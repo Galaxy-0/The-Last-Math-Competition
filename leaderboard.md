@@ -4,16 +4,17 @@ Generated: 2026-10-01. Sources: all audited & merged submission pull requests pl
 local `lidangzzz` submissions (2026-09-12). Every submission passed the audit: LaTeX + PDF +
 compiling Lean 4 project (Mathlib or self-contained core Lean), no `sorry`, no
 `native_decide`/extra axioms, and a semantic review confirming the Lean theorem actually
-establishes the conjecture or its negation. 11 earlier submissions failed the semantic review
-and were removed (see git history): #124, #142, #156, #199, #325, #1854, #5400 (orionsheep),
-#7121 (earthking11), #1135 (lidangzzz), #46, #88 (feiyuceng06-prog).
+establishes the conjecture or its negation. 11 earlier merged submissions failed the semantic
+review and were removed (see git history): #124, #142, #156, #199, #325, #1854, #5400
+(orionsheep), #7121 (earthking11), #1135 (lidangzzz), #46, #88 (feiyuceng06-prog); one PR
+(conjecture #462) was closed unmerged for the same reason.
 
-**Total solved: 110 / 10000 conjectures** — 8 proven, 102 disproven.
+**Total solved: 116 / 10000 conjectures** — 8 proven, 108 disproven.
 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
 | 1 | [earthking11](https://github.com/earthking11) | 69 | 62 | 0 | 69 |
-| 2 | [orionsheep](https://github.com/orionsheep) | 19 | 17 | 0 | 19 |
+| 2 | [orionsheep](https://github.com/orionsheep) | 25 | 23 | 0 | 25 |
 | 3 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
 | 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 8 | 8 | 3 | 5 |
 | 5 | [SucRunBug](https://github.com/SucRunBug) | 4 | 4 | 1 | 3 |
@@ -37,11 +38,11 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 #3949★ (D), #3955★ (D), #4007★ (D), #5626★ (D), #8234★ (D), #8371★ (D), #8417★ (D), #8419★ (D)
 #8422★ (D), #8434★ (D), #8848★ (D)
 
-### orionsheep — 19 solved (17 first)
+### orionsheep — 25 solved (23 first)
 
 #119★ (D), #122★ (D), #340★ (D), #348★ (D), #404★ (D), #405 (D), #416★ (D), #423★ (D), #427 (D)
-#471★ (D), #1072★ (D), #1190★ (D), #1231★ (D), #1243★ (D), #1668★ (D), #3843★ (D), #7986★ (D)
-#8420★ (D), #8540★ (D)
+#433★ (D), #450★ (D), #471★ (D), #477★ (D), #485★ (D), #499★ (D), #544★ (D), #1072★ (D), #1190★ (D)
+#1231★ (D), #1243★ (D), #1668★ (D), #3843★ (D), #7986★ (D), #8420★ (D), #8540★ (D)
 
 ### lidangzzz — 16 solved (16 first)
 
