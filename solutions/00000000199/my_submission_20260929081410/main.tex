@@ -1,0 +1,130 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+
+\newtheorem*{conj*}{Conjecture 00000000199}
+\newtheorem{claim}{Claim}
+\newcommand{\ii}{\ensuremath{i}}
+\newcommand{\ps}{\psi}
+
+\title{Disproof of Conjecture 00000000199\\
+\large (quadratic-denominator psi representation)}
+\author{TLMC falsification package}
+\date{September 29, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{conj*}
+Let $S=\sum_{n\ge 0}\frac{1}{n^2+n+2}$, whose denominator is irreducible over $\mathbb{Q}$.
+The sum is an explicit $\mathbb{Q}$-linear combination of values of the digamma function at
+\emph{cube roots of unity}; the irrationality of $S$ is equivalent to that of $\ps(\omega)$-type
+values ($\omega^3=1$), the equivalence following from an explicit partial-fraction decomposition.
+\end{conj*}
+
+\begin{quote}
+\textbf{Verdict: FALSE.} The partial-fraction decomposition invoked by the conjecture produces
+digamma values at the roots of $z^2+z+2$, namely $(-1\pm \ii\sqrt7)/2$ --- points of modulus
+$\sqrt2\ne 1$, lying in the discriminant $-7$ quadratic field --- and \emph{not} at cube roots
+of unity, which belong to the discriminant $-3$ world of $z^2+z+1$.
+\end{quote}
+
+\section{The correct decomposition}
+
+Write $n^2+n+2=(n+a)(n+b)$ with
+\[
+a=\frac{1+\ii\sqrt7}{2},\qquad b=\frac{1-\ii\sqrt7}{2},\qquad a+b=1,\quad ab=2,\quad a-b=\ii\sqrt7 .
+\]
+The digamma identity $\ps(v)-\ps(u)=\sum_{n\ge0}\bigl(\frac1{n+u}-\frac1{n+v}\bigr)$ gives
+\begin{equation}\label{eq:pf}
+S=\sum_{n\ge0}\frac{1}{(n+a)(n+b)}
+ =\frac{1}{b-a}\sum_{n\ge0}\Bigl(\frac1{n+a}-\frac1{n+b}\Bigr)
+ =\frac{\ps(b)-\ps(a)}{b-a}.
+\end{equation}
+By Schwarz reflection ($\ps(\bar z)=\overline{\ps(z)}$),
+\begin{equation}\label{eq:closed}
+S=\frac{2}{\sqrt7}\,\operatorname{Im}\ps\!\Bigl(\frac{1+\ii\sqrt7}{2}\Bigr)
+ =1.1868273377200538821608430611187162259569\ldots
+\end{equation}
+Equivalently, since $\ps(z+1)=\ps(z)+1/z$, the arguments are the roots
+$r_\pm=(-1\pm\ii\sqrt7)/2$ of $z^2+z+2$ shifted by $1$.
+
+Numerically, \eqref{eq:pf} and a direct summation of $2\cdot10^5$ terms with a digamma tail
+agree to $6.4\times10^{-14}$ in double precision, and to $\sim10^{-39}$ in 40-digit arithmetic
+(see \texttt{reproduce.py}); so \eqref{eq:closed} is the true representation of $S$.
+
+\section{The attack: the arguments are not cube roots of unity}
+
+\begin{claim}\label{cl:root}
+The roots of $z^2+z+2$ are $r_\pm=(-1\pm\ii\sqrt7)/2$ with
+$|r_\pm|^2=r_+\bar r_+=\tfrac{1+7}{4}=2\ne 1$, and $r_+^3=\tfrac{5-\ii\sqrt7}{2}\ne 1$.
+The discriminant of $z^2+z+2$ is $b^2-4ac=1-8=-7$.
+\end{claim}
+
+\begin{claim}\label{cl:unity}
+Every cube root of unity is unimodular and is a root of $z^2+z+1$ or $z-1$, polynomials over
+the discriminant $-3$ field: the primitive ones satisfy $\omega^2+\omega+1=0$ with
+discriminant $1-4=-3$, $|\omega|=1$, $\omega^3=1$.
+\end{claim}
+
+Since $-7\ne -3$, the values $\ps\bigl(\tfrac{1\pm\ii\sqrt7}{2}\bigr)$ produced by the exact
+decomposition \eqref{eq:pf} are digamma values at non-unimodular, non-root-of-unity arguments.
+The conjecture asserts that \eqref{eq:pf}-type decomposition yields $\ps$ at \emph{cube roots of
+unity}; for this denominator it does not, and no mechanism replaces
+$\ps\bigl(\tfrac{1\pm\ii\sqrt7}{2}\bigr)$ by $\mathbb{Q}$-combinations of
+$\ps(1),\ps(\omega),\ps(\omega^2)$. The claimed equivalence of the irrationality of $S$ with that
+of $\ps(\omega)$-type values is therefore unsupported and false as stated.
+
+\paragraph{Numerical corroboration.}
+$\ps(1)=-\gamma=-0.57721566490\ldots$ and
+$\ps(\omega)=0.28507344127\ldots+2.42326662850\ldots\,\ii$ with
+$\operatorname{Im}\ps(\omega)\ne0$. Hence any \emph{real} $\mathbb{Q}$-linear combination
+$q_1\ps(1)+q_2\ps(\omega)+q_3\ps(\omega^2)$ must have $q_2=q_3$, i.e.\ lies in
+$\operatorname{span}_{\mathbb Q}\{\ps(1),\,2\operatorname{Re}\ps(\omega)\}$. An exhaustive search
+over denominators $\le 500$ finds no such combination matching
+$S=1.18682733772005\ldots$ (best residuals $>10^{-12}$), consistent with the verdict.
+
+\section{Boundary: why the mechanism works for discriminant $-3$ only}
+
+For the twin denominator $n^2+n+1$ the same decomposition gives
+\[
+\sum_{n\ge0}\frac1{n^2+n+1}
+=\frac{\ps(\bar\alpha)-\ps(\alpha)}{\bar\alpha-\alpha}
+=\frac{2}{\sqrt3}\operatorname{Im}\ps\Bigl(\frac{1+\ii\sqrt3}{2}\Bigr)
+=1.7981472805626901809\ldots,
+\]
+and here $\alpha=\tfrac{1+\ii\sqrt3}{2}$ \emph{is} a sixth root of unity
+($\alpha^6=1$, $|\alpha|=1$, disc $-3$), so the cube-root-of-unity representation genuinely
+applies. The conjecture's mechanism is discriminant-specific: disc $-3$ produces roots-of-unity
+arguments; disc $-7$ does not. The conjecture generalizes the disc $-3$ phenomenon to a
+discriminant $-7$ denominator, where it fails.
+
+\section{Exact verification}
+
+\begin{itemize}
+\item \texttt{reproduce.py} (standard library only) recomputes: the roots and their invariants
+(Claim~\ref{cl:root}); $S$ three independent ways agreeing to $6.4\times10^{-14}$; the
+discriminant-$-3$ boundary sum; the exhaustive small-denominator search; and the exact
+fixed-point partial sums
+\[
+\frac{\texttt{1868497242085\ldots429833203580928}}{\texttt{1608225631910\ldots212099076096}}
+=1.161837745283165\ldots \quad (N=40),
+\]
+\[
+\frac{\texttt{1326774102455\ldots725602926375206912}}{\texttt{1133836264661\ldots7480348409856}}
+=1.170163756273512\ldots \quad (N=60),
+\]
+the full 81- and 155-digit literals being reproduced verbatim by \texttt{reproduce.py} and
+asserted as theorems \texttt{psum40\_val}/\texttt{psum60\_val} in \texttt{lean4/Main.lean}.
+\item \texttt{lean4/Main.lean} (core Lean 4, toolchain v4.33.1, no Mathlib) formalizes the
+attack concretely in $\mathbb{Q}(\sqrt{-7})$ and $\mathbb{Q}(\sqrt{-3})$:
+$r$ is a root of $z^2+z+2$; $|r|^2=2\ne1$; $r^3,\bar r^3,r^2,r\ne1$; discriminants $-7\ne-3$;
+the contrast $\omega^2+\omega+1=0$, $\omega^3=1$, $\omega\bar\omega=1$; the partial-fraction
+mechanism sampled at $n=0,1,2,3$; and the exact fixed-point partial sums above.
+All 22 theorems are closed computations (\texttt{rfl}/\texttt{decide});
+\texttt{Check.lean} audits \texttt{\#print axioms} on each: \emph{zero axioms, zero
+\texttt{sorry}}.
+\end{itemize}
+
+\end{document}
