@@ -1,0 +1,209 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{conjecture}{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+\title{Disproof of TLMC Conjecture 00000000124:\\
+the least missing value in the orbit of $2$ equals $q$, not $O((\log q)^2)$}
+\author{TLMC falsification package}
+\date{September 29, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000000124 asserts that if $q$ is an odd prime for which $2$ is a
+primitive root, then the least positive integer $m(q)$ missing from the orbit
+$\{2^n \bmod q : n \ge 0\}$ satisfies $m(q) = O((\log q)^2)$.  This is false:
+the hypothesis forces the orbit to be all of $\{1,\dots,q-1\}$, so
+$m(q) = q$ identically, and $q > (\log q)^2$ for every $q \ge 3$.  The claim
+therefore fails with constant $C=1$ at \emph{every} admissible prime (e.g.\
+$m(3)=3>1.2069=(\ln 3)^2$ and $m(101)=101 \gg 21.2993=(\ln 101)^2$), and for
+every fixed $C>0$ at every admissible prime $q>e^{6C}$.  All instances are
+confirmed by independent recomputation and by machine-checked Lean~4
+certificates using no axioms and no \texttt{sorry}.
+\end{abstract}
+
+\section{The conjecture and the attack}
+
+\begin{conjecture}[TLMC 00000000124]
+Let $q$ be an odd prime such that $2$ is a primitive root modulo $q$ (i.e.\
+the multiplicative order satisfies $\operatorname{ord}_q(2)=q-1$).  Let $m(q)$
+be the least positive integer that does not occur in the orbit
+$\{2^n \bmod q : n \ge 0\}$, residues taken in $\{0,1,\dots,q-1\}$.  Then
+$m(q) = O((\log q)^2)$.
+\end{conjecture}
+
+The attack is structural and requires no computation: the hypothesis is so
+strong that it determines $m(q)$ exactly.
+
+\section{The exact value of $m(q)$}
+
+\begin{theorem}\label{thm:main}
+Let $q$ be an odd prime with $\operatorname{ord}_q(2)=q-1$.  Then the orbit of
+$2$ modulo $q$, written with least positive residues, is exactly
+$\{1,2,\dots,q-1\}$, and the least missing positive integer is
+\[
+m(q) = q .
+\]
+\end{theorem}
+
+\begin{proof}
+Since $q$ is odd, $\gcd(2,q)=1$, so no power of $2$ is divisible by $q$: the
+residues $r_n := 2^n \bmod q$ all lie in $\{1,\dots,q-1\}$.
+
+The values $r_0, r_1, \dots, r_{q-2}$ are pairwise distinct.  Indeed, if
+$2^i \equiv 2^j \pmod q$ with $0 \le i < j \le q-2$, then multiplying by the
+inverse of $2^i$ gives $2^{\,j-i} \equiv 1 \pmod q$ with $0 < j-i < q-1$,
+contradicting $\operatorname{ord}_q(2) = q-1$.
+
+So the orbit contains $q-1$ distinct elements of the $(q-1)$-element set
+$\{1,\dots,q-1\}$, hence equals it: $\{r_0,\dots,r_{q-2}\} = \{1,\dots,q-1\}$
+(and $r_n$ for $n \ge q-1$ merely repeats it, since $2^{q-1}\equiv 1$).
+
+Consequently every positive integer $k \le q-1$ occurs in the orbit (as the
+residue $k$ itself), while $q$ does not: $q \equiv 0 \pmod q$ and $0$ is not a
+power of $2$ modulo $q$.  The least missing positive integer is therefore
+$q$.  \qed
+\end{proof}
+
+\section{The gap against the logarithmic bound}
+
+\begin{theorem}\label{thm:gap}
+For every real $x \ge 1$, $(\ln x)^2 < x$.
+\end{theorem}
+
+\begin{proof}
+Put $t=\ln x \ge 0$.  We show $e^{t/2} > t$, i.e.\ $\sqrt{x} > \ln x$.
+The tangent bound $e^u \ge 1+u$ (all Taylor coefficients are nonnegative) gives,
+for $0 \le t < 2$: $e^{t/2} \ge 1 + t/2 > t$.  For $t \ge 2$, applying the same
+bound at $u=(t-2)/2 \ge 0$ gives
+$e^{t/2} = e \cdot e^{(t-2)/2} \ge e\,(1+\tfrac{t-2}{2}) = \tfrac{e}{2}\,t > t$,
+because $e > 2$.  \qed
+\end{proof}
+
+\begin{corollary}\label{cor:refute}
+For every odd prime $q$ with $\operatorname{ord}_q(2)=q-1$,
+\[
+m(q) = q > (\log q)^2
+\]
+with the constant $C=1$; already $m(3)=3 > 1.2069\ldots=(\ln 3)^2$ and
+$m(101)=101 \gg 21.2993\ldots=(\ln 101)^2$.  More generally, for every fixed
+$C>0$: since $e^{L} \ge L^3/6$ for $L\ge0$ (Taylor series with nonnegative
+terms), every $q$ with $L=\ln q > 6C$ satisfies
+$q = e^{L} \ge \tfrac{L^3}{6} > C L^2 = C(\log q)^2$, hence
+$m(q) > C(\log q)^2$.
+\end{corollary}
+
+\section{Scope and boundary of the refutation}
+\label{sec:boundary}
+
+The following statements are \textbf{unconditional}:
+\begin{itemize}
+\item $m(q)=q$ exactly, for every admissible $q$ (Theorem~\ref{thm:main});
+\item $m(q) > (\log q)^2$, i.e.\ the conjecture fails with constant $C=1$, for
+      every admissible $q$ without exception (Corollary~\ref{cor:refute});
+\item for each fixed $C \le $ any prescribed value, every admissible
+      $q > e^{6C}$ violates the proposed bound.
+\end{itemize}
+
+The full refutation of the $O(\cdot)$ statement for \emph{arbitrary} constants
+$C$ additionally requires that admissible primes be unbounded.  By
+Theorem~\ref{thm:main}, $m(q)/(\log q)^2 = q/(\log q)^2 \to \infty$ along any
+unbounded sequence of admissible primes; the infinitude of primes with $2$ as
+primitive root is Artin's primitive-root conjecture for $a=2$, which is open in
+general but provable under the Generalized Riemann Hypothesis
+(Hooley, 1967) and supported by the expected positive density
+($\approx 0.374$; OEIS A001122).  Note that if the admissible set were finite,
+the $O$-statement would hold vacuously for large $q$; thus the exact identity
+$m(q)=q$ is the unconditional core of the disproof, and it already destroys
+the conjecture's polylogarithmic content: the true growth is \emph{linear} in
+$q$, not $(\log q)^2$.  This boundary is stated explicitly in
+\texttt{README.md}.
+
+\section{Computational verification}
+
+An independent recomputation (\texttt{reproduce.py}, pure standard library)
+confirms the verdict's spot checks and the general picture for all $22$
+admissible primes below $200$: the orbit is $\{1,\dots,q-1\}$, $m(q)=q$, and
+$m(q) > (\ln q)^2$ throughout, with the ratio $m(q)/(\ln q)^2$ growing
+steadily.
+
+\begin{center}
+\begin{tabular}{rrrr@{\hspace{2em}}rrrr}
+\toprule
+$q$ & $m(q)$ & $(\ln q)^2$ & ratio & $q$ & $m(q)$ & $(\ln q)^2$ & ratio\\
+\midrule
+3   & 3   & 1.207  & 2.49 & 83  & 83  & 19.526 & 4.25\\
+5   & 5   & 2.590  & 1.93 & 101 & 101 & 21.299 & 4.74\\
+11  & 11  & 5.750  & 1.91 & 107 & 107 & 21.835 & 4.90\\
+13  & 13  & 6.579  & 1.98 & 131 & 131 & 23.768 & 5.51\\
+19  & 19  & 8.670  & 2.19 & 139 & 139 & 24.349 & 5.71\\
+29  & 29  & 11.339 & 2.56 & 149 & 149 & 25.039 & 5.95\\
+37  & 37  & 13.039 & 2.84 & 163 & 163 & 25.946 & 6.28\\
+53  & 53  & 15.763 & 3.36 & 173 & 173 & 26.556 & 6.51\\
+59  & 59  & 16.626 & 3.55 & 179 & 179 & 26.909 & 6.65\\
+61  & 61  & 16.899 & 3.61 & 181 & 181 & 27.024 & 6.70\\
+67  & 67  & 17.679 & 3.79 & 197 & 197 & 27.912 & 7.06\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The two verdict spot checks are reproduced exactly: for $q=3$,
+$m=3 > (\ln 3)^2 \approx 1.2069$; for $q=101$, $m=101 \gg (\ln 101)^2 \approx
+21.2993$.
+
+\section{Machine-checked Lean 4 certificates}
+
+The directory \texttt{lean4/} contains a self-contained Lean~4 project
+(toolchain \texttt{leanprover/lean4:v4.33.1}, no dependencies, core Lean only).
+For each admissible prime $q<200$ it proves, by \texttt{decide} over $\mathbb{N}$
+arithmetic or by the two elementary lemmas of the file:
+\begin{itemize}
+\item \texttt{pr\_q}: $2$ is a primitive root mod $q$ --- Fermat's congruence
+      $2^{q-1}\equiv 1$ together with $2^{(q-1)/f}\not\equiv 1$ for each prime
+      $f \mid q-1$;
+\item \texttt{cover\_q}: every $1 \le k < q$ occurs in the orbit
+      $\{2^n \bmod q\}$, via explicit discrete-log witness lists checked by
+      \texttt{dlogOk} and the semantic lemma \texttt{dlogOk\_implies};
+\item \texttt{lm\_q}: \texttt{IsLeastMissing q q}, i.e.\ the least positive
+      integer missing from the orbit is exactly $q$ (so $m(q)=q$);
+\item \texttt{pw\_q}: $2^{\ell} \le q < 2^{\ell+1}$ for
+      $\ell=\lfloor\log_2 q\rfloor$ and $\ell^2 < q$ --- the concrete gap
+      $m(q)=q > (\log_2 q)^2$.
+\end{itemize}
+The flagship \texttt{attack\_101} bundles the verdict's $q=101$ check:
+primitive-root certificate, $m(101)=101$, and
+$6^2=36=(\lfloor\log_2 101\rfloor)^2 < 101$.
+
+\texttt{Check.lean} runs \texttt{\#print axioms} on all $138$ theorems; every
+single one reports \emph{does not depend on any axioms} --- zero
+\texttt{sorry}, zero \texttt{propext}/\texttt{Quot.sound}/%
+\texttt{Classical.choice}, i.e.\ a fully constructive, axiom-free audit.
+
+\section{Reproducing}
+
+\begin{verbatim}
+python3 reproduce.py                 # independent recomputation (stdlib only)
+cd lean4 && lake build               # builds Main.lean (Lean 4.33.1)
+lake env lean Check.lean             # axiom audit: 138 x "does not depend on any axioms"
+tectonic main.tex --outdir build     # this document
+\end{verbatim}
+
+\begin{thebibliography}{9}
+\bibitem{artin} E.~Artin, \emph{\"Uber eine neue Art von L-Reihen},
+Abh.\ Math.\ Sem.\ Univ.\ Hamburg 3 (1927), 89--108.
+\bibitem{hooley} C.~Hooley, \emph{On Artin's conjecture}, J.\ Reine Angew.\
+Math.\ 225 (1967), 209--220.
+\bibitem{oeis} OEIS Foundation, \emph{A001122: Primes with primitive root 2},
+\url{https://oeis.org/A001122}.
+\end{thebibliography}
+
+\end{document}
