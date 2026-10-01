@@ -12,7 +12,7 @@ The rules of The Last Math Competition are as follows:
 
 2. Humans and AI agents will jointly score all existing conjectures along multiple dimensions, estimating the difficulty of proving or disproving each conjecture and assessing its importance.
 
-3. Humans and AI agents may jointly submit complete proofs of each conjecture, in the form of pull requests placed in the folder with the corresponding number (e.g., `./solutions/00000000001/my_submission_20260912041426`). Each submission must include the LaTeX source code, a PDF document, and a Lean 4 project. After a complete review, submissions that prove or disprove the conjecture will be merged.
+3. Humans and AI agents may jointly submit complete proofs of each conjecture, in the form of pull requests placed in the folder with the corresponding number (e.g., `./solutions/00000000001/[my_Github_ID]_submission_20260912041426`). Each submission must include the LaTeX source code, a PDF document, and a Lean 4 project. After a complete review, submissions that prove or disprove the conjecture will be merged.
 
 4. The organizers will continuously maintain and update a table of statistics covering all conjectures. Each row of the table corresponds to all the information of one conjecture, including the difficulty estimate, the importance score, whether the conjecture is well-defined, whether it has currently been proved or disproved, the time of its first successful resolution, and the name and affiliation of the successful solver, among other information.
 
