@@ -20,14 +20,14 @@ The rules of The Last Math Competition are as follows:
 
 ## Leaderboard
 
-Current standings as of 2026-10-01 — **114 of the 10,000 conjectures solved** (7 proven, 107 disproven). All listed submissions passed full audit: LaTeX source + PDF + Lean 4 project (Mathlib), no `sorry`, no `native_decide` or extra axioms. Full per-solver conjecture lists: [leaderboard.md](./leaderboard.md).
+Current standings as of 2026-10-01 — **103 of the 10,000 conjectures solved** (7 proven, 96 disproven). All listed submissions passed full audit: LaTeX source + PDF + Lean 4 project (Mathlib), no `sorry`, no `native_decide` or extra axioms, and a semantic review confirming the Lean theorem establishes the conjecture or its negation. Full per-solver conjecture lists: [leaderboard.md](./leaderboard.md).
 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
-| 1 | [earthking11](https://github.com/earthking11) | 70 | 63 | 0 | 70 |
-| 2 | [orionsheep](https://github.com/orionsheep) | 22 | 21 | 0 | 22 |
-| 3 | [lidangzzz](https://github.com/lidangzzz) | 17 | 17 | 2 | 15 |
-| 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 10 | 10 | 3 | 7 |
+| 1 | [earthking11](https://github.com/earthking11) | 69 | 62 | 0 | 69 |
+| 2 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
+| 3 | [orionsheep](https://github.com/orionsheep) | 15 | 14 | 0 | 15 |
+| 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 8 | 8 | 3 | 5 |
 | 5 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
 | 6 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
 | 7 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |

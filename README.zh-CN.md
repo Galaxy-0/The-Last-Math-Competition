@@ -20,14 +20,14 @@
 
 ## 排行榜（Leaderboard）
 
-截至 2026-10-01 的当前战绩——**10000 个猜想中已解决 114 个**（7 个证明，107 个证伪）。所有上榜提交均通过完整审计：LaTeX 源码 + PDF + Lean 4 项目（Mathlib），无 `sorry`，无 `native_decide` 或额外公理。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
+截至 2026-10-01 的当前战绩——**10000 个猜想中已解决 103 个**（7 个证明，96 个证伪）。所有上榜提交均通过完整审计：LaTeX 源码 + PDF + Lean 4 项目（Mathlib），无 `sorry`，无 `native_decide` 或额外公理，并通过语义审查确认 Lean 定理确实建立了该猜想或其否定。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
 
 | # | GitHub ID | 解题数 | 首解数 | 证明 | 证伪 |
 |---|----------|-------:|-------:|-------:|----------:|
-| 1 | [earthking11](https://github.com/earthking11) | 70 | 63 | 0 | 70 |
-| 2 | [orionsheep](https://github.com/orionsheep) | 22 | 21 | 0 | 22 |
-| 3 | [lidangzzz](https://github.com/lidangzzz) | 17 | 17 | 2 | 15 |
-| 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 10 | 10 | 3 | 7 |
+| 1 | [earthking11](https://github.com/earthking11) | 69 | 62 | 0 | 69 |
+| 2 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
+| 3 | [orionsheep](https://github.com/orionsheep) | 15 | 14 | 0 | 15 |
+| 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 8 | 8 | 3 | 5 |
 | 5 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
 | 6 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
 | 7 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
