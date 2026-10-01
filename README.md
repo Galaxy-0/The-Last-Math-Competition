@@ -18,6 +18,20 @@ The rules of The Last Math Competition are as follows:
 
 5. Based on the existing conjectures, the evaluations of the existing conjectures, and the successful proofs or disproofs of the existing conjectures, the organizers will adjust the strategy of using AI agents to generate conjectures, in order to gradually improve the quality of future conjectures and possibly to gradually increase the number of conjectures generated.
 
+## Leaderboard
+
+Current standings as of 2026-10-01 — **114 of the 10,000 conjectures solved** (7 proven, 107 disproven). All listed submissions passed full audit: LaTeX source + PDF + Lean 4 project (Mathlib), no `sorry`, no `native_decide` or extra axioms. Full per-solver conjecture lists: [leaderboard.md](./leaderboard.md).
+
+| # | GitHub ID | Solved | First solves | Proven | Disproven |
+|---|----------|-------:|-------------:|-------:|----------:|
+| 1 | [earthking11](https://github.com/earthking11) | 70 | 63 | 0 | 70 |
+| 2 | [orionsheep](https://github.com/orionsheep) | 22 | 21 | 0 | 22 |
+| 3 | [lidangzzz](https://github.com/lidangzzz) | 17 | 17 | 2 | 15 |
+| 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 10 | 10 | 3 | 7 |
+| 5 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
+| 6 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
+| 7 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
+
 ## An Early-Stage Disclaimer
 
 Since the competition is in its early days, we must declare that the average quality of the conjectures generated early on is relatively poor. Some conjectures may be insufficiently defined, may contain erroneous conditions, may contain obvious mistakes, or may even be "not even wrong." We will therefore rely on the statistics table of the conjectures to improve the quality and methodology of newly generated conjectures.

@@ -18,6 +18,20 @@
 
 5. 根据现存的猜想、对现存猜想的评估、对现存猜想的成功证明或者证伪，举办方将调整使用 AI Agent 生成猜想的策略，来逐步提高未来生成数学猜想的质量，以及可能逐步提高生成猜想的数量。
 
+## 排行榜（Leaderboard）
+
+截至 2026-10-01 的当前战绩——**10000 个猜想中已解决 114 个**（7 个证明，107 个证伪）。所有上榜提交均通过完整审计：LaTeX 源码 + PDF + Lean 4 项目（Mathlib），无 `sorry`，无 `native_decide` 或额外公理。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
+
+| # | GitHub ID | 解题数 | 首解数 | 证明 | 证伪 |
+|---|----------|-------:|-------:|-------:|----------:|
+| 1 | [earthking11](https://github.com/earthking11) | 70 | 63 | 0 | 70 |
+| 2 | [orionsheep](https://github.com/orionsheep) | 22 | 21 | 0 | 22 |
+| 3 | [lidangzzz](https://github.com/lidangzzz) | 17 | 17 | 2 | 15 |
+| 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 10 | 10 | 3 | 7 |
+| 5 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
+| 6 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
+| 7 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
+
 ## 早期声明
 
 由于比赛尚在早期，我们必须声明：在早期生成的数学猜想的平均质量比较差，一部分猜想可能定义不充分或者存在错误的条件，或者存在显而易见的错误，甚至可能 "not even wrong"。所以我们将会根据对猜想的统计数据表格，来提升新生成猜想的质量和方法。
