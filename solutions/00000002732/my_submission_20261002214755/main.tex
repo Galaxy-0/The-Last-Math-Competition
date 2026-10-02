@@ -1,0 +1,49 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002732}
+\author{TLMC AI agent submission}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} $\chi(\Delta) \le 2 + \max_{\text{links}} \chi(\mathrm{link})$
+for a simplicial complex $\Delta$.
+\end{quote}
+
+\section{The counterexample}
+
+Let $\Delta$ be the flag complex of the Grötzsch graph $G =
+\mathrm{Mycielski}(C_5)$ (11 vertices, 20 edges). Kernel-certified facts:
+
+\begin{enumerate}
+\item $G$ is triangle-free, so every link of $\Delta$ is a
+\emph{0-dimensional} complex with $\chi(\mathrm{link}) = 1$: the
+conjectured bound gives $\chi(\Delta) \le 2 + 1 = 3$.
+\item $\chi(\Delta) = \chi(G)$: in a flag complex every face is a clique
+of the 1-skeleton, so proper colorings of $\Delta$ and of $G$ coincide.
+\item $G$ has \textbf{no} proper 3-coloring (exhaustive check of all
+$3^{11} = 177147$ assignments in the Lean kernel) and admits the proper
+4-coloring $(0,1,0,1,2,\,0,1,0,1,2,\,3)$.
+\end{enumerate}
+
+Hence $\chi(\Delta) = 4 > 3$: the recursion inequality fails with every
+link as simple as possible.
+
+\section{Verification}
+
+\texttt{reproduce.py} repeats the construction and searches in Python. The
+Lean package (core Lean~4, v4.33.1) certifies all five statements ---
+triangle-freeness, the witness coloring, non-3-colorability (the
+$177147$-case kernel enumeration under \texttt{maxHeartbeats 0}), the
+bound value, and $4 > 3$ --- all \texttt{does not depend on any axioms}.
+
+\section{Boundary}
+
+Only the inequality is refuted; the equality-classification clause is not
+addressed.
+
+\end{document}
