@@ -1,0 +1,29 @@
+Verified UTC: 2026-10-02T02:27:48.413017+00:00
+Submitter: SucRunBug
+Lean/Mathlib: v4.33.0
+Mathlib commit: db584cd6d46c92f209a44c0f1c829460d327499d
+LaTeX: native desktop compiler returned success for main.tex.
+PDF: readable rendering of the same proof text; visual QA is recorded separately.
+
+$ python3 reproduce.py
+PASS: row-three terminal hook cell has probability 1 and violates content bound
+
+exit status: 0
+
+$ lake build
+ℹ [2008/2009] Built Main (1.3s)
+info: Main.lean:23:0: 'TLMC414.visits_terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:24:0: 'TLMC414.bound_fails' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (2009 jobs).
+
+exit status: 0
+
+$ lake env lean Check.lean
+'TLMC414.visits_terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC414.bound_fails' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+exit status: 0
+
+SHA256 Main.lean: 8fd54f694a087ad32104a0175951f851b0598a93b813b9656df59d81a2e3f5b0
+SHA256 main.tex: 1c1eb6eaa17c5a5096abc10dfa35201e045eec96568b5c56d8593e347285e1f7
+All executed checks passed; no incomplete proof or custom axiom detected.
