@@ -1,0 +1,90 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{claim}{Claim}
+\newtheorem{fact}{Fact}
+\title{The triangular $H^2$ conjecture (TLMC 00000001147) is false:\\ $\dim H^2(\mathfrak{aff}(1))=0$}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+Quoted verbatim from the problem statement:
+
+\begin{quote}
+\itshape Definition: A triangular Lie algebra is a subalgebra of triangular matrices. Conjecture: The dimension of the second cohomology of a triangular Lie algebra is two; and the dimension is realized by one contribution each from the outer derivations and the center. (triangular H2 dimension two)
+\end{quote}
+
+Cohomology means Chevalley--Eilenberg cohomology $H^\bullet(\mathfrak{g}) = \operatorname{Ext}_{U(\mathfrak{g})}(\Bbbk,\,\cdot\,)$, computed by the standard complex
+\[
+C^q=\operatorname{Hom}\bigl(\Lambda^q\mathfrak{g},\Bbbk\bigr),\qquad
+(\delta^q\omega)(x_1,\dots,x_{q+1})=-\sum_{i<j}(-1)^{i+j}\,\omega\bigl([x_i,x_j],x_1,\widehat{x_i},\widehat{x_j},\dots,x_{q+1}\bigr).
+\]
+
+\section{The counterexample}
+
+Take the two-dimensional non-abelian Lie algebra
+\[
+\mathfrak{aff}(1)=\Bigl\{\begin{pmatrix} a& b\\ 0& 0\end{pmatrix}: a,b\in\Bbbk\Bigr\},
+\qquad
+H=\begin{pmatrix}1&0\\0&0\end{pmatrix},\quad
+E=\begin{pmatrix}0&1\\0&0\end{pmatrix},\quad
+[H,E]=E .
+\]
+It is a subalgebra of the algebra of upper triangular $2\times2$ matrices, hence a \emph{triangular Lie algebra} under the definition quoted above. We claim
+\[
+\dim H^2\bigl(\mathfrak{aff}(1)\bigr)=0\ \neq\ 2 .
+\]
+
+\subsection{The cochain complex}
+
+The cochain spaces are
+\[
+C^1=\operatorname{Hom}(\mathfrak{g},\Bbbk),\quad \dim C^1=2;\qquad
+C^2=\operatorname{Hom}(\Lambda^2\mathfrak{g},\Bbbk),\quad \dim C^2=1;\qquad
+C^3=\operatorname{Hom}(\Lambda^3\mathfrak{g},\Bbbk)=0,
+\]
+because $\dim\mathfrak{g}=2$ forces $\Lambda^3\mathfrak{g}=0$. An alternating form is determined by its value on the single wedge basis vector $H\wedge E$; we identify $C^2\cong\Bbbk$ via $\omega\mapsto\omega(H,E)$.
+
+\subsection{The differential is onto}
+
+For $f\in C^1$,
+\[
+(\delta^1 f)(H,E)=-f\bigl([H,E]\bigr)=-f(E).
+\]
+The map $f\mapsto \delta^1 f$ is therefore nonzero ($f=E^*$ gives $(\delta^1 f)(H,E)=-1$), and since $\dim C^2=1$ it is surjective. Hence
+\[
+B^2=\operatorname{im}\delta^1=C^2 .
+\]
+
+\subsection{Every $2$-cochain is a cocycle}
+
+Since $C^3=0$, we have $\delta^2=0$ and
+\[
+Z^2=\ker\delta^2=C^2 .
+\]
+
+\subsection{Conclusion}
+
+\begin{claim}\label{cl:main}
+$\dim H^2\bigl(\mathfrak{aff}(1)\bigr)=\dim Z^2-\dim B^2=1-1=0\neq 2$. The conjecture is false.
+\end{claim}
+
+The secondary clause fails as well: $\operatorname{Der}(\mathfrak{aff}(1))=\{D:\ D(H)=bE,\ D(E)=cE\}$ has dimension $2$, $\operatorname{Inn}= [\mathfrak{g},\mathfrak{g}]$-conjugates give $\dim\operatorname{Inn}=1$, so $\dim\operatorname{Out}=1$, while the center $Z(\mathfrak{aff}(1))=0$ has dimension $0$; there is no ``one plus one'' realization of a zero-dimensional space.
+
+\section{The conjecture is not vacuous either}
+
+The Heisenberg algebra $\mathfrak{n}_3=\langle x,y,z\mid [x,y]=z\rangle$ (strictly upper triangular $3\times3$ matrices, also triangular under the given definition) satisfies $\dim C^2=3$, $\delta^2\equiv 0$ (all brackets land in the center, so $(\delta^2\omega)(x,y,z)=-\omega(z,z)=0$), $\dim B^2=1$, whence $\dim H^2(\mathfrak{n}_3)=2$: the conjecture's value is attained by some triangular Lie algebras but is not an identity across the class.
+
+\section{Machine verification}
+
+\begin{itemize}
+\item \texttt{reproduce.py} recomputes $\dim Z^2,B^2,H^2$ from the structure constants with exact rational Gaussian elimination: it prints $\dim H^2(\mathfrak{aff}(1))=0$ and $\dim H^2(\mathfrak{n}_3)=2$.
+\item \texttt{lean4/Main.lean} formalizes the computation in bare Lean~4 (no Mathlib, coefficients in $\mathbb{Z}$; ranks are field-independent): surjectivity of the differential (\texttt{d1\_surj}), vanishing of degree~3 (\texttt{no\_strict\_inc}: no strictly increasing triple of values in a two-element index set, i.e.\ $\Lambda^3\mathfrak{g}=0$), triviality of the cohomology (a single class, \texttt{cobdy\_all}), and the key dimension obstruction (\texttt{no\_four\_classes}): a $2$-dimensional space over any field contains the four distinct points $0,v,w,v+w$ for a basis $(v,w)$, so $\dim H^2=2$ would exhibit four pairwise non-cohomologous $2$-cochains --- impossible when all pairs are cohomologous.
+\item \texttt{lean4/Check.lean} audits every theorem with \texttt{\#print axioms}: all of \texttt{Br\_HE}, \texttt{d1\_surj}, \texttt{d1\_add}, \texttt{no\_strict\_inc}, \texttt{cobdy\_all}, \texttt{no\_four\_classes}, \texttt{main} \textbf{do not depend on any axioms} (no \texttt{sorryAx}, no \texttt{Classical.choice}, no \texttt{propext}, no \texttt{Quot.sound}).
+\end{itemize}
+
+\end{document}
