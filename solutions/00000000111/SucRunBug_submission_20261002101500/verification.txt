@@ -1,0 +1,29 @@
+Verified UTC: 2026-10-02T02:27:48.413017+00:00
+Submitter: SucRunBug
+Lean/Mathlib: v4.33.0
+Mathlib commit: db584cd6d46c92f209a44c0f1c829460d327499d
+LaTeX: native desktop compiler returned success for main.tex.
+PDF: readable rendering of the same proof text; visual QA is recorded separately.
+
+$ python3 reproduce.py
+PASS: every order-two Latin square has zero transversals
+
+exit status: 0
+
+$ lake build
+ℹ [1005/1006] Built Main (782ms)
+info: Main.lean:33:0: 'TLMC111.minimum_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:34:0: 'TLMC111.violates_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (1006 jobs).
+
+exit status: 0
+
+$ lake env lean Check.lean
+'TLMC111.minimum_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC111.violates_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+exit status: 0
+
+SHA256 Main.lean: c3b65603400ea054822f505b45c811af42933d829f2645193307109c2fe86fe9
+SHA256 main.tex: bd762cb6f195451dce8e3eafbf3cc89a362507a58ed7dd201aa69040b78d2d07
+All executed checks passed; no incomplete proof or custom axiom detected.

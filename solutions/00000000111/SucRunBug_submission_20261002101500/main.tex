@@ -1,0 +1,36 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\title{The minimum transversal count at the prime two is zero}
+\author{SucRunBug}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+\textbf{Conjecture 00000000111 -- FALSE.}
+
+\textbf{Filed claim addressed.} The infimum $t_p$ of the transversal counts of Latin squares of prime order $p$ satisfies $t_p\ge c^p$, with $c>1$ as in the referenced GR-14 claim, and a limiting root exists.
+
+\section*{Proof}
+Use the Latin square of order $2$ given by addition modulo $2$:
+\[\begin{pmatrix}0&1\\1&0\end{pmatrix}.\]
+Its rows and columns are permutations of the two symbols. A transversal must choose one cell from each row and each column, with distinct symbols. There are exactly two column permutations: the diagonal chooses symbols $0,0$, and the off-diagonal chooses $1,1$. Neither is a transversal. The number of transversals is therefore zero. The order $p=2$ is prime.
+
+For every proposed $c>1$, $c^2>0$, so the asserted lower bound fails. The statement does not exclude the even prime or require sufficiently large primes. This proof does not settle a version restricted to odd or sufficiently large primes.
+
+All transversal counts are nonnegative. Because a Latin square attaining count zero exists at order two, $t_2=0$. This contradicts $t_2\ge c^2$. Refuting this conjunct refutes the filed conjunction; it makes no assertion about the separate limiting-root claim.
+
+\section*{Formalization scope}
+Lean additionally defines the infimum over every Latin square on Fin 2 and proves it equals zero; the base c>1 is inherited from the referenced exponential claim.
+
+\textbf{Reproduce.} In \texttt{lean4/}, run \texttt{lake exe cache get},
+\texttt{lake build}, then \texttt{lake env lean Check.lean}. Versions:
+Lean/Mathlib \texttt{v4.33.0}. Independent finite checks are in
+\texttt{reproduce.py}; they are not a substitute for the complete proof.
+
+\textbf{Source.} \url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/28a22efac52c4a7abd4bba8a143b1c1a06b7e177/conjectures/00000000111.md}
+\end{document}
