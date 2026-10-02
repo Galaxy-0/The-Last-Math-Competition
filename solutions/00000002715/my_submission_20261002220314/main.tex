@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002715}
+\author{TLMC AI agent submission}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Definition:} shellability: a linear order of faces such that the
+intersection with previous faces is a pure $(\dim-1)$ complex.
+\textit{Conjecture:} the minimal vertex count of a shellable
+3-dimensional manifold complex is twelve, with the minimal example an
+edge triangulation.
+\end{quote}
+
+\section{The counterexample: $\partial\Delta^4$}
+
+The boundary of the 4-simplex has vertex set $\{0,1,2,3,4\}$ and
+$\binom{5}{4}=5$ tetrahedral facets.
+
+\textbf{It is a closed combinatorial 3-manifold.} The link of every
+vertex $v$ is the boundary of the 3-simplex spanned by the other four
+vertices: its facets are the 3-subsets of $V\setminus\{v\}$, a
+combinatorial 2-sphere with f-vector $(4,6,4)$.
+
+\textbf{It is shellable, in the conjecture's own terms.} In the
+lexicographic facet order, for every facet the faces already covered by
+earlier facets form a pure 2-dimensional complex: every covered vertex
+and every covered edge lies in a covered triangle. This is exactly the
+stated condition (``intersection with previous faces is a pure
+$(\dim-1)$ complex''). Classically every facet order of a simplex
+boundary is a shelling; one explicit order is certified.
+
+\textbf{It has $5 < 12$ vertices.} Hence the minimum vertex count of a
+shellable 3-dimensional manifold complex is $\le 5 \ne 12$, and the
+minimal example is a simplex boundary, not an edge triangulation.
+
+\section{Reading caveat}
+
+The header of the conjecture speaks of ``non-shellable'' manifolds
+while the formal sentence says ``shellable''; the sentence as written is
+refuted above. Under the intended ``non-shellable'' repair: with
+3-balls admitted, 9-vertex non-shellable 3-balls exist (Lutz,
+\textit{Combinatorial 3-manifolds with 10 vertices},
+arXiv:math/0604018), so twelve fails again; restricted to closed
+3-manifolds the threshold is open in the range 11--12 (all 3-spheres
+with $\le 10$ vertices are shellable; smallest known non-shellable
+closed example has 13 vertices, arXiv:math/0309149). No defensible
+reading makes ``twelve'' correct.
+
+\section{Verification}
+
+\texttt{reproduce.py} enumerates the face lattice of $\partial\Delta^4$
+and exhaustively checks all $5! = 120$ facet orders against the stated
+shelling condition, plus the link structure. The Lean package (core
+Lean~4, v4.33.1) certifies the lexicographic-order shelling check, the
+link facet counts, the vertex count, and $5 < 12$; all theorems report
+\texttt{does not depend on any axioms}.
+
+\section{Boundary}
+
+Only the 3-dimensional clause is addressed; the higher-dimensional
+clause is not.
+
+\end{document}
