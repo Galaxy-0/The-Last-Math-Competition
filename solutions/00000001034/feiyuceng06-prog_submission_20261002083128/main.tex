@@ -1,0 +1,140 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\F}{\mathbb F}
+
+\title{A Counterexample to Conjecture 00000001034:\\
+a Nontrivial Perfect Lee Code in Dimension $2$}
+\author{%
+  Feiyu\thanks{Independent researcher.}
+  \and
+  Claude (Opus 5.5)\thanks{Anthropic.}%
+}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000001034 asserts that nontrivial perfect codes in the Lee metric
+exist only in dimension $n=1$ (with $q\ge5$) and $n=3$ (with $q=2$). The code
+$\{(x,y)\in\F_5^2 : x+2y=0\}$ is a perfect Lee code of radius $1$ with five
+codewords, in dimension $n=2$. This is the classical two-dimensional perfect
+Lee code of Golomb and Welch. The refutation is checked in Lean~4 against
+Mathlib.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture 00000001034 reads:
+
+\begin{quote}
+Definition: Perfect codes in the Lee metric are ball-packing partitions of
+$\F_q^n$ by Lee balls. Conjecture: Nontrivial perfect Lee codes exist only for
+$n = 1$ ($q \ge 5$) and $n = 3$ ($q = 2$, the Golomb--Welch perfect codes); for
+$n \ge 4$ all Lee perfect codes are trivial; in particular the Golomb--Welch
+counterexamples are excluded outside $(q,n) = (5,3)$.
+\end{quote}
+
+\section{Reading of the statement}
+
+The Lee metric lives on $\mathbb Z/q$; we take $q$ prime, so that
+$\F_q=\mathbb Z/q$, which covers the case used below. The \emph{Lee weight} of
+$a\in\mathbb Z/q$, with representative $0\le a<q$, is $\min(a,q-a)$. The
+\emph{Lee distance} between $x,y\in(\mathbb Z/q)^n$ is
+$\sum_i \mathrm{wt}(x_i-y_i)$.
+
+\begin{definition}
+$C\subseteq\F_q^n$ is a \emph{perfect Lee code of radius $e$} if the Lee balls
+of radius $e$ around the codewords partition $\F_q^n$, i.e.\ every word lies
+within Lee distance $e$ of exactly one codeword. It is \emph{nontrivial} if
+$e\ge1$ and $|C|\ge2$.
+\end{definition}
+
+The conditions $e\ge1$ and $|C|\ge2$ exclude the two degenerate cases: radius
+$0$ ($C=\F_q^n$), and a single ball covering everything. The first sentence of
+the conjecture asserts: if a nontrivial perfect Lee code exists in $\F_q^n$,
+then $n=1$ and $q\ge5$, or $n=3$ and $q=2$.
+
+\section{Result}
+
+\begin{theorem}\label{thm:main}
+$C=\{(0,0),(1,2),(2,4),(3,1),(4,3)\}=\{(x,y)\in\F_5^2:x+2y=0\}$ is a perfect Lee
+code of radius $1$ in $\F_5^2$. Since $n=2$, Conjecture 00000001034 is false.
+\end{theorem}
+
+\section{Proof}
+
+A Lee ball of radius $1$ in $\F_5^2$ consists of its centre $c$ and the four
+points $c\pm(1,0)$, $c\pm(0,1)$, so it has $5$ points. Five balls therefore have
+$25=|\F_5^2|$ points in total, and it suffices to show that the balls are
+pairwise disjoint. By the triangle inequality, this holds if distinct codewords
+are at Lee distance at least $3$.
+
+The code is the kernel of the linear map $\varphi(x,y)=x+2y$, so the difference
+$v$ of two distinct codewords is a nonzero vector with $\varphi(v)=0$. The
+nonzero vectors of Lee weight at most $2$ are $\pm e_1$, $\pm e_2$, $\pm2e_1$,
+$\pm2e_2$ and $\pm e_1\pm e_2$. Their $\varphi$-values are $\pm1$, $\pm2$,
+$\pm2$, $\pm4$, $\pm3$ and $\pm1$, none of them $0$ in $\F_5$. Hence distinct
+codewords are at distance at least $3$, and the balls partition $\F_5^2$. The
+Lean development checks the defining property directly, over all $25$ words.
+
+\section{Formalization}
+
+The accompanying Lean~4 project (\texttt{lean/Submission/Basic.lean}) states
+the conjecture and proves its negation against Mathlib.
+
+\begin{itemize}
+  \item \texttt{leeWeight}, \texttt{leeDist} --- the Lee weight on
+    \texttt{ZMod q} and the Lee distance on \texttt{Fin n -> ZMod q}.
+  \item \texttt{IsPerfectLeeCode q n e C} --- every word $x$ has exactly one
+    codeword within Lee distance $e$.
+  \item \texttt{ConjectureHolds} --- for every prime $q$, every $n$, $e\ge1$
+    and every perfect Lee code $C$ with $|C|\ge2$: $(n=1\wedge q\ge5)\vee(n=3
+    \wedge q=2)$.
+  \item \texttt{C5}, \texttt{isPerfectLeeCode\_C5}, \texttt{card\_C5} --- the
+    code of Theorem~\ref{thm:main}, checked by \texttt{decide}.
+  \item \texttt{conjecture\_00000001034\_false} ---
+    $\lnot\,$\texttt{ConjectureHolds}.
+\end{itemize}
+
+The toolchain is \texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to
+\texttt{v4.33.1}, and \texttt{lake build} succeeds. The project contains no
+\texttt{sorry}, no \texttt{admit} and no \texttt{native\_decide}, and
+introduces no axioms:
+\begin{center}
+\texttt{\#print axioms conjecture\_00000001034\_false}
+\end{center}
+reports exactly \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\section{Remarks}
+
+Golomb and Welch \cite{gw} showed that perfect Lee codes exist in dimensions
+$1$ and $2$ for every radius, and for radius $1$ in every dimension. Their
+celebrated conjecture is that there are none for $n\ge3$ and $e\ge2$. The list
+in Conjecture 00000001034 therefore omits dimension $2$ entirely. Its claim that
+$n\ge4$ admits only trivial codes also fails, already for $q=2$, where the Lee
+metric is the Hamming metric and the binary Hamming code of length $7$ is
+perfect of radius $1$. We formalize only the dimension-$2$ counterexample.
+
+\begin{thebibliography}{9}
+\bibitem{gw} S.~W.~Golomb and L.~R.~Welch, \emph{Perfect codes in the Lee
+  metric and the packing of polyominoes}, SIAM J. Appl. Math. 18 (1970),
+  302--317.
+\end{thebibliography}
+
+\end{document}
