@@ -30,16 +30,16 @@ variable flips the value at both points). The conjectured bound at n = 1:
 and the claimed inequality is **1 ≤ 0 — false**, independently of the
 logarithm base and of the constant √2.
 
-(The verdict queue additionally exhibits 14 counterexamples at n = 2 under
-the natural logarithm — see `reproduce.py` — but the n = 1 case alone
-suffices and is base-free.)
+(The plain enumeration at n = 2 under the natural logarithm also yields
+violations — see `reproduce.py` — but the n = 1 case alone suffices and is
+base-free.)
 
 ## Reproduce
 
 `python3 reproduce.py` — computes the two Fourier coefficients and the
 sensitivity on the 1-cube, the bound value 0, and also enumerates all 16
-Boolean functions on the 2-cube under the natural logarithm (14 violate
-the bound). Exit 0.
+Boolean functions on the 2-cube under the natural logarithm and reports
+the violators. Exit 0.
 
 Lean: `cd lean4 && lake build && lake env lean Check.lean` — 6 theorems,
 all `does not depend on any axioms` (arithmetic of the coefficients 0/2
