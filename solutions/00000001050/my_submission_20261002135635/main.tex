@@ -1,0 +1,91 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,booktabs}
+\title{Disproof of Conjecture 00000001050:\\
+A Relative-Trace Surjectivity Criterion with Nontrivial Kernel}
+\author{TLMC submission}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture (verbatim)}
+
+\begin{quote}
+``Conjecture: For any composition of a permutation polynomial $f$ with a linearized
+polynomial, the image under the relative trace $F_{q^2}/F_q$ is everything if and
+only if the kernel is trivial (a relative-trace surjectivity criterion).''
+\end{quote}
+
+\section{Verdict}
+
+\textbf{FALSE.} The biconditional fails already at $q = 2$ with the identity
+permutation polynomial: the relative-trace image is everything while the kernel is
+nontrivial.
+
+\section{Counterexample}
+
+Let $q = 2$ and $\mathbb{F}_4 = \mathbb{F}_2(\omega)$ with
+$\omega^2 = \omega + 1$, $\omega^3 = 1$. Take
+\[
+f = \mathrm{id} \in \mathbb{F}_4[x] \quad\text{(a permutation polynomial)},\qquad
+L(x) = \omega x + \omega x^2 = \omega(x + x^2) \in \mathbb{F}_4[x],
+\]
+where $L$ is a linearized polynomial (exponents $2^0, 2^1$; $\mathbb{F}_2$-linear
+map). The composition is $g = L \circ \mathrm{id} = L$; since $f = \mathrm{id}$,
+both composition orders coincide. The relative trace is
+$\operatorname{Tr}_{\mathbb{F}_4/\mathbb{F}_2}(z) = z + z^2$.
+
+\subsection{Pointwise computation}
+
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+$x$ & $x + x^2$ & $L(x) = \omega(x+x^2)$ & $\operatorname{Tr}(L(x)) = L(x) + L(x)^2$ \\
+\midrule
+$0$ & $0$ & $0$ & $0$ \\
+$1$ & $1+1 = 0$ & $0$ & $0$ \\
+$\omega$ & $\omega + \omega^2 = 1$ & $\omega$ & $\omega + \omega^2 = 1$ \\
+$\omega^2$ & $\omega^2 + \omega^4 = 1$ & $\omega$ & $\omega + \omega^2 = 1$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{The two halves of the biconditional}
+
+\begin{itemize}
+\item \textbf{Kernel nontrivial.} $\ker L = \{x \in \mathbb{F}_4 : x + x^2 = 0\}
+= \{0, 1\} = \mathbb{F}_2 \neq \{0\}$. (Indeed $x^2 = x$ has exactly the roots
+$0, 1$ in any field.)
+\item \textbf{Trace image is everything.} $L(\mathbb{F}_4) = \{0, \omega\}$, so
+\[
+\operatorname{Tr}_{\mathbb{F}_4/\mathbb{F}_2}\bigl(L(\mathbb{F}_4)\bigr)
+= \{\operatorname{Tr}(0), \operatorname{Tr}(\omega)\}
+= \{0, \omega + \omega^2\} = \{0, 1\} = \mathbb{F}_2 .
+\]
+\end{itemize}
+
+Hence ``image is everything'' holds while ``kernel is trivial'' fails, so the
+stated criterion
+$\bigl(\operatorname{Tr}_{\mathbb{F}_{q^2}/\mathbb{F}_q}(g(\mathbb{F}_{q^2}))
+= \mathbb{F}_q\bigr) \iff (\ker g = \{0\})$ is false. Conjecture 00000001050 is
+disproven.
+
+\section{Lean verification}
+
+The file \texttt{lean4/Main.lean} encodes $\mathbb{F}_4$ as a four-constructor
+inductive type with explicit addition/multiplication/Frobenius tables and proves:
+\texttt{surjective\_true} ($\operatorname{Tr} \circ L$ hits $0$ and $1$),
+\texttt{kernel\_not\_trivial} ($1 \in \ker L$, $1 \neq 0$), and
+\texttt{criterion\_false} ($\neg(\text{Surjective} \leftrightarrow
+\text{KernelTrivial})$). Every assertion is closed by \texttt{rfl} or constructor
+exhaustion; there are zero axioms and no \texttt{sorry}. \texttt{lean4/Check.lean}
+prints \texttt{\#print axioms} for every theorem.
+An independent recomputation is available in \texttt{reproduce.py}.
+
+\section{Boundary}
+
+This counterexample only refutes the verbatim biconditional at the smallest
+instance ($q=2$, $f = \mathrm{id}$). No claim is made about the converse direction
+(kernel trivial $\Rightarrow$ surjective) in general, nor about compositions with
+$f \neq \mathrm{id}$; both composition orders coincide here because $f=\mathrm{id}$.
+
+\end{document}
