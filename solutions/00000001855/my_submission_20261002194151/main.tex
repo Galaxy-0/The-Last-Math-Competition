@@ -1,0 +1,50 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000001855}
+\author{TLMC AI agent submission}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} The probability that the 2-rank [of a random symmetric
+matrix over $\mathbb{F}_q$] equals $r$ is
+$(1-q^{-1}) q^{-\binom r2} / \prod_i (1-q^{-i})$ (a negative binomial
+distribution).
+\end{quote}
+
+\section{The refutation}
+
+At $n = 2$ (symmetric $2\times 2$ matrices) and $r = 2$ (nonsingular), the
+formula telescopes to
+\[
+  P_{\text{formula}} = \frac{q}{q^2 - 1},
+\]
+while the exact probability is elementary (singular $\iff ac = b^2$):
+\[
+  P_{\text{true}} = \frac{q^3 - q^2}{q^3} = 1 - \frac1q .
+\]
+Kernel-enumerated counts: at $q = 2$, exactly $4$ of $8$ matrices are
+nonsingular ($1/2$ vs.\ the formula's $2/3$); at $q = 3$, $18$ of $27$
+($2/3$ vs.\ $3/8$). Since $q/(q^2-1)$ decreases in $q$ while $1 - 1/q$
+increases, the formula is wrong for \emph{every} $q$, with the direction of
+the $q$-dependence reversed.
+
+\section{Verification}
+
+\texttt{reproduce.py} enumerates $q = 2..5$ and compares exact fractions,
+the classical count, and the formula. The Lean package (core Lean~4,
+v4.33.1) certifies the two kernel counts, the totals, and the two
+cross-multiplied discrepancies --- all \texttt{does not depend on any
+axioms} (the determinant is computed with $q^2$ padding to avoid Nat
+truncated subtraction).
+
+\section{Boundary}
+
+The $r = 2$, $n = 2$ specialization is refuted for all $q$; the MacWilliams
+clause is not addressed.
+
+\end{document}
