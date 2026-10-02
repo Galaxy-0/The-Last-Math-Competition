@@ -1,0 +1,34 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\title{Base-three prime digit sums cannot be uniform modulo two}
+\author{SucRunBug}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+\textbf{Conjecture 00000000793 -- FALSE.}
+
+\textbf{Filed claim addressed.} For every prime base $p$, digit sums of primes modulo $p-1$ have a uniform limiting distribution.
+
+\section*{Proof}
+Choose the prime base $p=3$. Every nonnegative integer $q$ is congruent to the sum of its base-three digits modulo two, since $3\equiv1\pmod2$. Every prime except two is odd. Therefore among all primes, only $q=2$ has an even base-three digit sum.
+
+Among the first $N$ primes there is at most one such instance. The relative frequency of residue zero is nonnegative and at most $1/N$, so it tends to zero as $N\to\infty$. A uniform distribution modulo two would give that residue frequency $1/2$. The two limits differ, refuting the always-uniform assertion.
+
+This addresses uniformity over all residue classes in the filed statement. Restricting to admissible unit classes is a different claim.
+
+\section*{Formalization scope}
+Lean proves the actual digit-sum congruence, classifies the even-digit-sum primes, uses the standard nth-prime enumeration, bounds the empirical frequency by 1/N, and proves its limit is zero and cannot be one-half.
+
+\textbf{Reproduce.} In \texttt{lean4/}, run \texttt{lake exe cache get},
+\texttt{lake build}, then \texttt{lake env lean Check.lean}. Versions:
+Lean/Mathlib \texttt{v4.33.0}. Independent finite checks are in
+\texttt{reproduce.py}; they are not a substitute for the complete proof.
+
+\textbf{Source.} \url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/28a22efac52c4a7abd4bba8a143b1c1a06b7e177/conjectures/00000000793.md}
+\end{document}
