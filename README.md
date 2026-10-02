@@ -25,7 +25,7 @@ Current standings as of 2026-10-01 — **122 of the 10,000 conjectures solved** 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
 | 1 | [earthking11](https://github.com/earthking11) | 69 | 62 | 0 | 69 |
-| 2 | [orionsheep](https://github.com/orionsheep) | 31 | 29 | 0 | 31 |
+| 2 | [orionsheep](https://github.com/orionsheep) | 32 | 29 | 0 | 32 |
 | 3 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
 | 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 8 | 8 | 3 | 5 |
 | 5 | [SucRunBug](https://github.com/SucRunBug) | 4 | 4 | 1 | 3 |

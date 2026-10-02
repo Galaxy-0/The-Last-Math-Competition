@@ -14,7 +14,7 @@ review and were removed (see git history): #124, #142, #156, #199, #325, #1854, 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
 | 1 | [earthking11](https://github.com/earthking11) | 69 | 62 | 0 | 69 |
-| 2 | [orionsheep](https://github.com/orionsheep) | 31 | 29 | 0 | 31 |
+| 2 | [orionsheep](https://github.com/orionsheep) | 32 | 29 | 0 | 32 |
 | 3 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
 | 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 8 | 8 | 3 | 5 |
 | 5 | [SucRunBug](https://github.com/SucRunBug) | 4 | 4 | 1 | 3 |
@@ -24,7 +24,7 @@ review and were removed (see git history): #124, #142, #156, #199, #325, #1854, 
 
 ## Solved conjectures per solver
 
-P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (2026-09-12, no intra-day timestamp for the local submission) share the first solve: #416 and #1243 (`lidangzzz & orionsheep`), #1186 (`lidangzzz & earthking11`).
+P = proof, D = disproof, ★ = first solve of the conjecture or an independent second solution. Same-day ties (2026-09-12, no intra-day timestamp for the local submission) share the first solve: #416 and #1243 (`lidangzzz & orionsheep`), #1186 (`lidangzzz & earthking11`).
 
 ### earthking11 — 69 solved (62 first)
 
@@ -38,12 +38,12 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 #3949★ (D), #3955★ (D), #4007★ (D), #5626★ (D), #8234★ (D), #8371★ (D), #8417★ (D), #8419★ (D)
 #8422★ (D), #8434★ (D), #8848★ (D)
 
-### orionsheep — 31 solved (29 first)
+### orionsheep — 32 solved (29 first)
 
 #119★ (D), #122★ (D), #340★ (D), #348★ (D), #404★ (D), #405 (D), #416★ (D), #423★ (D), #427 (D)
 #433★ (D), #450★ (D), #471★ (D), #477★ (D), #485★ (D), #492★ (D), #499★ (D), #544★ (D), #548★ (D)
-#570★ (D), #589★ (D), #602★ (D), #1040★ (D), #1072★ (D), #1190★ (D), #1231★ (D), #1243★ (D)
-#1668★ (D), #3843★ (D), #7986★ (D), #8420★ (D), #8540★ (D)
+#570★ (D), #578 (D), #589★ (D), #602★ (D), #1040★ (D), #1072★ (D), #1190★ (D), #1231★ (D)
+#1243★ (D), #1668★ (D), #3843★ (D), #7986★ (D), #8420★ (D), #8540★ (D)
 
 ### lidangzzz — 16 solved (16 first)
 
