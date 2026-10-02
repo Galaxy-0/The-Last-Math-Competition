@@ -1,0 +1,36 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\title{The integral p-adic Mandelbrot set is the whole ring}
+\author{SucRunBug}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+\textbf{Conjecture 00000000744 -- TRUE (NORMALIZED HAAR MEASURE).}
+
+\textbf{Filed claim addressed.} $M_p=\{c\in\mathbb Z_p:\text{the zero orbit of }x^2+c\text{ is bounded}\}$ is clopen and has rational, explicit Haar measure.
+
+\section*{Proof}
+For every $c\in\mathbb Z_p$, the polynomial $x\mapsto x^2+c$ maps $\mathbb Z_p$ into itself. Starting from zero, every iterate is therefore in $\mathbb Z_p$, whose elements all have $p$-adic norm at most one. This supplies a uniform bound for the complete orbit for every $c$.
+
+Consequently,
+\[M_p=\mathbb Z_p.\]
+It is both closed and open in $\mathbb Z_p$. For normalized Haar measure $\mu(\mathbb Z_p)=1$, its measure is exactly the rational number one, for every prime $p$, independent of $p\bmod4$.
+
+The normalization is essential when specifying a numerical Haar measure: arbitrary scalar multiples of Haar measure are also Haar measures. The value asserted here uses the standard probability normalization on the compact ring.
+
+\section*{Formalization scope}
+Lean uses the actual PadicInt ring and its norm, proves boundedness of every iterate and equality to the whole ring, proves clopenness, and proves measure one for every probability measure, hence in particular normalized Haar measure.
+
+\textbf{Reproduce.} In \texttt{lean4/}, run \texttt{lake exe cache get},
+\texttt{lake build}, then \texttt{lake env lean Check.lean}. Versions:
+Lean/Mathlib \texttt{v4.33.0}. Independent finite checks are in
+\texttt{reproduce.py}; they are not a substitute for the complete proof.
+
+\textbf{Source.} \url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/28a22efac52c4a7abd4bba8a143b1c1a06b7e177/conjectures/00000000744.md}
+\end{document}
