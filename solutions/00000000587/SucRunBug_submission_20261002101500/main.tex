@@ -1,0 +1,34 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\title{An Apery set with three positive squares defeats the two-generator bound}
+\author{SucRunBug}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+\textbf{Conjecture 00000000587 -- FALSE.}
+
+\textbf{Filed claim addressed.} For a numerical semigroup $S=\langle a,b\rangle$ of embedding dimension two, the number of squares in $\operatorname{Ap}(S,m)$ is at most $\sqrt{ab}$.
+
+\section*{Proof}
+Let $S=\langle2,3\rangle=\{0,2,3,4,\ldots\}$ and take $m=25\in S$. Both generators are necessary, so the embedding dimension is two. Directly from $s\in S$ and $s-25\notin S$,
+\[\operatorname{Ap}(S,25)=\{0,2,3,\ldots,24,26\}.\]
+The squares $4,9,16$ all lie in this set. Thus it contains at least three positive squares, whereas $\sqrt{ab}=\sqrt6<3$. The claimed bound fails.
+
+The filed definition gives a parameter $m$ without requiring it to be the multiplicity. This example uses a legitimate positive semigroup element as the Ap\'ery parameter. If one imposes the additional condition $m=\min(S\setminus\{0\})$, this example is excluded and the present argument does not settle that modified statement.
+
+\section*{Formalization scope}
+Lean defines S by nonnegative combinations of 2 and 3, proves its exact membership and Apery set, verifies the two necessary generators, and proves at least three entries satisfy the actual IsSquare predicate. That lower bound suffices for the refutation.
+
+\textbf{Reproduce.} In \texttt{lean4/}, run \texttt{lake exe cache get},
+\texttt{lake build}, then \texttt{lake env lean Check.lean}. Versions:
+Lean/Mathlib \texttt{v4.33.0}. Independent finite checks are in
+\texttt{reproduce.py}; they are not a substitute for the complete proof.
+
+\textbf{Source.} \url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/28a22efac52c4a7abd4bba8a143b1c1a06b7e177/conjectures/00000000587.md}
+\end{document}
