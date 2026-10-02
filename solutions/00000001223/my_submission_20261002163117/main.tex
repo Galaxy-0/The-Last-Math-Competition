@@ -1,0 +1,225 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{remark}{Remark}
+
+\title{The surround cop number of a cubic graph is never two:\\
+a refutation of conjecture \texttt{00000001223}}
+\author{Submission to The Last Math Competition}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture \texttt{00000001223} asserts that ``the surround cop number of a
+cubic graph is two'', with tightness of the surround constant attained by the
+Petersen graph.  We show that the statement is false in the strongest possible
+sense: \emph{no} cubic graph has surround cop number two.  In a simple
+3-regular graph the robber always stands on a vertex with exactly three
+distinct neighbours, while two cops occupy at most two vertices; the surround
+condition --- the cops occupy every neighbour of the robber's vertex --- can
+therefore never hold with two cops, at time zero and hence at no moment of any
+play, independently of all movement rules.  Consequently
+$\sigma(G)\ge 3$ for every cubic graph $G$.  The smallest witness is $K_4$,
+whose surround cop number is exactly $3$; the Petersen graph, $Q_3$,
+$K_{3,3}$ and the triangular prism also all have $\sigma = 3$.  Everything is
+a finite computation: the refutation is formalised in Lean~4 using only the
+kernel and core, and all seventeen audited theorems depend on no axioms at all.
+\end{abstract}
+
+\section{The conjecture}
+
+The conjecture reads, verbatim:
+
+\begin{quote}
+\textbf{Definition}: The surround cop number is the least number of cops
+needed to surround rather than capture.  \textbf{Conjecture}: The surround cop
+number of a cubic graph is two; and tightness of the surround constant is
+attained by the Petersen graph.  \emph{(cubic surround constant)}
+\end{quote}
+
+\section{The game and the parameter}
+
+The notion at issue is the \emph{surrounding cops and robbers} game of
+Burgess, Cameron, Clarke, Danziger, Finbow, Jones and Pike
+\cite{BCCDFJP}, who write that in contrast to the original game in which
+``the cops win by occupying the same vertex as the robber, they now win by
+occupying each of the robber's neighbouring vertices'', and that
+``we denote by $\sigma(G)$ the surrounding cop number of $G$, namely the least
+number of cops required to surround a robber in the graph $G$''.  This matches
+the definition sentence of the conjecture word for word (``surround rather
+than capture'') and is the only notion at issue.
+
+Concretely: $k$ cops occupy vertices of $G$, then the robber occupies a vertex;
+in each round every cop may stay put or move along an edge (cops never occupy
+the robber's vertex), after which the robber must move along an edge to an
+unoccupied vertex.  The cops win as soon as they occupy \emph{every} neighbour
+of the robber's current vertex; the robber wins if that never happens.
+$\sigma(G)$ is the least $k$ for which the cops have a winning strategy.
+
+\section{The obstruction: $\sigma(G)\ge\delta(G)$}
+
+\begin{lemma}\label{lem:mindeg}
+Let $G$ be a simple graph, let $v$ be a vertex of degree $d$, and let at most
+$d-1$ cops be placed on vertices of $G$ (distinct or not).  Then the robber
+standing on $v$ is \emph{not} surrounded.
+\end{lemma}
+
+\begin{proof}
+The $d$ neighbours of $v$ are pairwise distinct, and the at most $d-1$ cops
+occupy at most $d-1$ vertices, so at least one neighbour of $v$ is cop-free.
+The surround condition --- every neighbour of $v$ occupied --- therefore fails
+for this configuration.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+For every simple graph $G$, $\sigma(G)\ge\delta(G)$, where $\delta(G)$ is the
+minimum degree of $G$.  In particular, for every cubic graph $G$ we have
+$\sigma(G)\ge 3$, so $\sigma(G)\ne 2$.
+\end{theorem}
+
+\begin{proof}
+Suppose $k<\delta(G)$ cops play against $G$, whatever the movement rules (who
+moves first, whether players may pass, whether cops move simultaneously or one
+at a time, when the surround condition is checked).  By
+Lemma~\ref{lem:mindeg} the surround condition fails at time zero --- before
+any move has been made, so no rule about moves can matter.  Since the cops win
+only if the condition holds \emph{at some moment}, and it holds at no moment
+of any play, no cop strategy of any kind wins.  Hence $k$ cops do not suffice
+for every $k<\delta(G)$, i.e.\ $\sigma(G)\ge\delta(G)$.
+\end{proof}
+
+\begin{corollary}\label{cor:cubic}
+The conjecture is false under the universal reading (``every cubic graph has
+surround cop number two''): by Theorem~\ref{thm:main} \emph{every} cubic graph
+has $\sigma\ge 3$.  It is also false under the existential reading (``some
+cubic graph has surround cop number two''): no cubic graph attains the value
+$2$ at all.  The second conjunct (tightness of the surround constant attained
+by the Petersen graph) is moot once the first fails; we note that
+$\sigma(\text{Petersen}) = 3\ne 2$ as well (Theorem~\ref{thm:witness} and
+Table~\ref{tab:games}).
+\end{corollary}
+
+\section{The witness: $\sigma(K_4)=3$ exactly}
+
+\begin{theorem}\label{thm:witness}
+$\sigma(K_4)=3$.
+\end{theorem}
+
+\begin{proof}
+$K_4$ is simple and cubic.  By Theorem~\ref{thm:main}, $\sigma(K_4)\ge 3$.
+For the upper bound, place three cops on the three neighbours of the robber's
+vertex $v$ (in $K_4$ these are exactly $V(K_4)\setminus\{v\}$): the surround
+condition holds at time zero, for every position $v$ of the robber.  Hence
+three cops suffice and $\sigma(K_4)=3$.
+\end{proof}
+
+An exhaustive check strengthens the lower-bound half into a complete
+verification: over \emph{all} ordered pairs of cop positions in $K_4$
+(including stacked cops, a weaker team than the rules allow) and all robber
+positions --- $64$ configurations --- the surround condition never holds.  The
+same is done for the other cubic graphs named by the verification pipeline:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+graph & $n$ & cubic & 2-cop configurations checked & surroundings found\\
+\midrule
+$K_4$ & 4 & yes & 64 & 0\\
+Petersen & 10 & yes & $1\,000$ & 0\\
+$Q_3$ & 8 & yes & 512 & 0\\
+$K_{3,3}$ & 6 & yes & 216 & 0\\
+triangular prism & 6 & yes & 216 & 0\\
+\bottomrule
+\end{tabular}
+\caption{Exhaustive 2-cop impossibility (all placements, including stacked
+cops).  The surround condition never holds at time zero, hence never at all.}
+\label{tab:exhaustive}
+\end{table}
+
+Additionally, a full retrograde (attractor) computation of the game under the
+standard rules of \cite{BCCDFJP} confirms the exact values:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccccc}
+\toprule
+graph & $K_4$ & Petersen & $Q_3$ & $K_{3,3}$ & prism\\
+\midrule
+$\sigma(G)$ & 3 & 3 & 3 & 3 & 3\\
+\bottomrule
+\end{tabular}
+\caption{Surround cop numbers by game search (\texttt{reproduce.py}).}
+\label{tab:games}
+\end{table}
+
+\begin{remark}[Robustness of the reading]
+The obstruction of Theorem~\ref{thm:main} uses only two facts: (i) surround
+means occupying \emph{all} neighbours of the robber's vertex; (ii) cops occupy
+vertices, at most one cop per vertex (stacking is anyway included in the
+exhaustive checks and only weakens the cops).  Every timing convention in the
+literature leaves the time-zero argument untouched.  Even the strengthened win
+condition ``occupy the closed neighbourhood $N[v]$'' survives: on $K_4$ that
+set has $4$ vertices, still more than two cops can occupy; and the robber on a
+cubic graph always retains a legal move to a cop-free neighbour, so a
+``robber stuck'' loss condition also never triggers with two cops.  Finally,
+$K_4$ is simple and cubic by any textbook definition, so no reading of
+``cubic graph'' avoids the counterexample.
+\end{remark}
+
+\section{Formal verification}
+
+The Lean~4 formalisation in \texttt{lean4/Main.lean} uses only the kernel and
+core (no Mathlib, no \texttt{sorry}).  All definitions are pure structural
+matches over explicit adjacency tables, and every statement is a Boolean
+equation between closed computable expressions proved by \texttt{rfl}, i.e.\
+by kernel reduction alone:
+
+\begin{itemize}
+\item \texttt{surrounded nbr cops v} --- the robber on $v$ is surrounded iff
+  every neighbour of $v$ lies in \texttt{cops};
+\item \texttt{twoCopTable nbr n} --- exhaustive over every robber vertex
+  $v<n$ and every ordered pair of cop positions $(c_1,c_2)$, $c_1,c_2<n$
+  (stacked cops included): the surround condition never holds;
+\item \texttt{cubicTable nbr n} / \texttt{symmetricTable nbr n} --- sanity
+  checks that the explicit tables define simple symmetric cubic graphs;
+\item \texttt{K4\_two\_cops\_never\_surround}, \texttt{K4\_three\_cops\_surround}
+  --- $\sigma(K_4)\ge 3$ and $\sigma(K_4)\le 3$, i.e.\ $\sigma(K_4)=3$;
+\item \texttt{Petersen\_two\_cops\_never\_surround},
+  \texttt{Q3\_two\_cops\_never\_surround},
+  \texttt{K33\_two\_cops\_never\_surround},
+  \texttt{prism\_two\_cops\_never\_surround} --- the Petersen graph, $Q_3$,
+  $K_{3,3}$ and the triangular prism are likewise not 2-surroundable;
+\item \texttt{all\_five\_two\_cops\_never\_surround} --- all five at once.
+\end{itemize}
+
+Running \texttt{lake env lean Check.lean} re-evaluates every audited quantity
+(all come out \texttt{true}) and prints \texttt{\#print axioms} for all
+seventeen theorems: \emph{every one of them reports ``does not depend on any
+axioms''} --- no \texttt{propext}, no \texttt{Classical.choice}, no
+\texttt{Quot.sound}, no \texttt{sorryAx}.  The script
+\texttt{reproduce.py} (standard library only) repeats the sanity checks, the
+exhaustive 2-cop tables, the $K_4$ witness and the retrograde game search, and
+exits with status $0$ on success.
+
+\begin{thebibliography}{9}
+\bibitem{BCCDFJP}
+A.~C.~Burgess, R.~A.~Cameron, N.~E.~Clarke, P.~Danziger, S.~Finbow,
+C.~W.~Jones, D.~A.~Pike,
+\emph{Cops that surround a robber},
+Discrete Applied Mathematics (2021),
+\url{https://doi.org/10.1016/j.dam.2020.06.019};
+arXiv:\url{https://arxiv.org/abs/1910.14200}.
+\end{thebibliography}
+
+\end{document}
