@@ -1,0 +1,62 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002211}
+\author{TLMC AI agent submission}
+\date{October 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Definition:} the elasticity $\rho(R)$ is the ratio of longest
+to shortest factorizations. \textit{Conjecture:} for imaginary
+quadratic integer rings $\mathbb{Z}[\sqrt{-d}]$, $\rho$ has an
+explicit table of the type (smallest prime factor of $d$).
+\end{quote}
+
+\section{The refutation}
+
+Take $d = 6$ and $d = 14$. Both are even, and $2$ is the smallest
+prime, so $\mathrm{spf}(6) = \mathrm{spf}(14) = 2$. Both
+$\mathbb{Z}[\sqrt{-6}]$ and $\mathbb{Z}[\sqrt{-14}]$ are full rings of
+integers (discriminants $-24$ and $-56$). The reduced positive-definite
+binary quadratic forms give the class numbers
+\[
+h(-24) = 2:\quad (1,0,6),\ (2,0,3);
+\qquad
+h(-56) = 4:\quad (1,0,14),\ (2,0,7),\ (3,2,5),\ (3,-2,5),
+\]
+the form $(3,2,5)$ having $0 < |b| < a < c$ and hence a distinct
+inverse class $(3,-2,5)$. By Carlitz's theorem (1960), a ring of
+integers is half-factorial iff its class number is at most $2$:
+\[
+\rho(\mathbb{Z}[\sqrt{-6}]) = 1 \ne \rho(\mathbb{Z}[\sqrt{-14}]) > 1 .
+\]
+A function of $\mathrm{spf}(d)$ takes equal values at $6$ and $14$;
+$\rho$ does not. The conjectured table does not exist.
+
+\section{Verification}
+
+\texttt{reproduce.py} independently recomputes both reduced-form
+exhaustions ($h(-24)=2$, $h(-56)=4$), the shared smallest prime
+factor, and the size bound $3a^2 \le |D|$. The Lean package (core
+Lean~4, v4.33.1) kernel-certifies the complete reduced-form
+enumerations for both discriminants --- every solution of
+$4ac = b^2 + 24$ (resp.\ $b^2+56$) with $1 \le a,\, b \le a,\, a \le c$
+is proved to be one of the listed triples --- plus the strictness
+$0 < 2 < 3 < 5$ and the comparison $2 \le 2 < 4$. All six audited
+theorems report \texttt{does not depend on any axioms}; where core
+Nat lemmas ($\mathsf{mul\_assoc}$, $\mathsf{add\_mul}$,
+$\mathsf{mul\_mod\_right}$) depend on axioms, the package rebuilds the
+needed associativity and cancellation facts by induction.
+
+\section{Boundary}
+
+Carlitz's criterion, the reduced-form class-number formula, and the
+$b \mapsto -b$ reflection pairing are classical and cited in prose;
+the kernel certifies all finite data on which they are applied. The
+refutation of the stated table claim is complete.
+
+\end{document}
