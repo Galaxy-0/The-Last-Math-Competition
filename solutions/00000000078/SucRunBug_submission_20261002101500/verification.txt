@@ -1,0 +1,33 @@
+Verified UTC: 2026-10-02T02:27:48.413017+00:00
+Submitter: SucRunBug
+Lean/Mathlib: v4.33.0
+Mathlib commit: db584cd6d46c92f209a44c0f1c829460d327499d
+LaTeX: native desktop compiler returned success for main.tex.
+PDF: readable rendering of the same proof text; visual QA is recorded separately.
+
+$ python3 reproduce.py
+PASS: identity recurrence averages are 0 or 1/2, never 1/4
+
+exit status: 0
+
+$ lake build
+ℹ [1756/1757] Built Main (1.0s)
+info: Main.lean:44:0: 'TLMC78.total_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:45:0: 'TLMC78.identity_preserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:46:0: 'TLMC78.no_claimed_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:54:0: 'TLMC78.chen_prime_limit_fails' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (1757 jobs).
+
+exit status: 0
+
+$ lake env lean Check.lean
+'TLMC78.total_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC78.identity_preserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC78.no_claimed_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC78.chen_prime_limit_fails' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+exit status: 0
+
+SHA256 Main.lean: f907a9dfea9a32027dd3ca8289ea756b305c552b284004f2c6cbe40e3d40f2a3
+SHA256 main.tex: 09acd15aa4a9dae6cd5444a97cdd9fabae9524127bf225cad5be6fa9d9039232
+All executed checks passed; no incomplete proof or custom axiom detected.
