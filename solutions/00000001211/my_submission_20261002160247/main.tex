@@ -1,0 +1,152 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\theoremstyle{definition}
+\newtheorem{reading}[theorem]{Reading}
+\newtheorem{counterexample}[theorem]{Counterexample}
+
+\title{Disproof of TLMC Conjecture 00000001211:\\ P-Positions of the Young Poset Game Are Not the Perfect Squares}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Conjecture and verdict}
+
+\begin{conjecture}[TLMC 00000001211, verbatim]
+Definition: A poset game (delete an element and everything above it). Conjecture: The
+P-positions of the poset game on Young's lattice have an explicit characterization via
+perfect square partitions (the Young poset game).
+\end{conjecture}
+
+\medskip
+\noindent\textbf{Verdict: disproved.} The phrase ``poset game on Young's lattice'' admits two
+natural readings; under \emph{both} the perfect-square characterization fails, and every number
+in this note is certified twice: by a Lean development that uses \emph{no axioms at all} (no
+\texttt{sorry}, no \texttt{Classical.choice}, no \texttt{Quot.sound}, not even
+\texttt{propext}; see \texttt{lean4/Check.lean}) and by an independent Python enumeration over
+all $252$ Young diagrams fitting in the $5\times 5$ box (\texttt{reproduce.py}).
+
+\section*{Setup}
+
+A \emph{Young diagram} is a partition $\lambda=(\lambda_1\ge\lambda_2\ge\dots\ge 0)$, drawn as
+rows of cells, row $i$ (1-indexed, from the top) having $\lambda_i$ cells. A move
+\emph{chomps} a cell $(i,j)$: the cell together with every cell $(r,c)$ with $r\ge i$, $c\ge j$
+is removed. Under normal play, a position is a \emph{P-position} if the player to move loses.
+A \emph{perfect-square partition} is $(k,k,\dots,k)$ with $k$ rows of length $k$
+(a $k\times k$ square).
+
+\begin{reading}[Literal poset game]
+Every cell of the current diagram may be chomped; the player who cannot move (facing $\emptyset$)
+loses.
+\end{reading}
+
+Since the corner cell $(1,1)$ belongs to every nonempty diagram and its up-set is the whole
+diagram, chomping $(1,1)$ clears the board in one move.
+
+\begin{theorem}[Reading 1]
+The P-positions of the literal Young poset game are exactly $\{\emptyset\}$. In particular the
+perfect square $(2,2)$ is an $N$-position.
+\end{theorem}
+
+\begin{proof}[Lean certificate]
+\texttt{isPLit\_nil : isPLit [] = true} and \texttt{isPLit\_cons : 1 <= n -> isPLit (n :: rest)
+= false}, i.e.\ no nonempty position is a P-position; combined they pin $P=\{\emptyset\}$.
+The key lemma \texttt{chompAt\_11} states that chomping $(1,1)$ always yields the empty
+diagram; the witness move then makes every nonempty position an $N$-position.
+\end{proof}
+
+\begin{counterexample}[Reading 1]
+$(2,2)$ is a perfect-square partition but an $N$-position (indeed so is every nonempty
+diagram). If one insists on regarding $\emptyset$ as the $0\times0$ square, the inclusion
+``$P\subseteq$ squares'' holds trivially while ``squares $\subseteq P$'' fails; either way the
+explicit characterization is false.
+\end{counterexample}
+
+\begin{reading}[Chomp with a poison corner]
+The corner $(1,1)$ is poison: taking it loses. Equivalently---since a rational player never
+takes poison voluntarily---forbid that move; a player facing the lone poison cell $(1)$ has no
+winning move and must take the poison, so $(1)$ is a P-position, exactly as in Chomp.
+\end{reading}
+
+\begin{theorem}[Reading 2]
+The characterization fails in both directions: $(2,1)$ is a P-position that is not a square,
+and the perfect squares $(2,2)$ and $(3,3,3)$ are $N$-positions.
+\end{theorem}
+
+\begin{proof}[Lean certificate]
+\texttt{chomp\_counterexample} bundles the \texttt{decide}-verified evaluations
+\texttt{isPChomp [2,1] = true}, \texttt{isSquare [2,1] = false},
+\texttt{isSquare [2,2] = true}, \texttt{isPChomp [2,2] = false},
+\texttt{isSquare [3,3,3] = true}, \texttt{isNChomp [3,3,3] = true}.
+\end{proof}
+
+\section*{The 5\texorpdfstring{$\times$}{x}5 enumeration}
+
+There are $\binom{10}{5}=252$ partitions fitting in the $5\times5$ box. The literal reading
+yields the single P-position $\emptyset$. The Chomp reading yields exactly $24$ P-positions:
+\[
+\begin{gathered}
+(), (1), (2,1), (2,2,1), (3,1,1), (3,2), (2,2,2,1), (4,1,1,1), (4,3), (3,3,1,1), (4,2,2),\\
+(2,2,2,2,1), (4,2,1,1,1), (5,1,1,1,1), (5,2,1,1), (5,4), (3,3,2,1,1), (5,3,2), (3,3,3,2,2),\\
+(4,4,3,1,1), (5,3,3,2), (5,5,3), (4,4,2,2,2), (5,5,2,2).
+\end{gathered}
+\]
+The only square among them is the degenerate $(1)$; the nondegenerate squares
+$(2,2),(3,3,3),(4,4,4,4),(5,5,5,5,5)$ are all $N$-positions (as is the $2\times3$ rectangle
+$(3,3)$).
+
+The $3\times3$ corner of the table, under both readings:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+position & Reading 1 (literal) & Reading 2 (Chomp) \\
+\midrule
+$\emptyset$    & P & --- (not reached) \\
+$(1)$          & N & P (poison) \\
+$(2)$          & N & N \\
+$(1,1)$        & N & N \\
+$(2,1)$        & N & \textbf{P} (not a square) \\
+$(2,2)$        & N & \textbf{N} (a square) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+For instance, under Reading 2 the moves of $(2,1)$ chomping cells $\ne(1,1)$ are
+$(1,1)$ and $(2)$, both $N$ (each has the move to $(1)$), so $(2,1)$ is $P$; then $(2,2)$ has
+the move $(2,2)\to(2,1)$ to a P-position and is $N$.
+
+\section*{Machine-checked certificate}
+
+\texttt{lean4/Main.lean} encodes diagrams as \texttt{List Nat} (non-increasing row lengths)
+and defines the chomp move \texttt{chompAt}, the cell enumeration \texttt{anyCell}/\texttt{cols},
+and two fuel-based win oracles \texttt{winLit}/\texttt{winChomp} with the $N/P$ predicates
+\texttt{isNLit}/\texttt{isPLit}/\texttt{isNChomp}/\texttt{isPChomp} at fuel
+$\mathrm{total}(\lambda)+1$. The fuel is sufficient: every move enumerated is a genuine cell
+(column $j$ of a row of length $n$ has $1\le j\le n$), hence row $i$ shrinks from $len$ to
+$\min(len, j-1)\le len-1$ and every move removes at least one cell, so the game depth from a
+diagram with $t$ cells is at most $t$. Chomped rows that become empty end the construction
+immediately (for genuine cells of canonical partitions this can only happen when $j=1$, which
+empties all lower rows too), so results stay canonical partitions; this also keeps every
+definition free of \texttt{propext}.
+
+\texttt{lean4/Check.lean} prints \texttt{\#print axioms} for all $18$ theorems; every line
+reads \emph{``does not depend on any axioms''}. \texttt{reproduce.py} re-derives the
+enumeration independently and asserts every figure quoted above.
+
+\section*{Conclusion}
+
+Conjecture 00000001211 is false under both readings of the game: the P-positions of the Young
+poset game are $\{\emptyset\}$ (literal reading) or a $24$-element set inside the $5\times5$
+box that neither contains nor is contained in the set of perfect-square partitions (Chomp
+reading). No perfect-square characterization of the conjectured form exists.
+
+\end{document}
