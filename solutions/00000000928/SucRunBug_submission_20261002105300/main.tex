@@ -1,0 +1,41 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\title{Dense point spectrum forces a nontrivial closed invariant subspace}
+\author{SucRunBug}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+\textbf{Conjecture 00000000928 -- FALSE.}
+
+\textbf{Filed assertion.} There exists a Hilbert-space operator whose point spectrum is dense in the unit circle, whose spectrum is the whole disk, and which has no invariant subspace. We use the standard invariant-subspace-problem convention: a bounded complex linear operator and a nonzero proper closed invariant linear subspace.
+
+\section*{Proof}
+Let $H$ be a complex Hilbert space and $T:H\to H$ a bounded linear operator. Write
+\[P(T)=\{\lambda\in\mathbb C:\exists v\ne0,\ Tv=\lambda v\}\]
+for its point spectrum. Suppose that $T$ has no nonzero proper closed invariant linear subspace.
+
+For any $\lambda\in P(T)$, the eigenspace
+\[E_\lambda=\ker(T-\lambda I)\]
+is closed, because $T-\lambda I$ is continuous; it is nonzero by the definition of point spectrum. It is invariant: if $Tv=\lambda v$, then $T(Tv)=\lambda Tv$. The assumption forces $E_\lambda=H$.
+
+If $\lambda,\mu\in P(T)$, choose a nonzero $v\in E_\lambda$. Since $E_\mu=H$ as well, $\lambda v=Tv=\mu v$. A nonzero vector over $\mathbb C$ gives $\lambda=\mu$. Hence $P(T)$ has at most one element. Such a subset of $\mathbb C$ is closed, so its closure also has at most one element.
+
+If the point spectrum were dense on the unit circle, its closure would contain both $1$ and $-1$. These are distinct, contradicting the preceding conclusion. Thus density on the unit circle forces a nonzero proper closed invariant subspace.
+
+This already contradicts two conjuncts of the filed assertion. Requiring the full spectrum to be the whole disk cannot remove that contradiction, and no claim about the general invariant subspace problem is needed. In fact, the proof works on every complex normed space with a bounded linear operator, without using the Hilbert structure.
+
+\section*{Formalization}
+Lean uses Mathlib's actual nonzero-eigenvector definition and the closed eigenspaces of continuous linear maps. The density hypothesis is the weaker condition that the unit circle is contained in the closure of the point spectrum. The main theorem produces a closed invariant submodule different from both bottom and top. The final theorem refutes the conjunction of density and absence of such a subspace; the additional full-spectrum condition is unnecessary.
+
+\textbf{Reproduce.} In \texttt{lean4/}, run \texttt{lake exe cache get},
+\texttt{lake build}, then \texttt{lake env lean Check.lean}.
+Lean/Mathlib: \texttt{v4.33.0}.
+
+\textbf{Source.} \url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/28a22efac52c4a7abd4bba8a143b1c1a06b7e177/conjectures/00000000928.md}
+\end{document}

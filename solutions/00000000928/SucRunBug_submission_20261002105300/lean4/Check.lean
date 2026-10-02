@@ -1,0 +1,7 @@
+import Main
+#check Conjecture928.pointSpectrum
+#check Conjecture928.HasClosedInvariantSubspace
+#check Conjecture928.DensePointSpectrumOnCircle
+#print axioms Conjecture928.no_invariant_subspace_point_spectrum_subsingleton
+#print axioms Conjecture928.dense_point_spectrum_forces_invariant_subspace
+#print axioms Conjecture928.conjecture_928_false
