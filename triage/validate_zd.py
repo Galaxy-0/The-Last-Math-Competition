@@ -5,6 +5,7 @@ Builds Gamma(Z_n) explicitly and computes omega / chi directly, then compares
 with the quotient-graph computation. If these disagree the reduction is wrong
 and every downstream result is void.
 """
+import sys
 from itertools import combinations
 from math import gcd
 
@@ -79,3 +80,7 @@ for n in range(4, 121):
         bad += 1
         print(f"{n:>5} {len(verts):>5} {o_bf:>9} {c_bf:>7} {o_q:>8} {str(c_q):>6}  MISMATCH")
 print(f"\nvalidated n in [4,120]; mismatches: {bad}")
+# Exit nonzero on any mismatch so automated pipelines cannot mistake a failed
+# validation for a passed one (review fix: the old version printed MISMATCH
+# lines but still exited 0).
+sys.exit(1 if bad else 0)

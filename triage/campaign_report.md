@@ -87,15 +87,16 @@ triage 评分模型（`triage.py`）的加权逻辑：
 
 > Definition: The [84,12,12] binary extremal self-dual code is a candidate at the Griesmer boundary. Conjecture: This code does not exist; moreover, the automorphism group of every [84,12] binary self-dual code contains no element of order 11, and the minimum distance is at most 11.
 
-**判定：不适定（定义矛盾）**
+**判定：字面为真（空真 / nonexistence 从句成立）；定义层面病态**
 
-二进制自对偶码 C ⊂ F₂ⁿ 满足 C = C^⊥，因此**必有 dim C = n/2**。对 n = 84，自对偶码的维数**必须为 42**，而命题给的是 12。
+二进制自对偶码 C ⊂ F₂ⁿ 满足 C = C^⊥，因此**必有 dim C = n/2**。对 n = 84，自对偶码的维数**必须为 42**，而命题给的是 12。故 `[84,12,12]` 自对偶码不存在，参数应为 `[84,42,d]`。
 
-故 `[84,12,12]` 这一对象**不可能自对偶**，命题讨论的对象不存在。命题本身不是"假"，而是**没有真值**。
+*更正（审阅）*：本报告初版把整题判为「没有真值」，这一步走过头了，需要区分两层：
 
-（若要讨论长度 84 的自对偶码，参数应为 `[84,42,d]`。）
+1. **字面命题层**：首句「This code does not exist」**为真**（对象确实不存在，即由上面的维数论证）；两个全称从句（「every [84,12] binary self-dual code 的自同构群不含 11 阶元」「minimum distance ≤ 11」）在空集上**空真**。按字面读法整题 TRUE——但这与「机器生成了一个有意义的猜想」是两回事。
+2. **定义/元层面**：命题把 `[84,12,12]` 称作 "extremal self-dual candidate" 说明生成器把不自洽的参数当成了合法对象——这一病态才是 `well_definedness_level` 应该捕捉的，不应与字面真值混同。
 
-**这类问题值得单独提 issue**：`metadata.csv` 的 `well_definedness_level` 列正是为捕捉它而设，但目前全列为空。
+**记录方式**：字面 TRUE（空真）+ well_definedness 病态标注；不要记为 FALSE，也不应记为「无真值」。这与 #154 提议的 resolution_type 字段（solution / disproof / literature-refuted / ill-posed / vacuous）是同一类规则空白。
 
 ---
 
@@ -289,8 +290,8 @@ G(n,k) 是**三正则图**。由 **Brooks 定理**，连通图若最大度 Δ = 
 | ID | 陈述 | 实际情况 |
 |---|---|---|
 | `00000001093` | "Hadamard 矩阵阶 12 恰有 1 个等价类、阶 16 恰有 5 个、阶 24 恰有 60 个" | **正确且已知**——这正是 1960 年代已完成的分类结果（1, 5, 60 全对） |
-| `00000001034` | "n ≥ 4 无非平凡 Lee 完美码" | **Golomb–Welch 猜想，2023 年已被证明** |
-| `00000001602` | "临界耦合 λ=1 时 almost Mathieu 算子谱的 Hausdorff 维数为 1/2" | **已知定理**（Avila 等） |
+| `00000001034` | "n ≥ 4 无非平凡 Lee 完美码" | **部分已知,非完整定理**——2023 年结果([arXiv:2210.04550](https://arxiv.org/abs/2210.04550))只覆盖**线性** Lee 完美景码、**半径 2**;Golomb–Welch 全命题仍开放 |
+| `00000001602` | "临界耦合 λ=1 时 almost Mathieu 算子谱的 Hausdorff 维数为 1/2" | **「= 1/2」并非定理**——已证:临界耦合维数 ≤ 1/2([arXiv:1909.04429](https://arxiv.org/abs/1909.04429));部分频率维数 = 0([arXiv:1510.07651](https://arxiv.org/abs/1510.07651)),在这些频率上「= 1/2」与文献矛盾 |
 | `00000000242` | "Borsuk 问题反例的最小维数不超过 65" | Borsuk 猜想**已于 1993 年被 Kahn–Kalai 推翻**；此为数值界复述 |
 | `00000000271` | "对每个 4 \| n 存在 n 阶 Hadamard 矩阵" | **Hadamard 猜想**，著名未决问题（非反证目标） |
 
