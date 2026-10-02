@@ -1,0 +1,230 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\cut}{\square}
+\newcommand{\dcut}{\delta_\square}
+
+\title{A Counterexample to Conjecture 00000000046:\\
+the Prime-Sum Graphs Stay at Cut Distance $\ge 1/8$ from $W\equiv1/2$}
+\author{%
+  Feiyu\thanks{Independent researcher.}
+  \and
+  Claude (Opus 5.5)\thanks{Anthropic.}%
+}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000000046 asserts that the prime-sum graphs $G_n$ converge, in the
+sense of graph limits (cut distance), to the constant graphon $W\equiv1/2$. They
+do not: $\dcut(W_{G_n},1/2)\ge1/8$ for every $n\ge1$. The odd vertices of $G_n$
+are pairwise non-adjacent and carry at least half of $[0,1]$, so the step
+graphon vanishes on a box of measure at least $1/4$. The refutation is
+formalized in Lean~4 against Mathlib, including the step graphon, the cut norm,
+the cut distance and the convergence statement itself.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture 00000000046 reads:
+
+\begin{quote}
+Conjecture: $G_n$ converges, in the sense of graph limits (cut distance), to the
+constant graphon $W \equiv 1/2$.
+\end{quote}
+
+\section{Reading of the statement}
+
+\paragraph{The graphs.} $G_n$ is the prime-sum graph of the preceding
+conjecture 00000000045: its vertices are $1,\ldots,n$, and $i\sim j$ if and
+only if $i\ne j$ and $i+j$ is prime.
+
+\paragraph{Graph limits.} We use the standard definitions of the theory of
+dense graph limits \cite{lovasz}, on $[0,1]$ with Lebesgue measure $\lambda$.
+
+\begin{definition}
+\begin{enumerate}
+\item A \emph{graphon} is a measurable symmetric function
+  $W\colon[0,1]^2\to[0,1]$.
+\item The \emph{step graphon} of a graph $G$ on $\{1,\ldots,n\}$ is
+  $W_G(x,y)=1$ if the vertices carrying $x$ and $y$ are adjacent and $0$
+  otherwise. Here vertex $i$ carries the $i$-th interval of the partition
+  $[0,\tfrac1n],(\tfrac1n,\tfrac2n],\ldots,(\tfrac{n-1}n,1]$, that is, $x$ is
+  carried by vertex $\max(1,\lceil nx\rceil)$.
+\item The \emph{cut norm} of a bounded measurable $U\colon[0,1]^2\to\mathbb R$
+  is
+  \[
+    \|U\|_\cut=\sup_{S,T}\Bigl|\int_{S\times T}U\,d\lambda^2\Bigr|,
+  \]
+  the supremum over measurable $S,T\subseteq[0,1]$.
+\item For $\varphi\colon[0,1]\to[0,1]$ put $W^\varphi(x,y)=W(\varphi x,\varphi y)$.
+  The \emph{cut distance} is
+  \[
+    \dcut(U,W)=\inf_\varphi\|U-W^\varphi\|_\cut ,
+  \]
+  the infimum over invertible measure-preserving maps
+  $\varphi\colon[0,1]\to[0,1]$.
+\item A graph sequence $(G_n)$ \emph{converges} to a graphon $W$ if
+  $\dcut(W_{G_n},W)\to0$.
+\end{enumerate}
+\end{definition}
+
+So the conjecture asserts that $\dcut(W_{G_n},\tfrac12)\to0$ as $n\to\infty$,
+where $\tfrac12$ denotes the constant graphon. Other common forms of the cut
+distance (relabelling either argument, or taking the infimum over couplings)
+give the same conclusion; see Remark~\ref{rem:variants}.
+
+\section{Result}
+
+\begin{theorem}\label{thm:main}
+For every $n\ge1$, $\dcut(W_{G_n},\tfrac12)\ge\tfrac18$. In particular $G_n$
+does not converge to the constant graphon $\tfrac12$, and Conjecture
+00000000046 is false.
+\end{theorem}
+
+\section{Proof}
+
+\begin{lemma}\label{lem:const}
+For every bounded measurable $U$, $\dcut(U,\tfrac12)=\|U-\tfrac12\|_\cut$.
+\end{lemma}
+
+\begin{proof}
+A constant kernel is unchanged by relabelling, so every term of the infimum
+equals $\|U-\frac12\|_\cut$; the infimum is over a nonempty set, since the
+identity is an invertible measure-preserving map.
+\end{proof}
+
+\begin{lemma}\label{lem:odd}
+The odd vertices of $G_n$ are pairwise non-adjacent.
+\end{lemma}
+
+\begin{proof}
+If $i\ne j$ are both odd, then $i+j$ is even and at least $1+3=4$, so it is not
+prime.
+\end{proof}
+
+\begin{lemma}\label{lem:measure}
+Let $n\ge1$ and let $S_n\subseteq[0,1]$ be the union of the intervals carried by
+the odd vertices of $G_n$. Then $\lambda(S_n)=\lceil n/2\rceil/n\ge\tfrac12$.
+\end{lemma}
+
+\begin{proof}
+Each of the $n$ intervals of the partition has length $1/n$, and
+$\{1,\ldots,n\}$ contains $\lceil n/2\rceil=\lfloor (n+1)/2\rfloor$ odd
+numbers.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+By Lemma~\ref{lem:odd}, $W_{G_n}=0$ on $S_n\times S_n$, so
+$W_{G_n}-\tfrac12=-\tfrac12$ there. Taking $S=T=S_n$ in the definition of the
+cut norm and using Lemmas~\ref{lem:const} and~\ref{lem:measure},
+\[
+  \dcut\bigl(W_{G_n},\tfrac12\bigr)=\bigl\|W_{G_n}-\tfrac12\bigr\|_\cut
+  \;\ge\;\Bigl|\int_{S_n\times S_n}\bigl(W_{G_n}-\tfrac12\bigr)\Bigr|
+  \;=\;\tfrac12\,\lambda(S_n)^2\;\ge\;\tfrac18 .
+\]
+Hence $\dcut(W_{G_n},\frac12)$ does not tend to $0$.
+\end{proof}
+
+\section{Formalization}
+
+The accompanying Lean~4 project (\texttt{lean/Submission/Basic.lean}) works on
+Mathlib's unit interval \texttt{unitInterval} with its Lebesgue measure
+\texttt{volume} (a probability measure), and on \texttt{unitInterval}
+$\times$ \texttt{unitInterval} with the product measure. It states the
+conjecture with the definitions above and proves its negation.
+
+\begin{itemize}
+  \item \texttt{IsGraphon}, \texttt{cutNorm}, \texttt{relabel},
+    \texttt{cutDist} --- items 1, 3 and 4 of the definition. The cut norm is a
+    supremum over pairs of measurable sets and the cut distance an infimum over
+    measurable bijections $\varphi$ with measurable inverse
+    (\texttt{MeasurableEquiv}) that preserve \texttt{volume}.
+  \item \texttt{vtx n x} $=\max(1,\lceil nx\rceil)$, the vertex carrying $x$;
+    \texttt{PrimeSumAdj} --- adjacency in $G_n$; \texttt{W n} --- the step
+    graphon $W_{G_n}$; \texttt{half} --- the constant graphon.
+    \texttt{isGraphon\_W} and \texttt{isGraphon\_half} check that both are
+    graphons.
+  \item \texttt{ConjectureHolds} --- \texttt{cutDist (W n) half} tends to $0$
+    as $n\to\infty$ (a \texttt{Tendsto} statement), item 5 of the definition.
+  \item \texttt{volume\_vtx\_preimage}, \texttt{map\_vtx} --- every vertex
+    carries an interval of measure $1/n$, so \texttt{vtx n} is uniformly
+    distributed on $\{1,\ldots,n\}$; \texttt{card\_odd\_Icc},
+    \texttt{half\_le\_volume\_oddCells} --- Lemma~\ref{lem:measure}.
+  \item \texttt{not\_primeSumAdj\_of\_odd}, \texttt{W\_eq\_zero\_of\_mem} ---
+    Lemma~\ref{lem:odd} and its consequence for $W_{G_n}$;
+    \texttt{setIntegral\_oddCells} --- the value $-\frac12\lambda(S_n)^2$ of the
+    integral over $S_n\times S_n$.
+  \item \texttt{abs\_setIntegral\_le\_one} --- every box integral of
+    $W_{G_n}-\frac12$ is at most $1$ in absolute value, so the supremum in
+    \texttt{cutNorm} is a genuine least upper bound; \texttt{eighth\_le\_cutNorm}
+    --- $\|W_{G_n}-\frac12\|_\cut\ge\frac18$.
+  \item \texttt{relabel\_half}, \texttt{cutDist\_half} ---
+    Lemma~\ref{lem:const}; \texttt{eighth\_le\_cutDist} ---
+    Theorem~\ref{thm:main}.
+  \item \texttt{conjecture\_00000000046\_false} ---
+    $\lnot\,$\texttt{ConjectureHolds}.
+\end{itemize}
+
+The toolchain is \texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to
+\texttt{v4.33.1}, and \texttt{lake build} succeeds. The project contains no
+\texttt{sorry}, no \texttt{admit} and no \texttt{native\_decide}, and
+introduces no axioms:
+\begin{center}
+\texttt{\#print axioms conjecture\_00000000046\_false}
+\end{center}
+reports exactly \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\section{Remarks}
+
+\begin{remark}[other forms of the cut distance]\label{rem:variants}
+The bound does not depend on the variant of $\dcut$. Relabelling the first
+argument instead, $\|U^\varphi-\frac12\|_\cut\ge|\int_{S'\times S'}(U^\varphi-
+\frac12)|$ with $S'=\varphi^{-1}(S_n)$, and the integral equals
+$\int_{S_n\times S_n}(U-\frac12)$ because $\varphi$ preserves measure. For the
+definition by couplings $\mu$ of $(\lambda,\lambda)$, the box
+$(S_n\times[0,1])^2$ gives the same integral, because the first marginal of
+$\mu$ is $\lambda$. In every case the distance is at least $\frac18$.
+\end{remark}
+
+\begin{remark}[what $G_n$ does converge to]
+The edge density of $G_n$ tends to $0$: every edge $\{i,j\}$ has $i+j$ a prime
+at most $2n$, and each such prime $p$ accounts for fewer than $p/2\le n$ edges,
+so $e(G_n)\le n\,\pi(2n)=O(n^2/\log n)$. Since $\|W_{G_n}\|_\cut\le\int
+W_{G_n}=2e(G_n)/n^2$, the sequence $G_n$ converges to the zero graphon. This
+remark is not part of the Lean development.
+\end{remark}
+
+\begin{remark}[relation to an earlier submission]
+An earlier submission for this conjecture used the triangle-freeness of $G_n$
+and the counting lemma, but left the graph-limit part (graphons, cut norm, cut
+distance) unformalized, and it was withdrawn after review on 2026-10-01. The
+present argument is different and shorter. It uses a single box instead of
+homomorphism densities, and the Lean development states the conjecture with the
+graph-limit notions themselves and refutes it.
+\end{remark}
+
+\begin{thebibliography}{9}
+\bibitem{lovasz} L.~Lov\'asz, \emph{Large Networks and Graph Limits},
+  American Mathematical Society Colloquium Publications~60, AMS, 2012.
+\end{thebibliography}
+
+\end{document}
