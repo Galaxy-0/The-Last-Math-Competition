@@ -1,0 +1,172 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+
+\title{A Proof of Conjecture 00000000953:\\
+No Real ETF$(17,8)$, and a Real ETF$(16,6)$}
+\author{%
+  Feiyu\thanks{Independent researcher.}
+  \and
+  Claude (Opus 5.5)\thanks{Anthropic.}%
+}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000000953 asserts that a real equiangular tight frame of $17$
+vectors in $\mathbb R^8$ does not exist, while one of $16$ vectors in
+$\mathbb R^6$ does. We prove both parts. For the first, the Gram matrix of such a
+frame would force the integrality relation $9m^2=2$. For the second, we give
+the classical example of $16$ sign vectors in $\mathbb R^6$. Both parts are
+formalized in Lean~4 against Mathlib.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture 00000000953 reads:
+
+\begin{quote}
+Definition: ETFs (equiangular tight frames). Conjecture: The real ETF$(17, 8)$
+does not exist while ETF$(16, 6)$ does (boundary entries of the small-parameter
+ETF table, computationally verifiable).
+\end{quote}
+
+\section{Reading of the statement}
+
+\begin{definition}
+A \emph{real equiangular tight frame} of $N$ vectors in $\mathbb R^d$ consists
+of unit vectors $f_1,\ldots,f_N\in\mathbb R^d$ with
+\begin{itemize}
+  \item (equiangular) $|\ip{f_i}{f_j}|=\alpha$ for all $i\ne j$, for some
+    constant $\alpha$;
+  \item (tight) $\sum_i\ip{f_i}{x}f_i=A\,x$ for all $x\in\mathbb R^d$, for some
+    constant $A$.
+\end{itemize}
+\end{definition}
+
+ETF$(N,d)$ denotes $N$ vectors in $\mathbb R^d$. This is the only consistent
+reading: a frame of $N$ vectors in $\mathbb R^d$ needs $N\ge d$, so ETF$(16,6)$,
+which the statement says exists, must mean $16$ vectors in $\mathbb R^6$. The
+conjecture is therefore the conjunction: no real ETF of $17$ vectors in
+$\mathbb R^8$ exists, and a real ETF of $16$ vectors in $\mathbb R^6$ exists.
+
+\section{Result}
+
+\begin{theorem}\label{thm:main}
+There is no real equiangular tight frame of $17$ vectors in $\mathbb R^8$, and
+there is one of $16$ vectors in $\mathbb R^6$. Hence Conjecture 00000000953
+holds.
+\end{theorem}
+
+\section{Proof}
+
+\subsection{Nonexistence of ETF$(17,8)$}
+
+Let $f_1,\ldots,f_{17}$ be a real ETF in $\mathbb R^8$ and
+$G_{ij}=\ip{f_i}{f_j}$ its Gram matrix.
+
+\begin{lemma}\label{lem:gram}
+$G^2=AG$, and $A\cdot d=N$, i.e.\ $A=17/8$.
+\end{lemma}
+
+\begin{proof}
+$(G^2)_{ij}=\sum_k\ip{f_i}{f_k}\ip{f_k}{f_j}
+=\ip{f_i}{\sum_k\ip{f_k}{f_j}f_k}=A\,G_{ij}$. For the second claim, take the
+trace of the frame operator in an orthonormal basis $(e_k)$: by Parseval,
+$\sum_k\ip{e_k}{\sum_i\ip{f_i}{e_k}f_i}=\sum_i\|f_i\|^2=N$, while it also equals
+$\sum_k\ip{e_k}{Ae_k}=Ad$.
+\end{proof}
+
+Since $G_{ii}=1$ and $G_{ik}^2=\alpha^2$ for $k\ne i$, the diagonal of
+$G^2=AG$ reads $1+16\alpha^2=A=17/8$, so $\alpha^2=9/128$. Now look at the entry
+$(1,2)$:
+\[
+  (G^2)_{12}=G_{11}G_{12}+G_{12}G_{22}+\sum_{k\ne1,2}G_{1k}G_{k2}
+  =2G_{12}+\alpha^2m ,
+\]
+where each product $G_{1k}G_{k2}$ has square $\alpha^4$, hence equals
+$\pm\alpha^2$, and $m\in\mathbb Z$ is the sum of these signs. With
+$(G^2)_{12}=\frac{17}8G_{12}$ this gives $\frac18G_{12}=\frac9{128}m$, i.e.\
+$G_{12}=\frac9{16}m$. Squaring, $\frac{9}{128}=\alpha^2=\frac{81}{256}m^2$, so
+$9m^2=2$, which has no integer solution. Hence no such frame exists.
+
+\subsection{Existence of ETF$(16,6)$}
+
+Let $v_1,\ldots,v_{16}$ be the vectors $(1,x_2,\ldots,x_6)\in\{\pm1\}^6$ with
+$x_2x_3x_4x_5x_6=1$, and $f_i=v_i/\sqrt6$. Each $f_i$ is a unit vector. For
+$i\ne j$, $v_i$ and $v_j$ differ in an even, nonzero number of coordinates
+other than the first, i.e.\ in $2$ or $4$ places, so $\ip{v_i}{v_j}=6-2\cdot
+\#\{\text{differences}\}=\pm2$ and $|\ip{f_i}{f_j}|=1/3$. Finally
+$\sum_iv_iv_i^{\mathsf T}=16I$: the diagonal entries are $16$, and an
+off-diagonal entry $\sum_iv_{ik}v_{il}$ vanishes because the set is invariant
+under flipping two of the coordinates $x_2,\ldots,x_6$, which changes the sign of
+$v_{ik}v_{il}$. Hence $\sum_i\ip{f_i}{x}f_i=\frac{16}6x$, a tight frame with
+$A=8/3=N/d$. These are the $16$ equiangular lines in $\mathbb R^6$ \cite{ls}.
+
+\section{Formalization}
+
+The accompanying Lean~4 project (\texttt{lean/Submission/Basic.lean}) states
+the conjecture and proves it against Mathlib, in
+\texttt{EuclideanSpace} $\mathbb R$ \texttt{(Fin d)}.
+
+\begin{itemize}
+  \item \texttt{IsETF N d f}, \texttt{ETFExists N d} --- the definition above:
+    unit norms, $\exists\alpha$ with $|\ip{f_i}{f_j}|=\alpha$ for $i\ne j$, and
+    $\exists A$ with $\sum_i\ip{f_i}{x}f_i=A\,x$ for all $x$;
+    \texttt{ConjectureHolds} $=\lnot$\,\texttt{ETFExists 17 8} $\wedge$
+    \texttt{ETFExists 16 6}.
+  \item \texttt{gram\_sq}, \texttt{trace\_eq} --- Lemma~\ref{lem:gram}; the
+    trace uses Parseval's identity in the standard orthonormal basis of
+    $\mathbb R^d$ (Mathlib's \texttt{sum\_inner\_mul\_inner}).
+  \item \texttt{not\_etf\_17\_8} --- the nonexistence argument.
+  \item \texttt{v}, \texttt{v\_gram}, \texttt{v\_norm}, \texttt{v\_frame} ---
+    the sign vectors and their integer identities, checked by
+    \texttt{decide}; \texttt{F}, \texttt{norm\_F}, \texttt{abs\_inner\_F},
+    \texttt{tight\_F}, \texttt{etf\_16\_6} --- the frame.
+  \item \texttt{conjecture\_00000000953} --- \texttt{ConjectureHolds}.
+\end{itemize}
+
+The toolchain is \texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to
+\texttt{v4.33.1}, and \texttt{lake build} succeeds. The project contains no
+\texttt{sorry}, no \texttt{admit} and no \texttt{native\_decide}, and
+introduces no axioms:
+\begin{center}
+\texttt{\#print axioms conjecture\_00000000953}
+\end{center}
+reports exactly \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\section{Remarks}
+
+The nonexistence is an instance of the integrality conditions of Sustik,
+Tropp, Dhillon and Heath \cite{stdh}. For a real ETF of $N\ne2d$ vectors in
+$\mathbb R^d$, the numbers $\sqrt{d(N-1)/(N-d)}$ and $\sqrt{(N-d)(N-1)/d}$ must be
+odd integers. For $(N,d)=(17,8)$ the first is $\sqrt{128/9}$. The argument above
+is a direct, self-contained version of this obstruction.
+
+\begin{thebibliography}{9}
+\bibitem{ls} P.~W.~H.~Lemmens and J.~J.~Seidel, \emph{Equiangular lines},
+  J. Algebra 24 (1973), 494--512.
+\bibitem{stdh} M.~A.~Sustik, J.~A.~Tropp, I.~S.~Dhillon and R.~W.~Heath,
+  \emph{On the existence of equiangular tight frames}, Linear Algebra Appl.
+  426 (2007), 619--635.
+\end{thebibliography}
+
+\end{document}
