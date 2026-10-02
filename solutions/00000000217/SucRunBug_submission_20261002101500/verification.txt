@@ -1,0 +1,31 @@
+Verified UTC: 2026-10-02T02:27:48.413017+00:00
+Submitter: SucRunBug
+Lean/Mathlib: v4.33.0
+Mathlib commit: db584cd6d46c92f209a44c0f1c829460d327499d
+LaTeX: native desktop compiler returned success for main.tex.
+PDF: readable rendering of the same proof text; visual QA is recorded separately.
+
+$ python3 reproduce.py
+PASS: base-one finite towers stay at algebraic value 1; base is strictly interior
+
+exit status: 0
+
+$ lake build
+ℹ [2125/2126] Built Main (1.1s)
+info: Main.lean:29:0: 'TLMC217.tower_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:30:0: 'TLMC217.algebraic_interior' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:31:0: 'TLMC217.not_transcendental' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (2126 jobs).
+
+exit status: 0
+
+$ lake env lean Check.lean
+'TLMC217.tower_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC217.algebraic_interior' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC217.not_transcendental' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+exit status: 0
+
+SHA256 Main.lean: 649f2a9556fd913c2e539f6b3396d96e1d03da9914cef298884ca3ce23b3e593
+SHA256 main.tex: 9b213d2d5ac1bc411711e14a49d2eca70f5d725d50f3dcb038fb3e832d389e17
+All executed checks passed; no incomplete proof or custom axiom detected.
