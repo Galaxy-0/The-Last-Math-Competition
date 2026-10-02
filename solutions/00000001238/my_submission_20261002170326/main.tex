@@ -1,0 +1,234 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\theoremstyle{definition}
+\newtheorem{remark}{Remark}
+
+\title{A Disproof of Conjecture \texttt{00000001238}\\
+\large Log-concavity of Jacobian invariant factors, and the equality class}
+\author{TLMC Submission}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture \texttt{00000001238} asserts that (i) the invariant-factor sequence of the
+Jacobian (sandpile group) of every graph is log-concave, and (ii) equality in the
+concavity holds \emph{exactly} for direct sums of cycles.  Both clauses are false.
+The complete bipartite graph $K_{2,4}$ has Jacobian
+$\mathbb{Z}/2 \times \mathbb{Z}/2 \times \mathbb{Z}/8$, whose invariant-factor
+sequence $(2,2,8)$ violates the middle concavity inequality ($2\cdot 2 = 4 < 2\cdot
+8 = 16$); and $K_4$ has Jacobian $\mathbb{Z}/4 \times \mathbb{Z}/4$, whose sequence
+$(4,4)$ \emph{has} equality although $K_4$ is not a direct sum of cycles (the edge
+$\{0,1\}$ lies on the two triangles $\{0,1,2\}$ and $\{0,1,3\}$).  Moreover the two
+clauses are jointly unsatisfiable even on the class the conjecture nominates: the
+cactus $C_3 \vee C_3 \vee C_6$ is a direct sum of cycles yet has invariant factors
+$(3,3,6)$, which are not log-concave ($9 < 18$).  An exhaustive sweep over all
+$2^{15}$ graphs on six labeled vertices ($26{,}704$ connected) corroborates the
+picture.  All numeric facts are certified in core Lean~4 with zero axioms and no
+\texttt{sorry}, and reproduced by a standalone script.
+\end{abstract}
+
+\section{The conjecture}
+
+\begin{quote}
+``Definition: The invariant-factor sequence of the Jacobi group encodes the torsion
+structure of the graph Laplacian. Conjecture: Log-concavity of the invariant-factor
+sequence of the torsion group holds for all graphs; and equality in the concavity
+holds exactly for direct sums of cycles. (Jacobian invariant factors log-concave)''
+\end{quote}
+
+\section{Conventions and reading}\label{sec:conv}
+
+For a finite connected graph $G$ with vertices $V$, the \emph{Jacobian}
+$\operatorname{Jac}(G)$ is the cokernel $\mathbb{Z}^{V}/\,\mathrm{rows}(L)$ of the
+graph Laplacian $L$; equivalently $\mathbb{Z}^{|V|-1}/\mathrm{rows}(L^{\circ})$ for
+any reduced Laplacian $L^{\circ}$ (delete one row and the matching column).  Its
+\emph{invariant-factor sequence} is the nontrivial part $d_1 \mid d_2 \mid \dotsb \mid
+d_k$ ($d_i > 1$) of the Smith normal form diagonal of $L^{\circ}$; this is the reading
+fixed by the pipeline's own confirmed instance (SNF $(1,1,2,2,8)$, nontrivial factors
+$[2,2,8]$, $2^2 = 4 < 2\cdot 8 = 16$).  \emph{Log-concavity} is the system of interior
+inequalities $d_i^2 \ge d_{i-1} d_{i+1}$ for $1 < i < k$; \emph{equality} means every
+interior inequality is an equality.  A \emph{direct sum of cycles} is a graph each of
+whose blocks is a single edge or a cycle (a cactus: cycles joined at cut vertices),
+whose Jacobian is then the direct sum of the $\mathbb{Z}/(\text{cycle length})$.
+
+\begin{remark}[Convention robustness]\label{rem:robust}
+Our counterexamples do not depend on these conventions.  The failure of $K_{2,4}$
+occurs at an \emph{interior} triple $(2,2,8)$ with a strict inequality, so it
+persists under the full-sequence reading (with leading $1$s), under endpoint
+augmentation, and under reversal.  The failure of the ``exactly'' clause is witnessed
+by $K_4$ (sequence $(4,4)$, equality $4\cdot 4 = 4 \cdot 4$) and, with interior
+equalities, by $K_5$ (sequence $(5,5,5)$, all equalities $25 = 25$, $|\operatorname{Jac}(K_5)|
+= 5^3 = 125$); neither is a cactus under any reading.  If instead ``direct sum of
+cycles'' were read group-theoretically, the clause would be vacuous (every finite
+abelian group is a direct sum of cyclic groups), so the graph-theoretic reading is
+the only substantive one.
+\end{remark}
+
+\section{Counterexample A: log-concavity fails at $K_{2,4}$}
+
+Take parts $A = \{0,1\}$, $B = \{2,3,4,5\}$.  Deleting vertex $0$ leaves the reduced
+Laplacian
+\[
+L^{\circ}(K_{2,4}) \;=\; L_{24} \;=\;
+\begin{pmatrix}
+ 4 & -1 & -1 & -1 & -1\\
+-1 &  2 &  0 &  0 &  0\\
+-1 &  0 &  2 &  0 &  0\\
+-1 &  0 &  0 &  2 &  0\\
+-1 &  0 &  0 &  0 &  2
+\end{pmatrix}.
+\]
+The following integer matrices are unimodular, $\det U_{24} = \det V_{24} = -1$
+(each is a product of elementary row, resp.\ column, operations applied to
+$L_{24}$; all entries are verified by the kernel):
+\[
+U_{24} = \begin{pmatrix} 1&0&0&0&0\\ 0&0&1&0&0\\ 2&1&7&0&0\\ 2&1&6&1&0\\ 2&1&5&1&1 \end{pmatrix},
+\qquad
+V_{24} = \begin{pmatrix} 0&-1&0&0&2\\ -1&-4&1&0&1\\ 0&0&0&0&1\\ 0&0&-1&1&1\\ 0&0&0&-1&5 \end{pmatrix},
+\]
+\[
+U_{24}\, L_{24}\, V_{24} \;=\; \operatorname{diag}(1,1,2,2,8).
+\]
+Hence
+\[
+\operatorname{Jac}(K_{2,4}) \;\cong\; \mathbb{Z}/1 \times \mathbb{Z}/1 \times
+\mathbb{Z}/2 \times \mathbb{Z}/2 \times \mathbb{Z}/8 \;\cong\;
+\mathbb{Z}/2 \times \mathbb{Z}/2 \times \mathbb{Z}/8 ,
+\]
+with invariant-factor sequence $(2,2,8)$.  As a sanity check, the order equals the
+number of spanning trees,
+$|\operatorname{Jac}(K_{2,4})| = 1\cdot 1\cdot 2\cdot 2\cdot 8 = 32 = 2^{4-1}\cdot
+4^{2-1}$, which is the matrix-tree value $\tau(K_{m,n}) = m^{n-1} n^{m-1}$ at
+$(m,n) = (2,4)$.  The middle concavity condition for $(2,2,8)$ requires
+$d_2^{\,2} \ge d_1 d_3$, i.e.
+\[
+2 \cdot 2 = 4 \;\not\ge\; 2 \cdot 8 = 16 ,
+\]
+which fails.
+
+\begin{proposition}\label{prop:A}
+The invariant-factor sequence of $\operatorname{Jac}(K_{2,4})$ is $(2,2,8)$, which is
+not log-concave.  Clause (i) of Conjecture \texttt{00000001238} is false.
+\end{proposition}
+
+\section{Counterexample B: equality without being a cycle sum}
+
+\subsection{$K_4$}
+
+The reduced Laplacian of $K_4$ (vertices $\{0,1,2,3\}$, vertex $0$ deleted) is
+$L^{\circ}(K_4) = \mathrm{diag\text{-}off}\,(3,-1,-1;-1,3,-1;-1,-1,3)$, and
+\[
+U_4 = \begin{pmatrix} 1&0&0\\ 3&1&0\\ 2&1&1 \end{pmatrix},
+\qquad
+V_4 = \begin{pmatrix} 0&0&1\\ -1&1&1\\ 0&-1&2 \end{pmatrix},
+\qquad
+U_4\, L^{\circ}(K_4)\, V_4 = \operatorname{diag}(1,4,4),
+\]
+with $\det U_4 = \det V_4 = 1$.  So $\operatorname{Jac}(K_4) \cong
+\mathbb{Z}/4 \times \mathbb{Z}/4$ with sequence $(4,4)$: the (length-two)
+concavity condition $d_1^{\,2} \ge d_1 d_2$ reads $16 \ge 16$ and holds \emph{with
+equality}.  But $K_4$ is not a direct sum of cycles:
+\begin{itemize}
+\item the edge $\{0,1\}$ lies on the two distinct triangles $\{0,1,2\}$ and
+      $\{0,1,3\}$, while every edge of a direct sum of cycles lies on at most one
+      cycle;
+\item equivalently, an exhaustive check of all $2^6$ graphs on four vertices shows
+      every connected cactus has at most $4$ edges and at most
+      $\tau \in \{1,3,4\}$ spanning trees (there are exactly $31$ of them),
+      whereas $K_4$ has $6$ edges and $\tau(K_4) = 4^{4-2} = 16$.
+\end{itemize}
+So the ``only if'' direction of clause (ii) fails.  The same failure in a form with
+interior equalities is given by $K_5$:
+$\operatorname{diag}(1,5,5,5)$, sequence $(5,5,5)$, all interior equalities
+$25 = 25$, $|\operatorname{Jac}(K_5)| = 125 = 5^3$, and $K_5$ is very far from a
+cactus.  (On six vertices, $K_6$ itself has sequence $(6,6,6,6)$ with all interior
+equalities $36 = 36$.)
+
+\begin{proposition}\label{prop:B}
+$\operatorname{Jac}(K_4) \cong \mathbb{Z}/4 \times \mathbb{Z}/4$ has equality in the
+concavity, but $K_4$ is not a direct sum of cycles.  Clause (ii) of Conjecture
+\texttt{00000001238} is false.
+\end{proposition}
+
+\section{The two clauses are jointly unsatisfiable}
+
+The conjecture's own equality class does not even satisfy clause (i).  The cactus
+$C_3 \vee C_3 \vee C_6$ (three cycles joined at one vertex; a direct sum of cycles
+in the conjecture's sense) has Jacobian
+$\mathbb{Z}/3 \times \mathbb{Z}/3 \times \mathbb{Z}/6$ with sequence $(3,3,6)$, and
+\[
+3 \cdot 3 = 9 \;\not\ge\; 3 \cdot 6 = 18 .
+\]
+Thus no interpretation makes both clauses true: any graph class witnessing
+``exactly'' must contain cacti, and cacti already break log-concavity.  (A caution
+for the reading: the wedge $C_3 \vee C_4$ has Jacobian $\mathbb{Z}/3 \times
+\mathbb{Z}/4 \cong \mathbb{Z}/12$ by the Chinese remainder theorem, since
+$\gcd(3,4) = 1$; its invariant-factor sequence is the \emph{single} factor $(12)$.
+Divisibility of the cycle lengths controls when a cactus Jacobian stays decomposed.)
+
+\section{Exhaustive corroboration on six vertices}
+
+Sweeping all $2^{15}$ graphs on six labeled vertices and computing the Smith normal
+form of each reduced Laplacian by determinantal divisors (gcds of all $k \times k$
+minors):
+\begin{center}
+\begin{tabular}{lr}
+\hline
+connected graphs on $6$ labeled vertices & $26{,}704$\\
+nontrivial sequences of length $\ge 2$ that violate an interior inequality & $75$\\
+graphs with torsion exactly $\mathbb{Z}/2 \times \mathbb{Z}/2 \times \mathbb{Z}/8$ & $15$
+  \quad ($K_{2,4}$ among them)\\
+equality sequences of length $\ge 2$ on non-cacti & $3{,}793$\\
+\quad of which of length $\ge 3$ (e.g.\ $K_6$, $(6,6,6,6)$) & $31$\\
+\hline
+\end{tabular}
+\end{center}
+So both failure modes are ubiquitous already on six vertices.
+
+\section{Machine verification}
+
+The directory \texttt{lean4/} contains a core-only Lean~4 project (toolchain
+\texttt{leanprover/lean4:v4.33.1}) certifying, with \textbf{zero axioms and no
+\texttt{sorry}} (\texttt{Check.lean} audits all eleven theorems; none depends on any
+axiom):
+\begin{itemize}
+\item \texttt{Tlmc1238.snf\_L24}: $U_{24} L_{24} V_{24} = \operatorname{diag}(1,1,2,2,8)$,
+      $\det U_{24} = \det V_{24} = -1$;
+\item \texttt{Tlmc1238.snf\_LK4}: $U_4 L^{\circ}(K_4) V_4 = \operatorname{diag}(1,4,4)$,
+      $\det U_4 = \det V_4 = 1$;
+\item \texttt{Tlmc1238.lap24\_is\_minor}, \texttt{lapK4\_is\_minor}: the two matrices
+      equal the reduced Laplacians computed from the edge bitmasks $510$ and $615$;
+\item \texttt{Tlmc1238.K4\_edge\_in\_two\_triangles}: both triangles through the edge
+      $\{0,1\}$ exist and have distinct edge sets;
+\item \texttt{Tlmc1238.seq\_228\_not\_logconcave}, \texttt{seq\_44\_logconcave\_eq},
+      \texttt{seq\_555\_equalities}, \texttt{seq\_336\_not\_logconcave},
+      \texttt{violation\_arith};
+\item \texttt{Tlmc1238.refute}: the conjunction of all failures of both clauses.
+\end{itemize}
+Because core lemmas in this toolchain pull \texttt{propext} through
+\texttt{Nat.testBit}, \texttt{Nat.lor} and overlapping match patterns, the
+development uses only kernel-reduced arithmetic (\texttt{rfl}/\texttt{decide}),
+structural \texttt{div}/\texttt{mod} bit tests, and disjoint pattern matches.
+The script \texttt{reproduce.py} (pure standard library, ${\sim}15$\,s) recomputes
+every number here --- unimodular products, determinantal divisors, the
+four-vertex cactus classification, and the full six-vertex sweep.
+
+\section{Scope of the disproof}
+
+\begin{remark}
+We refute the literal two-clause statement of Conjecture \texttt{00000001238} at the
+concrete graphs $K_{2,4}$, $K_4$ (with $K_5$ and $C_3 \vee C_3 \vee C_6$ as
+reinforcements).  The Smith theory of Laplacians, the matrix-tree theorem, and the
+cactus decomposition of Jacobians of cycle sums are of course true and are used as
+tools; the log-concavity claim and its ``exactly cycles'' equality claim are false
+as stated.
+\end{remark}
+
+\end{document}
