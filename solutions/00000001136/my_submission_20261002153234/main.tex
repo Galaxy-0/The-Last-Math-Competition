@@ -1,0 +1,118 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+
+\newtheorem*{conj*}{Conjecture 00000001136}
+\newtheorem{obs}{Observation}
+
+\title{A Counterexample to TLMC Conjecture 00000001136:\\
+All Bott--Samelson Varieties Are Gorenstein}
+\author{TLMC falsification package}
+\date{October 2, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We disprove TLMC conjecture 00000001136, which asserts that a Bott--Samelson
+variety $BS(s_1,\dots,s_k)$ is Gorenstein \emph{if and only if} every letter of
+the word $s_1\cdots s_k$ occurs equally often.  The longest element
+$w_0 \in S_3$ provides a reduced word $s_1s_2s_1$ with letter counts $(2,1)$;
+nevertheless $BS(s_1,s_2,s_1)$ is Gorenstein, because every Bott--Samelson
+variety is an iterated $\mathbb{P}^1$-bundle, hence smooth projective, and
+smoothness implies the Gorenstein property.  The ``only if'' direction fails.
+\end{abstract}
+
+\section{The conjecture}
+
+We quote the original text verbatim.
+
+\begin{conj*}
+\emph{Definition:} Complete intersection property of Bott--Samelson varieties
+means some power of the canonical bundle is very ample and the cohomology ring
+is completely determined by Chern classes.
+\emph{Conjecture:} $BS(s_1,\dots,s_k)$ is Gorenstein if and only if each letter
+of the word $s_1\cdots s_k$ occurs equally often; and in the Gorenstein case,
+the shift of the dualizing sheaf is given by reversal of the word.
+\end{conj*}
+
+\section{The geometric input: smoothness implies Gorenstein}
+
+\begin{obs}
+For a reduced word $s_1,\dots,s_k$, the Bott--Samelson variety
+$BS(s_1,\dots,s_k)$ is an iterated $\mathbb{P}^1$-bundle (Demazure,
+\emph{D\'esingularisation des vari\'et\'es de Schubert g\'en\'eralis\'ees},
+Ann.\ Sci.\ ENS 7 (1974)).  In particular it is smooth and projective.
+\end{obs}
+
+\begin{obs}
+Every smooth variety is Gorenstein: smoothness means all local rings are
+regular local rings, and regular local rings are Gorenstein (standard
+commutative algebra; e.g.\ Matsumura, \emph{Commutative Ring Theory}, \S19).
+Equivalently, the dualizing sheaf of a smooth variety is a line bundle (the
+canonical bundle).
+\end{obs}
+
+Consequently \emph{every} Bott--Samelson variety $BS(s_1,\dots,s_k)$ built from
+a reduced word is Gorenstein, independently of how often each letter occurs in
+the word.
+
+\section{The counterexample}
+
+Let $w = s_1s_2s_1$, a word in the simple reflections of the symmetric group
+$S_3$ (letters applied left to right).  Direct computation:
+\[
+(s_1s_2s_1)(1) = 3,\qquad (s_1s_2s_1)(2) = 2,\qquad (s_1s_2s_1)(3) = 1,
+\]
+so $s_1s_2s_1 = w_0 = (3,2,1)$, the longest element of $S_3$.
+
+\begin{itemize}
+\item \textbf{The word is reduced.}  Its length is $3$, and the Coxeter length
+of $w_0$ (the number of inversions of the one-line notation $(3,2,1)$) is
+$\binom{3}{2} = 3$.  Since $s_1s_2s_1 = w_0$ and the lengths agree, the word is
+a reduced expression.
+\item \textbf{The letter counts are unequal.}  $s_1$ occurs $2$ times, $s_2$
+occurs $1$ time: $(2,1)$ with $2 \neq 1$.
+\item \textbf{Nevertheless $BS(s_1,s_2,s_1)$ is Gorenstein}, by Observations 1
+and 2: it is an iterated $\mathbb{P}^1$-bundle, hence smooth projective, hence
+Gorenstein.
+\end{itemize}
+
+Thus $BS(s_1,s_2,s_1)$ is Gorenstein although the letters of $s_1s_2s_1$ do not
+occur equally often: the ``only if'' direction of Conjecture 00000001136 fails,
+and the conjecture is \textbf{disproved}.
+
+\begin{obs}[Robustness]
+The longest element $w_0 \in S_3$ has exactly two reduced expressions,
+$s_1s_2s_1$ and $s_2s_1s_2$, with letter counts $(2,1)$ and $(1,2)$; no
+rewording of $w_0$ satisfies the conjecture's hypothesis.  Worse, since
+\emph{every} Bott--Samelson variety is Gorenstein, the conjecture's ``only if''
+direction would force every reduced word to have equally often occurring
+letters, which fails already for $s_1$ (counts $(1,0)$) in $S_3$.  With the
+``iff'' false, the claimed ``reversal of the word'' description of the dualizing
+shift is moot (for a smooth variety the dualizing sheaf is simply the canonical
+bundle).
+\end{obs}
+
+\section{Verification}
+
+\begin{itemize}
+\item \texttt{reproduce.py} recomputes all numbers: the evaluation
+$s_1s_2s_1 = w_0$, reducedness (word length $3$ = Coxeter length $3$), the
+letter counts $(2,1)$, and an exhaustive enumeration of the reduced expressions
+of $w_0$ in $S_3$.
+\item \texttt{lean4/Main.lean} formalizes the disproof in bare Lean~4 core
+(no Mathlib): letters are \texttt{Nat}, the reflections $s_1, s_2$ and $w_0
+\in S_3$ are concrete functions $\mathbb{N} \to \mathbb{N}$, the word
+$[1,2,1]$ is verified to evaluate to $w_0$ and to be reduced, and the main
+theorem \texttt{conjecture\_1136\_false} shows that for \emph{any} predicate
+$G$ of Gorenstein-ness satisfying the classical hypothesis
+$\forall w,\, G\,w$ (every Bott--Samelson variety is Gorenstein), the
+conjecture's biconditional $\forall w,\, G\,w \leftrightarrow
+\texttt{EqualCounts}\ w$ is false, witnessed by $[1,2,1]$.
+\item \texttt{lean4/Check.lean} audits all six theorems with
+\texttt{\#print axioms}: every one depends on no axioms (no \texttt{sorry},
+no \texttt{Classical.choice}, no \texttt{propext}, no \texttt{Quot.sound}).
+\end{itemize}
+
+\end{document}
