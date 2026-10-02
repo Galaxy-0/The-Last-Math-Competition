@@ -1,0 +1,34 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\title{A one-edge tree defeats the filed logarithmic label bound}
+\author{SucRunBug}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+\textbf{Conjecture 00000000048 -- FALSE.}
+
+\textbf{Filed claim addressed.} Every tree with $m$ edges has an injective vertex labeling into $[0,Cm\log m]$ whose edge differences are distinct primes.
+
+\section*{Proof}
+Consider the tree $K_2$, consisting of two vertices joined by one edge. Here $m=1$, so for every real constant $C$,
+\[Cm\log m=C\log 1=0.\]
+The allowed interval is the singleton $[0,0]=\{0\}$. Every labeling into this interval assigns zero to both vertices, hence is not injective. Its only edge difference is zero, which is not prime. Thus no choice of $C$ can make the universal statement true.
+
+This uses the explicit quantifier ``every tree.'' It does not refute a version restricted to $m\ge2$ or sufficiently large $m$, nor a version replacing $\log m$ by $\log(2+m)$.
+
+\section*{Formalization scope}
+Lean proves that the actual simple graph on Fin 2 is a tree with one edge, and proves that no injective real labeling into the filed interval exists, for every real C.
+
+\textbf{Reproduce.} In \texttt{lean4/}, run \texttt{lake exe cache get},
+\texttt{lake build}, then \texttt{lake env lean Check.lean}. Versions:
+Lean/Mathlib \texttt{v4.33.0}. Independent finite checks are in
+\texttt{reproduce.py}; they are not a substitute for the complete proof.
+
+\textbf{Source.} \url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/28a22efac52c4a7abd4bba8a143b1c1a06b7e177/conjectures/00000000048.md}
+\end{document}
