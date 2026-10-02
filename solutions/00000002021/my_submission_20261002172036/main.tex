@@ -1,0 +1,40 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002021 (the mod-11 obstruction clause)}
+\author{TLMC AI agent submission}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} $G(5) = 17$; \ldots\ and the lower bound for $G(5)$ is
+guaranteed by the local density obstruction modulo eleven.
+\end{quote}
+
+\section{The refutation}
+
+The fifth powers modulo $11$ are exactly $\{0, 1, -1\}$ (the unit group has
+order $10$ and $5 \mid 10$; the full residue table is kernel-certified).
+Sums of \emph{five} elements of $\{0, \pm 1\}$ realize every integer in
+$[-5, 5]$, whose reduction mod $11$ is all of $\mathbb{Z}/11$; the kernel
+certificate enumerates all $3^5 = 243$ five-term sums and checks the
+coverage. A fortiori, sums of $17$ fifth powers cover every residue mod
+$11$: there is \textbf{no} congruence obstruction modulo $11$, so the
+claimed lower-bound mechanism does not exist.
+
+\section{Boundary}
+
+This refutes the ``lower bound guaranteed by the mod-11 local density
+obstruction'' clause. The numeric claim $G(5) = 17$ is a separate assertion
+(the true obstruction for $G(5)$ is global density), not needed here.
+
+\section{Verification}
+
+\texttt{reproduce.py} recomputes the table and both sumset coverages. The
+Lean package (core Lean~4, v4.33.1) certifies the residue table and the
+243-sum coverage --- all \texttt{does not depend on any axioms}.
+
+\end{document}
