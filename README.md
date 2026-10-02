@@ -20,12 +20,12 @@ The rules of The Last Math Competition are as follows:
 
 ## Leaderboard
 
-Current standings as of 2026-10-02 — **157 of the 10,000 conjectures solved** (9 proven, 148 disproven). All listed submissions passed full audit: LaTeX source + PDF + Lean 4 project (Mathlib or self-contained core Lean), no `sorry`, no `native_decide` or extra axioms, and a semantic review confirming the Lean theorem establishes the conjecture or its negation. Full per-solver conjecture lists: [leaderboard.md](./leaderboard.md).
+Current standings as of 2026-10-02 — **158 of the 10,000 conjectures solved** (9 proven, 149 disproven). All listed submissions passed full audit: LaTeX source + PDF + Lean 4 project (Mathlib or self-contained core Lean), no `sorry`, no `native_decide` or extra axioms, and a semantic review confirming the Lean theorem establishes the conjecture or its negation. Full per-solver conjecture lists: [leaderboard.md](./leaderboard.md).
 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
 | 1 | [earthking11](https://github.com/earthking11) | 69 | 62 | 0 | 69 |
-| 2 | [orionsheep](https://github.com/orionsheep) | 56 | 50 | 0 | 56 |
+| 2 | [orionsheep](https://github.com/orionsheep) | 59 | 51 | 0 | 59 |
 | 3 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
 | 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 8 | 8 | 3 | 5 |
 | 5 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |

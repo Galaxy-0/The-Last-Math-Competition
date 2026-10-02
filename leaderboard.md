@@ -10,12 +10,12 @@ review and were removed (see git history): #124, #142, #156, #199, #325, #1854, 
 (conjectures #462, #521v1, #556, #591 v1+v2, #1031, #1046, #1042, #1128, #1132, #1168, #1245)
 were closed unmerged for the same reason — including re-reviewed v2 resubmissions.
 
-**Total solved: 157 / 10000 conjectures** — 9 proven, 148 disproven.
+**Total solved: 158 / 10000 conjectures** — 9 proven, 149 disproven.
 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
 | 1 | [earthking11](https://github.com/earthking11) | 69 | 62 | 0 | 69 |
-| 2 | [orionsheep](https://github.com/orionsheep) | 56 | 50 | 0 | 56 |
+| 2 | [orionsheep](https://github.com/orionsheep) | 59 | 51 | 0 | 59 |
 | 3 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
 | 4 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
 | 5 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 8 | 8 | 3 | 5 |
@@ -39,15 +39,15 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 #3949★ (D), #3955★ (D), #4007★ (D), #5626★ (D), #8234★ (D), #8371★ (D), #8417★ (D), #8419★ (D)
 #8422★ (D), #8434★ (D), #8848★ (D)
 
-### orionsheep — 56 solved (50 first)
+### orionsheep — 59 solved (51 first)
 
-#119★ (D), #122★ (D), #340★ (D), #348★ (D), #404★ (D), #405 (D), #416★ (D), #423★ (D), #427 (D)
-#433★ (D), #450★ (D), #471★ (D), #477★ (D), #485★ (D), #492★ (D), #499★ (D), #521★ (D), #544★ (D)
-#548★ (D), #570★ (D), #578 (D), #589★ (D), #602★ (D), #1040★ (D), #1050★ (D), #1067 (D), #1068★ (D)
-#1072★ (D), #1092★ (D), #1136★ (D), #1147★ (D), #1186 (D), #1190★ (D), #1211★ (D), #1223★ (D)
-#1225★ (D), #1226★ (D), #1231★ (D), #1236★ (D), #1238★ (D), #1243★ (D), #1262★ (D), #1323 (D)
-#1668★ (D), #2021★ (D), #2024★ (D), #2142★ (D), #2144★ (D), #2149★ (D), #2160★ (D), #2181★ (D)
-#2182★ (D), #3843★ (D), #7986★ (D), #8420★ (D), #8540★ (D)
+#119★ (D), #122★ (D), #277 (D), #340★ (D), #348★ (D), #404★ (D), #405 (D), #416★ (D), #423★ (D)
+#427 (D), #433★ (D), #443 (D), #450★ (D), #471★ (D), #477★ (D), #485★ (D), #492★ (D), #499★ (D)
+#521★ (D), #544★ (D), #548★ (D), #570★ (D), #578 (D), #589★ (D), #602★ (D), #1040★ (D), #1050★ (D)
+#1067 (D), #1068★ (D), #1072★ (D), #1092★ (D), #1136★ (D), #1147★ (D), #1186 (D), #1190★ (D)
+#1211★ (D), #1223★ (D), #1225★ (D), #1226★ (D), #1231★ (D), #1236★ (D), #1238★ (D), #1243★ (D)
+#1262★ (D), #1323 (D), #1668★ (D), #1855★ (D), #2021★ (D), #2024★ (D), #2142★ (D), #2144★ (D)
+#2149★ (D), #2160★ (D), #2181★ (D), #2182★ (D), #3843★ (D), #7986★ (D), #8420★ (D), #8540★ (D)
 
 ### SucRunBug — 18 solved (18 first)
 
