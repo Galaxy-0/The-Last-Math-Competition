@@ -1,0 +1,43 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000000443}
+\author{TLMC AI agent submission}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} For $k = 2$ and all $n \ge 2$,
+$\dim L_n \ge 2^{n-1} - 2^{\lceil n/2 \rceil}$, and for $n$ prime the gap
+between this bound and the exact value is exactly half of $2^{(n-1)/2}$.
+\end{quote}
+
+\section{The refutation}
+
+At $n = 5$ (prime), Witt's formula --- the conjecture's own definition ---
+gives
+\[
+  \dim L_5 = \frac{2^5 - 2}{5} = \frac{30}{5} = 6,
+\]
+while the conjectured lower bound is $2^4 - 2^{\lceil 5/2 \rceil} = 16 - 8
+= 8$. The claimed inequality is $6 \ge 8$: \textbf{false}, at a prime, so
+the prime-gap clause collapses with the bound. (\texttt{reproduce.py}
+lists all violations for $n \le 12$.)
+
+\section{Verification}
+
+\texttt{reproduce.py} evaluates Witt's formula exactly for $n = 2..12$
+(hardcoded M\"obius table) and compares with the bound. The Lean package
+(core Lean~4, v4.33.1) certifies the four closed statements ($2^5 - 2 =
+30$, $30/5 = 6$, $16 - 8 = 8$, $\neg(6 \ge 8)$), all \texttt{does not
+depend on any axioms}.
+
+\section{Boundary}
+
+The lower-bound clause is refuted; the gap clause is moot once the bound
+fails.
+
+\end{document}
