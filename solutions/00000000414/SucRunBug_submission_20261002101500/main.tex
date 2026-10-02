@@ -1,0 +1,34 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\title{A terminal hook-walk cell violates the content bound}
+\author{SucRunBug}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+\textbf{Conjecture 00000000414 -- FALSE.}
+
+\textbf{Filed claim addressed.} The probability that a uniformly started hook walk visits cell $(i,j)$ differs from its content $j-i$ by at most $n^{-1/2}$.
+
+\section*{Proof}
+Use the one-row Young diagram $(3)$, with cells $(1,1),(1,2),(1,3)$ and $n=3$. The hook walk moves strictly right whenever it is not at the terminal cell. From column one it chooses columns two or three with equal probabilities; from column two its next cell is column three. Every starting cell therefore leads to column three, including a start at column three itself. Its visitation probability is exactly one.
+
+The content of the terminal cell is $3-1=2$. The absolute deviation is $|1-2|=1$, but $3^{-1/2}<1$. The stated bound fails.
+
+This is the ordinary, unnormalized content appearing in the filed statement. Replacing the content by a rescaled statistic would change the conjecture.
+
+\section*{Formalization scope}
+Lean evaluates the actual three-state hook-walk hitting recursion and its uniform-start probability, and proves the strict numerical violation with real powers.
+
+\textbf{Reproduce.} In \texttt{lean4/}, run \texttt{lake exe cache get},
+\texttt{lake build}, then \texttt{lake env lean Check.lean}. Versions:
+Lean/Mathlib \texttt{v4.33.0}. Independent finite checks are in
+\texttt{reproduce.py}; they are not a substitute for the complete proof.
+
+\textbf{Source.} \url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/28a22efac52c4a7abd4bba8a143b1c1a06b7e177/conjectures/00000000414.md}
+\end{document}
