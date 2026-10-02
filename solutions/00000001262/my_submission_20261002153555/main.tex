@@ -1,0 +1,183 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\theoremstyle{definition}
+\newtheorem{remark}{Remark}
+
+\title{A Disproof of Conjecture \texttt{00000001262}\\
+\large The abelian complexity of a balanced periodic word is not eventually
+constant: the word $(aab)^\infty$}
+\author{TLMC Submission}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture \texttt{00000001262} states: \emph{the abelian complexity of balanced
+periodic words is eventually constant, equal to the alphabet size (the abelian
+constant class)}.  We disprove it with the word $w = (aab)^\infty$, which is
+balanced and periodic over the alphabet $\{a,b\}$ of size $2$, yet whose abelian
+complexity satisfies $\omega(3k) = 1$ for \emph{every} $k \ge 0$: it equals $1$
+at the infinitely many lengths $n = 3, 6, 9, \dots$ and therefore is not
+eventually constant, let alone eventually equal to $2$.  The full universal
+statement $\forall k,\ \omega(3k) = 1$ and the limit negation
+$\neg\exists N\,\forall n \ge N,\ \omega(n) = 2$ are machine-checked in Lean 4
+(core library only, zero axioms, zero \texttt{sorry}).
+\end{abstract}
+
+\section{Setup: abelian complexity}
+
+Let $w$ be a one-sided infinite word over a finite alphabet. For $n \ge 1$ a
+\emph{factor} (window) of length $n$ is $w[s..s+n-1]$, a contiguous block
+starting at position $s$. Its \emph{Parikh vector} records how many times each
+letter occurs. The \emph{abelian complexity} of $w$ is
+\[
+\omega(n) \;=\; \#\{\text{Parikh vectors of length-}n\text{ windows of } w\}.
+\]
+Since the Parikh vector of a length-$n$ window is determined by its number
+$A(s,n)$ of letters $a$ (the number of $b$'s is $n - A(s,n)$), $\omega(n)$ is
+the number of \emph{distinct values} of $A(s,n)$ over window starts $s$.
+
+\section{The counterexample word and its two structural properties}
+
+Let
+\[
+w \;=\; (aab)^\infty \;=\; a\,a\,b\,a\,a\,b\,a\,a\,b\cdots
+\]
+over $\{a, b\}$, an alphabet of size $q = 2$.
+
+\begin{lemma}[Periodicity]\label{lem:periodic}
+$w$ is periodic with period $3$: the letter at position $i+3$ equals the letter
+at position $i$ for all $i$.
+\end{lemma}
+\begin{proof}
+Position $i$ carries $b$ iff $i \equiv 2 \pmod 3$, and $i + 3 \equiv i \pmod 3$.
+\end{proof}
+
+\begin{lemma}[Balance]\label{lem:balanced}
+$w$ is balanced: any two windows of the same length contain numbers of $a$'s
+differing by at most $1$.
+\end{lemma}
+\begin{proof}
+Shifting a window by one position removes one letter and appends one letter, so
+$|A(s+1,n) - A(s,n)| \le 1$. By Lemma~\ref{lem:periodic}, $A(s+3,n) = A(s,n)$
+(a shift by $3$ is a cyclic permutation of the period). Hence as $s$ ranges over
+all starts, $A(s,n)$ takes at most the three values $A(0,n), A(1,n), A(2,n)$,
+and consecutive ones among these differ by at most $1$; so the range of
+$A(\cdot, n)$ has diameter at most $1$.
+\end{proof}
+
+Thus $w$ is a \emph{balanced periodic word} in the sense of the conjecture.
+
+\section{The exact abelian complexity of $(aab)^\infty$}
+
+Write $A_s(n)$ for the number of $a$'s in the window starting at $s$ of length
+$n$.
+
+\begin{lemma}[Shift by one]\label{lem:step}
+$A_s(n+1) = \chi(s) + A_{s+1}(n)$, where $\chi(s) = 1$ if position $s$ carries
+$a$ and $\chi(s) = 0$ if it carries $b$; explicitly
+$\chi(0)=\chi(1)=\chi(2)=\chi(3)=\chi(4)=1$, $\chi(2)=\chi(5)=0$.
+\end{lemma}
+
+\begin{lemma}[Length $3k$]\label{lem:triple}
+For every $k \ge 0$ and every start $s$: $\quad A_s(3k) = 2k$.
+\end{lemma}
+\begin{proof}
+By induction on $k$. For $k = 0$ the window is empty. For the step, unwrap
+three letters (Lemma~\ref{lem:step} three times):
+\[
+A_s(3k+3) = \chi(s) + \chi(s{+}1) + \chi(s{+}2) + A_{s+3}(3k).
+\]
+Every three consecutive positions contain exactly two $a$'s (the window
+$(s, s+1, s+2)$ is a cyclic permutation of $aab$), and $A_{s+3}(3k) = A_s(3k)$
+by periodicity (Lemma~\ref{lem:periodic}), so $A_s(3k+3) = 2 + A_s(3k) = 2k + 2$.
+\end{proof}
+
+\begin{proposition}\label{prop:omega}
+For all $k \ge 0$:
+\[
+\omega(3k) = 1, \qquad \omega(3k+1) = 2, \qquad \omega(3k+2) = 2 .
+\]
+\end{proposition}
+\begin{proof}
+By Lemma~\ref{lem:triple}, $A_0(3k) = A_1(3k) = A_2(3k) = 2k$; since these three
+starts cover all Parikh classes (Lemma~\ref{lem:balanced} argument), every
+length-$3k$ window has Parikh vector $(2k, k)$, whence $\omega(3k) = 1$. For
+$3k+1$: unwrapping one letter gives
+$A_0(3k{+}1) = \chi(0) + A_1(3k) = 2k{+}1$,
+$A_1(3k{+}1) = \chi(1) + A_2(3k) = 2k{+}1$,
+$A_2(3k{+}1) = \chi(2) + A_0(3k) = 2k$,
+so exactly two values occur: $\omega(3k{+}1) = 2$. For $3k+2$:
+$A_0(3k{+}2) = 2k{+}2$ and $A_1(3k{+}2) = A_2(3k{+}2) = 2k{+}1$, so
+$\omega(3k{+}2) = 2$.
+\end{proof}
+
+The first values, computable by hand:
+\begin{center}
+\begin{tabular}{c|cccccccccccccc}
+$n$      & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
+\hline
+$\omega(n)$ & 2 & 2 & \textbf{1} & 2 & 2 & \textbf{1} & 2 & 2 & \textbf{1} & 2 & 2 & \textbf{1} & 2 & 2
+\end{tabular}
+\end{center}
+
+\section{Refutation of the conjecture}
+
+The conjecture predicts that $\omega(n)$ is eventually constant with value equal
+to the alphabet size, here $2$.
+
+\begin{proposition}[Limit negation]\label{prop:main}
+$\neg\,\exists N\ \forall n \ge N,\ \omega(n) = 2.$
+\end{proposition}
+\begin{proof}
+Given any $N$, put $n = 3(N+1) \ge N$. By Proposition~\ref{prop:omega},
+$\omega(n) = 1 \neq 2$. So no such $N$ exists.
+\end{proof}
+
+\begin{remark}[Why the conjecture fails here, precisely]
+At lengths $n \not\equiv 0 \pmod 3$ the word does exhibit the conjectured value
+$\omega(n) = 2$; the letter multiplicities just fail to stabilize because at
+every multiple of $3$ the factorization into whole periods collapses the
+possible Parikh vectors to the single vector $(2k, k)$. Balance constrains
+$\omega(n) \le 2$ for this word but cannot prevent the periodic collapse to
+$1$.
+\end{remark}
+
+\begin{remark}[Scope]
+The conjecture is a universal statement over all balanced periodic words; one
+counterexample refutes it. No finite enumeration stands in for the infinite
+statement: the formalization proves $\forall k,\ \omega(3k) = 1$ as a
+quantified theorem, together with the limit negation
+$\neg\exists N\,\forall n \ge N,\ \omega(n) = 2$, and proves
+$\omega(3k+1) = \omega(3k+2) = 2$ to show the word meets the conjectured value
+at the other residues.
+\end{remark}
+
+\section{Formal verification}
+
+The Lean development (\texttt{lean4/}, toolchain \texttt{leanprover/lean4:v4.33.1},
+core library only) formalizes everything above in namespace \texttt{Tlmc1262}:
+\begin{itemize}
+\item \texttt{omega\_triple : $\forall$ k, omega (3*k) = 1};
+\item \texttt{omega\_triple\_succ}, \texttt{omega\_triple\_succ2}: the $=2$ residues;
+\item \texttt{not\_eventually\_two :
+      $\neg\exists$ N, $\forall$ n $\ge$ N, omega n = 2};
+\item faithfulness of the three-start definition of $\omega$:
+      \texttt{A\_shiftQ : $\forall$ q r n, A (3*q + r) n = A r n}.
+\end{itemize}
+Because the core library's lemmas about \texttt{\%} (e.g.\ \texttt{Nat.add\_mod\_left})
+depend on \texttt{propext}, the $3$-periodicity of the letter function is derived
+from scratch via an explicit three-phase clock built by structural recursion
+(\texttt{cycle}, \texttt{ph}). \texttt{Check.lean} audits all $27$ theorems with
+\texttt{\#print axioms} and with a metaprogram that throws on any axiom use: all
+are \textbf{axiom-free} (no \texttt{propext}, no \texttt{Classical.choice}, no
+\texttt{Quot.sound}, no \texttt{sorryAx}). \texttt{reproduce.py} independently
+recomputes the $\omega$ table, balance, and the limit negation.
+
+\end{document}
