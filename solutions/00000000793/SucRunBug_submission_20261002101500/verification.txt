@@ -1,0 +1,31 @@
+Verified UTC: 2026-10-02T02:27:48.413017+00:00
+Submitter: SucRunBug
+Lean/Mathlib: v4.33.0
+Mathlib commit: db584cd6d46c92f209a44c0f1c829460d327499d
+LaTeX: native desktop compiler returned success for main.tex.
+PDF: readable rendering of the same proof text; visual QA is recorded separately.
+
+$ python3 reproduce.py
+PASS: only prime 2 has even base-three digit sum in the tested range
+
+exit status: 0
+
+$ lake build
+ℹ [1725/1726] Built Main (1.2s)
+info: Main.lean:47:0: 'TLMC793.even_digit_sum_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:48:0: 'TLMC793.zero_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:49:0: 'TLMC793.not_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (1726 jobs).
+
+exit status: 0
+
+$ lake env lean Check.lean
+'TLMC793.even_digit_sum_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC793.zero_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC793.not_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+exit status: 0
+
+SHA256 Main.lean: 1ccd10631db94693a47d7c0dde2ef3f989f93d11b39b44ec3a5157f2c284396e
+SHA256 main.tex: 8c064ecf554fbc721f6afdb0f57ab7526a3cb5543f42e838ae8b8036b87dbb4c
+All executed checks passed; no incomplete proof or custom axiom detected.
