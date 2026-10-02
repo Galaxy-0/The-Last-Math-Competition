@@ -1,0 +1,44 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000000277}
+\author{TLMC AI agent submission}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} $M = 6$ for planar flat tori, where $M(T)$ is the
+maximum multiplicity of a Laplace eigenvalue on $T = \mathbb{C}/\Lambda$
+(and multiplicity six only on the torus with automorphism group of order
+$32$).
+\end{quote}
+
+\section{The refutation}
+
+On the square torus $\mathbb{C}/\mathbb{Z}^2$, Laplace eigenfunctions are
+$e^{2\pi i \langle k, z\rangle}$ with $k$ in the dual lattice
+$\mathbb{Z}^2$ and eigenvalues $4\pi^2 |k|^2$. The squared norm
+$|k|^2 = 5$ is attained by exactly eight lattice vectors,
+\[
+  (\pm 1, \pm 2),\; (\pm 2, \pm 1),
+\]
+so the eigenvalue $20\pi^2$ has multiplicity $8 > 6$ (kernel-certified by
+enumeration over the exhaustive box $[-4,4]^2$). Hence $M \ge 8$: the
+conjectured value $M = 6$ is false, and the order-$32$ attainment clause
+fails with it. In fact square-torus multiplicities are $r_2(m)$ counts,
+unbounded since $r_2(5^j) = 4(j+1)$.
+
+\section{Verification}
+
+\texttt{reproduce.py} lists the eight vectors and the $r_2(5^j)$ table.
+The Lean package (core Lean~4, v4.33.1) certifies the count and $8 > 6$,
+all \texttt{does not depend on any axioms}.
+
+\section{Boundary}
+
+Only $M = 6$ is refuted; $M = \infty$ is indicated but not formalized.
+
+\end{document}
