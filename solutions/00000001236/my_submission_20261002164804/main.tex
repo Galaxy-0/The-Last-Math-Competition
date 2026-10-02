@@ -1,0 +1,91 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\title{Disproof of conjecture 00000001236 (chip-firing recurrences)}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+\textbf{Conjecture 00000001236 --- verdict: FALSE.}
+
+\textbf{Filed statement (verbatim).} ``Definition: The minimal total weight of
+recurrent configurations is the minimum chip count among stable and recurrent
+configurations. Conjecture: This minimum equals the max-stable weight minus
+the explicit row-minimal sum of a matrix $M$, where $M$ is the rounding of the
+inverse of the $(V-1)\times(V-1)$ reduced Laplacian; the minimal configuration
+is unique up to isomorphism.''
+
+\section*{The counterexample}
+Let $G$ be the path $1-2-3$ on three non-sink vertices, with the sink attached
+to vertex $3$ (so $V=4$). The reduced Laplacian (sink row/column deleted) and
+its exact inverse are
+\[
+L=\begin{pmatrix}1&-1&0\\-1&2&-1\\0&-1&2\end{pmatrix},
+\qquad
+M_0=L^{-1}=\begin{pmatrix}3&2&1\\2&2&1\\1&1&1\end{pmatrix},
+\]
+and direct multiplication confirms $LM_0=I$. Since
+$\det L = 1\cdot(2\cdot2-1) - (-1)\cdot(-1\cdot 2-0) + 0 = 1$, the matrix
+$M_0$ is \emph{integral}: every rounding convention (round, floor, ceiling)
+produces the same $M=M_0$, so the clause ``$M$ is the rounding of the inverse
+of the reduced Laplacian'' is unambiguous on this graph.
+
+\textbf{Both readings of ``row-minimal sum'' coincide.}
+(a)~Sum of the row minima:
+$\min(3,2,1)+\min(2,2,1)+\min(1,1,1)=1+1+1=3$.
+(b)~Minimum of the row sums: $\min(3{+}2{+}1,\,2{+}2{+}1,\,1{+}1{+}1)=\min(6,5,3)=3$.
+Under either reading, the quantity subtracted from the max-stable weight
+is $3$.
+
+\textbf{The recurrent configurations.} The max-stable configuration is
+$c_{\max}=(\deg v_i-1)_i=(0,1,1)$, of total weight $0+1+1=2$. By Dhar's
+burning test $c_{\max}$ is recurrent: the sink burns first; then vertex $3$
+ignites since $c_3=1\ge 2-1$ (it is adjacent to the burning sink), vertex $2$
+ignites since $1\ge 2-1$, and vertex $1$ ignites since $0\ge 1-1$.
+Equivalently, $c_{\max}$ has no forbidden subconfiguration. Since
+$\det L=1$, the sandpile group of $G$ is trivial, so $c_{\max}$ is the
+\emph{only} recurrent configuration; alternatively, the three remaining
+stable configurations $(0,0,0)$, $(0,0,1)$, $(0,1,0)$ each fail the burning
+test (no vertex can ignite first in the first and third, and in the second the
+process stalls after vertex $3$). Hence the minimal total weight of recurrent
+configurations is $2$.
+
+\textbf{The conjecture fails.} It predicts
+\[
+\operatorname{wt}(c_{\max})-\operatorname{rowminsum}(M)=2-3=-1
+\]
+under \emph{both} readings of the ambiguous phrase, whereas the true minimum
+is $2$. The predicted value is even negative, while every configuration weight
+is nonnegative. The failure is not an artifact of this one graph: on
+$P_2+\text{sink}$ the prediction is $1-2=-1$ (truth $1$) and on
+$P_4+\text{sink}$ it is $3-4=-1$ (truth $3$); in all these cases
+$\det L=1$ and $L^{-1}$ is integral. The uniqueness clause of the conjecture
+does hold here --- the recurrent configuration is unique up to isomorphism ---
+but the value identity is false, so the conjecture as filed is disproved.
+
+\section*{Lean formalization}
+The pinned core-Lean project (\texttt{lean4/}, toolchain
+\texttt{leanprover/lean4:v4.33.1}, no Mathlib) formalises with zero axioms and
+zero \texttt{sorry}: the entrywise identity $LM=I$ (so $M$ is the exact, hence
+rounded, inverse); $\det L=1$; both readings of the row-minimal sum equal
+$3$; recurrence on this graph via Dhar's burning test (a parallel monotone
+closure in which the sink burns from the start); that $(0,1,1)$ is the unique
+stable recurrent configuration; and that the minimum recurrent weight is $2$,
+so the conjectured value $-1$ fails under either reading.
+
+\textbf{Reproduction.} In \texttt{lean4/} run \texttt{lake build} and
+\texttt{lake env lean Check.lean}; the latter prints
+\texttt{\#print~axioms} for every theorem, each reported as depending on no
+axioms. \texttt{reproduce.py} performs the exact-arithmetic recomputation
+(\texttt{fractions.Fraction}) and cross-checks recurrence with two independent
+classical criteria (Dhar burning and forbidden subconfigurations) on three
+graphs.
+
+\textbf{Source.}
+\url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000001236.md}
+\end{document}
