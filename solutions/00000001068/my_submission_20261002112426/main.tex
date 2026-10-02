@@ -1,0 +1,104 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\title{Disproof of TLMC Conjecture 00000001068}
+\author{}
+\date{October 2, 2026}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\F}{\mathbb{F}}
+\begin{document}
+\maketitle
+
+\section*{Verdict}
+\textbf{FALSE.} The conjecture fails already at $p = 11$.
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{The maximal sum-free subsets of $\F_p$ are exactly the intervals
+$((p+1)/3,\, 2(p-1)/3)$, uniquely up to dilation (the complete
+Diananda--Yap characterization over finite fields).}
+\end{quote}
+
+A set $A \subseteq \F_p$ is \emph{sum-free} if $(A + A) \cap A = \emptyset$,
+and \emph{maximal} sum-free if it is not properly contained in another
+sum-free set.
+
+\section{Counterexample: \texorpdfstring{$p = 11$}{p = 11}}
+
+\begin{theorem}\label{thm:main}
+In $\F_{11}$ the set $A = \{4,5,6,7\}$ is a maximal sum-free subset with
+$|A| = 4$, whereas the conjectured interval
+$I = ((p+1)/3,\, 2(p-1)/3) = (4,\, 20/3) = \{5,6\}$ has $|I| = 2$ and is not
+maximal. Hence the conjecture is false.
+\end{theorem}
+
+\begin{proof}
+\emph{$A$ is sum-free.} A direct computation of all sums of two elements of
+$A$ gives
+\[
+A + A \;=\; \{0,1,2,3,8,9,10\} \;=\; \F_{11} \setminus A,
+\]
+which is disjoint from $A$.
+
+\emph{$A$ is maximal.} Every element outside $A$ is a sum of two elements of
+$A$:
+\[
+0 = 5+6,\quad 1 = 5+7,\quad 2 = 6+7,\quad 3 = 7+7,\quad
+8 = 4+4,\quad 9 = 4+5,\quad 10 = 4+6 .
+\]
+If $x \notin A$ were added to $A$, then $x \in A + A \subseteq
+(A \cup \{x\}) + (A \cup \{x\})$ would meet $A \cup \{x\}$, so no enlargement
+of $A$ is sum-free.
+
+\emph{$I$ is not maximal.} By definition of the open interval with exact
+rational endpoints, $x \in I$ iff $3x > 12$ and $3x < 20$, i.e.\
+$I = \{5,6\}$. Since $I \subsetneq A$ and $A$ is sum-free, $I$ is not maximal.
+The same holds for every nonzero dilate: for $d = 1,\dots,10$ the dilate
+$dI = \{5d, 6d\} \bmod 11$ has exactly two elements and satisfies
+$dI \subsetneq dA$, where $dA$ is sum-free (dilation by a unit preserves
+sum-freeness, and this is directly verified for all $d$); the element
+$4d \bmod 11$ lies in $dA \setminus dI$. Thus the family conjectured to be
+``the maximal sum-free subsets'' contains no maximal sum-free set at
+$p = 11$.
+
+\emph{$A$ lies outside the conjectured family.} $A$ is maximal sum-free by
+the above, and every dilate of $I$ has $2$ elements while $|A| = 4$; so $A$
+is not a dilate of $I$.
+\end{proof}
+
+Both inclusions of the claimed characterization therefore fail: the
+conjectured family contains no maximal sum-free set, and there exists a
+maximal sum-free set outside it.
+
+\section{Computational verification}
+
+A brute-force census over all $2^{11}$ subsets of $\F_{11}$ confirms the
+maximum sum-free size is $4 = \lfloor (p+1)/3 \rfloor$ and that there are
+exactly $15$ maximal sum-free subsets, with sizes in $\{3,4\}$;
+$A = \{4,5,6,7\}$ is one of the size-$4$ maximal sets. All numbers above are
+recomputed by the accompanying script \texttt{reproduce.py} and are
+machine-checked in pure Lean~4 (no axioms, no \texttt{sorry}; see
+\texttt{lean4/}).
+
+\section{Boundary remarks}
+
+\begin{itemize}
+\item The attack is robust to endpoint conventions: with integer-division
+endpoints the open reading gives $(4,6) = \{5\}$ and the closed reading gives
+$[4,6] = \{4,5,6\}$; both are still strictly contained in the sum-free set
+$A$, hence non-maximal under every reading.
+\item The breakage is not specific to $p = 11$. Under the exact-rational open
+reading, $|I|$ equals $0,0,0,1,2,3$ for $p = 2,3,5,7,11,13$, while the true
+maximum sum-free size equals $1,1,2,2,4,4$; the claimed interval is
+non-maximal for every prime in this census.
+\item The genuine Diananda--Yap extremal interval is
+$\{\lfloor p/3 \rfloor + 1, \dots, \lfloor 2p/3 \rfloor\}$, equal to
+$\{4,\dots,7\}$ for $p = 11$. The conjecture's open endpoints
+$((p+1)/3,\, 2(p-1)/3)$ truncate that interval, which is precisely what
+destroys maximality. A single counterexample refutes the universal claim.
+\end{itemize}
+
+\end{document}
