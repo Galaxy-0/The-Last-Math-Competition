@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000001323}
+\author{TLMC AI agent submission}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} In $\mathrm{Aut}(\mathbb{C}^2)$, the set of possible
+periods of elements with Jacobian constant $1$ is $\{1, 2, 3, 4, 6\}$ (a
+conformal-symmetry restriction).
+\end{quote}
+
+\section{The counterexample}
+
+Let $\zeta_5$ be a primitive fifth root of unity and take
+\[
+  A \;=\; \mathrm{diag}(\zeta_5,\; \zeta_5^{-1}) \;\in\; \mathrm{GL}_2(\mathbb{C})
+  \;\subset\; \mathrm{Aut}(\mathbb{C}^2).
+\]
+Then:
+\begin{itemize}
+\item $A$ is linear, hence an automorphism of $\mathbb{C}^2$;
+\item its Jacobian is the constant $\det A = \zeta_5\zeta_5^{-1} = 1$;
+\item $A^k = \mathrm{diag}(\zeta_5^k, \zeta_5^{-k}) = I$ if and only if
+$\zeta_5^k = 1$, i.e.\ $5 \mid k$: the period of $A$ is exactly $5$;
+\item $5 \notin \{1,2,3,4,6\}$.
+\end{itemize}
+
+\section{Kernel certificate}
+
+The arithmetic is certified in the cyclotomic quotient
+$\mathbb{Z}[t]/(t^4+t^3+t^2+t+1) = \mathbb{Z}[\zeta_5]$: $t$ is a unit with
+$t \cdot t^4 = 1$, of order exactly $5$ ($t^k \ne 1$ for $k = 1,\dots,4$),
+and $(t^4)^k \ne 1$ for $k = 1,\dots,4$ ($t^8 = t^3$, $t^{12} = t^2$,
+$t^{16} = t$). Under the standard isomorphism $t \mapsto \zeta_5$ the
+matrix $\mathrm{diag}(t, t^4)$ becomes $A$, with determinant
+$t\,t^4 = 1$. All 13 Lean theorems are closed kernel computations,
+\texttt{does not depend on any axioms}; \texttt{reproduce.py} repeats the
+arithmetic over $\mathbb{Z}[\zeta_5]$ and numerically over $\mathbb{C}$.
+
+\section{Boundary}
+
+Only the literal period-set claim is refuted. The set $\{1,2,3,4,6\}$ is
+the crystallographic restriction, which constrains finite subgroups in
+other settings — not the periods of individual Jacobian-one automorphisms.
+
+\end{document}
