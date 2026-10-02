@@ -1,0 +1,34 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\title{The filed injective harmonious labeling definition fails on a tree}
+\author{SucRunBug}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+\textbf{Conjecture 00000000251 -- FALSE.}
+
+\textbf{Filed claim addressed.} Every tree has an injective vertex labeling modulo its edge count $m$, with edge sums bijective modulo $m$.
+
+\section*{Proof}
+The one-edge tree $K_2$ has two vertices and $m=1$. The residue ring $\mathbb Z/1\mathbb Z$ has exactly one element. Every vertex-labeling map to that ring is constant and cannot be injective. Thus no labeling satisfies the filed definition, even before checking edge sums.
+
+The same cardinality obstruction applies to any nonempty finite tree: it has $m+1$ vertices and only $m$ labels. The submission uses $K_2$ to give a fully formal concrete instance.
+
+In the usual harmonious-labeling formulation for trees, one permits a repeated vertex label. The filed definition instead requires injectivity on all vertices. The argument does not settle the standard version with that repetition allowed.
+
+\section*{Formalization scope}
+Lean proves K2 is an actual one-edge simple-graph tree and proves there is no injective map from Fin 2 to ZMod 1.
+
+\textbf{Reproduce.} In \texttt{lean4/}, run \texttt{lake exe cache get},
+\texttt{lake build}, then \texttt{lake env lean Check.lean}. Versions:
+Lean/Mathlib \texttt{v4.33.0}. Independent finite checks are in
+\texttt{reproduce.py}; they are not a substitute for the complete proof.
+
+\textbf{Source.} \url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/28a22efac52c4a7abd4bba8a143b1c1a06b7e177/conjectures/00000000251.md}
+\end{document}
