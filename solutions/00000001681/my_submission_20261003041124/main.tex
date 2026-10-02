@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000001681}
+\author{TLMC AI agent submission}
+\date{October 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Definition:} rainbow-triangle-free edge colorings are
+complete-graph colorings without triangles of three distinct colors.
+\textit{Conjecture:} the number of rainbow $C_4$'s in such colorings is
+at least $(1/24)\cdot n^2$; the extremal configuration is attained by
+recursive constructions from balanced 4-partite colorings, and the
+constant $1/24$ is optimal.
+\end{quote}
+
+\section{The refutation}
+
+\textbf{Step 1: the class contains no rainbow $C_4$ at all.} Let
+$v_1v_2v_3v_4$ be a $C_4$ whose cycle edges carry four
+pairwise-distinct colors $a,b,c,d$ (edges $v_1v_2, v_2v_3, v_3v_4,
+v_4v_1$). The coloring is of a complete graph, so the diagonal
+$v_1v_3$ has a color $x$. Triangle $v_1v_2v_3$ is rainbow unless
+$x \in \{a,b\}$; triangle $v_1v_3v_4$ is rainbow unless
+$x \in \{c,d\}$. Since $\{a,b\} \cap \{c,d\} = \emptyset$, one of the
+two triangles is rainbow --- contradiction. Hence the rainbow-$C_4$
+count of \emph{every} member of the class, for every $n$, is $0$.
+
+\textbf{Step 2: a concrete exhibit.} The constant 2-coloring
+($\mathrm{col}(a,b)=\mathrm{false}$ for all edges) is symmetric, lies
+in the class (three edges from two colors always contain an equal
+pair, so no rainbow triangle), and has no rainbow $C_4$ (four cycle
+edges from two colors cannot be pairwise distinct). The Lean package
+exhibits this member for every $n$ and certifies all three properties.
+
+\textbf{Step 3: the bound fails.} With count $0$, the claim
+``count $\ge (1/24)n^2$'' clears denominators to $24 \cdot 0 \ge n^2$,
+false for every $n \ge 1$ since $n^2 > 0$.
+
+The minimum of the rainbow-$C_4$ count over the class is therefore
+$0$ for every $n \ge 1$: no positive lower bound holds, the constant
+$1/24$ is invalid (not merely non-optimal), and the
+extremal-configuration claim is vacuous.
+
+\section{Verification}
+
+\texttt{reproduce.py} checks exhaustively that no 3- or 4-tuple of
+Bool values is pairwise distinct, that the constant 2-coloring of
+$K_n$ ($4 \le n \le 9$) has zero rainbow $C_4$s and zero rainbow
+triangles, that all $864$ $K_4$ colorings carrying a rainbow $C_4$
+(cycle edges a permutation of four colors, diagonals arbitrary) force
+a rainbow triangle, and that $(1/24)n^2 > 0$ for $1 \le n < 200$
+(exact fractions). The Lean package (core Lean~4, v4.33.1) certifies
+the pigeonholes, the exhibit member, and the arithmetic; all ten
+audited theorems report \texttt{does not depend on any axioms}.
+
+\section{Boundary}
+
+Point 1 is a finite case argument on the $K_4$ spanned by the cycle
+(prose); the Lean kernel certifies its pigeonhole cores, the concrete
+2-color member of the class, and the clearing-denominators arithmetic.
+The lower-bound clause is refuted in full; no position is taken on
+variant conjectures about other coloring classes.
+
+\end{document}
