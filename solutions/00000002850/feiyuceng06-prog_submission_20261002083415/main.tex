@@ -1,0 +1,147 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\rankp}{rank_+}
+
+\title{A Counterexample to Conjecture 00000002850:\\
+Nonnegative Rank Separates from Rank Already at Rank $3$}
+\author{%
+  Feiyu\thanks{Independent researcher.}
+  \and
+  Claude (Opus 5.5)\thanks{Anthropic.}%
+}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000002850 asserts that the separation of nonnegative rank from
+ordinary rank ``starts at rank $4$''. It starts at rank $3$: the $4\times4$
+slack matrix of a square has rank $3$ and nonnegative rank $4$. The lower bound
+on the nonnegative rank is a four-element fooling set. Everything is formalized
+in Lean~4 against Mathlib.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture 00000002850 reads:
+
+\begin{quote}
+Definition: Nonnegative matrix factorization (NMF): the algebraic geometry of
+nonnegativity constraints. Conjecture: Rank rigidity of NMF: the separation of
+nonnegative rank from ordinary rank starts at rank 4, with the minimal
+separating matrix an explicit $4\times4$ nonnegative matrix; the geometric
+characterization of the separation is a non-triangulable pair of nested
+polytopes.
+\end{quote}
+
+\section{Reading of the statement}
+
+\begin{definition}
+The \emph{nonnegative rank} $\rankp(M)$ of an entrywise nonnegative real
+$m\times n$ matrix $M$ is the least $k$ such that $M=WH$ with $W$ ($m\times k$)
+and $H$ ($k\times n$) entrywise nonnegative. Always $\rankp(M)\ge\rank(M)$. We
+say the two ranks \emph{separate at rank $r$} if some nonnegative matrix of
+rank $r$ has nonnegative rank larger than $r$.
+\end{definition}
+
+``The separation starts at rank $4$'' asserts that $4$ is the least $r$ at which
+the ranks separate: they separate at rank $4$, and at no $r<4$. The statement
+distinguishes this rank from the size of the minimal example (``an explicit
+$4\times4$ matrix''), so the number $4$ in ``starts at rank $4$'' refers to the
+rank. We refute it by exhibiting a separation at rank $3$.
+
+\section{Result}
+
+\begin{theorem}\label{thm:main}
+The slack matrix of a square
+\[
+  S=\begin{pmatrix}1&1&0&0\\0&1&1&0\\0&0&1&1\\1&0&0&1\end{pmatrix}
+\]
+has $\rank(S)=3$ and $\rankp(S)=4$. Hence the ranks separate at rank $3$, and
+Conjecture 00000002850 is false.
+\end{theorem}
+
+\section{Proof}
+
+\paragraph{The rank is $3$.} The fourth row is $r_1-r_2+r_3$, so $\rank S\le3$,
+and the leading $3\times3$ block
+$\left(\begin{smallmatrix}1&1&0\\0&1&1\\0&0&1\end{smallmatrix}\right)$ has
+determinant $1$, so $\rank S\ge3$.
+
+\paragraph{The nonnegative rank is $4$.} Trivially $\rankp S\le4$. Suppose
+$S=WH$ with $W,H\ge0$ and inner dimension $3$, so $S_{ij}=\sum_{k=1}^3W_{ik}H_{kj}$
+is a sum of nonnegative terms. Each diagonal entry $S_{ii}=1$ is positive, so
+for each $i$ there is a $k=f(i)$ with $W_{ik}>0$ and $H_{ki}>0$. If $f(i)=f(j)=k$
+for some $i\ne j$, then $S_{ij}\ge W_{ik}H_{kj}>0$ and $S_{ji}\ge W_{jk}H_{ki}>0$.
+But for every pair $i\ne j$ at least one of $S_{ij},S_{ji}$ is $0$; the diagonal
+positions form a fooling set. So $f\colon\{1,2,3,4\}\to\{1,2,3\}$ is injective,
+which is impossible.
+
+\section{Formalization}
+
+The accompanying Lean~4 project (\texttt{lean/Submission/Basic.lean}) states
+the conjecture and proves its negation against Mathlib.
+
+\begin{itemize}
+  \item \texttt{HasNonnegFactorization M k} --- $M=WH$ with $W,H$ entrywise
+    nonnegative and inner dimension $k$.
+  \item \texttt{SeparatesAt r} --- some entrywise nonnegative real matrix $M$
+    has \texttt{M.rank = r} (Mathlib's rank) and no nonnegative factorization
+    of inner dimension $r$.
+  \item \texttt{ConjectureHolds} --- \texttt{SeparatesAt 4} and
+    $\lnot\,$\texttt{SeparatesAt r} for all $r<4$.
+  \item \texttt{S}, \texttt{rank\_S} --- the matrix and its rank, via an
+    explicit factorization through dimension $3$ and the invertible leading
+    block.
+  \item \texttt{S\_fooling}, \texttt{not\_hasNonnegFactorization\_S} --- the
+    fooling-set argument.
+  \item \texttt{separatesAt\_three}, \texttt{conjecture\_00000002850\_false}.
+\end{itemize}
+
+The toolchain is \texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to
+\texttt{v4.33.1}, and \texttt{lake build} succeeds. The project contains no
+\texttt{sorry}, no \texttt{admit} and no \texttt{native\_decide}, and
+introduces no axioms:
+\begin{center}
+\texttt{\#print axioms conjecture\_00000002850\_false}
+\end{center}
+reports exactly \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\section{Remarks}
+
+For matrices of rank at most $2$ the two ranks coincide \cite{cr}, so the
+separation starts exactly at rank $3$, with $S$ as a minimal example. Geometrically,
+$S$ is the slack matrix of a square, and $\rankp(S)=4$ reflects the fact that a
+square in the plane cannot be written as the projection of a polytope with
+fewer than $4$ facets, i.e.\ its extension complexity is $4$ \cite{yannakakis}.
+The ``nested polytopes'' picture of the statement belongs to rank $3$, not $4$:
+a rank-$3$ matrix has nonnegative rank $3$ exactly when a triangle can be
+nested between the corresponding pair of polygons.
+
+\begin{thebibliography}{9}
+\bibitem{cr} J.~E.~Cohen and U.~G.~Rothblum, \emph{Nonnegative ranks,
+  decompositions, and factorizations of nonnegative matrices}, Linear Algebra
+  Appl. 190 (1993), 149--168.
+\bibitem{yannakakis} M.~Yannakakis, \emph{Expressing combinatorial
+  optimization problems by linear programs}, J. Comput. System Sci. 43 (1991),
+  441--466.
+\end{thebibliography}
+
+\end{document}
