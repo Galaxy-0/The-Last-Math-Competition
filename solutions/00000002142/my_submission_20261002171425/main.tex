@@ -1,0 +1,51 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002142}
+\author{TLMC AI agent submission}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} The number of mates with parameters $(460,153,32,57)$
+is explicit; and the kernel of the number is a biplane count.
+\end{quote}
+
+\section{The refutation}
+
+Every strongly regular graph with parameters $(v,k,\lambda,\mu)$ satisfies
+the classical two-path identity
+\[
+  k\,(k-\lambda-1) \;=\; (v-k-1)\,\mu,
+\]
+obtained by counting, from a fixed vertex $x$, the length-2 paths to the
+vertices non-adjacent to $x$: each of the $k$ neighbors of $x$ has
+$k-\lambda-1$ further neighbors, and each of the $v-k-1$ non-neighbors of
+$x$ is reached exactly $\mu$ times.
+
+At $(460,153,32,57)$:
+\[
+  153\cdot 120 = 18360 \;\ne\; 17442 = 306 \cdot 57 .
+\]
+The necessary identity fails, so \textbf{no} SRG$(460,153,32,57)$ exists:
+there are no cospectral mates with these parameters, and the conjectured
+explicit count with its biplane kernel has no subject matter.
+
+\section{Boundary}
+
+Literal layer: the mate count is $0$ --- no positive explicit enumeration or
+biplane kernel exists. Definitional layer: the generator selected an
+infeasible parameter set, a pathology for \texttt{well\_definedness\_level}
+(cf.\ \#154).
+
+\section{Verification}
+
+\texttt{reproduce.py} computes both products, checks the failed identity,
+and sanity-checks the identity on classical feasible parameter sets. The
+Lean package (core Lean~4, v4.33.1) certifies the five closed statements,
+all \texttt{does not depend on any axioms}.
+
+\end{document}
