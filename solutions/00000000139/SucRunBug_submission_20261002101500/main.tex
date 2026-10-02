@@ -1,0 +1,34 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\title{Identity dynamics refute the commuting prime-time recurrence formula}
+\author{SucRunBug}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+\textbf{Conjecture 00000000139 -- FALSE.}
+
+\textbf{Filed claim addressed.} For any commuting measure-preserving system and positive-measure set, the prime-time pairwise recurrence limit exists and equals the square of the measure.
+
+\section*{Proof}
+Let $X=\{0,1\}$ carry the uniform probability measure, let $A=\{0\}$, and take every transformation to be the identity. The transformations preserve measure and commute, and $\mu(A)=1/2>0$. For any nonnegative times $a,b$,
+\[\mu(A\cap T^{-a}A\cap U^{-b}A)=\mu(A)=\frac12\ne\mu(A)^2=\frac14.\]
+For every nonempty finite set of selected times, the normalized recurrence average is exactly $1/2$. This is independent of the arithmetic conditions used to select those times. With the usual zero value for an empty normalized average, every average belongs to $\{0,1/2\}$, a closed set not containing $1/4$. No sequence of such averages can converge to $1/4$.
+
+Thus the claimed universal limit formula fails. This argument requires no infinitude conjecture about the selected primes: whenever the normalized average is defined on a nonempty family, it is $1/2$; even allowing empty families cannot produce the claimed limit. The filed quantifier covers every measure-preserving system and does not require ergodicity or mixing. A version with added dynamical hypotheses is not settled here.
+
+\section*{Formalization scope}
+Lean constructs the actual two-point counting measure scaled by 1/2, proves total mass one and identity measure preservation, computes all recurrence intersections, and proves the claimed limit impossible. It also specializes to the arithmetic selection in this conjecture; for commuting recurrence it proves the transformations commute.
+
+\textbf{Reproduce.} In \texttt{lean4/}, run \texttt{lake exe cache get},
+\texttt{lake build}, then \texttt{lake env lean Check.lean}. Versions:
+Lean/Mathlib \texttt{v4.33.0}. Independent finite checks are in
+\texttt{reproduce.py}; they are not a substitute for the complete proof.
+
+\textbf{Source.} \url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/28a22efac52c4a7abd4bba8a143b1c1a06b7e177/conjectures/00000000139.md}
+\end{document}
