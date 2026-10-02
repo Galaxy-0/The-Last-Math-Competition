@@ -1,0 +1,33 @@
+Verified UTC: 2026-10-02T02:54:09.312368+00:00
+Submitter: SucRunBug
+Lean/Mathlib: v4.33.0
+Mathlib: db584cd6d46c92f209a44c0f1c829460d327499d
+
+$ lake build
+✔ [2034/2035] Built Main (1.3s)
+Build completed successfully (2035 jobs).
+
+exit status: 0
+
+$ lake env lean Check.lean
+Conjecture928.pointSpectrum.{u_1} {H : Type u_1} [NormedAddCommGroup H] [NormedSpace ℂ H] (T : H →L[ℂ] H) : Set ℂ
+Conjecture928.HasClosedInvariantSubspace.{u_1} {H : Type u_1} [NormedAddCommGroup H] [NormedSpace ℂ H] (T : H →L[ℂ] H) :
+  Prop
+Conjecture928.DensePointSpectrumOnCircle.{u_1} {H : Type u_1} [NormedAddCommGroup H] [NormedSpace ℂ H] (T : H →L[ℂ] H) :
+  Prop
+'Conjecture928.no_invariant_subspace_point_spectrum_subsingleton' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Conjecture928.dense_point_spectrum_forces_invariant_subspace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Conjecture928.conjecture_928_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+exit status: 0
+
+SHA256 lean4/Main.lean: 2150951e114e0b38c6bb440b5d4222514208431490e50ca61f16234b9d74ddd2
+SHA256 main.tex: 455bb84e362ac37a69fbeb7ccd01cb2a6af52f3419bcb8e66749e2c943231563
+
+Native LaTeX compiler: success (2026-10-02).
+PDF: one page visually inspected; no layout issues.
+Only standard Lean foundation axioms; all executed checks passed.
