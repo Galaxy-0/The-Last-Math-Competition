@@ -1,0 +1,112 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}
+\title{Disproof of TLMC Conjecture 00000001067:\\
+the ``$O(1)=0$ for $p\equiv 3\pmod 4$'' clause for maximal $B_2$ sets in $\mathbb{F}_p$}
+\author{}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+TLMC conjecture 00000001067 asserts that the maximal $B_2$ set of $\mathbb{F}_p$
+has size $\lceil\sqrt p\rceil+O(1)$ and that the $O(1)$ term equals $0$ for
+$p\equiv 3\pmod 4$.  Complete exhaustive enumeration shows that for
+$p=11\equiv 3\pmod 4$ the maximal $B_2$ subset of $\mathbb{Z}/11\mathbb{Z}$ has
+$3$ elements, while $\lceil\sqrt{11}\rceil=4$; likewise $M(19)=4<5=\lceil\sqrt{19}\rceil$.
+The exactness clause is therefore false.  The counterexample $p=11$ is fully
+machine-checked in Lean~4 with zero axioms and zero \texttt{sorry}.
+\end{abstract}
+
+\section{The conjecture, quoted verbatim}
+
+The conjecture text reads, character for character:
+\begin{quote}
+``Definition: A B\_h set (unique h-fold sums). Conjecture: The maximal B\_2 set
+in F\_p has size $\lceil\sqrt p\rceil$ + O(1), and the O(1) term equals 0 for
+p $\equiv$ 3 mod 4 (an exact B\_2 result).''
+\end{quote}
+
+\paragraph{Correspondence.}  For $h=2$ in $\mathbb{F}_p$, ``unique 2-fold sums''
+(up to permutation of summands, the only non-degenerate reading) is the Sidon
+condition: $A\subseteq\mathbb{Z}/p\mathbb{Z}$ is $B_2$ iff the sums $a+b\pmod p$
+over all unordered pairs with repetition $a\le b$, $a,b\in A$, are pairwise
+distinct.  ``Maximal'' is read as maximum cardinality
+$M(p)=\max\{|A|: A\subseteq\mathbb{Z}/p\mathbb{Z}\text{ is }B_2\}$, and the
+$O(1)=0$ clause asserts $M(p)=\lceil\sqrt p\rceil$ exactly for $p\equiv3\pmod4$.
+The attack uses precisely these objects; nothing is redefined.
+
+\section{The counterexample}
+
+A $B_2$ set of size $k$ in $\mathbb{Z}/p\mathbb{Z}$ has $k(k+1)/2$ distinct
+unordered pair sums, all lying in a set of $p$ residues.  Exhaustive enumeration
+of \emph{all} subsets gives:
+\[
+M(11)=3<4=\lceil\sqrt{11}\rceil,\qquad M(19)=4<5=\lceil\sqrt{19}\rceil,
+\qquad 11\equiv 19\equiv 3\pmod 4 .
+\]
+Concretely: for $p=11$, all $\binom{11}{4}=330$ four-subsets of
+$\mathbb{Z}/11\mathbb{Z}$ fail the Sidon condition (each would need its
+$10$ pair sums distinct among $11$ residues; none is), while
+$A=\{0,1,3\}$ is $B_2$ with pair sums $0,1,3,2,4,6$ --- all distinct mod $11$;
+hence $M(11)=3$.  For $p=19$, all $\binom{19}{5}=11628$ five-subsets fail and
+$\{0,1,3,7\}$ achieves $4$ (pair sums $0,1,2,3,4,6,7,8,10,14$, distinct mod
+$19$), so $M(19)=4$.  Since both primes are $\equiv3\pmod4$,
+the clause ``the $O(1)$ term equals $0$ for $p\equiv3\pmod4$'' is false; the
+conjecture's highlighted ``exact $B_2$ result'' does not hold.  (The weaker
+asymptotic part $\lceil\sqrt p\rceil+O(1)$ is not contradicted; the deviation is
+$1$ in both examples.)  One counterexample suffices: the conjecture is
+\textbf{FALSE}.
+
+\subsection*{Boundary behavior}
+
+Exact recomputation for primes $p\equiv3\pmod4$ shows the exactness fails
+erratically, and is already forced by the Erd\H{o}s--Tur\'an bound
+$M(p)\le\sqrt p+\tfrac12$ at $p=11,19$:
+\begin{center}
+\begin{tabular}{lccccccccc}
+\toprule
+$p$ & 3 & 7 & 11 & 19 & 23 & 31 & 43 & 47 & 59\\
+\midrule
+$M(p)$ & 2 & 3 & 3 & 4 & 5 & 6 & 6 & 6 & 7\\
+$\lceil\sqrt p\rceil$ & 2 & 3 & 4 & 5 & 5 & 6 & 7 & 7 & 8\\
+$M(p)=\lceil\sqrt p\rceil$? & yes & yes & \textbf{no} & \textbf{no} & yes & yes
+  & \textbf{no} & \textbf{no} & \textbf{no}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Lean 4 certificate (zero axioms)}
+
+Subsets of $\mathbb{Z}/11\mathbb{Z}$ are encoded as $11$-bit masks
+(bit $i$ set $\iff i\in A$); \texttt{isB2 11 n} is the Sidon condition
+(distinctness of all $a+b \bmod 11$, $a\le b$).  \texttt{Main.lean} proves:
+\begin{itemize}
+\item \texttt{check11}: an exhaustive check over all $2^{11}=2048$ masks that no
+  mask with $\ge4$ elements is $B_2$, discharged by pure kernel reduction
+  (\texttt{rfl});
+\item \texttt{allRange\_spec}: bridge lemma from the Boolean bounded check to a
+  $\forall$-statement (induction with core lemmas only);
+\item \texttt{no\_ge4\_B2\_Z11}:
+  $\forall n<2^{11},\ \texttt{isB2}\ 11\ n=\texttt{true}\to \texttt{maskPop}\ 11\ n\le 3$;
+\item \texttt{witness\_B2\_Z11}: $\{0,1,3\}$ (mask $11$) is a $3$-element $B_2$ set;
+\item \texttt{disproof\_1067}:
+  $11\%4=3\ \wedge\ (\forall n<2^{11},\ B_2(n)\to|n|\le3)\ \wedge\ B_2(\{0,1,3\})\
+  \wedge\ |\{0,1,3\}|=3\ \wedge\ \lceil\sqrt{11}\rceil=4$.
+\end{itemize}
+\texttt{Check.lean} runs \texttt{\#print axioms} on every theorem: each reports
+``does not depend on any axioms'' (no \texttt{propext}, \texttt{Classical.choice},
+\texttt{Quot.sound}, \texttt{sorryAx}); \texttt{native\_decide} is not used.
+
+\section{Reproduction}
+
+\begin{enumerate}
+\item \texttt{python3 reproduce.py} --- independent pure-Python recomputation:
+      exhaustive enumeration over all $k$-subsets of $\mathbb{Z}/p\mathbb{Z}$
+      yields $M(11)=3$, $M(19)=4$, and the boundary table above.
+\item \texttt{cd lean4 \&\& lake build \&\& lake env lean Check.lean} ---
+      compiles the certificate and prints the axiom audit.
+\end{enumerate}
+
+\end{document}
