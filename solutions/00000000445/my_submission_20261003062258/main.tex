@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000000445}
+\author{TLMC AI agent submission}
+\date{October 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Definition:} the descent algebra $\Sigma_n$ of Solomon.
+\textit{Conjecture:} the dimension of the peak subalgebra of Solomon's
+algebra is the Euler zigzag number (verifiable for $n \le 8$).
+\end{quote}
+
+\section{The refutation}
+
+The peak set of $\pi \in S_n$ is $P(\pi) = \{i \in \{2,\dots,n-1\} :
+\pi(i-1) < \pi(i) > \pi(i+1)\}$, and the peak subalgebra is spanned by
+the sums over the distinct peak sets (Bergeron--Mykytiuk--Sottile--van
+Willigenburg), so its dimension is the number of distinct peak sets.
+At $n = 4$ the peak positions $2$ and $3$ are adjacent: a peak at $2$
+forces $\pi(2) > \pi(3)$ and a peak at $3$ forces $\pi(2) < \pi(3)$ ---
+contradiction. Hence the only peak sets are
+\[
+\emptyset \;(\text{by } 1234), \qquad \{2\} \;(\text{by } 1324),
+\qquad \{3\} \;(\text{by } 1243),
+\]
+so the dimension is $3$, while the Euler zigzag number is $E_4 = 5$.
+The identity fails at $n = 4$, inside the claimed range. (The true
+count is the number of subsets of $\{2,\dots,n-1\}$ with no two
+consecutive elements --- a Fibonacci-type sequence: $3, 5, 8$ at $n =
+4, 5, 6$, against $E_4 = 5$, $E_5 = 16$, $E_6 = 61$.)
+
+\section{Verification}
+
+\texttt{reproduce.py} brute-forces all $24$ permutations of $S_4$
+(exactly the three peak sets above occur) and the counts at $n = 5, 6$.
+The Lean package (core Lean~4, v4.33.1) certifies the impossibility of
+adjacent peaks for all quadruples, the three attainment witnesses, and
+$3 < 5$; all five audited theorems report \texttt{does not depend on
+any axioms}.
+
+\section{Boundary}
+
+The peak-algebra dimension identification and $E_4 = 5$ are classical,
+cited in prose; the kernel certifies the combinatorial core. The
+conjecture is refuted at $n = 4$.
+
+\end{document}
