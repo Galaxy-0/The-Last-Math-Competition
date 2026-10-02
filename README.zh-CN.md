@@ -20,7 +20,7 @@
 
 ## 排行榜（Leaderboard）
 
-截至 2026-10-02 的当前战绩——**10000 个猜想中已解决 143 个**（8 个证明，135 个证伪）。所有上榜提交均通过完整审计：LaTeX 源码 + PDF + Lean 4 项目（Mathlib 或自包含核心 Lean），无 `sorry`，无 `native_decide` 或额外公理，并通过语义审查确认 Lean 定理确实建立了该猜想或其否定。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
+截至 2026-10-02 的当前战绩——**10000 个猜想中已解决 157 个**（9 个证明，148 个证伪）。所有上榜提交均通过完整审计：LaTeX 源码 + PDF + Lean 4 项目（Mathlib 或自包含核心 Lean），无 `sorry`，无 `native_decide` 或额外公理，并通过语义审查确认 Lean 定理确实建立了该猜想或其否定。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
 
 | # | GitHub ID | 解题数 | 首解数 | 证明 | 证伪 |
 |---|----------|-------:|-------:|-------:|----------:|
@@ -28,7 +28,7 @@
 | 2 | [orionsheep](https://github.com/orionsheep) | 56 | 50 | 0 | 56 |
 | 3 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
 | 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 8 | 8 | 3 | 5 |
-| 5 | [SucRunBug](https://github.com/SucRunBug) | 4 | 4 | 1 | 3 |
+| 5 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
 | 6 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
 | 7 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
 | 8 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |

@@ -6,19 +6,19 @@ compiling Lean 4 project (Mathlib or self-contained core Lean), no `sorry`, no
 `native_decide`/extra axioms, and a semantic review confirming the Lean theorem actually
 establishes the conjecture or its negation. 11 earlier merged submissions failed the semantic
 review and were removed (see git history): #124, #142, #156, #199, #325, #1854, #5400
-(orionsheep), #7121 (earthking11), #1135 (lidangzzz), #46, #88 (feiyuceng06-prog); eleven PRs
-(conjectures #462, #521v1, #556, #591 v1+v2, #1031, #1046, #1128, #1132, #1168, #1245) were
-closed unmerged for the same reason — two of them after re-review of resubmitted v2s.
+(orionsheep), #7121 (earthking11), #1135 (lidangzzz), #46, #88 (feiyuceng06-prog); twelve PRs
+(conjectures #462, #521v1, #556, #591 v1+v2, #1031, #1046, #1042, #1128, #1132, #1168, #1245)
+were closed unmerged for the same reason — including re-reviewed v2 resubmissions.
 
-**Total solved: 143 / 10000 conjectures** — 8 proven, 135 disproven.
+**Total solved: 157 / 10000 conjectures** — 9 proven, 148 disproven.
 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
 | 1 | [earthking11](https://github.com/earthking11) | 69 | 62 | 0 | 69 |
 | 2 | [orionsheep](https://github.com/orionsheep) | 56 | 50 | 0 | 56 |
-| 3 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
-| 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 8 | 8 | 3 | 5 |
-| 5 | [SucRunBug](https://github.com/SucRunBug) | 4 | 4 | 1 | 3 |
+| 3 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
+| 4 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
+| 5 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 8 | 8 | 3 | 5 |
 | 6 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
 | 7 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
 | 8 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
@@ -49,6 +49,11 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 #1668★ (D), #2021★ (D), #2024★ (D), #2142★ (D), #2144★ (D), #2149★ (D), #2160★ (D), #2181★ (D)
 #2182★ (D), #3843★ (D), #7986★ (D), #8420★ (D), #8540★ (D)
 
+### SucRunBug — 18 solved (18 first)
+
+#24★ (D), #48★ (D), #57★ (D), #58★ (D), #75★ (D), #77★ (D), #78★ (D), #111★ (D), #127★ (P)
+#139★ (D), #217★ (D), #251★ (D), #414★ (D), #587★ (D), #714★ (D), #744★ (P), #793★ (D), #928★ (D)
+
 ### lidangzzz — 16 solved (16 first)
 
 #405★ (D), #416★ (D), #458★ (D), #578★ (D), #590★ (P), #1186★ (D), #1202★ (D), #1203★ (D)
@@ -57,10 +62,6 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 ### feiyuceng06-prog — 8 solved (8 first)
 
 #6★ (D), #8★ (D), #13★ (D), #34★ (P), #44★ (D), #45★ (D), #49★ (P), #50★ (P)
-
-### SucRunBug — 4 solved (4 first)
-
-#24★ (D), #57★ (D), #75★ (D), #127★ (P)
 
 ### idealistichacker — 3 solved (3 first)
 
