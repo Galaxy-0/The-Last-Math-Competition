@@ -215,6 +215,12 @@ def features(cid, text):
     low = text.lower()
     parts = text.split("**中文。")
     en_part, zh_part = parts[0], (parts[1] if len(parts) > 1 else "")
+    # The file's own ID (title line "# <cid>") is metadata, not mathematics.
+    # Its zero-padded digits used to leak into every numeric feature below
+    # (n_numbers / numbers / max_number) and shift scores — an 11-digit ID
+    # also sets max_number outright. Strip it before numeric extraction;
+    # every other rule is unchanged. (P1 review fix)
+    body = text.replace(cid, "")
     grand = _distinct(_find_terms(low, GRAND, boundary=True))
     deep = _distinct(_find_terms(low, DEEP))
     names = grand + deep
@@ -240,14 +246,14 @@ def features(cid, text):
         "has_sequence": bool(SEQUENCE.search(text)),
         "has_variant": bool(VARIANT.search(text)),
         "has_infinite_family": bool(INFINITE_FAMILY.search(text)) or bool(FORALL.search(text)),
-        "n_numbers": len(NUMBER.findall(text)),
+        "n_numbers": len(NUMBER.findall(body)),
         # The magnitudes themselves, not just how many: a statement about
         # "order 12, 16, 24" is directly enumerable in a way that "for all
         # 4 | n" is not, and that difference is invisible in the count.
         # Capped so the JSONL stays small; `max_number` is the value the
         # adjudicability scale actually reads.
-        "numbers": sorted({int(x) for x in NUMBER.findall(text)})[:40],
-        "max_number": max((int(x) for x in NUMBER.findall(text)), default=0),
+        "numbers": sorted({int(x) for x in NUMBER.findall(body)})[:40],
+        "max_number": max((int(x) for x in NUMBER.findall(body)), default=0),
         "grand": grand,
         "deep": deep,
         "n_names": len(names),

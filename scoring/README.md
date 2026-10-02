@@ -85,6 +85,15 @@ and carries the flags behind each score (`meta`, `no_def`, `vague_x3`,
 `bare_latex`, `no_quant`, `short`, …), so a human reviewer can work the weakest
 10% first instead of re-reading all 10,000.
 
+*Correction (review):* confidence is a **text-quality** signal only — it is
+driven by length, phrasing, and formatting, and does **not** check whether the
+mathematical object or the claim is correctly stated. A `high`-confidence row
+can still be a misread of the mathematics (the scorer also misreads `of order n`
+in universally quantified statements as a finite object, lowering difficulty).
+Low confidence reliably flags *textual* weakness; it does **not** follow that
+high-confidence rows are mathematically reviewed. Rows whose *mathematics* has
+not been checked by a human should be treated as unreviewed regardless of band.
+
 ## Limitations — please read before using these numbers
 
 This is a **structural heuristic** scorer. It reads signals in the text, not
@@ -99,8 +108,8 @@ has already been settled. It fails on cases I checked by hand:
 | id | statement | reality | scored |
 |---|---|---|---|
 | `00000001093` | Hadamard matrix classes: 1 of order 12, 5 of order 16, 60 of order 24 | **correct and known** — classified in the 1960s | `novelty = 3` |
-| `00000001034` | no nontrivial perfect Lee code for n ≥ 4 | **Golomb–Welch, proved 2023** | `novelty = 3` |
-| `00000001602` | Hausdorff dimension of the critical almost Mathieu spectrum is 1/2 | **known theorem (Avila)** | `novelty = 3` |
+| `00000001034` | no nontrivial perfect Lee code for n ≥ 4 | **partially known only** — the 2023 result ([arXiv:2210.04550](https://arxiv.org/abs/2210.04550)) covers *linear* Lee perfect codes of *radius 2*; the full Golomb–Welch conjecture remains open | `novelty = 3` |
+| `00000001602` | Hausdorff dimension of the critical almost Mathieu spectrum is 1/2 | **not a theorem** — what is proved: dimension ≤ 1/2 at critical coupling ([arXiv:1909.04429](https://arxiv.org/abs/1909.04429)) and dimension = 0 for some frequencies ([arXiv:1510.07651](https://arxiv.org/abs/1510.07651)); a blanket "= 1/2" is contradicted on the zero-dimensional frequencies | `novelty = 1` |
 | `00000000242` | Borsuk counterexample dimension ≤ 65 | Borsuk's conjecture **refuted 1993** (Kahn–Kalai) | `novelty = 3` |
 
 Note that these are also the conjectures a text-based triage ranks as *most
@@ -121,9 +130,14 @@ four are far less sensitive to the convention. I would rather be told than
 guess — this is question 4 of #4.
 
 **3. The 7 rows scored 0 are a flag, not a verdict.** They are the scorer's
-suspicion that the object discussed does not exist. I confirmed 2 of that kind by
-hand (`00000001016`, `00000001619`, see #4) and the question of how to *record*
-them is open. The other 5 need a human.
+suspicion that the object discussed does not exist (`00000001156`, `00000001191`,
+`00000001226`, `00000001426`, `00000001461`, `00000001919`, `00000002378` — per the
+current CSV). *Correction (review):* an earlier version of this note wrongly
+cited `00000001016` and `00000001619` as two hand-confirmed 0-score rows; in the
+data they score `well_definedness = 5` and `3` respectively — the two I checked
+by hand are genuine ill-posedness examples (see #4), but they are **not** among
+the scorer's 0 rows. The question of how to *record* nonexistence is still open
+(now tracked in #154), and the remaining zero rows still need a human.
 
 **What the method cannot do at all:** decide whether a conjecture is true. It
 cannot see mathematics, only how mathematics is written down. It should be used
