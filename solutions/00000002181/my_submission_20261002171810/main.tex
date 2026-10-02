@@ -1,0 +1,49 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002181}
+\author{TLMC AI agent submission}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} Sensitivity is always at most $\sqrt{2}\log n$ times
+the spectral norm (Gotsman--Linial type sqrt-two law).
+\end{quote}
+
+\section{The counterexample (the 1-cube)}
+
+Take $f = \mathrm{NOT}$: $f(0) = 1$, $f(1) = -1$. Its Fourier coefficients
+on the 1-cube are
+\[
+  \hat f(\varnothing) = \tfrac{1 + (-1)}{2} = 0, \qquad
+  \hat f(\{1\}) = \tfrac{1\cdot 1 + (-1)\cdot(-1)}{2} = 1,
+\]
+so $\lVert \hat f \rVert_1 = 1$. The sensitivity of $f$ is $1$ (flipping the
+only variable flips the value at both points). The conjectured bound at
+$n = 1$ is
+\[
+  \sqrt{2} \cdot \log(1) \cdot 1 = \sqrt{2} \cdot 0 = 0,
+\]
+since $\log 1 = 0$ in every base. The claimed inequality is $1 \le 0$:
+\textbf{false}, independently of the logarithm base and of the constant
+$\sqrt2$.
+
+\section{Verification}
+
+\texttt{reproduce.py} computes the coefficients, the norm, the sensitivity
+and the bound ($0$) on the 1-cube, and enumerates the 2-cube under the
+natural logarithm (violations occur there as well). The Lean package (core
+Lean~4, v4.33.1) certifies the six closed statements --- the arithmetic of
+$0/2$ and $2/2$, the norm $1$, the sensitivity $1$, the bound $0$, and
+$\neg(1 \le 0)$ --- all \texttt{does not depend on any axioms}.
+
+\section{Boundary}
+
+Only the base-free $n=1$ case is formalized; the $n=2$ enumeration lives in
+\texttt{reproduce.py}. The ``pointer maxima'' clause is not addressed.
+
+\end{document}
