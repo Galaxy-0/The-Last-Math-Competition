@@ -1,0 +1,31 @@
+Verified UTC: 2026-10-02T02:27:48.413017+00:00
+Submitter: SucRunBug
+Lean/Mathlib: v4.33.0
+Mathlib commit: db584cd6d46c92f209a44c0f1c829460d327499d
+LaTeX: native desktop compiler returned success for main.tex.
+PDF: readable rendering of the same proof text; visual QA is recorded separately.
+
+$ python3 reproduce.py
+PASS: every order-two Latin square has zero transversals
+
+exit status: 0
+
+$ lake build
+ℹ [1005/1006] Built Main (778ms)
+info: Main.lean:30:0: 'TLMC58.latin' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:31:0: 'TLMC58.no_transversals' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:32:0: 'TLMC58.violates_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (1006 jobs).
+
+exit status: 0
+
+$ lake env lean Check.lean
+'TLMC58.latin' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC58.no_transversals' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC58.violates_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+exit status: 0
+
+SHA256 Main.lean: 62f96207260093b09771cdd6d5fe4425cd3ed4010bfc33bea6bc3e92bd32e880
+SHA256 main.tex: 3086704482b0ae4bd416dde91d3aed4f60e4c6a38876fd5a7a52fcb329fb3285
+All executed checks passed; no incomplete proof or custom axiom detected.
