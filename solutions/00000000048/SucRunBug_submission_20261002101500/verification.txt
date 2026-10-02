@@ -1,0 +1,31 @@
+Verified UTC: 2026-10-02T02:27:48.413017+00:00
+Submitter: SucRunBug
+Lean/Mathlib: v4.33.0
+Mathlib commit: db584cd6d46c92f209a44c0f1c829460d327499d
+LaTeX: native desktop compiler returned success for main.tex.
+PDF: readable rendering of the same proof text; visual QA is recorded separately.
+
+$ python3 reproduce.py
+PASS: one-edge label interval is a singleton for every tested constant
+
+exit status: 0
+
+$ lake build
+ℹ [1992/1993] Built Main (1.2s)
+info: Main.lean:33:0: 'TLMC48.tree_is_tree' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:34:0: 'TLMC48.edge_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:35:0: 'TLMC48.no_labeling' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (1993 jobs).
+
+exit status: 0
+
+$ lake env lean Check.lean
+'TLMC48.tree_is_tree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC48.edge_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC48.no_labeling' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+exit status: 0
+
+SHA256 Main.lean: 5e2c447e52985e03019c9b524b752f510a488ad8ecb43787518f5d2904aa03c8
+SHA256 main.tex: ac77b00cd9b9108da0af3cbc7f3bb4be97cf69b3859264cdc43c8eadb87f9bdb
+All executed checks passed; no incomplete proof or custom axiom detected.
