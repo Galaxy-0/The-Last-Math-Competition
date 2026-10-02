@@ -1,0 +1,42 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002037}
+\author{TLMC AI agent submission}
+\date{October 3, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} there exists an explicit admissible 50-tuple for
+which DHL[50,2] holds, giving infinitely many prime pairs with gap
+$\le 16$; the tuple is centered near $7\cdot 11\cdot 13$.
+\end{quote}
+
+\section{The refutation}
+
+Prime pairs of gap $\le 16$ produced from a tuple require two tuple
+elements to differ by at most 16, i.e.\ the tuple's diameter is
+$\le 16$: all 50 elements lie in $\{a, a+1, \dots, a+16\}$ --- 17 slots.
+In increasing order $t(0) < t(1) < \cdots < t(49)$ each step gains at
+least 1, so $t(49) \ge t(0) + 49 \ge a + 49$, contradicting
+$t(49) \le a + 16$ (equivalently $49 \le 16$). The contradiction is
+certified uniformly in the center $a$; admissibility is never reached.
+
+\section{Verification}
+
+\texttt{reproduce.py} brute-forces the maximal length of an increasing
+sequence in a diameter-16 window (exactly 17) for many window starts,
+and verifies that 50 distinct integers have diameter $\ge 49$. The Lean
+package (core Lean~4, v4.33.1) certifies the step-growth lemma and the
+contradiction; all four audited theorems report \texttt{does not depend
+on any axioms}.
+
+\section{Boundary}
+
+Only the ``50-tuple with gap $\le 16$'' clause is refuted; DHL$[k,2]$
+for suitable $k$ and larger gaps is not addressed.
+
+\end{document}
