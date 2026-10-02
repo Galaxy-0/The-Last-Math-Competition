@@ -1,0 +1,32 @@
+Verified UTC: 2026-10-02T02:27:48.413017+00:00
+Submitter: SucRunBug
+Lean/Mathlib: v4.33.0
+Mathlib commit: db584cd6d46c92f209a44c0f1c829460d327499d
+LaTeX: native desktop compiler returned success for main.tex.
+PDF: readable rendering of the same proof text; visual QA is recorded separately.
+
+$ python3 reproduce.py
+PASS: all tested integral parameter orbits preserve every tested residue ring
+
+exit status: 0
+
+$ lake build
+⚠ [2593/2594] Built Main (1.6s)
+warning: Main.lean:14:16: `Set.mem_setOf_eq` has been deprecated: Use `Set.mem_ofPred_eq` instead
+info: Main.lean:19:0: 'TLMC744.whole_ring' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:20:0: 'TLMC744.clopen' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:21:0: 'TLMC744.normalized_measure' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (2594 jobs).
+
+exit status: 0
+
+$ lake env lean Check.lean
+'TLMC744.whole_ring' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC744.clopen' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC744.normalized_measure' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+exit status: 0
+
+SHA256 Main.lean: b8b8771dfb15c3981a8bc5325500ed79af1913b9046941f80bb06f043e50fb4e
+SHA256 main.tex: bea0f3b1616400b863889bfe1b251d08b036302339682ec4376f5f45db92d06b
+All executed checks passed; no incomplete proof or custom axiom detected.
