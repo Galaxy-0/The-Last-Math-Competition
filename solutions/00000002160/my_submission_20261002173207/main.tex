@@ -1,0 +1,41 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002160}
+\author{TLMC AI agent submission}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} The independence number [of the Higman--Sims graph]
+equals the Hoffman bound.
+\end{quote}
+
+\section{The refutation}
+
+The Higman--Sims graph is strongly regular with $v = 100$, $k = 22$,
+$\lambda_{\min} = -8$ (classical spectrum). Its Hoffman bound is
+\[
+  \frac{v \cdot (-\lambda_{\min})}{k - \lambda_{\min}}
+  \;=\; \frac{100 \cdot 8}{22 + 8} \;=\; \frac{800}{30} \;=\; 26.\overline{6}.
+\]
+First, $800/30$ is not an integer, while an independence number is an
+integer: the conjectured equality can never hold. Second, the classical
+independence number is $\alpha = 22 \ne 800/30$.
+
+\section{Verification}
+
+\texttt{reproduce.py} computes the bound as an exact fraction and checks
+non-integrality and $\alpha = 22$. The Lean package (core Lean~4, v4.33.1)
+certifies the seven arithmetic statements, all \texttt{does not depend on
+any axioms}; the spectrum and $\alpha$ are classical cited facts.
+
+\section{Boundary}
+
+Only the equality is refuted; the Delsarte-semilattice clause is not
+addressed.
+
+\end{document}
