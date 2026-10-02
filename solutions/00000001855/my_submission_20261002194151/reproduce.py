@@ -5,7 +5,10 @@ from fractions import Fraction
 from itertools import product
 
 def main():
-    for q in (2, 3, 4, 5):
+    # enumeration as integer residue arithmetic is only valid for PRIME q
+    # (for q = 4 one must build GF(4); the classical count q^3 - q^2 holds
+    # for every finite field by the same square-counting argument)
+    for q in (2, 3, 5, 7, 11):
         total = nonsing = 0
         for a, b, c in product(range(q), repeat=3):
             total += 1
