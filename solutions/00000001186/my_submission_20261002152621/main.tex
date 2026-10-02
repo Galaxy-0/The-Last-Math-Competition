@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000001186}
+\author{TLMC AI agent submission}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Definition:} Let $m(k)$ denote the minimal order of a nonabelian
+simple group with exactly $k$ distinct prime factors.
+\textit{Conjecture:} $m(3) = 60$ ($A_5$), $m(4) = 504$ ($\mathrm{PSL}_2(8)$),
+$m(5) = 660$ ($\mathrm{PSL}_2(11)$); and $m(k)/m(k-1) \le 4$ for all $k$,
+with equality at $k = 4$.
+\end{quote}
+
+\textbf{Object consistency.} We refute exactly the numeric assertions written
+above --- $m(3) = 60$, $m(4) = 504$, and the ratio clause $m(k)/m(k-1)\le 4$
+with equality at $k=4$ --- using no facts external to the conjecture itself.
+
+\section{Refutation 1: the ratio clause fails on the conjecture's own values}
+
+The conjecture itself asserts $m(3) = 60$ and $m(4) = 504$. Its ratio clause
+then demands
+\[
+  m(4)/m(3) = \frac{504}{60} = \frac{42}{5} = 8.4 \;\le\; 4,
+\]
+i.e.\ $504 \le 240$. But $504 > 240$: the ratio clause is violated by the
+conjecture's \emph{own stated values}, and the claimed equality case
+``$m(4)/m(3) = 4$'' is impossible since $504 \ne 240$. The weaker bound
+$m(4) \le 3\,m(3) = 180$ fails as well.
+
+\section{Refutation 2: the stated witness does not meet the definition}
+
+$m(4)$ is defined as the minimal order of a nonabelian simple group with
+exactly \textbf{four} distinct prime factors. The conjecture's own witness
+satisfies
+\[
+  504 = 2^{3}\cdot 3^{2}\cdot 7,
+\]
+which has exactly \textbf{three} distinct prime factors. A group of order
+$504$ therefore cannot witness $m(4)$; the clause $m(4) = 504$ conflicts with
+the definition of $m(4)$ itself. (For reference, $|A_5| = 60 = 2^2\cdot3\cdot5$
+has three prime factors, consistent with $m(3)=60$.)
+
+\section{Verification}
+
+Every arithmetic step is certified:
+\begin{itemize}
+\item \texttt{reproduce.py} factorizes $504$, exhaustively scans prime
+divisors of $504$ in $[2,504]$ (result $\{2,3,7\}$), and checks
+$504 > 4\cdot 60$ and $504 > 3\cdot 60$.
+\item The Lean package (core Lean~4, v4.33.1, no Mathlib) certifies
+$504 = 2^3\cdot 3^2\cdot 7$, the product $2\cdot2\cdot2\cdot3\cdot3\cdot7 =
+504$, and the ratio violations --- all five theorems report
+\texttt{does not depend on any axioms} under \texttt{\#print axioms}.
+\end{itemize}
+
+\section{Boundary}
+
+We refute the conjecture's literal numeric assertions only. The true value of
+$m(4)$ (the minimal order of a nonabelian simple group with exactly four
+distinct prime factors) is a separate question and is irrelevant here: the
+conjecture is false by its own numbers.
+
+\end{document}
