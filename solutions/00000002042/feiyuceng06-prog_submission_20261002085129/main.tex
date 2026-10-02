@@ -1,0 +1,140 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A Counterexample to Conjecture 00000002042:\\
+Exact Covering Systems with Distinct Moduli Do Not Exist}
+\author{%
+  Feiyu\thanks{Independent researcher.}
+  \and
+  Claude (Opus 5.5)\thanks{Anthropic.}%
+}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000002042 asserts that the number of exact covering systems with
+distinct moduli grows like $c\,N^{1/2}$. By the theorem of Mirsky and Newman,
+the only such system is the trivial one $\{0\bmod 1\}$, so the count is at most
+$1$ for every $N$. We give the roots-of-unity proof and formalize it, together
+with the refutation, in Lean~4 against Mathlib.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture 00000002042 reads:
+
+\begin{quote}
+Definition: An exact covering system covers every integer by exactly one
+congruence class. Conjecture: The count of exact covering systems with distinct
+moduli is asymptotically $c\cdot N^{1/2}$ (with $c$ of the explicit $2/\pi$
+type); the count is controlled by the enumeration of Zn\'am-type trees.
+\end{quote}
+
+\section{Reading of the statement}
+
+\begin{definition}
+An \emph{exact covering system} is a finite set of residue classes $a_i\bmod
+m_i$ ($m_i\ge1$, $0\le a_i<m_i$) such that every integer lies in exactly one of
+them. It has \emph{distinct moduli} if the $m_i$ are pairwise distinct.
+\end{definition}
+
+Let $\mathrm{count}(N)$ be the number of exact covering systems with distinct
+moduli, all at most $N$. The conjecture asserts that
+$\mathrm{count}(N)/(c\sqrt N)\to1$ for some $c>0$. Other ways of measuring the
+size $N$ (largest modulus, least common multiple) lead to the same refutation,
+since by Theorem~\ref{thm:mn} there is at most one system in total.
+
+\section{Result}
+
+\begin{theorem}[Mirsky--Newman]\label{thm:mn}
+The only exact covering system with distinct moduli is $\{0\bmod1\}$.
+\end{theorem}
+
+\begin{corollary}
+$\mathrm{count}(N)\le1$ for all $N$, so $\mathrm{count}(N)/(c\sqrt N)\to0$ for
+every $c>0$, and Conjecture 00000002042 is false.
+\end{corollary}
+
+\section{Proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:mn}]
+Let $M$ be the largest modulus, attained by the class $a^\ast\bmod M$, and
+suppose $M\ge2$. Let $\zeta=e^{2\pi i/M}$, a primitive $M$-th root of unity, and
+let $L=\prod_i m_i$, so every modulus divides $L$. Since $\zeta\ne1$ and
+$\zeta^L=1$,
+\[
+  \sum_{n=0}^{L-1}\zeta^n=0 .
+\]
+Each $n\in[0,L)$ lies in exactly one class, and the elements of $[0,L)$ in the
+class $a\bmod m$ are $a+mj$, $0\le j<L/m$. Hence
+\[
+  0=\sum_i\ \zeta^{a_i}\sum_{j=0}^{L/m_i-1}\bigl(\zeta^{m_i}\bigr)^j .
+\]
+If $m_i<M$, then $\zeta^{m_i}\ne1$ while $(\zeta^{m_i})^{L/m_i}=\zeta^L=1$, so the
+inner geometric sum vanishes. Because the moduli are distinct, only the class
+$a^\ast\bmod M$ remains, and it contributes $\zeta^{a^\ast}\cdot L/M\ne0$. This
+is a contradiction, so $M=1$. Then every modulus is $1$, distinctness leaves a
+single class, and it is $0\bmod1$.
+\end{proof}
+
+\section{Formalization}
+
+The accompanying Lean~4 project (\texttt{lean/Submission/Basic.lean}) states
+the conjecture and proves its negation against Mathlib.
+
+\begin{itemize}
+  \item \texttt{IsExactCovering S}, \texttt{DistinctModuli S} --- for a finite
+    set \texttt{S} of pairs $(m,a)$ with $0<m$, $a<m$: every integer is
+    congruent mod $m$ to $a$ for exactly one pair; the moduli are pairwise
+    distinct.
+  \item \texttt{count N} --- the number of such systems with all moduli at most
+    $N$; \texttt{ConjectureHolds} --- $\exists c>0$,
+    $\mathrm{count}(N)/(c\sqrt N)\to1$.
+  \item \texttt{sum\_filter\_mod} --- the re-indexing of a residue class in
+    $[0,L)$; \texttt{eq\_trivial} --- Theorem~\ref{thm:mn}, with $\zeta$ from
+    Mathlib's \texttt{Complex.isPrimitiveRoot\_exp} and the geometric sums
+    from \texttt{geom\_sum\_eq}.
+  \item \texttt{count\_le\_one}, \texttt{conjecture\_00000002042\_false}.
+\end{itemize}
+
+The toolchain is \texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to
+\texttt{v4.33.1}, and \texttt{lake build} succeeds. The project contains no
+\texttt{sorry}, no \texttt{admit} and no \texttt{native\_decide}, and
+introduces no axioms:
+\begin{center}
+\texttt{\#print axioms conjecture\_00000002042\_false}
+\end{center}
+reports exactly \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\section{Remarks}
+
+Theorem~\ref{thm:mn} is due to Mirsky and Newman, and independently to
+Davenport and Rado, answering a question of Erd\H{o}s; see \cite{guy}. Exact
+covering systems \emph{with repeated moduli} exist in abundance (for instance
+$0\bmod2$, $1\bmod4$, $3\bmod4$), and the Zn\'am-type constructions mentioned
+in the statement concern those. With distinct moduli the count is identically
+$1$.
+
+\begin{thebibliography}{9}
+\bibitem{guy} R.~K.~Guy, \emph{Unsolved Problems in Number Theory}, 3rd ed.,
+  Springer, 2004, Section F13.
+\end{thebibliography}
+
+\end{document}
