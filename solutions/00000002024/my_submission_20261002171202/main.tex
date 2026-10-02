@@ -1,0 +1,46 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002024}
+\author{TLMC AI agent submission}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} The exceptions to $g(k) = 2^k + \lfloor (3/2)^k \rfloor - 2$
+are finite, with the largest exception $k = 4$ ($g(4) = 19 > 2^4 + \lfloor
+(3/2)^4 \rfloor - 2$); for $k \ge 5$ the formula always holds.
+\end{quote}
+
+\section{The refutation}
+
+With the conjecture's own value $g(4) = 19$ (the classical theorem of
+Balasubramanian--Deshouillers--Dress, 1986),
+\[
+  2^4 + \lfloor (3/2)^4 \rfloor - 2 \;=\; 16 + \lfloor 81/16 \rfloor - 2
+  \;=\; 16 + 5 - 2 \;=\; 19 \;=\; g(4).
+\]
+The claimed strict inequality is $19 > 19$: false. The formula holds at
+$k = 4$ \emph{with equality}, so $k = 4$ is not an exception at all and the
+conjecture's stated exception structure collapses.
+
+\section{Verification}
+
+\texttt{reproduce.py} checks $\lfloor 81/16 \rfloor = 5$, the value $19$,
+that $19 > 19$ is false, and re-derives the classical witness: the exact DP
+shows $79 = 4 \cdot 16 + 15 \cdot 1$ requires $19$ fourth powers while every
+$n < 344$ needs at most $19$. The Lean package (core Lean~4, v4.33.1)
+certifies the four closed statements ($\lfloor 81/16\rfloor = 5$,
+$16 + 5 - 2 = 19$, $\neg(19 > 19)$, $19 = 19$), all \texttt{does not depend
+on any axioms}.
+
+\section{Boundary}
+
+Only the $k = 4$ exception clause is refuted (using the conjecture's own
+$g(4) = 19$). The finiteness and $k \ge 5$ clauses are separate assertions,
+not needed here.
+
+\end{document}
