@@ -1,0 +1,29 @@
+Verified UTC: 2026-10-02T02:27:48.413017+00:00
+Submitter: SucRunBug
+Lean/Mathlib: v4.33.0
+Mathlib commit: db584cd6d46c92f209a44c0f1c829460d327499d
+LaTeX: native desktop compiler returned success for main.tex.
+PDF: readable rendering of the same proof text; visual QA is recorded separately.
+
+$ python3 reproduce.py
+PASS: negative prime powers have p-adic norm at least 1
+
+exit status: 0
+
+$ lake build
+ℹ [1963/1964] Built Main (1.3s)
+info: Main.lean:29:0: 'TLMC714.no_series' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:30:0: 'TLMC714.prime_series_diverges' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (1964 jobs).
+
+exit status: 0
+
+$ lake env lean Check.lean
+'TLMC714.no_series' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC714.prime_series_diverges' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+exit status: 0
+
+SHA256 Main.lean: 58fb9ba76f8eff38ada4d79b2cc878b1875370586d4731f20a84208a2847c274
+SHA256 main.tex: 409cd840c9b11b8b1ed809b5201046e1c30c7f7d79825f712edc58769b10697f
+All executed checks passed; no incomplete proof or custom axiom detected.
