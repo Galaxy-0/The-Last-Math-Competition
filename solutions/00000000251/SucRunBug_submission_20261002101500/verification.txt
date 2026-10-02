@@ -1,0 +1,31 @@
+Verified UTC: 2026-10-02T02:27:48.413017+00:00
+Submitter: SucRunBug
+Lean/Mathlib: v4.33.0
+Mathlib commit: db584cd6d46c92f209a44c0f1c829460d327499d
+LaTeX: native desktop compiler returned success for main.tex.
+PDF: readable rendering of the same proof text; visual QA is recorded separately.
+
+$ python3 reproduce.py
+PASS: no injective map from two vertices to the one residue modulo 1
+
+exit status: 0
+
+$ lake build
+ℹ [1992/1993] Built Main (1.1s)
+info: Main.lean:27:0: 'TLMC251.tree_is_tree' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:28:0: 'TLMC251.edge_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Main.lean:29:0: 'TLMC251.no_injective_labeling' depends on axioms: [propext]
+Build completed successfully (1993 jobs).
+
+exit status: 0
+
+$ lake env lean Check.lean
+'TLMC251.tree_is_tree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC251.edge_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TLMC251.no_injective_labeling' depends on axioms: [propext]
+
+exit status: 0
+
+SHA256 Main.lean: 462892e4f8c84067e8e96284f37cb57ca1a249fba24f4044041956f6cbed0201
+SHA256 main.tex: 2b389284e676a88441af3553543fa970aa67f7c92aae7a889e0ee61e95fbf8f4
+All executed checks passed; no incomplete proof or custom axiom detected.
