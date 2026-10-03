@@ -2,7 +2,7 @@
 \usepackage{amsmath,amssymb,geometry}
 \geometry{margin=1in}
 \title{Two maximum antichains disprove conjecture 00000008544}
-\author{Local AI-assisted solution draft}
+\author{gaochengzhecpu (AI-assisted submission)}
 \date{3 October 2026}
 % Compact consistent title for a short mathematical note.
 \makeatletter
@@ -30,7 +30,7 @@ For completeness, partition all eight elements into the following three chains:
 \]
 Every antichain meets each chain at most once, so it has at most three elements. Consequently both $\mathcal A$ and $\mathcal B$ are maximum antichains. They are the two middle rank layers, demonstrating why a uniqueness claim fails in this example. The Sperner number is $3$; its precise expression elsewhere in the conjecture need not be settled to refute uniqueness.
 \paragraph{Formal verification and semantic correspondence.}
-The accompanying \texttt{Main.lean} uses Lean 4.19.0 \texttt{Std}. The eight elements are indexed by \texttt{Fin 8}; \texttt{cube} and \texttt{unCube} are explicitly checked inverse maps with $(\texttt{Fin 2})^3$. The order \texttt{Below} is exactly the coordinatewise order under this identification, and totality of the factors and the resulting partial-order laws are checked.
+The accompanying \texttt{lean/Main.lean} uses Lean 4.19.0 \texttt{Std}. The eight elements are indexed by \texttt{Fin 8}; \texttt{cube} and \texttt{unCube} are explicitly checked inverse maps with $(\texttt{Fin 2})^3$. The order \texttt{Below} is exactly the coordinatewise order under this identification, and totality of the factors and the resulting partial-order laws are checked.
 
 Subsets are represented by eight-bit masks \texttt{Fin 256}. Membership is defined by the corresponding bit; \texttt{every\_subset\_encoded} proves that every Boolean membership function on the eight elements has such an encoding, so the subset enumeration is exhaustive. \texttt{Antichain} uses actual membership and comparability, and \texttt{cardinality} counts actual members. The theorem \texttt{sharp\_upper\_bound} checks all $256$ subsets and proves that every antichain has at most three elements. This is an independent finite verification of the chain-partition argument above.
 
