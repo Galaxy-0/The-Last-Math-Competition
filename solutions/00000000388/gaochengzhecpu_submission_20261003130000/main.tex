@@ -1,0 +1,100 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{url}
+\setlength{\emergencystretch}{3em}
+\title{Nested residual classes refute Conjecture 00000000388}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{3 October 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Statement.}
+The source defines, for positive integers $m$,
+\[
+ W_m=\{\xi: w_n(\xi)\le n/m \text{ for infinitely many }n,
+                 \quad \xi\notin U_k\text{ for every }k\}.
+\]
+It asserts that each $W_m$ is nonempty and uncountable, that distinct
+$W_m$ are disjoint, and that their union is the set of transcendental numbers.
+The nonemptiness and disjointness assertions are already incompatible with this definition.
+
+\paragraph{Proof.}
+Let $1\le m\le k$. For every nonnegative integer $n$,
+\[
+ \frac{n}{k}\le\frac{n}{m}.
+\]
+Consequently, if $w_n(\xi)\le n/k$, then $w_n(\xi)\le n/m$.
+The same infinitely many indices witnessing the condition for $W_k$
+therefore witness the condition for $W_m$. The exclusion from all $U_j$
+is identical in both definitions. It follows that
+\[
+ W_k\subseteq W_m \qquad (1\le m\le k).
+\]
+In particular $W_2\subseteq W_1$. If the asserted nonemptiness holds,
+choose $\xi\in W_2$; then $\xi\in W_1\cap W_2$, contradicting the asserted
+disjointness for $1\ne2$. Equivalently, disjointness forces $W_2=\varnothing$.
+This refutes the conjunction in the source, regardless of its further
+uncountability and coverage assertions.\hfill$\square$
+
+\paragraph{Scope.}
+The argument does not assert the existence of any particular approximation
+orders or transcendental numbers with these properties. It proves that no
+assignment of ordered numerical values to the symbols $w_n(\xi)$ can make
+the stated threshold definition and both assertions hold simultaneously.
+It also applies if the values can be $+\infty$, or if the underlying set
+is restricted to transcendental numbers. No Diophantine approximation
+theorem is needed.
+
+\newpage
+\paragraph{Formal verification.}
+The accompanying Lean 4.19.0 project uses only \texttt{Std}.
+It proves the following statement for an arbitrary underlying type $X$,
+arbitrary approximation-order data, and an arbitrary family of excluded sets $U_k$:
+\[
+ \neg\bigl[(\forall m\ge1,\ W_m\ne\varnothing)
+      \ \wedge\ (W_m\text{ are pairwise disjoint})\bigr].
+\]
+
+\paragraph{Numerical representation and semantic bridge.}
+\texttt{RationalBound} stores a numerator $a\in\mathbb N$ and a positive
+denominator $b$, representing the nonnegative rational number $a/b$.
+\texttt{BoundLE} compares two such fractions by cross multiplication:
+$a/b\le c/d$ means $ad\le cb$. Thus this representation uses exact
+rational bounds, not integer division. The theorem
+\path{threshold_antitone} proves $n/k\le n/m$ for every $n$ and every
+$1\le m\le k$ using monotonicity of multiplication in $\mathbb N$.
+
+An approximation order is represented by \texttt{UpperCut}, the set of
+its rational upper bounds. For an ordinary numerical value $v$, this is
+$\{q\in\mathbb Q_{\ge0}:v\le q\}$; it is upward closed, also when
+$v=+\infty$ (in which case it is empty).
+The formal theorem permits every upward-closed cut, a larger class than
+real-valued approximation orders, so its universal impossibility conclusion
+applies in particular to the usual numerical values.
+\path{UpperCut.respects_equivalent} proves independence of the chosen
+fraction representation.
+
+To make the interpretation explicit, \texttt{OrderedValues} records any
+numerical comparison relation with transitivity and an order-preserving interpretation
+of rational bounds. \texttt{cutOfValue} constructs the corresponding
+upper cut; \path{cutOfValue_exact} verifies that membership is precisely
+the comparison $v\le q$. The final theorem \path{ordered_value_version}
+states the contradiction directly using those numerical comparisons.
+The project does not construct real numbers or the analytic definition
+of $w_n$; neither is required, because the theorem is universal in the
+values and uses only the indicated order laws.
+
+\paragraph{Infinitude and source quantifiers.}
+\texttt{InfinitelyOften p} means $\forall B\in\mathbb N,\ \exists n>B,\ p(n)$.
+For a subset of $\mathbb N$ this is exactly infinitude. Passing to a weaker
+inequality keeps each witness $n$, as verified by
+\path{InfinitelyOften.mono}. \texttt{NoU} quantifies over every positive
+integer index, and \texttt{W} uses the same family of excluded sets for
+every $m$. The theorem \path{W_antitone} proves the full nestedness statement;
+\path{conjecture388_refuted} then negates the two necessary clauses of
+the original conjecture. Both this theorem and \path{ordered_value_version}
+have no axiom dependencies. There are no added axioms, proof placeholders,
+or native decision procedures. The project treats warnings as errors.
+\end{document}
