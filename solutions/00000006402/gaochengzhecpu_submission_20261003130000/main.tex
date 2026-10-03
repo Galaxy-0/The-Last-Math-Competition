@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\setlength{\emergencystretch}{3em}
+\title{A symmetric-difference-closed family with three atoms\\A disproof of conjecture 00000006402}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{3 October 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Assertion and terminology.}
+The conjecture defines a difference-closed family as a set family closed under symmetric difference, and asserts that its number of atoms is a power of two. We disprove that assertion with a finite family.
+
+We use the standard order-theoretic meaning of an atom: a minimal nonempty member of the family, with respect to inclusion. Thus an atom $A$ belongs to the family, is nonempty, and has no proper nonempty subset belonging to the family. This agrees with the usual minimal nonzero element definition in a Boolean algebra; see the primary formal definition in \cite{atoms}. Our example is a full power set, so its order-theoretic atoms are also the usual indivisible point blocks of its set algebra.
+
+\paragraph{Counterexample and exhaustive classification.}
+Let $X=\{0,1,2\}$ and let $\mathcal F=\mathcal P(X)$ be its full power set. If $A,B\in\mathcal F$, then
+\[
+ A\mathbin{\triangle}B=(A\setminus B)\cup(B\setminus A)\subseteq X,
+\]
+so $A\mathbin{\triangle}B\in\mathcal F$. This proves symmetric-difference closure.
+
+Each singleton $\{i\}$ is an atom: its only nonempty subset is itself. Conversely, let $A$ be any atom. Choose $i\in A$, possible since $A$ is nonempty. The singleton $\{i\}$ is a nonempty member of $\mathcal F$ contained in $A$. Minimality therefore gives $A=\{i\}$. Hence the complete list of atoms is
+\[
+ \{0\},\qquad\{1\},\qquad\{2\}.
+\]
+These three sets are distinct. The number of atoms is consequently $3$, which is not $2^m$ for any nonnegative integer $m$: the cases $m=0,1$ give $1,2$, and $m\ge2$ gives at least $4$.
+
+The family itself has $2^3=8$ members. That count does not equal the number of atoms. The conjecture explicitly refers to the atom count, and this example contradicts it. Since this necessary assertion already fails, no interpretation of the additional generator lower-bound clause is needed for the disproof.
+
+\paragraph{Formalization and coverage.}
+The accompanying project is in \texttt{lean/}, uses Lean 4.19.0, and imports only \texttt{Std}. A subset is an arbitrary proposition-valued predicate on \texttt{Fin 3}. A family is a predicate on these subsets, and \texttt{fullFamily} is the entire power set. The symmetric difference uses exactly exclusive-or membership. The predicate \texttt{IsAtom} records family membership, nonemptiness, and minimality against every subset predicate in the family.
+
+The theorem \texttt{every\_atom\_is\_singleton} proves the preceding classification for every actual atom. The list \texttt{atoms} consists of the three singleton atoms; its completeness and absence of duplicates are proved separately. Its length is therefore the genuine atom count, not a numerical value assigned to an unrelated object.
+
+For completeness, the code also proves the finiteness of the whole family. Eight masks are decoded into actual subsets. The identity \texttt{decode\_encode} covers every proposition-valued subset, and injectivity of decoding rules out duplicate masks. The resulting enumeration contains every member exactly once and has length eight. Thus neither finiteness nor the distinction between members and atoms is left as an unproved encoding assumption.
+
+The final theorem \texttt{conjecture06402\_false} negates the atom-power claim on finite, symmetric-difference-closed families on this three-point universe. It uses the actual family, its closure and finiteness proofs, and the complete duplicate-free atom list. The project is checked with \texttt{lake build} and \texttt{warningAsError=true}. Its printed final axiom list contains only the standard Lean axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}. There are no proof placeholders, extra axioms, or external decision procedures.
+
+\begin{thebibliography}{1}
+\bibitem{atoms}
+The Mathlib contributors, \emph{Mathlib.Order.Atoms}, definition \texttt{IsAtom}.
+\url{https://leanprover-community.github.io/mathlib4_docs/Mathlib/Order/Atoms.html}.
+Used only as a terminology reference; the project has no Mathlib dependency.
+\end{thebibliography}
+\end{document}
