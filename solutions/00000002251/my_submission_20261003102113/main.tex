@@ -1,0 +1,68 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002251}
+\author{TLMC AI agent submission}
+\date{October 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} the difference operator $\Delta_c f = f(z+c) - f(z)$
+has kernel of dimension $1$, and its spectrum on meromorphic function
+spaces is explicit of the $\{2\sin(kc/2)\}$ type (difference spectrum).
+\end{quote}
+
+\section{The refutation}
+
+$\ker \Delta_c$ is the space of $c$-periodic meromorphic functions.
+It contains the constants, but also $g_k(z) = e^{2\pi i k z / c}$ for
+every $k \in \mathbb{N}$ (periodic since $e^{2\pi i} = 1$).  These
+members are not proportional: $g_1(0) = 1$ while $g_1(c/4) = i$, so
+$g_1$ is not a multiple of any constant --- the kernel strictly
+exceeds the span of the constants.  Moreover at $z = c/4$ the members
+$k = 0,1,2,3$ take the four Gauss units $1, i, -1, -i$, pairwise
+distinct (kernel-certified), and $z = c/8$ separates $k = 0..7$ into
+eight distinct values; the family is pairwise non-proportional, so
+\[
+\dim(\ker \Delta_c) = \infty \ne 1 .
+\]
+(The ``dimension 1'' reading is correct only for rational functions
+on the Riemann sphere, not for the meromorphic function space of the
+conjecture, where difference polynomials live.)
+
+The spectrum conjunct fails independently: on the eigenfunction
+$e^{\lambda z}$, $\Delta_c$ acts as multiplication by $e^{\lambda c}
+- 1$; as $\lambda$ ranges over $\mathbb{C}$ these eigenvalues sweep
+$\mathbb{C} \setminus \{0\}$ --- a continuum, generally non-real
+($\lambda = 1 + i$, $c = 1.7$: $-1.705 + 5.428\,i$) --- nothing like
+the fixed real discrete set $\{2\sin(kc/2)\}$.
+
+\section{Verification}
+
+\texttt{reproduce.py} verifies the $c$-periodicity of
+$e^{2\pi i k z/c}$ for $k = 1..8$ (to $10^{-9}$), the quarter- and
+eighth-grid value separations, the non-constancy of $g_1$, and the
+eigenvalue continuum against $\{2\sin(kc/2)\}_{k=-20}^{20}$.  The
+Lean package (core Lean~4, v4.33.1) certifies the value skeleton on
+the quarter grid: \texttt{unit4\_period} (the cyclic shift identity
+$g(z+c) = g(z)$, the $\Delta_c g = 0$ certificate, by \texttt{rfl}),
+\texttt{g\_samples} (the four unit values),
+\texttt{g\_values}/\texttt{four\_distinct} (pairwise distinct), and
+\texttt{not\_constant} (a function with two distinct values equals no
+constant).  All six audited theorems report \texttt{does not depend
+on any axioms}.
+
+\section{Boundary}
+
+The kernel certifies the discrete value table of $g$ on the quarter
+grid, its period-$c$ shift identity, the distinctness facts, and the
+non-constancy criterion; the passage to the function-space statements
+($e^{2\pi i} = 1$, pairwise non-proportionality, the eigenvalue
+formula $e^{\lambda c} - 1$) is classical complex analysis, cited in
+prose and reproduced numerically.  Both conjuncts --- the kernel
+dimension and the spectrum shape --- are refuted.
+
+\end{document}
