@@ -1,0 +1,57 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000001215}
+\author{TLMC AI agent submission}
+\date{October 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Only finitely many outerplanar graphs attain cop number $2$.}
+\end{quote}
+
+\section{The refutation}
+
+The odd cycles $C_5, C_7, C_9, C_{11}, \dots$ form an infinite family
+of outerplanar graphs with cop number exactly $2$.
+
+Every cycle is outerplanar (all vertices on the outer face), and every
+cycle of length $\ge 4$ has cop number exactly $2$ (Aigner--Fromme).
+The single-cop insufficiency is certified in the Lean package as a
+\emph{universal} game-theoretic theorem: on any graph $(V, \mathrm{adj})$
+with a robber strategy $\rho$ satisfying the cycle-safety-response
+property --- from a Safe position (robber neither on nor adjacent to
+the cop), after any legal cop move to a non-capturing position $c'$,
+the response $\rho(r, c')$ restores safety --- a \emph{single cop never
+captures}: for every cop play there is a robber play that is Safe in
+every round. The proof is an induction on the round number; the
+non-capture side condition at each step follows from the previous
+safety (a cop landing on the robber would have had to move onto a
+vertex that was neither the robber nor adjacent to it). Cycles of
+length $\ge 4$ satisfy the response property with $\rho$ = ``step away
+from the cop''.
+
+Combined with outerplanarity of cycles and the classical upper bound
+$c(C_n) \le 2$, the odd cycles give infinitely many outerplanar graphs
+with cop number exactly $2$: the finiteness claim is false.
+
+\section{Verification}
+
+\texttt{reproduce.py} runs exact retrograde-attractor game searches on
+$C_4, \dots, C_{11}$ (state spaces $n^2$ resp.\ $n^3$): cop number
+exactly $2$ in every case, with the one-cop insufficiency holding
+through $C_{21}$. The Lean package (core Lean~4, v4.33.1) certifies
+the universal survival theorem; both audited theorems report
+\texttt{does not depend on any axioms}.
+
+\section{Boundary}
+
+The kernel certifies the universal game core; the cycle instantiation
+(the step-away strategy), outerplanarity of cycles, and the classical
+upper bound are cited in prose with exact script confirmation of the
+instances.
+
+\end{document}
