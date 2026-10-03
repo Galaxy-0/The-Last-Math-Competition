@@ -1,31 +1,44 @@
-# Conjecture 00000003490: disproof submission
+# Disproof of conjecture 00000003490
 
-Chromatic polynomials determine chromatic numbers.
+**Result:** Disproof under the reading stated below.
 
-Submitter: **gaochengzhecpu**. AI-assisted with Codex; draft for mathematical review.
+At every positive integer k, a chromatic polynomial counts proper k-colorings. A graph's chromatic number is the least k for which that count is positive. Therefore two graphs with the same chromatic polynomial cannot have different chromatic numbers.
 
-## Scope
+## The conjecture
+
+> Definition: Mutual determinacy of the chromatic polynomial and spectral radius: the separation power of joint invariants. Conjecture: There exist graph families with identical chromatic polynomial and spectral radius but different chromatic numbers; the minimal order of the separating family is ten, with the separation realized by asymptotic isomorphism of Schwenk-type branch pastings. (polynomial-spectrum separating family)
+
+[Original statement](https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/efab34b80a63963991d6c7ed625442a89a328a44/conjectures/00000003490.md); both languages are in `SOURCE.md`.
+
+## Reading and scope
 
 A general theorem for arbitrary finite graphs; not only a bounded search.
 
-Read `proof.pdf` for the complete ordinary proof, explicit assumptions and the correspondence to `Main.lean`. The LaTeX source is `proof.tex`. This submission preserves the locally reviewed source and PDF byte for byte; their draft labels do not imply organizer acceptance.
+## Proof
+
+The full mathematical argument is in [main.pdf](main.pdf), with LaTeX source [main.tex](main.tex).
+
+## Formalization
+
+Lean **4.19.0**, using its bundled standard library only; no Mathlib dependency. The complete project is in `lean/`, with warnings treated as errors. The report explains how the encoded objects and final proposition correspond to the original statement.
+
+Audited declarations include `not_separating_pair_claim`, `not_polynomial_separating_pair_claim`, `evaluation_pos_iff_colorable`. `lean-verification.txt` records the clean build and printed axiom dependencies. No `sorry`, `admit`, `native_decide`, or additional axiom is used; only standard Lean foundational axioms occur.
 
 ## Reproduce
 
-Use Lean **4.19.0**, then run in this directory:
+From this submission directory:
 
 ```text
+cd lean
 lake build
 ```
 
-Only Lean's bundled standard libraries are needed; there is no Mathlib dependency. The Lake configuration treats warnings as errors. Principal declarations print their axiom dependencies. Local checks found no `sorry`, `admit`, `native_decide` or added axioms; only standard Lean foundational axioms occur. `lean-verification.txt` records the successful local build.
+From this submission directory, rebuild the PDF with:
 
-Rebuild the PDF with `tectonic proof.tex` (or a standard LaTeX toolchain).
+```text
+tectonic main.tex
+```
 
-## Provenance and local validation
+## Submission status
 
-Original statement: [conjecture 00000003490](https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/efab34b80a63963991d6c7ed625442a89a328a44/conjectures/00000003490.md). An unchanged bilingual copy is included as `SOURCE.md`.
-
-Lean compilation, exact source correspondence, AI cross-review, and rendered-PDF inspection were completed locally. The source hashes in `verification.json` identify the checked artifacts. This is a draft submission, not an official review or an accepted result.
-
-Immediately before preparing this submission, official metadata did not mark this conjecture solved, and no matching conjecture number was found in the titles or bodies of the 298 public PRs checked at 2026-10-03T13:15:11.955212+00:00. This limited check is not a claim of mathematical novelty or priority.
+AI-assisted with Codex; submitted by **gaochengzhecpu**. The statement-to-proof correspondence was checked locally by a separate agent, and the PDF was rendered and inspected. This remains a draft for independent mathematical review; local verification is not organizer acceptance. `verification.json` gives hashes of the reviewed files.
