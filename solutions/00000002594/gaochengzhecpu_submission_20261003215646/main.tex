@@ -1,0 +1,84 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\setlength{\emergencystretch}{1em}
+\hypersetup{hidelinks}
+\begin{document}
+\title{LYM posets are not closed under arbitrary direct products}
+\author{Chengzhe Gao}\date{}\maketitle
+For a finite ranked poset $P$ with rank levels $P_i$, the LYM property is
+\[
+ \sum_{x\in A}\frac1{|P_{\rho(x)}|}\leq1
+ \quad\text{for every antichain }A\subseteq P.
+\]
+Conjecture 2594 asserts that the direct product of two LYM posets always
+has this property, without additional hypotheses on their rank sizes.
+
+Let $P$ have elements $a,b,c,d,e$ with ranks $0,1,2,2,2$. Put every element
+of a lower rank below every element of a higher rank, and leave distinct
+elements of rank two incomparable. Thus $P$ is the ordinal sum of antichains
+of sizes $(1,1,3)$. Let $Q=\{0<1\}$ be a two-element chain.
+
+\begin{theorem}
+Both $P$ and $Q$ are LYM posets, but $P\times Q$ is not.
+\end{theorem}
+\begin{proof}
+An antichain of $P$ lies within a single rank, because any two elements
+of different ranks are comparable. Its Lubell sum is therefore its
+cardinality divided by the size of that rank, at most one. The same
+argument applies to $Q$.
+
+Use componentwise order and additive rank on $P\times Q$. Its rank sizes
+are the coefficients of
+\[
+ (1+t+3t^2)(1+t)=1+2t+4t^2+3t^3.
+\]
+Consider
+\[
+ A=\{(a,1),(c,0),(d,0),(e,0)\}.
+\]
+The last three elements are mutually incomparable. Each is incomparable
+with $(a,1)$, since its first coordinate is greater and its second is
+smaller. The rank of $(a,1)$ is one, and the ranks of the other three
+elements are two. Consequently its Lubell sum is
+\[
+ \frac12+\frac34=\frac54>1.
+\]
+This violates LYM in the actual direct product.
+\end{proof}
+
+The antichain is also maximal: the omitted elements $(a,0),(b,0)$ lie
+below one of its members, while $(b,1),(c,1),(d,1),(e,1)$ lie above one.
+Thus wording in the source referring to maximal antichains does not affect
+the counterexample. The further claims about matching permutations are
+unnecessary once the asserted product closure fails.
+
+\paragraph{Formal verification.}
+\texttt{RankedPoset} includes the full enumerated vertex universe, its
+no-duplication and completeness proofs, the three partial-order axioms,
+rank zero on minimal elements, the common maximal rank, and rank increment
+one on every covering pair. All these requirements are verified for
+$P,Q,R$, where $R$ uses actual ordered pairs and the componentwise relation.
+\texttt{product\_\allowbreak{}order} and \texttt{product\_\allowbreak{}rank} explicitly identify
+$R$ with the standard ranked direct product. Rank sizes are counted from
+the complete vertex lists.
+
+\texttt{lubell} uses \texttt{Std.Internal.Rat}, performing the ordinary
+rational sum of reciprocal rank sizes. The two LYM proofs cover every
+Boolean membership function, by checking all $32$ or $4$ tuples and proving
+the respective tuple expansion identities. The theorem
+\texttt{every\_\allowbreak{}subset\_\allowbreak{}represented} represents every arbitrary
+propositional subset by its characteristic function, and
+\texttt{lym\_\allowbreak{}for\_\allowbreak{}every\_\allowbreak{}subset} gives the corresponding LYM statement.
+Thus the enumeration omits no antichains. The explicit product witness,
+its antichain property, its exact rational weight, and failure of the
+LYM bound are all checked. The theorem
+\texttt{conjecture2594\_\allowbreak{}false} negates the necessary instance
+$\mathrm{LYM}(P)\Rightarrow\mathrm{LYM}(Q)\Rightarrow\mathrm{LYM}(R)$.
+
+Lean 4.19.0 checks all computation by kernel reduction, without
+\texttt{native\_\allowbreak{}decide}, unproved declarations, or additional axioms.
+
+\end{document}
