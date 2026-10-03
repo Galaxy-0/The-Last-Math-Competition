@@ -1,0 +1,123 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,geometry}
+\geometry{margin=1in}
+\title{A counterexample to Conjecture 00000002304}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{October 3, 2026}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+
+The source proposes an equality classification under \emph{general
+linear actions}: equality in $k(GV)\leq k(G)k(V)$ occurs exactly when,
+among other conditions, the $G$-module $V$ is faithful.
+Here $k(H)$ denotes the number of conjugacy classes of a finite group
+$H$, and $k(V)$ refers to the additive group of the vector space.
+We give a general linear action attaining equality that is not faithful.
+Both language versions state the general-action scope; neither imposes
+faithfulness or coprimality as a hypothesis.
+
+\paragraph{Construction.}
+Let $G=C_2=\{0,1\}$ with addition modulo $2$ and identity $0$.
+Let the field be $\mathbb F_2=\{0,1\}$, with its usual addition and
+multiplication modulo $2$, and put $V=\mathbb F_2$, viewed as a
+one-dimensional vector space over itself.
+Define the action by
+\[
+ \rho(g)(v)=v\qquad(g\in G,\ v\in V).
+\]
+Every action map is the identity linear automorphism; the identity and
+composition laws for a group action hold. Thus this is a legitimate
+linear action. Its kernel is all of the nontrivial group $G$, so it is
+not faithful. Equivalently, $\rho(0)=\rho(1)$ while $0\ne1$.
+The vector space is nonzero and one-dimensional; in particular, the
+failure of faithfulness is not an artifact of using the zero module.
+
+Use the standard semidirect product on the carrier $V\times G$:
+\[
+ (v,g)(w,h)=(v+\rho(g)(w),\,g+h)=(v+w,\,g+h).
+\]
+Consequently $V\rtimes_\rho G=C_2\times C_2$, the four-element
+abelian group. Its identity is $(0,0)$ and each element is its own
+inverse.
+
+\paragraph{Conjugacy classes and contradiction.}
+In an abelian group, conjugating $x$ by any $g$ gives
+$gxg^{-1}=x$. Hence each element is a singleton conjugacy class.
+Therefore
+\[
+ k(G)=2,\qquad k(V)=2,\qquad k(V\rtimes_\rho G)=4=2\cdot2=k(G)k(V).
+\]
+Equality holds, yet $V$ is not a faithful $G$-module. This contradicts
+the faithfulness condition required by the proposed classification.
+It also contradicts the claim of strict inequality for all remaining
+actions. No interpretation of the additional character-degree
+assertion can restore this false necessary condition.
+
+\paragraph{Scope.}
+This disproof addresses the conjecture exactly as written, which
+quantifies over general linear actions. One could ask a different
+question after imposing a faithful-action hypothesis, or further
+hypotheses such as coprimality. Our example is deliberately not faithful,
+and $|G|=2$ equals the characteristic of the field, so it is not offered
+as a counterexample to either of those restricted variants.
+The source's stated equality classification cannot itself supply a
+missing assumption excluding counterexamples to that classification.
+
+\paragraph{Formal proof and correspondence with the mathematical objects.}
+The file \texttt{lean/Main.lean} is self-contained over \texttt{Std},
+using Lean 4.19.0.
+
+\texttt{GroupData} contains multiplication, identity, inverse, and
+all group laws. \texttt{FieldData} contains the additive and
+multiplicative field laws, distributivity, inverses of all nonzero
+elements, and the axiom $0\ne1$. \texttt{VectorSpaceData} contains an
+abelian additive group and the vector-space scalar laws.
+The concrete values \texttt{C2}, \texttt{F2}, and \texttt{V2}
+verify these axioms with the modulo-$2$ operations on \texttt{Fin 2}.
+The results \texttt{every\_vector\_is\_scalar} and
+\texttt{basis\_vector\_nonzero} additionally exhibit the nonzero
+spanning vector $1$.
+
+\texttt{LinearAction} asserts the group action laws and preservation
+of addition and scalar multiplication.
+The theorem \texttt{action\_inverse} records the inverse-action identity,
+so the acting maps are indeed automorphisms.
+\texttt{trivialAction} is the action used above.
+\texttt{Faithful} is injectivity of the map from group elements to
+action maps, and \texttt{not\_faithful} uses the distinct elements
+$0$ and $1$ directly.
+
+The multiplication of the group \texttt{GV}, defined on the entire
+product \texttt{Fin 2}$\times$\texttt{Fin 2}, is precisely the displayed
+semidirect formula. All group laws are verified; the theorems
+\texttt{semidirect\_multiplication} and
+\texttt{semidirect\_identity} expose that correspondence.
+
+In particular, the formalization does not replace conjugacy-class
+counts by unrelated constants.
+\texttt{Conjugate H x y} is defined by the existence of a group element
+$g$ with $gxg^{-1}=y$.
+\texttt{HasClassNumber H n} requires a setoid with exactly this
+relation and a bijection from \texttt{Fin n} onto its actual
+\texttt{Quotient}.
+The formal proof verifies that conjugacy is equality in each of the
+three groups. It then builds explicit quotient bijections, including
+a complete four-element enumeration of the product carrier, proving
+the class numbers $2,2,4$.
+
+\texttt{ClaimedEqualityNecessity} is the faithfulness implication
+required by the source, restricted to the specific finite group, field,
+and vector space already constructed, but quantified over their linear
+actions and corresponding semidirect products.
+A universal general-action equality classification necessarily implies
+this restricted claim.
+\texttt{counterexample} states the class-number equalities and failure
+of faithfulness together; \texttt{conjecture2304\_false} proves the
+negation of that necessary implication.
+
+The proof uses kernel-reduced \texttt{decide}, with no
+\texttt{native\_decide}, admitted statement, or custom axiom.
+Printed axioms of the final theorem are exactly
+\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+\end{document}
