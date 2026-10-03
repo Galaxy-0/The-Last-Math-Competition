@@ -1,0 +1,273 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\conjid}{00000002486}
+\newcommand{\Par}{\operatorname{Par}}
+\newcommand{\dom}{\trianglelefteq}
+
+\title{The dominance order on partitions of $n$ is a self-dual lattice\\[0.4em]\large The Last Math Competition, Conjecture \conjid}
+\author{Feiyu\\ \small Independent researcher}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For every $n\ge0$, the partitions of $n$ ordered by dominance form a lattice:
+any two partitions have a meet and a join. Conjugation $\lambda\mapsto\lambda'$ is
+an involution that reverses dominance, so it exchanges meets and joins and the
+lattice is self-dual. This is a classical theorem of Brylawski. We give a short
+self-contained proof and a complete Lean~4 formalization on Mathlib's
+\texttt{Nat.Partition}.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture \conjid{} reads:
+
+\begin{quote}
+Definition: The order on partitions: dominance. Conjecture: The dominance partial order on partitions is a lattice structure: joins and meets exist, and the structure closes under conjugation duality. (partition order dominance lattice structure)
+\end{quote}
+
+\section{Reading of the statement}
+
+% If the statement is ambiguous, under-specified, or contains an error, say so
+% HERE and fix a precise reading. State explicitly which reading is being
+% settled and why it is the faithful one. Do not silently repair the statement.
+
+A partition $\lambda$ of $n$ is written with its parts in weakly decreasing
+order, $\lambda_1\ge\lambda_2\ge\dots\ge\lambda_\ell>0$, and we set $\lambda_i=0$
+for $i>\ell$. Its partial sums are
+\[
+  \Sigma_k(\lambda)=\lambda_1+\dots+\lambda_k\qquad(k\ge0).
+\]
+The dominance order on the set $\Par(n)$ of partitions of $n$ is
+$\lambda\dom\mu$ iff $\Sigma_k(\lambda)\le\Sigma_k(\mu)$ for all $k$. The
+conjugate partition $\lambda'$ has parts $\lambda'_j=\#\{i:\lambda_i\ge j\}$
+($1\le j\le\lambda_1$), the column lengths of the Young diagram.
+
+Dominance compares partitions of the same integer $n$; this is the standard
+setting. So the statement is about the poset $(\Par(n),\dom)$ for each $n$. We
+read its three clauses as follows.
+\begin{enumerate}
+  \item \emph{Partial order}: $\dom$ is reflexive, transitive and
+    antisymmetric on $\Par(n)$.
+  \item \emph{Lattice}: any $\lambda,\mu\in\Par(n)$ have a greatest lower bound
+    (meet) $\lambda\wedge\mu$ and a least upper bound (join) $\lambda\vee\mu$.
+  \item \emph{Conjugation duality}: conjugation maps $\Par(n)$ to itself, is an
+    involution ($\lambda''=\lambda$) and reverses the order
+    ($\lambda\dom\mu\iff\mu'\dom\lambda'$). Hence it is an isomorphism from the
+    lattice onto its dual. It exchanges meets and joins:
+    $(\lambda\wedge\mu)'=\lambda'\vee\mu'$ and
+    $(\lambda\vee\mu)'=\lambda'\wedge\mu'$.
+\end{enumerate}
+
+\section{Result}
+
+% State exactly what is established: proved, disproved, or partially resolved.
+
+The conjecture is true. All three clauses hold for every $n\ge0$.
+
+\begin{theorem}\label{thm:main}
+Let $n\ge0$.
+\begin{enumerate}
+  \item[(a)] $(\Par(n),\dom)$ is a partial order.
+  \item[(b)] Any $\lambda,\mu\in\Par(n)$ have a meet. It is the partition $\nu$
+    with $\Sigma_k(\nu)=\min(\Sigma_k(\lambda),\Sigma_k(\mu))$ for all $k$.
+  \item[(c)] $\lambda''=\lambda$, and $\lambda\dom\mu\iff\mu'\dom\lambda'$.
+  \item[(d)] $m$ is a meet of $\lambda,\mu$ iff $m'$ is a join of
+    $\lambda',\mu'$. In particular any $\lambda,\mu$ have the join
+    $\lambda\vee\mu=(\lambda'\wedge\mu')'$, and $(\Par(n),\dom)$ is a lattice
+    isomorphic to its dual via conjugation.
+\end{enumerate}
+\end{theorem}
+
+\section{Proof}
+
+Throughout, $\lambda\in\Par(n)$. Since every part is at least~$1$, there are at
+most $n$ parts, so $\Sigma_0(\lambda)=0$ and $\Sigma_k(\lambda)=n$ for
+$k\ge n$. The increments $\Sigma_{k+1}(\lambda)-\Sigma_k(\lambda)=\lambda_{k+1}$
+are weakly decreasing, so
+\begin{equation}\label{eq:concave}
+  \Sigma_k(\lambda)+\Sigma_{k+2}(\lambda)\le2\,\Sigma_{k+1}(\lambda)\qquad(k\ge0).
+\end{equation}
+
+\begin{lemma}[Realization]\label{lem:real}
+Let $S:\mathbb N\to\mathbb N$ be nondecreasing with $S(0)=0$,
+$S(k)+S(k+2)\le2S(k+1)$ for all $k$, and $S(k)=n$ for $k\ge n$. Then there is
+exactly one $\lambda\in\Par(n)$ with $\Sigma_k(\lambda)=S(k)$ for all $k$.
+\end{lemma}
+
+\begin{proof}
+Put $d_k=S(k+1)-S(k)\ge0$. The hypothesis says $d_{k+1}\le d_k$, and
+$d_n=0$. Let $J$ be the least index with $d_J=0$. Then
+$d_0\ge\dots\ge d_{J-1}>0$ and $d_k=0$ for $k\ge J$. So
+$d_0+\dots+d_{J-1}=S(n)-S(0)=n$, and the partition $\lambda$ with parts
+$d_0,\dots,d_{J-1}$ satisfies $\Sigma_k(\lambda)=d_0+\dots+d_{k-1}=S(k)$.
+For uniqueness, the parts of any partition are recovered from its partial sums
+as $\lambda_{k+1}=\Sigma_{k+1}(\lambda)-\Sigma_k(\lambda)$.
+\end{proof}
+
+\paragraph{(a)} Reflexivity and transitivity are inherited from $\le$ on
+$\mathbb N$. If $\lambda\dom\mu\dom\lambda$, then $\Sigma(\lambda)=\Sigma(\mu)$,
+so $\lambda=\mu$ by the uniqueness in Lemma~\ref{lem:real}.
+
+\paragraph{(b)} Let $S(k)=\min(\Sigma_k(\lambda),\Sigma_k(\mu))$. It is
+nondecreasing, $S(0)=0$, and $S(k)=n$ for $k\ge n$. For concavity, say
+$S(k+1)=\Sigma_{k+1}(\lambda)$. Then by \eqref{eq:concave},
+\[
+  S(k)+S(k+2)\le\Sigma_k(\lambda)+\Sigma_{k+2}(\lambda)\le2\Sigma_{k+1}(\lambda)
+  =2S(k+1).
+\]
+Lemma~\ref{lem:real} gives $\nu$ with $\Sigma(\nu)=S$. Then $\nu\dom\lambda$ and
+$\nu\dom\mu$. If $\rho\dom\lambda$ and $\rho\dom\mu$, then
+$\Sigma_k(\rho)\le S(k)=\Sigma_k(\nu)$, so $\rho\dom\nu$.
+
+\paragraph{Conjugation and partial sums.} Count the cells of the Young diagram
+in the first $t$ columns row by row. This gives
+\begin{equation}\label{eq:conjsum}
+  \Sigma_t(\lambda')=\sum_i\min(\lambda_i,t)=n-G_\lambda(t),\qquad
+  G_\lambda(t):=\sum_i(\lambda_i-t)^+ .
+\end{equation}
+The second equality uses $\min(x,t)+(x-t)^+=x$.
+
+\begin{lemma}\label{lem:legendre}
+For all $J,t\ge0$ we have $\Sigma_J(\lambda)\le Jt+G_\lambda(t)$. Equality holds
+whenever $\lambda_i\ge t$ for $i\le J$ and $\lambda_i\le t$ for $i>J$. In
+particular:
+\begin{enumerate}
+  \item[(i)] for every $t$ there is a $J$ with equality, e.g.\
+    $J=\#\{i:\lambda_i>t\}$;
+  \item[(ii)] for every $J$ there is a $t$ with equality, namely
+    $t=\lambda_{J+1}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+We have
+$\Sigma_J(\lambda)=\sum_{i\le J}\lambda_i\le\sum_{i\le J}\bigl(t+(\lambda_i-t)^+\bigr)
+\le Jt+G_\lambda(t)$. Under the stated condition both inequalities are
+equalities. In~(i) and~(ii) the condition holds because the parts are weakly
+decreasing.
+\end{proof}
+
+\paragraph{(c), order reversal.} Let $\lambda\dom\mu$ and $t\ge0$. Choose $J$ as
+in Lemma~\ref{lem:legendre}(i) for $\lambda$. Then
+\[
+  G_\lambda(t)=\Sigma_J(\lambda)-Jt\le\Sigma_J(\mu)-Jt\le G_\mu(t),
+\]
+and the last step is Lemma~\ref{lem:legendre} for $\mu$. By
+\eqref{eq:conjsum}, $\Sigma_t(\mu')\le\Sigma_t(\lambda')$ for every $t$, that is,
+$\mu'\dom\lambda'$.
+
+\paragraph{(c), involution.} Fix $k$. By \eqref{eq:conjsum} applied to
+$\lambda'$, $\Sigma_k(\lambda'')=n-G_{\lambda'}(k)$, so it suffices to show
+$\Sigma_k(\lambda)+G_{\lambda'}(k)=n$.
+\begin{itemize}
+  \item By Lemma~\ref{lem:legendre}(i) for $\lambda'$ there is $J$ with
+    $\Sigma_J(\lambda')=Jk+G_{\lambda'}(k)$, so
+    $n-G_\lambda(J)=Jk+G_{\lambda'}(k)$ by \eqref{eq:conjsum}.
+    Lemma~\ref{lem:legendre} for $\lambda$ gives
+    $\Sigma_k(\lambda)\le kJ+G_\lambda(J)=n-G_{\lambda'}(k)$.
+  \item By Lemma~\ref{lem:legendre}(ii) for $\lambda$ there is $t$ with
+    $\Sigma_k(\lambda)=kt+G_\lambda(t)$. Lemma~\ref{lem:legendre} for $\lambda'$
+    gives $n-G_\lambda(t)=\Sigma_t(\lambda')\le tk+G_{\lambda'}(k)$, so
+    $\Sigma_k(\lambda)\ge n-G_{\lambda'}(k)$.
+\end{itemize}
+Hence $\Sigma(\lambda'')=\Sigma(\lambda)$, and $\lambda''=\lambda$ by~(a).
+Applying the order reversal to $\mu'\dom\lambda'$ gives
+$\lambda''\dom\mu''$, i.e.\ $\lambda\dom\mu$. This is the converse.
+
+\paragraph{(d)} By~(c), conjugation is a bijection of $\Par(n)$ onto itself
+that reverses $\dom$ in both directions. Such a map sends greatest lower
+bounds to least upper bounds and conversely. Applying this to the meet
+$\lambda'\wedge\mu'$ from~(b) shows that $(\lambda'\wedge\mu')'$ is a join of
+$\lambda''=\lambda$ and $\mu''=\mu$. \qed
+
+\section{Formalization}
+
+The accompanying Lean~4 project (\texttt{lean/Submission/Basic.lean}) states
+and proves Theorem~\ref{thm:main} for every $n$. Partitions are Mathlib's
+\texttt{Nat.Partition n}.
+
+\begin{itemize}
+  \item \texttt{sortedParts}, \texttt{partialSum}, \texttt{Dominates} --- the
+    parts in weakly decreasing order, the partial sums $\Sigma_k$, and $\dom$.
+    \texttt{IsMeet}, \texttt{IsJoin} --- greatest lower and least upper bounds
+    for \texttt{Dominates}.
+  \item \texttt{colLen p j} $=\#\{i:\lambda_i>j\}$ and \texttt{conj} --- the
+    conjugate, whose parts are the nonzero values among
+    \texttt{colLen p j}, $0\le j<n$.
+  \item \texttt{exists\_of\_concave}, \texttt{eq\_of\_partialSum\_eq} ---
+    Lemma~\ref{lem:real}; \texttt{exists\_meet} --- part~(b).
+  \item \texttt{partialSum\_conj} --- formula \eqref{eq:conjsum}.
+  \item \texttt{partialSum\_le}, \texttt{partialSum\_split} ---
+    Lemma~\ref{lem:legendre}.
+  \item \texttt{exists\_split\_threshold}, \texttt{exists\_split\_index}
+    --- Lemma~\ref{lem:legendre}(i) and~(ii).
+  \item \texttt{dominates\_conj}, \texttt{conj\_conj},
+    \texttt{dominates\_iff\_conj} --- part~(c);
+    \texttt{isMeet\_iff\_isJoin\_conj}, \texttt{exists\_join} --- part~(d).
+  \item \texttt{ConjectureHolds} --- for every $n$: reflexivity, transitivity
+    and antisymmetry of \texttt{Dominates}; existence of meets and joins;
+    \texttt{conj (conj p) = p}; order reversal; and meets of $p,q$
+    correspond to joins of their conjugates.
+    \texttt{conjecture\_00000002486} proves it.
+  \item \texttt{dominanceLattice n} packages the result as a Mathlib
+    \texttt{Lattice (Nat.Partition n)} whose order is \texttt{Dominates}.
+    \texttt{conj\_sup} and \texttt{conj\_inf} state
+    $(\lambda\vee\mu)'=\lambda'\wedge\mu'$ and
+    $(\lambda\wedge\mu)'=\lambda'\vee\mu'$.
+\end{itemize}
+
+The toolchain is \texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to
+\texttt{v4.33.1}, and \texttt{lake build} succeeds. The project contains no
+\texttt{sorry}, no \texttt{admit} and no \texttt{native\_decide}, and
+introduces no axioms:
+\begin{center}
+\texttt{\#print axioms conjecture\_00000002486}
+\end{center}
+reports exactly \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\section{Remarks}
+
+% Optional: what the truth is likely to be, what stays open, why the original
+% statement went wrong, what a repaired conjecture should say.
+
+The theorem is due to Brylawski~\cite{bry}. The order reversal under
+conjugation is also in Macdonald's book~\cite[Ch.~I, (1.11)]{mac}. The
+argument above organizes both through the Legendre-type identity of
+Lemma~\ref{lem:legendre}:
+$\Sigma_J(\lambda)=\min_t\bigl(Jt+G_\lambda(t)\bigr)$ and
+$G_\lambda(t)=\max_J\bigl(\Sigma_J(\lambda)-Jt\bigr)$.
+
+The join is not the pointwise maximum of partial sums. Take
+$\lambda=(3,1,1,1)$ and $\mu=(2,2,2)$ in $\Par(6)$. Their partial sums are
+$(3,4,5,6)$ and $(2,4,6,6)$. The pointwise maximum $(3,4,6,6)$ has increments
+$3,1,2$, which are not decreasing, so it is not the partial-sum sequence of any
+partition. The join is $(3,2,1)$, which equals $(\lambda'\wedge\mu')'$ with
+$\lambda'=(4,1,1)$ and $\mu'=(3,3)$. The meet is $(2,2,1,1)$, given by the
+pointwise minimum $(2,4,5,6)$.
+
+\begin{thebibliography}{9}
+\bibitem{bry} T.~Brylawski, \emph{The lattice of integer partitions},
+  Discrete Math. 6 (1973), 201--219.
+\bibitem{mac} I.~G.~Macdonald, \emph{Symmetric Functions and Hall
+  Polynomials}, 2nd ed., Oxford University Press, 1995.
+\end{thebibliography}
+
+\end{document}
