@@ -1,0 +1,157 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A Counterexample to Conjecture 00000000162:\\
+No Odd Polygon Has Two-Squares Sides for Primes $p\equiv1\pmod4$}
+\author{%
+  Feiyu\thanks{Independent researcher.}
+  \and
+  Claude (Opus 5.5)\thanks{Anthropic.}%
+}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000000162 asserts that for every $n\ge3$ there is a planar convex
+$n$-gon whose side vectors are two-squares vectors for primes $p\equiv1\pmod4$,
+i.e.\ integer vectors $(a,b)$ with $a^2+b^2=p$, and sum to zero. This fails
+for every odd $n$, already for triangles. Such a vector has exactly one odd
+coordinate, so an odd number of them cannot sum to zero. The argument does not
+use convexity. It is formalized in Lean~4 against Mathlib.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture 00000000162 reads:
+
+\begin{quote}
+Conjecture: Convex polygons with prime-square side lengths: for every
+$n \ge 3$ there exists a planar convex $n$-gon whose side vectors all have
+prime squared lengths (two-squares vectors for primes $p \equiv 1 \bmod 4$) and
+sum to zero.
+\end{quote}
+
+\section{Reading of the statement}
+
+The side vectors of a polygon with vertices $P_0,\ldots,P_{n-1}$, in cyclic
+order, are $v_i=P_{i+1}-P_i$ (indices mod $n$). The phrase ``prime squared
+lengths'' is qualified in parentheses by ``two-squares vectors for primes
+$p\equiv1 \bmod 4$''. We read this as specifying the side vectors, which is
+what the words say.
+
+\begin{definition}
+A \emph{two-squares vector for a prime $p\equiv1\pmod4$} is a vector
+$(a,b)\in\mathbb Z^2$ with $a^2+b^2=p$ for a prime $p\equiv1\pmod 4$.
+\end{definition}
+
+So the conjecture asserts: for every $n\ge3$ there is a convex $n$-gon in the
+plane whose side vectors $v_0,\ldots,v_{n-1}$ are two-squares vectors for
+primes $p\equiv1\pmod4$ and satisfy $\sum_i v_i=0$. (The last condition holds
+for every closed polygon. It is part of the statement, and the refutation uses
+nothing else.)
+
+The parenthetical is what gives the statement content. Without integrality
+it would be trivial: a regular $n$-gon with side $\sqrt2$ has all squared side
+lengths equal to the prime $2$. Remark~\ref{rem:two} discusses the reading
+that keeps integrality but also admits $p=2$.
+
+\section{Result}
+
+\begin{theorem}\label{thm:main}
+Let $n$ be odd. There are no two-squares vectors $v_0,\ldots,v_{n-1}$ for primes
+$p\equiv1\pmod4$ with $\sum_iv_i=0$. In particular no $n$-gon, convex or not,
+has such side vectors, and Conjecture 00000000162 fails for $n=3$.
+\end{theorem}
+
+\section{Proof}
+
+\begin{lemma}\label{lem:onecoord}
+If $(a,b)\in\mathbb Z^2$ and $a^2+b^2$ is odd, then $a+b$ is odd: exactly one
+of $a,b$ is odd.
+\end{lemma}
+
+\begin{proof}
+$x^2\equiv x\pmod2$ for every integer $x$, so $a+b\equiv a^2+b^2\equiv1\pmod 2$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Write $v_i=(a_i,b_i)$. Each $a_i^2+b_i^2$ is a prime $\equiv1\pmod4$, hence
+odd, so $a_i+b_i$ is odd by Lemma~\ref{lem:onecoord}. If $\sum_iv_i=0$ then
+$\sum_ia_i=\sum_ib_i=0$, so
+\[
+  0=\sum_{i=0}^{n-1}(a_i+b_i)\equiv\sum_{i=0}^{n-1}1=n\pmod 2,
+\]
+and $n$ is even.
+\end{proof}
+
+\section{Formalization}
+
+The accompanying Lean~4 project (\texttt{lean/Submission/Basic.lean}) states
+the conjecture and proves its negation against Mathlib.
+
+\begin{itemize}
+  \item \texttt{cross}, \texttt{IsConvexPolygon} --- vertices
+    $P\colon\texttt{Fin n}\to\mathbb R^2$ of a convex $n$-gon: $n\ge3$, and for
+    every edge $P_i\to P_{i+1}$ (successor \texttt{finRotate n}) all other
+    vertices lie strictly on the same side, the same side for all edges.
+  \item \texttt{IsTwoSquaresVector} --- the definition above.
+  \item \texttt{ConjectureHolds} --- for every $n\ge3$ there are $P$ and
+    $v\colon\texttt{Fin n}\to\mathbb Z^2$ with $P$ convex,
+    $P_{i+1}-P_i=v_i$, every $v_i$ a two-squares vector for a prime
+    $p\equiv1\pmod4$, and $\sum_iv_i=0$.
+  \item \texttt{odd\_of\_isTwoSquaresVector}, \texttt{odd\_add\_of\_odd} ---
+    the squared length is odd, and Lemma~\ref{lem:onecoord} (computed in
+    \texttt{ZMod 2}, where $x^2=x$).
+  \item \texttt{even\_of\_sum\_eq\_zero}, \texttt{not\_exists\_of\_odd} ---
+    Theorem~\ref{thm:main}.
+  \item \texttt{conjecture\_00000000162\_false} ---
+    $\lnot\,$\texttt{ConjectureHolds}, at $n=3$.
+\end{itemize}
+
+The toolchain is \texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to
+\texttt{v4.33.1}, and \texttt{lake build} succeeds. The project contains no
+\texttt{sorry}, no \texttt{admit} and no \texttt{native\_decide}, and
+introduces no axioms:
+\begin{center}
+\texttt{\#print axioms conjecture\_00000000162\_false}
+\end{center}
+reports exactly \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\section{Remarks}
+
+\begin{remark}[even $n$]
+For even $n=2m$ the obstruction disappears, and the statement is plausibly
+true. Take $m$ distinct primes $p_j\equiv1\pmod4$ and write $p_j=a_j^2+b_j^2$.
+The vectors $(a_j,b_j)$ are pairwise non-parallel, since distinct primes are
+not in a square ratio, and together with their negatives they are the side
+vectors of a centrally symmetric convex $2m$-gon when sorted by angle. We do
+not formalize this.
+\end{remark}
+
+\begin{remark}[admitting $p=2$]\label{rem:two}
+The obstruction is exactly the exclusion of the even prime. If $p=2$ were
+admitted, so that $(\pm1,\pm1)$ could be used, odd polygons would exist. For
+example the triangle with vertices $(0,0)$, $(1,1)$, $(2,-1)$ has side vectors
+$(1,1)$, $(1,-2)$, $(-2,1)$, of squared lengths $2,5,5$. The statement
+explicitly restricts to $p\equiv1\pmod4$, and we refute it as stated.
+\end{remark}
+
+\end{document}
