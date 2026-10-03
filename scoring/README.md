@@ -65,7 +65,7 @@ That is also why a partial run is safe to inspect: the first 400 rows of a
 | `importance` | 99 | 6001 | 2936 | 881 | 83 | 2 |
 | `novelty` | 166 | 1041 | 8793 | — | — | 3 |
 | `proof_difficulty` | 304 | 7395 | 1875 | 364 | 62 | 2 |
-| `disproof_difficulty` | 145 | 1093 | 2470 | 5019 | 1273 | 4 |
+| `disproof_difficulty` | 140 | 855 | 2249 | 5346 | 1410 | 4 |
 
 `well_definedness_level` also has **7 rows scored 0**, the scorer's flag for
 possibly ill-posed statements.
