@@ -1,0 +1,152 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb Z}
+
+\title{A Counterexample to Conjecture 00000007990:\\
+Perfect Lee Codes of Radius $1$ Exist in Every Dimension}
+\author{%
+  Feiyu\thanks{Independent researcher.}
+  \and
+  Claude (Opus 5.5)\thanks{Anthropic.}%
+}
+\date{2026-10-03}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000007990 claims that perfect Lee codes $PL(n,e)$ exist only for
+$(n,e)=(2,2)$, for $e=2$ with $n\equiv\pm1\pmod6$, and for sparse exceptions of higher
+radius. In particular no perfect Lee code of radius $1$ would exist. But for every
+$n\ge1$ the Golomb--Welch code $\{x\in\Z^n:\sum_i i\,x_i\equiv0\pmod{2n+1}\}$ is a
+perfect Lee code of radius $1$. The refutation, for all $n$ at once, is checked in
+Lean~4 against Mathlib.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture 00000007990 reads:
+
+\begin{quote}
+Definition: The perfect covering of the Lee metric for codewords: perfect Lee codes (a
+continuation of the Golab-Weldon problem). Conjecture: Perfect Lee codes $PL(n,e)$ of
+radius $e$ exist only at $(n,e) = (2,2)$ and $n$ congruent to plus or minus $1$ mod $6$
+($e = 2$, known to Golab-Weldon) plus sparse higher-radius exceptions; the step
+distribution of $(n,e)$ for radius at least $3$ is an arithmetic-progression
+intersection in the prime-mod-$6$ sense with density $(1/2) \prod_{p>3} (1-2/p^2)$ (an
+explicit Euler product); and nonexistence is uniquely determined by a Diophantine
+approximation obstruction of lattice density (the Markov constant).
+\end{quote}
+
+The Chinese version in \texttt{conjectures/00000007990.md} states the same three
+claims; it confirms that ``higher radius'' means radius at least $3$.
+
+\section{Reading of the statement}
+
+\begin{definition}
+The \emph{Lee distance} on $\Z^n$ is $d(x,y)=\sum_{i=1}^n|x_i-y_i|$. A set
+$C\subseteq\Z^n$ is a \emph{perfect Lee code of radius $e$}, written $PL(n,e)$, if
+every point of $\Z^n$ is within Lee distance $e$ of exactly one codeword; equivalently,
+the Lee balls of radius $e$ around the codewords tile $\Z^n$.
+\end{definition}
+
+This is the setting of Golomb and Welch~\cite{gw}, whose name the statement garbles as
+``Golab-Weldon''. The conjecture is a conjunction of three claims. We refute the first
+one:
+\begin{enumerate}
+\item[(C1)] if $PL(n,e)$ exists with $n,e\ge1$, then $(n,e)=(2,2)$, or $e=2$ and
+  $n\equiv\pm1\pmod6$, or $e\ge3$.
+\end{enumerate}
+Allowing every radius $e\ge3$ in (C1), instead of only ``sparse'' exceptions, only
+weakens the claim. Under (C1) no perfect Lee code of radius $1$ exists.
+
+\section{Result}
+
+\begin{theorem}\label{thm:main}
+For every $n\ge1$, the Golomb--Welch code
+\[
+C_n=\Bigl\{x\in\Z^n:\ \sum_{i=1}^n i\,x_i\equiv0\pmod{2n+1}\Bigr\}
+\]
+is a perfect Lee code of radius $1$. Hence (C1) fails for every pair $(n,1)$, $n\ge1$,
+and Conjecture 00000007990 is false.
+\end{theorem}
+
+\section{Proof}
+
+Write $w(x)=\sum_i i\,x_i$ and $m=2n+1$, and let $e_i$ be the unit vectors. A point $y$
+satisfies $d(x,y)\le1$ iff $y=x$ or $y=x\pm e_i$ for some $i$. Indeed, if
+$d(x,y)\le1$ and $y\ne x$, some coordinate differs, contributing at least $1$, so it
+contributes exactly $1$ and all other coordinates agree. These $2n+1$ points have
+weights
+\[
+w(x),\quad w(x)+i,\quad w(x)-i\qquad(1\le i\le n),
+\]
+that is $w(x)+\varepsilon$ with $\varepsilon$ running over the $2n+1$ distinct integers
+$-n,\dots,n$. These are all the residues modulo $m=2n+1$, each exactly once. So
+exactly one of the points has weight divisible by $m$, i.e.\ lies in $C_n$.
+
+In the formal proof, existence takes the residue $s=w(x)\bmod m\in[0,2n]$ and steps by
+$0$, by $-e_s$ (if $1\le s\le n$) or by $+e_{m-s}$ (if $n<s\le2n$). Uniqueness uses
+that two admissible steps have weights congruent modulo $m$ and of absolute value at
+most $n$, hence equal weights, hence they are equal.
+
+\section{Formalization}
+
+\sloppy
+The Lean~4 project in \texttt{lean/} (file \texttt{lean/Submission/Basic.lean})
+formalizes the definitions above and proves Theorem~\ref{thm:main} against Mathlib.
+\begin{itemize}
+  \item Points are integer vectors \texttt{Fin n} $\to\Z$; \texttt{leeDist} is the
+    Lee distance, and \texttt{IsPerfectLeeCode n e C} states that every point has a
+    unique codeword within distance $e$ (Lean's \texttt{ExistsUnique}). \texttt{ExistsPL n e} asserts that some such
+    $C$ exists. \texttt{Claim1} is (C1).
+  \item \texttt{weight} is $w$ (with coordinates indexed from $0$, so the weight of
+    coordinate $i$ is $i+1$), and \texttt{GW n} is $C_n$.
+  \item \texttt{step} and \texttt{stepWeight} describe the moves $0,\pm e_i$ and
+    their weights. \texttt{eq\_add\_step} characterizes the points within distance
+    $1$; \texttt{stepWeight\_abs} and \texttt{stepWeight\_injective} are the facts used
+    for uniqueness.
+  \item \texttt{isPerfectLeeCode\_GW} is Theorem~\ref{thm:main} for every $n$.
+    \texttt{not\_claim1} refutes (C1), and \texttt{claim1\_fails\_everywhere} records
+    that every pair $(n,1)$ violates it.
+  \item \texttt{conjecture\_00000007990\_false} states
+    $\lnot(\texttt{Claim1}\wedge P\wedge Q)$ for arbitrary propositions $P,Q$ standing
+    for the other two claims.
+\end{itemize}
+The toolchain is \texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to
+\texttt{v4.33.1}, and \texttt{lake build} succeeds. The project contains no
+\texttt{sorry}, no \texttt{admit} and no \texttt{native\_decide}, and introduces no
+axioms: \texttt{\#print axioms} reports exactly \texttt{propext},
+\texttt{Classical.choice} and \texttt{Quot.sound} for
+\texttt{conjecture\_00000007990\_false} and \texttt{isPerfectLeeCode\_GW}.
+
+\fussy
+\section{Remarks}
+
+\begin{remark}
+Golomb and Welch~\cite{gw} showed that perfect Lee codes exist in dimension $1$ and
+$2$ for every radius, and for radius $1$ in every dimension; their conjecture is that
+there are no others when $n\ge3$ and $e\ge2$. So perfect Lee codes are far more
+common than (C1) allows; we formalize only the radius-$1$ family.
+\end{remark}
+
+\begin{thebibliography}{9}
+\bibitem{gw} S.~W.~Golomb and L.~R.~Welch, \emph{Perfect codes in the Lee metric and
+  the packing of polyominoes}, SIAM J. Appl. Math. 18 (1970), 302--317.
+\end{thebibliography}
+
+\end{document}
