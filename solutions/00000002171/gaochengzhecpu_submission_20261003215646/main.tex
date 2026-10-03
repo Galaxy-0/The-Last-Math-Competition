@@ -1,0 +1,64 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\setlength{\emergencystretch}{1em}
+\begin{document}
+\title{Incompatible clauses in Conjecture 2171}
+\author{Chengzhe Gao}\date{}\maketitle
+The source asserts both that Frankl's union-closed conjecture holds and
+that the ground-set bound twelve for a minimal counterexample is attained.
+These two clauses are incompatible. This observation neither proves nor
+disproves the classical Frankl conjecture considered alone.
+
+For a finite set family $\mathcal F$, put
+$d_{\mathcal F}(x)=|\{A\in\mathcal F:x\in A\}|$.
+Use the ground set $\bigcup\mathcal F$, and exclude the degenerate family
+whose only possible member is the empty set. The usual Frankl assertion is
+\[
+ \forall\mathcal F\text{ union-closed},\quad
+ \exists x\in\bigcup\mathcal F:\quad
+ 2d_{\mathcal F}(x)\geq|\mathcal F|.
+\]
+A counterexample is an admissible union-closed family for which
+$2d_{\mathcal F}(x)<|\mathcal F|$ for every ground element.
+
+\begin{theorem}
+Frankl's assertion and the existence of a minimal counterexample with
+ground-set size twelve cannot both hold.
+\end{theorem}
+\begin{proof}
+Assume both statements, and take the claimed family on twelve ground
+elements. Frankl's assertion applies to that family and supplies an element
+$x$ with $2d_{\mathcal F}(x)\geq|\mathcal F|$. The counterexample condition
+gives the strict opposite inequality for the same $x$, a contradiction.
+Minimality and the value twelve are not needed for the contradiction.
+\end{proof}
+
+The words ``with twelve attained'' in English and the corresponding Chinese phrase (``and attained'')
+are an existential assertion, not merely a conditional lower bound on
+hypothetical counterexamples. Removing attainment would remove this
+contradiction and would be a different problem.
+
+\paragraph{Formal verification.}
+\texttt{Family n} is a list of actual subsets of $\mathrm{Fin}(n)$, represented
+by Boolean membership functions. \texttt{Admissible} requires no repeated
+sets, closure under pointwise union, full ground-set support, and the
+presence of a nonempty set. Every finite set family with an $n$-element
+ground set admits such a representation by labeling its ground elements;
+union and occurrence counts are preserved. Conversely each admissible
+representation is such a family. \texttt{frequency} computes the actual
+number of sets containing an element. The theorem
+\texttt{counterexample\_\allowbreak{}iff} connects the strict inequalities to absence
+of a Frankl witness. \texttt{MinimalGroundCounterexample} requires an
+actual counterexample and the absence of any smaller-ground counterexample.
+The final \texttt{conjecture2171\_\allowbreak{}false} negates the conjunction of the
+universal Frankl assertion and an actual attained twelve-element minimum.
+Thus the formalization does not replace the set theory by an uninterpreted
+proposition. It proves only the inconsistency of the source's full statement.
+
+Lean 4.19.0 with \texttt{Std} checks the proof, with only standard logical
+axioms in the printed dependency lists.
+
+\end{document}
