@@ -1,0 +1,147 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A Counterexample to Conjecture 00000001465:\\
+Moreau Envelopes Are Differentiable at Their Minimizers}
+\author{%
+  Feiyu\thanks{Independent researcher.}
+  \and
+  Claude (Opus 5.5)\thanks{Anthropic.}%
+}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000001465 asserts, as one of its two clauses, that above a
+critical parameter there is a convex function whose Moreau envelope is not
+differentiable at a minimizer. No such function exists, convex or not: at every
+minimizer $x^\ast$ the envelope $M$ satisfies
+$M(x^\ast)\le M(x)\le M(x^\ast)+\|x-x^\ast\|^2/\lambda$, so it is differentiable
+there with derivative $0$. The refutation is formalized in Lean~4 against
+Mathlib.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture 00000001465 reads:
+
+\begin{quote}
+Definition: The Moreau envelope of a convex function $f$ is
+$M_\lambda f(x) = \inf_y\{f(y) + |x-y|^2/(2\lambda)\}$. Conjecture: The critical
+parameter for $M_\lambda f$ to be $C^1$ is $\lambda^\ast(f) = 1/L(f)$, where
+$L(f)$ is the minimal Lipschitz constant of $f$; for $\lambda < \lambda^\ast$,
+all envelopes are $C^1$, while for $\lambda > \lambda^\ast$ there exists $f$
+whose envelope is nondifferentiable at a minimizer.
+\end{quote}
+
+\section{Reading of the statement}
+
+Functions are real-valued on $\mathbb R^n$, the parameter is $\lambda>0$ as
+usual, and $M_\lambda f(x)$ is the infimum in the definition (a real number).
+The conjecture is the conjunction of two clauses:
+\begin{enumerate}
+  \item for $0<\lambda<\lambda^\ast(f)=1/L(f)$, the envelope of every convex $f$ is
+    $C^1$;
+  \item there exist a convex $f$ and $\lambda>\lambda^\ast(f)$ such that
+    $M_\lambda f$ is not differentiable at some minimizer of $M_\lambda f$.
+\end{enumerate}
+We refute clause~2, which refutes the conjecture. Our argument shows more:
+\emph{every} envelope, of any function and for any $\lambda>0$, is
+differentiable at each of its minimizers. In particular the choice of
+$\lambda^\ast$ and the convexity of $f$ play no role. If ``minimizer'' is read
+as a minimizer of $f$ rather than of $M_\lambda f$, nothing changes. Since
+$M_\lambda f\le f$ and $M_\lambda f\ge\inf f$, a minimizer of $f$ is also a
+minimizer of $M_\lambda f$.
+
+\section{Result}
+
+\begin{theorem}\label{thm:main}
+Let $f\colon E\to\mathbb R$ on a real normed space $E$, let $\lambda>0$, and let
+$M=M_\lambda f$ be real-valued. If $x^\ast$ minimizes $M$, then for all $x$
+\[
+  M(x^\ast)\;\le\;M(x)\;\le\;M(x^\ast)+\frac{\|x-x^\ast\|^2}{\lambda}.
+\]
+Consequently $M$ is (Fr\'echet) differentiable at $x^\ast$ with derivative $0$,
+and Conjecture 00000001465 is false.
+\end{theorem}
+
+\section{Proof}
+
+The left inequality is the minimality of $x^\ast$. Taking $y=x$ in the
+infimum gives $M\le f$, hence $f(y)\ge M(y)\ge M(x^\ast)$ for every $y$. From
+$\|x-y\|\le\|x-x^\ast\|+\|x^\ast-y\|$ we get
+$\|x-y\|^2\le2\|x-x^\ast\|^2+2\|x^\ast-y\|^2$, so for every $y$
+\begin{align*}
+  M(x)&\le f(y)+\frac{\|x-y\|^2}{2\lambda}
+  \le 2\Bigl(f(y)+\frac{\|x^\ast-y\|^2}{2\lambda}\Bigr)-f(y)
+     +\frac{\|x-x^\ast\|^2}{\lambda}\\
+  &\le 2\Bigl(f(y)+\frac{\|x^\ast-y\|^2}{2\lambda}\Bigr)-M(x^\ast)
+     +\frac{\|x-x^\ast\|^2}{\lambda}.
+\end{align*}
+Thus $\frac12\bigl(M(x)+M(x^\ast)-\|x-x^\ast\|^2/\lambda\bigr)$ is a lower bound
+for the values $f(y)+\|x^\ast-y\|^2/(2\lambda)$, whose infimum is $M(x^\ast)$.
+Hence it is at most $M(x^\ast)$, which is the right inequality. Finally
+$|M(x^\ast+h)-M(x^\ast)|\le\|h\|^2/\lambda=o(\|h\|)$.
+
+\section{Formalization}
+
+The accompanying Lean~4 project (\texttt{lean/Submission/Basic.lean}) states
+the conjecture and proves its negation against Mathlib.
+
+\begin{itemize}
+  \item \texttt{IsMoreauEnvelope f lam M} --- for every $x$, $M(x)$ is the
+    greatest lower bound (\texttt{IsGLB}) of
+    $\{f(y)+\|x-y\|^2/(2\lambda)\}$.
+  \item \texttt{lipConst f} --- the least Lipschitz constant;
+    \texttt{ConjectureHolds} --- clauses~1 and~2 on
+    \texttt{EuclideanSpace} $\mathbb R$ \texttt{(Fin n)}, with \texttt{ConvexOn},
+    \texttt{ContDiff} $\mathbb R$ \texttt{1} and \texttt{DifferentiableAt}.
+  \item \texttt{le\_of\_isMin} --- the right inequality of
+    Theorem~\ref{thm:main}, on any real normed space;
+    \texttt{hasFDerivAt\_of\_isMin} --- \texttt{HasFDerivAt M 0 xs}.
+  \item \texttt{conjecture\_00000001465\_false} ---
+    $\lnot\,$\texttt{ConjectureHolds}, by refuting clause~2.
+\end{itemize}
+
+The toolchain is \texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to
+\texttt{v4.33.1}, and \texttt{lake build} succeeds. The project contains no
+\texttt{sorry}, no \texttt{admit} and no \texttt{native\_decide}, and
+introduces no axioms:
+\begin{center}
+\texttt{\#print axioms conjecture\_00000001465\_false}
+\end{center}
+reports exactly \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\section{Remarks}
+
+Much more is classical. For a proper lower semicontinuous convex $f$ on a
+Hilbert space, $M_\lambda f$ is $C^1$ for \emph{every} $\lambda>0$, with
+$(1/\lambda)$-Lipschitz gradient $\nabla M_\lambda f=(I-\mathrm{prox}_{\lambda
+f})/\lambda$ \cite{moreau,rw}. So there is no critical parameter at all, and
+clause~1 holds for trivial reasons. Our formal argument does not use this
+theory, only the elementary estimate of Theorem~\ref{thm:main}.
+
+\begin{thebibliography}{9}
+\bibitem{moreau} J.-J.~Moreau, \emph{Proximit\'e et dualit\'e dans un espace
+  hilbertien}, Bull. Soc. Math. France 93 (1965), 273--299.
+\bibitem{rw} R.~T.~Rockafellar and R.~J.-B.~Wets, \emph{Variational Analysis},
+  Springer, 1998.
+\end{thebibliography}
+
+\end{document}
