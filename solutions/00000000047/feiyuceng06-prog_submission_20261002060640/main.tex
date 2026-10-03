@@ -1,0 +1,158 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\title{A Proof of Conjecture 00000000047:\\
+Every $[n]$ Has a Prime Permutation}
+\author{%
+  Feiyu\thanks{Independent researcher.}
+  \and
+  Claude (Opus 5.5)\thanks{Anthropic.}%
+}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000000047 asserts that for every sufficiently large even $n$
+there is a permutation $\pi$ of $[n]=\{1,\ldots,n\}$ such that $\pi(i)+i$ is
+prime for all $i$. We prove that such a permutation exists for every $n$, even
+or odd, and that it can be chosen to be an involution. The proof is a short
+induction on Bertrand's postulate, and it is formalized in Lean~4 against
+Mathlib.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture 00000000047 reads:
+
+\begin{quote}
+Conjecture: For every sufficiently large even $n$ there exists a permutation
+$\pi$ of $[n]$ such that $\pi(i)+i$ is prime for all $i$ (a ``prime
+permutation'').
+\end{quote}
+
+\section{Reading of the statement}
+
+As usual, $[n]=\{1,2,\ldots,n\}$. A \emph{prime permutation} of $[n]$ is a
+bijection $\pi\colon[n]\to[n]$ such that $\pi(i)+i$ is a prime number for every
+$i\in[n]$. The conjecture asserts that there is an $N$ such that every even
+$n\ge N$ admits a prime permutation of $[n]$. There is no ambiguity to resolve.
+
+\section{Result}
+
+\begin{theorem}\label{thm:main}
+For every integer $n\ge0$ there is an involution $\pi$ of $[n]$ such that
+$\pi(i)+i$ is prime for all $i\in[n]$. In particular Conjecture 00000000047
+holds, with any threshold $N$, and the evenness hypothesis is not needed.
+\end{theorem}
+
+\section{Proof}
+
+We use Bertrand's postulate in the form: for every $n\ge1$ there is a prime $p$
+with $n<p\le 2n$.
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+By strong induction on $n$. For $n=0$ the empty permutation works.
+
+Let $n\ge1$, and assume the statement for all smaller values. Choose a prime
+$p$ with $n<p\le2n$ and put $m=p-n$, so that $1\le m\le n$. Split
+\[
+  [n]=\{1,\ldots,m-1\}\ \cup\ \{m,\ldots,n\}.
+\]
+On the second block define $\pi(i)=p-i$. If $m\le i\le n$ then
+$m=p-n\le p-i\le p-m=n$, so $\pi$ maps the block $\{m,\ldots,n\}$ into
+itself; clearly $\pi(\pi(i))=i$, and $\pi(i)+i=p$ is prime. The first block is
+$[m-1]$, and $m-1=p-n-1<n$ because $p\le 2n$. By the induction hypothesis there
+is an involution of $[m-1]$ with the required property, and we let $\pi$ act on
+the first block by it. The two pieces together form an involution of $[n]$, and
+$\pi(i)+i$ is prime for every $i\in[n]$.
+\end{proof}
+
+\begin{example}
+For $n=10$ take $p=11$, so $m=1$ and $\pi(i)=11-i$ on all of $[10]$: the pairs
+$\{1,10\},\{2,9\},\{3,8\},\{4,7\},\{5,6\}$ all sum to $11$. For $n=8$ take
+$p=11$, so $m=3$: the block $\{3,\ldots,8\}$ is paired as
+$\{3,8\},\{4,7\},\{5,6\}$, and the remaining $[2]$ is handled with $p=3$,
+giving the pair $\{1,2\}$. So $\pi=(1\,2)(3\,8)(4\,7)(5\,6)$ works for $n=8$.
+\end{example}
+
+\section{Formalization}
+
+The accompanying Lean~4 project (\texttt{lean/Submission/Basic.lean}) states
+the conjecture and proves it against Mathlib.
+
+\begin{itemize}
+  \item \texttt{HasPrimePermutation n} --- there is
+    \texttt{$\pi$ : Equiv.Perm (Finset.Icc 1 n)} with
+    \texttt{Nat.Prime ($\pi$ i + i)} for every \texttt{i}. A permutation of the
+    finite set $\{1,\ldots,n\}$, as a type, is exactly a permutation of $[n]$.
+  \item \texttt{ConjectureHolds} --- for some $N$, every even $n\ge N$
+    satisfies \texttt{HasPrimePermutation n}.
+  \item \texttt{exists\_prime\_involution} --- the induction above, producing
+    a function $f\colon\mathbb N\to\mathbb N$ that maps $[n]$ into itself,
+    satisfies $f(f(i))=i$ and makes $f(i)+i$ prime for $i\in[n]$. It uses
+    Mathlib's Bertrand postulate
+    \texttt{Nat.exists\_prime\_lt\_and\_le\_two\_mul}.
+  \item \texttt{hasPrimePermutation} --- every $n$ admits a prime permutation,
+    obtained from $f$ via \texttt{Function.Involutive.toPerm}.
+  \item \texttt{conjecture\_00000000047} --- \texttt{ConjectureHolds}, with
+    threshold $N=0$.
+\end{itemize}
+
+Primality is Mathlib's \texttt{Nat.Prime}. The toolchain is
+\texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to \texttt{v4.33.1}, and
+\texttt{lake build} succeeds. The project contains no \texttt{sorry}, no \texttt{admit} and no
+\texttt{native\_decide}, and introduces no axioms:
+\begin{center}
+\texttt{\#print axioms conjecture\_00000000047}
+\end{center}
+reports exactly \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\section{Remarks}
+
+\begin{remark}[fixed points]
+For even $n$ the involution constructed above has no fixed points, so it
+splits $[n]$ into $n/2$ pairs with prime sums. Indeed a fixed point needs
+$p=2i$, so $p=2$, which happens only in the case $n=1$. When $n$ is even, the
+paired block $\{m,\ldots,n\}$ has $2n-p+1$ elements, an even number because $p$
+is odd. So the leftover block $[m-1]$ again has an even number of elements, and
+the case $n=1$ never arises. This pairing statement for even $n$ is a classical
+consequence of Bertrand's postulate; see Greenfield and Greenfield
+\cite{greenfield}, who also discuss harder variants. For odd $n$ a fixed point
+is unavoidable for an involution, and our construction places it at $i=1$,
+where $1+1=2$ is prime. This fixed-point refinement is not part of the Lean
+development.
+\end{remark}
+
+\begin{remark}
+The conjecture asks only for large even $n$, which suggests a probabilistic
+argument was intended. Nothing of the kind is needed: the deterministic
+construction covers all $n$. A related but genuinely different question is
+whether the prime-sum graph on $[n]$ has a \emph{Hamilton cycle}
+(Conjecture 00000000045). There the vertices must form a single cycle, not a
+union of transpositions, and parity already rules it out for odd $n$.
+\end{remark}
+
+\begin{thebibliography}{9}
+\bibitem{greenfield} L.~E.~Greenfield and S.~J.~Greenfield, \emph{Some
+  problems of combinatorial number theory related to Bertrand's postulate},
+  J. Integer Sequences 1 (1998).
+\end{thebibliography}
+
+\end{document}
