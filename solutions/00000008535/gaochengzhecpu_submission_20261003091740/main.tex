@@ -2,7 +2,7 @@
 \usepackage{amsmath,amssymb,geometry}
 \geometry{margin=1in}
 \title{A positive characteristic root disproves conjecture 00000008535}
-\author{Local AI-assisted solution draft}
+\author{gaochengzhecpu (AI-assisted submission)}
 \date{3 October 2026}
 \usepackage{url}
 % Compact consistent title for a short mathematical note.
@@ -32,7 +32,7 @@ gives $\mu(0,0)=1$ and $\mu(0,1)=-1$. Hence
 \]
 It has the positive real root $t=1$, contrary to the asserted strict negativity. This suffices to disprove the whole conjecture, regardless of its additional root-modulus assertion.
 \paragraph{Formal verification and semantic correspondence.}
-The accompanying \texttt{Main.lean} is self-contained over Lean 4.19.0 \texttt{Std}. Its finite \texttt{LatticeData} contains an order, bottom, top, meet, join, and rank. It checks the partial-order and lattice universal properties, the grading of covers, atomisticity, and upper semimodularity. Supersolvability is expressed by a maximal chain all of whose elements satisfy the modular-element identity. These properties are proved for \texttt{booleanOne}.
+The accompanying \texttt{lean/Main.lean} is self-contained over Lean 4.19.0 \texttt{Std}. Its finite \texttt{LatticeData} contains an order, bottom, top, meet, join, and rank. It checks the partial-order and lattice universal properties, the grading of covers, atomisticity, and upper semimodularity. Supersolvability is expressed by a maximal chain all of whose elements satisfy the modular-element identity. These properties are proved for \texttt{booleanOne}.
 
 The file checks the defining M\"obius recurrence for the actual two values and evaluates the characteristic polynomial by its defining sum. The theorem \path{positive_characteristic_root} proves that this sum vanishes at the integer $1$. The universal proposition \texttt{NegativeRootClaim} is the necessary integer-root specialization of the conjecture's first clause: every integer root of every supersolvable geometric lattice is negative. Every integer root is a real root under the canonical inclusion $\mathbb Z\subset\mathbb R$; therefore falsity of this specialization refutes the original real-root statement. No analytic assertion about real roots is needed.
 

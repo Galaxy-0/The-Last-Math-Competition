@@ -1,44 +1,27 @@
-# Disproof of conjecture 00000008535
-
-**Result:** Disproof under the reading stated below.
+# Conjecture 00000008535: disproof
 
 The two-element Boolean lattice is supersolvable and geometric. Its characteristic polynomial, calculated from the defining Mobius recurrence, is t - 1 and has the positive root 1. Thus the claimed negativity of every root fails.
 
-## The conjecture
-
-> Definition: The characteristic polynomial of a lattice is the generating function of its Mobius function. Conjecture: The roots of the characteristic polynomial of a geometric lattice are real and negative when the lattice is supersolvable; and in general the minimum of the modulus spectrum of roots is controlled by the Mobius absolute value of its minimal antichain. (real-rootedness and modulus bound of characteristic roots)
-
-[Original statement](https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/efab34b80a63963991d6c7ed625442a89a328a44/conjectures/00000008535.md); both languages are in `SOURCE.md`.
-
-## Reading and scope
+## Scope
 
 Uses the standard characteristic-polynomial convention; a positive integer root is also a positive real root.
 
-## Proof
+The complete argument and the correspondence between the mathematical objects and Lean definitions are in [main.pdf](main.pdf) and [main.tex](main.tex). [SOURCE.md](SOURCE.md) reproduces both language versions and pins their source commit.
 
-The full mathematical argument is in [main.pdf](main.pdf), with LaTeX source [main.tex](main.tex).
+## Reproduce the formal verification
 
-## Formalization
-
-Lean **4.19.0**, using its bundled standard library only; no Mathlib dependency. The complete project is in `lean/`, with warnings treated as errors. The report explains how the encoded objects and final proposition correspond to the original statement.
-
-Audited declarations include `booleanOne_geometric`, `booleanOne_supersolvable`, `mobius_correct`, `conjecture8535_false`. `lean-verification.txt` records the clean build and printed axiom dependencies. No `sorry`, `admit`, `native_decide`, or additional axiom is used; only standard Lean foundational axioms occur.
-
-## Reproduce
-
-From this submission directory:
+Use Lean **4.19.0**. The project imports only `Std`, has no Mathlib dependency, and treats warnings as errors.
 
 ```text
 cd lean
 lake build
+cd ..
 ```
 
-From this submission directory, rebuild the PDF with:
+The final package was built in a new directory, and the accompanying scripts were rerun. `lean-verification.txt` records the build and printed axiom dependencies; `verification.json` records the exact file hashes. `auxiliary-results.json`, where present, records independent script output. Scripts write their own result files and do not overwrite the package verification record.
 
-```text
-tectonic main.tex
-```
+Rebuild the report with `tectonic main.tex`. The compiled PDF was rendered and visually checked. The proof-to-statement correspondence was also checked by a separate AI-assisted review.
 
-## Submission status
+## Submission
 
-AI-assisted with Codex; submitted by **gaochengzhecpu**. The statement-to-proof correspondence was checked locally by a separate agent, and the PDF was rendered and inspected. This remains a draft for independent mathematical review; local verification is not organizer acceptance. `verification.json` gives hashes of the reviewed files.
+AI-assisted submission by **gaochengzhecpu**, prepared for independent maintainer review. Local verification is not organizer acceptance. This directory contains only materials for conjecture 00000008535.
