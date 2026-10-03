@@ -1,0 +1,161 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A Proof of Conjecture 00000000051:\\
+the Graphs $K_{p,p}$ Have Spectrum $\{0,\pm p\}$}
+\author{%
+  Feiyu\thanks{Independent researcher.}
+  \and
+  Claude (Opus 5.5)\thanks{Anthropic.}%
+}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000000051 asserts that there are infinitely many pairwise
+non-isomorphic connected integral graphs whose adjacency spectrum consists only
+of $0$ and numbers $\pm p$ with $p$ prime. The complete bipartite graphs
+$K_{p,p}$, $p$ prime, form such a family: their adjacency matrix $A$ satisfies
+$A^3=p^2A$, so every eigenvalue lies in $\{0,p,-p\}$. The proof is formalized
+in Lean~4 against Mathlib.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture 00000000051 reads:
+
+\begin{quote}
+Conjecture: There exist infinitely many pairwise non-isomorphic connected
+integral graphs whose adjacency spectrum consists only of $0$ or $\pm$primes.
+\end{quote}
+
+\section{Reading of the statement}
+
+Graphs are finite and simple. The \emph{adjacency spectrum} of a graph $G$ is
+the set of (complex) eigenvalues of its adjacency matrix $A(G)$. As usual, $G$
+is \emph{integral} if all its adjacency eigenvalues are integers.
+
+\begin{definition}
+A finite simple graph $G$ is \emph{good} if it is connected, integral, and
+every adjacency eigenvalue $\mu$ of $G$ satisfies $\mu=0$ or $\mu=\pm p$ for
+some prime $p$.
+\end{definition}
+
+The conjecture asserts that there are infinitely many isomorphism classes of
+good graphs, that is, an infinite sequence of good graphs no two of which are
+isomorphic. (Integrality is implied by the spectral condition, since $0$ and
+$\pm p$ are integers, but we keep it as stated.)
+
+\section{Result}
+
+\begin{theorem}\label{thm:main}
+For every prime $p$ the complete bipartite graph $K_{p,p}$ is good. Since
+$K_{p,p}$ has $2p$ vertices, these graphs are pairwise non-isomorphic for
+distinct primes, and as there are infinitely many primes, Conjecture
+00000000051 holds.
+\end{theorem}
+
+\section{Proof}
+
+\begin{lemma}\label{lem:cube}
+Let $A$ be an $N\times N$ complex matrix and $c\in\mathbb C$ with $A^3=c^2A$.
+Then every eigenvalue of $A$ lies in $\{0,c,-c\}$.
+\end{lemma}
+
+\begin{proof}
+If $Av=\mu v$ with $v\ne0$, then $\mu^3v=A^3v=c^2Av=c^2\mu v$, so
+$\mu^3-c^2\mu=\mu(\mu-c)(\mu+c)=0$.
+\end{proof}
+
+\begin{lemma}\label{lem:walks}
+Let $A$ be the adjacency matrix of $K_{m,m}$ with sides $L$ and $R$. Then
+$(A^2)_{ij}=m$ if $i,j$ lie on the same side and $(A^2)_{ij}=0$ otherwise.
+Consequently $A^3=m^2A$.
+\end{lemma}
+
+\begin{proof}
+$(A^2)_{ij}$ counts vertices $k$ adjacent to both $i$ and $j$, that is, lying on
+the side opposite to both. There are $m$ of them if $i$ and $j$ are on the same
+side, and none otherwise. Then
+$(A^3)_{ij}=\sum_k A_{ik}(A^2)_{kj}$ runs over the $m$ vertices $k$ opposite to
+$i$, each contributing $m$ exactly when $k$ is on the side of $j$, i.e.\ when
+$j$ is opposite to $i$. So $(A^3)_{ij}=m^2A_{ij}$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Let $p$ be prime and $A$ the adjacency matrix of $K_{p,p}$. By
+Lemmas~\ref{lem:walks} and~\ref{lem:cube}, every eigenvalue of $A$ is $0$, $p$
+or $-p$. These are integers, so $K_{p,p}$ is integral, and they are of the form
+required by the conjecture. $K_{p,p}$ is connected, since $p\ge1$: two vertices
+on opposite sides are adjacent, and two vertices on the same side have a common
+neighbour. Finally, an isomorphism $K_{p,p}\cong K_{q,q}$ is a bijection
+between vertex sets of sizes $2p$ and $2q$, so $p=q$. Enumerating the primes as
+$p_0<p_1<\cdots$ gives the infinite sequence $K_{p_0,p_0},K_{p_1,p_1},\ldots$
+of pairwise non-isomorphic good graphs.
+\end{proof}
+
+\begin{remark}
+In fact the spectrum of $K_{p,p}$ is exactly $\{p,-p,0\}$, with $0$ of
+multiplicity $2p-2$: the vectors that are constant on each side span an
+$A$-invariant plane on which $A$ acts by
+$\left(\begin{smallmatrix}0&p\\p&0\end{smallmatrix}\right)$. Only the inclusion
+is needed for the conjecture.
+\end{remark}
+
+\section{Formalization}
+
+The accompanying Lean~4 project (\texttt{lean/Submission/Basic.lean}) states
+the conjecture and proves it against Mathlib.
+
+\begin{itemize}
+  \item \texttt{adjSpectrum G} --- Mathlib's \texttt{spectrum} of the adjacency
+    matrix \texttt{G.adjMatrix} over $\mathbb C$, taken in the matrix algebra.
+    For a matrix this is exactly its set of eigenvalues.
+  \item \texttt{IsIntegralGraph}, \texttt{SpectrumZeroOrPmPrime},
+    \texttt{IsGood} --- the definitions above, with Mathlib's
+    \texttt{SimpleGraph.Connected} and \texttt{Nat.Prime}.
+  \item \texttt{ConjectureHolds} --- there is a sequence of finite graphs
+    $(G_k)_{k\in\mathbb N}$, each \texttt{IsGood}, such that the type of graph
+    isomorphisms $G_j\simeq G_k$ is empty whenever $j\ne k$.
+  \item \texttt{spectrum\_subset\_of\_cube} --- Lemma~\ref{lem:cube}, via
+    Mathlib's spectral mapping inclusion
+    \texttt{spectrum.subset\_polynomial\_aeval} applied to $X^3-c^2X$.
+  \item \texttt{adjMatrix\_sq\_apply}, \texttt{adjMatrix\_cube} ---
+    Lemma~\ref{lem:walks}, for $K_{m,m}$ taken as Mathlib's
+    \texttt{completeBipartiteGraph} on two copies of \texttt{Fin m}.
+  \item \texttt{adjSpectrum\_K}, \texttt{K\_connected}, \texttt{isGood\_K} ---
+    $K_{p,p}$ is good.
+  \item \texttt{conjecture\_00000000051} --- \texttt{ConjectureHolds}, with
+    $G_k=K_{p_k,p_k}$ for $p_k=\texttt{Nat.nth Nat.Prime k}$; distinct indices
+    give distinct primes (\texttt{Nat.nth\_injective}), hence different vertex
+    counts.
+\end{itemize}
+
+The toolchain is \texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to
+\texttt{v4.33.1}, and \texttt{lake build} succeeds. The project contains no
+\texttt{sorry}, no \texttt{admit} and no \texttt{native\_decide}, and
+introduces no axioms:
+\begin{center}
+\texttt{\#print axioms conjecture\_00000000051}
+\end{center}
+reports exactly \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\end{document}
