@@ -3,3 +3,13 @@
 **English.** Definition: Mutual determinacy of the chromatic polynomial and spectral radius: the separation power of joint invariants. Conjecture: There exist graph families with identical chromatic polynomial and spectral radius but different chromatic numbers; the minimal order of the separating family is ten, with the separation realized by asymptotic isomorphism of Schwenk-type branch pastings. (polynomial-spectrum separating family)
 
 **中文。** 定义：色多项式与谱半径的互决定性：联合不变量的分离能力。猜想：存在图族使色多项式与谱半径均相同而色数不同；分离族的最小阶为十且分离现象由 Schwenk 型分支粘贴的渐近同构实现。（多项式-谱分离族）
+
+## Provenance
+
+Original bilingual statement at commit `f180f64ae3fca8e87d70c61ed7fd674775f050ca`.
+
+https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/f180f64ae3fca8e87d70c61ed7fd674775f050ca/conjectures/00000003490.md
+
+## Interpretation and scope
+
+A general theorem for arbitrary finite graphs; not only a bounded search.

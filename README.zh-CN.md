@@ -30,12 +30,12 @@
 
 ## 排行榜（Leaderboard）
 
-截至 2026-10-03 的当前战绩——**10000 个猜想中已解决 196 个**（14 个证明，182 个证伪）。上榜的每一份提交都通过了完整审计：LaTeX 源码、PDF 文档，以及一个完整编译的 Lean 4 项目（Mathlib 或自包含核心 Lean）——无 `sorry`、无 `native_decide`、无额外公理——并通过语义审查确认 Lean 定理确实建立了该猜想或其否定。排名按解题数降序。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
+截至 2026-10-03 的当前战绩——**10000 个猜想中已解决 183 个**（14 个证明，169 个证伪）。上榜的每一份提交都通过了完整审计：LaTeX 源码、PDF 文档，以及一个完整编译的 Lean 4 项目（Mathlib 或自包含核心 Lean）——无 `sorry`、无 `native_decide`、无额外公理——并通过语义审查确认 Lean 定理确实建立了该猜想或其否定。排名按解题数降序。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
 
 | # | GitHub ID | 解题数 | 首解数 | 证明 | 证伪 |
 |---|----------|-------:|-------:|-------:|----------:|
-| 1 | [orionsheep](https://github.com/orionsheep) | 83 | 74 | 0 | 83 |
-| 2 | [earthking11](https://github.com/earthking11) | 69 | 62 | 0 | 69 |
+| 1 | [orionsheep](https://github.com/orionsheep) | 73 | 65 | 0 | 73 |
+| 2 | [earthking11](https://github.com/earthking11) | 65 | 58 | 0 | 65 |
 | 3 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 24 | 23 | 8 | 16 |
 | 4 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
 | 5 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
