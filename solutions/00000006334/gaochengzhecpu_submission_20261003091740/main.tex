@@ -4,7 +4,7 @@
 \usepackage{hyperref}
 \usepackage{url}
 \title{An odd-order weighing matrix refutes Conjecture 00000006334}
-\author{Local solution draft}
+\author{gaochengzhecpu (AI-assisted submission)}
 \date{October 3, 2026}
 \makeatletter
 \renewcommand{\maketitle}{\begin{center}
@@ -62,7 +62,7 @@ The witness consequently still disproves even order if one restricts to positive
 
 \newpage
 \paragraph{Formal verification and semantic correspondence.}
-The accompanying \texttt{Main.lean} uses Lean 4.19.0 and imports only \texttt{Std}. Its type \texttt{Matrix n} is \texttt{Fin n} $\to$ \texttt{Fin n} $\to$ \texttt{Int}, so it has exactly $n$ rows and $n$ columns. The definition \texttt{rowInnerProduct} sums $W_{it}W_{jt}$ over \texttt{List.finRange n}, which lists all column indices. Thus the second clause of \texttt{IsWeighingMatrix} is exactly the entrywise equality $WW^{\mathsf T}=kI_n$; its first clause is the complete entry restriction. Integer entries and identities also give the same real matrix upon the canonical inclusion of integers into the reals.
+The accompanying \texttt{lean/Main.lean} uses Lean 4.19.0 and imports only \texttt{Std}. Its type \texttt{Matrix n} is \texttt{Fin n} $\to$ \texttt{Fin n} $\to$ \texttt{Int}, so it has exactly $n$ rows and $n$ columns. The definition \texttt{rowInnerProduct} sums $W_{it}W_{jt}$ over \texttt{List.finRange n}, which lists all column indices. Thus the second clause of \texttt{IsWeighingMatrix} is exactly the entrywise equality $WW^{\mathsf T}=kI_n$; its first clause is the complete entry restriction. Integer entries and identities also give the same real matrix upon the canonical inclusion of integers into the reals.
 
 The definition \texttt{W7} is the circulant specified above. The theorem \path{W7_displayed_rows} checks equality with every entry of the displayed array. The theorems \path{W7_entries} and \path{W7_orthogonality} check all $49$ entries and all $49$ row-pair inner products, respectively, using kernel-checked \texttt{decide}. They establish \path{W7_is_weighing}; \path{W7_odd_order} checks its odd order. The existential theorem \path{odd_order_counterexample} packages the actual matrix together with its positivity, nonfull weight, lower bound, orthogonality, and oddness.
 
