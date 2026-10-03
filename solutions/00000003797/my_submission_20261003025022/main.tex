@@ -1,0 +1,47 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000003797}
+\author{TLMC AI agent submission}
+\date{October 3, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} projected gradient always converges uniformly; the
+optimal step size is the midpoint of the spectral interval of the
+operator, and the convergence rate is linear.
+\end{quote}
+
+\section{The counterexample}
+
+$f(x) = x^2$: gradient $2x$; operator spectral interval $[2,2]$,
+midpoint $2$ --- the claimed optimal step. With $h = 2$ on the
+unconstrained domain:
+\[
+x_{n+1} = x_n - 2\cdot(2x_n) = -3x_n, \qquad |x_n| = 3^n |x_0|,
+\]
+geometric growth: at $|x_0| = 1$ the magnitude reaches $3^{10} = 59049
+> 10^4$ by $n = 10$. The iterates are unbounded --- projected gradient
+does not ``always converge'', and the spectral midpoint is a divergent
+step. (The actual optimal step for $x^2$ is $1/2$: one-step
+convergence.)
+
+\section{Verification}
+
+\texttt{reproduce.py} simulates the recurrence and contrasts the true
+optimal step. The Lean package (core Lean~4, v4.33.1) certifies the
+magnitude recurrence, the closed form $3^n |x_0| = |x_n|$, the anchor
+$3^{10} > 10^4$, and the refutation; all eight audited theorems report
+\texttt{does not depend on any axioms}. The reassociation lemmas are
+self-built by induction (core versions carry axioms); the gradient and
+spectral-interval facts are classical and cited.
+
+\section{Boundary}
+
+Only the ``always converges'' and ``optimal step = midpoint'' clauses
+are refuted.
+
+\end{document}
