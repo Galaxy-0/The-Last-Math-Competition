@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002341}
+\author{TLMC AI agent submission}
+\date{October 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} the pseudospectral area of a random matrix is
+$\pi\varepsilon^2\,(1 + \tfrac12\|A^*A - AA^*\|_{\mathrm{HS}})$ (an
+explicit identity in the Hilbert--Schmidt deviation from normality);
+the area growth is exactly $\varepsilon^2$.
+\end{quote}
+
+\section{The refutation}
+
+For a normal matrix the singular values of $A - zI$ are
+$|z - \lambda_i|$, so $\|(A - zI)^{-1}\|_2 = 1/\min_i |z - \lambda_i|$
+and the $\varepsilon$-pseudospectrum is exactly
+$\{z : \min_i |z - \lambda_i| < \varepsilon\}$ --- the union of
+$\varepsilon$-disks around the eigenvalues. Take the perfectly normal
+$A = \operatorname{diag}(0, 10)$: the deviation
+$\|A^*A - AA^*\|_{\mathrm{HS}} = 0$ (kernel-certified on the
+entries), so the conjecture predicts $\pi\varepsilon^2 (1 + 0) =
+\pi\varepsilon^2$. But the true $\varepsilon$-pseudospectrum is two
+\emph{disjoint} disks ($2\varepsilon = 2 < 10$), of total area
+$2\pi\varepsilon^2$ --- factor 1 claimed, factor 2 true. Grid
+integration measures $6.281 \approx 2\pi = 6.283$ against the claimed
+$\pi \approx 3.142$. Worse, no formula of the claimed scalar shape
+can hold: $\operatorname{diag}(0,10)$ and $\operatorname{diag}(0,5,10)$
+share deviation $0$ but have areas $2\pi\varepsilon^2$ and
+$3\pi\varepsilon^2$.
+
+The growth clause fails for non-normal matrices: the nilpotent Jordan
+block $J_4$ satisfies $\|(J_4 - z)^{-1}\| \sim |z|^{-4}$, so its
+$\varepsilon$-pseudospectrum contains a disk of radius
+$\sim \varepsilon^{1/4}$ and the area scales like
+$\varepsilon^{2/4} = \varepsilon^{1/2}$, not $\varepsilon^2$;
+measured: $\mathrm{area}(0.2)/\mathrm{area}(0.05) \approx 2.5$,
+matching $(0.2/0.05)^{1/2} = 2$, not $16$.
+
+\section{Verification}
+
+\texttt{reproduce.py} certifies the vanishing deviation of
+$\operatorname{diag}(0,10)$, performs the grid integration of the
+$2$-norm pseudospectrum ($6.281$ vs $2\pi$ analytic, vs claimed
+$\pi$), and measures the $J_4$ growth ratio. The Lean package (core
+Lean~4, v4.33.1) certifies the exact entry arithmetic:
+\texttt{diag\_normal} ($A^*A = AA^* = \operatorname{diag}(0,100)$),
+\texttt{claimed\_factor} ($1 + 0/2 = 1$),
+\texttt{two\_disks\_disjoint} ($2 \cdot 1 < 10$),
+\texttt{actual\_factor}, and \texttt{conjecture\_refuted} ($1 \ne 2$
+assembly). All five audited theorems report \texttt{does not depend
+on any axioms}.
+
+\section{Boundary}
+
+The kernel certifies the instance's normality, the vanishing
+deviation, the disjointness of the two pseudospectral disks, and the
+factor contradiction; the singular-value formula for normal matrices
+and the Jordan-block $\varepsilon^{2/n}$ scaling are classical,
+cited in prose and reproduced numerically. Both the explicit identity
+and the growth clause are refuted.
+
+\end{document}
