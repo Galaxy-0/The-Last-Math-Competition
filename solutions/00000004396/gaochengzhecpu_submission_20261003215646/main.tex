@@ -1,0 +1,83 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{A counterexample to Conjecture 00000004396}
+\author{gaochengzhecpu}
+\date{October 3, 2026}
+\setlength{\emergencystretch}{1em}
+\hypersetup{hidelinks}
+\begin{document}
+\maketitle
+
+The conjecture asserts, in particular, that every M\"obius ladder is
+Sidorenko. This assertion is false for the eight-vertex M\"obius ladder.
+No restriction to bipartite ladders or to a congruence class of their orders
+appears in either language of the source.
+
+For finite simple graphs $H,G$, write
+\[
+ t(H,G)=\frac{\operatorname{hom}(H,G)}{|V(G)|^{|V(H)|}}.
+\]
+Here a homomorphism is an arbitrary vertex map preserving every edge;
+it need not be injective. The Sidorenko property is
+\[
+ t(H,G)\geq t(K_2,G)^{|E(H)|}\qquad\text{for every nonempty finite graph }G.
+\]
+This is the standard finite-graph formulation\cite{sidorenko}.
+
+Let $H$ have vertex set $\mathbb Z/8\mathbb Z$, with edges between
+consecutive vertices and between opposite vertices. Thus $H$ is the cycle
+$C_8$ together with the four edges $\{i,i+4\}$, $0\leq i<4$.
+It has twelve edges and is a M\"obius ladder independently of conventions
+about including the smallest four-vertex member of this family.
+
+The vertices $0,1,2,3,4,0$ form a cycle of length five in $H$.
+A homomorphism $H\to K_2$ would alternate its two values along every edge
+of this cycle, which is impossible. Consequently
+\[
+ \operatorname{hom}(H,K_2)=0,\qquad t(H,K_2)=0.
+\]
+On the other hand, $K_2$ has two ordered adjacent pairs out of four
+ordered vertex pairs, so
+\[
+ t(K_2,K_2)=\frac12,\qquad
+ t(K_2,K_2)^{|E(H)|}=2^{-12}>0.
+\]
+The required inequality is therefore false. This refutes the conjunction
+in the source; no claim about odd subdivisions of trees is needed.
+
+\paragraph{Formal verification.}
+The self-contained Lean 4.19.0 file \texttt{lean/Main.lean} defines actual
+finite simple graphs, edge-preserving vertex maps, and the Sidorenko
+inequality. Counts use complete duplicate-free lists of maps. The
+inequality is written after multiplication by positive integer
+denominators, so there is no approximation or division convention:
+\[
+ (2|E(G)|)^{|E(H)|}|V(G)|^{|V(H)|}
+ \leq \operatorname{hom}(H,G)|V(G)|^{2|E(H)|}.
+\]
+The proof first excludes every map $\operatorname{Fin}8\to
+\operatorname{Fin}2$ directly using the five-cycle. It then proves that
+the 256 binary codes enumerate all such functions, each exactly once,
+using inverse encoding and decoding maps. The computed counts are thus
+counts of the intended objects. The final theorem
+\texttt{conjecture\_\allowbreak{}4396\_\allowbreak{}false} negates the universal assertion about
+the cycle-plus-opposite-edge family. The file uses no \texttt{sorry},
+\texttt{admit}, \texttt{native\_\allowbreak{}decide}, or additional axiom.
+
+\paragraph{Previous withdrawn submission.}
+An earlier, independently authored submission by \texttt{orionsheep}
+used the smaller $K_4$ member and the same necessary bipartiteness
+observation. It was withdrawn by its author, with no review rejection
+recorded, in pull request
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/pull/318}{\#318}.
+The present package supplies an independent eight-vertex construction
+and full finite-model verification; it does not claim priority for the
+general bipartiteness obstruction.
+
+\begin{thebibliography}{1}
+\bibitem{sidorenko}
+\emph{Sidorenko's conjecture, colorings and independent sets},
+\url{https://arxiv.org/abs/1603.05888}.
+\end{thebibliography}
+\end{document}
