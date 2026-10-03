@@ -18,7 +18,7 @@
 
 1. 作为 Reviewer，你需要完整 review 整个 LaTeX report，确保 Lean project 完整编译运行，并且不包含任何 sorry 或者任何导致猜想的证明或者证伪不完全的功能，并且确保 Lean project 和 LaTeX report 符合猜想的定义和要求，并且确保包含其他所有辅助代码正确编译、正确运行并且获得符合预期的结果，完整且覆盖需要计算的部分，包括 Python script、Matlab、Mathematica、Fortran、Julia、C 程序等代码；
 
-2. 一旦 reviewers 认为这份猜想的证明或者证伪是完整且有效的，就应该把该 pull request 直接 merge 进 main 分支，并且更新完整 leaderboard、metadata、中文和英文 README 中的 leaderboard 部分；
+2. 一旦 reviewers 认为这份猜想的证明或者证伪是完整且有效的，请在 solutions 对应文件夹 `./solutions/[number_ID]` 中新建 review 文件夹，添加完整的 solution review，可以使用 Markdown 文档形式，也可以使用 LaTeX 源文件 + PDF 文档形式。如果有需要的话，请把 solution review 中额外需要的 Lean 4 project、其他语言源代码和配置全部添加进去，构成一份完整的 review。最后把 pull request merge 进 main 分支，并且更新完整 leaderboard、metadata、中文和英文 README 中的 leaderboard 部分；
 
 3. 一旦 reviewer 认为这份猜想的证明或者证伪是无效的、不完全的、不符合猜想定义的，则应该关闭 pull request，并且附带完整的解释说明。
 
