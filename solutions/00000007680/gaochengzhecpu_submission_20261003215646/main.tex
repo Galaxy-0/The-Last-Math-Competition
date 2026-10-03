@@ -1,0 +1,47 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\title{A counterexample to Conjecture 00000007680}
+\author{gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+
+The conjecture explicitly permits positive integers $a,b,m$ and asserts that,
+for every admissible modulus $m$, the number of valid residues $b$ in
+$\{0,\ldots,a-1\}$ is the number $\omega(m)$ of distinct prime factors of $m$.
+The exact-count assertion already fails at $a=2$, $m=1$.
+
+Let $p(n)$ denote the ordinary partition function. Every integer is congruent
+to zero modulo $1$. Consequently
+\[
+ p(2n+b)\equiv0\pmod1\qquad(n\ge0)
+\]
+holds for both $b=0$ and $b=1$. Thus the number of valid residues in the stated
+set $\{0,1\}$ is $2$, whereas $\omega(1)=0$. If the opening requirement that
+$b$ be positive is also applied to the residue count, the allowed set instead
+contains the single valid residue $b=1$; its count is $1$, still different
+from $0$. In particular $(a,b,m)=(2,1,1)$ satisfies every positivity condition.
+
+The first assertion about the prime factors of $m$ does not exclude this
+example: $1$ has no prime factors, so any condition required of all its prime
+factors holds vacuously. The example uses the written positive-modulus
+domain. A reformulation imposing $m\ge2$ would be a different assertion and
+is not addressed here.
+
+\paragraph{Formal verification.}
+The Lean source defines the usual prime predicate, distinct-prime-factor
+count by a finite list of the possible divisors, and the congruence with a
+universal quantifier over every $n\in\mathbb N$. Residue counts filter the
+entire type $\operatorname{Fin}(a)$; they are not counts of a selected sample.
+The theorem \texttt{conjecture7680\_counterexample} disproves the exact-count
+clause under both readings of the positivity of $b$.
+
+Its parameter $p:\mathbb N\to\mathbb N$ is arbitrary. This strengthens the
+result: it holds for every sequence, hence directly for the actual partition
+function, without replacing partitions by a finite table or assuming any
+unproved identity for their values. The statement requires the modulus to
+have a valid positive residue before applying the purported count; the
+formal witness is $b=1$. Lean 4.19.0 checks the proof using only \texttt{Std}.
+There are no admitted lemmas, custom axioms, or native evaluation proofs.
+\end{document}
