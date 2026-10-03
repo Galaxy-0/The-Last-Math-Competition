@@ -1,0 +1,145 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A Counterexample to Conjecture 00000002040:\\
+Largest Sum-Free Subsets of $[n]$ Have Density $\to 1/2$, Not $1/4$}
+\author{%
+  Feiyu\thanks{Independent researcher.}
+  \and
+  Claude (Opus 5.5)\thanks{Anthropic.}%
+}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000002040 asserts that the density of the largest 3-independent
+(sum-free) subset of $[n]=\{1,\ldots,n\}$ tends to a limit that is at most, and
+in fact exactly, $1/4$. The largest such subset has exactly
+$\lceil n/2\rceil$ elements, so the density tends to $1/2$. The odd numbers
+show that $1/2$ is attained, and a short reflection argument shows it cannot be
+beaten. Everything is formalized in Lean~4 against Mathlib.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture 00000002040 reads:
+
+\begin{quote}
+Definition: A 3-independent set has no solutions of $x + y = z$. Conjecture:
+The density limit of maximal 3-independent sets in $[n]$ exists and is at most
+$1/4$ (with correction $0$); the limit is exactly $1/4$ (attained by the
+natural ternary cascade construction).
+\end{quote}
+
+\section{Reading of the statement}
+
+A set $A$ of positive integers is \emph{3-independent} if there are no
+$x,y,z\in A$ (not necessarily distinct) with $x+y=z$; such sets are usually
+called sum-free. Let
+\[
+  M(n)=\max\{|A| : A\subseteq[n]\text{ 3-independent}\},
+  \qquad d(n)=M(n)/n .
+\]
+``Maximal'' refers to the largest such sets; the Chinese version of the
+statement (in the conjecture file) says so explicitly, speaking of the largest
+3-independent set in $[n]$. The conjecture asserts that $d(n)$
+converges, that its limit is at most $1/4$, and that the limit is exactly
+$1/4$. The parenthetical remarks (``with correction~$0$'', ``attained by the
+natural ternary cascade construction'') add no mathematical content that we
+need.
+
+\section{Result}
+
+\begin{theorem}\label{thm:main}
+For every $n\ge0$, $M(n)=\lceil n/2\rceil=\lfloor (n+1)/2\rfloor$. Consequently
+$d(n)\to\frac12$, so $d(n)$ has no limit $\le\frac14$, and Conjecture 00000002040
+is false.
+\end{theorem}
+
+\section{Proof}
+
+\begin{lemma}[lower bound]\label{lem:odd}
+The set of odd numbers in $[n]$ is 3-independent and has
+$\lfloor(n+1)/2\rfloor$ elements.
+\end{lemma}
+
+\begin{proof}
+A sum of two odd numbers is even, hence not odd. The odd numbers in $[n]$ are
+$2k+1$ for $0\le k<\lfloor(n+1)/2\rfloor$.
+\end{proof}
+
+\begin{lemma}[upper bound]\label{lem:upper}
+Every 3-independent $A\subseteq[n]$ has $|A|\le\lfloor(n+1)/2\rfloor$.
+\end{lemma}
+
+\begin{proof}
+We may assume $A\ne\emptyset$; let $m=\max A$. For $a\in A$ with $a<m$, the
+number $m-a$ is not in $A$, since otherwise $a+(m-a)=m$ would be a solution
+inside $A$. So $A$ and $B=\{m-a : a\in A,\ a<m\}$ are disjoint. Both lie in
+$[m]$, and $|B|=|A|-1$. Hence $2|A|-1\le m\le n$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Lemmas~\ref{lem:odd} and~\ref{lem:upper} give $M(n)=\lfloor (n+1)/2\rfloor$.
+For $n\ge1$ this gives $\frac12\le d(n)\le\frac12+\frac1{2n}$, so $d(n)\to\frac12$. A
+convergent sequence has a unique limit, and $\frac12>\frac14$.
+\end{proof}
+
+\section{Formalization}
+
+The accompanying Lean~4 project (\texttt{lean/Submission/Basic.lean}) states
+the conjecture and proves its negation against Mathlib.
+
+\begin{itemize}
+  \item \texttt{IsThreeIndependent A} --- no $x,y,z\in A$ with $x+y=z$;
+    \texttt{maxSize n} --- the largest size of a 3-independent subset of
+    \texttt{Finset.Icc 1 n}, a supremum over its powerset;
+    \texttt{density n} $=\texttt{maxSize n}/n$ in $\mathbb R$.
+  \item \texttt{ConjectureHolds} --- there is $L\le\frac14$ with
+    \texttt{density} $\to L$, and \texttt{density} $\to\frac14$.
+  \item \texttt{odds}, \texttt{card\_odds}, \texttt{isThreeIndependent\_odds}
+    --- Lemma~\ref{lem:odd}.
+  \item \texttt{card\_le\_of\_isThreeIndependent} --- Lemma~\ref{lem:upper};
+    \texttt{maxSize\_eq} --- $M(n)=\lfloor(n+1)/2\rfloor$.
+  \item \texttt{half\_le\_density}, \texttt{density\_le},
+    \texttt{tendsto\_density} --- $d(n)\to\frac12$.
+  \item \texttt{conjecture\_00000002040\_false} ---
+    $\lnot\,$\texttt{ConjectureHolds}, by uniqueness of limits.
+\end{itemize}
+
+The toolchain is \texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to
+\texttt{v4.33.1}, and \texttt{lake build} succeeds. The project contains no
+\texttt{sorry}, no \texttt{admit} and no \texttt{native\_decide}, and
+introduces no axioms:
+\begin{center}
+\texttt{\#print axioms conjecture\_00000002040\_false}
+\end{center}
+reports exactly \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\section{Remarks}
+
+The value $\lceil n/2\rceil$ is classical. Besides the odd numbers, the upper
+half $\{\lfloor n/2\rfloor+1,\ldots,n\}$ is also extremal. The constant $1/4$
+does not arise for sum-free subsets of $[n]$. For comparison, in the cyclic
+group $\mathbb Z/p\mathbb Z$ ($p$ prime) the largest sum-free subsets have
+$\lfloor(p+1)/3\rfloor$ elements, density about $1/3$.
+
+\end{document}
