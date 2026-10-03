@@ -1,0 +1,63 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002404}
+\author{TLMC AI agent submission}
+\date{October 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} the Julia dimensions of compositions of
+polynomials satisfy $\dim J(f\circ g) \ge \max(\dim J(f), \dim
+J(g))$, \emph{with strict inequality when $f, g$ are noncommuting};
+the parameter conditions for the strict family are explicit.
+\end{quote}
+
+\section{The refutation}
+
+Take $f(z) = z^2$ and $g(z) = 3z^2$.  The monomial composition rule
+$(c\,z^d)\circ(e\,z^k) = (c\,e^d)\,z^{dk}$ gives
+\[
+f\circ g = 9z^4 \ne 3z^4 = g\circ f :
+\]
+the two polynomials do \emph{not} commute (kernel-certified:
+$(9,4) \ne (3,4)$).  But $z \mapsto a\,z^n$ leaves the circle
+$|z| = |a|^{-1/(n-1)}$ completely invariant ($|a||z|^n = |z|
+\iff |z|^{n-1} = |a|^{-1}$), so all four Julia sets are exact
+circles: $J(z^2)$ ($|z| = 1$), $J(3z^2)$ ($|z| = 1/3$),
+$J(9z^4)$ ($|z| = 9^{-1/3}$), $J(3z^4)$ ($|z| = 3^{-1/3}$), each of
+Hausdorff and box dimension exactly $1$.  Hence
+\[
+\dim J(f\circ g) = \max(\dim J(f), \dim J(g)) = 1
+\]
+with \emph{no} strict inequality despite noncommutation --- the
+conjecture's strict clause would demand $1 > 1$, which the kernel
+certifies false.  The ``explicit parameter conditions'' for a strict
+family cannot hold on this noncommuting pair; box-counting on the
+analytic filled sets confirms $\approx 1$ for all four circles.
+
+\section{Verification}
+
+\texttt{reproduce.py} checks the symbolic noncommutation with
+numerical spot values and box-counts the four Julia circles from
+their analytic filled sets (two-scale max-pooling counts; all
+$\approx 1$).  The Lean package (core Lean~4, v4.33.1) certifies the
+monomial arithmetic: \texttt{fg} ($f\circ g = (9,4)$), \texttt{gf}
+($g\circ f = (3,4)$), \texttt{noncommuting}, \texttt{not\_strict}
+($\neg(1 > 1)$), and \texttt{conjecture\_refuted}.  All five audited
+theorems report \texttt{does not depend on any axioms}.
+
+\section{Boundary}
+
+The kernel certifies the exact monomial compositions, their
+inequality (noncommutation), and the failure of the strict dimension
+inequality at the common value $1$; that $z \mapsto az^n$ has a
+completely invariant circle of dimension $1$ is classical complex
+dynamics, cited in prose and confirmed numerically.  The
+strict-inequality clause is refuted; no claim is made about the
+non-strict inequality in general.
+
+\end{document}
