@@ -3,7 +3,7 @@
 \usepackage{amsmath,amssymb}
 \usepackage{hyperref}
 \title{Six central automorphisms: a counterexample to Conjecture 00000004274}
-\author{Local solution draft}
+\author{gaochengzhecpu (AI-assisted submission)}
 \date{October 3, 2026}
 % Compact consistent title for a short mathematical note.
 \makeatletter
@@ -46,7 +46,7 @@ The powers $2^0,2^1,2^2$ are $1,2,4$, and all later powers are divisible by $8$.
 The group has only one nonzero Ulm invariant, $u_0=1$, since $7G=0$. Hence there is no issue involving a genuinely infinite nontrivial product. Even if one retains the trailing zero invariants, inserting factors equal to $1$ cannot change the obstruction.
 
 \paragraph{Formal verification and semantic correspondence.}
-The accompanying \texttt{Main.lean} imports only \texttt{Std} and is checked with Lean 4.19.0. The carrier is \texttt{Fin 7}, with modular addition and multiplication. The file checks the abelian group laws, primality of $7$, countability of the carrier, and annihilation by $7$.
+The accompanying \texttt{lean/Main.lean} imports only \texttt{Std} and is checked with Lean 4.19.0. The carrier is \texttt{Fin 7}, with modular addition and multiplication. The file checks the abelian group laws, primality of $7$, countability of the carrier, and annihilation by $7$.
 
 An automorphism is an actual function on this carrier with proofs of additivity, injectivity, and surjectivity. The proof that every homomorphism is determined by $f(1)$ is symbolic induction, not a test over a selected family of maps. Six multiplier automorphisms are constructed, and inverse maps between the full automorphism type and the six-element index set are proved. Centrality is defined by commuting with \emph{every} automorphism as functions, and that property is proved for all of them.
 
