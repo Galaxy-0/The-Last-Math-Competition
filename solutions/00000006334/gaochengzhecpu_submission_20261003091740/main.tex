@@ -1,0 +1,91 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{url}
+\title{An odd-order weighing matrix refutes Conjecture 00000006334}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{October 3, 2026}
+\makeatletter
+\renewcommand{\maketitle}{\begin{center}
+{\Large\bfseries\@title\par}\vspace{0.6em}
+{\small\@author\par\@date}
+\end{center}\vspace{0.5em}}
+\makeatother
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Verdict: false.} There is a weighing matrix of order $7$ and weight $4$. Its odd order directly contradicts the even-order clause of the conjecture.
+
+\paragraph{Statement and standard definition.}
+The English source explicitly asserts that the matrix order is even; the Chinese version says the same. This is a necessary consequence of its proposed existence characterization. Thus it suffices to exhibit a weighing matrix of odd order. We do not need to define its additional terminology concerning a window, a conversion constant, or a square decomposition.
+
+A weighing matrix $W(n,k)$ is an $n\times n$ matrix with entries in $\{0,1,-1\}$ such that
+\[
+WW^{\mathsf T}=kI_n.
+\]
+This is the standard definition, for example in Harada and Munemasa~\cite{HM}. The following witness has positive weight strictly less than its order.
+
+\paragraph{Explicit counterexample.}
+Let
+\[
+W=\begin{pmatrix}
+ 1&-1&-1& 0&-1& 0& 0\\
+ 0& 1&-1&-1& 0&-1& 0\\
+ 0& 0& 1&-1&-1& 0&-1\\
+-1& 0& 0& 1&-1&-1& 0\\
+ 0&-1& 0& 0& 1&-1&-1\\
+-1& 0&-1& 0& 0& 1&-1\\
+-1&-1& 0&-1& 0& 0& 1
+\end{pmatrix}.
+\]
+All entries belong to $\{0,1,-1\}$. Let $r=(1,-1,-1,0,-1,0,0)$ and let $\rho$ denote cyclic right shift on seven coordinates. Row $i$, for $0\le i\le6$, is $\rho^i r$. The seven cyclic correlations are
+\[
+\begin{array}{c|rrrrrrr}
+d&0&1&2&3&4&5&6\\ \hline
+r\cdot\rho^d r&4&-1+1&-1+1&-1+1&1-1&-1+1&-1+1
+\end{array}.
+\]
+Indeed, the nonzero contributions in each off-diagonal correlation are precisely the two terms displayed. A cyclic shift permutes the coordinates and preserves dot products, so
+\[
+(\rho^i r)\cdot(\rho^j r)=r\cdot\rho^{\,j-i}r
+ =\begin{cases}4&i=j,\\0&i\ne j,\end{cases}
+\]
+where exponents are taken modulo $7$. Therefore $WW^{\mathsf T}=4I_7$ and $W$ is a weighing matrix $W(7,4)$.
+
+Its order is $7\equiv1\pmod2$, contradicting the conjecture's even-order requirement. Moreover,
+\[
+0<4<7,\qquad 4+2=6\le7.
+\]
+The witness consequently still disproves even order if one restricts to positive, nonfull weights and additionally imposes the conjectured lower bound $n\ge k+2$.
+
+\newpage
+\paragraph{Formal verification and semantic correspondence.}
+The accompanying \texttt{lean/Main.lean} uses Lean 4.19.0 and imports only \texttt{Std}. Its type \texttt{Matrix n} is \texttt{Fin n} $\to$ \texttt{Fin n} $\to$ \texttt{Int}, so it has exactly $n$ rows and $n$ columns. The definition \texttt{rowInnerProduct} sums $W_{it}W_{jt}$ over \texttt{List.finRange n}, which lists all column indices. Thus the second clause of \texttt{IsWeighingMatrix} is exactly the entrywise equality $WW^{\mathsf T}=kI_n$; its first clause is the complete entry restriction. Integer entries and identities also give the same real matrix upon the canonical inclusion of integers into the reals.
+
+The definition \texttt{W7} is the circulant specified above. The theorem \path{W7_displayed_rows} checks equality with every entry of the displayed array. The theorems \path{W7_entries} and \path{W7_orthogonality} check all $49$ entries and all $49$ row-pair inner products, respectively, using kernel-checked \texttt{decide}. They establish \path{W7_is_weighing}; \path{W7_odd_order} checks its odd order. The existential theorem \path{odd_order_counterexample} packages the actual matrix together with its positivity, nonfull weight, lower bound, orthogonality, and oddness.
+
+The predicate \texttt{ClaimedEvenOrder} asserts that every weighing matrix has even order. The theorem \path{claimed_even_order_false} refutes it by the verified $W(7,4)$; \path{even_order_claim_fails_under_bound} refutes even the restricted assertion just described. Finally, \path{full_conjecture_false} states that conjoining this false necessary assertion with any further assertions remains false. This is the logical bridge to the source statement, without replacing the matrix hypothesis by a mere numerical check.
+
+Axiom audits are printed for all principal declarations. The primary matrix theorems depend only on the standard Lean axiom \texttt{propext}; the oddness calculation uses no axioms. There are no added axioms, admissions, or native decision procedures. The project is checked by a fresh \texttt{lake build} with warnings treated as errors.
+
+\paragraph{Supplementary observation about the proposed lower bound.}
+If the source's undefined window lower bound is interpreted as requiring $n\ge k+2$ for every weighing matrix $W(n,k)$, it also fails independently. The matrix
+\[
+C=\begin{pmatrix}
+0&1&1&1\\
+-1&0&-1&1\\
+-1&1&0&-1\\
+-1&-1&1&0
+\end{pmatrix}
+\]
+has $CC^{\mathsf T}=3I_4$, zero diagonal, and off-diagonal entries in $\{1,-1\}$. It is a conference matrix and a weighing matrix $W(4,3)$, whereas $4<3+2$. The Lean theorems \path{C4_is_weighing}, \path{C4_is_conference}, \path{claimed_necessary_bound_false}, and \path{conference_bound_false} verify this supplementary observation. This interpretation of the window plays no role in the primary odd-order counterexample.
+
+\begin{thebibliography}{1}
+\bibitem{HM}
+M.~Harada and A.~Munemasa,
+\emph{On the classification of weighing matrices and self-orthogonal codes},
+\href{https://arxiv.org/abs/1011.5382}{arXiv:1011.5382}, Introduction.
+\end{thebibliography}
+\end{document}
