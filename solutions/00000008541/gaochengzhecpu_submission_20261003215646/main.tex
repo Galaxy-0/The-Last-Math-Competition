@@ -1,0 +1,57 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\title{A counterexample to Conjecture 00000008541}
+\author{gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+
+The free lattice on two generators is finite: it has precisely the four
+elements
+\[m=x\wedge y,\quad x,\quad y,\quad j=x\vee y.\]
+Here $m<x<j$ and $m<y<j$, with $x$ and $y$ incomparable. Consequently every
+set of elements of length at most $\ell$ has at most four elements, for
+every $\ell$, whatever ordinary choice of length is made. Its growth is
+bounded and therefore cannot be doubly exponential.
+
+\paragraph{Verification of freeness.}
+Let $A$ be an arbitrary lattice and let $a,b\in A$. There is a homomorphism
+from the four-element lattice to $A$ given by
+\[
+ m\mapsto a\wedge b,\qquad x\mapsto a,\qquad
+ y\mapsto b,\qquad j\mapsto a\vee b.
+\]
+For comparable pairs the meet and join identities follow immediately from
+their order; for the incomparable pair $x,y$ they follow from the displayed
+assignments. Thus this map preserves both operations. It is the unique
+homomorphism sending $x$ to $a$ and $y$ to $b$, because the images of
+$m=x\wedge y$ and $j=x\vee y$ are forced. This is the full universal property
+of the free lattice on two generators, in the category of all lattices, not
+merely distributive lattices. It also proves that no additional elements
+or identifications were introduced in choosing the four-element model.
+
+The source imposes no lower restriction such as $n\ge3$. This counterexample
+addresses its written statement, at $n=2$. It makes no assertion about a
+version restricted to larger numbers of generators. The lattice signature
+here is the usual pair of binary operations $\wedge,\vee$, with no additional
+nullary constants, as in the source's unconstrained lattice identities.
+
+\paragraph{Lean verification.}
+The structure \texttt{Lattice} contains an actual partial order and the
+greatest-lower-bound and least-upper-bound axioms. The finite four-element
+model satisfies all of them. The theorem
+\texttt{free\_on\_two\_generators} proves existence and uniqueness of the
+homomorphism above into every such target lattice.
+
+The theorem \texttt{conjecture8541\_counterexample} quantifies over every
+family of predicates on all four elements, so it includes any possible
+family of length balls. It proves that every count is at most four and
+that the count function is not unbounded. Every doubly exponential growth
+law entails unboundedness; thus no convention for the unspecified word
+length can rescue the claimed growth at $n=2$.
+
+All finite decisions are checked by Lean's kernel, using Lean 4.19.0 and
+\texttt{Std}. No admitted lemmas, native evaluation proofs, or custom axioms
+are used.
+\end{document}
