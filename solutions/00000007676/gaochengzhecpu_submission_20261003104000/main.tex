@@ -1,0 +1,102 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+\title{The stated gamma expansion does not exist:\\a counterexample to Conjecture 7676}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{3 October 2026}
+\begin{document}
+\maketitle
+
+\paragraph{The assertion.}
+Conjecture \texttt{00000007676} explicitly defines
+\[
+ A_n(q,t)=\sum_{\pi\in S_n}q^{\operatorname{maj}(\pi)}t^{\operatorname{des}(\pi)}
+\]
+and asserts an expansion
+\[
+ A_n(q,t)=\sum_{j=0}^{\lfloor(n-1)/2\rfloor}
+ \gamma_{n,j}(q)t^j(1+t)^{n-1-2j},
+ \qquad\gamma_{n,j}(q)\in\mathbb N[q].
+\]
+It also specifies the number of monomials of these gamma coefficients.
+The displayed range of $j$ is the standard gamma-basis range in degree
+$n-1$; see \cite[Introduction]{LZ}. We use exactly the pair of statistics
+and the weight $q^{\operatorname{maj}}t^{\operatorname{des}}$ written in
+the problem.
+
+\paragraph{Definitions and exhaustive computation.}
+For $\pi=\pi_1\cdots\pi_n$, its descent set is
+$D(\pi)=\{i:1\le i<n,\ \pi_i>\pi_{i+1}\}$.
+The descent number is $|D(\pi)|$, and the major index is
+$\sum_{i\in D(\pi)}i$. There are exactly two permutations of two labels:
+\[
+\begin{array}{c|c|c|c|c}
+ \pi & D(\pi) & \operatorname{maj}(\pi)&\operatorname{des}(\pi)&
+ q^{\operatorname{maj}(\pi)}t^{\operatorname{des}(\pi)}\\\hline
+ 12 & \varnothing &0&0&1\\
+ 21 & \{1\} &1&1&qt
+\end{array}
+\]
+Consequently $A_2(q,t)=1+qt$.
+
+\paragraph{Contradiction.}
+At $n=2$, the only gamma index is $j=0$. The claimed identity becomes
+\[
+ 1+qt=\gamma_{2,0}(q)(1+t).
+\]
+The coefficient of $t^0$ forces $\gamma_{2,0}(q)=1$, while the
+coefficient of $t^1$ forces $\gamma_{2,0}(q)=q$. These are distinct
+polynomials, so there is no such gamma expansion at all.
+
+Equivalently, specialize $q=2$ and write $c=\gamma_{2,0}(2)$. Evaluating
+at $t=0$ gives $c=1$; at $t=1$ it gives $3=2c$, a contradiction.
+This argument permits arbitrary integer $c$, so imposing nonnegative
+polynomial coefficients cannot repair the identity. It is therefore
+incorrect to describe this example as having a negative gamma
+coefficient: the displayed expansion itself does not exist. The
+additional monomial-count assertion cannot hold for the nonexistent
+coefficients.
+
+\newpage
+\paragraph{Formal verification.}
+The accompanying Lean 4.19.0 project imports only \texttt{Std}.
+The predicate \texttt{IsPermutation} means bijectivity on \texttt{Fin 2}.
+The two-letter representation encodes every map. The theorem
+\begin{center}\texttt{permutationWords\_exact}\end{center}
+identifies the two enumerated words with precisely all bijections.
+The representation is injective, and the enumeration has no duplicates.
+Internal labels $0,1$ correspond to ordinary labels $1,2$; their order
+comparisons agree. The one possible descent receives position $1$, as
+required for the major index.
+
+\texttt{qEulerian} sums the genuine major-index and descent weights over
+this complete enumeration. \texttt{eulerianTwo\_formula} proves
+$A_2(q,t)=1+qt$ for all integer evaluations. Nonnegative coefficient
+polynomials in $q$ are represented by finite lists of natural numbers
+and evaluated by Horner's rule. \texttt{gammaSum} uses the complete
+standard gamma-index range, which reduces to $\{0\}$ at $n=2$.
+
+\texttt{no\_nonnegative\_gamma\_expansion} rules out any family of
+such coefficient polynomials satisfying the displayed identity.
+The final theorem \texttt{conjecture7676\_counterexample} uses the
+verified full permutation enumeration to negate the $n=2$ instance of
+the universal assertion. Its formulation asks for identity at all
+integer $q,t$; a polynomial identity necessarily has that property, so
+failure at the two displayed evaluations suffices to rule it out.
+
+The theorem assumes no gamma coefficients exist in advance. There are
+no proof placeholders, added axioms, or native decision procedures.
+The printed axiom audit uses only Lean's standard \texttt{propext} and
+\texttt{Quot.sound}.
+
+\begin{thebibliography}{9}
+\bibitem{LZ}
+Z. Lin and J. Zeng,
+\emph{The $\gamma$-positivity of basic Eulerian polynomials via group actions},
+J. Combin. Theory Ser. A \textbf{135} (2015), 112--129.
+\href{https://doi.org/10.1016/j.jcta.2015.04.006}{doi:10.1016/j.jcta.2015.04.006}.
+\end{thebibliography}
+\end{document}
