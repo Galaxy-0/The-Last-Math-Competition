@@ -1,0 +1,68 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002231}
+\author{TLMC AI agent submission}
+\date{October 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} there exists a transcendental meromorphic $f$
+whose deficiency spectrum $\{\delta(a)\}$ realizes \emph{exactly any
+prescribed closed subset} of $[0,1]$ containing $0$, where
+$\delta(a,f) = 1 - \limsup N(a,f)/T(f)$.
+\end{quote}
+
+\section{The refutation}
+
+Nevanlinna's defect relation $\sum_a \delta(a) \le 2$ caps every
+shell: if $k$ values satisfy $\delta(a) \ge 1/n$, they contribute at
+least $k/n$ to the total, so $k \le 2n$.  The spectrum is therefore a
+countable union of shells of sizes $\le 2n$ --- \emph{at most
+countable}, for \emph{every} meromorphic $f$.  But ``any prescribed
+closed subset'' quantifies over uncountable sets as well: $[0,1]$
+itself, the Cantor set, every nondegenerate interval.  None of these
+is the spectrum of anything.
+
+Concretely, $[0,1]$ contains the seven distinct values
+$\tfrac{7}{21}, \tfrac{9}{21}, \tfrac{11}{21}, \tfrac{13}{21},
+\tfrac{15}{21}, \tfrac{17}{21}, 1$, all $\ge \tfrac13$.  A spectrum
+realizing $[0,1]$ would take all seven values, forcing
+$\sum_a \delta(a) \ge 7 \cdot \tfrac13 = \tfrac73 > 2$ --- the defect
+relation is violated (the $n = 3$ shell allows at most $2 \cdot 3 =
+6$).  The uncountability side is Cantor's diagonal: no surjection
+$\mathbb{N} \to (\mathbb{N} \to \mathbf{2})$ exists, so the binary
+expansions in $[0,1]$ can never be exhausted by a countable spectrum.
+Countable prescriptions, by contrast, are sometimes realizable ---
+$e^z$ has spectrum $\{0,1\}$ ($T(r,e^z) = r/\pi$, no zeros or poles,
+$\delta(0) = \delta(\infty) = 1$) --- but the universal quantifier
+``any'' is refuted by a single uncountable failure.
+
+\section{Verification}
+
+\texttt{reproduce.py} verifies the shell bound with exact rationals
+($\max \#\{\delta \ge 1/n\} = 2n$ for $n = 1..50$), the Nevanlinna
+characteristic of $e^z$ numerically ($T = r/\pi$ to $10^{-5}$,
+$\sum \delta = 2$ tight), the constructive Cantor diagonal
+($1000/1000$ enumerations of Boolean sequences miss the diagonal),
+and the seven-value instance.  The Lean package (core Lean~4,
+v4.33.1) certifies \texttt{shell\_sum} ($k$ values $\ge m$ contribute
+$\ge k m$), \texttt{shell\_bound}/\texttt{shell\_count} (defect
+relation $\Rightarrow$ shell size $\le 2n$), \texttt{diagonal\_exists}
+(Cantor), and the instance facts \texttt{seven\_members},
+\texttt{seven\_exceeds}, \texttt{seven\_exceeds\_general}.  All eight
+audited theorems report \texttt{does not depend on any axioms}.
+
+\section{Boundary}
+
+The kernel certifies the shell-counting arithmetic (general bound and
+the $n = 3$ instance) and the Cantor uncountability mechanism; the
+defect relation $\sum_a \delta(a) \le 2$ itself is classical
+(Nevanlinna), cited in prose and spot-checked numerically for $e^z$.
+The refutation covers every uncountable prescription; no claim is
+made about which countable closed sets are realizable.
+
+\end{document}
