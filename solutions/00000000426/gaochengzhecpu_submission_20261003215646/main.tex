@@ -1,0 +1,74 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\setlength{\emergencystretch}{1em}
+\begin{document}
+\title{A singleton cyclic-sieving instance for Conjecture 426}
+\author{Chengzhe Gao}\date{}\maketitle
+\begin{theorem}
+There is a cyclic-sieving triple with a prime-order rotation group and
+a polynomial that is equal to $1$ at every root of unity of that order.
+\end{theorem}
+\begin{proof}
+Take two cyclically arranged positions and let $C=C_2$ act by their
+rotation. This is a group of order $2$, which is prime. Let $X$ consist
+of the single binary word $00$, and put $X(q)=1$. Rotating either zero
+or one step fixes this word. Thus, for every $g\in C$,
+\[
+ |X^g|=1=X(\omega(g)), \qquad \omega(1_C)=1,\quad
+ \omega(\text{one-step rotation})=-1.
+\]
+The two values of $\omega$ are precisely the complex second roots of
+unity, and $X(q)$ has nonnegative integer coefficients. These are all
+the required cyclic-sieving equalities. Indeed, the polynomial is
+equal to $1$ at every complex number.
+\end{proof}
+
+The group rotates the two positions faithfully, while its action on
+$X$ is trivial. The usual definition of a cyclic-sieving triple does
+not require a faithful action on $X$ \cite{RSW}. This distinction is
+essential here and is not concealed by the construction.
+
+\paragraph{Scope of the statement.}
+Both language versions of the conjecture ask for existence and impose
+no condition $|X|>1$. In fact that additional condition would be
+impossible: $1$ is one of the $p$-th roots of unity and the identity
+element fixes every member of $X$, so the two stipulated equalities
+give $|X|=X(1)=1$. Thus the parenthetical description of a separation
+from ``nontrivial counting'' cannot mean a cardinality greater than
+one. We prove the explicit existence assertion as written and also
+explain this unavoidable limitation.
+
+\paragraph{Formal verification.}
+The Lean project defines the two-element cyclic group by Boolean
+exclusive-or and checks its full group laws, enumeration, generator,
+and prime order. Words are actual functions from the two positions to
+the binary alphabet. The action is actual permutation of positions;
+closure of $X$ and both action laws are proved. A Boolean equality
+test is proved equivalent to function equality, so
+\texttt{fixedCount} counts the genuine fixed words of the complete,
+duplicate-free list $X$.
+
+The polynomial is the coefficient list $[1]$, evaluated by Horner's
+rule. The theorem \texttt{polynomial\_\allowbreak{}one\_\allowbreak{}at\_\allowbreak{}every\_\allowbreak{}point} holds
+over every type supplied with the elementary evaluation operations
+and the laws $q0=0$, $q+0=q$, and the natural-number image of $1$.
+In particular it holds over the complex numbers, with no restriction
+on the evaluation point. Hence this is not an evaluation at a finite
+sample of roots. The concrete root map into the integers checks
+that $1,-1$ multiply according to $C_2$ and are distinct; the same
+values embed into the complex numbers. The universal evaluation
+theorem proves all cyclic-sieving equalities under that embedding.
+The file also proves that the identity equality forces cardinality
+one. No custom axioms, admitted proofs, or external computation
+oracles are used.
+
+\begin{thebibliography}{1}
+\bibitem{RSW} V. Reiner, D. Stanton and D. White,
+\emph{The cyclic sieving phenomenon}, J. Combin. Theory Ser. A
+108 (2004), 17--50, Definition--Proposition in Section 1.
+\href{https://doi.org/10.1016/j.jcta.2004.04.009}{doi:10.1016/j.jcta.2004.04.009}.
+\end{thebibliography}
+\end{document}
