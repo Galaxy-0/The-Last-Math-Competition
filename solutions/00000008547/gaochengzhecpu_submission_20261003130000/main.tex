@@ -1,0 +1,120 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[hidelinks]{hyperref}
+\title{A Counterexample to Conjecture 00000008547}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+
+The assertion that every geometric Peck lattice has a symmetric
+characteristic polynomial is false.  The five-element diamond lattice
+$M_3$ is a counterexample: it is geometric, Peck, and strictly Sperner,
+but its characteristic polynomial is
+\[
+\chi_{M_3}(t)=t^2-3t+2.
+\]
+Its constant and leading coefficients differ.  Thus its coefficients
+are not symmetric about half its rank, which is $1$.
+
+\paragraph{Conventions and scope.}
+A finite lattice is geometric if it is atomistic and upper semimodular.
+We use the standard Peck conditions: rank symmetry, rank unimodality,
+and the strong Sperner property~\cite{stanley}.
+The source instead says ``rank-symmetric strictly Sperner.''
+Our example satisfies this condition too: its unique maximum antichain
+is its middle rank.  We disprove the universal characteristic-polynomial
+assertion, which is one conjunct of the conjecture; no claim about the
+infinite Young lattice is needed.
+
+\paragraph{The lattice and its geometric property.}
+Let
+\[
+M_3=\{0,a,b,c,1\},\qquad
+0<a<1,\quad 0<b<1,\quad 0<c<1,
+\]
+with $a,b,c$ pairwise incomparable.  Two distinct atoms have meet $0$
+and join $1$; all other meets and joins are forced by comparability.
+Every element is the join of the atoms below it, using the empty join
+for $0$, so the lattice is atomistic.  Its rank function has values
+$0,1,1,1,2$.
+
+To verify upper semimodularity, suppose $x$ covers $x\wedge y$.
+If $x\leq y$, the premise is impossible.  If $y<x$, then
+$x\wedge y=y$ and $x\vee y=x$, so the conclusion repeats the premise.
+The only remaining case consists of two distinct atoms.  Their meet
+is $0$, their join is $1$, and $1$ covers $y$.
+Hence $M_3$ is geometric.
+
+\paragraph{Both Sperner requirements.}
+The rank sizes are $(1,3,1)$, so they are symmetric and unimodal.
+Any antichain containing $0$ or $1$ is a singleton; every other
+antichain is a subset of $\{a,b,c\}$.  Consequently the largest
+antichain has size $3$, and it is uniquely the middle rank.
+In particular the lattice is strictly Sperner.
+
+A union of two antichains cannot contain all five elements: the chain
+$0<a<1$ would then contribute three comparable elements to two
+antichains.  The upper bound $4$ is attained by
+$\{0,a,b,c\}$, the union of the bottom and middle ranks.
+A union of three antichains has size at most $5$, attained by the
+whole lattice.  For more antichains the same bound is attained by
+allowing empty antichains.  These bounds are exactly the sums of the
+largest $k$ rank sizes.  Thus $M_3$ is strongly Sperner, and hence
+Peck also in the standard sense.
+
+\paragraph{The actual characteristic polynomial.}
+Write $\mu(x)=\mu(0,x)$.  The defining M\"obius recurrence is
+\[
+\sum_{y\leq x}\mu(y)=
+\begin{cases}1&x=0,\\0&x\ne0.\end{cases}
+\]
+It gives $\mu(0)=1$, $\mu(a)=\mu(b)=\mu(c)=-1$, and
+$\mu(1)=-(1-1-1-1)=2$.  Therefore the defining sum gives
+\[
+\chi_{M_3}(t)=\sum_{x\in M_3}\mu(x)t^{2-\operatorname{rk}(x)}
+=t^2-3t+2.
+\]
+The coefficient sequence in ascending degree is $(2,-3,1)$, so it
+is not palindromic.  If ``symmetric'' were instead intended as a
+reflection of values or roots about $1$, that also fails:
+$\chi(2)=0$ whereas $\chi(0)=2$.
+
+\paragraph{Formal verification and exhaustive scope.}
+The accompanying Lean 4.19.0 file uses only \texttt{Std}.  Its type
+\texttt{LatticeData} includes the order, bottom, top, meet, join, and
+rank on five elements.  It checks the partial-order and lattice laws,
+the cover-based rank rule, atomisticity, and upper semimodularity.
+
+Every subset is encoded by its five membership bits, as an element of
+\texttt{Fin 32}.  The theorem
+\texttt{every\_prop\_subset\_encoded} covers arbitrary
+proposition-valued subsets as well.  Chains and antichains use the
+actual order, and a $k$-family is defined by the absence of a chain
+of more than $k$ elements.  Such families include all unions of $k$
+antichains: each chain meets any one antichain in at most one element.
+Lean proves the exact extremal bound, with an attaining family, for
+every natural number $k$; no list of specially chosen families replaces
+the universal quantifier.  The unique maximum antichain is also checked.
+
+The M\"obius values satisfy the defining recurrence, and
+\texttt{diamond\_mobius\_unique} proves that every solution of that
+recurrence is this one.  The coefficients are sums of these values
+over the appropriate ranks, rather than an unrelated polynomial
+declared by hand.  Finally,
+\texttt{conjecture\_8547\_false} negates the universal symmetry
+assertion specialized to five-element lattices, even with both Peck
+and strict Sperner imposed as hypotheses.  This specialization is
+necessary for the conjecture as stated, so its failure disproves the
+conjecture.  There are no admitted proofs or additional axioms; the
+final theorem uses only \texttt{propext} and \texttt{Quot.sound}.
+
+\begin{thebibliography}{1}
+\bibitem{stanley}
+R. P. Stanley, \emph{Quotients of Peck posets},
+Order \textbf{1} (1984), 29--34, p.~29.
+\url{https://math.mit.edu/~rstan/pubs/pubfiles/60.pdf}
+\end{thebibliography}
+\end{document}
