@@ -1,0 +1,58 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{An integer-matrix separation proving Conjecture 00000006330}
+\author{gaochengzhecpu}
+\date{October 3, 2026}
+\begin{document}
+\maketitle
+
+The source asks for two matrices with identical determinant and permanent
+but different integer types, with the separation described through
+unimodular row transformations. The following pair works even if both
+unimodular row and column operations are allowed:
+\[
+ A=\begin{pmatrix}1&0\\0&4\end{pmatrix},\qquad
+ B=\begin{pmatrix}2&0\\0&2\end{pmatrix}.
+\]
+They satisfy
+\[
+ \det A=\det B=4,\qquad
+ \operatorname{per}A=\operatorname{per}B=4.
+\]
+Both matrices are already in Smith normal form: their diagonal entries
+are positive and the first divides the second. Their invariant-factor
+lists are respectively $(1,4)$ and $(2,2)$.
+
+A direct argument establishes the distinction without invoking the Smith
+normal form classification theorem. For arbitrary integer matrices $U,V$,
+every entry of $UBV=2UV$ is even. Therefore $UBV\ne A$, whose top-left
+entry is one. In particular, there are no unimodular integer $U,V$ with
+$UBV=A$. Thus the matrices have distinct integer-equivalence types.
+
+The row-only interpretation is also covered in both orientations.
+An equation $UB=A$ is impossible by parity. An equation $UA=B$ would
+require $4U_{22}=2$ by comparing the bottom-right entries, which is
+impossible over the integers. Hence neither matrix is obtained from the
+other by unimodular row transformations. This is the precise separation
+requested in the source, with a stronger two-sided obstruction as well.
+
+\paragraph{Formal verification.}
+The self-contained Lean 4.19.0 project defines actual integer matrices
+as functions $\operatorname{Fin}2\to\operatorname{Fin}2\to\mathbb Z$.
+Matrix multiplication, determinant, permanent, and unimodularity are
+defined explicitly. Row equivalence and two-sided integer equivalence
+quantify over \emph{all} integer matrices $U,V$; these quantifiers are
+not replaced by a finite search or a bound on their entries.
+
+The key invariant is the predicate that every matrix entry is an integer
+multiple of two. The file proves that multiplication on either side by
+any integer matrix preserves this predicate. It then verifies both
+determinants, both permanents, the actual Smith-diagonal conditions, and
+the inequivalences. The final existence theorem is
+\texttt{conjecture\_6330} in \texttt{lean/Main.lean}.
+It uses only bundled Std, with no \texttt{sorry}, \texttt{admit},
+\texttt{native\_decide}, or added axiom. The printed axiom list is limited
+to Lean's standard \texttt{propext} and \texttt{Quot.sound}.
+
+\end{document}
