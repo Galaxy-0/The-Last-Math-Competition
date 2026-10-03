@@ -1,0 +1,150 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A Counterexample to Conjecture 00000001666:\\
+the Game Domination Number of $C_n$ Is at Least $n/3$}
+\author{%
+  Feiyu\thanks{Independent researcher.}
+  \and
+  Claude (Opus 5.5)\thanks{Anthropic.}%
+}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000001666 asserts that the game domination number of the cycle
+$C_n$ is $\lceil n/5\rceil+O(1)$. Whatever the players do, the domination game on
+$C_n$ lasts at least $n/3$ moves: a vertex of $C_n$ dominates at most three
+vertices, and all $n$ vertices must be dominated. Since $n/3-n/5$ is unbounded,
+the conjecture is false. The game, its value under optimal play and the bound
+are formalized in Lean~4 against Mathlib.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture 00000001666 reads:
+
+\begin{quote}
+Definition: The game domination number $\gamma_g(G)$ is the two-player
+alternating-choice game version. Conjecture: The game domination number of the
+cycle $C_n$ is $\lceil n/5\rceil + O(1)$, with the constant term explicit by $n
+\bmod 5$ (cycle game domination).
+\end{quote}
+
+\section{Reading of the statement}
+
+We use the standard domination game of Bre\v{s}ar, Klav\v{z}ar and Rall
+\cite{bkr}.
+
+\begin{definition}
+In the \emph{domination game} on a finite graph $G$, two players, Dominator and
+Staller, alternately choose vertices, Dominator first. Each chosen vertex must
+dominate (be equal or adjacent to) at least one vertex not dominated by the
+previously chosen ones. The game ends when every vertex is dominated. Dominator
+aims to minimize the number of moves, Staller to maximize it, and the
+\emph{game domination number} $\gamma_g(G)$ is the number of moves under optimal
+play.
+\end{definition}
+
+The conjecture asserts that there is a constant $C$ with
+$|\gamma_g(C_n)-\lceil n/5\rceil|\le C$ for all $n\ge3$. (The clause on the
+constant term depending on $n\bmod5$ only refines this.)
+
+\section{Result}
+
+\begin{theorem}\label{thm:main}
+For every $n$, $\gamma_g(C_n)\ge n/3$. Consequently
+$\gamma_g(C_n)-\lceil n/5\rceil\ge n/3-n/5-1$ is unbounded, and Conjecture
+00000001666 is false.
+\end{theorem}
+
+\section{Proof}
+
+\begin{lemma}\label{lem:game}
+Let $G$ be a finite graph in which every closed neighbourhood $N[v]$ has at most
+$m$ vertices. In any position of the domination game, under any play, at least
+$u/m$ further moves are made, where $u$ is the number of undominated
+vertices. In particular $\gamma_g(G)\ge |V(G)|/m$.
+\end{lemma}
+
+\begin{proof}
+Each move dominates only vertices of $N[v]$ for the chosen $v$, hence lowers the
+number of undominated vertices by at most $m$. The game ends only when this
+number is $0$. Formally, by induction on the game tree: if a legal move exists,
+the value is $1$ plus the minimum (Dominator) or maximum (Staller) of the values
+after the legal moves, each of which is at least $(u-m)/m$ by induction. If no
+legal move exists, all vertices are dominated and $u=0$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+In $C_n$ every closed neighbourhood has at most $3$ vertices, so
+Lemma~\ref{lem:game} with $m=3$ gives $\gamma_g(C_n)\ge n/3$. If
+$\gamma_g(C_n)\le\lceil n/5\rceil+C$ for all $n\ge3$, take $n=15C+15$. Then
+$5C+5\le\gamma_g(C_n)\le 3C+3+C$, which is impossible.
+\end{proof}
+
+\section{Formalization}
+
+The accompanying Lean~4 project (\texttt{lean/Submission/Basic.lean}) defines
+the game, states the conjecture and proves its negation against Mathlib.
+
+\begin{itemize}
+  \item \texttt{closedNbhd}, \texttt{dominated}, \texttt{legalMoves} --- for
+    any finite \texttt{SimpleGraph} with decidable adjacency.
+  \item \texttt{gameValue fuel dom S} --- the value of the game from position $S$
+    (chosen vertices), $0$ when no legal move remains, otherwise $1+$ the
+    minimum (Dominator, \texttt{dom = true}) or maximum (Staller) over legal
+    moves. The parameter \texttt{fuel} bounds the remaining moves; since every
+    move dominates a new vertex, \texttt{fuel} $=|V|$ is never exhausted.
+    \texttt{gameDominationNumber G} $=$ \texttt{gameValue G |V| true} $\emptyset$.
+  \item \texttt{card\_undominated\_le\_mul},
+    \texttt{card\_le\_mul\_gameDominationNumber} --- Lemma~\ref{lem:game}.
+  \item \texttt{card\_closedNbhd\_cycleGraph},
+    \texttt{le\_three\_mul\_gameDominationNumber} --- $n\le3\gamma_g(C_n)$ for
+    Mathlib's \texttt{cycleGraph n}.
+  \item \texttt{ConjectureHolds} --- there is $C$ with
+    $|\gamma_g(C_n)-\lceil n/5\rceil|\le C$ for all $n\ge3$;
+    \texttt{conjecture\_00000001666\_false} --- its negation.
+\end{itemize}
+
+The toolchain is \texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to
+\texttt{v4.33.1}, and \texttt{lake build} succeeds. The project contains no
+\texttt{sorry}, no \texttt{admit} and no \texttt{native\_decide}, and
+introduces no axioms:
+\begin{center}
+\texttt{\#print axioms conjecture\_00000001666\_false}
+\end{center}
+reports exactly \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\section{Remarks}
+
+The game domination number of cycles is in fact about $n/2$. It was determined
+exactly by Ko\v{s}mrlj \cite{kosmrlj}. The elementary bound $n/3$, which follows
+from $\gamma_g(G)\ge\gamma(G)$, already refutes the conjectured growth
+$\lceil n/5\rceil+O(1)$.
+
+\begin{thebibliography}{9}
+\bibitem{bkr} B.~Bre\v{s}ar, S.~Klav\v{z}ar and D.~F.~Rall, \emph{Domination
+  game and an imagination strategy}, SIAM J. Discrete Math. 24 (2010),
+  979--991.
+\bibitem{kosmrlj} G.~Ko\v{s}mrlj, \emph{Domination game on paths and cycles},
+  Ars Math. Contemp. 13 (2017).
+\end{thebibliography}
+
+\end{document}
