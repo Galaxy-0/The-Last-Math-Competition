@@ -1,0 +1,114 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[hidelinks]{hyperref}
+\title{A Disproof of Conjecture 00000008549}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+
+The conjecture's assertion that the diamond lattice is a smallest
+partition lattice with variable maximal-chain length is false.
+The diamond $M_3$ is the partition lattice $\Pi_3$, and all of its
+maximal chains have length $2$.  Thus it is not an example with
+variable maximal-chain length at all, irrespective of minimality.
+
+\paragraph{Precise scope.}
+A partition is a collection of nonempty disjoint blocks whose union
+is the underlying set.  Partitions are ordered by refinement:
+$\pi\leq\sigma$ if every block of $\pi$ is contained in a block of
+$\sigma$.  Equivalently, the same-block equivalence relation of $\pi$
+is contained in that of $\sigma$.  We use the standard five-element
+diamond $M_3$, with bottom, top, and three incomparable atoms.
+The ordinary refinement order and the $\Pi_3$ diagram are also given
+in the MIT lecture notes~\cite{postnikov}.
+The length of a nonempty finite chain is its number of elements minus
+one.  A maximal chain is maximal under inclusion among all chains.
+
+The source's English first clause concerns graded lattices, whereas
+its Chinese first clause says ordered lattices.  This proof does not
+use or challenge that first clause.  It disproves the second clause,
+which explicitly describes the diamond as an example with variable
+length in both languages.
+
+\paragraph{All partitions on three points.}
+Use the set $\{0,1,2\}$.  A partition has either three, two, or one
+block.  In the first and last cases it is forced.  In the two-block
+case, one block has two elements, and there are exactly three choices
+for that block.  Thus all partitions are
+\[
+\begin{array}{c|c|c}
+\text{label}&\text{partition}&\text{rank}\\\hline
+0&\{\{0\},\{1\},\{2\}\}&0\\
+a&\{\{0,1\},\{2\}\}&1\\
+b&\{\{0,2\},\{1\}\}&1\\
+c&\{\{1,2\},\{0\}\}&1\\
+1&\{\{0,1,2\}\}&2
+\end{array}
+\]
+Each two-block partition lies above the discrete partition and below
+the one-block partition.  Distinct two-block partitions do not refine
+one another.  This proves $\Pi_3\cong M_3$ as ordered sets, and hence
+as lattices: least upper and greatest lower bounds are determined by
+the order.
+
+\paragraph{All maximal chains.}
+Let $C$ be any maximal chain of this lattice.  Both the bottom and
+top must belong to $C$, since either could otherwise be added to it.
+It contains at most one of $a,b,c$, since those are incomparable.
+It must contain at least one of them, because $\{0,1\}$ can be
+extended by inserting any atom.  Consequently the complete list of
+maximal chains is
+\[
+0<a<1,\qquad 0<b<1,\qquad 0<c<1.
+\]
+Each has exactly three elements and length $2$.  Conversely, each
+listed chain is maximal because its only missing elements are
+incomparable with its atom.  The claimed variable-length example
+therefore does not exist in the diamond.
+
+\paragraph{Formal verification and exhaustive scope.}
+The self-contained Lean 4.19.0 file imports only \texttt{Std}.
+It encodes a binary relation on three points by its nine truth values
+in \texttt{Fin 512}, and imposes reflexivity, symmetry, and transitivity.
+The theorem \texttt{every\_prop\_partition\_encoded} shows that every
+proposition-valued equivalence relation has such an encoding.
+Thus the formal definition of a partition as a same-block equivalence
+relation includes every actual partition.
+
+The only equivalence-relation codes are
+$273,283,341,433,511$, corresponding respectively to the five
+partitions displayed above.  The maps \texttt{partitionOf} and
+\texttt{label} are proved inverse.  The theorem
+\texttt{arbitrary\_partition\_refinement} proves that actual relation
+inclusion is precisely the diamond order.  The lattice laws for this
+order and its meet and join are also verified.
+
+All families of partitions, including arbitrary proposition-valued
+families, are uniquely encoded by five membership bits.
+\texttt{MaximalPartitionChain} quantifies over all such families when
+expressing maximality under inclusion.  The proof transfers this
+definition to the complete set of $32$ subset codes, where the only
+maximal-chain codes are $19,21,25$ and each has cardinality $3$.
+It also transfers maximality back and proves that these three actual
+maximal chains exist, so the length conclusion is not vacuous.
+
+The theorem \texttt{every\_maximal\_partition\_chain\_length\_two}
+establishes length $2$ for every maximal chain.
+The final theorem
+\texttt{conjecture\_8549\_diamond\_claim\_false}
+negates the existence of two actual maximal chains with unequal
+lengths.  This directly negates a necessary part of the conjecture's
+claim that the diamond is a variable-length example.
+There are no admitted proofs or additional axioms; the final theorem
+uses only \texttt{propext} and \texttt{Quot.sound}.
+
+\begin{thebibliography}{1}
+\bibitem{postnikov}
+A. Postnikov, \emph{Algebraic Combinatorics, Lecture 9},
+MIT 18.212, Spring 2021, section on the partition lattice.
+\url{https://math.mit.edu/~apost/courses/18.212_2021/lectures/18212_lecture09.pdf}
+\end{thebibliography}
+\end{document}
