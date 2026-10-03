@@ -1,0 +1,170 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{proposition}{Proposition}
+\newcommand{\code}[1]{\texttt{\small\detokenize{#1}}}
+\title{A counterexample to Conjecture 00000006542\\
+\large Ihara poles are not reciprocals of adjacency eigenvalues}
+\author{Chengzhe Gao}
+\date{October 3, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{The claim being refuted.}
+The English source asserts that ``the reciprocals of the poles are the
+adjacency spectrum.'' The Chinese source states the same correspondence.
+In particular, it implies that if $a\ne0$ is an Ihara zeta pole, then
+$a^{-1}$ is an adjacency eigenvalue. We refute this necessary implication
+for the finite, connected, simple, $2$-regular graph $C_3$. The source
+does not exclude cycles or impose minimum degree at least $3$.
+No interpretation of its other clauses about an index, a domain, or
+coverings is needed for this counterexample.
+
+\paragraph{The standard objects.}
+We use the usual Ihara definition in which a prime is a primitive,
+closed, backtrackless, tailless directed walk, modulo cyclic rotation.
+Reversing the direction does not identify two primes. Thus
+\[
+ Z_G(u)=\prod_{[P]}(1-u^{\ell(P)})^{-1}.
+\]
+These conventions are the ones in Horton--Stark--Terras,
+Section~2, equations (2.1)--(2.2)\cite{hst}. Their definition applies to
+finite connected graphs of fundamental-group rank at least one with
+no degree-one vertices; $C_3$ satisfies these conditions. For $C_3$ the
+product below is finite, so no convergence theorem or determinant
+formula is required.
+
+\begin{proposition}
+The Ihara zeta function of $C_3$ has a pole at $1$, but $1$ is not an
+eigenvalue of its adjacency matrix over $\mathbb C$.
+\end{proposition}
+\begin{proof}
+Use vertices $0,1,2$ and edges $01,12,20$. At any directed edge, there
+is exactly one next edge that is incident to its head and does not
+immediately reverse it. The six directed edges therefore form the two
+successor orbits
+\[
+ (01,12,20),\qquad (02,21,10).
+\]
+Every backtrackless walk stays in one of these orbits. It closes
+without a tail if and only if its positive length is divisible by $3$.
+A closed walk of length $3q$, with $q\ge2$, is the $q$th power of its
+first three edges. Conversely a length-three closed walk cannot be a
+proper power of a shorter reduced closed walk, since the latter would
+also have positive length divisible by $3$. Hence all prime walks have
+length $3$. Cyclic rotation identifies precisely the three starting
+edges in each displayed orbit, giving exactly two prime classes.
+Consequently the defining Euler product itself gives
+\[
+ Z_{C_3}(u)=\frac{1}{(1-u^3)^2}
+          =\frac{1}{(u-1)^2(1+u+u^2)^2}.
+\]
+The last factor has value $9$ at $u=1$, and the numerator has value
+$1$. Thus there is no cancellation, and $u=1$ is a pole of exact order
+$2$. Its reciprocal is $1$.
+
+The adjacency action on an arbitrary vector $(x,y,z)\in\mathbb C^3$ is
+\[
+ A(x,y,z)=(y+z,x+z,x+y),\qquad
+ A=\begin{pmatrix}0&1&1\\1&0&1\\1&1&0\end{pmatrix}.
+\]
+If $Av=v$, then $x=y+z$, $y=x+z$, and $z=x+y$.
+The first two equations imply $x=x+2z$, so $z=0$ and $x=y$.
+The third now gives $2x=0$, and therefore $x=y=z=0$.
+There is no nonzero eigenvector with eigenvalue $1$.
+\end{proof}
+
+The displayed failure concerns membership in the spectrum, so it does
+not depend on whether the source meant a set or a multiset of poles
+and eigenvalues. In the usual theory the relevant direct spectral
+object is the nonbacktracking directed-edge operator; replacing it
+by the adjacency operator is the error tested here.
+
+\paragraph{Formalization and coverage.}
+The accompanying \code{lean/Main.lean} uses only Lean 4.19.0 and
+\code{Std}. Its finite computations concern exactly the graph and
+polynomials above. The classification of walks covers arbitrary
+positive lengths, not a bounded search.
+
+The graph has vertex type \code{Fin 3}, with two vertices adjacent
+exactly when distinct. The six darts have explicit tails, heads, and
+reverses. Theorems \code{triangle_connected_regular} and
+\code{all_oriented_edges} verify regularity, connectivity, completeness
+and uniqueness of the dart encoding, and reversal. The predicate
+\code{Step} is equality of incident endpoints together with absence of
+immediate reversal, and \code{step_is_forced} proves its equivalence to
+the stated successor permutation.
+
+A \code{ClosedWalk} is a positive-length periodic dart sequence with
+\code{Step} at every pair of consecutive positions. This condition
+includes the junction between the last and first edge, and thus the
+usual tailless condition. Every ordinary finite cyclic dart word of
+every positive length is formally mapped into this representation by
+\code{fromFiniteWord}; its periodic extension is indexed modulo that
+length. Conversely, taking the first declared number of darts of a
+\code{ClosedWalk} recovers such a finite cyclic word, because its
+periodicity identifies the boundary positions. Thus no finite closed
+walks are omitted. Primitivity explicitly excludes a shorter positive
+period whose integer repetition number is at least two. Such a period
+is itself a closed reduced walk, so this is the usual proper-power
+condition. The symbolic theorem
+\code{primitive_iff_length_three} proves the classification for all
+lengths.
+
+\code{PrimeCycle} is an actual quotient of primitive walks by rotation,
+not a two-element type declared to be the primes. The theorem
+\code{rotations_iff_direction} proves the equivalence relation and its
+classification. The maps \code{cycleCode} and \code{codeCycle} are
+proved inverse. In particular, \code{prime_cycles_complete} and
+\code{prime_cycles_nodup} prove that the two displayed representatives
+are the full index set of the Ihara product, without duplicates.
+\code{iharaZeta} multiplies the Euler factors over this complete list.
+\code{actual_euler_product} then verifies its numerator and denominator.
+
+Polynomials are finite lists of integer coefficients in ascending
+degree. Addition and multiplication use coefficient addition and full
+convolution; evaluation is Horner evaluation. A rational expression
+is its polynomial numerator and denominator. The predicate
+\code{HasPoleAt} uses the exact algebraic criterion
+\[
+ D(u)=(u-a)^m Q(u),\quad m>0,\quad Q(a)\ne0,\quad N(a)\ne0.
+\]
+For integer-coefficient rational functions considered over $\mathbb C$,
+this criterion asserts an ordinary meromorphic pole of exact order
+$m$: the quotient $N/Q$ is analytic and nonzero near $a$.
+The Lean theorem \code{pole_at_one_order_two} verifies this factorization
+for the actual Euler product, and \code{residual_value} verifies
+$Q(1)=9$. Its denominator is nonzero since it has value $1$ at $0$.
+This finite algebraic pole certificate avoids assuming an unproved
+analytic continuation or a graph-zeta determinant identity.
+
+The eigenvalue predicate uses all functions \code{Fin 3} to an
+arbitrary scalar type, a nonzero coordinate, and the actual matrix
+action, formed by summing its three entries in each row. The statement
+\code{one_not_adjacency_eigenvalue} is proved for every scalar structure
+\code{ScalarLaws} with additive associativity, zero, cancellation,
+no additive $2$-torsion, and the usual zero and unit multiplication
+laws. These are all standard laws of $\mathbb C$ (also of any field of
+characteristic different from $2$). Hence the proof applies to
+arbitrary complex eigenvectors; it is not restricted to integer or
+rational vectors. The separately supplied integer instance only
+demonstrates consistency of the small algebraic interface.
+
+Finally \code{conjecture6542_false} rejects the necessary implication
+from this actual pole to this actual eigenvalue. The auxiliary script
+checks graph walks through length $15$, the same exact polynomial
+factorization, and $\det(I-A)=-4$; it is not used to justify the
+all-length classification or any Lean theorem. The printed axioms of
+the principal theorems are among \code{propext},
+\code{Classical.choice}, and \code{Quot.sound}. There are no placeholders,
+extra axioms, or unchecked native decision procedures.
+
+\begin{thebibliography}{9}
+\bibitem{hst}
+M.~D.~Horton, H.~M.~Stark, and A.~A.~Terras,
+\emph{What are zeta functions of graphs and what are they good for?},
+Section~2, author-hosted manuscript,
+\url{https://mathweb.ucsd.edu/~aterras/snowbird.pdf}.
+\end{thebibliography}
+\end{document}
