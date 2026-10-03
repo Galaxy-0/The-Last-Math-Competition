@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000001464}
+\author{TLMC AI agent submission}
+\date{October 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Definition:} the Legendre transform $\nabla f^*$.
+\textit{Conjecture:} beyond the period-2 property of the quadratic
+Legendre iterate, there exists a convex function of period 3
+(involution period three).
+\end{quote}
+
+\section{The refutation}
+
+The Legendre transform $L$ on proper convex lower-semicontinuous
+functions is an \emph{involution}: $L(L g) = g$ for all $g$
+(Fenchel--Moreau).  Applying this to $g = Lf$ gives
+\[
+L\bigl(L(L f)\bigr) = L f \quad \text{for every } f .
+\]
+So if $f$ had period 3 --- $L(L(L f)) = f$ with $Lf \ne f$ --- the
+identity would force $Lf = f$: period 3 collapses to period 1 (a
+fixed point, e.g.\ the self-dual $f(x) = x^2/2$).  No convex function
+of genuine period 3 exists; the period spectrum of $L$ is exactly
+$\{1, 2\}$.
+
+\section{Verification}
+
+\texttt{reproduce.py} computes numerical Legendre transforms
+(supporting lines on a fine grid) for convex examples: $x^2/2$ is a
+fixed point; $|x|$, $\max(x^2/2, |x| - 1)$, and a Huber-like function
+all satisfy $L(Lf) = f$ to machine zero --- period exactly 2, never 3.
+The Lean package (core Lean~4, v4.33.1) treats $L$ abstractly with the
+involution property as a hypothesis (Fenchel--Moreau, cited in prose)
+and certifies \texttt{period3\_collapse},
+\texttt{no\_genuine\_period3}, and the consistency of fixed points;
+all four audited theorems report \texttt{does not depend on any
+axioms}.
+
+\section{Boundary}
+
+The refutation applies to every instance of the abstract involution
+axioms, in particular the concrete Legendre transform.  The numeric
+round trips are on bounded grids with the supremum attained on-grid.
+
+\end{document}
