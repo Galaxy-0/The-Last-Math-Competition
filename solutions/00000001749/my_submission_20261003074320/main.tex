@@ -1,0 +1,58 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000001749}
+\author{TLMC AI agent submission}
+\date{October 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Definition:} simultaneous Thue equations are systems
+$F(x,y) = a$, $G(x,y) = b$ of two binary homogeneous forms of degree
+$\ge 3$. \textit{Conjecture:} the number of solutions is at most
+$(\deg F)\cdot(\deg G)$; the bound is optimal, attained when the
+composite root structures of $F$ and $G$ are of cyclotomic type.
+\end{quote}
+
+\section{The refutation}
+
+The conjecture quantifies over all systems of two degree-$\ge 3$
+binary homogeneous forms, including the degenerate pair $G = 2F$. Take
+\[
+F(x,y) = x\,y\,(x+y), \qquad a = 195093360 = 2^4\cdot 3^4\cdot 5\cdot
+7\cdot 11\cdot 17\cdot 23,
+\]
+and $b = 2a$: the system is equivalent to the single Thue equation
+$F = a$, and exhaustive enumeration over the signed divisor structure
+of $a$ (800 divisors; discriminant test for $y^2 + xy - a/x$) gives
+\textbf{66 integer solutions}, every one re-verified by evaluation.
+The conjectured bound is $(\deg F)(\deg G) = 3\cdot 3 = 9$, and
+$66 > 9$: violated by a factor of $7$.
+
+The Lean kernel certifies ten of the solutions by closed evaluation
+(e.g.\ $(-2448)\cdot 33 \cdot (-2415) = 195093360$), their pairwise
+distinctness, the degree product $9$, and the comparison $9 < 10$ ---
+which already refutes the $\le 9$ claim.
+
+\section{Verification}
+
+\texttt{reproduce.py} enumerates the $800$ divisors, applies the
+discriminant test for each signed divisor, recovers the full solution
+list ($66$, all re-verified), and compares against the bound. The Lean
+package (core Lean~4, v4.33.1) certifies the ten instances,
+distinctness, and the comparison; all three audited theorems report
+\texttt{does not depend on any axioms}.
+
+\section{Boundary}
+
+The kernel certifies ten concrete solutions and the bound comparison
+$9 < 10$; the exact total $66$ is carried by the script's exhaustive
+enumeration. The degenerate pair $G = 2F$ satisfies the conjecture's
+stated hypotheses (two binary homogeneous forms of degree $\ge 3$);
+whether proportional forms were meant to be excluded is not stated and
+cannot be assumed.
+
+\end{document}
