@@ -1,0 +1,124 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=23mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{url}
+\setlength{\emergencystretch}{3em}
+\title{A critical equality graph refutes Conjecture 00000003483}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{3 October 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Statement and definitions.}
+The conjecture asserts that equality in the edge-count expression
+$e=(5v-2)/3$ for four-critical graphs is attained only by nearly-four-regular
+double-critical graphs. We refute the necessary double-critical part of this assertion.
+A graph is four-critical if it has chromatic number $4$ and every proper subgraph is $3$-colorable.
+A connected $k$-chromatic graph is double-critical if deleting both endpoints of
+every edge lowers the chromatic number by two, equivalently leaves a $(k-2)$-colorable
+graph; see Kawarabayashi, Pedersen, and Toft~\cite{KPT}.
+The equivalence follows because restoring the two deleted vertices uses at most two new colors.
+
+\paragraph{The graph and equality.}
+Let $G$ have vertex set $\{0,1,\ldots,6\}$ and the following eleven unordered edges:
+\[
+02,\ 03,\ 05,\ 06,\ 12,\ 13,\ 14,\ 23,\ 45,\ 46,\ 56.
+\]
+This is the Haj\'os join of two copies of $K_4$: delete edges $01$ and $04$
+from the two four-vertex graphs, identify their vertices labelled $0$,
+and add the edge $14$.
+There are $v=7$ vertices and $e=11$ edges, so
+\[
+3e=33=5v-2.
+\]
+
+\paragraph{Four-criticality.}
+A proper four-coloring, in vertex order $0,\ldots,6$, is
+$(0,0,1,2,1,2,3)$.
+There is no proper three-coloring: vertices $2,3$ are adjacent and both are
+adjacent to $0,1$, forcing $0$ and $1$ to have the same third color.
+Similarly, vertices $5,6$ are adjacent and both adjacent to $0,4$,
+forcing $0$ and $4$ to have the same color.
+This contradicts the edge $14$.
+Thus $\chi(G)=4$.
+
+For a fully explicit criticality check, the following tables give proper
+three-colorings after every single vertex or edge deletion.
+Entries always list colors at vertices $0,\ldots,6$; the color at a deleted
+vertex is ignored.
+\[
+\begin{array}{c|c@{\qquad}c|c}
+\text{deleted vertex}&\text{colors}&\text{deleted edge}&\text{colors}\\ \hline
+0&(0,0,1,2,1,0,2)&02&(0,1,0,2,0,1,2)\\
+1&(0,0,1,2,0,1,2)&03&(0,1,2,0,0,1,2)\\
+2&(0,1,0,2,0,1,2)&05&(0,0,1,2,1,0,2)\\
+3&(0,1,2,0,0,1,2)&06&(0,0,1,2,1,2,0)\\
+4&(0,0,1,2,0,1,2)&12&(0,1,1,2,0,1,2)\\
+5&(0,0,1,2,1,0,2)&13&(0,1,2,1,0,1,2)\\
+6&(0,0,1,2,1,2,0)&14&(0,0,1,2,0,1,2)\\
+&&23&(0,1,2,2,0,1,2)\\
+&&45&(0,0,1,2,1,1,2)\\
+&&46&(0,0,1,2,1,2,1)\\
+&&56&(0,0,1,2,1,2,2)
+\end{array}
+\]
+Every proper subgraph omits a vertex or omits an edge; restrict the
+corresponding listed coloring. Thus every proper subgraph is $3$-colorable
+and $G$ is four-critical in the full, standard sense.
+
+\paragraph{Failure of double-criticality.}
+The vertices $0$ and $2$ are adjacent. After deleting them, the vertices
+$4,5,6$ still induce a triangle. Hence
+$\chi(G-\{0,2\})\ge3$.
+Restricting the displayed coloring for $G-0$ also gives a three-coloring
+of $G-\{0,2\}$, so in fact
+\[
+ \chi(G-\{0,2\})=3\ne4-2.
+\]
+Therefore $G$ is not double-critical, despite being four-critical and
+attaining the stated equality. Whatever additional condition is intended
+by nearly-four-regular, its conjunction with double-criticality cannot
+hold for this graph.
+
+\paragraph{Formal verification and semantic bridge.}
+The self-contained Lean 4.19.0 file imports only \texttt{Std}.
+Vertices are \texttt{Fin 7}. The graph is the displayed edge list.
+\texttt{NormalizedSimple} checks that every edge is within the vertex set,
+its endpoints are in increasing order, and the list has no duplicates;
+hence the verified list length is the ordinary undirected edge count.
+
+The theorem \path{G_four_critical} proves the standard chromatic-number
+minimum and three-colorability of \emph{every} proper subgraph.
+All colorings by three colors are covered by \texttt{tuple\_eta},
+which identifies an arbitrary function on \texttt{Fin 7} with its seven
+values. The vertex and edge certificates are exactly the displayed tables;
+\path{proper_subgraph_bridge} proves the restriction argument for arbitrary
+vertex subsets and arbitrary symmetric subgraph relations.
+Lower color counts are excluded by embedding their colors into the three-color set.
+
+\texttt{DoubleCriticalFour} includes connectivity, chromatic number four,
+and the exact two-color minimum after deleting the endpoints of any edge.
+\texttt{ProperPairDeleted} applies the ordinary proper-coloring condition
+only to the surviving vertices; unused labels at deleted vertices do not
+change colorability. The triangle argument is formalized without
+enumerating graph families, and \path{G_pair_chromatic_three} verifies
+the exact deletion chromatic number.
+The theorem \path{conjecture3483_counterexample} negates the necessary
+seven-vertex specialization of the equality characterization.
+This specialization alone refutes the source's unrestricted characterization.
+
+The proof addresses the equality assertion itself. It does not rely on the
+source's background description of the edge inequality as an upper bound.
+The principal axiom audits use only standard \texttt{propext} and
+\texttt{Quot.sound}; there are no added axioms, admissions, or native
+decision procedures.
+
+\begin{thebibliography}{1}
+\bibitem{KPT}
+K.-i.~Kawarabayashi, A.~S.~Pedersen, and B.~Toft,
+\emph{Double-critical graphs and complete minors},
+Electron.\ J.\ Combin.\ \textbf{17} (2010), R87.
+\href{https://www.combinatorics.org/ojs/index.php/eljc/article/view/v17i1r87}{doi:10.37236/359}.
+\end{thebibliography}
+\end{document}
