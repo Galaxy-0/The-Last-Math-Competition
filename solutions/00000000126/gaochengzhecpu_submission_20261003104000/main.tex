@@ -1,0 +1,81 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{url}
+\setlength{\emergencystretch}{3em}
+\title{Base-four repunits disprove Conjecture 00000000126}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{3 October 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Statement being refuted.}
+The conjecture asserts that for every integer $a\ge2$ there are infinitely many primes of the form
+$1+a+a^2+\cdots+a^k$.
+We show that for $a=4$ the only prime value is $5$.
+
+\paragraph{Definitions and all-length factorization.}
+For an integer $a\ge2$ and length $n\ge1$, put
+\[
+ R_n(a)=1+a+\cdots+a^{n-1}.
+\]
+Thus $n=k+1$ in the notation of the source. For the empty sum set $R_0(a)=0$.
+The finite geometric-sum identity gives
+\[
+ 3R_n(4)+1=4^n=(2^n)^2.
+\]
+Let $p=2^n$. Since $p$ is not divisible by $3$, write
+$p=3q+r$, where $r\in\{1,2\}$. If $n\ge3$, then $p\ge8$.
+In the two residue cases we obtain the following explicit integer factorizations:
+\[
+\begin{array}{c|c|c}
+r & R_n(4) & \text{lower bounds on the factors}\\ \hline
+1 & q(p+1) & q=(p-1)/3>1,\quad p+1>1\\
+2 & (p-1)(q+1) & p-1>1,\quad q+1=(p+1)/3>1 .
+\end{array}
+\]
+Both identities follow from
+$3R_n(4)=(p-1)(p+1)$ and cancellation of $3$.
+The inequalities use only $p\ge8$. Therefore every $R_n(4)$ with $n\ge3$ is composite.
+
+The remaining lengths give
+\[
+R_0(4)=0,\qquad R_1(4)=1,\qquad R_2(4)=5.
+\]
+The first two numbers are not prime and $5$ is prime. Consequently,
+\[
+ R_n(4)\text{ is prime}\quad\Longleftrightarrow\quad n=2,
+\]
+and the complete set of prime values in base $4$ is the singleton $\{5\}$.
+This contradicts the asserted infinitude for every base.
+
+\newpage
+\paragraph{Formal verification and semantic bridge.}
+The self-contained Lean 4.19.0 project imports only \texttt{Std}.
+The recursive definition \texttt{repunit a n} is the finite sum $R_n(a)$:
+the recursion adds $a^n$ on passing from length $n$ to $n+1$.
+The definition \texttt{IsPrime p} requires $p\ge2$ and that every factorization
+$p=ab$ in natural numbers has $a=1$ or $b=1$; this is the ordinary prime definition.
+
+The theorem \path{geometric_identity} proves the geometric-sum identity by induction for every length.
+The theorem \path{pow_two_nonzero_mod_three} proves the two residue cases by induction,
+and \path{all_long_repunit_composite} supplies actual natural-number factors
+larger than one for every $n\ge3$. These are symbolic proofs over arbitrary natural numbers,
+not a bounded search. The two factors are precisely those in the table.
+
+The theorem \path{prime_repunit_exact} proves the equivalence with $n=2$;
+\path{every_prime_repunit_is_five} states that every prime value is $5$.
+The predicate
+\begin{center}\texttt{InfinitelyManyPrimeRepunits}\end{center}
+expresses that prime values are unbounded:
+for every $B$ there is a positive length giving a prime value larger than $B$.
+For a subset of the natural numbers, this is equivalent to infinitude, since a bounded subset is finite.
+The theorem \path{base_four_not_infinitely_many} refutes this property at $B=5$,
+and \path{conjecture126_counterexample} negates the original universal claim using $a=4$.
+In particular, the formal conclusion concerns all possible lengths and distinct prime values.
+
+The project uses no added axioms, proof placeholders, or native decision procedure.
+The principal axiom audits contain only Lean's standard \texttt{propext} and \texttt{Quot.sound}.
+The Lake configuration treats warnings as errors.
+\end{document}
