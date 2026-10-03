@@ -1,0 +1,48 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath,amssymb,geometry,url}
+\geometry{margin=1in}
+\setlength{\emergencystretch}{3em}
+\title{There is no chain-length threshold for torsion-free quotients\\A disproof of conjecture 00000004287}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{3 October 2026}
+\begin{document}
+\maketitle
+
+\paragraph{The definition and the assertion.}
+The problem defines a pure subgroup by the condition that its quotient is torsion-free. We use exactly that definition. The conjecture asserts that unions of chains preserve purity only up to a threshold $\omega$, and that counterexamples exist at every chain length beyond $\omega$. In fact, purity in the stated sense is preserved by every nonempty directed union. In particular, no chain of any ordinal length can be the claimed counterexample.
+
+This argument is valid for abelian groups, the usual setting of the problem, and more generally for arbitrary groups with normal subgroups. Normality is precisely the condition needed to form a quotient group; it is automatic for subgroups of an abelian group.
+
+\paragraph{Quotient criterion.}
+Let $G$ be a group and $H$ a normal subgroup. Then
+\[
+ G/H\text{ is torsion-free}\quad\Longleftrightarrow\quad
+ \text{for every }x\in G\text{ and }n\ge1,\quad x^n\in H\Longrightarrow x\in H.
+\]
+Indeed, $(xH)^n=H$ holds exactly when $x^n\in H$, and $xH=H$ holds exactly when $x\in H$. Every element of the quotient has a representative $x$, so these implications in both directions give the equivalence. In additive abelian notation this criterion is $nx\in H\Rightarrow x\in H$ for every positive integer $n$.
+
+\paragraph{Directed unions.}
+Let $(H_i)_{i\in I}$ be a nonempty directed family of normal subgroups of a fixed group $G$, with $G/H_i$ torsion-free for every $i$. Put $U=\bigcup_{i\in I}H_i$.
+
+First, $U$ is a normal subgroup. It contains the identity because the family is nonempty. If $x\in H_i$ and $y\in H_j$, choose $k$ with $H_i,H_j\subseteq H_k$; then $xy\in H_k\subseteq U$. Inverses and conjugates of an element of $H_i$ remain in $H_i$, so these also remain in $U$.
+
+Now suppose $n\ge1$ and $x^n\in U$. There is an index $i$ such that $x^n\in H_i$. The quotient criterion for $H_i$ gives $x\in H_i$, hence $x\in U$. Applying the same criterion to $U$ proves that $G/U$ is torsion-free. This proves the assertion for every nonempty directed family.
+
+Every nonempty chain is directed: among any two of its members, the larger contains both. Therefore the conclusion holds for chains of arbitrary cardinality and arbitrary ordinal length, including every length beyond $\omega$. The claimed counterexamples cannot exist, so the conjecture is false. No assertion about the proposed ranks of those nonexistent counterexamples is needed.
+
+\newpage
+\paragraph{What the Lean project proves.}
+The accompanying \texttt{lean/Main.lean} is a self-contained Lean 4.19.0 project using only \texttt{Std}. It does not assume commutativity: \texttt{GroupData} records associativity, identity, and both inverse laws, using additive-looking operation names for a general group. A \texttt{Subgroup} records its full membership predicate, subgroup closure, and normality.
+
+The quotient is an actual Lean quotient type, constructed from the coset equivalence relation
+\[
+ x\sim_H y\quad\Longleftrightarrow\quad \exists h\in H:\ xh=y.
+\]
+The proof establishes equivalence of this relation, proves compatibility with multiplication and inverse using normality, and constructs all group operations and group laws on the quotient in \path{quotientStructure}. Natural-number multiples in the code mean repeated multiplication in a general group. The lemma \path{project_multiples} proves that the quotient projection preserves them, and \path{project_zero_iff} proves that the kernel of the projection is exactly $H$.
+
+Thus \texttt{Pure} is defined by torsion-freeness of this actual quotient group. It is not defined to be the root-closed criterion. The theorem \path{pure_iff_rootClosed} proves the equivalence between the two notions, and \path{directed_union_pure} then proves closure under directed unions. The union itself is an actual normal subgroup, with its closure and normality proved from the directed family. The theorem \path{arbitrary_chain_union_pure} applies this result to every nonempty chain.
+
+The final theorem \path{conjecture04287_false} rules out the existence of any group with a nonempty chain of pure subgroups whose union is not pure. Any counterexample at a specified transfinite length would be such a chain after forgetting the length. The formal result is therefore stronger than the failure of the proposed threshold; there is no unproved numerical or ordinal cut-off calculation.
+
+The project builds with \texttt{lake build} and \texttt{warningAsError=true}. The final theorem depends only on Lean's standard \texttt{propext} and \texttt{Quot.sound}. There are no proof placeholders, additional axioms, or external decision procedures.
+\end{document}
