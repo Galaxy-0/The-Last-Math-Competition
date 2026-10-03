@@ -8,9 +8,17 @@
     "info: .\\.\\.\\.\\Main.lean:66:0: 'Conjecture425.allGrids_nodup' does not depend on any axioms",
     "info: .\\.\\.\\.\\Main.lean:67:0: 'Conjecture425.membership_exact' depends on axioms: [propext]",
     "info: .\\.\\.\\.\\Main.lean:68:0: 'Conjecture425.full_coefficient_list' does not depend on any axioms",
-    "info: .\\.\\.\\.\\Main.lean:69:0: 'Conjecture425.conjecture425_counterexample' does not depend on any axioms"
+    "info: .\\.\\.\\.\\Main.lean:69:0: 'Conjecture425.conjecture425_counterexample' does not depend on any axioms",
+    "info: .\\.\\.\\.\\Main.lean:187:0: 'Conjecture425.cube_two_denominator_prefix' does not depend on any axioms",
+    "info: .\\.\\.\\.\\Main.lean:188:0: 'Conjecture425.cube_two_numerator_prefix' does not depend on any axioms",
+    "info: .\\.\\.\\.\\Main.lean:189:0: 'Conjecture425.macmahon_cube_two_coefficients' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "info: .\\.\\.\\.\\Main.lean:190:0: 'Conjecture425.macmahon_cube_two_not_logconcave' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "info: .\\.\\.\\.\\Main.lean:191:0: 'Conjecture425.counting_matches_macmahon_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "info: .\\.\\.\\.\\Main.lean:192:0: 'Conjecture425.formalQuotient_spec' depends on axioms: [propext, Quot.sound]",
+    "info: .\\.\\.\\.\\Main.lean:193:0: 'Conjecture425.macMahonCubeTwo_spec' depends on axioms: [propext, Quot.sound]",
+    "info: .\\.\\.\\.\\Main.lean:194:0: 'Conjecture425.macmahon_product_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]"
   ],
-  "interpretation_note": "Formal artifact uses scalar volume coefficients in equal-sided boxes. A separate ordinary proof covers the cross-size polynomial interpretation.",
+  "interpretation_note": "Interprets diagonal specialization as equal box side lengths. The Lean proof now constructs the infinite MacMahon formal quotient, proves its full numerator/denominator equation, and directly refutes log-concavity. The cross-size polynomial reading is additionally addressed in ordinary mathematics.",
   "source_static_audit": "No sorry/admit/native_decide/custom axiom/unsafe/implemented_by/extern in Lean code",
   "pdf_pages": 1,
   "status": "draft; maintainer review pending",
@@ -18,12 +26,15 @@
     ".gitignore": "36bf209894c12dac4a8eb56e2450719b40bd8e6d710eab117e56326588f36cd1",
     "lakefile.toml": "d138a7472c82e60a69d38934ae7cb029aad1ff67ba64d8f8df4e4ca4b6fd65c0",
     "lean-toolchain": "f28855f24b5253d7e8949f38027066a06cdde238520086d421ba7ad24c27a691",
-    "lean-verification.txt": "4beedbbeae6df097bd97a4b5408c0f6feda87f5fa71c41b35d4bed255a70afeb",
-    "Main.lean": "31730df8d8f2d62d7f0eecfda5a8f8ed7c5240b3a84a0cfb31040c0ef07c6887",
-    "proof.pdf": "7c6e59ff9f52a3f94c9f933957552c52d887618ac82e0f48a8944e0f62c2b808",
-    "proof.tex": "917b3e77f5b18b5b752f7340ea40310d5b29063fc633a2c97768993533aba7a3",
-    "README.md": "6f2cacf6ec22c6f8d898f78a01e178b095040d0b8a242b922b8fac749c689bd9",
+    "lean-verification.txt": "4ab2c20e97a3a971748997568abfaa754bf125210cc9c16be5aedbde72bdbaed",
+    "Main.lean": "926c7a3e91c8c6457735dec77056f35737e42d88b7fbfd860e9d93412fe425cf",
+    "proof.pdf": "a75e58eed91b59e39c78acb15cc2eba48e58dfc240195e13e1f6f4d1c871f558",
+    "proof.tex": "7b5a5ad450e85866f2621fd57eb916f47cb1974787b12f33043c0760c62142b3",
+    "README.md": "3adef6f4839226b6eaec089f22375a8f1c8de0643d91d79d01f1cc737147d535",
     "SOURCE.md": "78effd2b63947d51e70354e8de5d118319547a51f225b1cd3a747c0974ab1415",
     "verify.py": "e9c1d2f54cfa3e666565224ef39779c5d1cee669de7185e11c267dfd313e78ad"
-  }
+  },
+  "reviewed_at_utc": "2026-10-03T14:20:39.536490+00:00",
+  "replaces_head_sha": "1ee9eb65d63a0f9cb86f4b5391841659ed71f11a",
+  "revision_note": "Second adversarial review found that the original Lean enumerator did not connect to the specified MacMahon product. This revision supplies an explicit terminating formal-division construction, its coefficient equation at every index, and a disproof for the resulting actual series. The original counting counterexample remains valid."
 }

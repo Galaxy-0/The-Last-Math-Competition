@@ -6,9 +6,9 @@ Submitter: **gaochengzhecpu**. AI-assisted with Codex; draft for mathematical re
 
 ## Scope
 
-Formal artifact uses scalar volume coefficients in equal-sided boxes. A separate ordinary proof covers the cross-size polynomial interpretation.
+Interprets diagonal specialization as equal box side lengths. The Lean proof now constructs the infinite MacMahon formal quotient, proves its full numerator/denominator equation, and directly refutes log-concavity. The cross-size polynomial reading is additionally addressed in ordinary mathematics.
 
-Read `proof.pdf` for the complete ordinary proof, explicit assumptions and the correspondence to `Main.lean`. The LaTeX source is `proof.tex`. This submission preserves the locally reviewed source and PDF byte for byte; their draft labels do not imply organizer acceptance.
+Read `proof.pdf` for the complete ordinary proof, explicit assumptions and the correspondence to `Main.lean`. The LaTeX source is `proof.tex`. This revised version has been checked locally; its draft status does not imply organizer acceptance.
 
 ## Reproduce
 
@@ -31,3 +31,7 @@ Original statement: [conjecture 00000000425](https://github.com/The-Last-Math-Co
 Lean compilation, exact source correspondence, AI cross-review, and rendered-PDF inspection were completed locally. The source hashes in `verification.json` identify the checked artifacts. This is a draft submission, not an official review or an accepted result.
 
 Immediately before preparing this submission, official metadata did not mark this conjecture solved, and no matching conjecture number was found in the titles or bodies of the 298 public PRs checked at 2026-10-03T13:15:11.955212+00:00. This limited check is not a claim of mathematical novelty or priority.
+
+## Second review and correction
+
+Second adversarial review found that the original Lean enumerator did not connect to the specified MacMahon product. This revision supplies an explicit terminating formal-division construction, its coefficient equation at every index, and a disproof for the resulting actual series. The original counting counterexample remains valid.
