@@ -1,0 +1,116 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[hidelinks]{hyperref}
+\title{A Counterexample to Conjecture 00000008558}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+
+The conjectured equality between Boolean sublattice embedding dimension
+and the minimum number of lattice generators is false, even for the
+three-element distributive chain
+\[
+C_3=\{0<a<1\}.
+\]
+Its embedding dimension is $2$.  Its minimum number of generators is
+$3$ when the lattice operations are $\wedge,\vee$, and is $1$ when
+the bounds $0,1$ are also available as constants.  Thus both standard
+signature conventions contradict the proposed equality.
+
+\paragraph{Embedding dimension is exactly two.}
+For a nonnegative integer $n$, write $B_n=\mathcal P(\{0,\ldots,n-1\})$,
+with intersection and union as meet and join.  A sublattice embedding
+is an injective map preserving both operations.
+Define
+\[
+f(0)=\varnothing,\qquad f(a)=\{0\},\qquad f(1)=\{0,1\}.
+\]
+These are three distinct, nested subsets.  On a chain, meet and join
+are minimum and maximum; on these nested subsets, intersection and
+union are the corresponding smaller and larger subsets.  Therefore
+$f:C_3\hookrightarrow B_2$ is a sublattice embedding.
+It also preserves bottom and top, so the construction works if that
+additional convention is imposed.
+
+The lattices $B_0$ and $B_1$ have respectively one and two elements,
+so neither admits an injection from $C_3$.  Consequently the minimum
+embedding dimension exists and equals $2$.
+This counterexample lies entirely within the class of lattices which
+do embed into a finite Boolean lattice.
+
+\paragraph{Generators with the two binary lattice operations.}
+The usual lattice signature has precisely $\wedge$ and $\vee$;
+the bounded-lattice signature additionally includes two constants
+\cite{burris}.  First use the ordinary lattice signature.
+For any $x,y\in C_3$, both $x\wedge y$ and $x\vee y$ belong to
+$\{x,y\}$.  Induction on lattice terms therefore shows that every
+term whose inputs lie in a set $S\subseteq C_3$ evaluates to an
+element already in $S$.  Hence the generated set is exactly $S$.
+To generate $C_3$, all three elements must be chosen, and the full
+set does generate it.  The minimum number is thus $3\ne2$.
+Generation here means closure under both lattice operations, as in
+the source's statement about generators of a lattice.
+
+\paragraph{The convention with bounds as constants.}
+If $0$ and $1$ may be used without being counted as generators,
+the same term induction shows that $S$ generates exactly
+$S\cup\{0,1\}$.  A generating set must contain $a$, and $\{a\}$
+does generate the whole chain.  The minimum number is therefore
+$1\ne2$.  This covers the other standard convention without
+changing the embedding dimension.
+
+\paragraph{Formal verification and semantic map.}
+The accompanying Lean 4.19.0 file imports only \texttt{Std}.
+The three elements are represented by \texttt{Fin 3}, with numerical
+labels $0,1,2$ for the bottom, middle, and top respectively.
+The order, minimum, and maximum satisfy all lattice laws and both
+distributive identities.
+
+\texttt{BooleanLattice n} is the full type of Boolean membership
+functions on \texttt{Fin n}.  Intersection and union are pointwise
+Boolean conjunction and disjunction.  Arbitrary proposition-valued
+subsets have a proved membership-function encoding.
+\texttt{BooleanEmbedding} requires injectivity and preservation of
+both operations.  The file constructs the two-dimensional embedding
+and proves that it also preserves bounds.  It proves that no embedding
+in dimensions $0$ or $1$ exists, quantifying over all maps, rather
+than merely checking a chosen list of candidate embeddings.
+\texttt{boolean\_dimension\_two} establishes existence and minimality;
+\texttt{boolean\_dimension\_unique} identifies every minimum as $2$.
+
+Every possible generating set, including every proposition-valued
+subset, is encoded by its three membership bits.  The predicates
+\texttt{Generated} and \texttt{BoundedGenerated} are inductively
+defined by the actual lattice operations, with constants only in
+the latter.  Their characterization is proved by induction, so it
+covers terms of arbitrary depth.  The least-closure universal property
+is also proved for ordinary generation.
+The two minimum-generator predicates assert both attainment and a
+lower bound over every generating set.  Their minima are formally
+proved to be $3$ and $1$ respectively.
+
+The final theorems
+\begin{quote}
+\texttt{conjecture\_8558\_false}\\
+\texttt{conjecture\_8558\_bounded\_signature\_false}
+\end{quote}
+negate the existence of a common minimum for dimension and generator
+number under the two conventions.  All three minima have separately
+been proved to exist, so the disagreement is between actual finite
+numbers.  This disproves the second conjunct of the source conjecture;
+the separate proposed bound involving join-irreducible elements is
+not needed.  Neither theorem uses an admitted proof, a native proof
+oracle, or an additional axiom.  Both final theorems depend only on
+\texttt{propext} and \texttt{Quot.sound}.
+
+\begin{thebibliography}{1}
+\bibitem{burris}
+S. Burris and H. P. Sankappanavar,
+\emph{A Course in Universal Algebra}, Millennium Edition, 2012 update,
+Chapter II, Section 1, examples (8)--(9), and Section 3.
+\url{https://www.math.uwaterloo.ca/~snburris/htdocs/UALG/univ-algebra2012.pdf}
+\end{thebibliography}
+\end{document}
