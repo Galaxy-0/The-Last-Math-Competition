@@ -1,0 +1,90 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 1665: the proposed tight burning family}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{October 3, 2026}
+\usepackage{url}
+% Compact consistent title for a short mathematical note.
+\makeatletter
+\renewcommand{\maketitle}{\begin{center}
+{\Large\bfseries\@title\par}\vspace{0.6em}
+{\small\@author\par\@date}
+\end{center}\vspace{0.5em}}
+\makeatother
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+
+\paragraph{Claim being disproved.}
+The conjecture states, among other claims, that Cartesian products of the
+Petersen graph with paths have burning number
+$\lceil\sqrt{n}\rceil+1$, where $n$ is the order of the product.
+We disprove this universal tight-family statement. We make no assertion
+about the separate proposed upper bound for arbitrary graphs.
+
+\paragraph{Definitions and graph.}
+Let $P$ be the Petersen graph on vertices $0,\ldots,9$. Its edges are
+the outer cycle $i(i+1)$ for $i\in\mathbb Z/5\mathbb Z$, the inner
+cycle $(5+i)(5+i+2)$, and the five spokes $i(5+i)$.
+Let $P_2$ be the path with two vertices $0,1$. Set $G=P\mathbin\square P_2$.
+Write the product vertex $(u,j)$ as the integer $u+10j$.
+Thus $G$ is a simple graph of order $20$.
+
+At each burning round, choose a vertex unburned at the beginning of the
+round, ignite it, and spread the older fires to all adjacent vertices.
+For the burned set $B$ and source $s$, the update is
+\[
+ B\longmapsto B\cup\{s\}\cup\{v: (\exists u\in B)\ uv\in E(G)\}.
+\]
+The burning number is the least number of rounds in which every vertex
+can be burned.
+
+\paragraph{A four-round certificate.}
+Choose the successive sources $0,1,2,12$. Direct application of the
+update rule gives
+\begin{align*}
+ B_0&=\varnothing,\\
+ B_1&=\{0\},\\
+ B_2&=\{0,1,4,5,10\},\\
+ B_3&=\{0,1,2,3,4,5,6,7,8,9,10,11,14,15\},\\
+ B_4&=\{0,1,\ldots,19\}.
+\end{align*}
+Each source is outside the burned set at the beginning of its round:
+$0\notin B_0$, $1\notin B_1$, $2\notin B_2$, and $12\notin B_3$.
+Consequently $b(G)\leq4$.
+Equivalently, the Petersen graph has diameter two and its product with
+$P_2$ has diameter three, so one initial fire already reaches every
+vertex by the fourth round.
+
+On the other hand, $4^2<20\leq5^2$, so
+$\lceil\sqrt{20}\rceil+1=6$. Therefore
+\[
+ b(P\mathbin\square P_2)\leq4<6
+ =\lceil\sqrt{|V(P\mathbin\square P_2)|}\rceil+1.
+\]
+This contradicts the claimed equality and disproves Conjecture 1665.
+
+\paragraph{Lean verification and semantic correspondence.}
+The self-contained file \texttt{lean/Main.lean} imports only \texttt{Std}.
+The predicate \texttt{petPath m} is the Cartesian product with the
+$m$-vertex path. Theorems \texttt{product\_encoding} and
+\path{product_encoding_bijective} verify that the 20 labels used
+here represent exactly $P\square P_2$, and \texttt{graph\_simple}
+checks symmetry and absence of loops.
+The definitions \texttt{advance}, \texttt{run}, and \texttt{legal}
+implement precisely the update rule above, including the condition on
+new sources. Theorems \texttt{legal\_sources} and \texttt{all\_burned}
+check the complete finite process, not merely its length.
+The predicate \texttt{BurningNumberIs} asserts successful burning and
+minimality. Finally, \path{not_tight_family_claim} refutes the
+universally quantified equality for all products with nonempty paths.
+Its reported axiom dependency is only \texttt{propext}. No
+\texttt{sorry}, \texttt{admit}, \texttt{native\_decide}, or additional
+axiom is used.
+
+\paragraph{Reproduction.}
+Run \texttt{lean Main.lean} with Lean 4.19.0. The command exits
+successfully and prints the axiom dependencies of the principal results.
+All finite certificates use kernel-checked \texttt{decide}.
+\end{document}
