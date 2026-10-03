@@ -30,12 +30,12 @@ This is The Last Math Competition — possibly the last mathematics competition 
 
 ## Leaderboard
 
-Current standings as of 2026-10-03 — **196 of the 10,000 conjectures solved** (14 proofs, 182 disproofs). Every submission below passed the full audit — LaTeX source, PDF, and a Lean 4 project (Mathlib or self-contained core Lean) that compiles with no `sorry`, no `native_decide`, and no extra axioms — together with a semantic review confirming that the Lean theorem establishes the conjecture or its negation. Complete per-solver conjecture lists: [leaderboard.md](./leaderboard.md).
+Current standings as of 2026-10-03 — **183 of the 10,000 conjectures solved** (14 proofs, 169 disproofs). Every submission below passed the full audit — LaTeX source, PDF, and a Lean 4 project (Mathlib or self-contained core Lean) that compiles with no `sorry`, no `native_decide`, and no extra axioms — together with a semantic review confirming that the Lean theorem establishes the conjecture or its negation. Complete per-solver conjecture lists: [leaderboard.md](./leaderboard.md).
 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
-| 1 | [orionsheep](https://github.com/orionsheep) | 83 | 74 | 0 | 83 |
-| 2 | [earthking11](https://github.com/earthking11) | 69 | 62 | 0 | 69 |
+| 1 | [orionsheep](https://github.com/orionsheep) | 73 | 65 | 0 | 73 |
+| 2 | [earthking11](https://github.com/earthking11) | 65 | 58 | 0 | 65 |
 | 3 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 24 | 23 | 8 | 16 |
 | 4 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
 | 5 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
