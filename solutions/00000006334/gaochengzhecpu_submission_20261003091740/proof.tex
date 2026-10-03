@@ -1,0 +1,62 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\title{A conference-matrix counterexample to Conjecture 00000006334}
+\author{Local solution draft}
+\date{October 3, 2026}
+\usepackage{url}
+% Compact consistent title for a short mathematical note.
+\makeatletter
+\renewcommand{\maketitle}{\begin{center}
+{\Large\bfseries\@title\par}\vspace{0.6em}
+{\small\@author\par\@date}
+\end{center}\vspace{0.5em}}
+\makeatother
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+\noindent\textbf{Verdict: false.} The asserted lower bound ``weight plus two'' fails even for a conference matrix of positive, strictly submaximal weight.
+
+\paragraph{Statement being refuted.}
+The English and Chinese statements of Conjecture 00000006334 describe weighing matrices and claim that their existence window has lower bound equal to the weight plus two, attained by conference types. In the standard notation $W(n,k)$, $n$ is the order and $k$ is the weight. Thus a necessary consequence of the stated bound is
+\[
+ W(n,k)\text{ exists}\quad\Longrightarrow\quad n\geq k+2.
+\]
+The counterexample below has $0<k<n$ and even $n$, so neither exclusion of weight zero, exclusion of full weight, nor restriction to even order repairs this consequence.
+
+\paragraph{Definitions and explicit counterexample.}
+A weighing matrix $W(n,k)$ is an $n\times n$ matrix with entries in $\{0,1,-1\}$ satisfying $WW^{\mathsf T}=kI_n$. A conference matrix has zero diagonal and entries in $\{1,-1\}$ off the diagonal, and satisfies this identity with $k=n-1$.
+Set
+\[
+ C=\begin{pmatrix}
+ 0&1&1&1\\
+ -1&0&-1&1\\
+ -1&1&0&-1\\
+ -1&-1&1&0
+ \end{pmatrix}.
+\]
+Each row has squared norm $3$. The six inner products between distinct rows, in lexicographic order of the row indices, are
+\[
+ (-1+1),\quad (1-1),\quad (-1+1),\quad
+ (1-1),\quad (1-1),\quad (1-1),
+\]
+all zero. Consequently,
+\[
+ CC^{\mathsf T}=3I_4.
+\]
+Thus $C$ is a conference matrix, in particular a weighing matrix $W(4,3)$. But
+\[
+ 4<3+2=5,
+\]
+contradicting the conjectured necessary lower bound. Since the original conjecture is a conjunction containing that bound, its other claims about square decompositions and sharpness cannot rescue it.
+
+\paragraph{Formal verification and semantic correspondence.}
+The accompanying \texttt{Main.lean} imports only \texttt{Std} and was checked with Lean 4.19.0. The finite carrier \texttt{Fin 4} indexes all four rows and columns. \texttt{IsWeighingMatrix} checks every entry and every inner product, using an explicit finite sum; \texttt{IsConferenceMatrix} additionally checks every diagonal and off-diagonal entry. The matrix \texttt{C4} is exactly the matrix displayed above.
+
+The theorem \path{claimed_necessary_bound_false} proves the negation of the universal lower-bound assertion for arbitrary orders, weights, and matrices, by supplying this structurally verified matrix. The theorem \path{conference_bound_false} proves that restricting to conference matrices still does not save the bound. Finally, \texttt{full\_conjecture\_false} supplies the logical bridge to any conjunction of further assertions with the false necessary bound. The four displayed axiom audits are empty; no additional axioms, admissions, or native decision procedures are used.
+
+\paragraph{Scope.}
+The proof uses the standard meaning of the existence bound on order in terms of weight. The source gives no alternative formal definition of its ``window'' or ``square decomposition.'' If the intended claim excludes the displayed conference matrix, that restriction is absent from both language versions and would constitute a different statement.
+
+\end{document}
