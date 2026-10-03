@@ -1,0 +1,119 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref,url}
+\setlength{\emergencystretch}{3em}
+\title{No fixed points on two points: a disproof of Conjecture 00000000459}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{3 October 2026}
+\begin{document}
+\maketitle
+
+\paragraph{The claim and the counterexample.}
+The conjecture asserts a rank-preserving bijection between the fixed points
+of Kreweras complementation on $NC_n$ and certain 3-noncrossing partitions
+without isolated points. The asserted bijection already fails for $n=2$:
+the first set is empty and the second contains exactly one object.
+
+\paragraph{Definitions.}
+A set partition is represented by the equivalence relation of belonging
+to the same block. A partition is noncrossing if there are no
+$a<b<c<d$ with $a,c$ in one block and $b,d$ in a different block.
+For two noncrossing partitions $P,Q$ on $[n]$, interleave their vertices as
+\[
+ 1,1',2,2',\ldots,n,n',
+\]
+putting $P$ on the unprimed positions and $Q$ on the primed positions.
+The standard Kreweras complement $K(P)$ is the coarsest $Q$ for which
+this combined partition is noncrossing; see Definitions 2.9, 2.17,
+and 2.19 of~\cite{kreweras}.
+
+For the other side, an isolated point is a singleton block.
+In the standard arc representation, an arc joins consecutive elements
+of the same block. A 3-crossing requires three arcs $(a,d),(b,e),(c,f)$
+with $a<b<c<d<e<f$; a 3-noncrossing partition has no such configuration.
+On two vertices this condition is automatic.
+
+\paragraph{Compute the genuine complement.}
+There are exactly two partitions of $\{1,2\}$:
+\[
+ D=\{\{1\},\{2\}\},\qquad T=\{\{1,2\}\}.
+\]
+Both are noncrossing. If $P=D$, the primed block $\{1',2'\}$ creates
+no crossing, so its coarsest admissible complement is $T$.
+If $P=T$, choosing $Q=T$ would give alternating distinct blocks
+$\{1,2\}$ and $\{1',2'\}$ in the order $1,1',2,2'$.
+Thus $Q=T$ is forbidden, while $Q=D$ is allowed. Consequently
+\[
+ K(D)=T,\qquad K(T)=D.
+\]
+Neither partition is fixed. This also shows directly that the map is
+an involution in this instance; no general involution assertion is needed.
+
+On the target side, the partition $T$ has no singleton blocks and is
+3-noncrossing. It is the only such partition, since the other partition
+$D$ has singleton blocks. If the phrase is read as noncrossing partitions
+without singletons, or as noncrossing matchings without isolated vertices,
+the same two-vertex object $\{1,2\}$ still witnesses nonemptiness.
+Thus there cannot even be a surjection from the empty fixed-point set to
+the target set. A bijection, with or without a rank condition, is impossible.
+\hfill$\square$
+
+\paragraph{Scope.}
+We use the standard Kreweras complement and the ordinary meaning of
+partitions on $[n]$. The argument uses actual objects at $n=2$, not a
+guessed formula for the Riordan numbers. The source imposes no exception
+for this value of $n$. The accompanying files are prepared for independent review.
+
+\newpage
+\paragraph{Formal verification and exhaustive coverage.}
+The accompanying Lean 4.19.0 project imports only \texttt{Std}.
+\texttt{Partition n} stores an arbitrary proposition-valued binary
+relation on \texttt{Fin n} with proofs of reflexivity, symmetry, and
+transitivity. It is therefore an actual set partition, rather than a
+label assigned to a preselected example.
+
+\path{every_partition_encoded} proves that every partition of two
+points is exactly one of \texttt{model false} and \texttt{model true},
+which are $D$ and $T$. \path{model_injective} proves they are distinct,
+and \path{every_partition_noncrossing} verifies their eligibility for $NC_2$.
+Extensional equality is equality of their full membership relations.
+
+\texttt{interleave} implements the four positions $1,1',2,2'$ using
+even and odd indices, with integer division by two giving the original
+vertex index. \path{interleave_is_partition} proves directly that the
+combined relation is an equivalence relation for any two input partitions.
+\texttt{Noncrossing} is the alternating-four-vertex condition above.
+
+\texttt{IsKrewerasComplement P Q} requires both input partitions and
+their interleaving to be noncrossing, and requires every admissible
+partition to refine $Q$. Its maximality quantifier ranges over
+\emph{all} proposition-valued partitions, using the proved complete
+classification when finite checking is appropriate.
+\path{kreweras_models} verifies the two complements by this definition.
+Existence for every input and uniqueness of the complement are proved
+separately. Hence \path{no_fixed_points} concerns the fixed points of
+the actual uniquely defined operation, not a substitute Boolean map.
+
+The target uses the consecutive-block-element definition of an arc,
+the six-vertex 3-crossing condition, and the absence of singleton blocks.
+\texttt{targetWitness} constructs $T$ as a valid target object, and
+\path{target_unique} proves that every target object is this one.
+The theorem \path{conjecture459_refuted} denies the existence of a
+surjective function from the actual fixed-point subtype to that target
+subtype. This is a necessary condition for the asserted rank-preserving
+bijection, so no formalization of an unused rank function is needed.
+
+All finite decisions are kernel checked. There are no admitted proofs,
+additional axioms, or native decision procedures. The final theorem
+uses only the standard axioms \texttt{propext}, \texttt{Classical.choice},
+and \texttt{Quot.sound}. The Lake configuration treats warnings as errors.
+
+\begin{thebibliography}{1}
+\bibitem{kreweras}
+K. Ebrahimi-Fard and T. Ringeard,
+\emph{Planar Binary Trees, Noncrossing Partitions and the Operator-Valued
+S-Transform}, Annals of Combinatorics \textbf{29} (2025), 799--836.
+Definitions 2.9, 2.17, 2.19.
+\url{https://doi.org/10.1007/s00026-024-00730-1}.
+\end{thebibliography}
+\end{document}
