@@ -1,0 +1,86 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\title{A cubic-box counterexample to Conjecture 425}
+\author{Local AI-assisted solution draft}
+\date{3 October 2026}
+% Compact consistent title for a short mathematical note.
+\makeatletter
+\renewcommand{\maketitle}{\begin{center}
+{\Large\bfseries\@title\par}\vspace{0.6em}
+{\small\@author\par\@date}
+\end{center}\vspace{0.5em}}
+\makeatother
+\setlength{\emergencystretch}{3em}
+\usepackage{url}
+\begin{document}
+\maketitle
+\paragraph{Source and interpretation.}
+Conjecture \texttt{00000000425} in The Last Math Competition, at commit
+\path{efab34b80a63963991d6c7ed625442a89a328a44}, asserts that the
+coefficient sequence in the diagonal specialization of the boxed plane
+partition generating function is always log-concave. We use the standard
+volume generating polynomial, with the diagonal specialization meaning equal
+box side lengths. The counterexample is the $2\times2\times2$ box.
+
+\paragraph{Definitions.}
+A plane partition in this box is an array
+$\left(\begin{smallmatrix}a&b\\c&d\end{smallmatrix}\right)$ with entries in
+$\{0,1,2\}$, weakly decreasing along both rows and columns:
+$a\ge b$, $a\ge c$, $b\ge d$, and $c\ge d$.
+Its volume is $a+b+c+d$. Let $c_k$ count such arrays of volume $k$.
+Log-concavity requires $c_k^2\ge c_{k-1}c_{k+1}$ at every interior index.
+
+\paragraph{Counterexample and proof.}
+There is exactly one array of volume zero, namely the zero array, and exactly
+one of volume one, with a single $1$ in the top-left entry. The three arrays
+of volume two are
+\[
+\begin{pmatrix}2&0\\0&0\end{pmatrix},\qquad
+\begin{pmatrix}1&1\\0&0\end{pmatrix},\qquad
+\begin{pmatrix}1&0\\1&0\end{pmatrix}.
+\]
+These are exhaustive: either one entry equals $2$, which by monotonicity
+must be the top-left entry, or two entries equal $1$, giving exactly the
+two displayed order ideals. Consequently
+\[
+c_0=1,\qquad c_1=1,\qquad c_2=3,\qquad
+c_1^2=1<3=c_0c_2.
+\]
+Thus the asserted universal log-concavity is false. It is unnecessary to
+consider the additional equality characterization after this first clause
+has failed.
+
+\paragraph{Independent polynomial check.}
+The complete polynomial, obtained both by direct enumeration and by the
+MacMahon product, is
+\[
+\prod_{i,j,k=1}^{2}\frac{1-q^{i+j+k-1}}{1-q^{i+j+k-2}}
+=1+q+3q^2+3q^3+4q^4+3q^5+3q^6+q^7+q^8.
+\]
+The accompanying Python verifier independently computes the product as an
+exact integer formal power series and enumerates the arrays.
+
+\paragraph{Formal verification and scope.}
+The self-contained Lean 4.19.0 file \texttt{Main.lean} defines all four entries
+as \texttt{Fin 3}, proves the 81-array enumeration is complete and has no
+duplicates, proves the filtered membership predicate is exactly the
+plane-partition condition, and computes every coefficient. The theorem
+\path{Conjecture425.conjecture425_counterexample} proves the negation of
+log-concavity for this genuine diagonal box. All calculations use kernel
+reduction; there are no proof placeholders, custom axioms, or native decision
+procedures. The formal proof follows the direct counting definition; the
+MacMahon identity is an independent check, not an assumed Lean premise.
+
+\paragraph{Alternative reading of ``coefficientwise.''}
+If the intended claim instead compares consecutive polynomials $F_n(q)$
+for $n\times n\times n$ boxes, it is false as well. The completely filled
+box is the unique term of maximum volume, so $F_n$ is monic of degree
+$n^3$. At $n=2$, the polynomial $F_2(q)^2-F_1(q)F_3(q)$ has coefficient
+$-1$ at $q^{28}$, because the two product degrees are $16$ and $28$.
+This additional argument covers that reading in ordinary mathematics;
+the Lean artifact formalizes the scalar coefficient-sequence reading above.
+
+\end{document}
