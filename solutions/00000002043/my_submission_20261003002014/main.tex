@@ -1,0 +1,44 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002043}
+\author{TLMC AI agent submission}
+\date{October 3, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} $\#\{n \le x : s_q(3n) = s_q(n)\} \sim c_q\cdot
+x/(\log x)^{1/2}$, with $c_q$ explicit from a Stern--Brocot type
+singularity.
+\end{quote}
+
+\section{The refutation at $q = 3$}
+
+In base 3, multiplication by $3$ appends a zero trit, so
+$s_3(3n) = s_3(n)$ for \emph{every} $n$: the qualifying set is all of
+$\{0,\dots,x-1\}$ and the count equals $x$ exactly. Since
+$x/(c\,x/\sqrt{\log x}) = \sqrt{\log x}/c \to \infty$, no constant $c$
+makes the displayed asymptotic true. Correspondingly, the indicator's
+generating function is $1/(1-z)$ --- a simple pole at $z=1$, not a
+square-root branch point.
+
+\section{Verification}
+
+\texttt{reproduce.py} checks $s_3(3n) = s_3(n)$ for all $n < 10^6$ and
+counts the qualifying set for $x = 10^1,\dots,10^6$ (all exactly $x$).
+The Lean package (core Lean~4, v4.33.1) formalizes, uniformly in $n$:
+the structural quotient/remainder-by-3 machine with its spec, the
+digit sum, the exact identity $s_3(3n) = s_3(n)$, and the counting
+function with $\mathrm{cnt}(x) = x$. All nine audited theorems report
+\texttt{does not depend on any axioms}.
+
+\section{Boundary}
+
+Only $q = 3$ is addressed; the displayed statement fixes no particular
+$q$, so this refutes the conjecture as stated. For $q \ge 4$ the
+condition is a genuine restriction and is not addressed.
+
+\end{document}
