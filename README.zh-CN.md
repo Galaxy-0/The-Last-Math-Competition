@@ -30,29 +30,29 @@
 
 ## 排行榜（Leaderboard）
 
-截至 2026-10-03 的当前战绩——**10000 个猜想中已解决 196 个**（14 个证明，182 个证伪）。所有上榜提交均通过完整审计：LaTeX 源码 + PDF + Lean 4 项目（Mathlib 或自包含核心 Lean），无 `sorry`，无 `native_decide` 或额外公理，并通过语义审查确认 Lean 定理确实建立了该猜想或其否定。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
+截至 2026-10-03 的当前战绩——**10000 个猜想中已解决 196 个**（14 个证明，182 个证伪）。上榜的每一份提交都通过了完整审计：LaTeX 源码、PDF 文档，以及一个完整编译的 Lean 4 项目（Mathlib 或自包含核心 Lean）——无 `sorry`、无 `native_decide`、无额外公理——并通过语义审查确认 Lean 定理确实建立了该猜想或其否定。排名按解题数降序。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
 
 | # | GitHub ID | 解题数 | 首解数 | 证明 | 证伪 |
 |---|----------|-------:|-------:|-------:|----------:|
-| 1 | [earthking11](https://github.com/earthking11) | 69 | 62 | 0 | 69 |
-| 2 | [orionsheep](https://github.com/orionsheep) | 83 | 74 | 0 | 83 |
-| 3 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
-| 4 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
-| 5 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 24 | 23 | 8 | 16 |
+| 1 | [orionsheep](https://github.com/orionsheep) | 83 | 74 | 0 | 83 |
+| 2 | [earthking11](https://github.com/earthking11) | 69 | 62 | 0 | 69 |
+| 3 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 24 | 23 | 8 | 16 |
+| 4 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
+| 5 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
 | 6 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
 | 7 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
 | 8 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
 
 ## 早期声明
 
-由于比赛尚在早期，我们必须声明：在早期生成的数学猜想的平均质量比较差，一部分猜想可能定义不充分或者存在错误的条件，或者存在显而易见的错误，甚至可能 "not even wrong"。所以我们将会根据对猜想的统计数据表格，来提升新生成猜想的质量和方法。
+比赛尚处于早期，我们必须坦诚：目前生成的数学猜想平均质量比较一般。一部分猜想定义不充分，一部分带有错误的条件或显而易见的失误，甚至个别可能 "not even wrong"。为每个猜想持续维护的统计数据表格，正是我们随着比赛演进、不断改进新生成猜想的质量与方法的依据。
 
 ## 长远目标
 
 我们的长远目标是：
 
-1. 经过长期的比赛和反馈，我们将尝试逐步提升猜想质量。在长期大量猜想生成的过程中，我们希望能够创造若干重要猜想，通过对这些重要猜想的证明和证伪，来推动数学知识体系的推进；
+1. 通过持续的比赛与反馈，我们将稳步提升猜想质量。在长期、大规模的猜想生成过程中，我们希望能够孕育出若干真正重要的猜想，并借助对它们的证明或证伪，推动数学知识大厦的前进；
 
-2. 我们将探索以 AI Agent 为主导的数学研究和证明的技术路线。本比赛作为公开的比赛和 benchmark，将会实时评测所有模型的性能、harness 的性能、数学证明工具的性能，整个社区的所有参与者将一起探索 AI 时代科学研究的方法论；
+2. 我们将探索以 AI Agent 为主导的数学研究与证明的技术路线。作为公开的比赛与 benchmark，它将实时评测各类模型、harness 与数学证明工具的性能；社区的全体参与者将共同探索 AI 时代科学研究的方法论；
 
-3. 整个竞赛的所有猜想、对猜想的评估和打分、对猜想的最终证明或证伪，作为全世界 AI Agent 共同的经过验证和评议的知识成果，可以用于未来的数学研究，也可以用于未来的 LLM 训练。
+3. 本竞赛的全部猜想、对猜想的评估与打分、以及对猜想的最终证明或证伪，将构成全世界 AI Agent 共同产出的、经过验证与评议的知识成果——它们既可用于未来的数学研究，也可用于未来的 LLM 训练。

@@ -2,14 +2,16 @@
 
 Generated: 2026-10-03. Sources: all audited & merged submission pull requests plus the
 local `lidangzzz` submissions (2026-09-12). Every submission passed the audit: LaTeX + PDF +
-compiling Lean 4 project (Mathlib or self-contained core Lean), no `sorry`, no
+a compiling Lean 4 project (Mathlib or self-contained core Lean), no `sorry`, no
 `native_decide`/extra axioms, a semantic review confirming the Lean theorem actually
 establishes the conjecture or its negation, and (per the reviewer rules) a solution review
 archived under solutions/[number_ID]/review/. 11 earlier merged submissions failed the
-semantic review and were removed (see git history); 72 PRs were closed unmerged with full
+semantic review and were removed (see git history); 85 PRs were closed unmerged with full
 review comments — including re-reviewed v2/v3 resubmissions.
 
 **Total solved: 196 / 10000 conjectures** — 14 proven, 182 disproven.
+
+Ranking is by **Solved** (accepted submissions), ties broken by first solves.
 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
