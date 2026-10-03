@@ -1,0 +1,67 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002313}
+\author{TLMC AI agent submission}
+\date{October 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} the second coefficient of the asymptotics of the
+restricted Burnside groups: $\log|R(r,p)| = (r-1)^2 \log p +
+c_{r,p}$, with $c$ of the explicit $-\log 2$ type; the coefficient
+comes from a corrected Witt formula for Lie algebras.
+\end{quote}
+
+\section{The refutation}
+
+Read at $r = 2$, the claimed form is $\log_p |R(2,p)| = 1 + c$ with
+$|c| \le \log 2$ --- the ceiling $|R(2,p)| \le 2p$. The published
+orders of the actual restricted Burnside groups dwarf this:
+\[
+|R(2,5)| = 5^{34} \quad\text{(24 digits)},\qquad
+|R(2,7)| = 7^{20416} \quad\text{(17254 digits; nilpotency class 28,
+derived length 5)}.
+\]
+The exponent gaps are $34 - 1 = 33$ at $p = 5$ and
+$20416 - 1 = 20415$ at $p = 7$: for the conjecture to survive, the
+``constant'' $c_{2,7}$ of the $-\log 2$ type would have to contribute
+a factor of $7^{20415}$. The underlying structure is the opposite of
+$O(1)$: the Witt numbers of the free Lie algebra on 2 generators,
+$\dim_m = \tfrac1m \sum_{d \mid m} \mu(d) 2^{m/d} = 2, 1, 2, 3, 6, 9,
+18, 30, 56, \dots$, grow like $2^m/m$ (total $1{,}465{,}020$ through
+degree 24), and the nilpotency class of $R(2,p)$ itself grows with
+$p$ (28 at $p = 7$). A ``corrected Witt formula'' yielding a constant
+second coefficient does not exist.
+
+\section{Verification}
+
+\texttt{reproduce.py} compares the published orders with the claimed
+ceilings (factors $5.8 \times 10^{22}$ and $\approx 7^{20414}$),
+digit-counts $7^{20416}$, and verifies the classic Witt table
+$2, 1, 2, 3, 6, 9, 18, 30, 56$ with its exponential growth. The Lean
+package (core Lean~4, v4.33.1) certifies the contradiction without
+evaluating the huge powers: clean structural exponent monotonicity
+(\texttt{pow\_step}, \texttt{pow\_mono}, built from
+\texttt{Nat.le\_mul\_of\_pos\_right}/\texttt{Nat.le\_trans}) gives
+$7^4 = 2401 \le 7^{20416} > 14 = 2 \cdot 7$ (\texttt{R27\_dwarfs});
+$5^{34} > 25 > 10$ by ground \texttt{decide} (\texttt{R25\_dwarfs});
+the ceilings (\texttt{claimed\_ceiling\_7/5}) and the gap
+(\texttt{exponent\_gap}). All eight audited theorems report
+\texttt{does not depend on any axioms}.
+
+\section{Boundary}
+
+The kernel certifies the ceilings implied by the conjecture's own
+form and their contradiction with the published orders (via clean
+exponent monotonicity, avoiding large-power evaluation). The
+published orders $|R(2,5)| = 5^{34}$ and $|R(2,7)| = 7^{20416}$ are
+the classical computational results (power-commutator
+presentations), cited in prose and digit-checked by the script. The
+claimed asymptotic form --- with its constant second term of the
+$-\log 2$ type --- is refuted at $r = 2$.
+
+\end{document}
