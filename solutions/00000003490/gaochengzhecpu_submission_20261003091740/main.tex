@@ -1,0 +1,85 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 3490: chromatic polynomials determine chromatic numbers}
+\author{Local verified working submission}
+\date{October 3, 2026}
+\usepackage{url}
+% Compact consistent title for a short mathematical note.
+\makeatletter
+\renewcommand{\maketitle}{\begin{center}
+{\Large\bfseries\@title\par}\vspace{0.6em}
+{\small\@author\par\@date}
+\end{center}\vspace{0.5em}}
+\makeatother
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+
+\paragraph{Claim.}
+Conjecture 3490 asserts the existence of graph families with identical
+chromatic polynomial and spectral radius but different chromatic
+numbers, with minimum order ten. We prove that even a single pair of
+finite graphs with identical chromatic polynomial and different
+chromatic numbers cannot exist. Thus the extra spectral-radius
+condition and the stated minimum order cannot repair the assertion.
+
+\paragraph{Definitions.}
+For a finite graph $G$ and a nonnegative integer $k$, a proper
+$k$-coloring is a function $V(G)\to\{0,\ldots,k-1\}$ assigning
+different colors to adjacent vertices. The chromatic polynomial $P_G$
+is characterized by
+\[
+ P_G(k)=\#\{\text{proper $k$-colorings of }G\}
+ \qquad(k\in\mathbb N).
+\]
+The chromatic number $\chi(G)$ is the least $k$ admitting a proper
+$k$-coloring. These conventions also cover the empty graph, whose
+chromatic number is zero.
+
+\paragraph{Proof.}
+For every $k\in\mathbb N$,
+\[
+ G\text{ is $k$-colorable}\quad\Longleftrightarrow\quad P_G(k)>0.
+\]
+Consequently $P_G=P_H$ implies that $G$ and $H$ admit proper
+$k$-colorings for exactly the same values of $k$. Their least such
+values agree, so $\chi(G)=\chi(H)$.
+Equivalently, if $\chi(G)<\chi(H)$, evaluation at $k=\chi(G)$
+would give $P_G(k)>0=P_H(k)$, a contradiction; the reverse inequality
+is excluded in the same way. No pair claimed in the conjecture exists.
+
+\paragraph{Lean verification and semantic correspondence.}
+The self-contained file \texttt{Main.lean} imports only \texttt{Std}.
+Vertices are \texttt{Fin n}; the edge relation is arbitrary and
+decidable, so the result applies in particular to every finite simple
+graph. The list \texttt{words k n} enumerates the length-$n$ lists with
+entries below $k$. Theorems \texttt{mem\_words} and
+\texttt{words\_nodup} establish completeness and absence of
+duplicates. The predicate \texttt{Proper} checks the edge constraints,
+and \texttt{chromaticEvaluation} counts the proper assignments.
+The theorem \path{evaluation_pos_iff_colorable} proves that this
+count is positive exactly when a proper coloring exists.
+
+\texttt{ChromaticNumberIs} uses the actual existence and minimality
+definition. The theorem
+\path{equal_evaluations_equal_chromatic_numbers} proves equality
+of chromatic numbers for any two graphs with identical natural
+coloring counts. Integer polynomials are represented explicitly by
+coefficient lists and evaluated by Horner's rule in
+\texttt{polynomialEval}. The predicate \texttt{IsChromaticPolynomial}
+is precisely the counting characterization above. The final theorem
+\path{not_polynomial_separating_pair_claim} refutes the
+existence of two graphs sharing an actual integer polynomial with
+that characterization and having distinct chromatic numbers.
+Thus the polynomial-to-counting bridge is included in the formal
+statement, and not left as an assumed numerical coincidence.
+
+\paragraph{Reproduction and trust.}
+Run \texttt{lean Main.lean} using Lean 4.19.0. The command exits
+successfully. The principal results depend only on the standard Lean
+axioms \texttt{propext}, \texttt{Classical.choice}, and
+\texttt{Quot.sound}. There are no added axioms, placeholders, or
+uses of \texttt{native\_decide}. The proof is uniform in the numbers
+of vertices and colors and is not limited to a bounded search.
+\end{document}
