@@ -1,0 +1,48 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\setlength{\emergencystretch}{3em}
+\title{A counterexample to conjecture 00000008438}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{3 October 2026}
+\usepackage{url}
+% Compact consistent title for a short mathematical note.
+\makeatletter
+\renewcommand{\maketitle}{\begin{center}
+{\Large\bfseries\@title\par}\vspace{0.6em}
+{\small\@author\par\@date}
+\end{center}\vspace{0.5em}}
+\makeatother
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+\paragraph{Claim being disproved.}
+The conjecture bounds the number of columns of a strength-$t$ orthogonal array over $n$ symbols by $n^2-n+t$. Here ``strength $t$'' means that on any $t$ distinct rows every ordered $t$-tuple of symbols occurs equally often. We use an array of index one, so the example does not rely on repeating columns.
+\paragraph{Construction.}
+Take $n=2$, $t=3$, and the array
+\[
+ A=\begin{pmatrix}
+ 0&1&0&1&0&1&0&1\\
+ 0&0&1&1&0&0&1&1\\
+ 0&0&0&0&1&1&1&1
+ \end{pmatrix}.
+\]
+Its columns are all eight distinct binary words of length three. Hence any ordering of its three rows contains every ordered binary triple exactly once: reordering coordinates is a bijection on $\{0,1\}^3$. Thus $A$ is a strength-three, index-one orthogonal array.
+\paragraph{Contradiction.}
+The array has $8$ columns, but the proposed bound is
+\[
+ n^2-n+t=2^2-2+3=5<8.
+\]
+A counterexample to the first bound disproves the conjunction in the conjecture; the prime-power attainability and deficit assertions need not be considered.
+\paragraph{A second witness with matching row and alphabet counts.}
+Take instead the three-row array whose columns are all $27$ words in $\{0,1,2\}^3$. It also has strength three and index one, since permuting its rows permutes all ternary triples. Here both the alphabet size and the row count equal $3$, while $27>3^2-3+3=9$. Thus this example also avoids any possible ambiguity between those two meanings of $n$. The accompanying Lean theorems \path{ternaryArray_is_OA3}, \path{ternaryArray_columns_distinct}, and \path{conjecture8438_false_ternary} verify the full second witness and the resulting negation.
+\paragraph{Formal verification and semantic correspondence.}
+The accompanying \texttt{lean/Main.lean} uses only Lean 4.19.0 and \texttt{Std}. The type \texttt{Fin r} indexes rows, \texttt{Fin c} indexes columns, and \texttt{Fin n} indexes symbols. The definition \texttt{occurrences} counts actual columns matching prescribed entries. The predicate \texttt{OA3} quantifies over every triple of distinct rows, in every order, and every prescribed symbol triple. The theorem \texttt{binaryArray\_is\_OA3} verifies this property for the displayed array; \path{binaryArray_columns_distinct} also verifies that no two columns coincide.
+
+\texttt{ColumnBoundAtThree} states the conjectured universal upper bound specialized to $t=3$, over arbitrary alphabet size, row count, column count, and array. The final theorem \texttt{conjecture8438\_false} proves its negation by instantiating that universal claim with $A$. Thus the formal result includes the orthogonal-array hypotheses and the implication to the claimed bound, rather than only the numerical inequality $8>5$.
+
+All enumeration is checked by Lean's kernel using \texttt{decide}; there is no external computation oracle. The printed axiom lists contain only the standard Lean axiom \texttt{propext}. No \texttt{sorry}, \texttt{admit}, \texttt{native\_decide}, or additional axiom is used.
+\paragraph{Reproduction.}
+Run \texttt{lean Main.lean} with Lean 4.19.0. Successful compilation prints the axiom lists of the array property, column distinctness, and final disproof.
+\end{document}
+
