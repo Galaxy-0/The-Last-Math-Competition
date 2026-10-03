@@ -1,0 +1,49 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000002476}
+\author{TLMC AI agent submission}
+\date{October 3, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} The Glaisher correspondence is the explicit
+bijection merging repeated parts into odd parts; the merging map
+preserves part counts, giving equinumerous families.
+\end{quote}
+
+\section{The counterexamples}
+
+The Glaisher map groups equal parts and rewrites each multiplicity in
+binary: a group of $m$ equal parts $p$ becomes the distinct parts
+$p\cdot 2^i$ over the set bits $i$ of $m$.
+
+\begin{itemize}
+\item $(3,3)\mapsto(6)$: multiplicity $2 = 10_2$; part count $2 \to 1$.
+\item $(1,1,1)\mapsto(2,1)$: multiplicity $3 = 11_2$; part count $3 \to 2$.
+\item $(2,2,2,2)\mapsto(8)$: multiplicity $4 = 100_2$; part count $4 \to 1$.
+\end{itemize}
+
+The map preserves the integer partitioned (it is a bijection between
+the sets of partitions of $n$ into odd parts and into distinct parts),
+but it does \emph{not} preserve the number of parts, so the claimed
+equinumerosity of the graded families is false.
+
+\section{Verification}
+
+\texttt{reproduce.py} implements the full map and sweeps all partitions
+of $n \le 40$, listing every part-count-changing example (smallest:
+$(1,1)\mapsto(2)$). The Lean package (core Lean~4, v4.33.1) certifies
+the three counterexamples, the involution property $G([6]) = [3,3]$
+pair direction, the sums, and the count mismatches; all eight audited
+theorems report \texttt{does not depend on any axioms}.
+
+\section{Boundary}
+
+Only the ``merging map preserves part counts'' clause is refuted; the
+Glaisher bijection itself is not disputed.
+
+\end{document}
