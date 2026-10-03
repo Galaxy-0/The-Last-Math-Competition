@@ -1,0 +1,156 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,geometry,hyperref}
+\geometry{margin=0.85in}
+\newtheorem{proposition}{Proposition}
+\title{A counterexample to Conjecture 00000002618}
+\author{gaochengzhecpu (AI-assisted submission)}
+\date{October 3, 2026}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+
+The conjecture states, in particular, that a finite lattice is
+semidistributive if and only if each element has a unique canonical join
+representation. We disprove the reverse implication. All definitions below
+are the standard lattice-theoretic ones. In particular, semidistributivity
+requires both the join and the meet semidistributive laws.
+
+\paragraph{Definitions.}
+For a subset $A$ of a finite lattice $L$, a join representation of $w$ is
+an equality $w=\bigvee A$, with $\bigvee\varnothing=0$.
+It is irredundant when no proper subset of $A$ has join $w$.
+A subset $A$ \emph{join-refines} $B$ if for every $a\in A$ there exists
+$b\in B$ with $a\leq b$.
+A canonical join representation is an irredundant join representation
+that join-refines every irredundant join representation of the same
+element. This is the standard definition used, for example, by Barnard
+\cite{Barnard}. The argument below verifies the stronger property of
+refining every join representation.
+
+The join and meet semidistributive laws, respectively, are
+\[
+ x\vee y=x\vee z\ \Longrightarrow\
+ x\vee(y\wedge z)=x\vee y,\qquad
+ x\wedge y=x\wedge z\ \Longrightarrow\
+ x\wedge(y\vee z)=x\wedge y.
+\]
+A semidistributive lattice satisfies both.
+
+\paragraph{The lattice.}
+Let $E=\{a,b,c\}$ and let
+\[
+ L=\{\varnothing,\{a\},\{b\},\{a,b\},\{c\},\{a,c\},E\}
+\]
+be ordered by inclusion. Thus the subset $\{b,c\}$ is omitted from the
+Boolean lattice of subsets of $E$.
+This family is closed under intersections, contains $\varnothing$ and
+$E$, and hence is a lattice. Its meet is intersection. Its join is the
+union unless that union is $\{b,c\}$, in which case the join is $E$.
+For clarity write its elements as $0,A,B,D,C,F,1$, in the order displayed
+above, so $D=A\vee B$, $F=A\vee C$, and $1=B\vee C$.
+
+\begin{proposition}
+Every element of $L$ has a unique canonical join representation.
+\end{proposition}
+\begin{proof}
+The proposed representations are
+\[
+\begin{array}{c|ccccccc}
+ w&0&A&B&D&C&F&1\\ \hline
+ \operatorname{Can}(w)&\varnothing&\{A\}&\{B\}&\{A,B\}
+ &\{C\}&\{A,C\}&\{B,C\}.
+\end{array}
+\]
+Each has join $w$ and is irredundant: in the two-element cases either
+single remaining atom is strictly below $w$; in the one-element cases
+removing the atom leaves join $0$. The empty representation is
+irredundant.
+
+We verify refinement against an arbitrary join representation $R$ of $w$.
+For $w=0$ refinement by the empty set is vacuous.
+If $w$ is an atom, every element of $R$ is below $w$, and $R$ must contain
+$w$, since otherwise its join would be $0$.
+For $w=D$, if no element of $R$ lies above $A$, then every element of $R$
+belongs to $\{0,B\}$, whence $\bigvee R\leq B<D$, a contradiction.
+The same reasoning with $A$ and $B$ exchanged gives an element above $B$.
+Thus $\{A,B\}$ refines $R$. The argument for $w=F$ is identical using
+$A,C$.
+For $w=1$, if no element of $R$ lies above $B$, then every element of $R$
+is in $\{0,A,C,F\}$, all below $F<1$, a contradiction.
+If none lies above $C$, all elements of $R$ are below $D<1$, again a
+contradiction. Therefore $\{B,C\}$ refines $R$.
+
+Finally canonical join representations are unique as subsets.
+Indeed any irredundant representation is an antichain: if distinct
+$x\leq y$ both occurred, removing $x$ would leave the same join.
+If two canonical representations $S,T$ refine one another, then for
+$x\in S$ there exist $y\in T$ and $z\in S$ with $x\leq y\leq z$.
+The antichain property of $S$ gives $x=z$, and antisymmetry gives
+$x=y$, so $x\in T$. By symmetry $S=T$.
+\end{proof}
+
+\paragraph{Failure of semidistributivity.}
+Take $x=A$, $y=B$, $z=C$. Then
+\[
+ A\wedge B=0=A\wedge C,\qquad
+ A\wedge(B\vee C)=A\wedge1=A\ne0.
+\]
+The meet semidistributive law fails. This proves that the lattice is not
+semidistributive, despite the unique canonical join representations of
+all its elements, and therefore disproves the stated equivalence.
+The further congruence-separation assertion in the source cannot repair
+this already false conjunct. No interpretation of that additional
+assertion is needed.
+
+\paragraph{Scope of the counterexample.}
+The familiar correct finite-lattice criterion characterizes
+\emph{join-semidistributivity} by existence of canonical join
+representations. Full semidistributivity additionally requires the dual
+meet condition; this distinction is explicit in \cite{Barnard}.
+Our lattice in fact satisfies the join semidistributive law, as is also
+checked by the formal proof. We use the standard meaning of the
+unqualified word \emph{semidistributive}, consistent in the source's
+English and Chinese statements.
+
+\paragraph{Formal verification and semantic correspondence.}
+The accompanying file \texttt{lean/Main.lean} uses Lean 4.19.0 and
+\texttt{Std}, with no external mathematical library.
+\texttt{LatticeData} contains a partial order, a bottom element, and
+both universal properties for binary joins and meets. The concrete
+object \texttt{seven} verifies every one of these axioms on
+\texttt{Fin 7}. Its labels encode the displayed subsets by their
+three-bit membership masks, with label $6$ representing $E$ rather than
+the missing subset $\{b,c\}$.
+
+\texttt{JoinRep} asserts the least-upper-bound property for an
+arbitrary predicate $S:L\to\mathrm{Prop}$, so it is exactly
+$w=\bigvee S$. \texttt{Irredundant}, \texttt{Refines}, and
+\texttt{CanonicalJoin} implement the definitions above, quantifying over
+arbitrary subsets.
+All $2^7=128$ subsets have finite binary codes.
+Crucially, \texttt{every\_subset\_encoded} proves that every
+predicate-valued subset equals a decoded code.
+Thus finite verification does not restrict the mathematical
+representations to a selected family.
+\texttt{irredCode\_iff} transfers the finite irredundancy check to its
+unrestricted definition.
+The kernel checks all seven representation certificates; the general
+antichain argument \texttt{canonical\_unique} then supplies uniqueness.
+
+\texttt{counterexample} states that this genuine lattice has unique
+canonical join representations for every element and is not
+semidistributive.
+\texttt{ClaimedCriterion} is the necessary reverse implication of the
+source for all finite labelled lattices, and
+\texttt{conjecture2618\_false} proves its negation by specializing to
+\texttt{seven}.
+All finite checks use kernel-reduced \texttt{decide}; there is no
+\texttt{native\_decide}, admitted result, or additional axiom.
+
+\begin{thebibliography}{1}
+\bibitem{Barnard}
+E. Barnard, \emph{The canonical join complex},
+Electronic Journal of Combinatorics \textbf{26}(1) (2019), P1.24.
+\url{https://www.combinatorics.org/ojs/index.php/eljc/article/download/v26i1p24/pdf/}
+\end{thebibliography}
+\end{document}
