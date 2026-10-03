@@ -1,0 +1,71 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000001268}
+\author{TLMC AI agent submission}
+\date{October 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Definition:} the palindromic defect is the count of defect
+letters of rich-in-palindromes words. \textit{Conjecture:} every
+infinite word can be repaired to a rich word by at most one letter
+insertion; and the minimality of the repair position is uniquely given
+by the defect center.
+\end{quote}
+
+\section{The refutation}
+
+A word of length $n$ is rich when it has $n+1$ distinct palindromic
+factors; an infinite word is rich when all its factors are rich. The
+periodic word $(abc)^\infty$ admits no single-letter repair.
+
+\textbf{Step 1: no long palindromic factors.} The letters of
+$(abc)^\infty$ are 3-periodic. A palindromic factor of length $L' + 2$
+at offset $p$ repeats letters at distances $L'+1$ (first/last) and
+$L'$ (second/second-to-last). Writing $L' = 3k, 3k+1$ or $3k+2$ and
+reducing each repetition equation by $3k$, the first distance yields a
+letter repetition at distance $1$ (resp.\ $2$) when $L' = 3k+1$
+(resp.\ $3k+2$); when $L' = 3k$ the second distance $3k$ yields a
+distance-$2$ repetition. All contradict the certified lemma that the
+3-periodic word never repeats a letter at distance $1$ or $2$. Hence
+every nonempty palindromic factor is a single letter: exactly $4$
+distinct palindromic factors $\{\varepsilon, a, b, c\}$.
+
+\textbf{Step 2: insertions do not help.} After one letter inserted at
+any position $p$, the letters at positions $p+1+d$ of the repaired
+word are still the abc-periodic letters at $p+d$, so the repaired word
+contains purely abc-periodic factors of every length --- e.g.\ length
+$5$ (one of $abcab$, $bcabc$, $cabca$).
+
+\textbf{Step 3: those factors are not rich.} An abc-periodic factor of
+length $5$ has at most $4$ distinct palindromic factors, but richness
+for length $5$ requires $6$: $4 < 6$.
+
+For every insertion position and every inserted letter the repaired
+word still contains a non-rich factor: no single insertion repairs
+$(abc)^\infty$, and the defect-center clause is vacuous.
+
+\section{Verification}
+
+\texttt{reproduce.py} brute-forces the palindromic factors of
+$(abc)^\infty$ up to length $8$ (exactly $\{\varepsilon, a, b, c\}$),
+checks all $9$ single-letter insertions (three letters, three gap
+positions) for a remaining non-rich factor, and re-derives the
+non-richness of the abc-periodic words of lengths $5$ and $6$. The
+Lean package (core Lean~4, v4.33.1) certifies the 3-periodicity
+machinery, the universal no-long-palindrome theorem, and the
+post-insertion window facts; all nine audited theorems report
+\texttt{does not depend on any axioms}.
+
+\section{Boundary}
+
+The kernel certifies the combinatorial core (universally over offsets
+and lengths); the rich-word counting identification
+(Droubay--Justin--Pirillo) is classical and cited in prose, and the
+enumeration of the nine insertion instances is carried by the script.
+
+\end{document}
