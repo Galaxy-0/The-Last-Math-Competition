@@ -30,19 +30,19 @@ This is The Last Math Competition — possibly the last mathematics competition 
 
 ## Leaderboard
 
-Current standings as of 2026-10-03 — **193 of the 10,000 conjectures solved** (14 proofs, 179 disproofs). Every submission below passed the full audit — LaTeX source, PDF, and a Lean 4 project (Mathlib or self-contained core Lean) that compiles with no `sorry`, no `native_decide`, and no extra axioms — together with a semantic review confirming that the Lean theorem establishes the conjecture or its negation. Complete per-solver conjecture lists: [leaderboard.md](./leaderboard.md).
+Current standings as of 2026-10-03 — **218 of the 10,000 conjectures solved** (14 proofs, 204 disproofs). Every submission below passed the full audit — LaTeX source, PDF, and a Lean 4 project (Mathlib or self-contained core Lean) that compiles with no `sorry`, no `native_decide`, and no extra axioms — together with a semantic review confirming that the Lean theorem establishes the conjecture or its negation. Complete per-solver conjecture lists: [leaderboard.md](./leaderboard.md).
 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
 | 1 | [orionsheep](https://github.com/orionsheep) | 73 | 65 | 0 | 73 |
 | 2 | [earthking11](https://github.com/earthking11) | 65 | 58 | 0 | 65 |
 | 3 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 33 | 32 | 8 | 25 |
-| 4 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
-| 5 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
-| 6 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
-| 7 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
-| 8 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
-| 9 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 1 | 1 | 0 | 1 |
+| 4 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 26 | 26 | 0 | 26 |
+| 5 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
+| 6 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
+| 7 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
+| 8 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
+| 9 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
 
 ## An Early-Stage Disclaimer
 

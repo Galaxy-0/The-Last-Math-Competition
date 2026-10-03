@@ -10,7 +10,7 @@ archived under solutions/[number_ID]/review/. After the full re-audit of 2026-10
 reverted to open unless another valid submission remains); 98 PRs were closed unmerged with
 full review comments.
 
-**Total solved: 193 / 10000 conjectures** — 14 proven, 179 disproven.
+**Total solved: 218 / 10000 conjectures** — 14 proven, 204 disproven.
 
 Ranking is by **Solved** (accepted submissions), ties broken by first solves.
 
@@ -19,12 +19,12 @@ Ranking is by **Solved** (accepted submissions), ties broken by first solves.
 | 1 | [orionsheep](https://github.com/orionsheep) | 73 | 65 | 0 | 73 |
 | 2 | [earthking11](https://github.com/earthking11) | 65 | 58 | 0 | 65 |
 | 3 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 33 | 32 | 8 | 25 |
-| 4 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
-| 4 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
-| 5 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
-| 6 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
-| 7 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
-| 8 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 1 | 1 | 0 | 1 |
+| 4 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 26 | 26 | 0 | 26 |
+| 5 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
+| 6 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
+| 7 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
+| 8 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
+| 9 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
 
 ## Solved conjectures per solver
 
@@ -60,9 +60,12 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 #2040★ (D), #2042★ (D), #2058★ (D), #2486★ (P), #2850★ (D)
 #3965★ (D), #3967★ (D), #7780★ (D), #7965★ (D), #7976★ (D), #7990★ (D), #8176★ (D), #8256★ (D), #8869★ (D)
 
-### gaochengzhecpu — 1 solved (1 first)
+### gaochengzhecpu — 26 solved (26 first)
 
-#996★ (D)
+#996★ (D), #126★ (D), #388★ (D), #425★ (D), #459★ (D), #1665★ (D), #2304★ (D), #2617★ (D)
+#2618★ (D), #3483★ (D), #3486★ (D), #3490★ (D), #4274★ (D), #4287★ (D), #4294★ (D), #6334★ (D)
+#6402★ (D), #7292★ (D), #7676★ (D), #8438★ (D), #8535★ (D), #8536★ (D), #8544★ (D), #8547★ (D)
+#8549★ (D), #8558★ (D)
 
 ### SucRunBug — 18 solved (18 first)
 

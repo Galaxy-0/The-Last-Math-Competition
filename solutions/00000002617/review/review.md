@@ -1,0 +1,30 @@
+# Solution Review — Conjecture 00000002617 (PR 306)
+
+**Submission:** gaochengzhecpu — `gaochengzhecpu_submission_20261003091740`
+**Reviewer:** competition review pipeline (structure + build + semantic audit)
+**Date:** 2026-10-03
+
+## Checklist results
+- Conjecture read: yes — the Jacobson radical of an incidence algebra of a locally finite poset is zero (semisimplicity "evidenced" by pointwise invertibility of the Möbius function; vanishing "from local finiteness").
+- LaTeX: compiled ok (pdflatex twice, exit 0, 1 page, 121 KB); included main.pdf is a real PDF (1 page); tex and pdf agree.
+- Lean build: fresh build after `rm -rf .lake`, exit 0, no warnings (warnings-as-errors active), v4.19.0, imports only Std.
+- Forbidden content: none — no sorry/admit/native_decide/axiom/unsafe/implemented_by/extern; only maxRecDepth/maxHeartbeats (allowed). `#print axioms not_zero_radical_claim` = [propext, Classical.choice, Quot.sound] — standard Lean axioms only, no sorryAx.
+- Auxiliary code: none present (verification.json records `auxiliary_scripts_rerun: []`, consistent). All recorded sha256 file hashes match current files; official conjecture sha256 = original_source_sha256. I ran an independent brute-force enumeration of all left ideals of the 8-element ring: exactly two maximal proper left ideals {[0,1,2,3], [0,2,4,6]}, intersection (= Jacobson radical) = {0, 2} = {0, e} — confirming e ∈ J(R) and e ≠ 0.
+## Semantic audit
+Conjecture (literal): "The Jacobson radical of an incidence algebra is zero." Universal claim over incidence algebras of locally finite posets. Counterexample: the two-point chain X = {0<1} (finite, hence locally finite) over F2.
+
+Object correspondence (all verified, not assumed): the ring is Fin 8 with bit-encoding (a,b,c) ↦ 4a+2b+c; `plus` is bitwise XOR (F2 addition); `times` is (a,b,c)(a',b',c') = (aa', ab'⊕bc', cc'), exactly 2×2 upper-triangular matrix multiplication. `ring_laws` kernel-checks associativity, commutativity, zero, additive inverse (x⊕x=0), associativity of times, two-sided unit (one = 5 = identity matrix), and both distributivities over all of R³. `entry x i j` reads out the (i,j) entry with `entries_supported : entry x 1 0 = false` (support only on 0≤0, 0≤1, 1≤1 — the order relation of the chain); `addition_is_pointwise` and `multiplication_is_convolution : entry (times x y) i j = (entry x i 0 ∧ entry y 0 j) ⊕ (entry x i 1 ∧ entry y 1 j)` identify the operations with pointwise addition and incidence convolution; `every_incidence_function` (symbolic proof) and `entries_injective` show the encoding is an exhaustive, duplicate-free representation of all F2-valued incidence functions of the two-point poset. Hence (R, plus, times) IS the incidence algebra I({0<1}, F2) as a convolution algebra.
+
+Radical definition: `LeftIdeal` is an arbitrary predicate with the actual ideal axioms (0 ∈ M, closed under plus, closed under left multiplication); `MaximalProper I := ¬I.mem one ∧ ∀ J, Included I J → ¬J.mem one → Included J I` (proper and maximal among proper left ideals); `InJacobsonRadical x := ∀ I, MaximalProper I → I.mem x` — the intersection of ALL maximal proper left ideals, the standard Jacobson radical. This is emphatically not a proxy: `radical_contains_e : InJacobsonRadical e` is proved symbolically for an arbitrary maximal proper left ideal I: if e ∉ I, then `enlarge I = M + Re` (with kernel-verified closure proofs) is a proper left ideal strictly containing I and containing e, contradicting maximality; so 1 = i ⊕ re with i ∈ I; then (1⊕re)·i ∈ I by the left-ideal law and `invert_expression` (kernel-checked: one = plus i (times r e) → times (plus one (times r e)) i = one, i.e. (1+re)² = 1 via (re)² = 0 and characteristic 2) gives 1 ∈ I, contradicting properness. This is exactly the classical argument, engaging the maximal-ideal definition rather than the nilpotence shortcut e² = 0.
+
+Contradiction with the conjecture: `e_nonzero : e ≠ zero` (e = 2 = [[0,1],[0,0]]) and `not_zero_radical_claim : ¬ZeroRadicalClaim` where `ZeroRadicalClaim := ∀ x, InJacobsonRadical x → x = zero` is precisely "the Jacobson radical is zero" for this incidence algebra. The hypotheses of the conjecture are met (two-point chain is locally finite; F2 is a field), the conclusion fails, so the universal conjecture is refuted. The pointwise invertibility of the Möbius function is genuine in this algebra yet the radical is nonzero — precisely the gap the conjecture papered over. Not vacuous: the decisive objects (incidence functions, convolution, maximal left ideals) are all present and verified. My brute-force computation independently confirms J = {0, e}.
+
+LaTeX/Lean match: same algebra, same element e, same argument structure, same theorem names.
+## Issues found
+- Minor (non-blocking): `chain_locally_finite` is a token Fin 2 statement rather than a formalization of local finiteness in general; harmless since local finiteness of a two-point poset is trivial context, not a load-bearing step.
+- Minor (non-blocking): the conjecture does not pin the coefficient field; the counterexample uses F2. The choice is immaterial — e ∈ J over any base ring (1+re is invertible whenever (re)²=0), so the disproof is robust.
+## Verdict rationale
+The submission compiles cleanly with no placeholders, its Lean code constructs the genuine incidence algebra of the two-point chain over F2 with entrywise-verified convolution, defines the Jacobson radical exactly as the intersection of all maximal proper left ideals, and proves symbolically that the nonzero element e lies in it — refuting the conjecture's central claim. Independent brute force confirms J(R) = {0, e} ≠ 0. A genuine, non-vacuous disproof.
+
+## Disposition
+APPROVED — merged into main (PR 306). Independent fresh rebuild of the Lean project (Lean 4.19.0, `lake build` with warnings-as-errors, exit 0, axioms limited to the standard Lean foundational set), LaTeX recompilation, auxiliary-script re-runs, and a semantic audit confirming the Lean theorem refutes the conjecture as stated in both language versions.
