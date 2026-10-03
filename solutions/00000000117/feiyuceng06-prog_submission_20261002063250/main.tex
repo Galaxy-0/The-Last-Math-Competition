@@ -1,0 +1,219 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A Proof of Conjecture 00000000117:\
+Pandigital Primes in Every Base from 2 to 16}
+\author{%
+  Feiyu\thanks{Independent researcher.}
+  \and
+  Claude (Opus 5.5)\thanks{Anthropic.}%
+}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000000117 asserts that for every base $b\in[2,16]$ there is a
+$b$-ary pandigital prime, a prime whose base-$b$ expansion contains each
+digit $0,\ldots,b-1$ at least once. We exhibit one in every base: the smallest
+one, as listed in OEIS A185122. We verify the digits of each witness, and we
+prove its primality with Pratt certificates checked against the Lucas
+primality criterion. Everything is formalized in Lean~4 against Mathlib.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture 00000000117 reads:
+
+\begin{quote}
+Conjecture: For every base $b \in [2, 16]$ there exists a $b$-ary pandigital
+prime (whose expansion contains each of the digits $0, \ldots, b-1$ at least
+once).
+\end{quote}
+
+\section{Reading of the statement}
+
+For an integer $b\ge2$, the base-$b$ expansion of a positive integer $n$ is
+its usual digit string without leading zeros. $n$ is \emph{$b$-ary
+pandigital} if every $d\in\{0,\ldots,b-1\}$ occurs in it. The conjecture
+asserts that for each integer $b$ with $2\le b\le16$ some prime is $b$-ary
+pandigital. The statement is finite and unambiguous.
+
+\section{Result}
+
+\begin{theorem}\label{thm:main}
+For each $b\in\{2,\ldots,16\}$ the number $p_b$ of Table~\ref{tab:wit} is a
+$b$-ary pandigital prime. Hence Conjecture 00000000117 holds.
+\end{theorem}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrl}
+\toprule
+$b$ & $p_b$ & base-$b$ expansion of $p_b$\\
+\midrule
+2 & 2 & \texttt{10}\\
+3 & 11 & \texttt{102}\\
+4 & 283 & \texttt{10123}\\
+5 & 3319 & \texttt{101234}\\
+6 & 48761 & \texttt{1013425}\\
+7 & 863231 & \texttt{10223465}\\
+8 & 17119607 & \texttt{101234567}\\
+9 & 393474749 & \texttt{1012346785}\\
+10 & 10123457689 & \texttt{10123457689}\\
+11 & 290522736467 & \texttt{1022345689A7}\\
+12 & 8989787252711 & \texttt{101234568A79B}\\
+13 & 304978405943587 & \texttt{10123456789ABC}\\
+14 & 11177758345241723 & \texttt{10123456789CDAB}\\
+15 & 442074237951168419 & \texttt{10223456789ADBCE}\\
+16 & 18528729602926047181 & \texttt{10123456789ABEFCD}\\
+\bottomrule
+\end{tabular}
+\caption{The witnesses: the smallest $b$-ary pandigital primes (OEIS
+A185122). Digits $10,\ldots,15$ are written \texttt{A}--\texttt{F}.}
+\label{tab:wit}
+\end{table}
+
+\section{Proof}
+
+\paragraph{Digits.} Reading off the expansions in Table~\ref{tab:wit}, each
+contains every digit $0,\ldots,b-1$. (In Lean, $p_b$ is written as
+$\sum_i d_i b^i$ for the listed digit string, every digit is checked to be
+$<b$ with a nonzero leading digit, so the string is \emph{the} base-$b$
+expansion of $p_b$, and membership of each digit is then checked directly.)
+
+\paragraph{Primality.} The witnesses $p_2,\ldots,p_7$ are below $10^6$ and
+their primality is checked by trial division. For the others we use the
+classical criterion of Lucas, in the form proved in Mathlib.
+
+\begin{lemma}[Lucas]\label{lem:lucas}
+Let $p\ge2$ and $a$ be integers with $a^{p-1}\equiv1\pmod p$ and
+$a^{(p-1)/q}\not\equiv1\pmod p$ for every prime $q\mid p-1$. Then $p$ is
+prime.
+\end{lemma}
+
+\begin{proof}
+The order of $a$ in $(\mathbb Z/p\mathbb Z)^\times$ divides $p-1$ but no
+$(p-1)/q$, so it equals $p-1$. Hence $(\mathbb Z/p\mathbb Z)^\times$ has
+$p-1$ elements and every nonzero residue is a unit, so $p$ is prime.
+\end{proof}
+
+To apply Lemma~\ref{lem:lucas} one needs all prime factors of $p-1$, which
+in turn are certified prime in the same way unless they are small: this is a
+Pratt certificate \cite{pratt}. Table~\ref{tab:cert} lists every certificate
+used. For each row, $p-1$ equals the displayed product, the witness $a$
+satisfies the two congruences of Lemma~\ref{lem:lucas}, and each factor is
+either below $10^6$ (prime by trial division) or itself a row of the table.
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{rrl}
+\toprule
+$p$ & $a$ & factorization of $p-1$\\
+\midrule
+1065901 & 6 & $2^{2} \cdot 3 \cdot 5^{2} \cdot 11 \cdot 17 \cdot 19$ \\
+1222829 & 2 & $2^{2} \cdot 347 \cdot 881$ \\
+6395407 & 3 & $2 \cdot 3 \cdot 1065901$ \\
+17119607 & 5 & $2 \cdot 7 \cdot 1222829$ \\
+67222271 & 7 & $2 \cdot 5 \cdot 2087 \cdot 3221$ \\
+335476601 & 6 & $2^{3} \cdot 5^{2} \cdot 47 \cdot 89 \cdot 401$ \\
+393474749 & 2 & $2^{2} \cdot 691 \cdot 142357$ \\
+10123457689 & 13 & $2^{3} \cdot 3^{2} \cdot 4091 \cdot 34369$ \\
+290522736467 & 2 & $2 \cdot 433 \cdot 335476601$ \\
+8989787252711 & 11 & $2 \cdot 5 \cdot 11 \cdot 131617 \cdot 620933$ \\
+35485169204621 & 2 & $2^{2} \cdot 5 \cdot 41 \cdot 197 \cdot 317 \cdot 347 \cdot 1997$ \\
+50829734323931 & 2 & $2 \cdot 5 \cdot 1129 \cdot 13873 \cdot 324529$ \\
+132708276772139 & 2 & $2 \cdot 19 \cdot 47 \cdot 170179 \cdot 436627$ \\
+304978405943587 & 2 & $2 \cdot 3 \cdot 50829734323931$ \\
+11177758345241723 & 2 & $2 \cdot 13 \cdot 6395407 \cdot 67222271$ \\
+442074237951168419 & 2 & $2 \cdot 6229 \cdot 35485169204621$ \\
+18528729602926047181 & 6 & $2^{2} \cdot 3 \cdot 5 \cdot 13 \cdot 179 \cdot 132708276772139$ \\
+\bottomrule
+\end{tabular}
+\caption{Pratt certificates, in increasing order of $p$.}
+\label{tab:cert}
+\end{table}
+
+The modular powers $a^{e}\bmod p$ with $p$ up to $1.85\cdot10^{19}$ are
+computed by binary exponentiation, so each check takes about $65$
+multiplications modulo $p$.
+
+\section{Formalization}
+
+The accompanying Lean~4 project (\texttt{lean/Submission/Basic.lean}) states
+the conjecture and proves it against Mathlib.
+
+\begin{itemize}
+  \item \texttt{IsPandigital b p} --- every $d<b$ occurs in
+    \texttt{Nat.digits b p}, Mathlib's base-$b$ expansion.
+    \texttt{ConjectureHolds} --- every $b$ with $2\le b\le16$ has a prime
+    $p$ with \texttt{IsPandigital b p}.
+  \item \texttt{powMod} --- binary exponentiation modulo $m$, with
+    \texttt{powMod\_eq}: it equals $a^e\bmod m$ whenever $e<2^{\mathrm{fuel}}$.
+  \item \texttt{mem\_of\_prime\_dvd\_prod} --- a prime dividing
+    $\prod q_i^{e_i}$ (with all $q_i$ prime) is one of the $q_i$.
+  \item \texttt{prime\_of\_cert} --- Lemma~\ref{lem:lucas} with a factored
+    $p-1$, derived from Mathlib's \texttt{lucas\_primality}.
+  \item \texttt{prime\_1065901}, \ldots, \texttt{prime\_18528729602926047181}
+    --- the rows of Table~\ref{tab:cert}.
+  \item \texttt{digits\_b}, \texttt{isPandigital\_b} for $b=2,\ldots,16$ ---
+    the expansions of Table~\ref{tab:wit}, via Mathlib's
+    \texttt{Nat.digits\_ofDigits}.
+  \item \texttt{conjecture\_00000000117} --- \texttt{ConjectureHolds}.
+\end{itemize}
+
+All numerical checks are carried out by the Lean kernel, with
+\texttt{decide +kernel} and \texttt{norm\_num}. The kernel evaluates numeral
+arithmetic natively, and \texttt{powMod} keeps every intermediate value below
+$p^2$. The toolchain is \texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to
+\texttt{v4.33.1}, and \texttt{lake build} succeeds in a few seconds. The
+project contains no \texttt{sorry}, no \texttt{admit} and no
+\texttt{native\_decide}, and introduces no axioms:
+\begin{center}
+\texttt{\#print axioms conjecture\_00000000117}
+\end{center}
+reports exactly \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\section{Remarks}
+
+\begin{remark}[why the witnesses repeat a digit]
+For $b\ge4$, no pandigital prime has exactly $b$ digits. If each digit occurs
+once, then $n\equiv0+1+\cdots+(b-1)=b(b-1)/2\pmod{b-1}$. For even $b$ this
+is $\equiv0$, so $b-1\mid n$. For odd $b$ it is $\equiv(b-1)/2$, so
+$(b-1)/2\mid n$. In both cases $n$ has a proper divisor greater than $1$
+once $b\ge4$. This is why every witness in Table~\ref{tab:wit} with $b\ge4$
+has $b+1$ digits.
+\end{remark}
+
+\begin{remark}
+The witnesses are the smallest pandigital primes, as recorded in OEIS A185122 \cite{oeis};
+a computer search confirms this, but minimality is not needed and is not part
+of the Lean development. Any pandigital prime in each base would do.
+\end{remark}
+
+\begin{thebibliography}{9}
+\bibitem{pratt} V.~R.~Pratt, \emph{Every prime has a succinct certificate},
+  SIAM J. Comput. 4 (1975), 214--220.
+\bibitem{oeis} OEIS Foundation, \emph{The On-Line Encyclopedia of Integer
+  Sequences}, sequence A185122 (minimum pandigital prime in base $n$).
+\end{thebibliography}
+
+\end{document}
