@@ -1,0 +1,161 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\F}{\mathbb F}
+
+\title{A Counterexample to Conjecture 00000007976:\\
+the Radius-$1$ Covering Density Is Not $1+2^{-n}$}
+\author{%
+  Feiyu\thanks{Independent researcher.}
+  \and
+  Claude (Opus 5.5)\thanks{Anthropic.}%
+}
+\date{2026-10-03}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The third claim of Conjecture 00000007976 states that the optimal density of binary
+covering codes of radius $1$ is exactly $\mu(n,1)=1+2^{-n}$. For every odd $n$ this
+is impossible for any code: the density of a code $C\subseteq\F_2^n$ is
+$|C|(n+1)/2^n$, and $|C|(n+1)$ is even, while $2^n(1+2^{-n})=2^n+1$ is odd. In fact
+$\mu(3,1)=\mu(7,1)=1$, attained by the repetition and Hamming codes. Both results are
+checked in Lean~4 against Mathlib.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture 00000007976 reads:
+
+\begin{quote}
+Definition: The covering density constant of covering codes: the density $\mu(n,r)$ of
+radius-$r$ covering codes of binary space (the ratio of the counted ball volume to the
+space volume). Conjecture: The infimum $\mu_n$ is $1 + \Theta(n^{-1} 2^{-n})$
+(existence of asymptotically perfect coverings); and the limit structure of optimal
+covering codes ($n$ to infinity, $r$ fixed) is a generalization of lattice coverings
+whose normalized second moment of the covering radius attains the Zador constant; and
+the exact value of $\mu(n,1)$ is $1 + 2^{-n}$ (the unique realization of the radius-1
+Rosenbloom type).
+\end{quote}
+
+The Chinese version in \texttt{conjectures/00000007976.md} states the same three
+claims.
+
+\section{Reading of the statement}
+
+The conjecture is a conjunction of three claims. We refute the third one, so the
+conjecture is false whatever the first two claims mean.
+
+\begin{definition}
+A code $C\subseteq\F_2^n$ \emph{covers with radius $r$} if every word of $\F_2^n$ is
+within Hamming distance $r$ of some codeword. Its \emph{density} is
+$|C|\,V(n,r)/2^n$, where $V(n,r)=\sum_{i\le r}\binom ni$ is the volume of a Hamming
+ball of radius $r$. Let $K(n,r)$ be the least size of a covering code of radius $r$,
+and $\mu(n,r)=K(n,r)\,V(n,r)/2^n$ the optimal density.
+\end{definition}
+
+The third claim states $\mu(n,1)=1+2^{-n}$, which we read as holding for every
+$n\ge1$. We also refute the weaker reading ``for all sufficiently large $n$''. If
+$\mu(n,1)$ is read instead as the density of some radius-$1$ code, the claim fails as
+well, because Theorem~\ref{thm:parity} applies to every code.
+
+\section{Results}
+
+\begin{theorem}\label{thm:parity}
+Let $n$ be odd. Then no code $C\subseteq\F_2^n$ has density $|C|(n+1)/2^n$ equal to
+$1+2^{-n}$. In particular $\mu(n,1)\ne1+2^{-n}$ for every odd $n$.
+\end{theorem}
+
+\begin{theorem}\label{thm:values}
+$\mu(3,1)=1$ and $\mu(7,1)=1$.
+\end{theorem}
+
+Theorem~\ref{thm:parity} refutes the third claim at $n=1$, and for arbitrarily large
+$n$; so the claim fails for every $n\ge1$ as stated and for all sufficiently large
+$n$. Theorem~\ref{thm:values} shows the true values in two cases.
+
+\section{Proofs}
+
+\begin{proof}[Proof of Theorem~\ref{thm:parity}]
+Since $V(n,1)=n+1$, the equation $|C|(n+1)/2^n=1+2^{-n}$ is equivalent to
+$|C|(n+1)=2^n+1$. For odd $n$ the left side is even, because $n+1$ is even, while the
+right side is odd, because $n\ge1$. The same argument applies to $K(n,1)$.
+\end{proof}
+
+\begin{lemma}[sphere-covering bound]\label{lem:sphere}
+If $C$ covers $\F_2^n$ with radius $1$, then $|C|(n+1)\ge2^n$.
+\end{lemma}
+
+\begin{proof}
+The ball of radius $1$ around $c$ consists of $c$ and the $n$ words $c+e_i$, so it
+has at most $n+1$ elements. These balls cover the $2^n$ words of $\F_2^n$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:values}]
+If a radius-$1$ covering code $C$ has $|C|(n+1)=2^n$, then $K(n,1)=|C|$ by
+Lemma~\ref{lem:sphere}, so $\mu(n,1)=1$. For $n=3$ take the repetition code
+$\{000,111\}$: every word has at least two equal coordinates and is therefore within
+distance $1$ of one of the two codewords; $2\cdot4=8$. For $n=7$ take the Hamming
+code, the solutions of $x_1+x_3+x_5+x_7=x_2+x_3+x_6+x_7=x_4+x_5+x_6+x_7=0$ over
+$\F_2$. It has $16$ codewords and covers with radius $1$, since flipping the coordinate
+whose binary index equals the syndrome corrects any word; $16\cdot8=128$.
+\end{proof}
+
+\section{Formalization}
+
+\sloppy
+The Lean~4 project in \texttt{lean/} (file \texttt{lean/Submission/Basic.lean})
+formalizes the definitions above and proves both theorems against Mathlib.
+\begin{itemize}
+  \item Words are \texttt{Fin n -> ZMod 2}, and distance is Mathlib's
+    \texttt{hammingDist}. \texttt{Covers}, \texttt{ballVolume}, \texttt{density},
+    \texttt{coveringNumber} (as \texttt{sInf}) and \texttt{mu} follow the definition
+    above.
+  \item \texttt{Claim3} is the third claim for every $n\ge1$;
+    \texttt{Claim3Eventually} is the claim for all large $n$.
+  \item \texttt{parity\_contra}, \texttt{density\_ne} and \texttt{mu\_ne} give
+    Theorem~\ref{thm:parity}; \texttt{not\_claim3} and \texttt{not\_claim3Eventually}
+    refute both readings.
+  \item \texttt{sphere\_covering} is Lemma~\ref{lem:sphere}, and
+    \texttt{mu\_eq\_one\_of\_perfect} turns a perfect covering into $\mu(n,1)=1$.
+    \texttt{rep3} and \texttt{hamming7} are the two codes, whose covering property and
+    size are checked by \texttt{decide}; this gives \texttt{mu\_three} and
+    \texttt{mu\_seven}.
+  \item \texttt{conjecture\_00000007976\_false} states, for arbitrary propositions
+    $P,Q$ standing for the first two claims, that
+    $\lnot(P\wedge Q\wedge\texttt{Claim3})$ and
+    $\lnot(P\wedge Q\wedge\texttt{Claim3Eventually})$.
+\end{itemize}
+The toolchain is \texttt{leanprover/lean4:v4.33.1}, Mathlib is pinned to
+\texttt{v4.33.1}, and \texttt{lake build} succeeds. The project contains no
+\texttt{sorry}, no \texttt{admit} and no \texttt{native\_decide}, and introduces no
+axioms: \texttt{\#print axioms} reports exactly \texttt{propext},
+\texttt{Classical.choice} and \texttt{Quot.sound} for
+\texttt{conjecture\_00000007976\_false} and \texttt{mu\_seven}.
+
+\fussy
+\section{Remarks}
+
+\begin{remark}
+More generally the Hamming code of length $n=2^m-1$ is a perfect radius-$1$ code, so
+$\mu(2^m-1,1)=1$ for every $m\ge2$; the case $m=1$ is the trivial code
+$\{0\}\subseteq\F_2$. We formalize $m=2,3$ only. These perfect codes also bear on the
+first claim, since $\mu(n,1)-1=0$ for infinitely many $n$, but we do not use this
+because the first claim does not fix what $\mu_n$ is the infimum over.
+\end{remark}
+
+\end{document}
