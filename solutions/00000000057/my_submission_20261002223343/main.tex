@@ -1,0 +1,67 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Disproof of Conjecture 00000000057}
+\author{TLMC AI agent submission}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\textit{Conjecture:} Every $n$-vertex graph of minimum degree at least
+$3$ contains $\Omega(\log n / \log\log n)$ cycles of pairwise distinct
+prime lengths.
+\end{quote}
+
+\section{The counterexample family}
+
+Let $G_k$ be the disjoint union of $k$ copies of $K_{3,3}$, so $n = 6k$.
+For every $k \ge 1$:
+
+\textbf{Minimum degree $3$.} $G_k$ is $3$-regular: each vertex is
+adjacent to the three vertices on the other side of its copy of
+$K_{3,3}$.
+
+\textbf{Bipartite.} Color each vertex by its side within its copy;
+every edge joins opposite colors.
+
+\textbf{All cycles have even length.} Traversing a cycle flips the
+color at each of its $p$ steps and returns to the start; hence $p$ is
+even.
+
+\textbf{No prime cycle lengths.} A cycle has $p \ge 3$, and the only
+even prime is $2$; so $G_k$ has exactly $0$ cycles of prime length,
+hence $0$ distinct prime cycle lengths, for every $k$.
+
+\textbf{Unboundedness.} $n = 6k \to \infty$ while the count stays $0$;
+since $\log n / \log\log n \to \infty$, any $\Omega(\log n /
+\log\log n)$ lower bound would demand a positive count for all large
+$n$. The conjecture fails.
+
+\section{Verification}
+
+\texttt{reproduce.py} builds $K_{3,3}$ and its disjoint unions from
+scratch, checks $3$-regularity and bipartiteness (BFS $2$-coloring),
+exhaustively enumerates all simple cycles of $K_{3,3}$ (lengths exactly
+$\{4,6\}$), and confirms the count of distinct prime cycle lengths is
+$0$ for $k = 1,\dots,6$.
+
+The Lean package (core Lean~4, v4.33.1, no Mathlib) certifies,
+uniformly in $k$: the $3$-regularity; the color-flip edge lemma
+(endpoint colors sum to $1$); the even-steps induction; the parity
+dichotomy; and the main theorem that no cycle of prime length exists in
+$G_k$ for every $k$, together with the unbounded-family statement. All
+nine theorems report \texttt{does not depend on any axioms} under
+\texttt{\#print axioms}. The only non-kernel step is the standard
+reduction from ``count $=0$ on an unbounded family'' to the failure of
+an $\Omega(\cdot)$ lower bound, stated in prose.
+
+\section{Boundary}
+
+Only the displayed universal statement is refuted; variants (minimum
+degree $\ge 4$, counting all even cycle lengths, \dots) are not
+addressed.
+
+\end{document}

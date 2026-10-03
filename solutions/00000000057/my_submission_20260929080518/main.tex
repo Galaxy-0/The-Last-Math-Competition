@@ -1,0 +1,130 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of Conjecture 00000000057:\\
+Prime Cycle Lengths in Minimum-Degree-Three Graphs}
+\author{TLMC submission}
+\date{September 29, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We disprove Conjecture 00000000057, which asserts that every $n$-vertex graph
+of minimum degree at least $3$ contains $\Omega(\log n / \log\log n)$ cycles of
+pairwise distinct prime lengths. The counterexample is the disjoint union of
+any number of copies of $K_{3,3}$: it has minimum degree $3$ on $n = 6k$
+vertices, yet all of its cycle lengths lie in $\{4,6\}$, so the number of
+distinct prime cycle lengths is $0$ for every $k$, while
+$\log n/\log\log n \to \infty$.
+\end{abstract}
+
+\section{The conjecture}
+
+\begin{conjecture}[00000000057]
+Every $n$-vertex graph of minimum degree at least $3$ contains
+$\Omega(\log n / \log\log n)$ cycles of pairwise distinct prime lengths.
+\end{conjecture}
+
+\section{The counterexample family}
+
+For $k \ge 1$ let $G_k$ denote the disjoint union of $k$ copies of the
+complete bipartite graph $K_{3,3}$. Thus $G_k$ has $n = 6k$ vertices and
+$9k$ edges.
+
+\begin{proposition}\label{prop:mindeg}
+$\delta(G_k) = 3$ for every $k \ge 1$.
+\end{proposition}
+
+\begin{proof}
+In $K_{3,3}$ every vertex is adjacent to all $3$ vertices of the opposite
+part and to no vertex of its own part, so every vertex has degree exactly
+$3$. Taking a disjoint union does not alter any vertex degree. Hence
+$\delta(G_k) = 3 \ge 3$, and $|V(G_k)| = 6k$ is unbounded as $k \to \infty$.
+\end{proof}
+
+\begin{lemma}\label{lem:lengths}
+Every cycle of $G_k$ has length $4$ or $6$.
+\end{lemma}
+
+\begin{proof}
+Every cycle of a disjoint union of graphs lies entirely inside one connected
+component, i.e.\ inside one copy of $K_{3,3}$: consecutive vertices of a cycle
+are adjacent, and there are no edges between distinct copies. So it suffices to
+consider $K_{3,3}$ with bipartition $A \mathbin{\dot\cup} B$, $|A| = |B| = 3$.
+A cycle in a bipartite graph alternates between the two parts, so every cycle
+has even length $2m$ and uses exactly $m$ vertices of $A$ and $m$ vertices of
+$B$. Since $|A| = |B| = 3$ we have $m \le 3$, and since $K_{3,3}$ is simple
+(no parallel edges) a cycle has $m \ge 2$. Hence $2m \in \{4, 6\}$, and both
+lengths are realized.
+\end{proof}
+
+\begin{lemma}\label{lem:noprime}
+No cycle of $G_k$ has prime length.
+\end{lemma}
+
+\begin{proof}
+By Lemma~\ref{lem:lengths} every cycle length is $4 = 2 \cdot 2$ or
+$6 = 2 \cdot 3$, both composite.
+\end{proof}
+
+\section{The disproof}
+
+\begin{theorem}
+Conjecture 00000000057 is false.
+\end{theorem}
+
+\begin{proof}
+Let $G_k$ be the family above and write $n = |V(G_k)| = 6k$. By
+Proposition~\ref{prop:mindeg}, $G_k$ has minimum degree at least $3$ for every
+$k$, and $n \to \infty$. By Lemmas~\ref{lem:lengths} and~\ref{lem:noprime},
+$G_k$ contains no cycle of prime length at all, so the number of cycles of
+pairwise distinct prime lengths is $0$ for every $k$.
+
+Since $\log n / \log\log n \to \infty$ as $n \to \infty$, for every constant
+$c > 0$ there are arbitrarily large $k$ with $c \cdot \log(6k) / \log\log(6k) > 0$
+(indeed the right-hand side is positive for all $n \ge 3$ and unbounded).
+The asserted lower bound $0 \ge c \cdot \log n / \log\log n$ therefore fails
+for every $c > 0$: the number of distinct prime cycle lengths is not
+$\Omega(\log n / \log\log n)$.
+\end{proof}
+
+\begin{remark}
+Already for $k = 1$, i.e.\ $n = 6$, the graph $K_{3,3}$ has
+$\lfloor \log_2 6 \rfloor / \lfloor \log_2 (\lfloor \log_2 6 \rfloor + 1) \rfloor
+= 2 / 1 = 2 > 0$ as a discrete stand-in for the target growth rate, while its
+prime-length cycle count is $0$: exactly nine $4$-cycles and six $6$-cycles
+(up to reversal), no others.
+\end{remark}
+
+\begin{remark}
+The obstruction is that a minimum-degree condition alone cannot control
+component structure: the conjecture would need a connectivity hypothesis (or a
+bound on the number of components) to rule out this family. For connected
+graphs of minimum degree $3$ the conjecture is not addressed here.
+\end{remark}
+
+\section{Verification artifacts}
+
+\begin{itemize}
+  \item \texttt{reproduce.py} brute-force enumerates \emph{all} simple cycles
+        of $G_k$ for $k \in \{1,2,3,5,8\}$ directly from the adjacency
+        definition and confirms: minimum degree $3$, all cycle lengths in
+        $\{4,6\}$, zero distinct prime lengths.
+  \item \texttt{lean4/} contains a full Lean~4 (core, no Mathlib,
+        v4.33.1) formalization with zero axioms and zero \texttt{sorry}:
+        every cycle of the family has even length at least $3$ (hence is
+        non-prime), every vertex has three pairwise distinct neighbors, and
+        the vertex count $6k$ is unbounded.
+\end{itemize}
+
+\end{document}
