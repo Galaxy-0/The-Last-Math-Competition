@@ -3,8 +3,8 @@
 \usepackage{amsmath,amssymb}
 \usepackage[T1]{fontenc}
 \usepackage{hyperref}
-\title{A cubic-box counterexample to Conjecture 425}
-\author{Local AI-assisted solution draft}
+\title{Two MacMahon counterexamples to Conjecture 425}
+\author{gaochengzhecpu (AI-assisted submission)}
 \date{3 October 2026}
 % Compact consistent title for a short mathematical note.
 \makeatletter
@@ -21,12 +21,15 @@
 Conjecture \texttt{00000000425} (original statement and pinned commit in
 \texttt{SOURCE.md}) asserts that the
 coefficient sequence in the diagonal specialization of the boxed plane
-partition generating function is always log-concave. We use the standard
-volume generating polynomial, with the diagonal specialization meaning equal
-box side lengths. The counterexample is the $2\times2\times2$ box.
+partition generating function is always log-concave. Write $F_n(q)$ for the
+standard volume generating polynomial of the $n\times n\times n$ box,
+so the three box dimensions are specialized to the diagonal.
+We disprove both log-concavity of the numerical coefficients of a fixed
+$F_n$ and coefficientwise log-concavity of the polynomial sequence $(F_n)$.
+Both arguments are formalized in the accompanying Lean file.
 
 \paragraph{Definitions.}
-A plane partition in this box is an array
+For the box of side two, a plane partition is an array
 $\left(\begin{smallmatrix}a&b\\c&d\end{smallmatrix}\right)$ with entries in
 $\{0,1,2\}$, weakly decreasing along both rows and columns:
 $a\ge b$, $a\ge c$, $b\ge d$, and $c\ge d$.
@@ -76,7 +79,7 @@ $(f_0,f_1,f_2)=(1,1,3)$. This directly refutes log-concavity for the product
 specified in the conjecture, without using the counting formula as an
 unproved assumption.
 
-The self-contained Lean 4.19.0 file \texttt{Main.lean} formalizes both routes.
+The self-contained Lean 4.19.0 file \texttt{lean/Main.lean} formalizes both routes.
 It verifies the complete, duplicate-free enumeration of the 81 arrays and
 the precise plane-partition predicate. It also defines integer formal series,
 Cauchy multiplication, and the actual three nested MacMahon products. The
@@ -88,16 +91,51 @@ not for a predicate whose existence is merely assumed. Its first three
 coefficients are also proved equal to the direct enumeration above.
 All calculations use kernel proofs, with no placeholders or custom axioms.
 
-\paragraph{Alternative reading of ``coefficientwise.''}
-If the intended claim instead compares consecutive polynomials $F_n(q)$
-for $n\times n\times n$ boxes, it is false as well. The completely filled
-box is the unique term of maximum volume, so $F_n$ is monic of degree
-$n^3$. At $n=2$, the polynomial $F_2(q)^2-F_1(q)F_3(q)$ has coefficient
-$-1$ at $q^{28}$, because the two product degrees are $16$ and $28$.
-This additional argument covers that reading in ordinary mathematics;
-the Lean artifact formalizes the scalar coefficient-sequence reading above.
-The source does not explicitly define ``diagonal specialization,'' so we
-retain this interpretation boundary rather than claiming all possible
-meanings have been formalized.
+\paragraph{Coefficientwise log-concavity across box sizes.}
+For a sequence of polynomials, coefficientwise log-concavity requires every
+coefficient of $F_n(q)^2-F_{n-1}(q)F_{n+1}(q)$ to be nonnegative.
+This reading fails at $n=2$ as well. The completely filled box is the unique
+term of maximum volume, so $F_n$ is monic of degree $n^3$.
+Consequently $F_2^2$ has degree $16$ while $F_1F_3$ is monic of degree $28$,
+and
+\[
+ [q^{28}]\bigl(F_2(q)^2-F_1(q)F_3(q)\bigr)=0-1=-1.
+\]
+In particular, the claimed nonnegativity fails before any equality
+characterization is considered.
+
+\paragraph{Formal verification of the cross-size argument.}
+The Lean proof does not assume the preceding degree or monicity facts.
+It constructs three actual infinite formal quotients from the exact
+MacMahon numerators and denominators for side lengths $1$, $2$, and $3$.
+Their full equations $D_nF_n=N_n$ hold at every index by
+\path{formalQuotient_spec}; in each case $D_n(0)=1$ is verified.
+
+To calculate efficiently, the file represents the first $29$ coefficients
+by finite integer lists. The theorem \path{prefixProduct_correct} proves
+for arbitrary lists of factors that the truncated product agrees with the
+infinite Cauchy product at every index below the cutoff. Successive kernel
+checks compute the actual MacMahon factors, rather than assume their
+product or a claimed polynomial table. Three further kernel checks verify
+$D_n C_n=N_n$ through degree $28$ for the displayed coefficient lists $C_n$.
+The theorem \path{equation_prefix_unique}, proved by strong induction,
+then identifies those lists with the first $29$ coefficients of any true
+MacMahon quotient. This uniqueness step is valid because $D_n(0)=1$.
+
+Finally \path{macmahon_cross_size_coefficient} applies to arbitrary series
+satisfying the three MacMahon equations and proves the displayed
+coefficient to be $-1$. The theorem
+\path{concrete_cross_size_coefficient} specializes it to the constructed
+quotients, so there is no existence assumption left open. The theorem
+\path{macmahon_diagonal_coefficientwise_counterexample} negates the
+universal coefficientwise assertion using its $n=2$ instance.
+Thus both readings described at the start have full formal disproofs.
+
+The independent script \texttt{verify.py} concerns only Conjecture 425.
+It enumerates the $2\times2$ arrays, computes the three exact MacMahon
+series through degree $28$, compares them with the Lean coefficient
+tables, and checks the cross-size convolution. Only the standard Lean
+foundational axioms occur; no additional axiom or external decision
+oracle is used.
 
 \end{document}
