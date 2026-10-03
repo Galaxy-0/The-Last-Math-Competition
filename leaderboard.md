@@ -6,7 +6,7 @@ compiling Lean 4 project (Mathlib or self-contained core Lean), no `sorry`, no
 `native_decide`/extra axioms, a semantic review confirming the Lean theorem actually
 establishes the conjecture or its negation, and (per the reviewer rules) a solution review
 archived under solutions/[number_ID]/review/. 11 earlier merged submissions failed the
-semantic review and were removed (see git history); 62 PRs were closed unmerged with full
+semantic review and were removed (see git history); 69 PRs were closed unmerged with full
 review comments — including re-reviewed v2/v3 resubmissions.
 
 **Total solved: 196 / 10000 conjectures** — 14 proven, 182 disproven.
