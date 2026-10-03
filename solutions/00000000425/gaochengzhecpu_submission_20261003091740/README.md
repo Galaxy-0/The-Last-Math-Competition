@@ -1,37 +1,46 @@
-# Conjecture 00000000425: disproof submission
+# Disproof of conjecture 00000000425
 
-Cubic plane partitions: 1, 1, 3 is not log-concave.
+**Result:** Disproof under the reading stated below.
 
-Submitter: **gaochengzhecpu**. AI-assisted with Codex; draft for mathematical review.
+For the equal-sided 2 x 2 x 2 MacMahon box, the coefficient sequence starts 1, 1, 3, so a_1^2 = 1 < 3 = a_0 a_2. Lean constructs the formal quotient, proves its numerator/denominator coefficient equation at every index, and derives this failure directly.
 
-## Scope
+## The conjecture
+
+> Definition: The generating function of boxed plane partitions is MacMahon's three-parameter product. Conjecture: The coefficient sequence of the diagonal specialization always satisfies coefficientwise log-concavity; and equality in the concavity holds only at the diagonal single cell. (diagonal coefficient log-concavity)
+
+[Original statement](https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/efab34b80a63963991d6c7ed625442a89a328a44/conjectures/00000000425.md); both languages are in `SOURCE.md`.
+
+## Reading and scope
 
 Interprets diagonal specialization as equal box side lengths. The Lean proof now constructs the infinite MacMahon formal quotient, proves its full numerator/denominator equation, and directly refutes log-concavity. The cross-size polynomial reading is additionally addressed in ordinary mathematics.
 
-Read `proof.pdf` for the complete ordinary proof, explicit assumptions and the correspondence to `Main.lean`. The LaTeX source is `proof.tex`. This revised version has been checked locally; its draft status does not imply organizer acceptance.
+## Proof
+
+The full mathematical argument is in [main.pdf](main.pdf), with LaTeX source [main.tex](main.tex).
+
+## Formalization
+
+Lean **4.19.0**, using its bundled standard library only; no Mathlib dependency. The complete project is in `lean/`, with warnings treated as errors. The report explains how the encoded objects and final proposition correspond to the original statement.
+
+Audited declarations include `macmahon_cube_two_not_logconcave`, `counting_matches_macmahon_prefix`, `formalQuotient_spec`, `macMahonCubeTwo_spec`, `macmahon_product_counterexample`. `lean-verification.txt` records the clean build and printed axiom dependencies. No `sorry`, `admit`, `native_decide`, or additional axiom is used; only standard Lean foundational axioms occur.
 
 ## Reproduce
 
-Use Lean **4.19.0**, then run in this directory:
+From this submission directory:
 
 ```text
+cd lean
 lake build
 ```
 
-Only Lean's bundled standard libraries are needed; there is no Mathlib dependency. The Lake configuration treats warnings as errors. Principal declarations print their axiom dependencies. Local checks found no `sorry`, `admit`, `native_decide` or added axioms; only standard Lean foundational axioms occur. `lean-verification.txt` records the successful local build.
+From this submission directory, rebuild the PDF with:
 
-Rebuild the PDF with `tectonic proof.tex` (or a standard LaTeX toolchain).
+```text
+tectonic main.tex
+```
 
-The optional exact-arithmetic helper `python verify.py` performs both the 425 and 996 checks. It is independent of the Lean proof.
+Independent arithmetic check: `python verify.py`.
 
-## Provenance and local validation
+## Submission status
 
-Original statement: [conjecture 00000000425](https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/efab34b80a63963991d6c7ed625442a89a328a44/conjectures/00000000425.md). An unchanged bilingual copy is included as `SOURCE.md`.
-
-Lean compilation, exact source correspondence, AI cross-review, and rendered-PDF inspection were completed locally. The source hashes in `verification.json` identify the checked artifacts. This is a draft submission, not an official review or an accepted result.
-
-Immediately before preparing this submission, official metadata did not mark this conjecture solved, and no matching conjecture number was found in the titles or bodies of the 298 public PRs checked at 2026-10-03T13:15:11.955212+00:00. This limited check is not a claim of mathematical novelty or priority.
-
-## Second review and correction
-
-Second adversarial review found that the original Lean enumerator did not connect to the specified MacMahon product. This revision supplies an explicit terminating formal-division construction, its coefficient equation at every index, and a disproof for the resulting actual series. The original counting counterexample remains valid.
+AI-assisted with Codex; submitted by **gaochengzhecpu**. The statement-to-proof correspondence was checked locally by a separate agent, and the PDF was rendered and inspected. This remains a draft for independent mathematical review; local verification is not organizer acceptance. `verification.json` gives hashes of the reviewed files.
