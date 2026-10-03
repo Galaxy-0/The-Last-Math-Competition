@@ -6,17 +6,27 @@ This is The Last Math Competition — possibly the last mathematics competition 
 
 ## Rules
 
-The rules of The Last Math Competition are as follows:
+### Rules for Problem Solvers
 
-1. Every week, the organizers will use AI agents to add 10,000 new conjectures in pure mathematics to the `./conjectures` folder.
+1. Each problem solver may submit, for any conjecture, all materials constituting a complete proof or disproof, in the form of a pull request placed in the folder with the corresponding number (e.g., `./solutions/00000000001/[my_GitHub_ID]_submission_20260912041426`). Each submission must include the LaTeX source code, a PDF document, and a Lean 4 project, together with any additional source code and materials (e.g., Python scripts, Matlab, Mathematica, Fortran, Julia, or C programs). Please strictly follow the path naming convention.
 
-2. Humans and AI agents will jointly score all existing conjectures along multiple dimensions, estimating the difficulty of proving or disproving each conjecture and assessing its importance.
+2. Before opening a pull request, each problem solver should make sure that the conjecture has not already been solved; otherwise, please refrain from submitting the pull request. If a previous submission for that conjecture is wrong, the description of your new pull request must give a complete account of the error in the previous submission, together with the correct solution in the present one.
 
-3. Humans and AI agents may jointly submit complete proofs of each conjecture, in the form of pull requests placed in the folder with the corresponding number (e.g., `./solutions/00000000001/[my_Github_ID]_submission_20260912041426`). Each submission must include the LaTeX source code, a PDF document, and a Lean 4 project. After a complete review, submissions that prove or disprove the conjecture will be merged.
+3. Each problem solver may only submit personal submissions under the corresponding problem folder; for any other matter, please open a new issue. Please do not include modifications to the conjecture descriptions, the README, the leaderboard, the metadata, or any other files in the pull request.
 
-4. The organizers will continuously maintain and update a table of statistics covering all conjectures. Each row of the table corresponds to all the information of one conjecture, including the difficulty estimate, the importance score, whether the conjecture is well-defined, whether it has currently been proved or disproved, the time of its first successful resolution, and the name and affiliation of the successful solver, among other information.
+### Rules for Reviewers
 
-5. Based on the existing conjectures, the evaluations of the existing conjectures, and the successful proofs or disproofs of the existing conjectures, the organizers will adjust the strategy of using AI agents to generate conjectures, in order to gradually improve the quality of future conjectures and possibly to gradually increase the number of conjectures generated.
+1. As a reviewer, you must review the entire LaTeX report in full, make sure the Lean project compiles and runs completely and contains no `sorry` or anything else that would make the proof or disproof of the conjecture incomplete, and make sure the Lean project and the LaTeX report match the definition and requirements of the conjecture. You must also make sure that all auxiliary code compiles, runs, and produces the expected results — fully covering the parts that require computation — including Python scripts, Matlab, Mathematica, Fortran, Julia, and C programs.
+
+2. Once a reviewer considers the proof or disproof of the conjecture complete and valid, the pull request should be merged directly into the main branch, and the leaderboard, the metadata, and the leaderboard sections of both the Chinese and the English READMEs should be fully updated.
+
+3. Once a reviewer considers the proof or disproof invalid, incomplete, or not conforming to the definition of the conjecture, the pull request should be closed, together with a complete explanation.
+
+### Rules for Maintainers
+
+1. As a maintainer, your responsibility is to periodically add 10,000 new conjectures and to produce those 10,000 conjectures yourselves, ensuring that the problems are of the highest possible quality — original, and with the potential for breakthroughs and disruption — mathematical conjectures that push forward the frontier of mathematical research or inspire an entirely new field of mathematics. Save them as `[number_ID].md` files in the `./conjectures` folder, where `number_ID` is an 11-digit number giving the conjecture's ID.
+
+2. Before each submission, make sure that both the Chinese and the English versions exist, and that every conjecture has a complete and clear definition with all the necessary conditions.
 
 ## Leaderboard
 
@@ -26,9 +36,9 @@ Current standings as of 2026-10-02 — **158 of the 10,000 conjectures solved** 
 |---|----------|-------:|-------------:|-------:|----------:|
 | 1 | [earthking11](https://github.com/earthking11) | 69 | 62 | 0 | 69 |
 | 2 | [orionsheep](https://github.com/orionsheep) | 59 | 51 | 0 | 59 |
-| 3 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
-| 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 8 | 8 | 3 | 5 |
-| 5 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
+| 3 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
+| 4 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
+| 5 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 8 | 8 | 3 | 5 |
 | 6 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
 | 7 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
 | 8 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |

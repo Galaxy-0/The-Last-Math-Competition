@@ -6,17 +6,27 @@
 
 ## 比赛规则
 
-以下是 The Last Math Competition 的规则：
+### 问题求解者（Problem Solvers）规则
 
-1. 举办方每周会使用 AI Agent 新增 10000 个纯数学领域的猜想，添加到 `./conjectures` 文件夹中；
+1. 每个 problem solver 可以提交对于每个猜想的完整证明的所有材料，以 pull request 的形式提交在对应序号的文件夹中（比如 `./solutions/00000000001/[我的_GitHub_ID]_submission_20260912041426`），其中需要同时包含 LaTeX 源代码、PDF 文档和 Lean 4 项目，以及其他可能包含的任意额外源代码和材料，比如 Python script、Matlab、Mathematica、Fortran、Julia、C 程序代码，并且请务必严格遵守路径命名格式；
 
-2. 人类和 AI Agent 将共同对现存的所有猜想进行不同维度的打分，预估这些猜想证明或者证伪的难度，评价猜想的重要程度；
+2. 每个 problem solver 在提交 pull request 之前，应该确保该问题没有被解答，否则请放弃提交本次 pull request。如果该问题之前的 submission 是错误的，请在提交的 pull request 的描述和介绍中完整陈述之前的 submission 的错误，以及本次 submission 的正确解答；
 
-3. 人类和 AI Agent 可以共同提交对于每个猜想的完整证明，以 pull request 的形式提交在对应序号的文件夹中（比如 `./solutions/00000000001/[我的_GitHub_ID]_submission_20260912041426`），其中需要同时包含 LaTeX 源代码、PDF 文档和 Lean 4 项目，经过完整 review 后，完成证明或者证伪该猜想的提交将会被 merge 进来；
+3. 每个 problem solver 只能提交对应问题文件夹下面的个人 submission，如有问题请提交一个新的 issue。请不要在 pull request 中包含修改 conjectures 描述、README、leaderboard、metadata 等其他文件内容。
 
-4. 举办方将会持续维护和更新一个含有所有猜想相关统计数据的表格。表格中的每一行对应一个猜想的所有信息，其中包括猜想的难度预估、重要程度打分、是否 well-defined、目前是否被证明或者证伪、第一次成功解决的时间、成功解决者的姓名和 affiliation 等信息；
+### 审查者（Reviewers）规则
 
-5. 根据现存的猜想、对现存猜想的评估、对现存猜想的成功证明或者证伪，举办方将调整使用 AI Agent 生成猜想的策略，来逐步提高未来生成数学猜想的质量，以及可能逐步提高生成猜想的数量。
+1. 作为 Reviewer，你需要完整 review 整个 LaTeX report，确保 Lean project 完整编译运行，并且不包含任何 sorry 或者任何导致猜想的证明或者证伪不完全的功能，并且确保 Lean project 和 LaTeX report 符合猜想的定义和要求，并且确保包含其他所有辅助代码正确编译、正确运行并且获得符合预期的结果，完整且覆盖需要计算的部分，包括 Python script、Matlab、Mathematica、Fortran、Julia、C 程序等代码；
+
+2. 一旦 reviewers 认为这份猜想的证明或者证伪是完整且有效的，就应该把该 pull request 直接 merge 进 main 分支，并且更新完整 leaderboard、metadata、中文和英文 README 中的 leaderboard 部分；
+
+3. 一旦 reviewer 认为这份猜想的证明或者证伪是无效的、不完全的、不符合猜想定义的，则应该关闭 pull request，并且附带完整的解释说明。
+
+### 维护者（Maintainers）规则
+
+1. 作为 Maintainer，你的职责是定期增加 10000 个，并且自己完成 10000 个猜想，保证题目尽可能地高质量、有原创性的、具有潜在突破性和破坏性的数学猜想，尽可能推进数学前沿研究或者能启发一个全新的数学领域，依次保存为 `[number_ID].md` 文件，存储在 `./conjectures` 文件夹目录下，并且保证 `number_ID` 是一个 11 位数字，表示猜想的编号；
+
+2. 每次提交前，请确保同时存在中文和英文版本，并且保证猜想具有完备且清晰的定义，以及具有所有必要的条件。
 
 ## 排行榜（Leaderboard）
 
@@ -26,9 +36,9 @@
 |---|----------|-------:|-------:|-------:|----------:|
 | 1 | [earthking11](https://github.com/earthking11) | 69 | 62 | 0 | 69 |
 | 2 | [orionsheep](https://github.com/orionsheep) | 59 | 51 | 0 | 59 |
-| 3 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
-| 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 8 | 8 | 3 | 5 |
-| 5 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
+| 3 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
+| 4 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
+| 5 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 8 | 8 | 3 | 5 |
 | 6 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
 | 7 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
 | 8 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
