@@ -1,31 +1,44 @@
-# Conjecture 00000008536: disproof submission
+# Disproof of conjecture 00000008536
 
-Four lattice generators for six join-irreducibles.
+**Result:** Disproof under the reading stated below.
 
-Submitter: **gaochengzhecpu**. AI-assisted with Codex; draft for mathematical review.
+In the Boolean lattice on the six edges of K_4, the four vertex stars generate all singletons by pairwise intersection and then every subset by union. The lattice has six join-irreducibles but needs at most four generators, contradicting the asserted equality.
 
-## Scope
+## The conjecture
+
+> Definition: A distributive lattice is a lattice of ideals. Conjecture: The minimal number of generators of a distributive lattice equals its number of join-irreducible elements; and the dimension of the Boolean lattice into which a distributive lattice embeds equals its minimal number of generators. (embedding dimension of distributive lattices)
+
+[Original statement](https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/efab34b80a63963991d6c7ed625442a89a328a44/conjectures/00000008536.md); both languages are in `SOURCE.md`.
+
+## Reading and scope
 
 Lattice generation uses both binary meet and join, even without free constants; join-only generation would be a different claim.
 
-Read `proof.pdf` for the complete ordinary proof, explicit assumptions and the correspondence to `Main.lean`. The LaTeX source is `proof.tex`. This submission preserves the locally reviewed source and PDF byte for byte; their draft labels do not imply organizer acceptance.
+## Proof
+
+The full mathematical argument is in [main.pdf](main.pdf), with LaTeX source [main.tex](main.tex).
+
+## Formalization
+
+Lean **4.19.0**, using its bundled standard library only; no Mathlib dependency. The complete project is in `lean/`, with warnings treated as errors. The report explains how the encoded objects and final proposition correspond to the original statement.
+
+Audited declarations include `booleanSix_is_distributive_lattice`, `join_irreducibles_exact`, `four_generators_suffice`, `conjecture8536_false`. `lean-verification.txt` records the clean build and printed axiom dependencies. No `sorry`, `admit`, `native_decide`, or additional axiom is used; only standard Lean foundational axioms occur.
 
 ## Reproduce
 
-Use Lean **4.19.0**, then run in this directory:
+From this submission directory:
 
 ```text
+cd lean
 lake build
 ```
 
-Only Lean's bundled standard libraries are needed; there is no Mathlib dependency. The Lake configuration treats warnings as errors. Principal declarations print their axiom dependencies. Local checks found no `sorry`, `admit`, `native_decide` or added axioms; only standard Lean foundational axioms occur. `lean-verification.txt` records the successful local build.
+From this submission directory, rebuild the PDF with:
 
-Rebuild the PDF with `tectonic proof.tex` (or a standard LaTeX toolchain).
+```text
+tectonic main.tex
+```
 
-## Provenance and local validation
+## Submission status
 
-Original statement: [conjecture 00000008536](https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/efab34b80a63963991d6c7ed625442a89a328a44/conjectures/00000008536.md). An unchanged bilingual copy is included as `SOURCE.md`.
-
-Lean compilation, exact source correspondence, AI cross-review, and rendered-PDF inspection were completed locally. The source hashes in `verification.json` identify the checked artifacts. This is a draft submission, not an official review or an accepted result.
-
-Immediately before preparing this submission, official metadata did not mark this conjecture solved, and no matching conjecture number was found in the titles or bodies of the 298 public PRs checked at 2026-10-03T13:15:11.955212+00:00. This limited check is not a claim of mathematical novelty or priority.
+AI-assisted with Codex; submitted by **gaochengzhecpu**. The statement-to-proof correspondence was checked locally by a separate agent, and the PDF was rendered and inspected. This remains a draft for independent mathematical review; local verification is not organizer acceptance. `verification.json` gives hashes of the reviewed files.
