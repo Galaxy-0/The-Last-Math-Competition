@@ -1,0 +1,115 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\begin{document}
+\title{The printed divisibility assertion in Conjecture 00000000261 fails at $d=5$}
+\author{Chengzhe Gao}\date{}\maketitle
+
+\paragraph{Statement being addressed.}
+Both source languages take a fundamental discriminant $d\equiv1\pmod4$
+and a fundamental Pell solution $(t+u\sqrt d)/2$, and assert
+$u\nmid t$. The displayed divisor and dividend are essential.
+The conventional AAC formulation concerns divisibility of the unit
+coefficient by the prime discriminant, $p\nmid u$; see~\cite{FM}.
+Our counterexample concerns the printed condition $u\nmid t$ only.
+
+For $d\equiv1\pmod4$, the standard half-integral Pell presentation
+uses positive integers $t,u$ of the same parity with
+$t^2-du^2=\pm4$. Its least value $(t+u\sqrt d)/2>1$ is the fundamental
+unit. If ``Pell solution'' instead restricts the norm to $+1$,
+use $t^2-du^2=4$ and take the least value in that class.
+Both conventions give a counterexample here.
+
+\begin{theorem}
+The integer $5$ is a fundamental discriminant congruent to $1$ modulo $4$.
+The unique fundamental positive pair for $t^2-5u^2=\pm4$ is $(1,1)$.
+For $t^2-5u^2=4$ it is $(3,1)$. In particular $u\mid t$ in both cases.
+\end{theorem}
+\begin{proof}
+The integer $5$ is squarefree and $5\equiv1\pmod4$, so it is a
+fundamental discriminant. The pair $(1,1)$ has equal parity and
+$1^2-5\cdot1^2=-4$. Every positive integer pair $(t,u)$ has $t\geq1$
+and $u\geq1$. Therefore
+\[
+ \frac{t+u\sqrt5}{2}\geq\frac{1+\sqrt5}{2},
+\]
+with equality only at $(t,u)=(1,1)$. This proves genuine minimality
+and uniqueness among all positive Pell pairs, with no search bound.
+The coefficient $u=1$ divides $t=1$.
+
+Under the norm-$+1$ convention, $(3,1)$ has equal parity and
+$3^2-5\cdot1^2=4$. Every positive solution satisfies
+$t^2=5u^2+4\geq9$, hence $t\geq3$ and $u\geq1$. Consequently
+\[
+ \frac{t+u\sqrt5}{2}\geq\frac{3+\sqrt5}{2},
+\]
+with equality only at $(3,1)$. Here $u=1$ divides $t=3$.
+This disproves the universal condition as printed under both conventions.
+\end{proof}
+
+\paragraph{Why positive coefficients exhaust the unit candidates.}
+For the usual ring of integers $\mathbb Z[(1+\sqrt5)/2]$, write a unit
+$\alpha>1$ and its conjugate as
+$\alpha=(t+u\sqrt5)/2$ and $\alpha'=(t-u\sqrt5)/2$.
+Its norm is $\pm1$, so $\alpha'=\pm1/\alpha$ and $|\alpha'|<1$.
+Thus $t=\alpha+\alpha'>0$ and $u\sqrt5=\alpha-\alpha'>0$.
+Its integral coordinates have the same parity and satisfy the
+displayed Pell equation. Conversely those pairs have norm $\pm1$
+and inverses in the same ring. Hence the positive-Pell minimum used
+above is the usual fundamental unit, not a smaller search class.
+
+\paragraph{Exact order representation in Lean.}
+To avoid approximating $\sqrt d$, the formal project compares
+nonnegative coefficient pairs by exact integer arithmetic.
+For $u\leq v$, the inequality
+$t+u\sqrt d\leq s+v\sqrt d$ is equivalent to
+\[
+ t\leq s\quad\text{or}\quad (t-s)^2\leq d(v-u)^2,
+\]
+where differences in the implementation are natural-number subtraction.
+If $t>s$, this is obtained by squaring the nonnegative sides of
+$t-s\leq(v-u)\sqrt d$; if $t\leq s$, the comparison already holds.
+For $u>v$, the equivalent condition is
+\[
+ t\leq s\quad\text{and}\quad d(u-v)^2\leq(s-t)^2.
+\]
+These equivalences justify the project predicate \texttt{ValueLE}
+as the exact order of the algebraic values, including their common
+denominator $2$. The project proves coordinatewise monotonicity
+and the equality case at a coordinatewise minimum for arbitrary
+coefficients. The real-surds interpretation above is the elementary
+semantic bridge; no real-number library or pre-assumed Pell
+minimality is used.
+
+\paragraph{Formal verification and limits.}
+Lean defines squarefreeness over every potential squared divisor,
+the appropriate fundamental-discriminant class, both Pell equations
+over all positive integer pairs, and fundamentality by minimality
+against every candidate. It proves the two minima, uniqueness,
+divisibility and negations of the source's universal claim.
+The finite checks establish only the concrete pair equations and
+the small discriminant's squarefreeness; minimality is an unbounded proof.
+
+The project uses Lean 4.19.0 with bundled Std only. It has passed a fresh
+\texttt{lake build} with warnings as errors and
+\texttt{lake env lean -DwarningAsError=true Main.lean}.
+The printed axiom dependencies are standard foundational axioms;
+there is no \texttt{sorry}, \texttt{admit}, \texttt{native\_decide}
+or custom axiom. The Python script is only a supplementary exact
+arithmetic check. The manuscript and proof were reviewed by the
+same assistant in a separate adversarial pass, without a subagent
+or claim of independent review.
+
+This submission makes no new claim about the conventional AAC assertion
+$p\nmid u$. At $d=5$ the coefficient $u=1$ does satisfy that different
+condition. The disproof applies to the displayed source's $u\nmid t$.
+
+\begin{thebibliography}{1}
+\bibitem{FM} N. Fellini and M. Ram Murty,
+\emph{Wieferich primes in number fields and the conjectures of
+Ankeny--Artin--Chowla and Mordell}, 2025.
+\href{https://arxiv.org/abs/2508.08472}{arXiv:2508.08472}.
+\end{thebibliography}
+\end{document}
