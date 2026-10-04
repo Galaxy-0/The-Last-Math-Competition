@@ -1,0 +1,154 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\title{Subdividing an Edge of $K_9$:\\A Disproof of Conjecture 00000003476}
+\author{GitHub: gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+The source asserts that subdividing an edge decreases the Wiener index
+if and only if the betweenness of that edge is below a quarter of the
+number of vertices. In the complete graph $K_9$ every edge has
+betweenness $1<9/4$, yet subdividing an edge raises the Wiener index
+from $36$ to $53$. The graph, the subdivision, the Wiener index, the
+betweenness and the negation of the criterion are formalised in Lean.
+In fact subdivision never decreases the Wiener index of a connected
+graph. An earlier submission argued with $K_5$ but had none of these
+objects in Lean; its error is described below.
+\end{abstract}
+
+\paragraph{Definitions and reading of the source.}
+Let $G$ be a finite connected simple graph with $n$ vertices and
+distance function $d$. Its Wiener index is
+$W(G)=\sum_{\{x,y\}}d(x,y)$, the sum over unordered pairs of vertices.
+Subdividing an edge $e=ab$ gives the graph $G_e$: the edge $ab$ is
+removed and a new vertex $w$ adjacent to exactly $a$ and $b$ is added.
+The betweenness of $e$ is
+\[
+ B(e)=\sum_{\{s,t\}}\frac{\sigma_{st}(e)}{\sigma_{st}},
+\]
+where $\sigma_{st}$ is the number of shortest paths from $s$ to $t$ and
+$\sigma_{st}(e)$ the number of those through $e$. The source claims, for
+every such $G$ and $e$,
+\begin{equation}\label{eq:crit}
+ W(G_e)<W(G)\iff B(e)<\frac n4 .
+\end{equation}
+
+\begin{theorem}
+Let $G=K_9$ and let $e$ be an edge. Then $B(e)=1<9/4$, while
+$W(G)=36$ and $W(G_e)=53$. Hence \eqref{eq:crit} fails.
+\end{theorem}
+\begin{proof}
+Any two distinct vertices $s,t$ of $K_9$ are adjacent, so the only
+shortest path between them is the edge $st$. It passes through $e$
+exactly when $\{s,t\}=e$. Thus $B(e)=1$. All $\binom92=36$ distances
+equal $1$, so $W(G)=36$.
+
+Let $e=ab$. The graph $G_e$ has $10$ vertices and is connected, so each
+of its $\binom{10}2=45$ distances is at least $1$. Already this gives
+$W(G_e)\ge45>36$. Precisely, the pairs at distance $2$ are $\{a,b\}$ and
+$\{w,x\}$ for the seven vertices $x\ne a,b$; all other pairs are
+adjacent. So $W(G_e)=45+8=53$.
+\end{proof}
+
+\begin{proposition}
+For every finite connected graph $G$ and every edge $e$,
+$W(G_e)>W(G)$.
+\end{proposition}
+\begin{proof}
+Let $e=ab$ and let $d'$ be the distance in $G_e$. A walk in $G_e$
+between two old vertices $x,y$ yields a walk in $G$ that is no longer:
+replace each passage $a,w,b$ or $b,w,a$ by the edge $ab$, and delete
+each passage $a,w,a$ or $b,w,b$. Hence $d'(x,y)\ge d(x,y)$. The pairs
+containing $w$ contribute a positive amount. Summing gives
+$W(G_e)>W(G)$.
+\end{proof}
+
+So the left side of \eqref{eq:crit} never holds, and the criterion fails
+for every edge with $B(e)<n/4$.
+
+\begin{remark}
+The value of $B(e)$ depends on the convention only mildly. Summing over
+ordered pairs gives $2$; omitting the pair of endpoints gives $0$;
+normalised versions are smaller. All are below $9/4$, which is why
+$K_9$ is used and not a smaller complete graph. If the quarter is taken
+of the $10$ vertices of $G_e$, the same inequalities hold. For the
+clause on bipartite graphs, $K_{7,7}$ has $n=14$ and
+$B(e)=1+2\cdot\tfrac67=\tfrac{19}7<\tfrac{14}4$ for every edge, so by
+the proposition the criterion fails there as well. The proposition and
+this last computation are not formalised.
+\end{remark}
+
+\section*{The earlier submission and its error}
+Pull request 225 of the competition repository (by
+\texttt{orionsheep}) proposed the same kind of counterexample with
+$K_5$. It was closed without merging on 3 October 2026. The reviewer's
+stated reason was that the main Lean theorem was arithmetic on a
+hard-coded list of distances, and that no graph, Wiener index,
+subdivision or betweenness was defined in Lean.
+
+That is the error: the Lean file checked that a list of numbers sums to
+$19$ and that $19>10$, which says nothing about graphs. There is also a
+gap in the example itself. With betweenness summed over ordered pairs
+an edge of $K_5$ has betweenness $2>5/4$, so $K_5$ refutes the
+criterion only under some conventions.
+
+The present submission defines the four objects in Lean for arbitrary
+finite graphs, states the criterion with a universal quantifier, and
+uses $K_9$, for which the ordered convention is covered too.
+
+\section*{Formal verification and scope}
+Graphs are Mathlib's \texttt{SimpleGraph} and distances are Mathlib's
+\texttt{SimpleGraph.dist}. \texttt{subdivide G a b} is a graph on
+\texttt{Option V}; the new vertex is \texttt{none}.
+\texttt{wiener} is half the sum of distances over ordered pairs.
+\texttt{sigma} and \texttt{sigmaThrough} count the walks whose length
+equals the distance, and those among them whose edge list contains
+$e$; \texttt{betweenness} is the resulting sum over unordered pairs and
+\texttt{betweennessOrdered} the sum over ordered pairs.
+
+For a complete graph on any vertex type, \texttt{sigma\_top} and
+\texttt{sigmaThrough\_top} prove $\sigma_{st}=1$ and
+$\sigma_{st}(e)\in\{0,1\}$ according to whether $\{s,t\}=e$, by
+classifying all walks of length one. This gives
+\texttt{betweenness\_K9}: $B(e)=1$, and
+\texttt{betweennessOrdered\_K9}: the ordered sum is $2$.
+\texttt{wienerTwice\_K9} computes the ordered distance sum $72$.
+\texttt{subdivide\_K9\_connected} proves that the subdivided graph is
+connected, and \texttt{wienerTwice\_ge} proves that a connected graph
+on $m$ vertices has ordered distance sum at least $m(m-1)$. Hence
+\texttt{wiener\_increases}: $W(K_9)<W((K_9)_e)$. Lean proves the bound
+$W((K_9)_e)\ge45$, which is what the disproof needs; the exact value
+$53$ is the hand computation above.
+
+The proposition \texttt{ClaimedCriterion} is \eqref{eq:crit} quantified
+over all finite connected graphs and edges. Its negation is the theorem
+\begin{center}\small\texttt{conjecture\_false}.\end{center}
+The theorem
+\begin{center}\small\texttt{conjecture\_false\_ordered}\end{center}
+is the same for the ordered convention. No \texttt{sorry},
+\texttt{native\_decide} or custom axiom occurs.
+
+The disproof concerns the stated equivalence. No claim is made about
+the phrase on the cut-load inequality chain, which is not a precise
+statement.
+
+\section*{Source and reproduction}
+The exact bilingual source is included byte-for-byte as
+\texttt{SOURCE.md}. Its repository path is
+\begin{center}\small\texttt{conjectures/00000003476.md}.\end{center}
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake build}, then
+\begin{center}\small\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The included public-Git manifest locks all dependency revisions. The
+\texttt{verification/} directory records the fresh-build logs,
+theorem-axiom reports, artifact hashes, review and final PDF
+inspection. No supplementary numerical computation is required.
+\end{document}
