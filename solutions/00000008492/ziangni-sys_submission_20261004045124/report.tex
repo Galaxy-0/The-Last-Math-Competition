@@ -1,0 +1,118 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\title{A deterministic obstruction to a universal subadditive rate}
+\author{ziangni-sys}
+\date{Conjecture 00000008492}
+\begin{document}
+\sloppy
+\maketitle
+\noindent Both source versions assert that the universal spectrum of rates of
+mean convergence for random subadditive sequences is dominated by
+$\log n/n$. We disprove this assertion even on a one-point ergodic probability
+space. In particular, the obstruction persists when the implied constant and
+the starting index may depend arbitrarily on the process.
+
+\begin{theorem}
+There is an integrable, nonnegative subadditive process on an ergodic
+probability-preserving system whose normalized expectations converge to zero,
+but whose errors are not $O(\log n/n)$.
+\end{theorem}
+\begin{proof}
+Let $\Omega=\{*\}$, let $\mu$ be the unit point mass, and let $T$ be the
+identity. This system preserves probability and is ergodic: its only subsets
+are the empty set and $\Omega$. Define, for every integer $n\geq0$,
+\[
+ X_n(*)=\sqrt n.
+\]
+Every $X_n$ is a measurable integrable random variable, is nonnegative, and
+$X_0=0$. For all $m,n\geq0$,
+\[
+ X_{m+n}(*)=\sqrt{m+n}\leq\sqrt m+\sqrt n
+ =X_m(*)+X_n(T^m*).
+\]
+The inequality follows by squaring the nonnegative quantities: the square on
+the right is $m+n+2\sqrt{mn}\geq m+n$. Thus this is the usual subadditive
+cocycle inequality, with its actual iterate of the measure-preserving map.
+
+Since integration against $\mu$ evaluates at its one point,
+\[
+ a_n:=\frac{\mathbb E_\mu X_n}{n}
+     =\frac{\sqrt n}{n}=\frac1{\sqrt n}\longrightarrow0
+ \qquad(n\geq1).
+\]
+The normalized process has the same limit pointwise and in mean. Its
+one-sided error from the limiting value $0$ is exactly $a_n>0$.
+
+For any real constant $C$, the standard logarithm--power limit gives
+\[
+ C\frac{\log n}{\sqrt n}\longrightarrow0.
+\]
+Consequently, for every starting index $N$, there exists $n\geq\max(N,1)$
+such that $C\log n<\sqrt n$. Dividing by $n>0$ yields
+\[
+ C\frac{\log n}{n}<\frac{\sqrt n}{n}=a_n.
+\]
+This excludes every eventual big-$O$ constant, even for this single fixed
+process, and proves the theorem.
+\end{proof}
+
+\newpage
+\section*{Scope of the disproof}
+The source concerns random subadditive sequences and does not impose a
+uniform bound on all unnormalized $X_n$, mixing assumptions, or a special
+symbolic construction. The example is deterministic, which is a valid
+special case of a random process, and its underlying probability system is
+ergodic. Each random variable is bounded and integrable; the normalized
+variables are uniformly bounded by $1$ for $n\geq1$. The unnormalized values
+grow as $\sqrt n$. No claim is made about a different hypothesis requiring
+$\sup_n\|X_n\|_\infty<\infty$.
+
+The assertion about a universal upper rate is a necessary clause of the
+conjecture. Its failure already disproves the conjunction; no assertion about
+the separate Sturmian or Thue--Morse extremal constructions is needed.
+The counterexample does not merely violate a coefficient-one inequality:
+it violates every possible eventual constant multiple of the proposed rate.
+
+\section*{Formal correspondence}
+The accompanying Lean project uses Mathlib's actual probability, ergodicity,
+integration, filter convergence, and asymptotic definitions.
+\begin{itemize}
+\item \texttt{mu} (written $\mu$ in the source) is
+\texttt{Measure.dirac ()} on \texttt{Unit} with its full sigma-algebra.
+An \texttt{IsProbabilityMeasure} instance and \texttt{system\_ergodic}
+establish the probability and \texttt{Ergodic T mu} conditions.
+\item \texttt{X n} is the actual real square root of the natural index.
+\texttt{integrable\_X}, \texttt{X\_nonneg}, \texttt{X\_zero}, and
+\texttt{subadditive\_process} verify integrability, nonnegativity,
+the zero initial value, and the full iterated subadditive inequality.
+\item \texttt{expectation\_X} computes the Bochner integral.
+\texttt{mean} divides that integral by the index;
+\texttt{mean\_tendsto\_zero} and \texttt{pointwise\_normalized\_limit}
+prove convergence, using the real negative-power limit.
+\item The logarithm little-$o$ power theorem yields the limit of
+$\log n/\sqrt n$. This is formalized as
+\texttt{log\_div\_sqrt\_tendsto\_zero}.
+The theorem \texttt{no\_eventual\_rate} proves
+\[
+ \forall C\in\mathbb R\;\forall N\in\mathbb N\;\exists n\geq N,
+ \quad n\geq1\quad\hbox{and}\quad
+ C\frac{\log n}{n}<a_n.
+\]
+\item \texttt{not\_bigO} proves the negation of Mathlib's
+\texttt{Asymptotics.IsBigO} at \texttt{atTop}, including its norm-based
+definition. Positivity identifies the formal error with the one-sided error.
+\end{itemize}
+Natural-index division at $n=0$ uses Lean's totalized field convention;
+all counterexample witnesses have $n\geq1$, so this has no asymptotic effect.
+
+\section*{Reproduction}
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake update}, \texttt{lake exe cache get},
+and \texttt{lake build}. Check the complete source with
+\begin{center}\small\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The source prints axiom audits for the principal theorems. Only standard
+logical axioms are used; there are no admitted statements or additional axioms.
+\end{document}
