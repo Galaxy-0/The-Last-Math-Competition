@@ -1,0 +1,164 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=27mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\newcommand{\gra}{\operatorname{gra}}
+\title{Existence of maximal monotone extensions\\Proof of Conjecture 00000008847}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+
+\textbf{Result.} Both assertions follow from a general maximal-extension
+theorem for pairwise conditions on graphs. This theorem permits arbitrary
+source and target sets. In particular, it covers monotone operators into
+a continuous dual space, as well as monotone operators on inner-product
+spaces. No completeness assumption is needed.
+
+\section*{1. General graph formulation}
+Let $X,Y$ be arbitrary sets and let $C(p,q)$ be any predicate on pairs of
+points $p,q\in X\times Y$. No symmetry, reflexivity, or algebraic
+condition on $C$ is assumed. Call $S\subseteq X\times Y$ \emph{admissible}
+if
+\[
+  \forall p,q\in S,\quad C(p,q).
+\]
+A set-valued map $A:X\to\mathcal P(Y)$ has graph
+\[
+  \gra A=\{(x,u):u\in A(x)\}.
+\]
+Call $A$ admissible when its graph is admissible. A map $B$ extends $A$
+when $A(x)\subseteq B(x)$ for every $x$, equivalently
+$\gra A\subseteq\gra B$. Empty values and empty graphs are allowed.
+A map is \emph{maximal admissible} when it is admissible and every
+admissible extension of it is equal to it.
+
+\textbf{General theorem.} Every admissible map admits a maximal
+admissible extension. Moreover, a map is maximal admissible if and only
+if its graph is a maximal element of the family of admissible graphs
+ordered by inclusion.
+
+\section*{2. The chain-union lemma}
+Let $\mathcal C$ be a family of admissible graphs linearly ordered by
+inclusion. Then $U=\bigcup_{S\in\mathcal C}S$ is admissible.
+
+Indeed, choose $p,q\in U$. There are $S,T\in\mathcal C$ with $p\in S$
+and $q\in T$. Either $S\subseteq T$ or $T\subseteq S$. Thus the two
+points lie together in one admissible graph, which gives $C(p,q)$.
+For the empty chain, the union is empty and admissibility is vacuous.
+This argument uses only that admissibility is a condition on each pair
+of graph points.
+
+\newpage
+\section*{3. Existence and graph-order maximality}
+Fix an admissible map $A$ and consider
+\[
+  \mathcal M_A=\{S\subseteq X\times Y:\gra A\subseteq S,
+                \ S\text{ is admissible}\},
+\]
+ordered by inclusion. This family is nonempty because it contains
+$\gra A$. A nonempty chain in $\mathcal M_A$ has an upper bound in
+$\mathcal M_A$ given by its union: the union contains $\gra A$ and is
+admissible by Section 2. The empty chain has $\gra A$ as an upper bound.
+Zorn's lemma therefore gives a maximal element $M\in\mathcal M_A$.
+
+Set
+\[
+  B(x)=\{u\in Y:(x,u)\in M\}.
+\]
+Then $\gra B=M$, and $B$ is an admissible extension of $A$.
+If an admissible map $D$ extends $B$, its graph contains $\gra A$ and
+belongs to $\mathcal M_A$. Maximality gives $\gra D=M=\gra B$, so $D=B$.
+This proves the extension assertion.
+
+For the characterization, the constructions
+\[
+  A\longmapsto\gra A,\qquad
+  S\longmapsto\bigl[x\mapsto\{u:(x,u)\in S\}\bigr]
+\]
+are inverse bijections between all set-valued maps $X\to\mathcal P(Y)$
+and all subsets of $X\times Y$. They preserve inclusion and
+admissibility. Therefore graph-order maximality is exactly the absence
+of a proper admissible map extension, in both directions.\hfill$\square$
+
+\section*{4. Standard monotonicity specializations}
+\textbf{Continuous-dual operators.} Let $E$ be a real normed space and
+$E^*$ its continuous dual, the space of continuous real linear maps
+$E\to\mathbb R$. Take $X=E$, $Y=E^*$, and
+\[
+  C\bigl((x,u),(y,v)\bigr)\quad\Longleftrightarrow\quad
+  (u-v)(x-y)\geq0.
+\]
+The admissible maps are precisely the usual monotone set-valued
+operators $A:E\to\mathcal P(E^*)$. The general theorem gives a maximal
+monotone extension of every such operator and the exact graph-order
+characterization. This applies to every real Banach space; completeness
+is unnecessary. Evaluation here is actual evaluation of continuous
+linear functionals, not an assumed surrogate pairing.
+
+\textbf{Inner-product operators.} For a real inner-product space $H$,
+take $X=Y=H$ and
+\[
+  C\bigl((x,u),(y,v)\bigr)\quad\Longleftrightarrow\quad
+  \langle x-y,u-v\rangle\geq0.
+\]
+This recovers both conclusions for monotone operators
+$H\to\mathcal P(H)$, in particular for Hilbert spaces.
+The general theorem also applies to other source/target pairings by
+inserting their defining pairwise monotonicity predicate.
+
+\newpage
+\section*{5. Scope and formal correspondence}
+The English and Chinese conjecture both assert existence of maximal
+extensions and maximality under graph inclusion. The general theorem
+proves these two assertions for every pairwise graph compatibility
+condition, with explicit standard monotone-operator instances in
+Section 4. It does not restrict the original claim to equal source and
+target spaces or to Hilbert spaces.
+
+No continuity of the set-valued operator, nonempty-domain, full-domain,
+or completeness assumption is used. Zorn's lemma uses classical choice.
+The result asserts existence, not uniqueness or an effective procedure
+for selecting an extension.
+
+The accompanying Lean 4.19.0 project pins Mathlib to commit
+\begin{center}\small
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\end{center}
+The principal definitions and results in \texttt{lean/Main.lean} are:
+\begin{itemize}
+\item \texttt{graph}, \texttt{ofGraph}, and both inverse identities for
+arbitrary source and target types;
+\item \texttt{IsAdmissibleGraph}, the actual condition
+$\forall p,q\in S,\ C(p,q)$, and \texttt{admissible\_iff}, its
+pointwise map formulation;
+\item \texttt{graph\_subset\_iff}, the equivalence between valuewise
+map extension and graph inclusion;
+\item \texttt{admissible\_sUnion}, the chain-union proof, and
+\texttt{exists\_maximal\_graph}, Zorn's lemma with the prescribed graph
+as seed;
+\item \texttt{maximal\_graph\_iff}, the precise equivalence with absence
+of proper admissible map extensions, and
+\texttt{exists\_maximal\_extension}, the map existence result.
+\end{itemize}
+
+The general final theorem \texttt{conjecture\_00000008847} combines both
+conclusions for arbitrary $X$, $Y$, and $C$. No hypothesis asserts an
+extension or a maximal element. The source then defines the genuine
+inner-product and continuous-dual compatibility predicates and proves
+both specialized theorems, \texttt{InnerProduct.result} and
+\texttt{Duality.result}. In the dual instance the target is Lean's type
+of continuous real linear maps, and \texttt{Duality.monotone\_iff}
+identifies the condition with $(u-v)(x-y)\geq0$.
+
+All three final theorems are kernel checked and audited. There are no
+additional axioms, incomplete terms, or \texttt{native\_decide}.
+The standard logical axioms, including the classical choice used by
+Zorn's lemma, are recorded in \texttt{VERIFICATION.md}. No auxiliary
+numerical computation is involved.
+\end{document}
