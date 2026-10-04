@@ -1,0 +1,123 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\title{A complete market has one martingale vertex, not zero}
+\author{ziangni-sys}
+\date{Conjecture 00000008251}
+\begin{document}
+\sloppy
+\maketitle
+\noindent The conjecture asserts that the number of extreme points of the
+martingale-measure set of a finite-state market equals the number of
+states minus the rank of the assets. A complete two-state market already
+contradicts this formula.
+
+\section*{An explicit complete, arbitrage-free market}
+Take $\Omega=\{0,1\}$ with all subsets measurable and physical probability
+$P=\tfrac12\delta_0+\tfrac12\delta_1$. There are two dates, $0$ and $1$,
+with trivial initial information and full terminal information. Use
+discounted prices and two Arrow securities:
+\[
+ S_0^0=S_0^1=\tfrac12,\qquad S_1^i(x)=\mathbf1_{\{i\}}(x).
+\]
+The terminal payoff matrix, with states indexing rows and securities
+indexing columns, is
+\[
+ D=\begin{pmatrix}1&0\\0&1\end{pmatrix},\qquad
+ \operatorname{rank}D=2=|\Omega|.
+\]
+The portfolio $(h_0,h_1)$ pays $h_x$ in state $x$ and costs
+$(h_0+h_1)/2$, so every contingent claim is replicated. The portfolio
+$(1,1)$ costs and pays one, supplying a constant numeraire.
+Nonnegative payoffs and nonpositive cost force both coordinates to be
+zero, proving absence of arbitrage.
+
+\medskip
+\noindent\textbf{All martingale measures.}
+For a probability measure $Q$ on this actual measurable space, the
+one-period discounted martingale equations are exactly
+\[
+ \mathbb E_Q[S_1^i]=S_0^i\quad(i=0,1).
+\]
+Conditional expectation at the trivial initial sigma-algebra is ordinary
+expectation. Integrating the singleton indicators gives
+\[
+ Q(\{0\})=Q(\{1\})=\tfrac12.
+\]
+Singleton masses determine every measure on this finite space. Therefore
+$Q=P$ is the only martingale probability. It is equivalent to $P$, since
+both masses are positive. Thus the set of all martingale probabilities
+and the set of equivalent martingale probabilities are both the singleton
+$\{P\}$.
+
+\begin{theorem}
+The conjectured extreme-point formula fails for this market.
+\end{theorem}
+\begin{proof}
+The unique point of a singleton convex set is extreme: any convex
+decomposition into points of that set has both terms equal to that point.
+Consequently either convention for martingale measures gives exactly one
+extreme point. The proposed formula instead gives $2-2=0$.
+\end{proof}
+
+\newpage
+\raggedright
+\section*{Scope}
+Both originals state the count formula for a finite-state market without
+requiring incompleteness. The separate assertion about replication in
+incomplete markets is a different conjunct. This counterexample is a
+nonempty, complete, arbitrage-free market with a strictly positive
+martingale probability, so neither nonexistence nor boundary probability
+conventions explain the failure. The Arrow-security payoff matrix has
+rank two directly; the argument does not depend on whether a separately
+named bond is counted among the assets. The number of extreme points is
+not the affine dimension of the feasible set: the singleton has dimension
+zero but one extreme point.
+
+\section*{Actual probability and financial objects in Lean}
+The state type is \texttt{Fin 2} with its actual discrete Borel measurable
+structure. \texttt{payoff}, \texttt{price}, \texttt{terminal} and
+\texttt{cost} define the two securities and actual portfolio sums.
+\texttt{terminal\_eq} proves that a portfolio pays its corresponding
+coordinate in each state. \texttt{complete\_market},
+\texttt{bond\_replication} and \texttt{no\_arbitrage} establish the
+financial properties above. \texttt{payoffMatrix} is the actual matrix
+of these payoffs; it is proved to equal the identity, and its actual
+\texttt{Matrix.rank}, defined from the range of its linear map, is two.
+
+\texttt{rawReference} is the sum of two genuinely scaled Dirac measures.
+Its total mass is proved to be one, giving the bundled
+\texttt{ProbabilityMeasure} called \texttt{reference}.
+\texttt{MartingaleMeasure} quantifies over both actual Bochner integrals
+of the securities and equates them to the initial prices.
+\texttt{expectation\_eq\_weight} proves the singleton-expectation formula
+from indicator integration. The definition of martingale measure thus
+uses the complete finite-market equations, not asserted scalar weights.
+
+\texttt{weight\_injective} uses the measure-extensionality theorem on
+countable spaces: agreement of all real singleton masses implies equality
+of the actual probability measures. \texttt{martingale\_unique} proves
+an if-and-only-if characterization of every martingale probability.
+\texttt{equivalent\_martingale\_unique} also imposes both genuine
+absolute-continuity conditions, and proves the same characterization.
+
+The finite mass coordinates place the full sets in the real vector space
+$\mathbb R^\Omega$. \texttt{martingaleWeights} and
+\texttt{equivalentWeights} are defined as images of all the actual
+probability measures satisfying the corresponding conditions. Both sets
+are proved to be the singleton uniform vector. The final count uses
+Mathlib's actual \texttt{extremePoints} and \texttt{Set.ncard}.
+The final theorem compares this computed count with the actual state
+cardinality minus the actual payoff-matrix rank. No probability, rank,
+feasible-set size or extreme-point count is assumed.
+
+\section*{Reproduction}
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake update}, \texttt{lake exe cache get},
+\texttt{lake build}, and
+\texttt{lake env lean Main.lean -DwarningAsError=true}.
+The printed theorem dependency audits contain only standard logical
+axioms; no admitted statements or auxiliary computations are used.
+\end{document}
