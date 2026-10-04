@@ -1,0 +1,363 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\F}{\mathbb{F}_2}
+\newcommand{\wt}{\operatorname{wt}}
+\newcommand{\dd}{\operatorname{d}}
+
+\title{Disproof of Conjecture 00000007964:\\
+binary linear quasi-perfect codes exist for every length $n\ge 2$}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000007964 claims, among other things, that binary linear
+quasi-perfect codes of length $n$ exist if and only if $n=2^k-1$ or $n$ lies
+in a finite exceptional list. This is false. A code is quasi-perfect when its
+covering radius is one more than its packing radius
+$e=\lfloor (d-1)/2\rfloor$. We prove that such codes exist for every
+length $n\ge 2$ and for no length $n\le 1$. The witnesses are not degenerate:
+for every $n\ge 3$ with $n+1$ not a power of two, the shortened Hamming code of
+length $n$ is a quasi-perfect $[n,\,n-\lceil\log_2(n+1)\rceil,\,3]$ code. For
+every $m\ge 2$, the extended Hamming code of length $2^m$ is quasi-perfect with
+$d=4$ and has a perfectly uniform shell distribution. The set of lengths
+outside $\{2^k-1\}$ is infinite, so no finite exceptional list can rescue the
+clause. All three code families, the full length spectrum and the refutation
+of the clause (also restricted to $d\ge 3$ or $d\ge 4$, and in the non-strict
+reading) are formalized in Lean~4 (core library only).
+\end{abstract}
+
+\section{The conjecture and the clause we refute}
+The English statement reads:
+\begin{quote}
+\emph{Definition:} The classification extension of perfect codes: nontrivial
+$q$-ary perfect codes (covering radius 1, balls fill the space) have known
+types the Hamming codes and the binary/ternary Golay codes; define relaxed
+quasi-perfect codes (Q-uniform ball measures) with tight uniform shell
+distribution at covering radius $r+1$. \emph{Conjecture:} The gap constant of
+the radius spectrum of quasi-perfect codes is at most 2 (covering efficiency
+at least $1/2$); and binary linear quasi-perfect codes of length $n$ exist if
+and only if $n$ is of type $2^k-1$ or in a finite exceptional list (the
+Levenshtein set), completely enumerating the spectrum.
+\end{quote}
+The Chinese version says the same thing. The conjecture is a conjunction. Its
+first conjunct (``gap constant of the radius spectrum'') is never defined, and
+we do not discuss it. Refuting the second conjunct suffices:
+\begin{equation}\label{eq:clause}
+\begin{gathered}
+\exists\ \text{finite } L\subset\mathbb{N}\ \ \forall n:\\
+\bigl(\exists \text{ binary linear quasi-perfect code of length } n\bigr)
+\iff \bigl(\exists k:\ n=2^k-1\bigr)\ \lor\ n\in L .
+\end{gathered}
+\end{equation}
+
+\begin{definition}
+A \emph{binary linear code} of length $n$ is an $\F$-subspace $C\subseteq\F^n$
+with $|C|\ge 2$. Its \emph{minimum distance} is
+$d=\min\{\dd(x,y): x\ne y\in C\}$ (Hamming distance), its \emph{packing
+radius} is $e=\lfloor (d-1)/2\rfloor$, and its \emph{covering radius} is
+$\rho=\max_{x\in\F^n}\min_{c\in C}\dd(x,c)$. The balls of radius $e$ around
+codewords are disjoint and those of radius $\rho$ cover $\F^n$. Hence
+$\rho\ge e$, and $C$ is \emph{perfect} if $\rho=e$. $C$ is
+\emph{quasi-perfect} if $\rho=e+1$.
+\end{definition}
+
+This is the standard definition (for example, MacWilliams and Sloane). The
+conjecture writes it as ``covering radius $r+1$'' for packing radius $r$.
+Section~\ref{sec:readings} covers the other readings: the non-strict version
+$\rho\le e+1$, a ``nontriviality'' demand $d\ge 3$ or $d\ge 4$, restrictions on
+$k$, and the ``relaxed, uniform shell'' variant from the conjecture's
+preamble. The counterexamples defeat all of them.
+
+\section{Syndromes}
+We use the bitwise exclusive or $a\oplus b$ of nonnegative integers. It is
+addition in the $\F$-vector space of finitely supported bit strings. In
+particular it is associative and commutative, $a\oplus a=0$, $a\oplus 0=a$, and
+$a\oplus b=0\iff a=b$.
+
+Fix labels $\ell_1,\dots,\ell_n\in\mathbb{N}$, one per coordinate. The
+\emph{syndrome} of $x\in\F^n$ is
+\[
+\sigma(x)=\bigoplus_{j:\,x_j=1}\ell_j .
+\]
+Then $\sigma(x+y)=\sigma(x)\oplus\sigma(y)$, so $\ker\sigma$ is a linear code.
+This is just the code with parity-check matrix whose $j$-th column is the
+binary expansion of $\ell_j$. Write $e_j$ for the $j$-th unit vector.
+
+\begin{lemma}\label{lem:syn}
+Suppose the labels are pairwise distinct.
+\begin{enumerate}
+\item If $\wt(x)=0$ then $\sigma(x)=0$. If $\wt(x)=1$, say $x=e_j$, then
+$\sigma(x)=\ell_j$. If $\wt(x)=2$ then $\sigma(x)\neq 0$.
+\item If all $\ell_j<2^m$ then $\sigma(x)<2^m$ for every $x$.
+\item For $x\in\F^n$ and $y$ with $\sigma(y)=\sigma(x)$, the word $c=x+y$ lies
+in $\ker\sigma$ and $\dd(x,c)=\wt(y)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) $\sigma(e_i+e_j)=\ell_i\oplus\ell_j\ne 0$ for $\ell_i\ne\ell_j$.
+(2) XOR does not create bits above position $m-1$.
+(3) $\sigma(x+y)=\sigma(x)\oplus\sigma(x)=0$ and $x+c=y$.
+\end{proof}
+
+\begin{lemma}\label{lem:bit}
+If $t=2^k\le s<2^{k+1}$ then $s\oplus t=s-t<t$.
+\end{lemma}
+\begin{proof}
+Bit $k$ is the leading bit of $s$. XOR with $2^k$ clears it and leaves the
+lower bits unchanged.
+\end{proof}
+
+\section{\texorpdfstring{Shortened Hamming codes: $d=3$, every length $n\ge 3$ with $n+1\ne 2^k$}{Shortened Hamming codes}}
+For $n\ge 1$ let $\mathrm{SH}(n)=\ker\sigma\subseteq\F^n$ with labels
+$\ell_j=j$ ($j=1,\dots,n$). For $n=2^m-1$ this is the Hamming code. For other
+$n$ it is a shortened Hamming code.
+
+\begin{theorem}\label{thm:sh}
+Let $n\ge 3$ and suppose $n+1$ is not a power of $2$. Then $\mathrm{SH}(n)$ is
+a binary linear code with minimum distance $d=3$ (so $e=1$) and covering
+radius $\rho=2$. It is quasi-perfect.
+\end{theorem}
+\begin{proof}
+\emph{Minimum distance.} Let $c\ne 0$ be a codeword. $\wt(c)\ne 1$, because
+$\sigma(e_j)=j\ne 0$. $\wt(c)\ne 2$ by Lemma~\ref{lem:syn}(1). So
+$\wt(c)\ge 3$. Since $1\oplus 2\oplus 3=0$, $e_1+e_2+e_3$ is a codeword of
+weight $3$. For a linear code the minimum distance is the least nonzero weight,
+so $d=3$.
+
+\emph{Covering radius $\le 2$.} Let $k=\lfloor\log_2 n\rfloor$ and $t=2^k$, so
+$t\le n<2t$. Let $x\in\F^n$ and $s=\sigma(x)$. By Lemma~\ref{lem:syn}(2) with
+$m=k+1$ we have $s<2t$. We find $y$ with $\wt(y)\le 2$ and $\sigma(y)=s$:
+\begin{itemize}
+\item if $s=0$, take $y=0$;
+\item if $1\le s\le n$, take $y=e_s$;
+\item if $n<s<2t$, put $b=s\oplus t$. By Lemma~\ref{lem:bit}, $b<t\le n$.
+Also $b\ne 0$, since otherwise $s=t\le n$. So $y=e_t+e_b$ is a word of weight
+$2$ with $\sigma(y)=t\oplus b=s$.
+\end{itemize}
+By Lemma~\ref{lem:syn}(3), $c=x+y$ is a codeword with $\dd(x,c)\le 2$.
+
+\emph{Covering radius $\ge 2$.} Since $n<2t$ and $n+1\ne 2t$, we have $n\le
+2t-2$. Put $s^\ast=2t-1$, so $n<s^\ast<2t$. By the previous paragraph there is
+$y^\ast$ with $\sigma(y^\ast)=s^\ast$. For every codeword $c$,
+$\sigma(y^\ast+c)=s^\ast$. Since $s^\ast\ne 0$ and $s^\ast\notin\{1,\dots,n\}$,
+Lemma~\ref{lem:syn}(1) gives $\wt(y^\ast+c)\notin\{0,1\}$. So
+$\dd(y^\ast,c)\ge 2$ for all $c$, and $\rho=2=e+1$.
+\end{proof}
+
+For $n=2^m-1$ the same argument gives $\rho=1=e$: every $s<2^m$ is a label or
+$0$. So $\mathrm{SH}(2^m-1)$ is the perfect Hamming code and not
+quasi-perfect. The Lean file proves this as a sanity check
+(\texttt{hamming\_not\_QP}). The dimension of $\mathrm{SH}(n)$ is
+$n-\lceil\log_2(n+1)\rceil$, because the labels $1,2,4,\dots,2^k\le n$ make
+$\sigma$ surjective onto $\{0,\dots,2^{k+1}-1\}$. This is not needed for the
+disproof.
+
+\section{\texorpdfstring{Extended Hamming codes: $d=4$, lengths $2^m$}{Extended Hamming codes}}
+For $m\ge 2$ let $N=2^m$. Label the coordinates $0,1,\dots,N-1$ and let
+\[
+\mathrm{EH}(m)=\{x\in\F^N:\ \sigma(x)=0,\ \wt(x)\text{ even}\}.
+\]
+This is the extended Hamming code. It is linear because $\sigma$ and the
+parity $\wt(x)\bmod 2$ are both linear.
+
+\begin{theorem}\label{thm:eh}
+$\mathrm{EH}(m)$ has $d=4$ (so $e=1$) and covering radius $2$, so it is
+quasi-perfect. Moreover, every word at distance $2$ from the code has exactly
+$N/2$ codewords at distance $2$. Every word at distance $1$ has exactly one
+codeword at distance $1$ and none at distance $2$.
+\end{theorem}
+\begin{proof}
+A nonzero codeword has even weight, and weight $2$ is excluded by
+Lemma~\ref{lem:syn}(1). Since $0\oplus1\oplus2\oplus3=0$, $e_0+e_1+e_2+e_3$ is a
+codeword of weight $4$. So $d=4$.
+
+Let $x\in\F^N$ and $s=\sigma(x)<N$. If $\wt(x)$ is odd, $y=e_s$ has syndrome
+$s$ and odd weight. If $\wt(x)$ is even and $s\ne 0$, $y=e_0+e_s$ has syndrome
+$s$ and even weight. If $\wt(x)$ is even and $s=0$, $x$ is a codeword. In each
+case $c=x+y$ is a codeword with $\dd(x,c)\le 2$. For $x=e_0+e_1$ and any
+codeword $c$, $x+c$ has syndrome $1\neq 0$ and even weight, so
+$\dd(x,c)\ge 2$. Hence $\rho=2$.
+
+Shells: if $\dd(x,C)=2$ then $\wt(x)$ is even and $s=\sigma(x)\ne 0$. The
+codewords at distance $2$ are the $x+e_a+e_b$ with $a\oplus b=s$, and there
+are exactly $N/2$ unordered pairs $\{a,a\oplus s\}$. If $\dd(x,C)=1$, the
+codeword at distance $1$ is unique, because $d=4>2$. By parity no codeword is
+at even distance from $x$.
+\end{proof}
+
+The shell numbers depend only on the distance to the code. So
+$\mathrm{EH}(m)$ is uniformly packed: its shell distribution at the covering
+radius $e+1$ is as uniform as it can be.
+
+\section{Even-weight and repetition codes}
+\begin{proposition}\label{prop:ew}
+For $n\ge 2$ the even-weight code $\mathrm{EW}(n)=\{x:\wt(x)\text{ even}\}$ has
+$d=2$, $e=0$ and $\rho=1$, so it is quasi-perfect. Every word not in the code
+has exactly $n$ codewords at distance $1$.
+\end{proposition}
+\begin{proof}
+Nonzero codewords have weight $\ge 2$, and $e_1+e_2$ is a codeword. A word
+of odd weight becomes a codeword by flipping any one of its $n$ bits, and it is
+at odd distance from every codeword. So $\rho=1$, attained by $e_1$.
+\end{proof}
+
+For even $n=2m$ the repetition code $\{0,\mathbf 1\}$ has $d=2m$, $e=m-1$ and
+$\rho=m$. Every word is within $\min(\wt x,n-\wt x)\le m$ of a codeword, and
+weight-$m$ words are at distance $m$ from both codewords. So it is
+quasi-perfect as well. This family is mentioned only for completeness and is
+checked in \texttt{verify.py}.
+
+\begin{proposition}\label{prop:short}
+There is no binary linear quasi-perfect code of length $n\le 1$.
+\end{proposition}
+\begin{proof}
+For $n=0$ there is only one word, so no code has two codewords. For $n=1$ the
+only linear code with two codewords is $\F^1$. It has $\rho=0<e+1$.
+\end{proof}
+
+\begin{theorem}[length spectrum]\label{thm:spec}
+A binary linear quasi-perfect code of length $n$ exists if and only if $n\ge 2$.
+Codes with $d=3$ exist for every $n\ge 3$ with $n+1\ne 2^k$
+(Theorem~\ref{thm:sh}). Codes with $d=4$ exist for every $n=2^m$, $m\ge 2$
+(Theorem~\ref{thm:eh}).
+\end{theorem}
+\begin{proof}
+Use Propositions~\ref{prop:ew} and \ref{prop:short}.
+\end{proof}
+
+\section{The disproof}
+\begin{corollary}\label{cor:main}
+Clause~\eqref{eq:clause} is false. In fact, already its ``only if'' direction
+fails for every finite $L$. This holds even when only codes with $d\ge 3$ (or
+$d\ge 4$) are counted, and even when perfect codes are also allowed (reading
+$\rho\le e+1$).
+\end{corollary}
+\begin{proof}
+Let $L$ be finite and $M=\max(L\cup\{0\})$. Put $n=2(M+2)$. Then $n\ge 4$,
+$n\notin L$, and $n+1$ is odd and $\ge 5$, so it is not a power of $2$. By
+Theorem~\ref{thm:sh}, $\mathrm{SH}(n)$ is quasi-perfect with $d=3$, but $n$ is
+neither of the form $2^k-1$ nor in $L$. For the $d\ge 4$ version take
+$n=2^{M+2}>M$. Then $n+1$ is odd and $>1$, and $\mathrm{EH}(M+2)$ is
+quasi-perfect with $d=4$. A code with $\rho=e+1$ in particular satisfies
+$\rho\le e+1$, so the non-strict reading is covered too.
+\end{proof}
+
+So the true spectrum is $\{n\ge 2\}$, and its complement $\{0,1\}$ is
+finite. The proposed ``spectrum'' $\{2^k-1\}\cup L$ has density zero. The
+clause seems to confuse quasi-perfect codes with perfect codes. The lengths of
+nontrivial binary perfect codes do lie in $\{2^k-1\}\cup\{23\}$, and the binary
+Golay code supplies the exceptional length.
+
+\section{Robustness of the interpretation}\label{sec:readings}
+\begin{itemize}
+\item \textbf{Strict versus non-strict.} Our codes have $\rho=e+1$ exactly, so
+they are quasi-perfect whether or not perfect codes are counted
+(Lean: \texttt{onlyIfWeak\_false}).
+\item \textbf{Trivial codes.} Someone could object to $d\le 2$ or to
+repetition codes. The shortened Hamming codes ($d=3$, every admissible
+$n\ge 4$) and the extended Hamming codes ($d=4$) are standard nontrivial codes
+(Lean: \texttt{onlyIf3\_false}, \texttt{onlyIf4\_false},
+\texttt{levenshteinAtLeast\_false} for every bound $D\le 4$ on $d$).
+\item \textbf{Range of $k$, and the ``if'' direction.} We refute the ``only
+if'' direction with $k$ arbitrary. This is the weakest form, and it implies
+every variant that restricts $k$. The ``if'' direction is not used. (It holds
+for $k\ge 2$ because of $\mathrm{EW}(2^k-1)$, and fails only at $n\in\{0,1\}$.)
+\item \textbf{The exceptional list.} $L$ is arbitrary and finite, which
+includes whatever the ``Levenshtein set'' is meant to be. The counterexample
+lengths form an infinite set (all even $n\ge 4$ already suffice).
+\item \textbf{The ``relaxed quasi-perfect (uniform shell)'' notion.} The
+preamble's notion is not precisely defined. Read it as ``$\rho=e+1$ and the
+number of codewords in each shell around a word depends only on that word's
+distance to the code''. Then $\mathrm{EH}(m)$ (Theorem~\ref{thm:eh}: shell
+counts $1$, $0$ and $N/2$) and $\mathrm{EW}(n)$ (Proposition~\ref{prop:ew}:
+shell count $n$) qualify. Their lengths, $2^m$ and all $n\ge 2$, again lie
+outside $\{2^k-1\}\cup L$ for infinitely many $n$. Shortened Hamming codes are
+in general \emph{not} uniformly packed, so under this reading the disproof
+rests on $\mathrm{EH}$ and $\mathrm{EW}$. The shell counts are proved above and
+checked by \texttt{verify.py}. They are not formalized in Lean.
+\item \textbf{Linear.} Our codes are $\F$-subspaces. Linearity is part of the
+Lean definition.
+\end{itemize}
+
+\section{Lean formalization}
+The project \texttt{lean4/} (Lean 4.19.0, core library only) defines words as
+\texttt{List Bool}, with weight \texttt{wt}, coordinatewise sum \texttt{xorW},
+distance \texttt{dist} and the syndrome \texttt{synd i x}, the XOR of the labels
+$i,i+1,\dots$ of the $1$-positions. A code is a predicate
+\texttt{C : List Bool -> Prop}:
+\begin{itemize}
+\item \texttt{IsLinear n C}: all codewords have length $n$, $0\in C$, and $C$
+is closed under \texttt{xorW}.
+\item \texttt{MinDist C d}: all distinct codewords are at distance $\ge d$, and
+some pair is at distance exactly $d$.
+\item \texttt{CovRad n C r}: every word of length $n$ is within $r$ of $C$, and
+some word is at distance $\ge r$ from all of $C$.
+\item \texttt{IsQP n C}: \texttt{IsLinear n C} and, for some \texttt{d}, \texttt{MinDist C d} and \texttt{CovRad n C ((d-1)/2+1)}.
+\end{itemize}
+Lemmas \texttt{minDist\_unique} and \texttt{covRad\_unique} show these are
+genuine (unique) values. The main theorems are:
+\begin{itemize}
+\item \texttt{SH\_quasiPerfect}: Theorem~\ref{thm:sh} for all $n$. It uses
+\texttt{xor\_top\_lt} (Lemma~\ref{lem:bit}, proved via \texttt{Nat.testBit}).
+\item \texttt{EH\_quasiPerfect}: the quasi-perfect part of
+Theorem~\ref{thm:eh} for all $m\ge2$.
+\item \texttt{EW\_quasiPerfect}: Proposition~\ref{prop:ew} without the shell
+count. \texttt{no\_QP\_short}: Proposition~\ref{prop:short}.
+\item \texttt{hamming\_not\_QP}: the Hamming codes of length $2^m-1$, $m\ge3$,
+are not quasi-perfect. This shows that \texttt{IsQP} is not vacuous in the
+other direction.
+\item \texttt{QP\_spectrum}: \texttt{QPLen n} $\iff$ \texttt{2 <= n}.
+\item \texttt{conjecture\_00000007964\_false}: $\neg$\,\texttt{LevenshteinClause}, where
+\texttt{LevenshteinClause} is
+$\exists L$ \texttt{: List Nat}, $\forall n$, \texttt{QPLen n} $\iff$ ($(\exists k,\ n+1=2^k)\lor n\in L$).
+\item \texttt{onlyIf3\_false}, \texttt{onlyIf4\_false},
+\texttt{onlyIfWeak\_false} and \texttt{levenshteinAtLeast\_false}: the
+variants of Corollary~\ref{cor:main}.
+\end{itemize}
+The project contains no \texttt{sorry}, \texttt{native\_decide} or added
+axioms. \texttt{\#print axioms} reports only \texttt{propext},
+\texttt{Classical.choice} and \texttt{Quot.sound}. Not in Lean: the shell
+counts of Theorem~\ref{thm:eh} and Proposition~\ref{prop:ew}, the repetition
+codes, and the dimension formula.
+
+\section{Independent computer check}
+\texttt{verify.py} (Python standard library) works by brute force. It lists
+codewords explicitly, computes $d$ as the least nonzero weight, and computes
+$\rho$ by a multi-source breadth-first search on the hypercube. It confirms:
+\begin{itemize}
+\item $\mathrm{SH}(n)$ for $3\le n\le 16$: $d=3$, with $\rho=2$ except at
+$n\in\{3,7,15\}$, where $\rho=1$ (Hamming codes).
+\item $\mathrm{EH}(m)$ for $m=2,3,4$: $d=4$, $\rho=2$, and the shell counts
+of Theorem~\ref{thm:eh}.
+\item $\mathrm{EW}(n)$ for $2\le n\le 14$, and the even repetition codes up to
+length $16$.
+\item An exhaustive enumeration of all binary linear codes of length $n\le 7$.
+There are $1, 2, 5, 16, 67, 374, 2825, 29212$ of them, including $\{0\}$.
+Quasi-perfect codes exist exactly for $n\ge 2$ in this range. Those with
+$d\ge3$ exist for $n=4,5,6,7$ (5, 15, 107 and 1260 codes).
+\item Lemma~\ref{lem:bit} for $k\le 12$.
+\end{itemize}
+
+\section{Reproduction}
+\begin{verbatim}
+cd lean4 && lake build      # Lean 4.19.0, no Mathlib
+cd .. && python3 verify.py  # about one minute
+pdflatex report.tex && pdflatex report.tex
+\end{verbatim}
+
+\end{document}
