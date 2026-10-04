@@ -21,6 +21,9 @@ Checks (by methods independent of the Lean development):
  6. The claim: no discriminant carries two fields with different unit groups; under the weakened
     reading without "same discriminant", witnesses exist already at |D| <= 8 (class number 1,
     so trivial 3-parts), so "the smallest discriminant has seven digits" fails there too.
+ 7. Real quadratic readings: disc injective on squarefree 1 < m < 20000; every squarefree
+    1 < m < 2000 has a unit of infinite order (Pell, continued fractions); Q(sqrt 2) / Q(sqrt -2)
+    (|D| = 8, Minkowski bounds < 2, so h = 1) is a one-digit mixed witness.
 """
 import sys
 from math import isqrt
@@ -249,6 +252,51 @@ h = {D: len(reduced_forms(D)) for D in small}
 check(all(h[D] % 3 != 0 for D in (-3, -4, -8)), f"h(-3), h(-4), h(-8) = {h[-3]}, {h[-4]}, {h[-8]}: trivial 3-parts of the class groups")
 check(w_of(-3) != w_of(-4) and w_of(-4) != w_of(-8),
       "weakened reading: (-3,-4) and (-4,-8) have isomorphic (trivial) 3-parts and unit groups of orders 6/4 and 4/2 -> one-digit witnesses, not seven-digit")
+
+# readings 7-8: real quadratic fields
+seen_r = {}
+ok_r = True
+for m in range(2, M):
+    if not squarefree(m):
+        continue
+    D = disc(m)
+    if D in seen_r:
+        ok_r = False
+    seen_r[D] = m
+check(ok_r, f"real fields: disc injective on all {len(seen_r)} squarefree 1 < m < {M}")
+
+
+def pell_pm1(m):
+    """Smallest solution of x^2 - m y^2 = +-1 with y > 0 via the continued fraction of sqrt(m)."""
+    a0 = isqrt(m)
+    mm, d, a = 0, 1, a0
+    p_prev, p = 1, a0
+    q_prev, q = 0, 1
+    for _ in range(10000):
+        if p * p - m * q * q in (1, -1):
+            return p, q
+        mm = d * a - mm
+        d = (m - mm * mm) // d
+        a = (a0 + mm) // d
+        p_prev, p = p, a * p + p_prev
+        q_prev, q = q, a * q + q_prev
+    return None
+
+
+ok_pell = True
+cnt_pell = 0
+for m in range(2, 2000):
+    if not squarefree(m):
+        continue
+    sol = pell_pm1(m)
+    if sol is None or sol[1] <= 0 or sol[0] ** 2 - m * sol[1] ** 2 not in (1, -1):
+        ok_pell = False
+    cnt_pell += 1
+check(ok_pell, f"real fields: each of the {cnt_pell} squarefree 1 < m < 2000 has a unit x + y*sqrt(m), y > 0 (infinite order); with Dirichlet, O_K^x = {{+-1}} x Z")
+from math import pi, sqrt
+check(abs(disc(2)) == abs(disc(-2)) == 8 and 0.5 * sqrt(8) < 2 and (2 / pi) * sqrt(8) < 2,
+      "mixed reading: Q(sqrt 2), Q(sqrt -2) have |D| = 8 and Minkowski bounds 1.41, 1.80 < 2 (h = 1); units Z/2 x Z vs Z/2 -> one-digit witness")
+check(pell_pm1(2) == (1, 1), "Q(sqrt 2): fundamental unit 1 + sqrt 2 (norm -1)")
 
 print()
 print("ALL CHECKS PASSED" if FAIL == 0 else f"{FAIL} CHECK(S) FAILED")

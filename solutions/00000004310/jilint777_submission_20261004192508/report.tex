@@ -228,7 +228,31 @@ $\Q(i)$ and $\Q(\sqrt{-2})$ all have class number $1$ (trivial $3$-parts), with 
 orders $6,4,2$. The discriminants involved are $-3,-4,-8$, with one digit, so clause (M), the
 seven-digit minimum, fails under this reading too. Moreover, every witness pair must contain
 $\Q(i)$ or $\Q(\sqrt{-3})$, since all other unit groups are $\{\pm1\}$.
+\item \textbf{Real quadratic fields of the same discriminant.} The word ``imaginary'' is
+explicit, but the claim fails for real fields too. Every real quadratic field is $\Q(\sqrt m)$
+for a unique squarefree $m>1$, its discriminant is again $m$ or $4m$ by (F3), and
+Lemma~\ref{lem:inj} holds on all of $\Z$. So two real quadratic fields with the same
+discriminant are equal. In any case, by Dirichlet's unit theorem every real quadratic unit group
+is $\{\pm1\}\times\varepsilon^{\Z}\cong\Z/2\times\Z$, so all of them are isomorphic.
+\item \textbf{A real and an imaginary field with the same $|D|$.} Here the unit groups always
+differ ($\Z/2\times\Z$ against a finite group), so such pairs can be witnesses. They are
+small. Take $\Q(\sqrt2)$ and $\Q(\sqrt{-2})$, with $D=8$ and $D=-8$. Both have class number
+$1$: the Minkowski bounds are $\tfrac12\sqrt8\approx1.41$ and
+$\tfrac2\pi\sqrt8\approx1.80$, both below $2$, so every ideal class contains $\OO_K$ and the
+$3$-parts are trivial. The unit groups are $\Z/2\times\Z$ and $\Z/2$. Here $|D|=8$ has one
+digit, so clause (M) fails under this reading too.
 \end{enumerate}
+
+\begin{remark}[on ``seven digits'']
+The seven-digit figure possibly echoes the classical computations of imaginary quadratic fields
+whose class group has large $3$-rank (Diaz y Diaz, 1974). There the smallest discriminants with
+$3$-rank $3$ are of seven-digit size. That is a statement about the $3$-part of the class group
+alone. It cannot be rescued by keeping the unit-group condition: a separation of unit groups
+between imaginary quadratic fields forces $\Q(i)$ or $\Q(\sqrt{-3})$ (discriminant $-4$ or
+$-3$) into the pair, by Theorem~\ref{thm:units}. A separation between real fields is
+impossible, and a real/imaginary pair already occurs at $|D|=8$. So no repair of the statement
+that keeps the unit-group condition has a seven-digit minimum.
+\end{remark}
 
 \section{The Lean formalization}
 The directory \texttt{lean4/} contains a Lean~4.19.0 project that uses the core library only.
@@ -289,9 +313,13 @@ algebraic integers. Facts (F1)--(F4) are the bridge from ``imaginary quadratic f
 \texttt{fN m}''. Lean proves the integer part of (F2) (\texttt{integral\_iff},
 \texttt{halfCoords\_mul}) and the discriminant formula (F3) as the determinant of the trace
 form. The rational step $2v\in\Z$ and the uniqueness in (F1) are argued in this report. Class
-groups are not formalized; they enter only as an arbitrary predicate. Theorem
-\texttt{conjecture\_00000004310\_false} uses only \texttt{disc\_injective}; the stronger units
-classification gives the second proof.
+groups are not formalized; they enter only as an arbitrary predicate. Once fields are parametrised by $m$, the first Lean proof
+\texttt{conjecture\_00000004310\_false} is immediate: it uses only \texttt{disc\_injective}.
+The mathematical content of the disproof is the cited classification (F1)--(F4) together with
+the $w(D)$ argument, which is formalized in \texttt{units\_classification},
+\texttt{unitList\_eq\_pows}, \texttt{orderUnits\_iso\_of\_w\_eq} and the second proof
+\texttt{conjecture\_00000004310\_false'}. The real-quadratic readings 7 and 8 are argued in
+this report and checked in \texttt{verify.py}, not in Lean.
 
 \section{Independent verification}
 \texttt{verify.py} (standard library only) checks:
@@ -308,7 +336,10 @@ $\Nm(a+b\omega)=1$ each have $w(D)$ solutions, and that the unit group is cyclic
 through $(t,u)$ for all $D$, and by brute force over $\mathrm{SL}_2$ matrices with entries in
 $[-2,2]$ for $|D|<400$;
 \item a few class numbers, and that no discriminant carries two fields with different unit groups;
-\item reading~6: $h(-3)=h(-4)=h(-8)=1$, giving one-digit witnesses.
+\item reading~6: $h(-3)=h(-4)=h(-8)=1$, giving one-digit witnesses;
+\item readings~7--8: injectivity of \texttt{disc} on the squarefree $1<m<20000$; for every
+squarefree $1<m<2000$, a unit of infinite order (a solution of $x^2-my^2=\pm1$, $y>0$, found by
+continued fractions); and for $\Q(\sqrt{\pm2})$, $|D|=8$, Minkowski bounds below $2$.
 \end{itemize}
 All checks pass (see \texttt{verification.txt}).
 

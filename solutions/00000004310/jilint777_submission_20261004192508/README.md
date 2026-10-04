@@ -35,6 +35,15 @@ witness discriminant, and in particular no smallest one with seven digits.
 | binary quadratic **forms** of discriminant `D` | every form has `w(D)` automorphs, and the class group `C(D)` depends only on `D` (report, `verify.py`) |
 | `|D|` instead of `D` | both discriminants are negative, so this is the same as equal `D` |
 | "same discriminant" dropped | witnesses exist but are tiny: `Q(√−3)`, `Q(i)`, `Q(√−2)` have `h = 1` and `w = 6, 4, 2`, with `D = −3, −4, −8`; one digit, not seven |
+| two **real** quadratic fields with the same `D` | same field (the `disc` formula and its injectivity are unchanged), and every real unit group is `≅ Z/2 × Z` anyway |
+| a real and an imaginary field with the same `|D|` | witnesses exist but are tiny: `Q(√2)`, `Q(√−2)`, `|D| = 8`, both `h = 1`, units `Z/2 × Z` vs `Z/2`; one digit, not seven |
+
+**About "seven digits".** This possibly echoes the classical computations (Diaz y Diaz, 1974) of
+imaginary quadratic fields whose class group has 3-rank 3, where the smallest discriminants have
+seven digits. That is a statement about class groups alone. Any separation of unit groups
+between imaginary fields forces `Q(i)` or `Q(√−3)` into the pair. Real/real separation is
+impossible, and real/imaginary already occurs at `|D| = 8`. So no repair that keeps the
+unit-group condition yields a seven-digit minimum.
 
 ## Contents
 
@@ -97,6 +106,13 @@ Axioms used: `propext`, `Quot.sound` and `Classical.choice`. There is no `sorry`
 
 **Limitations.**
 
+- Once fields are parametrised by `m`, the first proof `conjecture_00000004310_false` is
+  immediate: it is just `disc_injective`. The mathematical content of the disproof is the cited
+  classification (F1)–(F4) plus the `w(D)` argument, formalized in `units_classification`,
+  `unitList_eq_pows`, `orderUnits_iso_of_w_eq` and the second proof
+  `conjecture_00000004310_false'`.
+- The real-quadratic readings are argued in the report and checked in `verify.py`, not in Lean.
+
 - Lean does not construct `Q(√m)` itself. The bridge "imaginary quadratic field ↔ squarefree
   `m < 0` with ring `O_m`" is the textbook classification (F1)–(F4) in the report.
 - Lean does prove the integer core of the `O_K` formula (`integral_iff`, `halfCoords_mul`) and
@@ -134,6 +150,12 @@ No previous submission exists for this conjecture.
 - 理解为虚二次序（order）时，每个判别式只有一个序，其单位群为 `Z/w(D)`。
 - 理解为二元二次型时，判别式为 `D` 的每个型都恰有 `w(D)` 个自同构，型类群也只依赖于 `D`。
 - 若去掉"同判别式"，确实存在满足条件的例子，但判别式极小：`Q(√−3)`、`Q(i)`、`Q(√−2)` 的类数都是 1，单位群阶分别为 6、4、2，判别式为 −3、−4、−8，都是一位数而非七位数。
+- 两个判别式相同的**实**二次域也必是同一个域（判别式公式及其单射性不变）；况且每个实二次域的单位群都同构于 `Z/2 × Z`。
+- 一个实二次域与一个虚二次域、判别式绝对值相同时，确有满足条件的例子，但判别式极小：`Q(√2)` 与 `Q(√−2)`，`|D| = 8`，类数都是 1，单位群分别为 `Z/2 × Z` 与 `Z/2`。这是一位数，不是七位数。
+
+**关于"七位数"**：这或许来自 Diaz y Diaz（1974）关于类群 3-秩为 3 的虚二次域的计算，其中最小判别式是七位数量级。但那只涉及类群。只要保留"单位群不同构"这一条件：虚二次域之间的分离必然涉及 `Q(i)` 或 `Q(√−3)`；实二次域之间不可能分离；实、虚混合在 `|D| = 8` 就已出现。所以任何保留单位群条件的修正都不会得到七位数的最小判别式。
+
+**说明**：一旦用 `m` 参数化虚二次域，第一个 Lean 证明 `conjecture_00000004310_false` 就只是判别式单射性的直接推论。真正的数学内容是所引用的经典分类 (F1)–(F4)，加上 `w(D)` 论证（`units_classification`、`unitList_eq_pows` 与第二个证明 `conjecture_00000004310_false'`）。实二次域的读法只在报告和 `verify.py` 中处理，没有在 Lean 中形式化。
 
 **Lean 形式化**：只用 Lean 4.19.0 核心库，所有对象从零定义，包括无平方因子、判别式、整数对表示的二次环（证明了环公理）、整数环 `O_m`、任意判别式的序、单位群和群同构。主要定理：
 
