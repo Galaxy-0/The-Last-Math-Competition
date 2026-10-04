@@ -1,0 +1,118 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=27mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\newcommand{\gra}{\operatorname{gra}}
+\title{Existence of maximal monotone extensions\\Proof of Conjecture 00000008847}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+
+\textbf{Theorem.} Every set-valued monotone operator on a real Hilbert
+space admits a maximal monotone extension. Maximal elements in the
+inclusion order on monotone graphs are exactly maximal monotone operators.
+In fact, the proof works in every real inner-product space, without
+assuming completeness.
+
+\section*{1. Definitions and scope}
+Let $E$ be a real inner-product space. A set-valued operator is a map
+$A:E\to\mathcal P(E)$; empty values are allowed. Its graph is
+\[
+  \gra A=\{(x,u)\in E\times E:u\in A(x)\}.
+\]
+It is \emph{monotone} when
+\[
+  \langle x-y,u-v\rangle\geq0
+  \quad\text{whenever }u\in A(x),\ v\in A(y).
+\]
+An operator $B$ extends $A$ when $A(x)\subseteq B(x)$ for all $x$,
+equivalently $\gra A\subseteq\gra B$.
+An operator is \emph{maximal monotone} if it is monotone and has no proper
+monotone graph extension. This is maximality among monotone operators,
+not a claim that its values are maximal subsets of $E$.
+
+These are the standard set-valued monotone-operator meanings of the
+conjecture. Both the extension assertion and the graph-order assertion
+are proved below. No continuity, nonempty-domain, or full-domain
+assumption is imposed. The proof is an application of the axiom of
+choice through Zorn's lemma and does not assert uniqueness or provide
+an algorithm for selecting an extension.
+
+\section*{2. Monotonicity of chain unions}
+Call a subset $S\subseteq E\times E$ a monotone graph when every two
+of its points satisfy the displayed inner-product inequality. Let
+$\mathcal C$ be a family of monotone graphs linearly ordered by inclusion.
+Then $U=\bigcup_{S\in\mathcal C}S$ is a monotone graph.
+
+Indeed, choose $(x,u),(y,v)\in U$. There are $S,T\in\mathcal C$ containing
+the first and second points, respectively. Since $\mathcal C$ is a chain,
+either $S\subseteq T$ or $T\subseteq S$. In the first case both points lie
+in $T$, and in the second both lie in $S$. Monotonicity of that graph
+gives $\langle x-y,u-v\rangle\geq0$. This proves the claim. For the empty
+chain, its union is empty and monotonicity is vacuous.
+
+\newpage
+\section*{3. Existence and maximality}
+Fix a monotone operator $A$ and consider the set
+\[
+  \mathcal M_A=\{S\subseteq E\times E:\gra A\subseteq S,
+       \ S\text{ is a monotone graph}\},
+\]
+ordered by inclusion. It is nonempty because $\gra A\in\mathcal M_A$.
+Every nonempty chain in $\mathcal M_A$ has its union as an upper bound:
+the union contains $\gra A$ and is monotone by Section 2.
+The empty chain has $\gra A$ as an upper bound.
+Zorn's lemma therefore supplies a maximal element $M\in\mathcal M_A$.
+
+Define $B:E\to\mathcal P(E)$ by
+\[
+  B(x)=\{u\in E:(x,u)\in M\}.
+\]
+Then $\gra B=M$, so $B$ is monotone and extends $A$.
+If a monotone operator $C$ extends $B$, then its graph also contains
+$\gra A$, hence belongs to $\mathcal M_A$. Maximality of $M$ gives
+$\gra C=M=\gra B$, and therefore $C=B$. Thus $B$ is maximal monotone.
+
+For the second assertion, the assignments
+\[
+  A\longmapsto\gra A,
+  \qquad S\longmapsto\bigl[x\mapsto\{u:(x,u)\in S\}\bigr]
+\]
+are inverse bijections between set-valued maps and subsets of $E\times E$.
+They preserve the extension/inclusion order and the defining monotonicity
+inequality. Hence a maximal element of the monotone-graph order is
+exactly a maximal monotone operator, and conversely.\hfill$\square$
+
+\section*{4. Lean correspondence and verification}
+The accompanying Lean 4.19.0 project pins Mathlib to commit
+\begin{center}\small
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\end{center}
+The formal theorem is polymorphic in an arbitrary real inner-product
+space. The definitions \texttt{graph} and \texttt{ofGraph} implement the
+inverse bijections, with both inverse identities proved. The theorem
+\texttt{monotone\_iff} exposes the ordinary pointwise inner-product
+inequality, and \texttt{graph\_subset\_iff} proves the order correspondence.
+
+\texttt{monotone\_sUnion} proves the chain-union lemma directly on graph
+points.
+
+\texttt{exists\_maximal\_graph} applies Mathlib's
+\texttt{zorn\_subset\_nonempty}, whose initial graph parameter ensures
+that the maximal graph contains the prescribed seed.
+\texttt{maximal\_graph\_iff} proves the exact equivalence with
+\texttt{IsMaximalMonotone}; \texttt{exists\_maximal\_extension} transfers
+the graph result back to set-valued operators.
+
+The final theorem \texttt{conjecture\_00000008847} combines both original
+assertions. Its proof has no additional axioms, incomplete terms, or
+\texttt{native\_decide}. Standard classical choice, as used in Zorn's
+lemma, is recorded by the axiom audit in \texttt{VERIFICATION.md}.
+No auxiliary numerical computation is involved.
+\end{document}
