@@ -1,0 +1,126 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\title{A Flat Maximum in the Quantum Factorial:\\Disproof of Conjecture 00000007683}
+\author{\texttt{ziangni-sys}\\\small Prepared with OpenAI Codex}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The coefficients of $[3]_q!$ are $(1,2,2,1)$. In particular, the two adjacent
+middle coefficients form a flat maximum. This contradicts the conjecture's
+assertion that the coefficient sequence is flat-free for every fixed $n$.
+The defining polynomial multiplication, all coefficients, and the resulting
+contradiction are verified by a self-contained Lean 4 project.
+\end{abstract}
+
+\section{Statement and scope}
+The source defines
+\[
+ [n]_q! = \prod_{i=1}^{n}(1+q+\cdots+q^{i-1})
+         = \sum_{m\geq 0} c_{n,m}q^m
+\]
+and asserts, in particular, that for each fixed $n$ the coefficient sequence
+is ``flat-free and log-concave.'' The Chinese statement likewise asserts the
+absence of a flat portion. The additional assertions concern the location
+and asymptotic size of a peak.
+
+We use ``flat-free'' to mean the absence of equal adjacent entries in the
+finite coefficient sequence. Our example has the stronger property that
+two adjacent entries are both global maxima. Thus it also contradicts the
+absence of a flat peak. No trailing zero coefficients, limiting regime, or
+choice of numerical approximation is involved.
+
+\section{Exact counterexample}
+\begin{proposition}
+For $n=3$,
+\[
+ [3]_q! = 1+2q+2q^2+q^3.
+\]
+The maximum coefficient is $2$, attained at both degrees $1$ and $2$.
+\end{proposition}
+\begin{proof}
+Directly from the stated definition,
+\begin{align*}
+ [3]_q! &= (1)(1+q)(1+q+q^2)\\
+ &= (1+q+q^2)+(q+q^2+q^3)\\
+ &= 1+2q+2q^2+q^3.
+\end{align*}
+Consequently $c_{3,0}=c_{3,3}=1$, $c_{3,1}=c_{3,2}=2$, and all
+coefficients at degrees at least $4$ are zero. In particular, the equal
+coefficients at degrees $1$ and $2$ are positive, inside the support,
+and greater than their two outside neighbors.
+\end{proof}
+
+\begin{corollary}
+Conjecture 00000007683, as stated, is false.
+\end{corollary}
+\begin{proof}
+Its universal flat-free assertion includes $n=3$, whereas the proposition
+exhibits a flat peak at that value. A false necessary clause makes the
+conjunction of all asserted clauses false.
+\end{proof}
+
+For clarity, the example is log-concave: both interior inequalities are
+$2^2\geq 1\cdot 2$. It is the flat-free assertion that fails. Neither a
+disproof of log-concavity nor an analysis of the peak asymptotic is claimed
+or required here.
+
+\section{Lean certificate and semantic correspondence}
+The accompanying project uses Lean 4.19.0 and only its bundled
+\texttt{Std} library. A polynomial is represented by its list of natural
+number coefficients in increasing degree order. These coefficients are
+nonnegative integers, as in the defining product above.
+
+\begin{itemize}
+\item \texttt{add} is coefficientwise addition.
+\texttt{mul} implements the convolution identity
+$(a+XP)Q=aQ+X(PQ)$.
+\item \texttt{eval\_add}, \texttt{eval\_scale}, and
+\texttt{eval\_mul} establish the corresponding polynomial evaluation
+identities for every natural-number argument, not merely the example.
+\item \texttt{qInteger n} is the list of $n$ ones, representing
+$1+q+\cdots+q^{n-1}$.
+\texttt{qFactorial} recursively multiplies these lists, beginning with
+the empty product $1$.
+\item \texttt{qFactorial\_three} computes the entire coefficient list
+by definitional equality. The lemma \path{coefficient_formula} identifies
+the coefficient at every natural-number degree, including those beyond
+the support.
+\item \texttt{flat\_maximum} proves the existence of an adjacent
+equal pair inside the finite coefficient sequence and that both entries
+are global maxima.
+\item \texttt{conjecture\_flatFree\_false} refutes the universal
+flat-free clause even when restricted to $n\geq 3$.
+\texttt{conjecture\_false} establishes that conjoining arbitrary remaining
+clauses with this necessary clause is impossible.
+\end{itemize}
+
+The final contradiction theorems have no axiom dependencies. Some auxiliary
+evaluation and maximum lemmas use standard Lean logical axioms; their exact
+dependencies are printed by the project. There are no admitted proofs,
+external proof oracles, or added axioms. From the \texttt{lean} directory,
+run \texttt{lake build} and
+\texttt{lake env lean -DwarningAsError=true Main.lean}.
+
+The optional Python check independently multiplies the coefficient lists
+and enumerates the inversion numbers of all six permutations of three
+elements. It is supplementary evidence, not a premise of the Lean proof.
+
+\section{Source and attribution}
+The statement is \texttt{conjectures/00000007683.md} in
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition}
+{The Last Math Competition}, at commit
+\begin{center}
+\small\texttt{4509328ceb3b63c07d05bc4c42c4f12e8fa3c94f}.
+\end{center}
+The complete English and Chinese source text is reproduced in
+\texttt{SOURCE.md}. This submission was prepared by OpenAI Codex for
+\texttt{ziangni-sys} and is offered for independent review.
+\end{document}
