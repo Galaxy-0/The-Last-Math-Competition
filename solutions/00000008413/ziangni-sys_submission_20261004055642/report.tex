@@ -1,0 +1,79 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{proposition}{Proposition}
+\title{A prime-order obstruction to conjecture 00000008413}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result.} The claimed existence of Singer-parameter difference sets on noncyclic abelian groups for every prime-power parameter is false already at \(n=2\).
+
+\paragraph{Original assertion and exact scope.}
+Both original language versions assert that difference sets with parameters
+\((n^2+n+1,n+1,1)\) on noncyclic abelian groups exist if and only if \(n\) is a prime power. We refute the sufficiency direction. The original places no restriction excluding \(n=2\). We do not claim to settle the cyclic perfect-difference-set prime-power question or classify possible nonabelian realizations.
+
+\paragraph{Standard difference-set definition.}
+A \((v,k,1)\) difference set in a finite group \(G\) is a subset \(D\subseteq G\) satisfying
+\[
+ |G|=v,\qquad |D|=k,
+\]
+such that each nonidentity element \(g\in G\) has exactly one ordered representation
+\[
+ g=ab^{-1},\qquad a,b\in D.
+\]
+For \(g\ne1\), this automatically requires \(a\ne b\).
+Thus the parameters concern the order of the ambient group, not merely the cardinality of the block or a subgroup. For Singer parameters they require
+\[
+ |G|=n^2+n+1,\qquad |D|=n+1.
+\]
+
+\begin{proposition}
+No noncyclic group, hence no noncyclic abelian group, admits a difference set with Singer parameters at \(n=2\).
+\end{proposition}
+\begin{proof}
+The parameter \(2=2^1\) is a prime power. Its Singer parameters are
+\[
+ (2^2+2+1,2+1,1)=(7,3,1).
+\]
+Any alleged realization would therefore have ambient group order \(7\).
+Every group of prime order is cyclic: choose an element \(g\ne1\); its cyclic subgroup has order greater than one and dividing \(7\), so has order \(7\) and is the whole group. Thus the ambient group cannot be noncyclic, a contradiction. The difference-covering condition cannot overcome the absence of an eligible ambient group.
+\end{proof}
+
+\paragraph{This is not failure of ordinary cyclic existence.}
+The obstruction concerns the required noncyclic class. For comparison, in the additive cyclic group \(\mathbb Z/7\mathbb Z\), the subset \(\{0,1,3\}\) has the six ordered nonzero differences
+\[
+ 0-1=6,\quad 0-3=4,\quad 1-0=1,\quad
+ 1-3=5,\quad 3-0=3,\quad 3-1=2,
+\]
+each occurring once. This elementary comparison is not needed for the disproof or its formal verification.
+\newpage
+\paragraph{An independent issue with the claimed exception.}
+The original also refers to a dihedral exception of group order \(21\).
+A finite dihedral group with \(m\) rotations has \(m\) rotations and \(m\) reflections, hence order \(2m\). No such group has odd order \(21\). Calling the symmetry group of a \(21\)-gon a dihedral group gives order \(42\), not \(21\). This is an additional necessary-condition obstruction, but the main disproof above does not depend on how that exception was named.
+
+\paragraph{Actual objects and theorem scope in Lean.}
+The project contains a faithful definition
+\texttt{SingerDifferenceSet} for actual finite subsets of actual groups. It records \(\texttt{Nat.card}\,G=n^2+n+1\), the block cardinality \(n+1\), and unique ordered pairs for every nonidentity group element satisfying \(ab^{-1}=g\).
+\begin{itemize}
+\item \texttt{PrimePower} uses the standard positive-exponent definition: \(n=p^k\) for a prime \(p\) and \(k>0\). \texttt{two\_prime\_power} provides the witnesses \(p=2,k=1\).
+\item \texttt{singer\_two\_forces\_cyclic} derives actual ambient order \(7\) from the complete difference-set hypothesis and applies Mathlib's prime-cardinality group theorem to obtain \(\texttt{IsCyclic}\,G\).
+\item \texttt{no\_noncyclic\_realization} excludes every noncyclic ambient group, without even needing commutativity. Its abelian specialization covers the class specified in the original.
+\item \texttt{NoncyclicAbelianRealizable} existentially quantifies over ambient types, their actual commutative group structures, their noncyclicity, and the actual difference-set block.
+\item \texttt{counterexample} proves that \(2\) is a prime power but this existential realization statement is false. The conclusion is not conditional on a single preselected group.
+\item \texttt{no\_dihedral\_order\_twenty\_one} independently uses actual \texttt{DihedralGroup} cardinalities to exclude order \(21\).
+\end{itemize}
+No unique-difference property is assumed to be impossible on cyclic groups. It is the actual required ambient order together with noncyclicity that yields the contradiction. Proving nonexistence by a necessary defining condition suffices; enumerating hypothetical blocks in a nonexistent ambient group is unnecessary.
+
+\paragraph{Reproduction.}
+The project pins Lean 4.19.0 and Mathlib commit
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+From \texttt{lean/}, run \texttt{lake build}, followed by:
+\begin{center}
+\small\texttt{lake env lean Main.lean -DwarningAsError=true}.
+\end{center}
+Six principal theorem audits use only the standard logical axioms
+\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+There are no admitted proofs, additional axioms, native decision procedures, or external numerical computations.
+\end{document}
