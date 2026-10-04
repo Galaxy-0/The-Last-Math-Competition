@@ -81,7 +81,7 @@ vector (first nonzero coordinate $1$). We number the $133$ points:
 \]
 Lines are numbered the same way by their normalized dual coordinates, and point
 $p$ lies on line $L$ iff $\mathrm{coord}(p)\cdot\mathrm{coord}(L)=0$. Three
-points are \emph{collinear} if they lie on a common line. The standard frame is
+points are \emph{collinear} if they lie on a common line. These $133$ dual vectors give \emph{all} lines: any nonzero $\ell\in\F^3$ is a nonzero scalar multiple of exactly one normalized vector, so by \texttt{points\_cover} (applied to $\ell$) it equals $c\cdot\mathrm{coord}(L)$ for some $L<133$ and some $c\neq0$, and has the same zero set. The standard frame is
 \[
 \mathcal F=\{e_1,e_2,e_3,u\}=\{0,121,132,12\},\qquad u=(1,1,1).
 \]
@@ -128,7 +128,7 @@ All $\lambda_i\neq0$ by general position. Then the matrix with columns
 $\lambda_i\,\mathrm{coord}(a_i)$ maps $e_1,e_2,e_3,u$ to $a_0,a_1,a_2,a_3$, and
 $M$ is its inverse.
 
-In Lean we use an equivalent four-step construction. Each step is a matrix from
+In Lean the lemma is applied to the first four entries of the arc's point list. For points of an arc, ``no three collinear'' is exactly the general-position hypothesis needed here. Lean uses an equivalent four-step construction. Each step is a matrix from
 an explicit table that was checked exhaustively:
 \begin{enumerate}
 \item $t_1(p)$ maps $p\mapsto e_1$;
