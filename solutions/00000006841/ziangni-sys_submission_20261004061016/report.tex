@@ -1,0 +1,61 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Orthogonal subspace reflections and their compositions\\Proof of conjecture 00000006841}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\paragraph{Source and interpretation.}
+The English source states that subspace reflection operators and their combinations are unitary isometries. The Chinese version likewise asserts that compositions of subspace reflections are unitary isometries. We use the standard orthogonal reflection in a closed linear subspace of a real or complex Hilbert space. For real scalars, unitary means orthogonal: a surjective linear map preserving the inner product. No finite-dimensional assumption is needed.
+
+\begin{theorem}
+Let $H$ be a real or complex Hilbert space and let $K$ be a closed linear subspace. Write $P_K:H\to K$ for orthogonal projection, viewed in $H$, and set
+\[
+ R_K x=2P_Kx-x.
+\]
+Then $R_K$ is a surjective linear isometry preserving the inner product. It is an involution, fixes exactly $K$, and acts as negation on $K^\perp$. Every finite composition of such reflections is a surjective linear isometry preserving the inner product.
+\end{theorem}
+\begin{proof}
+The orthogonal decomposition theorem gives a unique expression $x=u+v$ with $u\in K$ and $v\in K^\perp$. The displayed formula becomes
+\[
+ R_K(u+v)=u-v.
+\]
+Orthogonal projection is linear, so $R_K$ is linear. Applying the same formula twice gives $R_K^2x=x$, proving both involutivity and surjectivity. The formula fixes $u$ and negates $v$. If $R_Kx=x$, then $u-v=u+v$; over either scalar field this implies $v=0$, so $x\in K$.
+
+For $x=u+v$ and $y=u'+v'$ in the respective decompositions, the cross inner products vanish. Consequently
+\[
+ \langle R_Kx,R_Ky\rangle
+ =\langle u,u'\rangle+\langle v,v'\rangle
+ =\langle x,y\rangle.
+\]
+In particular $\|R_Kx\|=\|x\|$, and linearity gives
+$\|R_Kx-R_Ky\|=\|x-y\|$.
+Finally, a composition of surjective linear maps is surjective and linear, and composition preserves both the distance and inner-product equalities. Induction proves the finite-composition assertion, including the empty composition, which is the identity.
+\end{proof}
+
+\newpage
+\paragraph{Domain of the theorem.}
+In infinite-dimensional Hilbert spaces an arbitrary nonclosed subspace need not admit orthogonal projection, so the usual orthogonal reflection is not automatically defined there. The closed-subspace convention specifies the domain of the standard operation. In finite dimensions all linear subspaces are closed, so the theorem applies to every subspace. More generally the proof applies to any subspace admitting an orthogonal decomposition, even in an inner product space that is not complete.
+
+\paragraph{Meaning of combination.}
+The combination in the conjecture is composition of operators. For subspaces $K_1,\ldots,K_m$ it is
+\[
+ R_{K_m}\circ\cdots\circ R_{K_1}.
+\]
+The result need not itself be a reflection or an involution; the claimed property is that it is unitary and isometric. No assertion is made that arbitrary sums or scalar multiples of reflections are unitary.
+
+\paragraph{Formal mathematical objects.}
+The Lean project uses Mathlib's actual inner product spaces over an arbitrary \path{RCLike} field, encompassing both real and complex scalars. \path{Submodule.reflection} is an actual linear isometry equivalence; its formula uses the actual continuous orthogonal projection. The theorem \path{reflection_structure} proves the formula, involution, fixed-point characterization, negation on the orthogonal complement, and the unitary-isometry assertion together.
+
+The predicate \path{UnitaryIsometry} explicitly requires a representing linear map, surjectivity, the metric \path{Isometry} property, and preservation of every inner product. The list construction \path{productReflection} uses actual equivalence composition. Its cons theorem identifies the evaluated map with the stated successive reflections, and \path{finite_composition_unitary} covers arbitrary finite lists of projectable subspaces.
+
+The definition \path{closedReflection} derives the needed completeness of the subspace from its closedness in a complete ambient space. Theorems \path{closed_reflection_unitary} and \path{two_closed_reflections_unitary} explicitly cover closed subspaces without taking orthogonal projection as an additional assumption. The general list theorem applies to any finite collection of those closed subspaces.
+
+\paragraph{Verification.}
+The project pins Lean 4.19.0 and the following Mathlib commit:\\
+\path{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+Run \texttt{lake build} and \texttt{lake env lean} with arguments \path{-DwarningAsError=true} and \path{Main.lean} from the \path{lean} directory. The source prints the axiom dependencies of the principal statements. It contains no admitted proof, additional axiom, or computation-trust shortcut.
+\end{document}
