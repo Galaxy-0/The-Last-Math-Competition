@@ -1,0 +1,91 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\E}{\mathbb E}
+\title{Conjecture 00000000428:\\The proposed Durfee-size mean grows too fast}
+\author{C0ldSmi1e}
+\date{4 October 2026}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+\begin{abstract}
+Every partition of $n$ has Durfee side length at most $\sqrt n$. Its uniform mean therefore obeys the same bound. The conjecture proposes a leading term of order $\sqrt n\log n$, which exceeds this bound by an amount tending to infinity. Consequently no real constant and additive $o(1)$ correction can make the displayed asymptotic valid.
+\end{abstract}
+
+\section{The exact claim and the statistic}
+The complete English and Chinese statement is included as \texttt{conjecture.md}. Both assert, for a uniformly chosen partition of $n$,
+\begin{equation}\label{claim}
+ \E[d]=\frac{\sqrt{6n}}{\pi}\log\!\left(\frac{\sqrt{6n}}{\pi}\right)+c+o(1).
+\end{equation}
+Here $c$ is a fixed real constant. For a partition $\lambda=(\lambda_1\ge\lambda_2\ge\cdots)$ of $n$, the Durfee size is the side length
+\[
+ d(\lambda)=\max\{k:\lambda_k\ge k\},
+\]
+equivalently the largest side length of a square contained in its Ferrers diagram~\cite[\S2.1]{pakpanova}. The empty partition has Durfee size zero. If $\mathcal P_n$ denotes the finite nonempty set of all partitions of $n$, the uniform mean is
+\[
+ E_n=\frac{1}{|\mathcal P_n|}\sum_{\lambda\in\mathcal P_n}d(\lambda).
+\]
+Repeated parts are retained. The sample space consists of partitions, rather than ordered compositions or tableaux.
+
+\section{An obstruction valid for every partition}
+\begin{lemma}\label{area}
+For every $\lambda\vdash n$, $d(\lambda)^2\le n$. In particular $0\le E_n\le\sqrt n$.
+\end{lemma}
+\begin{proof}
+Put $d=d(\lambda)$. There are at least $d$ parts of length at least $d$, so their sum is at least $d^2$. Their sum is at most the sum of all parts, namely $n$. Taking square roots and averaging the pointwise bound over the actual uniform probability measure gives the claim.
+\end{proof}
+
+\begin{theorem}
+No $c\in\mathbb R$ satisfies \eqref{claim}.
+\end{theorem}
+\begin{proof}
+Let $a=\sqrt6/\pi>0$ and $L_n=a\sqrt n\log(a\sqrt n)$, the proposed leading term. As $n\to\infty$, $a\sqrt n\to\infty$ and $\log(a\sqrt n)\to\infty$. Eventually $\log(a\sqrt n)\ge2/a$, so $L_n\ge2\sqrt n$. Lemma~\ref{area} then gives
+\[
+ L_n-E_n\ge\sqrt n\longrightarrow+\infty.
+\]
+Hence $E_n-L_n$ cannot converge to any real constant $c$. But \eqref{claim} asserts exactly that convergence, or equivalently $E_n-(L_n+c)\to0$. This is a contradiction.
+\end{proof}
+The argument proves an infinite-limit obstruction. It uses no finite numerical test, partition-count asymptotic, or conjectural distributional approximation.
+
+\clearpage
+\section{Faithful formalization}
+The Lean proof uses Mathlib's actual type \texttt{Nat.Partition n}: a multiset of positive integers whose sum equals $n$. The existing finite-type instance enumerates partitions themselves and its inhabited instance supplies a partition for every $n$, including zero.
+
+For a partition $p$, let $r_p(k)$ be the number of its parts at least $k$, counting multiplicities. The proof defines $d(p)$ as the maximum $k$ with $k\le r_p(k)$. The implementation uses a finite search through $0,\ldots,n$, proves that zero qualifies, and proves that every qualifying $k$ lies in this range. It then establishes attainment and the unrestricted equivalence
+\[
+ k\le d(p)\quad\Longleftrightarrow\quad k\le r_p(k).
+\]
+Thus the finite representation does not truncate the statistic.
+
+The proof also constructs the actual Ferrers diagram as a Mathlib \texttt{YoungDiagram}, with cells
+\[
+ (i,j)\in F(p)\quad\Longleftrightarrow\quad i<r_p(j+1),
+ \qquad i,j\in\mathbb N.
+\]
+It proves finiteness, downward closure, and that this diagram contains exactly $n$ cells. It also identifies square containment exactly:
+\[
+ \{0,\ldots,k-1\}^2\subseteq F(p)
+ \quad\Longleftrightarrow\quad k\le d(p).
+\]
+The area estimate is proved from the sum of the actual filtered multiset of parts, not assigned as a property of an unrelated number.
+
+The probability layer is \texttt{PMF.uniformOfFintype} on \texttt{Nat.Partition n}. Its associated measure is proved to be a probability measure, with every singleton having mass $1/|\mathcal P_n|$. The real-valued Durfee statistic is measurable and integrable. The definition \texttt{meanDurfee} is its actual integral; the finite arithmetic-mean formula is proved from that measure. Monotonicity of the integral yields $E_n\le\sqrt n$.
+
+The analysis layer retains the exact coefficient $\sqrt{6n}/\pi$ and natural logarithm from the source. It proves that the leading term minus any sequence bounded above by $\sqrt n$ tends to $+\infty$. Specializing to the proved uniform-mean bound excludes every finite additive correction. The final proposition \texttt{ClaimedExpansion} quantifies over an arbitrary real $c$ and asserts convergence of the exact remainder to zero. The theorem \texttt{conjecture\_false} proves its negation with no extra hypotheses.
+
+The proof does not claim a replacement asymptotic or require a theorem about Gumbel laws. The source's descriptive phrase about such a correction cannot overcome the displayed deterministic obstruction.
+
+\section{Reproduction and verification}
+Lean 4.19.0 and Mathlib v4.19.0 are pinned. The accompanying README gives complete build, strict source-replay and definition/type/axiom-audit commands. All mathematical computations and the limiting contradiction are proved in Lean; no auxiliary numerical program is needed.
+
+The package contains the exact bilingual source, this LaTeX report and matching PDF, the full Lean project, an independent internal semantic review, and verification records for the final files. Local verification and internal review are distinct from official maintainer acceptance. The source and both contribution guides were checked at upstream revision \texttt{4cc82278}.
+
+\begin{thebibliography}{1}\small
+\bibitem{pakpanova} I. Pak and G. Panova. \emph{Durfee squares, symmetric partitions and bounds on Kronecker coefficients}, 2023, \S2.1. \href{https://www.math.ucla.edu/~pak/papers/Fixed12.pdf}{Author-hosted paper}.
+\end{thebibliography}
+\end{document}
