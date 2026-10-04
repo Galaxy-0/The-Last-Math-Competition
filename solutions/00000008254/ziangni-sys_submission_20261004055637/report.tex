@@ -1,0 +1,88 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\title{A two-strategy symmetric game with no ESS}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Disproof of conjecture 00000008254.}
+Both original language versions assert that every $2\times2$ game admits a mixed evolutionarily stable strategy (ESS). A symmetric game with all payoffs zero has no ESS at all, including at the boundary of the mixed-strategy simplex.
+
+\paragraph{Actual game and strategies.}
+Each player has actions $\{0,1\}$. Let the payoff matrix for the symmetric game be
+\[
+ A=\begin{pmatrix}0&0\\0&0\end{pmatrix}.
+\]
+The first player's pure payoff at $(i,j)$ is $A_{ij}$, and the second player's is $A_{ji}$. Thus this is an actual symmetric two-player game, with both payoffs zero at every action pair. Its mixed strategies are precisely
+\[
+ \Delta=\{p=(p_0,p_1)\in\mathbb R^2:p_0,p_1\geq0,\ p_0+p_1=1\}.
+\]
+For arbitrary mixed strategies $p,q$, the bilinear expected payoff is
+\[
+ u(p,q)=\sum_{i=0}^1\sum_{j=0}^1p_i A_{ij}q_j=0.
+\]
+The zero value is a consequence of the actual matrix and expectation formula.
+
+\paragraph{Direct invasion definition.}
+A resident $p\in\Delta$ is an ESS if for every mutant $q\in\Delta$ with $q\ne p$, there exists $\delta>0$ such that every sufficiently small positive invasion proportion satisfies
+\[
+ 0<\varepsilon<\delta,\quad\varepsilon\leq1
+ \quad\Longrightarrow\quad
+ u\bigl(p,(1-\varepsilon)p+\varepsilon q\bigr)
+ >u\bigl(q,(1-\varepsilon)p+\varepsilon q\bigr).
+\]
+The population mixture is a genuine strategy: each coordinate is nonnegative when $0\leq\varepsilon\leq1$, and its coordinate sum is
+$(1-\varepsilon)\cdot1+\varepsilon\cdot1=1$.
+The strict comparison requires that the resident resist invasion by every distinct mutant, rather than merely have equal fitness.
+
+\paragraph{Nonexistence for every resident.}
+The pure strategies $e_0=(1,0)$ and $e_1=(0,1)$ are distinct elements of $\Delta$. For any $p\in\Delta$, choose $q=e_0$ if $p\ne e_0$ and otherwise choose $q=e_1$. Then $q\ne p$.
+For any proposed $\delta>0$, take
+\[
+ \varepsilon=\frac{\min\{\delta,1\}}{2}.
+\]
+This proportion satisfies $0<\varepsilon<\delta$ and $\varepsilon\leq1$, and the corresponding population is feasible. However,
+\[
+ u\bigl(p,(1-\varepsilon)p+\varepsilon q\bigr)
+ =0=
+ u\bigl(q,(1-\varepsilon)p+\varepsilon q\bigr),
+\]
+contradicting the required strict inequality. Thus no $p\in\Delta$ is an ESS.
+\newpage
+\paragraph{The usual payoff criterion also fails.}
+For a symmetric matrix game, the familiar ESS payoff test demands, for each $q\ne p$, either
+\[
+ u(p,p)>u(q,p),
+\]
+or the tie case
+\[
+ u(p,p)=u(q,p)\quad\text{and}\quad u(p,q)>u(q,q).
+\]
+All four expected payoffs here are zero, so neither strict inequality can hold. The Lean proof separately verifies failure of this test as well. The direct invasion argument above already proves nonexistence and does not rely on an unproved characterization theorem.
+
+\paragraph{Source correspondence and scope.}
+The English source says ``all $2$ by $2$ games admit one,'' and the Chinese asserts existence for every $2\times2$ game. No nondegeneracy, strict-payoff, or isolated-equilibrium assumption is stated. The zero game is consequently within the claim, and is symmetric, as required for the usual ESS setting. It has no ESS among either pure or genuinely mixed strategies. All its strategies are neutrally tied, which does not meet evolutionary stability's strict invasion requirement. The purported $3\times3$ nonexistence threshold is therefore also invalid as a minimal threshold. We need not resolve the source's remaining attraction-radius or support-bound assertions to refute the conjunction.
+
+\paragraph{Lean correspondence.}
+The project gives faithful finite definitions and proves the following:
+\begin{itemize}
+\item \texttt{Action=Fin 2} and \texttt{zeroGame}: the actual two-action matrix, with the symmetric two-player payoff functions.
+\item \texttt{ValidStrategy} and \texttt{Strategy}: all nonnegative real probability vectors of total mass one, including boundary points.
+\item \texttt{pure}, \texttt{pure\_distinct}, and \texttt{distinct\_mutant}: actual pure strategy validity and a distinct feasible mutant for every resident.
+\item \texttt{expectedPayoff} and \texttt{zero\_payoff}: the actual double finite-sum expectation, proved zero for arbitrary argument vectors.
+\item \texttt{mixture} and \texttt{mixture\_valid}: the population mixture and its nonnegativity and total-mass calculation for every feasible proportion.
+\item \texttt{InvasionESS} and \texttt{no\_invasion\_ess}: the full quantified small-positive-invasion definition and its negation for every resident, using the explicit positive proportion above.
+\item \texttt{ESS} and \texttt{no\_ess}: the separately defined payoff test and its failure for every resident.
+\item \texttt{counterexample}: the actual action count two and both universal nonexistence results.
+\end{itemize}
+These definitions express standard probability, payoff and invasion conditions; no stability conclusion is assumed.
+
+\paragraph{Reproduction.}
+The public project pins Lean 4.19.0 and Mathlib commit
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+From \texttt{lean/}, run \texttt{lake build} and
+\texttt{lake env lean -DwarningAsError=true Main.lean}.
+No admitted proofs, custom axioms, native decision procedures or external numerical computations are used. Printed dependency audits contain only standard logical axioms.
+\end{document}
