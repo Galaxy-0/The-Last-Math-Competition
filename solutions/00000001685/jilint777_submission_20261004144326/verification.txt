@@ -1,0 +1,41 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:424:0: 'Pfaffian.not_pfaffian_of_invariant' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:425:0: 'Pfaffian.K33_not_pfaffian' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:426:0: 'Pfaffian.S_not_pfaffian' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:427:0: 'Pfaffian.M6_not_pfaffian' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:428:0: 'Pfaffian.K4_pfaffian' does not depend on any axioms
+info: ././././Main.lean:429:0: 'Pfaffian.M8_pfaffian' does not depend on any axioms
+info: ././././Main.lean:430:0: 'Pfaffian.pfMat_K33' does not depend on any axioms
+info: ././././Main.lean:431:0: 'Pfaffian.pfMat_M8' does not depend on any axioms
+info: ././././Main.lean:432:0: 'Pfaffian.S_even_subdivision' does not depend on any axioms
+info: ././././Main.lean:433:0: 'Pfaffian.conjecture_00000001685_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:434:0: 'Pfaffian.conjecture_00000001685_false'' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:435:0: 'Pfaffian.conjecture_00000001685_false_proper' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:436:0: 'Pfaffian.conjecture_00000001685_conjunction_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:437:0: 'Pfaffian.mobius_clause_false_vertex_convention' depends on axioms: [propext, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+K33: Pfaffian?, #PM, orientations tried                    (False, 6, 512)  [ok]
+S (edge 03 subdivided twice): Pfaffian?, #PM, tried        (False, 6, 2048)  [ok]
+two edges subdivided twice: Pfaffian?, #PM, tried          (False, 6, 8192)  [ok]
+all 9 edges subdivided twice: Pfaffian?, #PM, classes      (False, 6, 16)  [ok]
+all 9 edges subdivided 4 times: Pfaffian?, #PM, classes    (False, 6, 16)  [ok]
+parity obstruction for 515 even subdivisions of K33        True  [ok]
+Moebius ladder, 2 rungs (4 vertices): Pfaffian?            True  [ok]
+Moebius ladder, 3 rungs (6 vertices): Pfaffian?            False  [ok]
+Moebius ladder, 4 rungs (8 vertices): Pfaffian?            True  [ok]
+Moebius ladder, 5 rungs (10 vertices): Pfaffian?           False  [ok]
+Moebius ladder, 6 rungs (12 vertices): Pfaffian?           True  [ok]
+Moebius ladder, 7 rungs (14 vertices): Pfaffian?           False  [ok]
+Moebius ladder 5 rungs, exhaustive: Pfaffian?, #PM, tried  (False, 13, 32768)  [ok]
+W = V8 with edge 01 subdivided twice: Pfaffian?, #PM       (True, 7)  [ok]
+W: degrees 2 present, |E|-|V|                              (2, 4)  [ok]
+V8 contains a subdivision of K33 (so V8 and W are nonplanar) True  [ok]
+ALL CHECKS PASSED
+exit 0

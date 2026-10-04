@@ -1,0 +1,363 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of Conjecture 00000001685:\\
+no even subdivision of $K_{3,3}$ is a Pfaffian graph}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000001685 says that the minimal families of nonplanar Pfaffian graphs
+are the M\"obius ladders $M_{2k}$ and the even subdivisions of $K_{3,3}$. In
+particular it says that the even subdivisions of $K_{3,3}$ are Pfaffian graphs.
+This is false. We prove that \emph{no} even subdivision of $K_{3,3}$ has a Pfaffian
+orientation, including $K_{3,3}$ itself, which is also the M\"obius ladder on $6$
+vertices. The proof is a parity argument: in every orientation an odd number of
+the six perfect-matching terms of the Pfaffian are negative, so the terms never
+all have the same sign. The obstruction, and its instances for $K_{3,3}$, for a
+proper even subdivision of $K_{3,3}$, and for the $6$-vertex M\"obius ladder, are
+formalized in Lean~4 (core library only). As a secondary result we give a
+nonplanar Pfaffian graph of crossing number $1$ that lies in neither family.
+\end{abstract}
+
+\section{The conjecture and the clause we refute}
+\begin{quote}
+\emph{Definition:} A Pfaffian orientable graph is one whose perfect matchings can
+be counted by signed cancellation. \emph{Conjecture:} The minimal families of
+nonplanar Pfaffian graphs are the M\"obius ladders $M_{2k}$ and the even
+subdivisions of $K_{3,3}$; these two families exhaust the nonplanar Pfaffian class
+of crossing number $\le 2$.
+\end{quote}
+The Chinese version says the same. The first sentence names two families
+\emph{of nonplanar Pfaffian graphs}, and the second calls them part of ``the
+nonplanar Pfaffian class''. So the conjecture asserts, at the least:
+
+\begin{quote}
+\textbf{Clause (E).} Every even subdivision of $K_{3,3}$ is a (nonplanar) Pfaffian graph.
+\end{quote}
+
+The conjecture is a conjunction that includes (E), so refuting (E) refutes the
+conjecture. Whatever ``minimal'' means, a family of nonplanar Pfaffian graphs
+has to consist of Pfaffian graphs, and the falsity of (E) does not depend on that
+word.
+
+\paragraph{Readings covered.}
+\begin{itemize}
+\item \emph{Even subdivision.} An even subdivision of $H$ replaces every edge by a
+path with an even number ($0,2,4,\dots$) of internal vertices. We prove
+(Theorem~\ref{thm:main}) that \emph{every} even subdivision of $K_{3,3}$ is
+non-Pfaffian. So it makes no difference whether $K_{3,3}$ itself counts as an even
+subdivision, whether at least one edge must be subdivided, or whether every
+edge must be subdivided.
+\item \emph{Pfaffian.} We use the conjecture's own definition (the signed sum
+counts the perfect matchings, $|\operatorname{Pf}(A_D)|=\#\mathrm{PM}$) and
+Kasteleyn's standard definition (all perfect matchings have the same sign). They
+are equivalent (Lemma~\ref{lem:equiv}), and both are refuted.
+\item \emph{$M_{2k}$.} If $M_{2k}$ is the M\"obius ladder on $2k$ vertices ($k$
+rungs), then $M_6\cong K_{3,3}$ is not Pfaffian, so the M\"obius part fails as well.
+More generally, the computations below show that the ladders with $3$, $5$ and $7$
+rungs are non-Pfaffian. If instead $M_{2k}$ has $2k$ rungs, the ladders with $2$, $4$
+and $6$ rungs are Pfaffian, and we make no claim against the M\"obius part. In
+both cases the refutation of (E) does not depend on this choice.
+\end{itemize}
+
+\section{Definitions}
+Let $G$ be a loopless graph on the vertex set $\{1,\dots,n\}$ (we use $\{0,\dots,n-1\}$
+in the code). A \emph{perfect matching} is a set of edges covering every vertex
+exactly once. An \emph{orientation} $D$ directs every edge, and its skew adjacency
+matrix is $A_D=(a_{ij})$, where $a_{ij}=1$ if $i\to j$, $a_{ij}=-1$ if $j\to i$, and
+$a_{ij}=0$ otherwise. Let $M=\{t_1h_1,\dots,t_mh_m\}$ be a perfect matching
+($n=2m$), with each edge written tail-first ($t_k\to h_k$). Its \emph{term} is
+\[
+  \operatorname{sgn}_D(M)=\operatorname{sgn}\begin{pmatrix}1&2&\cdots&2m-1&2m\\
+  t_1&h_1&\cdots&t_m&h_m\end{pmatrix}=(-1)^{\operatorname{inv}(t_1h_1\cdots t_mh_m)},
+\]
+where $\operatorname{inv}$ counts inversions. This does not depend on the order in
+which the edges are listed: moving a block of two entries past another entry is an
+even permutation. The Pfaffian is
+\[
+\operatorname{Pf}(A_D)=\sum_{\pi}\operatorname{sgn}(\pi)\prod_{k}a_{\pi(2k-1)\pi(2k)}
+=\sum_{M}\operatorname{sgn}_D(M).
+\]
+Here $\pi$ runs over the permutations with $\pi(1)<\pi(3)<\dots$ and
+$\pi(2k-1)<\pi(2k)$. A term is non-zero exactly when the pairs form a perfect
+matching $M$. Writing each pair tail-first changes the sign of the permutation
+and of the factor $a$ together, so the term equals $\operatorname{sgn}_D(M)$.
+
+\begin{definition}
+$D$ is a \emph{Pfaffian orientation} if $|\operatorname{Pf}(A_D)|$ equals the number
+$\Phi(G)$ of perfect matchings. $G$ is \emph{Pfaffian} if it has a Pfaffian orientation.
+\end{definition}
+
+\begin{lemma}\label{lem:equiv}
+$|\operatorname{Pf}(A_D)|=\Phi(G)$ if and only if all perfect matchings have the same sign
+$\operatorname{sgn}_D(M)$.
+\end{lemma}
+\begin{proof}
+Suppose $p$ of the $\Phi$ terms are $+1$ and $q$ are $-1$. Then
+$|\operatorname{Pf}|=|p-q|$, and this equals $p+q$ if and only if $pq=0$.
+\end{proof}
+
+\section{The parity obstruction}
+\begin{lemma}\label{lem:flip}
+Reversing one edge $e$ of $D$ changes $\operatorname{sgn}_D(M)$ for exactly the perfect
+matchings $M\ni e$.
+\end{lemma}
+\begin{proof}
+If $e\notin M$, the word $t_1h_1\cdots t_mh_m$ is unchanged. If $e=t_kh_k\in M$, the
+two adjacent entries $t_k,h_k$ are swapped. They are distinct because $G$ is
+loopless, so the swap is a transposition and the inversion number changes by
+exactly $1$.
+\end{proof}
+
+\begin{theorem}[Parity obstruction]\label{thm:obstruction}
+Let $G$ be loopless, and suppose that
+\begin{enumerate}
+\item[(a)] $\Phi(G)$ is even;
+\item[(b)] every edge lies in an even number of perfect matchings;
+\item[(c)] for some orientation $D_0$, the number of perfect matchings $M$ with
+$\operatorname{sgn}_{D_0}(M)=-1$ is odd.
+\end{enumerate}
+Then $G$ is not Pfaffian.
+\end{theorem}
+\begin{proof}
+Let $\nu(D)$ be the number of negative terms. Any orientation $D$ is obtained from
+$D_0$ by reversing edges one at a time. By Lemma~\ref{lem:flip}, reversing $e$
+changes $\nu$ by an amount congruent modulo $2$ to the number of perfect matchings
+containing $e$, which is even by (b). Hence $\nu(D)\equiv\nu(D_0)\equiv1\pmod2$ for
+every $D$. If $D$ were Pfaffian, Lemma~\ref{lem:equiv} would give $\nu(D)\in\{0,\Phi\}$,
+which is even by (a). This is a contradiction.
+\end{proof}
+Equivalently, by (b) the product $\prod_M\operatorname{sgn}_D(M)=(-1)^{\nu(D)}$ does not
+depend on $D$. It is $-1$, while a Pfaffian orientation would make it
+$(\pm1)^{\Phi}=1$. This is the classical reason why $K_{3,3}$ is not Pfaffian
+(Little~\cite{little}; see also \cite{lp,rst}).
+
+\section[K\_\{3,3\}]{\texorpdfstring{$K_{3,3}$}{K33}}
+Let the vertices be $0,1,2$ and $3,4,5$, and let $D_0$ orient every edge $a\to b$ with
+$a\in\{0,1,2\}$. The perfect matchings are $M_\sigma=\{0\,\sigma(0),\,1\,\sigma(1),\,2\,\sigma(2)\}$
+for the six bijections $\sigma:\{0,1,2\}\to\{3,4,5\}$. In the word
+$0\,\sigma(0)\,1\,\sigma(1)\,2\,\sigma(2)$ the entries $\sigma(i)\ge3$ form $2+1=3$
+inversions with the later entries $1,2$, plus the inversions of $\sigma$ itself, so
+$\operatorname{sgn}_{D_0}(M_\sigma)=-\operatorname{sgn}(\sigma)$:
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+matching & mask (Lean) & $\operatorname{sgn}(\sigma)$ & $\operatorname{sgn}_{D_0}$\\
+\midrule
+$\{05,14,23\}$ & 84 & $-1$ & $+1$\\
+$\{04,15,23\}$ & 98 & $+1$ & $-1$\\
+$\{05,13,24\}$ & 140 & $+1$ & $-1$\\
+$\{03,15,24\}$ & 161 & $-1$ & $+1$\\
+$\{04,13,25\}$ & 266 & $-1$ & $+1$\\
+$\{03,14,25\}$ & 273 & $+1$ & $-1$\\
+\bottomrule
+\end{tabular}
+\end{center}
+(Bit $i$ of a mask selects edge number $i$ in the order $03,04,05,13,14,15,23,24,25$.)
+Thus $\Phi=6$; each edge $ab$ lies in exactly $2$ matchings (the $2$ bijections with
+$\sigma(a)=b$); and $\nu(D_0)=3$ is odd. By Theorem~\ref{thm:obstruction}:
+
+\begin{proposition}\label{prop:k33}
+$K_{3,3}$ is not Pfaffian. Concretely, $\operatorname{Pf}(A_{D_0})=0$, and every one of
+the $2^9=512$ orientations has $|\operatorname{Pf}(A_D)|\le 4<6$.
+\end{proposition}
+(Indeed $\nu(D)$ is odd, so $|\operatorname{Pf}|=|6-2\nu|\in\{4,0\}$.)
+
+\section[All even subdivisions of K\_\{3,3\}]{All even subdivisions of \texorpdfstring{$K_{3,3}$}{K33}}
+Let $G$ have vertices $\{0,\dots,n-1\}$ and an edge $uv$. Let $G'$ be the graph
+obtained by replacing $uv$ with the path $u\,a\,b\,v$, where $a=n$ and $b=n+1$ are
+new vertices. Every even subdivision of $K_{3,3}$ arises from $K_{3,3}$ by finitely
+many such steps, up to relabelling of the vertices.
+
+\begin{lemma}\label{lem:sub}
+If $G$ satisfies (a), (b) and (c) of Theorem~\ref{thm:obstruction}, so does $G'$, and
+$\Phi(G')=\Phi(G)$.
+\end{lemma}
+\begin{proof}
+In $G'$ the vertex $a$ is matched either to $b$ or to $u$; in the latter case $b$ is
+matched to $v$. This gives a bijection $M\mapsto M'$ from the perfect matchings of $G$:
+\[
+M'=M\cup\{ab\}\ \text{if } uv\notin M,\qquad M'=(M\setminus\{uv\})\cup\{ua,bv\}\ \text{if } uv\in M.
+\]
+So $\Phi(G')=\Phi(G)$ and (a) is inherited. Let $c$ be the number of perfect
+matchings of $G$ through $uv$. In $G'$ the edges $ua$ and $bv$ lie in $c$ perfect
+matchings and $ab$ lies in $\Phi-c$. Both numbers are even, and the other edges keep
+their counts, so (b) is inherited. For (c): since $G$ satisfies (b), the proof of
+Theorem~\ref{thm:obstruction} shows that $\nu(D)$ is odd for \emph{every} orientation
+$D$ of $G$, so we may take $D_0$ with $u\to v$. Orient
+$u\to a\to b\to v$ and keep every other edge. If $uv\notin M$, the word of $M'$ is the word of
+$M$ followed by $a\,b$. These are the two largest labels, in increasing order, so the
+sign is unchanged. If $uv\in M$, list $uv$ last, so that the word of $M$ is $W\,u\,v$.
+The word of $M'$ is $W\,u\,a\,b\,v$. It arises from $W\,u\,v\,a\,b$ (which has the sign of
+$W\,u\,v$) by moving $v$ past $a$ and $b$, an even permutation. Hence
+$\operatorname{sgn}_{D_0'}(M')=\operatorname{sgn}_{D_0}(M)$ for all $M$, and $\nu$ is
+preserved.
+\end{proof}
+
+Relabelling the vertices by a permutation $\tau$ multiplies every term by
+$\operatorname{sgn}(\tau)$. So conditions (a), (b) and (c) are invariant under
+relabelling: when $\Phi$ is even, $\nu$ either stays the same or becomes $\Phi-\nu$.
+Being Pfaffian is also invariant. Induction with Lemma~\ref{lem:sub}, starting from
+Proposition~\ref{prop:k33}, gives:
+
+\begin{theorem}\label{thm:main}
+Every even subdivision of $K_{3,3}$ (including $K_{3,3}$ itself) satisfies the
+hypotheses of Theorem~\ref{thm:obstruction} with $\Phi=6$. Hence no even subdivision
+of $K_{3,3}$ is Pfaffian, and Clause (E) of Conjecture 00000001685 is false.
+\end{theorem}
+
+\begin{corollary}
+Conjecture 00000001685 is false.
+\end{corollary}
+
+The smallest proper even subdivision is $S$: $K_{3,3}$ with edge $03$ replaced by
+the path $0\,6\,7\,3$ (8 vertices, 11 edges). It is non-Pfaffian with
+$\Phi(S)=6$. The masks of its perfect matchings, over the edge order
+$04,05,13,14,15,23,24,25,06,67,73$, are $554,561,582,645,1360,1416$.
+
+\section{M\"obius ladders}
+The M\"obius ladder with $r$ rungs has vertices $0,\dots,2r-1$, the cycle edges
+$i\,(i+1 \bmod 2r)$ and the rungs $i\,(i+r)$. For $r=3$ it is $K_{3,3}$, with colour
+classes the even and the odd vertices. Its $6$ perfect matchings satisfy the
+obstruction directly; this is proved in Lean as \texttt{M6\_not\_pfaffian}. An
+exhaustive computation in \texttt{verify.py}, using the method of the next section,
+gives the following:
+\begin{center}
+\begin{tabular}{lcccccc}
+\toprule
+rungs $r$ & 2 & 3 & 4 & 5 & 6 & 7\\
+vertices & 4 & 6 & 8 & 10 & 12 & 14\\
+Pfaffian? & yes & no & yes & no & yes & no\\
+\bottomrule
+\end{tabular}
+\end{center}
+The ladder with $5$ rungs has $13$ perfect matchings, and none of its $2^{15}$
+orientations is Pfaffian. In the vertex-count convention, then, the M\"obius part
+of the conjecture also fails (for example at $M_6$ and $M_{10}$). In the rung-count
+convention we make no claim about it.
+
+\section{Secondary: the second sentence}\label{sec:second}
+Read the second sentence as ``every nonplanar Pfaffian graph of crossing number
+$\le2$ is a M\"obius ladder or an even subdivision of $K_{3,3}$''. Under this
+reading it is also false. Let $W$ be the Wagner graph $V_8$ (the M\"obius ladder
+with $4$ rungs) with the edge $01$ replaced by a path $0\,8\,9\,1$. Then:
+\begin{itemize}
+\item $W$ is Pfaffian, with $\Phi(W)=7$. The proof of Lemma~\ref{lem:sub} shows that
+the compatible orientation of a Pfaffian orientation of $V_8$ is Pfaffian. The
+Lean theorem \texttt{M8\_pfaffian} exhibits a Pfaffian orientation of $V_8$, and
+\texttt{verify.py} checks $W$ directly.
+\item $W$ is nonplanar. $V_8-\{04\}$ is a subdivision of $K_{3,3}$ with classes
+$\{1,3,6\}$ and $\{2,5,7\}$: the paths are $12$, $15$, $1\,0\,7$, $32$, $37$,
+$3\,4\,5$, $65$, $67$, $62$.
+\item $\operatorname{cr}(W)\le1$. Draw the ladder with rails $0\,1\,2\,3$ (top) and
+$4\,5\,6\,7$ (bottom), and with vertical rungs. Draw the edge $34$ around the top
+and down the left side, and draw $70$ around the bottom and up the left side. The
+two edges cross exactly once. Subdividing an edge does not change the drawing.
+\item $W$ is not a M\"obius ladder, since it has vertices of degree $2$. It is not an
+even subdivision of $K_{3,3}$, since $|E|-|V|=14-10=4$, whereas every subdivision of
+$K_{3,3}$ has $|E|-|V|=3$.
+\end{itemize}
+This part is not formalized in Lean, apart from \texttt{M8\_pfaffian}. The main
+disproof does not depend on it.
+
+\section{Independent computational check (\texttt{verify.py})}
+The script uses only the Python standard library and a different method from the
+Lean proof. Since $\det A_D=\operatorname{Pf}(A_D)^2$ and $|\operatorname{Pf}|\le\Phi$, $G$ is
+Pfaffian if and only if some orientation has $\det A_D=\Phi^2$. The script computes
+exact integer determinants (Bareiss elimination) and enumerates perfect matchings
+recursively. It checks:
+\begin{itemize}
+\item $K_{3,3}$ (all $512$ orientations), $S$ (all $2048$), and $K_{3,3}$ with two
+edges subdivided twice (all $8192$): none is Pfaffian, and $\Phi=6$ in each case.
+\item $K_{3,3}$ with every edge subdivided $2$ times, and with every edge subdivided
+$4$ times. Switching at a vertex (reversing all its edges) multiplies the
+Pfaffian by $-1$ and leaves $\det$ unchanged. So it suffices to check one
+orientation per switching class: fix the edges of a spanning tree, which leaves
+$2^{|E|-|V|+1}=16$ orientations. None is Pfaffian.
+\item The hypotheses (a), (b), (c) of Theorem~\ref{thm:obstruction} for all $2^9$ even
+subdivisions with $0$ or $2$ internal vertices per edge, and for three more with
+up to $6$.
+\item M\"obius ladders with $2$--$7$ rungs (the table above), with $5$ rungs also
+exhaustively over $2^{15}$ orientations; and the graph $W$ of the previous
+section.
+\end{itemize}
+
+\section{Lean formalization}
+\texttt{lean4/} is a self-contained Lean~4.19.0 project (core library only, no
+Mathlib). Everything is defined from scratch:
+\begin{itemize}
+\item \texttt{Graph} is a vertex count and an edge list. \texttt{sel es M} is the edge
+subset selected by the bit mask $M$. \texttt{isPM} says every vertex $v<n$ lies on
+exactly one selected edge. \texttt{PMs G} lists all perfect matchings among the
+$2^{|E|}$ masks, and \texttt{numPM G} is their number.
+\item An orientation is a \texttt{List Bool}, one entry per edge (\texttt{true} keeps
+$(a,b)$ as $a\to b$). \texttt{par} is the inversion parity of the word
+$t_1h_1t_2h_2\cdots$, and \texttt{term} is $\pm1$ accordingly.
+$\texttt{Pf G os}=\sum_{M}\texttt{term}$.
+\item \texttt{IsPfaffian G}: some orientation of length $|E|$ has
+$|\texttt{Pf}|=\texttt{numPM}$ (the conjecture's definition). \texttt{IsPfaffian'}:
+all terms are equal (Kasteleyn's definition). \texttt{same\_sign\_pfaffian} shows
+that the second implies the first.
+\item \texttt{not\_pfaffian\_of\_invariant} is Theorem~\ref{thm:obstruction} for
+arbitrary graphs. It is proved through \texttt{word\_perm}, \texttt{par\_flips}
+(Lemma~\ref{lem:flip} in cumulative form: the parity changes by the number of
+reversed matching edges), \texttt{sum\_map\_flips\_even} and \texttt{sum\_terms}.
+\item Computations (kernel \texttt{decide}): \texttt{PMs\_K33}, \texttt{PMs\_S},
+\texttt{PMs\_M6}, and the hypotheses (a)--(c). The results are
+\texttt{K33\_not\_pfaffian}, \texttt{S\_not\_pfaffian} and \texttt{M6\_not\_pfaffian}.
+\item \texttt{EvenSubdivisionK33} is the inductive family generated from $K_{3,3}$ by
+\texttt{subdivide2}, which replaces an edge $uv$ by $u\,n\,(n{+}1)\,v$.
+\texttt{S\_even\_subdivision} shows $S$ belongs to it and $S\ne K_{3,3}$.
+\item Main theorems:
+\texttt{conjecture\_00000001685\_false (Q)}:
+$\neg\,\forall G,\ \texttt{EvenSubdivisionK33}\ G\to Q\,G\wedge\texttt{IsPfaffian}\ G$, for an
+arbitrary extra property $Q$ such as ``nonplanar'' or ``minimal'';
+the same with \texttt{IsPfaffian'}; \texttt{\_false\_proper} (members other than
+$K_{3,3}$); \texttt{\_conjunction\_false} ($\neg((E)\wedge R)$ for any $R$); and
+\texttt{mobius\_clause\_false\_vertex\_convention}.
+\item Non-vacuity: \texttt{K4\_pfaffian} ($K_4$, the ladder with $2$ rungs) and
+\texttt{M8\_pfaffian} (the nonplanar Wagner graph) have explicit Pfaffian
+orientations, so \texttt{IsPfaffian} is not empty. As a cross-check that
+\texttt{Pf} is the matrix Pfaffian, \texttt{pfMat\_K33} and \texttt{pfMat\_M8} compare
+it with the recursive row expansion
+$\operatorname{Pf}(A)=\sum_j(-1)^{j}a_{1j}\operatorname{Pf}(A_{\hat1\hat j})$ of the skew
+matrix.
+\end{itemize}
+\paragraph{Not in Lean.} Three things are proved here but not in Lean: the induction
+of Lemma~\ref{lem:sub} for arbitrary even subdivisions (Lean covers $K_{3,3}$ and
+$S$, which already refute every reading of (E)); the invariance under
+relabelling; and Section~\ref{sec:second} apart from \texttt{M8\_pfaffian}. There is no
+\texttt{sorry}, no \texttt{native\_decide}, and no added axiom.
+\texttt{\#print axioms} shows at most \texttt{propext} and \texttt{Quot.sound}.
+
+\section{Reproduction}
+\begin{verbatim}
+cd lean4 && lake build     # Lean 4.19.0, core only (about 1 minute)
+cd .. && python3 verify.py # Python 3 standard library
+pdflatex report.tex && pdflatex report.tex
+\end{verbatim}
+
+\begin{thebibliography}{9}
+\bibitem{little} C.~H.~C.~Little, A characterization of convertible $(0,1)$-matrices,
+\emph{J. Combin. Theory Ser. B} 18 (1975), 187--208.
+\bibitem{lp} L.~Lov\'asz and M.~D.~Plummer, \emph{Matching Theory}, North-Holland, 1986.
+\bibitem{rst} N.~Robertson, P.~D.~Seymour and R.~Thomas, Permanents, Pfaffian
+orientations, and even directed circuits, \emph{Ann. of Math.} 150 (1999), 929--975.
+\end{thebibliography}
+\end{document}
