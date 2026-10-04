@@ -1,0 +1,75 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,lmodern}
+\setlength{\emergencystretch}{2em}
+\begin{document}
+\begin{center}
+{\Large Closed graphs and domain density of maximal monotone operators}\\[4pt]
+{\large Proof of Conjecture 00000008842}\\[6pt]
+ziangni-sys \qquad 4 October 2026
+\end{center}
+
+\section*{Operators and maximality}
+Let $E$ be a real Banach space with continuous dual $E^*$ and
+$A:E\rightrightarrows E^*$ a set-valued operator. Its graph and domain are
+\[
+G=\{(x,x^*):x^*\in A(x)\},\qquad
+D=\{x:\exists x^*\in A(x)\}.
+\]
+Monotonicity means $\langle x^*-y^*,x-y\rangle\geq0$ for all
+$(x,x^*),(y,y^*)\in G$. Maximal monotonicity means monotonicity together
+with the absence of a proper monotone graph extension.
+Every subset of $E\times E^*$ is the graph of a set-valued operator,
+by taking its fibers, so maximality is precisely maximality under
+inclusion among monotone subsets. No closedness is included in this
+definition. All closures below use the product norm topology.
+
+\section*{A general closedness lemma}
+Let $X$ be a topological space and $C(p,q)$ a reflexive, symmetric
+relation whose sections $\{p:C(p,q)\}$ are closed for every $q$.
+Suppose $G\subseteq X$ is maximal among sets all of whose pairs satisfy $C$.
+Then
+\[
+p\in G\quad\Longleftrightarrow\quad
+C(p,q)\text{ for every }q\in G.
+\]
+The forward implication is pairwise compatibility. For the converse,
+if $p$ satisfies all those relations, $G\cup\{p\}$ is compatible:
+the pairs in $G$ already are, the new diagonal pair uses reflexivity,
+and both orders of each mixed pair use symmetry. Maximality forces $p\in G$.
+Consequently
+\[
+G=\bigcap_{q\in G}\{p:C(p,q)\},
+\]
+an intersection of closed sets, so $G$ is closed.
+
+Apply this lemma to $X=E\times E^*$ and
+$C((x,x^*),(y,y^*))\iff\langle x^*-y^*,x-y\rangle\geq0$.
+The relation is reflexive, and it is symmetric because negating both
+differences leaves the pairing unchanged. Each section is closed by
+continuity of the duality pairing: evaluation is a bounded bilinear map,
+with $|x^*(x)|\leq\|x^*\|\|x\|$. Hence a maximal monotone graph is closed.
+The same argument applies to operators $H\rightrightarrows H$ on a real
+Hilbert space using its continuous inner product.
+
+\section*{Density in the closure}
+For any topological space and any subset $D$, the canonical inclusion
+\[
+\iota:D\longrightarrow\overline D,\qquad \iota(x)=x
+\]
+has dense range. Indeed, a relative open neighborhood of
+$x\in\overline D$ is obtained from an ambient open neighborhood of $x$;
+the latter intersects $D$ by the definition of closure.
+This proves the domain clause, including when the domain is empty.
+It asserts relative density in $\overline D$, not density in the entire
+ambient space. Combining it with the closedness lemma proves both
+clauses of the source conjecture.
+
+\section*{Formal verification}
+Lean proves the general closed-compatibility lemma and the actual
+\texttt{DenseRange} of the subtype inclusion. It defines graphs and
+monotonicity using continuous-dual evaluation and, separately, inner
+products; the two \texttt{conjecture\_8842} theorems prove the full
+conjunction in these settings. They hold already in real normed spaces
+and inner-product spaces: completeness is unnecessary.
+\end{document}
