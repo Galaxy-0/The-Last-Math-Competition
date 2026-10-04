@@ -1,0 +1,251 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}_q}
+
+\title{Disproof of Conjecture 00000007672:\\
+$\gcd(F_{55},F_{11})=1$ and $\gcd(F_6,F_3)=1$ in $\mathbb Z[q]$}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000007672 asserts that for the $q$-Fibonacci polynomials
+$F_n(q)=\sum_j\qbinom{n-1-j}{j}q^{j^2}$, the greatest common divisor
+$\gcd(F_n,F_m)$ in $\mathbb Z[q]$ equals $F_{\gcd(n,m)}$ times a correction
+factor. We give two counterexamples. First, $\gcd(F_6,F_3)=1$ in
+$\mathbb Z[q]$ while $F_{\gcd(6,3)}=F_3=1+q$. Second, and robust under every
+reading of the exceptional set $E$: $\gcd(F_{55},F_{11})=1$ while
+$F_{\gcd(11,55)}=F_{11}$ is a monic polynomial of degree $25$ with no
+cyclotomic factor. Here all prime factors of $11$ and $55$ are $5$ or $11$,
+none $\equiv\pm2\pmod 5$. Both are formalized in Lean~4 (core library only).
+\end{abstract}
+
+\section{The conjecture}
+
+The statement (English version) reads:
+\begin{quote}
+\emph{Definition:} The $q$-Fibonacci polynomials are
+$F_n(q)=\sum\,[n-1-j \text{ choose } j]_q\, q^{j^2}$, with Gaussian binomial
+coefficients. \emph{Conjecture:} $\gcd(F_n(q),F_m(q))$ in $\mathbb Z[q]$ equals
+$F_{\gcd(n,m)}(q)$ times a correction factor from a finite exceptional set $E$
+depending only on primes $p\equiv\pm2 \pmod 5$, and the count of
+$E\cap[1,x]$ is $O(\log\log x)$.
+\end{quote}
+The Chinese version says the same thing. The conjecture is a conjunction, so
+refuting its first clause refutes it. That clause is:
+\begin{equation}\label{eq:clause}
+\gcd(F_n,F_m)=F_{\gcd(n,m)}\cdot c_{n,m}\qquad\text{for some polynomial } c_{n,m}.
+\end{equation}
+The ``correction factor'' multiplies a polynomial and is supposed to yield the
+gcd, which lies in $\mathbb Z[q]$. So it is a polynomial, in $\mathbb Z[q]$ or at
+least in $\mathbb Q[q]$. Our argument works for $c_{n,m}\in\mathbb Q[q]$ too
+(Remark~\ref{rem:Q}). If $c_{n,m}$ were allowed to be an arbitrary rational
+function, \eqref{eq:clause} would hold for any polynomial in place of
+$\gcd(F_n,F_m)$ and would say nothing.
+
+\paragraph{The exceptional set $E$.} The phrase ``a correction factor from a
+finite exceptional set $E$ depending only on primes $p\equiv\pm2\pmod5$'' is
+vague. A charitable reading lets the correction factor divide out a few
+cyclotomic factors $\Phi_p(q)$, or integer factors $p$, attached to finitely
+many exceptional primes $p\equiv\pm2\pmod 5$, or excuses finitely many
+exceptional indices. Under that reading the counterexample $(6,3)$ could be
+explained away. There the missing factor is $1+q=\Phi_2(q)$, and $2\equiv2\pmod5$.
+The counterexample $(11,55)$ of Section~\ref{sec:11} is not affected. Its
+indices involve only the primes $5$ and $11$. The missing factor is all of
+$F_{11}$, which has degree $25$ and no cyclotomic factor. No correction built
+from finitely many primes or cyclotomic polynomials can turn $F_{11}$ into
+$\gcd(F_{55},F_{11})=1$.
+
+\section{Definitions and small values}
+
+The Gaussian binomial coefficient is
+$\qbinom{n}{k}=\prod_{i=1}^{k}\frac{1-q^{n-k+i}}{1-q^{i}}$ for $0\le k\le n$, and
+$0$ otherwise. It satisfies the $q$-Pascal rule
+$\qbinom{n+1}{k+1}=\qbinom{n}{k}+q^{k+1}\qbinom{n}{k+1}$. Only the terms with
+$0\le j\le n-1-j$ contribute to $F_n$. We get
+\begin{align*}
+F_3&=\qbinom{2}{0}+\qbinom{1}{1}q=1+q,\\
+F_6&=\qbinom{5}{0}+\qbinom{4}{1}q+\qbinom{3}{2}q^4
+ =1+(q+q^2+q^3+q^4)+(q^4+q^5+q^6)\\
+&=1+q+q^2+q^3+2q^4+q^5+q^6 .
+\end{align*}
+As a sanity check, $F_n(1)=\sum_j\binom{n-1-j}{j}$ is the Fibonacci number
+$1,1,2,3,5,8,\dots$. These are the classical $q$-Fibonacci polynomials of
+Schur, Carlitz and Andrews \cite{carlitz,andrews}.
+
+\begin{lemma}\label{lem:values}
+$F_3(-1)=0$ and $F_6(-1)=2$. Moreover $F_6=F_3\cdot(-1+2q-q^2+2q^3+q^5)+2$.
+\end{lemma}
+\begin{proof}
+Direct computation. $F_6(-1)=1-1+1-1+2-1+1=2$.
+\end{proof}
+
+\section{\texorpdfstring{The gcd of $F_6$ and $F_3$ in $\mathbb Z[q]$}{The gcd of F6 and F3 in Z[q]}}
+
+\begin{proposition}\label{prop:gcd}
+$1$ is a greatest common divisor of $F_6$ and $F_3$ in $\mathbb Z[q]$. That is,
+every $D\in\mathbb Z[q]$ dividing both $F_6$ and $F_3$ divides $1$, i.e.\
+$D=\pm1$.
+\end{proposition}
+\begin{proof}
+Write $DA=F_3=1+q$ and $DB=F_6$ with $A,B\in\mathbb Z[q]$. Degrees add in
+$\mathbb Z[q]$, because the top coefficient of a product is the product of the
+top coefficients and $\mathbb Z$ has no zero divisors. Hence
+$\deg D+\deg A=1$, so $D$ or $A$ is constant.
+
+If $A=a$ is constant, then $D(0)a=1$ gives $a\ne0$, and $D(-1)a=F_3(-1)=0$
+gives $D(-1)=0$. But then $F_6(-1)=D(-1)B(-1)=0$, contradicting
+$F_6(-1)=2$ (Lemma~\ref{lem:values}).
+
+If $D=d$ is constant, then $d\cdot A(0)=1$ forces $d=\pm1$, so $D\cdot d=1$
+and $D\mid 1$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+For $(n,m)=(6,3)$ the clause \eqref{eq:clause} fails. Conjecture 00000007672 is
+false.
+\end{theorem}
+\begin{proof}
+$\gcd(6,3)=3$ and $F_3=1+q$. By Proposition~\ref{prop:gcd} the gcd of $F_6$ and
+$F_3$ in $\mathbb Z[q]$ is $\pm1$, which is unique up to units. If
+$\pm1=(1+q)\,c$ for a polynomial $c$, then evaluating at $q=-1$ gives
+$\pm1=0$, a contradiction. More generally, \emph{no} divisor $G$ of $F_6$ is a
+multiple of $F_3$. If $G=F_3c$ and $GH=F_6$, then
+$2=F_6(-1)=F_3(-1)c(-1)H(-1)=0$.
+\end{proof}
+
+\begin{remark}\label{rem:Q}
+The same evaluation argument works if the correction factor $c$ is allowed to
+lie in $\mathbb Q[q]$, or even to be any rational function without a pole at
+$q=-1$. Over $\mathbb Q[q]$ the gcd is also $1$, because $F_6\equiv 2 \pmod{1+q}$.
+\end{remark}
+
+\begin{remark}[The family $(3,3k)$]
+The polynomials $F_n$ satisfy Schur's recurrence
+$F_n=F_{n-1}+q^{n-2}F_{n-2}$ for $n\ge3$ \cite{andrews}. To see this, apply
+$\qbinom{N}{j}=\qbinom{N-1}{j}+q^{N-j}\qbinom{N-1}{j-1}$ with $N=n-1-j$. The
+first terms sum to $F_{n-1}$. In the second, put $i=j-1$: the exponent
+$j^2+(n-1-2j)$ becomes $i^2+n-2$, so these terms sum to $q^{n-2}F_{n-2}$.
+Put $f_n=F_n(-1)$, so $f_0=0$ and $f_1=f_2=1$. Then
+$f_{2k}=f_{2k-1}+f_{2k-2}$ and $f_{2k+1}=f_{2k}-f_{2k-1}=f_{2k-2}$. Hence
+$f_{2k}=f_{2k-2}+f_{2k-4}$ for $k\ge2$, with $f_2=f_4=1$, so
+$f_{2k}=\mathrm{Fib}_k$ and $f_{2k+1}=\mathrm{Fib}_{k-1}$. In particular
+$f_n>0$ for all $n\ge1$ with $n\ne3$. Thus $1+q=F_3$ divides no $F_{3k}$ with
+$k\ge2$, and the argument of Theorem~\ref{thm:main} refutes \eqref{eq:clause}
+for every pair $(3,3k)$, $k\ge2$. (Lean checks $f_{3k}$ for $k=2,\dots,6$.) All
+of these pairs share the missing factor $\Phi_2=1+q$, so this family alone
+does not rule out the cyclotomic reading of $E$. The next section does.
+\end{remark}
+
+\section{A counterexample avoiding the exceptional primes}\label{sec:11}
+
+\begin{theorem}\label{thm:11}
+$\gcd(11,55)=11$, and no divisor of $F_{55}$ in $\mathbb Z[q]$ is a multiple of
+$F_{11}$. In fact $\gcd(F_{55},F_{11})=1$ in $\mathbb Z[q]$, while
+\[
+F_{11}=1+q+q^2+q^3+2q^4+2q^5+3q^6+3q^7+4q^8+5q^9+5q^{10}+5q^{11}+6q^{12}+\dots+q^{25}
+\]
+is monic of degree $25$ and is divisible by no cyclotomic polynomial.
+\end{theorem}
+\begin{proof}
+From the definition, $F_{11}(-1)=3$ and $F_{55}(-1)=121393=\mathrm{Fib}_{26}$
+(also from $f_{2k+1}=\mathrm{Fib}_{k-1}$ above). If $G=F_{11}c$ and $GH=F_{55}$
+with $c,H\in\mathbb Z[q]$, then $121393=3\,c(-1)H(-1)$. This is impossible
+because $121393\equiv1\pmod 3$. Since $c\in\mathbb Q[q]$ with $F_{11}c\in\mathbb
+Z[q]$ forces $c\in\mathbb Z[q]$ by Gauss's lemma ($F_{11}$ is monic), the same
+holds over $\mathbb Q[q]$.
+
+The remaining statements are computational and are checked in
+\texttt{verify.py}. Both $F_{11}$ and $F_{55}$ are monic, so a nontrivial common
+factor over $\mathbb Q$ would be a monic integer polynomial, and its reduction
+modulo the prime $2^{61}-1$ would divide both reductions. The Euclidean
+algorithm modulo $2^{61}-1$ gives a gcd of degree $0$, so
+$\gcd(F_{55},F_{11})=1$. A cyclotomic factor $\Phi_k$ of $F_{11}$ would need
+$\varphi(k)\le25$, hence $k\le1250$ (since $\varphi(k)\ge\sqrt{k/2}$). None of
+the $53$ such $\Phi_k$ divides $F_{11}$.
+\end{proof}
+
+Thus for $(n,m)=(11,55)$ the gcd is $1=F_{11}\cdot c$ only for $c=1/F_{11}$,
+which is not a polynomial. It is also not a correction made of finitely many
+primes or cyclotomic factors, under any reading of $E$. Failures are common:
+$F_d\nmid F_{2d}$ for every $3\le d\le30$ except $d=5$.
+
+\section{Lean formalization}
+
+The directory \texttt{lean4/} is a self-contained Lean~4.19.0 project that uses
+only the core library (no Mathlib).
+\begin{itemize}
+\item Polynomials in $\mathbb Z[q]$ are coefficient lists. \texttt{PEq} means
+equal coefficients, \texttt{Dvd a b} is $\exists c,\ a\cdot c=b$ in $\mathbb Z[q]$,
+and \texttt{IsGcd G a b} is the standard definition of a greatest common
+divisor (a common divisor that every common divisor divides).
+\item \texttt{gauss} defines Gaussian binomials by the $q$-Pascal rule.
+\texttt{gauss\_product\_formula} checks
+$\qbinom{n}{k}(q;q)_k(q;q)_{n-k}=(q;q)_n$ for all $k\le n\le7$.
+\texttt{qfib n} is $\sum_{j<n}\qbinom{n-1-j}{j}q^{j^2}$ exactly as in the
+conjecture. \texttt{qfib\_at\_one} checks $F_n(1)=\mathrm{Fib}_n$ for $n\le15$.
+\item \texttt{common\_divisor\_dvd\_one} and \texttt{isGcd\_one} formalize
+Proposition~\ref{prop:gcd}. They use the degree argument
+(\texttt{coeff\_mulL\_top}, \texttt{const\_or\_const}) and evaluation
+(\texttt{evalL\_mulL}, \texttt{evalL\_congr}).
+\item \texttt{GcdClause} is the clause \eqref{eq:clause}: for all $n,m\ge1$ and
+every gcd $G$ of $F_n,F_m$ in $\mathbb Z[q]$, $G=F_{\gcd(n,m)}\cdot c$ for some
+$c\in\mathbb Z[q]$. \texttt{conjecture\_00000007672\_false} proves
+$\neg$\texttt{GcdClause} using $(6,3)$.
+\texttt{no\_divisor\_of\_F6\_is\_multiple\_of\_F3} proves the stronger statement
+from the proof of Theorem~\ref{thm:main}.
+\item \texttt{GcdClauseExists} is the existential form: for all $n,m\ge1$ there
+are a gcd $G$ and $c\in\mathbb Z[q]$ with $G=F_{\gcd(n,m)}\cdot c$.
+\texttt{conjecture\_00000007672\_false\_11\_55} proves
+$\neg$\texttt{GcdClauseExists} using $(11,55)$, via
+\texttt{no\_divisor\_of\_F55\_is\_multiple\_of\_F11}. $F_{55}(-1)$ is computed
+with a row-by-row evaluation of Gaussian binomials (\texttt{row},
+\texttt{fastF}), proved equal to evaluating the polynomial
+(\texttt{evalL\_qfib}).
+\item Lean takes the correction factor in $\mathbb Z[q]$. The extension to
+$\mathbb Q[q]$ (Gauss's lemma) and the facts that $\gcd(F_{55},F_{11})=1$ and that
+$F_{11}$ has no cyclotomic factor are shown in this report and in
+\texttt{verify.py}, not in Lean.
+\end{itemize}
+\texttt{lake build} succeeds. There is no \texttt{sorry}, no
+\texttt{native\_decide}, and no added axioms. \texttt{\#print axioms} shows at
+most \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. The
+numerical facts are proved by \texttt{decide}. \texttt{qfib\_mult3\_at\_neg\_one}
+and \texttt{qfib\_55\_at\_neg\_one} use \texttt{decide +kernel}, which is
+checked by the Lean kernel.
+
+\section{Reproduction}
+\begin{verbatim}
+cd lean4 && lake build       # Lean 4.19.0, core only
+python3 verify.py            # standard library only
+pdflatex report.tex
+\end{verbatim}
+\texttt{verify.py} computes Gaussian binomials from the product formula by exact
+division, which is independent of the $q$-Pascal rule used in Lean. It
+recomputes $F_n$, finds $\gcd(F_6,F_3)=1$ by the Euclidean algorithm in
+$\mathbb Q[q]$ (and in $\mathbb Z[q]$ by Gauss's lemma, since $F_3$ is
+primitive), and lists all $76$ pairs $n<m\le30$ for which
+$F_{\gcd(n,m)}\nmid F_n$ or $F_{\gcd(n,m)}\nmid F_m$. It also performs all the
+checks for $(11,55)$ in Theorem~\ref{thm:11} and verifies Schur's recurrence
+for $n\le30$.
+
+\begin{thebibliography}{9}
+\bibitem{carlitz} L.~Carlitz, Fibonacci notes 3: $q$-Fibonacci numbers,
+\emph{Fibonacci Quart.} 12 (1974), 317--322.
+\bibitem{andrews} G.~E.~Andrews, Fibonacci numbers and the Rogers--Ramanujan
+identities, \emph{Fibonacci Quart.} 42 (2004), 3--19.
+\end{thebibliography}
+
+\end{document}
