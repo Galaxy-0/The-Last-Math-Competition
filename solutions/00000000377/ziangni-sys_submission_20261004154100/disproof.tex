@@ -1,0 +1,44 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\newtheorem{proposition}{Proposition}
+\title{Parabolic multipliers cannot be Liouville numbers}
+\author{ziangni-sys}
+\date{Conjecture 00000000377}
+\begin{document}
+\maketitle
+\noindent\textbf{Claim addressed.} Both versions of the source claim Hausdorff dimension $1$ for the parameters on the Mandelbrot boundary whose quadratic map has a parabolic periodic point with a Liouville multiplier. This set is empty.
+
+For $c\in\mathbb C$, let $F_c(z)=z^2+c$, and let $F_c^{\circ n}$ denote composition iteration. If $F_c^{\circ n}(z)=z$ with $n>0$, its multiplier is
+\[
+ \lambda=(F_c^{\circ n})'(z).
+\]
+A parabolic periodic multiplier is a root of unity: there is $q>0$ with $\lambda^q=1$. This is the usual definition, including the multiplier-$1$ convention as a special case; see Milnor~\cite{milnor}. It differs from an irrationally indifferent multiplier.
+
+\begin{proposition}
+No parabolic periodic point of any quadratic map $F_c$ has a multiplier that is a real Liouville number. Consequently the parameter set in the source has Hausdorff dimension $0$, rather than $1$.
+\end{proposition}
+\begin{proof}
+Suppose such a multiplier were the Liouville number $\xi\in\mathbb R$, viewed as a complex number. Then $\xi^q=1$ for some positive integer $q$. Taking absolute values gives $|\xi|^q=1$, hence $|\xi|=1$ and $\xi\in\{1,-1\}$. Both possibilities are rational, whereas a Liouville number is irrational. This is a contradiction.
+
+The irrationality fact can be seen directly from the standard Liouville approximation condition: for every positive integer $N$, there are integers $a$ and $b>1$ with
+\[
+ 0<\left|\xi-\frac ab\right|<\frac1{b^N}.
+\]
+If $\xi=u/v$ were rational with $v>0$, every distinct rational $a/b$ would have distance at least $1/(vb)$. Taking $N$ with $2^{N-1}\geq v$ contradicts the displayed inequalities, since $b\geq2$. The Lean proof uses Mathlib's genuine Liouville condition and its proved irrationality theorem.
+
+This obstruction holds for every parameter $c$, so it also holds after restricting to the actual Mandelbrot boundary. More explicitly, define
+\[
+ M=\{c\in\mathbb C:\{F_c^{\circ n}(0):n\geq0\}\text{ is bounded}\}.
+\]
+The set of $c\in\partial M$ admitting the stated periodic point and multiplier is therefore empty. The Hausdorff dimension of the empty set is $0$ under the usual nonnegative convention, as in Mathlib, and in particular is not $1$.
+\end{proof}
+
+\noindent\textbf{Formal correspondence.} Lean defines actual quadratic composition iterates and proves their evaluation agrees with function iteration. The multiplier is the actual complex derivative, with a proved polynomial-derivative bridge. The parameter set uses the actual bounded-critical-orbit Mandelbrot set and its frontier, periodicity, the parabolic root-of-unity condition, and the genuine Liouville property. It proves emptiness and actual \texttt{dimH} zero. Emptiness also holds without a Julia-set restriction, so imposing that restriction cannot add points. Only the first dimension claim is addressed.
+
+\begin{thebibliography}{1}
+\bibitem{milnor} J.~Milnor, \emph{Periodic orbits, external rays and the Mandelbrot set: an expository account}, Ast\'erisque \textbf{261} (2000), 277--333. \href{https://www.math.stonybrook.edu/files/dynamics/orm.pdf}{Original article}.
+\end{thebibliography}
+\end{document}
