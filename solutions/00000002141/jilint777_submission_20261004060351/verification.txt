@@ -1,0 +1,29 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:269:0: 'Cospectral.cospectral_1' does not depend on any axioms
+info: ././././Main.lean:270:0: 'Cospectral.invariants' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:271:0: 'Cospectral.pair_1' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:272:0: 'Cospectral.pair_2' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:273:0: 'Cospectral.conjecture_00000002141_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:274:0: 'Cospectral.conjecture_00000002141_conjunction_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:275:0: 'Cospectral.orth_1' does not depend on any axioms
+info: ././././Main.lean:276:0: 'Cospectral.orth_2' does not depend on any axioms
+info: ././././Main.lean:277:0: 'Cospectral.cp_A1' does not depend on any axioms
+info: ././././Main.lean:278:0: 'Cospectral.cp_B2' does not depend on any axioms
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+charpoly(A1) = charpoly(B1) = [80, 200, 9, -320, -180, 136, 110, -16, -20, 0, 1]
+charpoly(A2) = charpoly(B2) = [-16, 68, 80, -188, -183, 104, 108, -14, -20, 0, 1]
+A1, B1, A2, B2 pairwise non-isomorphic (exhaustive search)
+all four graphs are connected
+orthogonal similarity certificates M M^T = 4I, M A = B M verified
+n=10, 4-regular: 60 graphs, cospectral families [['ICR`vGyu?', 'ICR`tjWY_'], ['ICR`uiwY_', 'ICdedhkY_']]
+n=10, 5-regular: 60 graphs, cospectral families [['ICpvfq{Z_', 'ICxvFjYN_'], ['ICpvfZwN_', 'ICY^Nrw\\_']]
+no cospectral regular graphs below order 10; at order 10 exactly two 4-regular pairs and two 5-regular pairs
+ALL CHECKS PASSED
+exit 0
