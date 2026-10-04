@@ -1,0 +1,42 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\title{A star refutes the high-girth nodal bound\\Conjecture 00000002153}
+\author{ziangni-sys (prepared with OpenAI Codex)}
+\date{4 October 2026}
+\begin{document}\maketitle
+\paragraph{Verdict.} The claimed universal bound $2\sqrt n$ is false.
+For the ten-vertex star $K_{1,9}$, a Fiedler vector has nine strong nodal domains, whereas $9>2\sqrt{10}$. The tree bound involving eigenvalue multiplicity remains valid in this example.
+
+\paragraph{Original statement.} The conjecture defines a Fiedler vector as an eigenvector of the second eigenvalue, and nodal domains as components where its sign is constant. It asserts that the domain count on trees is at most $\operatorname{mult}(\lambda_2)+1$, and on graphs of girth at least five is at most $2\sqrt n$.
+
+\paragraph{Conventions.} We use the combinatorial Laplacian $L=D-A$ and strong nodal domains: connected components of the subgraphs induced by $\{v:x_v>0\}$ and $\{v:x_v<0\}$. This is precisely the strictly sign-constant convention; a zero vertex has a different sign and cannot connect two positive vertices within a sign-constant component. If zero components themselves are counted, the example has ten domains and still violates the bound. Weak nodal domains instead allow zero vertices to join vertices of one sign; their count here is two. The counterexample concerns the conjecture's sign-constant definition, not that different weak convention.
+
+\paragraph{Graph and vector.} Let the vertices be $0,1,\ldots,9$, with edges $\{0,i\}$ for $1\leq i\leq9$. This connected graph is a tree. A cycle would give a leaf two distinct neighbors, which is impossible. Its girth is therefore infinite, in particular at least five. Put
+\[
+x_0=0,\qquad x_1=\cdots=x_8=1,\qquad x_9=-8.
+\]
+The Laplacian acts by
+\[
+(Ly)_0=9y_0-\sum_{i=1}^9y_i,\qquad (Ly)_i=y_i-y_0\quad(1\leq i\leq9).
+\]
+Thus $Lx=x$, since the sum of the leaf coordinates is zero.
+
+\paragraph{Why this is a Fiedler vector.} The full spectrum is
+\[
+0\ (\text{multiplicity }1),\quad1\ (\text{multiplicity }8),\quad10\ (\text{multiplicity }1).
+\]
+Indeed, constants form the zero eigenspace. Vectors with center zero and leaf sum zero form an eight-dimensional eigenspace for eigenvalue one. Finally $(-9,1,\ldots,1)$ is an eigenvector of eigenvalue ten. These subspaces are independent and their dimensions sum to ten; equivalently their displayed eigenvectors give a complete basis. Consequently the second eigenvalue, counted with multiplicity, is one.
+
+Lean also checks every real eigenpair directly: summing the nine leaf equations and multiplying the center equation by $t-1$ gives $t(t-10)y_0=0$. If $t$ differs from $0,1,10$, then $y_0=0$ and each $(t-1)y_i=0$, contradicting that the vector is nonzero. The zero-kernel calculation gives only constant vectors, and the exhibited eigenvector at one proves that one is the least positive eigenvalue.
+
+\paragraph{Domain count and contradiction.} The positive induced subgraph has eight vertices and no edges, hence eight singleton components. The negative induced subgraph has only vertex nine, hence one component. Therefore there are nine strong nodal domains. Both sides of the proposed bound are nonnegative, and squaring gives
+\[
+9^2=81>40=(2\sqrt{10})^2.
+\]
+The first tree clause remains consistent: here $\operatorname{mult}(\lambda_2)+1=8+1=9$. Refuting the second universal clause suffices to refute the conjunction.
+
+\paragraph{Formal verification.} The Lean 4.19.0 project uses Mathlib v4.19.0 pinned by commit. It defines the star adjacency relation on \texttt{Fin 10}, the real operator $D-A$ built from its complete neighbor lists and its equality to the displayed coordinate formula, real eigenvectors, and sign-restricted paths. It proves the spectrum restriction and zero-kernel characterization and certifies the Fiedler witness. A complete, duplicate-free list gives exactly one representative of each of its nine strong nodal domains; sign-restricted reachability is proved equivalent to equality. No embedded triangles or quadrilaterals exist, which is exactly the girth-at-least-five condition needed for a simple graph. The concluding theorem combines these properties with the strict numerical violation. This is a faithful self-contained finite graph model; it does not depend on a graph library's terminology.
+
+The accompanying \texttt{verify.py} independently constructs $D-A$ from adjacency, verifies a full exact rational eigenbasis by Gaussian elimination, checks every possible embedded three- and four-cycle, and computes all sign components by graph traversal. The Lean theorem is kernel checked without extra axioms, admitted proofs, or native decision shortcuts. Reproduction commands and verification logs are included in the README and verification directory.
+\end{document}
