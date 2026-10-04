@@ -1,0 +1,50 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{An infeasible two-block ADMM trajectory\\Conjecture 00000008838}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+Both source versions assert that two-block ADMM always converges without a feasibility hypothesis. We give an actual iteration with strongly convex block objectives, nonzero coupling maps, and unique subproblem minimizers at every state, whose scaled dual diverges. The primal variables stay stationary but infeasible; they do not diverge. The three-block clause is unused.
+
+Take scalar blocks $x,y\in\mathbb R$, the usual real Euclidean constraint space $\mathbb R^2$, and
+\[
+f(x)=\frac{x^2}{2},\quad g(y)=\frac{y^2}{2},\qquad
+Ax=(x,0),\quad By=(y,0),\quad c=(0,1).
+\]
+Both coupling maps are nonzero continuous linear maps. The objectives are finite, closed and strongly convex with modulus one. The constraint $Ax+By=c$ is infeasible because its second coordinate is $0=1$.
+
+Use unit penalty and scaled multiplier $u=(u_1,u_2)$. The genuine scaled augmented Lagrangian is
+\[
+L(x,y,u)=f(x)+g(y)+\frac12\|Ax+By-c+u\|^2-\frac12\|u\|^2.
+\]
+In the standard Euclidean norm it is
+\[
+L=\frac{x^2+y^2}{2}+\frac{(x+y+u_1)^2+(u_2-1)^2}{2}
+-\frac{u_1^2+u_2^2}{2}.
+\]
+Thus the actual ADMM subproblem solutions and dual update are
+\[
+x^+=-\frac{y+u_1}{2},\qquad
+ y^+=-\frac{x^++u_1}{2},\qquad
+ u^+=u+Ax^++By^+-c.
+\]
+These are unique global minimizers, not assumed gradient data: for every competitor $z$,
+\[
+L(z,y,u)-L(x^+,y,u)=(z-x^+)^2,
+\quad L(x^+,z,u)-L(x^+,y^+,u)=(z-y^+)^2.
+\]
+The squares are nonnegative and vanish only at the displayed minimizers.
+
+Start from $x_0=y_0=0$, $u_0=(0,0)$. Induction through these genuine ADMM updates gives
+\[
+x_k=y_k=0,\qquad u_k=(0,-k),\qquad Ax_k+By_k-c=(0,-1).
+\]
+The actual scaled dual has no norm or weak limit: its second-coordinate continuous linear functional gives $-k$, which has no finite limit. Therefore the full primal-dual ADMM state does not converge, even though every update is well defined and uniquely solvable. The primal residual also never vanishes.
+
+This identifies the missing feasibility assumption in the unqualified two-block convergence claim. It does not refute a standard ADMM convergence theorem with the appropriate feasible saddle-point hypotheses.
+
+\paragraph{Formal verification.}
+Lean uses actual Euclidean Hilbert norms and continuous linear couplings, expands the true augmented Lagrangian, proves unique global subproblem solutions, and checks every iterate and residual of the full ADMM state. The second-coordinate functional proves actual norm and weak nonconvergence of its dual path. The block objectives' convexity, closed epigraph and quadratic strong-convexity identity are checked. Lean 4.19.0 and Mathlib \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b} are pinned.
+\end{document}
