@@ -1,0 +1,88 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\emergencystretch=2em
+\title{A signed triangle remainder in a dually flat line\\Disproof of Conjecture 00000005781}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\section*{Claim and counterexample}
+The original English conjecture says that the canonical divergence's
+triangle deficit is a Pythagorean remainder of dual points, expressed as a
+second-order interaction of potential differences, and is nonnegative.
+The Chinese statement likewise asserts nonnegativity of this interaction
+remainder. Neither version imposes orthogonality, projection, or an
+ordering condition on the points.
+
+Take the Euclidean line with potential $\psi(x)=x^2/2$.
+Its Hessian is $\psi''=1$, so the Hessian metric is the usual positive
+Euclidean metric. The primal affine coordinate is $x$ and its dual affine
+coordinate is $\eta=\psi'(x)=x$. Both affine connections have zero
+coefficients, so they are flat and dual for this constant metric.
+Thus this is an actual dually flat structure, not an arbitrary assignment
+of a divergence function.
+
+Its Legendre-dual potential is $\varphi(\eta)=\eta^2/2$.
+Indeed, completing the square gives
+\[
+\eta x-\psi(x)=\frac{\eta^2}{2}-\frac{(x-\eta)^2}{2}
+\leq\frac{\eta^2}{2},
+\]
+with equality at $x=\eta$. This proves the defining supremum formula
+for the Legendre transform. The canonical divergence is therefore
+\[
+D(x,y)=\psi(x)+\varphi(\eta(y))-x\eta(y)
+=\frac{(x-y)^2}{2}.
+\]
+Equivalently, it is the Bregman formula
+$\psi(x)-\psi(y)-\psi'(y)(x-y)$.
+It is everywhere nonnegative and vanishes precisely at equal points.
+
+\newpage
+\section*{The signed three-point identity}
+Define the additive triangle deficit by
+\[
+\Delta(x,y,z)=D(x,y)+D(y,z)-D(x,z).
+\]
+Expanding the squares gives the exact interaction identity
+\[
+\Delta(x,y,z)=(y-x)(y-z).
+\]
+This is the Euclidean instance of the primal/dual three-point interaction.
+It has no fixed sign. For the three distinct points $(0,1,2)$,
+\[
+D(0,1)=\tfrac12,\quad D(1,2)=\tfrac12,\quad D(0,2)=2,
+\qquad \Delta(0,1,2)=-1<0.
+\]
+Hence the asserted universal nonnegativity is false.
+If the triangle remainder is instead defined with the opposite sign,
+use the three distinct points $(0,2,1)$: their deficit is
+$D(0,2)+D(2,1)-D(0,1)=2$, so the opposite remainder is $-2<0$.
+The disproof thus does not depend on a choice of sign convention.
+Reversing arguments in the definition of canonical divergence has no
+effect here, since the quadratic example is symmetric.
+
+Orthogonality makes this interaction zero and yields the familiar
+Pythagorean equality; suitable projection conditions can make one chosen
+sign nonnegative. Such hypotheses are absent from the conjecture.
+The result disproves its nonnegativity clause, not the validity of a
+three-point identity under its usual definitions.
+
+\section*{Formal model and verification}
+The Lean project defines the real potential and proves its actual
+derivative and Hessian using Mathlib's derivative operator.
+An explicit positive Jensen gap proves strict convexity.
+The Legendre bound and its attaining point are proved by completing
+the square. The canonical and Bregman divergences are both defined from
+the potential and its derivative, and are proved equal.
+The squared-distance formula, nonnegativity of the divergence itself,
+and signed three-point identity follow from these definitions.
+Finally, \texttt{conjecture\_5781\_false} and
+\texttt{opposite\_sign\_also\_false} refute nonnegativity for both conventions.
+The report's identification of the constant Hessian metric and its two
+flat connections is direct coordinate geometry; no general
+information-geometric theorem is assumed or claimed as formalized.
+\end{document}
