@@ -1,0 +1,32 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Identical central sections of noncongruent intervals}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Conjecture 00000007809.} The assertion that central section data determine every convex body up to translation and reflection is false in the allowed dimension $n=1$. Neither language version excludes this dimension.
+
+In the real Euclidean line, take
+\[
+ K=[-1,1],\qquad L=[-2,2].
+\]
+These are compact convex bodies. Both contain the symmetric open neighborhood $(-1,1)$ of the origin and have nonempty interior. The unit sphere is $S^0=\{-1,1\}$. For either unit direction $\theta$, its genuine orthogonal subspace is
+\[
+ \theta^\perp=\{x\in\mathbb R:\langle\theta,x\rangle=0\}
+ =\{x:\theta x=0\}=\{0\}.
+\]
+Both central sections are therefore the singleton $\{0\}$ in this zero-dimensional subspace.
+
+The section measure here is \emph{intrinsic zero-dimensional Lebesgue volume}, not ambient one-dimensional Lebesgue volume. Its normalization assigns volume $1$ to the singleton zero-dimensional space. Explicitly, the empty-coordinate Euclidean space $\mathbb R^0$ consists of its zero vector; its product Lebesgue measure is the empty product, equal to the Dirac probability measure at zero. The map sending this vector to $0\in\theta^\perp$ is a linear isometric equivalence. Transporting this actual measure through that equivalence gives volume $1$ for both sections. Hence, for every unit direction,
+\[
+ S_K(\theta)=\operatorname{vol}_0(K\cap\theta^\perp)=1
+ =\operatorname{vol}_0(L\cap\theta^\perp)=S_L(\theta).
+\]
+Nevertheless $\operatorname{diam}K=2$ and $\operatorname{diam}L=4$. Translations and reflections are isometries and preserve diameter. More strongly, for any two isometries $f,g:\mathbb R\to\mathbb R$, the equality $f(K)=g(L)$ would imply $2=4$, a contradiction. Thus their identical section functions do not determine the bodies up to the permitted motions.
+
+\noindent\textbf{Scope.} This is a counterexample to the unrestricted uniqueness clause as written, specifically in dimension one. It does not claim a counterexample in dimensions $n\geq2$, and it does not separately assess the stated spherical-harmonic condition-number clause. Adding an explicit restriction $n\geq2$ would remove this particular example.
+
+\noindent\textbf{Formal verification.} The accompanying pinned Lean project uses actual real compact convex intervals, a genuine orthogonal linear subspace, a linear isometric equivalence from the empty-coordinate space, its actual product Lebesgue measure transported to the subspace, and intrinsic section volumes. It proves equality of the data for every unit direction and noncongruence for every pair of isometries.
+\end{document}
