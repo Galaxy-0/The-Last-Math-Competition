@@ -32,6 +32,7 @@ Concretely, take `n = 2` and `p = 3`:
 | "dimension" read as `F_p`-dimension, `n = 2` | `dim Z(u(sl_2)) = 5, 4, 7` for `p = 2, 3, 5` | `≠ 1` |
 | full `U(sl_n)` in characteristic `p` (report only) | `n² − 1` (Z is finite over the p-centre `F_p[x^p − x^[p]]`; Zassenhaus) | false for `n ≥ 2` |
 | `U(sl_n)` in characteristic 0 (report only) | `n − 1` (Harish-Chandra) | **true**, but this is not the stated conjecture: "restricted enveloping algebra" and "p-centre" exist only in characteristic `p` |
+| Harish-Chandra part `U(sl_n)^G ≅ S(𝔥)^W` in characteristic `p` (Veldkamp; report only) | `n − 1` | **true**, but it is neither the centre of `u(sl_n)` nor the full centre of `U(sl_n)` (Krull dim `n² − 1`) |
 
 Clause 2 for `g = sl_2` (reductive, rank 1):
 
@@ -130,6 +131,7 @@ Limitations:
 - 若把"维数"理解为线性维数：`dim Z(u(sl_2)) = 5, 4, 7`（对应 `p = 2, 3, 5`），都不等于 1。
 - 特征 0 时 `U(sl_n)` 的中心的 Krull 维数确为 `n − 1`（Harish-Chandra）。这是一个**正确**的
   命题，但它不是题目所述的猜想。
+- 特征 p 时 `U(sl_n)` 中心的 Harish-Chandra 部分 `U(sl_n)^G ≅ S(𝔥)^W`（Veldkamp）的 Krull 维数为 `n − 1`。这也是正确的命题，但它既不是 `u(sl_n)` 的中心，也不是 `U(sl_n)` 的整个中心（后者 Krull 维数为 `n² − 1`）。
 
 **Lean 形式化**：只用 Lean 4.19.0 核心库，不依赖 Mathlib，所有对象从零定义。
 
