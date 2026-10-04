@@ -1,0 +1,114 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\title{An additive-game counterexample to the core vertex-count law}
+\author{ziangni-sys}
+\date{Conjecture 00000008232}
+\begin{document}
+\sloppy
+\maketitle
+\noindent Both source versions assert that the number of vertices of the core
+of a convex geometry (``anti-convex games'') is $2^{n-1}$. We disprove this
+vertex-count clause using a two-player additive game on the full Boolean
+convex geometry. We verify both conventional payoff and cost core inequalities.
+
+\section*{The actual geometry and game}
+Let $N=\{0,1\}$ and take all subsets of $N$ as feasible coalitions.
+The closure operator is $\operatorname{cl}(S)=S$. This is a finite convex
+geometry: closure is extensive, monotone and idempotent, and
+$\operatorname{cl}(\varnothing)=\varnothing$. Its anti-exchange axiom says
+that for distinct $x,y$ outside $\operatorname{cl}(S)$, if
+$x\in\operatorname{cl}(S\cup\{y\})$, then
+$y\notin\operatorname{cl}(S\cup\{x\})$. Here the antecedent is impossible:
+$x\in S\cup\{y\}$ would imply $x\in S$ or $x=y$.
+Every coalition is closed and feasible. Removing any element from a
+nonempty feasible coalition again gives a feasible coalition. Thus the full
+Boolean family also satisfies the accessible feasible-family convention.
+
+Define the normalized game $v(S)=|S|$. The finite-set cardinality identity
+\[
+ |S\cup T|+|S\cap T|=|S|+|T|
+\]
+shows that $v$ is modular. In particular it is both supermodular (the usual
+convex-game inequality) and submodular (the reversed inequality used for
+concave or cost games). All these inequalities hold with equality.
+
+\begin{theorem}
+For this game, under either payoff or cost conventions, the core is
+$\{(1,1)\}$ and has one vertex. The asserted vertex count is
+$2^{2-1}=2$, so the conjecture is false.
+\end{theorem}
+\begin{proof}
+The payoff core consists of $x=(x_0,x_1)\in\mathbb R^2$ such that
+\[
+ x_0+x_1=v(N)=2,\qquad \sum_{i\in S}x_i\ge v(S)
+ \quad\text{for every feasible }S\subseteq N.
+\]
+The singleton coalitions require $x_0\ge1$ and $x_1\ge1$.
+Efficiency forces $x_0=x_1=1$. Conversely, $(1,1)$ satisfies every coalition
+inequality with equality. Hence the entire payoff core is $\{(1,1)\}$.
+For the cost core the inequalities are reversed: $x_0\le1$, $x_1\le1$,
+with the same efficiency equality. The same argument gives exactly the
+same singleton core.
+
+A point of a convex set is extreme if it cannot be written as a strict
+convex combination of two distinct points of the set. The unique point of
+a singleton is extreme, and there are no other points. Both cores are
+therefore genuine singleton polytopes with exactly one vertex, contrary to
+$2^{n-1}=2$ for $n=2$.
+\end{proof}
+\newpage
+\section*{Source conventions and scope}
+The source's term ``anti-convex games'' is not separately defined in either
+language. Our example satisfies both standard non-strict game inequalities,
+and its feasible family is an actual convex geometry. No strict
+nonmodularity condition appears in the source. We do not add such a
+condition or claim a result about a different restricted game class.
+The example also avoids ambiguity about payoff versus cost conventions by
+computing both entire cores.
+
+The full Boolean family is a permitted convex geometry, including the
+identity closure as its simplest case. The restriction to feasible
+coalitions introduces no omissions in this example, since all coalitions
+are feasible. Additive games are normalized ($v(\varnothing)=0$) and meet
+the usual convex and concave game conditions. A core need not have full
+dimension to be a polytope with vertices: a singleton is a zero-dimensional
+polytope with one vertex.
+
+The vertex-count assertion is a conjunct of the original claim. Refuting
+it suffices to disprove the conjecture; no claim about the other extreme-ray,
+chain-count or entropy assertions is required.
+
+\section*{Actual Lean objects and checked theorems}
+The player type is \texttt{Fin 2}, coalitions are actual finite subsets,
+and allocations are real-valued functions on the players.
+\texttt{IsConvexGeometry} states the closure axioms and anti-exchange
+condition, proved by \texttt{boolean\_convex\_geometry} for the identity
+closure. \texttt{every\_coalition\_feasible} and
+\texttt{feasible\_accessible} verify the feasible-family correspondence.
+
+The actual game value \texttt{game s} is the real cast of
+\texttt{s.card}. \texttt{game\_modular} proves the cardinality identity;
+\texttt{game\_supermodular} and \texttt{game\_submodular} prove both
+standard inequalities. \texttt{payoffCore} and \texttt{costCore} each
+impose the efficiency equality and every feasible coalition inequality.
+They do not assume that only singleton constraints matter.
+\texttt{payoff\_core\_singleton} and \texttt{cost\_core\_singleton}
+prove equality of the full cores with the singleton allocation.
+
+The formalization uses Mathlib's actual \texttt{Set.extremePoints} over
+$\mathbb R$, whose definition uses membership in strict open line segments.
+Its proved singleton theorem computes both extreme-point sets.
+\texttt{vertex\_count\_fails} computes their actual \texttt{Set.ncard}
+as $1$ and proves that neither is $2^{\#N-1}$.
+
+\section*{Reproduction}
+Lean 4.19.0 and Mathlib are pinned at commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake update}, \texttt{lake exe cache get},
+and \texttt{lake build}; then check the whole source with
+\begin{center}\small\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The axiom audits use only standard logical axioms. No statements are
+admitted, and no custom axioms or native decision procedures are used.
+\end{document}
