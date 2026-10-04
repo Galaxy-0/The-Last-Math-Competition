@@ -1,0 +1,50 @@
+import Conjecture141
+
+#print Conjecture141.PrimeCycles
+#print Conjecture141.N
+#print Conjecture141.crossMatching
+#print Conjecture141.doubleFinEquiv
+#print Conjecture141.matchingPermutation
+#print Conjecture141.matchingEmbedding
+#print Conjecture141.proposedCount
+#print Conjecture141.sourceConstant
+#print Conjecture141.ConjectureClaim
+
+#check Conjecture141.crossMatching_inl
+#print axioms Conjecture141.crossMatching_inl
+#check Conjecture141.crossMatching_inr
+#print axioms Conjecture141.crossMatching_inr
+#check Conjecture141.crossMatching_twice
+#print axioms Conjecture141.crossMatching_twice
+#check Conjecture141.crossMatching_no_fixed
+#print axioms Conjecture141.crossMatching_no_fixed
+#check Conjecture141.crossMatching_injective
+#print axioms Conjecture141.crossMatching_injective
+#check Conjecture141.matchingPermutation_no_fixed
+#print axioms Conjecture141.matchingPermutation_no_fixed
+#check Conjecture141.matchingPermutation_sq
+#print axioms Conjecture141.matchingPermutation_sq
+#check Conjecture141.matchingPermutation_injective
+#print axioms Conjecture141.matchingPermutation_injective
+#check Conjecture141.primeCycles_of_involution_no_fixed
+#print axioms Conjecture141.primeCycles_of_involution_no_fixed
+#check Conjecture141.matchingPermutation_primeCycles
+#print axioms Conjecture141.matchingPermutation_primeCycles
+#check Conjecture141.factorial_le_count_even
+#print axioms Conjecture141.factorial_le_count_even
+#check Conjecture141.sourceConstant_pos
+#print axioms Conjecture141.sourceConstant_pos
+#check Conjecture141.proposedCount_pos
+#print axioms Conjecture141.proposedCount_pos
+#check Conjecture141.proposedCount_le_exp
+#print axioms Conjecture141.proposedCount_le_exp
+#check Conjecture141.factorial_eventually_gt_geometric
+#print axioms Conjecture141.factorial_eventually_gt_geometric
+#check Conjecture141.no_proposed_asymptotic_of_factorial_lower
+#print axioms Conjecture141.no_proposed_asymptotic_of_factorial_lower
+#check Conjecture141.count_not_proposed_ratio_limit
+#print axioms Conjecture141.count_not_proposed_ratio_limit
+#check Conjecture141.count_not_asymptotic
+#print axioms Conjecture141.count_not_asymptotic
+#check Conjecture141.conjecture141_disproof
+#print axioms Conjecture141.conjecture141_disproof

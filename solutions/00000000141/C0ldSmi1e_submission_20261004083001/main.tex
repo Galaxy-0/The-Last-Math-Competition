@@ -1,0 +1,109 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\R}{\mathbb R}
+\title{Conjecture 00000000141:\\Prime-cycle permutations already have factorial growth}
+\author{C0ldSmi1e}
+\date{4 October 2026}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+\begin{abstract}
+The conjecture counts permutations of labelled elements whose cycle lengths are all prime. An explicit injection from permutations of $n$ labels to fixed-point-free involutions on $2n$ labels proves $N(2n)\geq n!$. This factorial lower bound contradicts the proposed asymptotic, for every positive leading constant. The Lean proof counts actual permutations and refutes Mathlib's asymptotic-equivalence relation for the exact printed expression.
+\end{abstract}
+
+\section{Statement and counting convention}
+The English statement is:
+\begin{quote}
+Counting permutations with all cycle lengths prime: the number $N(n)$ of permutations of $n$ elements all of whose cycle lengths are prime satisfies
+$N(n)\sim c\,n^{-1/2}\exp(2\sqrt{n/\log n})$
+with the explicit constant $c=(4\pi)^{-1/2}e^{-1/2}$; the exponential constant is given by the capacity integral of the generating function $\prod_p(1-z^p)^{-1}$.
+\end{quote}
+Both source languages count permutations, not conjugacy classes or partitions. The exact bilingual statement is in \texttt{conjecture.md}. A fixed point is a cycle of length one, so it is forbidden: one is not prime. We refute the displayed asymptotic; no interpretation of the subsequent capacity-integral assertion is needed.
+
+\section{An explicit factorial family}
+\begin{lemma}\label{count}
+For every natural $n$, $N(2n)\geq n!$.
+\end{lemma}
+\begin{proof}
+Use two disjoint labelled copies $L$ and $R$ of an $n$-element set. For every permutation $\sigma$ of that set, define
+\[
+ \tau_\sigma(L_i)=R_{\sigma(i)},\qquad
+ \tau_\sigma(R_j)=L_{\sigma^{-1}(j)}.
+\]
+Applying $\tau_\sigma$ twice gives the identity. It has no fixed point, because each application switches copies. Hence all its cycles have length exactly two, which is prime. Relabelling the disjoint union by $2n$ labels gives a permutation counted by $N(2n)$.
+
+The construction is injective: $\tau_\sigma(L_i)$ recovers $\sigma(i)$ for every $i$. There are exactly $n!$ choices of $\sigma$, establishing the bound. We do not assume a formula for the total number of fixed-point-free involutions.
+\end{proof}
+
+\clearpage
+\section{Contradiction with the actual asymptotic claim}
+For $c>0$ write
+\[
+ g_c(k)=c\,k^{-1/2}\exp\!\left(2\sqrt{\frac{k}{\log k}}\right).
+\]
+Only sufficiently large positive integers matter; the values of this expression at zero or one play no role.
+
+\begin{lemma}\label{upper}
+For every $c>0$, eventually $g_c(k)\leq c e^k$.
+\end{lemma}
+\begin{proof}
+For sufficiently large $k$, both $k\geq4$ and $\log k\geq1$ hold. Then
+\[
+ k^{-1/2}\leq1,\qquad
+ \frac{k}{\log k}\leq k,\qquad
+ 2\sqrt{\frac{k}{\log k}}\leq2\sqrt{k}\leq k.
+\]
+Monotonicity of the exponential gives the result.
+\end{proof}
+
+\begin{lemma}\label{factorial}
+For all fixed real $a$ and $C$, eventually $Ca^n<n!$.
+\end{lemma}
+\begin{proof}
+The series $\sum_{n\geq0}a^n/n!$ is absolutely convergent. For example, when $a\ne0$, the ratio of successive absolute terms is $|a|/(n+1)$, tending to zero; the case $a=0$ is immediate. Its terms therefore tend to zero, so $Ca^n/n!<1$ eventually. Since $n!>0$, the claimed strict inequality follows. In Lean this uses Mathlib's proved summability theorem for the exponential series.
+\end{proof}
+
+\begin{theorem}\label{disproof}
+For every $c>0$, $N(k)$ is not asymptotic to $g_c(k)$ as $k\to\infty$.
+\end{theorem}
+\begin{proof}
+Suppose otherwise. Since $g_c(k)>0$ for every integer $k\geq2$, asymptotic equivalence implies $N(k)/g_c(k)\to1$. Restricting to the cofinal subsequence $k=2n$, we obtain
+\[
+ N(2n)<2g_c(2n)\quad\hbox{eventually}.
+\]
+By Lemma~\ref{upper}, $g_c(2n)\leq c e^{2n}=c(e^2)^n$ eventually. Lemma~\ref{factorial}, applied with $a=e^2$ and $C=2c$, gives $2c(e^2)^n<n!$ eventually. Together with Lemma~\ref{count}, these inequalities imply
+\[
+ n!\leq N(2n)<2g_c(2n)\leq2c(e^2)^n<n!,
+\]
+a contradiction. All these eventual conditions hold simultaneously for some sufficiently large $n$.
+\end{proof}
+The printed constant $(4\pi)^{-1/2}e^{-1/2}$ is strictly positive, so Theorem~\ref{disproof} directly refutes the first assertion of conjecture 00000000141. This is an infinite-family obstruction to the stated limit, not a discrepancy at finitely many small indices.
+
+\clearpage
+\section{Formal objects and statement correspondence}
+\paragraph{Actual permutation count.}
+The predicate \texttt{PrimeCycles} requires every part of the actual cycle partition of a permutation of \texttt{Fin n} to be prime. Mathlib's \texttt{partition.parts} includes the length-one cycles from fixed points, whereas \texttt{cycleType} alone omits them. The definition deliberately uses the full partition. The function \texttt{N} is the finite cardinality of the subtype of all permutations satisfying this predicate.
+
+\paragraph{Injection and cycle condition.}
+The module \texttt{Counting.lean} defines the cross-matching permutation on the disjoint union \texttt{Fin n} $\oplus$ \texttt{Fin n}, proves it squares to the identity and has no fixed points, and transports it through an explicit equivalence to \texttt{Fin (2*n)}. It proves injectivity after this relabelling.
+
+For the transported involution, full support removes every length-one part of the cycle partition. Every remaining cycle length divides two and is at least two, so it equals two and is prime. The resulting embedding lands in the actual prime-cycle permutation subtype. Its cardinality inequality and Mathlib's cardinality theorem for permutations prove \texttt{factorial\_le\_count\_even}. No surrogate sequence is substituted for the count.
+
+\paragraph{Exact asymptotic relation.}
+The module \texttt{Growth.lean} defines \texttt{proposedCount} with real powers, the natural logarithm, square root and exponential exactly as displayed in the conjecture. It proves the exponential upper bound and eventual factorial domination, then rules out a ratio limit of one for any count satisfying the established lower bound. The even-index map is formally proved to tend to infinity; every use of a logarithm bound, positive denominator or growth comparison is justified on an eventual set.
+
+The root module connects these results to \texttt{N}. Its predicate \texttt{ConjectureClaim} uses Mathlib's actual \texttt{Asymptotics.IsEquivalent} relation, with the exact source constant. The theorem \texttt{count\_not\_asymptotic} rules out every positive constant, using the proved eventual positivity to pass from asymptotic equivalence to the quotient limit. The final \texttt{conjecture141\_disproof} negates \texttt{ConjectureClaim} without any additional assumptions. The later capacity-integral phrase is not needed once the main asymptotic is false.
+
+\section{Reproduction and verification}
+Lean 4.19.0 and Mathlib v4.19.0 are pinned; the manifest records exact dependency revisions. From \texttt{lean/}, run \texttt{lake build}, then replay every submitted Lean source with \texttt{lake env lean -DwarningAsError=true}. The README supplies the full command sequence. \texttt{Check.lean} prints nine central definitions and checks all nineteen theorem types and transitive axiom dependencies.
+
+The package includes independent internal semantic scrutiny, a fresh-build record, strict source replay and axiom audits. No numerical auxiliary program is used or needed. The matching PDF is compiled from this source and visually inspected. Local validation and internal review are separate from official maintainer acceptance.
+
+The source and contribution guides were read at revision \texttt{0862407e}; the README links the immutable conjecture. The eligibility record preserves the unsolved metadata and all-state pull-request and solution-history searches. No previous or competing submission for this conjecture was identified.
+\end{document}
