@@ -1,0 +1,93 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newcommand{\C}{\mathbb C}
+\newcommand{\R}{\mathbb R}
+\title{Conjecture 00000000973:\\A two-dimensional obstruction for every bounded set}
+\author{C0ldSmi1e}
+\date{4 October 2026}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+\begin{abstract}
+Under the conjecture's stated definition, every nonempty bounded subset of the complex plane already fails to be a spectral set of order two. A Jordan matrix can have its spectrum at a single point of the set while its nilpotent part has arbitrarily large Euclidean operator norm. This refutes the explicit claim about all orders below fifteen for every union of two nonempty disks.
+\end{abstract}
+
+\section{Statement and scope}
+The English source states:
+\begin{quote}
+Definition: A set $K\subset\C$ is a spectral set of order $n$ if every polynomial satisfies the von Neumann inequality $\sup_{z\in K}|p(z)|\geq\|p(T)\|$ for all $n\times n$ matrices $T$ with spectrum in $K$. Conjecture: The minimal order for the union of two disks to be a spectral set lies between 15 and 33; all matrices of order $n<15$ satisfy the von Neumann inequality on this set, and a counterexample of order 33 exists.
+\end{quote}
+The exact English and Chinese versions are copied in \texttt{conjecture.md}. Both quantify over all matrices with spectrum in the set. Neither imposes normality, a contraction condition, or a resolvent bound. We use the Euclidean operator norm and refute the explicit universal clause for $n<15$, by taking $n=2$. This is sufficient to disprove the conjunction; no interpretation of the separate ``minimal order'' wording is needed.
+
+\clearpage
+\section{A general counterexample}
+\begin{theorem}\label{general}
+For every nonempty bounded $K\subset\C$, there exist a complex $2\times2$ matrix $J$ and a complex polynomial $p$ such that
+\[
+ \sigma(J)\subseteq K,\qquad
+ \sup_{z\in K}|p(z)|<\|p(J)\|_2.
+\]
+\end{theorem}
+\begin{proof}
+Choose $\lambda\in K$ and $B\in\R$ with $|z|\leq B$ for all $z\in K$. Put $D=|B|+|\lambda|$ and $R=D+1>0$, and define
+\[
+ J=\begin{pmatrix}\lambda&R\\0&\lambda\end{pmatrix},
+ \qquad p(z)=z-\lambda.
+\]
+For every $w\in\C$, $\det(wI-J)=(w-\lambda)^2$, so the actual complex spectrum is $\sigma(J)=\{\lambda\}\subseteq K$. Polynomial evaluation gives
+\[
+ p(J)=\begin{pmatrix}0&R\\0&0\end{pmatrix},\qquad
+ p(J)(u,v)=(Rv,0).
+\]
+Thus $\|p(J)\|_2=R$: the upper bound follows from $|v|\leq\sqrt{|u|^2+|v|^2}$, and equality holds on the unit vector $(0,1)$. Meanwhile
+\[
+ |p(z)|=|z-\lambda|\leq |z|+|\lambda|\leq B+|\lambda|\leq D\quad(z\in K).
+\]
+The set of these nonnegative values is nonempty and bounded above, so its genuine real supremum is at most $D<R$. This proves the strict inequality. No compactness or attainment of the supremum is used.
+\end{proof}
+
+\section{Application to the two disks}
+Let $a,b\in\C$ and $r,s>0$. The union
+\[
+ K=\overline{B}(a,r)\cup\overline{B}(b,s)
+\]
+is nonempty and satisfies
+\[
+ |z|\leq\max(|a|+r,|b|+s)\qquad(z\in K).
+\]
+Theorem~\ref{general} therefore supplies an order-two counterexample for every choice of centers and positive radii. The disks may be disjoint, intersecting, nested, or identical. The same argument applies to open disks, since their union is nonempty and lies inside the corresponding union of closed disks. Consequently neither interpretation satisfies the stated claim for all $0<n<15$.
+
+For a concrete example, take the two closed unit disks centered at $0$ and $3$. Every point of their union has modulus at most $4$, and the point $4$ belongs to it. For
+\[
+ J=\begin{pmatrix}0&5\\0&0\end{pmatrix},\qquad p(z)=z,
+\]
+the spectrum is $\{0\}\subseteq K$, while $\sup_K|p|=4<5=\|p(J)\|_2$. This is an illustration of the general argument, not a numerical simulation.
+
+\clearpage
+\section{Formal correspondence}
+The Lean predicate \texttt{SpectralSetOrder} quantifies over \emph{all} complex matrices of the indicated size and \emph{all} complex polynomials. It uses Mathlib's \texttt{spectrum}, algebraic polynomial evaluation \texttt{Polynomial.aeval}, and the real supremum \texttt{sSup} of the set of polynomial moduli. The norm is explicitly that of \texttt{Matrix.toEuclideanCLM}, the canonical operator on \texttt{EuclideanSpace}; it is not an entrywise matrix norm.
+
+The module \texttt{Jordan.lean} computes the resolvent determinant, proves that both the matrix and associated operator spectra equal $\{\lambda\}$, computes $p(J)$, and proves the exact operator norm. The module \texttt{BoundedSet.lean} constructs the counterexample and negates the full order-two predicate for every nonempty norm-bounded set. It proves nonemptiness and boundedness of the polynomial-value set before using its supremum.
+
+The root module defines \texttt{SmallOrderClaim} as the assertion for all natural $n$ with $0<n<15$. It proves that both unions of closed disks and unions of open disks are counterexamples. The final theorems \texttt{conjecture973\_disproof\_closed} and \texttt{conjecture973\_disproof\_open} negate this necessary explicit clause of the source statement. The closed-disk theorem even permits radius zero for the first disk; the open-disk theorem requires a positive first radius. The second radius is arbitrary, so both include the intended case of two positive radii.
+
+The usual notion of a spectral set is relative to a fixed operator and requires the norm inequalities in addition to spectrum containment~\cite{bbc}. This submission follows the stronger, all-matrices definition actually stated by the conjecture. It does not add the operator hypotheses that would make other spectral-set theorems applicable.
+
+\section{Reproduction and review}
+Lean 4.19.0 and Mathlib v4.19.0 are pinned, including exact dependency revisions. From \texttt{lean/}, run \texttt{lake build} and replay every Lean source with \texttt{lake env lean -DwarningAsError=true}; the README lists the commands. \texttt{Check.lean} prints the defining predicates, theorem types, and transitive axiom dependencies. No auxiliary numerical program is used. Internal independent semantic review and local build records accompany the submission; these do not constitute official maintainer acceptance.
+
+The source and contribution rules were checked at revision \texttt{0862407e}. The eligibility record preserves the unsolved metadata, all-state pull-request searches, and empty prior solution history. No previous submission for this conjecture was identified.
+
+\begin{thebibliography}{9}
+\bibitem{bbc} C. Badea, B. Beckermann, and M. Crouzeix,
+\emph{K-spectral sets and intersections of disks of the Riemann sphere},
+\S1.1, arXiv:0712.0522 (2007). \url{https://arxiv.org/abs/0712.0522}.
+This reference supplies terminology only; the counterexample is proved here and in Lean.
+\end{thebibliography}
+\end{document}
