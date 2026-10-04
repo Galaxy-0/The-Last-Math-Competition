@@ -1,0 +1,63 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\title{A counterexample to Conjecture 00000008432}
+\author{gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+
+The first assertion says that the hypergraph formed by the supports of
+minimum-weight codewords has rank $t+1$ when it is a $t$-design. Under the
+standard definition, hypergraph rank is the maximum cardinality of an edge.
+The binary simplex code of length seven supplies a counterexample: its
+minimum-weight supports form a $2$-$(7,4,2)$ design, while their hypergraph
+rank is $4$, not $2+1=3$.
+
+\paragraph{The code and all its minimum supports.}
+Label the seven coordinates by the nonzero vectors $v\in\mathbb F_2^3$,
+and define
+\[c(u)=(u\cdot v)_{v\in\mathbb F_2^3\setminus\{0\}},\qquad
+ C=\{c(u):u\in\mathbb F_2^3\}.\]
+The dot product is over $\mathbb F_2$. The map $c$ is linear and injective:
+the coordinates at the three standard basis vectors recover the three
+entries of $u$. Thus $C$ is a binary linear code of dimension three.
+For $u\ne0$, precisely four vectors $v\in\mathbb F_2^3$ satisfy
+$u\cdot v=1$. None of them is zero. All seven nonzero codewords therefore
+have weight four; these are exactly the minimum-weight codewords. Their
+seven supports are distinct, since binary codewords are determined by
+their supports.
+
+For any distinct nonzero coordinates $v,w$, these vectors are linearly
+independent over $\mathbb F_2$. The simultaneous equations
+$u\cdot v=u\cdot w=1$ have exactly two solutions $u$, both nonzero. Hence
+every pair of coordinates lies in exactly two supports, proving the
+$2$-$(7,4,2)$ design property. Its strength is not three: if $z=v+w$, the
+three equations with right side $1$ are inconsistent, whereas for three
+independent coordinate vectors they have exactly one solution. Thus $t=2$
+is the actual design strength, and not an arbitrarily chosen weaker
+parameter. Since every support has cardinality four, the hypergraph rank
+is exactly four. This disproves the rank assertion and therefore the full
+conjunction in the conjecture.
+
+\paragraph{Formal verification.}
+Lean represents binary triples by $\operatorname{Fin}(8)$ and all length-seven
+binary words by $\operatorname{Fin}(128)$. The bit encoding is proved
+surjective onto every Boolean coordinate function and every predicate on
+the seven coordinates, and injective. The addition and scalar operations
+are verified to be the coordinate operations of $\mathbb F_2$.
+The encoder is the displayed dot product with all seven nonzero columns.
+Its linearity and injectivity, all codeword weights, all minimum supports,
+and the absence of repeated blocks are proved.
+
+The pair-count theorem quantifies over every pair of distinct coordinates;
+the two explicit triple counts also certify that the strength is not three.
+The predicate \texttt{HypergraphRank} requires both a bound for every minimum
+support and a support attaining that bound. The final theorem
+\texttt{conjecture8432\_counterexample} includes the linear-code and design
+hypotheses and proves rank four and failure of rank three. These facts are
+kernel-checked finite statements, not an external search certificate.
+
+The proof uses Lean 4.19.0 with \texttt{Std} only and contains no admitted
+lemmas, native evaluation proofs, or custom axioms.
+\end{document}
