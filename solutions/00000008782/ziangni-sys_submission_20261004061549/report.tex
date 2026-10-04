@@ -1,0 +1,60 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{A missing symmetry hypothesis in Hutchinson's variance law}
+\author{ziangni-sys}
+\date{Conjecture 00000008782}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result.} The displayed variance formula is false for general real matrices. A real skew-symmetric $2\times2$ matrix gives variance zero, whereas the proposed expression equals four.
+
+\paragraph{Scope of the original statement.}
+Both the English and Chinese versions assert that Hutchinson's variance is
+\[
+2\left(\|A\|_F^2-\sum_i a_{ii}^2\right).
+\]
+Neither version states that $A$ must be symmetric.
+We use the ordinary one-sample Hutchinson estimator $H_A(z)=z^{\mathsf T}Az$, where the coordinates of $z$ are independent Rademacher variables.
+This counterexample concerns the variance conjunct of the unqualified statement. It does not contradict the familiar formula for symmetric real matrices and does not settle the separate Hutch++ or probing clauses.
+
+\paragraph{The actual probability space and matrix.}
+Let $\Omega=\{0,1\}^2$ with all subsets measurable and every outcome of probability $1/4$. Put $s(0)=-1$, $s(1)=1$ and $z(\omega)=(s(\omega_1),s(\omega_2))$. Each coordinate takes $-1$ and $1$ with probability $1/2$. For all subsets $S,T\subseteq\mathbb R$,
+\[
+\mathbb P(z_1\in S,z_2\in T)
+=\frac{\#(S\cap\{-1,1\})\#(T\cap\{-1,1\})}{4}
+=\mathbb P(z_1\in S)\mathbb P(z_2\in T),
+\]
+so these are genuinely independent Rademacher coordinates. Take
+\[
+A=\begin{pmatrix}0&1\\-1&0\end{pmatrix}.
+\]
+For every real vector $v$, not just the four sampled vectors,
+\[
+v^{\mathsf T}Av=v_1v_2-v_2v_1=0.
+\]
+Consequently $H_A$ is identically zero, $\mathbb E H_A=0=\operatorname{tr}A$, and $\operatorname{Var}(H_A)=0$. There is no integrability issue: the estimator is a constant on a finite probability space.
+
+\newpage
+\paragraph{The contradicted numerical value.}
+The Frobenius norm is defined by $\|A\|_F=\sqrt{\sum_{i,j}|a_{ij}|^2}$. In this real example,
+\[
+\|A\|_F^2=0^2+1^2+(-1)^2+0^2=2,
+\qquad \sum_i a_{ii}^2=0.
+\]
+Thus the conjectured right side is $2(2-0)=4$, different from the actual variance zero. The original conjunction is therefore false as written.
+
+\paragraph{Why symmetry matters.}
+For a general real matrix and independent Rademacher coordinates, expand the estimator as
+\[
+H_A(z)=\operatorname{tr}A+\sum_{i<j}(a_{ij}+a_{ji})z_i z_j.
+\]
+The products in this sum have mean zero. Distinct unordered pairs give orthogonal products in $L^2$: some coordinate appears to an odd power, so independence and zero coordinate means make their cross expectation vanish. Therefore
+\[
+\operatorname{Var}(H_A)=\sum_{i<j}(a_{ij}+a_{ji})^2.
+\]
+If $A$ is symmetric, this is $4\sum_{i<j}a_{ij}^2=2(\|A\|_F^2-\sum_i a_{ii}^2)$. If $A$ is skew-symmetric, every off-diagonal sum is zero. This explains precisely the missing assumption. This explanatory general formula is not needed as an assumption or as an imported theorem in the formal counterexample.
+
+\paragraph{Formal verification.}
+The accompanying Lean 4.19.0 project uses pinned Mathlib commit \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}. It constructs the uniform four-outcome probability mass function and its actual probability measure, proves \texttt{IndepFun} of the two real coordinates for all measurable events, and computes their Rademacher distributions. It defines the actual matrix and the finite-sum quadratic form, proves that this form vanishes for every real vector, and computes the Bochner expectation, actual \texttt{ProbabilityTheory.variance}, matrix trace, Frobenius norm, and diagonal square sum. The final theorem \texttt{variance\_formula\_false} proves the displayed inequality of the two expressions. Dependency audits use only Lean's standard logical axioms; no custom axioms, admitted facts or external decision procedures are used.
+\end{document}
