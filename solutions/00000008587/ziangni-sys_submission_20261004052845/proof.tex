@@ -1,0 +1,115 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\title{A triangularizing representation basis needs three vectors}
+\author{ziangni-sys}
+\date{Conjecture 00000008587}
+\begin{document}
+\sloppy
+\maketitle
+\noindent The source defines adaptive bases as minimal bases making the
+representation matrices upper triangular and asserts that the dimension
+upper bound of such minimal bases is $2$. We disprove this clause for a
+commutative operator algebra in a concrete faithful unital representation.
+
+\section*{The operator algebra and representation}
+Let $H=\mathbb C^3$, equipped with its usual Euclidean Hilbert-space structure,
+and let
+\[
+ \mathcal A=\{a I_H:a\in\mathbb C\}\subseteq\operatorname{End}_{\mathbb C}(H).
+\]
+This is a unital commutative complex operator algebra. The scalar map
+$\rho:\mathbb C\to\operatorname{End}_{\mathbb C}(H)$, $a\mapsto a I_H$,
+is an algebra homomorphism, since
+\[
+ \rho(a+b)=\rho(a)+\rho(b),\qquad
+ \rho(ab)=\rho(a)\rho(b),\qquad \rho(1)=I_H.
+\]
+It is faithful: if $a I_H=b I_H$, evaluating at the first standard basis
+vector gives $a=b$. Every such finite-dimensional linear operator is bounded.
+
+For every vector-space basis $B$ of $H$, the matrix of $\rho(a)$ is $a I_3$.
+Indeed, $\rho(a)b_j=ab_j$ for each basis vector $b_j$. The matrix is diagonal,
+and therefore upper triangular. In particular the standard three-vector
+basis is an actual triangularizing basis for every element of $\mathcal A$.
+
+\begin{theorem}
+The minimum cardinality of a triangularizing representation basis for
+$\mathcal A$ acting on $H$ is $3$, contradicting the asserted upper bound $2$.
+\end{theorem}
+\begin{proof}
+The standard basis provides a triangularizing basis of cardinality $3$.
+Every vector-space basis of $H$ is finite and has cardinality
+$\dim_{\mathbb C}H=3$. This applies to every possible triangularizing basis,
+not just the standard one. Thus the minimum is exactly $3$, and no
+triangularizing basis has cardinality at most $2$.
+\end{proof}
+
+\section*{Meaning of minimality and scope}
+The bases here are vector bases of the space carrying the representation,
+as required to make its matrices upper triangular. Minimality is with
+respect to such representation bases for this fixed operator algebra
+acting on this fixed space. No vector can be omitted while retaining a
+basis of $H$.
+
+We do not replace this notion by a basis of the abstract algebra
+$\mathcal A$ itself, whose algebraic dimension is $1$, or minimize the
+dimension over different representation spaces. The source defines bases
+through representation matrices, and specifies no such alternative
+minimization. Our witness uses an actual faithful unital representation,
+and computes the actual representation dimension and all basis sizes.
+The failed upper-bound clause is a conjunct; the other claims about maximal
+ideal spaces and noncommutative algebras need not be resolved.
+
+\newpage
+\section*{Formal objects and correspondence}
+The Lean space \texttt{H} is Mathlib's actual
+\texttt{EuclideanSpace} $\mathbb C$ \texttt{(Fin 3)}, and \texttt{EndH}
+is its complex linear endomorphism algebra.
+The actual algebra homomorphism \texttt{scalar} is
+\texttt{Algebra.ofId} into this endomorphism algebra.
+\texttt{scalar\_apply} verifies $\rho(a)x=ax$,
+\texttt{scalar\_injective} verifies faithfulness,
+\texttt{scalar\_unital} verifies the unit identity, and
+\texttt{scalar\_continuous} verifies continuity of every represented scalar.
+\texttt{scalarAlgebra} is the actual range subalgebra.
+\texttt{algebra\_commutative} proves that every pair of its elements commutes.
+
+\texttt{standardBasis} is the actual standard orthonormal basis viewed as
+a vector-space \texttt{Basis}.
+\texttt{scalar\_matrix} uses Mathlib's actual
+\texttt{LinearMap.toMatrix} and proves that the representation matrix is
+$aI$ in every genuine finitely indexed basis.
+\texttt{Triangularizing} quantifies over every algebra element and requires
+each entry strictly below the diagonal to be zero.
+\texttt{every\_basis\_triangularizes} proves this property in any such
+ordered basis, and \texttt{standard\_triangularizes} supplies its explicit
+standard-basis instance.
+
+\texttt{ambient\_dimension} computes the actual complex
+\texttt{Module.finrank} as $3$. \texttt{every\_basis\_finite} proves that
+every basis index type is finite, rather than assuming this in the
+minimality argument. \texttt{every\_basis\_cardinality} proves that the
+actual \texttt{Nat.card} of every basis index type is $3$, including
+arbitrary index universes. Finite-dimensionality makes this cardinal
+computation an ordinary finite basis count.
+
+The theorem \texttt{minimum\_triangularizing\_basis\_size} combines an
+actual triangularizing basis with the universal cardinality equality.
+\texttt{dimension\_bound\_fails} combines the actual standard basis with
+the impossibility of any basis having cardinality at most $2$.
+No representation dimension, basis size or matrix data is assumed.
+
+\section*{Reproduction and validation}
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake update}, \texttt{lake exe cache get},
+and \texttt{lake build}; check the entire source with
+\begin{center}\small\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The source prints dependency audits for the actual representation,
+commutativity, matrices, triangularization, basis finiteness, cardinality
+and final contradiction. Only standard logical axioms are used. There are
+no admitted statements, custom axioms, native decision procedures or
+auxiliary numerical evidence.
+\end{document}
