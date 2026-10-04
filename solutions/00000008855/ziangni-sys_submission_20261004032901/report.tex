@@ -1,0 +1,74 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\emergencystretch=2em
+\title{A sparse penalty whose proximal map is not soft thresholding\\Disproof of Conjecture 00000008855}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\section*{Penalty and proximal definition}
+The source asserts that proximal operators of sparse penalties are
+always soft thresholding, without restricting the penalty to a convex
+class. Consider the standard scalar nonzero-count penalty
+\[
+P(y)=\|y\|_0=
+\begin{cases}0&y=0,\\1&y\ne0.\end{cases}
+\]
+This is a sparsity penalty: it charges one for a nonzero coordinate and
+zero for a zero coordinate.
+With unit proximal parameter, define the proximal graph by global
+minimization of
+\[
+F_x(y)=\tfrac12(y-x)^2+P(y),\qquad
+\operatorname{prox}_{P}(x)=\operatorname*{argmin}_{y\in\mathbb R}F_x(y).
+\]
+It may be a set in general, but the two inputs below have unique minimizers.
+
+\section*{Two exact global minima}
+At $x=2$, $F_2(2)=1$ whereas $F_2(0)=2$.
+For every nonzero $y$, $F_2(y)=1+(y-2)^2/2\geq1$,
+with equality if and only if $y=2$. Thus
+$\operatorname{prox}_{P}(2)=\{2\}$.
+At $x=1$, $F_1(0)=1/2$. For every nonzero $y$,
+$F_1(y)=1+(y-1)^2/2\geq1>1/2$.
+Consequently $\operatorname{prox}_{P}(1)=\{0\}$.
+These comparisons check every real competitor; they do not rely on
+an assumed hard-thresholding table.
+
+\section*{No fixed soft threshold can realize this map}
+For a threshold $\tau\geq0$, the standard scalar soft threshold is
+\[
+S_\tau(x)=
+\begin{cases}
+x-\tau&x>\tau,\\
+x+\tau&x<-\tau,\\
+0&|x|\leq\tau.
+\end{cases}
+\]
+If $S_\tau$ were a proximal map for this penalty, uniqueness at $x=2$
+would require $S_\tau(2)=2$.
+When $\tau\geq2$ its value is zero; when $0\leq\tau<2$ its value
+is $2-\tau$. The required equality therefore forces $\tau=0$.
+But $S_0(1)=1$, contradicting the unique proximal value zero at $x=1$.
+Thus no fixed nonnegative threshold can represent the proximal operator.
+In particular the customary unit threshold gives $S_1(2)=1$,
+which is not a minimizer.
+
+This refutes the first clause of the original conjunction; the separate
+splitting-rate clause is not needed for the disproof.
+Soft thresholding for the absolute-value penalty is a different result
+and does not imply the universal statement for sparse penalties.
+
+\section*{Formal verification}
+Lean defines the actual piecewise nonzero-count penalty, the real
+quadratic objective, and the proximal relation as comparison with every
+real competitor. It proves both exact proximal-set characterizations,
+defines the piecewise soft-threshold function, and proves the impossibility
+of a threshold valid for every input.
+The final theorem \texttt{conjecture\_8855\_false} is stronger than a
+failure at one prescribed threshold: even changing the fixed threshold
+cannot fix this penalty.
+\end{document}
