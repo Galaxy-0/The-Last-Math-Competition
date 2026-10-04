@@ -49,7 +49,7 @@ Read that way, the clause says that every 2k-dimensional cs-neighborly polytope 
 - The true minimum is **2k**. Every k-dimensional centrally symmetric polytope has at least 2k
   vertices, and equality holds exactly for affine cross-polytopes.
 - A d-dimensional Hanner polytope has between 2d and 2^d vertices. So no Hanner polytope has
-  2^{d+1} vertices, and the two clauses of the conjecture cannot both hold.
+  2^{d+1} vertices, and the two clauses of the conjecture cannot both hold (for the k-dimensional reading, if "extremal" means attaining the minimum).
 
 ## Contents
 
@@ -125,7 +125,7 @@ The project has no `sorry`, no `native_decide` and no added axioms. `#print axio
 ```sh
 cd lean4 && lake build
 cd .. && python3 verify.py
-pdflatex report.tex && pdflatex report.tex
+pdflatex report.tex && pdflatex report.tex && pdflatex report.tex
 ```
 
 ## 中文说明
@@ -155,7 +155,7 @@ k 维正轴体（交叉多胞体）conv{±e_1, …, ±e_k} 有以下性质：
 报告还证明了以下事实：
 
 - 真实最小值是 2k，且恰由仿射正轴体取到；
-- d 维 Hanner 多胞体的顶点数介于 2d 与 2^d 之间，因此不存在顶点数为 2^{d+1} 的 Hanner 多胞体，猜想的两条结论本身就互相矛盾。
+- d 维 Hanner 多胞体的顶点数介于 2d 与 2^d 之间，因此不存在顶点数为 2^{d+1} 的 Hanner 多胞体，猜想的两条结论本身就互相矛盾（指 k 维读法，且“极值体”理解为达到最小值者）。
 
 Lean（4.19.0，仅核心库）从零定义了顶点、面、中心对称、维数证书和三种 cs-邻居性，并具体完成了以下工作：
 
