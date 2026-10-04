@@ -1,0 +1,102 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\setlength{\emergencystretch}{2em}
+\begin{document}
+\begin{center}
+{\Large Proof of conjecture 00000006430}\\[5pt]
+Equal sum and product counts, different Ehrhart polynomials\\
+ziangni-sys
+\end{center}
+\textbf{Source and precise count data.}
+The source requests two lattice sets with the same product-count conversion but different counting polynomials, realized by an explicit pair with equal sum count and different coefficients. We supply equal input cardinalities, equal Cartesian-product counts and equal Minkowski self-sum counts. Their normalized doubling constants also agree. Thus every conversion determined solely by this entire count tuple agrees. The source does not define a further conversion involving extra geometric structure, and no assertion about such undefined quantities is made.
+
+For positive integers $a,b,c$, let
+\[
+ K(a,b,c)=[0,a]\times[0,b]\times[0,c]\subset\mathbb R^3,
+ \qquad F(a,b,c)=K(a,b,c)\cap\mathbb Z^3.
+\]
+These are actual lattice boxes; $K$ is a compact convex lattice polytope. Its eight corners are integral. Define
+\[
+ A=F(1,8,12),\qquad B=F(2,2,25).
+\]
+
+\textbf{Actual input and product counts.}
+Each coordinate can independently assume every integer from zero to the side length. Therefore
+\[
+ |F(a,b,c)|=(a+1)(b+1)(c+1).
+\]
+In particular
+\[
+ |A|=2\cdot9\cdot13=234,\qquad
+ |B|=3\cdot3\cdot26=234.
+\]
+Consequently both actual Cartesian products have cardinality
+\[
+ |A\times A|=|B\times B|=234^2=54\,756.
+\]
+
+\textbf{Actual Minkowski sums.}
+For all nonnegative integer side lengths,
+\[
+ F(a,b,c)+F(a,b,c)=F(2a,2b,2c).
+\]
+One inclusion follows by adding coordinate bounds. For the reverse inclusion, every integer $0\le j\le2a$ splits as
+\[
+ j=\min(j,a)+(j-\min(j,a)),
+\]
+with both summands in $[0,a]\cap\mathbb Z$. Apply the same decomposition independently to the other coordinates.
+
+It follows that
+\[
+ |A+A|=3\cdot17\cdot25=1\,275,\qquad
+ |B+B|=5\cdot5\cdot51=1\,275.
+\]
+Thus their normalized doubling constants are both $1275/234=425/78$. The input, Cartesian-product and self-sum count tuple is identical.
+\newpage
+\textbf{The full counting polynomials.}
+For every integer $t\ge0$, including $t=0$, the actual dilation satisfies
+\[
+ tK(a,b,c)=[0,ta]\times[0,tb]\times[0,tc].
+\]
+Hence its lattice-point count is
+\[
+ E_{a,b,c}(t)=|tK(a,b,c)\cap\mathbb Z^3|
+            =(at+1)(bt+1)(ct+1).
+\]
+This is the Ehrhart polynomial of the lattice box, proved by direct counting rather than by assuming polynomiality.
+
+For our two boxes the polynomials are
+\[
+ \begin{aligned}
+ E_A(t)&=(t+1)(8t+1)(12t+1)
+       =96t^3+116t^2+21t+1,\\
+ E_B(t)&=(2t+1)^2(25t+1)
+       =100t^3+104t^2+29t+1.
+ \end{aligned}
+\]
+Their leading coefficients, and their other nonconstant coefficients, differ. Their difference is
+\[
+ E_B(t)-E_A(t)=4t(t-1)(t-2).
+\]
+This explains why they agree at $t=0,1,2$, including the input and sum counts, despite differing as polynomials. For instance $E_A(3)=3700$ and $E_B(3)=3724$.
+
+\textbf{Formal correspondence.}
+The Lean package constructs actual finite sets of integer triples as products of finite integer intervals. It proves their membership description, generic cardinality formula, and genuine finite Minkowski self-sum identity, using the coordinate splitting argument.
+
+The associated real boxes are actual compact convex subsets of a three-dimensional real vector space. The formalization proves that membership in the enumerated integer box at side lengths $(ta,tb,tc)$ is equivalent to membership of the embedded integer point in the actual scalar dilation of the real box. Positive $t$ uses division by $t$; the zero dilation is handled separately.
+
+The counting polynomial is an actual rational polynomial, and its evaluation is proved equal to the genuine finite lattice-point count for every natural dilation factor. Both explicit polynomial expansions, unequal leading coefficients and polynomial inequality are proved. The actual Cartesian products, self-sums, cardinalities and normalized doubling constants are computed. A general theorem states that every function of the shared count tuple takes the same value on these two sets.
+
+\textbf{Reproduction.}
+Run \texttt{lake build} inside the submitted \texttt{lean} directory with Lean 4.19.0. Mathlib is pinned publicly to
+\[
+ \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\]
+Printed axiom audits cover the actual boxes, dilation lattice points, counting polynomials, shared counts and final separation. The submission includes this full source, its compiled PDF and the pinned Lean project.
+
+\textbf{Conclusion.}
+Equal lattice-set input, Cartesian-product and sum counts do not determine the full lattice counting polynomial. The displayed pair realizes the requested separation with explicit different coefficients.
+\end{document}
