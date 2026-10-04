@@ -1,0 +1,22 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:199:0: 'Cospectral.cospectral_1' does not depend on any axioms
+info: ././././Main.lean:200:0: 'Cospectral.invariants' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:201:0: 'Cospectral.pair_1' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:202:0: 'Cospectral.pair_2' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:203:0: 'Cospectral.conjecture_00000002141_false' depends on axioms: [propext, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+charpoly(A1) = charpoly(B1) = [80, 200, 9, -320, -180, 136, 110, -16, -20, 0, 1]
+charpoly(A2) = charpoly(B2) = [-16, 68, 80, -188, -183, 104, 108, -14, -20, 0, 1]
+A1, B1, A2, B2 pairwise non-isomorphic (exhaustive search)
+n=10, 4-regular: 60 graphs, cospectral families [['ICR`vGyu?', 'ICR`tjWY_'], ['ICR`uiwY_', 'ICdedhkY_']]
+n=10, 5-regular: 60 graphs, cospectral families [['ICpvfq{Z_', 'ICxvFjYN_'], ['ICpvfZwN_', 'ICY^Nrw\\_']]
+no cospectral regular graphs below order 10; at order 10 exactly two 4-regular pairs and two 5-regular pairs
+ALL CHECKS PASSED
+exit 0
