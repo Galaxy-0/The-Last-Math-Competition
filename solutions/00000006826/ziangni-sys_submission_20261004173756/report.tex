@@ -1,0 +1,67 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\setlength{\emergencystretch}{2em}
+\begin{document}
+\begin{center}
+{\Large Disproof of conjecture 00000006826}\\[5pt]
+Hyperinvariant Schur triangularization\\
+ziangni-sys
+\end{center}
+\textbf{Source and scope.}
+The English source asserts an upper-triangular realization whose triangularization consists of hyperinvariant subspaces. The Chinese source likewise explicitly strengthens Schur triangularization to hyperinvariant subspaces. We use the standard meaning of a complete triangularizing flag: in complex dimension two it contains a one-dimensional intermediate subspace. A subspace is hyperinvariant when it is invariant under every bounded linear operator commuting with the given operator.
+
+The counterexample refutes this strengthened requirement. Ordinary Schur triangularization remains valid. Indeed the example is already upper triangular in every basis, and ordinary invariant lines exist.
+
+\textbf{The actual operator.}
+Let $E=\mathbb C^2$ and $A=I_E$. Its matrix in the standard coordinate basis is
+\[
+ \begin{pmatrix}1&0\\0&1\end{pmatrix}.
+\]
+This is a bounded complex linear operator. Every bounded complex linear operator $S$ on $E$ commutes with $A$, since $SA=S=AS$.
+
+\textbf{Classification of hyperinvariant subspaces.}
+Suppose $M$ is a hyperinvariant linear subspace of $E$ and $M\ne\{0\}$. Choose $v\in M$ with $v\ne0$, and a coordinate $j\in\{0,1\}$ with $v_j\ne0$. For an arbitrary $w\in E$, define
+\[
+ S_w(z)=z_j(v_j)^{-1}w .
+\]
+Coordinate evaluation and multiplication by a fixed vector are continuous linear maps, so $S_w$ is an actual bounded complex linear operator. It commutes with $A$. Moreover,
+\[
+ S_w(v)=v_j(v_j)^{-1}w=w .
+\]
+Hyperinvariance gives $w\in M$. Since $w$ was arbitrary, $M=E$. Thus every hyperinvariant subspace of $I_E$ is either $\{0\}$ or $E$.
+
+In particular none has complex dimension one. A complete triangularizing flag in dimension two must have the form
+\[
+ \{0\}\subset M_1\subset E,\qquad \dim_{\mathbb C}M_1=1.
+\]
+It cannot consist of hyperinvariant subspaces. This disproves the stated hyperinvariant strengthening.
+\newpage
+\textbf{Ordinary invariant subspaces are different.}
+The coordinate line
+\[
+ L=\{(z_0,z_1)\in\mathbb C^2:z_1=0\}
+\]
+is invariant under $A=I_E$. It is nonzero because $(1,0)\in L$, and proper because $(1,1)\notin L$. It is not hyperinvariant: the classification just proved excludes all nonzero proper subspaces. Thus an ordinary invariant flag does not repair the hyperinvariant assertion.
+
+The proof applies even to arbitrary algebraic subspaces, without a closedness assumption. Consequently it also applies to the usual convention that hyperinvariant subspaces are closed. In the present finite-dimensional space every linear subspace is closed anyway.
+
+\textbf{Formal correspondence.}
+The Lean package uses the actual complex vector space \texttt{Fin 2} $\to\mathbb C$, its continuous linear identity, and actual submodules. Hyperinvariance is defined by quantifying over continuous complex linear maps with the equality of composed operators. The rank-one map is constructed by composing coordinate evaluation with scalar multiplication by a fixed vector, through Mathlib's continuous linear map operations.
+
+The formal proof shows that all maps commute with the identity, that the rank-one map sends the chosen nonzero vector to an arbitrary target, and that every hyperinvariant submodule is bottom or top. Actual complex finite dimension is two; hence no hyperinvariant submodule has dimension one. It also constructs the ordinary coordinate line as a genuine linear-map kernel, proves it nonzero and proper, and proves it is not hyperinvariant.
+
+A separate actual identity matrix acts as the continuous linear identity on every vector. Every entry below its diagonal is zero. The final theorem combines this genuine upper-triangular matrix with the nonexistence of a complete hyperinvariant flag. No scalar proxy for invariant-subspace structure is assumed.
+
+\textbf{Reproduction.}
+The submission contains \texttt{lean/Main.lean}, a pinned public Lean project, this complete source, and the compiled PDF. With Lean 4.19.0 installed, run \texttt{lake build} inside the \texttt{lean} directory. Mathlib is pinned to commit
+\[
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\]
+Printed axiom audits cover the commuting maps, rank-one action, classification, actual dimension, obstruction to an intermediate subspace, ordinary line, matrix action, triangularity, and final counterexample. The proof uses no admitted statements or extra axioms.
+
+\textbf{Conclusion.}
+The complex identity operator has an upper-triangular realization, but has no complete flag of hyperinvariant subspaces. The stronger Schur-type assertion therefore fails even in dimension two.
+\end{document}
