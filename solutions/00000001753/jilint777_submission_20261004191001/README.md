@@ -47,6 +47,16 @@ spin character has absolute value 2^{⌊(n−3)/2⌋} on a lifted 3-cycle. This 
 - **⟨χ,g⟩ as an inner product.** If ⟨χ,g⟩ meant the inner product ⟨χ, 1_C⟩ with the class
   indicator, the statement would be trivially true by column orthogonality. We consider this
   reading unintended and make no claim under it (see the report).
+- **Normalised values |χ(g)|/χ(1) ≤ 2^{⌊n/4⌋−1}.** This reading is trivially true for n ≥ 4,
+  since |χ(g)| ≤ χ(1) and the right side is ≥ 1. It is trivially false for n ≤ 3 at g = 1. It is
+  not the intended reading, for three reasons:
+  - The "order-n bound 2^{(n/2)−1}" is an absolute scale: for even n it equals the basic spin
+    degree.
+  - The "decay factor" arithmetic 2^{n/2−1}/2^{⌊n/4⌋} = 2^{⌊n/4⌋−1} (exact for 4 | n) only makes
+    sense for absolute values.
+  - The Chinese text says 自旋特征标值, i.e. character *values*. This also fixes ⟨χ,g⟩ = χ(g).
+
+  We make no claim under this reading.
 
 ## Contents
 
@@ -124,6 +134,12 @@ n = 4 时，单位元（次数 2 > 1）已违反上界。
 - 若指 2·A₅ 的特征标，二维自旋特征标在 5-轮换提升上的值为 (1+√5)/2 > 1。
 - 若"交错类"指奇类，n = 4 时值的绝对值为 √2 > 1。
 - 若把 ⟨χ,g⟩ 理解为与类指示函数的内积，命题平凡成立；我们认为这不是本意，对此不作断言。
+- 若理解为归一化值 |χ(g)|/χ(1) ≤ 2^{⌊n/4⌋−1}：n ≥ 4 时平凡成立（|χ(g)| ≤ χ(1)，右边 ≥ 1），n ≤ 3 时在 g = 1 处平凡不成立。这不是本意，原因有三：
+  - 题中"阶 n 的界 2^{(n/2)−1}"是绝对尺度：n 为偶数时它恰为基本自旋特征标的次数；
+  - "衰减因子"的算式 2^{n/2−1}/2^{⌊n/4⌋} = 2^{⌊n/4⌋−1}（4 | n 时精确成立）只对绝对值有意义；
+  - 中文原文明确写的是"自旋特征标值"，这也确定了 ⟨χ,g⟩ 即 χ(g)。
+
+  我们对此读法不作断言。
 
 **Lean 部分**（仅用核心库）：
 - 在 ℤ[ζ₈] 上定义矩阵、Schur 关系（自旋表示）、不可约性（单词张成全矩阵代数）以及到 S_n 的投影。
