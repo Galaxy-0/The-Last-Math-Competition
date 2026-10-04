@@ -1,0 +1,117 @@
+{
+  "status": "PASS",
+  "scope": "PDF source compilation, export, source identity and page layout. Lean execution and independent semantic review are recorded separately.",
+  "source_sha256": "a80a1ba11afd92dab6310de5b6a8d21405c3352fdcc05c8e6511454d87dd71aa",
+  "pdf_sha256": "7d98006f2344e5e9ff3601e2fd9c7c49f9c4ab43a220214816075bbd227168c4",
+  "pdf_bytes": 67894,
+  "pages": 4,
+  "artifact_marker": {
+    "operation_kind": "create",
+    "expected_output_count": 1,
+    "output_format": "pdf",
+    "successful_invocations": 1,
+    "exit_code": 0,
+    "timing": "Immediately before the first authoring command for this report."
+  },
+  "native_compilation": {
+    "tool": "compile_latex_document",
+    "status": "success",
+    "source": "/private/tmp/tlmc7718-package/main.tex",
+    "source_sha256": "a80a1ba11afd92dab6310de5b6a8d21405c3352fdcc05c8e6511454d87dd71aa",
+    "message": "The final source compiled successfully with the desktop editor compiler. The source was opened in its LaTeX editor (queued because this agent chat was not foreground)."
+  },
+  "export": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--keep-logs",
+      "--outdir",
+      "/private/tmp/tlmc7718-package",
+      "/private/tmp/tlmc7718-package/main.tex"
+    ],
+    "exit_code": 0,
+    "compiler": "Tectonic 0.17.0",
+    "compiler_version_exit_code": 0,
+    "log": "report.txt",
+    "log_sha256": "8ec3d96e1c23b16dfd1ab52c0a9adf44f631d5869fe96cf690bd6b97150b0882",
+    "warnings_or_box_diagnostics": []
+  },
+  "preliminary_export_note": "The first export attempted to load an uncached math typewriter font and failed because networking was restricted. Literal witness words were typeset using the already available text typewriter font. The final native compilation and final export succeed without font substitutions or any warning.",
+  "log_normalization": "Trailing whitespace was removed from compiler-log lines when saving report.txt; all diagnostic text was retained. The raw main.log remains with the authoring files.",
+  "pdf_inspection": {
+    "command": [
+      "pdfinfo",
+      "/private/tmp/tlmc7718-package/main.pdf"
+    ],
+    "exit_code": 0,
+    "page_size": "595.28 x 841.89 pts (A4)",
+    "pdf_version": "1.5",
+    "encrypted": false,
+    "all_pages_have_text": true,
+    "replacement_glyph_count": 0
+  },
+  "visual_review": {
+    "reviewer": "report7718 author agent",
+    "scope": "Personally inspected all four complete final rendered pages at readable resolution, including source scope, words, matrix, geometric coverage, spectra, inequalities, quantified lower-bound refutation, page boundaries, theorem names, reproduction commands and references. This is author visual QA, not independent semantic review.",
+    "render_command": [
+      "pdftoppm",
+      "-r",
+      "110",
+      "-png",
+      "/private/tmp/tlmc7718-package/main.pdf",
+      "/private/tmp/tlmc7718-package/rendered/page"
+    ],
+    "render_exit_code": 0,
+    "rendered_pages": [
+      {
+        "path": "/private/tmp/tlmc7718-package/rendered/page-1.png",
+        "sha256": "9c949bca45040a19eccdd91e3d0506a8187f66a56c67f46e62bc83a966f05c4e"
+      },
+      {
+        "path": "/private/tmp/tlmc7718-package/rendered/page-2.png",
+        "sha256": "cd8c9fd431961674d7880f37ee401f38e41d02071612e1a7407736be1363e94b"
+      },
+      {
+        "path": "/private/tmp/tlmc7718-package/rendered/page-3.png",
+        "sha256": "433b867ded2f9bcf40430f9859a1b05ed162d40a46fe82ec74fa540b235e31b5"
+      },
+      {
+        "path": "/private/tmp/tlmc7718-package/rendered/page-4.png",
+        "sha256": "1eac28f588bf4b3cd41c52ddf0ce2698b317b6da3fca90a21b0be6a3067bb65a"
+      }
+    ],
+    "status": "PASS",
+    "findings": "No clipping, overlap, broken glyphs or sparse trailing pages. The mathematical exposition occupies pages 1-3; formal scope, correspondence, commands and references fit legibly on page 4. No compiler warnings or box diagnostics remain."
+  },
+  "source_whitespace_check": {
+    "command": [
+      "git",
+      "diff",
+      "--no-index",
+      "--check",
+      "/dev/null",
+      "/private/tmp/tlmc7718-package/main.tex"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "",
+    "trailing_whitespace_lines": 0,
+    "interpretation": "The nonzero no-index comparison status reflects comparison against /dev/null; no whitespace diagnostics were emitted."
+  },
+  "verification_status_note": "This PDF author record does not certify the independent Lean execution or final semantic review, which are separate deliverables. The report directs readers to those records without giving premature counts or timestamps.",
+  "verified_utc": "2026-10-04T22:20:25.557113+00:00",
+  "second_visual_review": {
+    "reviewer": "root coordinating agent",
+    "status": "PASS",
+    "reviewed_utc": "2026-10-04T22:22:10.459935+00:00",
+    "pages_reviewed": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "source_sha256": "a80a1ba11afd92dab6310de5b6a8d21405c3352fdcc05c8e6511454d87dd71aa",
+    "pdf_sha256": "7d98006f2344e5e9ff3601e2fd9c7c49f9c4ab43a220214816075bbd227168c4",
+    "rendered_page_hashes_match": true,
+    "findings": "Viewed all four complete final rendered pages at readable resolution. Words, matrices, complex spectrum, exact inequality, quantified result, commands and references match the source and remain legible; no clipping, overlap, broken glyphs or problematic page breaks."
+  }
+}

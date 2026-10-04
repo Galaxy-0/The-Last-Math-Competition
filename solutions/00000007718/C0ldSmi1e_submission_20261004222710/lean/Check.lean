@@ -1,0 +1,110 @@
+import Conjecture7718
+
+#print Conjecture7718.Letter
+#print Conjecture7718.Substitution
+#print Conjecture7718.incidenceCounts
+#print Conjecture7718.incidenceMatrix
+#print Conjecture7718.familyCounts
+#print Conjecture7718.substitution
+#print Conjecture7718.wordMap
+#print Conjecture7718.iterateWord
+#print Conjecture7718.PrimitiveSubstitution
+#print Conjecture7718.prototileSupport
+#print Conjecture7718.expandedPrototileSupport
+#print Conjecture7718.wordTileColor
+#print Conjecture7718.wordTileSupport
+#print Conjecture7718.wordTileInterior
+#print Conjecture7718.UnitIntervalSubstitution
+#print Conjecture7718.perronValue
+#print Conjecture7718.OrderedSpectralData
+#print Conjecture7718.AdmissibleRatio
+#print Conjecture7718.spectralRatio
+#print Conjecture7718.claimedMinimum
+#print Conjecture7718.ConjecturedPositiveLowerBound
+
+#check Conjecture7718.iterateWord_one
+#print axioms Conjecture7718.iterateWord_one
+#check Conjecture7718.incidenceCounts_substitution
+#print axioms Conjecture7718.incidenceCounts_substitution
+#check Conjecture7718.incidenceMatrix_substitution
+#print axioms Conjecture7718.incidenceMatrix_substitution
+#check Conjecture7718.substitution_length
+#print axioms Conjecture7718.substitution_length
+#check Conjecture7718.substitution_nonempty
+#print axioms Conjecture7718.substitution_nonempty
+#check Conjecture7718.familyCounts_pos
+#print axioms Conjecture7718.familyCounts_pos
+#check Conjecture7718.every_letter_mem_substitution
+#print axioms Conjecture7718.every_letter_mem_substitution
+#check Conjecture7718.substitution_primitive
+#print axioms Conjecture7718.substitution_primitive
+#check Conjecture7718.incidenceCounts_substitution_pow_one_pos
+#print axioms Conjecture7718.incidenceCounts_substitution_pow_one_pos
+#check Conjecture7718.incidenceCounts_substitution_transpose
+#print axioms Conjecture7718.incidenceCounts_substitution_transpose
+#check Conjecture7718.incidenceMatrix_substitution_transpose
+#print axioms Conjecture7718.incidenceMatrix_substitution_transpose
+#check Conjecture7718.wordTileColors_eq
+#print axioms Conjecture7718.wordTileColors_eq
+#check Conjecture7718.wordTileColor_count
+#print axioms Conjecture7718.wordTileColor_count
+#check Conjecture7718.substitution_tileColor_count
+#print axioms Conjecture7718.substitution_tileColor_count
+#check Conjecture7718.wordTileInterior_eq
+#print axioms Conjecture7718.wordTileInterior_eq
+#check Conjecture7718.wordTileSupport_translate
+#print axioms Conjecture7718.wordTileSupport_translate
+#check Conjecture7718.union_unit_intervals
+#print axioms Conjecture7718.union_unit_intervals
+#check Conjecture7718.union_wordTileSupport
+#print axioms Conjecture7718.union_wordTileSupport
+#check Conjecture7718.pairwise_disjoint_wordTileInterior
+#print axioms Conjecture7718.pairwise_disjoint_wordTileInterior
+#check Conjecture7718.expandedPrototileSupport_eq
+#print axioms Conjecture7718.expandedPrototileSupport_eq
+#check Conjecture7718.substitution_unitInterval
+#print axioms Conjecture7718.substitution_unitInterval
+#check Conjecture7718.substitution_primitive_unitInterval
+#print axioms Conjecture7718.substitution_primitive_unitInterval
+#check Conjecture7718.perronValue_gt_three
+#print axioms Conjecture7718.perronValue_gt_three
+#check Conjecture7718.incidence_charpoly
+#print axioms Conjecture7718.incidence_charpoly
+#check Conjecture7718.incidence_resolvent_det
+#print axioms Conjecture7718.incidence_resolvent_det
+#check Conjecture7718.incidence_mem_spectrum_iff
+#print axioms Conjecture7718.incidence_mem_spectrum_iff
+#check Conjecture7718.incidence_det
+#print axioms Conjecture7718.incidence_det
+#check Conjecture7718.incidence_rank
+#print axioms Conjecture7718.incidence_rank
+#check Conjecture7718.incidence_mulVec_one
+#print axioms Conjecture7718.incidence_mulVec_one
+#check Conjecture7718.incidence_positive_eigenvector
+#print axioms Conjecture7718.incidence_positive_eigenvector
+#check Conjecture7718.perron_isGreatest
+#print axioms Conjecture7718.perron_isGreatest
+#check Conjecture7718.second_isGreatest
+#print axioms Conjecture7718.second_isGreatest
+#check Conjecture7718.substitution_orderedSpectralData
+#print axioms Conjecture7718.substitution_orderedSpectralData
+#check Conjecture7718.spectralRatio_eq
+#print axioms Conjecture7718.spectralRatio_eq
+#check Conjecture7718.spectralRatio_pos
+#print axioms Conjecture7718.spectralRatio_pos
+#check Conjecture7718.spectralRatio_admissible
+#print axioms Conjecture7718.spectralRatio_admissible
+#check Conjecture7718.spectralRatio_two
+#print axioms Conjecture7718.spectralRatio_two
+#check Conjecture7718.one_third_lt_claimedMinimum
+#print axioms Conjecture7718.one_third_lt_claimedMinimum
+#check Conjecture7718.counterexample
+#print axioms Conjecture7718.counterexample
+#check Conjecture7718.conjecture_00000007718_false
+#print axioms Conjecture7718.conjecture_00000007718_false
+#check Conjecture7718.arbitrarily_small_positive_ratios
+#print axioms Conjecture7718.arbitrarily_small_positive_ratios
+#check Conjecture7718.no_positive_universal_lower_bound
+#print axioms Conjecture7718.no_positive_universal_lower_bound
+#check Conjecture7718.no_least_positive_admissible_ratio
+#print axioms Conjecture7718.no_least_positive_admissible_ratio
