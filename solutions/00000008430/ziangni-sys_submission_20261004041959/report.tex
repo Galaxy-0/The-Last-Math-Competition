@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\newtheorem{proposition}{Proposition}
+\title{Noninteger roots of a Schubert counting polynomial\\\large Counterexample to TLMC 00000008430}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The full Grassmannian of lines in a three-dimensional vector space over
+$\mathbb F_q$ has $q^2+q+1$ points. This is a Schubert configuration
+family determined by dimensions. Its counting polynomial is monic but
+has nonreal roots, disproving the assertion that its roots are integers.
+\end{abstract}
+
+\section{Configuration family and scope}
+The source defines a Schubert configuration as a chain of subspaces
+determined by dimension conditions. It asserts that its finite-field
+count is a monic polynomial in $q$ whose roots are integers.
+
+Take $V=\mathbb F_q^3$ and the family of chains
+\[
+ 0\subsetneq L\subsetneq V,\qquad \dim L=1.
+\]
+Each chain is uniquely determined by the line $L$, so this family is
+the Grassmannian $\operatorname{Gr}(1,3)=\mathbb P^2$. It is the full
+Schubert variety, namely the closure of the largest Schubert cell for
+any fixed complete flag. The entire Grassmannian is allowed by the
+dimension-chain definition in the source. We count this full variety,
+not only its open affine cell, which by itself would have $q^2$ points.
+
+\section{Count and polynomial}
+\begin{proposition}
+The number of these configurations over every finite field of cardinality
+$q$ is $q^2+q+1$.
+\end{proposition}
+\begin{proof}
+Every nonzero vector of $V$ spans a unique line. Each line has exactly
+$q-1$ nonzero vectors, and the nonzero-vector sets of distinct lines
+are disjoint. Thus the number of lines is
+\[
+ \frac{q^3-1}{q-1}=q^2+q+1.
+\]
+This holds for every finite field, not merely for selected small values.
+The polynomial $P(X)=X^2+X+1$ is also uniquely determined by these
+counts: any second counting polynomial agrees with it on every prime
+field cardinality, and there are infinitely many primes. Two distinct
+polynomials cannot agree at infinitely many points.
+\end{proof}
+
+\newpage
+\begin{proposition}
+$P$ is monic and has a root that is not an integer.
+\end{proposition}
+\begin{proof}
+Its leading coefficient is $1$. Put
+\[
+ \zeta=\frac{-1+i\sqrt3}{2}.
+\]
+Direct expansion, using $(\sqrt3)^2=3$, gives
+$\zeta^2+\zeta+1=0$. Since
+$\operatorname{Im}\zeta=\sqrt3/2>0$, the root $\zeta$ is not a real
+number and in particular is not an integer.
+\end{proof}
+
+The polynomial-counting and monicity clauses both hold in this example;
+it is precisely the integer-root clause that fails. Thus the example
+disproves the conjecture without imposing any alternate counting model.
+
+\section{Lean correspondence and verification}
+\raggedright
+The Lean4.19.0 project pins Mathlib commit
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+For any field $k$, the type \texttt{Lines k} consists of actual
+\texttt{Submodule k (Fin 3 -> k)} objects whose \texttt{Module.finrank}
+is one. Fixing the endpoints $0$ and $k^3$ identifies these objects
+exactly with the chains above; no extra choices or quotients change
+the count.
+
+The theorem \texttt{count\_lines} applies Mathlib's proved equivalence
+between projective points and one-dimensional submodules, followed by
+its projective-space cardinality theorem and the actual dimension of
+$k^3$. It proves the count for every finite field. The theorem
+\texttt{polynomial\_counts} identifies these cardinalities with
+evaluation of the actual complex polynomial \texttt{countPolynomial}.
+The theorem \texttt{counting\_polynomial\_unique} uses actual prime
+fields \texttt{ZMod p}, infinitude of primes, and the polynomial
+identity theorem to prove uniqueness of the counting polynomial.
+
+The theorem \texttt{countPolynomial\_monic} checks monicity.
+The value \texttt{zeta} is an actual complex number with the real square
+root of three in its imaginary part. The theorems
+\texttt{zeta\_isRoot} and \texttt{zeta\_not\_integer} prove its root
+equation and exclusion from every complex cast of an integer.
+The final theorem \texttt{conjecture\_00000008430} combines the
+general counting identity with existence of a noninteger root.
+
+Run \texttt{lake build} and \texttt{lake env lean Main.lean} inside
+the \texttt{lean} directory. The axiom audits for the count, uniqueness,
+monicity, and final theorem use only the standard logical axioms
+\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+No table of counts, unproved geometric assertion, native evaluation,
+numerical approximation, or auxiliary computational script is used.
+\end{document}
