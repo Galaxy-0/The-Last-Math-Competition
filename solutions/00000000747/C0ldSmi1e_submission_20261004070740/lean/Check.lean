@@ -1,0 +1,23 @@
+import Conjecture747
+
+#print PadicInt
+#print Conjecture747.powerMap
+#print Conjecture747.iterativeFixed
+#print Conjecture747.directFixedPointClaim
+#print Conjecture747.iterativeFixedPointClaim
+#check Conjecture747.neg_one_distinct
+#check Conjecture747.neg_one_fixed
+#check Conjecture747.neg_one_fixed_every_iterate
+#check Conjecture747.neg_one_iterativeFixed
+#check Conjecture747.counterexample_every_prime
+#check Conjecture747.concrete_counterexample
+#check Conjecture747.not_directFixedPointClaim
+#check Conjecture747.conjecture747_disproof
+#print axioms Conjecture747.neg_one_distinct
+#print axioms Conjecture747.neg_one_fixed
+#print axioms Conjecture747.neg_one_fixed_every_iterate
+#print axioms Conjecture747.neg_one_iterativeFixed
+#print axioms Conjecture747.counterexample_every_prime
+#print axioms Conjecture747.concrete_counterexample
+#print axioms Conjecture747.not_directFixedPointClaim
+#print axioms Conjecture747.conjecture747_disproof

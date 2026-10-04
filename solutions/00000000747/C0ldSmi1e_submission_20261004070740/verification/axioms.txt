@@ -1,0 +1,29 @@
+def PadicInt : (p : ℕ) → [hp : Fact (Nat.Prime p)] → Type :=
+fun p [Fact (Nat.Prime p)] => { x // ‖x‖ ≤ 1 }
+def Conjecture747.powerMap : (p : ℕ) → [inst : Fact (Nat.Prime p)] → ℤ_[p] → ℤ_[p] :=
+fun p [Fact (Nat.Prime p)] x => x ^ p
+def Conjecture747.iterativeFixed : (p : ℕ) → [inst : Fact (Nat.Prime p)] → ℤ_[p] → Prop :=
+fun p [Fact (Nat.Prime p)] x => ∃ n, 0 < n ∧ (Conjecture747.powerMap p)^[n] x = x
+def Conjecture747.directFixedPointClaim : Prop :=
+∀ (p : ℕ) [inst : Fact (Nat.Prime p)], 5 ≤ p → ∀ (x : ℤ_[p]), Conjecture747.powerMap p x = x → x = 0 ∨ x = 1
+def Conjecture747.iterativeFixedPointClaim : Prop :=
+∀ (p : ℕ) [inst : Fact (Nat.Prime p)], 5 ≤ p → ∀ (x : ℤ_[p]), Conjecture747.iterativeFixed p x → x = 0 ∨ x = 1
+Conjecture747.neg_one_distinct (p : ℕ) [Fact (Nat.Prime p)] : -1 ≠ 0 ∧ -1 ≠ 1
+Conjecture747.neg_one_fixed (p : ℕ) [hp : Fact (Nat.Prime p)] (hp5 : 5 ≤ p) : Conjecture747.powerMap p (-1) = -1
+Conjecture747.neg_one_fixed_every_iterate (p : ℕ) [Fact (Nat.Prime p)] (hp5 : 5 ≤ p) (n : ℕ) :
+  (Conjecture747.powerMap p)^[n] (-1) = -1
+Conjecture747.neg_one_iterativeFixed (p : ℕ) [Fact (Nat.Prime p)] (hp5 : 5 ≤ p) : Conjecture747.iterativeFixed p (-1)
+Conjecture747.counterexample_every_prime (p : ℕ) [Fact (Nat.Prime p)] (hp5 : 5 ≤ p) :
+  ∃ x, x ≠ 0 ∧ x ≠ 1 ∧ Conjecture747.powerMap p x = x ∧ ∀ (n : ℕ), (Conjecture747.powerMap p)^[n] x = x
+Conjecture747.concrete_counterexample :
+  -1 ≠ 0 ∧ -1 ≠ 1 ∧ Conjecture747.powerMap 5 (-1) = -1 ∧ ∀ (n : ℕ), (Conjecture747.powerMap 5)^[n] (-1) = -1
+Conjecture747.not_directFixedPointClaim : ¬Conjecture747.directFixedPointClaim
+Conjecture747.conjecture747_disproof : ¬Conjecture747.iterativeFixedPointClaim
+'Conjecture747.neg_one_distinct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture747.neg_one_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture747.neg_one_fixed_every_iterate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture747.neg_one_iterativeFixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture747.counterexample_every_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture747.concrete_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture747.not_directFixedPointClaim' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture747.conjecture747_disproof' depends on axioms: [propext, Classical.choice, Quot.sound]

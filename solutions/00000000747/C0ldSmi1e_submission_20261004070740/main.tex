@@ -1,0 +1,90 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\title{Conjecture 00000000747:\\A fixed point in the actual $p$-adic integers}
+\author{C0ldSmi1e}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+For every prime $p\geq5$, the $p$-adic integer $-1$ is distinct from $0$ and $1$ and is fixed by every iterate of $x\mapsto x^p$. This disproves the conjecture directly in its stated domain. The Lean development uses Mathlib's actual ring of $p$-adic integers. We also explain the missing formalization and the erroneous higher-iterate count in the earlier, subsequently removed submission.
+\end{abstract}
+
+\section{The statement and a direct disproof}
+The repository's English statement is:
+\begin{quote}
+Conjecture: For $p\geq5$, the iterative fixed points of $x\mapsto x^p$ in $\mathbb Z_p$ are only $0$ and $1$ (rigidity of superattracting orbits).
+\end{quote}
+The exact English and Chinese versions are preserved in \texttt{conjecture.md}. We use the usual convention that $p$ is prime and $\mathbb Z_p$ denotes the ring of $p$-adic integers. Write
+\[
+ f_p:\mathbb Z_p\longrightarrow\mathbb Z_p,\qquad f_p(x)=x^p,
+\]
+and let $f_p^{\circ n}$ denote its $n$-fold composition, with $f_p^{\circ0}$ the identity.
+
+\begin{theorem}
+For every prime $p\geq5$, the element $-1\in\mathbb Z_p$ is different from both $0$ and $1$, and
+\[
+ f_p(-1)=-1,\qquad f_p^{\circ n}(-1)=-1\quad\text{for every }n\in\mathbb N.
+\]
+\end{theorem}
+\begin{proof}
+The ring $\mathbb Z_p$ has characteristic zero, so the images of the distinct integers $-1$, $0$, and $1$ are distinct. Every prime $p\geq5$ is odd. Therefore $(-1)^p=-1$, proving the first equality in the actual ring $\mathbb Z_p$.
+
+For the iterates, the case $n=0$ follows from the identity map. If $f_p^{\circ n}(-1)=-1$, then
+\[
+ f_p^{\circ(n+1)}(-1)=f_p\bigl(f_p^{\circ n}(-1)\bigr)=f_p(-1)=-1.
+\]
+Induction proves the assertion for every $n$.
+\end{proof}
+\begin{corollary}
+Conjecture 00000000747 is false, both for ordinary fixed points and for points fixed by a positive iterate.
+\end{corollary}
+\begin{proof}
+Take the prime $p=5$. The point $-1\in\mathbb Z_5$ lies outside $\{0,1\}$ and is fixed already by the first iterate. In fact, the theorem supplies the same counterexample for every permitted prime.
+\end{proof}
+
+\paragraph{Scope of the parenthetical phrase.}
+Neither language states a derivative-zero hypothesis on the points. The assertions addressed here concern ordinary fixed points and fixed points of positive iterates. We do not assert that $-1$ is superattracting: for $f_5(x)=x^5$, both $f_5'(1)$ and $f_5'(-1)$ equal $5\ne0$. The parenthetical language is not used to introduce a different restricted dynamical statement.
+
+\section{The previous submission and the repair}
+PR~35~\cite{oldpr} was initially merged and subsequently removed by the maintainer's re-audit commit \texttt{541cf4fb}~\cite{removal}. The current metadata again marks the conjecture unsolved. We identify the earlier submission's two essential issues, as required by the contribution rules.
+
+\paragraph{Missing formal connection to $\mathbb Z_p$.}
+The old \texttt{lean4/Main.lean} at commit \texttt{5daa6749} imports only \texttt{Std}. Its results concern \texttt{Fin 5}, remainders modulo $5^8$, and a single lift from modulus $5$ to modulus $25$. The theorem named \texttt{conjecture\_00000000747\_false} is a conjunction of those finite statements. It contains no $p$-adic element or theorem that passes from the finite congruences to a root in $\mathbb Z_5$. The author explicitly described this scope; the re-audit cited the missing $\mathbb Z_p$/Hensel formalization when removing it.
+
+The new proof constructs its witness as an element of Mathlib's \texttt{PadicInt} from the outset and proves the power and iteration equalities there. The integer $-1$ already belongs to the ring, so no lifting theorem or approximation sequence is needed.
+
+\paragraph{An incorrect claim about higher iterates.}
+The old report's ``Iterates'' remark and the corresponding README paragraph claim that $X^{p^n}-X$ has $p^n$ roots in $\mathbb Z_p$, based on the assertion that all $(p^n-1)$-st roots of unity lie in that ring. This is false for $n>1$. To see the correct count, put $F_n(X)=X^{p^n}-X$, where $n\geq1$. Every residue $a\in\mathbb F_p$ satisfies
+\[
+ F_n(a)\equiv0\pmod p,\qquad F_n'(a)\equiv-1\pmod p.
+\]
+The simple-root form of Hensel's lemma~\cite[Theorem~2.1]{conrad} gives exactly one root in $\mathbb Z_p$ in each residue class, hence $p$ roots in total. The count $p^n$ is the algebraic-closure count, not the count in $\mathbb Z_p$. The old first-iterate count $p$ was mathematically correct; the missing Lean proof of the actual-domain conclusion still made that submission incomplete.
+
+This root-count correction is historical context, not a premise of the new counterexample. The submitted Lean theorem proves the required negation by the explicit $-1$ witness and does not claim to formalize the classification of all roots.
+
+\section{Formal statement and verification}
+Mathlib defines \texttt{PadicInt p}, written $\mathbb Z_{[p]}$ in Lean, as the elements of its $p$-adic field with norm at most one. Its ring operations and characteristic-zero instance are used directly. The definition \texttt{powerMap} is $x\mapsto x^p$ on this type; \texttt{iterativeFixed} means that some positive natural iterate, using Lean's actual function iteration, fixes the point.
+
+The two universal conjecture predicates quantify over all primes $p\geq5$ and all $x\in\mathbb Z_p$. The main theorem, \texttt{conjecture747\_disproof}, negates the positive-iterate predicate. A separate theorem negates the ordinary fixed-point predicate. The uniform counterexample and the fully concrete $p=5$ instance are also proved. No finite quotient replaces the domain, and no Hensel theorem is assumed.
+
+The project pins Lean 4.19.0 and Mathlib v4.19.0 with exact dependency revisions. From \texttt{lean/}, run:
+\begin{verbatim}
+lake build
+lake env lean -DwarningAsError=true Conjecture747.lean
+lake env lean -DwarningAsError=true Check.lean
+\end{verbatim}
+The audit file prints definitions, theorem types, and axiom dependencies. Validation records, independent semantic scrutiny, and artifact hashes accompany the submission. No auxiliary numerical program is used. Local verification is separate from maintainer acceptance.
+
+\begin{thebibliography}{9}
+\raggedright
+\bibitem{oldpr} The Last Math Competition, PR~35, earlier submission for conjecture 00000000747. \href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/pull/35}{Pull request and discussion}. The source at commit \texttt{5daa6749} is linked in the accompanying prior-submission note.
+\bibitem{removal} The Last Math Competition, commit \texttt{541cf4fb}, re-audit removing incomplete submissions. \href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/commit/541cf4fbc7aef3e17085577f6403c11c09f31fe1}{Maintainer removal record}.
+\bibitem{conrad} K. Conrad, \emph{Hensel's Lemma}, Theorem~2.1 and Example~2.10. \url{https://kconrad.math.uconn.edu/blurbs/gradnumthy/hensel.pdf}.
+\end{thebibliography}
+\end{document}
