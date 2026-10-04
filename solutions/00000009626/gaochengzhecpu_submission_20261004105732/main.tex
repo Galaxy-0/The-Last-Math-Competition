@@ -1,0 +1,101 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\newtheorem{proposition}{Proposition}
+\title{Disproof of Conjecture 00000009626\\\large The three-symbol full shift}
+\author{gaochengzhecpu}
+\date{October 4, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The unrestricted class of two-dimensional shifts of finite type contains the
+full shift on three symbols. Its spatial entropy is $\log 3$, contradicting
+the asserted upper bound $\log 2$. We give the complete counting argument
+and a Lean 4 formalization of the configurations, finite-type condition,
+pattern counts, real logarithms, and entropy limit.
+\end{abstract}
+
+\section*{The assertion addressed}
+Conjecture 00000009626 asserts, in both its English and Chinese versions,
+that the set of realizable spatial entropies of two-dimensional shifts of
+finite type (SFTs) is $[0,\log 2]$. Neither version restricts the alphabet to
+two symbols. We use the ordinary definition allowing any finite alphabet.
+The independent assertions about row-by-row approximation are unnecessary:
+the claimed entropy interval is already false.
+
+\section*{An explicit SFT and its entropy}
+Let $A=\{0,1,2\}$ and let
+\[
+                 X=A^{\mathbb Z^2}.
+\]
+This is the full shift: every configuration is allowed. It is a shift of
+finite type defined by the empty finite collection of forbidden patterns.
+It is nonempty, closed, and invariant under every lattice translation.
+
+For $n\geq 1$, write $Q_n=\{0,\ldots,n-1\}^2$, and let $N_X(n)$ be the
+number of patterns on $Q_n$ occurring in configurations in $X$.
+Every map $p:Q_n\to A$ occurs: extend it to $\mathbb Z^2$ by assigning
+the symbol $0$ outside $Q_n$. Conversely every occurring pattern is such a
+map. Since $|Q_n|=n^2$, independent choices at all sites give exactly
+\[
+                         N_X(n)=3^{n^2}.
+\]
+Using the usual square-box definition of spatial entropy (natural logarithms),
+\[
+ h(X)=\lim_{n\to\infty}\frac{\log N_X(n)}{|Q_n|}
+     =\lim_{n\to\infty}\frac{\log(3^{n^2})}{n^2}
+     =\log 3.
+\]
+The normalized expression is identically $\log 3$ for every positive $n$,
+so there is no approximation or unproved limiting interchange in this step.
+
+\begin{proposition}
+The entropy spectrum asserted in Conjecture 00000009626 is not $[0,\log 2]$.
+\end{proposition}
+\begin{proof}
+The SFT $X$ constructed above has entropy $\log 3>\log 2$, because the
+natural logarithm is strictly increasing on the positive real numbers.
+Thus its entropy lies outside the asserted interval.
+\end{proof}
+
+\section*{Scope and formal verification}
+This counterexample uses three symbols and addresses the unrestricted
+statement that was submitted. Adding a binary-alphabet restriction would
+change that statement; the present example makes no claim to disprove an
+upper bound for binary subshifts. No classification theorem for SFT
+entropies is needed here. For background on the actual unrestricted
+spectrum, see Hochman and Meyerovitch~\cite{HM}.
+
+The accompanying \texttt{lean/Main.lean} defines actual configurations
+$(\mathbb Z\times\mathbb Z)\to\operatorname{Fin}(3)$, SFTs through finite
+forbidden square patterns at every translate, and occurring patterns through
+extension to an actual configuration. It proves an equivalence between all
+square patterns and occurring patterns of $X$, then computes their cardinality.
+\texttt{HasSpatialEntropy} is the convergence of the normalized real
+logarithmic counts along boxes of side $n+1$; this harmless reindexing excludes
+the empty box. The main theorem \texttt{counterexample} provides an SFT,
+its proved entropy limit, and the strict violation of the proposed bound.
+\texttt{not\_universal\_entropy\_bound} negates the bound explicitly.
+
+The project pins Lean 4.19.0 and Mathlib v4.19.0 at commit
+\begin{center}
+\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\end{center}
+It contains no admitted theorem or added axiom. The supplemental Python
+script checks small finite examples only; the proof for every box size and
+the real limit are in Lean. Build logs, printed foundational axiom
+dependencies, file hashes, and a separate adversarial self-review are
+provided with the submission.
+
+\begin{thebibliography}{1}
+\bibitem{HM}
+M. Hochman and T. Meyerovitch,
+\emph{A characterization of the entropies of multidimensional shifts of
+finite type}, Annals of Mathematics 171 (2010), 2011--2038.
+\href{https://arxiv.org/abs/math/0703206}{arXiv:math/0703206}.
+\end{thebibliography}
+\end{document}
