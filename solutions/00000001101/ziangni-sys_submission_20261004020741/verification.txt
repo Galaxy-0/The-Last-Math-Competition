@@ -1,0 +1,44 @@
+Verification date (UTC): 2026-10-04
+
+Lean 4.19.0, standard library only:
+  cd lean
+  lake build
+  Result: exit 0, Main built, Build completed successfully.
+  lake env lean Main.lean
+  Result: exit 0.
+  KL_unique_coeff: axioms [propext, Quot.sound]
+  leading_is_one: axioms [propext, Quot.sound]
+  rank_one_disproof: axioms [propext, Quot.sound]
+  certified_counterexample: axioms [propext, Quot.sound]
+
+Python (bundled runtime), no external packages:
+  python verify.py
+  Result: exit 0.
+  PASS: exact rank-one Hecke bar invariance and KL normalization
+  PASS: all four pairs; nonzero leading coefficients = 1; zero excluded
+
+PDF:
+  tectonic report.tex
+  Result: exit 0; report.pdf, 3 pages, 57349 bytes.
+  Poppler pdfinfo: PDF 1.5, Letter, not encrypted, 3 pages.
+  Poppler pdftoppm -r 110 -png report.pdf <scratch>/report
+  All three rendered pages visually inspected: legible formulas, complete
+  text, no clipped content or overlapping elements. One harmless underfull
+  bibliography paragraph warning remains; no overfull boxes.
+  Built-in editor opened/queued with report.tex; its compiler reported
+  "Unable to find standard directories for platform". Tectonic supplies the
+  successfully compiled, visually checked PDF independently.
+
+Pre-submission availability:
+  metadata.csv: proven=false, disproven=false.
+  git ls-tree upstream/main solutions/00000001101: empty.
+  Cached all-state PR list: no matching problem ID.
+  gh pr list --repo The-Last-Math-Competition/The-Last-Math-Competition
+    --state all --search 00000001101 --json number,state,title,url
+  Result: [].
+
+Scope:
+  Mathematical identification of the A1 root system and rank-one canonical
+  Hecke basis is explained in report.tex. Lean formalizes the coefficientwise
+  KL characterization, proves uniqueness and the counterexample, rather than
+  formalizing the entire general root-system and Hecke-algebra libraries.
