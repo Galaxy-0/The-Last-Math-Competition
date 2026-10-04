@@ -1,0 +1,62 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\title{Three simplex pivots on a diameter-two polytope}
+\author{ziangni-sys \quad Conjecture 00000007129}
+\date{}
+\begin{document}
+\maketitle
+\vspace{-2em}
+\textbf{Disproof.} The conjecture says that the worst-case step count of the simplex method is the polytope's graph diameter. Ordinary simplex with Dantzig's largest-positive-reduced-cost rule already contradicts this assertion in dimension two. Every pivot below has a unique entering variable and a unique leaving variable. There is no degeneracy, cycling, or tie-breaking issue.
+
+Consider the bounded, full-dimensional polytope
+\[
+ P=\{(x,y)\in\mathbb R^2: x\ge0,\ y\ge0,\ x\le5,\ 4x+y\le25\}
+\]
+and maximize $z=2x+y$. Its vertices, in boundary order, are
+\[
+ v_0=(0,0),\quad v_1=(5,0),\quad v_2=(5,5),\quad v_3=(0,25).
+\]
+For completeness, if $0<y<25-4x$, a point lies in the open vertical segment joining $(x,0)$ and $(x,25-4x)$, so is not extreme. On either remaining boundary, a point with $0<x<5$ lies in the open segment between the corresponding listed endpoints. Conversely, the two active constraints at each listed point force both endpoints of any convex combination representing it to be that point. Thus this is the full vertex set.
+
+The four edges are supported respectively by $y=0$, $x=5$, $4x+y=25$, and $x=0$. There are no diagonal edges. Indeed, a linear functional $ax+by$ supporting both $v_0,v_2$ would satisfy $5a+5b=0$, $5a\le0$, and $25b\le0$, hence $a=b=0$. Supporting both $v_1,v_3$ similarly gives $5a=25b$, $0\le5a$, and $5a+5b\le5a$, again forcing $a=b=0$. Since $P$ is full dimensional, the common maximizer set of a nonzero supporting functional containing two distinct vertices is a one-dimensional face. The graph is therefore the four-cycle, of diameter $2$.
+
+\textbf{The genuine simplex computation.} Introduce slack variables $s,t\ge0$:
+\[
+ x+s=5,\qquad 4x+y+t=25.
+\]
+The successive dictionaries are displayed below. All four variables remain constrained to be nonnegative. Nonbasic variables are set to zero at each basic feasible solution.
+\[
+\begin{array}{c|c|l|l}
+ &\text{nonbasic}&\text{basic-variable equations}&\text{objective}\\\hline
+D_0&x,y&s=5-x,\quad t=25-4x-y&z=2x+y\\
+D_1&s,y&x=5-s,\quad t=5+4s-y&z=10-2s+y\\
+D_2&s,t&x=5-s,\quad y=5+4s-t&z=15+2s-t\\
+D_3&x,t&s=5-x,\quad y=25-4x-t&z=25-2x-t
+\end{array}
+\]
+These are identities for the entire equality-constrained solution set, obtained by solving for the indicated basic variables; they are not merely values at the four vertices. The basic coordinates at each origin are strictly positive.
+
+In $D_0$, Dantzig chooses $x$, since $2>1>0$. With $y=0$, the ratio bounds are $x\le5$ and $x\le25/4$, so $s$ uniquely leaves at $x=5$. This gives $D_1$ and $v_1$.
+
+In $D_1$, $y$ is the only variable with positive reduced cost. Holding $s=0$ gives $t=5-y$, so $t$ uniquely leaves at $y=5$. This gives $D_2$ and $v_2$.
+
+In $D_2$, $s$ is the only variable with positive reduced cost. Holding $t=0$ gives $x=5-s$ and $y=5+4s$, so $x$ uniquely leaves at $s=5$. This gives $D_3$ and $v_3$.
+
+Both final reduced costs are negative. Indeed, for every feasible point,
+\[
+ 2x+y=(4x+y)-2x\le25,
+\]
+with equality only at $(0,25)$. Thus the actual terminating run is
+\[
+ v_0\longrightarrow v_1\longrightarrow v_2\longrightarrow v_3,
+ \qquad\text{objective values }0,10,15,25.
+\]
+It has three pivots. Consequently any worst-case count covering this ordinary Dantzig simplex method is at least $3>2=\operatorname{diam}(P)$, disproving the asserted equality. In fact, for this objective the displayed run visits all four vertices, so its three pivots are maximal among strictly improving runs on this polytope.
+
+\textbf{Scope.} Both language versions expressly identify worst-case simplex steps with diameter, without restricting the pivot rule to an optimally chosen shortest route. Graph diameter concerns shortest undirected paths, whereas a pivot rule can take a longer improving path. This example addresses ordinary Dantzig simplex and refutes that equality; it does not assert that every pivot rule takes three steps, nor address the separate proposed monomial diameter bound.
+
+\textbf{Formal verification.} The accompanying Lean 4 project uses real coordinates, the actual halfspace feasible set, Mathlib's full extreme-point set, nonzero supporting functionals, and Mathlib's graph distance and diameter. It proves the complete vertex and edge classifications, dictionary identities for every equality-feasible vector, nonbasic-coordinate recovery, basis partitions, strict positivity of basic coordinates, objective reduced costs, unique entering and leaving variables, the complete feasible ray intervals, endpoint transitions, and terminal uniqueness. The three-pivot certificate and its graph walk have length strictly exceeding the computed diameter. All final theorem audits use only the standard logical axioms; no computational oracle, extra axiom, or omitted proof is used. Reproduction instructions and the pinned Mathlib revision are supplied in the package.
+\end{document}
