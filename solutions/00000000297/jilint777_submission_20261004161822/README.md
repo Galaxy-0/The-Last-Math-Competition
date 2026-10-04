@@ -76,7 +76,14 @@ shows only `propext`, `Classical.choice` and `Quot.sound`.
 
 **Scope.** The conjecture's definition fixes the setting to Wang tiles: edge-colored
 unit squares placed by translation only. Nothing is claimed about prototiles of
-general shape.
+general shape. (That is a different setting. Greenfeld–Tao, DCG 2023, give an aperiodic pair of
+translational tiles in Z²×G₀ with G₀ finite abelian.) Tiles are placed by translation only:
+`IsTiling` has no rotations.
+
+**Reading of "aperiodic".** "Aperiodic prototile set" is the standard term of art: the set tiles the plane
+and *every* tiling by it is non-periodic. A set that merely admits some non-periodic tiling is not
+aperiodic. For example, (n,e,s,w) = (0,1,0,1) and (0,2,0,2) force constant rows that can be stacked in
+any order. That loose reading is non-standard, and we set it aside.
 
 ## Reproduce
 

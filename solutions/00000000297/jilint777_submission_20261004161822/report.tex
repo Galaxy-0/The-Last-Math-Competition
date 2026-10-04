@@ -94,6 +94,13 @@ The conjecture's definition fixes the setting: Wang tiles, i.e.\ edge-colored un
 squares. We say nothing about general shapes (``prototiles'' that are polygons
 or other sets). That is a different question.
 
+``Aperiodic prototile set'' is the standard term of art (Gr\"unbaum--Shephard): the
+set tiles the plane, and every tiling by it is non-periodic. A set that merely
+\emph{admits} some non-periodic tiling is not aperiodic in this sense. For
+example, the tiles $A=(n,e,s,w)=(0,1,0,1)$ and $B=(0,2,0,2)$ force constant rows,
+but the rows can be stacked in any order, so non-periodic tilings exist. That loose
+reading would make (C1) true, and we set it aside as non-standard.
+
 \section{The theorem}
 \begin{theorem}\label{thm:main}
 Let $T$ be a set of at most two Wang tiles. If $T$ tiles the plane, then some
@@ -250,4 +257,12 @@ torus). Finally, it checks that the four patterns of the proof always suffice.
 Everything above is proved in Lean, for an arbitrary color type, with tile sets as
 lists of length at most $2$. The literature remark (Jeandel--Rao) is context
 only and is not used. We do not address prototiles that are general shapes.
+That setting is different. Greenfeld and Tao (\emph{Undecidable translational
+tilings with only two tiles, or one nonabelian tile}, Discrete Comput.\ Geom.\
+2023) construct an aperiodic pair of translational tiles in
+$\mathbb Z^2\times G_0$ with $G_0$ finite abelian. For a single translational
+tile of $\mathbb Z^2$, or a polygonal topological disk, periodicity is known
+(Bhattacharya; Girault-Beauquier--Nivat, Kenyon). The conjecture's own definition
+(``Wang tiles are unit squares tiled by matching edge colors only'') fixes the
+Wang setting, which is the one refuted here.
 \end{document}
