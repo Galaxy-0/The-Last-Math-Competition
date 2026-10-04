@@ -1,0 +1,43 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{Infinitely many multiple eigenvalues of a compact operator}
+\author{ziangni-sys}
+\date{Conjecture 00000008582}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result.} The claimed finiteness of the multiple-eigenvalue exceptions is false, even for a compact normal operator that is genuinely nonselfadjoint.
+
+\paragraph{The operator.}
+Let $H=\ell^2(\mathbb N;\mathbb C^2)$, with its usual complex Hilbert inner product, and let $P_n$ be the orthogonal projection onto the $n$th two-dimensional coordinate block. Put
+\[
+ \lambda_n=i\,2^{-n},\qquad
+ T=\sum_{n=0}^{\infty}\lambda_nP_n.
+\]
+Each $P_n$ has finite-dimensional range and norm one, and
+$\sum_n\|\lambda_nP_n\|=\sum_n2^{-n}<\infty$.
+The series therefore converges in operator norm to a bounded complex-linear operator. Every finite partial sum is compact, and the compact operators are closed in operator norm, so $T$ is compact. Concretely,
+\[
+ (Tx)_n=\lambda_n x_n\qquad (x\in H).
+\]
+This is an operator on the full infinite-dimensional Hilbert space, not merely a list of prescribed spectral values.
+
+\paragraph{Multiple eigenvalues.}
+Let $e_{n,1},e_{n,2}$ be the two standard coordinate vectors in block $n$. They are orthonormal and satisfy
+\[
+ Te_{n,1}=\lambda_ne_{n,1},\qquad
+ Te_{n,2}=\lambda_ne_{n,2}.
+\]
+Thus the eigenspace at $\lambda_n$ has dimension at least two. In particular its algebraic multiplicity is at least two as well, since the ordinary eigenspace is contained in the generalized eigenspace. The numbers $\lambda_n$ are nonzero and pairwise distinct: their norms $2^{-n}$ are strictly decreasing. Hence $T$ has infinitely many distinct nonzero multiple eigenvalues.
+
+\paragraph{Nonselfadjointness and scope.}
+For the unit vector $e=e_{0,1}$, $Te=ie$. With the inner product conjugate-linear in its first argument,
+\[
+ \langle Te,e\rangle=-i\ne i=\langle e,Te\rangle.
+\]
+Consequently $T$ is not selfadjoint. It happens to be normal; the source imposes no nonnormality requirement. Both source versions state a separate finite-exception law for multiple eigenvalues of compact nonselfadjoint operators. Our example refutes that law. It does not refute a claim that simple eigenvalues are generic in a specified topology, and it does not address the separate completeness implication. Compactness permits nonzero eigenvalues to accumulate at zero; it does not force only finitely many of them to have multiplicity greater than one.
+
+\paragraph{Formal verification.}
+The Lean project uses Mathlib's actual $\ell^2$ Hilbert sum, continuous linear coordinate maps, operator-norm summation, and compact-operator predicate. It proves convergence of the operator series, compactness, its action on every embedded coordinate block, linear independence of each displayed pair, injectivity and nonvanishing of the eigenvalue sequence, failure of the selfadjoint inner-product identity, and infinitude of the set of multiple eigenvalues. The predicate for a multiple eigenvalue explicitly requires two linearly independent eigenvectors, which already suffices to rule out algebraic simplicity.
+\end{document}
