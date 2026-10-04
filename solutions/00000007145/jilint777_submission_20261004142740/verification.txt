@@ -1,6 +1,4 @@
 == lake build (fresh, Lean 4.19.0)
-info: polytopeHamiltonicity: no previous manifest, creating one from scratch
-info: toolchain not updated; already up-to-date
 ℹ [2/3] Built Main
 info: ././././Main.lean:594:0: 'PolytopeHam.not_adj_of_cert' depends on axioms: [propext, Quot.sound]
 info: ././././Main.lean:595:0: 'PolytopeHam.no_hamCycle' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -35,5 +33,8 @@ ok   pyramid: cube vertices pairwise non-adjacent
 ok   pyramid: exhaustive DFS finds no Hamiltonian cycle
 ok   octahedron: 8 facets, 12 edges, Hamiltonian cycle [0, 1, 2, 3, 4, 5]
 ok   triakis octahedron (alternative): 14 vertices, 24 facets, 36 edges, non-Hamiltonian
+ok   triakis octahedron: all 24 facets are triangles (simplicial)
+ok   cuboctahedron: 12 vertices, 24 edges, 8 triangles + 6 squares
+ok   cuboctahedron: facet-adjacency graph is bipartite 8 + 6 with 24 edges, non-Hamiltonian
 ALL CHECKS PASSED
 exit 0

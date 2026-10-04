@@ -79,6 +79,29 @@ most $3$.
 facets) were meant, (B) still fails. Tutte's graph \cite{tutte} is cubic, planar
 and 3-connected. By Steinitz's theorem it is the graph of a simple 3-polytope, and
 it is not Hamiltonian. This reading is not formalized; we only cite it.
+\item \emph{Simplicial polytopes.} If only simplicial polytopes (all facets are
+simplices) were meant, (B) still fails in dimension $3$. The triakis octahedron
+\[T=\operatorname{conv}\{(\pm12,0,0),(0,\pm12,0),(0,0,\pm12),(\pm5,\pm5,\pm5)\}\]
+has
+$14$ vertices, $36$ edges and $24$ triangular facets. Its $8$ apexes
+$(\pm5,\pm5,\pm5)$ are pairwise non-adjacent and $8>14/2$, so by
+Lemma~\ref{lem:indep} its graph is not Hamiltonian. The script
+\texttt{verify.py} checks the facets, the edges, that every facet is a triangle, and
+non-Hamiltonicity by exhaustive search. This example is not formalized in Lean.
+\item \emph{Facet adjacency (dual graph).} If ``polytope graph'' meant the graph
+whose nodes are the facets, two facets being adjacent when they share a ridge, (B)
+still fails in dimension $3$. The cuboctahedron, the convex hull of all
+permutations of $(\pm1,\pm1,0)$, is the polar dual of
+the rhombic dodecahedron $R$ of Section~4. Its $8$ triangles and $6$ squares are its
+facets, and every edge lies on one triangle and one square. Its facet-adjacency
+graph is therefore the graph of $R$, which is not Hamiltonian
+(Theorem~\ref{thm:main}). \texttt{verify.py} computes this dual graph directly and
+checks that it is not Hamiltonian.
+\item \emph{Tautological reading.} One could read ``the examples'' as only the
+4-dimensional examples of the first clause. Then ``their minimal dimension is
+four'' is true by definition and says nothing beyond (A), and the minimality clause
+would be empty. So this cannot be the intended meaning. The meaningful reading, used
+throughout, takes the minimum over all polytopes with non-Hamiltonian graphs.
 \end{enumerate}
 
 \section{Definitions}\label{sec:defs}
@@ -288,7 +311,12 @@ and \texttt{Quot.sound}.
 vertices and integer functionals. This is enough for the disproof: integer
 polytopes are polytopes, so refuting ``all integer 3-polytopes are Hamiltonian''
 refutes ``all 3-polytopes are Hamiltonian''. By Lemma~\ref{lem:int} (proved here,
-not in Lean), the integer notions of vertex and edge agree with the real ones. The
+not in Lean), the integer notions of vertex and edge agree with the real ones.
+The disproof itself needs only the certificate lemma (\texttt{not\_adj\_of\_cert},
+Lemma~\ref{lem:cert}). Its proof holds verbatim for real functionals, so the Lean
+non-adjacency facts, and hence non-Hamiltonicity, carry over to real polytopes
+directly. Lemma~\ref{lem:int} is needed only to identify the $24$ positive edges
+of $R$ as real edges. The
 Hamiltonian-path reading (Remark~\ref{rem:path}) and the simple-polytope reading
 (Tutte) are argued in this report only; \texttt{verify.py} also checks the path
 statement by exhaustive search.
@@ -304,7 +332,9 @@ finds no Hamiltonian cycle and no Hamiltonian path. It re-checks every edge
 functional and every non-edge certificate of the Lean tables against the
 facet-computed graph. For the pyramid it confirms dimension $4$, $13$ facets,
 $38$ edges and no Hamiltonian cycle. It finds a Hamiltonian cycle in the octahedron
-(a positive control) and checks the triakis octahedron.
+(a positive control). It checks that the triakis octahedron is simplicial and
+non-Hamiltonian, and that the facet-adjacency graph of the cuboctahedron is not
+Hamiltonian.
 
 \section{Reproduction}
 \begin{verbatim}

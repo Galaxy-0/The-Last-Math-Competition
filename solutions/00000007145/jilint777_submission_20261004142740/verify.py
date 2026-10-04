@@ -6,7 +6,8 @@ from its FACETS.  Facets are found by brute force over all d-subsets of points
 (exact integer hyperplanes); the smallest face containing two vertices p, q is the
 intersection of all facets containing both, and {p, q} is an edge iff that
 intersection is exactly {p, q}.  Hamiltonicity is then decided by exhaustive
-depth-first search.  The Lean tables (edges with exposing functionals, non-edges
+depth-first search.  Extra readings: the simplicial triakis octahedron and the
+facet-adjacency (dual) graph of the cuboctahedron.  The Lean tables (edges with exposing functionals, non-edges
 with convex-combination certificates) are re-checked with exact arithmetic too.
 """
 from fractions import Fraction
@@ -190,6 +191,21 @@ Ft, vt, Et = graph(TO)
 ht, _ = hamiltonian(14, Et)
 check(len(vt) == 14 and len(Ft) == 24 and len(Et) == 36 and not ht,
       "triakis octahedron (alternative): 14 vertices, 24 facets, 36 edges, non-Hamiltonian")
+
+check(all(len(f) == 3 for f in Ft), "triakis octahedron: all 24 facets are triangles (simplicial)")
+
+# ---- facet-adjacency (dual) graph of the cuboctahedron
+CO = sorted({tuple(p[i] for i in perm) for p in product([1,-1],[1,-1],[0])
+             for perm in [(0,1,2),(0,2,1),(1,0,2),(1,2,0),(2,0,1),(2,1,0)]})
+Fc, vc, Ec = graph(CO)
+Fc = list(Fc)
+dualE = {(i, j) for i, j in combinations(range(len(Fc)), 2) if len(Fc[i] & Fc[j]) == 2}
+hc, _ = hamiltonian(len(Fc), dualE)
+sizes = sorted(len(f) for f in Fc)
+check(len(vc) == 12 and len(Ec) == 24 and sizes == [3]*8 + [4]*6,
+      "cuboctahedron: 12 vertices, 24 edges, 8 triangles + 6 squares")
+check(len(dualE) == 24 and all({len(Fc[i]), len(Fc[j])} == {3, 4} for i, j in dualE) and not hc,
+      "cuboctahedron: facet-adjacency graph is bipartite 8 + 6 with 24 edges, non-Hamiltonian")
 
 print("ALL CHECKS PASSED" if ok else "SOME CHECK FAILED")
 sys.exit(0 if ok else 1)

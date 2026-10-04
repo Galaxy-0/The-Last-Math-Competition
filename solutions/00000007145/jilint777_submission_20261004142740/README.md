@@ -23,6 +23,20 @@ Hamiltonian. The conjecture therefore fails exactly through its minimality claus
   The counterexample has dimension exactly 3, so it defeats every convention.
 - The example is not even traceable, so it also covers the Hamiltonian-path reading (report and `verify.py` only).
 - For simple polytopes, Tutte's graph gives a counterexample (cited in the report, not formalized).
+- **Simplicial polytopes.** The triakis octahedron conv{(±12,0,0),(0,±12,0),(0,0,±12),(±5,±5,±5)}
+  is a 3-polytope with 24 triangular facets. Its 8 apexes are pairwise non-adjacent and 8 > 14/2,
+  so its graph is not Hamiltonian. `verify.py` checks this; it is not in Lean.
+- **Facet adjacency (dual graph).** The cuboctahedron, conv of all permutations of (±1,±1,0), is the dual of R.
+  Its facet-adjacency graph is the graph of R, which is not Hamiltonian, so this reading also fails in
+  dimension 3. `verify.py` computes the dual graph directly.
+- **Tautological reading.** One could read "the examples" as only the 4-dimensional examples.
+  Then "their minimal dimension is four" holds by definition and the clause is empty, so this cannot be
+  the intended meaning. The meaningful reading takes the minimum over all polytopes with non-Hamiltonian graphs.
+
+Lean polytopes use integer coordinates and integer functionals. The disproof needs only the certificate
+lemma `not_adj_of_cert`, which holds verbatim for real functionals. The Lean non-adjacency facts, and hence
+non-Hamiltonicity, therefore carry over to real polytopes directly. The report's integer-functional
+lemma is needed only to identify the 24 positive edges.
 
 ## Contents
 
@@ -83,6 +97,10 @@ pdflatex report.tex && pdflatex report.tex
 每条棱都连接一个立方体顶点 (±1,±1,±1) 和一个坐标轴顶点。因此 8 个立方体顶点两两不相邻，而 8 > 14/2。
 在哈密顿圈中，每个立方体顶点的后继都是互不相同的坐标轴顶点，但坐标轴顶点只有 6 个，矛盾。所以 R 的图不是哈密顿图。
 由于二部图两部分大小为 8 和 6，它甚至没有哈密顿路。多边形的图都是哈密顿圈，所以真正的最小维数是 3，不是 4。
+其他解读同样不成立。对单纯多面体，三角化八面体 conv{(±12,0,0),(0,±12,0),(0,0,±12),(±5,±5,±5)} 有 24 个三角形面，且图非哈密顿。
+对面邻接图（对偶图），立方八面体的面邻接图就是 R 的图，同样非哈密顿。以上两点由 verify.py 检查。
+“例子”若只指四维例子，则最小维数为四是同义反复，这一条毫无内容，所以不可能是本意。有意义的读法是在所有图非哈密顿的多面体中取最小维数。
+非棱证书引理对实数泛函同样成立，因此 Lean 中的非相邻结论直接适用于实多面体。
 第一条是对的：R 上的棱锥是四维多面体，其图也不是哈密顿图。因此猜想恰好在“最小维数为四”这一条上不成立。
 
 Lean 部分（仅用核心库）从零定义了以下对象：整数向量、顶点（某个线性泛函的唯一最大点）、棱（某个线性泛函的最大点集恰为两点）、
