@@ -1,0 +1,35 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{Global differential solutions obstruct o-minimality}
+\author{ziangni-sys}
+\date{Conjecture 00000008034}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result.} No o-minimal expansion of the real field can contain the graphs of all global real solutions of polynomial differential equations. Thus the unrestricted DAE-closure required in the conjecture does not exist.
+
+\paragraph{Source scope.}
+Both versions ask for an o-minimal closure of solution sets of differential polynomial systems over $\mathbb R$, without a bounded-domain or nonoscillation restriction. Their explicit inclusion of solutions of $x'=x$ indicates that actual solution functions, and hence their graphs, are intended. We use this unrestricted global-solution interpretation. No assertion here concerns closures generated only by suitably restricted solutions.
+
+\paragraph{A polynomial differential equation.}
+The smooth function $y(t)=\sin t$, defined for every $t\in\mathbb R$, satisfies
+\[
+ y''+y=0,\qquad y(0)=0,\qquad y'(0)=1.
+\]
+The equation is polynomial in $y,y',y''$ with real coefficients. Equivalently it is the polynomial first-order system $y'=z$, $z'=-y$. Consequently the proposed closure must contain the graph
+\[
+ G=\{(t,\sin t):t\in\mathbb R\}.
+\]
+Intersection with the horizontal zero line and projection onto the first coordinate give the definable set
+\[
+ Z=\{t:\sin t=0\}=\pi\mathbb Z.
+\]
+This set is infinite. It contains no nondegenerate interval: if $n\pi<m\pi$ are two of its points, then $m\ge n+1$ and $(n+\tfrac12)\pi$ lies between them but has sine $(-1)^n\ne0$.
+
+\paragraph{Contradiction.}
+O-minimality requires each definable subset of $\mathbb R$ to be a finite union of points and intervals. More generally, suppose $Z$ were a finite union of order-connected subsets. Each such subset is contained in $Z$ and, by the preceding observation, has at most one point. Their finite union would therefore be finite, contrary to $\pi\mathbb Z$ being infinite. This rules out the proposed structure before its further counting and conservativity claims arise. Restricting the allowed differential solutions can change the question, but that is an additional hypothesis absent from the source.
+
+\paragraph{Formal verification.}
+The accompanying Lean proof uses the actual real sine function, its derivatives, and its integer-multiple zero characterization. It proves infinitude, the order-connected-subset obstruction, and the actual intersection/projection identity for $G$. The formal interface consists of unbundled unary and binary definable-set families closed under this zero-fiber operation. It proves that even these necessary closure axioms, together with the unary o-minimal condition, are incompatible with containing $G$. It does not claim to construct or import a full model-theoretic structure. Every o-minimal real-field expansion satisfies the necessary axioms used here.
+\end{document}
