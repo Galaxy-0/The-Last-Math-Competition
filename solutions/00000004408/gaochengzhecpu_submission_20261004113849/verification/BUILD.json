@@ -1,0 +1,157 @@
+{
+  "id": "00000004408",
+  "verified_at_utc": "2026-10-04T11:30:58.964132+00:00",
+  "clean_build_pass": true,
+  "commands": [
+    {
+      "command": [
+        "lake.exe",
+        "--version"
+      ],
+      "exit_code": 0,
+      "seconds": 0.047,
+      "log": "lean-version.log"
+    },
+    {
+      "command": [
+        "lake.exe",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 16.281,
+      "log": "lake-build.log"
+    },
+    {
+      "command": [
+        "lake.exe",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Main.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 17.454,
+      "log": "lean-axioms.log"
+    },
+    {
+      "command": [
+        "tectonic.exe",
+        "--keep-logs",
+        "main.tex"
+      ],
+      "exit_code": 0,
+      "seconds": 0.75,
+      "log": "pdf-build.log"
+    },
+    {
+      "command": [
+        "pdftoppm.exe",
+        "-scale-to",
+        "1500",
+        "-png",
+        "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\drafts\\00000004408\\main.pdf",
+        "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\qa\\00000004408\\fc6dd20b132e\\page"
+      ],
+      "exit_code": 0,
+      "seconds": 0.531,
+      "log": "pdf-render.log"
+    }
+  ],
+  "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "lean_source_sha256": {
+    "lake-manifest.json": "73b07f195166adb947eda67d2d79ecd3299057bd0bef71d57c3651c5022f2e09",
+    "lakefile.toml": "3151632159c1f353f08bd9a28d27d430ea6b705f7ff9b17ab1725b92dbf6e14f",
+    "lean-toolchain": "f28855f24b5253d7e8949f38027066a06cdde238520086d421ba7ad24c27a691",
+    "Main.lean": "3364850e098f68415a7a292ca04c149108816c0fb90f70d6e6fa86f8eae48b00"
+  },
+  "main_tex_sha256": "fc6dd20b132ed0cb098ba789260e05dce1610decd4b60afc960e68c1d6d29272",
+  "main_pdf_sha256": "a977ef1fa831f755dbeed6cc48e490eb3013da5204d31ccf9aa439340950388c",
+  "pdf_pages": 3,
+  "pdf_warnings": [],
+  "pdf_visual_review": "PASS",
+  "review_mode": "agent development with parent adversarial review; no external independent review",
+  "native_compiler": "unavailable: Unable to find standard directories for platform; existing Tectonic export used",
+  "rendered_images": [
+    "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\qa\\00000004408\\fc6dd20b132e\\page-1.png",
+    "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\qa\\00000004408\\fc6dd20b132e\\page-2.png",
+    "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\qa\\00000004408\\fc6dd20b132e\\page-3.png"
+  ],
+  "dependencies": [
+    {
+      "name": "mathlib",
+      "git_commit": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0"
+    },
+    {
+      "name": "plausible",
+      "git_commit": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\plausible"
+    },
+    {
+      "name": "LeanSearchClient",
+      "git_commit": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\LeanSearchClient"
+    },
+    {
+      "name": "importGraph",
+      "git_commit": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\importGraph"
+    },
+    {
+      "name": "proofwidgets",
+      "git_commit": "c4919189477c3221e6a204008998b0d724f49904",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\proofwidgets"
+    },
+    {
+      "name": "aesop",
+      "git_commit": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\aesop"
+    },
+    {
+      "name": "Qq",
+      "git_commit": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\Qq"
+    },
+    {
+      "name": "batteries",
+      "git_commit": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\batteries"
+    },
+    {
+      "name": "Cli",
+      "git_commit": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\Cli"
+    }
+  ],
+  "dependency_note": "Only official commit-pinned dependency artifacts were reused; this submission was built in a fresh directory without its own .lake build artifacts.",
+  "pdf_visual_reviewed_at_utc": "2026-10-04T11:32:27.741463+00:00",
+  "pdf_visual_review_details": {
+    "method": "All three final 1500-pixel PNG renderings opened with view_image and inspected by the author agent.",
+    "page_1": "PASS: title, abstract, statement, interval/product notation, graphon definition, and first lemma fit the page; no clipping or missing glyphs.",
+    "page_2": "PASS: both lemma proofs, pushforward/product-measure formulas, main contradiction, corollary, and scope paragraph are legible and correctly separated.",
+    "page_3": "PASS: commit and theorem identifiers stay within the margins; semantic bridge and source provenance text are fully visible.",
+    "scope": "Author visual review only; parent independent review and publication decision remain separate."
+  },
+  "source_byte_match": true,
+  "source_sha256": "5d88723e210e16717ee48dbab9b26b2bbd21a0daa1125e1a3a00080f19c234a8",
+  "pdf_engine_environment_messages": [
+    "Fontconfig error: Cannot load default config file: No such file: (null)",
+    "Fontconfig error: No writable cache directories",
+    "These environment messages did not prevent Tectonic exit code 0; the produced embedded-font PDF was rendered and every page inspected."
+  ],
+  "parent_review": "PASS",
+  "parent_review_at_utc": "2026-10-04T11:38:23.495155+00:00"
+}
