@@ -1,0 +1,83 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\newtheorem{proposition}{Proposition}
+\emergencystretch=2em
+\newcommand{\R}{\mathbb R}
+\title{A degenerate transportation vertex with disconnected support\\\large Disproof of Conjecture 00000006672}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The $2\times2$ transportation polytope with all row and column margins equal to one has the identity matrix as a vertex. Its positive-support graph consists of two disjoint edges and is not a spanning tree. This disproves the conjecture's first assertion without imposing any interpretation on its subsequent assertions. A Lean 4 proof uses Mathlib's real numbers, extreme-point set, and simple-graph tree predicate.
+\end{abstract}
+
+\section{Statement and interpretation}
+The English conjecture says: ``The polytope vertices are spanning trees'' and then makes assertions about nondegeneracy and counting. The Chinese statement specifies support trees. We therefore test the assertion that the support of every transportation-polytope vertex is a spanning tree. The statement includes no hypothesis that the polytope or the vertex is nondegenerate.
+
+For a nonnegative matrix $X=(x_{ij})$, its positive-support graph has a row vertex $r_i$ for each row, a column vertex $c_j$ for each column, and the edge $r_ic_j$ exactly when $x_{ij}>0$. All row and column vertices are retained. A spanning tree in this setting must in particular be connected on this entire vertex set. This is distinct from selecting a spanning-tree basis that includes variables with value zero.
+
+\section{The counterexample}
+Consider the ordinary real transportation polytope
+\[
+ P=\left\{X\in\R^{2\times2}:
+ x_{ij}\geq0,\quad
+ x_{i0}+x_{i1}=1\ (i=0,1),\quad
+ x_{0j}+x_{1j}=1\ (j=0,1)\right\}.
+\]
+Both supply margins and both demand margins are strictly positive, and their totals agree. In particular this is a balanced transportation linear program's feasible polytope. The cost vector can be chosen arbitrarily; it plays no role in its vertices. Set
+\[
+ D=\begin{pmatrix}1&0\\0&1\end{pmatrix}.
+\]
+The entries are nonnegative and every row and column sum is one, so $D\in P$.
+
+\begin{proposition}
+The matrix $D$ is an extreme point, hence a vertex, of $P$.
+\end{proposition}
+\begin{proof}
+Let $A,B\in P$ and let $s,t>0$ satisfy $s+t=1$ and
+$D=sA+tB$. At each off-diagonal position the equality reads
+\[
+ 0=s a_{01}+t b_{01},\qquad
+ 0=s a_{10}+t b_{10}.
+\]
+Each summand is nonnegative. Thus all four summands are zero, and the strict positivity of $s$ and $t$ implies
+$a_{01}=b_{01}=a_{10}=b_{10}=0$.
+The row sums of $A$ and $B$ are one, so all four diagonal entries equal one. Hence $A=B=D$. This is exactly the extreme-point condition for arbitrary real convex combinations, rather than a claim only about integral feasible matrices.
+\end{proof}
+
+\begin{proposition}
+The positive support of $D$ is not a spanning tree.
+\end{proposition}
+\begin{proof}
+Its full vertex set is $\{r_0,r_1,c_0,c_1\}$ and its edge set is
+\[
+ E(D)=\{r_0c_0,\ r_1c_1\}.
+\]
+Every edge preserves the subscript, so every walk preserves the subscript. Consequently no walk joins $r_0$ to $r_1$. The graph has two connected components, $\{r_0,c_0\}$ and $\{r_1,c_1\}$, and is disconnected. A spanning tree is connected, so this support is not a spanning tree.
+\end{proof}
+
+Together the propositions give a vertex of a real transportation polytope with strictly positive margins whose support is not a spanning tree. Therefore the first assertion of the conjecture, and hence the entire conjunction as written, is false.
+
+\section{Why a tree basis does not rescue the statement}
+The row and column equations here have rank three, while $D$ has only two positive entries; this is the familiar degenerate case. The distinction can also be seen without rank calculations: add the edge $r_0c_1$ to the two support edges. The resulting three-edge graph is a spanning tree of the complete bipartite graph $K_{2,2}$, but the corresponding entry of $D$ is zero. Thus it is possible to choose a tree basis representing $D$, while the actual positive support remains disconnected. Such an augmented basis is not the support graph asserted in the conjecture. Our disproof does not claim that a vertex cannot admit a tree basis, nor does it dispute the matrix-tree theorem. It needs only the false first clause.
+
+\section{Formal verification and reproducibility}
+The accompanying project pins Lean 4.19.0 and Mathlib tag \texttt{v4.19.0}, at commit \begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}\end{center}
+Its matrices are functions \texttt{Bool $\to$ Bool $\to$ $\R$}; \texttt{false} and \texttt{true} index $0$ and $1$. The definition \texttt{Transport.P} gives precisely the nonnegativity, row-sum, and column-sum constraints above.
+
+\texttt{diagonal\_extreme} proves membership in Mathlib's actual set
+\texttt{P.extremePoints $\R$}, whose open segments quantify over arbitrary positive real weights summing to one. The graph \texttt{support X} is a Mathlib \texttt{SimpleGraph} on \texttt{Sum Bool Bool}, with adjacency defined by positive entries across the two parts. The theorem \texttt{support\_walk\_preserves\_index} is proved by induction on Mathlib walks, and \texttt{support\_disconnected} rules out connectivity. Finally,
+\texttt{counterexample} proves
+\[
+ \exists X\in\operatorname{ext}_{\R}(P),\quad
+ \neg\operatorname{IsTree}(\operatorname{support}(X)),
+\]
+and \texttt{not\_all\_vertices\_have\_tree\_support} states the direct negation of the universal claim for this polytope.
+
+There are no custom axioms or admitted proofs. The printed axiom audit uses only the standard Lean foundations \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}. The README gives build commands and describes the verification logs. No numerical experiment or external computation is needed to establish the counterexample.
+\end{document}
