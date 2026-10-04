@@ -1,0 +1,41 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\newtheorem{proposition}{Proposition}
+\title{A unique positive completion with a missing central block}
+\author{ziangni-sys}
+\date{Conjecture 00000008590}
+\begin{document}
+\maketitle
+\noindent\textbf{Claim addressed.} The source asserts that the minimal positive completion is unique if and only if the missing block lies at a corner. We disprove the necessity direction for a fixed $3\times3$ block layout, using scalar blocks on the real Hilbert space $\mathbb R^3$. The example covers both minimum operator norm and minimality in Loewner order.
+
+\begin{proposition}
+For the partial operator matrix
+\[
+ P=\begin{pmatrix}0&0&0\\0&?&0\\0&0&0\end{pmatrix},
+\]
+the zero operator is the unique completion of minimum operator norm and the unique Loewner-minimal positive completion. The unspecified block is central and is not a corner.
+\end{proposition}
+\begin{proof}
+We use the standard Euclidean inner product, its orthonormal coordinate basis, and the induced operator norm. A positive operator here means a self-adjoint operator $T$ satisfying $\langle x,Tx\rangle\geq0$ for every $x$. Its matrix entries are $\langle e_i,Te_j\rangle$, and all entries except $(i,j)=(1,1)$, with indices $0,1,2$, must equal zero.
+
+The zero operator is a positive completion. Every operator has nonnegative norm, so the minimum completion norm is $0$. If a completion attains this norm, the norm's definiteness gives $T=0$. Thus the norm-minimizing completion is unique.
+
+For completeness, Loewner order is $S\preceq T$ if $\langle x,Sx\rangle\leq\langle x,Tx\rangle$ for every $x$. Every positive completion satisfies $0\preceq T$, so zero is a least positive completion. If $T$ is Loewner-minimal among these completions, the admissibility of zero implies $T\preceq0$. Positivity then yields
+\[
+ \langle x,Tx\rangle=0\qquad\text{for every }x.
+\]
+Self-adjointness and polarization imply $T=0$. Explicitly, evaluating the preceding identity at $x+Tx$ and expanding gives
+\[
+ 0=\langle x,Tx\rangle+\langle x,T(Tx)\rangle
+     +\langle Tx,Tx\rangle+\langle Tx,T(Tx)\rangle
+   =2\langle Tx,Tx\rangle.
+\]
+Hence $Tx=0$ for every $x$. Conversely zero is Loewner-minimal because it is least. This proves uniqueness under this interpretation as well.
+
+In the fixed layout, a corner has both row and column indices in $\{0,2\}$. The missing index $(1,1)$ satisfies neither endpoint condition. This contradicts the asserted necessity of a corner.
+\end{proof}
+
+\noindent\textbf{Scope and formalization.} All specified blocks are allowed to be zero; neither language imposes a nondegeneracy hypothesis. The block position is understood in the given layout, as required by a condition about corners. The other positive completions are $\operatorname{diag}(0,t,0)$ for $t\geq0$, although their classification is unnecessary for the proof. Lean uses actual continuous linear operators on \texttt{EuclideanSpace} $\mathbb R\,(\mathrm{Fin}\,3)$, actual inner-product matrix entries and operator norms. It proves zero's feasibility and leastness, and proves that every norm-minimal or Loewner-minimal feasible operator equals zero. The polarization calculation is also formalized. We do not address the source's other completion claims.
+\end{document}
