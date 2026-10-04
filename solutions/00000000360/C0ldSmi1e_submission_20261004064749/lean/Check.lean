@@ -1,0 +1,28 @@
+import Conjecture360
+
+#print Conjecture360.productAt
+#print Conjecture360.uniformDiagonalBound
+#print Conjecture360.uniformNonsingularDiagonalBound
+#print Conjecture360.optimalDiagonalConstant
+#print Conjecture360.claimedConstant
+#print Conjecture360.optimalityClaim
+#check Conjecture360.diagonal_det_ne_zero
+#check Conjecture360.diagonal_product_firstCoordinate
+#check Conjecture360.firstCoordinate_global_minimum
+#check Conjecture360.uniformDiagonalBound_iff
+#check Conjecture360.uniformNonsingularDiagonalBound_iff
+#check Conjecture360.zero_is_optimal
+#check Conjecture360.positive_improvement
+#check Conjecture360.not_optimalityClaim
+#check Conjecture360.conjecture360_disproof
+#print axioms Conjecture360.diagonal_det_ne_zero
+#print axioms Conjecture360.diagonal_product_firstCoordinate
+#print axioms Conjecture360.firstCoordinate_ne_zero
+#print axioms Conjecture360.firstCoordinate_global_minimum
+#print axioms Conjecture360.uniformDiagonalBound_iff
+#print axioms Conjecture360.uniformNonsingularDiagonalBound_iff
+#print axioms Conjecture360.zero_is_optimal
+#print axioms Conjecture360.claimedConstant_pos
+#print axioms Conjecture360.positive_improvement
+#print axioms Conjecture360.not_optimalityClaim
+#print axioms Conjecture360.conjecture360_disproof
