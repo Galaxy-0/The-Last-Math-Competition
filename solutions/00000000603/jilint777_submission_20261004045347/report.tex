@@ -77,8 +77,22 @@ F_0=0,\qquad F_1=1,\qquad F_{n+2}=F_n+z\,F_{n+1},\qquad F_n:=\nabla(L_n).
 \end{equation}
 These conditions determine every $F_n$. The $F_n$ are the Fibonacci polynomials.
 
+\paragraph{Conventions and topological inputs.} We take $\sigma_1$ to be a
+positive crossing, so $\sigma_1^{n+2}$ plays the role of $L_+$. The mirror
+convention would replace $F_n(z)$ by $F_n(-z)$. For odd $n$ the polynomial
+$F_n$ contains only even powers of $z$, so the knot polynomials do not change.
+The only topological facts used are standard:
+(i) $T(2,n)$ is the closure of $\sigma_1^{n}$ \cite{rolfsen};
+(ii) $\nabla$ is characterized by $\nabla(\text{unknot})=1$ and the skein
+relation, which force $\nabla=0$ on split links \cite{conway,kauffman};
+(iii) the conjecture's own definition identifies $P_K(1,z)$ with $\nabla_K(z)$.
+Uniqueness of the solution of \eqref{eq:skein} is proved, not assumed.
+As a second, independent route, we also use the classical Alexander
+polynomial of torus knots (below). Both routes are checked in Lean.
+
 \begin{lemma}\label{lem:closed}
-$F_n(z)=\sum_{j\ge 0}\binom{n-1-j}{j} z^{\,n-1-2j}$ for $n\ge1$. In particular,
+$F_n(z)=\sum_{j=0}^{\lfloor (n-1)/2\rfloor}\binom{n-1-j}{j} z^{\,n-1-2j}$ for $n\ge1$
+(equivalently, sum over all $j\ge0$ with the convention $\binom{m}{j}=0$ for $j>m$). In particular,
 for $n=2k+1$,
 \[
 \nabla_{T(2,2k+1)}(z)=\sum_{i=0}^{k}\binom{k+i}{2i}\,z^{2i}.
@@ -99,6 +113,16 @@ $\Delta_{T(p,q)}(t)=\frac{(t^{pq}-1)(t-1)}{(t^p-1)(t^q-1)}$, and
 $\nabla(t^{1/2}-t^{-1/2})=\Delta(t)$. The script \texttt{verify.py} derives the
 Conway polynomial from this formula and confirms that it agrees with
 \eqref{eq:skein} and Lemma~\ref{lem:closed} for all $T(2,n)$, $n\le 61$.
+For $p=2$ and odd $n$ the formula gives
+$\Delta_{T(2,n)}(t)=\frac{t^n+1}{t+1}=\sum_{j=0}^{n-1}(-t)^j$. Writing $t=s^2$ and
+clearing denominators, the relation $\nabla(s-s^{-1})=s^{-(n-1)}\Delta(s^2)$
+becomes the polynomial identity
+\[
+\sum_{i}[z^i]\nabla_{T(2,n)}\,(s^2-1)^i\,s^{\,n-1-i}=\sum_{j=0}^{n-1}(-1)^j s^{2j}.
+\]
+The Lean project proves this identity for $n=25$ and $n=61$ with the
+coefficients produced by the skein recursion (\texttt{alexander\_25},
+\texttt{alexander\_61}).
 
 \begin{table}[ht]
 \centering
@@ -114,7 +138,9 @@ $n$ & coefficients of $z^0,z^2,z^4,\dots$ in $\nabla_{T(2,n)}$ & peak index & $\
 \textbf{25} & 1, 78, 1001, 5005, 12870, \textbf{19448}, 18564, 11628, \dots & \textbf{5} & \textbf{6}\\
 \bottomrule
 \end{tabular}
-\caption{Even Conway coefficients of $T(2,n)$ and the predicted peak index.}
+\caption{Even Conway coefficients of $T(2,n)$ for selected $n$ and the
+predicted peak index. Reading (R2) holds for every odd $n\le 23$; for $n=21$ the
+maximum $3003$ is attained at indices 4 and 5 (a tie).}
 \label{tab:small}
 \end{table}
 
@@ -146,11 +172,13 @@ about $k/\sqrt5\approx 0.447\,k$. The predicted index is
 $\lfloor (n-1)/4\rfloor=\lfloor k/2\rfloor$, so the gap between them grows
 linearly in $k$. $T(2,25)$ and $T(3,13)$ (both of genus 12) are the
 smallest-genus torus knots that violate (R2), according to a survey of all
-$T(p,q)$ with $p<q\le 30$ in \texttt{verify.py}.
+$T(p,q)$ with $p<q\le 30$ in \texttt{verify.py}. This survey covers every torus
+knot of genus at most $12$, because $g=(p-1)(q-1)/2\le 12$ with $p\ge2$ forces
+$q\le 25$.
 
 \begin{theorem}\label{thm:61}
 For $T(2,61)$ we have $\lfloor 60/4\rfloor=15$. The unique largest coefficient of
-$\nabla_{T(2,61)}$ is $[z^{26}]=\binom{43}{26}=421171648758$, whereas
+$\nabla_{T(2,61)}$ (strictly larger than the coefficient of every other power of $z$) is $[z^{26}]=\binom{43}{26}=421171648758$, whereas
 $[z^{15}]=0$, $[z^{28}]=\binom{44}{28}=416714805914$ and
 $[z^{30}]=\binom{45}{30}=344867425584$. So the predicted position $15$ is not
 a peak under any of (R1), (R2), (R3).
@@ -164,8 +192,11 @@ exactly in Lean and in Python.
 \begin{remark}
 Reading (R3) happens to hold for $T(2,25)$ (position 6 is $z^{10}$). It
 already fails for $T(2,5)$, where position 1 is $z^0$ with coefficient
-$1<3$. It also fails for $T(2,61)$. The other clauses of the conjecture
-(nonnegativity, log-unimodality) are not needed: the conjecture is a
+$1<3$. It also fails for $T(2,61)$. Reading (R1) also conflicts with the
+conjecture's own clause ``no internal zeros'', since all odd coefficients vanish
+(already $\nabla_{T(2,3)}=1+0\cdot z+z^2$). This supports (R2) as the intended
+reading. The other clauses of the conjecture
+(nonnegativity, no internal zeros, log-unimodality) are not needed: the conjecture is a
 conjunction, and one false clause refutes it.
 \end{remark}
 
@@ -186,9 +217,14 @@ coefficient, with the reference lists \texttt{ref n} computed by the
 recursion. \texttt{ref\_skein}: the reference family satisfies the
 hypotheses, so they are consistent and the result is not vacuous.
 \item \texttt{ref\_25}: the full coefficient list of $\nabla_{T(2,25)}$.
-\texttt{ref\_61\_peak}: in $\nabla_{T(2,61)}$ the coefficient of $z^{26}$ is
-strictly larger than every other coefficient. Both are proved by kernel
-\texttt{decide}.
+\texttt{ref\_61\_unique\_peak}: in $\nabla_{T(2,61)}$ the coefficient of
+$z^{26}$ is strictly larger than the coefficient of every other power of $z$.
+\item \texttt{alexander\_25}, \texttt{alexander\_61}: the skein coefficients
+satisfy the Alexander--Conway identity above with
+$\Delta_{T(2,n)}(t)=\sum_{j<n}(-t)^j$, which is an independent cross-check.
+The numerical facts are proved by \texttt{decide}. \texttt{alexander\_61}
+uses \texttt{decide +kernel}, which is checked by the Lean kernel and is not
+\texttt{native\_decide}.
 \item \texttt{PeakClaim c pos}: the conjecture's peak clause for all $T(2,n)$
 ($n$ odd, $n\ge3$), with position $\lfloor (2-1)(n-1)/4\rfloor$ and the
 indexing convention \texttt{pos} $\in\{$(R1), (R2), (R3)$\}$.
@@ -199,7 +235,8 @@ the skein facts, \texttt{PeakClaim} fails under all three readings.
 \texttt{lake build} succeeds. There is no \texttt{sorry}, no
 \texttt{native\_decide}, and no added axioms. \texttt{\#print axioms} reports at
 most \texttt{propext} and \texttt{Quot.sound}. The coefficient computations
-\texttt{ref\_25} and \texttt{ref\_61\_peak} depend on no axioms at all.
+\texttt{ref\_25}, \texttt{ref\_61\_peak}, \texttt{alexander\_25} and
+\texttt{alexander\_61} depend on no axioms at all.
 
 \section{Reproduction}
 \begin{verbatim}

@@ -39,12 +39,16 @@ crossing: `F₀ = 0` (2-component unlink), `F₁ = 1` (unknot), and
 `ConwaySkein c` states the three skein facts above for a family of
 polynomials in `z`, given as coefficient functions. `skein_unique` proves
 that these facts determine every coefficient. `ref_skein` proves that they
-are consistent. `ref_25` and `ref_61_peak` compute the coefficients with
-kernel `decide`. `conjecture_00000000603_false` proves that the peak clause
-`PeakClaim` fails for all `T(2,n)` under all three readings.
+are consistent. `ref_25` and `ref_61_unique_peak` compute the coefficients with
+`decide`. `alexander_25` and `alexander_61` cross-check the skein coefficients
+against the classical Alexander polynomial `Δ_{T(2,n)}(t) = Σ_{j<n} (−t)^j`
+through the identity `∇(s − s⁻¹) = s^{−(n−1)} Δ(s²)`. `alexander_61` uses
+`decide +kernel`, which is checked by the kernel and is not `native_decide`.
+`conjecture_00000000603_false` proves that the peak clause `PeakClaim` fails for all `T(2,n)` under all three readings.
 
-The project has no `sorry`, no `native_decide`, and no added axioms. `#print axioms` shows only
-`propext` and `Quot.sound`, and the coefficient computations use no axioms.
+The project has no `sorry`, no `native_decide`, and no added axioms.
+`#print axioms` shows only `propext` and `Quot.sound`. `ref_25`,
+`alexander_25` and `alexander_61` use no axioms at all.
 
 ## Reproduce
 

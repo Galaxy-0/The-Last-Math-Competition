@@ -1,11 +1,11 @@
 """Independent checks for conjecture 00000000603 (Python 3 standard library).
 
-Three independent routes to the Conway polynomial of the torus knot T(2,n):
+Three routes to the Conway polynomial of the torus knot T(2,n):
   1. the skein recursion for closures of the 2-braids s1^n,
   2. the Alexander polynomial of T(p,q),
          Delta(t) = (t^{pq}-1)(t-1) / ((t^p-1)(t^q-1)),
      converted to Conway form via z^2 = t + 1/t - 2,
-  3. the closed form [z^{2j}] = C(k+j, 2j) for n = 2k+1.
+  3. the closed form [z^{2j}] = C(k+j, 2j) for n = 2k+1 (Fibonacci polynomials).
 Then the peak position is compared with floor((p-1)(q-1)/4).
 """
 

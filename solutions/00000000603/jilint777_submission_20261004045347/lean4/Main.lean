@@ -151,6 +151,55 @@ other coefficient. -/
 theorem ref_61_peak : ∀ k, k < 70 → k ≠ 26 → coeff (ref 61) k < coeff (ref 61) 26 := by
   decide
 
+theorem ref_61_length : (ref 61).length = 61 := by decide
+
+/-- The coefficient of `z²⁶` in `∇(T(2,61))` is strictly larger than every
+other coefficient (beyond degree 60 all coefficients vanish). -/
+theorem ref_61_unique_peak : ∀ k, k ≠ 26 → coeff (ref 61) k < coeff (ref 61) 26 := by
+  intro k hk
+  by_cases hlt : k < 70
+  · exact ref_61_peak k hlt hk
+  · have hz : coeff (ref 61) k = 0 := by
+      have hn : (ref 61)[k]? = none := by
+        rw [List.getElem?_eq_none_iff, ref_61_length]; omega
+      simp [coeff, hn]
+    rw [hz]; decide
+
+/-! ## Cross-check with the Alexander polynomial
+
+Independently of the skein recursion, the Alexander polynomial of the torus knot
+`T(2,n)` (`n` odd) is `Δ(t) = (t^{2n}-1)(t-1)/((t^2-1)(t^n-1)) = (t^n+1)/(t+1)
+= 1 - t + t² - ⋯ + t^{n-1}` (up to units), and Conway's normalization is
+`∇(s - s⁻¹) = s^{-(n-1)} Δ(s²)`.  Clearing denominators, this says
+`Σᵢ aᵢ (s²-1)ⁱ s^{n-1-i} = Σⱼ (-1)ʲ s^{2j}`, where `aᵢ = [zⁱ] ∇`.
+We check this polynomial identity in `s` for `n = 25` and `n = 61`. -/
+
+/-- Product of coefficient lists. -/
+def mulL : List Int → List Int → List Int
+  | [], _ => []
+  | a :: l, m => addL (m.map (a * ·)) (0 :: mulL l m)
+
+/-- `s^k` as a coefficient list. -/
+def monoL (k : Nat) : List Int := List.replicate k 0 ++ [1]
+
+/-- `Σᵢ aᵢ (s²-1)ⁱ s^{d-i}` for a coefficient list `a` (with `d = n - 1`). -/
+def conwayToS (a : List Int) (d : Nat) : List Int :=
+  (go a 0 [1]).reverse.dropWhile (· == 0) |>.reverse
+where
+  go : List Int → Nat → List Int → List Int
+    | [], _, _ => []
+    | x :: l, i, pw =>
+      addL ((mulL pw (monoL (d - i))).map (x * ·)) (go l (i + 1) (mulL pw [-1, 0, 1]))
+
+/-- `Σ_{j<n} (-1)ʲ s^{2j}`, the Alexander polynomial of `T(2,n)` in `s = t^{1/2}`. -/
+def alexanderS (n : Nat) : List Int :=
+  (List.range (2 * n - 1)).map fun k =>
+    if k % 2 = 1 then 0 else if (k / 2) % 2 = 0 then 1 else -1
+
+theorem alexander_25 : conwayToS (ref 25) 24 = alexanderS 25 := by decide
+/-- Checked by kernel reduction (`decide +kernel`). -/
+theorem alexander_61 : conwayToS (ref 61) 60 = alexanderS 61 := by decide +kernel
+
 /-! ## The conjecture's peak clause and its refutation -/
 
 /-- Position `⌊(p-1)(q-1)/4⌋` for `T(p,q)`. -/
@@ -213,6 +262,9 @@ end TorusConway
 #print axioms TorusConway.ref_skein
 #print axioms TorusConway.ref_25
 #print axioms TorusConway.ref_61_peak
+#print axioms TorusConway.ref_61_unique_peak
+#print axioms TorusConway.alexander_25
+#print axioms TorusConway.alexander_61
 #print axioms TorusConway.T_2_25_counterexample
 #print axioms TorusConway.T_2_61_counterexample
 #print axioms TorusConway.conjecture_00000000603_false
