@@ -1,0 +1,82 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\title{Divergent Douglas--Rachford iterations on the real line}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Disproof of conjecture 00000008831.}
+The assertion that Douglas--Rachford sequences for general monotone operators always converge weakly is false. A pair of full-domain maximal monotone operators produces a translation, whose iterates do not converge weakly. Both the source's composition of reflections and the usual averaged Douglas--Rachford convention are covered.
+
+\paragraph{Original scope.}
+Both language versions define the iteration by two reflections and assert weak convergence for general monotone operators. No hypothesis that the sum has a zero, or that the inclusion is feasible, is stated. Our example has no zero of the sum; this absence is explicit and is the reason that the unqualified convergence assertion fails. We do not dispute convergence theorems that impose appropriate feasibility hypotheses, nor address the source's further conditional rate and cyclic-repair assertions.
+
+\paragraph{Actual maximal monotone operators.}
+On the standard real Hilbert space $H=\mathbb R$, set
+\[
+ A(x)=\{0\},\qquad B(x)=\{1\}\qquad(x\in\mathbb R).
+\]
+For any real $c$, the constant operator $C_c(x)=\{c\}$ has graph
+$G_c=\{(x,c):x\in\mathbb R\}$ and is monotone, since
+$\langle x-y,c-c\rangle=0$.
+It is maximal under graph inclusion. Indeed, if a monotone graph $K$ contains $G_c$ and $(p,q)\in K$, then comparison with $(p-1,c)$ and $(p+1,c)$ gives
+\[
+ q-c\geq0,\qquad -(q-c)\geq0.
+\]
+Thus $q=c$ and $K=G_c$. This proves maximality against every monotone extension, for both $A$ and $B$. The sum $A(x)+B(x)=\{1\}$ never contains zero.
+
+\paragraph{Genuine resolvents and reflected resolvents.}
+Choose the positive resolvent parameter $\lambda=1$.
+The resolvent $J_c=(I+C_c)^{-1}$ is characterized by
+\[
+ x\in y+C_c(y)\quad\Longleftrightarrow\quad x=y+c
+ \quad\Longleftrightarrow\quad y=x-c.
+\]
+It therefore exists uniquely for every input and equals $J_c(x)=x-c$.
+The actual reflected resolvent is
+\[
+ R_c(x)=2J_c(x)-x=x-2c.
+\]
+Consequently $R_A=R_0=I$, $R_B=R_1:x\mapsto x-2$, and both composition orders give the same map
+\[
+ T=R_B R_A=R_A R_B,\qquad T(x)=x-2.
+\]
+The usual averaged Douglas--Rachford map is
+\[
+ D=\tfrac12(I+T),\qquad D(x)=x-1.
+\]
+These are derived from the actual resolvent equations, rather than chosen as unrelated translation maps.
+\paragraph{All iterates and failure of weak convergence.}
+Induction gives, for every initial point $x\in\mathbb R$ and $n\geq0$,
+\[
+ T^n(x)=x-2n,\qquad D^n(x)=x-n.
+\]
+Neither sequence converges weakly. The continuous linear functional
+$\ell=\operatorname{id}_{\mathbb R}$ would turn any weak limit into an ordinary real limit of the same scalar sequence. A convergent real sequence $u_n\to a$ necessarily satisfies
+$u_{n+1}-u_n\to a-a=0$.
+Here the difference is constantly $-2$ for $T$ and constantly $-1$ for $D$, contradicting uniqueness of limits. Thus every starting point yields a divergent orbit under either convention. One can in particular take $x=0$.
+
+\paragraph{What is refuted.}
+The example consists of genuine maximal monotone operators with full domain and genuine uniquely defined resolvents. The two reflection maps are themselves isometries, so reflection existence or discontinuity cannot explain the failure. The counterexample refutes the literal universal weak-convergence conjunct. The displayed inclusion for $A+B$ is infeasible, which is allowed by the original statement. Adding a feasibility assumption would change that statement.
+
+\paragraph{Lean correspondence.}
+The pinned project formalizes the standard real Hilbert inner product and the following actual objects and results:
+\begin{itemize}
+\item \texttt{MonotoneGraph}, \texttt{MaximalMonotoneGraph}, and \texttt{constant\_maximal}: the graph inequality and maximality against arbitrary extensions for every real constant.
+\item \texttt{ResolventEquation}, \texttt{resolvent\_equation}, and \texttt{unique\_resolvent}: membership in $y+C_c(y)$ and its unique solution for every $c,x$.
+\item \texttt{reflectedResolvent}, \texttt{dr}, \texttt{reverseDR}, and \texttt{averagedDR}: the actual reflection and both composition orders, together with the standard averaging.
+\item \texttt{dr\_iterate} and \texttt{averaged\_iterate}: the full iterate formulas for every $n$ and initial point.
+\item \texttt{WeaklyConverges}: convergence under every real continuous linear functional, the usual weak-convergence criterion.
+\item \texttt{constant\_decrement\_not\_weak}: identity-functional testing, convergence of the shifted sequence, subtraction of limits, and contradiction with a nonzero constant decrement.
+\item \texttt{no\_zero} and \texttt{counterexample}: explicit infeasibility and maximal monotone hypotheses together with nonconvergence under both iteration conventions.
+\end{itemize}
+
+\paragraph{Reproduction.}
+The project uses Lean 4.19.0 and Mathlib commit
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+From \texttt{lean/}, run \texttt{lake build} and then
+\texttt{lake env lean -DwarningAsError=true Main.lean}.
+The dependency audits use only standard logical axioms. No admitted proof, custom axiom, native decision procedure, or external numerical computation is used.
+\end{document}
