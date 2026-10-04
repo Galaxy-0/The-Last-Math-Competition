@@ -1,0 +1,50 @@
+Verification of packaged submission 00000000310
+Fresh local project build using the pinned Mathlib dependency cache.
+
+$ lean --version
+Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)
+exit code: 0
+
+$ lake build
+✔ [2799/2800] Built Conjecture310
+Build completed successfully.
+exit code: 0
+
+$ lake env lean -DwarningAsError=true Conjecture310.lean
+
+exit code: 0
+
+$ lake env lean Check.lean
+'Conjecture310.perpendicular_unit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture310.perpendicular_unit_zero_distance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture310.badAbs_eq_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture310.dimH_badAbs_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture310.dimH_badAbs_ne_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture310.badAbs_inter_eq_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture310.dimH_badAbs_inter_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit code: 0
+
+Submission source checks
+Exact packaged Lean sources/configuration match the freshly checked copy.
+No sorry, admit, native_decide, custom axiom declarations, unsafe, implemented_by, extern, or skipKernelTC occur in submitted Lean sources.
+Pinned bilingual conjecture copy matches repository source byte for byte.
+
+Report checks
+Desktop LaTeX editor compiler: success for the final source.
+Tectonic 0.17.0: PDF export exit code 0.
+PDF: 3 A4 pages; every page rendered and visually inspected.
+No clipped text, missing mathematical symbols, or overlapping elements observed.
+
+Pinned versions
+Lean: leanprover/lean4:v4.19.0
+Mathlib: v4.19.0, c44e0c8ee63ca166450922a373c7409c5d26b00b
+
+Artifact SHA-256
+869e955402ce0f0f584db1d2f856d650d181532aaad96578c6ee82eede961540  main.tex
+882c3fbeb0624e8e3e6b98611b5d7893c5d0495f0b62297458838138382cc1bf  main.pdf
+d3b386edd469b2a2af7699b68f23218b1d2500504e40337b00c67374b02db4e4  lean/Conjecture310.lean
+c17989f4cac51eac62d89b527cad3008540a56cb436703a6df52a7519bb224da  lean/Check.lean
+06fb806ab1dd3894984a60e328ee114cfdb197227389a32d26640df6cd4a46d2  lean/lakefile.toml
+4d9db48973a74e537223bc96d245647765016acfd96017d3f92d03b007a58d09  lean/lake-manifest.json
+55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea  lean/lean-toolchain
+951f5e3d129634cf52f974b2965a5db06605dc42750ed34e0789184f9540c338  conjecture.md

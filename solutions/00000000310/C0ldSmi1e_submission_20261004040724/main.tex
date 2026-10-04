@@ -1,0 +1,103 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Bad}{\mathrm{Bad}^{\mathrm{abs}}}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\title{Conjecture 00000000310 is false:\\the stated projection condition defines the empty set}
+\author{C0ldSmi1e\thanks{Prepared with Codex assistance. The accompanying Lean project provides machine-checked verification of the stated formal results.}}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Conjecture 00000000310 requires a point of the Euclidean plane to have a badly approximable projection in every unit direction, and asserts that the resulting set has Hausdorff dimension two. Every point has a perpendicular unit direction, in which its projection is zero. The required positive Diophantine lower bound fails in that direction at every positive denominator. Hence the set is empty and has Hausdorff dimension zero. We give the complete argument and a Lean formalization using Euclidean space, distance to the integers, and Mathlib's Hausdorff dimension.
+\end{abstract}
+
+\section{The statement and its interpretation}
+The English statement in the repository reads:
+\begin{quote}
+Definition: The absolutely badly approximable set $\Bad$ consists of those $x\in\R^2$ for which, uniformly over all unit vectors $e\in S^1$, there exists $c(e)>0$ with $\|q(e\cdot x)\|>c(e)/q$. Conjecture: $\Bad$ has Hausdorff dimension 2 (full), and it is absolute winning, so its intersection with any full-dimensional Cantor set remains full-dimensional.
+\end{quote}
+The Chinese version also requires all unit directions. We use the Euclidean norm $\|\cdot\|_2$ for vectors and, to avoid confusion with it, write
+\[
+ \delta(t):=\operatorname{dist}(t,\Z)=\inf_{m\in\Z}|t-m|
+ \qquad(t\in\R)
+\]
+for the real-valued nearest-integer distance. In particular, $\delta(0)=0$.
+
+With the usual positive-integer denominator convention, the set in the statement is
+\[
+ \Bad=\left\{x\in\R^2:\ \forall e\in\R^2,\quad
+ \|e\|_2=1\ \Longrightarrow\ \exists c>0\ \forall q\in\N_{>0},\quad
+ \delta\bigl(q\ip{e}{x}\bigr)>\frac{c}{q}\right\}.
+\]
+This allows the positive constant to depend on the direction, as the notation $c(e)$ indicates. Requiring one common constant for all directions would be stronger, so emptiness under this weaker reading also refutes the common-constant reading.
+
+\section{A perpendicular direction excludes every point}
+\begin{theorem}\label{thm:perp}
+For every $x\in\R^2$ there is a unit vector $e\in\R^2$ such that $\ip{e}{x}=0$. For that direction, every real $q>0$ and $c>0$ satisfy
+\[
+ \delta\bigl(q\ip{e}{x}\bigr)=0<\frac{c}{q}.
+\]
+\end{theorem}
+\begin{proof}
+If $x=0$, take $e=(1,0)$. Otherwise write $x=(x_1,x_2)$, put $r=\sqrt{x_1^2+x_2^2}>0$, and take
+\[
+ e=\frac{1}{r}(-x_2,x_1).
+\]
+Then
+\[
+ \|e\|_2^2=\frac{x_2^2+x_1^2}{r^2}=1,
+ \qquad
+ \ip{e}{x}=\frac{-x_2x_1+x_1x_2}{r}=0.
+\]
+Consequently $q\ip{e}{x}=0$ for every $q$, its distance to the integers is zero, and $c/q>0$ when $c,q>0$.
+\end{proof}
+
+\begin{corollary}\label{cor:empty}
+$\Bad=\varnothing$.
+\end{corollary}
+\begin{proof}
+Suppose $x\in\Bad$. Choose the perpendicular unit direction supplied by Theorem~\ref{thm:perp}. Membership supplies a positive constant $c$ for that direction. At the allowed denominator $q=1$, membership requires $\delta(\ip{e}{x})>c$, whereas the theorem gives $\delta(\ip{e}{x})=0$. This contradicts $c>0$.
+\end{proof}
+
+\begin{corollary}\label{cor:dimension}
+$\dim_H\Bad=0$, and in particular $\dim_H\Bad\ne2$. Thus Conjecture 00000000310 is false.
+\end{corollary}
+\begin{proof}
+Apply Corollary~\ref{cor:empty} and the standard convention $\dim_H\varnothing=0$, which is also Mathlib's convention. The conjecture includes the assertion $\dim_H\Bad=2$ as a conjunct, so its negation disproves the stated conjecture.
+\end{proof}
+
+The direction above may depend on $x$: that is exactly the witness needed to contradict the requirement that every unit direction work for that point. The obstruction persists if the bound is required only for sufficiently large denominators, or for infinitely many denominators, since it fails for every positive denominator. Replacing the strict lower bound by a non-strict positive lower bound does not repair it. Restricting the directions to almost every direction would change the conjecture and is not the statement being refuted.
+
+\section{Formalization and correspondence}
+The accompanying project uses Lean 4.19.0 and Mathlib v4.19.0. Its ambient type is \texttt{EuclideanSpace} $\R$ \texttt{(Fin 2)}, equipped with its Euclidean inner product and norm. The nearest-integer distance is \texttt{Metric.infDist} from a real number to the range of the integer-to-real cast. These are the actual geometric and metric objects used above.
+
+The source defines the direction-dependent projection condition with positive natural denominators. It proves a unit perpendicular witness for each point, proves that the defined set is empty, and concludes both that its Hausdorff dimension is zero and that its dimension is not two. The final dimension statement uses Mathlib's \texttt{dimH}; no substitute notion of dimension is introduced. The empty-set identity also settles the stronger common-constant reading. Since the dimension assertion already fails, no formalization of the absolute-winning game is needed to refute the conjunction in the source.
+
+The project includes an axiom audit for its principal theorems. The proof introduces no custom axioms and uses no admitted proofs or native evaluation tactic. The report and formal source address the same universal-direction definition.
+
+\section{Reproduction and source}
+From the submission's \texttt{lean/} directory, with the pinned toolchain installed, run:
+\begin{verbatim}
+lake exe cache get
+lake build
+lake env lean -DwarningAsError=true Conjecture310.lean
+lake env lean Check.lean
+\end{verbatim}
+These commands build the project, replay its source with warnings treated as errors, and print the axiom dependencies. See \texttt{README.md} and \texttt{verification.txt} for the final verification commands and recorded results. No numerical search is needed for this universal geometric argument. Compile this report with \texttt{tectonic main.tex}, or a standard LaTeX distribution.
+
+The authoritative bilingual source is preserved in \texttt{conjecture.md} and is available at the pinned repository revision:
+\begin{quote}\small
+\url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/6ad05f1490626b518d19ad5c5603419f7a021d30/conjectures/00000000310.md}
+\end{quote}
+The Hausdorff-dimension result used by the formal proof is documented in Mathlib's \texttt{Topology/MetricSpace/HausdorffDimension.lean}.
+\end{document}
