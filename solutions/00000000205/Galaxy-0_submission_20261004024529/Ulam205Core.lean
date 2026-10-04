@@ -244,6 +244,47 @@ theorem sequence_unbounded (n : Nat) (hn : 2 ≤ n) :
   intro B
   exact ⟨B, by have h := index_lower_bound n hn B; omega⟩
 
+/-- Membership in the full infinite range, not a truncated state. -/
+def InSequence (n : Nat) (hn : 2 ≤ n) (x : Nat) : Prop :=
+  ∃ i, sequence n hn i = x
+
+/-- Every full-range value below a term already belongs to its earlier prefix. -/
+theorem range_below_is_earlier (n : Nat) (hn : 2 ≤ n) (k x : Nat)
+    (hx : InSequence n hn x) (hlt : x < sequence n hn k) :
+    Earlier (sequence n hn) k x := by
+  obtain ⟨i, hi⟩ := hx
+  refine ⟨i, ?_, hi⟩
+  by_cases h : i < k
+  · exact h
+  apply False.elim
+  have hki : k ≤ i := by omega
+  by_cases he : k = i
+  · subst i
+    omega
+  · have hs := sequence_strictMono n hn k i (by omega)
+    omega
+
+/-- Each selected non-seed term has exactly one distinct-pair representation
+    even when all values in the final infinite sequence are allowed. -/
+theorem sequence_global_uniqueSum (n : Nat) (hn : 2 ≤ n) (r : Nat) :
+    UniqueSum (InSequence n hn) (sequence n hn (r + 2)) := by
+  obtain ⟨a, b, hab, ha, hb, hsum, huniq⟩ :=
+    (sequence_isUlam n hn).2.2 r |>.2.1
+  have lift : ∀ x, Earlier (sequence n hn) (r + 2) x → InSequence n hn x := by
+    rintro x ⟨i, _, hi⟩
+    exact ⟨i, hi⟩
+  refine ⟨a, b, hab, lift a ha, lift b hb, hsum, ?_⟩
+  intro c d hcd hc hd hsum'
+  have pos : ∀ x, InSequence n hn x → 0 < x := by
+    rintro x ⟨i, hi⟩
+    have hp := index_lower_bound n hn i
+    omega
+  have hcpos := pos c hc
+  have hdpos := pos d hd
+  exact huniq c d hcd
+    (range_below_is_earlier n hn (r + 2) c hc (by omega))
+    (range_below_is_earlier n hn (r + 2) d hd (by omega)) hsum'
+
 /-- A finite-list bound, used to state infinitude without a set library. -/
 def listBound : List Nat → Nat
   | [] => 0
@@ -360,6 +401,7 @@ theorem conjecture_00000000205 (n : Nat) (hn : 2 ≤ n) :
   exact ⟨sequence n hn, sequence_isUlam n hn, sequence_strictMono n hn,
     sequence_infinite n hn, exponential_upper_bound n hn, counting_lower_bound n hn⟩
 
+#print axioms sequence_global_uniqueSum
 #print axioms conjecture205
 #print axioms counting_lower_bound
 #print axioms sequence_unique

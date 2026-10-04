@@ -94,3 +94,25 @@ The repository adds the phrase “the infinitude is settled by density
 estimates.” The formally verified quantitative content here is precisely the
 logarithmic counting bound above. If its authors intend a stronger positive
 density theorem, that stronger statement is not established by this package.
+
+## 全局唯一表示 / Full-range uniqueness
+
+对每一个非初始项 a_k（k≥3），若完整序列中的两个正数之和等于 a_k，
+则它们都小于 a_k，故严格递增性保证它们都是较早项。因此在所有完整序列
+元素中计算表示，与在此前缀中计算完全相同；恰有一个不同元素的无序对。
+两个给定初始项不受这一表示条件约束。Lean 定理 sequence_global_uniqueSum
+明确证明这一结论，无需增加假设。候选见证 S+M 不一定被选中，也不要求
+它在后续步骤保持唯一表示。
+
+For every non-seed term a_k (k≥3), any two full-range values summing to a_k
+are positive and individually smaller than a_k. They therefore occur earlier.
+The full-range and earlier-term representations of a selected term coincide.
+The added Lean theorem sequence_global_uniqueSum proves this fact without new
+hypotheses. The two seeds are prescribed exceptions. An unused witness S+M
+need not retain uniqueness after further terms are added.
+
+Clément and Steinerberger (2025), *Small gaps in the Ulam sequence*, §1.2,
+p. 942 (PDF p. 3), explicitly confirm classical infinitude by the same
+two-largest-terms argument. Thus infinitude itself is established; this does
+not resolve stronger density questions.
+https://comptes-rendus.academie-sciences.fr/mathematique/item/10.5802/crmath.746.pdf#page=3

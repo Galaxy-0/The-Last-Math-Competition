@@ -28,7 +28,7 @@ density assertion is intended, that assertion is outside this submission.
 ## Files
 
 - `report.tex`: complete LaTeX report
-- `report.pdf`: four-page PDF compiled from that source
+- `report.pdf`: PDF compiled from that source
 - `Ulam205Core.lean`: complete dependency-free Lean 4 formalization
 - `lakefile.lean`, `lake-manifest.json`, `lean-toolchain`: Lean project setup
 - `proof.zh-en.md`: bilingual proof and scope explanation
@@ -53,9 +53,9 @@ empty external dependency list; no Mathlib download is required. The compiler
 binary and build cache are not bundled.
 
 Both commands completed with exit code 0 in the prepared submission directory.
-The final Lean source is unchanged from the independently checked version:
+The revised Lean source includes full-range representation uniqueness:
 
-    ddbc155f051e41efb27b719b3d08df58d1f33836d8e7f13bd551718863f0a887
+    af01fea811078f152350626d21498d72935961a7de011874a88e2aecd154382d
 
 The axiom audit reports only `propext`, `Classical.choice`, and `Quot.sound`
 for the main theorem. Uniqueness uses `propext` and `Quot.sound`. There are no
@@ -81,6 +81,8 @@ All declarations are in namespace `Ulam205Core`.
   Ulam rule, strict increase, infinite range, the growth bound, and the finite
   injective counting statement.
 - `sequence_unique`: any two sequences satisfying `IsUlam n` are equal.
+- `sequence_global_uniqueSum`: exactly one representation using the entire final
+  range for every non-seed term, with no extra hypotheses.
 - `stage_mem_iff`: each state contains exactly the earlier sequence values.
 - `counting_lower_bound`: an injection from `Fin (r + 2)` into Ulam values at
   most `n * 2^r`.
@@ -100,3 +102,20 @@ The source archive is a prepared submission; publication and acceptance are
 separate events. Recheck the problem's status immediately before opening a PR.
 
 Rules: https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/6ad05f1490626b518d19ad5c5603419f7a021d30/README.md
+
+## Review clarification (4 October 2026)
+
+The original core already quantifies over all distinct earlier pairs and proves
+next-term existence and least choice at every stage. The added full-range theorem
+makes explicit that later positive terms cannot create a representation of an
+already selected term. The seeds remain prescribed exceptions. A temporary
+existence witness need not remain unique later; it need not be selected.
+
+Clément and Steinerberger, *Small gaps in the Ulam sequence* (2025), §1.2,
+p. 942 (PDF p. 3), explicitly give known classical infinitude and the same
+two-largest-terms argument:
+https://comptes-rendus.academie-sciences.fr/mathematique/item/10.5802/crmath.746.pdf#page=3
+
+This revision clarifies semantics and attribution; it does not replace the
+standard definition or strengthen the seed hypothesis. The logarithmic counting
+claim and disclosed density limitations are unchanged.

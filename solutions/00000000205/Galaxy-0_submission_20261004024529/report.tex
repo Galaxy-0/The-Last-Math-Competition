@@ -76,6 +76,13 @@ M<b\le S+M<2M.
 \end{equation}
 Adjoining $b$ produces another finite strictly increasing positive prefix. Starting with $(1,n)$, recursion applies this construction at every stage; no assumption of infinitude is used to obtain the next term. The resulting sequence obeys the full least-choice rule and is strictly increasing.
 
+\section{Global representation semantics}
+The word ``unique'' in the rule quantifies over \emph{all} distinct pairs of earlier values, not merely adjacent pairs or a selected search window. Lemma~\ref{lem:pair} likewise considers every pair in the current prefix. It establishes that the candidate set is nonempty; it does not assert that its particular witness $S+M$ must be the next term.
+
+For clarity, the selected non-seed terms satisfy an even more explicit full-range formulation. If $k\ge3$ and $c,d\in U(1,n)$ satisfy $c<d$ and $c+d=a_k$, positivity gives $c<a_k$ and $d<a_k$. Strict increase then places both values before index $k$. Conversely, every earlier value is in the full range. Therefore the representations of $a_k$ by distinct values from the entire infinite sequence are exactly its earlier-term representations. There is exactly one such pair. The two prescribed seeds are exceptions to this representation requirement, as in the standard definition.
+
+This observation must not be applied to an arbitrary unused witness $S+M$. For example, in $U(1,2)$ the prefix $1,2,3,4$ has witness $7=3+4$, but the least candidate is $6$. After $6$ is added, $7$ also has the representation $1+6$. The proof only needs the witness at the current stage and selects the least candidate each time. It neither truncates the sequence nor strengthens the hypotheses.
+
 \section{Infinitude uniqueness and the counting estimate}
 \begin{proof}[Proof of Theorem~\ref{thm:main}]
 Existence and strict increase follow from the construction above. Strict increase in positive integers gives $a_k\ge k$ by induction, so the range is unbounded and hence infinite. Equivalently, no finite list of natural numbers contains every $a_k$.
@@ -107,7 +114,7 @@ A \lean{Prefix} stores a membership predicate, its two largest values, their pos
 
 The noncomputable definitions \lean{next}, \lean{advance}, \lean{stage}, and \lean{sequence} perform this construction. Noncomputability records the use of classical least-choice reasoning, rather than a missing proof or an experimental search. Crucially, \lean{stage_mem_iff} proves that each recursive state's membership predicate contains exactly the earlier sequence values, with no extra elements.
 
-\lean{IsUlam n u} explicitly requires the two initial values, strict increase at each subsequent step, exactly one distinct-pair representation using earlier sequence values, and minimality among all eligible larger natural numbers. The theorem \lean{sequence_isUlam} proves every part of this definition.
+\lean{IsUlam n u} explicitly requires the two initial values, strict increase at each subsequent step, exactly one distinct-pair representation using earlier sequence values, and minimality among all eligible larger natural numbers. The theorem \lean{sequence_isUlam} proves every part of this definition. The additional theorem \lean{range_below_is_earlier} transports full-range membership below a term to its earlier prefix; \lean{sequence_global_uniqueSum} proves exactly one representation over the entire final range for every non-seed term. These are consequences of the same construction, not new assumptions.
 
 \subsection{Formal conclusions}
 \begin{itemize}
@@ -126,10 +133,10 @@ lean --version
 lean Ulam205Core.lean
 lake build
 \end{lstlisting}
-The dependency list is empty. The compiler itself is not bundled. Both the direct Lean check and Lake build completed successfully in the cloud; the retained logs and audit are in \lean{verification/}. The unchanged final Lean source has SHA-256:
+The dependency list is empty. The compiler itself is not bundled. Both the direct Lean check and Lake build completed successfully in the cloud; the retained logs and audit are in \lean{verification/}. The revised final Lean source has SHA-256:
 \begin{center}\small\ttfamily
-ddbc155f051e41efb27b719b3d08df58d1f\\
-33836d8e7f13bd551718863f0a887
+af01fea811078f152350626d21498d72\\
+935961a7de011874a88e2aecd154382d
 \end{center}
 The split above is typographical only; concatenate the two lines to recover the hash. The source's \texttt{\#print axioms} commands report only Lean's standard foundational axioms \lean{propext}, \lean{Classical.choice}, and \lean{Quot.sound} for the main existence and counting theorems. Uniqueness uses \lean{propext} and \lean{Quot.sound}. The development contains no proof holes, additional axioms, or \lean{native_decide}.
 
@@ -140,7 +147,7 @@ pdflatex -interaction=nonstopmode -halt-on-error report.tex
 No numerical computation or external experimental result is needed for the proof.
 
 \section{Attribution}
-The elementary infinitude of Ulam sequences is established background, not a new mathematical discovery claimed by this submission. Ross's dissertation \cite{ross}, Chapter~1, printed pages~1--2, describes the standard rule and records the known infinitude fact. The present argument is supplied in full so that correctness does not depend on accepting an external assertion. The deliverable is a self-contained Lean formalization with an explicit, limited counting estimate. No priority claim is made for the elementary argument or for that estimate.
+The elementary infinitude of Ulam sequences is established background, not a new mathematical discovery claimed by this submission. Cl\'ement and Steinerberger \cite{clement}, Section~1.2, printed page~942 (PDF page~3), explicitly record infinitude and the same two-largest-terms argument for the classical sequence. The elementary argument above works unchanged for every seed pair $(1,n)$ with $n\ge2$. Ross's dissertation \cite{ross}, Chapter~1, printed pages~1--2, also describes the standard rule and records infinitude. Thus classical infinitude itself is not an open problem; this should be distinguished from stronger density questions. The present argument is supplied in full so that correctness does not depend on accepting an external assertion. The deliverable is a self-contained Lean formalization with an explicit, limited counting estimate. No priority claim is made for the elementary argument or for that estimate.
 
 \begin{thebibliography}{9}
 \bibitem{competition}
@@ -151,6 +158,14 @@ Repository snapshot at commit
 \href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/6ad05f1490626b518d19ad5c5603419f7a021d30/conjectures/00000000205.md}{Conjecture source};
 \href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/6ad05f1490626b518d19ad5c5603419f7a021d30/README.md}{submission rules}.
 Accessed 4 October 2026.
+
+\bibitem{clement}
+Fran\c{c}ois Cl\'ement and Stefan Steinerberger.
+\emph{Small gaps in the Ulam sequence}.
+Comptes Rendus Math\'ematique \textbf{363} (2025), 941--949.
+Section~1.2, printed page~942 (PDF page~3).
+\href{https://doi.org/10.5802/crmath.746}{doi:10.5802/crmath.746};
+\href{https://comptes-rendus.academie-sciences.fr/mathematique/item/10.5802/crmath.746.pdf\#page=3}{article PDF}.
 
 \bibitem{ross}
 Daniel Ross.
