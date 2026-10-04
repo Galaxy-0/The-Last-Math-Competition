@@ -1,0 +1,82 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,lmodern,booktabs}
+\setlength{\emergencystretch}{2em}
+\begin{document}
+\begin{center}
+{\Large A commutativity spot-check with detection probability $3/8$}\\[4pt]
+{\large Counterexample to Conjecture 00000005449}\\[6pt]
+ziangni-sys \qquad 4 October 2026
+\end{center}
+
+\section*{Claim and sampling law}
+Both source versions assert that a single check has detection power
+at least $1/2$ on a noncommutative witness. Consider the standard
+commutativity spot-check: draw $X,Y$ independently and uniformly from
+a finite group $G$, and detect noncommutativity if $XY\ne YX$.
+Thus every ordered pair has probability $1/|G|^2$. We show that this
+ordinary experiment has detection probability $3/8<1/2$ on a
+genuine noncommutative group.
+
+\section*{The actual group}
+Let $G$ be the symmetry group of the square, of order eight, often
+denoted $D_4$ or $D_8$ depending on the indexing convention.
+Write its elements as
+\[
+\{r_i:i\in\mathbb Z/4\mathbb Z\}\cup
+\{sr_i:i\in\mathbb Z/4\mathbb Z\}.
+\]
+With subscripts computed modulo four, multiplication is
+\[
+r_i r_j=r_{i+j},\quad r_i sr_j=sr_{j-i},\quad
+sr_i r_j=sr_{i+j},\quad sr_i sr_j=r_{j-i}.
+\]
+In particular $r_1 sr_0=sr_3$ whereas $sr_0r_1=sr_1$,
+so the group is noncommutative.
+
+\section*{Complete pair count}
+For each $x$, count its commuting partners using the displayed
+multiplication laws:
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+Elements $x$ & Number & Partners per element & Ordered pairs\\
+\midrule
+$r_0,r_2$ & 2 & 8 & 16\\
+$r_1,r_3$ & 2 & 4 & 8\\
+$sr_0,sr_1,sr_2,sr_3$ & 4 & 4 & 16\\
+\bottomrule
+\end{tabular}
+\end{center}
+All rotations commute with rotations. A rotation $r_i$ commutes with
+a reflection precisely when $2i=0$ modulo four.
+Two reflections $sr_i,sr_j$ commute precisely when $2(j-i)=0$,
+so each reflection has two reflection partners and two rotation partners.
+The table therefore covers all elements and gives $40$ commuting
+ordered pairs out of $8^2=64$.
+The actual detection event has $64-40=24$ pairs, so
+\[
+\mathbb P(XY\ne YX)=\frac{24}{64}=\frac38<\frac12.
+\]
+The possible equality $X=Y$ is included, as required for independent
+uniform sampling; it is not removed by conditioning.
+This refutes the single-check lower bound. The other clauses about
+independent repetitions and automorphism corrections are not needed
+for this disproof, and unspecified alternative algorithms are not claimed
+to share this sampling law.
+
+\section*{Formal verification}
+Lean uses the actual Mathlib group \texttt{DihedralGroup 4}, with its
+group structure and eight-element finite enumeration. It proves the
+noncommuting witness and counts the full finite filters defined by
+actual equality and inequality of the two products.
+Each draw has rational mass $1/8$, and the pair mass is defined as
+the product of the draw masses. Lean verifies nonnegative pair masses
+and normalization, and defines detection probability by summing these
+weights over the actual noncommuting-pair event.
+The final theorem includes noncommutativity, a valid sampling
+distribution, the exact probability, and failure of the proposed lower bound.
+Finite checks use ordinary kernel-checked \texttt{decide};
+no multiplication table or count is assumed and no native decision
+shortcut or external numerical calculation is used.
+\end{document}
