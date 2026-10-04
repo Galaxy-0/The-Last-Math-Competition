@@ -1,0 +1,121 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=27mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\setlength{\emergencystretch}{2em}
+\title{A dilation obstruction to the displayed vertex-volume bound\\
+\large Disproof of conjecture 00000007801}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+The source defines $G_k(K)$ as the mean volume of the
+$k$-simplices spanned by the vertices of a $d$-dimensional convex
+body, and explicitly asserts
+\[
+ G_k(K)\leq\binom dk V(S),
+\]
+where $S$ is the standard simplex.
+Both language versions give this displayed inequality.
+In dimension $d=k=1$, an actual interval of length two disproves it.
+There is no volume-normalization hypothesis on $K$ in the source.
+This concerns the stated formula, rather than a separately
+formulated classical Godbersen inequality.
+
+\textbf{Actual full-dimensional convex body.}
+Use the ordinary real Euclidean line and set
+\[
+ K=[0,2],\qquad S=[0,1].
+\]
+These are compact convex bodies. The interval $K$ has nonempty
+interior: the point $1$ belongs to $(0,2)$.
+Its actual ambient real dimension is one.
+The standard one-simplex $S$ has ordinary Lebesgue volume one.
+
+\textbf{Exhaustive vertices of $K$.}
+Its extreme points are exactly $0$ and $2$.
+To verify the left endpoint, suppose
+\[
+ 0=ax+by,\qquad a,b>0,\quad a+b=1,\quad x,y\in[0,2].
+\]
+Both terms are nonnegative, so $ax=0$ and therefore $x=0$;
+likewise $y=0$. Thus $0$ is extreme.
+For the right endpoint, an analogous representation
+$2=ax+by$ gives
+\[
+ a(2-x)+b(2-y)=0.
+\]
+Both terms are nonnegative, so $x=y=2$.
+
+Conversely, if $0<z<2$, then
+\[
+ z=(1-z/2)\,0+(z/2)\,2
+\]
+is a strict convex combination of distinct endpoints.
+Hence $z$ is not extreme.
+The complete vertex set is therefore $\{0,2\}$.
+
+\newpage
+\textbf{Complete mean of actual vertex simplices.}
+A one-simplex requires two distinct vertices. There is exactly
+one unordered two-element subset of $\{0,2\}$, namely the
+whole vertex set.
+The corresponding simplex is its genuine convex hull:
+\[
+ \operatorname{conv}\{0,2\}=[0,2]=K.
+\]
+Therefore the mean is a sum over one actual simplex divided by
+the number of such simplices:
+\[
+ G_1(K)=\frac{V(\operatorname{conv}\{0,2\})}{1}
+       =V([0,2])=2.
+\]
+Using ordered distinct vertex pairs would give two identical
+volumes and the same mean, so no averaging convention affects
+this example.
+
+\textbf{Failure of the displayed inequality.}
+The source's right-hand side is
+\[
+ \binom11V(S)=1\cdot V([0,1])=1.
+\]
+Thus its claimed inequality is the false statement
+\[
+ 2\leq1.
+\]
+The source also displays the proposed coefficient
+\[
+ c_{d,k}=\frac{d!}{(d-k)!\,k!}\frac{V(S)}{V(K)}.
+\]
+Here this coefficient equals $1/2$, so the original form
+$G_1(K)\leq c_{1,1}V(K)$ again gives $2\leq1$.
+
+\textbf{Scope and scaling.}
+Dilation makes the defect transparent: for $K=[0,L]$ the sole
+vertex one-simplex has volume $L$, while the fixed standard
+simplex continues to have volume one.
+The actual counterexample uses $L=2$ and satisfies all stated
+convex-body conditions.
+The special middle-dimensional stability assertion is a
+separate conjunct and is not needed.
+No disproof of a different normalized or mixed-volume
+formulation is claimed.
+
+\textbf{Formal correspondence and reproduction.}
+Lean uses the actual real interval, compactness, convexity,
+interior and real dimension. It proves the complete set of
+Mathlib extreme points, a bijective finite enumeration of the
+vertices, and exhaustive enumeration of every two-vertex subset.
+Each simplex is the actual convex hull of its selected vertices.
+Its volume is actual Lebesgue measure converted to a real number.
+The finite mean, both actual interval volumes, the displayed
+coefficient and the failure of both displayed inequalities are
+proved.
+
+Run \texttt{lake build} in \texttt{lean/} with Lean 4.19.0 and
+public Mathlib revision:
+\begin{center}\small
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}
+\end{center}
+The project prints the relevant axiom audits.
+\end{document}
