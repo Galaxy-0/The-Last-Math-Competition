@@ -1,0 +1,77 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\R}{\mathbb R}
+\newcommand{\A}{\mathcal A}
+\title{Conjecture 00000004107:\\A plane and a line violate coefficient alternation}
+\author{C0ldSmi1e}
+\date{4 October 2026}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+\begin{abstract}
+For the arrangement of a coordinate plane and its transverse coordinate axis in $\R^3$, the characteristic polynomial is $t^3-t^2-t+1$. The two consecutive coefficients $-1,-1$ disprove the asserted strict sign alternation. The computation uses the actual intersection poset, its M\"obius function, and subspace dimensions.
+\end{abstract}
+
+\section{Statement and standard definition}
+The English source says:
+\begin{quote}
+Definition: A subspace arrangement is the union of subspaces of a linear space, and one studies its complement. Conjecture: The coefficients of its characteristic polynomial are always strictly alternating in sign, and the sign pattern is completely determined by the dimension spectrum of the subspaces. (sign alternation law of subspace arrangements)
+\end{quote}
+The exact bilingual statement is included as \texttt{conjecture.md}. Both languages concern subspace arrangements, without requiring that every member be a hyperplane or that all members have the same dimension. We refute the universal sign-alternation clause; no interpretation of the additional dimension-spectrum assertion is needed.
+
+For a finite arrangement $\A$ in $V$, its intersection poset $L(\A)$ consists of the distinct intersections of all subfamilies, ordered by reverse inclusion. The empty subfamily gives $V$, the least element $\widehat0$. For central linear subspaces every intersection contains zero. The standard characteristic polynomial is~\cite[\S\S2--3, (3.1)]{be}
+\[
+ \chi_{\A}(t)=\sum_{S\in L(\A)}\mu(\widehat0,S)t^{\dim S},
+ \qquad
+ \mu(x,x)=1,\quad \mu(x,y)=-\sum_{x\leq z<y}\mu(x,z)\quad(x<y).
+\]
+
+\section{Exact counterexample}
+Let $V=\R^3$, $U=\{(a,b,0):a,b\in\R\}$ and $W=\{(0,0,c):c\in\R\}$, and set $\A=\{U,W\}$. These are distinct proper nonzero subspaces, neither contained in the other. Their intersection is $\{0\}$, so the complete intersection poset is
+\[
+ L(\A)=\{V,U,W,\{0\}\}.
+\]
+In its reverse-inclusion order, $V$ is least, $\{0\}$ is greatest, and $U,W$ are incomparable. The dimensions and recurrence values are
+\[
+\begin{array}{c|rrrr}
+ S & V & U & W & \{0\} \\ \hline
+ \dim S & 3 & 2 & 1 & 0 \\
+ \mu(V,S) & 1 & -1 & -1 & 1
+\end{array}
+\]
+
+\clearpage
+\begin{theorem}
+The characteristic polynomial of this arrangement does not have alternating signs.
+\end{theorem}
+\begin{proof}
+The recurrence gives $-1$ at each intermediate subspace and $-(1-1-1)=1$ at the origin. Substituting these values into the defining sum gives
+\[
+ \chi_{\A}(t)=t^3-t^2-t+1.
+\]
+The coefficients of $t^2$ and $t$ are both $-1$, with product $1>0$. Strict alternation would require a negative product. Even weak alternation would require a nonpositive product. All four coefficients are nonzero, so omitting zero coefficients cannot change this conclusion. Reversing the order in which coefficients are read also preserves the same-sign adjacent pair.
+\end{proof}
+
+\section{Formal correspondence}
+The Lean project uses actual real submodules of \texttt{Fin 3} $\to\R$. The coordinate plane and axis have their stated membership conditions. Explicit linear equivalences to $\R^2$ and $\R$ establish their dimensions; Lean also proves their zero intersection, properness, nonzeroness and incomparability.
+
+For an arbitrary finite indexed family of real submodules, the formal intersection poset consists of the actual submodules obtained by intersecting subfamilies. Its order is reverse inclusion. This representation identifies equal intersections and includes the empty intersection. The characteristic polynomial is a finite sum of Mathlib's \texttt{IncidenceAlgebra.mu} values multiplied by monomials whose exponents are the actual \texttt{Module.finrank} values.
+
+For the displayed arrangement, the proof establishes that every intersection is one of the four listed submodules. It then calculates the relevant order intervals, M\"obius values and dimensions, and derives the polynomial identity. Thus the polynomial is not introduced as a surrogate for an unformalized geometric invariant.
+
+The final sign argument uses the coefficients of this computed polynomial. A pair of consecutive negative coefficients refutes both strict and weak sign alternation. The universal assertion is specialized to the actual two-member arrangement in dimension three. The line $W$ is not a hyperplane, and the source imposes no hyperplane restriction. This counterexample makes no claim against a theorem restricted to hyperplane arrangements.
+
+\section{Reproduction and verification}
+Lean 4.19.0 and Mathlib v4.19.0 are pinned, including exact transitive dependency revisions. The README lists the commands for a complete build, strict replay of every submitted Lean source with warnings treated as errors, and theorem-type and transitive-axiom audits. The verification records preserve the exact tested source identities and dependency revisions.
+
+The package includes the exact bilingual source, this LaTeX report and its matching PDF, source-level semantic review and verification evidence. No numerical auxiliary program is used. Local validation and internal review are separate from official maintainer acceptance. Source and contribution rules were inspected at revision \texttt{0862407e}; the eligibility record preserves metadata and prior-submission searches.
+
+\begin{thebibliography}{1}\small
+\bibitem{be} A. Bj\"orner and T. Ekedahl. \emph{Subspace Arrangements over Finite Fields: Cohomological and Enumerative Aspects}. \href{https://arxiv.org/abs/math/9612217}{arXiv:math/9612217}, \S2 and \S3, equation (3.1). The arrangement definitions in \S2 apply over a general field; here the field is $\R$.
+\end{thebibliography}
+\end{document}
