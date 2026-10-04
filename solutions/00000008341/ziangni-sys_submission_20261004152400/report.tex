@@ -1,0 +1,39 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{A negative proposed Jarn\'ik dimension}
+\author{ziangni-sys}
+\date{Conjecture 00000008341}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result.} The stated dimension formula $2-(w+1)$ is false at $w=2$: it predicts $-1$ for a nonempty subset of the real line.
+
+\paragraph{The approximation set.}
+Use the standard Jarn\'ik parameter convention in which the error is $q^{-(w+1)}$. For integer $w\geq1$, define
+\[
+W(w)=\left\{x\in[0,1]\setminus\mathbb Q:
+\begin{array}{l}
+\text{for every }Q\in\mathbb N\text{ there are }q\in\mathbb N,\ p\in\mathbb Z,\\
+q>Q,\quad 0<|x-p/q|<q^{-(w+1)}
+\end{array}\right\}.
+\]
+Thus the denominators are genuinely unbounded. Restricting to irrationals removes exact rational coincidences. This is the classical well-approximable set underlying the Jarn\'ik--Besicovitch spectrum; see~\cite{BRV}, Sections~2.3 and~3.2.
+
+\paragraph{An explicit point.}
+Let $L=\sum_{n=0}^\infty10^{-n!}$. Its first two terms total $1/5$ and its remaining tail is strictly between $0$ and $1/10$, so $0<L<1$. The factorial truncations give the Liouville approximation property: for every integer exponent $N$ there are strict rational approximations with error less than $q^{-N}$. Such approximations have arbitrarily large denominators. Otherwise, irrationality gives a positive minimum distance from $L$ to fractions with the finitely many bounded denominators in a fixed bounded interval; taking $N$ sufficiently large contradicts that minimum. Consequently $L\in W(w)$ for every integer $w$, in particular $W(2)\ne\varnothing$.
+
+\paragraph{Dimension and contradiction.}
+The actual Hausdorff dimension is monotone under inclusion, and the real line has Hausdorff dimension one. Hence
+\[
+0\leq \dim_H W(2)\leq \dim_H\mathbb R=1.
+\]
+It is therefore finite and cannot equal $2-(2+1)=-1$. Both source languages explicitly print subtraction in $2-(w+1)$, with no restriction excluding $w=2$. This disproves the stated dimension conjunct, hence the combined conjecture. No assertion concerning its other uniform/nonuniform or convexity clauses is required. The classical formula is $2/(w+1)$ for $w>1$~\cite{BRV}; that deeper theorem is not needed for this elementary contradiction.
+
+\paragraph{Formal verification.}
+Lean defines the full quantified set above, verifies the actual factorial-series witness using Mathlib's Liouville theorems, and proves its interval bounds. It uses Mathlib's genuine \texttt{MeasureTheory.dimH}, establishes the bound by one and finiteness, then takes \texttt{ENNReal.toReal} to compare the dimension with the real number $-1$. No negative number is cast into extended nonnegative reals. The final theorem \texttt{Counterexample.counterexample} includes nonemptiness, finiteness, both dimension bounds, and failure of the proposed equality.
+
+\begin{thebibliography}{1}
+\bibitem{BRV} V.~Beresnevich, F.~Ram\'irez and S.~Velani, \emph{Metric Diophantine Approximation: aspects of recent work}, in \emph{Dynamics and Analytic Number Theory} (2017), Sections~2.3 and~3.2, Theorem~3.2. \href{https://eprints.whiterose.ac.uk/id/eprint/113590/}{Author manuscript}.
+\end{thebibliography}
+\end{document}
