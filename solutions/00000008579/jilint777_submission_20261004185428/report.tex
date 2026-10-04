@@ -1,0 +1,316 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\mult}{\operatorname{mult}}
+
+\title{Disproof of Conjecture 00000008579:\\
+the eigenvalue multiplicities of the Ornstein--Uhlenbeck operator\\
+are not the partition numbers}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000008579 makes four claims about the Ornstein--Uhlenbeck operator
+on Wiener space: its spectrum is $\{0,1,2,\dots\}$; the multiplicity of the
+eigenvalue $n$ is the partition number $p(n)$; the spectral counting function has
+Hardy--Ramanujan asymptotics; and its second-order correction is the Rademacher
+series. We refute the second claim (the ``partition multiplicity law''), and hence
+the conjunction. The eigenvalue $n$ of $N=-L$ has the $n$-th Wiener chaos as its
+eigenspace. On a Wiener space with infinitely many coordinates this space is
+infinite-dimensional for every $n\ge1$: for example $W(e_0),W(e_1),\dots$ are
+linearly independent eigenvectors for the eigenvalue $1$, while $p(1)=1$. On the
+finite-dimensional Gaussian space $\R^d$ the multiplicity is $\binom{n+d-1}{d-1}$.
+For $d\ge2$ this gives $\mult(1)=d\ge2\ne p(1)$. For $d=1$ every multiplicity is
+$1$, which differs from $p(n)$ for every $n\ge2$. So the law fails on every
+Gaussian space, at $n=1$ or $n=2$. The decisive objects are formalized in Lean~4
+(core library only): polynomials, $\partial_i$, multiplication by $x_i$, the
+generator $L=\sum_i(\partial_i^2-x_i\partial_i)$, eigenspaces, linear independence,
+multiplicity and $p(n)$. The final theorem refutes the law in every dimension
+$d\ge0$ and on the infinite-dimensional (cylinder) Wiener space.
+\end{abstract}
+
+\section{The conjecture and its precise reading}
+\begin{quote}
+\emph{Definition:} The Malliavin spectrum of the Ornstein--Uhlenbeck operator on
+Wiener space. \emph{Conjecture:} The spectrum consists of the nonnegative integers
+(a Hermite spectrum law); the eigenvalue multiplicities are the partition numbers
+of the corresponding degree (a partition multiplicity law); the asymptotics of
+spectral counting is given by the Hardy--Ramanujan partition asymptotics (an H-R
+asymptotic law); and the second-order correction is the Rademacher series (an
+R-correction law).
+\end{quote}
+The Chinese version says the same, clause by clause (``spectrum is the nonnegative
+integers; and the eigen-multiplicities are the partition numbers of the
+corresponding degree; \dots''). The conjecture is a conjunction of four clauses
+(1)--(4). We refute
+\begin{center}
+(2)\quad \emph{for every $n\ge0$, the eigenvalue $n$ of $N=-L$ has multiplicity
+exactly $p(n)$,}
+\end{center}
+where $p(n)$ is the number of partitions of $n$, so $p(0),p(1),p(2),\ldots=1,1,2,3,5,7,\ldots$.
+``The corresponding degree'' of the eigenvalue $n$ is $n$, because the eigenspace of
+$n$ is the $n$-th Wiener chaos, which consists of Hermite polynomials of degree $n$.
+Shifted indexings are treated in Section~\ref{sec:readings}.
+Refuting one clause of a conjunction refutes the conjunction, so clauses (1), (3)
+and (4) need not be interpreted. Clause (1) is in fact true.
+
+\subsection*{The objects}
+Let $(\Omega,H,\mu)$ be a Gaussian space with isonormal process $W$ on a real
+Hilbert space $H$. Examples are classical Wiener space ($H=L^2[0,1]$, so $H$ is
+infinite-dimensional) and $\R^d$ with the standard Gaussian measure $\gamma_d$
+($H=\R^d$, $W(e_i)=x_i$). The Ornstein--Uhlenbeck operator is $L=-\delta D$, where
+$D$ is the Malliavin derivative and $\delta$ its adjoint. Let $(e_i)$ be an
+orthonormal family in $H$. On a cylinder polynomial $F=f(W(e_0),\dots,W(e_{d-1}))$ with
+$f$ a polynomial, $L$ acts by
+\begin{equation}\label{eq:L}
+LF=(L_df)(W(e_0),\dots,W(e_{d-1})),\qquad
+L_d=\sum_{i<d}\Bigl(\frac{\partial^2}{\partial x_i^2}-x_i\frac{\partial}{\partial x_i}\Bigr)
+=\Delta-x\cdot\nabla .
+\end{equation}
+(This is standard; see Nualart, \emph{The Malliavin Calculus and Related Topics},
+\S1.4.) The map $f\mapsto f(W(e_0),\dots,W(e_{d-1}))$ is injective on polynomials, and
+it is an isometry from $L^2(\gamma_d)$ into $L^2(\mu)$ because the variables $W(e_i)$
+are i.i.d.\ standard normal. Polynomials lie in the domain of the self-adjoint
+operator $N=-L$, and $N$ extends $-L_d$ on them. Hence:
+
+\begin{lemma}\label{lem:transfer}
+If $f_1,\dots,f_m$ are linearly independent polynomials with $L_df_j=-nf_j$, then
+$F_j=f_j(W(e))$ are $m$ linearly independent eigenvectors of $N$ for the eigenvalue $n$.
+In particular $\mult(n)\ge m$, where $\mult(n)=\dim\ker(N-n)$.
+\end{lemma}
+
+\section{Polynomial computations}
+We identify a polynomial with its coefficient map $\beta\mapsto f_\beta$, where
+$\beta\in\N^{(\N)}$ is a multi-index and $x^\beta=\prod_i x_i^{\beta_i}$. Then
+$(\partial_if)_\beta=(\beta_i+1)f_{\beta+e_i}$ and $(x_if)_\beta=f_{\beta-e_i}$ (which
+is $0$ if $\beta_i=0$). So $(x_i\partial_if)_\beta=\beta_if_\beta$ and
+\begin{equation}\label{eq:coef}
+(L_df)_\beta=\sum_{i<d}\Bigl((\beta_i+1)(\beta_i+2)\,f_{\beta+2e_i}-\beta_i f_\beta\Bigr).
+\end{equation}
+These are exactly the definitions used in Lean (\texttt{deriv}, \texttt{mulX},
+\texttt{L}, \texttt{L\_apply}). As a sanity check, Lean also proves the canonical
+commutation relation $[\partial_i,x_i]=1$.
+
+\begin{lemma}[squarefree monomials]\label{lem:sqfree}
+If $\alpha_i\le1$ for all $i$ and $\alpha_i=0$ for $i\ge d$, then
+$L_dx^\alpha=-|\alpha|\,x^\alpha$ with $|\alpha|=\sum_i\alpha_i$.
+\end{lemma}
+\begin{proof}
+$\partial_i^2x^\alpha=0$ since $\alpha_i\le1$, and $x_i\partial_ix^\alpha=\alpha_ix^\alpha$.
+Sum over $i<d$.
+\end{proof}
+In particular $L_dx_i=-x_i$ for $i<d$, and $L_d(x_0x_1\cdots x_{n-1})=-n\,x_0\cdots x_{n-1}$.
+Distinct monomials are linearly independent.
+
+\begin{theorem}[$d\ge2$]\label{thm:dge2}
+On $\R^d$ with $d\ge2$, $\mult(1)\ge d\ge2>1=p(1)$. More generally
+$\mult(n)\ge\lfloor d/n\rfloor$ for $n\ge1$.
+\end{theorem}
+\begin{proof}
+The monomials $x_0,\dots,x_{d-1}$ are independent eigenvectors for the eigenvalue $1$
+(Lemma~\ref{lem:sqfree}, Lemma~\ref{lem:transfer}). For general $n$, the block monomials
+$b_j=x_{nj}x_{nj+1}\cdots x_{nj+n-1}$ with $0\le j<\lfloor d/n\rfloor$ are distinct
+squarefree monomials of degree $n$.
+\end{proof}
+
+\begin{theorem}[Wiener space]\label{thm:wiener}
+If $\dim H=\infty$ (for example on classical Wiener space), then every eigenvalue
+$n\ge1$ of $N$ has infinite multiplicity, so $\mult(n)\ne p(n)$ for every $n\ge1$.
+\end{theorem}
+\begin{proof}
+Choose an orthonormal sequence $e_0,e_1,\dots$ in $H$. For every $m$, the
+functionals $\prod_{k<n}W(e_{nj+k})$ with $j<m$ are $m$ independent eigenvectors
+(Theorem~\ref{thm:dge2} with $d=nm$, and Lemma~\ref{lem:transfer}). For $n=1$ these
+are just $W(e_0),\dots,W(e_{m-1})$.
+\end{proof}
+
+\begin{theorem}[$d=1$]\label{thm:d1}
+On $(\R,\gamma_1)$ every eigenvalue $n$ has multiplicity exactly $1$, with eigenspace
+$\R H_n$ ($H_n$ the probabilists' Hermite polynomial). Hence $\mult(n)=1<2\le p(n)$ for every
+$n\ge2$. In particular, for $n=2$ the eigenvectors are exactly the multiples of
+$x^2-1$, while $p(2)=2$.
+\end{theorem}
+\begin{proof}
+\emph{Polynomial eigenvectors.} Write $g_k=f_{(k)}$ for the coefficient of $x^k$. By
+\eqref{eq:coef}, $L_1f=-nf$ is equivalent to
+\begin{equation}\label{eq:rec}
+(k+1)(k+2)\,g_{k+2}=(k-n)\,g_k\qquad(k\ge0).
+\end{equation}
+Suppose $g$ is finitely supported, satisfies \eqref{eq:rec}, and $g_n=0$. For $k\ne n$,
+\eqref{eq:rec} shows that $g_{k+2}=0$ implies $g_k=0$. Descending from the top of the
+support gives $g_k=0$ for all $k>n$. Then $g_{n+1}=0$ and $g_n=0$, and descending
+from there gives $g_k=0$ for $k<n$. So $g=0$. If $f$ and $f'$ are two
+eigenvectors, then $f'_nf-f_nf'$ is an eigenvector with vanishing $x^n$-coefficient,
+hence zero. So any two eigenvectors are proportional, and the polynomial eigenspace has
+dimension $\le1$. It contains $H_n$, which satisfies $H_n''-xH_n'=-nH_n$; for example
+$L_1(x^2-1)=2-2x^2$.
+\emph{All $L^2$ eigenvectors.} The Hermite polynomials $H_k$ form an orthogonal
+basis of $L^2(\gamma_1)$ and $NH_k=kH_k$. If $NF=nF$, then for each $k$,
+$k\langle F,H_k\rangle=\langle F,NH_k\rangle=\langle NF,H_k\rangle=n\langle F,H_k\rangle$
+by self-adjointness. So $\langle F,H_k\rangle=0$ for $k\ne n$, and $F\in\R H_n$.
+Finally, for $n\ge2$ the partitions $(n)$ and $(1,\dots,1)$ are distinct, so $p(n)\ge2$.
+\end{proof}
+
+\begin{theorem}[exact multiplicities]\label{thm:exact}
+On $(\R^d,\gamma_d)$, $\mult(n)=\binom{n+d-1}{d-1}$, the number of multi-indices
+$\alpha\in\N^d$ with $|\alpha|=n$.
+\end{theorem}
+\begin{proof}
+The products $H_\alpha(x)=\prod_iH_{\alpha_i}(x_i)$ form an orthogonal basis of
+$L^2(\gamma_d)$, and $NH_\alpha=|\alpha|H_\alpha$ because $L_d$ is a sum of
+one-variable operators. The argument of Theorem~\ref{thm:d1} then shows that the
+eigenspace of $n$ is $\operatorname{span}\{H_\alpha:|\alpha|=n\}$.
+\end{proof}
+The table below is recomputed by \texttt{verify.py} as kernel dimensions of $L_d+n$
+on polynomials of degree $\le n$ (and, as a check, $\le n+2$):
+\begin{center}
+\begin{tabular}{c|cccccc}
+$n$ & 0&1&2&3&4&5\\\hline
+$p(n)$ & 1&1&2&3&5&7\\
+$d=1$ & 1&1&1&1&1&1\\
+$d=2$ & 1&2&3&4&5&6\\
+$d=3$ & 1&3&6&10&15&21\\
+$d=4$ & 1&4&10&20&35&56
+\end{tabular}
+\end{center}
+Note the isolated coincidence $d=2$, $n=4$ ($5=p(4)$). The law already fails there
+at $n=1,2,3$.
+
+\section{Main theorem}
+\begin{theorem}\label{thm:main}
+Clause (2) is false on every Gaussian space: on $\R^d$ for every $d\ge0$, and on
+every Wiener space with $\dim H=\infty$. Hence Conjecture 00000008579 is false.
+\end{theorem}
+\begin{proof}
+For $d=0$ (constants only) there is no eigenvector for $n=1$, but $p(1)=1$.
+For $d=1$ use Theorem~\ref{thm:d1} at $n=2$, for $d\ge2$ Theorem~\ref{thm:dge2} at $n=1$,
+and for $\dim H=\infty$ Theorem~\ref{thm:wiener} at $n=1$. In every case the second
+clause fails, so the conjunction fails.
+\end{proof}
+
+\section{Robustness: other readings}\label{sec:readings}
+\begin{enumerate}
+\item \emph{Which Wiener space.} Classical Wiener space, any abstract Wiener space, or
+any Gaussian Hilbert space of infinite dimension: Theorem~\ref{thm:wiener}.
+Finite-dimensional Gaussian spaces: Theorems~\ref{thm:dge2} and~\ref{thm:d1}. The
+answer does not depend on the choice of $H$, apart from its dimension.
+\item \emph{Field and kind of multiplicity.} $N$ is self-adjoint, so algebraic and
+geometric multiplicities agree. Complexifying does not change dimensions. Lean
+measures rank over $\Z$, which equals the dimension over $\Q$ (clear denominators)
+and over $\R$ for the rational polynomials used.
+\item \emph{Shifted index} ($\mult(n)=p(n+s)$). For $d=1$, $1\ne p(n+s)$ as soon as
+$n+s\ge2$. For $d\ge2$ the reading fails by item~4, and \texttt{verify.py} finds an
+explicit failure for $s\in\{-1,1,2\}$ and all $d\le29$. On infinite-dimensional
+Wiener space the multiplicities are infinite.
+\item \emph{``For all large $n$'' / asymptotic readings.} For finite $d$,
+$\binom{n+d-1}{d-1}$ is a polynomial of degree $d-1$ in $n$. Meanwhile
+$p(n)\ge\binom{\lfloor n/(d+1)\rfloor+d}{d}$: choose multiplicities
+$m_2,\dots,m_{d+1}\ge0$ with $\sum m_i\le\lfloor n/(d+1)\rfloor$, so that
+$\sum_i i\,m_i\le n$, and fill up with parts $1$. This lower bound is a polynomial
+of degree $d$, so $p(n)>\mult(n)$ for all large $n$; e.g.\ for $d=1,2,3$, for all $n>1,4,13$.
+The same comparison refutes clause (3) for finite $d$: the counting function
+$\#\{\text{eigenvalues}\le\lambda\}=\binom{\lfloor\lambda\rfloor+d}{d}$ is a polynomial, not of
+Hardy--Ramanujan type. For $\dim H=\infty$ every multiplicity is infinite.
+\item \emph{Restricting to symmetric functionals.} If one keeps only eigenvectors
+invariant under permutations of the $d$ coordinates, the multiplicity of $n$ is the
+number of partitions of $n$ into at most $d$ parts. This equals $p(n)$ only for
+$n\le d$, so for each fixed $d$ it fails at $n=d+1$ (checked in \texttt{verify.py} for
+$d\le3$). With infinitely many i.i.d.\ coordinates, the Hewitt--Savage $0$--$1$ law makes
+every exchangeable $L^2$ functional a.s.\ constant, so the multiplicities are $0$ for
+$n\ge1$.
+\item \emph{Is there any reading that gives $p(n)$?} Yes, but only for a different
+operator. The second quantization $d\Gamma(A)$ of $A=\operatorname{diag}(1,2,3,\dots)$,
+i.e.\ $\sum_k k(\partial_k^2-x_k\partial_k)$ (an Ornstein--Uhlenbeck operator with drift
+$-A$, or a string-oscillator energy operator), has eigenvalue $\sum_kk\alpha_k$ on
+$H_\alpha$. Its multiplicities are therefore $p(n)$ (\texttt{verify.py} checks this for
+$d=4,5$, $n\le d$). The conjecture names \emph{the} Ornstein--Uhlenbeck operator of
+Malliavin calculus, which is $d\Gamma(I)=-L$, the number operator. Its eigenspaces
+are the Wiener chaoses, and the ``Hermite spectrum law'' of clause (1) refers to
+exactly these Hermite eigenfunctions. We therefore regard the weighted operator as a
+different conjecture, not a reading of this one.
+\end{enumerate}
+
+\section{Lean formalization}
+The Lean 4.19.0 project in \texttt{lean4/} uses the core library only. Its definitions
+are as follows.
+\begin{itemize}
+\item \texttt{Poly := (Nat -> Nat) -> Int}, the coefficient map, and \texttt{mono},
+\texttt{x i}, \texttt{H2} $=x_0^2-1$.
+\item The predicates \texttt{InVars}, \texttt{Bounded} and \texttt{IsPoly d} (finite support in
+$x_0,\dots,x_{d-1}$).
+\item \texttt{deriv}, \texttt{mulX}, and \texttt{L d f = fun b => isum d (fun i => deriv i (deriv i f) b - mulX i (deriv i f) b)}.
+\item \texttt{Eig d n f} ($f$ is a polynomial with $Lf=-nf$), \texttt{LinIndep},
+\texttt{MultGE d n m}, \texttt{Mult d n m} ($\ge m$ and not $\ge m+1$), and the
+cylinder versions \texttt{EigCyl}, \texttt{MultGECyl}, \texttt{MultCyl}.
+\item \texttt{IsPartition}, \texttt{partitionsL}, \texttt{p}, with
+\texttt{mem\_partitionsL} for all $n$.
+\end{itemize}
+The main theorems are as follows.
+\begin{itemize}
+\item \texttt{L\_apply} (formula \eqref{eq:coef}) and \texttt{deriv\_mulX\_comm} ($[\partial_i,x_i]=1$).
+\item \texttt{L\_x0\_x1} ($Lx_0=-x_0$, $Lx_1=-x_1$) and \texttt{linIndep\_x}.
+\item \texttt{eig\_H2} ($L(x^2-1)=-2(x^2-1)$) and \texttt{multGE\_blocks} ($\mult_d(n)\ge m$ when $nm\le d$).
+\item \texttt{eig1\_prop}: in one variable, any two eigenvectors for the same eigenvalue,
+of any degree, are proportional. Consequences: \texttt{mult1\_le} ($\mult_1(n)\le1$
+for all $n$), \texttt{eig2\_eq\_H2} (every eigenvector for $2$ is $f_2\cdot(x^2-1)$), and
+\texttt{mult1\_exact} ($\mult_1(0)=\mult_1(1)=\mult_1(2)=1$).
+\item \texttt{p\_values} ($p(0..5)=1,1,2,3,5,7$) and \texttt{p\_ge\_two}.
+\item \texttt{partitionLaw\_false d}: $\neg\,$\texttt{PartitionLaw d} for every $d$;
+\texttt{d1\_fails\_all} (for $d=1$ the law fails at every $n\ge2$);
+\texttt{mult\_one\_ge\_two}.
+\item \texttt{L\_eq\_of\_isPoly}: $L$ is consistent across dimensions, so it is well defined on
+cylinder polynomials. \texttt{multCyl\_infinite} (no finite multiplicity for any
+$n\ge1$) and \texttt{partitionLawCyl\_false}.
+\item \texttt{conjecture\_00000008579\_false} and \texttt{conjecture\_00000008579\_false\_wiener}:
+$\neg(C_1\wedge\text{(2)}\wedge C_3\wedge C_4)$ for arbitrary propositions $C_1,C_3,C_4$.
+\end{itemize}
+The project contains no \texttt{sorry}, no \texttt{native\_decide} and no added axioms.
+\texttt{\#print axioms} reports \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}. Classical choice is used only to decide equality of multi-indices,
+which are functions, in the definition of monomials.
+
+\paragraph{Limitations.} Lean works on the polynomial core and does not formalize
+$L^2(\mu)$, the closure of $L$, or Hermite completeness. For $d\ge2$ and for Wiener
+space the disproof needs only lower bounds, and Lemma~\ref{lem:transfer} transfers
+polynomial eigenvectors to genuine eigenvectors. For $d=1$ it needs the upper bound
+$\mult(2)\le1$. Lean proves this bound for the polynomial eigenspace, and the extension
+to all of $L^2(\gamma_1)$ (Hermite completeness) is Theorem~\ref{thm:d1}, proved here
+only. Existence of $H_n$ for general $n$ (so that $\mult_1(n)=1$ exactly) and the exact
+formula of Theorem~\ref{thm:exact} are proved in this report and checked numerically
+in \texttt{verify.py}. Lean proves $\mult_1(n)=1$ exactly only for $n\le2$, and for $d\ge2$ it proves lower bounds only. The
+readings in Section~\ref{sec:readings}, items 3--6, are covered by this report and
+\texttt{verify.py}, except for $d=1$ at every $n\ge2$, which is in Lean.
+
+\section{Independent check}
+\texttt{verify.py} (Python 3 standard library) uses a different method. It builds
+the matrix of $L_d$ on the monomial basis and computes kernel dimensions of $L_d+n$
+exactly over $\Q$. It checks the following.
+\begin{itemize}
+\item The table above for $d\le4$, $n\le5$, and that degree $\le n+2$ gives the same
+dimensions.
+\item $\mult_d(1)=d$ for $d\le7$.
+\item $L$ of the Hermite polynomials for $n\le12$.
+\item $p(n)$ by Euler's recurrence and by enumeration.
+\item The shifted, eventual, symmetric and weighted-operator readings of
+Section~\ref{sec:readings}.
+\end{itemize}
+All checks pass.
+
+\end{document}
