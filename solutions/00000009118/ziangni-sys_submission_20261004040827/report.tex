@@ -1,0 +1,103 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\newtheorem{proposition}{Proposition}
+\title{A three-point finite-field Kakeya set\\\large Counterexample to TLMC 00000009118}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The three nonzero points in $\mathbb F_2^2$ contain an affine line in
+every nonzero direction. Thus they form a finite-field Kakeya set of
+cardinality $3<2^2$, contradicting the stated lower bound $q^n$.
+\end{abstract}
+
+\section{The exact assertion}
+The conjecture states that the size of finite-field Kakeya sets has the
+explicit lower bound $q^n$. Here $q$ denotes the size of the field and
+$n$ the ambient dimension. Neither language version supplies a
+multiplicative constant or excludes fields of small cardinality.
+We address the asserted coefficient-one bound
+\[
+ |K|\geq q^n.
+\]
+This is distinct from a bound $|K|\geq c_n q^n$ with a dimension-dependent
+constant $c_n<1$; the example below does not contradict such bounds.
+
+A subset $K\subseteq\mathbb F_q^n$ is a Kakeya set if, for every
+nonzero vector $v\in\mathbb F_q^n$, there exists $a\in\mathbb F_q^n$
+such that the entire affine line
+\[
+ \{a+tv:t\in\mathbb F_q\}
+\]
+lies in $K$. For nonzero $v$, this line has exactly $q$ points.
+
+\section{Explicit counterexample}
+Let $q=2$, $n=2$, and work with the field
+$\mathbb F_2=\{0,1\}$, with arithmetic modulo two. Define
+\[
+ K=\mathbb F_2^2\setminus\{(0,0)\}
+  =\{(1,0),(0,1),(1,1)\}.
+\]
+\begin{proposition}
+$K$ is a Kakeya set and $|K|=3<q^n=4$.
+\end{proposition}
+\begin{proof}
+The following table lists all nonzero directions and a base point in
+each direction. Because the scalar parameter takes only the values
+$0$ and $1$, the two rightmost entries give the complete line.
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+Direction $v$ & Base point $a$ & $a+0v$ & $a+1v$\\
+\midrule
+$(1,0)$ & $(0,1)$ & $(0,1)$ & $(1,1)$\\
+$(0,1)$ & $(1,0)$ & $(1,0)$ & $(1,1)$\\
+$(1,1)$ & $(1,0)$ & $(1,0)$ & $(0,1)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Every listed point belongs to $K$, and all nonzero directions have
+been covered. The three points of $K$ are distinct. Hence $K$ is a
+Kakeya set of size three, whereas $q^n=2^2=4$.
+\end{proof}
+
+\section{Formal verification}
+\raggedright
+The Lean project uses Lean 4.19.0 and Mathlib commit
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+The ambient space \texttt{Point} is the actual function space
+\texttt{Fin 2 -> ZMod 2}; Mathlib supplies the field structure on
+\texttt{ZMod 2} and the coordinatewise vector operations.
+The definition \texttt{affinePoint} uses ordinary vector addition and
+scalar multiplication $a+t\mathbin{\cdot}v$.
+
+The predicate \texttt{IsKakeya} quantifies over all actual nonzero
+vectors, existentially quantifies over all actual base points, and
+requires membership for every scalar. The set
+\texttt{puncturedPlane} is the finite universe with the zero vector
+erased. The theorem \texttt{puncturedPlane\_isKakeya} verifies that
+full quantified predicate; it does not assume a line-incidence table.
+The additional theorem \texttt{affinePoint\_injective} verifies that
+every nonzero direction parameterizes two distinct points.
+
+All finite checks use the kernel-checked \texttt{decide} tactic, with
+no native evaluation, numerical approximation, or external computation.
+The field size, ambient cardinality, and counterexample cardinality
+are checked separately. The theorem
+\texttt{conjecture\_00000009118} combines the Kakeya property with
+the strict inequality. The theorem \texttt{universal\_bound\_false}
+explicitly negates the proposed bound for all Kakeya sets in this
+ambient space, which suffices to disprove a universal bound over all
+finite fields and dimensions.
+
+From the \texttt{lean} directory, run \texttt{lake build}, then
+\texttt{lake env lean Main.lean} for the direct verification and
+axiom audit. The audited theorems depend only on the standard logical
+axioms \texttt{propext}, \texttt{Classical.choice}, and
+\texttt{Quot.sound}. No unproved mathematical assumption is used.
+\end{document}
