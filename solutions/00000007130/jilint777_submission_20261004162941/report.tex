@@ -1,6 +1,6 @@
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
-\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{booktabs}
 \usepackage{hyperref}
 
@@ -62,8 +62,10 @@ function is a polynomial (Ehrhart's theorem) and every denominator is $1$. Then
 ``period'' and ``denominators'' only mean something for \emph{rational} polytopes, whose vertices
 have rational coordinates. So the only reading in which the conjecture says anything is the
 standard rational setting: $P\subset\mathbb R^d$ a rational polytope and $L_P(t)=\#(tP\cap\Z^d)$.
-We adopt this reading. If the conjecture is meant to speak only about lattice polytopes, it is a
-(trivially) true statement and there is nothing to refute. We state this limitation openly.
+We adopt this reading. With vertex or facet denominators, the lattice-only reading is trivially
+true, and we state this limitation openly. With coefficient denominators (reading (C) below) the
+lattice-only reading fails as well. The standard simplex $\conv\{(0,0),(1,0),(0,1)\}$ has
+$L(t)=\frac{(t+1)(t+2)}{2}=\frac12t^2+\frac32t+1$, so its period is $1$ but its coefficient lcm is $2$.
 
 \paragraph{``The period''.} A quasi-polynomial has many periods (every multiple of a period is a
 period). With the definite article, ``the period'' is the \emph{minimal} period. This is how it is
@@ -88,6 +90,14 @@ quasi-polynomial. Refuted by $T$ (Remark~\ref{rem:coef}).
 \end{enumerate}
 Any reading that takes the lcm over vertex \emph{and} facet denominators gives $2$ for $T$, and is
 also refuted by $T$.
+
+\paragraph{Integer-programming reading.} In integer programming $T$ is cut out by integer data
+$Ax\le b$: $-y\le0$, $-x+2y\le0$, $x+2y\le2$. Its vertex denominators have lcm $2$. Its basis
+subdeterminants (the $2\times2$ minors of $A$, i.e.\ the pairs of facet normals) are
+$\det\begin{psmallmatrix}0&-1\\-1&2\end{psmallmatrix}=-1$,
+$\det\begin{psmallmatrix}0&-1\\1&2\end{psmallmatrix}=1$ and
+$\det\begin{psmallmatrix}-1&2\\1&2\end{psmallmatrix}=-4$, so the lcm of their absolute values
+is $\lcm(1,1,4)=4$. Both $2$ and $4$ differ from the period $1$.
 
 \section{Definitions}
 
@@ -276,11 +286,22 @@ clause for rational polytopes. There is no \texttt{sorry}, no \texttt{native\_de
 \texttt{\#print axioms} reports only \texttt{propext}, \texttt{Classical.choice} and
 \texttt{Quot.sound}.
 
-\paragraph{Limitations.} Reading (C) is treated only in this report and in \texttt{verify.py}. The Lean
+\paragraph{Limitations.} Reading (C), the integer-programming subdeterminant reading and the
+standard-simplex example are treated only in this report and in \texttt{verify.py}. The Lean
 formalization works with triangles and with an explicit facet list plus box. Their
 agreement with the vertex description is proved, not assumed (\texttt{describes\_T},
-\texttt{describes\_T2}). The literal ``lattice polytope'' reading is not refuted, because the clause
-is trivially true there.
+\texttt{describes\_T2}).
+
+\paragraph{Readings that are \emph{not} refuted.} These readings are true, and we do not claim otherwise.
+\begin{itemize}
+\item The weak vertex form ``the vertex-denominator lcm is \emph{a} period''. This is Ehrhart's
+theorem.
+\item The lattice-only reading with vertex or facet denominators. There the clause says ``$1=1$''.
+\item The reading in which ``denominators'' means the cyclotomic factors (poles at roots of unity) of
+the denominator of the reduced Ehrhart series $\sum_t L_P(t)z^t$. The minimal period is the lcm of
+the orders of those roots of unity, so this reading is true. For $T$ the series is $1/(1-z)^3$:
+only the pole $z=1$, and period $1$.
+\end{itemize}
 
 \section{Independent check}
 
@@ -290,7 +311,8 @@ generous box. It derives the primitive facet inequalities from the vertices. It 
 minimal period by exact interpolation of each residue class with polynomials of degree $\le2$, for
 all $t\le60$. Results: $L_T(t)=(t+1)(t+2)/2$, with period $1$, vertex lcm $2$, facet lcm $1$, coefficient lcm
 $2$. $L_{T_2}$ has period $2$, vertex lcm $2$, facet lcm $1$. The McAllister--Woods triangles with $D=2..6$
-all have period $1$.
+all have period $1$. It also computes the basis subdeterminants of $T$ ($1,1,4$, lcm $4$) and checks
+that the standard lattice simplex has period $1$ but coefficient lcm $2$.
 
 \begin{thebibliography}{9}
 \bibitem{Ehr} E.~Ehrhart, Sur les poly\`edres rationnels homoth\'etiques \`a $n$ dimensions,

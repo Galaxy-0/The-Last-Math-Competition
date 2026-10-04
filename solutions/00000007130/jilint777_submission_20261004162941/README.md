@@ -29,9 +29,21 @@ Readings:
   not even *a* period, this refutes the weak form as well.
 - **Coefficient denominators.** The Ehrhart polynomial `t²/2 + 3t/2 + 1` of `T` has coefficient lcm
   `2 ≠ 1`, so this reading fails for `T` too.
-- **"Lattice polytopes".** For lattice polytopes the clause reads "1 = 1" and has no content. The words
-  quasi-polynomial, period and denominators only make sense for rational polytopes, so we use the
-  rational reading. Under a literal lattice-only reading there is nothing to refute.
+- **"Lattice polytopes".** With vertex or facet denominators, the lattice-only reading is trivially
+  true ("1 = 1"). The words quasi-polynomial, period and denominators only make sense for rational
+  polytopes, so we use the rational reading. With coefficient denominators the lattice reading fails
+  too: the standard simplex `conv{(0,0),(1,0),(0,1)}` has `L = (t+1)(t+2)/2`, so its period is 1 but
+  its coefficient lcm is 2.
+- **Integer programming.** `T` is cut out by integer data `Ax ≤ b`: `−y ≤ 0`, `−x+2y ≤ 0`,
+  `x+2y ≤ 2`. Its vertex denominators have lcm 2. Its basis subdeterminants are `|det| = 1, 1, 4`
+  over the pairs of rows, with lcm 4. Both differ from the period 1.
+
+**Not refuted (true readings):**
+- the weak vertex form "the lcm is *a* period" (Ehrhart's theorem);
+- the lattice-only reading with vertex or facet denominators;
+- the reading where "denominators" means the cyclotomic factors (poles) of the reduced Ehrhart series.
+  The minimal period is the lcm of the orders of those roots of unity, so this reading is true. For
+  `T` the series is `1/(1−z)³`.
 
 ## Contents
 
@@ -67,7 +79,8 @@ Main results:
   fails, in both the "the period" and the "a period" forms.
 - Non-vacuity: `LT_period_denLcm` (`2` is a period of `L_T`), `sanity_T2_vertex` and
   `sanity_T_facet`. The claimed equality does hold in these other instances.
-- Not in Lean: the coefficient-denominator reading. It is covered by the report and `verify.py`.
+- Not in Lean: the coefficient-denominator reading, the standard-simplex example and the
+  integer-programming subdeterminants. They are covered by the report and `verify.py`.
 
 There is no `sorry`, no `native_decide` and no added axiom. `#print axioms` shows at most
 `propext`, `Classical.choice` and `Quot.sound`.
@@ -93,7 +106,11 @@ pdflatex report.tex && pdflatex report.tex
   其刻面为 `x ≥ 0`、`y ≥ 0`、`x+2y ≤ 1`，lcm 为 1，但 `4·#(tT₂ ∩ ℤ²) + (t mod 2) = (t+2)²`，周期恰为 2。
   1 甚至不是它的一个周期，所以弱形式也被否定。
 - 若"分母"指拟多项式系数的分母，则 `T` 的 Ehrhart 多项式 `t²/2+3t/2+1` 的系数分母的 lcm 为 2 ≠ 1，同样不成立。
-- 对格点多面体，子句变成平凡的"1 = 1"。拟多项式、周期、分母这些概念只在有理多面体上才有意义，所以我们采用有理多面体的解读。
+- 若取顶点分母或刻面分母，则只考虑格点多面体的解读平凡成立（"1 = 1"）。拟多项式、周期、分母这些概念只在有理多面体上才有意义，所以我们采用有理多面体的解读。
+  若取系数分母，则格点多面体的解读同样不成立：标准单形 `conv{(0,0),(1,0),(0,1)}` 满足 `L = (t+1)(t+2)/2`，周期为 1，但系数分母的 lcm 为 2。
+- 整数规划解读：`T` 由整数数据 `Ax ≤ b` 给出（`−y ≤ 0`、`−x+2y ≤ 0`、`x+2y ≤ 2`）。其顶点分母的 lcm 为 2，基子行列式绝对值为 1、1、4，lcm 为 4，两者都不等于周期 1。
+- 未被否定（为真）的解读：顶点分母的弱形式"lcm 是一个周期"（Ehrhart 定理）；取顶点或刻面分母时只考虑格点多面体的解读；
+  "分母"指约化 Ehrhart 级数分母中的分圆因子（单位根极点）的解读。最小周期正是这些单位根阶数的 lcm，因此该解读为真。
 
 Lean 项目（Lean 4.19.0，仅核心库）从零定义了有理三角形、伸缩 `tP` 中的整点（凸组合权）、刻面不等式、有限盒中的整点计数、
 拟多项式的周期与最小周期。项目证明了 `¬ VertexClaim`、`¬ FacetClaim` 及其弱形式，并验证了非空性。Python 脚本用独立方法复核了全部数值。

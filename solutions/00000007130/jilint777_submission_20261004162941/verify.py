@@ -147,6 +147,26 @@ ok &= cden == 2
 print(f"  => vertex reading: period {p} != {vden} (clause FAILS); "
       f"coefficient-denominator reading: {p} != {cden} (FAILS)")
 
+# --- integer-programming data of T: basis subdeterminants ---------------------------------
+A = [(a1, a2) for (a1, a2, _) in facets(T)]
+dets = [abs(A[i][0] * A[j][1] - A[i][1] * A[j][0]) for i in range(3) for j in range(i + 1, 3)]
+dl = 1
+for d in dets:
+    dl = lcm(dl, d)
+print(f"  basis subdeterminants |det| of facet-normal pairs: {sorted(dets)}, lcm = {dl}; "
+      f"vertex lcm {vden}; period {p}")
+ok &= sorted(dets) == [1, 1, 4] and dl == 4 and p == 1
+
+# --- lattice simplex conv{(0,0),(1,0),(0,1)}: coefficient-denominator reading fails ---------
+S = [(F(0), F(0)), (F(1), F(0)), (F(0), F(1))]
+valsS, vdenS, fdenS, pS, constsS = analyse("standard simplex", S)
+cdenS = 1
+for c in constsS[0]:
+    cdenS = lcm(cdenS, c.denominator)
+print(f"  lattice polytope: period {pS}, vertex lcm {vdenS}, facet lcm {fdenS}, "
+      f"coefficient lcm {cdenS} => coefficient reading FAILS even for lattice polytopes")
+ok &= pS == 1 and vdenS == 1 and fdenS == 1 and cdenS == 2
+
 # --- the control T2 = conv{(0,0),(1,0),(0,1/2)} ---------------------------------------------
 T2 = [(F(0), F(0)), (F(1), F(0)), (F(0), F(1, 2))]
 vals2, vden2, fden2, p2, consts2 = analyse("T2", T2)
