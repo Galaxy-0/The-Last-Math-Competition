@@ -1,0 +1,112 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\title{Conjecture 00000007790:\\An isotropic log-concave law with an exponential tail}
+\author{C0ldSmi1e}
+\date{4 October 2026}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+\begin{abstract}
+The centered rate-one exponential distribution has mean zero, variance one, and a log-concave density. Its right tail decays exponentially, so its absolute-value tail cannot obey the conjectured Gaussian bound. We prove this for every positive choice of threshold and decay constants, even if the bound is required only eventually. The Lean development verifies the actual probability measure, its density, all qualifying properties, and the tail contradiction.
+\end{abstract}
+
+\section{Statement and scope}
+The repository states:
+\begin{quote}
+Definition: The optimal exponent of the Paouris concentration inequality $\Pr(|X|\geq c\sqrt n\,t)\leq\exp(-ct^\kappa)$ for isotropic log-concave $X$. Conjecture: $\kappa$ can be taken as $2$, i.e. sub-Gaussian concentration holds for the norm; the form $\exp(-ct^2)$ cannot be improved to $\exp(-ct^{2+\epsilon})$; the extremal distributions are double-exponential marginals (simplex type) with tail exactly $e^{-ct^2}$, and constructions attaining this tail exist in every dimension.
+\end{quote}
+The exact English and Chinese text is preserved in \texttt{conjecture.md}. Both versions state the first bound for isotropic log-concave random vectors, without a bounded-support or symmetry assumption or a restriction excluding dimension one. A one-dimensional counterexample therefore refutes the conjecture. Here $\sqrt n=1$ and the Euclidean norm is absolute value.
+
+We use the conventional definition: isotropic means mean zero and covariance equal to the identity; log-concavity refers to the probability density~\cite{gm}. In one dimension, isotropy means $\mathbb EX=0$ and $\mathbb EX^2=1$. We allow independent positive constants $A$ and $c$ in
+\[
+ \Pr(|X|\geq At)\leq e^{-ct^2},
+\]
+and even an arbitrary starting threshold $T$. This is weaker than the stated bound, so disproving it also excludes using the same constant in both places. We do not need the later sharpness and extremizer claims.
+
+\section{The actual distribution and its qualifying properties}
+Let $Y$ have the rate-one exponential density $g(y)=e^{-y}$ for $y\geq0$ and $g(y)=0$ for $y<0$. Put $X=Y-1$. Translation gives the density
+\[
+ f(x)=\begin{cases}e^{-(x+1)},&x\geq-1,\\0,&x<-1.\end{cases}
+\]
+The elementary integrals
+\[
+ \int_0^\infty e^{-y}\,dy=1,\qquad
+ \int_0^\infty ye^{-y}\,dy=1,\qquad
+ \int_0^\infty y^2e^{-y}\,dy=2
+\]
+follow by integration by parts (the boundary terms vanish). In particular $g$ is normalized, the first two moments are integrable, and
+\[
+ \mathbb EX=\mathbb EY-1=0,\qquad
+ \mathbb EX^2=\mathbb EY^2-2\mathbb EY+1=2-2+1=1.
+\]
+Thus $X$ is isotropic in dimension one.
+
+To check log-concavity, let $a,b\geq0$ with $a+b=1$. We claim
+\[
+ f(ax+by)\geq f(x)^a f(y)^b \qquad(x,y\in\mathbb R).
+\]
+When both weights are positive and either point lies outside $[-1,\infty)$, the right side is zero, so the inequality follows from $f\geq0$. When both points lie in the support, their convex combination also lies there and
+\[
+ f(ax+by)=e^{-(ax+by+1)}
+ =e^{-a(x+1)}e^{-b(y+1)}=f(x)^a f(y)^b.
+\]
+If either weight is zero the inequality is equality at the other point. This verifies the full density definition, including zero-density points; it also shows that $\log f$ is affine on its convex positive support.
+
+\section{Failure for every Gaussian-decay constant}
+For $u\geq-1$, the exact open right tail is
+\[
+ \Pr(X>u)=\Pr(Y>u+1)=\int_{u+1}^\infty e^{-y}\,dy=e^{-(u+1)}.
+\]
+For $u\geq0$, the inclusion $\{X>u\}\subseteq\{|X|\geq u\}$ gives
+\begin{equation}\label{lower}
+ \Pr(|X|\geq u)\geq e^{-(u+1)}.
+\end{equation}
+The proof uses this lower bound, so no equality for the absolute-value tail is assumed.
+
+\begin{theorem}
+For all $A,c>0$ and every $T\in\mathbb R$, there is a real $t\geq\max(1,T)$ such that
+\[
+ \Pr(|X|\geq At)>e^{-ct^2}.
+\]
+\end{theorem}
+\begin{proof}
+Choose
+\[
+ t=\max\!\left(\max(T,1),\frac{A+2}{c}+1\right).
+\]
+Then $t\geq1$, $t\geq T$, and $ct>A+2$. Consequently
+\[
+ ct^2>(A+2)t\geq At+2>At+1.
+\]
+By monotonicity of the exponential and \eqref{lower},
+\[
+ e^{-ct^2}<e^{-(At+1)}\leq\Pr(|X|\geq At).
+\]
+\end{proof}
+The counterexample is the same distribution for every choice of constants. It rules out even a bound whose starting threshold depends on that distribution. The first assertion of conjecture 00000007790 is therefore false.
+
+\clearpage
+\section{Formal correspondence and verification}
+In Lean, \texttt{centered\allowbreak{}Exponential} is the law of $Y-1$, defined using the actual map of Mathlib's exponential measure. The proof identifies its Lebesgue density as $f$. It establishes this measure equality by translation invariance of Lebesgue integration.
+
+The development proves probability normalization and integrability of the first and second moments, and computes their values. It also proves the general exponential moment formula $\mathbb EY^n=n!$ for every natural $n$, using Mathlib's convergent Gamma integrals. The custom predicate \texttt{IsIsotropic} records precisely the integrable mean-zero and second-moment-one conditions on a real law.
+
+The predicate \texttt{IsLogConcaveDensity} is the full weighted-power inequality proved above, together with nonnegativity. Both endpoint weights and zero-density points are covered. The predicate \texttt{IsAdmissibleLaw} combines probability normalization, isotropic moments, and existence of a measurable log-concave density equal to the actual law's density. The shifted exponential satisfies this predicate without extra hypotheses.
+
+The right-tail calculation uses Mathlib's proved exponential CDF and its relation to actual interval probabilities. Event inclusion then yields the norm-tail lower bound. The theorem \texttt{conjecture7790\_\allowbreak{}counterexample} supplies the qualifying law and proves the violation for every $A,c,T$. The final \texttt{conjecture7790\_\allowbreak{}disproof} negates \texttt{OneDimensional\allowbreak{}Gaussian\allowbreak{}Claim}, the necessary one-dimensional consequence of the stated universal bound. It does not replace the mathematical domain with a numerical approximation, finite sample, or assumed tail formula.
+
+Lean 4.19.0 and Mathlib v4.19.0 are pinned, with exact dependency revisions in the manifest. From \texttt{lean/}, run \texttt{lake build}, then replay every submitted Lean file with \texttt{lake env lean -DwarningAsError=true}. The accompanying README gives the complete command sequence. \texttt{Check.lean} prints the definitions, theorem types, and axiom dependencies. Independent semantic scrutiny and local verification records accompany the submission. No auxiliary numerical program is used. Local verification is separate from official maintainer acceptance.
+
+\paragraph{Eligibility and source.}
+The pre-submission metadata and all-state pull-request and solution-history checks found no earlier or competing solution for this conjecture. The details and source links are in \texttt{verification/eligibility.json}. The bilingual conjecture and contribution requirements were read at revision \texttt{0862407e}; the immutable source is linked in the README.
+
+\begin{thebibliography}{9}
+\bibitem{gm} O. Gu\'edon and E. Milman, \emph{Interpolating Thin-Shell and Sharp Large-Deviation Estimates for Isotropic Log-Concave Measures}, introduction, pp.~1--2, arXiv:1011.0943v3 (2011). \url{https://arxiv.org/pdf/1011.0943v3}. This reference fixes the standard definitions; the counterexample is proved independently here and in Lean.
+\end{thebibliography}
+\end{document}

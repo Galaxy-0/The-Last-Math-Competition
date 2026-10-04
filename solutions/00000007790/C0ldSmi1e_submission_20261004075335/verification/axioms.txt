@@ -1,0 +1,90 @@
+def Conjecture7790.centeredExponential : MeasureTheory.Measure ℝ :=
+MeasureTheory.Measure.map (fun y => y - 1) (ProbabilityTheory.expMeasure 1)
+def Conjecture7790.density : ℝ → ℝ :=
+fun x => if -1 ≤ x then Real.exp (-(x + 1)) else 0
+def Conjecture7790.IsLogConcaveDensity : (ℝ → ℝ) → Prop :=
+fun f => (∀ (x : ℝ), 0 ≤ f x) ∧ ∀ (x y a b : ℝ), 0 ≤ a → 0 ≤ b → a + b = 1 → f x ^ a * f y ^ b ≤ f (a * x + b * y)
+def Conjecture7790.IsIsotropic : MeasureTheory.Measure ℝ → Prop :=
+fun μ =>
+  MeasureTheory.Integrable (fun x => x) μ ∧
+    MeasureTheory.Integrable (fun x => x ^ 2) μ ∧ ∫ (x : ℝ), x ∂μ = 0 ∧ ∫ (x : ℝ), x ^ 2 ∂μ = 1
+def Conjecture7790.IsAdmissibleLaw : MeasureTheory.Measure ℝ → Prop :=
+fun μ =>
+  MeasureTheory.IsProbabilityMeasure μ ∧
+    Conjecture7790.IsIsotropic μ ∧
+      ∃ f,
+        Measurable f ∧
+          Conjecture7790.IsLogConcaveDensity f ∧ μ = MeasureTheory.volume.withDensity fun x => ENNReal.ofReal (f x)
+def Conjecture7790.OneDimensionalGaussianClaim : Prop :=
+∃ A,
+  0 < A ∧
+    ∃ c,
+      0 < c ∧
+        ∃ T,
+          ∀ (μ : MeasureTheory.Measure ℝ),
+            Conjecture7790.IsAdmissibleLaw μ →
+              ∀ (t : ℝ), 1 ≤ t → T ≤ t → μ.real {x | A * t ≤ |x|} ≤ Real.exp (-c * t ^ 2)
+Conjecture7790.density_eq_exponentialPDF (x : ℝ) :
+  ENNReal.ofReal (Conjecture7790.density x) = ProbabilityTheory.exponentialPDF 1 (x + 1)
+Conjecture7790.centeredExponential_eq_withDensity :
+  Conjecture7790.centeredExponential =
+    MeasureTheory.volume.withDensity fun x => ENNReal.ofReal (Conjecture7790.density x)
+Conjecture7790.density_nonneg (x : ℝ) : 0 ≤ Conjecture7790.density x
+Conjecture7790.density_pos_iff (x : ℝ) : 0 < Conjecture7790.density x ↔ -1 ≤ x
+Conjecture7790.density_positive_support : {x | 0 < Conjecture7790.density x} = Set.Ici (-1)
+Conjecture7790.density_logConcave : Conjecture7790.IsLogConcaveDensity Conjecture7790.density
+Conjecture7790.log_density_of_mem_support {x : ℝ} (hx : x ∈ Set.Ici (-1)) :
+  Real.log (Conjecture7790.density x) = -(x + 1)
+Conjecture7790.log_density_concave : ConcaveOn ℝ (Set.Ici (-1)) fun x => Real.log (Conjecture7790.density x)
+Conjecture7790.exponential_integrable_pow (n : ℕ) :
+  MeasureTheory.Integrable (fun x => x ^ n) (ProbabilityTheory.expMeasure 1)
+Conjecture7790.exponential_integral_pow (n : ℕ) : ∫ (x : ℝ), x ^ n ∂ProbabilityTheory.expMeasure 1 = ↑n.factorial
+Conjecture7790.centeredExponential_isProbabilityMeasure :
+  MeasureTheory.IsProbabilityMeasure Conjecture7790.centeredExponential
+Conjecture7790.centeredExponential_integrable_id :
+  MeasureTheory.Integrable (fun x => x) Conjecture7790.centeredExponential
+Conjecture7790.centeredExponential_integrable_sq :
+  MeasureTheory.Integrable (fun x => x ^ 2) Conjecture7790.centeredExponential
+Conjecture7790.centeredExponential_integral_id : ∫ (x : ℝ), x ∂Conjecture7790.centeredExponential = 0
+Conjecture7790.centeredExponential_integral_sq : ∫ (x : ℝ), x ^ 2 ∂Conjecture7790.centeredExponential = 1
+Conjecture7790.centeredExponential_isIsotropic : Conjecture7790.IsIsotropic Conjecture7790.centeredExponential
+Conjecture7790.exponential_right_tail {u : ℝ} (hu : 0 ≤ u) :
+  (ProbabilityTheory.expMeasure 1).real (Set.Ioi u) = Real.exp (-u)
+Conjecture7790.centered_right_tail {u : ℝ} (hu : -1 ≤ u) :
+  Conjecture7790.centeredExponential.real (Set.Ioi u) = Real.exp (-(u + 1))
+Conjecture7790.norm_tail_lower_bound {u : ℝ} (hu : 0 ≤ u) :
+  Real.exp (-(u + 1)) ≤ Conjecture7790.centeredExponential.real {x | u ≤ |x|}
+Conjecture7790.gaussian_bound_fails (A c T : ℝ) (hA : 0 < A) (hc : 0 < c) :
+  ∃ t, 1 ≤ t ∧ T ≤ t ∧ Real.exp (-c * t ^ 2) < Conjecture7790.centeredExponential.real {x | A * t ≤ |x|}
+Conjecture7790.density_measurable : Measurable Conjecture7790.density
+Conjecture7790.centeredExponential_admissible : Conjecture7790.IsAdmissibleLaw Conjecture7790.centeredExponential
+Conjecture7790.conjecture7790_counterexample :
+  Conjecture7790.IsAdmissibleLaw Conjecture7790.centeredExponential ∧
+    ∀ (A c T : ℝ),
+      0 < A →
+        0 < c → ∃ t, 1 ≤ t ∧ T ≤ t ∧ Real.exp (-c * t ^ 2) < Conjecture7790.centeredExponential.real {x | A * t ≤ |x|}
+Conjecture7790.conjecture7790_disproof : ¬Conjecture7790.OneDimensionalGaussianClaim
+'Conjecture7790.density_eq_exponentialPDF' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.centeredExponential_eq_withDensity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.density_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.density_pos_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.density_positive_support' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.density_logConcave' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.log_density_of_mem_support' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.log_density_concave' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.exponential_integrable_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.exponential_integral_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.centeredExponential_isProbabilityMeasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.centeredExponential_integrable_id' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.centeredExponential_integrable_sq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.centeredExponential_integral_id' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.centeredExponential_integral_sq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.centeredExponential_isIsotropic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.exponential_right_tail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.centered_right_tail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.norm_tail_lower_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.gaussian_bound_fails' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.density_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.centeredExponential_admissible' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.conjecture7790_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7790.conjecture7790_disproof' depends on axioms: [propext, Classical.choice, Quot.sound]
