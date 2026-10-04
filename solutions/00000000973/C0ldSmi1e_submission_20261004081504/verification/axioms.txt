@@ -1,0 +1,63 @@
+def Conjecture973.jordan : ℂ → ℝ → Matrix (Fin 2) (Fin 2) ℂ :=
+fun c r => !![c, ↑r; 0, c]
+def Conjecture973.shiftedPolynomial : ℂ → Polynomial ℂ :=
+fun c => Polynomial.X - Polynomial.C c
+def Conjecture973.SpectralSetOrder : Set ℂ → ℕ → Prop :=
+fun K n =>
+  ∀ (A : Matrix (Fin n) (Fin n) ℂ),
+    spectrum ℂ A ⊆ K →
+      ∀ (p : Polynomial ℂ),
+        ‖Matrix.toEuclideanCLM ((Polynomial.aeval A) p)‖ ≤ sSup ((fun z => ‖Polynomial.eval z p‖) '' K)
+def Conjecture973.SmallOrderClaim : Set ℂ → Prop :=
+fun K => ∀ (n : ℕ), 0 < n → n < 15 → Conjecture973.SpectralSetOrder K n
+def Conjecture973.twoClosedDisks : ℂ → ℂ → ℝ → ℝ → Set ℂ :=
+fun a b r s => Metric.closedBall a r ∪ Metric.closedBall b s
+def Conjecture973.twoOpenDisks : ℂ → ℂ → ℝ → ℝ → Set ℂ :=
+fun a b r s => Metric.ball a r ∪ Metric.ball b s
+Conjecture973.jordan_resolvent_det (c z : ℂ) (r : ℝ) :
+  ((algebraMap ℂ (Matrix (Fin 2) (Fin 2) ℂ)) z - Conjecture973.jordan c r).det = (z - c) ^ 2
+'Conjecture973.jordan_resolvent_det' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.jordan_spectrum (c : ℂ) (r : ℝ) : spectrum ℂ (Conjecture973.jordan c r) = {c}
+'Conjecture973.jordan_spectrum' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.jordan_operator_spectrum (c : ℂ) (r : ℝ) :
+  spectrum ℂ (Matrix.toEuclideanCLM (Conjecture973.jordan c r)) = {c}
+'Conjecture973.jordan_operator_spectrum' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.aeval_shiftedPolynomial_jordan (c : ℂ) (r : ℝ) :
+  (Polynomial.aeval (Conjecture973.jordan c r)) (Conjecture973.shiftedPolynomial c) = Conjecture973.jordan 0 r
+'Conjecture973.aeval_shiftedPolynomial_jordan' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.nilpotent_jordan_apply (r : ℝ) (v : EuclideanSpace ℂ (Fin 2)) :
+  (Matrix.toEuclideanCLM (Conjecture973.jordan 0 r)) v = EuclideanSpace.single 0 (↑r * v 1)
+'Conjecture973.nilpotent_jordan_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.nilpotent_jordan_operatorNorm_lower (r : ℝ) : |r| ≤ ‖Matrix.toEuclideanCLM (Conjecture973.jordan 0 r)‖
+'Conjecture973.nilpotent_jordan_operatorNorm_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.nilpotent_jordan_operatorNorm (r : ℝ) : ‖Matrix.toEuclideanCLM (Conjecture973.jordan 0 r)‖ = |r|
+'Conjecture973.nilpotent_jordan_operatorNorm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.jordan_shifted_operatorNorm (c : ℂ) (r : ℝ) :
+  ‖Matrix.toEuclideanCLM ((Polynomial.aeval (Conjecture973.jordan c r)) (Conjecture973.shiftedPolynomial c))‖ = |r|
+'Conjecture973.jordan_shifted_operatorNorm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.jordan_shifted_operatorNorm_lower (c : ℂ) (r : ℝ) :
+  |r| ≤ ‖Matrix.toEuclideanCLM ((Polynomial.aeval (Conjecture973.jordan c r)) (Conjecture973.shiftedPolynomial c))‖
+'Conjecture973.jordan_shifted_operatorNorm_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.boundedSet_spectral_counterexample (K : Set ℂ) (hne : K.Nonempty) (hb : ∃ B, ∀ z ∈ K, ‖z‖ ≤ B) :
+  ∃ A p,
+    spectrum ℂ A ⊆ K ∧ sSup ((fun z => ‖Polynomial.eval z p‖) '' K) < ‖Matrix.toEuclideanCLM ((Polynomial.aeval A) p)‖
+'Conjecture973.boundedSet_spectral_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.boundedSet_not_spectralSetOrder_two (K : Set ℂ) (hne : K.Nonempty) (hb : ∃ B, ∀ z ∈ K, ‖z‖ ≤ B) :
+  ¬Conjecture973.SpectralSetOrder K 2
+'Conjecture973.boundedSet_not_spectralSetOrder_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.twoClosedDisks_nonempty (a b : ℂ) (r s : ℝ) (hr : 0 ≤ r) : (Conjecture973.twoClosedDisks a b r s).Nonempty
+'Conjecture973.twoClosedDisks_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.twoClosedDisks_bounded (a b : ℂ) (r s : ℝ) : ∃ B, ∀ z ∈ Conjecture973.twoClosedDisks a b r s, ‖z‖ ≤ B
+'Conjecture973.twoClosedDisks_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.twoClosedDisks_not_spectralSetOrder_two (a b : ℂ) (r s : ℝ) (hr : 0 ≤ r) :
+  ¬Conjecture973.SpectralSetOrder (Conjecture973.twoClosedDisks a b r s) 2
+'Conjecture973.twoClosedDisks_not_spectralSetOrder_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.twoOpenDisks_not_spectralSetOrder_two (a b : ℂ) (r s : ℝ) (hr : 0 < r) :
+  ¬Conjecture973.SpectralSetOrder (Conjecture973.twoOpenDisks a b r s) 2
+'Conjecture973.twoOpenDisks_not_spectralSetOrder_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.conjecture973_disproof_closed (a b : ℂ) (r s : ℝ) (hr : 0 ≤ r) :
+  ¬Conjecture973.SmallOrderClaim (Conjecture973.twoClosedDisks a b r s)
+'Conjecture973.conjecture973_disproof_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture973.conjecture973_disproof_open (a b : ℂ) (r s : ℝ) (hr : 0 < r) :
+  ¬Conjecture973.SmallOrderClaim (Conjecture973.twoOpenDisks a b r s)
+'Conjecture973.conjecture973_disproof_open' depends on axioms: [propext, Classical.choice, Quot.sound]

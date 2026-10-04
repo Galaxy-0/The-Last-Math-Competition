@@ -1,0 +1,43 @@
+import Conjecture973
+
+#print Conjecture973.jordan
+#print Conjecture973.shiftedPolynomial
+#print Conjecture973.SpectralSetOrder
+#print Conjecture973.SmallOrderClaim
+#print Conjecture973.twoClosedDisks
+#print Conjecture973.twoOpenDisks
+
+#check Conjecture973.jordan_resolvent_det
+#print axioms Conjecture973.jordan_resolvent_det
+#check Conjecture973.jordan_spectrum
+#print axioms Conjecture973.jordan_spectrum
+#check Conjecture973.jordan_operator_spectrum
+#print axioms Conjecture973.jordan_operator_spectrum
+#check Conjecture973.aeval_shiftedPolynomial_jordan
+#print axioms Conjecture973.aeval_shiftedPolynomial_jordan
+#check Conjecture973.nilpotent_jordan_apply
+#print axioms Conjecture973.nilpotent_jordan_apply
+#check Conjecture973.nilpotent_jordan_operatorNorm_lower
+#print axioms Conjecture973.nilpotent_jordan_operatorNorm_lower
+#check Conjecture973.nilpotent_jordan_operatorNorm
+#print axioms Conjecture973.nilpotent_jordan_operatorNorm
+#check Conjecture973.jordan_shifted_operatorNorm
+#print axioms Conjecture973.jordan_shifted_operatorNorm
+#check Conjecture973.jordan_shifted_operatorNorm_lower
+#print axioms Conjecture973.jordan_shifted_operatorNorm_lower
+#check Conjecture973.boundedSet_spectral_counterexample
+#print axioms Conjecture973.boundedSet_spectral_counterexample
+#check Conjecture973.boundedSet_not_spectralSetOrder_two
+#print axioms Conjecture973.boundedSet_not_spectralSetOrder_two
+#check Conjecture973.twoClosedDisks_nonempty
+#print axioms Conjecture973.twoClosedDisks_nonempty
+#check Conjecture973.twoClosedDisks_bounded
+#print axioms Conjecture973.twoClosedDisks_bounded
+#check Conjecture973.twoClosedDisks_not_spectralSetOrder_two
+#print axioms Conjecture973.twoClosedDisks_not_spectralSetOrder_two
+#check Conjecture973.twoOpenDisks_not_spectralSetOrder_two
+#print axioms Conjecture973.twoOpenDisks_not_spectralSetOrder_two
+#check Conjecture973.conjecture973_disproof_closed
+#print axioms Conjecture973.conjecture973_disproof_closed
+#check Conjecture973.conjecture973_disproof_open
+#print axioms Conjecture973.conjecture973_disproof_open
