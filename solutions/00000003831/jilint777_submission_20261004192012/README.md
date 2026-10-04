@@ -41,8 +41,15 @@ and the following edges:
 ### Boundary of the counterexample
 
 - **Normal crystals.** For normal (Stembridge) crystals (C1) is true: `B ≅ ⊔ B(λ)`, so `ch B = Σ s_λ`.
-  `B7` is therefore not normal. The only reading that rescues (C1) is
-  "finite crystal = normal crystal". The standard references define "crystal" abstractly,
+  `B7` is therefore not normal. Only normal-type readings rescue (C1): "finite crystal =
+  normal crystal", or the affine-theory term "finite crystal". The latter means crystal bases of
+  finite-dimensional `U'_q(ĝ)`-modules, such as Kirillov–Reshetikhin or perfect crystals, and
+  these are classically normal.
+- **The symmetrization would be idle for normal crystals.** For normal (indeed seminormal)
+  crystals `ch(B)` is already `W`-invariant. So "Weyl symmetrization" would be vacuous, and (C1)
+  would be a triviality. The explicit symmetrization therefore points to the abstract notion,
+  under which even a 1-vertex crystal is a counterexample (see the remark below). `B7` refutes
+  (C1) even under the stronger seminormal reading. The standard references define "crystal" abstractly,
   with seminormal and normal as extra conditions: Kashiwara 1993 and 1995, and Bump–Schilling 2017, Ch. 2.
 - **`gl₂` has no counterexample.** Every finite seminormal `gl₂` crystal is a disjoint union of
   strings, and each string has character `s_(a,c)`.
@@ -50,8 +57,11 @@ and the following edges:
   `S₃`-invariant weight multisets that satisfy the string condition. Among those with at most 6
   vertices there are 12, all Schur positive. With 7 vertices the only non-positive one, up to a
   `det` shift, is `ch(B7)`. This is checked by exhaustive search.
-- **Remark.** Without seminormality, one vertex suffices. The abstract `gl₂` crystal
-  `{b}` with `wt b = (−1,2)`, `ε = 3`, `φ = 0` has Weyl symmetrization `−s₁₀`.
+- **Remark.** Without seminormality, one vertex suffices:
+  - the abstract `gl₂` crystal `{b}` with `wt b = (−1,2)`, `ε = 3`, `φ = 0` has Weyl
+    symmetrization `−s₁₀`;
+  - the lowest vertex of `B(2,0)`, alone with its inherited `ε = 2`, `φ = 0`, has character `x₂²`
+    and Weyl symmetrization `−s₁₁` (orbit sum `x₁² + x₂² = s₂₀ − s₁₁`).
 
 ## Contents
 
@@ -138,11 +148,14 @@ B7 满足 Kashiwara 晶体的全部公理，并且是半正规、连通的。
 三种解释下 s₁₁₁ 的系数都是负数。换成 sl₃ 的说法同样成立：ch = χ_(1,1) − χ_(0,0)。
 
 反例的边界：
-- 对正规（Stembridge）晶体，（C1）成立，因为 ch B = Σ s_λ。所以只有把"有限晶体"理解为"正规晶体"才能挽救（C1）。
+- 对正规（Stembridge）晶体，（C1）成立，因为 ch B = Σ s_λ。所以只有"正规型"的解释才能挽救（C1）：一是把"有限晶体"理解为"正规晶体"；二是仿射理论中的"有限晶体"，即有限维 U'_q(ĝ) 模的晶体基（如 Kirillov–Reshetikhin 晶体、完美晶体），它们在经典部分上是正规的。
+- 对称化在正规晶体上是空操作：对正规（乃至半正规）晶体，ch(B) 本身已经 W 不变，"Weyl 对称化"不起任何作用，（C1）也就成了平凡命题。因此题中明确写出对称化，说明它指的是抽象晶体；在这一意义下连 1 个顶点的晶体都是反例。而 B7 在更强的半正规解释下也否定了（C1）。
 - 标准文献把晶体定义为抽象对象，半正规、正规都是附加条件：Kashiwara 1993、1995；Bump–Schilling 2017 第 2 章。
 - gl₂ 的半正规晶体不可能给出反例：每条弦的字符就是一个 s_(a,c)。
 - 对 gl₃，半正规晶体的字符恰为满足弦条件的 S₃ 不变权多重集。顶点数不超过 6 的共 12 个，全部 Schur 正。所以 7 个顶点是最小的，并且在相差一个 det 平移的意义下，7 顶点的反例字符唯一，就是 ch(B7)。
-- 附注：若不要求半正规，一个顶点即可构成反例。取 gl₂ 晶体 {b}，wt b = (−1,2)，ε = 3，φ = 0，其 Weyl 对称化为 −s₁₀。
+- 附注：若不要求半正规，一个顶点即可构成反例。
+  - 取 gl₂ 晶体 {b}，wt b = (−1,2)，ε = 3，φ = 0，其 Weyl 对称化为 −s₁₀。
+  - 取 B(2,0) 的最低顶点单独成晶体，保留继承的 ε = 2、φ = 0。其字符为 x₂²，Weyl 对称化为 −s₁₁。
 
 Lean 部分（4.19.0，仅核心库，无 sorry、无 native_decide）从零定义了以下对象：
 - 晶体结构与 Kashiwara 公理；

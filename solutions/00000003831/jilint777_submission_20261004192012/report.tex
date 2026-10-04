@@ -33,8 +33,8 @@ Conjecture 00000003831 asserts that for every finite crystal $B$ the Schur expan
 Weyl symmetrization of the character $\ch(B)$ has nonnegative coefficients, and that for
 $B=B(\lambda)\otimes B(\mu)$ these coefficients are the Littlewood--Richardson coefficients.
 The first clause is false. We exhibit a connected $7$-vertex \emph{seminormal} $\mathfrak{gl}_3$
-crystal $B_7$, obtained from $B(2,1,0)$ by deleting one of its two vertices of weight $(1,1,1)$
-and re-gluing the strings through the other one. It satisfies all of Kashiwara's crystal axioms,
+crystal $B_7$, obtained from $B(2,1,0)$ by identifying its two vertices of weight $(1,1,1)$
+into one vertex and keeping all eight edges. It satisfies all of Kashiwara's crystal axioms,
 $\varepsilon_i,\varphi_i$ are the string lengths, and
 \[
 \ch(B_7)=m_{21}+m_{111}=s_{21}-s_{111}.
@@ -43,8 +43,9 @@ The character is symmetric, so the Weyl symmetrizer $J(x^\rho f)/J(x^\rho)$ fixe
 coefficient of $s_{111}$ is $-1$; the orbit sum gives $6s_{21}-6s_{111}$ and the orbit average
 gives $s_{21}-s_{111}$. Seven vertices is the minimum for a seminormal $\mathfrak{gl}_3$
 counterexample, and seminormal $\mathfrak{gl}_2$ crystals never give one. Clause~1 is true for
-\emph{normal} (Stembridge) crystals, so it can only be rescued by reading ``finite crystal'' as
-``normal crystal''. The refutation is formalised in Lean~4 (core library only): crystals,
+\emph{normal} (Stembridge) crystals, so it can only be rescued by normal-type readings of
+``finite crystal'' (normal crystals, or the affine notion of a finite crystal, which is
+classically normal). The refutation is formalised in Lean~4 (core library only): crystals,
 Kashiwara's axioms, seminormality, characters, Schur polynomials (from tableaux), the
 antisymmetrizer and the Weyl symmetrization are defined from scratch. An independent Python
 script rechecks everything and performs the minimality searches.
@@ -220,8 +221,9 @@ $\ch B=\sum_k s_{\lambda^{(k)}}$ (the character of $B(\lambda)$ is the irreducib
 $s_\lambda$), which is symmetric and Schur-nonnegative; all three readings then give
 nonnegative coefficients. In particular (C1) holds for $B(\lambda)\otimes B(\mu)$, and (C2) holds
 under (W) and (A); under (O) the coefficients are $6c^\nu_{\lambda\mu}$, so (C2) fails under (O).
-Our $B_7$ is not normal: a normal crystal has a Schur-positive character. So the only reading
-under which (C1) survives is ``finite crystal'' $=$ ``normal crystal''. The literal statement
+Our $B_7$ is not normal: a normal crystal has a Schur-positive character. So the only readings
+under which (C1) survives are normal-type ones: ``finite crystal'' $=$ ``normal crystal'', or the
+affine-theory term discussed in Section~\ref{sec:readings}. The literal statement
 says ``any finite crystal'', and in the standard references \cite{Kas93,Kas95,BS17}
 ``crystal'' does not include normality (or even seminormality); $B_7$ is moreover seminormal,
 the strongest condition short of normality that is usually attached to the word.
@@ -286,15 +288,30 @@ Without seminormality, one vertex suffices: the $\mathfrak{gl}_2$ crystal $\{b\}
 $\wt(b)=(-1,2)$, $\varepsilon(b)=3$, $\varphi(b)=0$, $\tilde e b=\tilde f b=0$ satisfies
 Kashiwara's axioms ($\varphi-\varepsilon=-3=\langle h,\wt b\rangle$). Then
 $J(x^\rho x_1^{-1}x_2^2)=a_{(0,2)}=-a_{(2,0)}$, so the Weyl symmetrization is $-s_{(1,0)}$, and
-the orbit sum is $s_{(2,-1)}-s_{(1,0)}$. We do not rely on this example: it is far from the
+the orbit sum is $s_{(2,-1)}-s_{(1,0)}$. A second one: the lowest vertex $b$ of $B(2,0)$, kept
+alone with its inherited values $\wt(b)=(0,2)$, $\varepsilon(b)=2$, $\varphi(b)=0$ and no edges,
+is a crystal ($\varphi-\varepsilon=-2=0-2$). Its character is $x_2^2$, and
+$J(x^\rho x_2^2)=x_1x_2^2-x_1^2x_2=-a_{(2,1)}$, so the Weyl symmetrization is $-s_{(1,1)}$
+(orbit sum $x_1^2+x_2^2=s_{(2,0)}-s_{(1,1)}$). We do not rely on these examples: it is far from the
 spirit of the conjecture, while $B_7$ is seminormal, connected and differs from $B(2,1,0)$
 only by one vertex.
 \end{remark}
 
-\section{Readings covered}
+\section{Readings covered}\label{sec:readings}
 \begin{itemize}
 \item \emph{Crystal}: abstract Kashiwara crystals and seminormal crystals ($B_7$ is
-seminormal). Only ``normal crystal'' rescues (C1).
+seminormal). Only normal-type readings rescue (C1).
+\item \emph{The symmetrization would be idle for normal crystals.} For normal (indeed
+seminormal, Lemma~\ref{lem:semi}) crystals $\ch(B)$ is already $W$-invariant, so ``Weyl
+symmetrization'' would be vacuous, and for normal crystals (C1) would be a triviality. The explicit
+symmetrization therefore points to the abstract notion, under which even a $1$-vertex crystal is
+a counterexample (the remark above). $B_7$ refutes (C1) even under the stronger seminormal
+reading.
+\item \emph{Affine reading.} In affine crystal theory, a ``finite crystal'' means the crystal
+base of a finite-dimensional $U'_q(\hat{\mathfrak g})$-module (e.g.\ Kirillov--Reshetikhin or
+perfect crystals). Such crystals are classically normal: their restriction to the classical
+subalgebra is a disjoint union of $B(\lambda)$'s, so (C1) holds under this reading. It is one of
+the normal-type readings named above, and our counterexample does not apply to it.
 \item \emph{Weyl symmetrization}: the symmetrizer $J(x^\rho f)/J(x^\rho)$ (Demazure operator
 $\pi_{w_0}$), its bialternant coefficients $[x^{\lambda+\rho}]J(x^\rho f)$, the orbit sum and
 the orbit average all give a negative coefficient. Since $\ch B_7$ is symmetric, any

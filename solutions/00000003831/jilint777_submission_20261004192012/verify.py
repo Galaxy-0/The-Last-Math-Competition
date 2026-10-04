@@ -5,8 +5,8 @@ Clause 1 of the conjecture: "for any finite crystal B, the coefficients of the S
 of the Weyl symmetrization of ch(B) are nonnegative".
 
 Checks
-  1. The 7-vertex gl_3 crystal B7 (B(2,1,0) with one weight-(1,1,1) vertex removed and the
-     strings re-glued) satisfies all of Kashiwara's crystal axioms and is seminormal
+  1. The 7-vertex gl_3 crystal B7 (B(2,1,0) with its two weight-(1,1,1) vertices identified,
+     all eight edges kept) satisfies all of Kashiwara's crystal axioms and is seminormal
      (eps_i, phi_i are the string lengths).  Sanity: B(1,0,0), B(2,1,0) and the word crystal
      B(1)^{(x)3} (tensor rule) pass the same checker.
   2. ch(B7) = m_210 + m_111.  Schur polynomials are computed in two independent ways:
@@ -18,7 +18,8 @@ Checks
      satisfying the string condition; the realisation is constructed and re-checked.
      gl_2: every such character is Schur positive (exhaustive, <= 10 vertices, all weights).
      gl_3: no non-Schur-positive one has <= 6 vertices; with 7 vertices they exist.
-  5. Remark: the 1-vertex abstract (non-seminormal) gl_2 crystal also violates clause 1.
+  5. Remark: 1-vertex abstract (non-seminormal) gl_2 crystals also violate clause 1:
+     wt=(-1,2), eps=3, phi=0, and the lowest vertex of B(2,0) with inherited eps=2, phi=0.
 """
 from itertools import permutations, product
 from collections import Counter
@@ -461,6 +462,19 @@ check(schur_expand_bialt(c1, 2) == {(1, 0): -1}, f"Weyl symmetrizer: {schur_expa
 orb1 = padd(*[act(w, c1) for w in permutations(range(2))])
 check(schur_expand_peel(orb1, 2) == {(2, -1): 1, (1, 0): -1},
       f"orbit sum: {schur_expand_peel(orb1, 2)}")
+
+V2 = {'b': (0, 2)}
+check_crystal("1-vertex crystal = lowest vertex of B(2,0), wt=(0,2), eps=2, phi=0", V2, F1, 2,
+              eps={(1, 'b'): 2}, phi={(1, 'b'): 0}, seminormal=False)
+c2 = character(V2, 2)
+check(c2 == {(0, 2): 1} and schur_expand_bialt(c2, 2) == {(1, 1): -1},
+      f"ch = x2^2, Weyl symmetrizer: {schur_expand_bialt(c2, 2)} (= -s_11)")
+orb2 = padd(*[act(w, c2) for w in permutations(range(2))])
+check(schur_expand_peel(orb2, 2) == {(2, 0): 1, (1, 1): -1},
+      f"orbit sum: {schur_expand_peel(orb2, 2)} (x1^2 + x2^2 = s_20 - s_11)")
+VB20 = {'u': (2, 0), 'v': (1, 1), 'b': (0, 2)}
+FB20 = {1: {'u': 'v', 'v': 'b'}}
+check_crystal("B(2,0) (the lowest vertex b has eps=2, phi=0 there)", VB20, FB20, 2)
 
 print("ALL CHECKS PASSED" if OK else "SOME CHECK FAILED")
 sys.exit(0 if OK else 1)

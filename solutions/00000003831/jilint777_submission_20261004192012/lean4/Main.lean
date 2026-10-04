@@ -20,8 +20,8 @@ We formalize, from scratch (Lean 4 core only):
 * the Weyl symmetrization `π(f) = J(x^ρ f) / J(x^ρ)` through its defining equation
   `q · J(x^ρ) = J(x^ρ f)` (`WeylSym f q`).
 
-The counterexample `B7` is a 7-vertex seminormal `gl₃` crystal (B(2,1,0) with one of its two
-weight-(1,1,1) vertices removed and the strings re-glued).  `ch B7 = s₂₁₀ − s₁₁₁`, and every
+The counterexample `B7` is a 7-vertex seminormal `gl₃` crystal (obtained from B(2,1,0) by
+identifying its two weight-(1,1,1) vertices into one vertex `Z`, keeping all eight edges).  `ch B7 = s₂₁₀ − s₁₁₁`, and every
 reading of the symmetrization has a negative Schur coefficient.
 -/
 
