@@ -1,0 +1,93 @@
+{
+  "id": "00000000231",
+  "verified_at_utc": "2026-10-04T10:23:10.185903+00:00",
+  "clean_build_pass": true,
+  "commands": [
+    {
+      "command": [
+        "lake.exe",
+        "--version"
+      ],
+      "exit_code": 0,
+      "seconds": 0.032,
+      "log": "lean-version.log"
+    },
+    {
+      "command": [
+        "lake.exe",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 0.609,
+      "log": "lake-build.log"
+    },
+    {
+      "command": [
+        "lake.exe",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Main.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 0.562,
+      "log": "lean-axioms.log"
+    },
+    {
+      "command": [
+        "python.exe",
+        "-X",
+        "utf8",
+        "verify.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.032,
+      "log": "verify-output.json"
+    },
+    {
+      "command": [
+        "tectonic.exe",
+        "--keep-logs",
+        "main.tex"
+      ],
+      "exit_code": 0,
+      "seconds": 2.39,
+      "log": "pdf-build.log"
+    },
+    {
+      "command": [
+        "pdftoppm.exe",
+        "-scale-to",
+        "1500",
+        "-png",
+        "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\drafts\\00000000231\\main.pdf",
+        "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\qa\\00000000231\\dc2c85b64e2a\\page"
+      ],
+      "exit_code": 0,
+      "seconds": 0.406,
+      "log": "pdf-render.log"
+    }
+  ],
+  "axioms": [
+    "Quot.sound",
+    "propext"
+  ],
+  "lean_source_sha256": {
+    "lake-manifest.json": "28ceaec2a96da370c30ed44c51537fa8d36a9c7a60ffdbe30aa1781d667990c4",
+    "lakefile.toml": "a930c228ba0f394187c6fd23a6c292866d5978183e66129f6b7a74376ff352b5",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea",
+    "Main.lean": "6581e9744adaf162ffb204b83379ae71898640211dbd6afdd0e041916a61e055"
+  },
+  "main_tex_sha256": "dc2c85b64e2a3a353cda654ce8dbd69163aff2cbe8c7daf1df1ca36c6812a50f",
+  "main_pdf_sha256": "87644256a714a56b0edbdd2f18be2693bdaef7decec674315e1260f5e21381e6",
+  "pdf_pages": 2,
+  "pdf_warnings": [],
+  "pdf_visual_review": "PASS",
+  "review_mode": "single-agent; no independent reviewer",
+  "native_compiler": "unavailable: Unable to find standard directories for platform; existing Tectonic export used",
+  "rendered_images": [
+    "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\qa\\00000000231\\dc2c85b64e2a\\page-1.png",
+    "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\qa\\00000000231\\dc2c85b64e2a\\page-2.png"
+  ],
+  "pdf_visual_review_notes": "Both final pages inspected; no clipping, overflow or missing symbols."
+}

@@ -1,0 +1,111 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\begin{document}
+\title{A counterexample to the explicit period condition\newline in Conjecture 00000000231}
+\author{Chengzhe Gao}\date{}\maketitle
+
+\paragraph{Source and scope.}
+Both language versions define the exceptional primes by the condition
+that the Fibonacci period does not divide $p^2$, and assert that none
+is below $10^{17}$. Write $F_0=0$, $F_1=1$ and
+$F_{n+2}=F_n+F_{n+1}$, and let $\pi(m)$ be the least positive period
+of the entire Fibonacci sequence modulo $m$.
+Under the explicit condition $\pi(p)\nmid p^2$, the prime $p=7$
+is a counterexample. The same prime works if the unspecified period
+is instead read as $\pi(p^2)$.
+
+\begin{theorem}
+The prime $7<10^{17}$ satisfies
+\[
+ \pi(7)=16,\qquad \pi(49)=112,\qquad
+ 16\nmid49,\qquad112\nmid49.
+\]
+Thus the source's universal nonexistence clause is false under either
+of the two modulus readings above.
+\end{theorem}
+
+\begin{lemma}[A finite certificate for an infinite sequence]
+Let $R_m(n)=(F_n,F_{n+1})\pmod m$. If $R_m(k)=R_m(0)$ and $k>0$,
+then $F_{n+k}\equiv F_n\pmod m$ for every $n\geq0$.
+Conversely, any positive period $k$ has $R_m(k)=R_m(0)$.
+In particular, if there is no such return at $1\leq j<k$, then
+$\pi(m)=k$.
+\end{lemma}
+\begin{proof}
+The residue-pair recurrence is the deterministic map
+$(a,b)\mapsto (b,a+b\pmod m)$. Equality of the pairs at $k$ and $0$
+therefore gives equality at $n+k$ and $n$ by induction on $n$.
+The converse uses the period equalities at $n=0$ and $n=1$.
+Any smaller positive period would consequently give a smaller return.
+\end{proof}
+
+\begin{proof}[Proof of the theorem]
+Modulo $7$, the residues $F_0,\ldots,F_{17}$ are
+\[
+0,1,1,2,3,5,1,6,0,6,6,5,4,2,6,1,0,1.
+\]
+Among the pairs with starting indices $1,\ldots,16$, the first return
+to $(0,1)$ is at $16$. The lemma gives $\pi(7)=16$.
+
+For completeness, $\pi(49)=112$ can be checked with the same exact
+finite recurrence. A short certificate, for either modulus, is:
+\begin{verbatim}
+a, b = 0, 1
+for j in range(1, k + 1):
+    a, b = b, (a + b) % m
+    assert ((a, b) == (0, 1)) == (j == k)
+\end{verbatim}
+For $(m,k)=(7,16)$ and $(49,112)$ every assertion holds.
+The Lean project verifies every earlier pair and the terminal pair
+by kernel reduction of the natural-number Fibonacci recurrence,
+then applies the lemma. Thus this certificate establishes the
+least period of the entire sequence, with no assumption about
+unexamined indices. The supplied Python script independently
+recomputes both residue orbits as a supplementary check.
+
+Finally $7$ is prime, $7<10^{17}$, and neither $16$ nor $112$ divides
+$49$, proving both stated counterexamples.
+\end{proof}
+
+\paragraph{Relation to the conventional problem.}
+The source's divisibility condition is different from the
+conventional exceptional-prime condition $\pi(p^2)=\pi(p)$;
+see Elsenhans and Jahnel~\cite{EJ}, Section~2.2.
+Indeed, the calculations above give $112\ne16$, so $7$ is
+\emph{not} an exceptional prime in that conventional sense.
+This submission only disproves the explicit bilingual statement.
+It makes no claim about the existence or infinitude of conventional
+Wall--Sun--Sun primes or the validity of searches for them.
+The later discriminant and infinitude clauses are unnecessary to
+the disproof of the first conjunct.
+
+\paragraph{Formalization and reproduction.}
+The Lean 4.19.0 project uses only its bundled standard library.
+It defines the actual Fibonacci sequence on all natural indices,
+proves its initial values, recurrence and uniqueness, and defines
+a period by a universal equality over every index.
+The generic least-period certificate proves the bridge from
+finite residue pairs to this unbounded definition.
+Actual natural-number primality, divisibility, leastness and the
+bound $10^{17}$ appear in the final counterexample theorems.
+Both modulus readings and the inequality of the conventional
+periods are formally proved. Kernel-checked \texttt{decide}
+certifies only the finite arithmetic; no oracle computation is used.
+No \texttt{sorry}, \texttt{admit}, \texttt{native\_decide} or added
+axiom occurs. From \texttt{lean/}, run
+\texttt{lake build} and
+\texttt{lake env lean -DwarningAsError=true Main.lean}.
+Build logs, printed axiom dependencies and a solo adversarial
+review accompany this submission. No independent-review claim is made.
+
+\begin{thebibliography}{1}
+\bibitem{EJ} A.-S. Elsenhans and J. Jahnel,
+\emph{The Fibonacci sequence modulo $p^2$---An investigation by
+computer for $p<10^{14}$}, 2010.
+\href{https://arxiv.org/abs/1006.0824}{arXiv:1006.0824}.
+\end{thebibliography}
+\end{document}
