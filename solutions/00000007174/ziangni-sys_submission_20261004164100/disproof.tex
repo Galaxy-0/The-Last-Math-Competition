@@ -1,0 +1,62 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{A scaled rotation disproves conjecture 00000007174}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+The stated antisymmetric-norm lower bound fails even for an invertible
+normal real matrix. We use the standard spectral (Euclidean operator)
+condition number $\kappa_2(A)=\|A\|_2\|A^{-1}\|_2$ and also check the
+ratio of eigenvalue moduli, covering the source's spectral-ratio wording.
+
+On the actual real Euclidean plane let
+\[
+A=\begin{pmatrix}0&-2\\2&0\end{pmatrix},\qquad
+B=\begin{pmatrix}0&1/2\\-1/2&0\end{pmatrix}.
+\]
+Direct multiplication gives $BA=AB=I$, so $B=A^{-1}$.
+For every vector $v=(x,y)$,
+\[
+Av=(-2y,2x),\quad \|Av\|_2=2\|v\|_2,
+\qquad \|Bv\|_2=\tfrac12\|v\|_2.
+\]
+Taking the supremum over unit vectors therefore gives the actual
+operator norms $\|A\|_2=2$ and $\|B\|_2=1/2$. Consequently
+\[
+\kappa_2(A)=1.
+\]
+The adjoint for the standard Euclidean inner product is $A^*=-A$.
+In particular $A^*A=AA^*$, so $A$ is normal. Its standard antisymmetric
+part is
+\[
+K=\frac{A-A^*}{2}=A,\qquad \|K\|_2=2>1=\kappa_2(A).
+\]
+Thus the norm of the antisymmetric part is not a lower bound for the
+spectral condition number. If ``antisymmetric'' instead denotes the
+unnormalized difference $A-A^*$, its norm is $4$, so that convention
+also fails.
+
+For completeness, the complexified matrix has characteristic equation
+\[
+\det(A-zI)=z^2+4=(z-2i)(z+2i).
+\]
+Its two eigenvalues are exactly $2i$ and $-2i$, both of modulus $2$.
+The ratio of largest to smallest eigenvalue modulus is therefore also
+$1$, and is again strictly less than the antisymmetric norm $2$.
+The witness disproves the lower-bound inequality itself, independently
+of the further assertion about attaining the bound.
+
+\paragraph{Formal correspondence.}
+Lean realizes the real Euclidean plane as $\mathbb C$ with its actual
+real Hilbert structure and defines $A(z)=2iz$, $B(z)=-iz/2$ as actual
+continuous real linear maps. It verifies the coordinate matrix above,
+both inverse identities, both actual operator norms, the actual adjoint,
+normality and the strict failure of the bound. It separately verifies
+the determinant factorization and complete eigenvalue list of the
+complexified $2\times2$ matrix and the modulus ratio. The complex norm
+is the Euclidean norm; no coordinate supremum norm is used. The project
+is pinned to Lean 4.19.0 and Mathlib commit
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\end{document}
