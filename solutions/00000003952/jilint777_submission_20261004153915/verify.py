@@ -185,6 +185,7 @@ def main():
     S = {1, 2, 3, 4}
     check(len(bfs(HOUSE[1], S, 1)) == 4 and bfs(HOUSE[1], set(range(5)), 2)[3] == 2
           and bfs(HOUSE[1], S, 2)[3] == 3, "house: H-0 connected, d_H(2,3)=2, d_{H-0}(2,3)=3")
+    print("     Lean/report witness: S = [1, 2, 3, 4], x = 2, y = 3, d_G = 2, d_G[S] = 3")
     check(not dh_pruning(HOUSE) and not dh_forbidden(HOUSE), "house: not DH by pruning and by forbidden subgraphs")
     comp = graph(5, [(a, b) for a in range(5) for b in range(a+1, 5) if b not in HOUSE[1][a]])
     check(isomorphic(comp, P5), "house: complement is the path P5")
@@ -194,6 +195,12 @@ def main():
     check(twin_width(NET) == 2, f"net: exact twin-width (partition search) = {twin_width(NET)}")
     ws = seq_widths(NET, [(0,3), (1,4), (2,5), (0,1), (0,2)])
     check(max(ws) == 2, f"net: explicit width-2 sequence, red degrees {ws}")
+    # asteroidal triple 3,4,5 (second reason: tww<=1 graphs are permutation graphs, which are AT-free)
+    def at_path(G, a, b, c):
+        S = set(range(G[0])) - (G[1][c] | {c})
+        return b in bfs(G[1], S, a)
+    check(all(at_path(NET, a, b, c) for a, b, c in [(3,4,5), (3,5,4), (4,5,3)]),
+          "net: 3,4,5 is an asteroidal triple, so the net is not a permutation graph")
     check(is_dh(NET), "net: distance-hereditary (BFS on all 63 induced subgraphs, pruning, forbidden subgraphs)")
 
     # sanity: P5 agrees with the conjecture

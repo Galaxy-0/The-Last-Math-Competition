@@ -27,6 +27,18 @@ the new vertex red degree 2:
 
 So tww(N) > 1. A width-2 sequence exists, so tww(N) = 2.
 
+**Literature.** Bonnet, Kim, Reinald, Thomassé and Watrigant showed that tww ≤ 1 is
+recognizable in polynomial time. Ahn, Jacob, Köhler, Paul, Reinald and Wiederrecht ("Twin-width
+one") showed that tww ≤ 1 graphs are permutation graphs, recognizable in linear time. The net has
+an asteroidal triple (its three pendants), so it is not a permutation graph; this is a second
+reason why tww(N) > 1. Oum showed that DH graphs are exactly the graphs of rank-width ≤ 1, which
+explains the conjecture's mix-up.
+
+**Scope.** "Width" is the standard maximum red degree over all vertices of every trigraph
+(Bonnet–Kim–Thomassé–Watrigant), which is the conjecture's own definition. Both results also
+hold if only the contracted vertex is measured. Other variants, such as component twin-width or
+total red degree, are out of scope.
+
 ## Contents
 
 - `report.tex`, `report.pdf`: the complete proof, definitions, the readings covered, and the
@@ -95,3 +107,12 @@ pdflatex report.tex && pdflatex report.tex
 
 Lean 4（仅核心库）从零定义了三元图（红黑图）、收缩、收缩序列、宽度、twin-width ≤ d、导出子图中的途径以及距离遗传性，
 并证明了 `¬ Clause`。verify.py 用划分序列穷举与三种距离遗传判别方法独立复核。
+
+文献背景：
+- Bonnet–Kim–Reinald–Thomassé–Watrigant 证明了 twin-width ≤ 1 可在多项式时间内识别。
+- Ahn–Jacob–Köhler–Paul–Reinald–Wiederrecht（"Twin-width one"）证明了 twin-width ≤ 1 的图都是置换图，并可在线性时间内识别。
+  网图的三个悬挂点构成星状三元组（asteroidal triple），所以网图不是置换图，这给出了 tww(N) > 1 的第二个理由。
+- Oum 证明了距离遗传图恰为秩宽（rank-width）≤ 1 的图。猜想大概混淆了秩宽与 twin-width。
+
+宽度采用标准的 BKTW 定义（所有三元图中所有顶点红度的最大值），也就是猜想本身的定义。
+若只计被收缩的新顶点的红度，两个结论同样成立。其他变体（如分量 twin-width、红边总数）不在讨论范围内。

@@ -189,13 +189,24 @@ $N$ is DH but has $\operatorname{tww}>1$. Hence Conjecture 00000003952 is false.
 \begin{itemize}
 \item \textbf{``Exactly''} means equality of the two graph classes. Each inclusion fails
 separately (Theorems~\ref{thm:house} and~\ref{thm:net}).
-\item \textbf{Twin-width.} We use the standard definition. The trigraph and partition
-formulations agree, as explained above. ``Red-black graphs'' are the trigraphs, and a
-graph is a trigraph without red edges. The house sequence has red degree $\le1$ at
-\emph{every} vertex of every trigraph. The net lower bound comes from the red degree of
-the \emph{newly created} vertex in the first trigraph. So both results also hold for
-variants that measure only the contracted vertex, or all vertices. Twin-width does not
-depend on vertex names, and in Lean the merged vertex keeps the name of the first one.
+\item \textbf{Twin-width.} The conjecture's own definition (``the minimal width over
+contraction sequences of red-black graphs'') is exactly the standard
+Bonnet--Kim--Thomass\'e--Watrigant notion~\cite{bktw}. There, the width of a sequence is the
+maximum red degree of any vertex in any trigraph of the sequence, and we use this definition.
+The trigraph and partition formulations agree, as explained above. ``Red-black graphs'' are
+the trigraphs, and a graph is a trigraph without red edges. Other twin-width variants are
+outside the scope of the conjecture as stated, for example component twin-width or widths
+based on the total number of red edges.
+\item \textbf{The ``contracted vertex only'' variant.} One could measure only the red degree
+of the newly contracted vertex. Both results survive this change:
+\begin{itemize}
+\item The house sequence has red degree $\le1$ at \emph{every} vertex of every trigraph, so
+it also has width $\le 1$ under this smaller measure.
+\item The net lower bound comes from the red degree of the \emph{newly created} vertex in the
+first trigraph, so it holds under this variant as well.
+\end{itemize}
+Twin-width does not depend on vertex names. In Lean the merged vertex keeps the name of the
+first one.
 \item \textbf{Distance-hereditary.} Both graphs are connected, so the usual definitions
 coincide on them: Howorka's isometric-subgraph definition, the Bandelt--Mulder
 forbidden-subgraph and pruning characterizations, and the condition that every induced
@@ -208,6 +219,26 @@ property is not: $\overline{H}=P_5$ is DH. This explains why (C) cannot hold.
 house and the gem);
 \item on $6$ vertices there are $27$ such graphs, and the net is the only DH graph with
 $\operatorname{tww}>1$.
+\end{itemize}
+\item \textbf{Literature.} Our proofs above are self-contained. The following known results
+are consistent with them and explain the conjecture's mix-up:
+\begin{itemize}
+\item Bonnet, Kim, Reinald, Thomass\'e and Watrigant~\cite{bkrtw} showed that graphs of
+twin-width at most $1$ can be recognized in polynomial time.
+\item Ahn, Jacob, K\"ohler, Paul, Reinald and Wiederrecht~\cite{twinwidthone} showed that
+graphs of twin-width at most $1$ are permutation graphs, and recognized them in linear time.
+\item This gives a second proof that $\operatorname{tww}(N)>1$. The three pendants $3,4,5$ of
+the net form an asteroidal triple:
+\begin{itemize}
+\item the path $3\,0\,1\,4$ avoids $N(5)=\{2\}$;
+\item the path $3\,0\,2\,5$ avoids $N(4)=\{1\}$;
+\item the path $4\,1\,2\,5$ avoids $N(3)=\{0\}$.
+\end{itemize}
+Permutation graphs are cocomparability graphs, so they are AT-free. Hence $N$ is not a
+permutation graph.
+\item Oum~\cite{oum} showed that the distance-hereditary graphs are exactly the graphs of
+\emph{rank-width} at most $1$. The conjecture's first clause seems to confuse rank-width
+with twin-width.
 \end{itemize}
 \item \textbf{Not addressed.} The complexity statements about recognizing twin-width at
 most $2$ and at most $3$ are not needed and not discussed.
@@ -293,5 +324,11 @@ cd .. && python3 verify.py
 Quart.\ J.\ Math.\ Oxford 28 (1977) 417--420.
 \bibitem{bm} H.-J.~Bandelt, H.~M.~Mulder, \emph{Distance-hereditary graphs},
 J.~Combin.\ Theory Ser.~B 41 (1986) 182--208.
+\bibitem{bkrtw} \'E.~Bonnet, E.~J.~Kim, A.~Reinald, S.~Thomass\'e, R.~Watrigant,
+\emph{Twin-width and polynomial kernels}, Algorithmica 84 (2022) 3300--3337.
+\bibitem{twinwidthone} J.~Ahn, H.~Jacob, N.~K\"ohler, C.~Paul, A.~Reinald,
+S.~Wiederrecht, \emph{Twin-width one}, preprint (arXiv), 2025.
+\bibitem{oum} S.~Oum, \emph{Rank-width and vertex-minors}, J.~Combin.\ Theory
+Ser.~B 95 (2005) 79--100.
 \end{thebibliography}
 \end{document}

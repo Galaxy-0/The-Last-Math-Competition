@@ -1,6 +1,4 @@
 == lake build (fresh, Lean 4.19.0)
-info: twinWidthDH: no previous manifest, creating one from scratch
-info: toolchain not updated; already up-to-date
 ℹ [2/3] Built Main
 info: ././././Main.lean:484:0: 'TwinWidth.house_twwLe_one' does not depend on any axioms
 info: ././././Main.lean:485:0: 'TwinWidth.house_tww_eq_one' depends on axioms: [propext, Quot.sound]
@@ -24,11 +22,13 @@ ok   house: every first contraction creates a red edge (no twins)
 ok   house: exact twin-width (partition search) = 1
 ok   house: not distance-hereditary, witness (S, x, y, d_G, d_G[S]) = ([0, 1, 2, 3], 1, 2, 2, 3)
 ok   house: H-0 connected, d_H(2,3)=2, d_{H-0}(2,3)=3
+     Lean/report witness: S = [1, 2, 3, 4], x = 2, y = 3, d_G = 2, d_G[S] = 3
 ok   house: not DH by pruning and by forbidden subgraphs
 ok   house: complement is the path P5
 ok   net: every first contraction creates red degree >= 2
 ok   net: exact twin-width (partition search) = 2
 ok   net: explicit width-2 sequence, red degrees [0, 2, 2, 2, 1, 0]
+ok   net: 3,4,5 is an asteroidal triple, so the net is not a permutation graph
 ok   net: distance-hereditary (BFS on all 63 induced subgraphs, pruning, forbidden subgraphs)
 ok   P5: twin-width 1 and distance-hereditary (sanity)
 enumerating connected graphs with nauty-geng (n <= 6):
