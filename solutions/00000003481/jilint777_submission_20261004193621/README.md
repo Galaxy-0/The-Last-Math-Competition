@@ -14,6 +14,11 @@ The conjecture is a conjunction of four clauses:
 
 (C2), (C3) and (C4) are false, so the conjunction is false.
 
+**Reading dependence.** The Lean result refutes the literal (C3). Under the asymptotic reading
+of (C3), the disproof goes through (C2), whose refutation, π(T) ≤ 4 for every tree, is proved
+completely in report §4. That refutation is also formalised in Lean, with Thue's theorem as
+the only explicit hypothesis (`conjecture_C2_false`).
+
 ## (C3) is false for every logarithm base `b > 1` (formalised in Lean)
 
 For `b > 1` and `Δ ≥ 1`, `k ≤ 2 log_b Δ` holds iff `b^k ≤ Δ²`. There are three counterexamples:
@@ -30,7 +35,7 @@ A larger base gives a smaller bound. Refuting every rational base `p/q > 1` ther
 every real base `b > 1`. The rounded-up bound `⌈2 log_b Δ⌉` and the list (choice) version
 `π_ch ≥ π` fail on the same examples.
 
-## (C2) and (C4) are false: `π(T) ≤ 4` for every tree (proved in the report)
+## (C2) and (C4) are false: `π(T) ≤ 4` for every tree (report §4; in Lean modulo Thue's theorem)
 
 This is the theorem of Brešar, Grytczuk, Klavžar, Niwczyk and Peterin, *Nonrepetitive
 colorings of trees*, Discrete Math. 307 (2007) 163–172. The report gives a complete proof
@@ -53,8 +58,8 @@ have `Δ ≤ 3`, so they cannot form a family with `Δ → ∞`. This makes (C4)
 - **Literal (C3)** (`π ≤ 2 log Δ` for every tree): false for every base. `K₂` refutes it for
   `b > 1`, `P₄` for `b > 1.587`, and `B₆` for `b > √3`.
 - **(C3) only "for large Δ" or "up to O(1)":** then (C3) is true but trivial, since `π ≤ 4`.
-  But then (C4) and (C2) are false by the cited theorem, whose full proof is in the report but
-  not in Lean.
+  But then (C4) and (C2) are false by the cited theorem. Its full proof is in report §4, and it
+  is formalised in Lean for finite trees, with Thue's theorem as an explicit hypothesis.
 - **(C2):** false for every tree, finite or infinite. Disclosure: the different parameter
   `π_ch`, the nonrepetitive *list* chromatic number, is unbounded on trees (Fiorenzi, Ochem,
   Ossona de Mendez and Zhu 2011). The statement defines colourings, not list colourings.
@@ -72,7 +77,8 @@ have `Δ ≤ 3`, so they cannot form a family with `Δ → ∞`. This makes (C4)
   - paths (all paths, not only root-to-leaf paths);
   - `HasSquare s := ∃ a x b, x ≠ [] ∧ s = a ++ x ++ x ++ b`;
   - Thue colourings, `Colorable` and `IsThueNumber` (unique);
-  - trees (simple, connected, with `n-1` edges) and the maximum degree.
+  - trees (simple graphs in which any two vertices are joined by exactly one path; `K₂` and
+    `P₄` are also checked to be connected with `n-1` edges) and the maximum degree.
 
   It proves:
   - `thue_K2 : IsThueNumber K2 2` and `thue_P4 : IsThueNumber P4 3`;
@@ -83,7 +89,20 @@ have `Δ ≤ 3`, so they cannot form a family with `Δ → ∞`. This makes (C4)
   - `claimCol_false`, the colouring form, which does not use the minimum;
   - `claimDeg2_false`, which shows the `Δ ≥ 2` version fails when `p³ > 4q³`, for example for
     bases 2 and `27/10 < e`;
-  - `claim_mono` (a larger base gives a stronger claim) and `nonvacuous`.
+  - `claim_mono` (a larger base gives a stronger claim) and `nonvacuous`;
+  - **(C2), modulo Thue's theorem.** The hypothesis is
+    `ThueHyp := ∀ L, ∃ w : ℕ → ℕ, (∀ i, w i < 3) ∧ (no factor xx inside w₀…w_{L-1})`.
+    The list form `ThueHypList` (lists of each length with entries `< 3` and `¬ HasSquare`)
+    implies it, and `thueHyp_40` checks it for `L = 40` by `decide`. From it, Lean proves:
+    - `kp_sqfree`, `kp_ne1` and `kp_ne2`: the Kündgen–Pelsmajer lemma;
+    - `fold_sqfree`: the folding lemma;
+    - `valley`: paths go down, then up, in a layering with unique parents;
+    - `tree_layering`: every `IsTree` has such a layering;
+    - `tree_colorable_four : ThueHyp → IsTree G → Colorable G 4` and `thueNumber_le_four`;
+    - **`conjecture_C2_false : ThueHyp → ¬ (∀ k, ∃ G, IsTree G ∧ ¬ Colorable G k)`**, with the
+      variants `conjecture_C2_false'` (stated with `π`) and `conjecture_C2_false_list`.
+
+    These use the same graph, path, square, colouring and tree notions as the main theorem.
 
   Path enumeration is proved complete by a pigeonhole lemma. The only axioms are `propext`,
   `Classical.choice` and `Quot.sound`. There is no `sorry` and no `native_decide`.
@@ -91,21 +110,26 @@ have `Δ ≤ 3`, so they cannot form a family with `Δ → ∞`. This makes (C4)
   - enumerates all colourings and paths to get `π(K₂) = 2` and `π(P₄) = 3`;
   - generates all 987 trees with `n ≤ 12` (the counts match OEIS A000055) and computes `π` for
     each (the maximum is 3);
-  - computes `π(B_h)` for `h ≤ 6`, using two different searches for `B₆`;
+  - computes `π(B_h)` for `h ≤ 6`, using two different searches for `B₆`. Each search shows
+    that `B₆` has no Thue 3-colouring in about 0.03 s, well under a second;
   - checks the 4-colour depth construction on all 11006 rooted trees with `n ≤ 12` and on
     `B_1, …, B_8`.
 - `verification.txt`: the fresh build log, the forbidden-token scan and the output of
   `verify.py`.
 
-**Not in Lean:** the theorem `π(T) ≤ 4`, which needs Thue's infinite square-free word; the
-corollaries for (C2) and (C4); the computation `π(B₆) = 4`; and the step from rational to real
-bases, a one-line monotonicity argument whose rational form is `claim_mono`.
+**Not in Lean:**
+- Thue's theorem itself, which is the explicit hypothesis `ThueHyp`;
+- infinite trees;
+- the corollary for (C4);
+- the computation `π(B₆) = 4`;
+- the step from rational to real bases, a one-line monotonicity argument whose rational form is
+  `claim_mono`.
 
 ## Reproduce
 
 ```sh
 cd lean4 && lake build
-cd .. && python3 verify.py
+cd .. && python3 verify.py      # about 7 s; the B₆ searches take about 0.03 s each
 pdflatex report.tex && pdflatex report.tex
 ```
 
@@ -121,6 +145,10 @@ Thue 染色（非重复染色）要求任意路径的色序列不含平方因子
 - （C4）该界由完全二叉树的子树族渐近达到。
 
 其中（C2）、（C3）、（C4）均不成立，因此整个合取命题不成立。
+
+**解读依赖。** Lean 结果否定的是字面意义下的（C3）。若按渐近解读理解（C3），则否定通过（C2）完成：
+（C2）的否定，即每棵树都有 π(T) ≤ 4，在报告第 4 节中给出了完整证明；该否定也已在 Lean 中形式化，
+唯一的显式假设是 Thue 定理（`conjecture_C2_false`）。
 
 **（C3）对任何底数 `b > 1` 都不成立（已在 Lean 中形式化）。** 当 `Δ ≥ 1` 时，`k ≤ 2 log_b Δ` 等价于
 `b^k ≤ Δ²`。反例有三个：
@@ -147,7 +175,8 @@ Thue 染色（非重复染色）要求任意路径的色序列不含平方因子
 - 若把（C3）理解为对每棵树成立的上界（字面解读），则对任何底数均不成立：`K₂` 否定 `b > 1`，
   `P₄` 否定 `b > 1.587`，`B₆` 否定 `b > √3`；
 - 若把（C3）理解为"对大的 `Δ`"或"相差 O(1)"成立，则由 `π ≤ 4`，它为真但平凡；此时（C4）与（C2）
-  由所引定理不成立。该定理的完整证明在报告中，未在 Lean 中形式化；
+  由所引定理不成立。该定理的完整证明在报告第 4 节中，并已在 Lean 中对有限树形式化
+  （以 Thue 定理为显式假设）；
 - （C2）对有限树和无限树都不成立。需要说明：另一个参数 `π_ch`（非重复列表染色数）在树上确实无界
   （Fiorenzi–Ochem–Ossona de Mendez–Zhu 2011），但题目定义的是染色，而不是列表染色；
 - （C1）未被否定。计算得 `2 ≤ h ≤ 5` 时 `π(B_h) = 3`，且 `π(B₆) = 4`，从而所有 `h ≥ 6` 以及无限
@@ -158,12 +187,20 @@ Thue 染色（非重复染色）要求任意路径的色序列不含平方因子
 - 路径（任意路径）；
 - 平方因子；
 - Thue 染色、`Colorable` 与 `IsThueNumber`（证明了唯一性）；
-- 树（简单、连通、`n-1` 条边）以及最大度。
+- 树（任意两顶点之间恰有一条路径的简单图；对 `K₂`、`P₄` 还验证了连通且有 `n-1` 条边）以及最大度。
 
 它证明了：
 - `π(K₂) = 2` 与 `π(P₄) = 3`；
 - 主定理 `conjecture_00000003481_false`：对任何有理底数 `p/q > 1`，命题"每棵树满足 `p^π ≤ Δ² q^π`"
   不成立；
-- `claimCol_false`（染色形式）、`claimDeg2_false`（`Δ ≥ 2` 的版本）以及 `claim_mono`。
+- `claimCol_false`（染色形式）、`claimDeg2_false`（`Δ ≥ 2` 的版本）以及 `claim_mono`；
+- 以 Thue 定理为显式假设 `ThueHyp`（任意长度的三字母无平方字存在；其列表形式 `ThueHypList`
+  蕴含它，`thueHyp_40` 用 `decide` 验证了长度 40 的情形），证明了 Kündgen–Pelsmajer 引理
+  （`kp_sqfree`）、折叠引理（`fold_sqfree`）、树中路径"先降后升"（`valley`、`tree_layering`），
+  从而得到 `tree_colorable_four`：每棵树都有 Thue 4 染色；以及
+  `conjecture_C2_false : ThueHyp → ¬ (∀ k, ∃ G, IsTree G ∧ ¬ Colorable G k)`。
+  这些结果使用与主定理相同的图、路径、平方、染色和树的定义。
 
-`π ≤ 4` 的定理、`π(B₆) = 4` 的计算，以及从有理底数到实底数的推广，只在报告和 `verify.py` 中给出。
+未在 Lean 中形式化的部分：Thue 定理本身（作为假设）、无限树、（C4）的推论、`π(B₆) = 4` 的计算，
+以及从有理底数到实底数的推广。这些在报告和 `verify.py` 中给出。`verify.py` 中对 `B₆` 不可 3 染色的
+两次搜索各约 0.03 秒，远低于一秒。

@@ -34,8 +34,9 @@ Peterin, 2007). We include a complete proof of this bound that uses only Thue's 
 (iii)~Since $\pi\le4$ while $2\log\Delta\to\infty$, the bound is never attained asymptotically.
 Moreover, subtrees of the complete binary tree have $\Delta\le3$, so they cannot form a family
 with $\Delta\to\infty$. The refutation of (i) is formalised in Lean~4 (core library only).
-Graphs, paths, square factors, Thue colourings, the Thue number and trees are all defined there
-from scratch. An independent Python script computes $\pi$ for all $987$ trees with at most $12$
+So is the bound $\pi(T)\le4$ for every finite tree, and hence the refutation of (ii), with
+Thue's theorem as the only explicit hypothesis. Graphs, paths, square factors, Thue colourings,
+the Thue number and trees are all defined there from scratch. An independent Python script computes $\pi$ for all $987$ trees with at most $12$
 vertices. It also finds that the complete binary tree of depth $6$ has $\pi=4$, which is
 consistent with the remaining clause ``the Thue number of the binary tree is four''.
 \end{abstract}
@@ -121,7 +122,7 @@ The last item shows that even the family named in (C4) violates the bound in (C3
 also fails when it is rounded up: $\lceil 2\log_b1\rceil=0<2$, and $\lceil2\log_22\rceil=
 \lceil2\ln2\rceil=2<3$. It fails as well for the Thue \emph{choice} number $\pi_{ch}\ge\pi$.
 
-\section{\texorpdfstring{Every tree has $\pi(T)\le4$}{Every tree has pi(T) <= 4}}
+\section{\texorpdfstring{Every tree has $\pi(T)\le4$}{Every tree has pi(T) <= 4}}\label{sec:four}
 
 This is a theorem of Bre\v{s}ar, Grytczuk, Klav\v{z}ar, Niwczyk and Peterin~\cite{BGKNP}; see
 also Wood's survey~\cite[Thm.~4.1]{Wood}. For completeness we give a full proof. It uses the
@@ -201,7 +202,8 @@ the colour sequence of $P$ is exactly the word $s$ of Lemma~\ref{lem:fold}, with
 lengths of the two monotone parts. That word is square-free.
 \end{proof}
 
-For a finite tree only a finite prefix of $u$ is needed. Its existence for every length is still
+For a finite tree only a finite prefix of $u$ is needed. For finite trees, this proof is
+formalised in Lean, with Thue's theorem as an explicit hypothesis (Section~\ref{sec:lean}). Its existence for every length is still
 Thue's theorem. Bre\v{s}ar et al.~\cite{BGKNP} also show that $\pi(T)=4$ for some trees, so the
 bound is tight. Section~\ref{sec:c1} gives an explicit example.
 
@@ -237,6 +239,11 @@ result and is not formalised in Lean.
 
 \section{Readings covered}\label{sec:readings}
 
+The Lean result \texttt{conjecture\_00000003481\_false} refutes the literal (C3). Under the
+asymptotic reading of (C3), the disproof goes through (C2), whose refutation, $\pi(T)\le4$ for
+every tree, is proved completely in Section~\ref{sec:four}. That refutation is also formalised in Lean,
+modulo Thue's theorem as an explicit hypothesis (Section~\ref{sec:lean}).
+
 \begin{itemize}
 \item \textbf{(C3) as a universal bound $\pi(T)\le2\log_b\Delta(T)$} (the literal reading).
 False for every base $b>1$ by $K_2$. False for every $b>4^{1/3}$, in particular $b=2,e,10$, by
@@ -253,7 +260,7 @@ Zhu~\cite{FOOZ}). The statement defines colourings, not list colourings, so this
 Even for $\pi_{ch}$, the literal (C3) fails by $K_2$ and $P_4$.
 \end{itemize}
 
-\section{Formal verification (Lean 4)}
+\section{Formal verification (Lean 4)}\label{sec:lean}
 
 The directory \texttt{lean4/} contains a Lean~4.19.0 project that uses only the core library.
 \texttt{Main.lean} defines, from scratch:
@@ -264,7 +271,9 @@ only root-to-leaf ones);
 \item \texttt{HasSquare s} ($s=a\,x\,x\,b$ with $x\ne[\,]$);
 \item \texttt{Nonrepetitive}, \texttt{Colorable G k} and \texttt{IsThueNumber G k} (the least
 such $k$, proved unique);
-\item \texttt{IsTree} (simple, connected, $n-1$ edges) and \texttt{maxDeg};
+\item \texttt{IsTree}: a nonempty simple graph in which any two vertices are joined by exactly
+one path (the textbook definition; for $K_2$ and $P_4$ we also check ``connected with $n-1$
+edges''), and \texttt{maxDeg};
 \item \texttt{LogBound p q $\Delta$ k} $:=p^k\le\Delta^2q^k$, which is~\eqref{eq:log} for the
 base $p/q$.
 \end{itemize}
@@ -283,6 +292,35 @@ $p^3>4q^3$, for example for bases $2$ and $27/10<e$;
 \item \texttt{nonvacuous}: the hypotheses are satisfiable, and Thue colouring is a nontrivial
 condition.
 \end{itemize}
+
+\paragraph{Clause (C2) in Lean (Section 7 of \texttt{Main.lean}).} The hypothesis is
+\[
+\texttt{ThueHyp} := \forall L,\ \exists w:\mathbb N\to\mathbb N,\ (\forall i,\ w_i<3)\ \wedge\
+\forall i\,k,\ 0<k\to i+2k\le L\to \exists j<k,\ w_{i+j}\ne w_{i+j+k},
+\]
+i.e.\ Thue's theorem~\cite{Thue,Berstel} in finite form: a square-free ternary word of every
+length. The list form \texttt{ThueHypList} (lists of every length with entries $<3$ and
+$\neg$\,\texttt{HasSquare}) implies it (\texttt{thueHyp\_of\_list}).
+\texttt{thueHyp\_40} checks the hypothesis for $L=40$ by \texttt{decide}. From it, Lean
+proves:
+\begin{itemize}
+\item \texttt{kp\_sqfree}, \texttt{kp\_ne1}, \texttt{kp\_ne2}: Lemma~\ref{lem:kp} for
+$u_i=3$ if $i\equiv2\pmod 3$ and $u_i=w_{2\lfloor i/3\rfloor+(i\bmod 3)}$ otherwise;
+\item \texttt{fold\_sqfree}: Lemma~\ref{lem:fold}, for $t\mapsto u_{m+|t-a|}$, with all six
+positions of the turning point relative to the square;
+\item \texttt{valley}: along any path of a graph with a layering with unique parents, the depth
+is $m+|t-a|$;
+\item \texttt{tree\_layering}: every tree (in the sense of \texttt{IsTree}) has such a layering,
+namely the depth $d(v)=|P_v|-1$, where $P_v$ is the unique path from $0$ to $v$;
+\item \texttt{tree\_colorable\_four}: assuming \texttt{ThueHyp}, every tree has a Thue
+$4$-colouring; hence $\pi(T)\le4$ (\texttt{thueNumber\_le\_four});
+\item \texttt{conjecture\_C2\_false}: assuming \texttt{ThueHyp}, it is not the case that for
+every $k$ some tree $T$ satisfies $\neg$\,\texttt{Colorable T k}. The variant with $\pi$ is
+\texttt{conjecture\_C2\_false'}; the variant assuming the list form is
+\texttt{conjecture\_C2\_false\_list}.
+\end{itemize}
+These use the same \texttt{Graph}, \texttt{IsPath}, \texttt{HasSquare}, \texttt{Colorable} and
+\texttt{IsTree} as the main theorem.
 Nonrepetitiveness of the explicit colourings is decided over all candidate vertex sequences. The
 completeness of this enumeration is proved: by a pigeonhole lemma, a path has at most $n$
 vertices. Only the axioms \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}
@@ -290,9 +328,9 @@ are used. There is no \texttt{sorry} and no \texttt{native\_decide}.
 
 The following are \emph{not} in Lean, only here and in \texttt{verify.py}:
 \begin{itemize}
-\item Theorem~\ref{thm:four} ($\pi\le4$ for all trees), which needs Thue's infinite square-free
-word;
-\item Corollaries~\ref{cor:c2}--\ref{cor:c4};
+\item Thue's theorem itself (Theorem~\ref{thm:thue}), which is an explicit hypothesis;
+\item the case of infinite trees in Theorem~\ref{thm:four} (Lean graphs are finite);
+\item Corollary~\ref{cor:c4};
 \item the computation $\pi(B_6)=4$;
 \item the passage from rational to real bases, which is the one-line monotonicity argument after
 \eqref{eq:log}; its rational form is \texttt{claim\_mono}.
@@ -308,7 +346,9 @@ OEIS A000055) and computes $\pi$ for each by backtracking, re-checking each colo
 paths;
 \item finds the maximum to be $3$ for $n\le12$, and counts the trees that violate (C3): $10$ for
 base $2$ and $661$ for base $e$;
-\item computes $\pi(B_h)$ for $h\le6$, with the two independent searches for $B_6$;
+\item computes $\pi(B_h)$ for $h\le6$, with the two independent searches for $B_6$. Both
+searches are fast: each shows that $B_6$ (127 vertices) has no Thue $3$-colouring in well under
+a second (about $0.03$\,s). The whole script runs in about $7$\,s;
 \item checks the construction of Theorem~\ref{thm:four}. It builds a ternary square-free word,
 applies the K\"undgen--Pelsmajer insertion and checks the depth colouring on all $11006$ rooted
 trees with $n\le12$ and on $B_1,\dots,B_8$.
@@ -325,6 +365,8 @@ Nonrepetitive colorings of trees, \emph{Discrete Math.} 307 (2007), 163--172.
 tree-width, \emph{Discrete Math.} 308 (2008), 4473--4478.
 \bibitem{FOOZ} F.~Fiorenzi, P.~Ochem, P.~Ossona de Mendez, X.~Zhu, Thue choosability of trees,
 \emph{Discrete Appl.\ Math.} 159 (2011), 2045--2049.
+\bibitem{Berstel} J.~Berstel, \emph{Axel Thue's papers on repetitions in words: a
+translation}, Publications du LaCIM 20, Universit\'e du Qu\'ebec \`a Montr\'eal, 1995.
 \bibitem{Wood} D.~R.~Wood, Nonrepetitive graph colouring, \emph{Electron.\ J.\ Combin.}, Dynamic
 Survey DS24 (2021); arXiv:2009.02001.
 \end{thebibliography}

@@ -309,10 +309,18 @@ def main():
         print(f"  depth {h}: n = {len(adj):3d}, Delta = {D}, pi = {k}, "
               f"2*log2(Delta) = {2 * math.log2(D):.3f}")
     ok &= (res == {1: 2, 2: 3, 3: 3, 4: 3, 5: 3, 6: 4})
+    import time
     adj6 = complete_tree(6)
+    t0 = time.time()
+    first = bt_colour(adj6, 3, bfs_order(adj6))
+    t1 = time.time()
     second = bt_colour(adj6, 3, dfs_order(adj6), symbreak=False)
-    print(f"  second search (DFS order, no colour-symmetry breaking beyond the root): "
-          f"3-colouring of depth 6 {'FOUND' if second else 'does not exist'}")
+    t2 = time.time()
+    print(f"  first search (BFS order, colour-symmetry breaking): 3-colouring of depth 6 "
+          f"{'FOUND' if first else 'does not exist'} ({t1 - t0:.2f} s)")
+    print(f"  second search (DFS order, no colour-symmetry breaking): "
+          f"3-colouring of depth 6 {'FOUND' if second else 'does not exist'} ({t2 - t1:.2f} s)")
+    ok &= (first is None)
     ok &= (second is None)
 
     print("== [D] the pi(T) <= 4 construction (depth colouring by a square-free, "
