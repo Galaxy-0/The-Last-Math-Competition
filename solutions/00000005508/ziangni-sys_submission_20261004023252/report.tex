@@ -1,0 +1,76 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\title{A one-station counterexample to Conjecture 00000005508}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\section*{The clause being disproved}
+The original conjecture defines a bottleneck as the first station to saturate
+and asserts that the number of tied bottlenecks is the multiplicity of the
+minimum residual capacity, and is at most the logarithm of the station count.
+The Chinese version states the same bound on that multiplicity.
+There is no restriction excluding a network with one station.
+We disprove this bound, and therefore the conjunction, without needing to
+assess its identification or switching clauses.
+
+\section*{Network and proof}
+Consider a network consisting of one station with service capacity
+$\mu_0=1$. Jobs enter at rate $t\geq0$ and leave after service.
+Its traffic coefficient is $a_0=1$, its offered traffic is $ta_0=t$,
+and its residual capacity is
+\[
+r_0(t)=\mu_0-ta_0=1-t.
+\]
+Saturation means that offered traffic reaches or exceeds capacity:
+$\mu_0\leq ta_0$. The station is unsaturated for every $0\leq t<1$
+and saturates at $t=1$. It is therefore the first station to saturate.
+The bottleneck set is the singleton $\{0\}$ and has cardinality one.
+The residual-capacity vector has one entry, so its minimum has
+multiplicity one at every load, including the saturation load.
+We use precisely the multiplicity convention explicitly specified in the
+conjecture; it does not assign multiplicity zero to a unique minimizer.
+
+The station count is $n=1$. The bound would read
+\[
+1\leq\log1=0,
+\]
+which is false. This is independent of logarithm base: for every genuine
+base $b>0$, $b\neq1$, $\log_b1=0$.
+For comparison, a network of two identical independent stations receiving
+rate $t$ each has residual vector $(1-t,1-t)$ and two tied bottlenecks at
+$t=1$. It also violates the bound for natural logarithms
+($\log2<1<2$), base two ($\log_22=1<2$), and base ten
+($\log_{10}2<1<2$). The singleton witness additionally resolves every
+possible legitimate base, without relying on a plurality convention.
+The claim is an exact bound; interpreting it as an asymptotic order bound
+or adding an additive constant would change the conjecture.
+
+\section*{Formal verification and scope}
+The Lean project uses Mathlib's real numbers and natural logarithm.
+\texttt{Network n} records positive capacities and positive traffic
+coefficients on the actual station type \texttt{Fin n}.
+\texttt{Saturated} is the capacity inequality above.
+\texttt{FirstBottleneck} requires a nonnegative load at which the station
+saturates and the absence of saturation at every earlier nonnegative load,
+for every station. The bottleneck set is the filtered finite set of stations
+satisfying this predicate, and its cardinality is computed from that set.
+
+\texttt{single\_first} proves first saturation at load one.
+\texttt{single\_tied\_count} proves that the defined bottleneck set has
+cardinality one. The minimum multiplicity is computed independently by
+the minimum-station set; the two counts agree at saturation.
+The final theorem
+\texttt{conjecture\_5508\_false} refutes the universally quantified
+logarithmic tie bound.
+\texttt{single\_violates\_every\_base} verifies the base-change expression
+$\log1/\log b$ as well.
+The two-station comparison is supplementary; the fully formalized singleton
+witness alone disproves the exact original claim.
+No statistical assumption or queueing simulation is needed: this is a
+deterministic traffic/capacity network.
+\end{document}
