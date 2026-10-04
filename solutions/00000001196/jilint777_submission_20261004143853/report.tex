@@ -1,0 +1,303 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of Conjecture 00000001196:\\
+the largest coefficient of $Q_{(k)}Q_{(k)}$ is not $2^{k-1}$}
+\author{jilint777}
+\date{2026-10-04}
+
+\emergencystretch=3em
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000001196 concerns $M(\lambda,\mu)$, the largest Littlewood--Richardson
+coefficient in the product of two Schur $Q$-functions. It claims
+$M(\lambda,\mu)\le\min(2^{\ell(\lambda)},2^{\ell(\mu)},f^\nu)$ and
+$M((k),(k))=2^{k-1}$. We prove that for every $k\ge1$
+\[
+Q_{(k)}Q_{(k)} = 2\sum_{j=0}^{k-1} Q_{(2k-j,\,j)},\qquad
+P_{(k)}P_{(k)} = P_{(2k)} + 2\sum_{j=1}^{k-1} P_{(2k-j,\,j)} .
+\]
+So $M((k),(k))=2$ for all $k\ge2$ in both standard normalisations, not $2^{k-1}$. The
+claim first fails at $k=3$: $Q_3Q_3=2Q_6+2Q_{51}+2Q_{42}$, so $M((3),(3))=2\ne4$.
+We treat all eight normalisation readings ($X_{(k)}Y_{(k)}$ expanded in the $Z$-basis,
+$X,Y,Z\in\{P,Q\}$). Under each of them, at $\lambda=\mu=(3)$, either the value clause
+or the bound clause of the conjecture fails. The $k=3$ case is formalised from scratch
+in Lean~4 (core library only). Schur $Q$-functions are built from their generating
+function and Schur's Pfaffian, and the expansion coefficients are proved unique. An
+independent Python script recomputes everything from marked shifted tableaux.
+\end{abstract}
+
+\section{The conjecture and the clause we refute}
+
+The statement (English version) reads:
+\begin{quote}
+\emph{Definition:} $M(\lambda,\mu)$ is the maximum of the Littlewood--Richardson
+coefficients $N_{\lambda\mu}^{\nu}$ of Schur $Q$-functions at fixed shapes.
+\emph{Conjecture:} $M(\lambda,\mu)\le \min(2^{\ell(\lambda)},2^{\ell(\mu)},f^{\nu})$,
+with value exactly $2^{k-1}$ at $\lambda=\mu=(k)$; the extremum is attained on shifted
+rectangles.
+\end{quote}
+The Chinese version says the same thing. So $M(\lambda,\mu)=\max_\nu N^\nu_{\lambda\mu}$,
+where $N^\nu_{\lambda\mu}$ are the structure constants of the product of the
+$Q$-functions indexed by $\lambda$ and $\mu$. The conjecture is a conjunction, and we
+refute the clause
+\begin{equation}\label{eq:value}
+M((k),(k)) = 2^{k-1}\qquad\text{for all }k\ge1. \tag{V}
+\end{equation}
+It is stated for every $k$, so one value of $k$ refutes it. We also use a consequence of
+the bound clause. The quantity $f^\nu$ is not defined in the statement, but whatever it is,
+$\min(2^{\ell(\lambda)},2^{\ell(\mu)},f^\nu)\le 2^{\ell(\lambda)}$. So the bound clause
+implies
+\begin{equation}\label{eq:bound}
+M((k),(k)) \le 2^{\ell((k))} = 2. \tag{B}
+\end{equation}
+
+\paragraph{Readings.}
+Two normalisations of Schur $Q$-functions are in common use: $Q_\lambda$ and
+$P_\lambda=2^{-\ell(\lambda)}Q_\lambda$. The ``Littlewood--Richardson coefficients of
+Schur $Q$-functions'' are, in the standard literature, either Stembridge's
+\emph{shifted LR coefficients} $f^\nu_{\lambda\mu}$, defined by
+$P_\lambda P_\mu=\sum_\nu f^\nu_{\lambda\mu}P_\nu$~\cite{Ste}, or the structure constants of
+the $Q$-basis, $Q_\lambda Q_\mu=\sum_\nu 2^{\ell(\lambda)+\ell(\mu)-\ell(\nu)}f^\nu_{\lambda\mu}Q_\nu$
+(\cite[III.8]{Mac}). We call these the \emph{standard readings}. To be safe we also
+consider every mixed convention: the reading $(X,Y,Z)$ with $X,Y,Z\in\{P,Q\}$ expands
+$X_{(k)}Y_{(k)}$ in the basis $\{Z_\nu\}$ and takes the maximal coefficient. There are
+$8$ readings (6 up to the symmetry $X\leftrightarrow Y$). Coefficients may be rational.
+
+\section{\texorpdfstring{Schur $Q$-functions}{Schur Q-functions}}
+
+We follow Macdonald~\cite[III.8]{Mac}. Let $x=(x_1,x_2,\dots)$ and define $q_r$ by
+\[
+\sum_{r\ge0} q_r t^r = \prod_i \frac{1+x_it}{1-x_it}
+ = \prod_i\Bigl(1+\sum_{s\ge1}2x_i^st^s\Bigr).
+\]
+Then $q_0=1$, and since $Q(t)Q(-t)=1$ for $Q(t)=\sum_r q_rt^r$,
+\begin{equation}\label{eq:rel}
+\sum_{i=0}^{r}(-1)^iq_iq_{r-i}=0\qquad(r\ge1).
+\end{equation}
+For $r>s\ge0$ put
+\begin{equation}\label{eq:Q2}
+Q_{(r,s)} = q_rq_s + 2\sum_{i=1}^{s}(-1)^iq_{r+i}q_{s-i},
+\end{equation}
+so $Q_{(r,0)}=Q_{(r)}=q_r$. For a strict partition $\nu$ of even length $m$ (append a
+part $0$ if the length is odd), $Q_\nu=\operatorname{Pf}(Q_{(\nu_i,\nu_j)})_{1\le i,j\le m}$.
+For $\nu=(a,b,c)$ this is
+\begin{equation}\label{eq:pf}
+Q_{(a,b,c)} = Q_{(a,b)}q_c - Q_{(a,c)}q_b + q_aQ_{(b,c)} .
+\end{equation}
+Let $P_\nu=2^{-\ell(\nu)}Q_\nu$. The $Q_\nu$ ($\nu$ strict) form a basis of
+$\Gamma_{\mathbb Q}=\mathbb Q[q_1,q_2,\dots]$ \cite[III (8.9)]{Mac}, so every
+structure constant is well defined. Equivalently, $Q_\nu$ is the generating function of
+marked shifted tableaux of shape $\nu$ \cite[III (8.16)]{Mac}. Our Python check uses that
+description.
+
+Setting $x_i=0$ for $i>n$ is a ring homomorphism. It sends $q_r$ to $q_r(x_1,\dots,x_n)$,
+the coefficient of $t^r$ in $\prod_{i\le n}(1+x_it)/(1-x_it)$, and hence sends $Q_\nu$
+to $Q_\nu(x_1,\dots,x_n)$, computed by the same formulas~\eqref{eq:Q2},~\eqref{eq:pf}.
+
+\section{\texorpdfstring{The product $Q_{(k)}Q_{(k)}$}{The product Q(k)Q(k)}}
+
+\begin{theorem}\label{thm:main}
+For every $k\ge1$,
+\[
+Q_{(k)}Q_{(k)} = 2\sum_{j=0}^{k-1}Q_{(2k-j,\,j)} .
+\]
+\end{theorem}
+
+\begin{proof}
+Let $S=\sum_{j=0}^{k-1}Q_{(2k-j,j)}$. By~\eqref{eq:Q2}, $S$ is a sum of terms
+$q_{2k-j+i}q_{j-i}$ with $0\le i\le j\le k-1$. The coefficient is $1$ for $i=0$ and
+$2(-1)^i$ for $i\ge1$. Fix $v=j-i\in\{0,\dots,k-1\}$. Then $i$ runs over
+$0,\dots,n$ with $n=k-1-v$, and the total coefficient of $q_{2k-v}q_v$ is
+$1+2\sum_{i=1}^n(-1)^i=(-1)^n$. Hence
+\[
+S=(-1)^{k-1}\sum_{v=0}^{k-1}(-1)^v q_vq_{2k-v}.
+\]
+In~\eqref{eq:rel} with $r=2k$, the terms $i$ and $2k-i$ are equal. So
+$2\sum_{v=0}^{k-1}(-1)^vq_vq_{2k-v}+(-1)^kq_k^2=0$, that is,
+$\sum_{v=0}^{k-1}(-1)^vq_vq_{2k-v}=(-1)^{k-1}q_k^2/2$. Therefore $S=q_k^2/2$, and
+$Q_{(k)}Q_{(k)}=q_k^2=2S$.
+\end{proof}
+
+\begin{corollary}\label{cor:all}
+Let $k\ge2$. In the bases $\{Q_\nu\}$ and $\{P_\nu\}$ the products are
+\begin{align*}
+Q_kQ_k &= 2Q_{(2k)}+2\textstyle\sum_{j=1}^{k-1}Q_{(2k-j,j)}
+        = 4P_{(2k)}+8\textstyle\sum_{j=1}^{k-1}P_{(2k-j,j)},\\
+P_kQ_k=Q_kP_k &= Q_{(2k)}+\textstyle\sum_{j=1}^{k-1}Q_{(2k-j,j)}
+        = 2P_{(2k)}+4\textstyle\sum_{j=1}^{k-1}P_{(2k-j,j)},\\
+P_kP_k &= \tfrac12 Q_{(2k)}+\tfrac12\textstyle\sum_{j=1}^{k-1}Q_{(2k-j,j)}
+        = P_{(2k)}+2\textstyle\sum_{j=1}^{k-1}P_{(2k-j,j)}.
+\end{align*}
+These expansions are unique, so $M((k),(k))$ is as in Table~\ref{tab:M}.
+\end{corollary}
+
+\begin{proof}
+Use $P_k=Q_k/2$, $Q_{(2k)}=2P_{(2k)}$ and $Q_{(2k-j,j)}=4P_{(2k-j,j)}$ for $1\le j\le k-1$.
+Uniqueness holds because $\{Q_\nu\}$ and $\{P_\nu\}$ are bases.
+\end{proof}
+
+In particular $f^{(2k)}_{(k)(k)}=1$ and $f^{(2k-j,j)}_{(k)(k)}=2$, in agreement with the
+shifted Pieri rule \cite[III (8.15)]{Mac}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcccccc}
+\toprule
+reading & $P\cdot P$ in $P$ & $Q\cdot Q$ in $Q$ & $P\cdot Q$ in $P$ & $P\cdot Q$ in $Q$ & $Q\cdot Q$ in $P$ & $P\cdot P$ in $Q$\\
+\midrule
+$k=1$ & $1$ & $2$ & $2$ & $1$ & $4$ & $1/2$\\
+$k\ge2$ & $2$ & $2$ & $4$ & $1$ & $8$ & $1/2$\\
+\bottomrule
+\end{tabular}
+\caption{$M((k),(k))$ under each reading. The conjecture claims $2^{k-1}$; the first two
+columns are the standard readings. ($Q\cdot P$ is the same as $P\cdot Q$.)}
+\label{tab:M}
+\end{table}
+
+\begin{theorem}\label{thm:refute}
+\leavevmode
+\begin{enumerate}
+\item In both standard readings, $M((k),(k))=2^{k-1}$ holds for $k=1,2$ and fails for
+every $k\ge3$. The smallest counterexample is $k=3$:
+$Q_3Q_3=2Q_6+2Q_{51}+2Q_{42}$ and $P_3P_3=P_6+2P_{51}+2P_{42}$, so $M((3),(3))=2\ne4$.
+\item Under each of the eight readings, at $\lambda=\mu=(3)$, \eqref{eq:value} or
+\eqref{eq:bound} fails. Hence the conjecture is false under every reading.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(1) In Table~\ref{tab:M}, the first two columns give $1=2^0$ at $k=1$, $2=2^1$ at $k=2$,
+and $2<2^{k-1}$ for $k\ge3$.
+(2) At $k=3$ the claimed value is $4$. The readings $P\cdot P$ in $P$, $Q\cdot Q$ in $Q$,
+$P\cdot Q$ in $Q$, $Q\cdot Q$ in $P$ and $P\cdot P$ in $Q$ give $2,2,1,8,\tfrac12\neq4$,
+so~\eqref{eq:value} fails. The reading $P\cdot Q$ (or $Q\cdot P$) in $P$ gives $4$, which
+violates~\eqref{eq:bound} since $4>2$.
+\end{proof}
+
+\begin{remark}
+Table~\ref{tab:M} shows that no single $k$ makes the value clause alone fail under
+\emph{all} readings. For example, the non-standard reading $P\cdot Q$ in $P$ gives $4$ for
+every $k\ge2$, which equals $2^{k-1}$ at $k=3$. But the two clauses of the conjecture are
+incompatible for every $k\ge3$, whatever $M$ means: \eqref{eq:bound} gives
+$M((k),(k))\le2$, while~\eqref{eq:value} demands $M((k),(k))=2^{k-1}\ge4$. Part~(2) of
+Theorem~\ref{thm:refute} makes this concrete with the actual coefficients.
+\end{remark}
+
+\section{\texorpdfstring{The case $k=3$ in three variables}{The case k=3 in three variables}}
+
+This section gives the finite computation formalised in Lean. It proves part~(1) and
+part~(2) of Theorem~\ref{thm:refute} at $k=3$ without using the basis theorem.
+
+The strict partitions of $6$ are $6,\ 51,\ 42,\ 321$, all of length $\le3$. Specialise to
+three variables $x_1,x_2,x_3$. Let $m_1,m_2,m_3,m_4$ be the monomials $x_1^6$,
+$x_1^5x_2$, $x_1^4x_2^2$, $x_1^3x_2^2x_3$. Their coefficients are:
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+ & $m_1$ & $m_2$ & $m_3$ & $m_4$\\
+\midrule
+$Q_6$ & 2 & 4 & 4 & 8\\
+$Q_{51}$ & 0 & 4 & 8 & 24\\
+$Q_{42}$ & 0 & 0 & 4 & 24\\
+$Q_{321}$ & 0 & 0 & 0 & 8\\
+\midrule
+$Q_3Q_3$ & 4 & 16 & 32 & 112\\
+$P_3Q_3$ & 2 & 8 & 16 & 56\\
+$P_3P_3$ & 1 & 4 & 8 & 28\\
+\bottomrule
+\end{tabular}
+\end{center}
+For instance $Q_{321}(x_1,x_2,x_3)=8x_1x_2x_3(x_1+x_2)(x_1+x_3)(x_2+x_3)$. The $4\times4$
+block is triangular with nonzero diagonal, so $Q_6,Q_{51},Q_{42},Q_{321}$ are linearly
+independent in $\mathbb Q[x_1,x_2,x_3]$. Suppose $Q_3Q_3=\sum_\nu c_\nu Q_\nu$ in
+$\Gamma_{\mathbb Q}$ (or any rational identity of this shape). Specialising to three
+variables gives the same identity there. Comparing coefficients at $m_1,\dots,m_4$ gives
+$2c_6=4$, $4c_6+4c_{51}=16$, $4c_6+8c_{51}+4c_{42}=32$ and
+$8c_6+24c_{51}+24c_{42}+8c_{321}=112$. So $(c_6,c_{51},c_{42},c_{321})=(2,2,2,0)$, and the
+coefficients are forced. Conversely, the polynomial identity
+$Q_3Q_3=2Q_6+2Q_{51}+2Q_{42}$ holds in three variables. Together these determine
+$M((3),(3))=2$ in the $Q$-reading. The same argument applies to the other seven readings,
+using $P_\nu=2^{-\ell(\nu)}Q_\nu$. The forced vectors are $(1,2,2,0)$ for $P_3P_3$ in
+$P$, $(2,4,4,0)$ for $P_3Q_3$ in $P$, $(1,1,1,0)$ for $P_3Q_3$ in $Q$, $(4,8,8,0)$ for
+$Q_3Q_3$ in $P$, and $\tfrac12(1,1,1,0)$ for $P_3P_3$ in $Q$.
+
+\section{Lean formalisation}
+
+The directory \texttt{lean4/} is a Lean~4.19.0 project that uses only the core library.
+It contains no \texttt{sorry}, \texttt{native\_decide} or added axioms; heavy closed
+computations use \texttt{decide +kernel}.
+\begin{itemize}\raggedright
+\item \emph{Polynomials.} A polynomial in $\mathbb Z[x_1,x_2,x_3]$ is a list of
+(exponent triple, coefficient) pairs. \texttt{coeff p m} sums all coefficients with
+exponent \texttt{m}. \texttt{add}, \texttt{scale} and \texttt{mul} are proved to act on
+\texttt{coeff} as expected (\texttt{coeff\_add}, \texttt{coeff\_scale}).
+\item \emph{Objects.} \texttt{q r} is the coefficient of $t^r$ in
+$\prod_{i\le3}(1+x_it)/(1-x_it)$, built monomial by monomial. \texttt{Q2 r s} is
+\eqref{eq:Q2}. \texttt{Qfun} is the Pfaffian \eqref{eq:pf}, and
+\texttt{Pfun $\nu$} $=2^{-\ell(\nu)}$\texttt{Qfun $\nu$}. \texttt{P\_exact} proves that this
+division is exact. \texttt{strictParts} enumerates strict partitions, and
+\texttt{basis Z n} is $\{Z_\nu:\nu\text{ strict},|\nu|=n\}$. As sanity checks,
+\texttt{q\_relation} proves~\eqref{eq:rel} for $r\le6$ and \texttt{Q321\_eq} proves the
+product formula for $Q_{321}$.
+\item \emph{The clause.} \texttt{Expands d T cs B} says that $d\cdot T=\sum_i c_iB_i$
+coefficientwise. With $d>0$ this is a rational expansion with coefficients $c_i/d$.
+\texttt{ValueAt k X Y Z} says that some expansion of $X_{(k)}Y_{(k)}$ in the $Z$-basis has
+largest coefficient $2^{k-1}$. \texttt{BoundAt k X Y Z} says that every such expansion has
+largest coefficient $\le 2^{\ell((k))}$. \texttt{Conjecture X Y Z} is
+$\forall k\ge1$, \texttt{ValueAt} $\wedge$ \texttt{BoundAt}.
+\item \emph{Results.} \texttt{QQ\_in\_Q}, \texttt{PP\_in\_P} and six more theorems prove the
+expansions as polynomial identities. \texttt{expansion\_exists} shows non-vacuity, and
+\texttt{solveQ}, \texttt{solveP} and \texttt{expansion\_unique} prove uniqueness by
+triangularity. \texttt{max\_coeff} computes $M((3),(3))$ for each reading.
+\texttt{value\_clause\_false\_P} and \texttt{value\_clause\_false\_Q} are
+$\neg\,\forall k\ge1$, \texttt{ValueAt k} in the two standard readings.
+\texttt{conjecture\_00000001196\_false} is $\forall X\,Y\,Z,\ \neg$\texttt{Conjecture X Y Z}.
+It is assembled from \texttt{value\_fails} and \texttt{bound\_fails}.
+\texttt{bound\_holds\_P} and \texttt{value\_holds\_PQP} show that neither predicate is
+trivially false.
+\end{itemize}
+\emph{Scope.} Lean works in three variables, which is faithful at $k=3$ by the argument of
+Section~4: the specialisation to three variables commutes with all constructions, and the
+four basis functions are proved independent. The general-$k$ statement
+(Theorem~\ref{thm:main} and Table~\ref{tab:M}), and the passage from three variables to
+$\Gamma$, are proved in this report rather than in Lean. The predicate
+\texttt{Conjecture} quantifies over all $k$, but only its instance $k=3$ is used. For
+$k\ge5$ three variables would not determine expansions uniquely, which does not matter
+here.
+
+\section{Independent Python check}
+
+\texttt{verify.py} uses only the Python standard library and a different method from Lean.
+It computes $Q_\nu$ and $P_\nu$ by enumerating marked shifted tableaux. It checks that
+$q_r=\sum_{a+b=r}e_ah_b=Q_{(r)}$ and the relation~\eqref{eq:rel}. It checks that the
+Pfaffian formulas used in Lean agree with the tableau definition for all strict
+$\nu\vdash6$. It also checks that $Q_\nu=2^{\ell(\nu)}P_\nu$. For $k=1,\dots,5$, with as
+many variables as the longest strict partition of $2k$ needs, it expands all products in
+both bases by exact rational Gaussian elimination, asserting full rank. It reproduces
+Table~\ref{tab:M} and confirms Theorem~\ref{thm:main} and Corollary~\ref{cor:all} for
+$k\le5$. It also prints the coefficient table of Section~4.
+
+\begin{thebibliography}{9}
+\bibitem{Mac} I.~G.~Macdonald, \emph{Symmetric Functions and Hall Polynomials}, 2nd ed.,
+Oxford University Press, 1995, Chapter III, Section 8.
+\bibitem{Ste} J.~R.~Stembridge, Shifted tableaux and the projective representations of
+symmetric groups, \emph{Adv.\ Math.} 74 (1989), 87--134.
+\end{thebibliography}
+
+\end{document}
