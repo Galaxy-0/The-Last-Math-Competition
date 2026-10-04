@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\emergencystretch=2em
+\title{English auction revenue need not strictly exceed first-price revenue\\
+\large Disproof of conjecture 00000008235}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+The English conjecture asserts that the sign of the revenue difference
+between English and first-price auctions is always positive. The Chinese
+version likewise says that the sign is strictly positive. We refute this
+universal assertion with equal equilibrium expected revenues. This does
+not refute a nonnegative linkage comparison.
+
+\textbf{Private values and auction conventions.}
+There are two bidders, each with value $1$ for a single indivisible item.
+Each private-value distribution is the point mass at $1$. These values
+are independent and identically distributed: for arbitrary measurable
+sets $A,B$, the probabilities of their individual and joint membership
+events are zero or one and satisfy the independence product identity.
+The conjecture imposes no nondegeneracy restriction; the point-mass
+assumption is explicit in this example.
+
+Both auctions have zero reserve. Bids and dropout thresholds are
+nonnegative. Ties award the item to bidder $0$. Utility is value of the
+received item minus payment, with no payment by a losing bidder.
+
+The first-price auction awards to the highest bidder and charges that
+bid. The ascending English auction uses dropout thresholds: the clock
+starts at zero and stops at the first dropout, selling to the remaining
+bidder. If both drop simultaneously, the stated tie convention applies.
+For threshold vector $(b_0,b_1)$ the stopping price is
+\[
+ p_{\rm stop}=\min(b_0,b_1),
+\]
+and the winner is the bidder with the larger threshold. This is the actual
+ascending-clock stopping rule: no bidder drops at a nonnegative price
+$q<p_{\rm stop}$, while at $p_{\rm stop}$ at least one does. Thus these
+payments are derived from the English mechanism.
+
+\textbf{Equilibrium in the first-price auction.}
+Take the bid profile $(1,1)$. Bidder $0$ receives the item and pays $1$;
+bidder $1$ loses and pays zero. Both utilities are zero.
+A unilateral bid $r<1$ loses, giving zero utility. A bid $r>1$ wins but
+gives utility $1-r<0$. A bid $r=1$ gives zero utility, with either tie outcome.
+Thus no nonnegative unilateral deviation improves utility, including
+all boundary and tie cases. This is a Nash equilibrium and, because
+the type distribution is degenerate, a Bayesian Nash equilibrium.
+
+\newpage
+\textbf{Equilibrium in the English auction.}
+Take dropout thresholds $(1,1)$. The first dropout price is $1$; the
+tie winner pays $1$, so both utilities again vanish.
+A unilateral threshold $r<1$ drops first and loses, giving zero utility.
+For $r>1$, the opponent drops at $1$ and the deviator wins at price $1$,
+again giving zero utility. At $r=1$ the tie convention gives zero utility.
+Thus all threshold deviations have utility zero or less, and the profile
+is a Nash and Bayesian Nash equilibrium. In the two-bidder ascending
+dropout model these are all unilateral dropout choices.
+
+\textbf{Actual expected revenues.}
+Each auction sells the item at price $1$, so its revenue is the sum of
+the actual bidder payments, identically $1$ on the probability space.
+Consequently
+\[
+ \mathbb E R_{\rm English}=1=\mathbb E R_{\rm first-price},
+ \qquad
+ \mathbb E R_{\rm English}-\mathbb E R_{\rm first-price}=0.
+\]
+The difference is not strictly positive. Independence, zero reserve,
+the tie convention, and degeneracy of the distribution are all stated,
+rather than implicitly adding hypotheses to the conjecture. The example
+makes no separate assertion about Myerson's reserve formula or
+asymptotic gains under positive affiliation.
+
+\textbf{Formal correspondence.}
+Lean constructs a genuine \texttt{PMF.pure} probability law on the
+one-point sample space and its associated probability measure.
+\texttt{independent\_values} proves Mathlib's \texttt{IndepFun} predicate
+for the two real private values. Allocations, winning-bid payments,
+English dropout payments, utilities, and unilateral updates are defined
+as actual functions.
+
+\texttt{actual\_first\_dropout} proves the displayed stopping rule for
+every admissible threshold profile; \texttt{dropout\_unique} proves
+its uniqueness. \texttt{winner\_maximizes} proves the allocation selects
+a highest bid, and \texttt{allocation\_feasible} proves exactly one
+item is allocated. \texttt{revenue\_is\_payments} proves actual total
+payments equal the mechanism price.
+
+The equilibrium predicates quantify over both bidders and every
+nonnegative unilateral report. \texttt{first\_equilibrium} and
+\texttt{english\_equilibrium} verify them, covering all tie cases.
+Expected revenue is the actual Bochner integral of total payments
+against the constructed probability measure.
+\texttt{actual\_revenues} and \texttt{counterexample} prove equality
+of these integrals and the failure of strict positivity.
+
+\textbf{Reproduction.}
+Use Lean 4.19.0 and public Mathlib revision
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}\end{center}
+Run \texttt{lake build} inside \texttt{lean/}. Axiom audits are printed.
+The validation notes record the final full build and PDF inspection.
+\end{document}
