@@ -10,7 +10,7 @@ archived under solutions/[number_ID]/review/. After the full re-audit of 2026-10
 reverted to open unless another valid submission remains); 98 PRs were closed unmerged with
 full review comments.
 
-**Total solved: 218 / 10000 conjectures** — 14 proven, 204 disproven.
+**Total solved: 245 / 10000 conjectures** — 17 proven, 228 disproven.
 
 Ranking is by **Solved** (accepted submissions), ties broken by first solves.
 
@@ -18,13 +18,14 @@ Ranking is by **Solved** (accepted submissions), ties broken by first solves.
 |---|----------|-------:|-------------:|-------:|----------:|
 | 1 | [orionsheep](https://github.com/orionsheep) | 73 | 65 | 0 | 73 |
 | 2 | [earthking11](https://github.com/earthking11) | 65 | 58 | 0 | 65 |
-| 3 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 33 | 32 | 8 | 25 |
-| 4 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 26 | 26 | 0 | 26 |
+| 3 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 51 | 51 | 3 | 48 |
+| 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 34 | 33 | 8 | 26 |
 | 5 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
 | 6 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
 | 7 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
 | 8 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
 | 9 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
+| 10 | [ziangni-sys](https://github.com/ziangni-sys) | 1 | 1 | 0 | 1 |
 
 ## Solved conjectures per solver
 
@@ -53,19 +54,23 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 #2601★ (D), #2605★ (D), #3485★ (D), #3837★ (D), #3844★ (D), #3949★ (D), #3955★ (D), #5626★ (D)
 #8234★ (D), #8371★ (D), #8417★ (D), #8419★ (D), #8422★ (D), #8434★ (D), #8848★ (D)
 
-### feiyuceng06-prog — 33 solved (32 first)
+### feiyuceng06-prog — 34 solved (33 first)
 
 #6★ (D), #8★ (D), #13★ (D), #34★ (P), #44★ (D), #45★ (D), #46★ (D), #47★ (P), #49★ (P), #50★ (P)
 #51★ (P), #117★ (P), #162★ (D), #269★ (D), #953★ (P), #1034★ (D), #1063★ (D), #1465 (D), #1666★ (D)
 #2040★ (D), #2042★ (D), #2058★ (D), #2486★ (P), #2850★ (D)
 #3965★ (D), #3967★ (D), #7780★ (D), #7965★ (D), #7976★ (D), #7990★ (D), #8176★ (D), #8256★ (D), #8869★ (D)
+#4280★ (D)
 
-### gaochengzhecpu — 26 solved (26 first)
+### gaochengzhecpu — 51 solved (51 first)
 
 #996★ (D), #126★ (D), #388★ (D), #425★ (D), #459★ (D), #1665★ (D), #2304★ (D), #2617★ (D)
 #2618★ (D), #3483★ (D), #3486★ (D), #3490★ (D), #4274★ (D), #4287★ (D), #4294★ (D), #6334★ (D)
 #6402★ (D), #7292★ (D), #7676★ (D), #8438★ (D), #8535★ (D), #8536★ (D), #8544★ (D), #8547★ (D)
-#8549★ (D), #8558★ (D)
+#8549★ (D), #8558★ (D), #426★ (P), #541★ (D), #2171★ (D), #2353★ (D), #2594★ (D), #2610★ (D)
+#2835★ (D), #2839★ (D), #3461★ (D), #3464★ (D), #4396★ (D), #5135★ (D), #6330★ (P), #6542★ (D)
+#6551★ (D), #6557★ (D), #6825★ (P), #7680★ (D), #7689★ (D), #8432★ (D), #8541★ (D), #8554★ (D)
+#8656★ (D), #8657★ (D), #8887★ (D)
 
 ### SucRunBug — 18 solved (18 first)
 
@@ -88,4 +93,8 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 ### 11zhangzheng — 1 solved (1 first)
 
 #252★ (D)
+
+### ziangni-sys — 1 solved (1 first)
+
+#7683★ (D)
 
