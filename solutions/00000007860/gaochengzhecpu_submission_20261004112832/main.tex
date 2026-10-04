@@ -1,0 +1,67 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{proposition}{Proposition}
+\title{A Singleton Counterexample to the Universal\newline Greedy-Coloring Waste Bound}
+\author{Conjecture 00000007860}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+The finite-graph bound in Conjecture 00000007860 is false as stated. A graph with one vertex has zero greedy-coloring waste in every vertex order, whereas the proposed upper bound is negative. The same example refutes the bound if waste is interpreted as its uniform expectation. This does not address the conjecture's separate random-graph asymptotic assertion.
+\end{abstract}
+
+\section*{The statement being refuted}
+The conjecture defines the waste of greedy coloring in a uniformly random vertex order as
+\[
+ W(G)=\chi_{\mathrm{greedy}}(G)-\chi(G)
+\]
+and asserts, among other claims, that \emph{for every graph}
+\begin{equation}\label{eq:bound}
+ W(G)\leq \frac n2-\sqrt{\frac n2},\qquad n=|V(G)|.
+\end{equation}
+Both the English and Chinese source quantify over all graphs without a lower restriction such as $n\geq2$. We use finite simple graphs and the usual first-fit algorithm: process vertices in the given order and assign the least nonnegative integer color not already used by a processed neighbor. The number of colors is the number of distinct assigned colors, independent of whether color labels start at zero or one.
+
+\begin{proposition}
+Let $G$ be the simple graph with vertex set $\{v\}$ and no edges. For its unique vertex order $\sigma$,
+\[
+ \chi_{\mathrm{greedy}}(G,\sigma)=\chi(G)=1,
+ \qquad W(G,\sigma)=0>\frac12-\sqrt{\frac12}.
+\]
+Furthermore, $\mathbb E_{\sigma}[W(G,\sigma)]=0$ for the uniform distribution on vertex orders.
+\end{proposition}
+\begin{proof}
+There is exactly one permutation of a singleton, namely $(v)$. Initially no vertex has been processed, so the set of forbidden colors is empty. First-fit therefore assigns color $0$ to $v$. Its image has cardinality one, and hence exactly one color is used.
+
+The constant coloring of $G$ with one color is proper because $G$ has no edges. A zero-color coloring cannot exist: it would be a function from the nonempty set $\{v\}$ into the empty set. Thus $\chi(G)=1$ and the waste is $1-1=0$.
+
+Set $t=\sqrt{1/2}$. Then $t\geq0$ and $t^2=1/2$. If $t\leq1/2$, squaring the nonnegative quantities gives $1/2=t^2\leq1/4$, a contradiction. Therefore $1/2-t<0$, proving the strict violation of \eqref{eq:bound}.
+
+The uniform sample space consists of the single order $(v)$ with probability one. Its waste is zero, so its expected waste is also zero and violates the same negative upper bound.
+\end{proof}
+
+\section*{Scope}
+This is an exact boundary counterexample to the unqualified finite-graph inequality. It refutes that universally quantified conjunct, and thus the full conjunction as written. It makes no claim about a modified bound restricted to $n\geq2$, about the separate concentration claim for $G(n,1/2)$ as $n\to\infty$, or about proposed asymptotic extremizers. If the word ``waste'' in the inequality is read as a random variable, the violation occurs at every order, hence with probability one. If it is read as the expectation, the violation is unchanged.
+
+\section*{Formal verification and correspondence}
+The accompanying \texttt{lean/Main.lean} uses Lean 4.19.0 and Mathlib at commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+It formalizes the following objects and claims.
+\begin{itemize}
+\item \texttt{singletonGraph} is the actual Mathlib simple graph $\bot$ on \texttt{Fin 1}; \texttt{singleton\_no\_edges} checks its adjacency relation.
+\item \texttt{firstAvailable} is the least natural number outside a finite forbidden-color set, with proofs of admissibility and minimality. \texttt{greedyRun} computes first-fit from processed neighbors, and \texttt{greedyAssignment} runs it on a vertex permutation.
+\item \texttt{singleton\_greedy\_assignment} proves the output is precisely $[(0,0)]$ for every permutation. A proper \texttt{SimpleGraph.Coloring} is constructed and proved to agree with that assignment.
+\item \texttt{singleton\_chromatic\_number} uses Mathlib's actual minimum proper-coloring number. The greedy color count and the waste are then derived, rather than declared to be constants.
+\item \texttt{uniformExpectedWaste} is the finite sum over all permutations divided by their number. Positivity of the sample-space size and its singleton cardinality are proved. This is the exact expectation of the finite uniform law; no measure-theoretic probability library is needed.
+\item \texttt{not\_universal\_pointwise\_bound} and \texttt{not\_universal\_expectation\_bound} refute both readings of \eqref{eq:bound}. The square-root comparison is proved over Mathlib's real numbers.
+\end{itemize}
+The generic first-fit routine is defined for all finite graphs, but a general correctness theorem for that routine is not needed or claimed: the exhibited singleton output is proved directly and matched to a proper coloring. The auxiliary \texttt{verify.py} independently executes first-fit on all orders of this one graph, computes its chromatic number, and checks the radical inequality using rational arithmetic. It is a witness check, not an inference from a finite search over graph sizes.
+
+\section*{Source and reproducibility}
+The original bilingual statement is preserved in \texttt{SOURCE.md}. The source is the repository file
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000007860.md}{\texttt{conjectures/00000007860.md}}.
+The Lake project uses public Git dependency URLs and pinned revisions. See \texttt{README.md} for build commands, and \texttt{verification/BUILD.json} and the adjacent logs for actual build results, theorem-axiom audits, and PDF checks.
+\end{document}

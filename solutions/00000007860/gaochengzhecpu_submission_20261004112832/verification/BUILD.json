@@ -1,0 +1,153 @@
+{
+  "id": "00000007860",
+  "verified_at_utc": "2026-10-04T11:22:39.549223+00:00",
+  "clean_build_pass": true,
+  "commands": [
+    {
+      "command": [
+        "lake.exe",
+        "--version"
+      ],
+      "exit_code": 0,
+      "seconds": 0.047,
+      "log": "lean-version.log"
+    },
+    {
+      "command": [
+        "lake.exe",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 9.625,
+      "log": "lake-build.log"
+    },
+    {
+      "command": [
+        "lake.exe",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Main.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 10.0,
+      "log": "lean-axioms.log"
+    },
+    {
+      "command": [
+        "python.exe",
+        "-X",
+        "utf8",
+        "verify.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.047,
+      "log": "verify-output.json"
+    },
+    {
+      "command": [
+        "tectonic.exe",
+        "--keep-logs",
+        "main.tex"
+      ],
+      "exit_code": 0,
+      "seconds": 1.391,
+      "log": "pdf-build.log"
+    },
+    {
+      "command": [
+        "pdftoppm.exe",
+        "-scale-to",
+        "1500",
+        "-png",
+        "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\drafts\\00000007860\\main.pdf",
+        "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\qa\\00000007860\\c7d5171e7164\\page"
+      ],
+      "exit_code": 0,
+      "seconds": 0.375,
+      "log": "pdf-render.log"
+    }
+  ],
+  "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "lean_source_sha256": {
+    "lake-manifest.json": "16a33973383322046c52881652c6f7230d0651dacc0d96386c94a8cfa43a53b9",
+    "lakefile.toml": "3d85571f3b314064deeccaba9cba4617da21f57b4ae0e303b29a17d45e280cec",
+    "lean-toolchain": "f28855f24b5253d7e8949f38027066a06cdde238520086d421ba7ad24c27a691",
+    "Main.lean": "410c9409789e2ea022f1decffa0372db54402a30315c06903463ded187669d8e"
+  },
+  "main_tex_sha256": "c7d5171e7164c59f10f6ebe92b7cebf10d8a5d0115a5c67a54db8d31409ebd2b",
+  "main_pdf_sha256": "dfd5d70ed11df8a294493f8ff071aef46a14ac7ac4044564c69961297ed88a53",
+  "pdf_pages": 2,
+  "pdf_warnings": [],
+  "pdf_visual_review": "PASS",
+  "review_mode": "agent development with parent adversarial review; no external independent review",
+  "native_compiler": "Attempted via compile_latex_document: compile-failed, Unable to find standard directories for platform. Tectonic export and Poppler rendering succeeded.",
+  "rendered_images": [
+    "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\qa\\00000007860\\c7d5171e7164\\page-1.png",
+    "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\qa\\00000007860\\c7d5171e7164\\page-2.png"
+  ],
+  "dependencies": [
+    {
+      "name": "mathlib",
+      "git_commit": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0"
+    },
+    {
+      "name": "plausible",
+      "git_commit": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\plausible"
+    },
+    {
+      "name": "LeanSearchClient",
+      "git_commit": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\LeanSearchClient"
+    },
+    {
+      "name": "importGraph",
+      "git_commit": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\importGraph"
+    },
+    {
+      "name": "proofwidgets",
+      "git_commit": "c4919189477c3221e6a204008998b0d724f49904",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\proofwidgets"
+    },
+    {
+      "name": "aesop",
+      "git_commit": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\aesop"
+    },
+    {
+      "name": "Qq",
+      "git_commit": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\Qq"
+    },
+    {
+      "name": "batteries",
+      "git_commit": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\batteries"
+    },
+    {
+      "name": "Cli",
+      "git_commit": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\Cli"
+    }
+  ],
+  "dependency_note": "Only official commit-pinned dependency artifacts were reused; this submission was built in a fresh directory without its own .lake build artifacts.",
+  "author_pdf_review": "PASS: authoring agent inspected both rendered pages at 1500-pixel scale; no clipping, overlap, missing glyphs, or unbalanced page breaks.",
+  "parent_review": "PASS",
+  "parent_pdf_review": "Parent inspected both final rendered pages: complete, legible, no overflow or clipping."
+}
