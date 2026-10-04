@@ -1,0 +1,66 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Two dimensions do not suffice for a unitary dilation}
+\author{ziangni-sys}
+\date{Conjecture 00000008566}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result.} Even the zero contraction on the one-dimensional complex Hilbert space has no unitary dilation of dimension at most two that reproduces its first two powers. This disproves the stated dimension claim under both the full Sz.-Nagy and second-order interpretations.
+
+\paragraph{Source and conventions.}
+Both original languages assert that the minimal dilation dimension is two unless the contraction is already unitary. The source also uses the term second-order and names Sz.-Nagy dilation. We explicitly address both readings: a full unitary dilation reproduces all nonnegative powers, while a second-order dilation need only reproduce powers zero, one and two. Our obstruction already applies to this weaker requirement. We do not claim that second-order dilations fail to exist in larger spaces.
+
+Let $T:\mathbb C\to\mathbb C$ be the zero operator. Then $\|T\|=0\leq1$, so it is a contraction. It is not unitary: it sends the unit vector $1$ to zero and fails to preserve its norm.
+
+\begin{theorem}
+Let $K$ be a complex Hilbert space, $j:\mathbb C\to K$ a linear isometric embedding, and $U:K\to K$ a unitary operator. If
+\[
+j^*U^n j=T^n\qquad(n=0,1,2),
+\]
+then $K$ contains three orthonormal vectors. In particular, if $K$ is finite dimensional, $\dim_{\mathbb C}K\geq3$.
+\end{theorem}
+\begin{proof}
+Put $e=j(1)$. Since $j$ is isometric and $U$ is unitary,
+\[
+\|e\|=\|Ue\|=\|U^2e\|=1.
+\]
+The two positive-power compression equations give
+\[
+j^*Ue=0,\qquad j^*U^2e=0.
+\]
+Using the adjoint identity (with inner product linear in the second argument),
+\[
+\langle e,Ue\rangle=\langle1,j^*Ue\rangle=0,
+\qquad
+\langle e,U^2e\rangle=\langle1,j^*U^2e\rangle=0.
+\]
+Finally, unitarity gives
+\[
+\langle Ue,U^2e\rangle=\langle e,Ue\rangle=0.
+\]
+Conjugate symmetry supplies the reversed inner products. Thus $e,Ue,U^2e$ are orthonormal, hence linearly independent, proving the dimension bound.
+\end{proof}
+
+\newpage
+\paragraph{Consequences for the conjecture.}
+The lower bound rules out every complex dilation space of dimension at most two, every isometric embedding of the original scalar space, and every unitary operator on that space. It is not merely a failure of a chosen matrix or a chosen coordinate embedding. Because the original space already has dimension one, two times its dimension is also two; reading the claimed size as a doubling does not remove this obstruction.
+
+A full Sz.-Nagy dilation satisfies the equations for $n=0,1,2$ in particular and is therefore ruled out in dimension two as well. The example is a nonunitary contraction, so the stated unitary exception does not apply. Refuting this explicit dimension conjunct suffices; the separate assertions about constructions and continuous semigroups are not needed.
+
+\paragraph{Formal correspondence.}
+The Lean project uses the actual zero continuous linear operator on $\mathbb C$. The theorem \texttt{contraction} proves its operator-norm bound, and \texttt{not\_isometry} proves failure of metric isometry, hence excludes unitarity.
+
+The ambient type is an arbitrary complete complex inner product space. The embedding is an actual \texttt{LinearIsometry}, and the unitary operator is an actual \texttt{LinearIsometryEquiv}, so linearity, norm preservation and surjectivity are built into the mathematical objects. The condition \texttt{DilationThroughTwo} is the equality of actual continuous linear maps
+\[
+j^*\circ U^n\circ j=T^n\quad\hbox{for every }n\leq2.
+\]
+Here the adjoint, composition and powers are Mathlib's operator operations. Thus the proof uses genuine compression equations rather than assuming orthogonality or a dimension certificate.
+
+The two moment lemmas apply these operator equalities to $1$ and use the actual adjoint identity. The theorem \texttt{orbit\_orthonormal} proves orthonormality of the three-vector family; \texttt{dimension\_lower\_bound} derives the actual \texttt{Module.finrank} bound from its linear independence. The theorem \texttt{no\_dimension\_two\_dilation} excludes all embeddings and all unitaries whenever that dimension is at most two.
+
+\paragraph{Reproduction.}
+Lean 4.19.0 and Mathlib commit \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b} are pinned publicly. From \texttt{lean/}, run \texttt{lake build}. The file prints the principal theorem axiom audits. No admitted proof, custom axiom or external decision procedure is used.
+\end{document}
