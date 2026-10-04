@@ -1,0 +1,42 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\newtheorem{proposition}{Proposition}
+\title{Unbounded gcds of iterates of coprime quadratics}
+\author{ziangni-sys}
+\date{Conjecture 00000002236}
+\begin{document}
+\maketitle
+\noindent\textbf{Claim addressed.} The bilingual source asserts that the gcds of the composite orbits of arbitrary coprime polynomial pairs are bounded by a bound depending on their degrees. The following fixed pair of degree-two polynomials violates this, both for polynomial gcd degrees and for integer gcds evaluated at a fixed starting point.
+
+\begin{proposition}
+Let $f(X)=X^2$ and $g(X)=X^2-1$. Write $p^{\circ0}(X)=X$ and $p^{\circ(n+1)}=p\circ p^{\circ n}$. For every $k\geq0$,
+\[
+ \deg\gcd_{\mathbb Q[X]}(f^{\circ k},g^{\circ2k})=2^k, \qquad
+ \gcd_{\mathbb Z}(f^{\circ k}(2),g^{\circ2k}(2))=2^{2^k}.
+\]
+In particular neither family of gcds is bounded, although the original polynomials are coprime and have fixed degree $2$.
+\end{proposition}
+\begin{proof}
+The identity $f-g=1$ proves coprimality, even over $\mathbb Z[X]$. Clearly $f^{\circ k}(X)=X^{2^k}$. Set $q_k=g^{\circ2k}$. Since
+\[
+ (g\circ g)(X)=(X^2-1)^2-1=X^2(X^2-2),
+\]
+we have $q_0=X$ and
+\[
+ q_{k+1}=q_k^2(q_k^2-2).
+\]
+Induction now gives $X^{2^k}\mid q_k$ over $\mathbb Z[X]$: the assertion is true at $k=0$, and squaring the factor at stage $k$ produces $X^{2^{k+1}}$ at the next stage. Consequently $f^{\circ k}$ divides $g^{\circ2k}$ over $\mathbb Q[X]$. Their monic gcd is therefore $f^{\circ k}$, of degree $2^k$.
+
+Evaluating the integer-polynomial divisibility identity at $2$ also gives
+\[
+ 2^{2^k}=f^{\circ k}(2)\mid g^{\circ2k}(2).
+\]
+The positive integer gcd of these two values is thus exactly $2^{2^k}$. This uses the nonzero fixed starting point $2$. Indeed the orbit of $g$ from $2$ consists of integers at least $2$, because $t^2-1\geq t$ for integer $t\geq2$; it does not pass through zero.
+
+For every natural bound $B$, taking $k=B$ yields $2^k>B$ and $2^{2^k}>B$. Hence there is no bound uniform in the iteration indices for this fixed pair, and in particular none depending only on their degrees.
+\end{proof}
+
+\noindent\textbf{Formal correspondence and scope.} Lean defines the actual polynomials and recursively composes them. It proves coprimality by a Bezout identity, the degree-two assertions, the even-iterate recurrence and its actual polynomial divisibility consequence. The polynomial theorem concerns Mathlib's actual gcd and its natural degree, not an assumed common-factor count. The evaluated theorem uses the actual integer-polynomial evaluation map and \texttt{Int.gcd}; it gives the exact value above. Both failures are quantified against every natural bound. The source imposes no additional dynamical disjointness condition beyond coprimality. The proof concerns composition iterates, exactly as indicated by ``composite orbits'' and the Chinese wording.
+\end{document}
