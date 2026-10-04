@@ -1,0 +1,338 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\N}{\mathbb N}
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\Fix}{\operatorname{Fix}}
+
+\title{Disproof of Conjecture 00000007608:\\
+a rotation has infinitely many decompositions into two reflections}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000007608 asserts that the composition of two reflections is a rotation, that the
+decomposition (of a rotation into two reflections) is unique, and that the exception to
+uniqueness is the case of parallel reflections. The uniqueness clause is false for
+\emph{every} rotation $\rho\neq\id$ of the plane. Writing $R_\alpha$ for the reflection in the
+line through the centre at angle $\alpha$, we have $\rho_\theta=R_\beta\circ R_\alpha$ whenever
+$\beta-\alpha\equiv\theta/2\pmod\pi$, so $\alpha$ can be chosen freely. None of these
+decompositions has parallel mirrors. The simplest instance is
+$\left(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\right)
+\left(\begin{smallmatrix}1&0\\0&-1\end{smallmatrix}\right)=
+\left(\begin{smallmatrix}0&-1\\-1&0\end{smallmatrix}\right)
+\left(\begin{smallmatrix}-1&0\\0&1\end{smallmatrix}\right)=
+\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$. Its four mirrors are the $x$-axis,
+the line $y=x$, the $y$-axis and the line $y=-x$. In Lean~4 (core library only) we formalise
+rational $2\times2$ reflections and rotations from scratch. We prove that the decompositions of
+any rational rotation $\rho$ are exactly the pairs $(A,\rho A)$. We prove that for every rational
+$\rho\neq\id$ the Pythagorean family $A_t$ ($t\in\N$) gives infinitely many non-parallel
+decompositions with pairwise different mirrors, no three of which share an unordered mirror
+pair. The uniqueness clause is refuted in its weakest literal form (unordered pairs of mirrors).
+We also treat $\R^3$ and affine reflections, and we discuss the one charitable reading under
+which the clause becomes true (``unique up to rotating both mirrors'').
+\end{abstract}
+
+\section{The claim}
+
+The English statement reads: \emph{``Definition: Reflections as hyperplane mirror structure.
+Conjecture: The composition of two reflections is a rotation and the decomposition is unique;
+the exception of uniqueness is parallel reflections; and the exception of parallel reflections
+is translation composition.''} The Chinese version says the same thing: the composition of two
+reflections is a rotation and the decomposition is unique (``fen jie wei yi''); the exception
+to uniqueness is parallel reflections; the exception for parallel reflections is a composite
+translation. We split it into four clauses:
+\begin{itemize}
+\item[(C1)] the composition of two reflections is a rotation;
+\item[(C2)] the decomposition of a rotation into two reflections is unique;
+\item[(C3)] the exception to (C2) is the case of parallel mirrors;
+\item[(C4)] the exception to (C1) is the case of parallel mirrors, whose composition is a
+translation.
+\end{itemize}
+Clauses (C2) and (C3) together form the \emph{uniqueness clause}:
+\begin{quote}
+(U) If $\rho$ is a rotation and $\rho=B\circ A=B'\circ A'$ with reflections $A,B,A',B'$, and
+neither pair has parallel mirrors, then the two decompositions coincide.
+\end{quote}
+We refute (U). Because the conjecture is a conjunction, this refutes the conjecture. Clauses (C1)
+and (C4) are discussed in Section~\ref{sec:readings}; the disproof does not depend on them.
+
+\section{Set-up}
+
+A \emph{reflection} of $\R^2$ (fixing the origin) is an orthogonal matrix $A$ with $\det A=-1$
+and $A^2=I$. A \emph{rotation} is an orthogonal matrix with $\det=+1$. The \emph{mirror} of a
+reflection $A$ is its fixed line $\Fix A=\ker(A-I)$. Two mirrors through the origin are parallel
+iff they are equal. For $\alpha,\theta\in\R$ put
+\[
+R_\alpha=\begin{pmatrix}\cos2\alpha&\sin2\alpha\\ \sin2\alpha&-\cos2\alpha\end{pmatrix},\qquad
+\rho_\theta=\begin{pmatrix}\cos\theta&-\sin\theta\\ \sin\theta&\cos\theta\end{pmatrix}.
+\]
+$R_\alpha$ is the reflection in the line $\R(\cos\alpha,\sin\alpha)$, and $R_\alpha=R_{\alpha'}$
+iff $\alpha\equiv\alpha'\pmod\pi$.
+
+\begin{lemma}\label{lem:normal}
+Over any ordered field $K$ (in particular $\Q$ or $\R$), an orthogonal $2\times2$ matrix with
+determinant $-1$ has the form $\left(\begin{smallmatrix}a&b\\ b&-a\end{smallmatrix}\right)$ with
+$a^2+b^2=1$, and it is automatically an involution. An orthogonal matrix with determinant $+1$
+has the form $\left(\begin{smallmatrix}x&-y\\ y&x\end{smallmatrix}\right)$ with $x^2+y^2=1$. Over
+$\R$ these are exactly the $R_\alpha$ and the $\rho_\theta$.
+\end{lemma}
+\begin{proof}
+Let $M=\left(\begin{smallmatrix}a&b\\ c&d\end{smallmatrix}\right)$ with $MM^{T}=I$, so
+$a^2+b^2=c^2+d^2=1$. If $ad-bc=-1$, then
+$(b-c)^2+(a+d)^2=(a^2+b^2)+(c^2+d^2)+2(ad-bc)=0$, so $c=b$ and $d=-a$. Then
+$M^2=(a^2+b^2)I=I$. If $ad-bc=1$, then $(b+c)^2+(a-d)^2=2-2=0$ gives $c=-b$ and $d=a$.
+\end{proof}
+
+\begin{lemma}\label{lem:product}
+$R_\beta R_\alpha=\rho_{2(\beta-\alpha)}$ and $\rho_\theta R_\alpha=R_{\alpha+\theta/2}$.
+\end{lemma}
+\begin{proof}
+By direct multiplication and the addition formulas,
+\[
+R_\beta R_\alpha=\begin{pmatrix}\cos2\beta\cos2\alpha+\sin2\beta\sin2\alpha&
+\cos2\beta\sin2\alpha-\sin2\beta\cos2\alpha\\ \sin2\beta\cos2\alpha-\cos2\beta\sin2\alpha&
+\sin2\beta\sin2\alpha+\cos2\beta\cos2\alpha\end{pmatrix}=\rho_{2\beta-2\alpha}.
+\]
+The second identity follows by multiplying the first, with $\beta=\alpha+\theta/2$, on the right
+by $R_\alpha=R_\alpha^{-1}$.
+\end{proof}
+
+\section{The main theorem}
+
+\begin{theorem}\label{thm:main}
+Let $\rho=\rho_\theta\neq I$ be a rotation of $\R^2$.
+\begin{enumerate}
+\item The decompositions $\rho=B\circ A$ into two reflections are exactly the pairs
+$(A,\rho A)$ with $A$ an arbitrary reflection, i.e.\ $(R_\alpha,R_{\alpha+\theta/2})$ for
+$\alpha\in\R/\pi\Z$.
+\item In none of them are the two mirrors parallel.
+\item Distinct $\alpha\in\R/\pi\Z$ give distinct ordered pairs and distinct first mirrors. Each
+unordered pair of mirrors arises for at most two values of $\alpha$. Hence there are
+uncountably many decompositions, even counted as unordered pairs of mirrors.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(1) If $BA=\rho$, then $B=BAA=\rho A$. Conversely, if $A=R_\alpha$, then
+$\rho A=R_{\alpha+\theta/2}$ is a reflection (Lemma~\ref{lem:product}), and $(\rho A)A=\rho A^2=\rho$.
+(2) If $A$ and $B=\rho A$ had the same mirror, a nonzero vector $v$ on it would satisfy
+$Av=v=Bv=\rho Av=\rho v$. A rotation $\neq I$ fixes no nonzero vector, since
+$\det(\rho_\theta-I)=2-2\cos\theta\neq0$. Equivalently, the mirrors are at angle
+$\theta/2\not\equiv0\pmod\pi$.
+(3) The first mirror determines $\alpha$ modulo $\pi$. An unordered pair $\{m,m'\}$ contains at
+most two lines, so at most two decompositions have their first mirror in it.
+\end{proof}
+
+So uniqueness fails for \emph{every} nontrivial rotation. The exception named in (C3), parallel
+mirrors, never occurs for $\rho\neq I$: parallel (equal) linear mirrors give $A=B$ and
+$BA=I$. The only rotation that has decompositions with parallel mirrors is the identity, and
+for it \emph{all} decompositions $(A,A)$ have equal mirrors.
+
+\section{The rational version (formalised in Lean)}
+
+Lean's core library has no real numbers, so the formal proof works over $\Q$. That is enough,
+because the counterexamples are rational. A rational matrix is stored as $m/q$, with $m$ an
+integer matrix and $q>0$, and all predicates are the rational ones with the denominators
+cleared. Lemma~\ref{lem:normal} holds verbatim over $\Q$, where the last step uses that a sum
+of two rational squares vanishes only if both do. It is formalised as \texttt{isRefl\_iff},
+\texttt{rot\_form}, \texttt{refl\_of\_form} and \texttt{rot\_of\_form}.
+
+\begin{proposition}[general statements, all rational rotations]\label{prop:general}
+Let $\rho$ be a rational rotation and $A,B$ rational reflections.
+\begin{enumerate}
+\item $BA$ is a rotation (\texttt{refl\_mul\_refl}; this is (C1) in the linear case).
+\item $\rho A$ is a reflection and $(\rho A)A=\rho$ (\texttt{rot\_mul\_refl},
+\texttt{decomp\_of\_refl}).
+\item If $BA=\rho$, then $B=\rho A$ (\texttt{decomp\_classification}).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Write $\rho=\left(\begin{smallmatrix}x&-y\\ y&x\end{smallmatrix}\right)$ with $x^2+y^2=1$ and
+$A=\left(\begin{smallmatrix}a&b\\ b&-a\end{smallmatrix}\right)$ with $a^2+b^2=1$. Then
+$\rho A=\left(\begin{smallmatrix}a'&b'\\ b'&-a'\end{smallmatrix}\right)$ with $a'=xa-yb$ and
+$b'=xb+ya$. Moreover $a'^2+b'^2=(x^2+y^2)(a^2+b^2)=1$, so $\rho A$ is a reflection by
+Lemma~\ref{lem:normal}. Also $(\rho A)A=\rho(a^2+b^2)=\rho$. Parts (1) and (3) are similar
+polynomial identities, given in the Lean file with the denominators cleared.
+\end{proof}
+
+\paragraph{The Pythagorean family.} For $t\in\N$ let
+\[
+A_t=\frac1{1+t^2}\begin{pmatrix}1-t^2&2t\\ 2t&t^2-1\end{pmatrix}.
+\]
+Since $(1-t^2)^2+(2t)^2=(1+t^2)^2$, Lemma~\ref{lem:normal} shows that $A_t$ is a reflection
+(\texttt{Aref\_refl}). Moreover $A_t(1,t)^{T}=(1,t)^{T}$ (\texttt{Aref\_fix}), so the mirror of
+$A_t$ is the line of slope $t$. If $A_s$ fixes $(1,t)$, then the second coordinate gives
+$2s+(s^2-1)t=(1+s^2)t$, i.e.\ $s=t$ (\texttt{Aref\_fix\_eq}). Hence the mirrors of the $A_t$ are
+pairwise different (\texttt{Aref\_distinct}), and so are the matrices (\texttt{Aref\_injective}).
+Examples: $A_0=\operatorname{diag}(1,-1)$, $A_1=\left(\begin{smallmatrix}0&1\\
+1&0\end{smallmatrix}\right)$, $A_2=\frac15\left(\begin{smallmatrix}-3&4\\
+4&3\end{smallmatrix}\right)$.
+
+\begin{lemma}[\texttt{nonparallel}]\label{lem:nonpar}
+If $\rho$ is a rational rotation with $\rho\neq I$, then $A_t$ and $\rho A_t$ have different
+mirrors.
+\end{lemma}
+\begin{proof}
+Otherwise $\rho A_t$ fixes $v=(1,t)$. Since $A_tv=v$, this gives $\rho v=v$, that is,
+$x-yt=1$ and $y+xt=t$. Multiplying the first equation by $t$ and subtracting the second gives
+$y(1+t^2)=0$, so $y=0$ and $x=1$, i.e.\ $\rho=I$.
+\end{proof}
+
+\begin{theorem}[\texttt{infinitely\_many\_decompositions}, \texttt{not\_uniqueFor}]
+\label{thm:rational}
+Let $\rho\neq I$ be a rational rotation, and let $D_t=(A_t,\rho A_t)$ for $t\in\N$. Then:
+\begin{enumerate}
+\item every $D_t$ is a decomposition $\rho=(\rho A_t)\circ A_t$ with non-parallel mirrors;
+\item for $s\neq t$ the first mirrors of $D_s$ and $D_t$ differ;
+\item for pairwise distinct $s,t,u$, the unordered mirror pairs of $D_s$, $D_t$, $D_u$ are not
+all equal.
+\end{enumerate}
+In particular (U) fails for $\rho$, even when decompositions are compared as unordered pairs of
+mirrors.
+\end{theorem}
+\begin{proof}
+(1) is Proposition~\ref{prop:general}(2) together with Lemma~\ref{lem:nonpar}. (2) is
+\texttt{Aref\_distinct}. For (3), suppose all three unordered pairs coincide. Write $m_t$ for the
+mirror of $A_t$ and $m'_t$ for that of $\rho A_t$. Since $m_t\neq m_s$, equality of
+$\{m_s,m'_s\}$ and $\{m_t,m'_t\}$ forces $m_t=m'_s$; likewise $m_u=m'_s$. Hence $m_t=m_u$,
+contradicting (2). Applying (U) to $D_0,D_1$ and to $D_0,D_2$ gives exactly such a coincidence.
+\end{proof}
+
+\begin{corollary}[\texttt{conjecture\_00000007608\_false}]
+(U) is false. It already fails for the rotation by $90^\circ$, $\rho=\left(\begin{smallmatrix}0&-1\\
+1&0\end{smallmatrix}\right)$.
+\end{corollary}
+
+\paragraph{Explicit integer examples.} Let $R_1=\operatorname{diag}(1,-1)$,
+$R_2=\left(\begin{smallmatrix}0&1\\ 1&0\end{smallmatrix}\right)$,
+$R_3=\operatorname{diag}(-1,1)$ and $R_4=\left(\begin{smallmatrix}0&-1\\
+-1&0\end{smallmatrix}\right)$. Their mirrors are the $x$-axis, the line $y=x$, the $y$-axis and
+the line $y=-x$; these are pairwise different (\texttt{four\_mirrors\_distinct}, witnessed by the
+vectors $(1,0)$, $(1,1)$ and $(0,1)$). Then:
+\begin{itemize}
+\item $R_2R_1=R_4R_3=\rho_{90^\circ}$ (\texttt{rot90\_two\_decompositions});
+\item $R_3R_1=R_4R_2=R_2R_4=-I=\rho_{180^\circ}$ (\texttt{rot180\_two\_decompositions});
+\item $\rho_{90^\circ}A_2=\frac15\left(\begin{smallmatrix}-4&-3\\ -3&4\end{smallmatrix}\right)$
+(\texttt{Aref2\_example}).
+\end{itemize}
+
+\section{Readings}\label{sec:readings}
+
+\begin{itemize}
+\item \textbf{Ordered vs.\ unordered.} Lean refutes the weakest literal form, \texttt{UniqueClause}:
+two non-parallel decompositions should have the same \emph{unordered} pair of mirrors. The
+ordered, matrix-level form \texttt{UniqueClauseOrdered} implies it
+(\texttt{ordered\_implies\_unordered}), so it is false too (\texttt{conjecture\_false\_ordered}).
+\item \textbf{Which rotation.} Non-uniqueness is not a special phenomenon of one rotation. It
+holds for every rotation $\neq I$: Theorem~\ref{thm:main} over $\R$, and
+\texttt{every\_nontrivial\_rotation\_fails} for all rational rotations in Lean. For $\rho=I$
+every decomposition is $(A,A)$, with equal (``parallel'') mirrors, so (U) holds vacuously there
+(\texttt{uniqueFor\_id}). This also shows that the formal predicate is not trivially false.
+\item \textbf{Real vs.\ rational.} Lean works over $\Q$. Theorem~\ref{thm:main} is the real
+statement, and \texttt{verify.py} illustrates it numerically for irrational angles.
+\item \textbf{Affine reflections.} An affine reflection is $v\mapsto Mv+u$, with $M$ a linear
+reflection, that is an involution; its mirror is an affine line. A rotation about a point $c$
+is $\rho_c(v)=\rho(v-c)+c$. If two mirrors meet in a point $P$, the composition fixes $P$. If
+they are parallel and distinct, the composition is a nonzero translation. For example, the
+mirrors $x=0$ and $x=1$ give $v\mapsto v+(2,0)$, which has no fixed point
+(\texttt{parallel\_gives\_translation}). So for $\rho_c\neq\id$ both mirrors pass through $c$,
+and conjugating by the translation $v\mapsto v-c$ identifies the affine decompositions of
+$\rho_c$ with the linear decompositions of $\rho$. The affine reading therefore has the same
+infinite family. Concretely, the rotation by $90^\circ$ about $(1,1)$ equals
+$S_{y=x}\circ S_{y=1}=S_{x+y=2}\circ S_{x=1}$, with four different non-parallel mirrors through
+$(1,1)$ (\texttt{affine\_two\_decompositions}).
+\item \textbf{$\R^n$ and hyperplane mirrors.} The definition speaks of hyperplane mirrors. In
+$\R^n$ a product of two hyperplane reflections with distinct mirrors $H_1,H_2$ is a rotation in
+the plane $(H_1\cap H_2)^\perp$ about the axis $H_1\cap H_2$. A rotation $\rho\neq I$ of this
+kind (angle $\theta$ in a plane $\Pi$, fixing $\Pi^\perp$) is decomposed exactly by the pairs of
+hyperplanes containing $\Pi^\perp$, i.e.\ $H_i=\ell_i\oplus\Pi^\perp$, where $(\ell_1,\ell_2)$
+runs over the decompositions of $\rho|_\Pi$ in Theorem~\ref{thm:main}. Again there is a circle's
+worth. In Lean, \texttt{r3\_two\_decompositions} embeds the $90^\circ$ example block-diagonally in
+$\R^3$. There the mirrors are the planes $y=0$, $x=y$, $x=0$ and $x=-y$, each containing the
+$z$-axis, and they are pairwise different. Parallel hyperplanes through the origin are equal,
+so the exception again never applies.
+\item \textbf{Point reflections.} If ``reflection'' meant a point reflection $v\mapsto2c-v$, the
+composition of two of them would be a translation, never a nontrivial rotation, and (C1) would
+fail outright. The definition (``hyperplane mirror structure'') excludes this reading.
+\item \textbf{The charitable escape: ``unique up to rotating both mirrors''.} The classical
+textbook statement is that the decomposition is unique \emph{up to rotating both mirrors
+simultaneously about the centre}: only the angle between the mirrors, $\theta/2\bmod\pi$, is
+determined. This is true, and it follows from Theorem~\ref{thm:main}(1): any two decompositions
+$(R_\alpha,R_{\alpha+\theta/2})$ and $(R_{\alpha'},R_{\alpha'+\theta/2})$ differ by rotating both
+mirrors by $\alpha'-\alpha$. We do \emph{not} refute this version. However, it is not what the
+conjecture states. The conjecture asserts uniqueness and names parallel mirrors as \emph{the}
+exception, and the Chinese text says plainly that the decomposition is unique. Under the
+``up to rotation'' reading there would be no exception at all for $\rho\neq I$, and parallel
+mirrors would not be an exception to uniqueness but a different case. The literal clause
+therefore claims uniqueness of the mirror pair, and that is what we refute.
+\item \textbf{Clause (C1).} For linear reflections (C1) is true: $BA$ is orthogonal with
+$\det=(-1)^2=1$ (\texttt{refl\_mul\_refl}). With equal mirrors the composition is the
+identity, the rotation by $0$. For affine reflections with parallel distinct mirrors, (C1) is
+false: the composition is a translation with no fixed point. This is the exception that (C4)
+mentions, so (C1) and (C4) together are correct. The disproof does not use them.
+\end{itemize}
+
+\section{Machine verification}
+
+\paragraph{Lean 4 (\texttt{lean4/Main.lean}, core only, v4.19.0).} From scratch it defines:
+\begin{itemize}
+\item integer $2\times2$ matrices \texttt{M2} (product, transpose, determinant, action on
+$\Z^2$), and rational matrices \texttt{QM} $=m/q$ with equality \texttt{QEq}, proved to be an
+equivalence relation;
+\item \texttt{IsRefl} (orthogonal, $\det=-1$, involution), \texttt{IsRot}, the fixed-vector
+predicate \texttt{Fix}, \texttt{SameMirror} (parallel $=$ equal mirrors), and \texttt{Decomp};
+\item the claims \texttt{UniqueFor}~$\rho$, \texttt{UniqueClause} and
+\texttt{UniqueClauseOrdered}.
+\end{itemize}
+The main theorems are:
+\begin{itemize}
+\item \texttt{conjecture\_00000007608\_false : $\neg$ UniqueClause};
+\item \texttt{conjecture\_false\_rot90\_explicit} (the same, directly from $R_2R_1=R_4R_3$);
+\item \texttt{conjecture\_false\_ordered};
+\item \texttt{every\_nontrivial\_rotation\_fails};
+\item \texttt{infinitely\_many\_decompositions};
+\item \texttt{decomp\_classification}, \texttt{refl\_mul\_refl}, \texttt{isRefl\_iff} and
+\texttt{uniqueFor\_id};
+\item the concrete $90^\circ$, $180^\circ$, $\R^3$ and affine examples.
+\end{itemize}
+A small tactic \texttt{ring\_z} (expand, AC-normalise, \texttt{omega}) proves the polynomial
+identities, since core Lean has no \texttt{ring}. The concrete checks use \texttt{decide}. There
+is no \texttt{sorry} and no \texttt{native\_decide}. The axioms used are at most
+\texttt{propext} and \texttt{Quot.sound}.
+
+\emph{Limitations.} Lean works over $\Q$, not $\R$; the real statement
+(Theorem~\ref{thm:main}) is proved in this report. Mirrors are compared through integer
+vectors, which loses nothing, since a rational vector is fixed iff an integer multiple of it is.
+The $\R^3$ and affine parts are concrete integer examples (\texttt{decide}). The general $\R^n$
+and affine reductions above, and the ``up to rotation'' statement, are proved only in this
+report.
+
+\paragraph{Python (\texttt{verify.py}, standard library).} A different method: exact
+\texttt{Fraction} matrices, mirrors computed as kernels by Gaussian elimination, a small
+polynomial engine for the symbolic identities, and brute force. For 123 nontrivial rational
+rotations and 86 rational parameters $t$, every $(A_t,\rho A_t)$ is a non-parallel decomposition
+with pairwise different mirrors. In a set $S$ of 124 rational reflections it enumerates all
+pairs $(A,B)\in S^2$ with $BA=\rho$. For $\rho_{90^\circ}$ there are 124 such pairs, all
+non-parallel, with 124 different unordered mirror pairs. For $\rho=I$ all of them are $(A,A)$.
+It also checks the $\R^3$ and affine examples, and evaluates
+$R_{\alpha+\theta/2}R_\alpha=\rho_\theta$ in floating point for irrational angles.
+
+\end{document}
