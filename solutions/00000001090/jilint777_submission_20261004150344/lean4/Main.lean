@@ -18,6 +18,18 @@ nonzero combinations `a u + b v` are nonzero codewords, so their weights sum to 
 `8 (n - k + 1)`.  Each of the remaining `n - k + 2` coordinates is nonzero in exactly 0
 or 6 of them (`cnt_le`), so the sum is at most `6 (n - k + 2)`.  This forces `n ≤ k + 2`.
 
+Other readings (all refuted below):
+* "[12,6]" read as length 12 and distance 6: no MDS `[12,7,6]` code (`no_mds_12_7`).
+* "MDS" read as the ternary Golay code `[12,6,6]` (the intended object, probably): the
+  definition uses the stabiliser of the *permutation* equivalence class, i.e. `PAut`.
+  The code `golay'` (column 6 of `golay` doubled) is a `[12,6,6]` code
+  (`golay'_12_6_6`) with at least 720 > 660 distinct permutation automorphisms
+  (`golay_reading_witness`, `golay_reading_false`, `golay'_order_ge`).  In fact
+  `PAut(golay') ≅ M₁₁` has order 7920, and `golay` itself has `|PAut| = 660`
+  (exact orders in `verify.py`).
+* "MDS" dropped (all `[12,6]` codes): the repeated-pair code has at least 768
+  permutation automorphisms (`atMost660_false`, `pair_order_ge`).
+
 Codes are given by generator matrices `G : Nat → Nat → F3` (row `i < k`, column `j < n`).
 Arithmetic in `F₃ = Fin 3` is checked by `decide`.
 -/
@@ -317,8 +329,36 @@ theorem no_mds_ternary (n k : Nat) (hk : 2 ≤ k) (hn : k + 3 ≤ n) (G : Nat �
 
 /-! ## Automorphism groups -/
 
+/-- `j`-th entry of a list (0 if out of range); structural, so the kernel evaluates it fast. -/
+def nth : List Nat → Nat → Nat
+  | [], _ => 0
+  | a :: _, 0 => a
+  | _ :: l, n + 1 => nth l n
+
+theorem nth_mem : ∀ (l : List Nat) (j : Nat), j < l.length → nth l j ∈ l := by
+  intro l
+  induction l with
+  | nil => intro j h; exact absurd h (Nat.not_lt_zero _)
+  | cons a l ih =>
+    intro j h
+    cases j with
+    | zero => exact List.mem_cons_self ..
+    | succ j =>
+      exact List.mem_cons_of_mem _ (ih j (by simp only [List.length_cons] at h; omega))
+
+theorem nth_map (f : Nat → Nat) : ∀ (l : List Nat) (j : Nat), j < l.length →
+    nth (l.map f) j = f (nth l j) := by
+  intro l
+  induction l with
+  | nil => intro j h; exact absurd h (Nat.not_lt_zero _)
+  | cons a l ih =>
+    intro j h
+    cases j with
+    | zero => rfl
+    | succ j => exact ih j (by simp only [List.length_cons] at h; omega)
+
 /-- A coordinate permutation of `{0, …, n-1}` is stored as the list of images. -/
-def applyL (σ : List Nat) (j : Nat) : Nat := σ.getD j 0
+def applyL (σ : List Nat) (j : Nat) : Nat := nth σ j
 
 def IsPermL (n : Nat) (σ : List Nat) : Prop := σ.length = n ∧ σ.Nodup ∧ ∀ x ∈ σ, x < n
 
@@ -387,7 +427,18 @@ theorem no_mds_12_7 : ¬ ∃ G, IsMDS 12 7 G :=
 
 /-! ## Non-vacuity: the notions are satisfiable -/
 
-def matOf (rows : List (List F3)) : Nat → Nat → F3 := fun i j => (rows.getD i []).getD j 0
+def getF : List F3 → Nat → F3
+  | [], _ => 0
+  | a :: _, 0 => a
+  | _ :: l, n + 1 => getF l n
+
+def getRow : List (List F3) → Nat → List F3
+  | [], _ => []
+  | a :: _, 0 => a
+  | _ :: l, n + 1 => getRow l n
+
+/-- The matrix with the given rows (entries outside are 0). -/
+def matOf (rows : List (List F3)) : Nat → Nat → F3 := fun i j => getF (getRow rows i) j
 
 def msgL (l : List F3) : Nat → F3 := fun i => l.getD i 0
 
@@ -503,12 +554,8 @@ def PairResp (σ : List Nat) : Prop := ∀ i, i < 6 → applyL σ (2 * i) / 2 = 
 
 instance : DecidablePred PairResp := fun σ => by unfold PairResp; infer_instance
 
-theorem applyL_lt (σ : List Nat) (n j : Nat) (h : IsPermL n σ) (hj : j < n) : applyL σ j < n := by
-  have hl : j < σ.length := by rw [h.1]; exact hj
-  apply h.2.2
-  unfold applyL
-  rw [List.getD_eq_getElem?_getD, List.getElem?_eq_getElem hl, Option.getD_some]
-  exact List.getElem_mem hl
+theorem applyL_lt (σ : List Nat) (n j : Nat) (h : IsPermL n σ) (hj : j < n) : applyL σ j < n :=
+  h.2.2 _ (nth_mem σ j (by rw [h.1]; exact hj))
 
 theorem pair_aut (σ : List Nat) (h1 : IsPermL 12 σ) (h2 : PairResp σ) : IsPAut 12 6 pairG σ := by
   refine ⟨h1, fun m => ⟨fun i => m (applyL σ (2 * i) / 2), fun j hj => ?_⟩⟩
@@ -590,6 +637,302 @@ theorem pair_order_ge (N : Nat) (h : PAutOrder 12 6 pairG N) : 768 ≤ N := by
   rw [pairAuts_length] at this
   omega
 
+/-! ## The Golay reading: `[12,6,6]` ternary codes with more than 660 permutation automorphisms
+
+Up to monomial equivalence the extended ternary Golay code is the unique `[12,6,6]` ternary
+code, but its monomial class splits into several *permutation* equivalence classes with
+different permutation automorphism groups.  `golay` (above) has `|PAut| = 660`; scaling its
+column 6 by `2` gives `golay'`, whose `PAut` is `M₁₁` of order 7920 (exact orders: `verify.py`).
+Here we prove that `golay'` is a `[12,6,6]` code with at least 720 > 660 permutation
+automorphisms. -/
+
+/-- `golay` with column 6 multiplied by 2 (a monomially equivalent code). -/
+def golay' : Nat → Nat → F3 := fun i j => if j = 6 then 2 * golay i j else golay i j
+
+theorem comb_smul (k : Nat) (m : Nat → F3) (G : Nat → Nat → F3) (s : F3) (j : Nat) :
+    comb k m (fun i j' => s * G i j') j = s * comb k m G j := by
+  induction k with
+  | zero => simp only [comb]; revert s; decide
+  | succ k ih =>
+    simp only [comb]
+    rw [ih]
+    clear ih
+    generalize comb k m G j = X
+    generalize m k = c
+    generalize G k j = g
+    revert s X c g; decide
+
+theorem codeword_golay' (m : Nat → F3) (j : Nat) :
+    codeword 6 golay' m j = (if j = 6 then 2 else 1) * codeword 6 golay m j := by
+  unfold codeword
+  by_cases h : j = 6
+  · subst h
+    rw [comb_congr_vec 6 m golay' (fun i j' => 2 * golay i j') 6 6 (fun i _ => rfl), comb_smul]
+    rfl
+  · rw [comb_congr_vec 6 m golay' golay j j (fun i _ => by simp [golay', h])]
+    simp only [h, if_false]
+    generalize comb 6 m golay j = x
+    revert x; decide
+
+theorem sumTo_congr (n : Nat) (f g : Nat → Nat) (h : ∀ j, j < n → f j = g j) :
+    sumTo n f = sumTo n g := by
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+    simp only [sumTo]
+    rw [ih (fun j hj => h j (by omega)), h n (by omega)]
+
+theorem wt_golay' (m : Nat → F3) : wt 12 (codeword 6 golay' m) = wt 12 (codeword 6 golay m) := by
+  apply sumTo_congr
+  intro j _
+  rw [codeword_golay']
+  generalize codeword 6 golay m j = x
+  by_cases h : j = 6
+  · simp only [h, if_true]; revert x; decide
+  · simp only [h, if_false]; revert x; decide
+
+/-- `golay'` generates a `[12,6]` code of minimum distance exactly 6. -/
+theorem golay'_12_6_6 : IsGenMatrix 12 6 golay' ∧ HasMinDist 12 6 golay' 6 := by
+  obtain ⟨hgen, hge, m0, hm0, hw0⟩ := golay_12_6_6
+  refine ⟨?_, ?_, m0, hm0, by rw [wt_golay']; exact hw0⟩
+  · intro m hm
+    obtain ⟨j, hj, hne⟩ := hgen m hm
+    refine ⟨j, hj, ?_⟩
+    rw [codeword_golay']
+    generalize codeword 6 golay m j = x at hne
+    by_cases h : j = 6
+    · simp only [h, if_true]; revert x; decide
+    · simp only [h, if_false]; revert x; decide
+  · intro m hm
+    rw [wt_golay']
+    exact hge m hm
+
+/-- Combinations of combinations. -/
+theorem comb_comb (K k : Nat) (m : Nat → F3) (M : Nat → Nat → F3) (G : Nat → Nat → F3) (j : Nat) :
+    comb K m (fun i j' => comb k (M i) G j') j
+      = comb k (fun l => comb K m (fun i _ => M i l) 0) G j := by
+  induction K with
+  | zero =>
+    simp only [comb]
+    exact (comb_zero_coef k _ G j (fun _ _ => rfl)).symm
+  | succ K ih =>
+    simp only [comb]
+    rw [ih, comb_congr_coef k (fun l => comb K m (fun i _ => M i l) 0 + m K * M K l)
+      (fun l => 1 * comb K m (fun i _ => M i l) 0 + m K * M K l) G j
+      (fun l _ => by
+        show comb K m (fun i _ => M i l) 0 + m K * M K l
+          = 1 * comb K m (fun i _ => M i l) 0 + m K * M K l
+        generalize comb K m (fun i _ => M i l) 0 = X
+        generalize m K * M K l = y
+        revert X y; decide),
+      comb_lin]
+    generalize comb k (fun l => comb K m (fun i _ => M i l) 0) G j = X
+    generalize comb k (M K) G j = Y
+    generalize m K = c
+    revert X Y c; decide
+
+/-- A permutation is an automorphism as soon as every permuted generator row is the
+codeword of its own first `k` entries (a finite, decidable check). -/
+theorem paut_of_rows (n k : Nat) (G : Nat → Nat → F3) (σ : List Nat) (hp : IsPermL n σ)
+    (hrows : ∀ i, i < k → ∀ j, j < n →
+      G i (applyL σ j) = comb k (fun l => G i (applyL σ l)) G j) :
+    IsPAut n k G σ := by
+  refine ⟨hp, fun m => ⟨fun l => comb k m (fun i _ => G i (applyL σ l)) 0, fun j hj => ?_⟩⟩
+  show comb k m G (applyL σ j) = comb k (fun l => comb k m (fun i _ => G i (applyL σ l)) 0) G j
+  calc comb k m G (applyL σ j)
+      = comb k m (fun i j' => comb k (fun l => G i (applyL σ l)) G j') j :=
+        comb_congr_vec k m G _ (applyL σ j) j (fun i hi => hrows i hi j hj)
+    _ = _ := comb_comb k k m (fun i l => G i (applyL σ l)) G j
+
+/-- `golay'` is systematic: its first six columns form the identity matrix. -/
+theorem golay'_sys (m : Nat → F3) (j : Nat) (hj : j < 6) : comb 6 m golay' j = m j := by
+  have h : ∀ i, i < 6 → ∀ j, j < 6 → golay' i j = if i = j then 1 else 0 := by decide
+  rw [comb_congr_vec 6 m golay' (fun i _ => if i = j then 1 else 0) j j
+    (fun i hi => h i hi j hj)]
+  exact comb_ind 6 m j j hj
+
+/-- Decidable check on the six redundancy coordinates of every permuted generator row. -/
+def RowsOK (σ : List Nat) : Prop :=
+  ∀ i, i < 6 → ∀ t, t < 6 →
+    golay' i (applyL σ (6 + t)) = comb 6 (fun l => golay' i (applyL σ l)) golay' (6 + t)
+
+instance : DecidablePred RowsOK := fun σ => by unfold RowsOK; infer_instance
+
+theorem rows_of_RowsOK (σ : List Nat) (h : RowsOK σ) : ∀ i, i < 6 → ∀ j, j < 12 →
+    golay' i (applyL σ j) = comb 6 (fun l => golay' i (applyL σ l)) golay' j := by
+  intro i hi j hj
+  by_cases hj6 : j < 6
+  · rw [golay'_sys _ j hj6]
+  · have := h i hi (j - 6) (by omega)
+    rwa [show 6 + (j - 6) = j by omega] at this
+
+/-- Composition of permutation lists: `(comp σ τ)[j] = σ[τ[j]]`. -/
+def comp (σ τ : List Nat) : List Nat := τ.map (applyL σ)
+
+theorem applyL_comp (σ τ : List Nat) (j : Nat) (hj : j < τ.length) :
+    applyL (comp σ τ) j = applyL σ (applyL τ j) :=
+  nth_map (applyL σ) τ j hj
+
+/-- Length 12, values `< 12`, and codewords are mapped to codewords. -/
+def AutCore (σ : List Nat) : Prop :=
+  σ.length = 12 ∧ (∀ j, j < 12 → applyL σ j < 12) ∧
+    ∀ m, InCode 12 6 golay' (fun j => codeword 6 golay' m (applyL σ j))
+
+theorem autCore_of_paut (σ : List Nat) (h : IsPAut 12 6 golay' σ) : AutCore σ :=
+  ⟨h.1.1, fun j hj => applyL_lt σ 12 j h.1 hj, h.2⟩
+
+/-- Products of automorphisms are automorphisms. -/
+theorem autCore_comp (σ τ : List Nat) (hσ : AutCore σ) (hτ : AutCore τ) : AutCore (comp σ τ) := by
+  refine ⟨by unfold comp; rw [List.length_map]; exact hτ.1, fun j hj => ?_, fun m => ?_⟩
+  · rw [applyL_comp σ τ j (by rw [hτ.1]; exact hj)]
+    exact hσ.2.1 _ (hτ.2.1 j hj)
+  · obtain ⟨m1, h1⟩ := hσ.2.2 m
+    obtain ⟨m2, h2⟩ := hτ.2.2 m1
+    refine ⟨m2, fun j hj => ?_⟩
+    have e1 := h1 (applyL τ j) (hτ.2.1 j hj)
+    have e2 := h2 j hj
+    show codeword 6 golay' m (applyL (comp σ τ) j) = codeword 6 golay' m2 j
+    rw [applyL_comp σ τ j (by rw [hτ.1]; exact hj)]
+    exact e1.trans e2
+
+/-- 30 automorphisms of `golay'` with pairwise different images of the points `(0, 1)`. -/
+def H1 : List (List Nat) := [
+  [0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10,  11],
+  [0,  2,  1,  3,  6,  5,  4,  9,  11,  7,  10,  8],
+  [0,  3,  1,  2,  5,  6,  4,  7,  11,  9,  8,  10],
+  [0,  4,  1,  5,  2,  6,  3,  7,  8,  10,  11,  9],
+  [0,  5,  1,  2,  3,  4,  6,  11,  7,  8,  9,  10],
+  [0,  6,  1,  3,  2,  4,  5,  11,  9,  10,  7,  8],
+  [0,  7,  1,  2,  8,  10,  6,  9,  5,  3,  11,  4],
+  [0,  8,  1,  2,  7,  6,  10,  5,  9,  11,  3,  4],
+  [0,  9,  1,  2,  11,  4,  10,  3,  8,  7,  5,  6],
+  [0,  10,  1,  3,  9,  5,  8,  6,  7,  11,  2,  4],
+  [0,  11,  1,  2,  9,  10,  4,  8,  3,  5,  7,  6],
+  [1,  0,  2,  3,  4,  8,  10,  9,  5,  7,  6,  11],
+  [1,  2,  0,  3,  10,  8,  4,  7,  11,  9,  6,  5],
+  [1,  3,  0,  2,  8,  10,  4,  9,  11,  7,  5,  6],
+  [1,  4,  0,  5,  11,  9,  3,  10,  8,  7,  2,  6],
+  [1,  5,  0,  2,  9,  10,  6,  8,  7,  11,  3,  4],
+  [1,  6,  0,  3,  7,  8,  5,  10,  9,  11,  2,  4],
+  [1,  7,  0,  2,  11,  4,  6,  3,  5,  9,  8,  10],
+  [1,  8,  0,  2,  3,  4,  10,  11,  9,  5,  7,  6],
+  [1,  9,  0,  2,  5,  6,  10,  7,  8,  3,  11,  4],
+  [1,  10,  0,  3,  2,  4,  8,  11,  7,  6,  9,  5],
+  [1,  11,  0,  2,  7,  6,  4,  5,  3,  8,  9,  10],
+  [2,  0,  1,  3,  6,  11,  10,  7,  5,  9,  4,  8],
+  [2,  1,  0,  3,  10,  11,  6,  9,  8,  7,  4,  5],
+  [2,  3,  0,  1,  11,  10,  6,  7,  8,  9,  5,  4],
+  [2,  4,  0,  3,  9,  11,  5,  10,  7,  8,  1,  6],
+  [2,  5,  0,  1,  7,  10,  4,  11,  9,  8,  3,  6],
+  [2,  6,  0,  4,  8,  9,  1,  11,  10,  7,  3,  5],
+  [2,  7,  0,  1,  5,  4,  10,  9,  11,  3,  8,  6],
+  [2,  8,  0,  1,  9,  4,  6,  5,  3,  11,  7,  10]]
+
+/-- 24 automorphisms of `golay'` fixing the points `0` and `1`. -/
+def H2 : List (List Nat) := [
+  [0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10,  11],
+  [0,  1,  2,  5,  6,  3,  4,  11,  9,  8,  10,  7],
+  [0,  1,  2,  7,  6,  8,  10,  9,  11,  3,  4,  5],
+  [0,  1,  2,  8,  10,  7,  6,  5,  3,  11,  4,  9],
+  [0,  1,  2,  9,  10,  11,  4,  3,  5,  7,  6,  8],
+  [0,  1,  2,  11,  4,  9,  10,  8,  7,  5,  6,  3],
+  [0,  1,  3,  2,  4,  6,  5,  9,  10,  7,  8,  11],
+  [0,  1,  3,  6,  5,  2,  4,  11,  7,  10,  8,  9],
+  [0,  1,  3,  7,  8,  11,  4,  2,  6,  9,  5,  10],
+  [0,  1,  3,  9,  5,  10,  8,  7,  11,  2,  4,  6],
+  [0,  1,  3,  10,  8,  9,  5,  6,  2,  11,  4,  7],
+  [0,  1,  3,  11,  4,  7,  8,  10,  9,  6,  5,  2],
+  [0,  1,  4,  5,  3,  6,  2,  10,  9,  7,  11,  8],
+  [0,  1,  4,  6,  2,  5,  3,  8,  7,  9,  11,  10],
+  [0,  1,  4,  7,  11,  8,  3,  5,  6,  10,  2,  9],
+  [0,  1,  4,  8,  3,  7,  11,  9,  10,  6,  2,  5],
+  [0,  1,  4,  9,  11,  10,  2,  6,  5,  8,  3,  7],
+  [0,  1,  4,  10,  2,  9,  11,  7,  8,  5,  3,  6],
+  [0,  1,  5,  2,  6,  4,  3,  8,  10,  11,  9,  7],
+  [0,  1,  5,  4,  3,  2,  6,  7,  11,  10,  9,  8],
+  [0,  1,  5,  7,  6,  11,  9,  10,  8,  4,  3,  2],
+  [0,  1,  5,  8,  3,  10,  9,  11,  7,  2,  6,  4],
+  [0,  1,  5,  10,  9,  8,  3,  4,  2,  7,  6,  11],
+  [0,  1,  5,  11,  9,  7,  6,  2,  4,  8,  3,  10]]
+
+theorem H1_ok : ∀ σ ∈ H1, IsPermL 12 σ ∧ RowsOK σ := by decide +kernel
+
+theorem H2_ok : ∀ σ ∈ H2, IsPermL 12 σ ∧ RowsOK σ := by decide +kernel
+
+theorem H2_fix : ∀ k ∈ H2, applyL k 0 = 0 ∧ applyL k 1 = 1 := by decide +kernel
+
+theorem H1_sep :
+    H1.Pairwise (fun a b => (applyL a 0, applyL a 1) ≠ (applyL b 0, applyL b 1)) := by
+  decide +kernel
+
+theorem H1_blocks : ∀ h ∈ H1, (H2.map (comp h)).Nodup := by decide +kernel
+
+theorem autCore_H1 (h : List Nat) (hh : h ∈ H1) : AutCore h :=
+  autCore_of_paut h (paut_of_rows 12 6 golay' h (H1_ok h hh).1 (rows_of_RowsOK h (H1_ok h hh).2))
+
+theorem autCore_H2 (k : List Nat) (hk : k ∈ H2) : AutCore k :=
+  autCore_of_paut k (paut_of_rows 12 6 golay' k (H2_ok k hk).1 (rows_of_RowsOK k (H2_ok k hk).2))
+
+/-- The 720 products `h ∘ k` (`h ∈ H1`, `k ∈ H2`): permutation automorphisms of `golay'`. -/
+def golayAuts : List (List Nat) := H1.flatMap (fun h => H2.map (comp h))
+
+theorem golayAuts_length : golayAuts.length = 720 := by decide +kernel
+
+theorem golayAuts_perm : ∀ σ ∈ golayAuts, IsPermL 12 σ := by decide +kernel
+
+theorem golayAuts_aut : ∀ σ ∈ golayAuts, IsPAut 12 6 golay' σ := by
+  intro σ hσ
+  refine ⟨golayAuts_perm σ hσ, ?_⟩
+  obtain ⟨h, hh, hσ'⟩ := List.mem_flatMap.1 hσ
+  obtain ⟨k, hk, rfl⟩ := List.mem_map.1 hσ'
+  exact (autCore_comp h k (autCore_H1 h hh) (autCore_H2 k hk)).2.2
+
+/-- The products are pairwise distinct: different `h` give different images of `(0, 1)`. -/
+theorem golayAuts_nodup : golayAuts.Nodup := by
+  unfold golayAuts List.Nodup
+  rw [List.pairwise_flatMap]
+  refine ⟨H1_blocks, H1_sep.imp (fun {a b} hab => ?_)⟩
+  intro x hx y hy hxy
+  obtain ⟨k1, hk1, rfl⟩ := List.mem_map.1 hx
+  obtain ⟨k2, hk2, rfl⟩ := List.mem_map.1 hy
+  apply hab
+  have l1 := (H2_ok k1 hk1).1.1
+  have l2 := (H2_ok k2 hk2).1.1
+  have e0 : applyL (comp a k1) 0 = applyL a 0 := by
+    rw [applyL_comp a k1 0 (by rw [l1]; decide), (H2_fix k1 hk1).1]
+  have e1 : applyL (comp a k1) 1 = applyL a 1 := by
+    rw [applyL_comp a k1 1 (by rw [l1]; decide), (H2_fix k1 hk1).2]
+  have f0 : applyL (comp b k2) 0 = applyL b 0 := by
+    rw [applyL_comp b k2 0 (by rw [l2]; decide), (H2_fix k2 hk2).1]
+  have f1 : applyL (comp b k2) 1 = applyL b 1 := by
+    rw [applyL_comp b k2 1 (by rw [l2]; decide), (H2_fix k2 hk2).2]
+  rw [← e0, ← e1, ← f0, ← f1, hxy]
+
+/-- Reading "the maximal order is 660" for ternary `[12,6,6]` (Golay) codes:
+no such code has more than 660 distinct permutation automorphisms. -/
+def GolayMax660 : Prop :=
+  ∀ G (L : List (List Nat)), IsGenMatrix 12 6 G → HasMinDist 12 6 G 6 → L.Nodup →
+    (∀ σ ∈ L, IsPAut 12 6 G σ) → L.length ≤ 660
+
+theorem golay_reading_witness : ∃ G : Nat → Nat → F3, ∃ L : List (List Nat), IsGenMatrix 12 6 G ∧
+    HasMinDist 12 6 G 6 ∧ L.Nodup ∧ (∀ σ ∈ L, IsPAut 12 6 G σ) ∧ 660 < L.length :=
+  ⟨golay', golayAuts, golay'_12_6_6.1, golay'_12_6_6.2, golayAuts_nodup, golayAuts_aut,
+    by rw [golayAuts_length]; decide⟩
+
+theorem golay_reading_false : ¬ GolayMax660 := by
+  intro h
+  obtain ⟨G, L, h1, h2, h3, h4, h5⟩ := golay_reading_witness
+  have := h G L h1 h2 h3 h4
+  omega
+
+/-- Whatever the order `N` of `PAut(golay')` is, it is at least 720 (in fact 7920). -/
+theorem golay'_order_ge (N : Nat) (h : PAutOrder 12 6 golay' N) : 720 ≤ N := by
+  obtain ⟨L, _, hlen, hiff⟩ := h
+  have := nodup_length_le golayAuts L golayAuts_nodup
+    (fun σ hσ => (hiff σ).2 (golayAuts_aut σ hσ))
+  rw [golayAuts_length] at this
+  omega
+
 end TernaryMDS
 
 open TernaryMDS in
@@ -612,3 +955,11 @@ open TernaryMDS in
 #print axioms atMost660_false
 open TernaryMDS in
 #print axioms pair_order_ge
+open TernaryMDS in
+#print axioms golay'_12_6_6
+open TernaryMDS in
+#print axioms golay_reading_witness
+open TernaryMDS in
+#print axioms golay_reading_false
+open TernaryMDS in
+#print axioms golay'_order_ge

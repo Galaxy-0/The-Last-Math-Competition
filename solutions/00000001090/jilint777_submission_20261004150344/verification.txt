@@ -1,17 +1,19 @@
 == lake build (fresh, Lean 4.19.0)
-info: ternaryMDS: no previous manifest, creating one from scratch
-info: toolchain not updated; already up-to-date
 ℹ [2/3] Built Main
-info: ././././Main.lean:596:0: 'TernaryMDS.dep' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:598:0: 'TernaryMDS.no_mds_ternary' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:600:0: 'TernaryMDS.no_mds_12_6' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:602:0: 'TernaryMDS.conjecture_00000001090_false' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:604:0: 'TernaryMDS.conjecture_00000001090_monomial_false' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:606:0: 'TernaryMDS.no_mds_12_7' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:608:0: 'TernaryMDS.tetra_mds' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:610:0: 'TernaryMDS.golay_12_6_6' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:612:0: 'TernaryMDS.atMost660_false' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././Main.lean:614:0: 'TernaryMDS.pair_order_ge' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:939:0: 'TernaryMDS.dep' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:941:0: 'TernaryMDS.no_mds_ternary' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:943:0: 'TernaryMDS.no_mds_12_6' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:945:0: 'TernaryMDS.conjecture_00000001090_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:947:0: 'TernaryMDS.conjecture_00000001090_monomial_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:949:0: 'TernaryMDS.no_mds_12_7' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:951:0: 'TernaryMDS.tetra_mds' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:953:0: 'TernaryMDS.golay_12_6_6' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:955:0: 'TernaryMDS.atMost660_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:957:0: 'TernaryMDS.pair_order_ge' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:959:0: 'TernaryMDS.golay'_12_6_6' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:961:0: 'TernaryMDS.golay_reading_witness' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:963:0: 'TernaryMDS.golay_reading_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:965:0: 'TernaryMDS.golay'_order_ge' depends on axioms: [propext, Classical.choice, Quot.sound]
 Build completed successfully.
 exit 0
 
@@ -29,6 +31,13 @@ tetracode: [4,2,3] MDS code (so n <= k+2 is sharp)
 Golay code weight distribution: {0: 1, 6: 264, 9: 440, 12: 24}
 pair code [12,6,2]: permutation automorphisms = 46080 = 2^6 * 6! = 46080
 the 768 permutations listed in Lean are distinct automorphisms of the pair code
+hexad-preserving permutations (M12): 95040
+monomial automorphism group order: 190080
+PAut orders found: [108, 120, 432, 660, 7920] orbit sizes: [880, 792, 220, 144, 12]
+Golay code (column scaling d): |PAut| = 660 for golay, 7920 for golay' (column 6 doubled)
+the monomial class of the Golay code has exactly 5 permutation classes, |PAut| = [108, 120, 432, 660, 7920]
+orders 108, 120, 432 do not divide 132: True
+golay' is a [12,6,6] code; the 720 products h o k (h in H1, k in H2) from Lean are distinct permutation automorphisms
 |M11| = 7920 does not divide 660, so M11 is not a subgroup of a group of order 660: True
 ALL CHECKS PASSED
 exit 0

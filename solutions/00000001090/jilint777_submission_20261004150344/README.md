@@ -40,10 +40,20 @@ bound (n ≥ 14) gives a second proof.
   automorphisms:
   - Lean exhibits 768 distinct ones.
   - `verify.py` checks all 46080.
-- **Golay code.** The ternary Golay code [12,6,6] has monomial automorphism group
-  2.M₁₂ of order 190080. This is cited only, not checked.
-- **M₁₁.** |M₁₁| = 7920 does not divide 660, so the statement is internally
-  inconsistent anyway. We do not use this.
+- **Golay reading** (probably what was meant). The conjecture's group is the stabilizer
+  of the *permutation* equivalence class, i.e. PAut, not the monomial group.
+  - Up to monomial equivalence the ternary Golay code is the unique [12,6,6]₃ code
+    (Pless 1968; Delsarte–Goethals 1975).
+  - Its monomial class splits into exactly **5 permutation classes**, with
+    |PAut| = 108, 120, 432, 660 and 7920 (`verify.py`).
+  - The generator matrix `golay` = [I₆ | A] has |PAut| = 660.
+  - Doubling its column 6 gives `golay'`, with |PAut| = 7920 = |M₁₁|.
+  - So the maximum is 7920, not 660. The M₁₁ in the statement is actually attained as
+    a full PAut, and 660 = |PSL(2,11)| is not the maximum.
+  - The orders 108, 120 and 432 do not divide 132, so the "other classes" clause fails
+    too.
+  - Lean proves that `golay'` is a [12,6,6] code with at least 720 > 660 distinct
+    permutation automorphisms.
 
 ## Contents
 
@@ -77,6 +87,22 @@ bound (n ≥ 14) gives a second proof.
 - `tetra_mds`: the tetracode is a [4,2,3] MDS code, so the bound n ≤ k + 2 is sharp.
 - `golay_12_6_6`: the Golay code is a [12,6] code with minimum distance exactly 6.
 
+**Golay reading**
+
+- `golay'_12_6_6`: `golay'` is a [12,6] code with minimum distance exactly 6.
+- `golayAuts_aut` and `golayAuts_nodup`: 720 distinct permutation automorphisms.
+  They are the products h ∘ k, where:
+  - h ranges over 30 automorphisms with distinct images of (0,1);
+  - k ranges over 24 automorphisms fixing 0 and 1.
+  Each of these 54 permutations is checked by `decide +kernel` (`RowsOK`,
+  `paut_of_rows`), and products of automorphisms are automorphisms (`autCore_comp`).
+- `golay_reading_witness`: some [12,6,6] code has more than 660 distinct
+  permutation automorphisms.
+- `golay_reading_false : ¬ GolayMax660`.
+- `golay'_order_ge`: the PAut order of `golay'` is at least 720.
+- The exact orders 660 and 7920, and the five-class spectrum, are checked in
+  `verify.py` only.
+
 **"MDS" dropped**
 
 - `atMost660_false`: some [12,6] code has more than 660 distinct permutation
@@ -87,7 +113,8 @@ bound (n ≥ 14) gives a second proof.
 
 - There is no `sorry`, no `native_decide` and no added axiom.
 - The MDS results use only `propext` and `Quot.sound`.
-- The pair-code results also use `Classical.choice`, through core list lemmas.
+- The automorphism-list results (pair code and Golay reading) may also use
+  `Classical.choice`, through core list lemmas.
 
 ## Reproduce
 
@@ -115,10 +142,20 @@ pdflatex report.tex && pdflatex report.tex
 
 **其他读法：**
 
+- **Golay 码读法**（作者大概想说的是这个）。猜想定义的群是置换等价类的稳定群，即置换自同构群 PAut，而不是单项自同构群。
+  - 在单项等价意义下，三元 Golay 码是唯一的 [12,6,6]₃ 码（Pless 1968；Delsarte–Goethals 1975）。
+  - 它的单项等价类恰好分裂成 5 个置换等价类，PAut 的阶分别为 108、120、432、660、7920（由 verify.py 验证）。
+  - 生成矩阵 `golay` 的 PAut 阶为 660；把它的第 6 列乘以 2 得到 `golay'`，其 PAut 阶为 7920 = |M₁₁|。
+  - 因此最大值是 7920 而不是 660；而 108、120、432 都不整除 132，"其余类整除 132"这一条也不成立。
+  - Lean 证明了 `golay'` 是 [12,6,6] 码，并给出了它的 720 > 660 个互不相同的置换自同构。
+
 - 若把 [12,6] 读作 [n,d]，则对应的 MDS 码是 [12,7,6]₃，同样不存在。
 - 若去掉"MDS"，命题仍然为假：重复对码 {(x₀,x₀,…,x₅,x₅)} 是 [12,6] 码，置换自同构群阶为 2⁶·6! = 46080 > 660。Lean 中给出了其中 768 个互不相同的自同构。
 
 **Lean 部分**（仅用核心库）形式化了码、重量、最小距离、MDS 和自同构群，证明了上述一般定理及 `¬ Conjecture1090`。
 还验证了四元码（tetracode）是 [4,2,3] MDS 码、Golay 码是 [12,6,6] 码，以说明这些定义非空。
 
-**verify.py** 用不同方法独立验证：穷举说明 [8,2,7]₃ 码不存在，计算 Griesmer 界，并穷举检查重复对码的全部 46080 个自同构。
+**verify.py** 用不同方法独立验证：
+- 穷举说明 [8,2,7]₃ 码不存在，并计算 Griesmer 界；
+- 穷举检查重复对码的全部 46080 个自同构；
+- 完整计算 Golay 码单项等价类中 5 个置换等价类的 PAut 阶，确认 |PAut(golay')| = 7920。

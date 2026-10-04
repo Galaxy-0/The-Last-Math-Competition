@@ -28,10 +28,15 @@ $132$. We prove that \emph{no} ternary MDS code of type $[12,6]$ exists. More
 generally, if a $k\times n$ matrix over $\F$ with $k\ge2$ has all nonzero
 combinations of its rows of weight at least $n-k+1$, then $n\le k+2$. Hence
 no code attains the order $660$, and the conjecture is false whatever notion of
-automorphism group is used. If the word ``MDS'' is dropped, the claim is still
-false: the ternary $[12,6]$ code of repeated pairs has $2^6\cdot6!=46080>660$
-permutation automorphisms. The main results are formalized in Lean~4 (core
-library only).
+automorphism group is used. The likely intended object, the ternary Golay code
+$[12,6,6]$, does not rescue the claim either. The conjecture's group is the
+stabilizer of the \emph{permutation} equivalence class, i.e.\ the permutation
+automorphism group $\mathrm{PAut}$. The monomial class of the Golay code splits
+into five permutation classes, with $|\mathrm{PAut}|=108,120,432,660,7920$. So the
+maximum is $7920=|M_{11}|$, not $660$, and $108,120,432$ do not divide $132$. If
+``MDS'' is dropped altogether, the $[12,6]$ code of repeated pairs has
+$46080>660$ permutation automorphisms. The main results are formalized in
+Lean~4 (core library only).
 \end{abstract}
 
 \section{The conjecture and how we read it}
@@ -177,9 +182,11 @@ that no MDS $[12,6]$ ternary code has \emph{any} property $P$.
 \item \emph{Type $[12,6]$ as $[n,d]$.} If $[12,6]$ meant length $12$ and minimum
 distance $6$, an MDS code would be $[12,7,6]$, which does not exist either
 (Corollary~\ref{cor:main}).
+\item \emph{Golay reading.} The author may have meant the ternary Golay code
+$[12,6,6]$. This reading is treated in Section~\ref{sec:golay}, and the claim is
+false there as well.
 \item \emph{``MDS'' dropped.} Suppose the claim is read for all ternary
-$[12,6]$ codes, for example because the author had the ternary Golay code in
-mind. It is still false. The code of repeated pairs
+$[12,6]$ codes. It is still false. The code of repeated pairs
 \[
 P=\{(x_0,x_0,x_1,x_1,\dots,x_5,x_5)\}
 \]
@@ -188,16 +195,85 @@ $\{2i,2i+1\}$, so every automorphism permutes these six pairs. Conversely,
 every permutation preserving the pair partition is an automorphism. So
 $|\mathrm{PAut}(P)|=2^6\cdot6!=46080>660$. Lean exhibits $768$ distinct
 permutation automorphisms of $P$. For the monomial group the order is even larger,
-since $\mathrm{PAut}\subseteq\mathrm{MAut}$. (The ternary Golay code
-$[12,6,6]$ is also well known to have monomial automorphism group $2.M_{12}$ of
-order $190080$ \cite{cs}. We cite this but do not verify it.)
+since $\mathrm{PAut}\subseteq\mathrm{MAut}$.
 \end{itemize}
 
+\section{The Golay reading}\label{sec:golay}
+Up to monomial equivalence, the extended ternary Golay code $\mathcal G$ is the
+unique ternary $[12,6,6]$ code \cite{pless,dg}. Its monomial automorphism group is
+$2.M_{12}$, of order $190080$ \cite{cs}. The conjecture, however, defines the
+group as the stabilizer of the \emph{permutation} equivalence class, i.e.\ the
+permutation automorphism group $\mathrm{PAut}$. Monomially equivalent codes can
+have different $\mathrm{PAut}$. So the relevant data are the orders of
+$\mathrm{PAut}$ on the permutation classes inside the monomial class of
+$\mathcal G$.
+
+\begin{proposition}\label{prop:golay}
+The monomial class of $\mathcal G$ consists of exactly five permutation
+equivalence classes, with $|\mathrm{PAut}|=108$, $120$, $432$, $660$ and $7920$.
+Let \texttt{golay} be the generator matrix $[I_6\mid A]$ of Section~\ref{sec:readings}. Then
+\texttt{golay} has $|\mathrm{PAut}|=660$. Multiplying its column $6$
+(0-indexed) by $2$ gives \texttt{golay'}, with $|\mathrm{PAut}|=7920=|M_{11}|$.
+\end{proposition}
+\begin{proof}[Proof (computer-assisted, \texttt{verify.py})]
+\emph{Setup.} Every code in the class is permutation equivalent to some
+$C_d=\mathcal G\cdot\mathrm{diag}(d)$ with $d\in\{1,2\}^{12}$. Here $d$ is taken
+modulo $\pm1$, giving $2^{11}$ twists. A permutation $\sigma$ maps $C_d$ to
+$C_{d'}$ only if it preserves the $132$ supports of weight-$6$ words. These
+supports are the same for all $C_d$. The $95040$ permutations preserving them
+form $H\cong M_{12}$.
+
+\emph{Signs.} The script computes $H$. For each $\sigma\in H$, it finds exactly
+two sign vectors $\pm s(\sigma)$ making $c\mapsto s(\sigma)\cdot(c\circ\sigma)$ an
+automorphism of $\mathcal G$. It also checks that the only diagonal automorphisms
+are $\pm1$.
+
+\emph{Action.} It follows that $C_d\circ\sigma=C_{s(\sigma)(d\circ\sigma)}$.
+So $H$ acts on the $2^{11}$ twists. Two twists give permutation-equivalent
+codes if and only if they lie in the same orbit, and
+$\mathrm{PAut}(C_d)$ is the stabilizer of $d$.
+
+\emph{Orbits.} The script exhibits twists whose stabilizers have orders $108$,
+$120$, $432$, $660$ and $7920$. Conjugate stabilizers have equal order, so these
+five twists lie in different orbits. The orbit sizes are
+$95040/108=880$, $95040/120=792$, $95040/432=220$, $95040/660=144$ and
+$95040/7920=12$. They sum to $2048=2^{11}$, so these are all the orbits.
+\end{proof}
+
+\begin{theorem}\label{thm:golay}
+Under the Golay reading, the conjecture is false.
+\begin{itemize}
+\item The maximal order is $7920$, not $660$. It is attained by \texttt{golay'}.
+\item The orders $108$, $120$ and $432$ of three other classes do not divide $132$.
+\end{itemize}
+\end{theorem}
+\begin{proof}
+This follows from Proposition~\ref{prop:golay}. Lean proves the first item
+independently of the Python enumeration, in the following form. \texttt{golay'}
+generates a $[12,6]$ code of minimum distance exactly $6$. Lean exhibits
+$720>660$ distinct permutation automorphisms of it.
+\end{proof}
+
 \begin{remark}
-The statement is also internally inconsistent: $|M_{11}|=7920$, so $M_{11}$
-does not embed in a group of order $660$. ($660=|\mathrm{PSL}(2,11)|$, and
-$\mathrm{PSL}(2,11)$ is a maximal subgroup of $M_{11}$.) We do not use this.
+The order $660=|\mathrm{PSL}(2,11)|$ is attained, by \texttt{golay}. But
+$M_{11}$ (order $7920$) cannot embed in a group of order $660$. In fact $M_{11}$
+itself occurs as a full $\mathrm{PAut}$, namely of \texttt{golay'}. So the
+claimed maximum $660$ is wrong, and the parenthetical ``attained by an $M_{11}$
+embedding'' points to the actual maximum $7920$.
 \end{remark}
+
+\paragraph{The 720 automorphisms in Lean.} The automorphisms of \texttt{golay'}
+exhibited in Lean are the products $h\circ k$ with $h\in H_1$ and $k\in H_2$:
+\begin{itemize}
+\item $H_1$ consists of $30$ automorphisms with pairwise different images of
+the points $(0,1)$.
+\item $H_2$ consists of $24$ automorphisms fixing $0$ and $1$.
+\end{itemize}
+Each of these $54$ permutations is checked to be an automorphism: every permuted
+generator row is the codeword of its own first six entries (\texttt{RowsOK},
+\texttt{paut\_of\_rows}). Products of automorphisms are automorphisms
+(\texttt{autCore\_comp}). Products with different $h$ differ at $0$ or $1$, and
+for a fixed $h$ the $24$ products are checked to be distinct.
 
 \begin{remark}[non-vacuity]
 The obstruction is exactly the distance $7$. Ternary $[12,6]$ codes exist, for
@@ -238,6 +314,17 @@ cover the readings above.
 \item Non-vacuity: \texttt{tetra\_mds : IsMDS 4 2 tetra} and
 \texttt{golay\_12\_6\_6} (the Golay code is a $[12,6]$ code with minimum distance
 exactly $6$; checked over all $729$ messages by \texttt{decide +kernel}).
+\item Golay reading: \texttt{golay'} (column $6$ of \texttt{golay} doubled) and
+\texttt{golay'\_12\_6\_6} (a $[12,6]$ code with minimum distance exactly $6$).
+\texttt{golayAuts\_aut} and \texttt{golayAuts\_nodup} show that the $720$
+products $h\circ k$ are distinct permutation automorphisms.
+\texttt{golay\_reading\_witness} gives a $[12,6,6]$ code with more than $660$
+distinct permutation automorphisms, and \texttt{golay\_reading\_false} gives
+$\neg$\texttt{GolayMax660} (``no $[12,6,6]$ ternary code has more than $660$
+permutation automorphisms''). \texttt{golay'\_order\_ge} shows that any
+\texttt{PAutOrder} of \texttt{golay'} is at least $720$. The exact orders
+$660$ and $7920$ and the five-class spectrum are computed in \texttt{verify.py}
+only.
 \item ``MDS'' dropped: \texttt{pair\_gen}, \texttt{pair\_aut},
 \texttt{pairAuts\_nodup}, \texttt{atMost660\_false} (some $[12,6]$ code has
 more than $660$ distinct permutation automorphisms), and
@@ -248,9 +335,11 @@ only.
 \texttt{lake build} succeeds with no errors or warnings. There is no
 \texttt{sorry}, no \texttt{native\_decide} and no added axiom.
 \texttt{\#print axioms} shows only \texttt{propext} and \texttt{Quot.sound} for
-all results about MDS codes. The two results on the pair code
-(\texttt{atMost660\_false}, \texttt{pair\_order\_ge}) also use the standard axiom
-\texttt{Classical.choice}, through core list lemmas.
+all results about MDS codes and for \texttt{golay'\_12\_6\_6}. The results
+built on the automorphism lists (\texttt{atMost660\_false},
+\texttt{pair\_order\_ge}, \texttt{golay\_reading\_witness},
+\texttt{golay\_reading\_false}, \texttt{golay'\_order\_ge}) may also use the
+standard axiom \texttt{Classical.choice}, through core list lemmas.
 
 \section{Independent check}
 \texttt{verify.py} (Python~3 standard library) uses different methods:
@@ -268,6 +357,12 @@ $\le6$).
 \item It enumerates all $46080$ pair-preserving permutations, confirms that they
 are automorphisms of $P$, confirms that the weight-$2$ supports are the six pairs,
 and re-checks the $768$ permutations used in Lean.
+\item It carries out the proof of Proposition~\ref{prop:golay}. It computes the
+$95040$ hexad-preserving permutations, the signs $s(\sigma)$, and the
+stabilizer orders $108,120,432,660,7920$ with orbit sizes summing to
+$2^{11}$. It confirms $|\mathrm{PAut}(\texttt{golay})|=660$ and
+$|\mathrm{PAut}(\texttt{golay'})|=7920$, and re-checks the $720$ products
+$h\circ k$ read from \texttt{Main.lean}.
 \end{itemize}
 
 \section{Reproduction}
@@ -283,5 +378,9 @@ Error-Correcting Codes}, North-Holland, 1977, Ch.~11 (MDS codes; $n\le q+k-1$
 for $k\ge2$).
 \bibitem{cs} J.~H.~Conway and N.~J.~A.~Sloane, \emph{Sphere Packings, Lattices
 and Groups}, 3rd ed., Springer, 1999 (the ternary Golay code and $2.M_{12}$).
+\bibitem{pless} V.~Pless, On the uniqueness of the Golay codes, \emph{J.
+Combin. Theory} 5 (1968), 215--228.
+\bibitem{dg} P.~Delsarte and J.-M.~Goethals, Unrestricted codes with the Golay
+parameters are unique, \emph{Discrete Math.} 12 (1975), 211--224.
 \end{thebibliography}
 \end{document}

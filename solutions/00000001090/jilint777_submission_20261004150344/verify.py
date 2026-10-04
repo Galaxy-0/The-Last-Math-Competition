@@ -12,7 +12,11 @@ We check, by methods different from the Lean proof:
      nonzero codeword of weight <= 6, matching exhaustive minimum-distance computation;
   5. the tetracode is a [4,2,3] MDS code and the Golay code is a [12,6,6] code;
   6. the repeated-pair [12,6,2] code has exactly 2^6 * 6! = 46080 permutation automorphisms,
-     and the 768 permutations used in Lean are distinct automorphisms.
+     and the 768 permutations used in Lean are distinct automorphisms;
+  7. the monomial class of the ternary Golay code (the unique [12,6,6]_3 code up to monomial
+     equivalence) splits into exactly 5 permutation-equivalence classes with |PAut| =
+     108, 120, 432, 660, 7920; golay has |PAut| = 660 and golay' (column 6 doubled) has
+     |PAut| = 7920 = |M11|; the 720 automorphisms of golay' listed in Lean are re-checked.
 """
 import itertools
 import random
@@ -146,6 +150,118 @@ def check_examples():
     assert dist == {0: 1, 6: 264, 9: 440, 12: 24}
 
 
+GOLAY_A = [[0, 1, 1, 1, 1, 1], [1, 0, 1, 2, 2, 1], [1, 1, 0, 1, 2, 2],
+           [1, 2, 1, 0, 1, 2], [1, 2, 2, 1, 0, 1], [1, 1, 2, 2, 1, 0]]
+GOLAY = [[1 if i == j else 0 for j in range(6)] + GOLAY_A[i] for i in range(6)]
+GOLAY2 = [[(g[j] * (2 if j == 6 else 1)) % 3 for j in range(12)] for g in GOLAY]  # golay'
+
+
+def hexad_preserving_perms(code):
+    """All permutations sigma of 12 coordinates mapping the supports of weight-6 words
+    (which are the same for every code monomially equivalent to `code`) to themselves."""
+    hexes = set(frozenset(j for j in range(12) if w[j]) for w in code if wt(w) == 6)
+    assert len(hexes) == 132
+    by = {}
+    for h in hexes:
+        by.setdefault(max(h), []).append(h)
+    out = []
+    def rec(img, used):
+        t = len(img)
+        if t == 12:
+            out.append(tuple(img)); return
+        for c in range(12):
+            if c in used: continue
+            img.append(c)
+            if all(frozenset(img[j] for j in h) in hexes for h in by.get(t, [])):
+                rec(img, used | {c})
+            img.pop()
+    rec([], frozenset())
+    return out
+
+
+def norm(v):  # sign vectors modulo the global sign -1
+    return v if v[0] == 1 else tuple((2 * x) % 3 for x in v)
+
+
+def check_golay_classes():
+    C = {w for m, w in span(GOLAY)}
+    H = hexad_preserving_perms(C)
+    print("hexad-preserving permutations (M12):", len(H))
+    assert len(H) == 95040
+    # diagonal automorphisms of C are only +-1
+    diag = [e for e in itertools.product((1, 2), repeat=12)
+            if all(tuple((g[j] * e[j]) % 3 for j in range(12)) in C for g in GOLAY)]
+    assert sorted(diag) == [(1,) * 12, (2,) * 12]
+    # for each sigma in H, the signs s with c -> s*(c o sigma) an automorphism of C
+    w12 = [w for w in C if wt(w) == 12]
+    w0 = w12[0]
+    S = []
+    for sig in H:
+        rows = [[g[sig[j]] for j in range(12)] for g in GOLAY]
+        w0s = [w0[sig[j]] for j in range(12)]
+        sols = set()
+        for c in w12:
+            s = tuple((c[j] * w0s[j]) % 3 for j in range(12))
+            if all(tuple((s[j] * r[j]) % 3 for j in range(12)) in C for r in rows):
+                sols.add(s)
+        assert len(sols) == 2  # exactly +-s: MAut(C) = 2.M12 of order 190080
+        S.append(norm(min(sols)))
+    print("monomial automorphism group order:", 2 * len(H))
+    # The code C_d = C*diag(d) (d in {1,2}^12 modulo +-1) has
+    # PAut(C_d) = {sigma in H : s(sigma) * (d o sigma) = +-d}.
+    def paut_order(d):
+        return sum(1 for sig, s in zip(H, S)
+                   if norm(tuple((s[j] * d[sig[j]] * d[j]) % 3 for j in range(12))) == (1,) * 12)
+    reps = {}
+    cand = [tuple([1] * 12), tuple(2 if j == 6 else 1 for j in range(12))]
+    rng = __import__("random").Random(1090)
+    while len(reps) < 5 and len(cand) < 400:
+        d = cand.pop(0) if cand else tuple([1] + [rng.choice((1, 2)) for _ in range(11)])
+        o = paut_order(d)
+        reps.setdefault(o, d)
+        if not cand:
+            cand.append(tuple([1] + [rng.choice((1, 2)) for _ in range(11)]))
+    orders = sorted(reps)
+    print("PAut orders found:", orders, "orbit sizes:", [95040 // o for o in orders])
+    assert orders == [108, 120, 432, 660, 7920]
+    # distinct stabilizer orders => distinct orbits; the orbits already cover all 2^11 twists
+    assert sum(95040 // o for o in orders) == 2 ** 11
+    assert paut_order(tuple([1] * 12)) == 660
+    assert paut_order(tuple(2 if j == 6 else 1 for j in range(12))) == 7920
+    print("Golay code (column scaling d): |PAut| = 660 for golay, 7920 for golay' (column 6 doubled)")
+    print("the monomial class of the Golay code has exactly 5 permutation classes, |PAut| =", orders)
+    print("orders 108, 120, 432 do not divide 132:", all(132 % o for o in (108, 120, 432)))
+    return H, S
+
+
+def check_lean_golay_auts():
+    """Cross-check the lists H1, H2 of lean4/Main.lean: golayAuts = {h o k : h in H1, k in H2}."""
+    import os, re
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lean4", "Main.lean")
+    try:
+        src = open(path, encoding="utf8").read()
+    except OSError:
+        print("lean4/Main.lean not found; skipping the golayAuts cross-check")
+        return
+
+    def grab(name):
+        body = src[src.index("def " + name + " :"):]
+        body = body[body.index("[") + 1:body.index("]\n\n")]
+        return [tuple(int(x) for x in m.split(","))
+                for m in re.findall(r"\[([0-9, ]+)\]", body)]
+    H1, H2 = grab("H1"), grab("H2")
+    assert len(H1) == 30 and len(H2) == 24
+    C2 = {w for m, w in span(GOLAY2)}
+    def is_aut(sig):
+        return sorted(sig) == list(range(12)) and \
+            all(tuple(g[sig[j]] for j in range(12)) in C2 for g in GOLAY2)
+    prods = {tuple(h[k[j]] for j in range(12)) for h in H1 for k in H2}
+    assert len(prods) == 720 and all(is_aut(s) for s in prods)
+    assert min_dist(GOLAY2) == 6 and rank_mod3(GOLAY2) == 6
+    print("golay' is a [12,6,6] code; the 720 products h o k (h in H1, k in H2) from Lean are "
+          "distinct permutation automorphisms")
+
+
 def in_pair_code(w):
     return all(w[2 * i] == w[2 * i + 1] for i in range(6))
 
@@ -186,7 +302,10 @@ def main():
     check_random_12_6()
     check_examples()
     check_pair_code()
-    print("|M11| = 7920 does not divide 660, so M11 is not a subgroup of a group of order 660:", 660 % 7920 != 0)
+    check_golay_classes()
+    check_lean_golay_auts()
+    print("|M11| = 7920 does not divide 660, so M11 is not a subgroup of a group of order 660:",
+          660 % 7920 != 0)
     print("ALL CHECKS PASSED")
 
 
