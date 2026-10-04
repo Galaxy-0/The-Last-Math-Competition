@@ -1,0 +1,305 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\conv}{\operatorname{conv}}
+\newcommand{\lcm}{\operatorname{lcm}}
+
+\title{Disproof of Conjecture 00000007130:\\
+the period of an Ehrhart quasi-polynomial need not be\\ the lcm of the denominators}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000007130 asserts that the period of the Ehrhart quasi-polynomial of a
+rational polytope is the least common multiple of its denominators. This is false.
+The triangle $T=\conv\{(0,0),(1,\tfrac12),(2,0)\}$ has vertex denominators with
+lcm $2$, yet $\#(tT\cap\Z^2)=\frac{(t+1)(t+2)}{2}$ for every integer $t\ge0$. So its
+Ehrhart quasi-polynomial is a polynomial and its period is $1$. This is the smallest case of the
+\emph{period collapse} of McAllister and Woods. If ``denominators'' is read as the denominators of
+the facet inequalities instead, the triangle $T_2=\conv\{(0,0),(1,0),(0,\tfrac12)\}$ refutes the claim:
+its facets are $x\ge0$, $y\ge0$, $x+2y\le1$ (lcm $1$), but its Ehrhart quasi-polynomial has
+period exactly $2$. The second counterexample also defeats the weaker reading ``the lcm is
+\emph{a} period''. Both results are proved in Lean~4 (core library only), with the polytopes,
+lattice-point counts, quasi-polynomials and periods defined from scratch.
+\end{abstract}
+
+\section{The conjecture and its readings}
+
+The statement (English version) reads:
+\begin{quote}
+\emph{Definition:} Integer programming with lattice polytopes. \emph{Conjecture:} The period of the
+Ehrhart quasi-polynomial is the least common multiple of denominators, and the explicit form is
+the inverse normalization.
+\end{quote}
+The Chinese version says the same. The conjecture is a conjunction. We refute its first clause:
+\begin{equation}\label{eq:clause}
+\text{the period of the Ehrhart quasi-polynomial of } P \;=\; \lcm(\text{denominators of } P).
+\end{equation}
+We do not try to interpret the second clause (``the explicit form is the inverse
+normalization''). A conjunction with a false conjunct is false.
+
+\paragraph{Lattice versus rational polytopes.} For a lattice polytope (integer vertices) the Ehrhart
+function is a polynomial (Ehrhart's theorem) and every denominator is $1$. Then
+\eqref{eq:clause} says ``$1=1$'' and has no content. The words ``quasi-polynomial'',
+``period'' and ``denominators'' only mean something for \emph{rational} polytopes, whose vertices
+have rational coordinates. So the only reading in which the conjecture says anything is the
+standard rational setting: $P\subset\mathbb R^d$ a rational polytope and $L_P(t)=\#(tP\cap\Z^d)$.
+We adopt this reading. If the conjecture is meant to speak only about lattice polytopes, it is a
+(trivially) true statement and there is nothing to refute. We state this limitation openly.
+
+\paragraph{``The period''.} A quasi-polynomial has many periods (every multiple of a period is a
+period). With the definite article, ``the period'' is the \emph{minimal} period. This is how it is
+used in the literature, e.g.\ McAllister--Woods, \emph{The minimum period of the Ehrhart
+quasi-polynomial of a rational polytope} \cite{MW}. If the clause only said ``the lcm is
+\emph{a} period'', then in the vertex reading it would be Ehrhart's theorem, which is true
+(Remark~\ref{rem:aperiod}). Under the facet reading even this weak form fails
+(Section~\ref{sec:facet}).
+
+\paragraph{``Denominators''.} We treat three readings.
+\begin{enumerate}
+\item[(V)] \emph{Vertex denominators} (standard): the lcm of the denominators of all vertex
+coordinates, i.e.\ the least $d\ge1$ such that $dP$ is a lattice polytope. Refuted by $T$
+(Section~\ref{sec:T}).
+\item[(F)] \emph{Facet denominators}: write each facet inequality as $a\cdot x\le b$ with a
+primitive integer normal $a$ and $b\in\Q$ in lowest terms, and take the lcm of the denominators of
+the $b$'s. Equivalently, it is the least $d$ such that every facet hyperplane of $dP$ contains a
+lattice point. Refuted by $T_2$ (Section~\ref{sec:facet}). This holds for both ``the period'' and
+``a period''.
+\item[(C)] \emph{Coefficient denominators}: the lcm of the denominators of the coefficients of the
+quasi-polynomial. Refuted by $T$ (Remark~\ref{rem:coef}).
+\end{enumerate}
+Any reading that takes the lcm over vertex \emph{and} facet denominators gives $2$ for $T$, and is
+also refuted by $T$.
+
+\section{Definitions}
+
+\begin{definition}
+A function $L:\Z_{\ge0}\to\Z$ is a \emph{quasi-polynomial with period $p\ge1$} if there are
+polynomials $c_0,\dots,c_{p-1}\in\Q[t]$ with $L(t)=c_{t\bmod p}(t)$ for all $t\ge0$. The
+\emph{(minimal) period} of $L$ is the least such $p$. It is unique, and every multiple of a period is a period.
+\end{definition}
+
+In Lean the rational polynomials are written over a common denominator: $D\cdot L(t)=P_{t\bmod
+p}(t)$ with $D\in\Z_{>0}$ and $P_r\in\Z[t]$. This is equivalent.
+
+For a rational polytope $P$, Ehrhart's theorem \cite{Ehr} says that $L_P(t)=\#(tP\cap\Z^d)$ is a
+quasi-polynomial and that the vertex-denominator lcm is a period. McMullen \cite{McM} refined
+this coefficient by coefficient. McAllister and Woods \cite{MW} showed that the minimal period can be
+strictly smaller (``period collapse''). Their family
+$\conv\{(0,0),(1,\frac{D-1}{D}),(D,0)\}$ has denominator $D$ and period $1$, and our $T$ is the
+case $D=2$. We give a complete self-contained proof for $T$ below.
+
+\section{\texorpdfstring{The counterexample $T=\conv\{(0,0),(1,\frac12),(2,0)\}$}{The counterexample T}}
+\label{sec:T}
+
+The vertex coordinates $0,0,1,\frac12,2,0$ are in lowest terms with denominators
+$1,1,1,2,1,1$, so
+\[
+  \lcm(\text{vertex denominators of } T)=2 .
+\]
+
+\begin{lemma}[lattice points of $tT$]\label{lem:HT}
+Let $t\ge0$ and $(x,y)\in\Z^2$. Then $(x,y)\in tT$ if and only if
+\[
+  y\ge0,\qquad 2y\le x,\qquad x+2y\le 2t .
+\]
+All such points lie in the box $0\le x\le 2t$, $0\le y\le t$.
+\end{lemma}
+
+\begin{proof}
+$(x,y)\in tT$ means $(x,y)=\nu_0(0,0)+\nu_1(1,\frac12)+\nu_2(2,0)$ with $\nu_i\ge0$ rational and
+$\nu_0+\nu_1+\nu_2=t$. (For $t=0$ this gives $\{(0,0)\}=0T$.) The vertices are affinely independent, so
+the weights are unique: $y=\nu_1/2$ and $x=\nu_1+2\nu_2$ give
+\[
+  \nu_1=2y,\qquad \nu_2=\tfrac{x-2y}{2},\qquad \nu_0=t-\nu_1-\nu_2=\tfrac{2t-x-2y}{2}.
+\]
+Nonnegativity of these is exactly the three inequalities. Conversely, if they hold, these $\nu_i$
+work. For the box: $0\le 2y\le x\le 2t-2y\le 2t$ and $4y\le x+2y\le 2t$.
+\end{proof}
+
+The three inequalities are the facets $-y\le0$, $-x+2y\le0$, $x+2y\le2$ of $T$, scaled by $t$. Their
+normals are primitive and their right-hand sides are integers, so the facet lcm (F) of $T$ is $1$.
+
+\begin{theorem}[period collapse]\label{thm:T}
+For every integer $t\ge0$,
+\[
+  L_T(t)=\#(tT\cap\Z^2)=\frac{(t+1)(t+2)}{2}.
+\]
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:HT}, row $y$ ($0\le y\le t$) contains the integers $x$ with $2y\le x\le 2t-2y$.
+That is $\max(0,\,2t+1-4y)$ points. If $4y\le 2t$ this is $2t+1-4y$. If $4y>2t$ then $4y\ge 2t+2$, so
+the row is empty. Hence $L_T(t)=\sum_{0\le y\le t/2}(2t+1-4y)$.
+\begin{itemize}
+\item $t=2m$: $\sum_{y=0}^{m}(4m+1-4y)=(m+1)(4m+1)-2m(m+1)=(m+1)(2m+1)=\frac{(t+1)(t+2)}2$.
+\item $t=2m+1$: $\sum_{y=0}^{m}(4m+3-4y)=(m+1)(4m+3)-2m(m+1)=(m+1)(2m+3)=\frac{(t+1)(t+2)}2$.
+\end{itemize}
+(The Lean proof uses the equivalent recurrence $L_T(t+2)=L_T(t)+2t+5$. Row $y+1$ of $(t+2)T$ has as
+many points as row $y$ of $tT$, and row $0$ of $(t+2)T$ adds $2t+5$. Together with $L_T(0)=1$ and
+$L_T(1)=3$ this gives the formula by induction.)
+\end{proof}
+
+\begin{corollary}\label{cor:T}
+The Ehrhart quasi-polynomial of $T$ has minimal period $1$, while the lcm of the vertex
+denominators of $T$ is $2$. Hence clause \eqref{eq:clause} fails for $T$ in reading (V).
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:T} gives period $1$ with $c_0(t)=\frac12t^2+\frac32t+1$, and no period is smaller
+than $1$.
+\end{proof}
+
+\begin{remark}[``a period'']\label{rem:aperiod}
+The number $2$ \emph{is} a period of $L_T$ (take $c_0=c_1$), as Ehrhart's theorem guarantees. So
+the counterexample needs ``the period'' to mean the minimal period. That is the meaning of the
+definite article and the meaning in \cite{MW}. In Lean this is \texttt{LT\_period\_denLcm}.
+\end{remark}
+
+\begin{remark}[coefficient denominators]\label{rem:coef}
+The Ehrhart polynomial $\frac12t^2+\frac32t+1$ has coefficient denominators $2,2,1$, with lcm $2\ne1$. So
+reading (C) is refuted by $T$ too.
+\end{remark}
+
+\begin{remark}
+The same happens for every member of the McAllister--Woods family. \texttt{verify.py} checks
+$D=2,\dots,6$: denominator $D$, minimal period $1$.
+\end{remark}
+
+\section{\texorpdfstring{The facet reading: $T_2=\conv\{(0,0),(1,0),(0,\frac12)\}$}{The facet reading: T2}}
+\label{sec:facet}
+
+$T_2$ has facets $-x\le0$, $-y\le0$, $x+2y\le1$. Each has a primitive integer normal and an integer
+right-hand side, so the lcm in reading (F) is $1$. Each facet line passes through two vertices. Its vertex
+denominators have lcm $2$.
+
+\begin{lemma}\label{lem:HT2}
+For $t\ge0$ and $(x,y)\in\Z^2$: $(x,y)\in tT_2$ iff $x\ge0$, $y\ge0$, $x+2y\le t$. Such points
+lie in $[0,t]^2$.
+\end{lemma}
+\begin{proof}
+The unique weights are $\nu_1=x$ (for $(1,0)$), $\nu_2=2y$ (for $(0,\frac12)$) and
+$\nu_0=t-x-2y$.
+\end{proof}
+
+\begin{theorem}\label{thm:T2}
+$4L_{T_2}(t)+(t\bmod 2)=(t+2)^2$ for all $t\ge0$. So $L_{T_2}(t)=\frac{(t+2)^2}{4}$ for even
+$t$ and $\frac{(t+1)(t+3)}{4}$ for odd $t$, and the minimal period of $L_{T_2}$ is exactly $2$.
+\end{theorem}
+
+\begin{proof}
+Row $y$ has $\max(0,t+1-2y)$ points, so $L_{T_2}(t)=\sum_{0\le y\le t/2}(t+1-2y)$. For $t=2m$
+this is $(m+1)^2$, and for $t=2m+1$ it is $(m+1)(m+2)$. (Lean: $L(t+2)=L(t)+t+3$.) So $2$ is a period.
+
+Suppose $L_{T_2}$ had period $1$, i.e.\ $L_{T_2}(t)=q(t)$ for all $t\ge0$ with $q\in\Q[t]$. Then
+$q(t)=(t+2)^2/4$ for infinitely many (even) $t$, so $q=(t+2)^2/4$. But $q(1)=9/4\ne2=L_{T_2}(1)$.
+The Lean proof uses an integral version of this argument. Write $D\cdot L_{T_2}=P$ with $D\ge1$ and
+$P\in\Z[t]$, and put $a=2D+1$. Then $a\mid P(a)-P(0)=D(L_{T_2}(a)-1)$. Now
+$4D(L_{T_2}(a)-1)=D(a^2+4a-1)=Da(a+4)-D$, so $a\mid D$. This contradicts $0<D<a$.
+\end{proof}
+
+\begin{corollary}
+In reading (F), clause \eqref{eq:clause} fails for $T_2$: the facet lcm is $1$ and the minimal
+period is $2$. Since $1$ is not even \emph{a} period, the weak form fails too.
+\end{corollary}
+
+\begin{remark}
+Each triangle satisfies the clause under the \emph{other} reading: $T$ has facet lcm $1=$ period, and
+$T_2$ has vertex lcm $2=$ period. Lean proves both (\texttt{sanity\_T\_facet},
+\texttt{sanity\_T2\_vertex}). This shows the formal claims are not vacuous: the predicates can hold. Taken
+together, the two triangles refute every reading (V), (F), (C), and the combined vertex-and-facet
+lcm.
+\end{remark}
+
+\section{Formalization in Lean 4}
+
+The project \texttt{lean4/} (Lean 4.19.0, core library only) defines, from scratch:
+\begin{itemize}
+\item \texttt{RQ}, \texttt{RPt}, \texttt{Tri}: rational numbers $\mathrm{num}/\mathrm{den}$, rational
+points, triangles by vertices. \texttt{Tri.Reduced} means the coordinates are in lowest terms.
+\texttt{Tri.denLcm} is the lcm of the six vertex denominators.
+\item \texttt{Tri.MemScaled P t x y}: $(x,y)\in tP$. There are $M>0$ and $\mu_i\ge0$ with
+$\sum\mu_i=Mt$ and $(x,y)=\sum(\mu_i/M)v_i$, with fractions cleared by $M$ and by the product of the
+denominators.
+\item \texttt{Facet}: $a_1x+a_2y\le b$ with $b\in\Q$. \texttt{facetDenLcm}, \texttt{Facet.Primitive}
+and \texttt{FacetsOf P fs} (each facet is primitive and its line passes through two vertices).
+\item \texttt{hcount fs W H t}: the number of $(x,y)\in\Z^2$ with $0\le x\le Wt$, $0\le y\le Ht$ that
+satisfy every facet inequality scaled by $t$, computed by explicit finite counting.
+\texttt{Describes P fs W H} states that for all $t,x,y$, \texttt{MemScaled P t x y} holds iff
+$(x,y)$ is in the box and satisfies the facets. Then \texttt{hcount fs W H} is exactly
+$L_P$.
+\item \texttt{peval} (integer polynomials as coefficient lists), \texttt{HasPeriod L p} and
+\texttt{IsMinPeriod L p}, with \texttt{isMinPeriod\_unique}.
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Lean theorem & content\\
+\midrule
+\texttt{describes\_T}, \texttt{describes\_T2} & Lemmas \ref{lem:HT}, \ref{lem:HT2} (V- and H-description agree)\\
+\texttt{T\_denLcm}, \texttt{Tfacets\_denLcm} & vertex lcm $2$, facet lcm $1$ for $T$\\
+\texttt{LT\_formula} & $2L_T(t)=(t+1)(t+2)$\\
+\texttt{LT\_minPeriod}, \texttt{LT\_not\_minPeriod\_two} & minimal period of $L_T$ is $1$, not $2$\\
+\texttt{LT\_period\_denLcm} & $2$ is \emph{a} period of $L_T$\\
+\texttt{L2\_formula}, \texttt{L2\_minPeriod} & $4L_{T_2}(t)+(t\bmod2)=(t+2)^2$; minimal period $2$\\
+\texttt{conjecture\_00000007130\_false} & $\neg$\,\texttt{VertexClaim}\\
+\texttt{conjecture\_00000007130\_false\_facet} & $\neg$\,\texttt{FacetClaim}\\
+\texttt{conjecture\_00000007130\_false\_facet\_weak} & $\neg$\,\texttt{FacetClaimWeak} (``a period'')\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\texttt{VertexClaim} says: for every rational triangle $P$ in lowest terms, and every facet list and
+box that describe it, \texttt{IsMinPeriod (hcount fs W H) P.denLcm}. \texttt{FacetClaim} is the same
+with \texttt{facetDenLcm fs} and the extra hypothesis \texttt{FacetsOf P fs}. These are claims over
+all rational triangles, and triangles are rational polytopes, so their negations refute the
+clause for rational polytopes. There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+\texttt{\#print axioms} reports only \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\paragraph{Limitations.} Reading (C) is treated only in this report and in \texttt{verify.py}. The Lean
+formalization works with triangles and with an explicit facet list plus box. Their
+agreement with the vertex description is proved, not assumed (\texttt{describes\_T},
+\texttt{describes\_T2}). The literal ``lattice polytope'' reading is not refuted, because the clause
+is trivially true there.
+
+\section{Independent check}
+
+\texttt{verify.py} uses only the Python standard library. It counts lattice points of $tP$ directly
+from the \emph{vertices}, using exact barycentric coordinates (Cramer's rule with fractions) on a
+generous box. It derives the primitive facet inequalities from the vertices. It determines the
+minimal period by exact interpolation of each residue class with polynomials of degree $\le2$, for
+all $t\le60$. Results: $L_T(t)=(t+1)(t+2)/2$, with period $1$, vertex lcm $2$, facet lcm $1$, coefficient lcm
+$2$. $L_{T_2}$ has period $2$, vertex lcm $2$, facet lcm $1$. The McAllister--Woods triangles with $D=2..6$
+all have period $1$.
+
+\begin{thebibliography}{9}
+\bibitem{Ehr} E.~Ehrhart, Sur les poly\`edres rationnels homoth\'etiques \`a $n$ dimensions,
+\emph{C.~R. Acad. Sci. Paris} 254 (1962), 616--618.
+\bibitem{McM} P.~McMullen, Lattice invariant valuations on rational polytopes, \emph{Arch. Math.}
+31 (1978/79), 509--516.
+\bibitem{MW} T.~B.~McAllister and K.~M.~Woods, The minimum period of the Ehrhart quasi-polynomial of
+a rational polytope, \emph{J. Combin. Theory Ser.~A} 109 (2005), 345--352.
+\bibitem{BR} M.~Beck and S.~Robins, \emph{Computing the Continuous Discretely}, 2nd ed., Springer, 2015.
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,48 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:544:0: 'Ehrhart.isMinPeriod_unique' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:545:0: 'Ehrhart.describes_T' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:546:0: 'Ehrhart.LT_formula' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:547:0: 'Ehrhart.LT_minPeriod' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:548:0: 'Ehrhart.LT_period_denLcm' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:549:0: 'Ehrhart.describes_T2' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:550:0: 'Ehrhart.L2_formula' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:551:0: 'Ehrhart.L2_minPeriod' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:552:0: 'Ehrhart.conjecture_00000007130_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:553:0: 'Ehrhart.conjecture_00000007130_false_facet' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:554:0: 'Ehrhart.conjecture_00000007130_false_facet_weak' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:555:0: 'Ehrhart.sanity_T2_vertex' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:556:0: 'Ehrhart.sanity_T_facet' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+T: vertices [('0', '0'), ('1', '1/2'), ('2', '0')]
+  facets a1*x + a2*y <= b: [(-1, 2, '0'), (1, 2, '2'), (0, -1, '0')]
+  L(0..10) = [1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66]
+  vertex-denominator lcm = 2, facet-rhs-denominator lcm = 1, minimal period (t <= 60) = 1
+    constituent t = 0 mod 1: coefficients [1, 3/2, 1/2]
+  L_T(t) == (t+1)(t+2)/2 for all t <= 60: True
+  row formula sum_y max(0, 2t+1-4y) agrees: True
+  lcm of the denominators of the Ehrhart coefficients [1, 3/2, 1/2] = 2
+  => vertex reading: period 1 != 2 (clause FAILS); coefficient-denominator reading: 1 != 2 (FAILS)
+T2: vertices [('0', '0'), ('1', '0'), ('0', '1/2')]
+  facets a1*x + a2*y <= b: [(0, -1, '0'), (1, 2, '1'), (-1, 0, '0')]
+  L(0..10) = [1, 2, 4, 6, 9, 12, 16, 20, 25, 30, 36]
+  vertex-denominator lcm = 2, facet-rhs-denominator lcm = 1, minimal period (t <= 60) = 2
+    constituent t = 0 mod 2: coefficients [1, 1, 1/4]
+    constituent t = 1 mod 2: coefficients [3/4, 1, 1/4]
+  4 L_T2(t) + (t mod 2) == (t+2)^2 for all t <= 60: True
+  (2D+1) never divides D*(L(2D+1)-L(0)) for D = 1..50: True
+  => facet reading: period 2 != 1 (clause FAILS); vertex reading holds here (2 = 2)
+McAllister-Woods triangles conv{(0,0),(1,(D-1)/D),(D,0)} (t <= 30):
+  D = 2: vertex-denominator lcm 2, minimal period 1, polynomial [1, 3/2, 1/2]
+  D = 3: vertex-denominator lcm 3, minimal period 1, polynomial [1, 2, 1]
+  D = 4: vertex-denominator lcm 4, minimal period 1, polynomial [1, 5/2, 3/2]
+  D = 5: vertex-denominator lcm 5, minimal period 1, polynomial [1, 3, 2]
+  D = 6: vertex-denominator lcm 6, minimal period 1, polynomial [1, 7/2, 5/2]
+ALL CHECKS PASSED
+exit 0
