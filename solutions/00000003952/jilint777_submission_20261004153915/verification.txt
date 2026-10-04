@@ -1,0 +1,45 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:484:0: 'TwinWidth.house_twwLe_one' does not depend on any axioms
+info: ././././Main.lean:485:0: 'TwinWidth.house_tww_eq_one' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:486:0: 'TwinWidth.house_not_DH' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:487:0: 'TwinWidth.net_DH' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:488:0: 'TwinWidth.net_tww_eq_two' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:489:0: 'TwinWidth.P5_DH' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:490:0: 'TwinWidth.twwToDH_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:491:0: 'TwinWidth.DHToTww_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:492:0: 'TwinWidth.conjecture_00000003952_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:493:0: 'TwinWidth.conjecture_00000003952_conjunction_false' depends on axioms: [propext, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+ok   house: sequence {3,4},2,1,0 has red degrees [0, 1, 1, 1, 0]
+ok   house: every first contraction creates a red edge (no twins)
+ok   house: exact twin-width (partition search) = 1
+ok   house: not distance-hereditary, witness (S, x, y, d_G, d_G[S]) = ([0, 1, 2, 3], 1, 2, 2, 3)
+ok   house: H-0 connected, d_H(2,3)=2, d_{H-0}(2,3)=3
+     Lean/report witness: S = [1, 2, 3, 4], x = 2, y = 3, d_G = 2, d_G[S] = 3
+ok   house: not DH by pruning and by forbidden subgraphs
+ok   house: complement is the path P5
+ok   net: every first contraction creates red degree >= 2
+ok   net: exact twin-width (partition search) = 2
+ok   net: explicit width-2 sequence, red degrees [0, 2, 2, 2, 1, 0]
+ok   net: 3,4,5 is an asteroidal triple, so the net is not a permutation graph
+ok   net: distance-hereditary (BFS on all 63 induced subgraphs, pruning, forbidden subgraphs)
+ok   P5: twin-width 1 and distance-hereditary (sanity)
+enumerating connected graphs with nauty-geng (n <= 6):
+  n=1: 1 graphs; tww<=1 but not DH: 0 (e.g. None); DH but tww>1: 0 (e.g. None)
+  n=2: 1 graphs; tww<=1 but not DH: 0 (e.g. None); DH but tww>1: 0 (e.g. None)
+  n=3: 2 graphs; tww<=1 but not DH: 0 (e.g. None); DH but tww>1: 0 (e.g. None)
+  n=4: 6 graphs; tww<=1 but not DH: 0 (e.g. None); DH but tww>1: 0 (e.g. None)
+    n=5, tww<=1, not DH: DUw = house
+    n=5, tww<=1, not DH: DU{ = gem
+  n=5: 21 graphs; tww<=1 but not DH: 2 (e.g. DUw); DH but tww>1: 0 (e.g. None)
+    DH, tww=2: ECqg = net
+  n=6: 112 graphs; tww<=1 but not DH: 27 (e.g. ECro); DH but tww>1: 1 (e.g. ECqg)
+ALL CHECKS PASSED
+exit 0

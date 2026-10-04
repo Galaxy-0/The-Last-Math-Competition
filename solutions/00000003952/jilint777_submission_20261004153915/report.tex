@@ -1,0 +1,334 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of Conjecture 00000003952:\\
+twin-width at most 1 is not the same as distance-hereditary}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000003952 asserts, as its first clause, that the graphs of twin-width at
+most $1$ are exactly the distance-hereditary graphs. Both inclusions are false. The
+house (the complement of the path $P_5$) has twin-width $1$ but is not
+distance-hereditary. The net (a triangle with a pendant vertex at each corner) is
+distance-hereditary but has twin-width $2$. Since the conjecture is a conjunction, it is
+false. All definitions (trigraphs, contractions, contraction sequences, twin-width,
+walks in induced subgraphs, distance-hereditary graphs) are formalized from scratch in
+Lean~4 (core library only). Both counterexamples are proved there, and
+\texttt{verify.py} checks them independently.
+\end{abstract}
+
+\section{The conjecture and the clause we refute}
+\begin{quote}
+\emph{Definition:} The twin-width is the minimal width over contraction sequences of
+red-black graphs. \emph{Conjecture:} The graphs of twin-width at most 1 are exactly the
+distance-hereditary graphs; recognizing twin-width at most 2 is polynomial time, while
+recognizing twin-width at most 3 is NP-hard, so the boundary lies exactly at 2.
+\end{quote}
+The Chinese version states the same. The conjecture is a conjunction of three
+statements. We refute the first one,
+\[
+  \textbf{(C)}\qquad \{G : \operatorname{tww}(G)\le 1\} \;=\; \{G : G \text{ is distance-hereditary}\},
+\]
+and this already makes the whole conjecture false. We refute \emph{both} inclusions of (C),
+each with an explicit connected graph. We do not address the two complexity statements.
+
+\section{Definitions}
+All graphs are finite and simple, and have vertex set $\{0,\dots,n-1\}$.
+
+\begin{definition}[Trigraphs and contractions; Bonnet--Kim--Thomass\'e--Watrigant]
+A \emph{trigraph} (red--black graph) is a vertex set with, for each pair of distinct
+vertices, one of three colours: \emph{none}, \emph{black} or \emph{red}. A graph is the
+trigraph with black edges and no red edges. \emph{Contracting} two distinct vertices
+$u,v$ replaces them by a single new vertex $z$. Pairs not involving $z$ keep their
+colours. For every other vertex $w$, the pair $zw$ is
+\begin{itemize}
+\item black if $uw$ and $vw$ are both black,
+\item none if $uw$ and $vw$ are both none,
+\item red otherwise (in particular whenever $uw$ or $vw$ is red).
+\end{itemize}
+The \emph{red degree} of a vertex is its number of red edges. A \emph{contraction
+sequence} of an $n$-vertex graph $G$ is a sequence $G=T_n,T_{n-1},\dots,T_1$ of
+trigraphs, where $T_{i-1}$ is obtained from $T_i$ by contracting two vertices. Its
+\emph{width} is the maximum red degree of a vertex over all $T_i$. The \emph{twin-width}
+$\operatorname{tww}(G)$ is the minimum width over all contraction sequences of $G$. So
+$\operatorname{tww}(G)\le d$ iff some contraction sequence has width at most $d$.
+\end{definition}
+
+Equivalently, one can follow the partition of $V(G)$ into the sets of original vertices
+represented by the current vertices. Two parts $P\ne Q$ are joined by a red edge iff the pair
+$(P,Q)$ is not homogeneous (some but not all pairs in $P\times Q$ are edges). By induction,
+this gives exactly the trigraphs above, because the merging rule is the same.
+\texttt{verify.py} uses this partition formulation and Lean uses the trigraph one.
+
+\begin{definition}[Distance-hereditary; Howorka]
+For $S\subseteq V(G)$, $G[S]$ is the induced subgraph and $d_{G[S]}$ its distance
+($\infty$ between different components). $G$ is \emph{distance-hereditary} (DH) if
+$d_{G[S]}(x,y)=d_G(x,y)$ for every $S$ with $G[S]$ connected and all $x,y\in S$, that is,
+if every connected induced subgraph is isometric.
+\end{definition}
+By Bandelt and Mulder, a connected graph is DH iff it has no induced house, hole $C_k$
+($k\ge5$), domino or gem. It is also DH iff it can be reduced to a single vertex by
+repeatedly deleting a pendant vertex or one vertex of a pair of twins. We prove everything
+from Howorka's definition. The other two characterizations are used only as cross-checks in
+\texttt{verify.py}.
+
+\section{The house: twin-width 1, not distance-hereditary}
+Let $H$ be the graph on $\{0,1,2,3,4\}$ with edges
+\[ 02,\ 03,\ 04,\ 13,\ 14,\ 24 . \]
+This is the house: the 4-cycle $0\,3\,1\,4\,0$ with the roof vertex $2$ adjacent to
+$0$ and $4$. Its non-edges $01,12,23,34$ form the path $0\,1\,2\,3\,4$, so
+$H=\overline{P_5}$.
+
+\begin{theorem}\label{thm:house}
+$\operatorname{tww}(H)=1$, and $H$ is not distance-hereditary.
+\end{theorem}
+
+\begin{proof}
+\emph{$\operatorname{tww}(H)\le1$.} We contract $\{3,4\}$, then add $2$, then $1$, then $0$.
+Here $N(0)=\{2,3,4\}$, $N(1)=\{3,4\}$, $N(2)=\{0,4\}$, $N(3)=\{0,1\}$ and
+$N(4)=\{0,1,2\}$.
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+step & vertices & red edges & max red degree\\
+\midrule
+$T_5=H$ & $0,1,2,3,4$ & none & 0\\
+contract $3,4\to A$ & $0,1,2,A$ & $A2$ & 1\\
+contract $A,2\to B$ & $0,1,B$ & $B1$ & 1\\
+contract $B,1\to C$ & $0,C$ & $C0$ & 1\\
+contract $C,0$ & one vertex & none & 0\\
+\bottomrule
+\end{tabular}
+\end{center}
+Details:
+\begin{itemize}
+\item $A$: $3,4$ are both adjacent to $0$ and to $1$ (black), and only $4$ is adjacent to
+$2$ (red).
+\item $B$: $A0$ and $20$ are black, so $B0$ is black. $A1$ is black and $21$ is none,
+so $B1$ is red. The red edge $A2$ is now inside $B$.
+\item $C$: $B0$ is black and $10$ is none, so $C0$ is red.
+\end{itemize}
+Every trigraph has maximum red degree at most $1$.
+
+\emph{$\operatorname{tww}(H)\ge1$.} Contracting $u,v$ gives the new vertex a red edge to
+every $w\notin\{u,v\}$ adjacent to exactly one of $u,v$. If there is no such $w$, then
+$u,v$ are twins. $H$ has no twins: the sets $N(x)\setminus\{y\}$ and
+$N(y)\setminus\{x\}$ above differ for all $x\ne y$, for instance
+$N(0)\setminus\{4\}=\{2,3\}\ne\{1,2\}=N(4)\setminus\{0\}$. So every first contraction
+creates a red edge, and every contraction sequence has width $\ge1$.
+
+\emph{Not DH.} Let $S=\{1,2,3,4\}$. Then $H[S]$ has edges $13,14,24$, so it is the
+path $2\,4\,1\,3$ and is connected. Moreover $d_H(2,3)=2$ via $2\,0\,3$, since $2$ and $3$
+are not adjacent. In $H[S]$ the only path from $2$ to $3$ is $2\,4\,1\,3$, so
+$d_{H[S]}(2,3)=3\ne2$.
+\end{proof}
+
+\section{The net: distance-hereditary, twin-width 2}
+Let $N$ be the graph on $\{0,\dots,5\}$ with edges
+\[ 01,\ 12,\ 02,\ 03,\ 14,\ 25 . \]
+This is the triangle $0,1,2$ with pendant vertices $3,4,5$ attached to $0,1,2$.
+
+\begin{theorem}\label{thm:net}
+$N$ is distance-hereditary, and $\operatorname{tww}(N)=2$.
+\end{theorem}
+
+\begin{proof}
+\emph{DH.} An induced path of $N$ uses at most one triangle edge: if it used two, say
+$a\,b\,c$, then $ac$ would be a chord. A pendant vertex has degree $1$, so it can only be
+an endpoint of a path. So an induced path from $x$ to $y$ consists of, in order:
+\begin{itemize}
+\item the edge from $x$ to its triangle vertex, if $x$ is a pendant;
+\item the triangle edge between the two triangle vertices, if they differ;
+\item the edge to $y$, if $y$ is a pendant.
+\end{itemize}
+Hence all induced $x$--$y$ paths of $N$ have the same length. A shortest path is
+induced, so this common length is $d_N(x,y)$. Now let $N[S]$ be connected and
+$x,y\in S$. A shortest $x$--$y$ path in $N[S]$ is induced in $N[S]$, hence induced in $N$, so its length is $d_N(x,y)$. Therefore
+$d_{N[S]}(x,y)=d_N(x,y)$.
+(Alternatively: delete the pendants $3,4,5$; the remaining triangle reduces by twin
+deletions.)
+
+\emph{$\operatorname{tww}(N)\ge2$.} By the remark in the proof of
+Theorem~\ref{thm:house}, the new vertex gets a red edge to every vertex of
+$\Delta(u,v)=(N(u)\setminus\{v\})\,\triangle\,(N(v)\setminus\{u\})$. Up to the symmetry of
+$N$, which permutes the three corners together with their pendants, there are four types of
+pairs:
+\[
+\Delta(0,1)=\{3,4\},\quad \Delta(0,3)=\{1,2\},\quad \Delta(0,4)=\{2,3\},\quad \Delta(3,4)=\{0,1\}.
+\]
+These are triangle--triangle, corner with its own pendant, corner with another pendant,
+and pendant--pendant. In every case the first contraction already creates a vertex of
+red degree $2$. So no contraction sequence has width $\le1$.
+
+\emph{$\operatorname{tww}(N)\le2$.} Contract $3$ into $0$, $4$ into $1$, $5$ into $2$,
+then $1$ into $0$, then $2$ into $0$. The maximum red degrees along this sequence are
+$0,2,2,2,1,0$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+Clause (C) is false in both directions: $H$ has $\operatorname{tww}\le1$ but is not DH, and
+$N$ is DH but has $\operatorname{tww}>1$. Hence Conjecture 00000003952 is false.
+\end{theorem}
+
+\section{Interpretation and robustness}
+\begin{itemize}
+\item \textbf{``Exactly''} means equality of the two graph classes. Each inclusion fails
+separately (Theorems~\ref{thm:house} and~\ref{thm:net}).
+\item \textbf{Twin-width.} The conjecture's own definition (``the minimal width over
+contraction sequences of red-black graphs'') is exactly the standard
+Bonnet--Kim--Thomass\'e--Watrigant notion~\cite{bktw}. There, the width of a sequence is the
+maximum red degree of any vertex in any trigraph of the sequence, and we use this definition.
+The trigraph and partition formulations agree, as explained above. ``Red-black graphs'' are
+the trigraphs, and a graph is a trigraph without red edges. Other twin-width variants are
+outside the scope of the conjecture as stated, for example component twin-width or widths
+based on the total number of red edges.
+\item \textbf{The ``contracted vertex only'' variant.} One could measure only the red degree
+of the newly contracted vertex. Both results survive this change:
+\begin{itemize}
+\item The house sequence has red degree $\le1$ at \emph{every} vertex of every trigraph, so
+it also has width $\le 1$ under this smaller measure.
+\item The net lower bound comes from the red degree of the \emph{newly created} vertex in the
+first trigraph, so it holds under this variant as well.
+\end{itemize}
+Twin-width does not depend on vertex names. In Lean the merged vertex keeps the name of the
+first one.
+\item \textbf{Distance-hereditary.} Both graphs are connected, so the usual definitions
+coincide on them: Howorka's isometric-subgraph definition, the Bandelt--Mulder
+forbidden-subgraph and pruning characterizations, and the condition that every induced
+path is a shortest path. The house is itself one of the forbidden induced subgraphs.
+\item \textbf{Context.} Twin-width is invariant under complementation, but the DH
+property is not: $\overline{H}=P_5$ is DH. This explains why (C) cannot hold.
+\verb|verify.py| also enumerates all connected graphs on at most $6$ vertices:
+\begin{itemize}
+\item on $5$ vertices, exactly two have $\operatorname{tww}\le1$ but are not DH (the
+house and the gem);
+\item on $6$ vertices there are $27$ such graphs, and the net is the only DH graph with
+$\operatorname{tww}>1$.
+\end{itemize}
+\item \textbf{Literature.} Our proofs above are self-contained. The following known results
+are consistent with them and explain the conjecture's mix-up:
+\begin{itemize}
+\item Bonnet, Kim, Reinald, Thomass\'e and Watrigant~\cite{bkrtw} showed that graphs of
+twin-width at most $1$ can be recognized in polynomial time.
+\item Ahn, Jacob, K\"ohler, Paul, Reinald and Wiederrecht~\cite{twinwidthone} showed that
+graphs of twin-width at most $1$ are permutation graphs, and recognized them in linear time.
+\item This gives a second proof that $\operatorname{tww}(N)>1$. The three pendants $3,4,5$ of
+the net form an asteroidal triple:
+\begin{itemize}
+\item the path $3\,0\,1\,4$ avoids $N(5)=\{2\}$;
+\item the path $3\,0\,2\,5$ avoids $N(4)=\{1\}$;
+\item the path $4\,1\,2\,5$ avoids $N(3)=\{0\}$.
+\end{itemize}
+Permutation graphs are cocomparability graphs, so they are AT-free. Hence $N$ is not a
+permutation graph.
+\item Oum~\cite{oum} showed that the distance-hereditary graphs are exactly the graphs of
+\emph{rank-width} at most $1$. The conjecture's first clause seems to confuse rank-width
+with twin-width.
+\end{itemize}
+\item \textbf{Not addressed.} The complexity statements about recognizing twin-width at
+most $2$ and at most $3$ are not needed and not discussed.
+\end{itemize}
+
+\section{Lean formalization}
+The directory \texttt{lean4/} is a self-contained Lean~4.19.0 project (core library only;
+no \texttt{sorry}, no \texttt{native\_decide}, no added axioms; \verb|#print axioms|
+reports at most \texttt{propext} and \texttt{Quot.sound}). Contents of \texttt{Main.lean}
+(namespace \texttt{TwinWidth}):
+\begin{itemize}
+\item \texttt{Graph} (vertex count and edge list), \texttt{Graph.adj}, \texttt{Graph.WF}
+(well-formed simple graph).
+\item \texttt{Col}, \texttt{Trigraph}, \texttt{Trigraph.contract}: the contraction rule
+above, via \texttt{mergeCol}. Also \texttt{redDeg}, \texttt{maxRedDeg},
+\texttt{Graph.toTrigraph} (all edges black).
+\item \texttt{IsContractionSeq}: every step contracts two distinct current vertices, and
+at most one vertex remains at the end.
+\item \texttt{trigraphsAlong} and \texttt{seqWidth}: the maximum red degree over all
+trigraphs of the sequence.
+\item \texttt{TwwLe G d} $:=\exists s$, $s$ is a contraction sequence of $G$ with
+\texttt{seqWidth} $\le d$. \texttt{TwwEq G d} means \texttt{TwwLe G d} and not
+\texttt{TwwLe G d'} for $d'<d$.
+\item \texttt{Reach G m k x y}: an inductive walk predicate. It says there is a walk
+$x=v_0,\dots,v_j=y$ with $j\le k$ and $v_1,\dots,v_j$ in the vertex set encoded by the
+bit mask $m$, i.e.\ $d_{G[m]}(x,y)\le k$.
+\item \texttt{ConnectedOn G m}, and \texttt{DH G}: for all masks $m<2^n$ with $G[m]$
+connected, all $x,y\in m$ and all $k$, \texttt{Reach G (full G) k x y} implies
+\texttt{Reach G m k x y}.
+\item Computation:
+\begin{itemize}
+\item \texttt{reach\_iff\_ball} proves that \texttt{Reach} agrees with a computable BFS
+ball.
+\item \texttt{dh\_of\_check} proves, for every well-formed graph, that a finite Boolean
+check \texttt{dhCheck} implies \texttt{DH}. The check includes stabilization of the balls
+at radius $n$.
+\item \texttt{not\_twwLe\_of\_first} proves that if every first contraction has red degree
+$>d$, then \texttt{TwwLe G d} fails.
+\end{itemize}
+\item Results:
+\begin{itemize}
+\item \texttt{house\_twwLe\_one}, \texttt{house\_seq\_widths} (red degrees
+$[0,1,1,1,0]$), \texttt{house\_tww\_eq\_one}.
+\item \texttt{house\_not\_DH}, with witness $m=\{1,2,3,4\}$, $x=2$, $y=3$, $k=2$.
+\item \texttt{net\_DH}, \texttt{net\_not\_twwLe\_one}, \texttt{net\_tww\_eq\_two}.
+\item Sanity checks: \texttt{P5\_twwLe\_one} and \texttt{P5\_DH}. These show that both
+predicates are satisfiable and agree on $P_5$.
+\end{itemize}
+\item Final theorems:
+\begin{itemize}
+\item \texttt{twwToDH\_false : \textasciitilde ClauseTwwToDH}
+\item \texttt{DHToTww\_false : \textasciitilde ClauseDHToTww}
+\item \texttt{conjecture\_00000003952\_false : \textasciitilde Clause}, where\\
+\texttt{Clause := $\forall$ G, G.WF $\to$ (TwwLe G 1 $\leftrightarrow$ DH G)}
+\item \texttt{conjecture\_00000003952\_conjunction\_false (Rest) : \textasciitilde (Clause
+$\wedge$ Rest)}
+\end{itemize}
+\end{itemize}
+Lean does not cover the enumeration of all graphs on at most $6$ vertices or the
+equivalence with other DH characterizations. These appear only in \texttt{verify.py} and
+are not needed for the disproof.
+
+\section{Independent check and reproduction}
+\texttt{verify.py} uses only the Python standard library (plus \texttt{nauty-geng} for the
+optional enumeration, if installed). It checks:
+\begin{enumerate}
+\item the explicit sequences, by trigraph simulation;
+\item the exact twin-width of $H$, $N$ and $P_5$, by exhaustive search over partition
+sequences;
+\item the DH property, in three ways: BFS distances in all induced subgraphs,
+Bandelt--Mulder pruning, and forbidden induced subgraphs;
+\item the enumeration mentioned above.
+\end{enumerate}
+\begin{verbatim}
+cd lean4 && lake build     # Lean 4.19.0, core library only
+cd .. && python3 verify.py
+\end{verbatim}
+
+\begin{thebibliography}{9}
+\bibitem{bktw} \'E.~Bonnet, E.~J.~Kim, S.~Thomass\'e, R.~Watrigant,
+\emph{Twin-width I: tractable FO model checking}, J.~ACM 69 (2022).
+\bibitem{howorka} E.~Howorka, \emph{A characterization of distance-hereditary graphs},
+Quart.\ J.\ Math.\ Oxford 28 (1977) 417--420.
+\bibitem{bm} H.-J.~Bandelt, H.~M.~Mulder, \emph{Distance-hereditary graphs},
+J.~Combin.\ Theory Ser.~B 41 (1986) 182--208.
+\bibitem{bkrtw} \'E.~Bonnet, E.~J.~Kim, A.~Reinald, S.~Thomass\'e, R.~Watrigant,
+\emph{Twin-width and polynomial kernels}, Algorithmica 84 (2022) 3300--3337.
+\bibitem{twinwidthone} J.~Ahn, H.~Jacob, N.~K\"ohler, C.~Paul, A.~Reinald,
+S.~Wiederrecht, \emph{Twin-width one}, preprint (arXiv), 2025.
+\bibitem{oum} S.~Oum, \emph{Rank-width and vertex-minors}, J.~Combin.\ Theory
+Ser.~B 95 (2005) 79--100.
+\end{thebibliography}
+\end{document}
