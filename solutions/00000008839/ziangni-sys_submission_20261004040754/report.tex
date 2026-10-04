@@ -1,0 +1,69 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{The Yosida error need not equal or be bounded by\\the parameter times the operator norm}
+\author{ziangni-sys\quad---\quad Conjecture 00000008839}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\section*{Claim and counterexample}
+Both language versions state that the Yosida approximation error is always $\lambda$ times the norm of the monotone operator. We disprove this clause using actual bounded linear maps on the real Hilbert space. The example also violates an upper-bound reading of that statement. The separate claim about the first-order convergence of approximate solutions is not addressed.
+
+Let $A:\mathbb R\to\mathbb R$ be $A(x)=4x$, and let $\lambda=1/4$. The resolvent and the standard Yosida approximation are
+\[
+ J_\lambda=(I+\lambda A)^{-1},\qquad
+ A_\lambda=\frac1\lambda(I-J_\lambda).
+\]
+In this example $(I+\lambda A)(x)=2x$. The map $J(x)=x/2$ is its actual two-sided inverse: both compositions are the identity. Consequently
+\[
+ J_\lambda=\tfrac12I,\qquad
+ A_\lambda=4\bigl(I-\tfrac12I\bigr)=2I,\qquad
+ A-A_\lambda=2I.
+\]
+The resolvent is not asserted from an assumed scalar formula; the two inverse identities are verified directly as equalities of continuous linear maps.
+
+\section*{Actual norms and error}
+For the continuous linear map $T_a(x)=ax$ on $\mathbb R$,
+\[
+ \|T_a\|=|a|.
+\]
+Indeed $|T_a(x)|=|a||x|$ gives the upper bound, and evaluation at the unit vector $x=1$ gives the matching lower bound. Thus
+\[
+ \|A\|=4,\qquad \|A-A_\lambda\|=2,
+ \qquad \lambda\|A\|=1.
+\]
+It follows that $\|A-A_\lambda\|>\lambda\|A\|$, disproving both equality and the proposed upper bound. At the unit vector the pointwise error also equals $|A(1)-A_\lambda(1)|=2>1$, so interpreting error pointwise on unit vectors does not repair the assertion.
+
+\newpage
+\section*{Monotonicity and maximality}
+The operator is monotone, since for every $x,y\in\mathbb R$,
+\[
+ (A(x)-A(y))(x-y)=4(x-y)^2\geq0.
+\]
+It is in fact maximal monotone, as verified by the graph-extension definition. Suppose a monotone set-valued operator $B$ contains the graph of $A$, and let $u\in B(x)$. Put
+\[
+ v=u-4x,\qquad y=x+v/8.
+\]
+Since $4y\in B(y)$, monotonicity gives
+\[
+ 0\leq(u-4y)(x-y)
+ =\frac v2\left(-\frac v8\right)=-\frac{v^2}{16}.
+\]
+Thus $v=0$ and $u=4x$. Every graph point of $B$ already lies in the graph of $A$, proving maximality. Therefore the counterexample belongs even to the customary maximal-monotone setting for Yosida regularization. The parameter is positive and the resolvent exists everywhere.
+
+\section*{Why the proposed coefficient fails}
+For context, the same scalar calculation for $A=aI$ with $a>0$, $\lambda>0$ gives
+\[
+ J_\lambda=\frac1{1+\lambda a}I,\qquad
+ A_\lambda=\frac a{1+\lambda a}I,
+\]
+\[
+ \|A-A_\lambda\|=\frac{\lambda a^2}{1+\lambda a}.
+\]
+There is no general equality with $\lambda a$, nor a bound by it without additional assumptions. Our concrete $a=4$, $\lambda=1/4$ example alone suffices for the disproof. The general formula in this paragraph is explanatory; only the concrete counterexample is needed and formalized.
+
+\section*{Formal coverage and verification}
+The Lean project constructs actual continuous linear maps $A$, $J$, $I+\lambda A$, and $\lambda^{-1}(I-J)$. It proves both resolvent compositions equal the identity, identifies the unique inverse value for each input, and proves the approximation and error equal $2I$. The actual continuous-linear-map norm is computed by proving the pointwise upper bound and evaluating at the unit vector for the lower bound, rather than using assumed norm values. It also proves monotonicity and maximality for the actual singleton graph operator.
+
+The concluding theorem packages admissibility, the positive parameter, actual two-sided resolvent identities, the defining Yosida expression, and failure of the asserted error bound. Full Lean 4.19.0 build and complete-source checking logs with standard-axiom audits accompany the pinned Mathlib v4.19.0 project. No external numerical calculation, additional axiom, admitted proof or native decision shortcut is used. The compiled PDF is inspected in full.
+\end{document}
