@@ -1,0 +1,58 @@
+import Conjecture7790
+
+#print Conjecture7790.centeredExponential
+#print Conjecture7790.density
+#print Conjecture7790.IsLogConcaveDensity
+#print Conjecture7790.IsIsotropic
+#print Conjecture7790.IsAdmissibleLaw
+#print Conjecture7790.OneDimensionalGaussianClaim
+
+#check Conjecture7790.density_eq_exponentialPDF
+#check Conjecture7790.centeredExponential_eq_withDensity
+#check Conjecture7790.density_nonneg
+#check Conjecture7790.density_pos_iff
+#check Conjecture7790.density_positive_support
+#check Conjecture7790.density_logConcave
+#check Conjecture7790.log_density_of_mem_support
+#check Conjecture7790.log_density_concave
+#check Conjecture7790.exponential_integrable_pow
+#check Conjecture7790.exponential_integral_pow
+#check Conjecture7790.centeredExponential_isProbabilityMeasure
+#check Conjecture7790.centeredExponential_integrable_id
+#check Conjecture7790.centeredExponential_integrable_sq
+#check Conjecture7790.centeredExponential_integral_id
+#check Conjecture7790.centeredExponential_integral_sq
+#check Conjecture7790.centeredExponential_isIsotropic
+#check Conjecture7790.exponential_right_tail
+#check Conjecture7790.centered_right_tail
+#check Conjecture7790.norm_tail_lower_bound
+#check Conjecture7790.gaussian_bound_fails
+#check Conjecture7790.density_measurable
+#check Conjecture7790.centeredExponential_admissible
+#check Conjecture7790.conjecture7790_counterexample
+#check Conjecture7790.conjecture7790_disproof
+
+#print axioms Conjecture7790.density_eq_exponentialPDF
+#print axioms Conjecture7790.centeredExponential_eq_withDensity
+#print axioms Conjecture7790.density_nonneg
+#print axioms Conjecture7790.density_pos_iff
+#print axioms Conjecture7790.density_positive_support
+#print axioms Conjecture7790.density_logConcave
+#print axioms Conjecture7790.log_density_of_mem_support
+#print axioms Conjecture7790.log_density_concave
+#print axioms Conjecture7790.exponential_integrable_pow
+#print axioms Conjecture7790.exponential_integral_pow
+#print axioms Conjecture7790.centeredExponential_isProbabilityMeasure
+#print axioms Conjecture7790.centeredExponential_integrable_id
+#print axioms Conjecture7790.centeredExponential_integrable_sq
+#print axioms Conjecture7790.centeredExponential_integral_id
+#print axioms Conjecture7790.centeredExponential_integral_sq
+#print axioms Conjecture7790.centeredExponential_isIsotropic
+#print axioms Conjecture7790.exponential_right_tail
+#print axioms Conjecture7790.centered_right_tail
+#print axioms Conjecture7790.norm_tail_lower_bound
+#print axioms Conjecture7790.gaussian_bound_fails
+#print axioms Conjecture7790.density_measurable
+#print axioms Conjecture7790.centeredExponential_admissible
+#print axioms Conjecture7790.conjecture7790_counterexample
+#print axioms Conjecture7790.conjecture7790_disproof
