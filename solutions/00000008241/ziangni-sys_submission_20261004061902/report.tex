@@ -1,0 +1,59 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\title{A coalition defeats the proposed VCG gain bound\\Disproof of conjecture 00000008241}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\paragraph{Claim targeted.}
+Both source versions assert that the coalition VCG gain is at most the coalition size times the single-agent gain. We disprove this clause using total coalition utility measured at the agents' true valuations. This disproves the conjunctive conjecture; no separate conclusion about its revenue-minimality or Green--Laffont uniqueness clauses is needed.
+
+\paragraph{Actual VCG mechanism.}
+There are two agents and one indivisible good. Feasible allocations are: give the good to nobody, to agent 0, or to agent 1. Values for receiving the good are $v_0=2$ and $v_1=1$; otherwise the value is zero. Utilities are quasilinear: value minus payment. Reports are arbitrary nonnegative real bids $b_0,b_1$. Allocate to agent 0 when $b_0\ge b_1$ and to agent 1 otherwise. This includes deterministic tie breaking. Its reported welfare is $\max(b_0,b_1)$, which is at least the welfare zero of the unallocated option, so the allocation really maximizes reported welfare over all feasible choices.
+
+The Clarke pivot payment is
+\[
+ p_i(b)=\max_{a:\,i\text{ absent}}\sum_{j\ne i}b_j(a)
+             -\sum_{j\ne i}b_j(a(b)).
+\]
+Without agent $i$, the other agent either receives the good or does not, so the maximum is $\max(0,b_{1-i})=b_{1-i}$. In the chosen allocation the other-agent welfare is $b_{1-i}$ if that other agent wins, and zero otherwise. Therefore the winner pays the other bid and the loser pays zero. These are derived externality payments, rather than an independently specified payment table.
+
+\begin{theorem}
+For this mechanism every agent's maximum unilateral gain from the truthful profile is zero, but a two-agent coalition has gain one.
+\end{theorem}
+\begin{proof}
+Truthful reports $(2,1)$ give the good to agent 0, at payment 1. Thus the truthful utilities are $(1,0)$.
+
+If agent 0 alone reports any $r\ge0$, the other bid remains 1. For $r\ge1$, including the tie, agent 0 wins and has utility $2-1=1$. For $r<1$ agent 0 loses and has utility zero. Its gain is consequently either zero or $-1$.
+
+If agent 1 alone reports $r\ge0$, the other bid remains 2. For $r\le2$, including the tie, agent 1 loses and has utility zero. For $r>2$ it wins, pays 2, and has utility $1-2=-1$. Its gain is again zero or $-1$. In both cases truthful bidding attains gain zero, proving the maximum is exactly zero over the entire admissible report domain.
+
+The coalition $C=\{0,1\}$ reports $(2,0)$. Agent 0 still wins but now pays zero, and the utilities are $(2,0)$. Its total true-valuation utility gain is
+\[
+ (2+0)-(1+0)=1>2\cdot0=|C|\cdot0.
+\]
+Thus even the largest individual unilateral gain gives a zero right-hand side, contradicted by this actual coalition deviation.
+\end{proof}
+
+\newpage
+\paragraph{What is being compared.}
+The coalition gain is the sum of the members' utility changes, not an auctioneer-revenue statistic. The report change benefits agent 0 by one and leaves agent 1's utility unchanged. If a convention requires every coalition member to strictly benefit, a transfer of any amount between zero and one from agent 0 to agent 1 makes both strictly better off. Such a transfer preserves the total coalition gain and is unnecessary for the stated total-gain bound. The counterexample also violates a sum-of-individual-maxima bound, since each summand is zero.
+
+\paragraph{Faithful formalization.}
+The Lean allocation type has exactly the three feasible outcomes of this single-good auction. Actual nonnegative real bid vectors on \path{Fin 2} determine the tie-broken allocation. The theorem \path{winner_maximizes} proves welfare maximality for every such bid vector and every feasible outcome, including the unallocated alternative.
+
+The actual function \path{withoutBest} is the maximum of zero and the remaining bid. The theorem \path{withoutBest_is_actual_maximum} proves both the upper bound over all allocations without the agent and attainment at a feasible allocation. The payment function is exactly that maximum minus the actual other-agent welfare in the chosen allocation. The utility function uses the fixed true values, not the reports, minus this payment.
+
+The theorem \path{unilateral_gain_nonpositive} quantifies over every agent and every nonnegative real report, using an actual \path{Function.update} of the truthful vector. The proof covers both winners, losers and all ties. The stronger theorem \path{single_gain_maximum_zero} adds an admissible report attaining zero. The coalition is the actual finite set of both agents, with proved cardinality two, and its gain is the actual finite sum of utility differences.
+
+Finally \path{subadditivity_counterexample} packages admissibility, all unilateral upper bounds and zero attainment, and the strict coalition violation. It uses the separately proved utility computations and actual sum, rather than assuming values for the gain.
+
+\paragraph{Reproducibility.}
+The project pins Lean 4.19.0 and Mathlib commit:\\
+\path{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+From the \path{lean} directory, run \texttt{lake build}, then
+\texttt{lake env lean} with arguments \path{-DwarningAsError=true} and \path{Main.lean}.
+The source prints principal axiom audits; all dependencies are standard logical axioms. It contains no admitted proof, extra axiom, or computation-trust shortcut.
+\end{document}
