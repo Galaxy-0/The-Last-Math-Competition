@@ -1,0 +1,1 @@
+Original author/build/review records are historical evidence. Earlier statuses and manuscript hashes within those records describe their recorded stage, not this final publication copy. VALIDATION.json at the submission root is the authoritative current file manifest. Lean, LaTeX, and PDF bytes are unchanged from the fully reviewed local release.

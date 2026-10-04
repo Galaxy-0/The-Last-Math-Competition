@@ -1,0 +1,66 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\begin{document}
+\title{Finite samples have zero-dimensional Zariski closure}
+\author{Chengzhe Gao}\date{}\maketitle
+Conjecture 2839 claims that the Zariski closure of a generic $n$-point
+sample in ambient dimension $d$ has dimension $\min(n-1,d)$.
+That formula fails already for $n=2,d=1$, for \emph{every} two-point
+sample, so choosing a generic sample cannot repair it.
+
+\begin{theorem}
+For any two distinct points $a,b$ on the affine line over an algebraically
+closed field, their Zariski closure has dimension zero.
+\end{theorem}
+\begin{proof}
+The polynomial $(X-a)(X-b)$ has zero set exactly $\{a,b\}$, because the
+field has no zero divisors. Thus the sample itself is Zariski closed and
+is its own Zariski closure. Each singleton is also closed, being the zero
+set of $X-a$ or $X-b$.
+
+A nonempty irreducible closed subset of $\{a,b\}$ must be contained in
+one of those singletons: apply irreducibility to the cover
+$\{a,b\}=\{a\}\cup\{b\}$. Hence the only nonempty irreducible closed
+subsets are the two singletons. There is a chain of length zero and no
+strict chain of length one. By the standard dimension definition using
+chains of nonempty irreducible closed subsets, the dimension is exactly
+zero. The asserted formula instead gives $\min(2-1,1)=1$.
+\end{proof}
+
+The proof is uniform in $a,b$, including points in every nonempty generic
+locus of the configuration space. It does not substitute a specially
+chosen rational sample for a generic one. The affine span of two distinct
+points in the affine line does have dimension one, but affine span is a
+different operation from the Zariski closure named in both language
+versions of the source. No finite restriction on polynomial degree is
+part of the ordinary Zariski closure.
+
+\paragraph{Formal verification.}
+\texttt{DomainData} lists the ordinary integral-domain laws, all valid
+over any field; the main theorem is universally quantified in those laws.
+An integer model separately checks consistency without restricting that
+universal theorem. \texttt{Polynomial} contains precisely constant,
+variable, addition, multiplication and negation expressions. Every usual
+coefficient-list polynomial is embedded by Horner's construction, with
+a proved evaluation bridge.
+
+Zariski closed sets are zero sets of arbitrary collections of these
+polynomials. Closure is the actual common-zero set $V(I(S))$ of all
+polynomials vanishing on the sample. The file proves inclusion, closedness,
+and the least-closed-superset property, then identifies the two-point
+closure exactly. Irreducibility quantifies over arbitrary closed covers.
+Dimension at least $k$ is witnessed by a length-$k$ strict chain of
+nonempty irreducible closed subsets. The proof classifies all such subsets
+inside the two-point set and excludes every chain of length one, while
+constructing one of length zero.
+
+The final theorem rules out \emph{any} distinct pair with the dimension
+predicted at $n=2,d=1$. It therefore excludes any putative generic
+instance as well. Lean 4.19.0 verifies the complete polynomial, closure,
+irreducibility, and dimension chain with only \texttt{Std}, no custom
+axioms, no admitted declarations, and no native evaluation proof.
+
+\end{document}
