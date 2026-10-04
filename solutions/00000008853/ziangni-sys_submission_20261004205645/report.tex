@@ -1,0 +1,47 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem*{proposition}{Counterexample}
+\title{An empty convergence domain for three-operator splitting}
+\author{ziangni-sys\quad Conjecture 00000008853}
+\date{}
+\begin{document}
+\maketitle
+\vspace{-1em}
+The English and Chinese statements assert that the convergence domain of three-operator hybrid splitting is always nonempty. No existence hypothesis for a zero of the operator sum is stated. We refute this unconditional assertion for the standard relaxed Davis--Yin three-operator scheme. All step and relaxation parameters below are strictly positive; zero parameters, which freeze an iteration without solving its inclusion, are excluded.
+
+\begin{proposition}
+On the real Hilbert space, let $A(x)=B(x)=\{0\}$ and $C(x)=1$. The operators $A,B$ are maximal monotone, and $C$ is cocoercive with every positive constant. Nevertheless, for every step size $\gamma>0$, relaxation $\lambda>0$, and initial value, the three-operator iteration and both its resolvent shadows have no weak limit.
+\end{proposition}
+\begin{proof}
+The zero operator is monotone. To check maximality against arbitrary set-valued extensions, let $(x,u)$ belong to a monotone extension of its graph. Comparing it with $(x+u,0)$ gives $-u^2\geq0$, hence $u=0$. This proves maximality for both $A$ and $B$. Moreover, $C(x)-C(y)=0$, so
+\[
+ \beta |C(x)-C(y)|^2\leq (C(x)-C(y))(x-y)
+\]
+for every $\beta>0$. The map $C$ is continuous. The sum has no zero, since its value at every point is $\{1\}$.
+
+The resolvent equation $p\in x+\gamma A(x)$ is exactly $p=x$; thus $J_{\gamma A}=J_{\gamma B}=I$, with existence and uniqueness on all of $\mathbb R$. The actual relaxed Davis--Yin stages are
+\begin{align*}
+ x_B^n&=J_{\gamma B}z_n,\\
+ x_A^n&=J_{\gamma A}(2x_B^n-z_n-\gamma C(x_B^n)),\\
+ z_{n+1}&=z_n+\lambda(x_A^n-x_B^n).
+\end{align*}
+Substitution gives $x_B^n=z_n$, $x_A^n=z_n-\gamma$, and
+\[
+ z_{n+1}=z_n-\lambda\gamma,\qquad
+ z_n=z_0-n\lambda\gamma.
+\]
+This is the genuine splitting orbit, not a recurrence imposed independently of the resolvents. If it had a weak limit, testing with the continuous linear functional $x\mapsto x$ would give ordinary convergence. Its successive differences would then tend to zero, whereas they are constantly $-\lambda\gamma\ne0$. Both shadows have the same successive difference, so neither converges weakly.
+\end{proof}
+
+Define the positive-parameter convergence domain generously by
+\[
+ D=\{(\gamma,\lambda)\in(0,\infty)^2:
+       \exists z_0,a\in\mathbb R,\ z_n\rightharpoonup a\}.
+\]
+The proposition proves $D=\varnothing$. Requiring convergence from every initial state, convergence to a solution, or imposing smaller conventional step ranges cannot enlarge this empty domain. In particular, the ordinary unrelaxed choice $\lambda=1$ fails for every $\gamma>0$. This suffices to refute the first conjunct; no interpretation of the separate operator-norm endpoint formula is needed.
+
+\paragraph{Scope and formal verification.}
+The missing hypothesis is solvability. The standard Davis--Yin convergence theorem assumes a nonempty fixed-point set; the example does not contradict that theorem. We use its actual Algorithm~1 stages, with constant relaxation, as a standard instance of three-operator splitting. See Davis and Yin, \emph{A Three-Operator Splitting Scheme and its Optimization Applications}, Algorithm~1 and Theorem~1.1, \href{https://arxiv.org/abs/1504.01032}{arXiv:1504.01032}.
+The accompanying Lean project verifies maximality over all monotone graph extensions, cocoercivity, absence of zeros, both resolvent equations, all stages, the exact orbit, failure of weak convergence tested by every continuous linear functional, and emptiness of the actual parameter set. It uses Lean~4.19.0 and a pinned Mathlib revision, with only standard logical axioms.
+\end{document}
