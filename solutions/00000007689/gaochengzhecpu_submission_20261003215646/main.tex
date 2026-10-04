@@ -1,0 +1,69 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\title{Incompatible counting and growth assertions in Conjecture 00000007689}
+\author{gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+
+The conjecture asserts both $a_{r,s}=D(r,s)$, the Delannoy numbers, and
+$a_{m,m}\sim c\,3^m m^{-1/2}$. These assertions are incompatible. The
+contradiction does not depend on any interpretation of the Bailey sliding
+construction: no array can satisfy the two asserted properties together.
+
+\paragraph{A lower bound for all diagonal entries.}
+The Delannoy numbers are characterized by
+\[
+ D(0,s)=D(r,0)=1,\qquad
+ D(r+1,s+1)=D(r,s+1)+D(r+1,s)+D(r,s).
+\]
+They count paths using steps $(1,0),(0,1),(1,1)$, by conditioning on the
+last step. They are nondecreasing in each coordinate. Set $x=D(r,s)$.
+The recurrence and this monotonicity give
+\[
+ D(r+1,s+1)\ge3x,\qquad
+ D(r+1,s+2)\ge5x,\qquad D(r+2,s+1)\ge5x.
+\]
+Thus $D(r+2,s+2)\ge13D(r,s)$, and induction gives
+\[D(2n,2n)\ge13^n\qquad(n\ge0).\]
+
+In fact, the diagonal is not even $O(3^m)$. For a completely elementary
+estimate, induction on $n$ proves
+\[(4n+9)9^n\le9\,13^n.\]
+The induction step follows from
+$9(4n+13)\le13(4n+9)$. If some integers $C,N\ge0$ satisfied
+$D(m,m)\le C3^m$ for all $m\ge N$, take $n=9C+N+1$ and $m=2n$.
+Then
+\[(4n+9)9^n\le9\,13^n\le9C9^n,\]
+so cancellation of the positive number $9^n$ gives $4n+9\le9C$,
+contrary to the chosen $n$.
+
+\paragraph{Why the stated asymptotic is excluded.}
+The usual meaning of $a_{m,m}\sim c3^m/\sqrt m$ has a finite positive
+constant $c$. For all sufficiently large $m$, it entails
+$a_{m,m}\le2c3^m/\sqrt m\le2c3^m$. Choose an integer $C\ge2c$ and enlarge
+the integer threshold $N$ to at least one. This gives precisely the
+eventual bound just disproved. A nonpositive $c$ cannot supply an
+asymptotic equivalent of the positive Delannoy diagonal either.
+
+\paragraph{Formal verification and scope.}
+Lean defines the full two-variable sequence by the displayed terminating
+recurrence, and proves uniqueness among every array satisfying the two
+boundary conditions and the recurrence. The monotonicity, block-growth
+estimate, and diagonal lower bound are theorems for arbitrary natural
+indices. There is no extrapolation from a finite table.
+
+The theorem \texttt{no\_eventual\_three\_power\_bound} negates the existence
+of every integer bound $C$ and every threshold $N$. The theorem
+\texttt{conjecture7689\_counterexample} then negates, for any array $a$,
+the conjunction of equality to Delannoy numbers and this necessary
+eventual bound. The preceding paragraph supplies explicitly the elementary
+real-asymptotic implication to that integer statement; the Lean file
+formalizes its integer consequence rather than introducing a new or
+nonstandard definition of asymptotic equivalence. The other assertion
+about product-side factors is not needed to refute the conjunction.
+
+The program uses Lean 4.19.0 and \texttt{Std} only, with no admitted lemmas,
+custom axioms, or native evaluation proofs.
+\end{document}
