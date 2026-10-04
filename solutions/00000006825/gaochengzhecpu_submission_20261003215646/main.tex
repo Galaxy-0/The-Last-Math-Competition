@@ -1,0 +1,82 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\begin{document}
+\title{Completeness of the invariant-subspace lattice: Conjecture 6825}
+\author{Chengzhe Gao}\date{}\maketitle
+
+Let $X$ be a real or complex topological vector space and let $A:X\to X$
+be a linear operator. Write $\operatorname{Lat}A$ for the closed linear
+subspaces $M$ with $A(M)\subseteq M$. The standard order is inclusion.
+No boundedness or continuity assumption on $A$ is needed for the following
+conclusion. If the algebraic convention omits topological closedness,
+the same proof applies with every subset declared closed.
+
+\begin{theorem}
+The partially ordered set $(\operatorname{Lat}A,\subseteq)$ is a complete
+lattice. For every family $\mathcal F\subseteq\operatorname{Lat}A$,
+\[
+ \bigwedge\mathcal F=\bigcap_{M\in\mathcal F}M,
+ \qquad
+ \bigvee\mathcal F=
+ \bigcap\{U\in\operatorname{Lat}A:
+                  M\subseteq U\text{ for every }M\in\mathcal F\}.
+\]
+The intersection over an empty family is $X$.
+\end{theorem}
+
+\begin{proof}
+An arbitrary intersection of closed sets is closed. An intersection of
+linear subspaces contains zero and is closed under addition and scalar
+multiplication. If $x$ belongs to every member of an invariant family,
+then so does $Ax$. Thus the first displayed intersection is an element
+of $\operatorname{Lat}A$. It is contained in every member of $\mathcal F$,
+and every common lower bound is contained in the intersection; hence it
+is the greatest lower bound.
+
+The family of upper bounds is nonempty, since it contains $X$. Its
+intersection is again a closed invariant linear subspace. Every member
+of $\mathcal F$ is contained in this intersection, because it is contained
+in each upper bound. Conversely the intersection is contained in each
+upper bound. It is therefore the least upper bound. This argument includes
+the empty family, so arbitrary meets and joins exist. Inclusion is
+reflexive and transitive, and antisymmetry follows from equality of the
+underlying subsets. These are the complete-lattice axioms in the standard
+order.
+\end{proof}
+
+\paragraph{Meaning of the source.}
+The source's English and Chinese statements concern completeness in the
+standard order. A complete lattice need not be totally ordered. The result
+above proves existence of arbitrary infima and suprema; it makes no claim
+that arbitrary invariant subspaces are comparable.
+
+\paragraph{Formal verification.}
+The self-contained Lean file represents subsets by predicates $X\to
+\mathrm{Prop}$ and specifies the usual closed-set axioms of a topology.
+An invariant subspace carries proofs of closedness, zero membership,
+closure under the actual addition and scalar multiplication operations,
+and invariance under the actual map $A$. The proof needs no vector-space
+identities and is therefore proved in the stronger generality of arbitrary
+operations of the same arities. Every real or complex vector space supplies
+these operations; no numerical or finite-dimensional replacement is made.
+
+Families are arbitrary predicates on the type of invariant subspaces,
+including infinite and empty families. The closedness proof explicitly
+converts such a family into a family of its underlying subsets and proves
+equality of the two intersection predicates. Thus the closed-set axiom is
+applied to the actual intersection. The carrier of the join is defined as
+the intersection of all upper bounds. Extensional equality of subspaces,
+all order axioms, and both universal properties are proved.
+
+The theorem \texttt{conjecture6825} bundles these complete-lattice
+properties. A discrete-topology instance covers the convention of
+algebraic subspaces. A concrete instance with integers, their usual
+operations, and $A(n)=2n$ additionally witnesses consistency of the more
+general interface. It is not a restriction of the theorem to integers.
+The project uses Lean 4.19.0 and \texttt{Std} only, with no unproved
+axioms or external decision oracle; printed dependencies are the standard
+logical axioms \texttt{propext} and \texttt{Quot.sound}.
+\end{document}
