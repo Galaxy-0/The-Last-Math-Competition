@@ -1,0 +1,128 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.95in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\newtheorem{proposition}{Proposition}
+\title{A two-dimensional counterexample to Conjecture 00000009761}
+\author{gaochengzhecpu}
+\date{October 4, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The proposed arithmetic strengthening of the singular-value bound is false,
+already for a trace-class operator on $\mathbb C^2$. The upper triangular
+matrix $A=\left(\begin{smallmatrix}1&3/2\\0&1\end{smallmatrix}\right)$
+has eigenvalues $1,1$ counted with algebraic multiplicity and singular
+values $2,1/2$. At $n=2$ the claimed upper bound is $3/4$, whereas
+$|\lambda_2|=1$. We give an exact singular value decomposition, a
+Gram-matrix calculation, and a Lean 4 verification of the finite-dimensional
+counterexample.
+\end{abstract}
+
+\section{Statement and conventions}
+The conjecture proposes the universal bound
+\begin{equation}\label{eq:claim}
+ |\lambda_n|\ \leq\ \frac{\bigl(\prod_{k=1}^{n}s_k\bigr)^{1/n}+s_n}{2},
+\end{equation}
+where the eigenvalues are listed in nonincreasing modulus, with algebraic
+multiplicity, and the singular values satisfy $s_1\geq s_2\geq\cdots\geq0$.
+The supplied English and Chinese statements contain no normality or
+self-adjointness hypothesis. The reference to second-order diagonal models
+concerns claimed attainment of optimality, not a restriction on the class
+of operators. We disprove the inequality itself, so its asserted universal
+optimality and uniqueness cannot hold as stated.
+
+\begin{proposition}
+The trace-class operator on the standard complex Euclidean space $\mathbb C^2$
+with matrix
+\[
+ A=\begin{pmatrix}1&3/2\\0&1\end{pmatrix}
+\]
+violates \eqref{eq:claim} at $n=2$.
+\end{proposition}
+\begin{proof}
+Its characteristic polynomial is $(t-1)^2$, so $\lambda_1=\lambda_2=1$.
+The adjoint is the conjugate transpose, and
+\[
+ A^*A=\begin{pmatrix}1&3/2\\3/2&13/4\end{pmatrix},\qquad
+ \det(tI-A^*A)=t^2-\frac{17}{4}t+1
+              =(t-4)(t-1/4).
+\]
+Thus the ordered singular values, the nonnegative square roots of the
+eigenvalues of $A^*A$, are $s_1=2$ and $s_2=1/2$.
+All finite-dimensional operators are trace class; concretely, the sequence
+of singular values padded by zeros is $(2,1/2,0,\ldots)$ and has sum $5/2$.
+At $n=2$, the asserted right-hand side becomes
+\[
+ \frac{\sqrt{2\cdot(1/2)}+1/2}{2}=\frac34<1=|\lambda_2|,
+\]
+which contradicts \eqref{eq:claim}.
+\end{proof}
+
+\newpage
+\section{An explicit singular value decomposition}
+To independently certify that the listed values are singular values of the
+actual matrix, put $c=1/\sqrt5$ and define
+\[
+ U=c\begin{pmatrix}2&-1\\1&2\end{pmatrix},\qquad
+ V=c\begin{pmatrix}1&-2\\2&1\end{pmatrix},\qquad
+ S=\begin{pmatrix}2&0\\0&1/2\end{pmatrix}.
+\]
+Direct multiplication gives $UU^*=VV^*=I$ and
+\[
+ USV^*=\frac15
+ \begin{pmatrix}2&-1\\1&2\end{pmatrix}
+ \begin{pmatrix}2&0\\0&1/2\end{pmatrix}
+ \begin{pmatrix}1&2\\-2&1\end{pmatrix}
+ =\begin{pmatrix}1&3/2\\0&1\end{pmatrix}=A.
+\]
+Both diagonal entries of $S$ are nonnegative and already in decreasing
+order. Hence this is a complete unitary SVD, with no numerical approximation.
+The ordinary product bound is not contradicted: for this example
+$|\lambda_1\lambda_2|=s_1s_2=1$. The additional averaging with the smaller
+singular value is the step that fails. The example is not a normal matrix;
+no assertion about a version restricted to normal operators is made here.
+
+\section{Formal verification and its scope}
+The project uses Lean 4.19.0 and a pinned Mathlib revision. The matrix in
+\texttt{lean/Main.lean} is an actual complex $2\times2$ Mathlib matrix.
+The kernel-checked statements establish:
+\begin{itemize}
+\item the actual characteristic polynomials and full root multisets of
+$A$ and $A^*A$, including the repeated eigenvalue;
+\item membership of $U,V$ in the actual complex unitary group, the exact
+identity $A=USV^*$, and the order and sign of the singular values;
+\item the standard Euclidean-space operator and the Mathlib identity
+identifying conjugate transpose with the Hilbert-space adjoint;
+\item summability of the verified singular values extended by zero, with
+exact sum $5/2$, and failure of the proposed $n=2$ inequality.
+\end{itemize}
+\texttt{OrderedEigenvalues} is defined by the complete characteristic-root
+multiset and modulus order. \texttt{OrderedSingularValues} is defined by the
+existence of actual unitary matrices giving an SVD with a nonnegative,
+ordered diagonal. These are the standard finite-dimensional spectral data.
+The final theorem negates the universal inequality for these spectral data.
+The theorem
+\texttt{full\_counterexample} collects the verified witness and its summable
+singular sequence. No general-purpose trace-class API or proof of Lidskii's
+theorem is claimed: the finite-dimensional trace-class bridge is precisely
+the summability criterion just stated. The $n=2$ root is represented by the
+positive real square root.
+
+The supplementary \texttt{verify.py} checks the matrix products,
+characteristic polynomials, and strict rational inequality using exact
+fractions. Fresh-build logs, a theorem-axiom audit, and the source hashes are
+provided in \texttt{verification/}. This proof uses no numerical search.
+
+\small
+\textbf{Source.} The Last Math Competition, conjecture 00000009761,
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000009761.md}{repository statement}.
+
+The submitted \texttt{SOURCE.md} preserves the bilingual snapshot byte for
+byte; its source identity is recorded in \texttt{verification/}.
+\end{document}
