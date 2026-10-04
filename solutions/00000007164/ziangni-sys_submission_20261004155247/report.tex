@@ -1,0 +1,112 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\emergencystretch=2em
+\title{A star need not maximize graph spectral radius\\
+\large Disproof of conjecture 00000007164}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+The English conjecture says that the maximal-radius graph is the star.
+The Chinese version likewise asserts star-type maximal radius.
+There is no restriction to trees or to a fixed number of edges.
+We compare two actual connected simple graphs on the same three vertices:
+the star $K_{1,2}$ and the complete graph $K_3$.
+The latter has strictly greater adjacency spectral radius.
+
+\textbf{The graphs and actual adjacency matrices.}
+Let the vertex set be $\{0,1,2\}$. The star has exactly the edges
+$\{0,1\}$ and $\{0,2\}$. The triangle has those edges and also $\{1,2\}$.
+They are both simple and connected: vertex $0$ is adjacent to each
+other vertex, providing paths between every pair. Their adjacency matrices
+over $\mathbb C$ are
+\[
+ S=\begin{pmatrix}0&1&1\\1&0&0\\1&0&0\end{pmatrix},
+ \qquad
+ T=\begin{pmatrix}0&1&1\\1&0&1\\1&1&0\end{pmatrix}.
+\]
+The star has two edges and the triangle three. Thus this counterexample
+uses a fixed vertex count, not a fixed edge count. It makes no claim
+against extremality of stars within the class of trees or another
+restricted family.
+
+\textbf{Full actual spectra.}
+For a finite complex matrix $M$, its spectrum consists of those $z$
+for which $zI-M$ is not invertible. This is equivalent to
+$\det(zI-M)=0$, since a square matrix over a field is invertible exactly
+when its determinant is nonzero.
+
+Direct expansion of the actual adjacency determinants gives
+\[
+ \det(zI-S)=z(z^2-2),\qquad
+ \det(zI-T)=(z-2)(z+1)^2.
+\]
+Writing $r=\sqrt2>0$, we have $r^2=2$ and
+$z^2-2=(z-r)(z+r)$. Therefore these identities characterize every
+complex spectral point:
+\[
+ \sigma(S)=\{0,\sqrt2,-\sqrt2\},\qquad
+ \sigma(T)=\{2,-1\}.
+\]
+In particular these are complete spectra, not just a selected pair of
+eigenvalues or assumed scalar certificates.
+
+\newpage
+\textbf{Spectral radii and strict comparison.}
+The standard finite-dimensional spectral radius is
+\[
+ \rho(M)=\sup\{|z|:z\in\sigma(M)\}.
+\]
+Using the actual spectra computed above gives
+\[
+ \rho(S)=\sqrt2,\qquad \rho(T)=2.
+\]
+Since $\sqrt2\geq0$ and $(\sqrt2)^2=2<4=2^2$, we have
+\[
+ \rho(S)=\sqrt2<2=\rho(T).
+\]
+Consequently the star is not a maximal-radius graph even among
+connected simple graphs on three fixed vertices.
+
+This falsifies the first unqualified conjunct of the conjecture.
+It does not require interpreting the separate statement about the
+neighborhood of a star, nor does it impose or contradict a theorem
+with an additional fixed-edge or tree hypothesis. Such restrictions
+would change the extremal problem, and are absent from the source.
+
+\textbf{Formal correspondence.}
+The Lean source constructs the star and triangle as actual
+\texttt{SimpleGraph (Fin 3)} objects. Their symmetry and absence of
+loops are verified, and \texttt{star\_connected} and
+\texttt{triangle\_connected} prove actual graph connectivity.
+The finite set of ordered endpoint representatives $i<j$ of undirected
+edges is defined from adjacency. \texttt{edge\_counts} proves its
+cardinalities are two and three.
+
+All matrix computations use the graphs' actual
+\texttt{SimpleGraph.adjMatrix} values over $\mathbb C$.
+\texttt{spectrum\_det} connects Mathlib's actual \texttt{spectrum}
+to determinant vanishing via matrix invertibility.
+\texttt{star\_determinant} and \texttt{triangle\_determinant} prove
+the determinant identities for every complex parameter.
+\texttt{star\_spectrum} and \texttt{triangle\_spectrum} then prove
+equality of the full actual spectrum sets.
+
+The definition \texttt{radius} is the real supremum of the moduli
+of the actual complex spectrum.
+\texttt{star\_radius} and \texttt{triangle\_radius} evaluate these
+suprema; \texttt{radius\_strict} proves their strict comparison.
+\texttt{star\_not\_maximal} directly negates the maximal-radius
+property quantified over simple graphs on the same three vertices.
+The final \texttt{counterexample} combines the graph hypotheses,
+actual spectra and strict failure of maximality.
+
+\textbf{Reproduction.}
+Use Lean 4.19.0 with public Mathlib revision
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}\end{center}
+Run \texttt{lake build} in \texttt{lean/}. The project prints axiom audits.
+The validation notes record the final whole-project build and PDF inspection.
+\end{document}
