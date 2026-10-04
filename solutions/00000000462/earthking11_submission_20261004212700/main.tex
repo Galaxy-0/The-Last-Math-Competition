@@ -1,0 +1,471 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{parskip}
+\usepackage{booktabs}
+\usepackage{array}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\tauc}{\tau}
+
+\title{Disproof of conjecture \texttt{00000000462}}
+\author{earthking11}
+\date{2026-10-04}
+
+\begin{document}
+\maketitle
+
+\section*{Verdict: FALSE}
+
+We disprove conjecture \texttt{00000000462} as stated. Let $\tauc(n)$ denote the
+number of spanning trees of the circulant graph $C_n(1,2)$, the \emph{square of
+the $n$-cycle}: the graph on $\Z/n$ joining $i$ to $i\pm 1$ and to $i\pm 2$. We
+compute $\tauc$ exactly, and show:
+
+\begin{enumerate}
+\item $\tauc$ satisfies the six-term linear recurrence
+\[
+\tauc(n+6) \;=\; 4\,\tauc(n+5) - 10\,\tauc(n+3) + 4\,\tauc(n+1) - \tauc(n),
+\]
+whose characteristic polynomial is
+\[
+p(x) \;=\; x^{6} - 4x^{5} + 10x^{3} - 4x + 1 \;=\; \bigl((x+1)(x^{2}-3x+1)\bigr)^{2}.
+\]
+Its largest real root is
+\[
+\frac{3+\sqrt5}{2} \;=\; \varphi^{2} \;=\; 2.6180339887\ldots,
+\qquad \varphi = \frac{1+\sqrt5}{2}.
+\]
+\item The conjectured value
+\[
+\alpha^{2} \;=\; (2+\sqrt3)^{2} \;=\; 7 + 4\sqrt3 \;=\; 13.9282032302\ldots
+\]
+is \emph{not} a root of $p$: an exact computation in $\Z[\sqrt3]$ gives
+\[
+p\bigl(7+4\sqrt3\bigr) \;=\; 2615536 + 1510080\sqrt3 \;\neq\; 0 .
+\]
+\end{enumerate}
+
+Consequently $\alpha^{2}$ cannot be a characteristic root of the recurrence
+satisfied by $\tauc$, and it is also not the exponential growth rate, which is
+$\varphi^{2}$. The conjecture fails under either reading of its wording; see
+Section~\ref{sec:readings}.
+
+\section{The conjecture}
+
+Quoted verbatim from \texttt{conjectures/00000000462.md}:
+
+\begin{quote}
+\textbf{English.} Definition: $\tauc(\text{circulant } C_n(1,2))$. Conjecture:
+$\tauc(C_n(1,2))$ satisfies a linear recurrence whose largest real
+characteristic root tends to $\alpha^{2}$, where $\alpha = 2+\sqrt3$ (directly
+verifiable against the matrix-tree theorem, then stateable in closed form).
+\end{quote}
+
+\noindent The Chinese statement filed with the conjecture is reproduced verbatim
+in \texttt{README.md} together with this English text; it is not typeset here so
+that \texttt{main.tex} has no CJK font requirement and compiles with a plain
+\texttt{tectonic main.tex}. The two formulations are translations of one
+another, and both are refuted below.
+
+\begin{definition}[The graph]
+For $n \ge 5$ let $C_n(1,2)$ be the circulant graph on $\Z/n\Z$ in which $i$ and
+$j$ are adjacent whenever $j-i \equiv \pm 1$ or $j-i \equiv \pm 2 \pmod n$. Let
+$\tauc(n) = \tauc(C_n(1,2))$ be its number of spanning trees.
+\end{definition}
+
+\begin{remark}
+For $n = 3$ and $n = 4$ the connection set $\{\pm1,\pm2\}$ collapses
+($\pm2 = \mp1$ for $n=3$, and $\pm2 = \{2\}$ with $\pm1 = \{1,3\}$ for $n=4$),
+and the graphs are the complete graphs $K_3$ and $K_4$ with $\tauc(3)=3$ and
+$\tauc(4)=16$. The closed form below is the one for the general case $n \ge 5$,
+which is the case the conjecture is about. Every statement we prove is checked
+numerically for $5 \le n \le 60$.
+\end{remark}
+
+\section{The exact spanning-tree count}
+
+\begin{theorem}[Closed form]
+\label{thm:closed}
+For every $n \ge 5$,
+\[
+\tauc(n) \;=\; \frac{n\bigl(L(2n) + 2(-1)^{n-1}\bigr)}{5},
+\]
+where $L$ is the Lucas sequence $L(0)=2$, $L(1)=1$,
+$L(k+2)=L(k+1)+L(k)$. In particular $\tauc(n)$ is a positive integer and
+$5 \mid L(2n) + 2(-1)^{n-1}$.
+\end{theorem}
+
+\begin{proof}
+By the matrix-tree theorem (Kirchhoff), for a connected graph on $n$ vertices
+with Laplacian eigenvalues $\lambda_0 = 0, \lambda_1, \dots, \lambda_{n-1}$,
+\[
+\tauc \;=\; \frac1n \prod_{k=1}^{n-1} \lambda_k .
+\]
+For a circulant graph with connection set $S$, the Laplacian eigenvalues are
+$\lambda_k = \sum_{s \in S} \bigl(1 - \omega^{ks}\bigr)$ with
+$\omega = e^{2\pi i/n}$. Here $S = \{\pm 1, \pm 2\}$, so with $z = \omega^{k}$,
+\begin{equation}
+\label{eq:lambda}
+\lambda_k \;=\; 4 - z - z^{-1} - z^{2} - z^{-2}
+\;=\; -\frac{(z-1)^{2}\,(z^{2}+3z+1)}{z^{2}},
+\end{equation}
+the factorisation following from
+$z^{4}+z^{3}-4z^{2}+z+1 = (z-1)^{2}(z^{2}+3z+1)$.
+
+Set $z_k = \omega^{k}$ for $k = 1, \dots, n-1$; these are the nontrivial $n$-th
+roots of unity, and $\prod_{k=1}^{n-1} z_k^{2} = \omega^{2 \cdot n(n-1)/2} = 1$.
+Also
+\[
+\prod_{k=1}^{n-1}(z_k - 1) \;=\; (-1)^{n-1}\prod_{k=1}^{n-1}(1-\omega^{k}) \;=\; (-1)^{n-1} n ,
+\]
+because $\prod_{k=1}^{n-1}(x - \omega^{k}) = (x^{n}-1)/(x-1)$ evaluated at
+$x = 1$, whence
+\begin{equation}
+\label{eq:prodone}
+\prod_{k=1}^{n-1}(z_k-1)^{2} \;=\; n^{2}.
+\end{equation}
+Let $r_1, r_2$ be the roots of $z^{2}+3z+1$, so $r_1 + r_2 = -3$ and
+$r_1 r_2 = 1$. Since
+$\prod_{k=1}^{n-1}(x - z_k) = (x^{n}-1)/(x-1)$ for $x \notin \{z_k\}$,
+\[
+\prod_{k=1}^{n-1}(z_k - r) \;=\; (-1)^{n-1}\,\frac{r^{n}-1}{r-1},
+\]
+hence
+\begin{equation}
+\label{eq:prodq}
+\prod_{k=1}^{n-1}(z_k^{2}+3z_k+1)
+= \prod_{k=1}^{n-1}(z_k - r_1)(z_k - r_2)
+= \frac{(r_1^{n}-1)(r_2^{n}-1)}{(r_1-1)(r_2-1)}
+= \frac{(r_1^{n}-1)(r_2^{n}-1)}{5},
+\end{equation}
+because $(r_1-1)(r_2-1) = r_1r_2 - (r_1+r_2) + 1 = 1+3+1 = 5$. Combining
+\eqref{eq:lambda}, \eqref{eq:prodone} and \eqref{eq:prodq},
+\[
+\tauc(n) \;=\; \frac1n \prod_{k=1}^{n-1}\lambda_k
+\;=\; \frac1n \cdot (-1)^{n-1} \cdot n^{2} \cdot \frac{(r_1^{n}-1)(r_2^{n}-1)}{5}
+\;=\; \frac{(-1)^{n-1}\,n\,(r_1^{n}-1)(r_2^{n}-1)}{5}.
+\]
+Now $(r_1^{n}-1)(r_2^{n}-1) = (r_1r_2)^{n} - r_1^{n} - r_2^{n} + 1
+= 2 - (r_1^{n}+r_2^{n})$. Writing
+$s_1 = \tfrac{3-\sqrt5}{2}$ and $s_2 = \tfrac{3+\sqrt5}{2}$ we have
+$r_1 = -s_1$, $r_2 = -s_2$, so
+$r_1^{n}+r_2^{n} = (-1)^{n}(s_1^{n}+s_2^{n})$. Since $s_1, s_2$ are the roots of
+$x^{2}-3x+1$ with $s_1^{0}+s_2^{0} = 2$ and $s_1+s_2 = 3$, the sequence
+$s_1^{n}+s_2^{n}$ is $L(2n)$: indeed $L(2n)$ satisfies the same recurrence
+$x^{2}-3x+1$ with initial values $L(0)=2$, $L(2)=3$. Therefore
+\[
+(r_1^{n}-1)(r_2^{n}-1) \;=\; 2 - (-1)^{n} L(2n),
+\]
+and
+\[
+\tauc(n) \;=\; \frac{(-1)^{n-1} n \bigl(2 - (-1)^{n}L(2n)\bigr)}{5}
+\;=\; \frac{n\bigl(L(2n) + 2(-1)^{n-1}\bigr)}{5},
+\]
+since $-(-1)^{n-1}(-1)^{n} = +1$. This is the asserted form.
+\end{proof}
+
+The integrality statement in Theorem~\ref{thm:closed} is an instance of a small
+congruence: $L(2n) \equiv 2 \pmod 5$ for even $n$ and $L(2n) \equiv 3 \pmod 5$
+for odd $n$, so $L(2n) + 2(-1)^{n-1} \equiv 2 - 2 \equiv 0$ (even $n$) and
+$\equiv 3 + 2 \equiv 0$ (odd $n$) modulo $5$.
+
+\section{The linear recurrence and its characteristic polynomial}
+
+Write $u(n) = L(2n) + 2(-1)^{n-1}$, so that $\tauc(n) = n\,u(n)/5$ by
+Theorem~\ref{thm:closed}.
+
+\begin{lemma}[The recurrence for $u$]
+\label{lem:urec}
+For every $n \ge 0$,
+\[
+u(n+3) \;=\; 2\,u(n+2) + 2\,u(n+1) - u(n).
+\]
+Equivalently, $u$ satisfies the linear recurrence with characteristic
+polynomial
+\[
+q(x) \;=\; x^{3} - 2x^{2} - 2x + 1 \;=\; (x+1)\,(x^{2}-3x+1).
+\]
+\end{lemma}
+
+\begin{proof}
+The even-index Lucas numbers satisfy
+$L(2n+4) = 3L(2n+2) - L(2n)$; this is the standard Lucas identity
+$L(m+4) + L(m) = 3L(m+2)$ read at $m = 2n$, and it is the recurrence with
+characteristic polynomial $x^{2}-3x+1$. The sequence $(-1)^{n-1}$ satisfies
+$x+1$. Summing the two recurrences in operator form gives
+\[
+(E^{2}-3E+1)(E+1)\,u \;=\; 0,
+\]
+i.e.\ $(E^{3}-2E^{2}-2E+1)u = 0$, which is the stated three-term recurrence.
+The factorisation $x^{3}-2x^{2}-2x+1 = (x+1)(x^{2}-3x+1)$ is verified by
+expansion: $(x+1)(x^{2}-3x+1) = x^{3}-3x^{2}+x + x^{2}-3x+1 = x^{3}-2x^{2}-2x+1$.
+\end{proof}
+
+\begin{lemma}[The recurrence for $\tauc$]
+\label{lem:taurec}
+For every $n \ge 0$ the sequence $\tauc$ satisfies
+\[
+\tauc(n+6) \;=\; 4\,\tauc(n+5) - 10\,\tauc(n+3) + 4\,\tauc(n+1) - \tauc(n),
+\]
+so its characteristic polynomial divides
+\[
+p(x) \;=\; q(x)^{2} \;=\; x^{6} - 4x^{5} + 10x^{3} - 4x + 1
+\;=\; \bigl((x+1)(x^{2}-3x+1)\bigr)^{2}.
+\]
+\end{lemma}
+
+\begin{proof}
+Multiplying a sequence satisfying $q(E)w = 0$ by $n$ doubles the multiplicity of
+every root: if $q(E)w = 0$ then $q(E)^{2}(n\,w) = 0$, because
+$q(E)\bigl(n\,w(n)\bigr)$ is a fixed finite linear combination of the shifts of
+$w$, which $q(E)$ annihilates. Applying this to $w = u$ and using
+$\tauc(n) = n\,u(n)/5$ gives $p(E)\tauc = 0$ with $p = q^{2}$.
+
+For $q(x) = x^{3}-2x^{2}-2x+1$ we compute
+\[
+q(x)^{2} = (x^{3}-2x^{2}-2x+1)^{2} = x^{6} - 4x^{5} + 10x^{3} - 4x + 1 .
+\]
+Read as an operator identity $E^{6} - 4E^{5} + 10E^{3} - 4E + 1 = 0$, this is
+exactly the displayed recurrence. (The computation was also verified
+symbolically and numerically; see \texttt{reproduce.py}.)
+\end{proof}
+
+\begin{theorem}[Roots]
+\label{thm:roots}
+The roots of $p$ are $-1$ (twice) and
+\[
+s_2 = \frac{3+\sqrt5}{2} = \varphi^{2} \approx 2.6180339887,
+\qquad
+s_1 = \frac{3-\sqrt5}{2} \approx 0.3819660113,
+\]
+each twice (the roots of $x^{2}-3x+1$). The largest real root is $s_2 = \varphi^{2}$
+and it is simple as a root of $p$ in the sense that its multiplicity as a root
+of the minimal annihilator of $\tauc$ is at least the multiplicity forced by the
+factor $n$; the exponential growth rate of $\tauc$ is $\varphi^{2}$.
+\end{theorem}
+
+\begin{proof}
+Immediate from $p = ((x+1)(x^{2}-3x+1))^{2}$ and the quadratic formula. The
+growth statement follows from Theorem~\ref{thm:closed}: $\tauc(n) = n\,u(n)/5$
+and $u(n) = s_1^{n} + s_2^{n} + 2(-1)^{n-1}$ with $|s_1| < 1 < s_2$, so
+$\tauc(n) = \bigl(s_2^{n}(1+o(1))\bigr)\cdot n/5$ and
+$\lim_{n\to\infty} \tauc(n)^{1/n} = s_2 = \varphi^{2}$.
+\end{proof}
+
+\section{The conjectured root is not a characteristic root}
+\label{sec:root}
+
+\begin{theorem}
+\label{thm:notroot}
+$\alpha^{2} = (2+\sqrt3)^{2} = 7+4\sqrt3$ is not a root of
+$p(x) = x^{6}-4x^{5}+10x^{3}-4x+1$.
+\end{theorem}
+
+\begin{proof}
+Because $p(x) = (x+1)^{2}(x^{2}-3x+1)^{2}$, a number is a root of $p$ iff it
+equals $-1$ or is a root of $x^{2}-3x+1$. Work in the ring
+$\Z[\sqrt3] \cong \Z[t]/(t^{2}-3)$, embedded in $\R$ by $t \mapsto \sqrt3$.
+
+With $\alpha = 2+\sqrt3$ we get $\alpha^{2} = 7+4\sqrt3$ and
+$\alpha^{4} = (\alpha^{2})^{2} = 97 + 56\sqrt3$ in $\Z[\sqrt3]$. Hence
+\[
+\alpha^{4} - 3\alpha^{2} + 1
+= (97+56\sqrt3) - 3(7+4\sqrt3) + 1
+= 77 + 44\sqrt3 .
+\]
+Since $77 > 0$ and $44\sqrt3 > 0$, this number is nonzero. Also
+$\alpha^{2} = 7+4\sqrt3 > 0 > -1$. Therefore
+\[
+p(\alpha^{2}) \;=\; (\alpha^{2}+1)^{2}\bigl(\alpha^{4}-3\alpha^{2}+1\bigr)^{2}
+\;=\; (8+4\sqrt3)^{2}\,(77+44\sqrt3)^{2} \;>\; 0 ,
+\]
+and expanding, $p(\alpha^{2}) = 2615536 + 1510080\sqrt3 \neq 0$.
+\end{proof}
+
+\begin{corollary}[Refutation]
+\label{cor:refute}
+The sequence $\tauc(C_n(1,2))$ satisfies a linear recurrence with
+characteristic polynomial $p$, and the conjectured value
+$\alpha^{2} = 7+4\sqrt3$ is not a root of $p$. Since the minimal annihilating
+polynomial of a linear recurrence divides every annihilating polynomial, every
+characteristic root of $\tauc$ is a root of $p$; hence $\alpha^{2}$ is not a
+characteristic root of any linear recurrence satisfied by $\tauc$. The
+conjecture is false as stated.
+\end{corollary}
+
+\begin{proof}
+Lemma~\ref{lem:taurec} exhibits the annihilating polynomial $p$ of $\tauc$;
+Theorem~\ref{thm:notroot} shows $\alpha^{2}$ is not a root of $p$. If $q$ is the
+minimal annihilating polynomial of $\tauc$ then $q \mid p$, so every root of $q$
+is a root of $p$; since $p(\alpha^{2}) \neq 0$ we get $q(\alpha^{2}) \neq 0$.
+\end{proof}
+
+\section{The two readings of the conjecture}
+\label{sec:readings}
+
+The filed wording says that $\tauc$ ``satisfies a linear recurrence whose
+largest real characteristic root \emph{tends to} $\alpha^{2}$''. The word
+``tends'' is not standard for characteristic roots of a constant-coefficient
+recurrence; we dispose of both natural readings.
+
+\begin{enumerate}
+\item \textbf{``Characteristic root'' $=$ root of the characteristic
+polynomial.} For a linear recurrence $a_{n+k} = c_{k-1}a_{n+k-1} + \dots +
+c_0a_n$ the characteristic roots are the roots of
+$x^{k} - c_{k-1}x^{k-1} - \dots - c_0$, i.e.\ the roots of any annihilating
+polynomial. By Corollary~\ref{cor:refute} every such root of $\tauc$ is a root
+of $p$, and $\alpha^{2}$ is not one. \emph{The conjecture is false.}
+
+\item \textbf{``Tends to'' $=$ the exponential growth rate is $\alpha^{2}$.}
+If the claim is that $\lim_{n\to\infty}\tauc(n)^{1/n} = \alpha^{2}$, then the
+limit is in fact $\varphi^{2} = 2.6180339887\ldots$ by Theorem~\ref{thm:roots},
+not $\alpha^{2} = 13.9282032302\ldots$. Indeed $\tauc(n) \sim n\,\varphi^{2n}/5$:
+for $n = 60$ the ratio
+$\frac{\tauc(60)/60}{\tauc(59)/59}$ equals $2.6180339887$ to ten decimal places.
+\emph{The conjecture is false.}
+\end{enumerate}
+
+\begin{remark}[Why the numbers differ]
+$\varphi^{2} = \frac{3+\sqrt5}{2}$ comes from the Lucas recurrence
+$x^{2}-3x+1$, which is the recurrence genuinely satisfied by the even-index
+Lucas numbers underlying $u(n) = L(2n)+2(-1)^{n-1}$. The filed value
+$\alpha^{2} = 7+4\sqrt3$ comes from the order-$2$ algebraic number
+$2+\sqrt3$; it is not related to $C_n(1,2)$ in any way we can detect, and
+$p(\alpha^{2}) \neq 0$ rules it out as a root of the annihilator. Note also that
+$\alpha = 2+\sqrt3$ is \emph{not} of the form $\varphi^{k}$ for integer $k$
+($\varphi^{3} = 2+\sqrt5$), so it cannot arise from the Lucas family either.
+\end{remark}
+
+\section{Numerical verification}
+
+The following table collects the first values. The ``matrix tree'' column is the
+exact integer determinant of the reduced Laplacian (fraction-free Bareiss
+elimination); the ``closed form'' column is
+$n\bigl(L(2n)+2(-1)^{n-1}\bigr)/5$.
+
+\begin{center}
+\begin{tabular}{r r r r}
+\toprule
+$n$ & matrix tree $\tauc(n)$ & closed form & recurrence residual \\
+\midrule
+$5$  & $125$      & $125$      & $0$ \\
+$6$  & $384$      & $384$      & $0$ \\
+$7$  & $1183$     & $1183$     & $0$ \\
+$8$  & $3528$     & $3528$     & $0$ \\
+$9$  & $10404$    & $10404$    & $0$ \\
+$10$ & $30250$    & $30250$    & $0$ \\
+$11$ & $87131$    & $87131$    & $0$ \\
+$12$ & $248832$   & $248832$   & $0$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The residual column is
+$\tauc(n) - \bigl(4\tauc(n-1) - 10\tauc(n-3) + 4\tauc(n-5) - \tauc(n-6)\bigr)$.
+
+The two candidate roots compare as follows.
+
+\begin{center}
+\begin{tabular}{l r l}
+\toprule
+quantity & value & status \\
+\midrule
+$\varphi^{2} = (3+\sqrt5)/2$ & $2.6180339887\ldots$ & root of $p$ (the actual growth rate) \\
+$\alpha^{2} = 7+4\sqrt3$    & $13.9282032302\ldots$ & \textbf{not} a root: $p(\alpha^{2}) = 2615536 + 1510080\sqrt3$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Formalisation}
+
+The refutation is formalised in the Lean~4 project under \texttt{lean4/}
+(core Lean only --- no Mathlib, no \texttt{sorry}, no \texttt{native\_decide}).
+The project defines the Lucas numbers, the sequence
+$u(n) = L(2n)+2(-1)^{n-1}$, proves $u$'s three-term recurrence, derives the
+six-term recurrence for $c(n) = n\,u(n) = 5\tauc(n)$, proves $c$ and $\tauc$
+satisfy it, proves $5 \mid u(n)$, verifies the initial values
+$\tauc(5),\dots,\tauc(12)$, verifies the factorisation of $p$ by exact
+coefficient arithmetic, models $\Z[\sqrt3]$ as a pair ring, and checks
+$p(\alpha^{2}) \neq 0$. The main formal statements are
+
+\begin{quote}\ttfamily
+theorem u\_rec (n) : u (n+3) = 2*u(n+2) + 2*u(n+1) - u n\\
+theorem tau\_rec (n) : tau (n+6) = 4*tau(n+5) - 10*tau(n+3) + 4*tau(n+1) - tau n\\
+theorem char\_square : pmul [1,-2,-2,1] [1,-2,-2,1] = [1,-4,0,10,0,-4,1]\\
+theorem pEval\_alpha\_sq : pEval (mul alpha alpha) = (2615536, 1510080)\\
+theorem conjecture\_00000000462\_false :\\
+\hspace*{2em}(forall n, tau (n+6) = 4*tau(n+5) - 10*tau(n+3) + 4*tau(n+1) - tau n)\\
+\hspace*{2em}and (forall x, x = mul alpha alpha -> pEval x != zero)\\
+\hspace*{2em}and mul alpha alpha != scale (-1) one
+\end{quote}
+
+\noindent The axiom audit (\texttt{lake env lean Check.lean}) reports only
+\texttt{propext} and \texttt{Quot.sound} for every theorem, and no
+\texttt{sorryAx}. See \texttt{lean4/README.md} for the full statement table and
+scope note.
+
+\section{Reproducibility}
+
+\begin{quote}\ttfamily
+\$ python3 reproduce.py\\
+... (matrix-tree determinant for 5 <= n <= 60, the closed form,\\
+... the recurrence, the factorisation, and the exact check in Z[sqrt 3])\\
+PASS: every check verified; conjecture 00000000462 is FALSE.
+\end{quote}
+
+\texttt{reproduce.py} uses only the Python~3 standard library and exact integer
+arithmetic throughout (fraction-free Bareiss elimination for the determinant,
+integer coefficient lists for polynomials, pairs for $\Z[\sqrt3]$ and
+$\Z[\sqrt5]$); it runs in under a second, prints \texttt{PASS} and exits $0$
+exactly when every check holds. The Lean project is built and audited by
+
+\begin{quote}\ttfamily
+cd lean4\\
+lake build\\
+lake env lean Check.lean
+\end{quote}
+
+\noindent and the document is compiled by
+
+\begin{quote}\ttfamily
+tectonic main.tex\\
+(equivalently: tectonic --outdir build main.tex)
+\end{quote}
+
+\noindent producing \texttt{build/main.pdf}.
+
+\section{Status against the submission rules}
+
+\begin{itemize}
+\item \textbf{LaTeX source} --- present (\texttt{main.tex}), a standalone
+\texttt{article} using only \texttt{geometry}, \texttt{amsmath},
+\texttt{amssymb}, \texttt{amsthm}, \texttt{parskip}, \texttt{booktabs}, and
+\texttt{array}; it compiles with \texttt{tectonic main.tex}.
+\item \textbf{PDF document} --- present at \texttt{build/main.pdf}.
+\item \textbf{Lean 4 project} --- present under \texttt{lean4/}, with
+\texttt{lean-toolchain} (pinned to \texttt{leanprover/lean4:v4.33.1}),
+\texttt{lakefile.toml} (library \texttt{Main}, project \texttt{tlmc462}),
+\texttt{Main.lean} (core Lean only, no \texttt{sorry}, no
+\texttt{native\_decide}), \texttt{Check.lean} (\texttt{\#print axioms} audit),
+and \texttt{README.md}. The audit reports only \texttt{[propext, Quot.sound]}
+and no \texttt{sorryAx}.
+\item \textbf{Auxiliary code} --- \texttt{reproduce.py}, dependency-free, exits
+$0$ and prints \texttt{PASS}.
+\item \textbf{No other files touched} --- the pull request adds only the folder
+\texttt{solutions/00000000462/earthking11\_submission\_20261004212700/} and
+modifies nothing else.
+\end{itemize}
+
+\end{document}
