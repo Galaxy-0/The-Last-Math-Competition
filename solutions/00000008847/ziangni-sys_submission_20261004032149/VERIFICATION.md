@@ -3,69 +3,83 @@
 Verified on 2026-10-04 with Lean 4.19.0 and Mathlib commit
 `c44e0c8ee63ca166450922a373c7409c5d26b00b`.
 
-## Definitions and full semantic scope
+## General scope and actual definitions
 
-The theorem is generic over any real inner-product space E. It requires
-neither completeness nor continuity. Set-valued maps are actual functions
-`E -> Set E`; empty values and empty domains are allowed.
+The general theorem has arbitrary source X and target Y and an arbitrary
+predicate C on pairs of points in X × Y. No algebraic, topological,
+reflexivity, symmetry, or transitivity assumption is imposed on C.
+Set-valued maps are actual functions `X -> Set Y`.
 
 - `graph A` is `{(x,u) | u in A(x)}`.
 - `ofGraph s x` is `{u | (x,u) in s}`.
 - `graph_ofGraph` and `ofGraph_graph` prove both inverse identities.
-- `IsMonotoneGraph` is the pairwise inequality
-  `0 <= inner (x-y) (u-v)` on graph points.
-- `monotone_iff` proves agreement with the pointwise operator definition.
-- `Extends A B` is pointwise inclusion of values; `graph_subset_iff`
-  proves equivalence to graph inclusion.
-- `IsMaximalMonotone A` means A is monotone and every monotone extension
-  of A equals A.
+- `IsAdmissibleGraph C s` is `forall p in s, forall q in s, C p q`.
+- `admissible_iff` exposes the corresponding pointwise map property.
+- `Extends A B` is pointwise inclusion, and `graph_subset_iff` proves
+  its exact equivalence to graph inclusion.
+- `IsMaximalAdmissible C A` means A is admissible and every admissible
+  extension B equals A.
 
-`monotone_sUnion` proves that the union of any inclusion chain of monotone
-graphs is monotone. It extracts containing graphs for two arbitrary
-points and uses comparability to place them together. This also holds
-for the empty chain, whose union has no points.
+`admissible_sUnion` proves the chain-union lemma for arbitrary C. Two
+points in the union lie together in one comparable chain member. The
+empty chain has empty union, which is vacuously admissible.
+`exists_maximal_graph` uses `zorn_subset_nonempty`, supplying the original
+admissible graph as seed. In the equivalent poset of extensions described
+in the report, that seed bounds the empty chain. No extension hypothesis
+or maximality conclusion is assumed.
 
-`exists_maximal_graph` applies the standard library theorem
-`zorn_subset_nonempty` with the prescribed initial graph as its seed.
-Thus the result explicitly contains that graph, and the nonempty-chain
-version does not lose the initial extension condition. In the equivalent
-poset of extensions described in the report, the initial graph itself
-is an upper bound for the empty chain.
+`maximal_graph_iff` proves BOTH directions between Mathlib's `Maximal`
+predicate on admissible graphs and no proper admissible map extensions.
+`exists_maximal_extension` transfers the seeded graph theorem to maps.
+The general `conjecture_00000008847` combines both original clauses.
 
-`maximal_graph_iff` proves equivalence between Mathlib's order-theoretic
-`Maximal` predicate on monotone graphs and `IsMaximalMonotone` on maps.
-`exists_maximal_extension` uses the graph/map bijection to obtain the
-operator. The final theorem combines BOTH assertions of the original.
+## Actual standard monotonicity instances
 
-## Lean checks
+`InnerProduct.compatible` uses the real inner product of x-y and u-v.
+`InnerProduct.monotone_iff` identifies admissibility with ordinary
+inner-product monotonicity. `InnerProduct.result` specializes BOTH
+conclusions, for every real inner-product space.
+
+`Duality.compatible` takes graph points in E × (E ->L[Real] Real), where
+E is an arbitrary real normed space. Its predicate is the inequality
+`0 <= (u-v)(x-y)` using the actual continuous linear map subtraction and
+evaluation. `Duality.monotone_iff` proves the pointwise correspondence.
+`Duality.result` specializes BOTH conclusions. In particular it covers
+all real Banach spaces and operators into their continuous duals, without
+requiring completeness. The general theorem is not restricted to these
+two instances and applies to any other pairwise monotonicity convention.
+
+## Lean verification
 
 ```text
 lake build
 lake env lean Main.lean
 ```
 
-Both exited with code 0. The local project build directory was initially
-absent; the dependency cache matches the pinned Mathlib revision. The
-full build printed `Built Main` and `Build completed successfully.`
-The direct file check printed the audit:
+The revised direct Lean source check exited with code 0 and no warnings.
+The revised project build also exited with code 0, rebuilding Main.
+All three final audits printed the same standard logical axioms:
 
 ```text
 'MaximalMonotone8847.conjecture_00000008847' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MaximalMonotone8847.InnerProduct.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MaximalMonotone8847.Duality.result' depends on axioms: [propext, Classical.choice, Quot.sound]
 ```
 
 There are no additional axioms, `sorry`, `admit`, or `native_decide` in
-the proof. Classical choice is expected for this Zorn argument. All graph
-and inner-product statements are Lean terms checked by the kernel.
+the proof. Classical choice is expected for the Zorn argument. All
+pairwise graph statements and the concrete monotonicity instances are
+kernel checked. No dependency cache version was changed for the revision.
 
-## Report checks
+## Revised PDF verification
 
-The PDF artifact marker was run before authoring. The built-in editor
-was opened and compilation attempted, returning the known platform-
-directory lookup error. The actual PDF was successfully built using
-Tectonic and rendered with Poppler. Both pages were inspected in full
-for legibility, complete content, spacing, and absence of clipping or
-overlap. The final compilation has no overfull/underfull box warnings.
-Tectonic prints a nonfatal Fontconfig diagnostic, with correctly embedded
-Latin Modern fonts and correct visual output.
+The PDF edit marker was run before revising the report. The built-in
+editor remains on the same source. Its compiler was attempted and
+returned the known platform-directory lookup error. Tectonic successfully
+built the revised three-page PDF; all three pages were rendered using
+Poppler and inspected in full. The final compile has no overfull or
+underfull box warnings and no missing, clipped, or overlapping content.
+Tectonic's nonfatal Fontconfig diagnostic does not affect the embedded
+Latin Modern fonts or the visual output.
 
 No auxiliary numerical program is required.

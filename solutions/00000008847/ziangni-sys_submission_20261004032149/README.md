@@ -1,22 +1,29 @@
 # Proof of Conjecture 00000008847
 
-Every set-valued monotone operator on a real inner-product space has a
-maximal monotone extension. Maximal monotone operators correspond exactly
-to maximal elements in the inclusion order on monotone graphs. This
-proves both clauses of the original conjecture, and in particular covers
-real Hilbert spaces. Completeness is not needed.
+Both assertions follow from a general theorem for pairwise graph
+conditions: every admissible set-valued map has a maximal admissible
+extension, and maximality of a map is equivalent to maximality of its
+graph under inclusion. Source and target are arbitrary types, and the
+compatibility predicate on pairs of graph points is arbitrary.
 
-The proof uses Zorn's lemma. A union of a chain of monotone graphs is
-monotone because any two points of the union lie together in one member
-of the chain. The original graph provides the seed for the extension
-argument. Explicit inverse constructions between graphs and set-valued
-maps transfer the maximality result back to operators.
+The submission formally specializes this theorem to both standard cases:
+
+- Real normed-space operators into the continuous dual, with the actual
+  monotonicity inequality `(u-v)(x-y) >= 0`. This includes Banach spaces.
+- Real inner-product-space operators, with inequality
+  `<x-y,u-v> >= 0`. This includes Hilbert spaces.
+
+No completeness, full-domain, nonempty-domain, or operator-continuity
+assumption is used. Empty values are allowed. A chain union preserves
+pairwise compatibility; Zorn's lemma yields a maximal graph containing
+the original graph. The graph/map inverse constructions transfer both
+existence and maximality back to maps.
 
 ## Files
 
-- `report.tex` and `report.pdf`: full proof, definitions, and formal correspondence.
+- `report.tex` and `report.pdf`: full general proof and standard specializations.
 - `lean/`: Lean 4.19.0 project with a pinned Mathlib dependency.
-- `VERIFICATION.md`: exact theorem scope and verification evidence.
+- `VERIFICATION.md`: exact scope, correspondence, and verification evidence.
 
 ## Reproduction
 
@@ -38,10 +45,10 @@ Compile the report from this submission directory with:
 tectonic -X compile report.tex
 ```
 
-The final theorem is
-`MaximalMonotone8847.conjecture_00000008847`. It combines existence of a
-maximal extension with the exact graph-order characterization. The
-definitions use actual subsets of a product space and the ordinary
-real inner-product monotonicity inequality. The proof uses classical
-choice through Zorn's lemma; it does not assert uniqueness or an effective
-algorithm for choosing a maximal extension.
+The general final theorem is
+`MaximalMonotone8847.conjecture_00000008847`. Its two checked standard
+instances are `MaximalMonotone8847.InnerProduct.result` and
+`MaximalMonotone8847.Duality.result`. The dual instance uses actual
+continuous real linear functionals, not an assumed abstract value table.
+Classical choice enters through Zorn's lemma. The theorem asserts
+existence, not uniqueness or an effective extension-selection algorithm.
