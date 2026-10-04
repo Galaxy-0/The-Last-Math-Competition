@@ -1,0 +1,87 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\R}{\mathbb R}
+\title{Determinant parity does not characterize even lattices}
+\author{C0ldSmi1e\\\small Conjecture 00000009028}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Two positive-definite integral lattices of rank two disprove both directions of the determinant parity criterion in conjecture 00000009028. The root lattice $A_2$ is even with determinant $3$; a lattice with Gram matrix $\operatorname{diag}(1,2)$ has even determinant but is not even. The accompanying Lean project constructs the actual embedded lattices, their bases and inherited inner products, and verifies both counterexamples.
+\end{abstract}
+
+\section{Statement, conventions and scope}
+Both language versions assert that the lattice evenness criterion is an even determinant, alongside statements about theta weight and character. We disprove this explicit parity criterion. The exact bilingual source is included as \texttt{conjecture.md}.
+
+A Euclidean lattice is the integer span of a real basis of a finite-dimensional real inner-product space. It is integral if $\langle x,y\rangle\in\Z$ for all lattice vectors $x,y$, and even if $\langle x,x\rangle\in2\Z$ for every lattice vector $x$. Its determinant here is the determinant of a Gram matrix of an integer basis, also called the discriminant. This is the square of the covolume, not the covolume itself. These are the standard conventions in the theta-series setting \cite{elkies,nebe}.
+
+For an integral lattice, the correct evenness test is that every diagonal entry of an integral basis Gram matrix is even. It is not a test on the determinant. A change of integer basis replaces $G$ by $U^tGU$ with $\det U=\pm1$, so its determinant does not depend on that basis.
+
+\begin{theorem}
+Among positive-definite integral lattices of rank two, even determinant is neither a necessary nor a sufficient condition for evenness.
+\end{theorem}
+
+\section{Even lattice with odd determinant}
+Give the plane $H=\{(x,y,z)\in\R^3:x+y+z=0\}$ the usual Euclidean inner product restricted from $\R^3$. The map
+\[
+ T:\R^2\longrightarrow H,\qquad T(a,b)=(a,-a+b,-b)
+\]
+is a linear isomorphism: its inverse sends $(x,y,z)$ to $(x,-z)$. Thus
+\[
+ b_0=(1,-1,0),\qquad b_1=(0,1,-1)
+\]
+is a real basis of $H$, and $L=\Z b_0+\Z b_1$ is a discrete full lattice in this two-dimensional plane. The same vectors are an integer basis of $L$.
+For arbitrary integers $a,b,c,d$,
+\[
+ \langle T(a,b),T(c,d)\rangle=2ac-ad-bc+2bd\in\Z.
+\]
+In particular,
+\[
+ \|T(a,b)\|^2=2(a^2-ab+b^2)\in2\Z.
+\]
+Hence $L$ is integral and even. These are identities for all lattice vectors, not finite tests. The actual basis inner products give
+\[
+ G_L=\begin{pmatrix}2&-1\\-1&2\end{pmatrix},\qquad
+ \det G_L=4-1=3\notin2\Z.
+\]
+This is the standard $A_2$ lattice \cite{catalogue}. Positive definiteness is inherited from the Euclidean plane; explicitly, the squared length is $a^2+(-a+b)^2+b^2$, which vanishes only when $a=b=0$ even for real $a,b$.
+
+\section{Even determinant without evenness}
+For the converse use $K=\{(x,y,z)\in\R^3:y=z\}$, again with its inherited Euclidean inner product. The map $S(a,b)=(a,b,b)$ is a real linear isomorphism from $\R^2$ onto $K$, with inverse $(x,y,z)\mapsto(x,y)$. Let
+\[
+ c_0=(1,0,0),\quad c_1=(0,1,1),\quad M=\Z c_0+\Z c_1.
+\]
+It is a discrete full rank-two lattice in $K$, and it is integral because
+\[
+ \langle S(a,b),S(c,d)\rangle=ac+2bd\in\Z
+ \quad(a,b,c,d\in\Z).
+\]
+Its actual Gram matrix and determinant are
+\[
+ G_M=\begin{pmatrix}1&0\\0&2\end{pmatrix},\qquad \det G_M=2.
+\]
+But $c_0\in M$ has squared length $1\notin2\Z$, so $M$ is not even. Its real squared-length form $a^2+2b^2$ is positive definite. This proves the theorem.
+
+\section{Formal coverage and relation to the conjecture}
+The Lean project uses actual subspaces of \texttt{EuclideanSpace} and \texttt{Submodule.span} over $\Z$. Explicit linear equivalences give real bases; restriction of scalars gives their integer bases. Mathlib's lattice instances establish discreteness and full real span. Gram matrices are computed from the inherited inner products. Integrality quantifies over all lattice vectors, and all parity witnesses lie in $\Z$; real-number divisibility by two is never used as parity.
+
+The final theorem negates the universal lattice-evenness characterization. Separate theorems negate its necessity and sufficiency directions. Each is refuted by an actual positive-definite integral lattice, without an additional assumption on a witness.
+
+The source gives no modular group, level or character formula. We therefore do not supply an invented theta-series predicate or assert a new analytic modularity theorem. The mathematical failure is already in its explicit even-determinant test. Refuting that clause refutes the proposed combined criterion; the usual theta weight $\dim/2$ does not repair determinant parity. In particular, $A_2$ is a standard even-lattice theta example of level $3$ in the literature \cite{theta}. The cited analytic context is not used as a premise of the formal disproof.
+
+Reproduction instructions and exact execution records accompany the Lean source. They distinguish local verification and independent internal semantic review from official maintainer acceptance.
+
+\begin{thebibliography}{4}
+\bibitem{elkies} N. Elkies, \emph{Lattice basics}, Math 272y notes, 9 September 2019, pp.~1--3. \url{https://people.math.harvard.edu/~elkies/M272.19/sep09.pdf}.
+\bibitem{nebe} G. Nebe, \emph{Lattices and modular forms}, 2009, slides~2--4. \url{https://www.math.rwth-aachen.de/~Gabriele.Nebe/talks/lat1op.pdf}.
+\bibitem{catalogue} G. Nebe and N. J. A. Sloane, \emph{Catalogue of Lattices: $A_2$}. \url{https://www.math.rwth-aachen.de/~Gabriele.Nebe/LATTICES/A2.html}.
+\bibitem{theta} N. Elkies, \emph{Statements of general modularity results for weighted theta functions}, 11 November 2019, Theorem~2 and pp.~4--5. \url{https://people.math.harvard.edu/~elkies/M272.19/nov11.pdf}.
+\end{thebibliography}
+\end{document}
