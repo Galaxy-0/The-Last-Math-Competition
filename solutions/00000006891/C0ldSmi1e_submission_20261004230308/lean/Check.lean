@@ -1,0 +1,174 @@
+import Conjecture6891
+
+#print Conjecture6891.secantIndex
+#print Conjecture6891.RankSecantHierarchyClaim
+#print Conjecture6891.U
+#print Conjecture6891.arc
+#print Conjecture6891.segreCurve
+#print Conjecture6891.baseTensor
+#print Conjecture6891.projectiveArc
+#print Conjecture6891.projectiveCurve
+#print Conjecture6891.projectiveBase
+#print Conjecture6891.projectiveW
+#print Conjecture6891.sliceMinor
+#print Conjecture6891.Vector
+#print Conjecture6891.Tensor
+#print Conjecture6891.Coordinate
+#print Conjecture6891.pure
+#print Conjecture6891.tensorBasis
+#print Conjecture6891.coords
+#print Conjecture6891.e0
+#print Conjecture6891.e1
+#print Conjecture6891.W
+#print Conjecture6891.ProjectiveTensor
+#print Conjecture6891.ProjectiveVanishes
+#print Conjecture6891.projectiveZeroLocus
+#print Conjecture6891.IsProjectiveAlgebraic
+#print Conjecture6891.projectiveZariskiClosure
+#print Conjecture6891.segre
+#print Conjecture6891.secantSpanLocus
+#print Conjecture6891.secantVariety
+#print Conjecture6891.pointSubspace
+#print Conjecture6891.projectivizeSubmodule
+#print Conjecture6891.vectorSubmodule
+#print Conjecture6891.RankLE
+#print Conjecture6891.tensorRank
+
+#check Conjecture6891.secantSpanLocus_mono
+#print axioms Conjecture6891.secantSpanLocus_mono
+#check Conjecture6891.secantVariety_mono
+#print axioms Conjecture6891.secantVariety_mono
+#check Conjecture6891.exists_secantVariety
+#print axioms Conjecture6891.exists_secantVariety
+#check Conjecture6891.mem_secantVariety_index
+#print axioms Conjecture6891.mem_secantVariety_index
+#check Conjecture6891.secantIndex_le_of_mem
+#print axioms Conjecture6891.secantIndex_le_of_mem
+#check Conjecture6891.secantIndex_pos
+#print axioms Conjecture6891.secantIndex_pos
+#check Conjecture6891.secantIndex_projectiveW
+#print axioms Conjecture6891.secantIndex_projectiveW
+#check Conjecture6891.rank_and_secant_index_counterexample
+#print axioms Conjecture6891.rank_and_secant_index_counterexample
+#check Conjecture6891.conjecture_00000006891_false
+#print axioms Conjecture6891.conjecture_00000006891_false
+#check Conjecture6891.coords_U
+#print axioms Conjecture6891.coords_U
+#check Conjecture6891.coords_arc
+#print axioms Conjecture6891.coords_arc
+#check Conjecture6891.arc_zero
+#print axioms Conjecture6891.arc_zero
+#check Conjecture6891.arc_ne_zero
+#print axioms Conjecture6891.arc_ne_zero
+#check Conjecture6891.segreCurve_ne_zero
+#print axioms Conjecture6891.segreCurve_ne_zero
+#check Conjecture6891.baseTensor_ne_zero
+#print axioms Conjecture6891.baseTensor_ne_zero
+#check Conjecture6891.smul_arc
+#print axioms Conjecture6891.smul_arc
+#check Conjecture6891.continuous_coords_arc
+#print axioms Conjecture6891.continuous_coords_arc
+#check Conjecture6891.projectiveArc_zero
+#print axioms Conjecture6891.projectiveArc_zero
+#check Conjecture6891.projectiveCurve_ne_base
+#print axioms Conjecture6891.projectiveCurve_ne_base
+#check Conjecture6891.projectiveArc_mem_span
+#print axioms Conjecture6891.projectiveArc_mem_span
+#check Conjecture6891.sliceMinor_homogeneous
+#print axioms Conjecture6891.sliceMinor_homogeneous
+#check Conjecture6891.sliceMinor_pure
+#print axioms Conjecture6891.sliceMinor_pure
+#check Conjecture6891.sliceMinor_W
+#print axioms Conjecture6891.sliceMinor_W
+#check Conjecture6891.projectiveCurve_mem_segre
+#print axioms Conjecture6891.projectiveCurve_mem_segre
+#check Conjecture6891.projectiveBase_mem_segre
+#print axioms Conjecture6891.projectiveBase_mem_segre
+#check Conjecture6891.projectiveArc_mem_secantSpanLocus_two
+#print axioms Conjecture6891.projectiveArc_mem_secantSpanLocus_two
+#check Conjecture6891.projectiveW_mem_secantVariety_two
+#print axioms Conjecture6891.projectiveW_mem_secantVariety_two
+#check Conjecture6891.sliceMinor_vanishes_on_segre
+#print axioms Conjecture6891.sliceMinor_vanishes_on_segre
+#check Conjecture6891.projectiveW_not_mem_secantVariety_one
+#print axioms Conjecture6891.projectiveW_not_mem_secantVariety_one
+#check Conjecture6891.projectiveW_in_second_layer
+#print axioms Conjecture6891.projectiveW_in_second_layer
+#check Conjecture6891.coords_pure
+#print axioms Conjecture6891.coords_pure
+#check Conjecture6891.tensor_ext
+#print axioms Conjecture6891.tensor_ext
+#check Conjecture6891.coords_W
+#print axioms Conjecture6891.coords_W
+#check Conjecture6891.W_ne_zero
+#print axioms Conjecture6891.W_ne_zero
+#check Conjecture6891.pure_zero_left
+#print axioms Conjecture6891.pure_zero_left
+#check Conjecture6891.pure_smul_left
+#print axioms Conjecture6891.pure_smul_left
+#check Conjecture6891.homogeneous_eval_smul
+#print axioms Conjecture6891.homogeneous_eval_smul
+#check Conjecture6891.projectiveVanishes_mk_iff
+#print axioms Conjecture6891.projectiveVanishes_mk_iff
+#check Conjecture6891.subset_projectiveZariskiClosure
+#print axioms Conjecture6891.subset_projectiveZariskiClosure
+#check Conjecture6891.projectiveZariskiClosure_mono
+#print axioms Conjecture6891.projectiveZariskiClosure_mono
+#check Conjecture6891.projectiveZariskiClosure_algebraic
+#print axioms Conjecture6891.projectiveZariskiClosure_algebraic
+#check Conjecture6891.projectiveZariskiClosure_least
+#print axioms Conjecture6891.projectiveZariskiClosure_least
+#check Conjecture6891.projectiveZariskiClosure_idem
+#print axioms Conjecture6891.projectiveZariskiClosure_idem
+#check Conjecture6891.mem_pointSubspace
+#print axioms Conjecture6891.mem_pointSubspace
+#check Conjecture6891.projective_span_singleton
+#print axioms Conjecture6891.projective_span_singleton
+#check Conjecture6891.secantSpanLocus_one
+#print axioms Conjecture6891.secantSpanLocus_one
+#check Conjecture6891.mk_mem_projectivizeSubmodule
+#print axioms Conjecture6891.mk_mem_projectivizeSubmodule
+#check Conjecture6891.mem_vectorSubmodule
+#print axioms Conjecture6891.mem_vectorSubmodule
+#check Conjecture6891.projective_span_mk_iff
+#print axioms Conjecture6891.projective_span_mk_iff
+#check Conjecture6891.projectivize_bot_empty
+#print axioms Conjecture6891.projectivize_bot_empty
+#check Conjecture6891.secantSpanLocus_zero
+#print axioms Conjecture6891.secantSpanLocus_zero
+#check Conjecture6891.projectiveZariskiClosure_empty
+#print axioms Conjecture6891.projectiveZariskiClosure_empty
+#check Conjecture6891.secantVariety_zero
+#print axioms Conjecture6891.secantVariety_zero
+#check Conjecture6891.pure_e0_ne_zero
+#print axioms Conjecture6891.pure_e0_ne_zero
+#check Conjecture6891.mk_mem_secantSpanLocus_iff_rankLE
+#print axioms Conjecture6891.mk_mem_secantSpanLocus_iff_rankLE
+#check Conjecture6891.mk_mem_secantSpanLocus_iff_tensorRank_le
+#print axioms Conjecture6891.mk_mem_secantSpanLocus_iff_tensorRank_le
+#check Conjecture6891.exists_rankLE
+#print axioms Conjecture6891.exists_rankLE
+#check Conjecture6891.tensorRank_has_decomposition
+#print axioms Conjecture6891.tensorRank_has_decomposition
+#check Conjecture6891.tensorRank_le_of_rankLE
+#print axioms Conjecture6891.tensorRank_le_of_rankLE
+#check Conjecture6891.rankLE_succ
+#print axioms Conjecture6891.rankLE_succ
+#check Conjecture6891.rankLE_mono
+#print axioms Conjecture6891.rankLE_mono
+#check Conjecture6891.tensorRank_le_iff
+#print axioms Conjecture6891.tensorRank_le_iff
+#check Conjecture6891.rankLE_smul
+#print axioms Conjecture6891.rankLE_smul
+#check Conjecture6891.tensorRank_smul
+#print axioms Conjecture6891.tensorRank_smul
+#check Conjecture6891.rankLE_three_W
+#print axioms Conjecture6891.rankLE_three_W
+#check Conjecture6891.second_factor_coordinate_zero
+#print axioms Conjecture6891.second_factor_coordinate_zero
+#check Conjecture6891.W_ne_sum_two_pure
+#print axioms Conjecture6891.W_ne_sum_two_pure
+#check Conjecture6891.not_rankLE_two_W
+#print axioms Conjecture6891.not_rankLE_two_W
+#check Conjecture6891.tensorRank_W
+#print axioms Conjecture6891.tensorRank_W

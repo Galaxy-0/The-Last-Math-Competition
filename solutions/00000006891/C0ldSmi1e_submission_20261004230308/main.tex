@@ -1,0 +1,232 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm,microtype}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\usepackage{fancyvrb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{3em}
+\newcommand{\C}{\mathbb C}
+\newcommand{\N}{\mathbb N}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\rk}{\operatorname{rank}}
+\newcommand{\code}[1]{\nolinkurl{#1}}
+\newtheorem{proposition}{Proposition}
+\hypersetup{pdftitle={Tensor rank three at secant level two: disproof of conjecture 00000006891},pdfauthor={C0ldSmi1e}}
+\begin{document}
+\begin{center}
+{\LARGE Tensor rank three at secant level two}\\[8pt]
+{\large Disproof of conjecture 00000006891}\\[5pt]
+C0ldSmi1e \qquad 4 October 2026
+\end{center}
+\begin{abstract}
+An explicit tensor in $\C^2\otimes_{\C}(\C^2\otimes_{\C}\C^2)$ has ordinary tensor rank three, while its projective class first appears in the second closed secant variety of the Segre locus. We prove both exact values. The Lean formalization uses actual tensor products, actual projective points and projective spans, and the homogeneous-equation characterization of projective Zariski closure. This contradicts the conjectured equality of tensor rank and secant hierarchy index.
+\end{abstract}
+
+\section{Source statement and scope}
+The complete English statement in the repository is:
+\begin{quote}\small
+Definition: Tensor rank is the minimal number of simple-tensor summands. Conjecture: The geometric characterization of tensor rank is the hierarchy of secant varieties and the rank spectrum is exactly the hierarchy index; and the rank of general tensors is given by secant-dimension counting. (secant-variety rank hierarchy)
+\end{quote}
+The exact bilingual source is included as \code{conjecture.md}; its revision is recorded in reference~\cite{source}. Both versions make the rank-versus-hierarchy assertion without a genericity qualification. The reference to general tensors occurs in the separate dimension-counting clause. We refute the first assertion under the standard meaning of \emph{closed} secant varieties. Its failure disproves the conjunction; no assertion about generic rank or dimension counting is needed.
+
+\section{The actual tensor and the meaning of rank}
+Let $V=\C^2$, with $e_0=(1,0)$ and $e_1=(0,1)$, and let
+\[
+E=V\otimes_{\C}(V\otimes_{\C}V),\qquad
+E_{ijk}=e_i\otimes(e_j\otimes e_k)\quad(i,j,k\in\{0,1\}).
+\]
+The eight $E_{ijk}$ form a tensor-product basis. The induced linear equivalence identifies $E$ with eight complex coordinates $z_{ijk}$ and satisfies
+\[
+(a\otimes(b\otimes c))_{ijk}=a_i b_j c_k.
+\]
+Thus every tensor has a finite decomposition into actual simple tensors. For $T\in E$, let $R_{\le r}(T)$ mean that $T$ is a sum of $r$ such tensors, allowing zero summands. Define
+\[
+\rk(T)=\min\{r\in\N:R_{\le r}(T)\}.
+\]
+Zero padding shows this is precisely the usual minimal number of simple summands. Multiplying a nonzero tensor by a nonzero scalar preserves rank, since a coefficient can be absorbed into its first factor.
+
+Our witness is
+\begin{equation}\label{eq:W}
+W=E_{100}+E_{010}+E_{001}.
+\end{equation}
+Its $010$-coordinate is $1$, so $W\ne0$, and \eqref{eq:W} gives $\rk(W)\le3$.
+
+\newpage
+\section{No decomposition into two simple tensors}
+Suppose, for contradiction, that
+\begin{equation}\label{eq:two}
+W=a\otimes(b\otimes c)+d\otimes(e\otimes f).
+\end{equation}
+Take the two matrix slices indexed by the first factor. Put $R=bc^{\mathsf T}$ and $S=ef^{\mathsf T}$. Equation~\eqref{eq:two} gives
+\[
+A=\begin{pmatrix}0&1\\1&0\end{pmatrix}=a_0R+d_0S,
+\qquad
+B=\begin{pmatrix}1&0\\0&0\end{pmatrix}=a_1R+d_1S.
+\]
+These are outer products over $\C$; no complex conjugation is taken. In particular, $\det R=\det S=0$. Set $\delta=a_0d_1-a_1d_0$. Eliminating $S$ and then $R$ gives
+\[
+\delta R=d_1A-d_0B,\qquad
+\delta S=a_0B-a_1A.
+\]
+Taking determinants yields
+\[
+0=\det\!\begin{pmatrix}-d_0&d_1\\d_1&0\end{pmatrix}=-d_1^2,
+\qquad
+0=\det\!\begin{pmatrix}a_0&-a_1\\-a_1&0\end{pmatrix}=-a_1^2.
+\]
+Hence $a_1=d_1=0$. The equation for $B$ would then imply $B=0$, contrary to $B_{00}=1$. This argument never divides by $\delta$ and covers zero or dependent factors.
+
+The Lean proof carries out the same elimination directly in the coordinates. In particular, the first identity gives
+\[
+\delta b_0c_1=d_1,\qquad \delta b_1c_0=d_1,\qquad \delta b_1c_1=0.
+\]
+Consequently,
+\[
+d_1^2=(\delta b_0c_1)(\delta b_1c_0)
+=(\delta b_0c_0)(\delta b_1c_1)=0.
+\]
+Swapping the two summands gives $a_1=0$; the $100$-coordinate supplies the contradiction. Thus there is no two-term decomposition. A decomposition of length zero or one could be padded to length two, so
+\begin{equation}\label{eq:rank}
+\boxed{\rk(W)=3.}
+\end{equation}
+
+\section{Projective points and homogeneous equations}
+Write $[T]\in\PP(E)$ for the class of a nonzero tensor under nonzero scalar multiplication. The formal development uses Mathlib's \code{Projectivization} of the actual tensor space $E$.
+
+For a homogeneous polynomial $p$ of degree $d$ in the eight coordinates,
+\begin{equation}\label{eq:scaling}
+p(\lambda z)=\lambda^d p(z).
+\end{equation}
+The formal proof derives this identity from the monomial expansion. Thus vanishing is independent of the nonzero representative of $[T]$. Formally, vanishing at a projective point is defined by quantifying over \emph{all} its nonzero representatives; \eqref{eq:scaling} proves equivalence with testing any one representative.
+
+A projective algebraic set is the common zero set of an arbitrary family of homogeneous polynomials, allowing every degree, including zero. These are the usual projective Zariski closed sets; see Milne, Chapter~6a and Proposition~6.2~\cite{milne}.
+
+\newpage
+\section{Genuine projective secant varieties}
+For a subset $S\subseteq\PP(E)$, define its projective algebraic closure by
+\begin{equation}\label{eq:closure}
+C(S)=\bigl\{x:\ p(x)=0\text{ for every homogeneous }p
+\text{ vanishing on }S\bigr\}.
+\end{equation}
+The formal development proves the following properties directly from this definition:
+\begin{enumerate}
+\item $S\subseteq C(S)$.
+\item $C(S)$ is a projective algebraic set, being the common zero set of all the indicated homogeneous equations.
+\item If a projective algebraic set $Z$ contains $S$, then $C(S)\subseteq Z$.
+\end{enumerate}
+Indeed, every equation defining $Z$ vanishes on $S$ and is therefore among the equations tested in \eqref{eq:closure}. These properties establish that $C(S)$ is the least projective algebraic closed superset, which is the projective Zariski closure. Monotonicity and idempotence are also proved. The implementation uses this algebraic characterization directly, without installing a topology on the tensor or projective space.
+
+Let the Segre locus be
+\[
+X=\bigl\{[a\otimes(b\otimes c)]:a\otimes(b\otimes c)\ne0\bigr\}\subseteq\PP(E).
+\]
+For $r\in\N$, let $L_r$ be the union of the actual projective linear spans of $r$ points of $X$, allowing repeated points, and set
+\begin{equation}\label{eq:secant}
+\sigma_r(X)=C(L_r).
+\end{equation}
+The spans here are Mathlib's \code{Projectivization.Subspace.span}. The formal proof connects them to ordinary vector submodule spans: for any chosen nonzero representatives $v_i$, a nonzero tensor $T$ satisfies
+\[
+[T]\in\langle[v_i]:i\rangle_{\mathrm{proj}}
+\quad\Longleftrightarrow\quad
+T\in\operatorname{span}_{\C}\{v_i:i\}.
+\]
+For finitely many generators, write an element of the vector span as a linear combination. When the generators are simple tensors, absorb each coefficient into the first factor. Conversely, a finite simple-tensor decomposition supplies such a vector span; replace every zero term by the fixed nonzero simple tensor $E_{000}$ with coefficient zero. This proves, for every $r$ and every $T\ne0$,
+\begin{equation}\label{eq:spanrank}
+[T]\in L_r\quad\Longleftrightarrow\quad R_{\le r}(T)
+\quad\Longleftrightarrow\quad\rk(T)\le r.
+\end{equation}
+This bridge makes explicit the distinction between the unclosed rank locus and its secant-variety closure.
+
+The projective span of no points is empty, so $L_0=\varnothing$. The homogeneous constant polynomial $1$ gives $C(\varnothing)=\varnothing$, hence $\sigma_0(X)=\varnothing$. The projective span of a single point is that point, so $L_1=X$.
+
+Every projective point belongs to some $L_r$ by finite tensor decomposition, and therefore to some $\sigma_r(X)$. Its secant hierarchy index is the actual minimum
+\begin{equation}\label{eq:index}
+b(x)=\min\{r\in\N:x\in\sigma_r(X)\}.
+\end{equation}
+The empty zeroth secant ensures this minimum is positive. This is the standard closed-secant, or border-rank, convention; ordinary rank and border rank are distinguished in~\cite{landsberg}.
+
+\newpage
+\section{A polynomial arc in secant lines}
+Define
+\[
+U=E_{011}+E_{101}+E_{110},\qquad Q=E_{111},\qquad q(t)=W+tU+t^2Q
+\quad(t\in\C).
+\]
+The coordinates of $q(t)$, ordered as $000,001,010,011,100,101,110,111$, are
+\[
+(0,1,1,t,1,t,t,t^2).
+\]
+In particular $q(t)\ne0$ for every $t$, and $q(0)=W$. Direct multilinear expansion gives
+\begin{equation}\label{eq:arc}
+tq(t)=(e_0+te_1)\otimes\bigl((e_0+te_1)\otimes(e_0+te_1)\bigr)-E_{000}.
+\end{equation}
+Both simple tensors on the right are nonzero: their $000$-coordinates equal $1$. Their projective points are distinct when $t\ne0$, since the first has $001$-coordinate $t$, whereas every scalar multiple of $E_{000}$ has that coordinate zero. Equation~\eqref{eq:arc} therefore places $[q(t)]$ on an actual secant line for $t\ne0$. In particular, $[q(t)]\in L_2$.
+
+Let $p$ be any homogeneous polynomial vanishing on all of $L_2$. Then $p(q(t))=0$ for every $t\ne0$. The function $t\mapsto p(q(t))$ is continuous: every coordinate of $q(t)$ is polynomial, and multivariate polynomial evaluation is continuous over $\C$. Since $\C\setminus\{0\}$ is dense, $p(q(0))=p(W)=0$. The scaling identity~\eqref{eq:scaling} extends this to every representative of $[W]$. As this holds for every defining equation, \eqref{eq:closure} proves
+\begin{equation}\label{eq:second}
+[W]\in\sigma_2(X).
+\end{equation}
+Continuity is used to verify every homogeneous equation of the whole span locus. No equality between Euclidean closure and Zariski closure is asserted.
+
+\section{Exclusion from the first secant and the contradiction}
+Consider the homogeneous quadratic slice determinant
+\[
+g(z)=z_{000}z_{011}-z_{001}z_{010}.
+\]
+For $z=a\otimes(b\otimes c)$, direct substitution gives
+\[
+g(z)=(a_0b_0c_0)(a_0b_1c_1)-(a_0b_0c_1)(a_0b_1c_0)=0.
+\]
+Thus $g$ vanishes on $X=L_1$, with representative independence supplied by homogeneity. It is an equation tested in the definition of $\sigma_1(X)$. But
+\[
+g(W)=0\cdot0-1\cdot1=-1\ne0,
+\]
+so $[W]\notin\sigma_1(X)$. Together with $\sigma_0(X)=\varnothing$ and \eqref{eq:second}, this proves $b([W])=2$.
+
+The first source clause entails, in particular, the pointwise assertion
+\[
+\forall T\in E\setminus\{0\},\qquad \rk(T)=b([T]).
+\]
+Our witness contradicts it:
+\begin{equation}\label{eq:counterexample}
+\boxed{W\ne0,\qquad \rk(W)=3,\qquad b([W])=2.}
+\end{equation}
+This conclusion concerns the source's unqualified equality of rank and hierarchy index. It does not claim that generic-rank dimension counting is false. The example is also the three-factor tangent normal form appearing in~\cite[Proposition~1.1(c)]{landsberg}; the present proof establishes its required properties directly.
+
+\newpage
+\section{Formalization and reproducibility}
+\small\setlength{\parskip}{4pt}
+All submitted declarations use the namespace \code{Conjecture6891}. The implementation is organized as follows.
+\begin{description}\raggedright\setlength{\itemsep}{2pt}\setlength{\parsep}{0pt}
+\item[\code{Core.lean}] Defines the actual nested tensor product, tensor-product basis, coordinate linear equivalence, basis vectors and $W$. The theorems \code{coords_pure} and \code{W_ne_zero} connect the abstract tensors to the displayed coordinates.
+\item[\code{Rank.lean}] Defines \code{RankLE} and the actual minimum \code{tensorRank}. Proves finite decomposition, zero padding, scalar invariance, exclusion of two simple summands and \code{tensorRank_W}.
+\item[\code{Projective.lean}] Defines representative-invariant homogeneous zero loci, their least algebraic closure, the Segre set and actual secant spans. Proves \code{projective_span_mk_iff}, the rank/decomposition bridge, the singleton-span result and \code{secantVariety_zero}.
+\item[\code{Arc.lean}] Proves the polynomial identity, nonzero arc and distinct endpoints, actual secant-line membership, continuity, the slice determinant calculation and \code{projectiveW_in_second_layer}.
+\item[\code{Conjecture6891.lean}] Defines the total minimum \code{secantIndex} and the precise \code{RankSecantHierarchyClaim}. Proves \code{secantIndex_projectiveW}, \code{rank_and_secant_index_counterexample} and \code{conjecture_00000006891_false}.
+\item[\code{Check.lean}] Prints the submitted definition and theorem inventory, with theorem types and transitive axiom dependencies.
+\end{description}
+
+\textbf{Pinned environment.}
+The project uses Lean 4.19.0 and Mathlib v4.19.0, with Mathlib commit
+\code{c44e0c8ee63ca166450922a373c7409c5d26b00b}. The toolchain file and included lockfile specify the compiler and dependency revisions. From the submission directory:
+\begin{Verbatim}[fontsize=\small]
+cd lean
+lake exe cache get
+lake build
+for f in Conjecture6891/Core.lean Conjecture6891/Rank.lean \
+  Conjecture6891/Projective.lean Conjecture6891/Arc.lean \
+  Conjecture6891.lean Check.lean; do
+  lake env lean -DwarningAsError=true "$f" || exit 1
+done
+\end{Verbatim}
+The mathematical calculations are exact and are proved in Lean; no auxiliary numerical computation supplies evidence for the claim. The development uses no admitted proofs, \code{native_decide} or custom axioms. The accompanying \code{VERIFICATION.md} and \code{verification/} records give the actual validation results and input identities, including independent semantic scrutiny. Those records, rather than the existence of this report, establish which checks were executed. Local verification remains distinct from maintainer acceptance.
+
+\begin{thebibliography}{3}\small
+\bibitem{source} The Last Math Competition, conjecture 00000006891, English and Chinese versions, source revision \code{fe1d06d431b0591b65d759c60035b1d2e293a819}. \href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/fe1d06d431b0591b65d759c60035b1d2e293a819/conjectures/00000006891.md}{Repository source}.
+\bibitem{landsberg} Jaros{\l}aw Buczy{\'n}ski and J. M. Landsberg, \emph{On the third secant variety}, arXiv:1111.7005v2, 2012, \S1.1 and Proposition~1.1(c). \url{https://arxiv.org/abs/1111.7005}.
+\bibitem{milne} J. S. Milne, \emph{Algebraic Geometry}, Chapter~6a, particularly the definition of projective algebraic sets and Proposition~6.2. \url{https://www.jmilne.org/math/CourseNotes/AG.pdf}.
+\end{thebibliography}
+\end{document}

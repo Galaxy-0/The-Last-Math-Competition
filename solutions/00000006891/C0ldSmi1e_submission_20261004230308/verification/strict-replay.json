@@ -1,0 +1,4055 @@
+{
+  "started_utc": "2026-10-04T22:51:05.505451+00:00",
+  "source_root": "/private/tmp/tlmc6891-proof",
+  "independent_root": "/private/tmp/tlmc6891-independent",
+  "dependency_root": "/private/tmp/tlmc310-proof/.lake/packages",
+  "fresh_build_outputs_absent": true,
+  "copied_files": [
+    "Conjecture6891/Core.lean",
+    "Conjecture6891/Rank.lean",
+    "Conjecture6891/Projective.lean",
+    "Conjecture6891/Arc.lean",
+    "Conjecture6891.lean",
+    "Check.lean",
+    "lakefile.toml",
+    "lake-manifest.json",
+    "lean-toolchain"
+  ],
+  "source_sha256": {
+    "Conjecture6891/Core.lean": "5b03b887e0a3547fa484966243e84f95abf349d86b384b27b9acfc8b52a91898",
+    "Conjecture6891/Rank.lean": "90c1cfb8b9d76b6311bf697401e54b4092e7d0cf05d184db925999a1a2c0b99b",
+    "Conjecture6891/Projective.lean": "ca4fab215bcb3b94c09c4988dc5ce3fd47f45374915ef45c32d23396cf45d2a0",
+    "Conjecture6891/Arc.lean": "90d1f8e863b12636014c8bd96bfbe1d3a41341b03ee6dc7205b68848acfafa57",
+    "Conjecture6891.lean": "b2a408f374022672574ea19e56da07f0aec5eb911d7282d15cbdf8dbb91ef7e0",
+    "Check.lean": "060559f910abf209844b719235c9cc1ecd2e1b79d309bc364378ccba9f00e411",
+    "lakefile.toml": "709c2281d68750a80a7ab40e75f1becd09c8964007b5680e6f7d5ad19f356df4",
+    "lake-manifest.json": "c3b981fdf0a076d7be53cfddf2b82cec0274d51df1a945f36b6fabcfe5906b43",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "dependencies": [
+    {
+      "name": "mathlib",
+      "expected_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "actual_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "plausible",
+      "expected_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "actual_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "expected_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "actual_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "importGraph",
+      "expected_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "actual_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "proofwidgets",
+      "expected_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "actual_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "aesop",
+      "expected_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "actual_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Qq",
+      "expected_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "actual_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "batteries",
+      "expected_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "actual_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Cli",
+      "expected_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "actual_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    }
+  ],
+  "strict_replay": [
+    {
+      "file": "Conjecture6891/Core.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture6891/Core.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.839,
+      "output": ""
+    },
+    {
+      "file": "Conjecture6891/Rank.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture6891/Rank.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.124,
+      "output": ""
+    },
+    {
+      "file": "Conjecture6891/Projective.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture6891/Projective.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 4.54,
+      "output": ""
+    },
+    {
+      "file": "Conjecture6891/Arc.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture6891/Arc.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 4.47,
+      "output": ""
+    },
+    {
+      "file": "Conjecture6891.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture6891.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.56,
+      "output": ""
+    },
+    {
+      "file": "Check.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Check.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 14.034,
+      "output": "def Conjecture6891.secantIndex : Conjecture6891.ProjectiveTensor \u2192 \u2115 :=\nfun x => Nat.find \u22ef\ndef Conjecture6891.RankSecantHierarchyClaim : Prop :=\n\u2200 (t : Conjecture6891.Tensor) (ht : t \u2260 0),\n  Conjecture6891.tensorRank t = Conjecture6891.secantIndex (Projectivization.mk \u2102 t ht)\ndef Conjecture6891.U : Conjecture6891.Tensor :=\nConjecture6891.pure Conjecture6891.e0 Conjecture6891.e1 Conjecture6891.e1 +\n    Conjecture6891.pure Conjecture6891.e1 Conjecture6891.e0 Conjecture6891.e1 +\n  Conjecture6891.pure Conjecture6891.e1 Conjecture6891.e1 Conjecture6891.e0\ndef Conjecture6891.arc : \u2102 \u2192 Conjecture6891.Tensor :=\nfun t =>\n  Conjecture6891.W + t \u2022 Conjecture6891.U +\n    t ^ 2 \u2022 Conjecture6891.pure Conjecture6891.e1 Conjecture6891.e1 Conjecture6891.e1\ndef Conjecture6891.segreCurve : \u2102 \u2192 Conjecture6891.Tensor :=\nfun t =>\n  Conjecture6891.pure (Conjecture6891.e0 + t \u2022 Conjecture6891.e1) (Conjecture6891.e0 + t \u2022 Conjecture6891.e1)\n    (Conjecture6891.e0 + t \u2022 Conjecture6891.e1)\ndef Conjecture6891.baseTensor : Conjecture6891.Tensor :=\nConjecture6891.pure Conjecture6891.e0 Conjecture6891.e0 Conjecture6891.e0\ndef Conjecture6891.projectiveArc : \u2102 \u2192 Projectivization \u2102 Conjecture6891.Tensor :=\nfun t => Projectivization.mk \u2102 (Conjecture6891.arc t) \u22ef\ndef Conjecture6891.projectiveCurve : \u2102 \u2192 Projectivization \u2102 Conjecture6891.Tensor :=\nfun t => Projectivization.mk \u2102 (Conjecture6891.segreCurve t) \u22ef\ndef Conjecture6891.projectiveBase : Projectivization \u2102 Conjecture6891.Tensor :=\nProjectivization.mk \u2102 Conjecture6891.baseTensor Conjecture6891.baseTensor_ne_zero\ndef Conjecture6891.projectiveW : Projectivization \u2102 Conjecture6891.Tensor :=\nProjectivization.mk \u2102 Conjecture6891.W Conjecture6891.W_ne_zero\ndef Conjecture6891.sliceMinor : MvPolynomial Conjecture6891.Coordinate \u2102 :=\nMvPolynomial.X (0, 0, 0) * MvPolynomial.X (0, 1, 1) - MvPolynomial.X (0, 0, 1) * MvPolynomial.X (0, 1, 0)\n@[reducible] def Conjecture6891.Vector : Type :=\nFin 2 \u2192 \u2102\n@[reducible] def Conjecture6891.Tensor : Type :=\nTensorProduct \u2102 Conjecture6891.Vector (TensorProduct \u2102 Conjecture6891.Vector Conjecture6891.Vector)\n@[reducible] def Conjecture6891.Coordinate : Type :=\nFin 2 \u00d7 Fin 2 \u00d7 Fin 2\ndef Conjecture6891.pure : Conjecture6891.Vector \u2192\n  Conjecture6891.Vector \u2192 Conjecture6891.Vector \u2192 Conjecture6891.Tensor :=\nfun a b c => a \u2297\u209c[\u2102] b \u2297\u209c[\u2102] c\ndef Conjecture6891.tensorBasis : Basis Conjecture6891.Coordinate \u2102 Conjecture6891.Tensor :=\n(Pi.basisFun \u2102 (Fin 2)).tensorProduct ((Pi.basisFun \u2102 (Fin 2)).tensorProduct (Pi.basisFun \u2102 (Fin 2)))\ndef Conjecture6891.coords : Conjecture6891.Tensor \u2243\u2097[\u2102] Conjecture6891.Coordinate \u2192 \u2102 :=\nConjecture6891.tensorBasis.equivFun\ndef Conjecture6891.e0 : Conjecture6891.Vector :=\n![1, 0]\ndef Conjecture6891.e1 : Conjecture6891.Vector :=\n![0, 1]\ndef Conjecture6891.W : Conjecture6891.Tensor :=\nConjecture6891.pure Conjecture6891.e1 Conjecture6891.e0 Conjecture6891.e0 +\n    Conjecture6891.pure Conjecture6891.e0 Conjecture6891.e1 Conjecture6891.e0 +\n  Conjecture6891.pure Conjecture6891.e0 Conjecture6891.e0 Conjecture6891.e1\n@[reducible] def Conjecture6891.ProjectiveTensor : Type :=\nProjectivization \u2102 Conjecture6891.Tensor\ndef Conjecture6891.ProjectiveVanishes : MvPolynomial Conjecture6891.Coordinate \u2102 \u2192\n  Conjecture6891.ProjectiveTensor \u2192 Prop :=\nfun p x =>\n  \u2200 (v : Conjecture6891.Tensor) (hv : v \u2260 0),\n    Projectivization.mk \u2102 v hv = x \u2192 (MvPolynomial.eval (Conjecture6891.coords v)) p = 0\ndef Conjecture6891.projectiveZeroLocus : Set (MvPolynomial Conjecture6891.Coordinate \u2102) \u2192\n  Set Conjecture6891.ProjectiveTensor :=\nfun P => {x | \u2200 p \u2208 P, Conjecture6891.ProjectiveVanishes p x}\ndef Conjecture6891.IsProjectiveAlgebraic : Set Conjecture6891.ProjectiveTensor \u2192 Prop :=\nfun Z => \u2203 P, (\u2200 p \u2208 P, \u2203 d, p.IsHomogeneous d) \u2227 Z = Conjecture6891.projectiveZeroLocus P\ndef Conjecture6891.projectiveZariskiClosure : Set Conjecture6891.ProjectiveTensor \u2192\n  Set Conjecture6891.ProjectiveTensor :=\nfun S =>\n  {x |\n    \u2200 (d : \u2115) (p : MvPolynomial Conjecture6891.Coordinate \u2102),\n      p.IsHomogeneous d \u2192 (\u2200 y \u2208 S, Conjecture6891.ProjectiveVanishes p y) \u2192 Conjecture6891.ProjectiveVanishes p x}\ndef Conjecture6891.segre : Set Conjecture6891.ProjectiveTensor :=\n{x | \u2203 a b c, \u2203 (h : Conjecture6891.pure a b c \u2260 0), Projectivization.mk \u2102 (Conjecture6891.pure a b c) h = x}\ndef Conjecture6891.secantSpanLocus : \u2115 \u2192 Set Conjecture6891.ProjectiveTensor :=\nfun r => {x | \u2203 q, (\u2200 (i : Fin r), q i \u2208 Conjecture6891.segre) \u2227 x \u2208 Projectivization.Subspace.span (Set.range q)}\ndef Conjecture6891.secantVariety : \u2115 \u2192 Set Conjecture6891.ProjectiveTensor :=\nfun r => Conjecture6891.projectiveZariskiClosure (Conjecture6891.secantSpanLocus r)\ndef Conjecture6891.pointSubspace : Conjecture6891.ProjectiveTensor \u2192\n  Projectivization.Subspace \u2102 Conjecture6891.Tensor :=\nfun x => { carrier := {x}, mem_add' := \u22ef }\ndef Conjecture6891.projectivizeSubmodule : Submodule \u2102 Conjecture6891.Tensor \u2192\n  Projectivization.Subspace \u2102 Conjecture6891.Tensor :=\nfun L => { carrier := {x | x.submodule \u2264 L}, mem_add' := \u22ef }\ndef Conjecture6891.vectorSubmodule : Projectivization.Subspace \u2102 Conjecture6891.Tensor \u2192\n  Submodule \u2102 Conjecture6891.Tensor :=\nfun P =>\n  { carrier := {v | \u2200 (hv : v \u2260 0), Projectivization.mk \u2102 v hv \u2208 P}, add_mem' := \u22ef, zero_mem' := \u22ef, smul_mem' := \u22ef }\ndef Conjecture6891.RankLE : \u2115 \u2192 Conjecture6891.Tensor \u2192 Prop :=\nfun r t => \u2203 a b c, t = \u2211 i, Conjecture6891.pure (a i) (b i) (c i)\ndef Conjecture6891.tensorRank : Conjecture6891.Tensor \u2192 \u2115 :=\nfun t => Nat.find \u22ef\nConjecture6891.secantSpanLocus_mono {r s : \u2115} (h : r \u2264 s) :\n  Conjecture6891.secantSpanLocus r \u2286 Conjecture6891.secantSpanLocus s\n'Conjecture6891.secantSpanLocus_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.secantVariety_mono {r s : \u2115} (h : r \u2264 s) :\n  Conjecture6891.secantVariety r \u2286 Conjecture6891.secantVariety s\n'Conjecture6891.secantVariety_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.exists_secantVariety (x : Conjecture6891.ProjectiveTensor) : \u2203 r, x \u2208 Conjecture6891.secantVariety r\n'Conjecture6891.exists_secantVariety' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.mem_secantVariety_index (x : Conjecture6891.ProjectiveTensor) :\n  x \u2208 Conjecture6891.secantVariety (Conjecture6891.secantIndex x)\n'Conjecture6891.mem_secantVariety_index' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.secantIndex_le_of_mem {x : Conjecture6891.ProjectiveTensor} {r : \u2115}\n  (h : x \u2208 Conjecture6891.secantVariety r) : Conjecture6891.secantIndex x \u2264 r\n'Conjecture6891.secantIndex_le_of_mem' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.secantIndex_pos (x : Conjecture6891.ProjectiveTensor) : 0 < Conjecture6891.secantIndex x\n'Conjecture6891.secantIndex_pos' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.secantIndex_projectiveW : Conjecture6891.secantIndex Conjecture6891.projectiveW = 2\n'Conjecture6891.secantIndex_projectiveW' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.rank_and_secant_index_counterexample :\n  Conjecture6891.W \u2260 0 \u2227\n    Conjecture6891.tensorRank Conjecture6891.W = 3 \u2227 Conjecture6891.secantIndex Conjecture6891.projectiveW = 2\n'Conjecture6891.rank_and_secant_index_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.conjecture_00000006891_false : \u00acConjecture6891.RankSecantHierarchyClaim\n'Conjecture6891.conjecture_00000006891_false' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.coords_U (i j k : Fin 2) :\n  Conjecture6891.coords Conjecture6891.U (i, j, k) =\n    Conjecture6891.e0 i * Conjecture6891.e1 j * Conjecture6891.e1 k +\n        Conjecture6891.e1 i * Conjecture6891.e0 j * Conjecture6891.e1 k +\n      Conjecture6891.e1 i * Conjecture6891.e1 j * Conjecture6891.e0 k\n'Conjecture6891.coords_U' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.coords_arc (t : \u2102) (i j k : Fin 2) :\n  Conjecture6891.coords (Conjecture6891.arc t) (i, j, k) =\n    Conjecture6891.coords Conjecture6891.W (i, j, k) + t * Conjecture6891.coords Conjecture6891.U (i, j, k) +\n      t ^ 2 * (Conjecture6891.e1 i * Conjecture6891.e1 j * Conjecture6891.e1 k)\n'Conjecture6891.coords_arc' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.arc_zero : Conjecture6891.arc 0 = Conjecture6891.W\n'Conjecture6891.arc_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.arc_ne_zero (t : \u2102) : Conjecture6891.arc t \u2260 0\n'Conjecture6891.arc_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.segreCurve_ne_zero (t : \u2102) : Conjecture6891.segreCurve t \u2260 0\n'Conjecture6891.segreCurve_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.baseTensor_ne_zero : Conjecture6891.baseTensor \u2260 0\n'Conjecture6891.baseTensor_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.smul_arc (t : \u2102) : t \u2022 Conjecture6891.arc t = Conjecture6891.segreCurve t - Conjecture6891.baseTensor\n'Conjecture6891.smul_arc' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.continuous_coords_arc : Continuous fun t => Conjecture6891.coords (Conjecture6891.arc t)\n'Conjecture6891.continuous_coords_arc' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveArc_zero : Conjecture6891.projectiveArc 0 = Conjecture6891.projectiveW\n'Conjecture6891.projectiveArc_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveCurve_ne_base (t : \u2102) (ht : t \u2260 0) :\n  Conjecture6891.projectiveCurve t \u2260 Conjecture6891.projectiveBase\n'Conjecture6891.projectiveCurve_ne_base' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveArc_mem_span (t : \u2102) (ht : t \u2260 0) :\n  Conjecture6891.projectiveArc t \u2208\n    Projectivization.Subspace.span (Set.range ![Conjecture6891.projectiveCurve t, Conjecture6891.projectiveBase])\n'Conjecture6891.projectiveArc_mem_span' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.sliceMinor_homogeneous : Conjecture6891.sliceMinor.IsHomogeneous 2\n'Conjecture6891.sliceMinor_homogeneous' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.sliceMinor_pure (a b c : Conjecture6891.Vector) :\n  (MvPolynomial.eval (Conjecture6891.coords (Conjecture6891.pure a b c))) Conjecture6891.sliceMinor = 0\n'Conjecture6891.sliceMinor_pure' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.sliceMinor_W :\n  (MvPolynomial.eval (Conjecture6891.coords Conjecture6891.W)) Conjecture6891.sliceMinor = -1\n'Conjecture6891.sliceMinor_W' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveCurve_mem_segre (t : \u2102) : Conjecture6891.projectiveCurve t \u2208 Conjecture6891.segre\n'Conjecture6891.projectiveCurve_mem_segre' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveBase_mem_segre : Conjecture6891.projectiveBase \u2208 Conjecture6891.segre\n'Conjecture6891.projectiveBase_mem_segre' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveArc_mem_secantSpanLocus_two (t : \u2102) (ht : t \u2260 0) :\n  Conjecture6891.projectiveArc t \u2208 Conjecture6891.secantSpanLocus 2\n'Conjecture6891.projectiveArc_mem_secantSpanLocus_two' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveW_mem_secantVariety_two : Conjecture6891.projectiveW \u2208 Conjecture6891.secantVariety 2\n'Conjecture6891.projectiveW_mem_secantVariety_two' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.sliceMinor_vanishes_on_segre (x : Conjecture6891.ProjectiveTensor) (hx : x \u2208 Conjecture6891.segre) :\n  Conjecture6891.ProjectiveVanishes Conjecture6891.sliceMinor x\n'Conjecture6891.sliceMinor_vanishes_on_segre' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveW_not_mem_secantVariety_one : Conjecture6891.projectiveW \u2209 Conjecture6891.secantVariety 1\n'Conjecture6891.projectiveW_not_mem_secantVariety_one' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveW_in_second_layer :\n  Conjecture6891.projectiveW \u2208 Conjecture6891.secantVariety 2 \u2227\n    Conjecture6891.projectiveW \u2209 Conjecture6891.secantVariety 1\n'Conjecture6891.projectiveW_in_second_layer' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.coords_pure (a b c : Conjecture6891.Vector) (i j k : Fin 2) :\n  Conjecture6891.coords (Conjecture6891.pure a b c) (i, j, k) = a i * b j * c k\n'Conjecture6891.coords_pure' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.tensor_ext {u v : Conjecture6891.Tensor}\n  (h : \u2200 (i j k : Fin 2), Conjecture6891.coords u (i, j, k) = Conjecture6891.coords v (i, j, k)) : u = v\n'Conjecture6891.tensor_ext' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.coords_W (i j k : Fin 2) :\n  Conjecture6891.coords Conjecture6891.W (i, j, k) =\n    Conjecture6891.e1 i * Conjecture6891.e0 j * Conjecture6891.e0 k +\n        Conjecture6891.e0 i * Conjecture6891.e1 j * Conjecture6891.e0 k +\n      Conjecture6891.e0 i * Conjecture6891.e0 j * Conjecture6891.e1 k\n'Conjecture6891.coords_W' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.W_ne_zero : Conjecture6891.W \u2260 0\n'Conjecture6891.W_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.pure_zero_left (b c : Conjecture6891.Vector) : Conjecture6891.pure 0 b c = 0\n'Conjecture6891.pure_zero_left' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.pure_smul_left (s : \u2102) (a b c : Conjecture6891.Vector) :\n  Conjecture6891.pure (s \u2022 a) b c = s \u2022 Conjecture6891.pure a b c\n'Conjecture6891.pure_smul_left' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.homogeneous_eval_smul {p : MvPolynomial Conjecture6891.Coordinate \u2102} {d : \u2115} (hp : p.IsHomogeneous d)\n  (c : \u2102) (z : Conjecture6891.Coordinate \u2192 \u2102) : (MvPolynomial.eval (c \u2022 z)) p = c ^ d * (MvPolynomial.eval z) p\n'Conjecture6891.homogeneous_eval_smul' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveVanishes_mk_iff {p : MvPolynomial Conjecture6891.Coordinate \u2102} {d : \u2115} (hp : p.IsHomogeneous d)\n  (v : Conjecture6891.Tensor) (hv : v \u2260 0) :\n  Conjecture6891.ProjectiveVanishes p (Projectivization.mk \u2102 v hv) \u2194 (MvPolynomial.eval (Conjecture6891.coords v)) p = 0\n'Conjecture6891.projectiveVanishes_mk_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.subset_projectiveZariskiClosure (S : Set Conjecture6891.ProjectiveTensor) :\n  S \u2286 Conjecture6891.projectiveZariskiClosure S\n'Conjecture6891.subset_projectiveZariskiClosure' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveZariskiClosure_mono {S T : Set Conjecture6891.ProjectiveTensor} (h : S \u2286 T) :\n  Conjecture6891.projectiveZariskiClosure S \u2286 Conjecture6891.projectiveZariskiClosure T\n'Conjecture6891.projectiveZariskiClosure_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveZariskiClosure_algebraic (S : Set Conjecture6891.ProjectiveTensor) :\n  Conjecture6891.IsProjectiveAlgebraic (Conjecture6891.projectiveZariskiClosure S)\n'Conjecture6891.projectiveZariskiClosure_algebraic' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveZariskiClosure_least {S Z : Set Conjecture6891.ProjectiveTensor}\n  (hZ : Conjecture6891.IsProjectiveAlgebraic Z) (hSZ : S \u2286 Z) : Conjecture6891.projectiveZariskiClosure S \u2286 Z\n'Conjecture6891.projectiveZariskiClosure_least' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveZariskiClosure_idem (S : Set Conjecture6891.ProjectiveTensor) :\n  Conjecture6891.projectiveZariskiClosure (Conjecture6891.projectiveZariskiClosure S) =\n    Conjecture6891.projectiveZariskiClosure S\n'Conjecture6891.projectiveZariskiClosure_idem' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.mem_pointSubspace (x y : Conjecture6891.ProjectiveTensor) : y \u2208 Conjecture6891.pointSubspace x \u2194 y = x\n'Conjecture6891.mem_pointSubspace' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projective_span_singleton (x : Conjecture6891.ProjectiveTensor) :\n  Projectivization.Subspace.span {x} = Conjecture6891.pointSubspace x\n'Conjecture6891.projective_span_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.secantSpanLocus_one : Conjecture6891.secantSpanLocus 1 = Conjecture6891.segre\n'Conjecture6891.secantSpanLocus_one' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.mk_mem_projectivizeSubmodule (L : Submodule \u2102 Conjecture6891.Tensor) (v : Conjecture6891.Tensor)\n  (hv : v \u2260 0) : Projectivization.mk \u2102 v hv \u2208 Conjecture6891.projectivizeSubmodule L \u2194 v \u2208 L\n'Conjecture6891.mk_mem_projectivizeSubmodule' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.mem_vectorSubmodule (P : Projectivization.Subspace \u2102 Conjecture6891.Tensor) (v : Conjecture6891.Tensor)\n  (hv : v \u2260 0) : v \u2208 Conjecture6891.vectorSubmodule P \u2194 Projectivization.mk \u2102 v hv \u2208 P\n'Conjecture6891.mem_vectorSubmodule' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projective_span_mk_iff.{u_1} {\u03b9 : Type u_1} (v : \u03b9 \u2192 Conjecture6891.Tensor) (hv : \u2200 (i : \u03b9), v i \u2260 0)\n  (x : Conjecture6891.Tensor) (hx : x \u2260 0) :\n  Projectivization.mk \u2102 x hx \u2208 Projectivization.Subspace.span (Set.range fun i => Projectivization.mk \u2102 (v i) \u22ef) \u2194\n    x \u2208 Submodule.span \u2102 (Set.range v)\n'Conjecture6891.projective_span_mk_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectivize_bot_empty : \u2191(Conjecture6891.projectivizeSubmodule \u22a5) = \u2205\n'Conjecture6891.projectivize_bot_empty' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.secantSpanLocus_zero : Conjecture6891.secantSpanLocus 0 = \u2205\n'Conjecture6891.secantSpanLocus_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.projectiveZariskiClosure_empty : Conjecture6891.projectiveZariskiClosure \u2205 = \u2205\n'Conjecture6891.projectiveZariskiClosure_empty' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.secantVariety_zero : Conjecture6891.secantVariety 0 = \u2205\n'Conjecture6891.secantVariety_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.pure_e0_ne_zero : Conjecture6891.pure Conjecture6891.e0 Conjecture6891.e0 Conjecture6891.e0 \u2260 0\n'Conjecture6891.pure_e0_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.mk_mem_secantSpanLocus_iff_rankLE (r : \u2115) (t : Conjecture6891.Tensor) (ht : t \u2260 0) :\n  Projectivization.mk \u2102 t ht \u2208 Conjecture6891.secantSpanLocus r \u2194 Conjecture6891.RankLE r t\n'Conjecture6891.mk_mem_secantSpanLocus_iff_rankLE' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.mk_mem_secantSpanLocus_iff_tensorRank_le (r : \u2115) (t : Conjecture6891.Tensor) (ht : t \u2260 0) :\n  Projectivization.mk \u2102 t ht \u2208 Conjecture6891.secantSpanLocus r \u2194 Conjecture6891.tensorRank t \u2264 r\n'Conjecture6891.mk_mem_secantSpanLocus_iff_tensorRank_le' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.exists_rankLE (t : Conjecture6891.Tensor) : \u2203 r, Conjecture6891.RankLE r t\n'Conjecture6891.exists_rankLE' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.tensorRank_has_decomposition (t : Conjecture6891.Tensor) :\n  Conjecture6891.RankLE (Conjecture6891.tensorRank t) t\n'Conjecture6891.tensorRank_has_decomposition' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.tensorRank_le_of_rankLE {r : \u2115} {t : Conjecture6891.Tensor} (h : Conjecture6891.RankLE r t) :\n  Conjecture6891.tensorRank t \u2264 r\n'Conjecture6891.tensorRank_le_of_rankLE' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.rankLE_succ {r : \u2115} {t : Conjecture6891.Tensor} (h : Conjecture6891.RankLE r t) :\n  Conjecture6891.RankLE (r + 1) t\n'Conjecture6891.rankLE_succ' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.rankLE_mono {r s : \u2115} {t : Conjecture6891.Tensor} (hrs : r \u2264 s) (h : Conjecture6891.RankLE r t) :\n  Conjecture6891.RankLE s t\n'Conjecture6891.rankLE_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.tensorRank_le_iff (t : Conjecture6891.Tensor) (r : \u2115) :\n  Conjecture6891.tensorRank t \u2264 r \u2194 Conjecture6891.RankLE r t\n'Conjecture6891.tensorRank_le_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.rankLE_smul {r : \u2115} {t : Conjecture6891.Tensor} (h : Conjecture6891.RankLE r t) (s : \u2102) :\n  Conjecture6891.RankLE r (s \u2022 t)\n'Conjecture6891.rankLE_smul' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.tensorRank_smul (s : \u2102) (hs : s \u2260 0) (t : Conjecture6891.Tensor) :\n  Conjecture6891.tensorRank (s \u2022 t) = Conjecture6891.tensorRank t\n'Conjecture6891.tensorRank_smul' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.rankLE_three_W : Conjecture6891.RankLE 3 Conjecture6891.W\n'Conjecture6891.rankLE_three_W' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.second_factor_coordinate_zero (a b c d e f : Conjecture6891.Vector)\n  (h : Conjecture6891.W = Conjecture6891.pure a b c + Conjecture6891.pure d e f) : d 1 = 0\n'Conjecture6891.second_factor_coordinate_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.W_ne_sum_two_pure (a b c d e f : Conjecture6891.Vector) :\n  Conjecture6891.W \u2260 Conjecture6891.pure a b c + Conjecture6891.pure d e f\n'Conjecture6891.W_ne_sum_two_pure' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.not_rankLE_two_W : \u00acConjecture6891.RankLE 2 Conjecture6891.W\n'Conjecture6891.not_rankLE_two_W' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6891.tensorRank_W : Conjecture6891.tensorRank Conjecture6891.W = 3\n'Conjecture6891.tensorRank_W' depends on axioms: [propext, Classical.choice, Quot.sound]\n"
+    }
+  ],
+  "verifier_sha256": "9c3efba08e6c270584918c78a81fd621734fe236d65213308bfd1a417343f4a3",
+  "audit_inventory_sha256_before": "c7b191c9cbb4ab3a79c8a8ca1eacd80cc09a4a75015525352c7d1a6b5e58d33c",
+  "expected_counts": {
+    "definitions_abbreviations_structures": 33,
+    "theorems": 69,
+    "named_instances": 0,
+    "type_and_axiom_audits": 69
+  },
+  "local_imports": {
+    "Check.lean": [
+      "Conjecture6891.lean"
+    ],
+    "Conjecture6891.lean": [
+      "Conjecture6891/Rank.lean",
+      "Conjecture6891/Arc.lean"
+    ],
+    "Conjecture6891/Arc.lean": [
+      "Conjecture6891/Projective.lean"
+    ],
+    "Conjecture6891/Core.lean": [],
+    "Conjecture6891/Projective.lean": [
+      "Conjecture6891/Rank.lean"
+    ],
+    "Conjecture6891/Rank.lean": [
+      "Conjecture6891/Core.lean"
+    ]
+  },
+  "named_instance_names": [],
+  "frozen_identity_record": {
+    "path": "/private/tmp/tlmc6891-frozen-sources.json",
+    "sha256": "aa8fae3472366e2d60514123af6cc916295af923698ea0ca12b525a8a93475f8",
+    "source_hashes_match_before": true,
+    "record_unchanged_after": true,
+    "source_hashes_match_after": true
+  },
+  "expected_dependency_pins": {
+    "mathlib": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+    "plausible": "77e08eddc486491d7b9e470926b3dbe50319451a",
+    "LeanSearchClient": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+    "importGraph": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+    "proofwidgets": "c4919189477c3221e6a204008998b0d724f49904",
+    "aesop": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+    "Qq": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+    "batteries": "f5d04a9c4973d401c8c92500711518f7c656f034",
+    "Cli": "02dbd02bc00ec4916e99b04b2245b30200e200d0"
+  },
+  "lean_version": {
+    "exit_code": 0,
+    "output": "Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)"
+  },
+  "lean_commit": {
+    "exit_code": 0,
+    "expected": "6caaee842e9495688c1567e78c0e68dbb96942aa",
+    "actual": "6caaee842e9495688c1567e78c0e68dbb96942aa"
+  },
+  "project_identity": {
+    "manifest_name": "tlmc6891",
+    "lake_name": "tlmc6891",
+    "default_targets": [
+      "Conjecture6891"
+    ],
+    "toolchain_pin": "leanprover/lean4:v4.19.0",
+    "source_file_count": 6,
+    "config_file_count": 3,
+    "dependency_symlink_target": "/private/tmp/tlmc310-proof/.lake/packages"
+  },
+  "source_declaration_inventory": {
+    "declarations": [
+      {
+        "kind": "abbrev",
+        "name": "Conjecture6891.Vector",
+        "file": "Conjecture6891/Core.lean",
+        "line": 12
+      },
+      {
+        "kind": "abbrev",
+        "name": "Conjecture6891.Tensor",
+        "file": "Conjecture6891/Core.lean",
+        "line": 13
+      },
+      {
+        "kind": "abbrev",
+        "name": "Conjecture6891.Coordinate",
+        "file": "Conjecture6891/Core.lean",
+        "line": 14
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.pure",
+        "file": "Conjecture6891/Core.lean",
+        "line": 16
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.tensorBasis",
+        "file": "Conjecture6891/Core.lean",
+        "line": 18
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.coords",
+        "file": "Conjecture6891/Core.lean",
+        "line": 22
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.coords_pure",
+        "file": "Conjecture6891/Core.lean",
+        "line": 24
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.tensor_ext",
+        "file": "Conjecture6891/Core.lean",
+        "line": 28
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.e0",
+        "file": "Conjecture6891/Core.lean",
+        "line": 34
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.e1",
+        "file": "Conjecture6891/Core.lean",
+        "line": 35
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.W",
+        "file": "Conjecture6891/Core.lean",
+        "line": 37
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.coords_W",
+        "file": "Conjecture6891/Core.lean",
+        "line": 39
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.W_ne_zero",
+        "file": "Conjecture6891/Core.lean",
+        "line": 44
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.pure_zero_left",
+        "file": "Conjecture6891/Core.lean",
+        "line": 49
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.pure_smul_left",
+        "file": "Conjecture6891/Core.lean",
+        "line": 52
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.RankLE",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 10
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.exists_rankLE",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 13
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.tensorRank",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 32
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.tensorRank_has_decomposition",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 36
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.tensorRank_le_of_rankLE",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 40
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.rankLE_succ",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 45
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.rankLE_mono",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 51
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.tensorRank_le_iff",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 57
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.rankLE_smul",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 63
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.tensorRank_smul",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 70
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.rankLE_three_W",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 78
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.second_factor_coordinate_zero",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 84
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.W_ne_sum_two_pure",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 111
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.not_rankLE_two_W",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 119
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.tensorRank_W",
+        "file": "Conjecture6891/Rank.lean",
+        "line": 124
+      },
+      {
+        "kind": "abbrev",
+        "name": "Conjecture6891.ProjectiveTensor",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 13
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.homogeneous_eval_smul",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 16
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.ProjectiveVanishes",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 32
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveVanishes_mk_iff",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 36
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.projectiveZeroLocus",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 47
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.IsProjectiveAlgebraic",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 51
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.projectiveZariskiClosure",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 56
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.subset_projectiveZariskiClosure",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 60
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveZariskiClosure_mono",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 65
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveZariskiClosure_algebraic",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 70
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveZariskiClosure_least",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 83
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveZariskiClosure_idem",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 91
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.segre",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 98
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.secantSpanLocus",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 103
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.secantVariety",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 108
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.pointSubspace",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 112
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.mem_pointSubspace",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 125
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projective_span_singleton",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 128
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.secantSpanLocus_one",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 134
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.projectivizeSubmodule",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 155
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.mk_mem_projectivizeSubmodule",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 163
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.vectorSubmodule",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 169
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.mem_vectorSubmodule",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 188
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projective_span_mk_iff",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 194
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectivize_bot_empty",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 217
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.secantSpanLocus_zero",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 228
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveZariskiClosure_empty",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 242
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.secantVariety_zero",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 252
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.pure_e0_ne_zero",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 256
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.mk_mem_secantSpanLocus_iff_rankLE",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 264
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.mk_mem_secantSpanLocus_iff_tensorRank_le",
+        "file": "Conjecture6891/Projective.lean",
+        "line": 303
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.U",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 10
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.arc",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 13
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.coords_U",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 15
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.coords_arc",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 20
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.arc_zero",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 25
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.arc_ne_zero",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 27
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.segreCurve",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 33
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.baseTensor",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 37
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.segreCurve_ne_zero",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 39
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.baseTensor_ne_zero",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 46
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.smul_arc",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 49
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.continuous_coords_arc",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 57
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.projectiveArc",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 65
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.projectiveCurve",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 68
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.projectiveBase",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 71
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.projectiveW",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 74
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveArc_zero",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 76
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveCurve_ne_base",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 80
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveArc_mem_span",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 91
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.sliceMinor",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 117
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.sliceMinor_homogeneous",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 121
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.sliceMinor_pure",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 126
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.sliceMinor_W",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 131
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveCurve_mem_segre",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 135
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveBase_mem_segre",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 138
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveArc_mem_secantSpanLocus_two",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 141
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveW_mem_secantVariety_two",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 150
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.sliceMinor_vanishes_on_segre",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 162
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveW_not_mem_secantVariety_one",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 169
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.projectiveW_in_second_layer",
+        "file": "Conjecture6891/Arc.lean",
+        "line": 179
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.secantSpanLocus_mono",
+        "file": "Conjecture6891.lean",
+        "line": 7
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.secantVariety_mono",
+        "file": "Conjecture6891.lean",
+        "line": 17
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.exists_secantVariety",
+        "file": "Conjecture6891.lean",
+        "line": 21
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.secantIndex",
+        "file": "Conjecture6891.lean",
+        "line": 29
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.mem_secantVariety_index",
+        "file": "Conjecture6891.lean",
+        "line": 33
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.secantIndex_le_of_mem",
+        "file": "Conjecture6891.lean",
+        "line": 37
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.secantIndex_pos",
+        "file": "Conjecture6891.lean",
+        "line": 42
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.secantIndex_projectiveW",
+        "file": "Conjecture6891.lean",
+        "line": 49
+      },
+      {
+        "kind": "def",
+        "name": "Conjecture6891.RankSecantHierarchyClaim",
+        "file": "Conjecture6891.lean",
+        "line": 60
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.rank_and_secant_index_counterexample",
+        "file": "Conjecture6891.lean",
+        "line": 64
+      },
+      {
+        "kind": "theorem",
+        "name": "Conjecture6891.conjecture_00000006891_false",
+        "file": "Conjecture6891.lean",
+        "line": 69
+      }
+    ],
+    "unnamed_declarations": [],
+    "unsupported_declarations": [],
+    "method": "Line-based independent declaration scan after masking comments/strings, tracking namespaces and sections. Simple guillemet-quoted components such as \u00abprefix\u00bb normalize to logical names. Anonymous/private or unsupported quoted declarations require explicit review rather than silent omission.",
+    "matches_supplied_inventory": true
+  },
+  "named_instance_coverage": {
+    "qualified_names": [],
+    "present_as_source_instances": true,
+    "present_in_supplied_instance_inventory": true,
+    "requested_and_emitted_type_once": true,
+    "requested_and_emitted_axiom_audit_once": true,
+    "actual_audits": []
+  },
+  "proof_bypass_scan": {
+    "pattern": "\\b(?:sorry|admit|axiom|native_decide|unsafe|partial|run_tac|run_elab|elab|macro|initialize|builtin_initialize|implemented_by|extern|skipKernelTC)\\b|Lean\\.ofReduceBool|debug\\.skipKernelTC|trustLevel|#eval\\b",
+    "method": "Lexical scan after masking nested block comments, line comments, and string literals; raw matches retained for inspection.",
+    "raw_matches": [],
+    "hits": []
+  },
+  "build": {
+    "command": [
+      "lake",
+      "build"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 14.745,
+    "log": "build.txt"
+  },
+  "axiom_audit": {
+    "expected_count": 69,
+    "parsed_count": 69,
+    "expected_theorems": [
+      "Conjecture6891.secantSpanLocus_mono",
+      "Conjecture6891.secantVariety_mono",
+      "Conjecture6891.exists_secantVariety",
+      "Conjecture6891.mem_secantVariety_index",
+      "Conjecture6891.secantIndex_le_of_mem",
+      "Conjecture6891.secantIndex_pos",
+      "Conjecture6891.secantIndex_projectiveW",
+      "Conjecture6891.rank_and_secant_index_counterexample",
+      "Conjecture6891.conjecture_00000006891_false",
+      "Conjecture6891.coords_U",
+      "Conjecture6891.coords_arc",
+      "Conjecture6891.arc_zero",
+      "Conjecture6891.arc_ne_zero",
+      "Conjecture6891.segreCurve_ne_zero",
+      "Conjecture6891.baseTensor_ne_zero",
+      "Conjecture6891.smul_arc",
+      "Conjecture6891.continuous_coords_arc",
+      "Conjecture6891.projectiveArc_zero",
+      "Conjecture6891.projectiveCurve_ne_base",
+      "Conjecture6891.projectiveArc_mem_span",
+      "Conjecture6891.sliceMinor_homogeneous",
+      "Conjecture6891.sliceMinor_pure",
+      "Conjecture6891.sliceMinor_W",
+      "Conjecture6891.projectiveCurve_mem_segre",
+      "Conjecture6891.projectiveBase_mem_segre",
+      "Conjecture6891.projectiveArc_mem_secantSpanLocus_two",
+      "Conjecture6891.projectiveW_mem_secantVariety_two",
+      "Conjecture6891.sliceMinor_vanishes_on_segre",
+      "Conjecture6891.projectiveW_not_mem_secantVariety_one",
+      "Conjecture6891.projectiveW_in_second_layer",
+      "Conjecture6891.coords_pure",
+      "Conjecture6891.tensor_ext",
+      "Conjecture6891.coords_W",
+      "Conjecture6891.W_ne_zero",
+      "Conjecture6891.pure_zero_left",
+      "Conjecture6891.pure_smul_left",
+      "Conjecture6891.homogeneous_eval_smul",
+      "Conjecture6891.projectiveVanishes_mk_iff",
+      "Conjecture6891.subset_projectiveZariskiClosure",
+      "Conjecture6891.projectiveZariskiClosure_mono",
+      "Conjecture6891.projectiveZariskiClosure_algebraic",
+      "Conjecture6891.projectiveZariskiClosure_least",
+      "Conjecture6891.projectiveZariskiClosure_idem",
+      "Conjecture6891.mem_pointSubspace",
+      "Conjecture6891.projective_span_singleton",
+      "Conjecture6891.secantSpanLocus_one",
+      "Conjecture6891.mk_mem_projectivizeSubmodule",
+      "Conjecture6891.mem_vectorSubmodule",
+      "Conjecture6891.projective_span_mk_iff",
+      "Conjecture6891.projectivize_bot_empty",
+      "Conjecture6891.secantSpanLocus_zero",
+      "Conjecture6891.projectiveZariskiClosure_empty",
+      "Conjecture6891.secantVariety_zero",
+      "Conjecture6891.pure_e0_ne_zero",
+      "Conjecture6891.mk_mem_secantSpanLocus_iff_rankLE",
+      "Conjecture6891.mk_mem_secantSpanLocus_iff_tensorRank_le",
+      "Conjecture6891.exists_rankLE",
+      "Conjecture6891.tensorRank_has_decomposition",
+      "Conjecture6891.tensorRank_le_of_rankLE",
+      "Conjecture6891.rankLE_succ",
+      "Conjecture6891.rankLE_mono",
+      "Conjecture6891.tensorRank_le_iff",
+      "Conjecture6891.rankLE_smul",
+      "Conjecture6891.tensorRank_smul",
+      "Conjecture6891.rankLE_three_W",
+      "Conjecture6891.second_factor_coordinate_zero",
+      "Conjecture6891.W_ne_sum_two_pure",
+      "Conjecture6891.not_rankLE_two_W",
+      "Conjecture6891.tensorRank_W"
+    ],
+    "audits": [
+      {
+        "theorem": "Conjecture6891.secantSpanLocus_mono",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.secantVariety_mono",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.exists_secantVariety",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.mem_secantVariety_index",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.secantIndex_le_of_mem",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.secantIndex_pos",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.secantIndex_projectiveW",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.rank_and_secant_index_counterexample",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.conjecture_00000006891_false",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.coords_U",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.coords_arc",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.arc_zero",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.arc_ne_zero",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.segreCurve_ne_zero",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.baseTensor_ne_zero",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.smul_arc",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.continuous_coords_arc",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveArc_zero",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveCurve_ne_base",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveArc_mem_span",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.sliceMinor_homogeneous",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.sliceMinor_pure",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.sliceMinor_W",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveCurve_mem_segre",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveBase_mem_segre",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveArc_mem_secantSpanLocus_two",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveW_mem_secantVariety_two",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.sliceMinor_vanishes_on_segre",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveW_not_mem_secantVariety_one",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveW_in_second_layer",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.coords_pure",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.tensor_ext",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.coords_W",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.W_ne_zero",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.pure_zero_left",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.pure_smul_left",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.homogeneous_eval_smul",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveVanishes_mk_iff",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.subset_projectiveZariskiClosure",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveZariskiClosure_mono",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveZariskiClosure_algebraic",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveZariskiClosure_least",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveZariskiClosure_idem",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.mem_pointSubspace",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projective_span_singleton",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.secantSpanLocus_one",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.mk_mem_projectivizeSubmodule",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.mem_vectorSubmodule",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projective_span_mk_iff",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectivize_bot_empty",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.secantSpanLocus_zero",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.projectiveZariskiClosure_empty",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.secantVariety_zero",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.pure_e0_ne_zero",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.mk_mem_secantSpanLocus_iff_rankLE",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.mk_mem_secantSpanLocus_iff_tensorRank_le",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.exists_rankLE",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.tensorRank_has_decomposition",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.tensorRank_le_of_rankLE",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.rankLE_succ",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.rankLE_mono",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.tensorRank_le_iff",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.rankLE_smul",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.tensorRank_smul",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.rankLE_three_W",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.second_factor_coordinate_zero",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.W_ne_sum_two_pure",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.not_rankLE_two_W",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6891.tensorRank_W",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
+    ],
+    "allowed_axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "all_names_match": true,
+    "only_allowed_axioms": true,
+    "theorem_lemma_count": 69,
+    "named_instance_count": 0,
+    "zero_axiom_declarations": []
+  },
+  "independent_sha256": {
+    "Conjecture6891/Core.lean": "5b03b887e0a3547fa484966243e84f95abf349d86b384b27b9acfc8b52a91898",
+    "Conjecture6891/Rank.lean": "90c1cfb8b9d76b6311bf697401e54b4092e7d0cf05d184db925999a1a2c0b99b",
+    "Conjecture6891/Projective.lean": "ca4fab215bcb3b94c09c4988dc5ce3fd47f45374915ef45c32d23396cf45d2a0",
+    "Conjecture6891/Arc.lean": "90d1f8e863b12636014c8bd96bfbe1d3a41341b03ee6dc7205b68848acfafa57",
+    "Conjecture6891.lean": "b2a408f374022672574ea19e56da07f0aec5eb911d7282d15cbdf8dbb91ef7e0",
+    "Check.lean": "060559f910abf209844b719235c9cc1ecd2e1b79d309bc364378ccba9f00e411",
+    "lakefile.toml": "709c2281d68750a80a7ab40e75f1becd09c8964007b5680e6f7d5ad19f356df4",
+    "lake-manifest.json": "c3b981fdf0a076d7be53cfddf2b82cec0274d51df1a945f36b6fabcfe5906b43",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "source_unchanged": true,
+  "copied_files_unchanged": true,
+  "definition_and_type_audit": {
+    "definition_names": [
+      "Conjecture6891.secantIndex",
+      "Conjecture6891.RankSecantHierarchyClaim",
+      "Conjecture6891.U",
+      "Conjecture6891.arc",
+      "Conjecture6891.segreCurve",
+      "Conjecture6891.baseTensor",
+      "Conjecture6891.projectiveArc",
+      "Conjecture6891.projectiveCurve",
+      "Conjecture6891.projectiveBase",
+      "Conjecture6891.projectiveW",
+      "Conjecture6891.sliceMinor",
+      "Conjecture6891.Vector",
+      "Conjecture6891.Tensor",
+      "Conjecture6891.Coordinate",
+      "Conjecture6891.pure",
+      "Conjecture6891.tensorBasis",
+      "Conjecture6891.coords",
+      "Conjecture6891.e0",
+      "Conjecture6891.e1",
+      "Conjecture6891.W",
+      "Conjecture6891.ProjectiveTensor",
+      "Conjecture6891.ProjectiveVanishes",
+      "Conjecture6891.projectiveZeroLocus",
+      "Conjecture6891.IsProjectiveAlgebraic",
+      "Conjecture6891.projectiveZariskiClosure",
+      "Conjecture6891.segre",
+      "Conjecture6891.secantSpanLocus",
+      "Conjecture6891.secantVariety",
+      "Conjecture6891.pointSubspace",
+      "Conjecture6891.projectivizeSubmodule",
+      "Conjecture6891.vectorSubmodule",
+      "Conjecture6891.RankLE",
+      "Conjecture6891.tensorRank"
+    ],
+    "definition_count": 33,
+    "checked_theorem_names": [
+      "Conjecture6891.secantSpanLocus_mono",
+      "Conjecture6891.secantVariety_mono",
+      "Conjecture6891.exists_secantVariety",
+      "Conjecture6891.mem_secantVariety_index",
+      "Conjecture6891.secantIndex_le_of_mem",
+      "Conjecture6891.secantIndex_pos",
+      "Conjecture6891.secantIndex_projectiveW",
+      "Conjecture6891.rank_and_secant_index_counterexample",
+      "Conjecture6891.conjecture_00000006891_false",
+      "Conjecture6891.coords_U",
+      "Conjecture6891.coords_arc",
+      "Conjecture6891.arc_zero",
+      "Conjecture6891.arc_ne_zero",
+      "Conjecture6891.segreCurve_ne_zero",
+      "Conjecture6891.baseTensor_ne_zero",
+      "Conjecture6891.smul_arc",
+      "Conjecture6891.continuous_coords_arc",
+      "Conjecture6891.projectiveArc_zero",
+      "Conjecture6891.projectiveCurve_ne_base",
+      "Conjecture6891.projectiveArc_mem_span",
+      "Conjecture6891.sliceMinor_homogeneous",
+      "Conjecture6891.sliceMinor_pure",
+      "Conjecture6891.sliceMinor_W",
+      "Conjecture6891.projectiveCurve_mem_segre",
+      "Conjecture6891.projectiveBase_mem_segre",
+      "Conjecture6891.projectiveArc_mem_secantSpanLocus_two",
+      "Conjecture6891.projectiveW_mem_secantVariety_two",
+      "Conjecture6891.sliceMinor_vanishes_on_segre",
+      "Conjecture6891.projectiveW_not_mem_secantVariety_one",
+      "Conjecture6891.projectiveW_in_second_layer",
+      "Conjecture6891.coords_pure",
+      "Conjecture6891.tensor_ext",
+      "Conjecture6891.coords_W",
+      "Conjecture6891.W_ne_zero",
+      "Conjecture6891.pure_zero_left",
+      "Conjecture6891.pure_smul_left",
+      "Conjecture6891.homogeneous_eval_smul",
+      "Conjecture6891.projectiveVanishes_mk_iff",
+      "Conjecture6891.subset_projectiveZariskiClosure",
+      "Conjecture6891.projectiveZariskiClosure_mono",
+      "Conjecture6891.projectiveZariskiClosure_algebraic",
+      "Conjecture6891.projectiveZariskiClosure_least",
+      "Conjecture6891.projectiveZariskiClosure_idem",
+      "Conjecture6891.mem_pointSubspace",
+      "Conjecture6891.projective_span_singleton",
+      "Conjecture6891.secantSpanLocus_one",
+      "Conjecture6891.mk_mem_projectivizeSubmodule",
+      "Conjecture6891.mem_vectorSubmodule",
+      "Conjecture6891.projective_span_mk_iff",
+      "Conjecture6891.projectivize_bot_empty",
+      "Conjecture6891.secantSpanLocus_zero",
+      "Conjecture6891.projectiveZariskiClosure_empty",
+      "Conjecture6891.secantVariety_zero",
+      "Conjecture6891.pure_e0_ne_zero",
+      "Conjecture6891.mk_mem_secantSpanLocus_iff_rankLE",
+      "Conjecture6891.mk_mem_secantSpanLocus_iff_tensorRank_le",
+      "Conjecture6891.exists_rankLE",
+      "Conjecture6891.tensorRank_has_decomposition",
+      "Conjecture6891.tensorRank_le_of_rankLE",
+      "Conjecture6891.rankLE_succ",
+      "Conjecture6891.rankLE_mono",
+      "Conjecture6891.tensorRank_le_iff",
+      "Conjecture6891.rankLE_smul",
+      "Conjecture6891.tensorRank_smul",
+      "Conjecture6891.rankLE_three_W",
+      "Conjecture6891.second_factor_coordinate_zero",
+      "Conjecture6891.W_ne_sum_two_pure",
+      "Conjecture6891.not_rankLE_two_W",
+      "Conjecture6891.tensorRank_W"
+    ],
+    "checked_theorem_count": 69,
+    "checked_names_match_audits": true,
+    "printed_definition_names": [
+      "Conjecture6891.secantIndex",
+      "Conjecture6891.RankSecantHierarchyClaim",
+      "Conjecture6891.U",
+      "Conjecture6891.arc",
+      "Conjecture6891.segreCurve",
+      "Conjecture6891.baseTensor",
+      "Conjecture6891.projectiveArc",
+      "Conjecture6891.projectiveCurve",
+      "Conjecture6891.projectiveBase",
+      "Conjecture6891.projectiveW",
+      "Conjecture6891.sliceMinor",
+      "Conjecture6891.Vector",
+      "Conjecture6891.Tensor",
+      "Conjecture6891.Coordinate",
+      "Conjecture6891.pure",
+      "Conjecture6891.tensorBasis",
+      "Conjecture6891.coords",
+      "Conjecture6891.e0",
+      "Conjecture6891.e1",
+      "Conjecture6891.W",
+      "Conjecture6891.ProjectiveTensor",
+      "Conjecture6891.ProjectiveVanishes",
+      "Conjecture6891.projectiveZeroLocus",
+      "Conjecture6891.IsProjectiveAlgebraic",
+      "Conjecture6891.projectiveZariskiClosure",
+      "Conjecture6891.segre",
+      "Conjecture6891.secantSpanLocus",
+      "Conjecture6891.secantVariety",
+      "Conjecture6891.pointSubspace",
+      "Conjecture6891.projectivizeSubmodule",
+      "Conjecture6891.vectorSubmodule",
+      "Conjecture6891.RankLE",
+      "Conjecture6891.tensorRank"
+    ],
+    "printed_definition_count": 33,
+    "printed_definition_names_match": true,
+    "printed_theorem_type_names": [
+      "Conjecture6891.secantSpanLocus_mono",
+      "Conjecture6891.secantVariety_mono",
+      "Conjecture6891.exists_secantVariety",
+      "Conjecture6891.mem_secantVariety_index",
+      "Conjecture6891.secantIndex_le_of_mem",
+      "Conjecture6891.secantIndex_pos",
+      "Conjecture6891.secantIndex_projectiveW",
+      "Conjecture6891.rank_and_secant_index_counterexample",
+      "Conjecture6891.conjecture_00000006891_false",
+      "Conjecture6891.coords_U",
+      "Conjecture6891.coords_arc",
+      "Conjecture6891.arc_zero",
+      "Conjecture6891.arc_ne_zero",
+      "Conjecture6891.segreCurve_ne_zero",
+      "Conjecture6891.baseTensor_ne_zero",
+      "Conjecture6891.smul_arc",
+      "Conjecture6891.continuous_coords_arc",
+      "Conjecture6891.projectiveArc_zero",
+      "Conjecture6891.projectiveCurve_ne_base",
+      "Conjecture6891.projectiveArc_mem_span",
+      "Conjecture6891.sliceMinor_homogeneous",
+      "Conjecture6891.sliceMinor_pure",
+      "Conjecture6891.sliceMinor_W",
+      "Conjecture6891.projectiveCurve_mem_segre",
+      "Conjecture6891.projectiveBase_mem_segre",
+      "Conjecture6891.projectiveArc_mem_secantSpanLocus_two",
+      "Conjecture6891.projectiveW_mem_secantVariety_two",
+      "Conjecture6891.sliceMinor_vanishes_on_segre",
+      "Conjecture6891.projectiveW_not_mem_secantVariety_one",
+      "Conjecture6891.projectiveW_in_second_layer",
+      "Conjecture6891.coords_pure",
+      "Conjecture6891.tensor_ext",
+      "Conjecture6891.coords_W",
+      "Conjecture6891.W_ne_zero",
+      "Conjecture6891.pure_zero_left",
+      "Conjecture6891.pure_smul_left",
+      "Conjecture6891.homogeneous_eval_smul",
+      "Conjecture6891.projectiveVanishes_mk_iff",
+      "Conjecture6891.subset_projectiveZariskiClosure",
+      "Conjecture6891.projectiveZariskiClosure_mono",
+      "Conjecture6891.projectiveZariskiClosure_algebraic",
+      "Conjecture6891.projectiveZariskiClosure_least",
+      "Conjecture6891.projectiveZariskiClosure_idem",
+      "Conjecture6891.mem_pointSubspace",
+      "Conjecture6891.projective_span_singleton",
+      "Conjecture6891.secantSpanLocus_one",
+      "Conjecture6891.mk_mem_projectivizeSubmodule",
+      "Conjecture6891.mem_vectorSubmodule",
+      "Conjecture6891.projective_span_mk_iff",
+      "Conjecture6891.projectivize_bot_empty",
+      "Conjecture6891.secantSpanLocus_zero",
+      "Conjecture6891.projectiveZariskiClosure_empty",
+      "Conjecture6891.secantVariety_zero",
+      "Conjecture6891.pure_e0_ne_zero",
+      "Conjecture6891.mk_mem_secantSpanLocus_iff_rankLE",
+      "Conjecture6891.mk_mem_secantSpanLocus_iff_tensorRank_le",
+      "Conjecture6891.exists_rankLE",
+      "Conjecture6891.tensorRank_has_decomposition",
+      "Conjecture6891.tensorRank_le_of_rankLE",
+      "Conjecture6891.rankLE_succ",
+      "Conjecture6891.rankLE_mono",
+      "Conjecture6891.tensorRank_le_iff",
+      "Conjecture6891.rankLE_smul",
+      "Conjecture6891.tensorRank_smul",
+      "Conjecture6891.rankLE_three_W",
+      "Conjecture6891.second_factor_coordinate_zero",
+      "Conjecture6891.W_ne_sum_two_pure",
+      "Conjecture6891.not_rankLE_two_W",
+      "Conjecture6891.tensorRank_W"
+    ],
+    "printed_theorem_type_count": 69,
+    "printed_theorem_type_names_match": true
+  },
+  "audit_inventory_sha256": "c7b191c9cbb4ab3a79c8a8ca1eacd80cc09a4a75015525352c7d1a6b5e58d33c",
+  "execution_audit_scope": "Fresh independent build and trust/identity verification; separate from the independent semantic review.",
+  "complete_environment_audit": {
+    "method": "Enumerate imported environment constants by actual originating module; emit full type, declaration kind, safety flags and transitive collectAxioms result for every constant. No name-prefix filter or silent exclusion.",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-DwarningAsError=true",
+      "IndependentEnvironmentInventory.lean"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 24.355,
+    "module_names": [
+      "Conjecture6891.Core",
+      "Conjecture6891.Rank",
+      "Conjecture6891.Projective",
+      "Conjecture6891.Arc",
+      "Conjecture6891"
+    ],
+    "harness_sha256": "d8ba69fc58b5f7d0522d94f9eb695c8ba8140c610605ddc3580e0949fe7d2953",
+    "log": "environment-inventory.txt",
+    "parsed_count": 147,
+    "emitted_count_markers": [
+      147
+    ],
+    "authored_count": 102,
+    "all_authored_names_present": true,
+    "generated_or_additional_names": [
+      "Conjecture6891.U.eq_1",
+      "Conjecture6891.W.eq_1",
+      "Conjecture6891.arc.eq_1",
+      "Conjecture6891.baseTensor.eq_1",
+      "Conjecture6891.conjecture_00000006891_false._proof_1",
+      "Conjecture6891.coords._proof_3",
+      "Conjecture6891.coords.eq_1",
+      "Conjecture6891.e0._closed_1._cstage2",
+      "Conjecture6891.e0._closed_2._cstage2",
+      "Conjecture6891.e0._closed_3._cstage2",
+      "Conjecture6891.e0._closed_4._cstage2",
+      "Conjecture6891.e0._cstage1",
+      "Conjecture6891.e0._cstage2",
+      "Conjecture6891.e0.eq_1",
+      "Conjecture6891.e1._closed_1._cstage2",
+      "Conjecture6891.e1._cstage1",
+      "Conjecture6891.e1._cstage2",
+      "Conjecture6891.e1.eq_1",
+      "Conjecture6891.mk_mem_secantSpanLocus_iff_rankLE._proof_10",
+      "Conjecture6891.pointSubspace._proof_2",
+      "Conjecture6891.projectiveArc.eq_1",
+      "Conjecture6891.projectiveW.eq_1",
+      "Conjecture6891.projectiveZariskiClosure_empty._proof_10",
+      "Conjecture6891.projectivizeSubmodule._proof_4",
+      "Conjecture6891.pure.eq_1",
+      "Conjecture6891.secantIndex_pos._proof_1",
+      "Conjecture6891.secantIndex_projectiveW._proof_1",
+      "Conjecture6891.secantSpanLocus_one._proof_4",
+      "Conjecture6891.secantVariety.eq_1",
+      "Conjecture6891.segre._cstage1",
+      "Conjecture6891.segre._cstage2",
+      "Conjecture6891.segreCurve.eq_1",
+      "Conjecture6891.sliceMinor._proof_1",
+      "Conjecture6891.sliceMinor.eq_1",
+      "Conjecture6891.tensorBasis._proof_1",
+      "Conjecture6891.tensorBasis._proof_2",
+      "Conjecture6891.tensorBasis.eq_1",
+      "Conjecture6891.tensorRank_W._proof_1",
+      "Conjecture6891.vectorSubmodule._proof_6",
+      "Conjecture6891.vectorSubmodule._proof_7",
+      "Conjecture6891.vectorSubmodule._proof_8",
+      "_private.Conjecture6891.Projective.0._proof_1",
+      "_private.Conjecture6891.Projective.0._proof_3",
+      "_private.Conjecture6891.Projective.0._proof_5",
+      "_private.Conjecture6891.Projective.0._proof_9"
+    ],
+    "generated_or_additional_count": 45,
+    "compiler_runtime_generated_names": [
+      "Conjecture6891.e0._closed_1._cstage2",
+      "Conjecture6891.e0._closed_2._cstage2",
+      "Conjecture6891.e0._closed_3._cstage2",
+      "Conjecture6891.e0._closed_4._cstage2",
+      "Conjecture6891.e0._cstage1",
+      "Conjecture6891.e0._cstage2",
+      "Conjecture6891.e1._closed_1._cstage2",
+      "Conjecture6891.e1._cstage1",
+      "Conjecture6891.e1._cstage2",
+      "Conjecture6891.segre._cstage1",
+      "Conjecture6891.segre._cstage2"
+    ],
+    "compiler_runtime_note": "All runtime constants remain included and axiom-audited; _cstage1/_cstage2 compiler outputs are distinguished from safe kernel-level authored declarations.",
+    "unexpected_unsafe": [],
+    "partial_declarations": [],
+    "axiom_declarations": [],
+    "only_allowed_axioms": true,
+    "declarations": [
+      {
+        "unsafe": false,
+        "type": "Type",
+        "partial": false,
+        "name": "Conjecture6891.Coordinate",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": []
+      },
+      {
+        "unsafe": false,
+        "type": "Set.{0} Conjecture6891.ProjectiveTensor \u2192 Prop",
+        "partial": false,
+        "name": "Conjecture6891.IsProjectiveAlgebraic",
+        "module": "Conjecture6891.Projective",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Type",
+        "partial": false,
+        "name": "Conjecture6891.ProjectiveTensor",
+        "module": "Conjecture6891.Projective",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "MvPolynomial.{0, 0} Conjecture6891.Coordinate Complex \u2192 Conjecture6891.ProjectiveTensor \u2192 Prop",
+        "partial": false,
+        "name": "Conjecture6891.ProjectiveVanishes",
+        "module": "Conjecture6891.Projective",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Nat \u2192 Conjecture6891.Tensor \u2192 Prop",
+        "partial": false,
+        "name": "Conjecture6891.RankLE",
+        "module": "Conjecture6891.Rank",
+        "kind": "definition",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Prop",
+        "partial": false,
+        "name": "Conjecture6891.RankSecantHierarchyClaim",
+        "module": "Conjecture6891",
+        "kind": "definition",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Type",
+        "partial": false,
+        "name": "Conjecture6891.Tensor",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Conjecture6891.Tensor",
+        "partial": false,
+        "name": "Conjecture6891.U",
+        "module": "Conjecture6891.Arc",
+        "kind": "definition",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} Conjecture6891.U\n  (HAdd.hAdd.{0, 0, 0}\n    (HAdd.hAdd.{0, 0, 0} (Conjecture6891.pure Conjecture6891.e0 Conjecture6891.e1 Conjecture6891.e1)\n      (Conjecture6891.pure Conjecture6891.e1 Conjecture6891.e0 Conjecture6891.e1))\n    (Conjecture6891.pure Conjecture6891.e1 Conjecture6891.e1 Conjecture6891.e0))",
+        "partial": false,
+        "name": "Conjecture6891.U.eq_1",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Type",
+        "partial": false,
+        "name": "Conjecture6891.Vector",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Conjecture6891.Tensor",
+        "partial": false,
+        "name": "Conjecture6891.W",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} Conjecture6891.W\n  (HAdd.hAdd.{0, 0, 0}\n    (HAdd.hAdd.{0, 0, 0} (Conjecture6891.pure Conjecture6891.e1 Conjecture6891.e0 Conjecture6891.e0)\n      (Conjecture6891.pure Conjecture6891.e0 Conjecture6891.e1 Conjecture6891.e0))\n    (Conjecture6891.pure Conjecture6891.e0 Conjecture6891.e0 Conjecture6891.e1))",
+        "partial": false,
+        "name": "Conjecture6891.W.eq_1",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (a b c d e f : Conjecture6891.Vector),\n  Ne.{1} Conjecture6891.W (HAdd.hAdd.{0, 0, 0} (Conjecture6891.pure a b c) (Conjecture6891.pure d e f))",
+        "partial": false,
+        "name": "Conjecture6891.W_ne_sum_two_pure",
+        "module": "Conjecture6891.Rank",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Ne.{1} Conjecture6891.W 0",
+        "partial": false,
+        "name": "Conjecture6891.W_ne_zero",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Complex \u2192 Conjecture6891.Tensor",
+        "partial": false,
+        "name": "Conjecture6891.arc",
+        "module": "Conjecture6891.Arc",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (t : Complex),\n  Eq.{1} (Conjecture6891.arc t)\n    (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} Conjecture6891.W (HSMul.hSMul.{0, 0, 0} t Conjecture6891.U))\n      (HSMul.hSMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} t 2)\n        (Conjecture6891.pure Conjecture6891.e1 Conjecture6891.e1 Conjecture6891.e1)))",
+        "partial": false,
+        "name": "Conjecture6891.arc.eq_1",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (t : Complex), Ne.{1} (Conjecture6891.arc t) 0",
+        "partial": false,
+        "name": "Conjecture6891.arc_ne_zero",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} (Conjecture6891.arc 0) Conjecture6891.W",
+        "partial": false,
+        "name": "Conjecture6891.arc_zero",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Conjecture6891.Tensor",
+        "partial": false,
+        "name": "Conjecture6891.baseTensor",
+        "module": "Conjecture6891.Arc",
+        "kind": "definition",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} Conjecture6891.baseTensor (Conjecture6891.pure Conjecture6891.e0 Conjecture6891.e0 Conjecture6891.e0)",
+        "partial": false,
+        "name": "Conjecture6891.baseTensor.eq_1",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Ne.{1} Conjecture6891.baseTensor 0",
+        "partial": false,
+        "name": "Conjecture6891.baseTensor_ne_zero",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Not Conjecture6891.RankSecantHierarchyClaim",
+        "partial": false,
+        "name": "Conjecture6891.conjecture_00000006891_false",
+        "module": "Conjecture6891",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} 3 2 \u2192 False",
+        "partial": false,
+        "name": "Conjecture6891.conjecture_00000006891_false._proof_1",
+        "module": "Conjecture6891",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Continuous.{0, 0} fun t => Conjecture6891.coords (Conjecture6891.arc t)",
+        "partial": false,
+        "name": "Conjecture6891.continuous_coords_arc",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "LinearEquiv.{0, 0, 0, 0} (RingHom.id.{0} Complex) Conjecture6891.Tensor (Conjecture6891.Coordinate \u2192 Complex)",
+        "partial": false,
+        "name": "Conjecture6891.coords",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Finite.{1} (Prod.{0, 0} (Fin 2) (Prod.{0, 0} (Fin 2) (Fin 2)))",
+        "partial": false,
+        "name": "Conjecture6891.coords._proof_3",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} Conjecture6891.coords (Basis.equivFun.{0, 0, 0} Conjecture6891.tensorBasis)",
+        "partial": false,
+        "name": "Conjecture6891.coords.eq_1",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (i j k : Fin 2),\n  Eq.{1} (Conjecture6891.coords Conjecture6891.U (Prod.mk.{0, 0} i (Prod.mk.{0, 0} j k)))\n    (HAdd.hAdd.{0, 0, 0}\n      (HAdd.hAdd.{0, 0, 0}\n        (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (Conjecture6891.e0 i) (Conjecture6891.e1 j)) (Conjecture6891.e1 k))\n        (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (Conjecture6891.e1 i) (Conjecture6891.e0 j)) (Conjecture6891.e1 k)))\n      (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (Conjecture6891.e1 i) (Conjecture6891.e1 j)) (Conjecture6891.e0 k)))",
+        "partial": false,
+        "name": "Conjecture6891.coords_U",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (i j k : Fin 2),\n  Eq.{1} (Conjecture6891.coords Conjecture6891.W (Prod.mk.{0, 0} i (Prod.mk.{0, 0} j k)))\n    (HAdd.hAdd.{0, 0, 0}\n      (HAdd.hAdd.{0, 0, 0}\n        (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (Conjecture6891.e1 i) (Conjecture6891.e0 j)) (Conjecture6891.e0 k))\n        (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (Conjecture6891.e0 i) (Conjecture6891.e1 j)) (Conjecture6891.e0 k)))\n      (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (Conjecture6891.e0 i) (Conjecture6891.e0 j)) (Conjecture6891.e1 k)))",
+        "partial": false,
+        "name": "Conjecture6891.coords_W",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (t : Complex) (i j k : Fin 2),\n  Eq.{1} (Conjecture6891.coords (Conjecture6891.arc t) (Prod.mk.{0, 0} i (Prod.mk.{0, 0} j k)))\n    (HAdd.hAdd.{0, 0, 0}\n      (HAdd.hAdd.{0, 0, 0} (Conjecture6891.coords Conjecture6891.W (Prod.mk.{0, 0} i (Prod.mk.{0, 0} j k)))\n        (HMul.hMul.{0, 0, 0} t (Conjecture6891.coords Conjecture6891.U (Prod.mk.{0, 0} i (Prod.mk.{0, 0} j k)))))\n      (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} t 2)\n        (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (Conjecture6891.e1 i) (Conjecture6891.e1 j)) (Conjecture6891.e1 k))))",
+        "partial": false,
+        "name": "Conjecture6891.coords_arc",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (a b c : Conjecture6891.Vector) (i j k : Fin 2),\n  Eq.{1} (Conjecture6891.coords (Conjecture6891.pure a b c) (Prod.mk.{0, 0} i (Prod.mk.{0, 0} j k)))\n    (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (a i) (b j)) (c k))",
+        "partial": false,
+        "name": "Conjecture6891.coords_pure",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Conjecture6891.Vector",
+        "partial": false,
+        "name": "Conjecture6891.e0",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": true,
+        "type": "_obj",
+        "partial": false,
+        "name": "Conjecture6891.e0._closed_1._cstage2",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": true,
+        "type": "_obj",
+        "partial": false,
+        "name": "Conjecture6891.e0._closed_2._cstage2",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": true,
+        "type": "_obj",
+        "partial": false,
+        "name": "Conjecture6891.e0._closed_3._cstage2",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": []
+      },
+      {
+        "unsafe": true,
+        "type": "_obj",
+        "partial": false,
+        "name": "Conjecture6891.e0._closed_4._cstage2",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": []
+      },
+      {
+        "unsafe": true,
+        "type": "Conjecture6891.Vector",
+        "partial": false,
+        "name": "Conjecture6891.e0._cstage1",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": true,
+        "type": "_obj \u2192 _obj",
+        "partial": false,
+        "name": "Conjecture6891.e0._cstage2",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} Conjecture6891.e0 (Matrix.vecCons.{0} 1 (Matrix.vecCons.{0} 0 Matrix.vecEmpty.{0}))",
+        "partial": false,
+        "name": "Conjecture6891.e0.eq_1",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Conjecture6891.Vector",
+        "partial": false,
+        "name": "Conjecture6891.e1",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": true,
+        "type": "_obj",
+        "partial": false,
+        "name": "Conjecture6891.e1._closed_1._cstage2",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": []
+      },
+      {
+        "unsafe": true,
+        "type": "Conjecture6891.Vector",
+        "partial": false,
+        "name": "Conjecture6891.e1._cstage1",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": true,
+        "type": "_obj \u2192 _obj",
+        "partial": false,
+        "name": "Conjecture6891.e1._cstage2",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} Conjecture6891.e1 (Matrix.vecCons.{0} 0 (Matrix.vecCons.{0} 1 Matrix.vecEmpty.{0}))",
+        "partial": false,
+        "name": "Conjecture6891.e1.eq_1",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (t : Conjecture6891.Tensor), \u2203 r, Conjecture6891.RankLE r t",
+        "partial": false,
+        "name": "Conjecture6891.exists_rankLE",
+        "module": "Conjecture6891.Rank",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (x : Conjecture6891.ProjectiveTensor), \u2203 r, Membership.mem.{0, 0} (Conjecture6891.secantVariety r) x",
+        "partial": false,
+        "name": "Conjecture6891.exists_secantVariety",
+        "module": "Conjecture6891",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {p : MvPolynomial.{0, 0} Conjecture6891.Coordinate Complex} {d : Nat},\n  MvPolynomial.IsHomogeneous.{0, 0} p d \u2192\n    \u2200 (c : Complex) (z : Conjecture6891.Coordinate \u2192 Complex),\n      Eq.{1} ((MvPolynomial.eval.{0, 0} (HSMul.hSMul.{0, 0, 0} c z)) p)\n        (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} c d) ((MvPolynomial.eval.{0, 0} z) p))",
+        "partial": false,
+        "name": "Conjecture6891.homogeneous_eval_smul",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (x y : Conjecture6891.ProjectiveTensor), Iff (Membership.mem.{0, 0} (Conjecture6891.pointSubspace x) y) (Eq.{1} y x)",
+        "partial": false,
+        "name": "Conjecture6891.mem_pointSubspace",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (x : Conjecture6891.ProjectiveTensor),\n  Membership.mem.{0, 0} (Conjecture6891.secantVariety (Conjecture6891.secantIndex x)) x",
+        "partial": false,
+        "name": "Conjecture6891.mem_secantVariety_index",
+        "module": "Conjecture6891",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (P : Projectivization.Subspace.{0, 0} Complex Conjecture6891.Tensor) (v : Conjecture6891.Tensor) (hv : Ne.{1} v 0),\n  Iff (Membership.mem.{0, 0} (Conjecture6891.vectorSubmodule P) v)\n    (Membership.mem.{0, 0} P (Projectivization.mk.{0, 0} Complex v hv))",
+        "partial": false,
+        "name": "Conjecture6891.mem_vectorSubmodule",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (L : Submodule.{0, 0} Complex Conjecture6891.Tensor) (v : Conjecture6891.Tensor) (hv : Ne.{1} v 0),\n  Iff (Membership.mem.{0, 0} (Conjecture6891.projectivizeSubmodule L) (Projectivization.mk.{0, 0} Complex v hv))\n    (Membership.mem.{0, 0} L v)",
+        "partial": false,
+        "name": "Conjecture6891.mk_mem_projectivizeSubmodule",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (r : Nat) (t : Conjecture6891.Tensor) (ht : Ne.{1} t 0),\n  Iff (Membership.mem.{0, 0} (Conjecture6891.secantSpanLocus r) (Projectivization.mk.{0, 0} Complex t ht))\n    (Conjecture6891.RankLE r t)",
+        "partial": false,
+        "name": "Conjecture6891.mk_mem_secantSpanLocus_iff_rankLE",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {R : Type u} {M : Type v} [inst : Semiring.{u} R] [inst_1 : AddCommMonoid.{v} M] {module_M : Module.{u, v} R M}\n  (p : Submodule.{u, v} R M), Eq.{1} (Membership.mem.{v, v} p 0) True",
+        "partial": false,
+        "name": "Conjecture6891.mk_mem_secantSpanLocus_iff_rankLE._proof_10",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (r : Nat) (t : Conjecture6891.Tensor) (ht : Ne.{1} t 0),\n  Iff (Membership.mem.{0, 0} (Conjecture6891.secantSpanLocus r) (Projectivization.mk.{0, 0} Complex t ht))\n    (LE.le.{0} (Conjecture6891.tensorRank t) r)",
+        "partial": false,
+        "name": "Conjecture6891.mk_mem_secantSpanLocus_iff_tensorRank_le",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Not (Conjecture6891.RankLE 2 Conjecture6891.W)",
+        "partial": false,
+        "name": "Conjecture6891.not_rankLE_two_W",
+        "module": "Conjecture6891.Rank",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Conjecture6891.ProjectiveTensor \u2192 Projectivization.Subspace.{0, 0} Complex Conjecture6891.Tensor",
+        "partial": false,
+        "name": "Conjecture6891.pointSubspace",
+        "module": "Conjecture6891.Projective",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (x : Conjecture6891.ProjectiveTensor) (v w : Conjecture6891.Tensor) (hv : Ne.{1} v 0) (hw : Ne.{1} w 0)\n  (hvw : Ne.{1} (HAdd.hAdd.{0, 0, 0} v w) 0),\n  Membership.mem.{0, 0} (Singleton.singleton.{0, 0} x) (Projectivization.mk.{0, 0} Complex v hv) \u2192\n    Membership.mem.{0, 0} (Singleton.singleton.{0, 0} x) (Projectivization.mk.{0, 0} Complex w hw) \u2192\n      Membership.mem.{0, 0} (Singleton.singleton.{0, 0} x)\n        (Projectivization.mk.{0, 0} Complex (HAdd.hAdd.{0, 0, 0} v w) hvw)",
+        "partial": false,
+        "name": "Conjecture6891.pointSubspace._proof_2",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Complex \u2192 Projectivization.{0, 0} Complex Conjecture6891.Tensor",
+        "partial": false,
+        "name": "Conjecture6891.projectiveArc",
+        "module": "Conjecture6891.Arc",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (t : Complex), Eq.{1} (Conjecture6891.projectiveArc t) (Projectivization.mk.{0, 0} Complex (Conjecture6891.arc t) \u22ef)",
+        "partial": false,
+        "name": "Conjecture6891.projectiveArc.eq_1",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (t : Complex), Ne.{1} t 0 \u2192 Membership.mem.{0, 0} (Conjecture6891.secantSpanLocus 2) (Conjecture6891.projectiveArc t)",
+        "partial": false,
+        "name": "Conjecture6891.projectiveArc_mem_secantSpanLocus_two",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (t : Complex),\n  Ne.{1} t 0 \u2192\n    Membership.mem.{0, 0}\n      (Projectivization.Subspace.span.{0, 0}\n        (Set.range.{0, 1}\n          (Matrix.vecCons.{0} (Conjecture6891.projectiveCurve t)\n            (Matrix.vecCons.{0} Conjecture6891.projectiveBase Matrix.vecEmpty.{0}))))\n      (Conjecture6891.projectiveArc t)",
+        "partial": false,
+        "name": "Conjecture6891.projectiveArc_mem_span",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} (Conjecture6891.projectiveArc 0) Conjecture6891.projectiveW",
+        "partial": false,
+        "name": "Conjecture6891.projectiveArc_zero",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Projectivization.{0, 0} Complex Conjecture6891.Tensor",
+        "partial": false,
+        "name": "Conjecture6891.projectiveBase",
+        "module": "Conjecture6891.Arc",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Membership.mem.{0, 0} Conjecture6891.segre Conjecture6891.projectiveBase",
+        "partial": false,
+        "name": "Conjecture6891.projectiveBase_mem_segre",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Complex \u2192 Projectivization.{0, 0} Complex Conjecture6891.Tensor",
+        "partial": false,
+        "name": "Conjecture6891.projectiveCurve",
+        "module": "Conjecture6891.Arc",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (t : Complex), Membership.mem.{0, 0} Conjecture6891.segre (Conjecture6891.projectiveCurve t)",
+        "partial": false,
+        "name": "Conjecture6891.projectiveCurve_mem_segre",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (t : Complex), Ne.{1} t 0 \u2192 Ne.{1} (Conjecture6891.projectiveCurve t) Conjecture6891.projectiveBase",
+        "partial": false,
+        "name": "Conjecture6891.projectiveCurve_ne_base",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {p : MvPolynomial.{0, 0} Conjecture6891.Coordinate Complex} {d : Nat},\n  MvPolynomial.IsHomogeneous.{0, 0} p d \u2192\n    \u2200 (v : Conjecture6891.Tensor) (hv : Ne.{1} v 0),\n      Iff (Conjecture6891.ProjectiveVanishes p (Projectivization.mk.{0, 0} Complex v hv))\n        (Eq.{1} ((MvPolynomial.eval.{0, 0} (Conjecture6891.coords v)) p) 0)",
+        "partial": false,
+        "name": "Conjecture6891.projectiveVanishes_mk_iff",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Projectivization.{0, 0} Complex Conjecture6891.Tensor",
+        "partial": false,
+        "name": "Conjecture6891.projectiveW",
+        "module": "Conjecture6891.Arc",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} Conjecture6891.projectiveW (Projectivization.mk.{0, 0} Complex Conjecture6891.W Conjecture6891.W_ne_zero)",
+        "partial": false,
+        "name": "Conjecture6891.projectiveW.eq_1",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "And (Membership.mem.{0, 0} (Conjecture6891.secantVariety 2) Conjecture6891.projectiveW)\n  (Conjecture6891.projectiveW \u2209 Conjecture6891.secantVariety 1)",
+        "partial": false,
+        "name": "Conjecture6891.projectiveW_in_second_layer",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Membership.mem.{0, 0} (Conjecture6891.secantVariety 2) Conjecture6891.projectiveW",
+        "partial": false,
+        "name": "Conjecture6891.projectiveW_mem_secantVariety_two",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Conjecture6891.projectiveW \u2209 Conjecture6891.secantVariety 1",
+        "partial": false,
+        "name": "Conjecture6891.projectiveW_not_mem_secantVariety_one",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Set.{0} Conjecture6891.ProjectiveTensor \u2192 Set.{0} Conjecture6891.ProjectiveTensor",
+        "partial": false,
+        "name": "Conjecture6891.projectiveZariskiClosure",
+        "module": "Conjecture6891.Projective",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (S : Set.{0} Conjecture6891.ProjectiveTensor),\n  Conjecture6891.IsProjectiveAlgebraic (Conjecture6891.projectiveZariskiClosure S)",
+        "partial": false,
+        "name": "Conjecture6891.projectiveZariskiClosure_algebraic",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} (Conjecture6891.projectiveZariskiClosure EmptyCollection.emptyCollection.{0}) EmptyCollection.emptyCollection.{0}",
+        "partial": false,
+        "name": "Conjecture6891.projectiveZariskiClosure_empty",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {\u03b1 : Type u_2} [inst : Zero.{u_2} \u03b1] [inst_1 : One.{u_2} \u03b1] [inst_2 : NeZero.{u_2} 1], Eq.{1} (Eq.{u_2 + 1} 1 0) False",
+        "partial": false,
+        "name": "Conjecture6891.projectiveZariskiClosure_empty._proof_10",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (S : Set.{0} Conjecture6891.ProjectiveTensor),\n  Eq.{1} (Conjecture6891.projectiveZariskiClosure (Conjecture6891.projectiveZariskiClosure S))\n    (Conjecture6891.projectiveZariskiClosure S)",
+        "partial": false,
+        "name": "Conjecture6891.projectiveZariskiClosure_idem",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {S Z : Set.{0} Conjecture6891.ProjectiveTensor},\n  Conjecture6891.IsProjectiveAlgebraic Z \u2192\n    HasSubset.Subset.{0} S Z \u2192 HasSubset.Subset.{0} (Conjecture6891.projectiveZariskiClosure S) Z",
+        "partial": false,
+        "name": "Conjecture6891.projectiveZariskiClosure_least",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {S T : Set.{0} Conjecture6891.ProjectiveTensor},\n  HasSubset.Subset.{0} S T \u2192\n    HasSubset.Subset.{0} (Conjecture6891.projectiveZariskiClosure S) (Conjecture6891.projectiveZariskiClosure T)",
+        "partial": false,
+        "name": "Conjecture6891.projectiveZariskiClosure_mono",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Set.{0} (MvPolynomial.{0, 0} Conjecture6891.Coordinate Complex) \u2192 Set.{0} Conjecture6891.ProjectiveTensor",
+        "partial": false,
+        "name": "Conjecture6891.projectiveZeroLocus",
+        "module": "Conjecture6891.Projective",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {\u03b9 : Type u_1} (v : \u03b9 \u2192 Conjecture6891.Tensor) (hv : \u2200 (i : \u03b9), Ne.{1} (v i) 0) (x : Conjecture6891.Tensor)\n  (hx : Ne.{1} x 0),\n  Iff\n    (Membership.mem.{0, 0}\n      (Projectivization.Subspace.span.{0, 0}\n        (Set.range.{0, u_1 + 1} fun i => Projectivization.mk.{0, 0} Complex (v i) \u22ef))\n      (Projectivization.mk.{0, 0} Complex x hx))\n    (Membership.mem.{0, 0} (Submodule.span.{0, 0} Complex (Set.range.{0, u_1 + 1} v)) x)",
+        "partial": false,
+        "name": "Conjecture6891.projective_span_mk_iff",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (x : Conjecture6891.ProjectiveTensor),\n  Eq.{1} (Projectivization.Subspace.span.{0, 0} (Singleton.singleton.{0, 0} x)) (Conjecture6891.pointSubspace x)",
+        "partial": false,
+        "name": "Conjecture6891.projective_span_singleton",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Submodule.{0, 0} Complex Conjecture6891.Tensor \u2192 Projectivization.Subspace.{0, 0} Complex Conjecture6891.Tensor",
+        "partial": false,
+        "name": "Conjecture6891.projectivizeSubmodule",
+        "module": "Conjecture6891.Projective",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (L : Submodule.{0, 0} Complex Conjecture6891.Tensor) (v w : Conjecture6891.Tensor) (hv : Ne.{1} v 0) (hw : Ne.{1} w 0)\n  (hvw : Ne.{1} (HAdd.hAdd.{0, 0, 0} v w) 0),\n  Membership.mem.{0, 0} (setOf.{0} fun x => LE.le.{0} (Projectivization.submodule.{0, 0} x) L)\n      (Projectivization.mk.{0, 0} Complex v hv) \u2192\n    Membership.mem.{0, 0} (setOf.{0} fun x => LE.le.{0} (Projectivization.submodule.{0, 0} x) L)\n        (Projectivization.mk.{0, 0} Complex w hw) \u2192\n      Membership.mem.{0, 0} (setOf.{0} fun x => LE.le.{0} (Projectivization.submodule.{0, 0} x) L)\n        (Projectivization.mk.{0, 0} Complex (HAdd.hAdd.{0, 0, 0} v w) hvw)",
+        "partial": false,
+        "name": "Conjecture6891.projectivizeSubmodule._proof_4",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} (\u2191(Conjecture6891.projectivizeSubmodule Bot.bot.{0})) EmptyCollection.emptyCollection.{0}",
+        "partial": false,
+        "name": "Conjecture6891.projectivize_bot_empty",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Conjecture6891.Vector \u2192 Conjecture6891.Vector \u2192 Conjecture6891.Vector \u2192 Conjecture6891.Tensor",
+        "partial": false,
+        "name": "Conjecture6891.pure",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (a b c : Conjecture6891.Vector),\n  Eq.{1} (Conjecture6891.pure a b c) (TensorProduct.tmul.{0, 0, 0} Complex a (TensorProduct.tmul.{0, 0, 0} Complex b c))",
+        "partial": false,
+        "name": "Conjecture6891.pure.eq_1",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Ne.{1} (Conjecture6891.pure Conjecture6891.e0 Conjecture6891.e0 Conjecture6891.e0) 0",
+        "partial": false,
+        "name": "Conjecture6891.pure_e0_ne_zero",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (s : Complex) (a b c : Conjecture6891.Vector),\n  Eq.{1} (Conjecture6891.pure (HSMul.hSMul.{0, 0, 0} s a) b c) (HSMul.hSMul.{0, 0, 0} s (Conjecture6891.pure a b c))",
+        "partial": false,
+        "name": "Conjecture6891.pure_smul_left",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (b c : Conjecture6891.Vector), Eq.{1} (Conjecture6891.pure 0 b c) 0",
+        "partial": false,
+        "name": "Conjecture6891.pure_zero_left",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {r s : Nat} {t : Conjecture6891.Tensor}, LE.le.{0} r s \u2192 Conjecture6891.RankLE r t \u2192 Conjecture6891.RankLE s t",
+        "partial": false,
+        "name": "Conjecture6891.rankLE_mono",
+        "module": "Conjecture6891.Rank",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {r : Nat} {t : Conjecture6891.Tensor},\n  Conjecture6891.RankLE r t \u2192 \u2200 (s : Complex), Conjecture6891.RankLE r (HSMul.hSMul.{0, 0, 0} s t)",
+        "partial": false,
+        "name": "Conjecture6891.rankLE_smul",
+        "module": "Conjecture6891.Rank",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {r : Nat} {t : Conjecture6891.Tensor}, Conjecture6891.RankLE r t \u2192 Conjecture6891.RankLE (HAdd.hAdd.{0, 0, 0} r 1) t",
+        "partial": false,
+        "name": "Conjecture6891.rankLE_succ",
+        "module": "Conjecture6891.Rank",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Conjecture6891.RankLE 3 Conjecture6891.W",
+        "partial": false,
+        "name": "Conjecture6891.rankLE_three_W",
+        "module": "Conjecture6891.Rank",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "And (Ne.{1} Conjecture6891.W 0)\n  (And (Eq.{1} (Conjecture6891.tensorRank Conjecture6891.W) 3)\n    (Eq.{1} (Conjecture6891.secantIndex Conjecture6891.projectiveW) 2))",
+        "partial": false,
+        "name": "Conjecture6891.rank_and_secant_index_counterexample",
+        "module": "Conjecture6891",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Conjecture6891.ProjectiveTensor \u2192 Nat",
+        "partial": false,
+        "name": "Conjecture6891.secantIndex",
+        "module": "Conjecture6891",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {x : Conjecture6891.ProjectiveTensor} {r : Nat},\n  Membership.mem.{0, 0} (Conjecture6891.secantVariety r) x \u2192 LE.le.{0} (Conjecture6891.secantIndex x) r",
+        "partial": false,
+        "name": "Conjecture6891.secantIndex_le_of_mem",
+        "module": "Conjecture6891",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (x : Conjecture6891.ProjectiveTensor), LT.lt.{0} 0 (Conjecture6891.secantIndex x)",
+        "partial": false,
+        "name": "Conjecture6891.secantIndex_pos",
+        "module": "Conjecture6891",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (x : Conjecture6891.ProjectiveTensor),\n  Not (LT.lt.{0} 0 (Conjecture6891.secantIndex x)) \u2192 Not (Eq.{1} (Conjecture6891.secantIndex x) 0) \u2192 False",
+        "partial": false,
+        "name": "Conjecture6891.secantIndex_pos._proof_1",
+        "module": "Conjecture6891",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} (Conjecture6891.secantIndex Conjecture6891.projectiveW) 2",
+        "partial": false,
+        "name": "Conjecture6891.secantIndex_projectiveW",
+        "module": "Conjecture6891",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "LE.le.{0} (Conjecture6891.secantIndex Conjecture6891.projectiveW) 2 \u2192\n  LT.lt.{0} 0 (Conjecture6891.secantIndex Conjecture6891.projectiveW) \u2192\n    Ne.{1} (Conjecture6891.secantIndex Conjecture6891.projectiveW) 1 \u2192\n      Not (Eq.{1} (Conjecture6891.secantIndex Conjecture6891.projectiveW) 2) \u2192 False",
+        "partial": false,
+        "name": "Conjecture6891.secantIndex_projectiveW._proof_1",
+        "module": "Conjecture6891",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Nat \u2192 Set.{0} Conjecture6891.ProjectiveTensor",
+        "partial": false,
+        "name": "Conjecture6891.secantSpanLocus",
+        "module": "Conjecture6891.Projective",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {r s : Nat},\n  LE.le.{0} r s \u2192 HasSubset.Subset.{0} (Conjecture6891.secantSpanLocus r) (Conjecture6891.secantSpanLocus s)",
+        "partial": false,
+        "name": "Conjecture6891.secantSpanLocus_mono",
+        "module": "Conjecture6891",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} (Conjecture6891.secantSpanLocus 1) Conjecture6891.segre",
+        "partial": false,
+        "name": "Conjecture6891.secantSpanLocus_one",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {\u03b1 : Type u} {\u03b9 : Sort u_1} {f : \u03b9 \u2192 \u03b1} {x : \u03b1},\n  Eq.{1} (Membership.mem.{u, u} (Set.range.{u, u_1} f) x) (\u2203 y, Eq.{u + 1} (f y) x)",
+        "partial": false,
+        "name": "Conjecture6891.secantSpanLocus_one._proof_4",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} (Conjecture6891.secantSpanLocus 0) EmptyCollection.emptyCollection.{0}",
+        "partial": false,
+        "name": "Conjecture6891.secantSpanLocus_zero",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Nat \u2192 Set.{0} Conjecture6891.ProjectiveTensor",
+        "partial": false,
+        "name": "Conjecture6891.secantVariety",
+        "module": "Conjecture6891.Projective",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (r : Nat),\n  Eq.{1} (Conjecture6891.secantVariety r) (Conjecture6891.projectiveZariskiClosure (Conjecture6891.secantSpanLocus r))",
+        "partial": false,
+        "name": "Conjecture6891.secantVariety.eq_1",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {r s : Nat}, LE.le.{0} r s \u2192 HasSubset.Subset.{0} (Conjecture6891.secantVariety r) (Conjecture6891.secantVariety s)",
+        "partial": false,
+        "name": "Conjecture6891.secantVariety_mono",
+        "module": "Conjecture6891",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} (Conjecture6891.secantVariety 0) EmptyCollection.emptyCollection.{0}",
+        "partial": false,
+        "name": "Conjecture6891.secantVariety_zero",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (a b c d e f : Conjecture6891.Vector),\n  Eq.{1} Conjecture6891.W (HAdd.hAdd.{0, 0, 0} (Conjecture6891.pure a b c) (Conjecture6891.pure d e f)) \u2192 Eq.{1} (d 1) 0",
+        "partial": false,
+        "name": "Conjecture6891.second_factor_coordinate_zero",
+        "module": "Conjecture6891.Rank",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Set.{0} Conjecture6891.ProjectiveTensor",
+        "partial": false,
+        "name": "Conjecture6891.segre",
+        "module": "Conjecture6891.Projective",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": true,
+        "type": "Set.{0} Conjecture6891.ProjectiveTensor",
+        "partial": false,
+        "name": "Conjecture6891.segre._cstage1",
+        "module": "Conjecture6891.Projective",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": true,
+        "type": "_neutral",
+        "partial": false,
+        "name": "Conjecture6891.segre._cstage2",
+        "module": "Conjecture6891.Projective",
+        "kind": "definition",
+        "axioms": []
+      },
+      {
+        "unsafe": false,
+        "type": "Complex \u2192 Conjecture6891.Tensor",
+        "partial": false,
+        "name": "Conjecture6891.segreCurve",
+        "module": "Conjecture6891.Arc",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (t : Complex),\n  Eq.{1} (Conjecture6891.segreCurve t)\n    (Conjecture6891.pure (HAdd.hAdd.{0, 0, 0} Conjecture6891.e0 (HSMul.hSMul.{0, 0, 0} t Conjecture6891.e1))\n      (HAdd.hAdd.{0, 0, 0} Conjecture6891.e0 (HSMul.hSMul.{0, 0, 0} t Conjecture6891.e1))\n      (HAdd.hAdd.{0, 0, 0} Conjecture6891.e0 (HSMul.hSMul.{0, 0, 0} t Conjecture6891.e1)))",
+        "partial": false,
+        "name": "Conjecture6891.segreCurve.eq_1",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (t : Complex), Ne.{1} (Conjecture6891.segreCurve t) 0",
+        "partial": false,
+        "name": "Conjecture6891.segreCurve_ne_zero",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "MvPolynomial.{0, 0} Conjecture6891.Coordinate Complex",
+        "partial": false,
+        "name": "Conjecture6891.sliceMinor",
+        "module": "Conjecture6891.Arc",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "NeZero.{0} (HAdd.hAdd.{0, 0, 0} 1 1)",
+        "partial": false,
+        "name": "Conjecture6891.sliceMinor._proof_1",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} Conjecture6891.sliceMinor\n  (HSub.hSub.{0, 0, 0}\n    (HMul.hMul.{0, 0, 0} (MvPolynomial.X.{0, 0} (Prod.mk.{0, 0} 0 (Prod.mk.{0, 0} 0 0)))\n      (MvPolynomial.X.{0, 0} (Prod.mk.{0, 0} 0 (Prod.mk.{0, 0} 1 1))))\n    (HMul.hMul.{0, 0, 0} (MvPolynomial.X.{0, 0} (Prod.mk.{0, 0} 0 (Prod.mk.{0, 0} 0 1)))\n      (MvPolynomial.X.{0, 0} (Prod.mk.{0, 0} 0 (Prod.mk.{0, 0} 1 0)))))",
+        "partial": false,
+        "name": "Conjecture6891.sliceMinor.eq_1",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} ((MvPolynomial.eval.{0, 0} (Conjecture6891.coords Conjecture6891.W)) Conjecture6891.sliceMinor) (-1)",
+        "partial": false,
+        "name": "Conjecture6891.sliceMinor_W",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "MvPolynomial.IsHomogeneous.{0, 0} Conjecture6891.sliceMinor 2",
+        "partial": false,
+        "name": "Conjecture6891.sliceMinor_homogeneous",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (a b c : Conjecture6891.Vector),\n  Eq.{1} ((MvPolynomial.eval.{0, 0} (Conjecture6891.coords (Conjecture6891.pure a b c))) Conjecture6891.sliceMinor) 0",
+        "partial": false,
+        "name": "Conjecture6891.sliceMinor_pure",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (x : Conjecture6891.ProjectiveTensor),\n  Membership.mem.{0, 0} Conjecture6891.segre x \u2192 Conjecture6891.ProjectiveVanishes Conjecture6891.sliceMinor x",
+        "partial": false,
+        "name": "Conjecture6891.sliceMinor_vanishes_on_segre",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (t : Complex),\n  Eq.{1} (HSMul.hSMul.{0, 0, 0} t (Conjecture6891.arc t))\n    (HSub.hSub.{0, 0, 0} (Conjecture6891.segreCurve t) Conjecture6891.baseTensor)",
+        "partial": false,
+        "name": "Conjecture6891.smul_arc",
+        "module": "Conjecture6891.Arc",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (S : Set.{0} Conjecture6891.ProjectiveTensor), HasSubset.Subset.{0} S (Conjecture6891.projectiveZariskiClosure S)",
+        "partial": false,
+        "name": "Conjecture6891.subset_projectiveZariskiClosure",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Basis.{0, 0, 0} Conjecture6891.Coordinate Complex Conjecture6891.Tensor",
+        "partial": false,
+        "name": "Conjecture6891.tensorBasis",
+        "module": "Conjecture6891.Core",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "IsScalarTower.{0, 0, 0} Complex Complex (Fin 2 \u2192 Complex)",
+        "partial": false,
+        "name": "Conjecture6891.tensorBasis._proof_1",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Finite.{1} (Fin 2)",
+        "partial": false,
+        "name": "Conjecture6891.tensorBasis._proof_2",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} Conjecture6891.tensorBasis\n  (Basis.tensorProduct.{0, 0, 0, 0, 0, 0} (Pi.basisFun.{0, 0} Complex (Fin 2))\n    (Basis.tensorProduct.{0, 0, 0, 0, 0, 0} (Pi.basisFun.{0, 0} Complex (Fin 2)) (Pi.basisFun.{0, 0} Complex (Fin 2))))",
+        "partial": false,
+        "name": "Conjecture6891.tensorBasis.eq_1",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Conjecture6891.Tensor \u2192 Nat",
+        "partial": false,
+        "name": "Conjecture6891.tensorRank",
+        "module": "Conjecture6891.Rank",
+        "kind": "definition",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Eq.{1} (Conjecture6891.tensorRank Conjecture6891.W) 3",
+        "partial": false,
+        "name": "Conjecture6891.tensorRank_W",
+        "module": "Conjecture6891.Rank",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "LE.le.{0} (Conjecture6891.tensorRank Conjecture6891.W) 3 \u2192\n  Not (LE.le.{0} (Conjecture6891.tensorRank Conjecture6891.W) 2) \u2192\n    Not (Eq.{1} (Conjecture6891.tensorRank Conjecture6891.W) 3) \u2192 False",
+        "partial": false,
+        "name": "Conjecture6891.tensorRank_W._proof_1",
+        "module": "Conjecture6891.Rank",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (t : Conjecture6891.Tensor), Conjecture6891.RankLE (Conjecture6891.tensorRank t) t",
+        "partial": false,
+        "name": "Conjecture6891.tensorRank_has_decomposition",
+        "module": "Conjecture6891.Rank",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (t : Conjecture6891.Tensor) (r : Nat), Iff (LE.le.{0} (Conjecture6891.tensorRank t) r) (Conjecture6891.RankLE r t)",
+        "partial": false,
+        "name": "Conjecture6891.tensorRank_le_iff",
+        "module": "Conjecture6891.Rank",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {r : Nat} {t : Conjecture6891.Tensor}, Conjecture6891.RankLE r t \u2192 LE.le.{0} (Conjecture6891.tensorRank t) r",
+        "partial": false,
+        "name": "Conjecture6891.tensorRank_le_of_rankLE",
+        "module": "Conjecture6891.Rank",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (s : Complex),\n  Ne.{1} s 0 \u2192\n    \u2200 (t : Conjecture6891.Tensor),\n      Eq.{1} (Conjecture6891.tensorRank (HSMul.hSMul.{0, 0, 0} s t)) (Conjecture6891.tensorRank t)",
+        "partial": false,
+        "name": "Conjecture6891.tensorRank_smul",
+        "module": "Conjecture6891.Rank",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {u v : Conjecture6891.Tensor},\n  (\u2200 (i j k : Fin 2),\n      Eq.{1} (Conjecture6891.coords u (Prod.mk.{0, 0} i (Prod.mk.{0, 0} j k)))\n        (Conjecture6891.coords v (Prod.mk.{0, 0} i (Prod.mk.{0, 0} j k)))) \u2192\n    Eq.{1} u v",
+        "partial": false,
+        "name": "Conjecture6891.tensor_ext",
+        "module": "Conjecture6891.Core",
+        "kind": "theorem",
+        "axioms": [
+          "Quot.sound",
+          "propext",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "Projectivization.Subspace.{0, 0} Complex Conjecture6891.Tensor \u2192 Submodule.{0, 0} Complex Conjecture6891.Tensor",
+        "partial": false,
+        "name": "Conjecture6891.vectorSubmodule",
+        "module": "Conjecture6891.Projective",
+        "kind": "definition",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (P : Projectivization.Subspace.{0, 0} Complex Conjecture6891.Tensor) {v w : Conjecture6891.Tensor},\n  Membership.mem.{0, 0}\n      (setOf.{0} fun v => \u2200 (hv : Ne.{1} v 0), Membership.mem.{0, 0} P (Projectivization.mk.{0, 0} Complex v hv)) v \u2192\n    Membership.mem.{0, 0}\n        (setOf.{0} fun v => \u2200 (hv : Ne.{1} v 0), Membership.mem.{0, 0} P (Projectivization.mk.{0, 0} Complex v hv)) w \u2192\n      \u2200 (hvw : Ne.{1} (HAdd.hAdd.{0, 0, 0} v w) 0),\n        Membership.mem.{0, 0} P (Projectivization.mk.{0, 0} Complex (HAdd.hAdd.{0, 0, 0} v w) hvw)",
+        "partial": false,
+        "name": "Conjecture6891.vectorSubmodule._proof_6",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (P : Projectivization.Subspace.{0, 0} Complex Conjecture6891.Tensor) (h : Ne.{1} 0 0),\n  Membership.mem.{0, 0} P (Projectivization.mk.{0, 0} Complex 0 h)",
+        "partial": false,
+        "name": "Conjecture6891.vectorSubmodule._proof_7",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (P : Projectivization.Subspace.{0, 0} Complex Conjecture6891.Tensor) (c : Complex) (v : Conjecture6891.Tensor),\n  Membership.mem.{0, 0}\n      (setOf.{0} fun v => \u2200 (hv : Ne.{1} v 0), Membership.mem.{0, 0} P (Projectivization.mk.{0, 0} Complex v hv)) v \u2192\n    \u2200 (hcv : Ne.{1} (HSMul.hSMul.{0, 0, 0} c v) 0),\n      Membership.mem.{0, 0} P (Projectivization.mk.{0, 0} Complex (HSMul.hSMul.{0, 0, 0} c v) hcv)",
+        "partial": false,
+        "name": "Conjecture6891.vectorSubmodule._proof_8",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 {\u03b1 : Type u} {a b : \u03b1}, Eq.{1} (Membership.mem.{u, u} (Singleton.singleton.{u, u} b) a) (Eq.{u + 1} a b)",
+        "partial": false,
+        "name": "_private.Conjecture6891.Projective.0._proof_1",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (x y : Conjecture6891.ProjectiveTensor),\n  Eq.{1} (Membership.mem.{0, 0} (Conjecture6891.pointSubspace x) y) (Eq.{1} y x)",
+        "partial": false,
+        "name": "_private.Conjecture6891.Projective.0._proof_3",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (L : Submodule.{0, 0} Complex Conjecture6891.Tensor) (v : Conjecture6891.Tensor) (hv : Ne.{1} v 0),\n  Eq.{1} (Membership.mem.{0, 0} (Conjecture6891.projectivizeSubmodule L) (Projectivization.mk.{0, 0} Complex v hv))\n    (Membership.mem.{0, 0} L v)",
+        "partial": false,
+        "name": "_private.Conjecture6891.Projective.0._proof_5",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      },
+      {
+        "unsafe": false,
+        "type": "\u2200 (P : Projectivization.Subspace.{0, 0} Complex Conjecture6891.Tensor) (v : Conjecture6891.Tensor) (hv : Ne.{1} v 0),\n  Eq.{1} (Membership.mem.{0, 0} (Conjecture6891.vectorSubmodule P) v)\n    (Membership.mem.{0, 0} P (Projectivization.mk.{0, 0} Complex v hv))",
+        "partial": false,
+        "name": "_private.Conjecture6891.Projective.0._proof_9",
+        "module": "Conjecture6891.Projective",
+        "kind": "theorem",
+        "axioms": [
+          "propext",
+          "Quot.sound",
+          "Classical.choice"
+        ]
+      }
+    ]
+  },
+  "dependencies_post_build": [
+    {
+      "name": "mathlib",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "revision_matches": true
+    },
+    {
+      "name": "plausible",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "revision_matches": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "revision_matches": true
+    },
+    {
+      "name": "importGraph",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "revision_matches": true
+    },
+    {
+      "name": "proofwidgets",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "revision_matches": true
+    },
+    {
+      "name": "aesop",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "revision_matches": true
+    },
+    {
+      "name": "Qq",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "revision_matches": true
+    },
+    {
+      "name": "batteries",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "revision_matches": true
+    },
+    {
+      "name": "Cli",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "revision_matches": true
+    }
+  ],
+  "lean_commit_post_build": {
+    "exit_code": 0,
+    "actual": "6caaee842e9495688c1567e78c0e68dbb96942aa",
+    "unchanged": true
+  },
+  "lean_version_post_build": {
+    "exit_code": 0,
+    "output": "Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)",
+    "unchanged": true
+  },
+  "source_unchanged_after_all_audits": true,
+  "copied_files_unchanged_after_all_audits": true,
+  "status": "PASS",
+  "finished_utc": "2026-10-04T22:52:14.640476+00:00"
+}

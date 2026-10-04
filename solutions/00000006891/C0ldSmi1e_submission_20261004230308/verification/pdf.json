@@ -1,0 +1,133 @@
+{
+  "status": "PASS",
+  "scope": "PDF source compilation, export, source identity and page layout. Lean execution and independent semantic review are recorded separately.",
+  "source_sha256": "a24adea8c34c15f6048760f1d6cd8dd34375c667d6b88056764f3cdde0b7fd7e",
+  "pdf_sha256": "1233b6d002b7cb0536eef2a1d1cb4b575f1bb105de0532cf040e6840b77c9fa4",
+  "pdf_bytes": 71545,
+  "pages": 5,
+  "artifact_marker": {
+    "operation_kind": "create",
+    "expected_output_count": 1,
+    "output_format": "pdf",
+    "successful_invocations": 1,
+    "exit_code": 0,
+    "timing": "Immediately before the first authoring command for this report."
+  },
+  "native_compilation": {
+    "tool": "compile_latex_document",
+    "status": "success",
+    "source": "/private/tmp/tlmc6891-package/main.tex",
+    "source_sha256": "a24adea8c34c15f6048760f1d6cd8dd34375c667d6b88056764f3cdde0b7fd7e",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"path\":\"/private/tmp/tlmc6891-package/main.tex\",\"kind\":\"success\",\"message\":\"The current source compiled successfully with the desktop editor's compiler.\"}"
+        }
+      ],
+      "isError": false
+    },
+    "message": "Final saved source compiled successfully with desktop editor compiler after pagination adjustment; source was opened in its editor (queued for this agent chat)."
+  },
+  "export": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--keep-logs",
+      "--outdir",
+      "/private/tmp/tlmc6891-package",
+      "/private/tmp/tlmc6891-package/main.tex"
+    ],
+    "started_at": "2026-10-04T22:53:23.241159+00:00",
+    "finished_at": "2026-10-04T22:53:23.628353+00:00",
+    "exit_code": 0,
+    "compiler": "Tectonic 0.17.0",
+    "compiler_version_exit_code": 0,
+    "log": "report.txt",
+    "log_sha256": "d951d92d4b0a0410c5eec62ca6e2a2213fca2b14bb84a968f678c6dc7c0a4976",
+    "warnings_or_box_diagnostics": []
+  },
+  "preliminary_export_note": "First export produced six pages with the last bibliography item alone on page six. Reducing the formalization page to readable 10-point text brought all references onto page five. The final source was recompiled in the native compiler, re-exported and all five pages were rendered and inspected.",
+  "log_normalization": "Trailing whitespace was removed from compiler-log lines when saving report.txt; all diagnostic text was retained. The raw main.log remains with authoring files.",
+  "pdf_inspection": {
+    "command": [
+      "/Users/daniel/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override/pdfinfo",
+      "/private/tmp/tlmc6891-package/main.pdf"
+    ],
+    "exit_code": 0,
+    "page_size": "595.28 x 841.89 pts (A4)",
+    "pdf_version": "1.5",
+    "encrypted": false,
+    "all_pages_have_text": true,
+    "replacement_glyph_count": 0
+  },
+  "visual_review": {
+    "reviewer": "secant_arc report author agent",
+    "scope": "Personally inspected all five complete final rendered pages at readable resolution, including exact source, tensor coordinates, slice elimination, representative invariance, algebraic closure and span bridge, arc, quadratic separator, minimum-index contradiction, Lean symbol map, commands, references and page boundaries. This is author visual QA, not independent semantic review.",
+    "render_command": [
+      "/Users/daniel/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override/pdftoppm",
+      "-r",
+      "115",
+      "-png",
+      "/private/tmp/tlmc6891-package/main.pdf",
+      "/private/tmp/tlmc6891-verification/render/page"
+    ],
+    "render_exit_code": 0,
+    "rendered_pages": [
+      {
+        "path": "/private/tmp/tlmc6891-verification/render/page-1.png",
+        "sha256": "fbe9b3f214df6bfe1756652b67406f2d077993cdf1052a58b52fbf7b8a7c6c86"
+      },
+      {
+        "path": "/private/tmp/tlmc6891-verification/render/page-2.png",
+        "sha256": "bef237ad17a014c39bda65c0c512922cf449b5ebaddfe1f41947fdf2275e66a6"
+      },
+      {
+        "path": "/private/tmp/tlmc6891-verification/render/page-3.png",
+        "sha256": "bf27fbe67e161ff7ecc3ce4734380233733feb1b216f2f4c5bd49bcc27b405f9"
+      },
+      {
+        "path": "/private/tmp/tlmc6891-verification/render/page-4.png",
+        "sha256": "9c4e64dfc11e405452d1a46f5bee19298486b89892e1fff803f63cd7a6273d2a"
+      },
+      {
+        "path": "/private/tmp/tlmc6891-verification/render/page-5.png",
+        "sha256": "f7c4e5577f35cca52501424de27c774f34261a0d137aaadd3431dddd768f818a"
+      }
+    ],
+    "status": "PASS",
+    "findings": "No clipping, overlap, broken glyphs or sparse trailing pages. Mathematical exposition occupies pages 1-4; formalization, reproduction commands and all references fit legibly on page 5. No compiler warnings or box diagnostics remain."
+  },
+  "source_whitespace_check": {
+    "command": [
+      "git",
+      "diff",
+      "--no-index",
+      "--check",
+      "/dev/null",
+      "/private/tmp/tlmc6891-package/main.tex"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "",
+    "trailing_whitespace_lines": 0,
+    "interpretation": "The nonzero no-index comparison status reflects comparison against /dev/null; no whitespace diagnostics were emitted."
+  },
+  "verification_status_note": "This PDF author record does not certify independent Lean execution or final semantic review, which are separate deliverables. The report directs readers to those records without giving premature counts or timestamps.",
+  "verified_utc": "2026-10-04T22:54:26.340975+00:00",
+  "second_visual_review": {
+    "reviewer": "root coordinating agent",
+    "status": "PASS",
+    "completed_utc": "2026-10-04T22:55:33.823720+00:00",
+    "pages": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "method": "Viewed every complete final rendered PNG through view_image at readable resolution; verified rendered-page hashes against the author record.",
+    "findings": "All five pages legible. No clipping, overlaps, missing mathematical glyphs, broken equations or problematic page breaks; full references and reproduction commands fit page five.",
+    "source_sha256": "a24adea8c34c15f6048760f1d6cd8dd34375c667d6b88056764f3cdde0b7fd7e",
+    "pdf_sha256": "1233b6d002b7cb0536eef2a1d1cb4b575f1bb105de0532cf040e6840b77c9fa4"
+  }
+}
