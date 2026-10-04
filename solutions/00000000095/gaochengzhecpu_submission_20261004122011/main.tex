@@ -1,0 +1,73 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Gal}{\operatorname{Gal}}
+\title{Even-Degree Counterexamples to\newline Conjecture 00000000095}
+\author{GitHub: gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+For the fixed prime $p=2$, every even degree $d\ge2$ gives a counterexample to the assertion that $x^d-x-p$ has Galois group $S_d$ over $\Q$. The rational root $-1$ forces the actual Galois group to have order at most $(d-1)!<d!$. The proof rules out even an abstract group isomorphism with $S_d$, and the counterexamples have arbitrarily large degree.
+\end{abstract}
+
+\section*{The statement}
+The bilingual source asserts that for every fixed prime $p$, as $d\to\infty$, the polynomial $x^d-x-p$ has Galois group $S_d$ over $\Q$. Its usual eventual interpretation is
+\[
+ \forall p\text{ prime}\ \exists D\ \forall d\ge D,\quad
+ \Gal(x^d-x-p\,/\Q)\cong S_d.
+\]
+Here the Galois group of a polynomial is the automorphism group over $\Q$ of its splitting field. Both source versions include $p=2$ and impose no parity restriction on $d$.
+
+\begin{theorem}\label{thm:counter}
+For every even integer $d\ge2$, let $f_d(x)=x^d-x-2\in\Q[x]$. Then
+\[
+ \bigl|\Gal(f_d/\Q)\bigr|\le(d-1)!<d!.
+\]
+Consequently $\Gal(f_d/\Q)$ is not isomorphic to $S_d$.
+\end{theorem}
+\begin{proof}
+Since $d$ is even,
+\[
+ f_d(-1)=(-1)^d-(-1)-2=1+1-2=0.
+\]
+The factor theorem gives $f_d=(x+1)q_d$, where $q_d\in\Q[x]$ has degree $d-1$. A splitting field of $q_d$ already contains the additional root $-1$, so it is also a splitting field of $f_d$. Thus these polynomials have isomorphic Galois groups.
+
+Let $R$ be the set of distinct roots of $q_d$ in its splitting field. Every automorphism over $\Q$ permutes $R$. This action is faithful: an automorphism fixing all roots fixes the field they generate over $\Q$, which is the entire splitting field. It therefore embeds the Galois group into the permutation group of $R$. Since $|R|\le\deg q_d=d-1$,
+\[
+ \bigl|\Gal(f_d/\Q)\bigr|
+ =\bigl|\Gal(q_d/\Q)\bigr|
+ \le |R|!\le(d-1)!.
+\]
+Finally $d!=d(d-1)!>(d-1)!$ for $d\ge2$. Finite isomorphic groups have the same cardinality, and $|S_d|=d!$, so the claimed isomorphism cannot exist.
+\end{proof}
+
+For every degree threshold $D\ge0$, choose the even degree $d=2(D+1)$. Then $d\ge D$, $d\ge2$, and Theorem~\ref{thm:counter} applies at the same fixed prime $2$. Hence no eventual threshold exists for that prime, disproving the conjecture. The failure occurs at every positive even degree, so it also precludes interpreting the claim as holding for a set of degrees of density one. We make no assertion here about the odd degrees, or about a modified statement restricted to odd primes.
+
+\section*{Formal verification}
+The Lean project uses Mathlib's actual polynomial type $\Q[X]$ and \texttt{Polynomial.Gal}, defined as the automorphism group of the polynomial's actual splitting field. It does not replace the Galois group by a declared finite group or infer the abstract-group conclusion solely from reducibility.
+
+The proof in \texttt{lean/Main.lean} verifies the following correspondence:
+\begin{itemize}
+\item The polynomial \texttt{trinomial} is $X^d-X-C(p)$, with verified degree $d$ for $d\ge2$. Its value at $-1$ is proved to be zero for every even $d$ when $p=2$.
+\item The general bound on a polynomial's Galois group uses Mathlib's faithful root action. The number of distinct roots is bounded by the degree, giving the factorial bound without any unproved irreducibility assumption.
+\item The linear-factor step uses Mathlib's injective restriction map from the Galois group of a product to the product of the two factor groups. The group of $X-C(r)$ is trivial for rational $r$. This proves the required inequality for the product directly; a separate equality of splitting fields is not needed by the formal proof.
+\item \texttt{even\_degree\_gal\_card\_bound} gives the upper bound $(d-1)!$. The next theorem excludes an actual multiplicative equivalence with \texttt{Equiv.Perm (Fin d)}, so the conclusion also excludes an abstract isomorphism.
+\item \texttt{arbitrarily\_large\_counterexamples} constructs the degree $2(D+1)$ for every $D$. The theorem \texttt{conjecture95\_false} negates the quantified eventual statement for every fixed prime.
+\end{itemize}
+All these are generic theorems. The optional Python script checks the root, exact polynomial factorization, and factorial arithmetic for six sample even degrees; it does not compute exact Galois groups or justify the infinite result by finite experimentation. The density-one observation above is an elementary consequence of failure at every even degree; the Lean conclusion is the explicit unbounded-family result and the negation of the eventual assertion.
+
+\section*{Source and reproduction}
+The original statement is preserved byte-for-byte in \texttt{SOURCE.md}. Its repository path is
+\begin{center}\small\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000000095.md}{\texttt{conjectures/00000000095.md}}.\end{center}
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake build}, then
+\begin{center}\small\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+All dependency URLs are public Git URLs with locked revisions. The directory \texttt{verification/} contains actual clean-build logs, theorem-axiom audits, hashes, and PDF checks. The file \texttt{README.md} gives complete reproduction instructions.
+\end{document}
