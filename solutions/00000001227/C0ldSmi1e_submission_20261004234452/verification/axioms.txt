@@ -1,0 +1,69 @@
+def Conjecture1227.LegalMove.{u_1} : {V : Type u_1} →
+  [inst : DecidableEq V] → SimpleGraph V → Finset V → V → V → Prop :=
+fun {V} [DecidableEq V] G S v w => v ∈ S ∧ w ∈ S.erase v ∧ G.Adj v w
+@[irreducible] def Conjecture1227.Wins.{u_1} : {V : Type u_1} →
+  [inst : DecidableEq V] → SimpleGraph V → Finset V → V → Prop :=
+fun {V} [DecidableEq V] G S v => Conjecture1227.Wins._unary G ⟨S, v⟩
+def Conjecture1227.FirstPlayerWins.{u_1} : {V : Type u_1} →
+  [inst : DecidableEq V] → [inst : Fintype V] → SimpleGraph V → V → Prop :=
+fun {V} [DecidableEq V] [Fintype V] G start => Conjecture1227.Wins G Finset.univ start
+def Conjecture1227.IsMatchingOn.{u_1} : {V : Type u_1} → SimpleGraph V → Finset V → Finset (Sym2 V) → Prop :=
+fun {V} G S M => (∀ e ∈ M, e ∈ G.edgeSet ∧ ∀ v ∈ e, v ∈ S) ∧ ∀ e ∈ M, ∀ f ∈ M, ∀ v ∈ e, v ∈ f → e = f
+def Conjecture1227.Saturates.{u_1} : {V : Type u_1} → Finset (Sym2 V) → V → Prop :=
+fun {V} M v => ∃ e ∈ M, v ∈ e
+def Conjecture1227.MaximumMatching.{u_1} : {V : Type u_1} → SimpleGraph V → Finset V → Finset (Sym2 V) → Prop :=
+fun {V} G S M =>
+  Conjecture1227.IsMatchingOn G S M ∧ ∀ (N : Finset (Sym2 V)), Conjecture1227.IsMatchingOn G S N → N.card ≤ M.card
+def Conjecture1227.Essential.{u_1} : {V : Type u_1} → SimpleGraph V → Finset V → V → Prop :=
+fun {V} G S v => ∀ (M : Finset (Sym2 V)), Conjecture1227.MaximumMatching G S M → Conjecture1227.Saturates M v
+Conjecture1227.wins_recurrence.{u_1} {V : Type u_1} [DecidableEq V] (G : SimpleGraph V) (S : Finset V) (v : V)
+  (hv : v ∈ S) : Conjecture1227.Wins G S v ↔ ∃ w ∈ S.erase v, G.Adj v w ∧ ¬Conjecture1227.Wins G (S.erase v) w
+'Conjecture1227.wins_recurrence' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1227.not_wins_of_no_move.{u_1} {V : Type u_1} [DecidableEq V] (G : SimpleGraph V) (S : Finset V) (v : V)
+  (hv : v ∈ S) (h : ∀ (w : V), ¬Conjecture1227.LegalMove G S v w) : ¬Conjecture1227.Wins G S v
+'Conjecture1227.not_wins_of_no_move' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1227.wins_iff_of_recurrence.{u_1} {V : Type u_1} [DecidableEq V] (G : SimpleGraph V) (P : Finset V → V → Prop)
+  (hP : ∀ (S : Finset V), ∀ v ∈ S, P S v ↔ ∃ w ∈ S.erase v, G.Adj v w ∧ ¬P (S.erase v) w) (S : Finset V) (v : V) :
+  v ∈ S → (Conjecture1227.Wins G S v ↔ P S v)
+'Conjecture1227.wins_iff_of_recurrence' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1227.wins_iff_essential.{u_1} {V : Type u_1} [DecidableEq V] (G : SimpleGraph V) (S : Finset V) (v : V)
+  (hv : v ∈ S) : Conjecture1227.Wins G S v ↔ Conjecture1227.Essential G S v
+'Conjecture1227.wins_iff_essential' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1227.first_player_wins_iff_every_maximum_matching_saturates.{u_1} {V : Type u_1} [DecidableEq V] [Fintype V]
+  (G : SimpleGraph V) (start : V) :
+  Conjecture1227.FirstPlayerWins G start ↔
+    ∀ (M : Finset (Sym2 V)), Conjecture1227.MaximumMatching G Finset.univ M → Conjecture1227.Saturates M start
+'Conjecture1227.first_player_wins_iff_every_maximum_matching_saturates' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Conjecture1227.isolated_start_loses.{u_1} {V : Type u_1} [DecidableEq V] [Fintype V] (G : SimpleGraph V) (start : V)
+  (h : ∀ (w : V), ¬G.Adj start w) : ¬Conjecture1227.FirstPlayerWins G start
+'Conjecture1227.isolated_start_loses' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1227.matching_empty.{u_1} {V : Type u_1} (G : SimpleGraph V) (S : Finset V) :
+  Conjecture1227.IsMatchingOn G S ∅
+'Conjecture1227.matching_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1227.matching_mono.{u_1} {V : Type u_1} {G : SimpleGraph V} {S T : Finset V} {M : Finset (Sym2 V)}
+  (h : Conjecture1227.IsMatchingOn G S M) (hST : S ⊆ T) : Conjecture1227.IsMatchingOn G T M
+'Conjecture1227.matching_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1227.matching_erase_vertex.{u_1} {V : Type u_1} [DecidableEq V] {G : SimpleGraph V} {S : Finset V}
+  {M : Finset (Sym2 V)} {v : V} (h : Conjecture1227.IsMatchingOn G S M) (hv : ¬Conjecture1227.Saturates M v) :
+  Conjecture1227.IsMatchingOn G (S.erase v) M
+'Conjecture1227.matching_erase_vertex' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1227.matching_not_saturates_of_not_mem.{u_1} {V : Type u_1} {G : SimpleGraph V} {S : Finset V}
+  {M : Finset (Sym2 V)} {v : V} (h : Conjecture1227.IsMatchingOn G S M) (hv : v ∉ S) : ¬Conjecture1227.Saturates M v
+'Conjecture1227.matching_not_saturates_of_not_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1227.matching_erase_edge.{u_1} {V : Type u_1} [DecidableEq V] {G : SimpleGraph V} {S : Finset V}
+  {M : Finset (Sym2 V)} {e : Sym2 V} {v : V} (h : Conjecture1227.IsMatchingOn G S M) (he : e ∈ M) (hv : v ∈ e) :
+  Conjecture1227.IsMatchingOn G (S.erase v) (M.erase e) ∧ ¬Conjecture1227.Saturates (M.erase e) v
+'Conjecture1227.matching_erase_edge' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1227.matching_insert_edge.{u_1} {V : Type u_1} [DecidableEq V] {G : SimpleGraph V} {S : Finset V}
+  {M : Finset (Sym2 V)} {v w : V} (h : Conjecture1227.IsMatchingOn G S M) (hv : v ∈ S) (hw : w ∈ S) (ha : G.Adj v w)
+  (hnv : ¬Conjecture1227.Saturates M v) (hnw : ¬Conjecture1227.Saturates M w) :
+  Conjecture1227.IsMatchingOn G S (insert s(v, w) M)
+'Conjecture1227.matching_insert_edge' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1227.exists_maximum_matching.{u_1} {V : Type u_1} (G : SimpleGraph V) (S : Finset V) :
+  ∃ M, Conjecture1227.MaximumMatching G S M
+'Conjecture1227.exists_maximum_matching' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1227.essential_recurrence.{u_1} {V : Type u_1} [DecidableEq V] (G : SimpleGraph V) (S : Finset V) (v : V)
+  (hv : v ∈ S) : Conjecture1227.Essential G S v ↔ ∃ w ∈ S.erase v, G.Adj v w ∧ ¬Conjecture1227.Essential G (S.erase v) w
+'Conjecture1227.essential_recurrence' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,38 @@
+import Conjecture1227
+
+#print Conjecture1227.LegalMove
+#print Conjecture1227.Wins
+#print Conjecture1227.FirstPlayerWins
+#print Conjecture1227.IsMatchingOn
+#print Conjecture1227.Saturates
+#print Conjecture1227.MaximumMatching
+#print Conjecture1227.Essential
+
+#check Conjecture1227.wins_recurrence
+#print axioms Conjecture1227.wins_recurrence
+#check Conjecture1227.not_wins_of_no_move
+#print axioms Conjecture1227.not_wins_of_no_move
+#check Conjecture1227.wins_iff_of_recurrence
+#print axioms Conjecture1227.wins_iff_of_recurrence
+#check Conjecture1227.wins_iff_essential
+#print axioms Conjecture1227.wins_iff_essential
+#check Conjecture1227.first_player_wins_iff_every_maximum_matching_saturates
+#print axioms Conjecture1227.first_player_wins_iff_every_maximum_matching_saturates
+#check Conjecture1227.isolated_start_loses
+#print axioms Conjecture1227.isolated_start_loses
+#check Conjecture1227.matching_empty
+#print axioms Conjecture1227.matching_empty
+#check Conjecture1227.matching_mono
+#print axioms Conjecture1227.matching_mono
+#check Conjecture1227.matching_erase_vertex
+#print axioms Conjecture1227.matching_erase_vertex
+#check Conjecture1227.matching_not_saturates_of_not_mem
+#print axioms Conjecture1227.matching_not_saturates_of_not_mem
+#check Conjecture1227.matching_erase_edge
+#print axioms Conjecture1227.matching_erase_edge
+#check Conjecture1227.matching_insert_edge
+#print axioms Conjecture1227.matching_insert_edge
+#check Conjecture1227.exists_maximum_matching
+#print axioms Conjecture1227.exists_maximum_matching
+#check Conjecture1227.essential_recurrence
+#print axioms Conjecture1227.essential_recurrence
