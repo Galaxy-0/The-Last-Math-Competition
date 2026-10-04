@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{Coexisting equilibrium states without a phase transition}
+\author{ziangni-sys}
+\date{Conjecture 00000008476}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result.} Nonuniqueness of equilibrium states does not imply nonanalyticity of the pressure defined in the source.
+
+\paragraph{A compact dynamical system.}
+Take the discrete compact space $X=\{0,1\}$, the continuous map $T=\mathrm{id}_X$, and the continuous potential $f=0$. Each point mass $\delta_a$ is an invariant ergodic probability measure: every invariant measurable set has $\delta_a$-measure zero or one. The two measures $\delta_0$ and $\delta_1$ are distinct.
+
+\paragraph{The actual measure entropy.}
+For any probability measure $\mu$ on $X$ and any finite measurable partition $\mathcal P$, its Shannon entropy is
+\[
+ H_\mu(\mathcal P)=-\sum_{A\in\mathcal P}\mu(A)\log\mu(A),
+ \qquad 0\log0:=0.
+\]
+Since $T$ is the identity, the common refinement
+$\mathcal P^{(n)}=\bigvee_{j=0}^{n-1}T^{-j}\mathcal P$
+is exactly $\mathcal P$ for every $n\ge1$. Therefore
+\[
+ h_\mu(T,\mathcal P)
+ =\lim_{n\to\infty}\frac{H_\mu(\mathcal P^{(n)})}{n}=0,
+ \qquad
+ h_\mu(T)=\sup_{\mathcal P}h_\mu(T,\mathcal P)=0.
+\]
+The supremum is over all finite measurable partitions. Thus this is the Kolmogorov--Sinai entropy, not an assigned zero value.
+
+\paragraph{Pressure and maximizers.}
+For every real $t$ and every ergodic invariant probability measure $\mu$,
+\[
+ \int_X f\,d\mu+t\,h_\mu(T)=0.
+\]
+The family of such measures is nonempty, so the genuine supremum in the source is
+\[
+ P(t)=\sup_{\mu\ \mathrm{ergodic,\ invariant}}
+ \left(\int_X f\,d\mu+t\,h_\mu(T)\right)=0.
+\]
+This function is real analytic at every real parameter. Nevertheless, both distinct measures $\delta_0$ and $\delta_1$ attain this supremum for every $t$. Consequently equilibrium states are nonunique at every parameter, while there is no phase transition at any parameter under the source's explicit definition as a nonanalytic point.
+
+\paragraph{Scope and formalization.}
+Neither source version requires transitivity, mixing, or a hypothesis ensuring that distinct maximizing states yield different pressure branches. Their unrestricted equivalence therefore includes this example. We do not dispute existence or uniqueness theorems with additional dynamical hypotheses.
+
+Lean uses actual measures, ergodicity, Bochner integrals, and real analyticity. All finite partitions of the two-point space are encoded by their equivalence relations; atoms are their quotient classes. The iterated refinement is the infimum of the pulled-back equivalence relations. The proof computes every partition entropy rate by a genuine limit, then the supremum over all partitions, the full pressure supremum, and two distinct actual maximizing probability measures. A limit superior is used to define partition rates, and the proved ordinary limit is zero, so it agrees with the usual entropy rate.
+\end{document}
