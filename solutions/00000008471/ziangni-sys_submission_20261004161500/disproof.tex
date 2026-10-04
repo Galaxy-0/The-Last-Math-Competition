@@ -1,0 +1,57 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{A singleton counterexample to conjecture 00000008471}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+The final clause asserts that the complement of the locked continuous
+observables is a dense open set. We disprove density under the explicit
+locking definition given in both versions of the conjecture.
+
+Let $X=\{a\}$, with its unique compact topology, and let $T=\mathrm{id}_X$.
+Its only Borel probability measure is $\delta_a$: any probability measure
+assigns mass $1$ to $X=\{a\}$, and these are all its measurable sets.
+This measure is invariant under $T$. For every continuous
+$f:X\to\mathbb R$ we have
+\[
+\int_X f\,d\delta_a=f(a).
+\]
+Since there is no other invariant probability measure, the actual
+maximizing-measure set is
+\[
+M(f)=\{\delta_a\}\qquad\text{for every }f\in C(X,\mathbb R).
+\]
+This conclusion follows from maximization over all invariant probability
+measures, rather than from a restricted list of candidates.
+
+The point $a$ has period $1$, and the equidistribution on its orbit is
+\[
+\frac1{1}\sum_{j=0}^{0}\delta_{T^j(a)}=\delta_a.
+\]
+Consequently every continuous observable is locked in the stated sense:
+its entire maximizing-measure set consists of the equidistribution on
+one periodic orbit. In particular the locked-function set is the whole
+space $C(X,\mathbb R)$. Its complement is empty. The function space is
+nonempty (it contains the zero function), so the empty set is not dense
+in its usual uniform topology. Thus the claimed dense open complement
+law is false. Although the empty complement is open, it fails the
+required density.
+
+Neither source excludes singleton dynamical systems. Even if locking
+also requires persistence under perturbation, this example satisfies
+that condition: every continuous perturbation still has the same unique
+maximizing measure. The counterexample concerns the final conjunct;
+it does not assert a failure of the generic-locking conjunct.
+
+\paragraph{Formal verification.}
+The accompanying Lean project uses the actual compact space
+\texttt{Unit}, its Borel probability measures, the actual identity
+map, Bochner integrals and \texttt{ContinuousMap Unit Real}. It proves
+uniqueness of every probability measure, the full maximizing-measure
+characterization, the weighted orbit measure and periodicity, locking
+of every observable, and failure of Mathlib's actual \texttt{Dense}
+predicate for the complement. The project is pinned to Lean 4.19.0 and
+Mathlib commit \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\end{document}
