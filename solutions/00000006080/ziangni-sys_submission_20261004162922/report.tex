@@ -1,0 +1,136 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\emergencystretch=2em
+\title{Same network minima, different saddle spectra\\
+\large Proof of conjecture 00000006080}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+The conjecture asks for two networks with identical minimum positions
+and values but different saddle spectra, obtained by an explicit
+perturbation. We construct two genuine feedforward networks sharing
+both square-activation hidden layers. Changing one output weight
+preserves every local and global minimum but changes the Hessian
+spectrum of their common saddle.
+
+\textbf{Actual network architecture.}
+The activation is $s(u)=u^2$ at each hidden neuron.
+For input $(x,y)\in\mathbb R^2$, the first affine layer and activation give
+\[
+ h_1=\bigl(x^2,(y+1)^2,(y-1)^2\bigr).
+\]
+The second affine layer uses weights
+\[
+ W_2=\begin{pmatrix}1&0&0\\0&1/4&-1/4\end{pmatrix},
+ \qquad b_2=(-1,0),
+\]
+so its preactivation is
+$\bigl(x^2-1,((y+1)^2-(y-1)^2)/4\bigr)=(x^2-1,y)$.
+After squaring, the hidden output is
+$\bigl((x^2-1)^2,y^2\bigr)$.
+The final linear output weights $(c,1)$ yield
+\[
+ L_c(x,y)=c(x^2-1)^2+y^2.
+\]
+The first layer has weights with rows $(1,0),(0,1),(0,1)$
+and bias $(0,1,-1)$. Thus every affine layer, activation and output
+weight is specified. Our two networks are $L_1$ and $L_2$.
+The source fixes no activation class; we use square activation.
+
+\textbf{Every minimum position and value.}
+For every $c>0$, $L_c\geq0$, with equality exactly at
+\[
+ \mathcal P=\{(-1,0),(1,0)\}.
+\]
+Indeed both summands are nonnegative; their sum vanishes exactly
+when $x^2=1$ and $y=0$. Therefore these are precisely all global
+minimum positions, each with value zero.
+
+To cover all local minima as well, the actual derivative is
+\[
+ DL_c(x,y)[u,v]=4cx(x^2-1)u+2yv.
+\]
+Every local minimum is critical, hence $y=0$ and
+$x\in\{-1,0,1\}$.
+The origin is not a local minimum: for arbitrarily small
+$0<t<1$,
+\[
+ L_c(t,0)-L_c(0,0)=ct^2(t^2-2)<0.
+\]
+The remaining two critical points are global minima.
+Consequently $L_1$ and $L_2$ have exactly the same local minima,
+global minima and minimum values.
+
+\newpage
+\textbf{Actual saddle Hessians and full spectra.}
+The second derivatives give the actual Hessian at every point:
+\[
+ H_c(x,y)=
+ \begin{pmatrix}4c(3x^2-1)&0\\0&2\end{pmatrix}.
+\]
+The common critical point $(0,0)$ has
+\[
+ H_c(0,0)=\begin{pmatrix}-4c&0\\0&2\end{pmatrix}.
+\]
+For $c>0$, one eigenvalue is negative and the other positive,
+so the origin is a strict saddle. Directly, small $x$-axis
+perturbations decrease the loss, while nonzero $y$-axis
+perturbations increase it.
+
+The characteristic determinant is
+\[
+ \det(zI-H_c(0,0))=(z+4c)(z-2).
+\]
+Since a complex square matrix is invertible exactly when its
+determinant is nonzero, this characterizes the entire actual
+spectrum:
+\[
+ \sigma(H_1(0,0))=\{-4,2\},\qquad
+ \sigma(H_2(0,0))=\{-8,2\}.
+\]
+These spectra differ. The origin is the only saddle critical
+point: the other two critical points are the global minima.
+
+\textbf{Explicit perturbation.}
+Only the first output weight changes, from one to two:
+\[
+ L_2(x,y)-L_1(x,y)=(x^2-1)^2.
+\]
+More generally the explicit output-weight path $c=1+\theta$,
+$0\leq\theta\leq1$, leaves every minimum position and value
+unchanged, while the saddle's negative eigenvalue moves
+from $-4$ to $-8$. This realizes the requested separation.
+
+\textbf{Formal correspondence.}
+Lean defines actual dense affine layers with weight matrices and
+biases, square activation and a feedforward network structure.
+\texttt{network\_formula} derives the displayed polynomial from
+the actual layer evaluation, rather than declaring it a network.
+
+The derivative theorem proves the full \texttt{HasFDerivAt}
+formula. The local-minimum theorem and
+global-minimum theorem prove the complete minimum-position
+sets for every $c>0$, and \texttt{minimum\_value} proves value zero.
+The local-minimum exclusion uses an actual arbitrarily close
+descent point in each neighborhood.
+
+\texttt{Hessian} is defined by actual second partial derivatives
+of its function argument. The Hessian formula computes them,
+and the spectrum theorem proves the full Mathlib spectrum
+using invertibility and determinants.
+\texttt{StrictSaddle} requires a zero Fr\'echet derivative and
+negative and positive points in the actual Hessian spectrum.
+The final \texttt{counterexample} existentially supplies the
+two actual networks, their identical minima and values,
+their strict saddles, unequal spectra and explicit perturbation.
+
+\textbf{Reproduction.}
+Run \texttt{lake build} in \texttt{lean/} using Lean 4.19.0 and
+public Mathlib revision
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}\end{center}
+The project prints axiom audits.
+\end{document}
