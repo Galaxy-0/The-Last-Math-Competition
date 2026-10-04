@@ -1,0 +1,403 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\F}{\mathbb{F}_{11}}
+\newcommand{\PG}{\mathrm{PG}(2,11)}
+\newcommand{\PGL}{\mathrm{PGL}(3,11)}
+
+\title{Proof of Conjecture 00000001091:\\
+the complete $10$-arcs of $\mathrm{PG}(2,11)$ form a single class}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000001091 asserts that the complete $10$-arcs of the projective
+plane $\PG$ form a single isomorphism class. We prove this. Every $10$-arc
+contains a frame, and $\PGL$ is regular on ordered frames, so it suffices to
+classify the complete $10$-arcs through the standard frame
+$e_1,e_2,e_3,(1,1,1)$. The $24$ projectivities permuting the frame split the
+$72$ admissible further points into four orbits. A short exhaustive search
+from one representative of each orbit finds $13$ complete $10$-arcs, and each
+is mapped onto a fixed representative by an explicit matrix. The whole
+argument (linear algebra over $\F$, the frame lemma, the symmetry reduction,
+the search with its soundness proof, and the $13$ certificates) is formalized
+in Lean~4 (core library only, no \texttt{sorry}, no \texttt{native\_decide};
+axioms \texttt{propext} and \texttt{Quot.sound} only). An independent Python
+check finds $84$ complete $10$-arcs through the frame, all in one orbit, with
+stabilizer $A_5$ of order $60$. This agrees with the literature: Ball and
+Lavrauw state that $\PG$ has a unique complete arc of size $q-1=10$.
+\end{abstract}
+
+\section{The conjecture and how we read it}
+\begin{quote}
+\emph{Definition:} regular completions of arcs.
+\emph{Conjecture:} the complete $10$-arcs of $\PG$ form a single isomorphism
+class (an entry of the $\PG$ classification, computationally verified).
+\end{quote}
+The Chinese version says the same.
+
+A \emph{$k$-arc} of a projective plane is a set of $k$ points, no three of
+which are collinear. It is \emph{complete} if it is not contained in a
+$(k+1)$-arc, i.e.\ every point outside the arc lies on a secant (a line joining
+two points of the arc). The definition line (``regular completions'') only
+names the topic; the claim to be decided is the conjecture.
+
+Two arcs are \emph{isomorphic} (equivalent) if a collineation of the plane maps
+one onto the other. The collineation group of $\mathrm{PG}(2,q)$ is
+$\mathrm{P\Gamma L}(3,q)$ (fundamental theorem of projective geometry). For
+$q=11$ prime, the field $\F$ has no nontrivial automorphism, so
+$\mathrm{P\Gamma L}(3,11)=\PGL$. Hence ``isomorphic'' means
+\emph{projectively equivalent}: some invertible $3\times3$ matrix over $\F$
+maps one arc onto the other. This is the notion used throughout, and it is the
+strongest one (a single matrix), so the result also holds for any coarser
+notion. We prove:
+
+\begin{theorem}\label{thm:main}
+Complete $10$-arcs exist in $\PG$, and any two of them are projectively
+equivalent. So the complete $10$-arcs form exactly one class.
+\end{theorem}
+
+\section{The model}\label{sec:model}
+\paragraph{Points and lines.}
+A point is a $1$-dimensional subspace of $\F^3$, written as its normalized
+vector (first nonzero coordinate $1$). We number the $133$ points:
+\[
+11a+b\mapsto(1,a,b)\ (0\le a,b\le10),\qquad 121+b\mapsto(0,1,b),\qquad
+132\mapsto(0,0,1).
+\]
+Lines are numbered the same way by their normalized dual coordinates, and point
+$p$ lies on line $L$ iff $\mathrm{coord}(p)\cdot\mathrm{coord}(L)=0$. Three
+points are \emph{collinear} if they lie on a common line. The standard frame is
+\[
+\mathcal F=\{e_1,e_2,e_3,u\}=\{0,121,132,12\},\qquad u=(1,1,1).
+\]
+
+\paragraph{Action of matrices.}
+For an invertible matrix $M$ (with inverse $N$), $M$ maps the point $p$ to the
+point of $M\,\mathrm{coord}(p)$, and the line $L$ to the line of
+$N^{\mathsf T}\mathrm{coord}(L)$. The identity
+\[
+(N^{\mathsf T}\ell)\cdot(Mx)=\ell\cdot(NMx)=\ell\cdot x
+\]
+shows that incidence is preserved.
+
+\paragraph{Representative.} Our representative complete $10$-arc is
+\[
+R=\{0,121,132,12,25,35,49,74,103,119\},
+\]
+i.e.\ the points $(1,0,0)$, $(0,1,0)$, $(0,0,1)$, $(1,1,1)$, $(1,2,3)$,
+$(1,3,2)$, $(1,4,5)$, $(1,6,8)$, $(1,9,4)$ and $(1,10,9)$.
+
+\section{Proof of Theorem~\ref{thm:main}}
+
+\begin{lemma}[projectivities preserve complete arcs]\label{lem:preserve}
+Let $M$ be invertible. Then $M$ permutes the points and the lines and
+preserves incidence. In particular, $p,q,r$ are collinear iff $Mp,Mq,Mr$ are.
+Consequently, $M$ maps complete $k$-arcs onto complete $k$-arcs.
+\end{lemma}
+\begin{proof}
+The first statements follow from the identity above and $NM=I$. Let $A$ be a
+complete $k$-arc. Then $MA$ has $k$ points, since $M$ is injective on points.
+It is an arc, since collinearity of images implies collinearity of the
+preimages. For completeness, let $p'\notin MA$ and put $p=Np'$. Then $p\notin
+A$, so $p$ lies on a secant $qr$ of $A$, and $p'=Mp$ lies on the secant
+$(Mq)(Mr)$ of $MA$.
+\end{proof}
+
+\begin{lemma}[frame lemma]\label{lem:frame}
+Let $a_0,a_1,a_2,a_3$ be four points, no three collinear. Then some invertible
+$M$ maps them to $e_1,e_2,e_3,u$ respectively.
+\end{lemma}
+\begin{proof}
+Classically, write $\mathrm{coord}(a_3)=\sum\lambda_i\,\mathrm{coord}(a_i)$.
+All $\lambda_i\neq0$ by general position. Then the matrix with columns
+$\lambda_i\,\mathrm{coord}(a_i)$ maps $e_1,e_2,e_3,u$ to $a_0,a_1,a_2,a_3$, and
+$M$ is its inverse.
+
+In Lean we use an equivalent four-step construction. Each step is a matrix from
+an explicit table that was checked exhaustively:
+\begin{enumerate}
+\item $t_1(p)$ maps $p\mapsto e_1$;
+\item $t_2(p)$ fixes $e_1$ and maps $p\mapsto e_2$, for $p\neq e_1$;
+\item $t_3(p)$ fixes $e_1,e_2$ and maps $p\mapsto e_3$, for $p\notin e_1e_2$;
+\item $t_4(p)$ fixes $e_1,e_2,e_3$ and maps $p\mapsto u$, for $p$ off the
+triangle.
+\end{enumerate}
+By Lemma~\ref{lem:preserve}, the image of $a_{k}$ after $k$ steps satisfies the
+hypothesis of step $k+1$.
+\end{proof}
+
+Every $10$-arc contains four points, no three collinear. By
+Lemmas~\ref{lem:preserve} and~\ref{lem:frame}, every complete $10$-arc is
+therefore equivalent to a complete $10$-arc containing $\mathcal F$. It
+remains to classify those.
+
+\paragraph{Candidates and the frame stabilizer.}
+A point of an arc $S\supseteq\mathcal F$ outside $\mathcal F$ lies on none of
+the six sides of the quadrangle $\mathcal F$. There are exactly $72$ such
+points. The $24$ projectivities $g_\sigma$ mapping $(e_1,e_2,e_3,u)$ to a
+permutation of itself form a group $G_{\mathcal F}\cong S_4$. It acts on the
+$72$ candidates with four orbits:
+\begin{center}\small
+\begin{tabular}{@{}llp{0.62\textwidth}@{}}
+\toprule
+orbit & rep. & points\\
+\midrule
+$O_1$ (12) & $25=(1,2,3)$ & 25, 32, 35, 52, 61, 71, 73, 83, 92, 109, 112, 119\\
+$O_2$ (24) & $26=(1,2,4)$ & 26, 28, 29, 31, 39, 43, 46, 51, 63, 65, 68, 69, 75, 76,
+79, 81, 93, 98, 101, 105, 113, 115, 116, 118\\
+$O_3$ (24) & $27=(1,2,5)$ & 27, 30, 38, 40, 41, 50, 53, 54, 57, 58, 64, 70, 74, 80,
+86, 87, 90, 91, 94, 103, 104, 106, 114, 117\\
+$O_4$ (12) & $37=(1,3,4)$ & 37, 42, 47, 49, 59, 62, 82, 85, 95, 97, 102, 107\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{lemma}[symmetry reduction]\label{lem:reduce}
+Let $S$ be a complete $10$-arc containing $\mathcal F$. Let $j$ be the least
+index with $S\cap O_j\neq\emptyset$, and let $r_j$ be the representative of
+$O_j$. Then some $g\in G_{\mathcal F}$ maps $S$ to a complete $10$-arc $S'$
+with
+\[
+S'\supseteq\mathcal F\cup\{r_j\}\quad\text{and}\quad
+S'\cap(O_1\cup\dots\cup O_{j-1})=\emptyset .
+\]
+\end{lemma}
+\begin{proof}
+Such a $j$ exists, since $S\setminus\mathcal F\neq\emptyset$ consists of
+candidates. Pick $c\in S\cap O_j$ and $g$ with $gc=r_j$. Then $g\mathcal F=
+\mathcal F$, and the orbits are $g$-invariant. If $x\in S'\cap O_i$ with $i<j$,
+then $g^{-1}x\in S\cap O_i$, contradicting the choice of $j$.
+Lemma~\ref{lem:preserve} shows that $S'$ is a complete $10$-arc.
+\end{proof}
+
+\begin{lemma}[exhaustive search]\label{lem:search}
+For each $j\in\{1,2,3,4\}$, let $S$ be a complete $10$-arc with
+$S\supseteq\mathcal F\cup\{r_j\}$ and $S\cap(O_1\cup\dots\cup O_{j-1})=
+\emptyset$. Then, as a set, $S$ is one of the $13$ arcs listed in
+Table~\ref{tab:arcs}.
+\end{lemma}
+\begin{proof}
+Let $C_j=\mathcal F\cup\{r_j\}$. The other five points of $S$ are not in $C_j$,
+not in $O_1\cup\dots\cup O_{j-1}$, and on no secant of $C_j$. These points form
+an explicit list $\mathrm{rest}_j$ of $43$, $37$, $22$ and $7$ points
+respectively.
+
+The search chooses five of them in list order. After choosing $c$ it discards
+every later point on a line through $c$ and a chosen point. It also prunes a
+branch when too few points remain. At a leaf (ten points) it either finds a
+point on no secant, so the leaf is not complete, or it finds the leaf in
+Table~\ref{tab:arcs}.
+
+The search is sound. At each node:
+\begin{itemize}
+\item the chosen points belong to $S$;
+\item the remaining list contains every point of $S$ that is not chosen;
+\item the number of points of $S$ in the remaining list equals the number still
+to be chosen.
+\end{itemize}
+Branching at the first point of $S$ in the list preserves these invariants: a
+discarded point lies on a line with two chosen points of $S$, so it is not in
+$S$ (arc property). At a leaf, $S$ is the chosen set, and it is complete.
+
+The search tree has $816$, $497$, $138$ and $4$ nodes, with $28$, $6$, $22$ and
+$0$ leaves. Of these leaves, $7$, $5$, $1$ and $0$ are complete.
+\end{proof}
+
+\begin{table}[ht]\centering\small
+\begin{tabular}{@{}rll@{}}
+\toprule
+$j$ & arc (point numbers; each starts with $\mathcal F=0,121,132,12$) & \\
+\midrule
+1 & 25, 35, 49, 74, 103, 119 & $=R$\\
+1 & 25, 35, 53, 59, 94, 109 &\\
+1 & 25, 41, 54, 73, 86, 94 &\\
+1 & 25, 41, 70, 95, 109, 119 &\\
+1 & 25, 46, 70, 85, 93, 117 &\\
+1 & 25, 52, 71, 83, 109, 112 &\\
+1 & 25, 53, 65, 68, 85, 104 &\\
+2 & 26, 41, 49, 69, 90, 105 &\\
+2 & 26, 42, 50, 69, 79, 117 &\\
+2 & 26, 42, 82, 98, 101, 113 &\\
+2 & 26, 43, 62, 79, 91, 104 &\\
+2 & 26, 49, 63, 76, 79, 97 &\\
+3 & 27, 57, 74, 86, 94, 106 &\\
+\bottomrule
+\end{tabular}
+\caption{The $13$ complete $10$-arcs found by the search of
+Lemma~\ref{lem:search}. Each is mapped onto $R$ by an explicit invertible matrix
+(\texttt{orbitData} in the Lean file).}\label{tab:arcs}
+\end{table}
+
+\begin{lemma}[orbit certificates]\label{lem:cert}
+For each arc $T$ of Table~\ref{tab:arcs}, an explicit pair of matrices $(W,W')$
+with $WW'=W'W=I$ satisfies $WT=R$.
+\end{lemma}
+The matrices are listed in the Lean file and were checked there.
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+$R$ is a complete $10$-arc (checked directly). Let $A$ be any complete
+$10$-arc.
+\begin{enumerate}
+\item By Lemmas~\ref{lem:frame} and~\ref{lem:preserve}, some $M$ maps $A$ to a
+complete $10$-arc through $\mathcal F$.
+\item By Lemmas~\ref{lem:reduce}, \ref{lem:search} and~\ref{lem:cert}, a
+further projectivity maps that arc onto $R$.
+\end{enumerate}
+So every complete $10$-arc is equivalent to $R$. As equivalence is symmetric
+and transitive (inverse and product matrices), any two complete $10$-arcs are
+equivalent.
+\end{proof}
+
+\section{Further facts and the literature}
+The Python script \texttt{verify.py} computes the following facts. They are not
+needed for the proof.
+\begin{itemize}
+\item \textbf{Arcs through the frame.} For sizes $4,5,\dots,12$, the numbers
+of arcs containing $\mathcal F$ are $1$, $72$, $1548$, $10232$, $16233$,
+$4032$, $336$, $72$ and $9$.
+\item \textbf{Complete ones.} The complete arcs through $\mathcal F$ number
+$40, 5103, 3024, 84, 9$ for sizes $7, 8, 9, 10, 12$. So the complete arcs of
+$\PG$ have sizes $7,8,9,10,12$.
+\item \textbf{Incomplete $10$-arcs.} There are $84$ complete and $252$
+incomplete $10$-arcs through $\mathcal F$. Each incomplete one lies on one of
+the $9$ conics through $\mathcal F$, and $9\binom{8}{6}=252$. For example,
+$C_{10}=\{0,121,132,12,25,42,62,68,81,93\}$ is a $10$-arc whose completion to a
+conic adds the points $109$ and $116$. The Lean theorem
+\texttt{C10\_not\_complete} proves that $C_{10}$ is not complete.
+\item \textbf{One orbit.} The $84$ complete $10$-arcs through $\mathcal F$ have
+the same canonical form (least image over all $5040$ frame maps).
+\item \textbf{Stabilizer.} The stabilizer of a complete $10$-arc has order $60$,
+with element orders $1^1 2^{15} 3^{20} 5^{24}$, those of $A_5$. By orbit
+counting, its orbit contains $5040/60=84$ frame-containing arcs, i.e.\ all of
+them.
+\item \textbf{Total count.} The number of complete $10$-arcs in $\PG$ is
+$|\PGL|/60=212427600/60=3540460$.
+\end{itemize}
+
+This agrees with the literature. Ball and Lavrauw \cite{bl} (Corollary~8, based
+on Hirschfeld's classification \cite[Table~9.4]{hir}) state that for $q=11$
+there is a unique complete arc of size $q-1=10$. Their Example~3 is
+\[
+\{(1,0,0),(0,1,0),(0,0,1),(1,8,7),(1,5,2),(1,3,8),(1,4,1),(1,7,6),(1,9,4),(1,10,5)\}.
+\]
+\texttt{verify.py} checks that this set is a complete $10$-arc with the same
+canonical form as ours. By Segre's theorem \cite{segre} the $12$-arcs are the
+conics, and the enumeration shows that each of the $72$ $11$-arcs through
+$\mathcal F$ lies on one of the $9$ conics through $\mathcal F$ ($72=9\cdot8$).
+So a $10$-arc contained in a larger arc is a subset of a conic, consistent
+with the $252$ incomplete ones above.
+
+\section{Lean formalization}
+The project \texttt{lean4/} (Lean 4.19.0, core library only) builds in about
+$85$ seconds.
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \textbf{Linear algebra.} \texttt{F = Fin 11}, vectors \texttt{V},
+matrices \texttt{Mat}, \texttt{mulVec}, \texttt{mmul}, \texttt{dot}; and
+\texttt{IsInv M N} (two-sided inverse).
+\item \textbf{Points and incidence.} \texttt{coord} (the $133$ points),
+\texttt{inc}, and \texttt{Collinear} (a common line).
+\item \textbf{Arcs.} \texttt{IsArc}, \texttt{IsComplete} and
+\texttt{IsCompleteArc k A}, where $A$ is a list of $k$ distinct points.
+\item \textbf{Equivalence.} \texttt{act}, \texttt{MapsOnto M A B} (meaning
+$\{Ma : a\in A\}=B$), and \texttt{ProjEquiv}.
+\end{itemize}
+
+\paragraph{Main theorem.}
+\texttt{conjecture\_00000001091} states
+\[
+(\exists A,\ \mathrm{IsCompleteArc}\ 10\ A)\ \wedge\ \forall A\,B,\
+\mathrm{IsCompleteArc}\ 10\ A\to\mathrm{IsCompleteArc}\ 10\ B\to
+\mathrm{ProjEquiv}\ A\ B.
+\]
+
+\paragraph{General lemmas} (for all matrices and points, no enumeration).
+\begin{itemize}
+\item \textbf{Algebra.} \texttt{mulVec\_mmul}, \texttt{mmul\_assoc},
+\texttt{dot\_mulVec} and \texttt{tr\_mmul}. These are proved from field facts
+of $\F$, each checked by \texttt{decide}.
+\item \textbf{Action.} \texttt{act\_comp} and \texttt{act\_inv}.
+\item \textbf{Collinearity and arcs.} \texttt{collinear\_act},
+\texttt{collinear\_of\_act} and \texttt{map\_complete}.
+\item \textbf{Search.} The soundness theorem \texttt{search\_sound} and
+\texttt{search\_root}, with the counting lemmas.
+\item \textbf{Assembly.} \texttt{reduce}, \texttt{to\_rep},
+\texttt{frame\_lemma} and \texttt{complete10\_equiv}.
+\end{itemize}
+
+\paragraph{Kernel-checked finite facts} (\texttt{decide +kernel}).
+\begin{itemize}
+\item \texttt{ptl\_check}: the line masks agree with \texttt{inc} on all
+$133^2$ pairs (with \texttt{inc\_iff}, proved algebraically).
+\item \texttt{T1ok}--\texttt{T4ok}: the frame-lemma tables.
+\item \texttt{g1ok}--\texttt{g4ok}: the frame stabilizer data.
+\item \texttt{cand\_cover}, \texttt{cover1}--\texttt{cover4} and
+\texttt{rest\_ok}.
+\item \texttt{search1}--\texttt{search4}: the four searches.
+\item \texttt{orbit\_ok}: the $13$ certificates.
+\item \texttt{R\_complete}.
+\end{itemize}
+
+\paragraph{Model sanity.} The theorems \texttt{points\_cover},
+\texttt{points\_distinct} and \texttt{coord\_ne\_zero} show that the $133$
+listed points are exactly the points of $\PG$. \texttt{C10\_not\_complete}
+shows that completeness is a genuine restriction.
+
+\paragraph{Axioms.} \texttt{\#print axioms} reports only \texttt{propext} and
+\texttt{Quot.sound}. There is no \texttt{sorry}, no \texttt{native\_decide} and
+no added axiom.
+
+\paragraph{Limitations.} Collinearity is defined as ``lying on a common line''
+(the incidence definition of $\PG$). The equivalence with the vanishing of the
+$3\times3$ determinant is standard, but it is not proved in Lean. The facts of
+Section~4 (the count $84$, the stabilizer $A_5$, the size spectrum) are
+checked only by \texttt{verify.py}.
+
+\section{Independent check}
+\texttt{verify.py} uses only the Python standard library and no Lean table. It
+uses a different normalization (last nonzero coordinate $1$) and decides
+collinearity by the determinant. It:
+\begin{enumerate}
+\item enumerates all arcs through the frame;
+\item re-checks the $84$ complete $10$-arcs, and that each of the $252$
+incomplete ones lies on a conic;
+\item computes the canonical forms ($1$ class) and the stabilizer (order $60$,
+$A_5$);
+\item checks the Ball--Lavrauw example;
+\item reproduces the statistics of the Lean search ($1455$ nodes, $56$ leaves,
+$13$ complete).
+\end{enumerate}
+It runs in about $20$ seconds.
+
+\section{Reproduction}
+\begin{verbatim}
+cd lean4 && lake build        # Lean 4.19.0, core only
+cd .. && python3 verify.py
+pdflatex report.tex && pdflatex report.tex
+\end{verbatim}
+
+\begin{thebibliography}{9}
+\bibitem{bl} S.~Ball and M.~Lavrauw, Planar arcs, \emph{J. Combin. Theory
+Ser. A} (2018); arXiv:1705.10940.
+\bibitem{hir} J.~W.~P.~Hirschfeld, \emph{Projective Geometries over Finite
+Fields}, 2nd ed., Oxford University Press, 1998.
+\bibitem{segre} B.~Segre, Ovals in a finite projective plane, \emph{Canad. J.
+Math.} 7 (1955), 414--416.
+\end{thebibliography}
+\end{document}
