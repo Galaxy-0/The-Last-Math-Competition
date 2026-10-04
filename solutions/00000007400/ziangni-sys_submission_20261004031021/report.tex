@@ -1,0 +1,69 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\emergencystretch=2em
+\title{A purely odd representation of negative superdimension\\Disproof of Conjecture 00000007400}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\section*{Claim and conventions}
+The original conjecture asserts nonnegativity of superdimensions of
+supersymmetric representations. Neither the English nor Chinese statement
+restricts the grading, excludes trivial actions, or imposes a positivity
+condition on the character.
+For a finite-dimensional complex super vector space
+$V=V_{\bar0}\oplus V_{\bar1}$, its standard superdimension is
+\[
+\operatorname{sdim}V=\dim_{\mathbb C}V_{\bar0}
+-\dim_{\mathbb C}V_{\bar1}.
+\]
+Unlike ordinary dimension, this difference can be negative.
+
+\section*{A complete superrepresentation}
+Let $\mathfrak g$ be the one-dimensional abelian complex Lie algebra
+viewed as a Lie superalgebra concentrated in even degree:
+$\mathfrak g_{\bar0}=\mathbb C$, $\mathfrak g_{\bar1}=0$, and bracket zero.
+Bilinearity, graded skew symmetry and the graded Jacobi identity all hold
+because every bracket vanishes.
+
+Let the underlying vector space of $V$ be $\mathbb C$, with grading
+$V_{\bar0}=\{0\}$ and $V_{\bar1}=\mathbb C$.
+These are actual complex subspaces, disjoint and summing to $V$.
+Define the action $\rho(a)v=0$ for every $a\in\mathfrak g$ and $v\in V$.
+It is bilinear and preserves parity. Its representation identity is
+\[
+\rho([a,b])v
+=\rho(a)\rho(b)v-\rho(b)\rho(a)v=0.
+\]
+Since all nonzero algebra elements are even, this is exactly the required
+superrepresentation identity; requirements involving odd algebra elements
+hold trivially.
+Thus $V$ is a finite-dimensional graded representation, not merely an
+assigned pair of dimension counts.
+
+Its dimensions are $\dim V_{\bar0}=0$ and $\dim V_{\bar1}=1$, so
+\[
+\operatorname{sdim}V=0-1=-1<0.
+\]
+This disproves the universal nonnegativity assertion.
+The same example is the parity reversal of the one-dimensional trivial
+even representation.
+Its supercharacter at the identity is the supertrace of the identity,
+equal to $-1$; character terminology does not turn it into a positive
+number.
+
+\section*{Formal verification}
+The Lean project models the actual complex subspaces and their direct
+decomposition, the zero bilinear Lie bracket and its Jacobi identity,
+and bilinear actions with the commutator identity and parity preservation.
+The purely odd line is constructed as a structure satisfying these laws.
+Its dimensions are computed using Mathlib's vector-space
+\texttt{Module.finrank}, not introduced as hypotheses.
+The integer difference is proved equal to $-1$.
+The final theorem \texttt{conjecture\_7400\_false} refutes nonnegativity
+even in this restricted class of superrepresentations, which is contained
+in the original unrestricted domain.
+\end{document}
