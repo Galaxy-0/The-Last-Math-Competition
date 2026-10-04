@@ -1,0 +1,323 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\disc}{\operatorname{disc}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\Nm}{\operatorname{N}}
+\newcommand{\Cl}{\operatorname{Cl}}
+
+\title{Disproof of Conjecture 00000004310:\\
+imaginary quadratic fields of the same discriminant\\ have isomorphic unit groups}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000004310 asserts that there exist two imaginary quadratic fields of the same
+discriminant whose class groups have isomorphic $3$-parts while their unit groups are not
+isomorphic, and that the smallest such discriminant has seven digits. This is false, whatever
+the class-group condition means. The discriminant determines an imaginary quadratic field: every
+such field is $\Q(\sqrt m)$ for a unique squarefree $m<0$, its discriminant is $m$ or $4m$, and
+$m\mapsto\disc m$ is injective. So two fields with the same discriminant are equal, and their
+unit groups are equal. A second, independent argument: the unit group of an imaginary quadratic
+field, and more generally of an imaginary quadratic order, is cyclic of order $w(D)$, where
+$w(-4)=4$, $w(-3)=6$ and $w(D)=2$ otherwise, so it is a function of the discriminant $D$ alone.
+There is therefore no witness discriminant at all, and in particular no smallest one with seven
+digits. The Lean~4 development (core library only) defines squarefree integers, the
+discriminant, the rings of integers $\OO_m$ and the quadratic orders of every discriminant as
+rings of pairs, their unit groups and isomorphisms of unit groups from scratch. It proves
+injectivity of the discriminant, the complete list of units, and the negation of the claim, for
+an arbitrary class-group predicate. A standard-library Python script checks the same facts
+numerically by other methods, including the reading with binary quadratic forms.
+\end{abstract}
+
+\section{The statement}
+The conjecture reads:
+\begin{quote}
+Definition: The $p$-part of the class group and the unit group are two invariants of fields of
+the same discriminant. Conjecture: There exist two imaginary quadratic fields of the same
+discriminant whose $3$-parts of the class groups are isomorphic while their unit groups are not,
+and the smallest discriminant is a seven-digit value.
+\end{quote}
+The Chinese version says the same: there exist two imaginary quadratic fields with the same
+discriminant whose class groups have isomorphic $3$-parts and whose unit groups are not
+isomorphic, and the minimal discriminant is a seven-digit number.
+
+The conjecture is a conjunction of two clauses:
+\begin{enumerate}
+\item[(E)] there are imaginary quadratic fields $K_1,K_2$ with $D_{K_1}=D_{K_2}$,
+$\Cl(K_1)[3^\infty]\cong\Cl(K_2)[3^\infty]$ and $\OO_{K_1}^\times\not\cong\OO_{K_2}^\times$;
+\item[(M)] the smallest $|D|$ for which (E) holds has seven digits.
+\end{enumerate}
+We show that (E) is false. Then (M) is false as well, since there is no witness discriminant at
+all. Refuting (E) suffices to refute the conjecture.
+
+\section{Background}
+We use the following standard facts; see D.~A.~Marcus, \emph{Number Fields}, 2nd ed., Springer
+2018, Chapter~2 (quadratic fields, their rings of integers and discriminants), and D.~A.~Cox,
+\emph{Primes of the Form $x^2+ny^2$}, 2nd ed., Wiley 2013, \S2 (forms) and \S7 (orders).
+
+\begin{enumerate}
+\item[(F1)] \emph{Classification.} Every quadratic field is $\Q(\sqrt m)$ for a unique squarefree
+integer $m\notin\{0,1\}$. It is imaginary iff $m<0$. Uniqueness: $\Q(\sqrt m)=\Q(\sqrt{m'})$
+forces $m/m'$ to be a square in $\Q$, hence $m=m'$ for squarefree $m,m'$. This holds for
+subfields of $\C$ and for abstract fields up to isomorphism.
+\item[(F2)] \emph{Ring of integers.} For squarefree $m$, $\OO_K=\Z[\sqrt m]$ if
+$m\equiv 2,3\pmod 4$ and $\OO_K=\Z[\tfrac{1+\sqrt m}{2}]$ if $m\equiv1\pmod 4$.
+\item[(F3)] \emph{Discriminant.} $D_K=4m$ if $m\equiv2,3\pmod4$ and $D_K=m$ if $m\equiv1\pmod4$.
+\item[(F4)] \emph{Orders.} For every $D<0$ with $D\equiv0,1\pmod 4$ there is exactly one
+imaginary quadratic order of discriminant $D$ up to isomorphism, namely
+$\OO_D=\Z\big[\tfrac{D+\sqrt D}{2}\big]$. Every order in an imaginary quadratic field is of this
+form (Cox, \S7.A: an order of conductor $f$ is $\Z+f\OO_K$, of discriminant $f^2D_K$).
+\end{enumerate}
+
+\section{The discriminant determines the field}
+For an integer $m$ put $\disc m=m$ if $m\equiv1\pmod 4$ and $\disc m=4m$ otherwise.
+
+\begin{lemma}\label{lem:inj}
+The map $m\mapsto\disc m$ is injective on $\Z$. On squarefree $m$ its values satisfy
+$\disc m\equiv1\pmod 4$ or $\disc m\equiv 8,12\pmod{16}$, and $m$ is recovered as
+$m=\disc m$ if $\disc m\equiv1\pmod4$ and $m=\disc m/4$ otherwise.
+\end{lemma}
+\begin{proof}
+Suppose $\disc m_1=\disc m_2$. If $m_1\equiv m_2\equiv1\pmod4$, then $m_1=m_2$ directly. If
+neither is $\equiv1$, then $4m_1=4m_2$. If $m_1\equiv1$ and $m_2\not\equiv1$, then
+$m_1=4m_2\equiv0\pmod4$, a contradiction; the remaining case is symmetric. For squarefree $m$ we
+have $4\nmid m$. So if $m\not\equiv1\pmod 4$ then $m\equiv2,3\pmod4$ and
+$4m\equiv8,12\pmod{16}$. The recovery formula follows because $4m\equiv0\not\equiv1\pmod4$.
+\end{proof}
+
+\begin{theorem}\label{thm:same-field}
+If $K_1,K_2$ are imaginary quadratic fields with $D_{K_1}=D_{K_2}$, then $K_1\cong K_2$. If they
+are subfields of $\C$, then $K_1=K_2$. In either case
+$\OO_{K_1}^\times\cong\OO_{K_2}^\times$.
+\end{theorem}
+\begin{proof}
+By (F1) write $K_i\cong\Q(\sqrt{m_i})$ with $m_i<0$ squarefree. By (F3),
+$\disc m_1=D_{K_1}=D_{K_2}=\disc m_2$, so $m_1=m_2$ by Lemma~\ref{lem:inj}. Hence
+$K_1\cong\Q(\sqrt{m_1})\cong K_2$. Inside $\C$, an imaginary quadratic field is determined by the
+square class of $m$, so $K_1=K_2$. A field isomorphism maps the ring of integers onto the ring of
+integers, so it restricts to an isomorphism of unit groups.
+\end{proof}
+
+\section{The unit groups depend only on the discriminant}
+This section gives a second argument that does not use Lemma~\ref{lem:inj}, and it also covers
+orders.
+
+\paragraph{Quadratic rings of pairs.}
+For integers $t,n$ let $R_{t,n}=\Z[\omega]$, $\omega^2=t\omega-n$. Its elements are
+$a+b\omega$, $a,b\in\Z$, with
+\[
+(a+b\omega)(c+d\omega)=(ac-nbd)+(ad+bc+tbd)\,\omega .
+\]
+The ring has the conjugation $\overline{a+b\omega}=(a+tb)-b\omega$, the trace
+$\Tr(a+b\omega)=2a+tb$, and the norm $\Nm(a+b\omega)=(a+b\omega)\overline{(a+b\omega)}=a^2+tab+nb^2$.
+The norm is multiplicative and satisfies
+\begin{equation}\label{eq:4N}
+4\Nm(a+b\omega)=(2a+tb)^2+(4n-t^2)\,b^2 .
+\end{equation}
+The discriminant of the basis $(1,\omega)$ is
+$\det\big(\Tr(e_ie_j)\big)=2(t^2-2n)-t^2=t^2-4n$.
+
+\paragraph{Orders and maximal orders.}
+For $D\equiv0,1\pmod4$ put $t=D\bmod 2\in\{0,1\}$ and $n=(t-D)/4$. Then $t^2-4n=D$, and
+$\omega=(t+\sqrt D)/2$ satisfies $\omega^2=t\omega-n$, so $R_{t,n}\cong\OO_D$ is the order of
+discriminant $D$ in (F4). For squarefree $m$, the parameters of (F2) are $(t,n)=(1,(1-m)/4)$ when
+$m\equiv1\pmod4$, with $\omega=(1+\sqrt m)/2$, and $(t,n)=(0,-m)$ otherwise, with $\omega=\sqrt m$.
+These are exactly the parameters attached to $D=\disc m$, so $\OO_{\Q(\sqrt m)}=\OO_{\disc m}$.
+
+The map $a+b\omega\mapsto(x,y)$, where $x+y\sqrt m=2(a+b\omega)$, identifies $R_{t,n}$ with the
+elements $(x+y\sqrt m)/2$ of $\Q(\sqrt m)$ and respects multiplication. Formula (F2) is the
+following statement.
+
+\begin{lemma}[integrality]\label{lem:integral}
+Let $m\not\equiv0\pmod4$ and $x,y\in\Z$. The element $(x+y\sqrt m)/2$, which has trace
+$x\in\Z$, has norm $(x^2-my^2)/4\in\Z$ iff it lies in $\OO_m$; that is, iff $x\equiv y\pmod2$
+when $m\equiv1\pmod4$, and iff $x,y$ are both even otherwise.
+\end{lemma}
+\begin{proof}
+A square $z^2$ is $\equiv0\pmod4$ if $z$ is even and $\equiv1\pmod4$ if $z$ is odd, so $x^2-my^2\equiv[x\text{ odd}]-m[y\text{ odd}]\pmod 4$.
+If $y$ is even this is $\equiv0$ iff $x$ is even. If $y$ is odd it is $\equiv 1-m$ or $-m$,
+according to the parity of $x$. Since $4\nmid m$, the value is $0$ exactly when $x$ is odd and
+$m\equiv1\pmod4$.
+\end{proof}
+Every algebraic integer $\alpha=u+v\sqrt m\in\Q(\sqrt m)$ has this form: $2u=\Tr\alpha\in\Z$, and
+$(2u)^2-m(2v)^2=4\Nm\alpha\in\Z$, so $m(2v)^2\in\Z$, and $2v\in\Z$ because $m$ is squarefree.
+Together with Lemma~\ref{lem:integral} this is the proof of (F2).
+
+\begin{theorem}[units]\label{thm:units}
+Let $D<0$, $D\equiv0,1\pmod4$, and let $(t,n)$ be as above. The units of $\OO_D=R_{t,n}$ are the
+elements of norm $1$. They are
+\begin{itemize}
+\item $\pm1,\pm\omega$ for $D=-4$ (here $\omega=i$),
+\item $\pm1,\pm\omega,\pm(\omega-1)$ for $D=-3$ (here $\omega=(1+\sqrt{-3})/2$, $\omega^2=\omega-1$),
+\item $\pm1$ for every other $D$.
+\end{itemize}
+In each case $\OO_D^\times$ is cyclic of order $w(D)$, where $w(-4)=4$, $w(-3)=6$ and $w(D)=2$
+otherwise. It is generated by $\omega$, by $\omega$, and by $-1$, respectively.
+\end{theorem}
+\begin{proof}
+Since $4n-t^2=-D>0$, \eqref{eq:4N} shows that $\Nm\ge0$. If $xy=1$, then
+$\Nm(x)\Nm(y)=1$ forces $\Nm(x)=1$. Conversely, if $\Nm x=1$ then $x\bar x=1$. Now let
+$\Nm(a+b\omega)=1$. By \eqref{eq:4N}, $4=(2a+tb)^2+|D|b^2$ with $|D|\ge3$, so $|b|\le1$ and
+$|2a+tb|\le2$, hence $|a|\le1$. If $|D|>4$ then $b=0$ and $a=\pm1$. For $D=-4$ the equation is
+$a^2+b^2=1$, and for $D=-3$ it is $a^2+ab+b^2=1$. Enumerating the nine pairs $(a,b)$ gives the
+lists. The powers of $\omega$ for $D=-3$ are
+$1,\omega,\omega-1,-1,-\omega,1-\omega$, and $\omega^6=1$.
+\end{proof}
+
+\begin{corollary}\label{cor:w}
+For imaginary quadratic fields, $\OO_{\Q(\sqrt m)}^\times\cong\Z/w(\disc m)$. If $w(D_1)=w(D_2)$,
+then the unit groups of the orders of discriminants $D_1,D_2$ are isomorphic. In particular,
+equal discriminants give isomorphic unit groups. For orders of a fixed discriminant this holds
+without using Lemma~\ref{lem:inj}.
+\end{corollary}
+
+\begin{theorem}\label{thm:main}
+Clause (E) is false. More precisely, for every predicate $C(K_1,K_2)$ standing in for
+``$\Cl(K_1)[3^\infty]\cong\Cl(K_2)[3^\infty]$'', there are no imaginary quadratic fields with
+$D_{K_1}=D_{K_2}$, $C(K_1,K_2)$ and $\OO_{K_1}^\times\not\cong\OO_{K_2}^\times$. Consequently
+there is no witness discriminant, and clause (M) is false.
+\end{theorem}
+\begin{proof}
+This follows from Theorem~\ref{thm:same-field}, or independently from Corollary~\ref{cor:w}.
+\end{proof}
+
+\section{Readings of the statement}\label{sec:readings}
+\begin{enumerate}
+\item \textbf{``Two fields'' as subfields of $\C$ or as fields up to isomorphism.} In both cases
+Theorem~\ref{thm:same-field} gives $K_1\cong K_2$, hence isomorphic unit groups.
+\item \textbf{``Two'' fields that are required to be distinct.} Then there is not even a pair
+of distinct imaginary quadratic fields with the same discriminant, so (E) is false even before
+units are considered. If $K_1=K_2$ is allowed, the unit groups are equal.
+\item \textbf{The class-group condition.} It is one conjunct of an existential, and we refute
+the existential for an arbitrary predicate in its place. Whatever ``$3$-part'' means (Sylow
+$3$-subgroup, $3$-rank, $\Cl/\Cl^3$), the argument is unaffected. When $K_1=K_2$ it holds
+trivially.
+\item \textbf{Orders and binary quadratic forms.} If ``fields of discriminant $D$'' is read as
+imaginary quadratic orders of discriminant $D$, then by (F4) there is only one, and by
+Theorem~\ref{thm:units} its unit group is $\Z/w(D)$, a function of $D$. If it is read as
+primitive positive definite binary quadratic forms of discriminant $D$, the form class group
+$C(D)\cong\operatorname{Pic}(\OO_D)$ is a function of $D$. The ``unit group'' of a form $f$, its
+group of proper automorphs in $\mathrm{SL}_2(\Z)$, is in bijection with the solutions of
+$t^2-Du^2=4$ via $(t,u)\mapsto\begin{pmatrix}(t-bu)/2&-cu\\au&(t+bu)/2\end{pmatrix}$ (the classical
+description of automorphs; see Cox, \S7, and D.~A.~Buell, \emph{Binary Quadratic Forms},
+Springer 1989, Ch.~3). So it is cyclic of
+order $w(D)$ for every form of discriminant $D$. Again nothing depends on more than $D$.
+\item \textbf{Absolute value of the discriminant.} Both fields are imaginary, so their
+discriminants are negative, and $|D_1|=|D_2|$ gives $D_1=D_2$.
+\item \textbf{Dropping ``of the same discriminant''.} Then pairs with isomorphic $3$-parts and
+non-isomorphic unit groups do exist, but they are tiny. For example $\Q(\sqrt{-3})$,
+$\Q(i)$ and $\Q(\sqrt{-2})$ all have class number $1$ (trivial $3$-parts), with unit groups of
+orders $6,4,2$. The discriminants involved are $-3,-4,-8$, with one digit, so clause (M), the
+seven-digit minimum, fails under this reading too. Moreover, every witness pair must contain
+$\Q(i)$ or $\Q(\sqrt{-3})$, since all other unit groups are $\{\pm1\}$.
+\end{enumerate}
+
+\section{The Lean formalization}
+The directory \texttt{lean4/} contains a Lean~4.19.0 project that uses the core library only.
+All objects are defined from scratch.
+\begin{itemize}
+\item \texttt{Squarefree m} ($d^2\mid m\Rightarrow d=\pm1$), \texttt{IsImagQuadParam m}
+($m<0$ and squarefree), and \texttt{disc m}. \texttt{SqfCheck} is a decidable test proved sound
+(\texttt{squarefree\_of\_check}). It gives \texttt{param\_neg1}, \texttt{param\_neg2},
+\texttt{param\_neg3}, \dots; \texttt{not\_param\_neg4}.
+\item \texttt{disc\_injective}, \texttt{disc\_fundamental} (values $\equiv1\bmod4$ or
+$\equiv8,12\bmod16$), and \texttt{mOfDisc\_disc} (explicit inverse): Lemma~\ref{lem:inj}.
+\item \texttt{QR} and \texttt{mul t n}: the ring $R_{t,n}$ of pairs. Proven:
+\texttt{mul\_comm}, \texttt{mul\_assoc}, \texttt{one\_mul}, \texttt{mul\_one},
+\texttt{mul\_add}, \texttt{omega\_sq} ($\omega^2=t\omega-n$), \texttt{norm\_mul},
+\texttt{mul\_conj}, \texttt{four\_norm} (equation~\eqref{eq:4N}), and \texttt{discBasis\_eq}
+($\det\Tr(e_ie_j)=t^2-4n$).
+\item \texttt{fT m}, \texttt{fN m}: the parameters of $\OO_m$ in (F2). \texttt{sqrtM\_sq}:
+$\sqrt m\in\OO_m$. \texttt{field\_discBasis}: the discriminant of $\OO_m$ is \texttt{disc m}.
+\texttt{halfCoords\_mul}: under $a+b\omega\mapsto(x+y\sqrt m)/2$ the multiplication is that of
+$\Q(\sqrt m)$. \texttt{integral\_iff}: Lemma~\ref{lem:integral}.
+\item \texttt{tD D}, \texttt{nD D}: the order of discriminant $D$, with
+\texttt{discBasis\_tD}. \texttt{fT\_eq}, \texttt{fN\_eq}: $\OO_m$ is the order of discriminant
+\texttt{disc m}.
+\item \texttt{IsUnitQ} (has an inverse), \texttt{UnitGrp} (the subtype with its
+multiplication), and \texttt{isUnit\_iff\_norm}.
+\texttt{units\_classification}: for every valid $D<0$, $x$ is a unit iff
+$x\in$ \texttt{unitList D}. \texttt{unitList\_length} ($=w(D)$), \texttt{unitList\_nodup}, and
+\texttt{unitList\_eq\_pows}: the list is $1,g,\dots,g^{w-1}$ with $g^{w}=1$. Together these say
+that the unit group is cyclic of order $w(D)$ (Theorem~\ref{thm:units}).
+\item \texttt{field\_units\_pm\_one}, \texttt{field\_units\_neg1}, \texttt{field\_units\_neg3},
+and \texttt{field\_units\_card}: the field case.
+\item \texttt{MulIso}: bijections with inverse that preserve multiplication.
+\texttt{orderUnits\_iso\_of\_w\_eq} and \texttt{fieldUnits\_iso\_of\_disc\_eq}:
+Corollary~\ref{cor:w}. The latter does not use \texttt{disc\_injective}.
+\item \texttt{Claim C3}: $\exists\,m_1,m_2$, \texttt{IsImagQuadParam} $m_1$,
+\texttt{IsImagQuadParam} $m_2$, \texttt{disc} $m_1=$ \texttt{disc} $m_2$, \texttt{C3} $m_1\,m_2$,
+and $\neg$\,\texttt{Nonempty (MulIso (FieldUnits} $m_1$\texttt{) (FieldUnits} $m_2$\texttt{))}.
+Here \texttt{C3} is an arbitrary predicate standing for the class-group condition.
+\texttt{conjecture\_00000004310\_false : }$\neg$\,\texttt{Claim C3} (via injectivity), and
+\texttt{conjecture\_00000004310\_false'} (via $w$). \texttt{no\_witness\_discriminant} and
+\texttt{smallest\_seven\_digit\_false} refute clause (M). \texttt{order\_claim\_false} covers
+the reading with orders.
+\item Non-vacuity: \texttt{fieldUnits\_not\_iso} proves
+$\OO_{-1}^\times\not\cong\OO_{-2}^\times$ by a pigeonhole argument, so the condition ``not
+isomorphic'' is not empty. \texttt{weakened\_reading\_small\_witness} records the pair
+$(-1,-2)$ with discriminants $-4,-8$ for reading~6. \texttt{hypotheses\_satisfiable} and
+\texttt{param\_*} show that the field hypotheses are satisfiable.
+\end{itemize}
+Polynomial identities are proved by distributing, sorting monomials with
+\texttt{simp only [Int.mul\_comm, \dots]}, and closing with \texttt{omega} (the macro
+\texttt{poly\_omega}). The build takes about ten seconds. The \texttt{\#print axioms} report
+shows only \texttt{propext}, \texttt{Quot.sound} and \texttt{Classical.choice}. There is no
+\texttt{sorry} and no \texttt{native\_decide}.
+
+\paragraph{What is not in Lean.} Lean does not construct $\Q(\sqrt m)$ or the ring of all
+algebraic integers. Facts (F1)--(F4) are the bridge from ``imaginary quadratic field'' to
+``squarefree $m<0$ together with the ring \texttt{QR} with parameters \texttt{fT m},
+\texttt{fN m}''. Lean proves the integer part of (F2) (\texttt{integral\_iff},
+\texttt{halfCoords\_mul}) and the discriminant formula (F3) as the determinant of the trace
+form. The rational step $2v\in\Z$ and the uniqueness in (F1) are argued in this report. Class
+groups are not formalized; they enter only as an arbitrary predicate. Theorem
+\texttt{conjecture\_00000004310\_false} uses only \texttt{disc\_injective}; the stronger units
+classification gives the second proof.
+
+\section{Independent verification}
+\texttt{verify.py} (standard library only) checks:
+\begin{itemize}
+\item that \texttt{disc} is injective on the $12160$ squarefree $m$ with $-20000<m<0$; that its
+values are fundamental discriminants (recognised by an independent test); and that all $6079$
+negative fundamental discriminants with $|D|<20000$ arise;
+\item the unit counts of $\OO_m$ by brute force on a box of side 7, giving $4$, $6$ and $2$, so
+the count is a function of $D$;
+\item for all $4999$ discriminants $-10^4<D<0$, $D\equiv0,1\pmod4$, that $t^2-Du^2=4$ and
+$\Nm(a+b\omega)=1$ each have $w(D)$ solutions, and that the unit group is cyclic;
+\item for binary quadratic forms, that every reduced primitive form of discriminant $D$
+($143695$ forms for $|D|<10^4$) has exactly $w(D)$ proper automorphs. The automorphs are found
+through $(t,u)$ for all $D$, and by brute force over $\mathrm{SL}_2$ matrices with entries in
+$[-2,2]$ for $|D|<400$;
+\item a few class numbers, and that no discriminant carries two fields with different unit groups;
+\item reading~6: $h(-3)=h(-4)=h(-8)=1$, giving one-digit witnesses.
+\end{itemize}
+All checks pass (see \texttt{verification.txt}).
+
+\section{Conclusion}
+An imaginary quadratic field is determined by its discriminant, and its unit group is cyclic of
+order $w(D)\in\{2,4,6\}$, a function of the discriminant alone. So no two imaginary quadratic
+fields of the same discriminant have non-isomorphic unit groups, whatever their class groups
+are. The same holds for imaginary quadratic orders and for binary quadratic forms. The witness
+set is empty, so there is no ``smallest seven-digit discriminant''. Conjecture 00000004310 is
+false.
+
+\end{document}
