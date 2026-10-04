@@ -1,0 +1,116 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb,array}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\emergencystretch=2em
+\title{Three distinct voters in a one-dimensional\\single-peaked, single-crossing profile\\
+\large Disproof of conjecture 00000008244}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+The source's middle conjunct states that the maximal agent count
+in the simultaneous single-peaked and single-crossing domain is
+$2^d d$. In dimension one this is two.
+An actual one-dimensional Euclidean profile with three distinct
+strict preferences disproves that bound. We use neither duplicate
+preferences nor a higher-dimensional embedding.
+
+\textbf{Actual locations and utilities.}
+There are three alternatives $a,b,c$ with locations
+\[
+ q_a=0,\qquad q_b=2,\qquad q_c=3
+\]
+on the real line. Three agents have distinct locations
+\[
+ p_0=0,\qquad p_1=5/4,\qquad p_2=7/4.
+\]
+The actual Euclidean utility of agent $i$ for alternative $z$ is
+\[
+ u_i(z)=-(q_z-p_i)^2.
+\]
+These give the complete table
+\[
+\begin{array}{c|rrr|l}
+ i & u_i(a)&u_i(b)&u_i(c)&\text{strict order}\\ \hline
+ 0 & 0 & -4 & -9 & a\succ b\succ c\\
+ 1 & -25/16 & -9/16 & -49/16 & b\succ a\succ c\\
+ 2 & -49/16 & -1/16 & -25/16 & b\succ c\succ a
+\end{array}
+\]
+Every agent has a strict total order, with no ties, and all three
+orders are distinct. The alternative axis is $a<b<c$; the voter
+order is $0<1<2$, agreeing with their actual real locations.
+
+\textbf{Single-peakedness.}
+Agent zero has peak $a$ and prefers alternatives less as one moves
+right. Agents one and two have peak $b$, with $b$ preferred to
+the sole alternative on each side. Equivalently, each preference
+increases toward its peak along the fixed axis and decreases away
+from it on either side. Thus the complete profile is single-peaked
+on this one-dimensional axis.
+
+\newpage
+\textbf{Single-crossing, including all alternative pairs.}
+Along the voter order $0<1<2$, the strict-comparison sets are
+\[
+ \{i:a\succ_i b\}=\{0\},\qquad
+ \{i:a\succ_i c\}=\{0,1\},\qquad
+ \{i:b\succ_i c\}=\{0,1,2\}.
+\]
+Each is an initial segment. Each reversed comparison is its
+complement, a final segment; a comparison of an alternative to
+itself is empty. Hence every ordered-pair comparison set is an
+initial or final segment of the voter order. This is the standard
+single-crossing condition: a pairwise preference can switch at
+most once. In particular $a$ versus $b$ switches after voter zero,
+$a$ versus $c$ after voter one, and $b$ versus $c$ never switches.
+
+\textbf{The actual dimension and failure of the count bound.}
+Both agents and alternatives are located in $\mathbb R$ as a
+real vector space. Its actual real dimension is one:
+\[
+ d=\dim_{\mathbb R}\mathbb R=1.
+\]
+There are three agents and three distinct preference orders in
+the simultaneous domain. Therefore
+\[
+ 3>2=2^1\cdot1.
+\]
+Even counting distinct preferences instead of agents does not
+rescue the claimed bound.
+
+The profile also has the usual median-voter behavior: alternative
+$b$, the peak of the middle voter, defeats $a$ by two votes to one
+and defeats $c$ unanimously. Thus the counterexample does not
+depend on a failure of median existence.
+
+\textbf{Scope.}
+This refutes the stated maximal-agent-count conjunct.
+It makes no claim about the other conjectural criteria or the
+separate size formula for the full single-peaked domain.
+Single-crossing is verified for an explicit voter order, and
+single-peakedness for the same fixed alternative axis.
+
+\textbf{Formal correspondence.}
+Lean defines actual real locations and negative squared-distance
+utilities. An explicit finite rank table represents the three
+orders, and the utility/preference theorem proves equivalence
+to comparison of the actual utilities for every agent and pair.
+
+The proof verifies strict total preferences and pairwise
+distinctness. \texttt{SinglePeaked} is the full increase-to-peak,
+decrease-from-peak condition. \texttt{SingleCrossing} requires
+every ordered-pair comparison set to be downward or upward closed.
+Both properties are proved on the actual finite profile.
+The actual \texttt{Module.finrank} of $\mathbb R$ is one,
+and the final theorem combines all profile properties with
+the strict failure of the displayed count bound.
+
+\textbf{Reproduction.}
+Run \texttt{lake build} in \texttt{lean/} with Lean 4.19.0 and
+public Mathlib revision
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}\end{center}
+The project prints axiom audits.
+\end{document}
