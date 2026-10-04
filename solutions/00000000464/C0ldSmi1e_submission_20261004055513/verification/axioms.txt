@@ -1,0 +1,27 @@
+def Conjecture464.SpanningTree.{u_1} : {V : Type u_1} → SimpleGraph V → Type u_1 :=
+fun {V} G => { T // T ≤ G ∧ T.IsTree }
+def Conjecture464.spanningTreeCount.{u_1} : {V : Type u_1} → SimpleGraph V → ℕ :=
+fun {V} G => Nat.card (Conjecture464.SpanningTree G)
+def Conjecture464.largestPrimeFactor : ℕ → ℕ :=
+fun n => n.primeFactors.sup id
+Conjecture464.conjecture464_counterexample :
+  (∀ (k : ℕ), (Conjecture464.cycleFamily k).Connected ∧ (Conjecture464.cycleFamily k).IsRegularOfDegree 2) ∧
+    Filter.Tendsto (fun k => Fintype.card (Fin (Conjecture464.vertexCount k))) Filter.atTop Filter.atTop ∧
+      ¬∃ c,
+          0 < c ∧
+            ∃ K,
+              ∀ (k : ℕ),
+                K ≤ k →
+                  c * Real.log ↑(Fintype.card (Fin (Conjecture464.vertexCount k))) ≤
+                    ↑(Conjecture464.largestPrimeFactor (Conjecture464.spanningTreeCount (Conjecture464.cycleFamily k)))
+'Conjecture464.cycle_delete_connected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture464.cycle_spanningTreeCount_of_three_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture464.largestPrimeFactor_vertexCount' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture464.cycleFamily_connected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture464.cycleFamily_regular' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture464.cycleFamily_order_tendsto' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture464.cycleFamily_spanningTreeCount' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture464.cycleFamily_largestPrimeFactor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture464.cycleFamily_eventually_violates' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture464.no_eventual_logarithmic_lower_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture464.conjecture464_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
