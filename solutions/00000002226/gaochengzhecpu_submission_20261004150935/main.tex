@@ -1,0 +1,150 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\title{Matrix Rings and the McCoy Property:\\A Proof of Conjecture 00000002226}
+\author{GitHub: gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+For a nonzero commutative ring $R$ and $n\ge1$, the matrix ring $M_n(R)$
+has the McCoy property if and only if $n=1$. The case $n=1$ is McCoy's
+theorem. For $n\ge2$ an explicit pair of linear polynomials shows that
+$M_n(R)$ is neither right nor left McCoy. The equivalence and both
+one-sided versions are verified in Lean.
+\end{abstract}
+
+\paragraph{Definitions and reading of the source.}
+Rings are associative with $1$, and $A[x]$ is the polynomial ring in a
+central indeterminate. Following Nielsen~\cite{nielsen}, a ring $A$ is
+\emph{right McCoy} if for all nonzero $f,g\in A[x]$ with $fg=0$ there is
+a nonzero $r\in A$ with $fr=0$. It is \emph{left McCoy} if under the
+same hypothesis there is a nonzero $s\in A$ with $sg=0$. It is
+\emph{McCoy} if it is both. This is the property in the source: the
+coefficients of a zero-divisor polynomial are annihilated by one nonzero
+element.
+
+The source considers $M_n(R)$ over a commutative ring $R$; the Chinese
+version states the same equivalence. We take $R$ nonzero and $n\ge1$. These are the standing conventions for a matrix
+ring; without them $M_n(R)$ is the zero ring, which is McCoy vacuously
+because it has no nonzero polynomials. The last section returns to this
+point.
+
+\begin{theorem}
+Let $R$ be a nonzero commutative ring and $n\ge1$. Then $M_n(R)$ is
+McCoy if and only if $n=1$. The same equivalence holds for the right
+McCoy property alone and for the left McCoy property alone.
+\end{theorem}
+
+The theorem follows from the next two lemmas, since $M_1(R)\cong R$ and
+both properties are invariant under ring isomorphism.
+
+\begin{lemma}[McCoy \cite{mccoy}]
+Every commutative ring is McCoy.
+\end{lemma}
+\begin{proof}
+Let $f,g\in R[x]$ be nonzero with $fg=0$. Among all nonzero $h$ with
+$fh=0$ choose one of least degree $m$, and write $f=\sum_i a_ix^i$ and
+$h=\sum_{j\le m}b_jx^j$ with $b_m\ne0$. If $a_ih=0$ for every $i$, then
+$a_ib_m=0$ for every $i$, so $b_mf=0$ with $b_m\ne0$. Otherwise let $l$
+be the largest index with $a_lh\ne0$. Then
+$0=fh=(a_0+\dots+a_lx^l)h$, and the coefficient of $x^{l+m}$ gives
+$a_lb_m=0$. Hence $a_lh$ is nonzero of degree less than $m$, and
+$f\cdot a_lh=a_l\,fh=0$. This contradicts the choice of $h$. So some
+nonzero $r\in R$ satisfies $fr=rf=0$. Applying this to $gf=0$ gives a
+nonzero $s$ with $sg=0$.
+\end{proof}
+
+\begin{lemma}
+Let $S$ be a nonzero ring, not necessarily commutative, and $n\ge2$.
+Then $M_n(S)$ is neither right McCoy nor left McCoy.
+\end{lemma}
+\begin{proof}
+Let $E_{ab}$ be the matrix units, so $E_{ab}E_{cd}=\delta_{bc}E_{ad}$,
+and let $I$ be the identity matrix. Put
+\[
+ f=(I-E_{22})+E_{12}\,x,\qquad g=E_{21}-E_{11}\,x .
+\]
+Both are nonzero because $E_{12}\ne0$ and $E_{21}\ne0$. The three
+coefficients of $fg$ are
+\begin{align*}
+ (I-E_{22})E_{21}&=E_{21}-E_{21}=0,\\
+ E_{12}E_{21}-(I-E_{22})E_{11}&=E_{11}-E_{11}+0=0,\\
+ -E_{12}E_{11}&=0,
+\end{align*}
+so $fg=0$. Let $r\in M_n(S)$ with $fr=0$. Then $(I-E_{22})r=0$ and
+$E_{12}r=0$. The first equation gives $r=E_{22}r$, and therefore
+\[
+ r=E_{22}r=E_{21}E_{12}r=0 .
+\]
+Thus no nonzero constant annihilates $f$ on the right, and $M_n(S)$ is
+not right McCoy.
+
+For the left property put
+\[
+ f'=E_{12}-E_{11}\,x,\qquad g'=(I-E_{22})+E_{21}\,x .
+\]
+Both are nonzero. The coefficients of $f'g'$ are $E_{12}(I-E_{22})=0$,
+$E_{12}E_{21}-E_{11}(I-E_{22})=E_{11}-E_{11}=0$ and $-E_{11}E_{21}=0$,
+so $f'g'=0$. If $sg'=0$, then $s(I-E_{22})=0$ and $sE_{21}=0$, hence
+$s=sE_{22}=sE_{21}E_{12}=0$. Thus $M_n(S)$ is not left McCoy.
+\end{proof}
+
+\section*{Formal verification and scope}
+The Lean definitions \texttt{RightMcCoy}, \texttt{LeftMcCoy} and
+\texttt{McCoy} are stated for an arbitrary ring $A$ and Mathlib's
+polynomial ring \texttt{A[X]}, whose indeterminate is central. They are
+the definitions above, with \texttt{C r} the constant polynomial.
+
+The first lemma is proved in \texttt{rightMcCoy\_of\_comm} and
+\texttt{leftMcCoy\_of\_comm} from Mathlib's McCoy theorem
+\begin{center}\small\texttt{Polynomial.nmem\_nonZeroDivisors\_iff}.\end{center}
+The explicit ring isomorphism \texttt{oneByOne} between $M_1(R)$ and
+$R$, with the two transfer lemmas named \texttt{of\_ringEquiv}, gives
+\texttt{mcCoy\_one}.
+
+\texttt{not\_rightMcCoy\_matrix} and \texttt{not\_leftMcCoy\_matrix}
+prove the second lemma for matrices over any nonzero ring indexed by
+any finite type with two distinct indices. They use the polynomials
+displayed above, built from Mathlib's matrix units; the products, the
+nonvanishing of $f$ and $g$, and the vanishing of every annihilating
+constant are all proved. The main theorem is \texttt{matrix\_mcCoy\_iff}:
+for a nontrivial commutative ring and $1\le n$,
+\[
+ \texttt{McCoy (Matrix (Fin n) (Fin n) R)}\;\leftrightarrow\; n=1 .
+\]
+\texttt{matrix\_rightMcCoy\_iff} and \texttt{matrix\_leftMcCoy\_iff}
+are the one-sided versions. No \texttt{sorry}, \texttt{native\_decide}
+or custom axiom occurs.
+
+The hypotheses $R\ne0$ and $n\ge1$ are the only restriction.
+\texttt{mcCoy\_of\_subsingleton} records why they are needed: a zero
+ring is McCoy vacuously, so for $R=0$ or $n=0$ the ring $M_n(R)$ is
+McCoy for a trivial reason. Under the usual convention that the
+coefficient ring of a matrix ring is nonzero, the source statement is
+proved in full. A reader who admits the zero ring should read the
+result as: the equivalence holds exactly for nonzero $R$.
+
+\section*{Source and reproduction}
+The exact bilingual source is included byte-for-byte as
+\texttt{SOURCE.md}. Its repository path is
+\begin{center}\small\texttt{conjectures/00000002226.md}.\end{center}
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake build}, then
+\begin{center}\small\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The included public-Git manifest locks all dependency revisions. The
+\texttt{verification/} directory records the fresh-build logs,
+theorem-axiom reports, artifact hashes, review and final PDF
+inspection. No supplementary numerical computation is required.
+
+\begin{thebibliography}{9}
+\bibitem{mccoy} N. H. McCoy, Remarks on divisors of zero,
+\emph{Amer. Math. Monthly} 49 (1942), 286--295.
+\bibitem{nielsen} P. P. Nielsen, Semi-commutativity and the McCoy
+condition, \emph{J. Algebra} 298 (2006), 134--141.
+\end{thebibliography}
+\end{document}
