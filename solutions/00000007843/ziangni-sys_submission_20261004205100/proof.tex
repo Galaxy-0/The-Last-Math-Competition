@@ -1,0 +1,43 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Complete graphs contradict the universal random-greedy size law}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Conjecture 00000007843.} Both language versions assert that on \(d\)-regular graphs the random-order greedy independent-set size is always bounded above and below by
+\[
+ B(n,d)=\frac{n\log d}{d+\log d}
+\]
+up to a \(1+o(1)\) factor. They impose no triangle-free or local tree-like hypothesis on the first clause. The genuine complete graphs disprove this unrestricted relative asymptotic claim.
+
+For each integer \(d\ge2\), take the actual simple graph \(K_{d+1}\). It has \(n=d+1\) vertices and every vertex is adjacent to exactly the other \(d\) vertices, so it is genuinely \(d\)-regular.
+
+Run the standard greedy independent-set process on any permutation of its vertices: start with the empty set, scan the vertices in that order, and add a vertex exactly when it has not already been chosen and is adjacent to no chosen vertex. The first vertex is added. Every subsequent vertex is distinct from it and adjacent to it, so is rejected. The final set is the singleton containing the first vertex. It is an actual independent set and has cardinality one for \emph{every} permutation.
+
+Choose the permutation uniformly from the finite permutation group, giving each order probability \(1/(d+1)!\). This is a genuine probability measure on all vertex orders. The resulting random greedy size \(X_d\) satisfies
+\[
+ \mathbb P(X_d=1)=1,\qquad \mathbb E X_d=1.
+\]
+Thus the failure is deterministic across all orders and also holds for the true expectation and probability law, rather than relying on one exceptional order.
+
+The asserted benchmark on these graphs is
+\[
+ b_d=B(d+1,d)=\frac{(d+1)\log d}{d+\log d}.
+\]
+For \(d\ge2\), one has \(0\le\log d\le d\) and hence
+\[
+ b_d\ge\frac{d\log d}{2d}=\frac12\log d\longrightarrow\infty.
+\]
+Consequently the actual relative size obeys
+\[
+ \frac{X_d}{b_d}=\frac{\mathbb E X_d}{b_d}
+ =\frac1{b_d}\longrightarrow0.
+\]
+It cannot approach one, as the claimed two-sided \(1+o(1)\) comparison requires. Equivalently, beyond a sufficiently large degree the benchmark already exceeds twice the actual size, and the relative discrepancy grows rather than vanishing.
+
+\medskip\noindent\textbf{Scope.} This disproves the universal first clause in the simultaneous large-degree and large-vertex regime \(n=d+1\to\infty\). It does not assert failure of results restricted to triangle-free graphs, high-girth graphs or locally tree-like neighborhoods. The separate claim about neighborhood depth cannot supply a missing restriction on the stated universal first clause.
+
+\medskip\noindent\textbf{Formal verification.} Lean defines the genuine complete simple graphs and proves their exact degree. It defines the standard greedy scan recursively using adjacency and finite sets, proves its singleton output for every actual vertex permutation, and uses a normalized uniform probability mass function on the full finite permutation group. The true Bochner expectation and probability of size one are computed. It then proves the benchmark tends to infinity, the relative expectation tends to zero, and it cannot tend to one. The project uses pinned Lean and Mathlib and prints final theorem axiom audits.
+\end{document}
