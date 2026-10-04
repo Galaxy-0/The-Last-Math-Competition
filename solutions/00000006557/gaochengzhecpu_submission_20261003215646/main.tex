@@ -1,0 +1,103 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\setlength{\emergencystretch}{1em}
+\begin{document}
+\title{A fourth-order splitting whose negative mass is one half}
+\author{Chengzhe Gao}\date{}\maketitle
+Conjecture 6557 includes the claim that the sum of negative coefficients
+in higher-order splitting is one. We give a counterexample whether this
+means the signed sum or the sum of their absolute values.
+Order is understood in the usual formal Taylor-series sense for splitting
+in noncommuting operators; see \cite{BCM}, Section 3.
+
+Put $S(t)=\exp(tA/2)\exp(tB)\exp(tA/2)$, and define
+\[
+ T(h)=S(h/6)^4S(-h/3)S(h/6)^4.
+\]
+Merge consecutive exponentials of $A$. The resulting normalized product
+has nineteen alternating, nonzero stages, with the following coefficients:
+\[
+\begin{array}{c|rrrrrrrrrr}
+ A&\frac1{12}&\frac16&\frac16&\frac16&-\frac1{12}&-\frac1{12}
+     &\frac16&\frac16&\frac16&\frac1{12}\\[3pt]
+ B&\frac16&\frac16&\frac16&\frac16&-\frac13&\frac16&\frac16
+     &\frac16&\frac16&
+\end{array}
+\]
+Read the product as $A_1,B_1,A_2,B_2,\ldots,B_9,A_{10}$.
+The $A$ coefficients sum to one, as do the $B$ coefficients.
+
+\begin{theorem}
+The product $T$ has formal order at least four. Its negative coefficients
+have signed sum $-1/2$ and absolute-value sum $1/2$.
+\end{theorem}
+\begin{proof}
+Let $H=A+B$. The symmetric Strang product has formal logarithm
+\[
+ \log S(t)=tH+t^3C+O(t^5)
+\]
+for a fixed degree-three Lie polynomial $C$. Indeed its constant,
+linear, and quadratic expansion agrees with $\exp(tH)$, and
+$S(-t)=S(t)^{-1}$ eliminates all even logarithmic degrees.
+If $c_1,\ldots,c_9$ are the nine composition coefficients, then
+\[
+ \sum c_i=8\cdot\frac16-\frac13=1,\qquad
+ \sum c_i^3=8\cdot\frac1{216}-\frac1{27}=0.
+\]
+Up to degree three the logarithm of the product is therefore
+$hH+h^3(\sum c_i^3)C=hH$: commutators of its degree-one terms vanish
+because those terms are all multiples of $H$. The composition is
+palindromic and hence symmetric, so its logarithm has no degree-four
+term either. It follows that $T(h)=\exp(hH)+O(h^5)$.
+
+The only negative coefficients in the merged, alternating product are
+$-1/12,-1/3,-1/12$. Their signed sum is $-1/2$, and the sum of their
+absolute values is $1/2$. Neither is one.
+\end{proof}
+
+This counterexample is consistent with the necessity of some negative
+coefficients in higher-order real splitting. It refutes the additional
+numerical claim in the source; it does not attempt to refute the usual
+necessity theorem. No cancelling zero-time stages or consecutive stages
+of the same operator remain in the displayed product.
+
+\paragraph{Formal verification.}
+The Lean proof verifies the nineteen-stage product directly and does not
+assume a Baker--Campbell--Hausdorff formula. An infinite noncommutative
+formal series is a function on all finite words in $A,B$. Exponential
+coefficients are $a^n/n!$ on constant-letter words and zero otherwise.
+The Cauchy product sums over every prefix--suffix decomposition. Both
+reconstruction and completeness of these decompositions are proved.
+
+The code contains all thirty-one words of length at most four and proves
+that every arbitrary word below this bound occurs. Rational coefficient
+tables certify each successive multiplication. A general prefix theorem
+proves that multiplication respects agreement through any given degree;
+it connects every intermediate table to the genuine infinite product.
+The final table equals $1/n!$ on every word of length $n\leq4$, which is
+exactly the coefficient of $\exp(h(A+B))$.
+
+The theorem \texttt{order\_four} therefore proves the universal formal
+order condition. A further theorem proves equality of all degree-at-most-
+four homogeneous evaluations after arbitrary substitution of word values
+in any target algebra. It uses neither commutativity nor special identities
+of particular matrices. The component time sums, alternation, nonzero
+stages, and both interpretations of the negative-coefficient sum are
+checked on the actual coefficient list. Two final theorems negate the
+respective signed and absolute-value universal claims.
+
+All certificates are checked by kernel reduction in Lean 4.19.0 using
+\texttt{Std} exact rational arithmetic. The accompanying Python program
+independently recomputes coefficients with rational fractions; it is not
+trusted by Lean. No admitted proofs, new axioms, or external decision
+oracle are used.
+\begin{thebibliography}{1}
+\bibitem{BCM} S. Blanes, F. Casas and A. Murua,
+\emph{Splitting and composition methods in the numerical integration
+of differential equations}, 2008.
+\href{https://arxiv.org/abs/0812.0377}{arXiv:0812.0377}.
+\end{thebibliography}
+\end{document}
