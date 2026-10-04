@@ -17,4 +17,4 @@ tectonic report.tex
 
 Lean version: 4.19.0; Python script: standard library only; report compiler: Tectonic 0.17.0. `verification.txt` records results. Only this personal submission directory is changed.
 
-中文：A1 根系的 Weyl 群只有 e、s 两个元素。三个非零 Kazhdan–Lusztig 多项式均为常数 1，因此首项系数没有奇素因子。零多项式没有非零首项，不能作为猜想所要求的例子。报告给出完整的反例和定义对应关系；Lean 对满足标准 KL 条件的任意一阶多项式族证明该结论。
+中文：A1 根系的 Weyl 群只有 e、s 两个元素。三个非零 Kazhdan–Lusztig 多项式均为常数 1，因此首项系数没有奇素因子。零多项式没有非零首项，不能作为猜想所要求的例子。报告给出完整的反例和定义对应关系；Lean 对满足标准 KL 条件的秩一情形的任意多项式族证明该结论。
