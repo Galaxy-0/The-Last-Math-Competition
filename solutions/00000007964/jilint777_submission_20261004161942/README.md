@@ -44,6 +44,9 @@ Take any finite list `L` and choose an even `n > max L` with `n ≥ 4`. Then `n 
   extended Hamming codes.
 - `k` unrestricted, since only the "only if" direction is used.
 - Any finite list `L`.
+- "Tight" read as "nearly perfect" (Goethals–Snover: meeting the Johnson bound `|C| ≤ 2^n/(n+2)` for
+  e = 1, n even). `SH(2^m − 2)` has exactly `2^n/(n+2)` codewords, so it is nearly perfect at infinitely many
+  lengths `2^m − 2`. This is on paper only.
 
 ## Contents
 
