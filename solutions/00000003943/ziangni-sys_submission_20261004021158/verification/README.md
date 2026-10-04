@@ -12,3 +12,6 @@ The count is augmenting paths actually selected by the classical iterative match
 Formalization scope: actual graphs, matching disjointness and capacity, alternating simple-path edge extraction, remove-and-insert toggle cardinality, and a sequence of valid matchings linked by those updates. All intermediate matching invariants are stored in the run records. The report proves the standard fact that toggling any simple augmenting path preserves validity; the Lean theorem does not separately construct that matching. Its run bound applies to every actual algorithm run and even every partial run.
 
 Independent mathematical and semantic review is pending; this file records author verification only.
+
+`SHA256SUMS.json` hashes the distributed file bytes. The submission-local
+`.gitattributes` preserves LF text line endings for reproducible checksums.
