@@ -1,0 +1,43 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:719:0: 'KQS.check_sound' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:720:0: 'KQS.kqs_4' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:721:0: 'KQS.kqs_16' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:722:0: 'KQS.kqs_28' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:723:0: 'KQS.kqs_40' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:724:0: 'KQS.kqs_52' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:725:0: 'KQS.kqs_64' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:726:0: 'KQS.kqs_76' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:727:0: 'KQS.exceptional_le_19' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:728:0: 'KQS.clause2_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:729:0: 'KQS.conjecture_00000001028_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:730:0: 'KQS.clause2_le_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:731:0: 'KQS.not_hasKQS_two_three' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:732:0: 'KQS.not_hasKQS_five' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:733:0: 'KQS.admissible_below_316' does not depend on any axioms
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+v =  4: KQS verified (1 parallel classes, 1 blocks)
+v = 16: KQS verified (5 parallel classes, 20 blocks)
+v = 28: KQS verified (9 parallel classes, 63 blocks)
+v = 40: KQS verified (13 parallel classes, 130 blocks)
+v = 52: KQS verified (17 parallel classes, 221 blocks)
+v = 64: KQS verified (21 parallel classes, 336 blocks)
+v = 76: KQS verified (25 parallel classes, 475 blocks)
+R16 = lines of AG(2,4)
+R64 = lines of AG(3,4)
+R28 = secant lines of the Hermitian unital U(3) in PG(2,9)
+R40 = lines of PG(3,3) (13 spreads)
+R52 = 1-rotational development over Z_51 (difference property checked)
+R76 = 1-rotational development over Z_75 (difference property checked)
+admissible v < 316: 26 values 4 ... 304
+KQS exhibited for [4, 16, 28, 40, 52, 64, 76]
+exceptional values below 316: at most 19 (at most 20 if 316 is included)
+the clause 'exactly 21 exceptional values below v0 = 316' is FALSE
+ALL CHECKS PASSED
+exit 0
