@@ -1,0 +1,117 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue}
+\title{Conjecture 469 is false:\\a triangle and its plane dual share the root 1}
+\author{GodBlf}
+\date{October 4, 2026}
+\begin{document}
+\maketitle
+
+\section{Claim and counterexample}
+Conjecture 00000000469 asserts that the flow and tension polynomials of
+a pair of planar dual graphs have disjoint sets of real roots, with a
+suggested proof using sign reversal on dual cycles. Under the standard
+nowhere-zero definitions this is false.
+
+Let $G=C_3$ be a triangle embedded in the plane. It has two faces, the
+bounded face and the exterior face. Each of its three edges separates
+these faces. Therefore its plane dual $H=G^*$ has two vertices joined
+by three parallel edges. Parallel edges are part of the standard plane
+dual construction and are not excluded by the conjecture.
+We will prove
+\[
+             F_G(q)=T_H(q)=q-1.
+\]
+Thus their real-root sets are both $\{1\}$, refuting the claimed separation.
+
+\section{Definitions and direct calculation}
+For a finite graph $X$, choose arbitrary edge orientations and a finite
+abelian group $\Gamma$ of order $q$. A nowhere-zero flow assigns a nonzero
+group element to each edge so that incoming and outgoing sums agree at
+every vertex. A nowhere-zero tension is an edge assignment of the form
+$p(v)-p(u)$ on the oriented edge $u\to v$, with all edge values nonzero.
+The number of these assignments gives $F_X(q)$ and $T_X(q)$, respectively.
+Reversing an edge orientation negates its value and preserves these counts.
+
+Orient the three edges of $G$ cyclically. The conservation equations force
+all three values to be the same element $a\in\Gamma$. Every nonzero $a$
+works, so $F_G(q)=q-1$ for every positive integer $q$.
+Orient all three edges of $H$ from its first vertex to its second.
+All tension values equal the same potential difference $b$. Each nonzero
+$b$ is attainable, and potentials differing by a constant give the same
+assignment. Hence $T_H(q)=q-1$. Equality at infinitely many positive
+integers identifies the polynomials, and their evaluation at the real
+number $1$ is zero. In particular, $q=1$ is legitimate: the trivial group
+has no nonzero element, so there are no nowhere-zero assignments.
+
+For completeness, the other two polynomials are
+\[
+ T_G(q)=(q-1)(q-2),\qquad F_H(q)=(q-1)(q-2).
+\]
+Indeed $T_G=P_G/q$, with $P_G=q(q-1)(q-2)$. A flow on $H$ is a triple
+of nonzero elements $(a,b,c)$ satisfying $a+b+c=0$: choose $a\ne0$,
+then $b\ne0,-a$, and $c$ is forced. Thus either ordering of the dual pair,
+and even comparison on the same triangle, gives a common root at $1$.
+
+\section{Why planar duality contradicts separation}
+The standard planar duality identities are
+\[
+ F_X(q)=T_{X^*}(q),\qquad T_X(q)=F_{X^*}(q).
+\]
+Equivalently, for a connected plane graph,
+$F_X(q)=P_{X^*}(q)/q$ and $T_X(q)=P_X(q)/q$.
+These are polynomial identities; the quotients are polynomials, with
+no evaluation by division at $q=0$. The cycle/cut correspondence converts
+flow constraints into tension constraints, not separation of roots.
+Identical polynomials have identical root sets, so any real root suffices.
+If one additionally imposed simple graphs on both sides, the usual
+self-dual tetrahedral embedding of $K_4$ would also refute the assertion:
+both polynomials equal $(q-1)(q-2)(q-3)$. No such extra restriction is
+needed for the triangle example.
+
+\section{Formal verification and its scope}
+Write $k_X(A)$ for the number of connected components of the spanning
+subgraph with edge set $A\subseteq E$, including isolated vertices.
+The standard subset expansions are
+\begin{align*}
+F_X(q)&=\sum_{A\subseteq E}(-1)^{|E|-|A|}
+                    q^{|A|-|V|+k_X(A)},\\
+T_X(q)&=\sum_{A\subseteq E}(-1)^{|A|}
+                    q^{k_X(A)-k_X(E)}.
+\end{align*}
+They follow from inclusion--exclusion for nonzero edge values.
+All exponents are nonnegative. The tension expansion is also
+$P_X(q)/q^{k_X(E)}$. At $q=1$, every power is one, and the two sums
+for three edges become respectively $-1+3-3+1=0$ and $1-3+3-1=0$.
+
+The Lean project defines graphs by their actual endpoint maps. Its
+\texttt{components} counts equivalence classes of the equivalence closure
+of the selected edge adjacency relation, rather than inserting a table
+of assumed component counts. The functions \texttt{flow} and
+\texttt{tension} use the expansions above over $\mathbb R$. Theorems
+\texttt{flow\_at\_one} and \texttt{tension\_at\_one} prove the zero
+evaluation for every graph with three labeled edges, so no computation
+of quotient cardinalities is required. \texttt{common\_real\_root}
+and \texttt{conjecture\_false} specialize this to the actual triangle
+and triple bond.
+
+The six darts of the triangle also carry an explicit rotation system.
+Lean checks vertex preservation, the rotation involution, the two
+three-dart face cycles, their exhaustion, connectivity of both graphs,
+the Euler count $3-3+2=2$, and the dual endpoint maps. The interpretation
+of this rotation system as a plane embedding, and the standard
+inclusion--exclusion correspondence to group counts, are justified in
+this report; Lean does not formalize the surface classification theorem
+or the group-counting derivation. Its root theorems use the standard
+subset definitions directly, not postulated polynomial formulas.
+
+The auxiliary Python script independently computes component counts
+and coefficient arrays from the same subset definitions, and compares
+them with the four explicit polynomials above. Neither this computation
+nor a floating-point root search is needed for the mathematical disproof.
+The Lean project uses no admitted proofs, additional axioms, or
+\texttt{native\_decide}; the axiom audit is included in
+\texttt{verification.txt}.
+
+\end{document}
