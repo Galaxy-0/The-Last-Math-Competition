@@ -1,0 +1,77 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,lmodern}
+\setlength{\emergencystretch}{2em}
+\begin{document}
+\begin{center}
+{\Large A definite pencil beyond quotients of individual spectra}\\[4pt]
+{\large Counterexample to Conjecture 00000007177}\\[6pt]
+ziangni-sys \qquad 4 October 2026
+\end{center}
+
+\section*{Precise assertion and matrices}
+The source states that generalized eigenvalues have the scale of
+the quotient of the two spectra. We refute the individual-spectral
+quotient assertion: a pencil eigenvalue need not equal $\alpha/\beta$
+for any individual eigenvalues $\alpha$ of $A$ and $\beta\ne0$ of $B$.
+Consider
+\[
+A=\begin{pmatrix}1&0\\0&2\end{pmatrix},\qquad
+B=\begin{pmatrix}2&1\\1&3\end{pmatrix},\qquad
+v=\begin{pmatrix}1\\-1\end{pmatrix}.
+\]
+Both matrices are real symmetric positive definite. Indeed, for a
+nonzero $z=(x,y)^T$,
+\[
+z^TAz=x^2+2y^2>0,\qquad
+z^TBz=2x^2+2xy+3y^2=x^2+(x+y)^2+2y^2>0.
+\]
+Thus the example lies within the definite-pair setting.
+
+\section*{An actual pencil eigenvalue}
+The standard generalized eigenvalue condition for the pencil
+$A-\lambda B$ is a nonzero vector with $Av=\lambda Bv$. Here
+\[
+Av=\begin{pmatrix}1\\-2\end{pmatrix}=Bv,
+\]
+so $\lambda=1$ is a genuine generalized eigenvalue.
+Neither the vector equation nor definiteness is assumed.
+
+\section*{No quotient of the individual spectra}
+For $Az=\alpha z$ with nonzero $z=(x,y)^T$, the two coordinate equations
+are $(\alpha-1)x=0$ and $(\alpha-2)y=0$.
+At least one coordinate is nonzero, so $\alpha\in\{1,2\}$.
+Conversely, the two coordinate vectors realize $1$ and $2$, proving
+that the complete individual spectrum of $A$ is $\{1,2\}$.
+
+Neither number is an eigenvalue of $B$. If $Bz=z$, its equations give
+$x+y=0$ and $x+2y=0$, forcing $x=y=0$.
+If $Bz=2z$, its equations give $y=0$ and $x+y=0$, again forcing zero.
+Thus neither equation has a nonzero eigenvector.
+Now if $1=\alpha/\beta$ with $\beta\ne0$, then $\alpha=\beta$.
+An individual spectral quotient equal to $1$ would therefore require
+$A$ and $B$ to share an eigenvalue, which the preceding arguments exclude.
+The generalized eigenvalue $1$ is absent from every possible quotient
+of their individual spectra, irrespective of how those spectra are ordered.
+
+\section*{Distinction from the Rayleigh quotient}
+The generalized Rayleigh quotient uses the same vector in both forms:
+\[
+R(z)=\frac{z^TAz}{z^TBz}.
+\]
+It is not a quotient of two individual eigenvalues. In this example
+$v^TAv=v^TBv=3$, so $R(v)=1$, exactly as expected.
+The counterexample does not dispute this valid variational formulation
+or spectral interval bounds. It disproves the source's asserted
+individual-spectra quotient description; the separate extremum clause
+is unnecessary for refuting the conjunction.
+
+\section*{Formal verification}
+Lean defines actual matrices, matrix-vector multiplication, eigenvalues
+through nonzero eigenvectors, and the pencil condition $Az=\lambda Bz$.
+It proves symmetry and positive definiteness for all nonzero vectors,
+the concrete pencil witness, the full individual spectrum of $A$,
+the two exclusions for $B$, and impossibility of every quotient
+representing $1$. The final theorem packages these properties
+without assumed spectral tables or supplied definiteness data.
+\end{document}
