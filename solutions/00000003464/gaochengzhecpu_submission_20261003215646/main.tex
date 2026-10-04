@@ -1,0 +1,55 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\begin{document}
+\title{A counterexample to the unrestricted bound in Conjecture 3464}
+\author{Chengzhe Gao}\date{}\maketitle
+The English and Chinese versions both assert the universal bound
+$\lambda(G)\leq\Delta(G)^2$, without a lower bound on $\Delta$.
+Here $\lambda$ is the least label range for an $L(2,1)$-labeling.
+This note disproves that unrestricted assertion. It does not disprove
+the classical version restricted to $\Delta\geq2$.
+
+\begin{theorem}
+For the single-edge graph $K_2$, one has $\Delta(K_2)=1$ and
+$\lambda(K_2)=2>1=\Delta(K_2)^2$.
+\end{theorem}
+\begin{proof}
+Each vertex has exactly one neighbor. In any valid labeling, the two
+adjacent vertices have labels differing by at least two. Hence their
+label range is at least two, regardless of how large the labels are.
+The labels zero and two attain range two. There are no vertices at
+distance exactly two, so the second distance condition is vacuous.
+\end{proof}
+
+The later assertions in the source form part of a conjunction containing
+the displayed universal bound; a counterexample to this necessary part
+already disproves the conjecture as stated. No asymptotic claim is used.
+The omitted degree restriction is substantial: the standard formulation
+explicitly assumes $\Delta\geq2$; see the statement in
+\href{https://doi.org/10.1016/j.dam.2025.10.011}{Discrete Applied Mathematics,
+DOI 10.1016/j.dam.2025.10.011}.
+
+\paragraph{Formal verification.}
+The Lean file defines finite simple graphs with symmetry and no loops,
+computes degrees from the entire vertex list, and defines distance two
+as nonadjacency together with a common neighbor. The definition
+\texttt{L21} imposes both standard separation conditions.
+\texttt{SpanAtMost f R} means that every label lies in some translated
+interval $[\ell,\ell+R]$. The theorem \texttt{span\_range\_equivalence}
+proves that this agrees with maximum minus minimum on this graph.
+\texttt{every\_valid\_span\_at\_least\_two} quantifies over all natural
+labels and all intervals; it is not a search with an imposed label bound.
+The labels zero and two and this universal lower bound yield
+\texttt{edge\_minimum\_span}. Finally,
+\texttt{conjecture3464\_false} negates the claimed universal bound itself.
+Integer labels give the same minimum range by translating a finite
+labeling so that its minimum is zero.
+
+The program uses Lean 4.19.0 and \texttt{Std}. The printed axiom lists
+contain only Lean's standard logical foundations; no unproved declaration,
+external oracle, or native evaluation tactic occurs.
+
+\end{document}
