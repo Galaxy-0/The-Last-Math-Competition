@@ -6,6 +6,9 @@ points in every direction.  Conjecture: the minimal number of vertices of a
 k-dimensional cs-neighborly polytope is 2^{k+1}; and the extremal bodies are
 the Hanner polytopes."
 
+(The Chinese text says "2k-dimensional"; that reading is refuted by the
+6-dimensional cross-polytope, see `conjecture_00000001564_false_2k`.)
+
 We refute the first clause.  The k-dimensional cross-polytope
 `conv {±e₁, …, ±e_k}` has only `2k < 2^{k+1}` vertices, is centrally symmetric,
 satisfies the statement's own definition, and is cs-neighborly in the strongest
@@ -250,6 +253,10 @@ theorem crossFacts_2 : CrossFacts 2 := by decide
 theorem crossFacts_3 : CrossFacts 3 := by decide
 set_option maxRecDepth 10000 in
 theorem crossFacts_4 : CrossFacts 4 := by decide +kernel
+set_option maxRecDepth 100000 in
+/-- The 6-dimensional cross-polytope (12 vertices, 4096 sublists), used for the
+reading "2k-dimensional" of the Chinese statement. -/
+theorem crossFacts_6 : CrossFacts 6 := by decide +kernel
 
 /-- From the decidable bundle to the mathematical statements. -/
 theorem cross_props {k : Nat} (hk : 1 ≤ k) (h : CrossFacts k) :
@@ -277,6 +284,14 @@ def MinClause (N : List Pt → Prop) : Prop := ∀ k, 1 ≤ k → MinVerticesIs 
 and every notion `N` that the cross-polytope satisfies. -/
 theorem not_min_at {N : List Pt → Prop} {k : Nat} (hk : 1 ≤ k) (h : CrossFacts k)
     (hN : N (cross k)) (hlt : 2 * k < 2 ^ (k + 1)) : ¬ MinVerticesIs N k (2 ^ (k + 1)) := by
+  intro hmin
+  obtain ⟨hP, hcs, _, _, hlen⟩ := cross_props hk h
+  have := hmin.2 _ hP hcs hN
+  omega
+
+/-- Same, with an arbitrary claimed bound `n > 2k`. -/
+theorem not_min_lt {N : List Pt → Prop} {k n : Nat} (hk : 1 ≤ k) (h : CrossFacts k)
+    (hN : N (cross k)) (hlt : 2 * k < n) : ¬ MinVerticesIs N k n := by
   intro hmin
   obtain ⟨hP, hcs, _, _, hlen⟩ := cross_props hk h
   have := hmin.2 _ hP hcs hN
@@ -341,6 +356,36 @@ theorem conjecture_00000001564_false_param :
 theorem conjecture_00000001564_false_any (N : List Pt → Prop) (hN : N (cross 3)) :
     ¬ MinClause N :=
   fun h => fails_k3 hN (h 3 (by decide))
+
+/-! ### The Chinese statement: "2k-dimensional"
+
+The Chinese text reads "2 k dimensional" (2k-dimensional): the minimal number of
+vertices of a `2k`-dimensional cs-neighborly polytope would be `2^{k+1}`.
+The true minimum in dimension `2k` is `4k`, which equals `2^{k+1}` for `k = 1, 2`;
+the claim first fails at `k = 3`: the 6-dimensional cross-polytope has
+`12 < 16 = 2^4` vertices. -/
+
+/-- **Main theorem (Chinese reading, dimension `2k`).** -/
+theorem conjecture_00000001564_false_2k (N : List Pt → Prop) (hN : N (cross 6)) :
+    ¬ ∀ k, 1 ≤ k → MinVerticesIs N (2 * k) (2 ^ (k + 1)) :=
+  fun h => not_min_lt (k := 6) (by decide) crossFacts_6 hN (by decide) (h 3 (by decide))
+
+theorem conjecture_00000001564_false_2k_statement :
+    ¬ ∀ k, 1 ≤ k → MinVerticesIs StatementCsNeighborly (2 * k) (2 ^ (k + 1)) :=
+  conjecture_00000001564_false_2k _ (cross_props (by decide) crossFacts_6).2.2.2.1
+
+theorem conjecture_00000001564_false_2k_full :
+    ¬ ∀ k, 1 ≤ k → MinVerticesIs CsNeighborlyFull (2 * k) (2 ^ (k + 1)) :=
+  conjecture_00000001564_false_2k _ (cross_props (by decide) crossFacts_6).2.2.1
+
+theorem conjecture_00000001564_false_2k_grunbaum (j : Nat) :
+    ¬ ∀ k, 1 ≤ k → MinVerticesIs (CsNeighborlyUpTo j) (2 * k) (2 ^ (k + 1)) :=
+  conjecture_00000001564_false_2k _ ((cross_all_readings 6 (by decide) crossFacts_6).2.2 j)
+
+/-- Grünbaum's cs-`⌊d/2⌋`-neighborliness in dimension `d = 6`: cs-3-neighborly. -/
+theorem conjecture_00000001564_false_2k_cs3 :
+    ¬ ∀ k, 1 ≤ k → MinVerticesIs (CsNeighborlyUpTo 3) (2 * k) (2 ^ (k + 1)) :=
+  conjecture_00000001564_false_2k_grunbaum 3
 
 /-- The conjecture is a conjunction with a second clause about Hanner polytopes;
 whatever that clause is, the conjunction is false. -/
@@ -613,13 +658,21 @@ theorem cross3 : HannerCount 3 6 := .sum (.sum .segment .segment) .segment
 
 end CsNeighborly
 
+#print axioms CsNeighborly.crossFacts_1
+#print axioms CsNeighborly.crossFacts_2
 #print axioms CsNeighborly.crossFacts_3
 #print axioms CsNeighborly.crossFacts_4
+#print axioms CsNeighborly.crossFacts_6
 #print axioms CsNeighborly.cross_props
 #print axioms CsNeighborly.conjecture_00000001564_false
 #print axioms CsNeighborly.conjecture_00000001564_false_grunbaum
 #print axioms CsNeighborly.conjecture_00000001564_false_full
 #print axioms CsNeighborly.conjecture_00000001564_false_param
+#print axioms CsNeighborly.conjecture_00000001564_false_2k
+#print axioms CsNeighborly.conjecture_00000001564_false_2k_statement
+#print axioms CsNeighborly.conjecture_00000001564_false_2k_full
+#print axioms CsNeighborly.conjecture_00000001564_false_2k_grunbaum
+#print axioms CsNeighborly.conjecture_00000001564_false_2k_cs3
 #print axioms CsNeighborly.conjecture_00000001564_conjunction_false
 #print axioms CsNeighborly.fails_each_k
 #print axioms CsNeighborly.fullDim_linIndep

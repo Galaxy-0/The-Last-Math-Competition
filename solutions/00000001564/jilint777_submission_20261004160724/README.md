@@ -34,6 +34,16 @@ The conjecture is a conjunction, so refuting this one clause refutes it.
 
 It also works when k is read as the neighborliness parameter instead of the dimension.
 
+**The Chinese reading (dimension 2k).** The Chinese text says "二 k 维", which is 2k-dimensional.
+Read that way, the clause says that every 2k-dimensional cs-neighborly polytope has at least
+2^{k+1} vertices, with equality attained, for all k ≥ 1.
+
+- The true minimum in dimension 2k is 4k.
+- So this reading **holds for k = 1, 2** (4 = 4, 8 = 8) and **fails for every k ≥ 3**.
+- The smallest counterexample is the 6-dimensional cross-polytope: it has **12 < 16** vertices and
+  property (F).
+- Lean proves this as `conjecture_00000001564_false_2k`, using `crossFacts_6`.
+
 **Further results** (proved in the report):
 
 - The true minimum is **2k**. Every k-dimensional centrally symmetric polytope has at least 2k
@@ -49,7 +59,7 @@ It also works when k is read as the neighborliness parameter instead of the dime
 - `verify.py`: an independent check using only the Python 3 standard library. It uses a
   different method from the Lean proof:
   - it enumerates all small functionals and confirms that the faces of the cross-polytope are
-    exactly the antipodal-free vertex sets, for k ≤ 5;
+    exactly the antipodal-free vertex sets, for k ≤ 6;
   - it checks the lower bound 2k on all centrally symmetric sets in {−1,0,1}^k for k = 2, 3;
   - it builds the explicit Hanner polytopes of dimension at most 6 and checks their vertex
     numbers.
@@ -69,7 +79,8 @@ All objects are defined from scratch. Points of ℤ^k are lists of integers.
 - `MinVerticesIs N k n` says that the minimum is attained and is a lower bound.
   `MinClause N := ∀ k ≥ 1, MinVerticesIs N k (2^(k+1))`.
 
-The facts about `cross k` for k = 1, 2, 3, 4 are checked by `decide`:
+The facts about `cross k` for k = 1, 2, 3, 4, 6 are checked by `decide`. For k = 6 this uses
+`decide +kernel` and takes about 70 s.
 
 - length 2k, no repetitions, central symmetry;
 - the vertex witnesses and the dimension certificate;
@@ -82,6 +93,9 @@ Main theorems:
 - `conjecture_00000001564_false_full : ¬ MinClause CsNeighborlyFull`;
 - `conjecture_00000001564_false_any`: the same for any notion N that the octahedron satisfies;
 - `conjecture_00000001564_false_param`: k read as the neighborliness parameter;
+- `conjecture_00000001564_false_2k (N) (hN : N (cross 6)) : ¬ ∀ k, 1 ≤ k → MinVerticesIs N (2*k) (2^(k+1))`
+  is the Chinese 2k-dimensional reading. It has instances `_2k_statement`, `_2k_full`,
+  `_2k_grunbaum (j)` and `_2k_cs3`;
 - `fails_each_k`: the clause fails separately at k = 1, 2, 3, 4;
 - `conjecture_00000001564_conjunction_false`: the conjunction is false whatever the Hanner clause is.
 
@@ -101,7 +115,7 @@ The project has no `sorry`, no `native_decide` and no added axioms. `#print axio
 
 **Scope.**
 
-- Lean verifies the counterexample for k = 1 to 4; one k is enough to refute the clause. The case
+- Lean verifies the cross-polytope for k = 1, 2, 3, 4, 6; one k is enough to refute the clause. The case
   of general k is proved in the report.
 - The general lower bound 2k is formalized only for k = 1.
 - For Hanner polytopes, only the vertex-count recursion is formalized.
@@ -125,6 +139,12 @@ k 维正轴体（交叉多胞体）conv{±e_1, …, ±e_k} 有以下性质：
 - 它满足最强意义下的 cs-邻居性：任何不含对径点对的顶点集都是某个面的顶点集，由线性泛函 Σ_{s∈S} s 恰好取到。
 
 最小的例子：线段（2 < 4）、正方形（4 < 8）、正八面体（6 < 16）。
+
+中文题面写的是“二 k 维”，即 2k 维。按这种读法，命题断言 2k 维 cs-邻居多胞体的最小顶点数为 2^{k+1}，其中包含全称下界：每个 2k 维 cs-邻居多胞体至少有 2^{k+1} 个顶点。
+
+- 2k 维的真实最小值是 4k，所以该读法在 k = 1, 2 时成立（4 = 4，8 = 8），对所有 k ≥ 3 不成立。
+- 最小反例是 6 维正轴体，它有 12 < 16 个顶点。
+- Lean 定理 `conjecture_00000001564_false_2k` 证明了这一点。
 
 这一反例覆盖以下各种解读：
 

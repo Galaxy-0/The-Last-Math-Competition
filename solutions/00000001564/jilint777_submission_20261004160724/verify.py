@@ -1,12 +1,13 @@
 """Independent checks for conjecture 00000001564 (Python 3 standard library only).
 
+(k = 6 covers the Chinese "2k-dimensional" reading at k = 3: 12 < 16.)
 Claim refuted: "the minimal number of vertices of a k-dimensional cs-neighborly
 polytope is 2^(k+1)".  Counterexample: the k-dimensional cross-polytope
 conv{+-e_1, ..., +-e_k}, which has 2k < 2^(k+1) vertices.
 
 The Lean proof checks, for k = 1..4, that each subset S of vertices without an
 antipodal pair is exactly the set of maximizers of the functional sum(S).
-Here we use a different method: for k = 1..5 we enumerate ALL functionals c in
+Here we use a different method: for k = 1..6 we enumerate ALL functionals c in
 {-1,0,1}^k \\ {0} (and, for k <= 3, all c in {-2..2}^k \\ {0}), compute the set
 of maximizers of each, and check that the resulting family of exposed vertex
 sets is exactly the family of nonempty antipodal-free vertex subsets (no more,
@@ -166,12 +167,16 @@ def hanner_counts(maxd):
 
 def main():
     print("== cross-polytopes")
-    for k in range(1, 6):
+    for k in range(1, 7):
         n, f = check_cross(k, (-1, 0, 1))
         print(f"k={k}: dim {k}, cs, {n} = 2k vertices; the exposed vertex sets for c in "
               f"{{-1,0,1}}^k are exactly the {f} antipodal-free subsets; "
               f"2k = {2*k} < 2^(k+1) = {2**(k+1)}: {2*k < 2**(k+1)}")
         assert 2 * k < 2 ** (k + 1)
+    print("Chinese reading (dimension 2k): cross-polytope C_2k has 4k vertices vs claimed 2^(k+1)")
+    for k in range(1, 6):
+        print(f"  k={k}: dim {2*k}, 4k = {4*k}, 2^(k+1) = {2**(k+1)}, counterexample: {4*k < 2**(k+1)}")
+        assert (4 * k < 2 ** (k + 1)) == (k >= 3)
     for k in range(1, 4):
         check_cross(k, range(-2, 3))
         print(f"k={k}: same family of exposed sets for all c in {{-2..2}}^k")

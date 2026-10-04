@@ -32,7 +32,10 @@ the smallest cases are the square ($4<8$) and the octahedron ($6<16$). The
 counterexample works under every reading of ``cs-neighborly'' we know, including
 the statement's own definition. We also show that the true minimum is $2k$, and
 that no Hanner polytope has $2^{k+1}$ vertices. The refutation is formalized in
-Lean~4 (core library only) for $k=1,2,3,4$.
+Lean~4 (core library only) for $k=1,2,3,4$. The Chinese version of the statement
+asks about \emph{$2k$-dimensional} polytopes. That claim holds for $k=1,2$ and fails for
+every $k\ge3$; the smallest counterexample is the $6$-dimensional cross-polytope
+($12<16$), also formalized in Lean.
 \end{abstract}
 
 \section{The conjecture}
@@ -42,8 +45,10 @@ support points in every direction. \emph{Conjecture:} The minimal number of
 vertices of a $k$-dimensional cs-neighborly polytope is $2^{k+1}$; and the
 extremal bodies are the Hanner polytopes.
 \end{quote}
-The Chinese version says the same thing. The conjecture is a conjunction, so it is
-enough to refute the first clause:
+The Chinese version differs in one point: it speaks of a ``2$k$-dimensional''
+polytope (the dimension is written as ``two $k$''), while the number of vertices is still
+$2^{k+1}$. We treat this reading separately in Section~\ref{sec:cn}. The conjecture is a
+conjunction, so it is enough to refute the first clause:
 \begin{equation}\label{eq:claim}
 \textstyle\min\{\,f_0(P) : P \text{ a $k$-dimensional cs-neighborly polytope}\,\} = 2^{k+1}
 \qquad(k\ge 1),
@@ -138,6 +143,35 @@ qualifies and has $2k$ facets.
 \end{enumerate}
 \end{remark}
 
+\section{\texorpdfstring{The Chinese reading: dimension $2k$}{The Chinese reading: dimension 2k}}\label{sec:cn}
+The Chinese text reads: the minimal number of vertices of a $2k$-dimensional cs-neighborly
+polytope is $2^{k+1}$. As a universal statement, this is
+\begin{equation}\label{eq:cn}
+\forall k\ge1:\quad \min\{\,f_0(P) : P \text{ a $2k$-dimensional cs-neighborly polytope}\,\}=2^{k+1},
+\end{equation}
+and in particular it contains the universal lower bound: every $2k$-dimensional cs-neighborly
+polytope has at least $2^{k+1}$ vertices.
+
+\begin{theorem}\label{thm:cn}
+Claim~\eqref{eq:cn} holds for $k=1,2$ and fails for every $k\ge3$, under each reading of
+``cs-neighborly''. The smallest counterexample is the $6$-dimensional cross-polytope
+$C^\Delta_6$, which has property (F) and $12<16=2^{4}$ vertices.
+\end{theorem}
+\begin{proof}
+By Proposition~\ref{prop:true} (below), the minimum in dimension $2k$ is $4k$, under every
+reading. We have $4k=2^{k+1}$ for $k=1,2$ ($4=4$, $8=8$), and $4k<2^{k+1}$ for $k\ge3$
+($12<16$, and if $4k<2^{k+1}$ then $4(k+1)=4k+4<2^{k+1}+2^{k+1}=2^{k+2}$, using
+$4\le 2^{k+1}$). For $k\ge3$, $C^\Delta_{2k}$ is a counterexample (Theorem~\ref{thm:cross}).
+\end{proof}
+So the Chinese version is also false as a statement about all $k$, but its first two instances
+are true; a counterexample needs dimension at least $6$. Lean proves
+\texttt{conjecture\_00000001564\_false\_2k}: for every notion $N$ that $C^\Delta_6$ satisfies,
+$\neg\,\forall k\ge1,\ \texttt{MinVerticesIs N (2*k) (2\^{}(k+1))}$, with instances for the
+literal definition, property (F), cs-$j$-neighborliness for every $j$, and cs-$3$-neighborliness
+(Gr\"unbaum's cs-$\lfloor d/2\rfloor$-neighborliness for $d=6$). The case $k=3$ needs only the
+lower-bound half, which $C^\Delta_6$ violates. The truth of the instances $k=1,2$ rests on
+Proposition~\ref{prop:true}, which is not formalized in dimensions $2$ and $4$.
+
 \section{The true minimum and the Hanner clause}
 \begin{proposition}\label{prop:true}
 Every $k$-dimensional centrally symmetric polytope has at least $2k$ vertices. Equality
@@ -154,6 +188,14 @@ $V=\{\pm v_i\}=A V_k$ with $A$ the invertible linear map $e_i\mapsto v_i$. An in
 affine map preserves faces, central symmetry and antipodality, so $A C^\Delta_k$ has
 property (F). Conversely, every affine image of $C^\Delta_k$ has $2k$ vertices.
 \end{proof}
+
+\begin{remark}[A ``maximal'' reading]
+If ``minimal'' were a slip for ``maximal'', the claim would still fail for the $k$-dimensional
+reading. Under the literal definition there is no maximum (centrally symmetric $2m$-gons
+exist for every $m$). Under Gr\"unbaum's cs-$2$-neighborliness, Linial and Novik~\cite{LN}
+proved that a cs-$2$-neighborly $d$-polytope has at most $2^d$ vertices, so $2^{k+1}$ is not
+attained. This remark is not formalized.
+\end{remark}
 
 \paragraph{Hanner polytopes.}
 Hanner polytopes are generated from the segment $[-1,1]$ by Cartesian products
@@ -196,7 +238,7 @@ gives \texttt{IsPolytopeOfDim k V}.
 \texttt{statement\_def\_of\_cs} shows that every nonempty cs polytope satisfies the first.
 \item \texttt{MinVerticesIs N k n} says that the minimum is attained and is a lower bound;
 \texttt{MinClause N} is the clause $\forall k\ge1$, \texttt{MinVerticesIs N k (2\^{}(k+1))}.
-\item \texttt{crossFacts\_1} to \texttt{crossFacts\_4} check, by \texttt{decide} for the
+\item \texttt{crossFacts\_1} to \texttt{crossFacts\_4} and \texttt{crossFacts\_6} check, by \texttt{decide} for the
 generated list \texttt{cross k}:
   \begin{itemize}
   \item length $2k$, no repetitions, central symmetry;
@@ -213,6 +255,9 @@ generated list \texttt{cross k}:
   \item \texttt{conjecture\_00000001564\_false\_full};
   \item \texttt{conjecture\_00000001564\_false\_any}, for any notion satisfied by the octahedron;
   \item \texttt{conjecture\_00000001564\_false\_param}, the reading in Remark~\ref{rem:readings}(2);
+  \item \texttt{conjecture\_00000001564\_false\_2k}: the Chinese $2k$-dimensional reading
+  (Section~\ref{sec:cn}), via \texttt{crossFacts\_6}, with four instances (suffixes
+  \texttt{statement}, \texttt{full}, \texttt{grunbaum}, \texttt{cs3});
   \item \texttt{fails\_each\_k}: failure at each $k=1,2,3,4$;
   \item \texttt{conjecture\_00000001564\_conjunction\_false}: the conjunction with any Hanner clause is false.
   \end{itemize}
@@ -233,9 +278,9 @@ lemma) \texttt{Classical.choice}.
 
 \paragraph{Scope.}
 \begin{itemize}
-\item Lean checks the counterexample for $k=1,2,3,4$; one $k$ suffices to refute the clause.
+\item Lean checks the cross-polytope for $k=1,2,3,4,6$; one $k$ suffices to refute the clause.
 The case of general $k$ is Theorems~\ref{thm:cross} and~\ref{thm:main} above, and
-\texttt{verify.py} checks $k\le5$.
+\texttt{verify.py} checks $k\le6$.
 \item The general lower bound $2k$ of Proposition~\ref{prop:true} is proved here. It is
 formalized only for $k=1$, and \texttt{verify.py} checks it for lattice sets in $\{-1,0,1\}^k$, $k=2,3$.
 \item For Hanner polytopes, only the vertex-count recursion is formalized. The facts
@@ -249,10 +294,10 @@ genuine $3$-dimensional cs polytope in $\mathbb R^3$ with $6$ vertices and prope
 \section{Independent check (\texttt{verify.py})}
 The Python script uses only the standard library and a method different from the Lean proof.
 \begin{itemize}
-\item For $k\le5$, it enumerates all functionals $c\in\{-1,0,1\}^k\setminus\{0\}$, and for
+\item For $k\le6$, it enumerates all functionals $c\in\{-1,0,1\}^k\setminus\{0\}$, and for
 $k\le3$ also all $c\in\{-2,\dots,2\}^k\setminus\{0\}$. It collects every maximizer set and
-confirms that this family is exactly the family of antipodal-free vertex subsets ($2,8,26,80,242$
-for $k=1,\dots,5$). It also computes the dimension as an exact rank.
+confirms that this family is exactly the family of antipodal-free vertex subsets ($2,8,26,80,242,728$
+for $k=1,\dots,6$). It also computes the dimension as an exact rank.
 \item It checks every centrally symmetric point set in $\{-1,0,1\}^k$ ($k=2,3$) that
 spans $\mathbb R^k$: each gives a polytope with at least $2k$ vertices.
 \item It builds all $1,2,6,22,90,394$ explicit Hanner polytopes of dimension $1,\dots,6$
@@ -271,6 +316,8 @@ pdflatex report.tex && pdflatex report.tex
 (chapter on centrally symmetric polytopes).
 \bibitem{Ha} O.~Hanner, Intersections of translates of convex bodies,
 \emph{Math.\ Scand.} 4 (1956), 65--87.
+\bibitem{LN} N.~Linial and I.~Novik, How neighborly can a centrally symmetric polytope be?,
+\emph{Discrete Comput.\ Geom.} 36 (2006), 273--281.
 \bibitem{Ka} G.~Kalai, The number of faces of centrally-symmetric polytopes,
 \emph{Graphs Combin.} 5 (1989), 389--391.
 \end{thebibliography}
