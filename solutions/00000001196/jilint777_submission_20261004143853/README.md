@@ -49,21 +49,23 @@ Everything is built from scratch in `ℤ[x₁,x₂,x₃]`. Polynomials are lists
   formula for `Q_321`.
 - `Expands d T cs B` means `d·T = Σ cs_i B_i` coefficientwise. `ValueAt k X Y Z` says the
   largest coefficient of `X_(k) Y_(k)` in the `Z`-basis is `2^{k−1}`. `BoundAt k X Y Z` says
-  every expansion has largest coefficient `≤ 2^{ℓ((k))}`. `Conjecture X Y Z` is
-  `∀ k ≥ 1, ValueAt ∧ BoundAt`.
+  every expansion has largest coefficient `≤ 2^{ℓ((k))}`.
 - `QQ_in_Q`, `PP_in_P` and six more: the expansions at `k = 3` as polynomial identities.
 - `expansion_exists` shows non-vacuity. `solveQ`, `solveP` and `expansion_unique` prove the
   coefficients are unique, by triangularity at four monomials. `max_coeff` gives the value
   of `M((3),(3))` for each reading.
 - `value_clause_false_P` and `value_clause_false_Q` prove `¬ ∀ k ≥ 1, ValueAt k` in the two
   standard readings.
-- **`conjecture_00000001196_false : ∀ X Y Z, ¬ Conjecture X Y Z`**.
+- **`conjecture_00000001196_false (X Y Z : Norm) : ¬ (ValueAt 3 X Y Z ∧ BoundAt 3 X Y Z)`**:
+  under every reading, the value clause and the bound clause cannot both hold at `λ = μ = (3)`.
 - `bound_holds_P` and `value_holds_PQP` show that neither predicate is trivially false.
 
 Not in Lean: the identity for general `k` and the passage from three variables to the full
-ring `Γ`. The report proves both, and `verify.py` checks the identity for `k ≤ 5`. At
-`k = 3` three variables are faithful: specialisation is a ring homomorphism, all strict
-partitions of 6 have at most 3 parts, and the four `Q_ν` are proved linearly independent.
+ring `Γ`. The report proves both, and `verify.py` checks the identity for `k ≤ 5`.
+Existence of the expansion in `Γ` is Theorem 1 of the report (proved in `Γ`). The
+three-variable computation gives uniqueness: all strict partitions of 6 have at most 3 parts,
+specialisation is a ring homomorphism, and the four `Q_ν` are proved linearly independent.
+So the `k = 3` instance used by the main theorem says what the conjecture's value clause, and the consequence M ≤ 2^{ℓ(λ)} of its bound clause, say there (a weaker conjunct only strengthens the negation).
 
 The project has no `sorry`, no `native_decide`, and no added axioms. `#print axioms` shows
 at most `propext` and `Quot.sound`. The computations use `decide +kernel`, which is checked

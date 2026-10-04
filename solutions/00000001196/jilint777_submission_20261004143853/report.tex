@@ -2,7 +2,7 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{booktabs}
-\usepackage{hyperref}
+\usepackage[hypertexnames=false]{hyperref}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
@@ -230,9 +230,9 @@ $\Gamma_{\mathbb Q}$ (or any rational identity of this shape). Specialising to t
 variables gives the same identity there. Comparing coefficients at $m_1,\dots,m_4$ gives
 $2c_6=4$, $4c_6+4c_{51}=16$, $4c_6+8c_{51}+4c_{42}=32$ and
 $8c_6+24c_{51}+24c_{42}+8c_{321}=112$. So $(c_6,c_{51},c_{42},c_{321})=(2,2,2,0)$, and the
-coefficients are forced. Conversely, the polynomial identity
-$Q_3Q_3=2Q_6+2Q_{51}+2Q_{42}$ holds in three variables. Together these determine
-$M((3),(3))=2$ in the $Q$-reading. The same argument applies to the other seven readings,
+coefficients are forced. Existence of the expansion in $\Gamma$ is
+Theorem~\ref{thm:main} (proved in $\Gamma$); the three-variable computation gives
+uniqueness. Together these determine $M((3),(3))=2$ in the $Q$-reading. The same argument applies to the other seven readings,
 using $P_\nu=2^{-\ell(\nu)}Q_\nu$. The forced vectors are $(1,2,2,0)$ for $P_3P_3$ in
 $P$, $(2,4,4,0)$ for $P_3Q_3$ in $P$, $(1,1,1,0)$ for $P_3Q_3$ in $Q$, $(4,8,8,0)$ for
 $Q_3Q_3$ in $P$, and $\tfrac12(1,1,1,0)$ for $P_3P_3$ in $Q$.
@@ -259,27 +259,27 @@ product formula for $Q_{321}$.
 coefficientwise. With $d>0$ this is a rational expansion with coefficients $c_i/d$.
 \texttt{ValueAt k X Y Z} says that some expansion of $X_{(k)}Y_{(k)}$ in the $Z$-basis has
 largest coefficient $2^{k-1}$. \texttt{BoundAt k X Y Z} says that every such expansion has
-largest coefficient $\le 2^{\ell((k))}$. \texttt{Conjecture X Y Z} is
-$\forall k\ge1$, \texttt{ValueAt} $\wedge$ \texttt{BoundAt}.
+largest coefficient $\le 2^{\ell((k))}$.
 \item \emph{Results.} \texttt{QQ\_in\_Q}, \texttt{PP\_in\_P} and six more theorems prove the
 expansions as polynomial identities. \texttt{expansion\_exists} shows non-vacuity, and
 \texttt{solveQ}, \texttt{solveP} and \texttt{expansion\_unique} prove uniqueness by
 triangularity. \texttt{max\_coeff} computes $M((3),(3))$ for each reading.
 \texttt{value\_clause\_false\_P} and \texttt{value\_clause\_false\_Q} are
 $\neg\,\forall k\ge1$, \texttt{ValueAt k} in the two standard readings.
-\texttt{conjecture\_00000001196\_false} is $\forall X\,Y\,Z,\ \neg$\texttt{Conjecture X Y Z}.
+The main theorem \texttt{conjecture\_00000001196\_false} states
+$\forall X\,Y\,Z,\ \neg(\texttt{ValueAt 3 X Y Z} \wedge \texttt{BoundAt 3 X Y Z})$.
 It is assembled from \texttt{value\_fails} and \texttt{bound\_fails}.
 \texttt{bound\_holds\_P} and \texttt{value\_holds\_PQP} show that neither predicate is
 trivially false.
 \end{itemize}
-\emph{Scope.} Lean works in three variables, which is faithful at $k=3$ by the argument of
-Section~4: the specialisation to three variables commutes with all constructions, and the
-four basis functions are proved independent. The general-$k$ statement
-(Theorem~\ref{thm:main} and Table~\ref{tab:M}), and the passage from three variables to
-$\Gamma$, are proved in this report rather than in Lean. The predicate
-\texttt{Conjecture} quantifies over all $k$, but only its instance $k=3$ is used. For
-$k\ge5$ three variables would not determine expansions uniquely, which does not matter
-here.
+\emph{Scope.} Lean works in three variables. The $k=3$ instance is faithful to the
+statement in $\Gamma$ because the three-variable expansion is unique there: all strict
+partitions of $6$ have at most three parts, specialisation to three variables is a ring
+homomorphism that commutes with all constructions, and the four basis functions are proved
+linearly independent (Section~4). Hence \texttt{ValueAt 3} and \texttt{BoundAt 3} say exactly
+what the conjecture says at $\lambda=\mu=(3)$, and the main theorem is stated only for this
+instance. The general-$k$ statement (Theorem~\ref{thm:main} and Table~\ref{tab:M}) and the
+existence of the expansion in $\Gamma$ are proved in this report rather than in Lean.
 
 \section{Independent Python check}
 

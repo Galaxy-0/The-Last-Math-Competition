@@ -12,7 +12,7 @@ so `M((3),(3)) = 2` in both standard normalisations (`value_clause_false_P/Q`).
 All eight normalisation readings "`X_(k) Y_(k)` expanded in the `Z`-basis",
 `X, Y, Z ∈ {P, Q}`, are treated: in each of them, at `λ = μ = (3)`, either the value
 clause `M = 4` or the consequence `M ≤ 2^{ℓ((3))} = 2` of the bound clause fails
-(`conjecture_00000001196_false`).
+(`conjecture_00000001196_false : ∀ X Y Z, ¬ (ValueAt 3 X Y Z ∧ BoundAt 3 X Y Z)`).
 
 Everything is computed from scratch in `ℤ[x₁,x₂,x₃]`:
 * `q r` is the coefficient of `t^r` in `∏_{i ≤ 3} (1 + x_i t)/(1 - x_i t)`;
@@ -212,12 +212,14 @@ def BoundAt (k : Nat) (X Y Z : Norm) : Prop :=
   ∀ (d : Int) (cs : List Int), 0 < d → cs.length = (basis Z (2 * k)).length →
     Expands d (prodK X Y k) cs (basis Z (2 * k)) → maxList cs ≤ 2 ^ ([k].length) * d
 
-/-- The conjecture (its value clause and the consequence `M ≤ 2^{ℓ(λ)}` of its bound),
-for all `k ≥ 1`, under the normalisation reading `(X, Y, Z)`.  Only the instance `k = 3`
-is used; there three variables suffice (all strict partitions of `6` have at most three
-parts and the four basis functions are proved linearly independent), so `ValueAt 3` and
-`BoundAt 3` are faithful to the statement in the ring `Γ` of all variables. -/
-def Conjecture (X Y Z : Norm) : Prop := ∀ k, 1 ≤ k → ValueAt k X Y Z ∧ BoundAt k X Y Z
+/-! The main theorem below refutes the conjunction `ValueAt 3 X Y Z ∧ BoundAt 3 X Y Z`
+(the conjecture's value clause together with the consequence `M ≤ 2^{ℓ(λ)}` of its bound,
+at `λ = μ = (3)`).  This `k = 3` instance is faithful to the statement in the ring `Γ` of
+symmetric functions in infinitely many variables: all strict partitions of `6` have at most
+three parts, specialisation to three variables is a ring homomorphism, and the four basis
+functions `Z_6, Z_51, Z_42, Z_321` are proved linearly independent in three variables
+(`solveQ`, `solveP`, `expansion_unique`), so the three-variable expansion coefficients are
+unique and equal those in `Γ`. -/
 
 /-! ## Sanity checks on the definitions -/
 
@@ -455,9 +457,10 @@ theorem value_clause_false_Q : ¬ ∀ k, 1 ≤ k → ValueAt k .Q .Q .Q :=
 /-- **Main theorem.**  Under every normalisation reading `(X, Y, Z)` (product `X_(k) Y_(k)`
 expanded in the basis `{Z_ν}`), the conjecture fails at `λ = μ = (3)`: either
 `M((3),(3)) ≠ 2^{3-1} = 4` or `M((3),(3)) > 2^{ℓ((3))} = 2`. -/
-theorem conjecture_00000001196_false (X Y Z : Norm) : ¬ Conjecture X Y Z := by
+theorem conjecture_00000001196_false (X Y Z : Norm) :
+    ¬ (ValueAt 3 X Y Z ∧ BoundAt 3 X Y Z) := by
   intro h
-  obtain ⟨hv, hb⟩ := h 3 (by decide)
+  obtain ⟨hv, hb⟩ := h
   by_cases hr : (X = .P ∧ Y = .Q ∧ Z = .P) ∨ (X = .Q ∧ Y = .P ∧ Z = .P)
   · exact bound_fails X Y Z (by rcases hr with hr | hr <;> simp [hr]) hb
   · exact value_fails X Y Z hr hv
