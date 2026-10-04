@@ -48,7 +48,8 @@ $\rho\neq\id$ the Pythagorean family $A_t$ ($t\in\N$) gives infinitely many non-
 decompositions with pairwise different mirrors, no three of which share an unordered mirror
 pair. The uniqueness clause is refuted in its weakest literal form (unordered pairs of mirrors).
 We also treat $\R^3$ and affine reflections, and we discuss the one charitable reading under
-which the clause becomes true (``unique up to rotating both mirrors'').
+which the clause becomes true: ``unique up to rotating both mirrors'' and ``given one mirror,
+the other is unique''.
 \end{abstract}
 
 \section{The claim}
@@ -72,8 +73,16 @@ Clauses (C2) and (C3) together form the \emph{uniqueness clause}:
 (U) If $\rho$ is a rotation and $\rho=B\circ A=B'\circ A'$ with reflections $A,B,A',B'$, and
 neither pair has parallel mirrors, then the two decompositions coincide.
 \end{quote}
-We refute (U). Because the conjecture is a conjunction, this refutes the conjecture. Clauses (C1)
-and (C4) are discussed in Section~\ref{sec:readings}; the disproof does not depend on them.
+We refute (U). Because the conjecture is a conjunction, this refutes the conjecture.
+
+\emph{Convention.} The disproof relies on the literal reading of the bilingual text. The
+Chinese text says that the decomposition is unique and that the exception to uniqueness is
+parallel reflections (``fen jie wei yi; qie wei yi xing de li wai wei ping xing fan she''); the
+English text says the same. Clauses (C1) and (C4) are correct. (C1) holds for linear
+reflections, and for affine reflections it fails exactly for parallel distinct mirrors, which
+is the exception named in (C4); see Section~\ref{sec:readings}. So the conjunction fails
+through the uniqueness clause (U) and only through it. Section~\ref{sec:readings} discusses two
+weaker, true readings of (U) that we do not refute.
 
 \section{Set-up}
 
@@ -272,23 +281,39 @@ so the exception again never applies.
 \item \textbf{Point reflections.} If ``reflection'' meant a point reflection $v\mapsto2c-v$, the
 composition of two of them would be a translation, never a nontrivial rotation, and (C1) would
 fail outright. The definition (``hyperplane mirror structure'') excludes this reading.
-\item \textbf{The charitable escape: ``unique up to rotating both mirrors''.} The classical
-textbook statement is that the decomposition is unique \emph{up to rotating both mirrors
-simultaneously about the centre}: only the angle between the mirrors, $\theta/2\bmod\pi$, is
-determined. This is true, and it follows from Theorem~\ref{thm:main}(1): any two decompositions
-$(R_\alpha,R_{\alpha+\theta/2})$ and $(R_{\alpha'},R_{\alpha'+\theta/2})$ differ by rotating both
-mirrors by $\alpha'-\alpha$. We do \emph{not} refute this version. However, it is not what the
-conjecture states. The conjecture asserts uniqueness and names parallel mirrors as \emph{the}
-exception, and the Chinese text says plainly that the decomposition is unique. Under the
-``up to rotation'' reading there would be no exception at all for $\rho\neq I$, and parallel
-mirrors would not be an exception to uniqueness but a different case. The literal clause
-therefore claims uniqueness of the mirror pair, and that is what we refute.
+\item \textbf{Charitable reading 1: ``unique up to rotating both mirrors''.} Standard texts
+state the \emph{non}-uniqueness: a rotation about $c$ is a product of two reflections in
+lines through $c$ making half the angle of rotation, and one of the two mirrors may be chosen
+arbitrarily through $c$ \cite{coxeter,beg}. What is determined is only the angle between the
+mirrors, $\theta/2\bmod\pi$, so the pair is unique \emph{up to rotating both mirrors
+simultaneously about the centre}. This weakened statement is true and follows from
+Theorem~\ref{thm:main}(1): the decompositions $(R_\alpha,R_{\alpha+\theta/2})$ and
+$(R_{\alpha'},R_{\alpha'+\theta/2})$ differ by rotating both mirrors by $\alpha'-\alpha$. We do
+\emph{not} refute this version. But it is not what the conjecture states, and the standard
+sources, which stress that a mirror can be chosen freely, support reading ``unique'' literally
+as uniqueness of the pair of mirrors. Under the ``up to rotation'' reading there would also be
+no exception at all for $\rho\neq I$, and parallel mirrors would be a different case, not an
+exception to uniqueness.
+\item \textbf{Charitable reading 2: relative uniqueness.} ``Given one of the two mirrors, the
+other is unique.'' This is also true. It is exactly Theorem~\ref{thm:main}(1), and in Lean it is
+\texttt{decomp\_classification}: $BA=\rho$ forces $B=\rho A$, and symmetrically $A=B\rho$. Again
+it is not what is stated. Relative uniqueness holds equally for translations: given one of two
+parallel mirrors, the other is determined by the translation vector. So under this reading the
+stated exception (parallel mirrors) would be vacuous, which the conjecture plainly does not
+intend.
 \item \textbf{Clause (C1).} For linear reflections (C1) is true: $BA$ is orthogonal with
 $\det=(-1)^2=1$ (\texttt{refl\_mul\_refl}). With equal mirrors the composition is the
 identity, the rotation by $0$. For affine reflections with parallel distinct mirrors, (C1) is
 false: the composition is a translation with no fixed point. This is the exception that (C4)
 mentions, so (C1) and (C4) together are correct. The disproof does not use them.
 \end{itemize}
+
+\begin{thebibliography}{9}
+\bibitem{coxeter} H.~S.~M. Coxeter, \emph{Introduction to Geometry}, 2nd ed., Wiley, 1969,
+Chapter~3 (isometries of the Euclidean plane; a rotation as a product of two reflections).
+\bibitem{beg} D.~A. Brannan, M.~F. Esplen, J.~J. Gray, \emph{Geometry}, 2nd ed., Cambridge
+University Press, 2012 (Euclidean geometry; isometries as products of reflections).
+\end{thebibliography}
 
 \section{Machine verification}
 

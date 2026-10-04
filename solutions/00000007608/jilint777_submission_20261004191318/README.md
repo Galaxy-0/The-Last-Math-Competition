@@ -46,15 +46,26 @@ The following readings are covered:
 - **Affine reflections.** A rotation about `c` has its mirrors through `c`, which gives the same
   family. Lean shows the 90° rotation about `(1,1)` as `S(y=x)∘S(y=1) = S(x+y=2)∘S(x=1)`.
 
-**The charitable escape.** "Unique up to rotating both mirrors simultaneously" (only the angle
-between the mirrors is determined) is the classical **true** statement, and we do not refute
-it. The conjecture instead asserts uniqueness, with parallel mirrors as *the* exception. The
-Chinese text says the same ("分解唯一", the decomposition is unique). That literal claim is false.
+**Literal-reading convention.** The disproof relies on the literal reading of the bilingual
+text: "分解唯一；且唯一性的例外为平行反射" (the decomposition is unique, and the exception to
+uniqueness is parallel reflections). Clauses 1 and 4 are correct (see below), so the
+conjunction fails through the uniqueness clause.
+
+**Charitable reading 1: "unique up to rotating both mirrors simultaneously".** Only the angle
+between the mirrors is determined. This weakened statement is true, and we do not refute it.
+Standard texts, however, state the *non*-uniqueness: one of the two mirrors through the centre
+may be chosen arbitrarily (Coxeter, *Introduction to Geometry*, Ch. 3; Brannan–Esplen–Gray,
+*Geometry*). This supports reading "unique" literally.
+
+**Charitable reading 2: relative uniqueness.** "Given one mirror, the other is unique." This is
+also true; Lean proves it as `decomp_classification` (`BA = ρ ⇒ B = ρA`). It is not what is
+stated. It holds for translations too, so under this reading the stated exception (parallel
+mirrors) would be vacuous.
 
 **Clauses 1 and 4.** For linear reflections, clause 1 ("the composition is a rotation") is true
 (`refl_mul_refl`). For affine reflections with parallel distinct mirrors, the composition is a
 fixed-point-free translation, so clause 1 fails there. Clause 4 names exactly this exception.
-The disproof does not use clauses 1 and 4.
+Clauses 1 and 4 are therefore correct, and the disproof does not use them.
 
 ## Contents
 
@@ -151,9 +162,13 @@ pdflatex report.tex && pdflatex report.tex
 - ℝ³ 及一般 ℝⁿ 中的超平面镜面（Lean 给出分块嵌入的例子）；
 - 仿射反射：绕点 c 的旋转，其两镜面必过 c，于是有同样的无穷族。
 
-**宽容读法。** "在两镜面同时旋转的意义下唯一"（只有两镜面的夹角是确定的）是经典的**正确**命题，本文不否定它。但猜想原文明说"分解唯一"，并把平行镜面作为例外，按字面理解这是错误的。
+**字面读法约定。** 本否定依据中英文原文的字面含义："分解唯一；且唯一性的例外为平行反射"。第一条和第四条是正确的（见下），所以合取命题是因唯一性部分而不成立。
 
-**关于第一条和第四条。** 对线性反射，第一条"合成为旋转"成立（`refl_mul_refl`）。对仿射反射，两镜面平行且不同时，合成是无不动点的平移，第一条在此不成立，这正是第四条所说的例外。本否定不依赖这两条。
+**宽容读法一："在两镜面同时旋转的意义下唯一"。** 只有两镜面的夹角是确定的。这个弱化命题是正确的，本文不否定它。但标准教材讲的恰恰是**不**唯一性：过中心的两个镜面中，可以任意选定其中一个（Coxeter《Introduction to Geometry》第 3 章；Brannan–Esplen–Gray《Geometry》）。这支持按字面理解"唯一"。
+
+**宽容读法二：相对唯一性。** "给定一个镜面，另一个唯一"。这也是正确的，Lean 中即 `decomp_classification`（`BA = ρ ⇒ B = ρA`）。但这不是原文所说的。而且平移也满足相对唯一性，所以在这种读法下，原文所说的例外（平行镜面）就没有意义了。
+
+**关于第一条和第四条。** 对线性反射，第一条"合成为旋转"成立（`refl_mul_refl`）。对仿射反射，两镜面平行且不同时，合成是无不动点的平移，第一条在此不成立，这正是第四条所说的例外。因此第一条和第四条正确，本否定不依赖它们。
 
 **Lean 4.19.0（仅核心库）。** 从零定义了以下对象：
 - 有理 2×2 矩阵 `m/q`；
