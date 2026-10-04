@@ -1,0 +1,372 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Lang}{\mathcal{L}}
+\newcommand{\F}{\mathcal{F}}
+
+\title{Disproof of Conjecture 00000009617:\\
+the even shift has a 2-state Fischer cover but Hankel rank 3}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000009617 asserts, among other things, that the Fischer
+(``Fisher'') minimal state count of a sofic shift equals the rank of the
+Hankel matrix of its language. We show that this clause is false. For the
+even shift $X$ (binary sequences in which every run of $1$s between two $0$s
+has even length) the Fischer cover has exactly $2$ states, and no
+presentation of any kind has fewer. But the Hankel matrix
+$H[u][v]=[uv\in\Lang(X)]$ has the $3\times 3$ minor
+$\left(\begin{smallmatrix}1&1&1\\1&0&1\\0&1&1\end{smallmatrix}\right)$
+with determinant $-1$, so its rank is at least $3$ (in fact exactly $3$)
+over every field. The decisive facts (the presented shift, the minimal
+state count $2$, the language for all words, and the nonsingular minor) are
+formalized and checked in a self-contained Lean~4 project. An independent
+Python script confirms them.
+\end{abstract}
+
+\section{The conjecture}
+
+The statement (English version) reads:
+\begin{quote}
+\emph{Definition:} Sofic shifts are factor images of SFTs, presented by
+finite graphs with output (hidden Markov models); the Fisher minimal
+realization is unique. \emph{Conjecture:} The Fisher minimal state count of
+a sofic shift equals the rank of the Hankel matrix of its language; the rank
+is computable in polynomial time by a local criterion on words of length
+$2n+1$, and the minimal realization graph structure is unique.
+\end{quote}
+The Chinese version says the same. The conjecture is a conjunction of three
+clauses. We refute the first one:
+\begin{quote}
+(C) \emph{For every sofic shift $X$, the number of states of its Fischer
+(minimal right-resolving) presentation equals the rank of the Hankel matrix
+of $\Lang(X)$.}
+\end{quote}
+A conjunction with a false clause is false, so the conjecture is false. The
+two later clauses are not needed and we say nothing about them. ``Fisher'' is
+a common misspelling of R.~Fischer, who introduced the minimal
+right-resolving presentation \cite{fischer}.
+
+\section{Definitions}
+
+We follow Lind and Marcus \cite{lm}. The alphabet is $\{0,1\}$. A point is a
+bi-infinite sequence $x=(x_i)_{i\in\mathbb Z}$. A word $w=w_0\cdots w_{n-1}$
+\emph{occurs} in $x$ at $i$ if $x_{i+j}=w_j$ for all $j<n$. The
+\emph{language} $\Lang(X)$ of a set $X$ of points is the set of words that
+occur in some point of $X$.
+
+\paragraph{Labelled graphs and presentations.} A labelled graph $G$ on the
+vertex set $\{0,\dots,n-1\}$ is a set of edges $p\xrightarrow{a}q$ with
+$a\in\{0,1\}$. The shift $X_G$ presented by $G$ is the set of label sequences
+of bi-infinite paths, i.e.\ of all $x$ for which there are vertices $s_i$
+($i\in\mathbb Z$) with an edge $s_i\xrightarrow{x_i}s_{i+1}$ for every $i$. A
+shift space $X$ is \emph{sofic} if $X=X_G$ for some finite $G$; then $G$
+\emph{presents} $X$. (Parallel edges with the same label do not change $X_G$,
+so we may take $G$ to be a set of labelled edges.) $G$ is
+\emph{right-resolving} if the out-edges of each vertex carry distinct labels.
+
+\paragraph{Fischer cover.} Every irreducible sofic shift has a minimal
+right-resolving presentation, unique up to isomorphism \cite{fischer},
+\cite[\S3.3]{lm}. It is called the Fischer cover. It has the fewest
+vertices among all right-resolving presentations \cite[\S3.3]{lm}. So
+the ``Fisher minimal state count'' is
+\[
+\mathrm{Fis}(X)=\min\{n : X \text{ has a right-resolving presentation with } n \text{ vertices}\}.
+\]
+We also consider $\mathrm{Pres}(X)=\min\{n : X \text{ has a presentation with } n \text{ vertices}\}$.
+
+\paragraph{Hankel matrix and rank.} The Hankel matrix of a language $\Lang$
+is the infinite $0/1$ matrix indexed by pairs of words,
+$H[u][v]=1$ if $uv\in\Lang$ and $0$ otherwise. Its row $u$ is the indicator
+of the follower set $\F(u)=\{v: uv\in\Lang\}$. The rank of an infinite matrix
+over a field $K$ is the dimension of its row space. Equivalently, it is the
+supremum of the ranks of its finite submatrices, or the largest $r$ such
+that some $r\times r$ minor is nonzero in $K$. This is the meaning of ``Hankel
+rank'' in realization theory, from Kronecker's theorem on Hankel matrices of
+rational functions to the Fliess and Carlyle--Paz theorems on rational formal
+power series and the Hankel rank of hidden Markov processes
+\cite{fliess,cp,ito}.
+
+\section{The even shift and its language}
+
+The even shift is
+\[
+X=\{x\in\{0,1\}^{\mathbb Z} : \text{no block } 0\,1^{2k+1}\,0 \ (k\ge 0) \text{ occurs in } x\}.
+\]
+A block $0\,1^m\,0$ is exactly a run of $m$ ones bounded by $0$s on both sides,
+so $X$ consists of the sequences in which every such run has even length.
+
+\begin{lemma}\label{lem:lang}
+For every word $w$: $w\in\Lang(X)$ if and only if $w$ contains no factor
+$0\,1^{2k+1}\,0$.
+\end{lemma}
+\begin{proof}
+If $w$ occurs in $x\in X$ at $i$, then a factor $0\,1^{2k+1}\,0$ of $w$ at
+position $j$ would occur in $x$ at $i+j$. Conversely, if $w$ has no such
+factor, let $x$ be $w$ placed at positions $0,\dots,|w|-1$ and $1$
+everywhere else. Every $0$ of $x$ lies inside $w$. So a block
+$0\,1^{2k+1}\,0$ of $x$ would lie inside $w$, which is impossible. Hence
+$x\in X$ and $w\in\Lang(X)$.
+\end{proof}
+
+\section{The Fischer cover has two states}
+
+Let $G$ be the graph with vertices $A=0$, $B=1$ and edges
+\[
+A\xrightarrow{0}A,\qquad A\xrightarrow{1}B,\qquad B\xrightarrow{1}A.
+\]
+It is right-resolving and irreducible. It is follower-separated: $0$ labels a
+path from $A$ but not from $B$.
+
+\begin{proposition}\label{prop:presents}
+$X_G=X$.
+\end{proposition}
+\begin{proof}
+($X_G\subseteq X$.) Let $(s_i)$ be a path with labels $(x_i)$. Suppose
+$0\,1^{2k+1}\,0$ occurs at $i$. The only $0$-edge ends at $A$, so
+$s_{i+1}=A$. Along the $1$-edges the state alternates, so
+$s_{i+1+t}=A$ for even $t$ and $B$ for odd $t$ ($t\le 2k+1$). Hence
+$s_{i+2k+2}=B$. But $x_{i+2k+2}=0$ and $B$ has no $0$-edge. This is a contradiction.
+
+($X\subseteq X_G$.) Let $x\in X$. We say position $i$ is in state $B$ if one of
+the following holds:
+\begin{enumerate}
+\item[(a)] there is a $0$ at or after $i$, and the first one is at $i+t$ with $t$ odd;
+\item[(b)] there is no $0$ at or after $i$, there is a $0$ before $i$, and the
+last one is at $i-1-t$ with $t$ odd;
+\item[(c)] $x$ has no $0$ at all and $i$ is odd.
+\end{enumerate}
+Otherwise $i$ is in state $A$. We check that $s_i\xrightarrow{x_i}s_{i+1}$ is an edge for every $i$.
+
+If $x_i=0$, then (a) fails at $i$ with $t=0$, and (b), (c) fail too. So $s_i=A$.
+At $i+1$, (a) would give a block $0\,1^{t}\,0$ at $i$ with $t$ odd, which is
+excluded since $x\in X$. (b) fails because the last $0$ before $i+1$ is at
+$i$, so $t=0$. (c) fails. So $s_{i+1}=A$ and $A\xrightarrow{0}A$ is an edge.
+
+If $x_i=1$, we show that $s_{i+1}$ is the other state from $s_i$. Then the step
+is $A\xrightarrow1B$ or $B\xrightarrow1A$. If there is a $0$ after $i$, say
+first at $i+1+t$, then the first $0$ at or after $i$ is at $i+(t+1)$. Only
+rule (a) applies at both positions, with parities of $t$ and $t+1$. If there is
+no $0$ after $i$ but one before $i$, say last at $i-1-t$, then the last $0$
+before $i+1$ is at $(i+1)-1-(t+1)$. Only rule (b) applies, with parities of $t$
+and $t+1$. If $x$ has no $0$ at all, rule (c) applies with the parities of $i$
+and $i+1$.
+\end{proof}
+
+\begin{proposition}\label{prop:lower}
+No labelled graph with at most one vertex presents $X$.
+\end{proposition}
+\begin{proof}
+A graph with no vertex has no bi-infinite path, but $0^\infty\in X$. A graph
+with one vertex and loop label set $T\subseteq\{0,1\}$ presents the full
+shift $T^{\mathbb Z}$. If $0\notin T$, it misses $0^\infty\in X$. If $1\notin T$,
+it misses $1^\infty\in X$ (which has no $0$). If $T=\{0,1\}$, it contains
+$\cdots000\,1\,000\cdots\notin X$, since this point contains the block $010$.
+\end{proof}
+
+\begin{theorem}\label{thm:fis}
+$\mathrm{Fis}(X)=\mathrm{Pres}(X)=2$. The graph $G$ is the Fischer cover of $X$.
+\end{theorem}
+\begin{proof}
+By Propositions~\ref{prop:presents} and~\ref{prop:lower}. The
+Fischer cover is the unique minimal right-resolving presentation, so it is $G$.
+\end{proof}
+The verification script also enumerates all $2^8$ labelled graphs on two
+vertices. Exactly two of them have the same blocks as $X$ up to length $8$, and
+these are $G$ and its relabelling.
+
+\section{The Hankel matrix has rank 3}
+
+By Lemma~\ref{lem:lang}, $H[u][v]=1$ iff $uv$ has no factor $0\,1^{\mathrm{odd}}\,0$.
+Take rows $u\in\{11,\,0,\,01\}$ and columns $v\in\{0,\,10,\,1\}$:
+\[
+\begin{array}{c|ccc}
+ & 0 & 10 & 1\\\hline
+11 & 110\in\Lang & 1110\in\Lang & 111\in\Lang\\
+0 & 00\in\Lang & 010\notin\Lang & 01\in\Lang\\
+01 & 010\notin\Lang & 0110\in\Lang & 011\in\Lang
+\end{array}
+\qquad
+M=\begin{pmatrix}1&1&1\\1&0&1\\0&1&1\end{pmatrix}.
+\]
+We have $\det M=1\cdot(0-1)-1\cdot(1-0)+1\cdot(1-0)=-1$. The integer matrix
+$N=\left(\begin{smallmatrix}1&0&-1\\1&-1&0\\-1&1&1\end{smallmatrix}\right)$
+satisfies $MN=NM=I$. So $M$ is invertible over every commutative ring, and
+in particular over every field.
+
+\begin{theorem}\label{thm:rank}
+Over every field $K$, the Hankel matrix of $\Lang(X)$ has rank exactly $3$.
+\end{theorem}
+\begin{proof}
+The rank is at least $3$ because $M$ is a nonsingular submatrix. For the
+upper bound we show that $H$ has at most four distinct rows, one of which is
+zero. If $u\notin\Lang(X)$, then $\F(u)=\emptyset$, because $\Lang(X)$ is
+closed under taking factors. Let $u\in\Lang(X)$. A forbidden block in $uv$ lies
+inside $u$ (impossible), inside $v$, or straddles the junction. A straddling
+block $0\,1^m\,0$ has its first $0$ in $u$ and all $1$s up to the junction, so
+it starts at the last $0$ of $u$. Write $u=u'01^j$ if $u$ contains a $0$, and
+$v=1^r0v'$ if $v$ contains a $0$. Then $uv\in\Lang(X)$ iff $v\in\Lang(X)$ and,
+when both contain a $0$, $j+r$ is even. Hence $\F(u)=\Lang(X)$ if $u$ has no
+$0$, $\F(u)=\F(0)$ if $j$ is even, and $\F(u)=\F(01)$ if $j$ is odd. The rows
+lie in the span of the three vectors $\mathbf 1_{\Lang(X)}$, $\mathbf 1_{\F(0)}$
+and $\mathbf 1_{\F(01)}$, so the rank is at most $3$.
+\end{proof}
+
+\begin{corollary}
+$\mathrm{Fis}(X)=2\ne 3=\operatorname{rank}_K H$ for every field $K$. Clause (C), and
+with it Conjecture 00000009617, is false.
+\end{corollary}
+
+\section{Readings of the clause}
+
+\begin{itemize}
+\item \textbf{Rank over a field} ($\mathbb Q,\mathbb R,\mathbb C,\mathbb F_p$, or any other field).
+The rank is $3\ne2$. The determinant $-1$ is a unit in every ring, so the
+counterexample does not depend on the field. This is the standard meaning of
+the rank of a Hankel matrix (Section~2).
+\item \textbf{Fisher count.} We read it as the size of the minimal
+right-resolving presentation. If it means the least number of states of
+\emph{any} presentation, it is still $2$ (Theorem~\ref{thm:fis}). If it means
+the left Fischer cover (minimal left-resolving presentation), it is also $2$:
+$X$ is closed under reversal, and reversing $G$ gives a left-resolving
+presentation; Proposition~\ref{prop:lower} holds for all graphs.
+\item \textbf{Indexing of $H$.} Rows and columns may range over all words, over
+nonempty words, or over words of length at most $n$ for any $n\ge2$. All these
+contain $M$, so the rank is at least $3$ in each case. Indexing by $u^{R}v$ or
+transposing does not change the rank.
+\item \textbf{Boolean rank (disclosure).} Over the Boolean semiring (OR/AND), the
+rank of $H$ is $2$. Indeed $\mathbf 1_{\Lang(X)}=\mathbf 1_{\F(0)}\vee\mathbf 1_{\F(01)}$:
+if $v$ has no $0$, then $v\in\F(0)$; otherwise $v\in\F(0)$ or $v\in\F(01)$ by
+the parity of its leading run of $1$s. The fooling set $\{(0,0),(01,10)\}$ shows
+that the Boolean rank is at least $2$. Under this reading the even shift gives
+$2=2$ and is \emph{not} a counterexample. We do not claim anything about the
+Boolean reading. It is not the standard meaning: Boolean rank is a different
+notion and is always named as such. Over $\mathbb Q$ the vector
+$\mathbf 1_{\Lang(X)}$ is not $\mathbf 1_{\F(0)}+\mathbf 1_{\F(01)}$, since both
+follower sets contain every word $1^k$. This is why the field rank is $3$.
+\item \textbf{Hidden Markov model reading.} One could instead take the Hankel matrix
+of the probability function $P(w)$ of a measure on $X$. That matrix is not
+determined by the shift or by ``its language''. The clause speaks of the Hankel
+matrix of the language, so we use the indicator function of $\Lang(X)$.
+\item \textbf{Other covers.} The number of distinct nonempty follower sets of words
+of $X$ is $3$. This is the size of the follower-set graph and of the minimal
+deterministic automaton of $\Lang(X)$ without its dead state, and it equals
+the Hankel rank here. But that graph is not minimal, and it is not the Fischer
+cover. The Fischer cover only keeps the follower sets of synchronizing words,
+namely $\F(0)$ and $\F(01)$.
+\end{itemize}
+
+\section{Lean formalization}
+\begingroup\raggedright
+
+The directory \texttt{lean4/} is a self-contained Lean~4.19.0 project. It uses
+only the core library (no Mathlib). Points are functions
+\texttt{Int}~$\to$~\texttt{Bool} (\texttt{false} is $0$, \texttt{true} is $1$).
+\begin{itemize}
+\item \texttt{EvenShift x}: no \texttt{ForbiddenAt x i k}, the block
+$0\,1^{2k+1}\,0$ at $i$. \texttt{Lang X w}: some point of $X$ contains $w$.
+\item \texttt{LGraph n}, \texttt{IsPathLabel}, \texttt{Presents E X}
+($X$ equals the set of bi-infinite path labels), \texttt{RightResolving},
+\texttt{Sofic}. \texttt{IsFisherCount X m} means that $m$ is the least number
+of vertices of a right-resolving presentation. \texttt{IsMinPresCount} is the
+same for arbitrary presentations.
+\item \texttt{hankelEntry X u v} is $1$ if \texttt{Lang X (u ++ v)} holds and
+$0$ otherwise. \texttt{minor}, and \texttt{det} (Laplace expansion).
+\texttt{HankelRankAtLeast X r} means that some $r\times r$ minor has nonzero
+integer determinant, i.e.\ the rank over $\mathbb Q$ is at least $r$.
+\texttt{HankelRankAtLeastMod p} is the same over $\mathbb Z/p$.
+\texttt{HankelRankIs X m} means at least $m$ and not at least $m+1$.
+\item \texttt{Claim}: for every sofic $X$ and every $m$ with
+\texttt{IsFisherCount X m}, \texttt{HankelRankIs X m}. \texttt{ClaimMod p} and
+\texttt{ClaimAnyPresentation} are the variants for $\mathbb Z/p$ and for
+arbitrary presentations.
+\item \texttt{lang\_iff}: Lemma~\ref{lem:lang}, for all words.
+\texttt{fisher\_sound}, \texttt{fisher\_complete}, \texttt{fisher\_presents}:
+Proposition~\ref{prop:presents}. \texttt{no\_zero\_state}, \texttt{no\_one\_state}:
+Proposition~\ref{prop:lower}. \texttt{fisher\_count},
+\texttt{min\_presentation\_count}: Theorem~\ref{thm:fis}.
+\texttt{fisher\_rightResolving} and \texttt{fisher\_irreducible\_separated}
+check the properties of $G$.
+\item \texttt{minor\_eq}, \texttt{minor\_det} ($=-1$), \texttt{minor\_unimodular}
+(the inverse $N$), \texttt{rows\_independent} (the three rows are linearly
+independent over $\mathbb Q$), \texttt{hankel\_rank\_ge\_three} and
+\texttt{hankel\_rank\_ge\_three\_mod} (for every $p\ge2$).
+\item \texttt{conjecture\_00000009617\_false :}~$\neg$\,\texttt{Claim}. Also
+\texttt{conjecture\_00000009617\_false\_mod} ($\forall p\ge 2$, $\neg$\,\texttt{ClaimMod p})
+and \texttt{conjecture\_00000009617\_false\_any\_presentation}.
+\texttt{fisher\_lt\_rank}: every $m$ with \texttt{IsFisherCount X m} equals $2$, and the rank is
+at least $m+1$.
+\end{itemize}
+Non-vacuity: \texttt{evenShift\_sofic} and \texttt{fisher\_count} show that the
+hypotheses of \texttt{Claim} hold for $X$. \texttt{allZero\_mem},
+\texttt{allOne\_mem} and \texttt{single\_one\_not\_mem} show that $X$ is neither
+empty nor full. The final examples show that \texttt{Lang} is nontrivial and
+that \texttt{det} returns $0$ on a singular matrix.
+
+\paragraph{Limitations.} Lean proves rank \emph{at least} $3$, which suffices.
+The upper bound in Theorem~\ref{thm:rank} and the Boolean-rank remark are proved
+in this report and checked on finite truncations by \texttt{verify.py}, but not
+in Lean. Lean works over the alphabet $\{0,1\}$. The clause quantifies over all
+sofic shifts, so a binary counterexample suffices. The project has no
+\texttt{sorry}, no \texttt{native\_decide} and no added axioms.
+\texttt{\#print axioms} reports only the standard \texttt{propext},
+\texttt{Classical.choice} and \texttt{Quot.sound}. Classical logic is used to
+define the path in \texttt{fisher\_complete} and the Hankel entries of an
+arbitrary shift.
+
+\endgroup
+
+\section{Independent check}
+
+\texttt{verify.py} (Python~3 standard library) does the following:
+\begin{itemize}
+\item It checks that three descriptions of $\Lang(X)$ agree on all words of length
+at most $14$: forbidden blocks, parities of inner runs, and paths in $G$.
+\item It enumerates all labelled graphs with $0$, $1$ or $2$ vertices. None with
+fewer than $2$ vertices matches, and the matching $2$-vertex graphs are $G$ up
+to relabelling.
+\item It recomputes the minor, its determinant $-1$ and its inverse.
+\item It computes the rank of the Hankel truncation on all $127$ words of length at
+most $6$: it is $3$ over $\mathbb Q$ and over $\mathbb F_2,\mathbb F_3,\mathbb F_5,\mathbb F_7$.
+\item It confirms that only $4$ distinct rows occur.
+\item It confirms the Boolean-rank identity.
+\end{itemize}
+
+\section{Reproduction}
+\begin{verbatim}
+cd lean4 && lake build       # Lean 4.19.0, core only
+python3 verify.py            # standard library only
+pdflatex report.tex
+\end{verbatim}
+
+\begin{thebibliography}{9}
+\bibitem{fischer} R.~Fischer, Sofic systems and graphs, \emph{Monatsh. Math.}
+80 (1975), 179--186.
+\bibitem{lm} D.~Lind and B.~Marcus, \emph{An Introduction to Symbolic Dynamics
+and Coding}, Cambridge University Press, 1995 (2nd ed.\ 2021).
+\bibitem{fliess} M.~Fliess, Matrices de Hankel, \emph{J. Math. Pures Appl.}
+53 (1974), 197--224.
+\bibitem{cp} J.~W.~Carlyle and A.~Paz, Realizations by stochastic finite
+automata, \emph{J. Comput. System Sci.} 5 (1971), 26--40.
+\bibitem{ito} H.~Ito, S.-I.~Amari and K.~Kobayashi, Identifiability of hidden
+Markov information sources and their minimum degrees of freedom,
+\emph{IEEE Trans. Inform. Theory} 38 (1992), 324--333.
+\end{thebibliography}
+
+\end{document}
