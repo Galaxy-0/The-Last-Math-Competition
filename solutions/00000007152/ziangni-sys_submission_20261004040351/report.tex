@@ -1,0 +1,76 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,lmodern}
+\setlength{\emergencystretch}{2em}
+\begin{document}
+\begin{center}
+{\Large A Weyl extremal equality without a common eigenbasis}\\[4pt]
+{\large Counterexample to Conjecture 00000007152}\\[6pt]
+ziangni-sys \qquad 4 October 2026
+\end{center}
+
+\section*{The extremal equality}
+For real symmetric matrices, the largest-eigenvalue Weyl inequality is
+\[
+\lambda_{\max}(A+B)\leq\lambda_{\max}(A)+\lambda_{\max}(B).
+\]
+We refute the source's necessity of a common eigenbasis for Weyl extremal
+equality by exhibiting equality in this particular bound without such
+a basis. The example does not assert simultaneous saturation of every
+Weyl inequality; that is a stronger condition than equality in this
+extremal bound.
+
+Consider the actual symmetric matrices and vector
+\[
+A=\begin{pmatrix}3&0&0\\0&1&0\\0&0&0\end{pmatrix},\qquad
+B=\begin{pmatrix}3&0&0\\0&1&1\\0&1&1\end{pmatrix},\qquad
+e=\begin{pmatrix}1\\0\\0\end{pmatrix}.
+\]
+Both $Ae=3e$ and $Be=3e$, so $(A+B)e=6e$.
+
+\section*{Actual largest eigenvalues}
+Write $v=(v_0,v_1,v_2)$ and $S(v)=v_0^2+v_1^2+v_2^2$.
+Then
+\[
+v^TAv=3v_0^2+v_1^2\leq3S(v),\qquad
+v^TBv=3v_0^2+(v_1+v_2)^2\leq3S(v).
+\]
+The second bound follows from
+$(v_1+v_2)^2\leq2(v_1^2+v_2^2)$, since $(v_1-v_2)^2\geq0$.
+Adding the two bounds gives $v^T(A+B)v\leq6S(v)$.
+For any nonzero real eigenvector $Mv=\mu v$, the quadratic form is
+$v^TMv=\mu S(v)$ and $S(v)>0$. These bounds therefore imply that
+every eigenvalue of $A$, $B$, and $A+B$ is at most $3$, $3$, and $6$,
+respectively. Together with the displayed eigenvector $e$, they prove
+\[
+\lambda_{\max}(A)=3,\qquad\lambda_{\max}(B)=3,\qquad
+\lambda_{\max}(A+B)=6=3+3.
+\]
+This verifies the required equality using the matrices themselves,
+rather than assuming an eigenvalue table.
+
+\section*{No common eigenbasis}
+If a basis $\{b_i\}$ consisted of simultaneous eigenvectors, with
+$Ab_i=\alpha_i b_i$ and $Bb_i=\beta_i b_i$, then
+\[
+ABb_i=\beta_i\alpha_i b_i=\alpha_i\beta_i b_i=BAb_i.
+\]
+Linearity and the spanning property of the basis would give $AB=BA$.
+However, for $w=(0,0,1)^T$ direct computation gives
+\[
+ABw=(0,1,0)^T,\qquad BAw=(0,0,0)^T.
+\]
+Thus no common eigenbasis exists, even without requiring the basis to
+be orthogonal. The matrices share the one extremal eigenvector needed
+to saturate the top Weyl bound, while their actions on its complementary
+plane do not commute. A common eigenbasis is consequently not necessary
+for this Weyl extremal equality.
+
+\section*{Formal verification}
+Lean defines actual matrix multiplication, eigenvalue witnesses, and
+universal largest-eigenvalue bounds. It checks symmetry and all three
+largest eigenvalues. The theorem \texttt{no\_common\_eigenbasis} quantifies
+over an actual Lean \texttt{Basis} with arbitrary index type and proves
+the commutation contradiction. The final theorem packages the exact
+extremal equality together with the absence of a common eigenbasis.
+\end{document}
