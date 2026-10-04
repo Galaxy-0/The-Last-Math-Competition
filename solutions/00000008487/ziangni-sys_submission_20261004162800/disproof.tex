@@ -1,0 +1,59 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{Incompatible density claims in conjecture 00000008487}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+Both versions assert that the locked-function set is dense $G_\delta$
+and that its complement is dense and open. These assertions cannot
+hold simultaneously in any nonempty topological space. The contradiction
+does not depend on the locking convention, measure or fractal dimension.
+
+\paragraph{Topological obstruction.}
+Let $Y$ be a nonempty topological space and $L\subseteq Y$ be dense.
+If $Y\setminus L$ is open and nonempty, density of $L$ implies
+\[
+L\cap(Y\setminus L)\ne\varnothing,
+\]
+which is impossible. Hence an open complement of a dense set must be
+empty. But an empty set cannot be dense in a nonempty space: its closure
+is empty. We have therefore proved
+\[
+\neg\bigl(L\text{ dense}\ \land\ Y\setminus L\text{ open}
+\ \land\ Y\setminus L\text{ dense}\bigr).
+\]
+This argument is valid without a Baire-space assumption, and even
+without the additional $G_\delta$ assertion.
+
+\paragraph{Application to the actual interval function space.}
+Take the genuine interval $I=[0,1]\subset\mathbb R$ and its continuous
+observable space $Y=C(I,\mathbb R)$, with its usual uniform topology.
+This space is nonempty, since the constant zero function belongs to it.
+Fix any interval map, for example the continuous identity map
+$T(x)=x$, and let $L$ be its actual set of locked observables according
+to the intended definition. Since the obstruction holds for \emph{every}
+subset of $Y$, it holds for this actual $L$. Thus $L$ cannot satisfy the
+two asserted density clauses simultaneously. This disproves the
+conjecture as written, without imposing a definition of locking that
+might alter the statement.
+
+A dense $G_\delta$ set can certainly have a dense complement; the added
+\emph{openness} of that complement is what causes the contradiction.
+No conclusion about the separate Lebesgue-measure or box-dimension
+claims is needed. The proof remains valid for other nonempty spaces
+of observables and any topology on them.
+
+\paragraph{Lean correspondence.}
+The accompanying project proves the obstruction for every actual
+nonempty topological space and every subset, using Mathlib's
+\texttt{Dense} and \texttt{IsOpen} predicates. It specializes to
+\texttt{ContinuousMap (Set.Icc (0:Real) 1) Real}, supplies the actual
+zero observable, and proves that no subset can satisfy the complete
+claimed topology conjunction, including the $G_\delta$ predicate. This universal
+statement covers the actual locked-function set without an assumed
+certificate or a replacement dynamics model. The project is pinned
+to Lean 4.19.0 and Mathlib commit
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\end{document}
