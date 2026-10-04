@@ -1,0 +1,72 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\R}{\mathbb R}
+\newcommand{\SOL}{\operatorname{SOL}}
+\title{Conjecture 00000003794:\\An LCP with infinitely many solutions}
+\author{C0ldSmi1e}
+\date{4 October 2026}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+\begin{abstract}
+A nonzero positive semidefinite matrix of order two has an entire ray of linear complementarity solutions. This disproves the unrestricted solution-count bound $2^n$ stated in conjecture 00000003794. Lean verifies the standard LCP conditions, the complete solution set, its infinite cardinality, and the negation of the universal bound.
+\end{abstract}
+
+\section{Source statement and scope}
+The English conjecture reads:
+\begin{quote}
+Definition: Linear complementarity problems: complementarity structures on cones. Conjecture: The solution count of LCP: the upper bound of solution counts of linear complementarity is 2 to the n-th power, with the tightness of bounds the strictness of P-matrices. (LCP P matrix strict solution upper bound tightness)
+\end{quote}
+The exact bilingual source is included as \texttt{conjecture.md}. In both languages the first clause states a solution-count bound without assuming a matrix class, nonsingularity, or finitely many or isolated solutions. The subsequent P-matrix tightness phrase supplies no precise additional definition. We refute the explicit unrestricted first clause. Our matrix is singular and is not a P-matrix; this is not a disproof of a reformulation restricted to P-matrices.
+
+\section{The complete counterexample}
+For a real $n\times n$ matrix $M$ and $q\in\R^n$, the standard orthant LCP has solution set~\cite[p.~540]{chen}
+\[
+ \SOL(M,q)=\{x\in\R^n:x\geq0,\ Mx+q\geq0,\ x^{\mathsf T}(Mx+q)=0\},
+\]
+where inequalities are coordinatewise. The nonnegative orthant is a cone, so this is already a case of complementarity on cones.
+
+\begin{theorem}\label{counter}
+Let $M=\left(\begin{smallmatrix}1&-1\\-1&1\end{smallmatrix}\right)$ and $q=0$. Then
+$\SOL(M,0)=\{(t,t):t\geq0\}$, an infinite set. In particular, it has more than $2^2=4$ solutions, although $M$ is nonzero and positive semidefinite.
+\end{theorem}
+\begin{proof}
+For $x=(a,b)$, $Mx=(a-b,b-a)$. Feasibility requires $a,b\geq0$, $a-b\geq0$, and $b-a\geq0$. Thus $a=b=t\geq0$. Conversely, every $(t,t)$ with $t\geq0$ has $Mx=0$, so all three LCP conditions hold.
+The map $k\mapsto(k,k)$ from natural numbers into this solution set is injective. Already $(0,0),(1,1),(2,2),(3,3),(4,4)$ are five distinct solutions.
+Finally $M\ne0$, $M$ is symmetric, and $x^{\mathsf T}Mx=(a-b)^2\geq0$. Its determinant is zero.
+\end{proof}
+
+\clearpage
+\section{Solutions and complementarity patterns}
+The $2^n$ choices of a zero coordinate from each pair $(x_i,(Mx+q)_i)$ need not determine distinct, unique vectors. Here $Mx=0$ leaves an entire ray. Rohn's Proposition~2.4 gives a $2^n$ solution bound assuming every complementary matrix is nonsingular; Proposition~2.5 describes infinite families~\cite{rohn}. These results provide context, not premises for our elementary counterexample.
+
+Since $\det M=0$, this matrix fails the P-matrix condition that all principal minors are positive. We count all solutions; we make no claim about bounds restricted to isolated solutions or to finite solution sets. For $t>0$, each $x_i=t>0$ and each residual coordinate is zero, so these points are even strictly complementary. Strict complementarity of a solution is different from matrix nonsingularity.
+
+\section{Formal statement correspondence}
+In \texttt{Problem.lean}, the orthant is Mathlib's \texttt{ConvexCone.positive}. The definition \texttt{LCPSolutions} uses actual matrix-vector multiplication, nonnegativity of both vectors, and their zero dot product. The coordinatewise equivalence theorem proves the standard scalar LCP conditions: a finite sum of nonnegative products is zero exactly when every product is zero.
+
+The matrix and diagonal vectors are concrete real matrices and functions on \texttt{Fin 2}. The theorem \texttt{counterSolutions\_iff} classifies all solutions. Lean also verifies nonzeroness, determinant zero, symmetry as the real Hermitian condition, the quadratic identity, and Mathlib's \texttt{Matrix.PosSemidef} predicate.
+
+The root module proves injectivity of the natural-number family and infinitude of the actual solution set. Its \texttt{Set.encard} is the extended natural cardinality, which equals infinity here. Bare natural-valued cardinality would assign zero to an infinite set and misstate the bound. The predicate \texttt{SolutionCountBound} is
+\[
+ \forall n\in\mathbb N,\ n>0\;\Longrightarrow\;
+ \forall M\in\R^{n\times n}\;\forall q\in\R^n,
+ \quad\operatorname{encard}(\SOL(M,q))\leq2^n.
+\]
+The theorem \texttt{conjecture3794\_disproof} negates this predicate at $n=2$, the displayed matrix, and $q=0$. All connections to the actual solution set are proved.
+
+\section{Reproduction and verification}
+Lean 4.19.0 and Mathlib v4.19.0 are pinned with exact dependency revisions. The README lists commands for \texttt{lake build} and strict replay of all three Lean sources with warnings treated as errors. \texttt{Check.lean} prints six definitions and audits all 23 theorem types and axiom dependencies.
+
+This package records a fresh independent build, strict replay, internal semantic review, and rendered-PDF inspection. No numerical auxiliary program is needed. These local checks are separate from maintainer acceptance. Source and rules were checked at revision \texttt{0862407e}; eligibility evidence records unsolved metadata and prior-submission searches.
+
+\begin{thebibliography}{2}\small
+\bibitem{chen} X. Chen and S. Xiang. \emph{Sparse solutions of linear complementarity problems}. Mathematical Programming 159 (2016), 539--556. \href{https://www.polyu.edu.hk/ama/staff/xjchen/Chen-Xiang2016MP.pdf}{Author-hosted article}, \S1.
+\bibitem{rohn} J. Rohn. \emph{Description of all solutions of a linear complementarity problem}. Electronic Journal of Linear Algebra 18 (2009), 246--252. \href{https://journals.uwyo.edu/index.php/ela/article/download/619/619/}{Journal article}, Propositions 2.4--2.5.
+\end{thebibliography}
+\end{document}

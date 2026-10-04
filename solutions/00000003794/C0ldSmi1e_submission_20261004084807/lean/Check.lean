@@ -1,0 +1,57 @@
+import Conjecture3794
+
+set_option pp.universes false
+
+#print Conjecture3794.nonnegativeOrthant
+#print Conjecture3794.LCPSolutions
+#print Conjecture3794.counterMatrix
+#print Conjecture3794.diagonalVector
+#print Conjecture3794.SolutionCountBound
+#print Conjecture3794.solutionSequence
+
+#check Conjecture3794.mem_nonnegativeOrthant
+#print axioms Conjecture3794.mem_nonnegativeOrthant
+#check Conjecture3794.mem_LCPSolutions_iff
+#print axioms Conjecture3794.mem_LCPSolutions_iff
+#check Conjecture3794.dotProduct_eq_zero_iff_coordinatewise
+#print axioms Conjecture3794.dotProduct_eq_zero_iff_coordinatewise
+#check Conjecture3794.mem_LCPSolutions_iff_coordinatewise
+#print axioms Conjecture3794.mem_LCPSolutions_iff_coordinatewise
+#check Conjecture3794.counterMatrix_mulVec
+#print axioms Conjecture3794.counterMatrix_mulVec
+#check Conjecture3794.counterMatrix_mul_diagonal
+#print axioms Conjecture3794.counterMatrix_mul_diagonal
+#check Conjecture3794.diagonalVector_mem
+#print axioms Conjecture3794.diagonalVector_mem
+#check Conjecture3794.counterSolutions_iff
+#print axioms Conjecture3794.counterSolutions_iff
+#check Conjecture3794.diagonalVector_injective
+#print axioms Conjecture3794.diagonalVector_injective
+#check Conjecture3794.counterMatrix_ne_zero
+#print axioms Conjecture3794.counterMatrix_ne_zero
+#check Conjecture3794.counterMatrix_det
+#print axioms Conjecture3794.counterMatrix_det
+#check Conjecture3794.counterMatrix_isHermitian
+#print axioms Conjecture3794.counterMatrix_isHermitian
+#check Conjecture3794.counterMatrix_quadratic
+#print axioms Conjecture3794.counterMatrix_quadratic
+#check Conjecture3794.counterMatrix_posSemidef
+#print axioms Conjecture3794.counterMatrix_posSemidef
+#check Conjecture3794.solutionSequence_mem
+#print axioms Conjecture3794.solutionSequence_mem
+#check Conjecture3794.solutionSequence_injective
+#print axioms Conjecture3794.solutionSequence_injective
+#check Conjecture3794.counterSolutions_infinite
+#print axioms Conjecture3794.counterSolutions_infinite
+#check Conjecture3794.counterSolutions_encard
+#print axioms Conjecture3794.counterSolutions_encard
+#check Conjecture3794.counterSolutions_exceed_every_finite_bound
+#print axioms Conjecture3794.counterSolutions_exceed_every_finite_bound
+#check Conjecture3794.five_distinct_solutions
+#print axioms Conjecture3794.five_distinct_solutions
+#check Conjecture3794.counterSolutions_not_le_two_pow_two
+#print axioms Conjecture3794.counterSolutions_not_le_two_pow_two
+#check Conjecture3794.conjecture3794_counterexample
+#print axioms Conjecture3794.conjecture3794_counterexample
+#check Conjecture3794.conjecture3794_disproof
+#print axioms Conjecture3794.conjecture3794_disproof
