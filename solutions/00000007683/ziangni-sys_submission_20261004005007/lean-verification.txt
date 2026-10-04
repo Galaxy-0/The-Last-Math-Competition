@@ -1,0 +1,23 @@
+Clean-directory verification using the bundled Std library; no prior .lake cache.
+
+$ lean --version
+Lean (version 4.19.0, x86_64-unknown-linux-gnu, commit 6caaee842e94, Release)
+Exit status: 0
+
+$ lake build
+ℹ [2/3] Built Main
+info: ././././Main.lean:115:0: 'Conjecture7683.eval_mul' depends on axioms: [propext]
+info: ././././Main.lean:116:0: 'Conjecture7683.coefficient_formula' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:117:0: 'Conjecture7683.flat_maximum' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:118:0: 'Conjecture7683.conjecture_flatFree_false' does not depend on any axioms
+info: ././././Main.lean:119:0: 'Conjecture7683.conjecture_false' does not depend on any axioms
+Build completed successfully.
+Exit status: 0
+
+$ lake env lean -DwarningAsError=true Main.lean
+'Conjecture7683.eval_mul' depends on axioms: [propext]
+'Conjecture7683.coefficient_formula' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7683.flat_maximum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture7683.conjecture_flatFree_false' does not depend on any axioms
+'Conjecture7683.conjecture_false' does not depend on any axioms
+Exit status: 0
