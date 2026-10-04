@@ -1,0 +1,58 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,hyperref}
+\title{Kernel ideals do not determine lattice congruences\\Disproof of conjecture 00000008550}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\section*{Scope and the actual lattice}
+Both language versions assert that kernel ideals correspond one-to-one with lattice congruences. For a bounded lattice, the kernel ideal of a congruence is its zero class, equivalently the inverse image of zero under its quotient homomorphism. We disprove the correspondence on the three-element bounded chain
+\[
+ C_3=\{0<1<2\},\qquad x\wedge y=\min(x,y),\quad x\vee y=\max(x,y).
+\]
+We exhibit distinct congruences with the same kernel ideal. In fact, this lattice has four congruences and only three kernel ideals, so even an arbitrary bijection between the two sets is impossible. The separate tower-height clause is not addressed.
+
+\section*{Genuine quotient homomorphisms}
+Consider the following surjective maps, with codomains the indicated bounded chains:
+\[
+\begin{array}{c|c|ccc|c}
+\text{map}&\text{codomain}&q(0)&q(1)&q(2)&q^{-1}(0)\\\hline
+q_{\rm id}&C_3&0&1&2&\{0\}\\
+q_{\rm upper}&C_2&0&1&1&\{0\}\\
+q_{\rm lower}&C_2&0&0&1&\{0,1\}\\
+q_{\rm trivial}&C_1&0&0&0&C_3
+\end{array}
+\]
+Each map preserves meet, join, bottom and top, and is surjective. In particular the constant map is a bounded-lattice homomorphism to the one-element lattice, whose bottom and top coincide.
+
+For each map $q$, its actual kernel congruence is
+\[
+ x\mathrel{\theta_q}y\quad\Longleftrightarrow\quad q(x)=q(y).
+\]
+The identity gives equality; the upper quotient identifies $1$ and $2$. Those congruences differ, since $1\not\mathrel{\theta_{\rm id}}2$ but $1\mathrel{\theta_{\rm upper}}2$. Nevertheless, both zero classes are exactly $\{0\}$. Thus the natural kernel-ideal map is not injective.
+
+\newpage
+\section*{Complete classification and cardinality obstruction}
+The four quotient congruences have blocks
+\[
+ \{0\}|\{1\}|\{2\},\quad \{0\}|\{1,2\},\quad
+ \{0,1\}|\{2\},\quad \{0,1,2\}.
+\]
+These are all the congruences. A lattice congruence is an equivalence relation compatible with both meet and join. Besides these four equivalence relations, the only possible partition of $C_3$ is $\{0,2\}|\{1\}$. It cannot be a congruence: $0\sim2$ and $1\sim1$ would imply $\min(0,1)\sim\min(2,1)$, hence $0\sim1$, a contradiction.
+
+A lattice ideal here contains zero, is downward closed, and is closed under binary joins. The only possibilities are
+\[
+ \{0\},\qquad \{0,1\},\qquad C_3.
+\]
+All three are kernel ideals, realized respectively by $q_{\rm id}$, $q_{\rm lower}$ and $q_{\rm trivial}$. Thus the number of congruences is four, and the number of kernel ideals is three. No bijection exists, independently of whether the conjecture means the natural zero-class map or an abstract one-to-one correspondence.
+
+\section*{Complete formal and computational coverage}
+The Lean project models $C_3$ as \texttt{Fin 3} with its actual bounded order and lattice operations. A Boolean relation is tested for reflexivity, symmetry, transitivity and full two-argument compatibility with both minimum and maximum. Every binary relation is represented: there are $2^9=512$. Kernel-checked finite decision proves the classification and counts the actual congruence predicate, rather than assuming a list of valid relations.
+
+The four actual quotient functions are independently checked for both lattice-operation preservation, preservation of both bounds, and surjectivity. Their congruences are defined by actual equality of quotient images. The kernel is the actual zero class; its agreement with the quotient's zero preimage is proved. Ideals are defined by their actual closure properties, and all eight subsets of $C_3$ are checked. The project proves that the set of congruence kernels equals the set of all ideals, counts them, and negates the existence of an equivalence between congruences and kernel ideals.
+
+An independent Python check also examines all 512 relations and all eight subsets, verifies all quotient laws and surjections, and confirms the classification, counts and common-kernel example. The Lean proof uses ordinary kernel-checked decision, with no native decision shortcut, additional axiom or admitted proof.
+
+Complete project build and direct-source check logs with theorem axiom audits accompany the Lean 4.19.0 project pinned to Mathlib v4.19.0. The compiled two-page PDF is visually inspected in full. The use of $C_3$ is a standard finite example; the source claim addressed here is the kernel-ideal correspondence, not any previously submitted congruence-atom bound.
+\end{document}
