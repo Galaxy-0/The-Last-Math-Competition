@@ -1,0 +1,162 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Infinitude and a counting bound for Ulam sequences},pdfauthor={Galaxy-0},pdfsubject={Conjecture 00000000205 and Lean 4 formalization}}
+\usepackage{enumitem}
+\setlist{itemsep=3pt,topsep=5pt}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\U}{U(1,n)}
+\newcommand{\lean}[1]{\texttt{\detokenize{#1}}}
+\lstset{basicstyle=\ttfamily\small,columns=fullflexible,keepspaces=true,breaklines=true,frame=none,showstringspaces=false}
+\title{Infinitude and a counting bound for Ulam sequences\\[5pt]\large Conjecture 00000000205}
+\author{Submission account: Galaxy-0}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+For every integer $n\ge2$, the standard Ulam sequence $U(1,n)$ exists uniquely and has infinitely many terms. We give a self-contained proof and a Lean 4 formalization, including the quantitative estimate $A_n(n2^r)\ge r+2$ for every $r\ge0$, where $A_n(X)$ counts sequence values at most $X$. The key fact is that the sum of the two largest values in any finite prefix has exactly one representation by two distinct prefix values. Infinitude is a known elementary fact; this report makes no novelty claim for it. The estimate is logarithmic and does not establish positive natural density or existence of a density limit.
+\end{abstract}
+
+\section{Statement and exact scope}
+Fix an integer $n\ge2$. Set $a_1=1$ and $a_2=n$. For $k\ge2$, define $a_{k+1}$ to be the least integer $x>a_k$ having exactly one representation
+\[
+x=a_i+a_j,\qquad 1\le i<j\le k.
+\]
+The two summands must be distinct, and exchanging them does not count as a second representation. Existence of the next term is part of what must be proved.
+
+Write $U(1,n)=\{a_k:k\ge1\}$ and, for real $X\ge0$, let
+\[
+A_n(X)=\#\{a\in U(1,n):a\le X\}.
+\]
+This cardinality is finite because these values are positive integers.
+
+\begin{theorem}\label{thm:main}
+For every $n\ge2$, there is a unique sequence obeying the rule above. It is strictly increasing and its range is infinite. For every integer $r\ge0$,
+\begin{equation}\label{eq:bounds}
+a_{r+2}\le n2^r,\qquad A_n(n2^r)\ge r+2.
+\end{equation}
+\end{theorem}
+
+The repository statement \cite{competition} asks for infinitude and adds the phrase ``the infinitude is settled by density estimates.'' Its wording does not specify a density, a limit, or an asserted positive constant. The precise quantitative content proved here is \eqref{eq:bounds}. The finite-density consequence
+\[
+\frac{A_n(n2^r)}{n2^r}\ge\frac{r+2}{n2^r}
+\]
+has a right-hand side tending to zero. Consequently, this report does not claim a positive lower asymptotic density, a positive natural density, or the existence of a natural-density limit. If the intended requirement is any of these stronger assertions, it remains outside the proved statement.
+
+\section{The next term always exists}
+\begin{lemma}\label{lem:pair}
+Let $P$ be a finite strictly increasing prefix of positive integers with at least two elements. Let $M$ be its largest value and $S$ its second-largest value. Then $S+M>M$, and $S+M$ has exactly one representation as a sum of two distinct values of $P$.
+\end{lemma}
+\begin{proof}
+Since $0<S<M$, the pair $(S,M)$ is an admissible representation and $S+M>M$. Suppose $c,d\in P$, $c<d$, and $c+d=S+M$. If neither summand equals $M$, both are at most $S$, so
+\[
+c+d\le2S<S+M,
+\]
+a contradiction. Thus a summand equals $M$. As $c<d\le M$, it is $d=M$, and cancellation gives $c=S$. This is the sole ordered representative of the unordered pair.
+\end{proof}
+
+For a prefix $P$ ending in $M$, let
+\[
+E(P)=\{x\in\N:x>M\text{ and }x\text{ has exactly one distinct-pair representation in }P\}.
+\]
+Lemma~\ref{lem:pair} proves $S+M\in E(P)$. The well-ordering of $\N$ therefore supplies a least element $b$ of $E(P)$, satisfying
+\begin{equation}\label{eq:step}
+M<b\le S+M<2M.
+\end{equation}
+Adjoining $b$ produces another finite strictly increasing positive prefix. Starting with $(1,n)$, recursion applies this construction at every stage; no assumption of infinitude is used to obtain the next term. The resulting sequence obeys the full least-choice rule and is strictly increasing.
+
+\section{Infinitude uniqueness and the counting estimate}
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Existence and strict increase follow from the construction above. Strict increase in positive integers gives $a_k\ge k$ by induction, so the range is unbounded and hence infinite. Equivalently, no finite list of natural numbers contains every $a_k$.
+
+For uniqueness, suppose $(a_k)$ and $(b_k)$ obey the same rule. They agree at the first two terms. If they agree through index $k$, their earlier-value sets and final prefix values coincide. Thus their eligible candidate sets are identical, and the least members are equal: $a_{k+1}=b_{k+1}$. Induction proves equality at every index.
+
+For the quantitative bound, the case $r=0$ is $a_2=n$. If $a_{r+2}\le n2^r$, then \eqref{eq:step} gives
+\[
+a_{r+3}<2a_{r+2}\le n2^{r+1},
+\]
+which in particular proves the required non-strict inequality at $r+1$. Hence $a_{r+2}\le n2^r$ for all $r\ge0$. The first $r+2$ terms are distinct and all lie at or below $a_{r+2}$. They give $r+2$ distinct elements of $U(1,n)$ no greater than $n2^r$, proving $A_n(n2^r)\ge r+2$.
+\end{proof}
+
+The counting estimate itself also witnesses infinitude: if the whole range had finite cardinality $K$, choosing $r=K$ would give at least $K+2$ distinct elements in it. Thus the quantitative conclusion is a genuine unbounded counting lower bound for the same recursively constructed sequence.
+
+For comparison with the usual logarithmic terminology, for $X\ge n$ choose $r=\lfloor\log_2(X/n)\rfloor$. Then $n2^r\le X$, and monotonicity of the count gives
+\begin{equation}\label{eq:log}
+A_n(X)\ge\lfloor\log_2(X/n)\rfloor+2.
+\end{equation}
+Equation~\eqref{eq:log} is an ordinary mathematical corollary included for interpretation. The Lean file formalizes the exact integer-scale statement \eqref{eq:bounds}, without introducing real logarithms or a real-valued counting function.
+
+\section{Correspondence with the Lean formalization}
+The supplied project uses Lean~4.31.0 and imports \lean{Lean}; it does not depend on Mathlib. All declarations below are in the namespace \lean{Ulam205Core}. The formal sequence is zero-indexed: $u(0)=1$, $u(1)=n$, and $u(r+1)=a_{r+2}$.
+
+\subsection{Definition and construction}
+\lean{UniqueSum A x} states that there are values $a<b$ in $A$ with $a+b=x$, and that every $c<d$ in $A$ with $c+d=x$ has $c=a$ and $d=b$. For the strictly increasing constructed sequence, unique value-pairs are equivalent to unique index-pairs.
+
+A \lean{Prefix} stores a membership predicate, its two largest values, their positivity and order properties, and the assertion that every member is at most the second-largest value or equals the largest. This structure does not assume an infinite Ulam sequence. The theorem \lean{largest_pair_unique} proves Lemma~\ref{lem:pair}; \lean{candidate_exists} and \lean{least_exists} justify choosing the least admissible value. The latter is proved by strong induction on natural numbers.
+
+The noncomputable definitions \lean{next}, \lean{advance}, \lean{stage}, and \lean{sequence} perform this construction. Noncomputability records the use of classical least-choice reasoning, rather than a missing proof or an experimental search. Crucially, \lean{stage_mem_iff} proves that each recursive state's membership predicate contains exactly the earlier sequence values, with no extra elements.
+
+\lean{IsUlam n u} explicitly requires the two initial values, strict increase at each subsequent step, exactly one distinct-pair representation using earlier sequence values, and minimality among all eligible larger natural numbers. The theorem \lean{sequence_isUlam} proves every part of this definition.
+
+\subsection{Formal conclusions}
+\begin{itemize}
+\item \lean{sequence_strictMono} and \lean{sequence_injective} prove strict increase and absence of repeated values.
+\item \lean{sequence_unbounded} and \lean{sequence_infinite} prove unboundedness and the impossibility of containing the range in a finite list. For subsets of $\N$, this is the usual infinitude assertion.
+\item \lean{exponential_upper_bound} proves $u(r+1)\le n2^r$.
+\item \lean{counting_lower_bound} constructs, for every $r$, an injective map $f:\operatorname{Fin}(r+2)\to\N$ whose values all occur in $u$ and are all at most $n2^r$. This is the exact finite counting assertion in \eqref{eq:bounds}.
+\item \lean{conjecture_00000000205} packages the defining rule, strict increase, infinitude, growth estimate, and counting conclusion for one and the same sequence.
+\item \lean{sequence_unique} proves that any two sequences satisfying \lean{IsUlam n} are equal. It supplements the combined theorem with uniqueness.
+\end{itemize}
+
+\section{Reproducibility and proof audit}
+The proof source is \lean{Ulam205Core.lean}. The supplied Lake configuration has no external package dependencies. With the official Lean~4.31.0 toolchain selected, run from the submission directory:
+\begin{lstlisting}
+lean --version
+lean Ulam205Core.lean
+lake build
+\end{lstlisting}
+The dependency list is empty. The compiler itself is not bundled. Both the direct Lean check and Lake build completed successfully in the cloud; the retained logs and audit are in \lean{verification/}. The unchanged final Lean source has SHA-256:
+\begin{center}\small\ttfamily
+ddbc155f051e41efb27b719b3d08df58d1f\\
+33836d8e7f13bd551718863f0a887
+\end{center}
+The split above is typographical only; concatenate the two lines to recover the hash. The source's \texttt{\#print axioms} commands report only Lean's standard foundational axioms \lean{propext}, \lean{Classical.choice}, and \lean{Quot.sound} for the main existence and counting theorems. Uniqueness uses \lean{propext} and \lean{Quot.sound}. The development contains no proof holes, additional axioms, or \lean{native_decide}.
+
+This PDF is compiled directly from \lean{report.tex}. To reproduce it, run the following command twice:
+\begin{lstlisting}
+pdflatex -interaction=nonstopmode -halt-on-error report.tex
+\end{lstlisting}
+No numerical computation or external experimental result is needed for the proof.
+
+\section{Attribution}
+The elementary infinitude of Ulam sequences is established background, not a new mathematical discovery claimed by this submission. Ross's dissertation \cite{ross}, Chapter~1, printed pages~1--2, describes the standard rule and records the known infinitude fact. The present argument is supplied in full so that correctness does not depend on accepting an external assertion. The deliverable is a self-contained Lean formalization with an explicit, limited counting estimate. No priority claim is made for the elementary argument or for that estimate.
+
+\begin{thebibliography}{9}
+\bibitem{competition}
+The Last Math Competition.
+\emph{Conjecture 00000000205} and submission rules.
+Repository snapshot at commit
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/tree/6ad05f1490626b518d19ad5c5603419f7a021d30}{\texttt{6ad05f1490626b518d19ad5c5603419f7a021d30}}.
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/6ad05f1490626b518d19ad5c5603419f7a021d30/conjectures/00000000205.md}{Conjecture source};
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/6ad05f1490626b518d19ad5c5603419f7a021d30/README.md}{submission rules}.
+Accessed 4 October 2026.
+
+\bibitem{ross}
+Daniel Ross.
+\emph{The Ulam Sequence and Related Phenomena}.
+PhD dissertation, University of Wisconsin--Madison, 2016.
+Chapter~1, printed pages~1--2 (PDF pages~10--11).
+\href{https://asset.library.wisc.edu/1711.dl/6DJJQWLMRTYIH8U/R/file-fb00e.pdf}{University of Wisconsin repository PDF}.
+\end{thebibliography}
+\end{document}
