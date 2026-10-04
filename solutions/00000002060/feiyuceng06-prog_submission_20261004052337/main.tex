@@ -1,0 +1,67 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\conjid}{00000002060}
+
+\title{The Cyclic Group of Order Twelve Violates the Claimed Spectrum\\[0.4em]\large The Last Math Competition, Conjecture \conjid}
+\author{Feiyu\\ \small Independent researcher}
+\date{2026-10-04}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The conjecture excludes every finite group order that is neither a prime power nor squarefree. The additive group of integers modulo 12, regarded as a multiplicative group, is an actual finite group of order 12. The number 12 is neither a prime power nor squarefree. We formalize this group, its cardinality, and both arithmetic exclusions in Lean, directly refuting the stated spectrum exclusion.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture \conjid{} reads:
+
+\begin{quote}
+Definition: The spectrum of a locally finite variety is the set of cardinalities of its finite algebras. Conjecture: The limit set of spectra of all finite members of the variety of groups equals the set of prime powers $\cup$ squarefree orders (a formula); the complement (neither prime powers nor squarefree) is not realizable.
+\end{quote}
+
+\section{Reading of the statement}
+
+% If the statement is ambiguous, under-specified, or contains an error, say so
+% HERE and fix a precise reading. State explicitly which reading is being
+% settled and why it is the faithful one. Do not silently repair the statement.
+
+We interpret the ``variety of groups'' in its literal sense as the class of all groups and its spectrum as the cardinalities of its finite members. The statement explicitly says that orders which are neither prime powers nor squarefree are not realizable. It suffices to refute that clause. The Chinese version makes the same exclusion claim. The concrete counterexample below is a finite group object, not merely an integer with a factorization.
+
+\section{Result}
+
+% State exactly what is established: proved, disproved, or partially resolved.
+
+The group $G=(\mathbb{Z}/12\mathbb{Z},+)$ has 12 elements. Since $12=2^2\cdot 3$, it is not a prime power, and it is not squarefree because $2^2$ divides it. Thus an order excluded by the conjectured description is realized by a finite group.
+
+\section{Proof}
+
+Let $G$ be the additive group on $\mathbb{Z}/12\mathbb{Z}$, which Lean represents as the multiplicative wrapper \texttt{Multiplicative (ZMod 12)}. The type has exactly 12 elements. If $12=p^k$ for a prime $p$ and positive $k$, then $p$ divides 12, so $p$ must be 2 or 3; neither $2^k$ nor $3^k$ equals 12. Moreover, $2^2=4$ divides 12, so 12 is not squarefree. This finite group therefore has an order in the alleged forbidden complement.
+
+\section{Formalization}
+
+The Lean 4 formalization against Mathlib is in \verb|lean/Submission/Basic.lean|. The proposition \verb|FiniteGroupOrderOccurs n| asks for a carrier with a group structure and a finite type instance whose cardinality is $n$. The concrete type \verb|Multiplicative (ZMod 12)| supplies the cyclic group, and \verb|cyclicGroup12_order| proves its cardinality is 12. The theorems \verb|twelve_not_prime_power| and \verb|twelve_not_squarefree| prove the two arithmetic exclusions using \verb|Nat.Prime| and Mathlib's \verb|Squarefree|. The main theorem \verb|conjecture_00000002060_false| refutes the claimed universal spectrum description using this actual group object. The file prints its axiom dependencies and introduces no custom axioms or proof holes.
+
+\section{Remarks}
+
+% Optional: what the truth is likely to be, what stays open, why the original
+% statement went wrong, what a repaired conjecture should say.
+
+This counterexample refutes the claim that the complement of the prime-power and squarefree orders is unrealizable. It does not attempt to classify the full spectrum or settle any separate topological interpretation of the phrase ``limit set'' in the source statement.
+
+\end{document}
