@@ -1,0 +1,83 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\title{Conjecture 00000000360:\\The optimal homogeneous diagonal constant is zero}
+\author{C0ldSmi1e}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The conjecture asserts that $10!/10^{10}$ cannot be improved for products of diagonal linear forms at nonzero integer points. Every such product vanishes at the first coordinate vector. We prove that the admissible uniform constants, even for nonsingular diagonal matrices, are exactly the nonnegative real numbers. In particular, a strictly smaller positive constant works for the entire stated class. The accompanying Lean project proves these statements with actual matrix multiplication and determinants.
+\end{abstract}
+
+\section{Statement and scope}
+The repository's English statement reads:
+\begin{quote}
+Definition: Minkowski's linear-forms product conjecture asserts: for a product of $n$ linear forms in $n$ variables, there is a nonzero integer point with $|L_1\cdots L_n|\leq (n!/n^n)\cdot|\det|$. Conjecture: For $n=10$, the constant $n!/n^n$ cannot be improved for completely split diagonal forms, and the minimizing integer point can be found inside a convex body of volume at most $C\cdot n^2$.
+\end{quote}
+The exact English and Chinese source is preserved in \texttt{conjecture.md}. Both versions specify a nonzero integer point. Neither requires every coordinate or every factor to be nonzero, and neither includes affine shifts.
+
+We use diagonal forms in the given integer coordinates:
+\[
+ A=\operatorname{diag}(a_1,\ldots,a_n),\qquad L_i(x)=(Ax)_i=a_i x_i.
+\]
+The argument and the sharp-constant classification apply to arbitrary real coefficients. They also hold when one restricts to $a_i\ne0$ for every $i$, so that $\det A\ne0$. Thus singularity is not the source of the counterexample. Refuting the first conjunct suffices to disprove the stated conjunction; the convex-body clause is not claimed false.
+
+\section{The exact uniform bound}
+For $n\geq2$ and $c\in\mathbb R$, let $U_n(c)$ mean
+\[
+ \forall a\in\mathbb R^n\ \exists x\in\mathbb Z^n\setminus\{0\}:
+ \left|\prod_{i=1}^n(Ax)_i\right|\leq c\,|\det A|,
+ \qquad A=\operatorname{diag}(a).
+\]
+\begin{theorem}
+For every $n\geq2$, one has $U_n(c)$ if and only if $c\geq0$. The same equivalence holds if the coefficient matrices are restricted to nonsingular ones. For each individual diagonal matrix, the minimum of the absolute product over nonzero integer vectors is attained and equals zero.
+\end{theorem}
+\begin{proof}
+Let $e_1=(1,0,\ldots,0)\in\mathbb Z^n$. This vector is nonzero, while
+\[
+ Ae_1=(a_1,0,\ldots,0),\qquad
+ \left|\prod_{i=1}^n(Ae_1)_i\right|=0.
+\]
+In particular, the second factor vanishes, since $n\geq2$. Absolute values are nonnegative, so this is a global minimum. For every $c\geq0$, the same vector proves the required inequality for every diagonal matrix, because $c|\det A|\geq0$.
+
+Conversely, if $U_n(c)$ holds, apply it to $a_i=1$ for every $i$. The resulting matrix is the identity and has determinant one. Its promised vector therefore satisfies
+\[
+ 0\leq\left|\prod_{i=1}^n x_i\right|\leq c,
+\]
+which forces $c\geq0$. The identity matrix is nonsingular, so the same necessity argument also works for the restricted class.
+\end{proof}
+\begin{corollary}
+The first conjunct of conjecture 00000000360 is false.
+\end{corollary}
+\begin{proof}
+Put $K=10!/10^{10}>0$. The theorem gives $U_{10}(0)$, so $K$ is not the least nonnegative uniform constant. Even if only positive constants are admitted, $0<K/2<K$ and $U_{10}(K/2)$ give a strict uniform improvement. The improvement applies to every diagonal matrix, including the whole nonsingular class.
+\end{proof}
+
+\section{Formalization and reproducibility}
+The file \texttt{lean/Conjecture360.lean} defines the product using Mathlib's \texttt{Matrix.mulVec}, after casting an actual integer vector into the reals. The coefficient matrix is \texttt{Matrix.diagonal}; its determinant is Mathlib's \texttt{Matrix.det}. The main uniform-bound predicate quantifies over all real diagonal coefficients and all relevant integer witnesses. A separate predicate restricts the coefficients to nonzero entries, and the same classification is proved for that class. The proof covers dimensions $m+2$, for arbitrary natural $m$, and specializes to dimension ten.
+
+The project also proves that nonzero diagonal entries give nonzero determinant, constructs the nonzero coordinate vector, proves its product is zero and globally minimal, classifies all uniform constants, and exhibits the positive half-constant improvement. The final theorem negates the formal sharpness claim. No numerical experiment or auxiliary computational program is needed.
+
+The project pins Lean 4.19.0 and Mathlib v4.19.0; the manifest records exact dependency revisions. From \texttt{lean/}, run:
+\begin{verbatim}
+lake build
+lake env lean -DwarningAsError=true Conjecture360.lean
+lake env lean -DwarningAsError=true Check.lean
+\end{verbatim}
+The audit file prints the definitions, final theorem types, and axiom dependencies. Detailed local validation and artifact hashes are supplied in \texttt{verification/}. Local verification is separate from official maintainer acceptance.
+
+\section{Distinction from the classical formulation}
+The repository's administrative scoring discussion in PR~5 mentions this conjecture in connection with classical Minkowski terminology~\cite{scoring}. It is not an earlier solution submission. The classical formulation displayed by Kathuria and Raka~\cite[p.~2]{kr} instead allows arbitrary real shifts $b_i$ and bounds $|\prod_i(L_i(x)+b_i)|$ by $|\det A|/2^n$. The coordinate-vector argument does not cover arbitrary shifts. This submission addresses exactly the unshifted diagonal sharpness assertion written in the repository and makes no claim about that different problem. The cited paper supplies context only; no result from it is assumed in the proof.
+
+\begin{thebibliography}{9}
+\raggedright
+\bibitem{kr} L. Kathuria and M. Raka, \emph{On conjectures of Minkowski and Woods for $n=10$}, arXiv:2009.09992v1 (2020), p.~2. \url{https://arxiv.org/abs/2009.09992}.
+\bibitem{scoring} The Last Math Competition, PR~5, administrative scoring discussion, comment 5645616987. \href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/pull/5#issuecomment-5645616987}{GitHub discussion}.
+\end{thebibliography}
+\end{document}

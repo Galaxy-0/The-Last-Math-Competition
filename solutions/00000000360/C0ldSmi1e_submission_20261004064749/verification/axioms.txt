@@ -1,0 +1,43 @@
+def Conjecture360.productAt : {n : ℕ} → Matrix (Fin n) (Fin n) ℝ → (Fin n → ℤ) → ℝ :=
+fun {n} A x => ∏ i, A.mulVec (fun j => ↑(x j)) i
+def Conjecture360.uniformDiagonalBound : ℕ → ℝ → Prop :=
+fun n c =>
+  ∀ (a : Fin n → ℝ), ∃ x, x ≠ 0 ∧ |Conjecture360.productAt (Matrix.diagonal a) x| ≤ c * |(Matrix.diagonal a).det|
+def Conjecture360.uniformNonsingularDiagonalBound : ℕ → ℝ → Prop :=
+fun n c =>
+  ∀ (a : Fin n → ℝ),
+    (∀ (i : Fin n), a i ≠ 0) →
+      ∃ x, x ≠ 0 ∧ |Conjecture360.productAt (Matrix.diagonal a) x| ≤ c * |(Matrix.diagonal a).det|
+def Conjecture360.optimalDiagonalConstant : ℕ → ℝ → Prop :=
+fun n c => Conjecture360.uniformDiagonalBound n c ∧ ¬∃ d, 0 ≤ d ∧ d < c ∧ Conjecture360.uniformDiagonalBound n d
+def Conjecture360.claimedConstant : ℝ :=
+↑(Nat.factorial 10) / 10 ^ 10
+def Conjecture360.optimalityClaim : Prop :=
+Conjecture360.optimalDiagonalConstant 10 Conjecture360.claimedConstant
+Conjecture360.diagonal_det_ne_zero {n : ℕ} (a : Fin n → ℝ) (ha : ∀ (i : Fin n), a i ≠ 0) : (Matrix.diagonal a).det ≠ 0
+Conjecture360.diagonal_product_firstCoordinate (n : ℕ) (a : Fin (n + 2) → ℝ) :
+  Conjecture360.productAt (Matrix.diagonal a) (Conjecture360.firstCoordinate n) = 0
+Conjecture360.firstCoordinate_global_minimum (n : ℕ) (a : Fin (n + 2) → ℝ) (x : Fin (n + 2) → ℤ) :
+  |Conjecture360.productAt (Matrix.diagonal a) (Conjecture360.firstCoordinate n)| ≤
+    |Conjecture360.productAt (Matrix.diagonal a) x|
+Conjecture360.uniformDiagonalBound_iff (n : ℕ) (c : ℝ) : Conjecture360.uniformDiagonalBound (n + 2) c ↔ 0 ≤ c
+Conjecture360.uniformNonsingularDiagonalBound_iff (n : ℕ) (c : ℝ) :
+  Conjecture360.uniformNonsingularDiagonalBound (n + 2) c ↔ 0 ≤ c
+Conjecture360.zero_is_optimal (n : ℕ) : Conjecture360.optimalDiagonalConstant (n + 2) 0
+Conjecture360.positive_improvement :
+  0 < Conjecture360.claimedConstant / 2 ∧
+    Conjecture360.claimedConstant / 2 < Conjecture360.claimedConstant ∧
+      Conjecture360.uniformDiagonalBound 10 (Conjecture360.claimedConstant / 2)
+Conjecture360.not_optimalityClaim : ¬Conjecture360.optimalityClaim
+Conjecture360.conjecture360_disproof : ¬Conjecture360.optimalityClaim
+'Conjecture360.diagonal_det_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture360.diagonal_product_firstCoordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture360.firstCoordinate_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture360.firstCoordinate_global_minimum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture360.uniformDiagonalBound_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture360.uniformNonsingularDiagonalBound_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture360.zero_is_optimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture360.claimedConstant_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture360.positive_improvement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture360.not_optimalityClaim' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture360.conjecture360_disproof' depends on axioms: [propext, Classical.choice, Quot.sound]
