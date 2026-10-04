@@ -1,0 +1,110 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{hyperref}
+\newtheorem{proposition}{Proposition}
+\title{An isometric iteration without a weak limit\\\large Counterexample to TLMC 00000008841}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The reflection $T(x)=-x$ on the real Hilbert space is asymptotically
+nonexpansive with all coefficients equal to one. It has a fixed point and
+preserves a nonempty closed bounded convex interval, yet its Picard orbit
+from $1$ does not converge weakly. This disproves the claimed universal
+weak convergence of such iterations.
+\end{abstract}
+
+\section{Claim and definitions}
+The source describes ``Iteration of asymptotically nonexpansive maps'' and
+asserts that weak convergence of asymptotically nonexpansive sequences
+always holds in Hilbert space. Its further clause concerns strong
+convergence and the demiclosedness principle. We disprove the universal
+weak-convergence assertion, which suffices to disprove the conjunction.
+
+For a map $T:C\to C$ in a normed space, asymptotic nonexpansiveness means
+that there are real numbers $k_n\geq1$, with $k_n\to1$, such that
+\[
+ \|T^n x-T^n y\|\leq k_n\|x-y\|
+ \qquad(x,y\in C,\ n\geq0).
+\]
+Including $n=0$ does not change the standard definition. The iteration
+is the Picard iteration $x_{n+1}=T x_n$, or $x_n=T^n x_0$.
+Weak convergence $x_n\rightharpoonup a$ means that
+$f(x_n)\to f(a)$ for every continuous linear functional $f$ on the
+ambient space. No averaging scheme or asymptotic regularity hypothesis
+is stated in the source.
+
+\section{The counterexample}
+Let $H=\mathbb R$ with its usual real Hilbert space structure, let
+$C=[-1,1]$, and define $T(x)=-x$ on all of $H$. Its restriction maps
+$C$ to itself. The interval is nonempty, closed, bounded, and convex;
+also $0\in C$ is a fixed point of $T$ and $x_0=1\in C$.
+
+\begin{proposition}
+Every iterate of $T$ is an isometry. The orbit $x_n=T^n1$ lies in $C$
+and has no weak limit in $H$.
+\end{proposition}
+\begin{proof}
+Negation preserves distance, and a composition of isometries is an
+isometry. Induction therefore gives
+\[
+ |T^n x-T^n y|=|x-y| \qquad(n\geq0).
+\]
+Consequently $T$ is asymptotically nonexpansive with $k_n=1$ for every
+$n$. These same coefficients work for the restriction to $C$.
+
+Since $T(Tx)=x$, induction on $m$ gives the actual orbit identities
+\[
+ x_{2m}=1,\qquad x_{2m+1}=-1\qquad(m\geq0).
+\]
+In particular the orbit remains in $C$. If it converged weakly to some
+$a\in\mathbb R$, applying the continuous linear identity functional
+$f(x)=x$ would give $x_n\to a$ in $\mathbb R$. The even and odd
+index maps both tend to infinity, so both subsequences would have limit
+$a$. They are constant with respective limits $1$ and $-1$.
+Uniqueness of real limits would imply $a=1=-1$, a contradiction.
+\end{proof}
+
+This failure occurs despite boundedness, convexity, closedness, and
+existence of a fixed point. In particular the demiclosedness clause
+cannot restore the already false universal weak-convergence assertion.
+The example does not purport to refute results that assume asymptotic
+regularity or use an averaged iteration: here
+$|x_{n+1}-x_n|=2$ for every $n$.
+
+\section{Lean verification and correspondence}
+\raggedright
+The accompanying Lean 4.19.0 project uses Mathlib at commit
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+In namespace \texttt{AsymptoticIteration8841},
+\texttt{reflection} is real negation and \texttt{orbit} is defined by
+Lean's actual function iteration, not by a supplied table of values.
+\texttt{AsymptoticallyNonexpansive} is the quantified norm inequality
+above, expressed with metric distance, and
+\texttt{WeaklyConverges} quantifies over all actual continuous real
+linear functionals. The use of this definition on $\mathbb R$ is
+exactly the standard definition of weak convergence.
+
+\texttt{iterate\_isometry} proves the isometry assertion for every
+iterate. \texttt{reflection\_asymptotically\_nonexpansive} supplies
+the constant coefficients and their convergence.
+\texttt{interval\_geometry} checks the closed, bounded, convex
+interval and membership of $0$ and $1$.
+\texttt{orbit\_even} and \texttt{orbit\_odd} prove the orbit identities;
+the cofinality lemmas and uniqueness of limits then prove
+\texttt{orbit\_not\_weakly\_convergent}.
+The final theorem \texttt{conjecture\_00000008841} packages the
+counterexample, its invariant interval and fixed point, and the
+nonexistence of a weak limit.
+
+The proof uses no numerical approximation, unproved axiom, or auxiliary
+computation. Its axiom audit reports only the standard logical axioms
+\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+Build with \texttt{lake build}; check the source and axiom audit with
+\texttt{lake env lean Main.lean} from the \texttt{lean} directory.
+\end{document}
