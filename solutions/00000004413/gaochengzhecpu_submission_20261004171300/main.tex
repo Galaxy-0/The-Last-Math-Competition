@@ -1,0 +1,194 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\title{Cycle Graphs Exceed the Conjectured Cycle-Count Bound:\\
+A Disproof of Conjecture 00000004413}
+\author{GitHub: gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+The source asserts that in a graph limit with degree bound $d$ the
+measure of cycles of length $\ell$ is at most $(d-1)^\ell/(2\ell)$, and
+that this bound is attained and optimal for the $d$-regular tree. For
+$d=2$ the bound is false: the cycle graph $C_\ell$ has degree $2$ and
+cycle measure $1/\ell>1/(2\ell)$, for every $\ell\ge3$. This is
+verified in Lean for Mathlib's graphs. For $d\ge3$ the bound holds but
+is neither attained nor optimal, and for no $d\ge2$ does the tree attain
+it; these two facts are proved here on paper. An earlier submission
+with the triangle as example was withdrawn by its author; it is
+discussed below.
+\end{abstract}
+
+\section*{Reading of the source}
+A bounded-degree graph limit (Benjamini--Schramm limit, or graphing)
+is a random rooted graph $(G,o)$ with all degrees at most $d$ that
+satisfies the mass-transport principle. Every finite graph $G$ with a
+uniformly random root is such an object; it is the limit of the
+constant sequence $G,G,\dots$. For a finite graph the \emph{measure of
+cycles of length $\ell$} is
+\[
+ c_\ell(G)=\frac{\#\{\text{cycles of length }\ell\text{ in }G\}}{|V(G)|},
+\]
+and for a general limit it is $\mathbb E[N_\ell(G,o)]/(2\ell)$, where
+$N_\ell(G,o)$ is the number of sequences
+$(o=v_0,v_1,\dots,v_{\ell-1})$ of distinct vertices with $v_i$ adjacent
+to $v_{i+1}$ for all $i$ modulo $\ell$. The two agree for finite
+graphs, because each cycle of length $\ell\ge3$ gives exactly $2\ell$
+such sequences in total, one for each starting vertex and direction.
+A cycle is a cycle in the graph-theoretic sense: its vertices are
+distinct.
+
+The source makes two claims for a degree bound $d$ and a length
+$\ell$:
+\begin{enumerate}
+\item[(i)] $c_\ell\le(d-1)^\ell/(2\ell)$ for every graph limit with
+degree bound $d$;
+\item[(ii)] this bound is attained, and is optimal, for the
+$d$-regular tree.
+\end{enumerate}
+Other normalisations of the measure are larger: the expected number of
+$\ell$-cycles through the root is $\ell\,c_\ell$. So a violation of (i)
+for $c_\ell$ is a violation for them as well.
+
+\section*{The disproof}
+\begin{theorem}\label{thm:cycle}
+Let $\ell\ge3$. The cycle graph $C_\ell$ has all degrees equal to $2$
+and $c_\ell(C_\ell)=1/\ell$. Hence
+\[
+ c_\ell(C_\ell)=\frac1\ell>\frac1{2\ell}=\frac{(2-1)^\ell}{2\ell},
+\]
+and claim (i) is false for $d=2$ and every $\ell\ge3$.
+\end{theorem}
+\begin{proof}
+Take the vertex set $\mathbb Z/\ell$ with $i$ adjacent to $i\pm1$.
+Since $\ell\ge3$, the two neighbours $i-1$ and $i+1$ of $i$ are
+different, so every degree is $2$. The graph $C_\ell$ is itself a cycle
+of length $\ell$, and it is the only one: a cycle of length $\ell$ has
+$\ell$ edges and $C_\ell$ has only $\ell$ edges. So
+$c_\ell(C_\ell)=1/\ell$.
+
+For the formal proof only the inequality $c_\ell(C_\ell)\ge1/\ell$ is
+needed. The $\ell$ rotations $i\mapsto i+k$ and the $\ell$ reflections
+$i\mapsto k-i$ are injective homomorphisms $C_\ell\to C_\ell$. They are
+$2\ell$ different maps: a rotation is determined by the image $k$ of
+$0$, a reflection likewise, and if $i+k=k'-i$ for all $i$, then $k=k'$
+and $2=0$ in $\mathbb Z/\ell$, which is false for $\ell\ge3$. So there
+are at least $2\ell$ rooted oriented cycles and
+$c_\ell(C_\ell)\ge 2\ell/(2\ell\cdot\ell)=1/\ell$.
+\end{proof}
+
+\begin{proposition}\label{prop:upper}
+Let $(G,o)$ be a rooted graph with all degrees at most $d$, where
+$d\ge1$, and let $\ell\ge3$. Then $N_\ell(G,o)\le d(d-1)^{\ell-2}$.
+Hence every graph limit with degree bound $d$ satisfies
+\[
+ c_\ell\le\frac{d(d-1)^{\ell-2}}{2\ell}.
+\]
+For $d\ge3$ this is at most $\frac34\cdot\frac{(d-1)^\ell}{2\ell}$.
+\end{proposition}
+\begin{proof}
+Build a sequence $(o=v_0,\dots,v_{\ell-1})$ step by step. There are at
+most $d$ choices for $v_1$. For $2\le i\le\ell-1$ the vertex $v_i$ is a
+neighbour of $v_{i-1}$ different from $v_{i-2}$, so there are at most
+$d-1$ choices. This gives at most $d(d-1)^{\ell-2}$ sequences. Taking
+expectations and dividing by $2\ell$ gives the bound for $c_\ell$.
+Finally $d(d-1)^{\ell-2}=\frac{d}{(d-1)^2}(d-1)^\ell$, and
+$d/(d-1)^2\le3/4$ for $d\ge3$.
+\end{proof}
+
+\paragraph{Claim (ii) fails for every $d\ge2$.}
+A tree has no cycle, so the $d$-regular tree has $c_\ell=0$, while
+$(d-1)^\ell/(2\ell)>0$ for $d\ge2$. So the tree does not attain the
+bound. The bound is not optimal either: for $d=2$ it is false by
+Theorem~\ref{thm:cycle}, and for $d\ge3$ no graph limit comes within
+the factor $3/4$ of it, by Proposition~\ref{prop:upper}. For $d=2$ the
+correct optimal bound is $1/\ell$, attained by $C_\ell$, again by
+Proposition~\ref{prop:upper}.
+
+\begin{remark}
+The expression $(d-1)^\ell/(2\ell)$ is the limiting mean of the total
+number of $\ell$-cycles in a random $d$-regular graph on $n$ vertices
+as $n\to\infty$. It is a count for the whole graph, not a density, and
+not an upper bound. The refutation of (i) uses $d=2$ only; for
+$d\ge3$ claim (i) is true by Proposition~\ref{prop:upper}, so the
+conjecture fails for $d\ge3$ through claim (ii) alone.
+\end{remark}
+
+\section*{The earlier submission}
+Pull request 302 of the competition repository (by
+\texttt{orionsheep}) treated this conjecture with the triangle $K_3$,
+which is the case $\ell=3$ of Theorem~\ref{thm:cycle}. It was closed
+without merging on 3 October 2026, together with a comment of its
+author withdrawing the submission; its comment thread contains no
+reviewer verdict. Its example and its conclusion were correct.
+
+We read its Lean file. It modelled a finite graph by a structure of its
+own and defined the cycle measure through maps from $\mathbb Z/n$ to
+the vertices with cyclically adjacent consecutive values, identified by
+their edge sets. These maps were not required to be injective. For
+$n=3$ they are exactly the triangles, so the instance used was sound.
+For $n\ge4$ they include closed walks that are not cycles, such as
+$a,b,a,b$ on a single edge; with that definition a single edge would
+have positive ``$4$-cycle measure''. So the universally quantified
+statement negated there was not the bound for cycles in general. Its
+statement about the tree was only the positivity of the expression
+$(d-1)^\ell/(2\ell)$.
+
+The present submission uses Mathlib's graphs and cycle graphs, counts
+genuine cycles (injective homomorphisms from $C_\ell$), proves the
+violation for every $\ell\ge3$, and separates what holds for $d\ge3$.
+
+\section*{Formal verification and scope}
+Graphs are Mathlib's \texttt{SimpleGraph}; degrees are Mathlib's
+\texttt{SimpleGraph.degree}; the cycle graph is Mathlib's
+\texttt{SimpleGraph.cycleGraph}. The type \texttt{CycleCopy G L}
+consists of the injective graph homomorphisms from
+\texttt{cycleGraph L} to \texttt{G}, and
+\begin{center}\small
+\texttt{cycleMeasure G L}
+\end{center}
+is their number divided by $2L$ and by the number of vertices, a
+rational number. \texttt{claimedBound d L} is $(d-1)^L/(2L)$.
+\texttt{rotation} and \texttt{reflection} are the maps of the proof of
+Theorem~\ref{thm:cycle}, and \texttt{two\_mul\_le\_card} shows that
+they are $2L$ different elements. The theorem
+\begin{center}\small
+\texttt{cycle\_violates}
+\end{center}
+states that \texttt{claimedBound 2 (l + 3)} is smaller than the cycle
+measure of \texttt{cycleGraph (l + 3)} for every natural number $l$.
+
+The proposition \texttt{ClaimedUpperBound} is claim (i) for all finite
+graphs, all $d$ and all $L\ge3$. Its negation is
+\begin{center}\small\texttt{conjecture\_false},\end{center}
+and \texttt{conjecture\_false\_every\_length} gives, for each $L\ge3$,
+a graph with all degrees at most $2$ violating the bound for $d=2$. No
+\texttt{sorry}, \texttt{native\_decide} or custom axiom occurs.
+
+Scope. Lean treats finite graphs, which are special graph limits;
+general graph limits are not formalised, and a counterexample among
+finite graphs refutes claim (i) for graph limits. Lean proves
+$c_\ell(C_\ell)\ge1/\ell$; the equality, Proposition~\ref{prop:upper},
+the discussion of claim (ii), and the remark are proved on paper only.
+The refutation in Lean does not use the degenerate value $d=0$, for
+which the expression $(d-1)^L/(2L)$ is negative when $L$ is odd.
+
+\section*{Source and reproduction}
+The exact bilingual source is included byte-for-byte as
+\texttt{SOURCE.md}. Its repository path is
+\begin{center}\small\texttt{conjectures/00000004413.md}.\end{center}
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake build}, then
+\begin{center}\small\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The included public-Git manifest locks all dependency revisions. The
+\texttt{verification/} directory records the fresh-build logs,
+theorem-axiom reports, artifact hashes, review and final PDF
+inspection. No supplementary numerical computation is required.
+\end{document}
