@@ -1,0 +1,240 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newcommand{\fix}{\operatorname{fix}}
+\title{The Derangement Proportion of a Transitive Group\\Is at Least $1/|\Omega|$:
+A Disproof of Conjecture 00000002311}
+\author{GitHub: gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+The source asserts that the proportion of fixed-point-free elements of
+a transitive group on $\Omega$ is at least $c/|\Omega|$ with
+$c=\tfrac12$, and that this constant is tight, as verified by Frobenius
+groups. The inequality is true, but the tightness clause is false. For
+every finite transitive group of degree $n\ge2$ the proportion is at
+least $1/n$ (Cameron and Cohen). Hence no transitive group, Frobenius
+or not, attains or approaches $\tfrac12\cdot\tfrac1n$, and the tight
+constant is $1$; it is attained by the Frobenius group $S_3$ on three
+points. The general bound, the count of derangements in every Frobenius
+group, the example and the negation of the source's assertion are
+verified in Lean, using Burnside's lemma from Mathlib.
+\end{abstract}
+
+\paragraph{Reading of the source.}
+Let a finite group $G$ act transitively on a finite set $\Omega$ with
+$n=|\Omega|$. A \emph{derangement} is an element of $G$ without fixed
+points; $D$ is the set of derangements and $\delta(G)=|D|/|G|$ is the
+derangement proportion. Both language versions of the source make two
+assertions:
+\begin{enumerate}
+\item[(i)] $\delta(G)\ge c/|\Omega|$ with $c=\tfrac12$;
+\item[(ii)] this constant is tight, and Frobenius groups verify the
+ tightness.
+\end{enumerate}
+The source names only one constant, $c=\tfrac12$, and we read ``the
+corrected constant'' in (ii) as this constant. A constant in a lower
+bound is called tight when it cannot be replaced by a larger one. We
+consider three precise forms of (ii):
+\begin{enumerate}
+\item[(T1)] no constant $c'>\tfrac12$ satisfies (i) for all transitive
+ groups;
+\item[(T2)] some Frobenius group has $\delta(G)=\tfrac12/|\Omega|$;
+\item[(T3)] for every $\varepsilon>0$ some Frobenius group has
+ $\delta(G)<(\tfrac12+\varepsilon)/|\Omega|$.
+\end{enumerate}
+We take $n\ge2$ throughout. For $n=1$ there are no derangements, so
+(i) itself fails; we do not use this degenerate case. A
+\emph{Frobenius group} is a transitive permutation group of degree
+$n\ge2$ in which no non-identity element fixes two points and some
+non-identity element fixes a point.
+
+\begin{theorem}[Cameron--Cohen]\label{thm:cc}
+Let a finite group $G$ act transitively on a finite set $\Omega$ with
+$n=|\Omega|\ge2$. Then $n\,|D|\ge|G|$, that is, $\delta(G)\ge1/n$.
+\end{theorem}
+\begin{proof}
+Write $\fix(g)$ for the number of fixed points of $g$. By Burnside's
+lemma, $\sum_{g\in G}\fix(g)$ equals $|G|$ times the number of orbits
+on $\Omega$, so
+\begin{equation}\label{eq:one}
+ \sum_{g\in G}\fix(g)=|G| .
+\end{equation}
+Let $G$ act on $\Omega\times\Omega$ by $g(x,y)=(gx,gy)$. A pair is fixed
+by $g$ exactly when both entries are fixed, so $g$ fixes $\fix(g)^2$
+pairs. The diagonal is invariant, and as $n\ge2$ there is a pair off the
+diagonal; hence there are at least two orbits, and Burnside's lemma
+gives
+\begin{equation}\label{eq:two}
+ \sum_{g\in G}\fix(g)^2\ge2\,|G| .
+\end{equation}
+For every $g$ we have
+\begin{equation}\label{eq:pt}
+ \bigl(\fix(g)-1\bigr)\bigl(\fix(g)-n\bigr)\le n\cdot\mathbf 1_D(g).
+\end{equation}
+Indeed, if $g\in D$ the left side is $(-1)(-n)=n$. Otherwise
+$1\le\fix(g)\le n$, and the left side is at most $0$. Summing
+\eqref{eq:pt} over $G$ and using \eqref{eq:one} and \eqref{eq:two},
+\[
+ n\,|D|\ \ge\ \sum_{g}\fix(g)^2-(n+1)\sum_{g}\fix(g)+n\,|G|
+ \ \ge\ 2|G|-(n+1)|G|+n|G|=|G| .\qedhere
+\]
+\end{proof}
+
+\begin{theorem}[Frobenius groups]\label{thm:frob}
+Let $G$ be a finite Frobenius group of degree $n$. Then $|D|=n-1$ and
+$\delta(G)=(n-1)/|G|$.
+\end{theorem}
+\begin{proof}
+The identity fixes $n$ points and is not a derangement. A non-identity
+element fixes at most one point, so it fixes exactly one point unless it
+is a derangement. By \eqref{eq:one},
+$|G|=n+\bigl(|G|-1-|D|\bigr)$, hence $|D|=n-1$.
+\end{proof}
+
+\begin{corollary}\label{cor:main}
+The following hold.
+\begin{enumerate}
+\item For every finite transitive group of degree $n\ge2$,
+ $\delta(G)\ge\dfrac1n>\dfrac12\cdot\dfrac1n$. In particular \textup{(i)}
+ holds, also with the constant $1$ in place of $\tfrac12$.
+\item \textup{(T1)}, \textup{(T2)} and \textup{(T3)} are false. So the
+ conjunction of \textup{(i)} and \textup{(ii)} is false in each of the
+ three readings of tightness.
+\item The constant $1$ is tight in all three senses: the Frobenius
+ group $S_3$ acting on three points has $\delta=\tfrac13=1/n$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) is Theorem~\ref{thm:cc}. For (2): the constant $c'=1>\tfrac12$
+satisfies (i), which refutes (T1). A Frobenius group is transitive of
+degree $n\ge2$, so $\delta(G)\ge1/n$; this is larger than
+$\tfrac12/n$, which refutes (T2), and with $\varepsilon=\tfrac12$ it
+refutes (T3). For (3): in $S_3$ a transposition fixes exactly one point
+and a $3$-cycle fixes none, so $S_3$ is a Frobenius group with
+$|D|=2$ and $\delta=2/6=1/3$. Thus no $c'>1$ satisfies (i), and equality
+holds for a Frobenius group.
+\end{proof}
+
+\begin{remark}[Not formalised]
+For a Frobenius group with point stabiliser of order $h$ one has
+$|G|=nh$ and, by Theorem~\ref{thm:frob}, $n\,\delta(G)=(n-1)/h$.
+Theorem~\ref{thm:cc} gives $h\le n-1$; classically $h$ divides $n-1$,
+because the stabiliser acts freely on the other $n-1$ points. So the
+value $n\,\delta(G)$ ranges over numbers $(n-1)/h\ge1$ and equals $1$
+exactly when $h=n-1$, as for $\mathrm{AGL}(1,q)$.
+Theorem~\ref{thm:cc} is due to P.~J.~Cameron and A.~M.~Cohen
+(Discrete Math.\ 106/107 (1992), 135--138), who also show that for
+permutation groups equality holds exactly for sharply $2$-transitive
+groups. The Boston--Shalev conjecture, now a theorem of
+Fulman and Guralnick, concerns a lower bound for $\delta$ independent of
+$n$ for simple groups; it is not addressed here.
+\end{remark}
+
+\section*{The earlier submission and its error}
+Pull request \#190 (orionsheep) addressed the same clause (ii). It
+computed that the Frobenius group $\mathrm{AGL}(1,7)$ of order $42$ has
+exactly $6$ derangements, so that $n\,\delta=1$, and concluded that
+Frobenius groups do not verify tightness of $\tfrac12$. It was closed
+without merging on 2026-10-03. The computation was correct. The
+reviewer named two errors, and both are real. First, the Lean file used
+Lean core only; it counted residues with a Boolean function on natural
+numbers, and its decisive theorem was
+\begin{center}\small\texttt{theorem not\_half\_tight : $\neg$ (6 = 3)}.\end{center}
+No group, action, derangement proportion or tightness statement
+occurred. Second, one Frobenius group with $n\,\delta=1$ does not show
+that no other Frobenius group does better; this needs a general fact,
+which that submission mentioned only in prose and only for the groups
+$C_p\rtimes C_m$. The present submission proves the general fact for
+all transitive groups (Theorem~\ref{thm:cc}) and for all Frobenius
+groups (Theorem~\ref{thm:frob}), with Mathlib's groups and actions, and
+states the tightness readings as propositions.
+
+\section*{Formal verification and scope}
+In Lean, \texttt{derangements G $\Omega$} is the set of $g$ with
+$g\cdot x\ne x$ for all $x$, for a Mathlib \texttt{MulAction} (for the
+full symmetric group this is the defining formula of Mathlib's own
+\texttt{derangements}), and
+\texttt{derangementProportion} is the quotient of the two cardinalities
+in $\mathbb Q$. Transitivity is Mathlib's
+\texttt{MulAction.IsPretransitive}. Burnside's lemma is Mathlib's
+\begin{center}\small
+\texttt{MulAction.sum\_card\_fixedBy\_eq\_card\_orbits\_mul\_card\_group},
+\end{center}
+applied to $\Omega$ and to $\Omega\times\Omega$ with Mathlib's product
+action. The theorem \texttt{cameron\_cohen} is Theorem~\ref{thm:cc}:
+for every group $G$ and action on $\Omega$ with $G$ and $\Omega$ finite,
+the action transitive and $2\le|\Omega|$,
+\begin{center}\small
+\texttt{Nat.card G $\le$ Nat.card $\Omega$ * Nat.card (derangements G $\Omega$)}.
+\end{center}
+The rational forms are
+\begin{center}\small
+\texttt{one\_div\_card\_le\_proportion},\qquad
+\texttt{half\_div\_card\_lt\_proportion}.
+\end{center}
+
+The structure \texttt{IsFrobenius G $\Omega$} has four fields:
+transitivity, $2\le|\Omega|$, that a non-identity element fixing $x$ and
+$y$ forces $x=y$, and the existence of a non-identity element with a
+fixed point. Theorem~\ref{thm:frob} is
+\begin{center}\small
+\texttt{frobenius\_card\_derangements},\qquad
+\texttt{frobenius\_proportion},
+\end{center}
+and \texttt{frobenius\_ne\_half} states that no Frobenius group has
+$\delta=\tfrac12/|\Omega|$. For $S_3$, realised as
+\texttt{Equiv.Perm (Fin 3)} acting on \texttt{Fin 3}, the theorems
+\texttt{s3\_isFrobenius} and \texttt{s3\_proportion} prove the Frobenius
+property and $\delta=1/3$.
+
+The proposition \texttt{LowerBound c} is (i) with the constant $c$,
+quantified over all finite transitive actions of degree at least two.
+The three readings of tightness are
+\begin{center}\small
+\texttt{CannotBeImproved c},\quad
+\texttt{AttainedByFrobenius c},\quad
+\texttt{ApproachedByFrobenius c}.
+\end{center}
+\texttt{Conjecture} is the conjunction of \texttt{LowerBound (1/2)}
+with the disjunction of the three readings at $c=\tfrac12$. The final
+theorem \texttt{conjecture\_false} is its negation; it is proved by
+refuting each of the three readings. The theorem
+\texttt{corrected\_statement} proves the bound and all three readings
+of tightness for $c=1$. Finite checks for $S_3$ use kernel evaluation by
+\texttt{decide}; no \texttt{native\_decide}, \texttt{sorry} or custom
+axiom occurs.
+
+Scope. This is a disproof of the source's statement as a whole, through
+its tightness clause; clause (i) alone is true and is proved here in a
+stronger form. The actions in the Lean theorems are not assumed
+faithful, so they include all transitive permutation groups. The degree
+is assumed to be at least two. The Frobenius property is defined in the
+file by the permutation-group condition above, because Mathlib has no
+such notion; its equivalence with the kernel-and-complement description
+is not used. The remark is not formalised. If ``the corrected
+constant'' were meant to be a constant other than the stated
+$c=\tfrac12$, the source would not say which; Corollary~\ref{cor:main}
+shows that $1$ is the only constant for which the bound and the
+tightness clause both hold. A reading of (ii) that does not concern the
+size of the constant is not addressed.
+
+\section*{Source and reproduction}
+The exact bilingual source is included byte-for-byte as
+\texttt{SOURCE.md}. Its repository path is
+\begin{center}\small\texttt{conjectures/00000002311.md}.\end{center}
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake build}, then
+\begin{center}\small\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The included public-Git manifest locks all dependency revisions.
+The \texttt{verification/} directory records the fresh-build logs,
+theorem-axiom reports, artifact hashes and the self-review.
+No supplementary numerical computation is required.
+\end{document}
