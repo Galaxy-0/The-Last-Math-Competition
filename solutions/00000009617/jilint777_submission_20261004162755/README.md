@@ -109,7 +109,7 @@ the minimal graph) are not addressed.
   - `conjecture_00000009617_false_charge`, `_charge_mod` and `_charge_any_presentation`.
 - **Not in Lean.**
   - the rank upper bounds;
-  - `Fis(X_c) = 3` exactly;
+  - `Fis(X_c) = 3` exactly, and the fact that no graph with ≤ 2 vertices presents `X_c` (exhaustive search in `verify.py`);
   - the 6 follower sets of `X_c`, so the follower-set reading is not in Lean;
   - the Boolean and measure remarks.
 
