@@ -1,0 +1,77 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=26mm]{geometry}
+\usepackage{amsmath,amssymb,lmodern}
+\setlength{\emergencystretch}{2em}
+\title{Firm nonexpansiveness and fixed points of resolvents\\
+\large Proof of Conjecture 00000008844}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+
+\section*{Definitions and domain}
+Let $H$ be a real Hilbert space and let $A:H\rightrightarrows H$ be
+monotone: for every $a\in A(u)$ and $b\in A(v)$,
+\[
+\langle u-v,a-b\rangle\geq0.
+\]
+For the standard positive parameter $\lambda>0$, define the resolvent
+$J_\lambda=(I+\lambda A)^{-1}$ by
+\[
+u\in J_\lambda(x)
+\quad\Longleftrightarrow\quad
+\exists a\in A(u):\ x=u+\lambda a.
+\]
+Its natural domain is $D_\lambda=\operatorname{ran}(I+\lambda A)$.
+We will prove that its values there are singletons, so it is an actual
+map $J_\lambda:D_\lambda\to H$.
+The source conjecture's two properties hold on this natural domain.
+No claim of totality on $H$ is made: monotonicity alone does not give
+that additional property. For example, the graph containing only $(0,0)$
+is monotone and its resolvent domain is $\{0\}$.
+
+\section*{Firm nonexpansiveness}
+Take $x,y\in D_\lambda$, $u\in J_\lambda(x)$, and $v\in J_\lambda(y)$.
+Choose $a\in A(u)$ and $b\in A(v)$ with
+$x=u+\lambda a$, $y=v+\lambda b$. Then
+\begin{align*}
+\langle u-v,x-y\rangle
+&=\langle u-v,(u-v)+\lambda(a-b)\rangle\\
+&=\|u-v\|^2+\lambda\langle u-v,a-b\rangle
+\geq\|u-v\|^2.
+\end{align*}
+If $x=y$, the inequality forces $\|u-v\|^2=0$, hence $u=v$.
+Existence on $D_\lambda$ follows from its definition, and thus the
+resolvent is single-valued there. Substituting its unique values yields
+\[
+\|J_\lambda(x)-J_\lambda(y)\|^2
+\leq\langle J_\lambda(x)-J_\lambda(y),x-y\rangle,
+\]
+which is the defining firm nonexpansiveness inequality.
+
+\section*{Fixed points and zeros}
+For any $x\in H$, the diagonal graph relation is equivalent to a zero:
+\[
+x\in J_\lambda(x)
+\quad\Longleftrightarrow\quad
+\exists a\in A(x):\ x=x+\lambda a
+\quad\Longleftrightarrow\quad
+0\in A(x).
+\]
+The second equivalence uses $\lambda>0$, hence $\lambda a=0$ implies $a=0$.
+A zero therefore automatically belongs to $D_\lambda$. By single-valuedness,
+the displayed equivalence proves the exact set identity
+\[
+\{x\in D_\lambda:J_\lambda(x)=x\}
+=\{x\in H:0\in A(x)\}.
+\]
+
+\section*{Formal verification}
+Lean defines the set-valued graph, monotonicity, inverse graph, natural
+domain, and a choice-defined resolvent map. It proves the map satisfies
+the inverse graph and that this graph is exactly its value relation.
+The theorems \texttt{resolvent\_firm} and
+\texttt{fixed\_set\_eq\_zero\_set} establish both original clauses.
+All results are for arbitrary real inner-product spaces, so they include
+Hilbert spaces without needing completeness or maximality.
+\end{document}
