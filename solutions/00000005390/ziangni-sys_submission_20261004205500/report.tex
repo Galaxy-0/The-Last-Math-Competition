@@ -1,0 +1,104 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\setlength{\emergencystretch}{2em}
+\title{Disproof of conjecture 00000005390}
+\author{ziangni-sys}
+\date{}
+\begin{document}
+\maketitle
+\noindent\textbf{The impossible required realization.}
+Both source versions request maps with the same canonical height function but different periodic point structures, with the separation realized by an explicit conjugate pair and a controlled period difference. Actual bijective conjugacy preserves the full corresponding periodic dynamics. Thus this required realization is impossible, independently of the additional height constraints.
+
+Here a conjugacy is a bijection $e:X\to Y$ between the point spaces of $f:X\to X$ and $g:Y\to Y$ such that
+\[
+ e\circ f=g\circ e.
+\]
+This includes topological, smooth and algebraic conjugacies on their actual point spaces. The periodic structure means corresponding periods, periodic cycles and their counts up to dynamical isomorphism. Merely different point coordinates do not constitute such a separation. Equivalence only almost everywhere in a measure space is a different notion and is not asserted to preserve every point's period.
+
+\medskip
+\noindent\textbf{Every iterate is intertwined.}
+For every integer $n\ge0$ and every $x\in X$,
+\[
+ e(f^n(x))=g^n(e(x)).
+\]
+Induction proves this: the $n=0$ case is immediate, and the next step follows from the conjugacy equation. Injectivity of $e$ then gives
+\[
+ f^n(x)=x\quad\Longleftrightarrow\quad g^n(e(x))=e(x).
+\]
+Thus $e$ restricts to a bijection between the actual fixed-point sets of every iterate.
+
+\medskip
+\noindent\textbf{Exact and minimal positive periods.}
+Say that $x$ has exact period $n$ when $n>0$, $f^n(x)=x$, and
+$f^k(x)\ne x$ for every $0<k<n$. The previous equivalence holds for every $k$, so
+\[
+ x\text{ has exact period }n
+ \quad\Longleftrightarrow\quad
+ e(x)\text{ has exact period }n.
+\]
+Whenever a minimal positive period exists, it is therefore exactly the same at corresponding points. Both implications, including the absence of smaller periods, are essential here.
+
+\medskip
+\noindent\textbf{The full cyclic dynamics.}
+The stronger relation
+\[
+ f^k(x)=y\quad\Longleftrightarrow\quad
+ g^k(e(x))=e(y)
+ \qquad(k\ge0)
+\]
+follows in the same way. In particular $e$ preserves every directed step and every finite reachability relation.
+
+Write $\mathcal O_f(x)=\{f^k(x):k\ge0\}$ for the actual forward orbit. Intertwining and surjectivity onto the image prove
+\[
+ e(\mathcal O_f(x))=\mathcal O_g(e(x)).
+\]
+For an exact-period point this is its whole finite cycle. The image equality and directed-step correspondence show that cycles are transported as dynamical cycles, not just as collections of unrelated points.
+
+\newpage
+\noindent\textbf{Unrooted cycles and all counts.}
+For each positive integer $n$, let
+\[
+ \mathcal C_f(n)
+ =\{\mathcal O_f(x):x\text{ has exact period }n\}.
+\]
+An orbit set appears once regardless of which point on its cycle is selected, so this is the actual collection of unrooted $n$-cycles. The map
+\[
+ S\longmapsto e(S)
+\]
+is a bijection $\mathcal C_f(n)\to\mathcal C_g(n)$, with inverse
+$T\mapsto e^{-1}(T)$. The image-orbit identity proves that both maps send actual cycles to actual cycles, and the two inverse identities follow from bijectivity of $e$.
+
+Consequently, cardinalities agree for every iterate-fixed set, every exact-period set and every unrooted-cycle collection. When these sets are finite, their ordinary finite counts agree as well. For all $n$,
+\[
+ \#\operatorname{Fix}(f^n)=\#\operatorname{Fix}(g^n),\quad
+ \#\operatorname{Per}_n(f)=\#\operatorname{Per}_n(g),\quad
+ \#\mathcal C_f(n)=\#\mathcal C_g(n).
+\]
+Here cardinality notation also covers infinite sets; finite counts are separate specializations of the same actual bijections.
+
+\medskip
+\noindent\textbf{Why height constraints cannot repair the claim.}
+The preservation statements hold for every conjugate pair of maps on arbitrary point spaces. Adding any further conditions, such as the existence and equality of canonical heights, cannot create a pair violating them. No substitute height function is needed for this necessary-condition disproof.
+
+This does not rule out two \emph{unconjugated} maps having the same height function and different periodic structures. It rules out exactly the source's additional requirement that the separation be realized by a conjugate pair with a genuine period difference.
+
+\medskip
+\noindent\textbf{Formal correspondence.}
+The Lean project defines actual maps, a genuine equivalence of point spaces, and the pointwise conjugacy equation. It proves intertwining of all iterates and equivalence of actual iterate-fixed and exact-period predicates. The resulting subtype equivalences prove actual cardinal and finite-count equalities.
+
+Forward orbits are actual ranges of all natural iterates. Their image equality is proved in both directions. Unrooted cycles are actual sets of orbit sets of exact-period points; the development supplies the actual cycle equivalence by images under $e$ and $e^{-1}$. This proves both cardinal and finite cycle-count preservation. The reachability theorem proves that the step dynamics are preserved as well.
+
+The final impossibility theorem permits any additional property of the conjugacy and excludes a difference in any of these count families. Thus no height assumption is used or silently dropped in a claimed positive construction: the required conjugate separation is disproved before height restrictions can matter.
+
+\medskip
+\noindent\textbf{Reproduction and conclusion.}
+Run \texttt{lake build} in the submitted \texttt{lean} directory with Lean 4.19.0. Mathlib is pinned publicly to
+\[
+ \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\]
+Printed axiom audits cover iterate intertwining, exact-period preservation, actual point and cycle equivalences, reachability, orbit images and the final impossibility theorem. Complete LaTeX source and its compiled PDF are included.
+
+Bijective conjugacy preserves the corresponding periodic point and cycle structures exactly. Therefore the explicit conjugate realization required by conjecture 00000005390 cannot exhibit the asserted period difference.
+\end{document}
