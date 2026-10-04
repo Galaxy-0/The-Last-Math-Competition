@@ -10,7 +10,7 @@ archived under solutions/[number_ID]/review/. After the full re-audit of 2026-10
 reverted to open unless another valid submission remains); 98 PRs were closed unmerged with
 full review comments.
 
-**Total solved: 246 / 10000 conjectures** — 17 proven, 229 disproven.
+**Total solved: 247 / 10000 conjectures** — 17 proven, 230 disproven.
 
 Ranking is by **Solved** (accepted submissions), ties broken by first solves.
 
@@ -25,7 +25,7 @@ Ranking is by **Solved** (accepted submissions), ties broken by first solves.
 | 7 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
 | 8 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
 | 10 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
-| 9 | [ziangni-sys](https://github.com/ziangni-sys) | 2 | 2 | 0 | 2 |
+| 9 | [ziangni-sys](https://github.com/ziangni-sys) | 3 | 3 | 0 | 3 |
 
 ## Solved conjectures per solver
 
@@ -94,7 +94,7 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 
 #252★ (D)
 
-### ziangni-sys — 2 solved (2 first)
+### ziangni-sys — 3 solved (3 first)
 
-#7683★ (D), #3327★ (D)
+#7683★ (D), #3327★ (D), #1101★ (D)
 
