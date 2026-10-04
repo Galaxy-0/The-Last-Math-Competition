@@ -215,6 +215,11 @@ Let \texttt{golay} be the generator matrix $[I_6\mid A]$ of Section~\ref{sec:rea
 \texttt{golay} has $|\mathrm{PAut}|=660$. Multiplying its column $6$
 (0-indexed) by $2$ gives \texttt{golay'}, with $|\mathrm{PAut}|=7920=|M_{11}|$.
 \end{proposition}
+Since $\mathrm{PAut}(\texttt{golay'})$ lies in the hexad-stabilizer $H\cong M_{12}$
+(see the proof), a subgroup of order $7920$ has index $12$ in $M_{12}$. Every
+subgroup of index $12$ in $M_{12}$ is isomorphic to $M_{11}$ (Conway et al., ATLAS
+of Finite Groups, 1985). So $\mathrm{PAut}(\texttt{golay'})\cong M_{11}$. Only the
+order is verified by computer; the isomorphism type follows from this standard fact.
 \begin{proof}[Proof (computer-assisted, \texttt{verify.py})]
 \emph{Setup.} Every code in the class is permutation equivalent to some
 $C_d=\mathcal G\cdot\mathrm{diag}(d)$ with $d\in\{1,2\}^{12}$. Here $d$ is taken
