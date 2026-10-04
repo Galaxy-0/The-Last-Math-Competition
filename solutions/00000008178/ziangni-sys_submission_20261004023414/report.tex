@@ -1,0 +1,108 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=27mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue,linkcolor=blue}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\newcommand{\rad}{\operatorname{rad}}
+\title{A smaller ABC hit\\Disproof of Conjecture 00000008178}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+
+\textbf{Result.} The triple $(3,125,128)$ disproves the assertion that
+$(2,3^{10}\cdot109,23^5)$ is the smallest ABC hit. The witness also obeys
+the power cutoff with the explicit positive parameter $\varepsilon=1/4$.
+
+\section*{1. The assertion being disproved}
+The English and Chinese versions of the conjecture both assert that the
+smallest ABC hit is the displayed classical triple. The English specifies
+``the smallest $a+b=c$''. Thus minimality is measured by $c=a+b$.
+The conjecture also makes counting-density and algorithm-complexity
+assertions. Its assertions are conjunctive; disproving the minimum assertion
+disproves the conjecture, without deciding those other assertions.
+
+For a positive integer $n$, let
+\[
+  \rad(n)=\prod_{\substack{p\mid n\\p\text{ prime}}}p.
+\]
+An ABC triple consists of positive integers $a<b$ and $c=a+b$ that are
+pairwise coprime. An ABC hit satisfies $\rad(abc)<c$. To check the
+conjecture's additional power-cutoff wording as well, we impose the
+stronger condition
+\begin{equation}\label{cutoff}
+  \rad(abc)\leq c^{1-\varepsilon},\qquad 0<\varepsilon<1.
+\end{equation}
+This explicit check avoids relying solely on an ordinary hit with a
+radical barely below $c$. If the schematic cutoff $\mathrm{Rad}(n)\leq
+n^{1-\varepsilon}$ uses $n=abc$, condition~\eqref{cutoff} implies it too,
+because $abc\geq c$ and $1-\varepsilon>0$.
+
+\section*{2. Exact counterexample}
+Take $a=3$, $b=125=5^3$, and $c=128=2^7$. Then
+\[
+  3+125=128,\qquad
+  \gcd(3,125)=\gcd(3,128)=\gcd(125,128)=1.
+\]
+Their product is $48000=2^7\cdot3\cdot5^3$, so its set of prime
+divisors is exactly $\{2,3,5\}$ and
+\[
+  \rad(3\cdot125\cdot128)=2\cdot3\cdot5=30<128.
+\]
+All entries exceed $1$; the counterexample therefore does not depend on
+whether an optional convention excludes $a=1$.
+
+\newpage
+For $\varepsilon=1/4$, exact integer arithmetic gives
+\[
+  30^4=810000<2097152=128^3.
+\]
+Since the fourth-power function is strictly increasing on the nonnegative
+real numbers, this yields $30<128^{3/4}$. In particular,
+\[
+  \rad(3\cdot125\cdot128)\leq128^{1-1/4}.
+\]
+On the other hand, the proposed smallest triple has
+\[
+  2+3^{10}\cdot109=2+6436341=6436343=23^5,
+\]
+and $128<6436343$. A smallest hit with this value of $c$ would require
+$23^5\leq128$ when applied to our witness, a contradiction.
+The same contradiction applies to a proposed minimum in the fixed
+$\varepsilon=1/4$ cutoff class.
+This proves the claimed minimality false.\hfill$\square$
+
+\section*{3. Kernel-checked formalization}
+The accompanying Lean 4.19.0 project pins Mathlib to commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+It defines the radical using \texttt{Nat.primeFactors}, the actual finite
+set of prime divisors, and its product. It proves the exact set
+$\{2,3,5\}$ from the prime-power factorization. Positivity, addition, pairwise
+coprimality, and the strict ordering of the two values of $c$ are likewise
+checked rather than assumed.
+
+The power cutoff uses Mathlib's real numbers and real exponentiation.
+The proof applies \texttt{Real.rpow\_le\_rpow\_iff} with exponent $4$,
+combines powers using \texttt{Real.rpow\_mul}, and reduces to exact
+arithmetic. No numerical approximation or floating-point computation is
+used.
+
+The principal declarations in \texttt{lean/Main.lean} are:
+\begin{itemize}
+\item \texttt{witness\_primeFactors} and \texttt{witness\_radical}:
+the actual prime divisors and radical of $abc$;
+\item \texttt{witness\_cutoff}: the full ABC hit and real power bound;
+\item \texttt{not\_smallest\_hit} and
+\texttt{not\_smallest\_cutoff\_hit}: the two minimality negations;
+\item \texttt{counterexample}: the combined result with
+$0<\varepsilon<1$, the explicit witness, and both negations.
+\end{itemize}
+The project contains no additional axioms, incomplete proofs, or
+\texttt{native\_decide}. The axiom audit and reproduction commands are
+recorded in \texttt{VERIFICATION.md}. No auxiliary numerical program is
+needed for the proof.
+\end{document}
