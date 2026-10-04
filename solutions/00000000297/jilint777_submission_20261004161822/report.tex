@@ -1,0 +1,253 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\DeclareUnicodeCharacter{2208}{\ensuremath{\in}}
+\DeclareUnicodeCharacter{2203}{\ensuremath{\exists}}
+\DeclareUnicodeCharacter{2200}{\ensuremath{\forall}}
+\DeclareUnicodeCharacter{2260}{\ensuremath{\neq}}
+\DeclareUnicodeCharacter{2227}{\ensuremath{\wedge}}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\le}}
+\DeclareUnicodeCharacter{00AC}{\ensuremath{\neg}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\to}}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of Conjecture 00000000297:\\
+no set of two Wang tiles is aperiodic}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000000297 asserts that there is an aperiodic rotation-free set of
+only $2$ Wang tiles, that no single Wang tile is aperiodic, and hence that the
+minimal size of a rotation-free aperiodic Wang tile set is exactly $2$. We prove
+that every set of at most two Wang tiles that tiles the plane also tiles it with
+periods $(2,0)$ and $(0,2)$. Hence no set of at most two Wang tiles is
+aperiodic, in the strong sense (no tiling has a nonzero period) or in the weak
+sense (no tiling is doubly periodic). The first clause of the conjecture, and
+with it the claim that the minimum is exactly $2$, is false. The proof is a
+short case analysis. It is formalized in Lean~4 (core library only), and an
+independent Python script checks it by exhaustive search.
+\end{abstract}
+
+\section{Statement and reading}
+The conjecture (English) reads:
+\begin{quote}
+Definition: Wang tiles are unit squares tiled by matching edge colors only.
+Conjecture: There exists an aperiodic prototile set of only 2 tiles without
+rotations, and no single rotation-free aperiodic tile exists (the minimal
+rotation-free aperiodic set is exactly 2).
+\end{quote}
+The Chinese version says the same. It is a conjunction of three claims:
+\begin{itemize}
+\item[(C1)] there is an aperiodic set of only $2$ Wang tiles (without rotations);
+\item[(C2)] no single Wang tile is aperiodic;
+\item[(C3)] the minimal size of an aperiodic set of Wang tiles is exactly $2$.
+\end{itemize}
+We show that (C1) is false. Since (C3) contains (C1), (C3) is false too, and so
+is the conjecture. (C2) is true; it is the one-tile case of our theorem.
+
+\begin{definition}
+Let $\mathcal C$ be any set of colors. A \emph{Wang tile} is a quadruple
+$t=(n_t,e_t,s_t,w_t)\in\mathcal C^4$ (north, east, south and west edge colors).
+Tiles are placed on the cells of $\mathbb Z^2$ and are never rotated or
+reflected. A \emph{tiling} of the plane by a finite tile set $T$ is a map
+$f:\mathbb Z^2\to T$ such that for all $(x,y)$
+\[
+ e_{f(x,y)}=w_{f(x+1,y)}\qquad\text{and}\qquad n_{f(x,y)}=s_{f(x,y+1)} .
+\]
+Write $a\mathrel{|}b$ (``$b$ may sit right of $a$'') when $e_a=w_b$, and
+$a\mathrel{\bot}b$ (``$b$ may sit above $a$'') when $n_a=s_b$. A vector
+$(p,q)\in\mathbb Z^2$ is a \emph{period} of $f$ if $f(x+p,y+q)=f(x,y)$ for all
+$x,y$. The tiling $f$ is \emph{periodic} if it has a nonzero period, and
+\emph{doubly periodic} if it has two linearly independent periods.
+\end{definition}
+
+\begin{definition}
+A tile set $T$ is \emph{(strongly) aperiodic} if it tiles the plane but no
+tiling by $T$ is periodic. It is \emph{weakly aperiodic} if it tiles the plane
+but no tiling by $T$ is doubly periodic.
+\end{definition}
+Strong aperiodicity is the standard notion for Wang tiles (Berger, Robinson,
+Jeandel--Rao), and it implies weak aperiodicity. (It is a classical fact that
+the two notions coincide for Wang tiles. We do not use it.) We refute (C1) under
+\emph{both} readings. So that every reading is covered:
+\begin{itemize}
+\item ``only $2$ tiles'' may mean exactly $2$ or at most $2$. We cover every set
+of at most $2$ tiles, and allow the two tiles to be equal.
+\item The colors are arbitrary, from any color set $\mathcal C$, with any number of
+colors.
+\item ``Without rotations'' is part of the definition of Wang tiles: tiles are
+placed by translation only. This is the setting of the conjecture.
+\end{itemize}
+The conjecture's definition fixes the setting: Wang tiles, i.e.\ edge-colored unit
+squares. We say nothing about general shapes (``prototiles'' that are polygons
+or other sets). That is a different question.
+
+\section{The theorem}
+\begin{theorem}\label{thm:main}
+Let $T$ be a set of at most two Wang tiles. If $T$ tiles the plane, then some
+tiling by $T$ has the periods $(2,0)$ and $(0,2)$. In particular it is periodic
+and doubly periodic, so $T$ is neither aperiodic nor weakly aperiodic.
+\end{theorem}
+
+If $T=\emptyset$ there is no tiling. If $T=\{t\}$, put $t_0=t_1=t$. So assume
+$T=\{t_0,t_1\}$ (possibly $t_0=t_1$) and let $f$ be a tiling by $T$.
+Call the pair \emph{H-crossing} if $t_0\mathrel{|}t_1$ and $t_1\mathrel{|}t_0$,
+and \emph{V-crossing} if $t_0\mathrel{\bot}t_1$ and $t_1\mathrel{\bot}t_0$.
+
+\begin{lemma}[local lemma]\label{lem:loop}
+If $\{t_0,t_1\}$ is not H-crossing, then $f(x,y)\mathrel{|}f(x,y)$ for every
+cell $(x,y)$. If it is not V-crossing, then $f(x,y)\mathrel{\bot}f(x,y)$ for
+every cell.
+\end{lemma}
+\begin{proof}
+Let $a=f(x-1,y)$, $b=f(x,y)$, $c=f(x+1,y)$. Then $a\mathrel{|}b$ and $b\mathrel{|}c$.
+Suppose $b\mathrel{|}b$ fails. Then $c\ne b$, since $b\mathrel{|}c$. Also $a\neq b$,
+since $a\mathrel{|}b$. As $a,b,c\in\{t_0,t_1\}$, this forces $a=c$ to be the
+tile other than $b$. Then $a\mathrel{|}b$ and $b\mathrel{|}a$ are the two cross
+matches, so the pair is H-crossing, a contradiction. The vertical statement is
+proved the same way, with $f(x,y-1),f(x,y),f(x,y+1)$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Each pattern $g$ below takes values in $\{t_0,t_1\}$ and depends only on
+$x\bmod 2$ and $y\bmod 2$, so it has periods $(2,0)$ and $(0,2)$. These are
+linearly independent ($\det\begin{pmatrix}2&0\\0&2\end{pmatrix}=4\neq0$), and
+$(2,0)\ne(0,0)$. It remains to check that each $g$ is a tiling.
+
+\emph{Case 1: H-crossing and V-crossing.} Take the checkerboard
+$g(x,y)=t_0$ if $x+y$ is even and $t_1$ otherwise. Horizontal and vertical
+neighbours are always $t_0,t_1$ or $t_1,t_0$, in that order. These pairs match by
+assumption.
+
+\emph{Case 2: neither.} By Lemma~\ref{lem:loop}, the tile $t=f(0,0)$ satisfies
+$t\mathrel{|}t$ and $t\mathrel{\bot}t$. The constant pattern $g\equiv t$ is a tiling.
+
+\emph{Case 3: not H-crossing, but V-crossing.} By Lemma~\ref{lem:loop}, every
+tile used by $f$ matches itself horizontally. If $f(0,1)=f(0,0)=t$, then
+$t\mathrel{|}t$ by the lemma, and $t\mathrel{\bot}t$ because
+$f(0,0)\mathrel{\bot}f(0,1)$. So $g\equiv t$ is a tiling. Otherwise
+$f(0,0)\neq f(0,1)$ are the two tiles $t_0,t_1$ in some order. Hence
+$t_0\mathrel{|}t_0$ and $t_1\mathrel{|}t_1$. Take horizontal stripes:
+$g(x,y)=t_0$ if $y$ is even, $t_1$ otherwise. Horizontal neighbours are equal
+and match. Vertical neighbours are $t_0$ below $t_1$, or $t_1$ below $t_0$, and
+these pairs match by V-crossing.
+
+\emph{Case 4: H-crossing, but not V-crossing.} This is Case 3 with the axes
+swapped. Use $f(0,0)$ and $f(1,0)$, and the vertical stripes $g(x,y)=t_0$ if $x$ is even,
+$t_1$ otherwise. If $t_0=t_1$ the pair can still be H- or V-crossing. The
+argument does not use $t_0\ne t_1$.
+\end{proof}
+
+\begin{corollary}\label{cor}
+No set of at most two Wang tiles is aperiodic, even weakly. Hence:
+\begin{enumerate}
+\item (C1) is false. There is no aperiodic set of $2$ Wang tiles, whether
+``$2$'' means exactly or at most $2$, and whether ``aperiodic'' is strong or weak.
+\item (C2) is true: a single tile is never aperiodic.
+\item (C3) is false: the minimal size of an aperiodic Wang tile set is not $2$.
+\end{enumerate}
+In particular the conjecture, a conjunction containing (C1), is false.
+\end{corollary}
+
+\begin{remark}
+This agrees with the literature. Jeandel and Rao (2021) found an aperiodic set of
+$11$ Wang tiles. They also showed by computer search that every Wang set with at
+most $10$ tiles is not aperiodic. So the true minimum is $11$. Our argument for
+two tiles is elementary and does not use their result.
+\end{remark}
+
+\begin{remark}[Why the local lemma looks at three cells]
+A $2\times2$ window is not enough to decide the question. Take
+$t_0=(0,1,0,2)$ and $t_1=(1,3,1,1)$, written as $(n,e,s,w)$. The only horizontal
+match is $t_0\mathrel{|}t_1$, and the only vertical matches are
+$t_0\mathrel{\bot}t_0$ and $t_1\mathrel{\bot}t_1$. The $2\times2$ square with
+rows $t_0\,t_1$ is legal. But no row of three cells is legal, so the pair does
+not tile the plane, and no periodic pattern exists. Lemma~\ref{lem:loop} looks
+at three consecutive cells $x-1,x,x+1$ of a row (or column). The script
+\texttt{verify.py} finds $16$ relation pairs of this kind, all of which have a
+legal $2\times2$ square but no legal $3\times3$ square.
+\end{remark}
+
+\section{Lean formalization}
+The folder \texttt{lean4/} is a Lean~4.19.0 project that uses only the core
+library. Everything is defined from scratch in \texttt{Main.lean}:
+\begin{itemize}
+\item \texttt{Tile C}: a structure with fields \texttt{n e s w : C}, for an
+arbitrary color type \texttt{C}. The relations \texttt{HMatch a b :=
+a.e = b.w} and \texttt{VMatch a b := a.n = b.s}.
+\item \texttt{IsTiling T f}: \texttt{f : Int → Int → Tile C} with
+\texttt{f x y ∈ T}, \texttt{HMatch (f x y) (f (x+1) y)} and
+\texttt{VMatch (f x y) (f x (y+1))} for all \texttt{x y}. Tile sets are lists,
+and \texttt{Tiles T := ∃ f, IsTiling T f}.
+\item \texttt{IsPeriodic f}: some period \texttt{(a,b) ≠ (0,0)}.
+\texttt{IsDoublyPeriodic f}: periods \texttt{(a,b)} and \texttt{(c,d)} with
+\texttt{a*d - b*c ≠ 0}.
+\item \texttt{Aperiodic T := Tiles T ∧ ∀ f, IsTiling T f → ¬ IsPeriodic f}, and
+\texttt{WeaklyAperiodic T} is the same with \texttt{IsDoublyPeriodic}.
+\texttt{Aperiodic.weakly} proves that strong implies weak.
+\end{itemize}
+The main results:
+\begin{itemize}
+\item \texttt{hloop}, \texttt{vloop}: Lemma~\ref{lem:loop}.
+\item \texttt{two\_tiles\_periodic}: the four cases of the proof, with the
+patterns \texttt{constPat}, \texttt{checker}, \texttt{stripesH} and \texttt{stripesV}.
+\item \texttt{le\_two\_tiles\_periodic}: for every list \texttt{T} with
+\texttt{T.length ≤ 2}, \texttt{Tiles T} implies a tiling with periods
+$(2,0)$ and $(0,2)$ that is periodic and doubly periodic. Lists of length $0$,
+$1$ and $2$ are all covered.
+\item \texttt{not\_aperiodic}, \texttt{not\_weaklyAperiodic}: no list of length
+at most $2$ is (weakly) aperiodic.
+\item \texttt{Conjecture297 C := Clause1 C ∧ Clause2 C ∧ MinAperiodicSize C 2},
+where \texttt{Clause1 C := ∃ T, T.length = 2 ∧ Aperiodic T}.
+\texttt{conjecture\_00000000297\_false : ¬ Conjecture297 C} holds for every color
+type \texttt{C}. The project also proves
+\texttt{clause1\_false}, \texttt{clause1\_weak\_false}
+(weak reading), \texttt{clause1\_le\_false} (``at most $2$'' with the weak
+reading), \texttt{minSize\_ne\_two}, and \texttt{clause2\_true}.
+\end{itemize}
+Non-vacuity checks, with natural-number colors:
+\begin{itemize}
+\item \texttt{tiles\_example}: a $2$-tile set that tiles.
+\item \texttt{not\_tiles\_example}: a $2$-tile set that does not tile.
+\item \texttt{crossTiling\_isTiling} and \texttt{crossTiling\_not\_periodic}: a
+four-tile set (blank, horizontal line, vertical line, cross) with a tiling that
+has a single cross at the origin. This tiling has no nonzero period. So
+\texttt{IsPeriodic} is a real restriction on tilings, and our theorem
+produces \emph{some} periodic tiling. It does not claim that every tiling is periodic.
+\end{itemize}
+The project has no \texttt{sorry}, \texttt{native\_decide} or custom axioms.
+\texttt{\#print axioms} shows only \texttt{propext}, \texttt{Classical.choice}
+and \texttt{Quot.sound}.
+
+\section{Independent check}
+\texttt{verify.py} (Python~3 standard library) uses a different method. It
+abstracts a pair of tiles $\{0,1\}$ to its two compatibility relations
+$H,V\subseteq\{0,1\}^2$. For all $16\times16=256$ pairs $(H,V)$, including
+pairs that no coloring realises, it checks by brute force that either no
+$3\times3$ square can be filled legally, or a legal $2\times2$ torus pattern
+exists. Every tiling of the plane restricts to a legal $3\times3$ square, and a
+$2\times2$ torus pattern gives a tiling with periods $(2,0),(0,2)$. So this
+reproves Theorem~\ref{thm:main}. There are $127$ pairs with a torus and $129$
+pairs with no legal $3\times3$ square. The script also runs the test on all
+$3^8=6561$ ordered pairs of concrete tiles with colors in $\{0,1,2\}$, which
+realise $144$ distinct relation pairs. It confirms that $3\times3$ cannot be
+replaced by $2\times2$ ($16$ relation pairs have a legal $2\times2$ square but no
+torus). Finally, it checks that the four patterns of the proof always suffice.
+
+\section{Limitations}
+Everything above is proved in Lean, for an arbitrary color type, with tile sets as
+lists of length at most $2$. The literature remark (Jeandel--Rao) is context
+only and is not used. We do not address prototiles that are general shapes.
+\end{document}

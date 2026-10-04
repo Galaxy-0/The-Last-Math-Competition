@@ -1,0 +1,22 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:360:0: 'Wang.two_tiles_periodic' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:361:0: 'Wang.le_two_tiles_periodic' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:362:0: 'Wang.clause1_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:363:0: 'Wang.clause1_le_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:364:0: 'Wang.clause2_true' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:365:0: 'Wang.conjecture_00000000297_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:366:0: 'Wang.crossTiling_not_periodic' depends on axioms: [propext, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+(A/B) 256 relation pairs: 127 have a 2x2 torus, 129 have no legal 3x3 square
+(C) 6561 ordered pairs of concrete tiles (colours 0..2): 144 distinct relation pairs realised, all pass
+(D) relation pairs with a legal 2x2 square but no 2x2 torus: 16 (e.g. H=[(0, 1)], V=[(0, 0), (1, 1)])
+(E) every relation pair with a legal 3x3 square is tiled by one of the four patterns: constant, checkerboard, horizontal stripes, vertical stripes
+ALL CHECKS PASSED
+exit 0
