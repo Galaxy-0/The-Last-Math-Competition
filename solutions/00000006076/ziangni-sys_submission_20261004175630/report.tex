@@ -1,0 +1,72 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\setlength{\emergencystretch}{2em}
+\begin{document}
+\begin{center}
+{\Large Disproof of conjecture 00000006076}\\[5pt]
+Nonstationary trajectories that never escape a strict saddle\\
+ziangni-sys
+\end{center}
+\textbf{Source and scope.}
+Both source versions claim deterministic escape inside a strict-saddle neighborhood window controlled by the curvature ratio, together with exponential escape. We interpret deterministic escape in the conventional ordinary gradient-descent setting. The source imposes no perturbation, randomization, generic-start restriction, or exclusion of the stable manifold. Under that unqualified interpretation, deterministic escape fails.
+
+Our starting points are nonstationary and can be arbitrarily close to the saddle. The result does not contradict escape guarantees for randomized or perturbed methods, or guarantees restricted to starting points with an unstable component.
+
+\textbf{A genuine smooth strict saddle.}
+On the standard Euclidean plane $E=\mathbb R^2$ take
+\[
+ f(x,y)=x^2-y^2,\qquad
+ \nabla f(x,y)=(2x,-2y),\qquad
+ \nabla^2 f=\begin{pmatrix}2&0\\0&-2\end{pmatrix}.
+\]
+This polynomial is smooth. The origin is stationary. Its Hessian is nonsingular and has both a positive eigenvalue $2$ and a negative eigenvalue $-2$. In particular its negative curvature is nondegenerate. The quadratic form of the Hessian on the unit second coordinate vector is $-2$ and on the unit first coordinate vector is $2$.
+
+The origin is neither a local minimum nor a local maximum: arbitrarily small first-axis points have positive objective value, and arbitrarily small second-axis points have negative objective value. Thus it is a strict saddle in the source's stated sense.
+
+The gradient is globally $2$-Lipschitz in Euclidean norm, since the Hessian sends $(x,y)$ to $(2x,-2y)$ and has norm $2$. The magnitudes of its two curvatures are equal. There is no extreme curvature ratio or degenerate Hessian involved.
+
+\textbf{Actual deterministic iteration.}
+Choose the safe step size $\eta=1/4$, which lies strictly between $0$ and $1/L=1/2$. Ordinary gradient descent is
+\[
+ T(x,y)=(x,y)-\eta\nabla f(x,y)
+        =(x/2,3y/2).
+\]
+For any $s>0$, start at $z_0=(s,0)$. This point is nonstationary, because $\nabla f(s,0)=(2s,0)\ne0$. Every finite iterate is exactly
+\[
+ z_n=T^n z_0=(s\,2^{-n},0).
+\]
+This follows by induction from the displayed update. The Euclidean distance to the saddle is $\|z_n\|=s\,2^{-n}$.
+\newpage
+\textbf{No neighborhood window guarantees escape.}
+Let an arbitrary radius $r>0$ be given. Choose $s=r/2$. Then the nonstationary starting point lies strictly inside the ball $B(0,r)$, and for every integer $n\ge0$,
+\[
+ \|T^n z_0\|=\frac r2\,2^{-n}\le\frac r2<r.
+\]
+No iterate exits the ball. Moreover $T^n z_0\to0$: the trajectory converges to the strict saddle rather than escaping it.
+
+More generally the same conclusion holds for every $0<s<r$. The final formal theorem quantifies over every positive radius. Consequently no positive-radius saddle neighborhood, chosen solely from this curvature data, makes escape deterministic for all its nonstationary starts. An exponential escape rate is impossible for these trajectories, whose distance instead decreases exponentially.
+
+This is the stable-axis obstruction. The stable axis is a measure-zero set in the plane, which explains why statements about almost every or randomly perturbed start may still hold. Such restrictions are absent from the claimed deterministic law.
+
+\textbf{Formal correspondence.}
+The Lean package uses Mathlib's actual two-dimensional Euclidean space with its inner product and norm. Coordinate projections and coordinate vectors are genuine continuous linear maps and Euclidean vectors. A continuous linear Hessian operator is constructed from the coordinate projections. The package proves actual \texttt{HasGradientAt} statements for the objective, identifies Mathlib's gradient, proves smoothness, and proves that the Hessian operator is the actual Fr\'echet derivative of the gradient at every point.
+
+It proves that the Hessian has zero kernel, computes its negative and positive quadratic forms, proves stationarity and failure of both local extremum conditions, and defines the actual gradient-descent map with step $1/4$. The closed formula is proved equal to every finite function iterate, rather than assumed as an orbit.
+
+The norm and ball statements use the actual Euclidean metric. Every stable-axis nonstationary start remains in the prescribed ball. Actual convergence to zero is proved through the geometric-sequence limit. The final theorem provides such a nonstationary start for every positive radius.
+
+The supplementary global Lipschitz calculation above is immediate from the explicit Hessian, and the formal safe-step inequalities are proved numerically. No stochastic escape statement or generic-start theorem is asserted or refuted.
+
+\textbf{Reproduction.}
+Run \texttt{lake build} in the submitted \texttt{lean} directory with Lean 4.19.0. Public Mathlib is pinned to
+\[
+ \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\]
+The project prints axiom audits for the genuine gradient, smoothness, Hessian, strict-saddle properties, iterates, nonstationarity, nonescape, convergence and final theorem. The submission includes this source and its compiled PDF.
+
+\textbf{Conclusion.}
+Even a smooth nondegenerate strict saddle admits arbitrarily close nonstationary deterministic gradient trajectories that never leave its neighborhood. Unqualified deterministic escape is false.
+\end{document}
