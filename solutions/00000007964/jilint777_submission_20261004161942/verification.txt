@@ -1,15 +1,21 @@
 == lake build (fresh, Lean 4.19.0)
 ℹ [2/3] Built Main
-info: ././././Main.lean:692:0: 'SH_quasiPerfect' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././Main.lean:693:0: 'hamming_not_QP' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././Main.lean:694:0: 'EH_quasiPerfect' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././Main.lean:695:0: 'EW_quasiPerfect' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:696:0: 'QP_spectrum' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:697:0: 'onlyIf3_false' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././Main.lean:698:0: 'onlyIf4_false' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././Main.lean:699:0: 'onlyIfWeak_false' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././Main.lean:700:0: 'levenshteinAtLeast_false' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././Main.lean:701:0: 'conjecture_00000007964_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:833:0: 'SH_quasiPerfect' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:834:0: 'hamming_not_QP' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:835:0: 'EH_quasiPerfect' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:836:0: 'EW_quasiPerfect' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:837:0: 'QP_spectrum' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:838:0: 'onlyIf3_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:839:0: 'onlyIf4_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:840:0: 'onlyIfWeak_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:841:0: 'onlyIf_any_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:842:0: 'levenshteinAtLeast_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:843:0: 'conjecture_00000007964_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:844:0: 'EW_shellUniform' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:845:0: 'SH5_not_shellUniform' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:846:0: 'UQP_spectrum' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:847:0: 'onlyIfUniform_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:848:0: 'conjecture_00000007964_false_uniform' depends on axioms: [propext, Quot.sound]
 Build completed successfully.
 exit 0
 
@@ -71,6 +77,25 @@ PASS  n=4: 67 linear codes, 30 quasi-perfect (d values [1, 2, 3, 4]; with d>=3: 
 PASS  n=5: 374 linear codes, 111 quasi-perfect (d values [1, 2, 3]; with d>=3: 15)
 PASS  n=6: 2825 linear codes, 520 quasi-perfect (d values [1, 2, 3, 5, 6]; with d>=3: 107)
 PASS  n=7: 29212 linear codes, 3088 quasi-perfect (d values [1, 2, 3]; with d>=3: 1260)
+== 5b. uniform shell distribution (coset weight distributions depend only on the coset's minimum weight)
+PASS  SH(6) = SH(2^3-2) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s); min wt 2: 1 distinct profile(s))
+PASS  SH(14) = SH(2^4-2) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s); min wt 2: 1 distinct profile(s))
+PASS  EH(2) (length 4) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s); min wt 2: 1 distinct profile(s))
+PASS  EH(3) (length 8) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s); min wt 2: 1 distinct profile(s))
+PASS  EH(4) (length 16) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s); min wt 2: 1 distinct profile(s))
+PASS  EW(2) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(3) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(4) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(5) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(6) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(7) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(8) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(9) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(10) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(11) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(12) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  among SH(n), 3<=n<=14, exactly n in [3, 6, 7, 14] are shell-uniform (2^m-1: perfect; 2^m-2: once shortened)
+PASS  SH(5) is quasi-perfect but NOT shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 2 distinct profile(s); min wt 2: 1 distinct profile(s)), cf. Lean SH5_not_shellUniform
 == 6. the bit lemma: 2^k <= s < 2^(k+1)  =>  s xor 2^k < 2^k  (k <= 12)
 PASS  bit lemma
 == 7. lengths outside {2^k - 1} carrying QP codes with d = 3 (SH) up to 64

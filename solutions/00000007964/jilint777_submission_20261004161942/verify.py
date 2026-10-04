@@ -170,6 +170,47 @@ for n in range(0, 8):
            + (f" (d values {sorted(set(qp))}; with d>=3: {len(qp3)})" if qp else ""))
     check((len(qp) > 0) == (n >= 2), msg)
 
+print("== 5b. uniform shell distribution (coset weight distributions depend only on the coset's minimum weight)")
+# For a linear code C, the shell counts #{c in C : d(x,c) = j} are the weight distribution of the coset x + C.
+# Cosets are identified by an exact coset invariant (syndrome); words are bucketed by it.
+from collections import Counter, defaultdict
+def lab_synd(x, labels):
+    s = 0
+    for j, l in enumerate(labels):
+        if x >> j & 1:
+            s ^= l
+    return s
+def coset_profiles(n, key):
+    buckets = defaultdict(Counter)
+    for x in range(1 << n):
+        buckets[key(x)][wt(x)] += 1
+    by_min = defaultdict(set)
+    for dist_counter in buckets.values():
+        mn = min(dist_counter)
+        by_min[mn].add(tuple(sorted(dist_counter.items())))
+    return by_min
+def uniform(by_min):
+    return all(len(v) == 1 for v in by_min.values())
+def describe(by_min):
+    return "; ".join(f"min wt {r}: {len(v)} distinct profile(s)" for r, v in sorted(by_min.items()))
+for m in (3, 4):
+    n = (1 << m) - 2
+    prof = coset_profiles(n, lambda x: lab_synd(x, range(1, n + 1)))
+    check(uniform(prof) and sorted(prof) == [0, 1, 2],
+          f"SH({n}) = SH(2^{m}-2) is shell-uniform ({describe(prof)})")
+for m in (2, 3, 4):
+    n = 1 << m
+    prof = coset_profiles(n, lambda x: (lab_synd(x, range(n)), wt(x) % 2))
+    check(uniform(prof) and sorted(prof) == [0, 1, 2], f"EH({m}) (length {n}) is shell-uniform ({describe(prof)})")
+for n in range(2, 13):
+    prof = coset_profiles(n, lambda x: wt(x) % 2)
+    check(uniform(prof), f"EW({n}) is shell-uniform ({describe(prof)})")
+unif = [n for n in range(3, 15) if uniform(coset_profiles(n, lambda x: lab_synd(x, range(1, n + 1))))]
+check(unif == [3, 6, 7, 14],
+      f"among SH(n), 3<=n<=14, exactly n in {unif} are shell-uniform (2^m-1: perfect; 2^m-2: once shortened)")
+prof5 = coset_profiles(5, lambda x: lab_synd(x, range(1, 6)))
+check(not uniform(prof5), f"SH(5) is quasi-perfect but NOT shell-uniform ({describe(prof5)}), cf. Lean SH5_not_shellUniform")
+
 print("== 6. the bit lemma: 2^k <= s < 2^(k+1)  =>  s xor 2^k < 2^k  (k <= 12)")
 check(all((s ^ (1 << k)) < (1 << k) for k in range(13) for s in range(1 << k, 1 << (k + 1))),
       "bit lemma")

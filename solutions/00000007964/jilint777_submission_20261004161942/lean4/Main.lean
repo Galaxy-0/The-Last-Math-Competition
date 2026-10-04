@@ -6,8 +6,12 @@ The conjecture contains the clause
   "binary linear quasi-perfect codes of length `n` exist if and only if `n` is of type `2^k - 1`
    or in a finite exceptional list (the Levenshtein set)".
 
-A code is *quasi-perfect* when its covering radius equals its packing radius plus one,
-`ρ = e + 1` with `e = ⌊(d-1)/2⌋`.  Everything below is built from scratch in Lean 4 core:
+The conjecture's preamble defines quasi-perfect codes as codes with covering radius `e + 1`
+("r+1") having a *tight uniform shell distribution*.  We treat two readings:
+* standard: covering radius = packing radius + 1, `ρ = e + 1` with `e = ⌊(d-1)/2⌋` (`IsQP`);
+* the conjecture's own: `IsQP` plus `ShellUniform` (any two words at the same distance from the
+  code have equinumerous shells of every radius, via explicit bijections) (`UQPLen`).
+Everything below is built from scratch in Lean 4 core:
 words are `List Bool`, codes are predicates, `IsLinear` is "F₂-subspace of F₂ⁿ", `MinDist`
 and `CovRad` are the usual minimum distance and covering radius (attained values).
 
@@ -19,8 +23,12 @@ Results:
 * `hamming_not_QP`   — sanity check: the Hamming codes (length `2^m - 1`) are perfect, not QP.
 * `QP_spectrum`      — binary linear QP codes of length `n` exist **iff `n ≥ 2`**.
 * `conjecture_00000007964_false : ¬ LevenshteinClause` — the clause is false; and
-  `onlyIf3_false`, `onlyIf4_false`, `onlyIfWeak_false`, `levenshteinAtLeast_false` refute even the
-  one-directional / `d ≥ 3` / `d ≥ 4` / non-strict variants.
+  `onlyIf3_false`, `onlyIf4_false`, `onlyIfWeak_false`, `onlyIf_any_false`,
+  `levenshteinAtLeast_false` refute even the one-directional / `d ≥ 3` / `d ≥ 4` / non-strict variants.
+* `EW_shellUniform`, `UQP_spectrum : UQPLen n ↔ 2 ≤ n`,
+  `conjecture_00000007964_false_uniform : ¬ LevenshteinClauseUniform` and `onlyIfUniform_false` —
+  the same refutation for the conjecture's uniform-shell notion; `SH5_not_shellUniform` shows that
+  `ShellUniform` is a genuine restriction.
 -/
 
 /-! ## Binary words -/
@@ -646,6 +654,139 @@ theorem hamming_not_QP (m : Nat) (hm : 3 ≤ m) : ¬ IsQP (2^m - 1) (SH (2^m - 1
   have := covRad_unique hcov (hamming_covRad m (by omega))
   simp at this
 
+/-! ## The conjecture's own notion: quasi-perfect codes with uniform shell distribution -/
+
+/-- `r` is the distance from the word `x` to the code `C`. -/
+def DistTo (C : List Bool → Prop) (x : List Bool) (r : Nat) : Prop :=
+  (∃ c, C c ∧ dist x c = r) ∧ ∀ c, C c → r ≤ dist x c
+
+/-- Uniform shell distribution (strongest form). Take any two words `x`, `y` of length `n` that are
+at the same distance `r` from `C`, and any radius `j`. Then the shells
+`{c ∈ C | dist x c = j}` and `{c ∈ C | dist y c = j}` are in explicit bijection: maps `f`, `g`
+between them with `g ∘ f = id` and `f ∘ g = id` on the shells. -/
+def ShellUniform (n : Nat) (C : List Bool → Prop) : Prop :=
+  ∀ x y : List Bool, ∀ r j : Nat, x.length = n → y.length = n → DistTo C x r → DistTo C y r →
+    ∃ f g : List Bool → List Bool,
+      (∀ c, C c → dist x c = j → C (f c) ∧ dist y (f c) = j) ∧
+      (∀ c, C c → dist y c = j → C (g c) ∧ dist x (g c) = j) ∧
+      (∀ c, C c → dist x c = j → g (f c) = c) ∧
+      (∀ c, C c → dist y c = j → f (g c) = c)
+
+/-- Uniformly-shelled quasi-perfect binary linear code of length `n` exists. -/
+def UQPLen (n : Nat) : Prop := ∃ C, IsQP n C ∧ ShellUniform n C
+
+theorem xorW_shift : ∀ (x y c : List Bool), x.length = y.length → c.length = x.length →
+    xorW y (xorW c (xorW x y)) = xorW x c
+  | [], [], [], _, _ => rfl
+  | a :: xs, b :: ys, d :: cs, h1, h2 => by
+      simp only [List.length_cons, Nat.add_right_cancel_iff] at h1 h2
+      simp only [xorW, xorW_shift xs ys cs h1 h2]
+      cases a <;> cases b <;> cases d <;> rfl
+
+theorem xorW_back : ∀ (x y c : List Bool), x.length = y.length → c.length = x.length →
+    xorW (xorW c (xorW x y)) (xorW y x) = c
+  | [], [], [], _, _ => rfl
+  | a :: xs, b :: ys, d :: cs, h1, h2 => by
+      simp only [List.length_cons, Nat.add_right_cancel_iff] at h1 h2
+      simp only [xorW, xorW_back xs ys cs h1 h2]
+      cases a <;> cases b <;> cases d <;> rfl
+
+theorem EW_parity_iff (n : Nat) (x : List Bool) (r : Nat) (hx : x.length = n)
+    (h : DistTo (EW n) x r) : (wt x % 2 = 0 ↔ r = 0) := by
+  constructor
+  · intro hp
+    have := h.2 x ⟨hx, hp⟩
+    rw [dist_self] at this; omega
+  · intro hr
+    obtain ⟨c, hc, hd⟩ := h.1
+    rw [hr] at hd
+    have := eq_of_wt_xorW_zero x c (by rw [hx, hc.1]) hd
+    rw [this]; exact hc.2
+
+theorem EW_shift (n : Nat) (x y c : List Bool) (hx : x.length = n) (hy : y.length = n)
+    (hp : wt x % 2 = wt y % 2) (hc : EW n c) :
+    EW n (xorW c (xorW x y)) ∧ dist y (xorW c (xorW x y)) = dist x c := by
+  have hxy : x.length = y.length := by rw [hx, hy]
+  have hlw : (xorW x y).length = n := by rw [length_xorW x y hxy, hx]
+  have hcw : c.length = (xorW x y).length := by rw [hc.1, hlw]
+  refine ⟨⟨?_, ?_⟩, ?_⟩
+  · rw [length_xorW _ _ hcw, hc.1]
+  · have h1 := wt_xorW_parity c (xorW x y) hcw
+    have h2 := wt_xorW_parity x y hxy
+    have := hc.2
+    omega
+  · simp only [dist]; rw [xorW_shift x y c hxy (by rw [hc.1, hx])]
+
+/-- The even-weight code has a uniform shell distribution (all `n`). -/
+theorem EW_shellUniform (n : Nat) : ShellUniform n (EW n) := by
+  intro x y r j hx hy hdx hdy
+  have ix := EW_parity_iff n x r hx hdx
+  have iy := EW_parity_iff n y r hy hdy
+  have hp : wt x % 2 = wt y % 2 := by
+    by_cases h : r = 0
+    · have := ix.2 h; have := iy.2 h; omega
+    · have a := (mt ix.1) h; have b := (mt iy.1) h; omega
+  have hxy : x.length = y.length := by rw [hx, hy]
+  refine ⟨fun c => xorW c (xorW x y), fun c => xorW c (xorW y x), ?_, ?_, ?_, ?_⟩
+  · intro c hc hd
+    obtain ⟨h1, h2⟩ := EW_shift n x y c hx hy hp hc
+    exact ⟨h1, by rw [h2, hd]⟩
+  · intro c hc hd
+    obtain ⟨h1, h2⟩ := EW_shift n y x c hy hx hp.symm hc
+    exact ⟨h1, by rw [h2, hd]⟩
+  · intro c hc _
+    exact xorW_back x y c hxy (by rw [hc.1, hx])
+  · intro c hc _
+    exact xorW_back y x c hxy.symm (by rw [hc.1, hy])
+
+/-- Non-vacuity of `ShellUniform`: the quasi-perfect code `SH 5` is NOT shell-uniform.
+`e₁` and `e₂` are both at distance 1 from it, but `e₁` has a codeword at distance 5 and `e₂` has none. -/
+theorem SH5_not_shellUniform : ¬ ShellUniform 5 (SH 5) := by
+  intro h
+  have hd1 : ∀ x : List Bool, x.length = 5 → synd 1 x ≠ 0 → wt x = 1 → DistTo (SH 5) x 1 := by
+    intro x hx hs hw
+    refine ⟨⟨zeroW 5, SH_linear 5 |>.2.1, ?_⟩, ?_⟩
+    · have := xorW_zeroW x; rw [hx] at this; simp only [dist]; rw [this, hw]
+    · intro c hc
+      have : dist x c ≠ 0 := fun h0 => by
+        have := eq_of_wt_xorW_zero x c (by rw [hx, hc.1]) h0
+        rw [this] at hs; exact hs hc.2
+      omega
+  obtain ⟨f, -, hf, -, -, -⟩ := h [true, false, false, false, false] [false, true, false, false, false]
+    1 5 rfl rfl (hd1 _ rfl (by decide) rfl) (hd1 _ rfl (by decide) rfl)
+  obtain ⟨hmem, hdist⟩ := hf [false, true, true, true, true] ⟨rfl, by decide⟩ (by decide)
+  have key : ∀ a b c d e : Bool, synd 1 [a, b, c, d, e] = 0 →
+      dist [false, true, false, false, false] [a, b, c, d, e] ≠ 5 := by decide
+  have hl := hmem.1
+  match hw : f [false, true, true, true, true], hl with
+  | [a, b, c, d, e], _ => rw [hw] at hmem hdist; exact key a b c d e hmem.2 hdist
+
+theorem UQP_spectrum (n : Nat) : UQPLen n ↔ 2 ≤ n := by
+  constructor
+  · rintro ⟨C, hqp, -⟩
+    exact (QP_spectrum n).1 ⟨C, hqp⟩
+  · intro h; exact ⟨EW n, (EW_quasiPerfect n h).2.2.2, EW_shellUniform n⟩
+
+/-- The clause with the conjecture's own (uniform-shell) notion of quasi-perfect code. -/
+def LevenshteinClauseUniform : Prop :=
+  ∃ L : List Nat, ∀ n, UQPLen n ↔ ((∃ k, n + 1 = 2^k) ∨ n ∈ L)
+
+def OnlyIfClauseUniform : Prop :=
+  ∃ L : List Nat, ∀ n, UQPLen n → ((∃ k, n + 1 = 2^k) ∨ n ∈ L)
+
+theorem onlyIfUniform_false : ¬ OnlyIfClauseUniform := by
+  rintro ⟨L, hL⟩
+  let n := 2 * (listMax L + 2)
+  have hpow : ∀ k, n + 1 ≠ 2^k := odd_ne_two_pow (n+1) (by omega) (by omega)
+  rcases hL n ((UQP_spectrum n).2 (by omega)) with ⟨k, hk⟩ | hmem
+  · exact hpow k hk
+  · have := le_listMax L n hmem; omega
+
+/-- **Main theorem, uniform-shell reading.** -/
+theorem conjecture_00000007964_false_uniform : ¬ LevenshteinClauseUniform := by
+  rintro ⟨L, hL⟩
+  exact onlyIfUniform_false ⟨L, fun n h => (hL n).1 h⟩
+
 /-- The `iff` clause restricted to codes with minimum distance `d ≥ D`. -/
 def LevenshteinClauseAtLeast (D : Nat) : Prop :=
   ∃ L : List Nat, ∀ n, QPLenAtLeast D n ↔ ((∃ k, n + 1 = 2^k) ∨ n ∈ L)
@@ -697,5 +838,11 @@ example : ¬ SH 6 [true, true, false, false, false, false] := fun h => by
 #print axioms onlyIf3_false
 #print axioms onlyIf4_false
 #print axioms onlyIfWeak_false
+#print axioms onlyIf_any_false
 #print axioms levenshteinAtLeast_false
 #print axioms conjecture_00000007964_false
+#print axioms EW_shellUniform
+#print axioms SH5_not_shellUniform
+#print axioms UQP_spectrum
+#print axioms onlyIfUniform_false
+#print axioms conjecture_00000007964_false_uniform

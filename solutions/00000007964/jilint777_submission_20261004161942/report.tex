@@ -27,18 +27,24 @@ binary linear quasi-perfect codes exist for every length $n\ge 2$}
 \begin{abstract}
 Conjecture 00000007964 claims, among other things, that binary linear
 quasi-perfect codes of length $n$ exist if and only if $n=2^k-1$ or $n$ lies
-in a finite exceptional list. This is false. A code is quasi-perfect when its
-covering radius is one more than its packing radius
-$e=\lfloor (d-1)/2\rfloor$. We prove that such codes exist for every
-length $n\ge 2$ and for no length $n\le 1$. The witnesses are not degenerate:
+in a finite exceptional list. This is false. The conjecture defines
+quasi-perfect codes as codes whose covering radius is one more than the packing
+radius $e=\lfloor (d-1)/2\rfloor$ and which have a ``tight uniform shell
+distribution''. We treat two readings: the standard one ($\rho=e+1$ only), and
+the conjecture's stronger notion, where in addition any two words at the same
+distance from the code have equally many codewords in every shell. Under
+\emph{both} readings such codes exist for every length $n\ge 2$ and for no
+length $n\le 1$. The witnesses are not degenerate:
 for every $n\ge 3$ with $n+1$ not a power of two, the shortened Hamming code of
 length $n$ is a quasi-perfect $[n,\,n-\lceil\log_2(n+1)\rceil,\,3]$ code. For
 every $m\ge 2$, the extended Hamming code of length $2^m$ is quasi-perfect with
-$d=4$ and has a perfectly uniform shell distribution. The set of lengths
+$d=4$. Both the extended Hamming codes and the once-shortened Hamming codes of
+length $2^m-2$ ($d=3$) have uniform shell distributions. The set of lengths
 outside $\{2^k-1\}$ is infinite, so no finite exceptional list can rescue the
 clause. All three code families, the full length spectrum and the refutation
-of the clause (also restricted to $d\ge 3$ or $d\ge 4$, and in the non-strict
-reading) are formalized in Lean~4 (core library only).
+of the clause are formalized in Lean~4 (core library only). The Lean
+refutation covers the uniform-shell notion (via even-weight codes), the
+restrictions to $d\ge 3$ or $d\ge 4$, and the non-strict reading.
 \end{abstract}
 
 \section{The conjecture and the clause we refute}
@@ -76,12 +82,26 @@ $\rho\ge e$, and $C$ is \emph{perfect} if $\rho=e$. $C$ is
 \emph{quasi-perfect} if $\rho=e+1$.
 \end{definition}
 
-This is the standard definition (for example, MacWilliams and Sloane). The
-conjecture writes it as ``covering radius $r+1$'' for packing radius $r$.
-Section~\ref{sec:readings} covers the other readings: the non-strict version
-$\rho\le e+1$, a ``nontriviality'' demand $d\ge 3$ or $d\ge 4$, restrictions on
-$k$, and the ``relaxed, uniform shell'' variant from the conjecture's
-preamble. The counterexamples defeat all of them.
+This is the standard notion (for example, MacWilliams and Sloane). The
+conjecture's own definition is \emph{stronger}. Its preamble asks for a
+``tight uniform shell distribution at covering radius $r+1$'', where $r$ is
+the packing radius. We formalize this as follows.
+
+\begin{definition}\label{def:uniform}
+For $x\in\F^n$ and $j\ge 0$ let $S_j(x)=\{c\in C:\dd(x,c)=j\}$ be the
+$j$-th shell around $x$. The code $C$ is \emph{shell-uniform} if
+$|S_j(x)|=|S_j(y)|$ for all $j$ whenever $\dd(x,C)=\dd(y,C)$. A
+\emph{uniform-shell quasi-perfect} code is a quasi-perfect code that is
+shell-uniform.
+\end{definition}
+
+This is the strongest reasonable reading: it constrains every shell, not only
+the shells of radius $e$ and $e+1$ that enter the classical notion of a
+uniformly packed code. We refute the clause under both the standard and the
+uniform-shell reading (Section~\ref{sec:uniform} and Corollary~\ref{cor:uniform}).
+Section~\ref{sec:readings} covers the remaining readings: the non-strict
+version $\rho\le e+1$, a ``nontriviality'' demand $d\ge 3$ or $d\ge 4$,
+restrictions on $k$, and the choice of the finite list.
 
 \section{Syndromes}
 We use the bitwise exclusive or $a\oplus b$ of nonnegative integers. It is
@@ -240,6 +260,76 @@ Codes with $d=3$ exist for every $n\ge 3$ with $n+1\ne 2^k$
 Use Propositions~\ref{prop:ew} and \ref{prop:short}.
 \end{proof}
 
+\section{Uniform shell distributions}\label{sec:uniform}
+For a linear code $C$, the map $c\mapsto x+c$ is a bijection from $S_j(x)$ onto
+the set of weight-$j$ words of the coset $x+C$. Also $\dd(x,C)$ is the minimum
+weight of $x+C$. Hence:
+
+\begin{lemma}\label{lem:coset}
+A linear code is shell-uniform if and only if any two cosets with the same
+minimum weight have the same weight distribution. Suppose a coordinate
+permutation $\pi$ maps $C$ onto itself. Then $\pi$ maps the coset $x+C$ onto
+$\pi(x)+C$ and preserves weights. So if the group of such permutations acts
+transitively on the cosets of each minimum weight, $C$ is shell-uniform.
+\end{lemma}
+
+\begin{theorem}\label{thm:uniform}
+The following quasi-perfect codes are shell-uniform:
+\begin{enumerate}
+\item $\mathrm{EW}(n)$ for every $n\ge 2$;
+\item $\mathrm{EH}(m)$ for every $m\ge 2$ ($d=4$, length $2^m$);
+\item $\mathrm{SH}(2^m-2)$ for every $m\ge 3$ ($d=3$, length $2^m-2$).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Identify a label $\ell<2^m$ with the vector of its binary digits in $\F^m$.
+Then $\oplus$ is vector addition and $\sigma(x)=\sum_{j:x_j=1}\ell_j$.
+
+(1) $\mathrm{EW}(n)$ has two cosets, itself (minimum weight $0$) and the
+odd-weight words (minimum weight $1$). There is one coset of each minimum
+weight. (In Lean the bijection $c\mapsto c+x+y$ is given explicitly.)
+
+(2) The coordinates of $\mathrm{EH}(m)$ are labelled by all of $\F^m$. The map
+$x\mapsto(\sigma(x),\wt(x)\bmod 2)$ is linear and surjective onto
+$\F^m\times\F$, and its kernel is $\mathrm{EH}(m)$. So the cosets correspond to
+the pairs $(s,p)$. By the proof of Theorem~\ref{thm:eh}, the minimum weights
+are as follows: $(0,0)$ has minimum weight $0$; $(s,1)$ has minimum weight $1$
+for every $s$; and $(s,0)$ with $s\neq 0$ has minimum weight $2$.
+
+Every affine bijection $\varphi(v)=Av+b$ of $\F^m$, with $A\in GL(m,2)$,
+permutes the coordinates. Let a word have support $T$. Its image has support
+$\varphi(T)$, with syndrome $A\sigma+|T|\,b$ and the same parity. So $\varphi$
+maps the coset $(s,p)$ to $(As+pb,\,p)$, and it preserves $\mathrm{EH}(m)$,
+which is the coset $(0,0)$.
+\begin{itemize}
+\item The translations ($A=I$, $b=s+s'$) map $(s,1)$ to $(s',1)$.
+\item For nonzero $s,s'$, a linear map $A$ with $As=s'$ maps $(s,0)$ to
+$(s',0)$.
+\end{itemize}
+So the action is transitive on the cosets of each minimum weight.
+
+(3) Let $n=2^m-2$ and $u=2^m-1$, the all-ones vector. The labels are
+$\F^m\setminus\{0,u\}$. The unit vectors $1,2,\dots,2^{m-1}$ are labels, so
+$\sigma$ is surjective and the cosets correspond to syndromes $s\in\F^m$. By
+Theorem~\ref{thm:sh} and Lemma~\ref{lem:syn}, the minimum weights are: $s=0$
+gives $0$; $s=u$ gives $2$; and every other $s$ (a label) gives $1$. Minimum
+weights $0$ and $2$ each have a single coset.
+
+Now let $s,s'\notin\{0,u\}$. Then $\{s,u\}$ and $\{s',u\}$ are both linearly
+independent, so some $A\in GL(m,2)$ satisfies $Au=u$ and $As=s'$ (extend both
+pairs to bases). $A$ fixes $0$ and $u$, so it permutes the labels. The induced
+coordinate permutation multiplies syndromes by $A$, so it preserves the code
+and maps coset $s$ to coset $s'$. Lemma~\ref{lem:coset} finishes the proof.
+\end{proof}
+
+This agrees with the classical literature on uniformly packed codes
+(Semakov, Zinov'ev and Zaitsev; Goethals and van Tilborg), where extended and
+once-shortened Hamming codes are standard examples. Our proof does not depend
+on it. Shortened Hamming codes of other lengths are in general \emph{not}
+shell-uniform. For example, in $\mathrm{SH}(5)$ the words $e_1$ and $e_2$ are
+both at distance $1$ from the code, but only $e_1$ has a codeword at distance
+$5$, namely $e_2+e_3+e_4+e_5$ (Lean: \texttt{SH5\_not\_shellUniform}).
+
 \section{The disproof}
 \begin{corollary}\label{cor:main}
 Clause~\eqref{eq:clause} is false. In fact, already its ``only if'' direction
@@ -257,7 +347,20 @@ quasi-perfect with $d=4$. A code with $\rho=e+1$ in particular satisfies
 $\rho\le e+1$, so the non-strict reading is covered too.
 \end{proof}
 
-So the true spectrum is $\{n\ge 2\}$, and its complement $\{0,1\}$ is
+\begin{corollary}[uniform-shell reading]\label{cor:uniform}
+Clause~\eqref{eq:clause} is also false when ``quasi-perfect'' means
+uniform-shell quasi-perfect (Definition~\ref{def:uniform}). Such codes exist
+exactly for $n\ge 2$, by $\mathrm{EW}(n)$ and Proposition~\ref{prop:short}.
+Nontrivial ones exist for the infinitely many lengths $2^m-2$ ($d=3$) and $2^m$
+($d=4$), and none of these lengths has the form $2^k-1$.
+\end{corollary}
+\begin{proof}
+Use Theorem~\ref{thm:uniform}. Choose $n$ larger than $\max L$ exactly as in
+Corollary~\ref{cor:main}: $n=2(M+2)$ for $\mathrm{EW}$, $n=2^{M+3}-2$ for
+$\mathrm{SH}$, or $n=2^{M+2}$ for $\mathrm{EH}$.
+\end{proof}
+
+So the true spectrum is $\{n\ge 2\}$ under both readings, and its complement $\{0,1\}$ is
 finite. The proposed ``spectrum'' $\{2^k-1\}\cup L$ has density zero. The
 clause seems to confuse quasi-perfect codes with perfect codes. The lengths of
 nontrivial binary perfect codes do lie in $\{2^k-1\}\cup\{23\}$, and the binary
@@ -280,16 +383,17 @@ for $k\ge 2$ because of $\mathrm{EW}(2^k-1)$, and fails only at $n\in\{0,1\}$.)
 \item \textbf{The exceptional list.} $L$ is arbitrary and finite, which
 includes whatever the ``Levenshtein set'' is meant to be. The counterexample
 lengths form an infinite set (all even $n\ge 4$ already suffice).
-\item \textbf{The ``relaxed quasi-perfect (uniform shell)'' notion.} The
-preamble's notion is not precisely defined. Read it as ``$\rho=e+1$ and the
-number of codewords in each shell around a word depends only on that word's
-distance to the code''. Then $\mathrm{EH}(m)$ (Theorem~\ref{thm:eh}: shell
-counts $1$, $0$ and $N/2$) and $\mathrm{EW}(n)$ (Proposition~\ref{prop:ew}:
-shell count $n$) qualify. Their lengths, $2^m$ and all $n\ge 2$, again lie
-outside $\{2^k-1\}\cup L$ for infinitely many $n$. Shortened Hamming codes are
-in general \emph{not} uniformly packed, so under this reading the disproof
-rests on $\mathrm{EH}$ and $\mathrm{EW}$. The shell counts are proved above and
-checked by \texttt{verify.py}. They are not formalized in Lean.
+\item \textbf{The conjecture's uniform-shell notion.} This notion is handled
+by Definition~\ref{def:uniform}, Theorem~\ref{thm:uniform} and
+Corollary~\ref{cor:uniform}. In Lean, the even-weight family carries the
+refutation (\texttt{EW\_shellUniform}, \texttt{UQP\_spectrum},
+\texttt{conjecture\_00000007964\_false\_uniform}). The nontrivial uniform
+families $\mathrm{SH}(2^m-2)$ ($d=3$) and $\mathrm{EH}(m)$ ($d=4$) are proved
+uniform in the report and checked by \texttt{verify.py}. Weaker variants that
+constrain only some shells are implied.
+\item \textbf{The first conjunct.} The ``gap constant of the radius spectrum''
+is not defined in the conjecture. We do not address that conjunct, and the
+disproof does not need it.
 \item \textbf{Linear.} Our codes are $\F$-subspaces. Linearity is part of the
 Lean definition.
 \end{itemize}
@@ -326,14 +430,32 @@ other direction.
 \texttt{LevenshteinClause} is
 $\exists L$ \texttt{: List Nat}, $\forall n$, \texttt{QPLen n} $\iff$ ($(\exists k,\ n+1=2^k)\lor n\in L$).
 \item \texttt{onlyIf3\_false}, \texttt{onlyIf4\_false},
-\texttt{onlyIfWeak\_false} and \texttt{levenshteinAtLeast\_false}: the
-variants of Corollary~\ref{cor:main}.
+\texttt{onlyIf\_any\_false}, \texttt{onlyIfWeak\_false} and
+\texttt{levenshteinAtLeast\_false}: the variants of Corollary~\ref{cor:main}.
+\item Uniform-shell reading. The definitions are \texttt{DistTo C x r}
+($r$ is the distance from $x$ to $C$) and \texttt{ShellUniform n C}: for any
+two words of length $n$ at the same distance $r$ from $C$ and any $j$, there
+are maps $f,g$ between the two $j$-shells with $g\circ f=\mathrm{id}$ and
+$f\circ g=\mathrm{id}$ on them. Further, \texttt{UQPLen n} means that some
+code satisfies both \texttt{IsQP n C} and \texttt{ShellUniform n C}. The
+theorems are:
+\begin{itemize}
+\item \texttt{EW\_shellUniform}, for all $n$;
+\item \texttt{SH5\_not\_shellUniform}, which shows the condition is a genuine
+restriction;
+\item \texttt{UQP\_spectrum}: \texttt{UQPLen n} $\iff$ \texttt{2 <= n};
+\item \texttt{onlyIfUniform\_false}, and
+\texttt{conjecture\_00000007964\_false\_uniform}:
+$\neg$\,\texttt{LevenshteinClauseUniform}. This is the iff clause with
+\texttt{UQPLen}.
+\end{itemize}
 \end{itemize}
 The project contains no \texttt{sorry}, \texttt{native\_decide} or added
 axioms. \texttt{\#print axioms} reports only \texttt{propext},
-\texttt{Classical.choice} and \texttt{Quot.sound}. Not in Lean: the shell
-counts of Theorem~\ref{thm:eh} and Proposition~\ref{prop:ew}, the repetition
-codes, and the dimension formula.
+\texttt{Classical.choice} and \texttt{Quot.sound}. Not in Lean: the
+shell-uniformity of $\mathrm{EH}(m)$ and $\mathrm{SH}(2^m-2)$
+(Theorem~\ref{thm:uniform}(2),(3)), the shell counts of Theorem~\ref{thm:eh},
+the repetition codes, and the dimension formula.
 
 \section{Independent computer check}
 \texttt{verify.py} (Python standard library) works by brute force. It lists
@@ -350,6 +472,11 @@ length $16$.
 There are $1, 2, 5, 16, 67, 374, 2825, 29212$ of them, including $\{0\}$.
 Quasi-perfect codes exist exactly for $n\ge 2$ in this range. Those with
 $d\ge3$ exist for $n=4,5,6,7$ (5, 15, 107 and 1260 codes).
+\item Shell uniformity, via coset weight distributions grouped by minimum
+weight: $\mathrm{SH}(6)$, $\mathrm{SH}(14)$, $\mathrm{EH}(2)$,
+$\mathrm{EH}(3)$, $\mathrm{EH}(4)$ and $\mathrm{EW}(n)$ for $n\le 12$ are
+shell-uniform. Among $\mathrm{SH}(n)$ with $3\le n\le 14$, exactly
+$n\in\{3,6,7,14\}$ are shell-uniform. $\mathrm{SH}(5)$ is not.
 \item Lemma~\ref{lem:bit} for $k\le 12$.
 \end{itemize}
 

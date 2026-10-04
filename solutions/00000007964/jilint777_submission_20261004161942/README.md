@@ -2,44 +2,57 @@
 
 Among other things, the conjecture claims that **binary linear quasi-perfect codes of length `n`
 exist if and only if `n = 2^k − 1` or `n` lies in a finite exceptional list** (the "Levenshtein set").
-The conjecture is a conjunction, so refuting this clause refutes it. Its other conjunct, the
-"gap constant of the radius spectrum", is never defined and is not discussed here.
+The conjecture is a conjunction, so refuting this clause refutes it. Its first conjunct, the
+"gap constant of the radius spectrum", is never defined. We do not address it, and the disproof
+does not need it.
 
-A code is quasi-perfect when its covering radius is one more than its packing radius:
-`ρ = e + 1` with `e = ⌊(d−1)/2⌋`. This is the standard definition, written in the conjecture as
-"covering radius r+1". The clause is false because quasi-perfect codes exist for **every** length
-`n ≥ 2`:
+**Which notion of quasi-perfect.** The conjecture defines a *stronger* notion than the textbook one.
+Its preamble asks for covering radius `r + 1` (with `r = e`, the packing radius) **and** a "tight
+uniform shell distribution". We treat both readings:
 
-- **Shortened Hamming codes** (`d = 3`). Take parity-check columns equal to the binary expansions
-  of `1, …, n`. For every `n ≥ 3` with `n + 1` not a power of 2, this code has `d = 3`, `e = 1` and
-  covering radius `2`. Write `2^k ≤ n < 2^(k+1)`. Every syndrome `s < 2^(k+1)` is `0`, a single
-  column, or the sum of the two columns `2^k` and `s ⊕ 2^k`. The syndrome `2^(k+1) − 1 > n` is not
-  `0` and not a single column.
-- **Extended Hamming codes** of length `2^m`, `m ≥ 2` (`d = 4`, covering radius `2`). These have
-  uniform shells: a word at distance 2 from the code has exactly `2^(m−1)` codewords at distance 2,
-  and a word at distance 1 has exactly 1 codeword at distance 1.
-- **Even-weight codes** of every length `n ≥ 2` (`d = 2`, `e = 0`, covering radius `1`). Each
-  odd-weight word has exactly `n` codewords at distance 1.
-- No length `n ≤ 1` works, so the spectrum is exactly `{n ≥ 2}`.
+1. **Standard:** covering radius `ρ = e + 1`, where `e = ⌊(d−1)/2⌋`.
+2. **The conjecture's uniform-shell notion:** `ρ = e + 1`, and the code is *shell-uniform*. That is,
+   any two words at the same distance from the code have equally many codewords at distance `j`,
+   for every `j`. This constrains every shell, which is the strongest reasonable form.
+
+Under **both** readings, such codes exist for exactly the lengths `n ≥ 2`. So the clause is false.
+
+**Code families.**
+
+- **Shortened Hamming codes `SH(n)`** (`d = 3`). Take parity-check columns equal to the binary
+  expansions of `1, …, n`. For every `n ≥ 3` with `n + 1` not a power of 2, this code has `d = 3`,
+  `e = 1` and covering radius `2`.
+- **Once-shortened Hamming codes `SH(2^m − 2)`, `m ≥ 3`.** These are also shell-uniform. The linear
+  maps fixing the all-ones syndrome act transitively on the weight-1 cosets.
+- **Extended Hamming codes** of length `2^m`, `m ≥ 2` (`d = 4`, covering radius `2`). These are
+  shell-uniform because the affine group `AGL(m,2)` acts transitively on the cosets of each minimum
+  weight.
+- **Even-weight codes** of every length `n ≥ 2` (`d = 2`, covering radius `1`). These are
+  shell-uniform via the explicit bijection `c ↦ c ⊕ x ⊕ y`.
+- No length `n ≤ 1` works.
 
 Take any finite list `L` and choose an even `n > max L` with `n ≥ 4`. Then `n + 1` is odd and
-`≥ 5`, so `n` is not of the form `2^k − 1`, and `n ∉ L`. Still, `SH(n)` is quasi-perfect with `d = 3`.
+`≥ 5`, so `n` is not of the form `2^k − 1`, and `n ∉ L`. Yet `SH(n)` (d = 3) and `EW(n)`
+(shell-uniform) are quasi-perfect codes of length `n`.
 
-**Readings covered.** The disproof refutes the strict reading `ρ = e + 1` and the non-strict reading
-`ρ ≤ e + 1`. It also refutes the versions that count only codes with `d ≥ 3` or `d ≥ 4`, so it does
-not rely on "trivial codes". Only the "only if" direction is needed, with `k` unrestricted, so every
-restriction on `k` is covered too. `L` can be any finite list. Under the "relaxed, uniform shell"
-reading in the preamble, the extended Hamming and even-weight families still apply. Both are
-infinite and lie outside `{2^k − 1}`. Shortened Hamming codes are generally not uniformly packed,
-so this reading relies on those two families.
+**Readings covered.**
+
+- Both the strict reading `ρ = e + 1` and the non-strict reading `ρ ≤ e + 1`.
+- The uniform-shell notion.
+- Counting only codes with `d ≥ 3` or `d ≥ 4`, so the disproof does not rely on trivial codes. Under
+  the uniform-shell reading, this holds on paper and in `verify.py`, using `SH(2^m − 2)` and
+  extended Hamming codes.
+- `k` unrestricted, since only the "only if" direction is used.
+- Any finite list `L`.
 
 ## Contents
 
 - `report.tex`, `report.pdf`: the complete mathematical report.
 - `lean4/`: a self-contained Lean 4.19.0 project (core library only, no Mathlib).
-- `verify.py`: an independent brute-force check using only the Python 3 standard library. It lists
-  codewords explicitly and gets covering radii from a BFS on the hypercube. It also enumerates all
-  29212 binary linear codes of length 7, and all shorter ones.
+- `verify.py`: an independent brute-force check using only the Python 3 standard library.
+  - Codewords are listed explicitly, and covering radii come from a BFS on the hypercube.
+  - Shell uniformity is checked through coset weight distributions grouped by minimum weight.
+  - It also enumerates all 29212 binary linear codes of length 7, and all shorter ones.
 - `verification.txt`: the fresh build log, the forbidden-token scan and the Python output.
 
 ## Lean
@@ -49,26 +62,41 @@ Words are `List Bool`, and codes are predicates `List Bool → Prop`. The defini
 - `IsLinear n C`: an F₂-subspace of F₂ⁿ.
 - `MinDist C d` and `CovRad n C r`: the attained minimum distance and covering radius, proved
   unique by `minDist_unique` and `covRad_unique`.
-- `IsQP n C`: linear, and the covering radius is `(d−1)/2 + 1`.
+- `IsQP n C`: linear, and the covering radius is `(d−1)/2 + 1`. `QPLen n` means such a code of
+  length `n` exists.
+- `DistTo C x r`: `r` is the distance from `x` to `C`.
+- `ShellUniform n C`: for any `x`, `y` of length `n` at the same distance from `C` and any `j`,
+  there are maps `f`, `g` between their `j`-shells with `g ∘ f = id` and `f ∘ g = id`.
+  `UQPLen n := ∃ C, IsQP n C ∧ ShellUniform n C`.
 
 The theorems are:
 
-- `SH_quasiPerfect`: for all `n ≥ 3` with `n+1 ≠ 2^k`, the shortened Hamming code `SH n` is linear
-  with `MinDist 3` and `CovRad 2`.
-- `EH_quasiPerfect`: for all `m ≥ 2`, the extended Hamming code is linear with `MinDist 4` and
-  `CovRad 2`.
+- `SH_quasiPerfect`: for all `n ≥ 3` with `n+1 ≠ 2^k`, `SH n` has `MinDist 3` and `CovRad 2`.
+- `EH_quasiPerfect`: for all `m ≥ 2`, the extended Hamming code has `MinDist 4` and `CovRad 2`.
 - `EW_quasiPerfect`: for all `n ≥ 2`, the even-weight code is quasi-perfect.
-- `hamming_not_QP`: the Hamming codes of length `2^m − 1` (`m ≥ 3`) are perfect, so they are
-  **not** quasi-perfect. This is a non-vacuity check.
+- `hamming_not_QP`: the Hamming codes are perfect, so they are not quasi-perfect. This is a
+  non-vacuity check.
 - `QP_spectrum : QPLen n ↔ 2 ≤ n`.
 - `conjecture_00000007964_false : ¬ LevenshteinClause`, where
   `LevenshteinClause := ∃ L : List Nat, ∀ n, QPLen n ↔ ((∃ k, n + 1 = 2^k) ∨ n ∈ L)`.
-- `onlyIf3_false`, `onlyIf4_false`, `onlyIfWeak_false` and `levenshteinAtLeast_false`: even the
-  "only if" direction fails. It still fails when only codes with `d ≥ 3` or `d ≥ 4` count, and when
-  perfect codes are allowed.
+- `onlyIf3_false`, `onlyIf4_false`, `onlyIf_any_false`, `onlyIfWeak_false` and
+  `levenshteinAtLeast_false`: even the "only if" direction fails. It still fails when only codes
+  with `d ≥ 3` or `d ≥ 4` count, and when perfect codes are allowed.
+- Uniform-shell notion:
+  - `EW_shellUniform`, for all `n`.
+  - `SH5_not_shellUniform`: `ShellUniform` is a genuine restriction.
+  - `UQP_spectrum : UQPLen n ↔ 2 ≤ n`.
+  - `onlyIfUniform_false`.
+  - `conjecture_00000007964_false_uniform : ¬ LevenshteinClauseUniform`, which is the iff clause
+    with `UQPLen`.
 
-**Not in Lean.** The shell-count (uniform packing) statements, the repetition codes and the
-dimension formula are not formalized. The report proves them and `verify.py` checks them.
+**Not in Lean.** These are proved in the report and checked by `verify.py`:
+
+- the shell uniformity of the extended Hamming codes and of `SH(2^m − 2)`, so the `d ≥ 3` and
+  `d ≥ 4` versions of the uniform-shell refutation are on paper and in `verify.py` only;
+- the explicit shell counts;
+- the repetition codes;
+- the dimension formula.
 
 The project has no `sorry`, no `native_decide` and no added axioms. `#print axioms` shows at most
 `propext`, `Classical.choice` and `Quot.sound`.
@@ -83,21 +111,23 @@ pdflatex report.tex && pdflatex report.tex
 
 ## 中文说明
 
-猜想的第二部分断言：二元线性 quasi-perfect 码（覆盖半径 = 填充半径 `e = ⌊(d−1)/2⌋` 加 1）在长度 `n`
-存在，当且仅当 `n = 2^k − 1` 或 `n` 属于某个有限例外列表。该断言是错误的。猜想是合取命题，所以否定这一部分即否定整个猜想。第一部分的“间隙常数”没有给出定义，本文不讨论。
+猜想的第二部分断言：二元线性 quasi-perfect 码在长度 `n` 存在，当且仅当 `n = 2^k − 1` 或 `n` 属于某个有限例外列表。该断言是错误的。猜想是合取命题，所以否定这一部分即否定整个猜想。第一部分的“间隙常数”没有给出定义，本文不讨论，否定也不依赖它。
 
-- **缩短 Hamming 码**：校验矩阵的列取 `1, …, n` 的二进制表示。对每个 `n ≥ 3` 且 `n+1` 不是 2 的幂，
-  该码满足 `d = 3`、`e = 1`、覆盖半径 `2`，因此是 quasi-perfect 码。
-- **扩展 Hamming 码**：长度 `2^m`（`m ≥ 2`），`d = 4`，覆盖半径 `2`，且壳层分布完全均匀。
-- **偶重码**：对每个长度 `n ≥ 2`，`d = 2`，覆盖半径 `1`。
-- 长度 `n ≤ 1` 不存在这样的码。因此 quasi-perfect 码的长度谱恰为 `{n ≥ 2}`。
+猜想本身的定义比教科书定义更强：要求覆盖半径为 `e+1`（`e` 为填充半径），并且具有“紧壳均匀分布”。我们处理两种解读：
 
-对任意有限列表 `L`，取偶数 `n > max L` 且 `n ≥ 4`。此时 `n+1` 是奇数且不是 2 的幂，`n ∉ L`，
-但 `SH(n)` 是 `d = 3` 的 quasi-perfect 码，矛盾。
+1. 标准解读：`ρ = e + 1`。
+2. 猜想自己的“壳层均匀”解读：此外，到码距离相同的任意两个字，在每个半径 `j` 的壳层中码字个数相同（最强形式）。
 
-覆盖的解读：严格解读（`ρ = e+1`）与非严格解读（`ρ ≤ e+1`）；只计 `d ≥ 3` 或 `d ≥ 4` 的码；`k` 的任意取值范围；任意有限例外集。
-按“松弛（均匀壳层）”的解读，扩展 Hamming 码与偶重码两个无穷族仍构成反例。
+在两种解读下，这类码都恰好存在于所有长度 `n ≥ 2`。
 
-Lean 4（仅核心库）从零定义了线性码、最小距离、覆盖半径和 quasi-perfect，并证明了上述三个族、长度谱 `QPLen n ↔ 2 ≤ n`，
-以及主定理 `conjecture_00000007964_false : ¬ LevenshteinClause`。壳层计数、重复码和维数公式未在 Lean 中形式化，
-由报告给出证明，并由 `verify.py` 检验。
+- 缩短 Hamming 码：对每个 `n ≥ 3` 且 `n+1` 不是 2 的幂，`d = 3`，覆盖半径 `2`。其中长度 `2^m − 2` 的码还满足壳层均匀。
+- 扩展 Hamming 码：长度 `2^m`，`d = 4`，壳层均匀。
+- 偶重码：对每个 `n ≥ 2` 均为壳层均匀的 quasi-perfect 码。
+
+Lean 4（仅核心库）从零定义了线性码、最小距离、覆盖半径、quasi-perfect 以及壳层均匀 `ShellUniform`（以显式双射表述），并证明了：
+
+- 长度谱 `QP_spectrum`、`UQP_spectrum`（都是 `↔ 2 ≤ n`）；
+- 主定理 `conjecture_00000007964_false` 与 `conjecture_00000007964_false_uniform`；
+- `SH5_not_shellUniform`，说明壳层均匀条件确实是实质性的限制。
+
+扩展 Hamming 码和 `SH(2^m−2)` 的壳层均匀性未在 Lean 中形式化，由报告给出证明（仿射群在每种最小重量的陪集上可迁），并由 `verify.py` 检验。
