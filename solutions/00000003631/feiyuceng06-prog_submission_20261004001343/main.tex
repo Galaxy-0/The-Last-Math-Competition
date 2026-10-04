@@ -1,0 +1,71 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\conjid}{00000003631}
+
+\title{A Homogeneous Quadratic Star Field Has Five Invariant Lines\\[0.4em]\large The Last Math Competition, Conjecture \conjid}
+\author{Feiyu\\ \small Independent researcher}
+\date{2026-10-04}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The homogeneous quadratic vector field $P(x,y)=x^2$, $Q(x,y)=xy$ has every line through the origin as an invariant line. In particular, five pairwise distinct such lines contradict the conjectured upper bound of four. The example has degree exactly two, so it belongs to the stated class without relying on a lower-degree degeneration.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original text of conjecture \conjid{} reads:
+
+\begin{quote}
+Definition: Invariant lines of quadratic systems: the algebraic-curve side. Conjecture: The count of invariant lines: the maximal number of invariant lines of quadratic systems is four, realized as complete grids. (quadratic invariant line complete grid maximal four)
+\end{quote}
+
+\section{Reading of the statement}
+
+% If the statement is ambiguous, under-specified, or contains an error, say so
+% HERE and fix a precise reading. State explicitly which reading is being
+% settled and why it is the faithful one. Do not silently repair the statement.
+
+We read a quadratic system in the literal polynomial sense: its two components have degree at most two, and the claimed maximum is an upper bound for the number of its invariant straight lines. The counterexample below is homogeneous of degree exactly two, so it also refutes any reading that requires exact degree two. The source gives no general-position or nondegeneracy hypothesis that excludes a star point. The Chinese version in the conjecture file asserts the same numerical maximum of four; the same example refutes it.
+
+\section{Result}
+
+% State exactly what is established: proved, disproved, or partially resolved.
+
+The asserted maximum of four is false. A single exact-degree-two system has at least five distinct invariant lines, and in fact has infinitely many.
+
+\section{Proof}
+
+Consider the vector field $X=(P,Q)=(x^2,xy)$. For any real numbers $a,b$, let $L(x,y)=ax+by$ be a nonzero linear form. Its derivative along the field is
+\[
+X(L)=P\,\partial_x L+Q\,\partial_y L=ax^2+bxy=x(ax+by)=xL.
+\]
+Thus the vector field is tangent to the line $L=0$ at every point on that line, so every line through the origin is invariant. In particular, the five forms $x$, $y$, $x+y$, $x+2y$, and $x-y$ define pairwise distinct lines. Since $P$ and $Q$ are homogeneous quadratic polynomials and $P$ is nonzero, the system has degree exactly two.
+
+\section{Formalization}
+
+The Lean 4 formalization against Mathlib is in \verb|lean/Submission/Basic.lean|. It defines the coefficients of a homogeneous quadratic vector field, the polynomial divisibility criterion for an invariant line, and the assertion that no five pairwise distinct invariant lines exist. The theorems \verb|starSystem_exact|, \verb|fiveLines_pairwise_distinct|, and \verb|fiveLines_are_invariant| certify the exact degree, distinctness, and invariance of the example. The main theorem \verb|conjecture_00000003631_false| refutes the universal upper-bound statement. The file prints the theorem's axiom dependencies and introduces no custom axioms.
+
+\section{Remarks}
+
+% Optional: what the truth is likely to be, what stays open, why the original
+% statement went wrong, what a repaired conjecture should say.
+
+The example is a star field: its radial factor causes every line through the origin to be invariant. Consequently, a finite maximum of four requires additional hypotheses that rule out this behavior; no such restriction appears in the conjecture as stated.
+
+\end{document}
