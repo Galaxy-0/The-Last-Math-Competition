@@ -1,0 +1,133 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,lmodern}
+\setlength{\emergencystretch}{2em}
+\begin{document}
+\begin{center}
+{\Large Finite edge graphs cannot realize every real value}\\[4pt]
+{\large Disproof of Conjecture 00000008883}\\[6pt]
+ziangni-sys \qquad 4 October 2026
+\end{center}
+\section*{The finite-realization clause}
+Both originals assert that every real surreal can be realized by a
+finite edge graph in blue-red Hackenbush. We disprove this clause by a
+cardinality obstruction that applies to every possible deterministic
+value rule on finite grounded colored graphs. It does not require a
+formula for Hackenbush values or an analysis of infinite positions.
+
+A blue-red Hackenbush position is an abstract colored graph with a
+ground set: a player removes an edge of the appropriate color, after
+which edges disconnected from ground disappear. Only edge incidence,
+colors and grounding affect the game. Relabeling vertices or edges and
+redrawing the same graph do not change the legal moves or the game
+value. Distinct real numbers represent distinct real surreals, so
+realizing all real surreals would require realizing all real numbers as
+values of these positions.
+
+\section*{Exhaustive finite descriptions}
+Allow a grounded multigraph with any finite edge set $E$, any vertex
+set $V$, endpoint maps $s,t:E\to V$, edge colors $b:E\to\{0,1\}$,
+and ground flags $a:V\to\{0,1\}$. This includes parallel edges and
+loops, so we do not obtain a bound by restricting to simple graphs.
+The vertex set itself need not be finite. Its incident support is
+\[
+ S=s(E)\cup t(E),
+\]
+a finite set. Restricting to $S$ retains every edge and both endpoints,
+all edge colors, and the ground status of every incident vertex.
+Vertices outside $S$ have no incident edge and can never provide a
+move or a connection between edges. Removing them changes no play.
+This also handles the source's wording ``finite edges'' without silently
+assuming a finite vertex set.
+
+Enumerate $S$ and $E$ as $\{0,\ldots,v-1\}$ and
+$\{0,\ldots,e-1\}$. The normalized graph becomes a finite description
+consisting of
+\[
+ s,t:\mathrm{Fin}(e)\to\mathrm{Fin}(v),\quad
+ b:\mathrm{Fin}(e)\to\{0,1\},\quad
+ a:\mathrm{Fin}(v)\to\{0,1\}.
+\]
+For fixed $v,e$ there are finitely many such descriptions
+($v^{2e}2^{e+v}$, with the usual empty-function conventions).
+Taking the union over all natural $v,e$ gives a countable type $D$.
+The labeling is exhaustive: any finite-edge position first normalizes
+as above and then has one of these descriptions, with all incidence,
+color and ground data preserved. Any disconnected or initially
+unplayable description only enlarges this countable set.
+
+\section*{No value rule can cover the reals}
+The real numbers are uncountable. Hence no function $D\to\mathbb R$
+is surjective. Even if some descriptions do not have a real value,
+the subtype of descriptions that do is still countable, so no partial
+real-value rule can be surjective either.
+Equivalently, for any relation $R(d,r)$ in which a description has at
+most one real value, the assertion
+$\forall r\in\mathbb R\ \exists d\in D\ R(d,r)$ is false.
+A Hackenbush position has one game value, and isomorphic descriptions
+have the same value. Thus the conjectured realization of every real
+surreal by finite edge graphs would give exactly this impossible
+coverage. The finite-realization clause is false, irrespective of the
+separate claimed correspondence for infinite Hackenbush.
+
+\newpage
+\section*{Formal model and completeness}
+\raggedright
+Lean defines actual graph data \texttt{Graph V E} by endpoint maps,
+Boolean edge colors and Boolean ground flags. The edge type is
+independent of endpoints, so multiple edges are genuinely allowed.
+\texttt{Description v e} contains these same maps over actual finite
+index types. The full description type is a dependent sum over all
+natural vertex and edge counts, not a bounded collection.
+Mathlib's countability handler encodes each fixed-size description,
+and countability instances cover the dependent sum.
+
+\texttt{IsRelabelling} explicitly requires both endpoint equations,
+the color equation for every edge, and the ground equation for every
+vertex, under actual vertex and edge bijections.
+\texttt{describe\_preserves\_everything} constructs finite index
+representations for arbitrary finite vertex and edge types and proves
+all these equations. No completeness of labeling is assumed.
+
+To cover arbitrary vertex sets, \texttt{support} is the actual finite
+union of endpoint images. The source/target support theorems prove that
+every endpoint lies there. \texttt{normalize} uses the actual subtype
+of incident vertices and retains the same edge type and colors.
+\texttt{normalization\_preserves\_incidence} proves all endpoint,
+color and ground-flag equalities after forgetting the subtype labels.
+\texttt{exhaustive\_finite\_edge\_representation} combines this
+normalization with finite enumeration. It quantifies over every vertex
+type and every finite edge type and produces a finite description plus
+actual vertex/edge equivalences satisfying the full relabeling condition.
+
+\section*{Formal cardinal contradiction}
+The type \texttt{FiniteDescription} is proved countable.
+\texttt{no\_value\_assignment\_realizes\_all\_reals} proves that
+\emph{every} function from that type to the actual real numbers is
+nonsurjective. \texttt{omitted\_real} gives an omitted real for each
+such function. \texttt{no\_partial\_value\_assignment} covers any
+subtype of eligible descriptions, so real-valuedness of every position
+is not a hidden premise.
+
+The theorem \texttt{no\_functional\_realization\_covers\_all\_reals}
+quantifies over any realization relation with at most one real value
+per description and negates coverage of all reals. Its proof selects
+the unique value on eligible descriptions; full coverage would make
+that selected map surjective, contradicting the preceding theorem.
+This is a universal necessary-condition disproof: no special
+Hackenbush evaluation table, dyadic-value theorem, or desired
+nonsurjectivity is assumed. The graph semantics supplies only the
+ordinary uniqueness of a position's value and invariance under
+relabeling/removal of vertices incident to no edge, justified above.
+
+\section*{Verification}
+The project uses Lean 4.19.0 with pinned Mathlib commit
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+Axiom audits of exhaustive representation, nonsurjectivity, the omitted
+real theorem and the realization-relation obstruction use only
+\texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
+No admitted proofs, additional axioms, native evaluation shortcuts or
+auxiliary computation are used. The complete graph model includes all
+finite sizes and arbitrary grounding; labeling artifacts or drawing
+geometry cannot add real-valued game information.
+\end{document}
