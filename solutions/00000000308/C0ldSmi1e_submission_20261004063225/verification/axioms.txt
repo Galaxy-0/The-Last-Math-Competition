@@ -1,0 +1,21 @@
+def Conjecture308.BadC : Set ℂ :=
+{z |
+  ∃ c,
+    0 < c ∧
+      ∀ (p q : GaussianInt),
+        q ≠ 0 → c / ‖GaussianInt.toComplex q‖ ^ 2 ≤ ‖z - GaussianInt.toComplex p / GaussianInt.toComplex q‖}
+def Conjecture308.realLine : ℂ → ℂ → Set ℂ :=
+fun a v => {z | ∃ t, z = a + ↑t * v}
+def Conjecture308.lineEmptinessClaim : Prop :=
+∀ (a v : ℂ), v ≠ 0 → Conjecture308.BadC ∩ Conjecture308.realLine a v = ∅
+Conjecture308.gaussian_sqrt_two_approximation_bound (p q : GaussianInt) (hq : q ≠ 0) :
+  1 / 4 / ‖GaussianInt.toComplex q‖ ^ 2 ≤ ‖↑√2 - GaussianInt.toComplex p / GaussianInt.toComplex q‖
+Conjecture308.conjecture308_disproof : ¬Conjecture308.lineEmptinessClaim
+'Conjecture308.real_sqrt_two_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture308.gaussian_sqrt_two_linear_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture308.gaussian_sqrt_two_approximation_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture308.sqrt_two_mem_BadC' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture308.realAxis_eq_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture308.sqrt_two_mem_realAxis' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture308.bad_inter_realAxis_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture308.conjecture308_disproof' depends on axioms: [propext, Classical.choice, Quot.sound]
