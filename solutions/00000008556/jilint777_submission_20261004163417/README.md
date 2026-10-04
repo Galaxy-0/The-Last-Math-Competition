@@ -86,6 +86,8 @@ Main theorems:
   ∧ an arbitrary predicate `C2` ∧ claim 3 stated for `FixedAut`.
 - `no_lengths_fit`: no integers `L₂, L₃` and no base `b` satisfy `b^L₂ = p(2)` and
   `b^L₃ = p(3)`.
+  It uses only n = 2, 3, so it covers every reading with integer chain lengths, including readings that
+  exclude n = 1: the fixed lattice of a single automorphism, the S_n-orbit poset, or a quotient lattice.
 - Non-vacuity:
   - `natSys` and `intSys` are number systems;
   - `act_isAut` shows that `IsAut` is satisfiable;
