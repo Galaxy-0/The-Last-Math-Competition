@@ -1,0 +1,117 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{proposition}{Proposition}
+\newcommand{\qN}{q_N}
+\title{A repeated interlace root below $-4$\\\large Disproof of conjecture 00000003474}
+\author{gaochengzhecpu}
+\date{October 4, 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Result.} For the disjoint union $G=P_5\sqcup P_5$ of two
+five-vertex paths, the original one-variable interlace polynomial is
+\[
+ \qN(G;x)=x^2(x^2+5x+2)^2.
+\]
+Consequently $r=(-5-\sqrt{17})/2<-4$ is a multiple real root. This contradicts
+the conjecture's first clause, that all multiple roots lie in $[-4,0]$.
+
+\paragraph{Definition and scope.}
+We use the original single-variable interlace polynomial of
+Arratia, Bollob\'as, and Sorkin~\cite{ABS}, subsequently called the
+\emph{vertex-nullity interlace polynomial}. It is characterized on finite
+simple graphs by
+\begin{equation}\label{eq:rec}
+ \qN(E_n;x)=x^n,\qquad
+ \qN(H;x)=\qN(H-a;x)+\qN(H^{ab}-b;x)\quad(ab\in E(H)).
+\end{equation}
+Here $E_n$ is edgeless. For the ABS pivot $H^{ab}$, divide the other vertices
+into those adjacent to $a$ only, $b$ only, both, or neither; toggle edges
+between different classes among the first three. Incidences at $a,b$ remain
+unchanged. The two source languages do not specify a different interlace
+variant or restrict to connected graphs. The counterexample uses this
+standard original convention, with no claim about a different polynomial.
+
+\begin{proposition}
+The graph $G=P_5\sqcup P_5$ has a multiple real interlace root outside $[-4,0]$.
+\end{proposition}
+\begin{proof}
+Write $p_n=\qN(P_n;x)$, where $P_n$ has $n$ vertices and $p_0=1$.
+Pivoting on an end edge $ab$, with $a$ the leaf, changes no edges.
+Deleting $a$ leaves $P_{n-1}$; deleting $b$ leaves an isolated $a$ and
+$P_{n-2}$. The polynomial is multiplicative on disjoint unions
+\cite[Remark 16]{ABS}, giving $p_n=p_{n-1}+xp_{n-2}$ for $n\ge2$.
+Starting with $p_1=x$ gives
+\[
+ p_2=2x,\quad p_3=x^2+2x,\quad
+ p_4=3x^2+2x,\quad p_5=x^3+5x^2+2x.
+\]
+Multiplicativity now yields $\qN(G;x)=p_5^2=x^2(x^2+5x+2)^2$.
+The quadratic has root $r=(-5-\sqrt{17})/2$. Since $17>9$, we have
+$\sqrt{17}>3$ and hence $r<-4$. Its other root differs from $r$ and
+$r\ne0$, so $r$ has multiplicity exactly two in $\qN(G;x)$.
+One false necessary clause already disproves the full conjecture; its
+additional embedding and link-spectrum clauses are not needed.
+\end{proof}
+
+\newpage
+\paragraph{Lean verification.}
+The accompanying Lean 4.19.0 project, with Mathlib pinned to commit
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}, contains:
+\begin{itemize}
+ \item actual Boolean adjacency matrices on $\mathrm{Fin}(5)$ and
+ $\mathrm{Fin}(10)$, with symmetry and absence of loops checked;
+ \item vertex deletion, the ABS pivot, and the total recursion
+ \eqref{eq:rec}, choosing the first edge in lexicographic order;
+ \item kernel-checked evaluation of that recursion on both graphs,
+ proving the two polynomial identities above;
+ \item proofs that the ten-vertex polynomial is nonzero, that
+ $(X-r)^2$ divides it over $\mathbb R$, and that $r<-4$;
+ \item a theorem negating the universal real multiple-root location claim
+ for this interlace polynomial.
+\end{itemize}
+To keep finite graph evaluation small, an auxiliary recursion records the
+orders of the edgeless leaves. A general Lean theorem proves that the sum
+of their monomials equals the polynomial recursion. Ordinary
+\texttt{decide} checks the finite reduction lists; polynomial algebra is
+proved by kernel-checked tactics. There is no use of \texttt{native\_decide},
+unfinished proof, or custom axiom.
+
+\paragraph{Formalization boundary.}
+The Lean definition directly implements the published original pivot
+recursion. The general theorem that its value is independent of pivot
+order, and its equivalence to the subset-nullity expression below, are
+the established results cited in \cite{ABS,ABS2}; they are not re-proved
+in this file. No hypothesis assigning a precomputed polynomial to $G$
+is assumed. The formal multiple-root certificate proves multiplicity at
+least two, which is all the disproof requires; the exact multiplicity
+statement follows from the elementary factorization in the paper.
+
+\paragraph{Independent exact computation.}
+The pure-Python check enumerates all induced vertex subsets and computes
+their adjacency-matrix ranks over $\mathbb F_2$, using
+\[
+ \qN(H;x)=\sum_{S\subseteq V(H)}(x-1)^{\dim\ker A_H[S]}.
+\]
+For $P_5$, the numbers of subsets of nullities $0,1,2,3$ are respectively
+$8,15,8,1$. Expanding gives $x^3+5x^2+2x$. For $G$, all $1024$ subsets are
+checked, giving ascending coefficients
+$(0,0,4,20,29,10,1)$, exactly the square of the path polynomial.
+This computation is supplementary and is not imported as a Lean axiom.
+
+\begin{thebibliography}{9}\small
+\bibitem{ABS} R.~Arratia, B.~Bollob\'as, and G.~B.~Sorkin,
+\emph{The interlace polynomial of a graph},
+J. Combin. Theory Ser. B \textbf{92} (2004), 199--233.
+Definition 5, Theorem 12, and Remark 16.
+\href{https://arxiv.org/abs/math/0209045}{arXiv:math/0209045}.
+\bibitem{ABS2} R.~Arratia, B.~Bollob\'as, and G.~B.~Sorkin,
+\emph{A two-variable interlace polynomial},
+Combinatorica \textbf{24} (2004), 567--584, Section 4.
+\href{https://arxiv.org/abs/math/0209054}{arXiv:math/0209054}.
+\end{thebibliography}
+\end{document}
