@@ -1,0 +1,292 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\title{Two Cubic Perron Numbers with Different Minimal Matrix Sizes:\\
+A Disproof of Conjecture 00000009611}
+\author{GitHub: gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+The source asserts that the minimal size of a nonnegative integer matrix
+realising a Perron number $\lambda$ as the entropy of a mixing subshift
+of finite type is a function $f(d)$ of the algebraic degree $d$ of
+$\lambda$, and that $f(d)=d$ exactly when the minimal polynomial is
+sign-alternating. We exhibit two Perron numbers of degree $3$: the real
+root $x$ of $X^3-X-1$, whose minimal size is $3$, and the real root $y$
+of $X^3+X^2-3X-4$, whose minimal size is $4$. So no such function $f$
+exists. The minimal polynomial of $x$ is not sign-alternating although
+its minimal size equals its degree, so the stated criterion fails as
+well. All of this is verified in Lean with Mathlib.
+\end{abstract}
+
+\section*{Reading of the source}
+Let $A$ be an $n\times n$ matrix with entries in $\mathbb{Z}_{\ge 0}$,
+$n\ge 1$. It is \emph{primitive} if some power $A^k$, $k\ge 1$, has all
+entries positive; the subshift of finite type $X_A$ is mixing exactly
+in this case. A primitive matrix has a unique eigenvalue with an
+entrywise positive eigenvector, its Perron eigenvalue $\lambda_A$; this
+is its spectral radius, and the entropy of $X_A$ is $\log\lambda_A$.
+A \emph{Perron number} is a real algebraic integer $\lambda\ge 1$ that
+is strictly larger than the modulus of each of its other conjugates.
+By Lind's theorem the Perron numbers are exactly the numbers
+$\lambda_A$.
+
+We say that $\lambda$ is \emph{realised in size $n$} if
+$\lambda=\lambda_A$ for a primitive $n\times n$ matrix $A$ over
+$\mathbb{Z}_{\ge 0}$, and we write $m(\lambda)$ for the least such $n$.
+The degree $d(\lambda)$ is the degree of the minimal polynomial of
+$\lambda$ over $\mathbb{Q}$. The source makes two claims.
+\begin{itemize}
+\item[(C1)] There is a function $f$ with $m(\lambda)=f(d(\lambda))$ for
+every Perron number $\lambda$.
+\item[(C2)] $f(d)=d$ if and only if the coefficients of the minimal
+polynomial of $\lambda$ are sign-alternating. Since the right-hand side
+depends on $\lambda$, we read this for each $\lambda$ separately:
+$m(\lambda)=d(\lambda)$ if and only if the minimal polynomial of
+$\lambda$ is sign-alternating.
+\end{itemize}
+The English and the Chinese text agree. We refute (C1), and we refute
+the implication from left to right in (C2).
+
+\section*{Statement}
+\begin{theorem}\label{main}
+Let $x$ be the real root of $X^3-X-1$ and let $y$ be the real root of
+$X^3+X^2-3X-4$ in the interval $[9/5,2]$. Then
+\begin{enumerate}
+\item $x$ and $y$ are Perron numbers of degree $3$;
+\item $m(x)=3$;
+\item $m(y)=4$. Moreover $y$ is not an eigenvalue of any matrix of size
+at most $3$ with entries in $\mathbb{Z}_{\ge 0}$, primitive or not.
+\end{enumerate}
+\end{theorem}
+\begin{corollary}
+Claim \textup{(C1)} is false: a function $f$ would satisfy $f(3)=3$ and
+$f(3)=4$. The implication $m(\lambda)=d(\lambda)\Rightarrow$
+sign-alternating of \textup{(C2)} is false: $m(x)=d(x)=3$, and the
+coefficients of $X^1$ and $X^0$ in $X^3-X-1$ are both $-1$.
+\end{corollary}
+Numerically $x\approx 1.3247$ and $y\approx 1.8312$.
+
+\section*{Proof}
+\begin{lemma}\label{spec}
+Let $A$ be an $n\times n$ matrix over $\mathbb{Z}_{\ge 0}$ and let
+$v\in\mathbb{R}^n$ have positive entries with $Av=\lambda v$.
+\begin{enumerate}
+\item Every complex eigenvalue $\mu$ of $A$ satisfies
+$|\mu|\le\lambda$.
+\item Let $N_k=\sum_{i,j}(A^k)_{ij}$ be the number of paths of length
+$k$ in the graph of $A$. There are constants $c,C>0$ with
+$c\lambda^k\le N_k\le C\lambda^k$ for all $k$. If $A$ is primitive, then
+$\lambda>0$ and $\frac1k\log N_k\to\log\lambda$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Let $Aw=\mu w$ with $w\ne 0$, and choose $i$ with $|w_i|/v_i$
+maximal; call this maximum $t>0$. Then $|w_j|\le t v_j$ for all $j$ and
+\[
+ |\mu|\,|w_i|=\Bigl|\sum_j A_{ij}w_j\Bigr|\le\sum_j A_{ij}|w_j|
+ \le t\sum_j A_{ij}v_j=t\lambda v_i=\lambda|w_i| .
+\]
+Since $|w_i|>0$, this gives $|\mu|\le\lambda$.
+
+(2) From $A^kv=\lambda^kv$ we get
+$\sum_{i,j}(A^k)_{ij}v_j=\lambda^k S$ with $S=\sum_i v_i$. With
+$a=\min v_j$ and $b=\max v_j$ this gives
+$aN_k\le\lambda^kS\le bN_k$, so $c=S/b$ and $C=S/a$ work. Clearly
+$\lambda\ge 0$. If $A^k$ is positive for some $k\ge1$, then
+$\lambda^kv_1=\sum_j(A^k)_{1j}v_j>0$, so $\lambda>0$. Taking logarithms
+in the bounds and dividing by $k$ gives the limit.
+\end{proof}
+So a number realised in size $n$ in our sense is the spectral radius of
+the matrix and the exponential of the entropy of $X_A$.
+
+\begin{lemma}\label{deg}
+Let $B$ be an $n\times n$ matrix over $\mathbb{Z}_{\ge 0}$ and let the
+real number $\lambda$ be an eigenvalue of $B$. Then the minimal
+polynomial $p$ of $\lambda$ over $\mathbb{Q}$ divides the characteristic
+polynomial $\chi_B$. In particular $d(\lambda)\le n$. If
+$d(\lambda)=n$, then $\chi_B=p$, and the coefficient of $X^{n-1}$ in $p$
+is $-\operatorname{tr}B\le 0$.
+\end{lemma}
+\begin{proof}
+$\chi_B$ has rational coefficients and $\chi_B(\lambda)=\det(\lambda
+I-B)=0$, so $p$ divides $\chi_B$. Both are monic, and $\chi_B$ has
+degree $n$. If $p$ also has degree $n$, they are equal. The coefficient
+of $X^{n-1}$ in $\chi_B$ is $-\operatorname{tr}B$, and the trace of a
+matrix with nonnegative entries is nonnegative.
+\end{proof}
+
+\begin{lemma}\label{irr}
+The polynomials $p_1=X^3-X-1$ and $p_2=X^3+X^2-3X-4$ are irreducible
+over $\mathbb{Q}$.
+\end{lemma}
+\begin{proof}
+A reducible cubic over a field has a root in that field. A rational
+root $r=a/b$ in lowest terms of a monic cubic with integer coefficients
+has $b\mid a^3$, hence $b=1$, and then $r$ divides the constant term.
+For $p_1$ the candidates are $\pm1$, and $p_1(1)=p_1(-1)=-1$. For $p_2$
+the candidates are $\pm1,\pm2,\pm4$, and
+\[
+ p_2(1)=-5,\quad p_2(-1)=-1,\quad p_2(2)=2,\quad p_2(-2)=-2,\quad
+ p_2(4)=64,\quad p_2(-4)=-40 .
+\]
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{main}]
+\emph{The roots.} We have $p_1(5/4)=-19/64<0<5=p_1(2)$ and
+$p_2(9/5)=-41/125<0<2=p_2(2)$. By the intermediate value theorem there
+are real numbers $x\in[5/4,2]$ and $y\in[9/5,2]$ with $p_1(x)=0$ and
+$p_2(y)=0$. By Lemma~\ref{irr}, $p_1$ and $p_2$ are their minimal
+polynomials, so $d(x)=d(y)=3$, and both are algebraic integers.
+
+\emph{Perron numbers.} Dividing $p_1$ by $X-x$ shows that the other
+roots $\mu$ of $p_1$ satisfy $\mu^2+x\mu+x^2-1=0$. The discriminant is
+$4-3x^2<0$ because $x\ge 5/4$. So the two roots are complex conjugates
+with $|\mu|^2=x^2-1<x^2$. Likewise the other roots of $p_2$ satisfy
+$\mu^2+(y+1)\mu+y^2+y-3=0$, with discriminant $13-2y-3y^2<0$ because
+$y\ge 9/5$, and $|\mu|^2=y^2+y-3<y^2$ because $y<3$. Hence $x$ and $y$
+are Perron numbers.
+
+\emph{Realisations.} Let
+\[
+ A_3=\begin{pmatrix}0&1&0\\0&0&1\\1&1&0\end{pmatrix},\qquad
+ A_4=\begin{pmatrix}0&0&1&2\\1&0&2&0\\0&1&0&0\\1&0&0&0\end{pmatrix}.
+\]
+Both are primitive:
+\[
+ A_3^5=\begin{pmatrix}1&1&1\\1&2&1\\1&2&2\end{pmatrix},\qquad
+ A_4^5=\begin{pmatrix}6&1&12&8\\12&6&9&2\\1&4&6&8\\4&4&1&2\end{pmatrix}.
+\]
+The vector $u=(1,x,x^2)$ is positive and
+$A_3u=(x,\,x^2,\,1+x)=xu$, because $x^3=x+1$.
+The vector $w=(y,\;y^3-2y,\;y^2-2,\;1)$ is positive, because
+$y^2\ge 81/25>2$. We check $A_4w=yw$ row by row:
+\begin{align*}
+ w_3+2w_4&=y^2=y\,w_1, & w_2&=y(y^2-2)=y\,w_3,\\
+ w_1+2w_3&=2y^2+y-4=y\,w_2, & w_1&=y=y\,w_4 .
+\end{align*}
+The identity $w_1+2w_3=y\,w_2$ uses $y^3=-y^2+3y+4$, which gives
+$y^4=4y^2+y-4$ and so $y\,w_2=y^4-2y^2=2y^2+y-4$. Hence $x$ is realised
+in size $3$ and $y$ is realised in size $4$.
+
+\emph{Lower bounds.} By Lemma~\ref{deg}, neither $x$ nor $y$ is an
+eigenvalue of a matrix of size $1$ or $2$ over $\mathbb{Z}_{\ge0}$. So
+$m(x)=3$. If $y$ were an eigenvalue of a $3\times3$ matrix $B$ over
+$\mathbb{Z}_{\ge0}$, Lemma~\ref{deg} would give $\chi_B=p_2$ and
+$\operatorname{tr}B=-1$, which is impossible. So $m(y)=4$.
+\end{proof}
+
+\begin{remark}
+(i) The characteristic polynomial of $A_4$ is
+$(X-1)(X^3+X^2-3X-4)$; the extra eigenvalue $1$ makes the trace zero.
+
+(ii) The lower bounds do not use primitivity, and $A_3$, $A_4$ are
+primitive. So (C1) fails in the same way if ``realising'' allows
+irreducible or arbitrary nonnegative integer matrices. If only
+$0$--$1$ matrices are allowed, $A_3$ is still admissible, $y$ still
+needs size at least $4$, and $y$ is realised by the $0$--$1$ edge
+matrix of the graph of $A_4$; so $m(x)\ne m(y)$ under that reading
+too. The statement about $0$--$1$ matrices is not formalised.
+
+(iii) The converse implication in (C2) also fails. The polynomial
+$X^3-X^2+X-3$ is irreducible, its real root $z\approx1.575$ is a Perron
+number, and its coefficients alternate in sign. A $3\times3$ matrix $B$
+over $\mathbb{Z}_{\ge0}$ with this characteristic polynomial would have
+trace $1$, so exactly one diagonal entry equal to $1$ and the others
+$0$; then the sum of its principal $2\times2$ minors is
+$-\sum_{i<j}B_{ij}B_{ji}\le0$, but this sum is the coefficient $+1$ of
+$X$. By Lind's theorem $z$ is realised in some size, so
+$m(z)>3=d(z)$. This remark is not formalised and is not needed for the
+disproof.
+\end{remark}
+
+\section*{Formal verification and scope}
+The Lean file works with Mathlib's \texttt{Matrix}, \texttt{minpoly},
+\texttt{Matrix.charpoly} and \texttt{Polynomial}. For a matrix
+\texttt{A} with natural number entries indexed by \texttt{Fin n}:
+\begin{itemize}
+\item \texttt{IsPrimitive A}: some power $A^k$ with $k\ge1$ has all
+entries positive.
+\item \texttt{IsPerronEigenvalue A lam}: there is a real vector with
+positive entries and $Av=\lambda v$.
+\item \texttt{Realizable lam n}: $n\ge1$ and some primitive $n\times n$
+matrix has Perron eigenvalue $\lambda$.
+\item \texttt{IsMinSize lam m}: $\lambda$ is realisable in size $m$ and
+in no smaller size.
+\item \texttt{algDegree lam}: the degree of Mathlib's minimal polynomial
+\texttt{minpoly} of $\lambda$ over $\mathbb{Q}$.
+\item \texttt{IsPerronNumber lam}: $\lambda$ is integral over
+$\mathbb{Z}$, $\lambda\ge1$, and every complex root $\mu\ne\lambda$ of
+the minimal polynomial has $|\mu|<\lambda$.
+\end{itemize}
+Lemma~\ref{spec} is proved as
+\begin{center}\small
+\texttt{norm\_le\_of\_isPerronEigenvalue},\quad
+\texttt{pathCount\_bounds},\quad \texttt{hasEntropy\_log}.
+\end{center}
+The last one states that $\frac1k\log N_k$ converges to $\log\lambda$
+for a primitive matrix with Perron eigenvalue $\lambda$, where $N_k$ is
+\texttt{pathCount A k}. Lemma~\ref{deg} is
+\texttt{minpoly\_dvd\_charpoly}, \texttt{algDegree\_le} and
+\texttt{not\_isEigenvalue\_three}. Lemma~\ref{irr} is
+\texttt{p1\_irreducible} and \texttt{p2\_irreducible}. The roots are
+obtained from the intermediate value theorem. Theorem~\ref{main} is
+\begin{center}\small\texttt{two\_cubic\_perron\_numbers}\end{center}
+which states the existence of real $x,y$ that are Perron numbers of
+algebraic degree $3$ with \texttt{IsMinSize x 3} and
+\texttt{IsMinSize y 4}, and such that the minimal polynomial of $x$ is
+not weakly sign-alternating.
+
+The refuted statements are the following propositions.
+\begin{itemize}
+\item \texttt{ClaimedDegreeLaw}: there is $f:\mathbb{N}\to\mathbb{N}$
+such that every Perron number $\lambda$ has minimal size
+$f(d(\lambda))$. Its negation is \texttt{conjecture\_false}.
+\item \texttt{ClaimedDegreeLawRealized}: the same for every $\lambda$
+that is realised in some size. Its negation is
+\texttt{conjecture\_false\_realized}. This version does not depend on
+the definition of Perron numbers.
+\item \texttt{ClaimedSignCriterion}: for every Perron number,
+$m(\lambda)=d(\lambda)$ if and only if the minimal polynomial is weakly
+sign-alternating, meaning that no two adjacent coefficients have the
+same strict sign. Its negation is \texttt{sign\_criterion\_false}.
+Every polynomial with alternating coefficient signs, with or without
+zero coefficients allowed, is weakly sign-alternating, so the refuted
+implication fails for those notions too.
+\end{itemize}
+No \texttt{sorry}, \texttt{native\_decide} or custom axiom occurs.
+
+Not formalised: Lind's theorem (it is not used; it only explains why
+the two quantifications describe the same set of numbers); the
+Perron--Frobenius theorem that every primitive matrix has a positive
+eigenvector (it is not used: realisability is defined through the
+eigenvector, and the lower bounds are proved for every real eigenvalue
+of every nonnegative integer matrix); the equivalence of primitivity
+and mixing and the identification of $\lim\frac1k\log N_k$ with
+topological entropy, which are standard facts used here as definitions;
+and the three items of the Remark. The source does not define
+``sign-alternating''; under our reading of (C2) one direction is
+refuted in Lean and the other on paper.
+
+\section*{Source and reproduction}
+The exact bilingual source is included byte-for-byte as
+\texttt{SOURCE.md}. Its repository path is
+\begin{center}\small\texttt{conjectures/00000009611.md}.\end{center}
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake build}, then
+\begin{center}\small\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The included public-Git manifest locks all dependency revisions. The
+\texttt{verification/} directory records the fresh-build logs,
+theorem-axiom reports, artifact hashes, review and final PDF
+inspection. The matrix $A_4$ was found by a computer search; its
+properties are proved above and in Lean, and no numerical computation
+is part of the proof.
+\end{document}
