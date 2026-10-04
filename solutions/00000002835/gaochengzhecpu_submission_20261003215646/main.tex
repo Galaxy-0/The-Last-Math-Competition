@@ -1,0 +1,67 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\begin{document}
+\title{A rank-one completion counterexample to Conjecture 2835}
+\author{Chengzhe Gao}\date{}\maketitle
+The asserted criterion says that a rank-$r$ matrix is uniquely determined
+by the entries on a graph support $G$ if and only if $G$ contains an
+$r$-regular supported subgraph. The sufficiency direction is false already
+for a $2\times2$ rank-one matrix.
+
+Take
+\[
+ A=\begin{pmatrix}1&1\\1&1\end{pmatrix},\qquad
+ B=\begin{pmatrix}1&-1\\-1&1\end{pmatrix},\qquad
+ G=\{(1,1),(2,2)\}.
+\]
+Here $G$ is the bipartite observation graph, with two row vertices and two
+column vertices. Its two edges form a perfect matching, so $G$ itself is
+$1$-regular. In particular it contains a $1$-regular subgraph whether or
+not ``subgraph'' is required to be spanning.
+
+\begin{theorem}
+The entries on $G$ do not uniquely recover $A$ among rank-one matrices.
+\end{theorem}
+\begin{proof}
+Both matrices have determinant zero and a nonzero entry, hence rank exactly
+one. More explicitly,
+$A=(1,1)^{\mathsf T}(1,1)$ and
+$B=(1,-1)^{\mathsf T}(1,-1)$.
+Their two observed diagonal entries agree. Their $(1,2)$ entries differ,
+so they are distinct completions of the same observations, each of the
+specified rank. Since $G$ itself is $1$-regular, the conjectured sufficient
+condition holds while unique recovery fails.
+\end{proof}
+
+The entries are rational, and the same matrices have rank one over the
+real and complex fields. The example does not impose an unintended
+spanning condition on the source. It also does not use a counting heuristic
+as a substitute for constructing two completions. Failure of this necessary
+part of the conjecture suffices, independently of the later observation-count
+claim.
+
+\paragraph{Formal verification.}
+\texttt{Matrix} is the full space of $2\times2$ matrices over
+\texttt{Std.Internal.Rat}. The function \texttt{rank} is the determinantal
+rank: two if the sole full-size determinant is nonzero, zero if every
+one-by-one minor is zero, and one otherwise. This is exactly the standard
+rank definition by the largest nonvanishing minor in dimension two.
+The proof also checks every selected two-by-two minor and an explicit
+nonzero one-by-one minor for each matrix, as well as both outer-product
+descriptions.
+
+The support is an actual Boolean bipartite graph. Row and column degrees
+count all neighbors, and the regular-subgraph predicate permits arbitrary
+selected nonempty row and column vertex sets, with edges restricted to
+those sets and to $G$. The witness selects every vertex and $G$ itself.
+Unique recoverability quantifies over \emph{all} rational matrices of the
+same rank, not a finite candidate table. The program constructs $B$ as a
+counterexample to that universal quantifier. The final theorem negates the
+rank-one, two-by-two instance of the source's iff criterion. Lean 4.19.0
+checks this with \texttt{Std}, no unproved declarations, and no native
+evaluation tactic.
+
+\end{document}
