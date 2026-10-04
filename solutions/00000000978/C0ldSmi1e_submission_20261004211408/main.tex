@@ -1,0 +1,187 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\CC}{\mathcal{C}}
+\newcommand{\Zar}{\operatorname{Zar}}
+\newtheorem{theorem}{Theorem}
+\begin{document}
+\begin{center}
+{\LARGE A smooth Kippenhahn conic\\[3pt]with infinitely many real points\par}
+\vspace{10pt}
+C0ldSmi1e\\[2pt]
+{\small Disproof of conjecture 00000000978\\4 October 2026}
+\end{center}
+\vspace{3pt}
+\begin{abstract}
+The matrix $A=\left(\begin{smallmatrix}0&2\\0&0\end{smallmatrix}\right)$ has numerical range equal to the closed unit disk. Its smooth homogeneous Hermitian determinant pencil is $w^2-u^2-v^2$, and the real affine chart of its complex projective dual is the unit circle. The real algebraic boundary of the numerical range is the same circle. A rational parametrization proves that it has infinitely many real points, contradicting the proposed bound $n(n-1)/2=1$ in dimension two. Every matrix identity and the relevant numerical-range, algebraic-closure, and counting bridges are established for this witness.
+\end{abstract}
+
+\section{Statement and the specialization being refuted}
+The exact English text of conjecture 00000000978 is:
+\begin{quote}
+Definition: The Kippenhahn curve (the algebraic boundary of the numerical range of a matrix). Conjecture: The number of real points of the Kippenhahn curve is bounded above by the combination $n(n-1)/2$ of eigenvalue multiplicities (real-point counting).
+\end{quote}
+The Chinese version likewise says that the number of real points has the displayed combinatorial upper bound. Neither version restricts the count to isolated points, singular points, or connected components. Neither assumes normality, diagonalizability, or a simple spectrum. The exact bilingual source is preserved in the submission's \texttt{conjecture.md}.
+
+We use the matrix
+\begin{equation}\label{eq:A}
+A=\begin{pmatrix}0&2\\0&0\end{pmatrix}\in M_2(\C),
+\qquad A^2=0,\qquad \det(XI-A)=X^2.
+\end{equation}
+Thus the dimension is two, and the only eigenvalue is zero with algebraic multiplicity two. The displayed bound is one in this case. In fact, the infinite count below contradicts every finite bound, so its failure does not depend on resolving the source's imprecise wording about how multiplicities are combined.
+
+For the dual-curve construction we only need matrices whose determinant pencil is a smooth projective curve; our witness satisfies this condition. The unrestricted source assertion would necessarily hold on this subclass. This restriction avoids using a raw polynomial gradient as a universal definition for a nonreduced determinant polynomial, whose repeated factors could make that gradient vanish on whole components. No such issue occurs for the smooth conic in this proof.
+
+\section{The actual Hermitian pencil and its smooth conic}
+With $A^*$ denoting conjugate transpose, form the actual Hermitian matrices
+\[
+H_1=\frac{A+A^*}{2}=\begin{pmatrix}0&1\\1&0\end{pmatrix},\qquad
+H_2=\frac{A-A^*}{2i}=\begin{pmatrix}0&-i\\i&0\end{pmatrix}.
+\]
+Their homogeneous determinant polynomial is
+\begin{equation}\label{eq:p}
+p(u,v,w)=\det(uH_1+vH_2+wI)
+=\det\begin{pmatrix}w&u-iv\\u+iv&w\end{pmatrix}
+=w^2-u^2-v^2.
+\end{equation}
+This is a nonzero polynomial of degree two, homogeneous in the three complex coordinates. Its actual polynomial derivatives give
+\begin{equation}\label{eq:gradient}
+\nabla p(u,v,w)=(-2u,-2v,2w).
+\end{equation}
+The gradient vanishes only at $(0,0,0)$. Therefore every nonzero zero of $p$ is smooth as a projective point. This does not assert smoothness of the affine cone at its origin.
+
+For a smooth homogeneous plane curve, the gradient at a nonzero zero gives the coefficients of its projective tangent line. Here that line at $q$ has equation
+\[
+\nabla p(q)\mathbin{\cdot}(x,y,z)=0.
+\]
+It contains $q$ because $\nabla p(q)\cdot q=2p(q)=0$. Nonzero scalar multiples represent the same line. These are the determinant-pencil and projective-duality conventions used in the background reference~\cite{PRW}; the particular calculation here is proved directly.
+
+\section{The complex dual and its real affine chart}
+For a subset $S\subseteq\C^3$, let $I(S)$ be the ideal of all complex polynomials vanishing on $S$, and let $Z(I(S))$ be their common zero locus. This is the algebraic, or Zariski, closure of $S$. Define the actual nonzero scaled-gradient image and its closure by
+\begin{align*}
+T_p&=\{c\nabla p(q):\ q\ne0,\ p(q)=0,\ \nabla p(q)\ne0,\ c\in\C\setminus\{0\}\},\\
+D_p&=Z(I(T_p)).
+\end{align*}
+The cone $D_p$ represents the projective dual through its homogeneous coordinates. We use its complex affine chart
+\[
+\CC_{\C}=\{(x,y)\in\C^2:(x,y,1)\in D_p\}
+\]
+and its real points $\CC_{\R}=\CC_{\C}\cap\R^2$, using the usual embedding of real coordinates into $\C$. The last coordinate is fixed to one; consequently distinct affine pairs cannot become identified by a nonzero projective scalar.
+
+We compute this chart in both directions. If $p(q)=0$ and $c\ne0$, then \eqref{eq:p}--\eqref{eq:gradient} imply
+\[
+p(c\nabla p(q))=4c^2p(q)=0.
+\]
+Thus $p\in I(T_p)$, so every point of $D_p$ satisfies $p=0$. In particular, every $(x,y)\in\CC_{\C}$ satisfies $x^2+y^2=1$.
+
+Conversely, let $x,y\in\C$ satisfy $x^2+y^2=1$. Set
+\[
+q=(-x,-y,1).
+\]
+Then $q\ne0$, $p(q)=0$, and $q$ is smooth. Its gradient satisfies
+\[
+\tfrac12\nabla p(q)=(x,y,1).
+\]
+The scalar $1/2$ is nonzero, so $(x,y,1)$ already lies in $T_p$, hence in its algebraic closure. We have proved the exact identities
+\begin{equation}\label{eq:dualcircle}
+\CC_{\C}=\{(x,y)\in\C^2:x^2+y^2=1\},\qquad
+\CC_{\R}=\{(x,y)\in\R^2:x^2+y^2=1\}.
+\end{equation}
+The calculation uses the complex dual and its polynomial zero-locus closure, not just a real gradient image or a Euclidean closure.
+
+\section{Numerical range and algebraic boundary}
+To check the source's parenthetical definition independently, use the ordinary numerical range
+\[
+W(A)=\{z^*Az:z\in\C^2,\ z^*z=1\}.
+\]
+Here $z^*z=|z_0|^2+|z_1|^2$. This is the Hermitian Euclidean unit condition, not the supremum norm of a coordinate function. For \eqref{eq:A}, direct multiplication gives
+\[
+z^*Az=2\overline{z_0}z_1.
+\]
+If $z^*z=1$, then
+\[
+|2\overline{z_0}z_1|\le |z_0|^2+|z_1|^2=1,
+\]
+so $W(A)$ is contained in the closed unit disk.
+
+For the reverse containment, take any $\zeta\in\C$ with $|\zeta|\le1$, and define
+\begin{equation}\label{eq:unitwitness}
+r=|\zeta|^2,\qquad s=\sqrt{1-r},\qquad
+a=\sqrt{\frac{1+s}{2}}>0,\qquad b=\frac{\zeta}{2a}.
+\end{equation}
+The strict positivity follows from $s\ge0$. Since $s^2=1-r$ and $2a^2-1=s$, we obtain
+\[
+4a^4-4a^2+r=0,\qquad
+a^2+|b|^2=a^2+\frac{r}{4a^2}=1.
+\]
+Moreover $a$ is real, so $2\overline a b=\zeta$. Therefore the actual vector $(a,b)$ is a unit-vector witness for every point of the disk. This proves
+\begin{equation}\label{eq:disk}
+W(A)=\{\zeta\in\C:|\zeta|\le1\},\qquad
+\partial W(A)=\{\zeta\in\C:|\zeta|=1\}.
+\end{equation}
+The boundary identity is the usual topological frontier of the closed disk: points of norm less than one are interior, those of norm greater than one are exterior, and radial perturbations of a unit point approach it from both sides.
+
+Write $J(x,y)=x+iy$. In real affine coordinates, \eqref{eq:disk} becomes
+\[
+B_A=\{(x,y)\in\R^2:J(x,y)\in\partial W(A)\}
+=\{(x,y):x^2+y^2=1\}.
+\]
+The \emph{real algebraic boundary} used for counting real points is $Z_{\R}(I_{\R}(B_A))$, not the topological frontier by definition. The right-hand set is the real zero locus of $X^2+Y^2-1$. Every polynomial zero locus is fixed by $Z(I(\cdot))$: inclusion into its closure is automatic, while its defining polynomials vanish on it and therefore also on that closure. Hence
+\begin{equation}\label{eq:boundary}
+Z_{\R}(I_{\R}(B_A))=B_A=\CC_{\R}.
+\end{equation}
+This establishes agreement of the two descriptions for the witness, without asserting such an identity for every matrix.
+
+\section{Infinitely many points and failure of the bound}
+For each real $t$, put
+\[
+f(t)=\left(\frac{1-t^2}{1+t^2},\frac{2t}{1+t^2}\right).
+\]
+The denominator is positive, and expanding the squares gives $f_0(t)^2+f_1(t)^2=1$. Thus $f(t)\in\CC_{\R}$. On this image,
+\[
+1+f_0(t)=\frac{2}{1+t^2}>0,\qquad
+\frac{f_1(t)}{1+f_0(t)}=t.
+\]
+Consequently $f$ is injective. Since $\R$ is infinite, the circle, the real affine dual chart, and the real algebraic boundary in \eqref{eq:boundary} are infinite.
+
+\begin{theorem}
+For the actual matrix $A$ in \eqref{eq:A}, the determinant pencil is a smooth homogeneous conic, and both its real affine dual curve and the real algebraic boundary of $W(A)$ have infinitely many points. In particular, the literal real-point bound in conjecture 00000000978 is false.
+\end{theorem}
+\begin{proof}
+The preceding computations establish all object identities and infinitude. At $n=2$, the conjectured bound is $2(2-1)/2=1$. An infinite set cannot satisfy this finite bound. Even the distinct real affine points $(1,0)$ and $(-1,0)$ already exceed it.
+\end{proof}
+
+\section{Formalization and logical scope}
+The accompanying Lean 4.19.0 project uses actual matrix conjugate transpose, determinant and characteristic polynomial operations. Its pencil is an \texttt{MvPolynomial (Fin 3)} over $\C$, and its gradient is obtained with polynomial partial derivatives. The dual cone is exactly \texttt{zeroLocus (vanishingIdeal ...)} of the nonzero scaled-gradient image. No projective quotient type is needed for the chart computation: fixing the final coordinate to one gives unique affine representatives.
+
+The numerical-range definition uses the actual Hermitian quadratic form and the sum of squared complex norms. The project proves the full disk equality using the unit vector in \eqref{eq:unitwitness}, then identifies the frontier and its real algebraic closure with the computed dual circle. Infinitude is proved by the injective parametrization above. Counting uses \texttt{Set.encard}, whose value on an infinite set is $\top$; a finite-only cardinality function that assigns zero to infinite sets would not express the asserted bound.
+
+The definition \texttt{RealPointBoundClaim} is the necessary dimension-two specialization with a homogeneous degree-two, projectively smooth determinant pencil, using the actual real algebraic boundary.
+
+The parallel \texttt{DualPointBoundClaim} counts the actual real affine dual chart. The final theorems record the conclusions:
+\begin{itemize}
+\item \path{conjecture978_disproof} negates \texttt{RealPointBoundClaim}.
+\item \path{dualPointBoundClaim_false} negates \texttt{DualPointBoundClaim}.
+\item \path{realAffinePoints_eq_algebraicBoundary_witness} identifies the two witness curves.
+\item \path{universal_algebraicBoundary_bound_false} negates the bound for real algebraic boundaries of matrices in all dimensions.
+\end{itemize}
+
+A universal bound from the source would imply the dimension-two specialization, and the exhibited matrix refutes it. The proof does not need a general Kippenhahn theorem or a construction for every nonreduced pencil. Compilation, strict replay, axiom checks, source identities and independent semantic review are recorded separately. These local records do not claim maintainer acceptance.
+
+\begin{thebibliography}{9}
+\bibitem{PRW}
+P. Paparella, L. J. Ramirez, and Y.-F. Wang,
+\emph{A proof of the elliptical range theorem via Kippenhahn's theorem},
+arXiv:1807.04268 (2018), Section~2.1, Theorem~2.1 and Section~3(i).
+\href{https://arxiv.org/abs/1807.04268}{arxiv.org/abs/1807.04268}.
+This reference supplies background conventions. All matrix, dual-chart, and numerical-range computations needed for this counterexample are proved here and in the accompanying formalization.
+\end{thebibliography}
+\end{document}

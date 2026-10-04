@@ -1,0 +1,123 @@
+{
+  "status": "PASS",
+  "scope": "PDF source compilation, export, source identity, and page layout only. Lean execution and independent semantic review are recorded separately.",
+  "source_sha256": "6ab3fc6fac1dcbf8643ce1dcef02a910587b927536a1cf54ed130096b443f477",
+  "pdf_sha256": "06c852069416ec5fd48f0603810cca0b41646e43c88c142b12a7b20de6b04b13",
+  "pdf_bytes": 69389,
+  "pages": 4,
+  "artifact_marker": {
+    "operation_kind": "create",
+    "expected_output_count": 1,
+    "output_format": "pdf",
+    "successful_invocations": 1,
+    "exit_code": 0,
+    "timing": "Immediately before the first authoring command for this new report."
+  },
+  "native_compilation": {
+    "tool": "compile_latex_document",
+    "status": "success",
+    "source": "/private/tmp/tlmc978-report/main.tex",
+    "source_sha256": "6ab3fc6fac1dcbf8643ce1dcef02a910587b927536a1cf54ed130096b443f477",
+    "message": "The final source compiled successfully with the desktop editor compiler; the source was opened in its LaTeX editor."
+  },
+  "export": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--keep-logs",
+      "main.tex"
+    ],
+    "working_directory": "/private/tmp/tlmc978-report",
+    "exit_code": 0,
+    "compiler": "Tectonic 0.17.0",
+    "compiler_version_exit_code": 0,
+    "log": "report.txt",
+    "log_sha256": "ccc4806e5f44c658935aa24907bd1fffc95f44fe74e6f6a6f35f396180f19c0b",
+    "stdout_stderr": "report-export.txt",
+    "stdout_stderr_sha256": "241bd482a784cced137e8baea6586b1401379b45039ba354d2c36f0e3bbdde31",
+    "warnings_or_box_diagnostics": []
+  },
+  "log_normalization": "Trailing whitespace was removed from compiler-log lines when saving report.txt; all diagnostic text was retained. The raw main.log is retained outside the submission evidence.",
+  "pdf_inspection": {
+    "command": [
+      "pdfinfo",
+      "/private/tmp/tlmc978-report/main.pdf"
+    ],
+    "exit_code": 0,
+    "page_size": "612 x 792 pts (letter)",
+    "pdf_version": "1.5",
+    "encrypted": false
+  },
+  "visual_review": {
+    "reviewer": "auxiliary_code report-author agent",
+    "scope": "All four complete final rendered pages were personally inspected at the output resolution, including mathematical notation, page boundaries, margins, headings, theorem-name layout, and references. This is author visual QA, not an independent semantic review.",
+    "render_command": [
+      "pdftoppm",
+      "-png",
+      "-scale-to",
+      "1500",
+      "/private/tmp/tlmc978-report/main.pdf",
+      "/private/tmp/tlmc978-verification/page"
+    ],
+    "render_exit_code": 0,
+    "rendered_pages": [
+      {
+        "path": "page-1.png",
+        "sha256": "b6e7fa324d47c78217bc93e74a58e6583dcca83c3be8029d0a840a9e90c4d17f"
+      },
+      {
+        "path": "page-2.png",
+        "sha256": "e7474cd307db8cf2fef3efc32dc494224f90f82fc1f6bd036c78a4c40e4238e2"
+      },
+      {
+        "path": "page-3.png",
+        "sha256": "5d8f5eedeaca9bc5f0907ec986ec3765b27b497e311b6bb7e3b7eeaed6cc960f"
+      },
+      {
+        "path": "page-4.png",
+        "sha256": "52fd07adb6a4c0eee8bbaa11e2d4d7902ac2dbfd2b46b8a1940d9a526e359019"
+      }
+    ],
+    "status": "PASS",
+    "findings": "No clipping, overlap, broken mathematical glyphs, or layout defects were observed. Long theorem names were reformatted before this final successful check."
+  },
+  "source_whitespace_check": {
+    "command": [
+      "git",
+      "diff",
+      "--no-index",
+      "--check",
+      "/dev/null",
+      "/private/tmp/tlmc978-report/main.tex"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "",
+    "trailing_whitespace_lines": 0,
+    "interpretation": "The nonzero no-index comparison status reflects comparison against /dev/null. It emitted no whitespace diagnostics; a direct scan also found no trailing whitespace."
+  },
+  "verified_utc": "2026-10-04T21:13:08.553716+00:00",
+  "second_visual_review": {
+    "reviewer": "coordinating root agent",
+    "status": "PASS",
+    "scope": "Personally viewed all four complete final rendered pages and read the entire final LaTeX source. Checked equations, mathematical glyphs, margins, page boundaries, theorem-name formatting, source interpretation and report/proof correspondence. No clipping, overlap or layout defect found. Separate from the independent semantic review.",
+    "reviewed_pages": [
+      {
+        "path": "page-1.png",
+        "sha256": "b6e7fa324d47c78217bc93e74a58e6583dcca83c3be8029d0a840a9e90c4d17f"
+      },
+      {
+        "path": "page-2.png",
+        "sha256": "e7474cd307db8cf2fef3efc32dc494224f90f82fc1f6bd036c78a4c40e4238e2"
+      },
+      {
+        "path": "page-3.png",
+        "sha256": "5d8f5eedeaca9bc5f0907ec986ec3765b27b497e311b6bb7e3b7eeaed6cc960f"
+      },
+      {
+        "path": "page-4.png",
+        "sha256": "52fd07adb6a4c0eee8bbaa11e2d4d7902ac2dbfd2b46b8a1940d9a526e359019"
+      }
+    ],
+    "verified_utc": "2026-10-04T21:14:08.480322+00:00"
+  }
+}
