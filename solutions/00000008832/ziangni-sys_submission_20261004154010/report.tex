@@ -1,0 +1,117 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\emergencystretch=2em
+\title{Lipschitz monotonicity alone does not ensure FBF convergence\\
+\large Disproof of conjecture 00000008832}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+Both versions of the conjecture assert unconditional convergence of
+forward-backward-forward splitting under joint Lipschitz monotonicity.
+Neither states existence of a zero of the inclusion. We give an actual
+FBF iteration with monotone Lipschitz operators and a step satisfying
+the usual strict Lipschitz step bound, but with no weak or strong limit.
+The example has no zero; it does not contradict the standard convergence
+theorem that assumes a solution exists.
+
+\textbf{Actual operators and their hypotheses.}
+Work in the real Hilbert space $\mathbb R$, and set
+\[
+ A(x)=\{0\},\qquad B(x)=1\quad(x\in\mathbb R).
+\]
+Both graphs are maximal monotone. To prove this directly, for any
+$c\in\mathbb R$ the graph $G_c=\{(x,c):x\in\mathbb R\}$ is monotone,
+because its monotonicity inner product is zero.
+If a point $(p,q)$ can belong to a monotone graph containing $G_c$,
+comparison with $(p-1,c)$ and $(p+1,c)$ gives
+\[
+ q-c\geq0,\qquad -(q-c)\geq0.
+\]
+Thus $q=c$, proving maximality against every monotone graph extension.
+
+The single-valued versions of $A$ and $B$ are both constant and hence
+zero-Lipschitz. In particular each is $1$-Lipschitz, so the usual
+positive Lipschitz upper bound $L=1$ is valid.
+
+\textbf{Genuine resolvent and three stages.}
+For any $\gamma>0$, the resolvent equation for $A$ is
+\[
+ x=u+\gamma a,\qquad a\in A(u)=\{0\}.
+\]
+It holds exactly when $u=x$. Thus the resolvent is the actual unique map
+$J_{\gamma A}=\operatorname{id}$.
+The standard FBF stages are
+\[
+ v=x-\gamma B(x),\qquad
+ y=J_{\gamma A}(v),\qquad
+ x^+=y-\gamma\bigl(B(y)-B(x)\bigr).
+\]
+Here $v=x-\gamma$, $y=v$, and $B(y)-B(x)=0$. Consequently
+\[
+ x^+=x-\gamma.
+\]
+The backward stage is well-defined everywhere and solves its resolvent
+equation exactly; no approximate certificates are assumed.
+
+\newpage
+\textbf{All iterates and absence of a limit.}
+Choose $\gamma=1/2$. It satisfies $0<\gamma<1/L$ for $L=1$,
+so the example does not use a violation of the usual Lipschitz bound.
+For any initial point $x_0\in\mathbb R$, induction gives
+\[
+ x_n=x_0-n/2\qquad(n\geq0).
+\]
+In particular the trajectory diverges to minus infinity.
+There is no finite strong limit. One direct argument, used formally,
+is that convergence of $x_n$ to $a$ would imply convergence of the shifted
+sequence $x_{n+1}$ to $a$ and hence of its difference to zero. But
+\[
+ x_{n+1}-x_n=-1/2
+\]
+is a nonzero constant sequence, which cannot converge to zero.
+
+There is also no weak limit: the identity on $\mathbb R$ is an actual
+continuous linear functional, so weak convergence would imply the
+strong convergence just excluded. The same argument works for every
+nonzero fixed step, not just $1/2$.
+
+\textbf{The missing hypothesis.}
+The actual inclusion is
+\[
+ 0\in A(x)+B(x)=\{1\},
+\]
+which has no solution. Joint monotonicity and Lipschitz continuity
+do not imply nonemptiness of the zero set. Thus the source's unqualified
+convergence assertion is false; a valid standard FBF result needs a
+solution-existence hypothesis in addition to its operator and step
+assumptions. This disproof makes no separate assertion about
+adaptive backtracking or the detailed joint domain of unequal step sizes.
+
+\textbf{Formal correspondence.}
+The Lean project defines actual graphs as subsets of $\mathbb R^2$
+and monotonicity using the real Hilbert inner product.
+\texttt{constant\_maximal} proves inclusion-maximality against every
+monotone graph extension. \texttt{joint\_lipschitz} proves actual
+Mathlib \texttt{LipschitzWith} bounds for both operators.
+
+\texttt{actual\_resolvent} proves the resolvent equation and its unique
+solution. The forward, backward and final forward stages are defined
+explicitly; \texttt{genuine\_backward\_stage} verifies the exact equation.
+\texttt{actual\_step} and \texttt{actual\_iterates} prove the update and
+all iterates for every starting point and every step.
+\texttt{no\_strong\_limit} proves nonconvergence, and
+\texttt{no\_weak\_limit} uses the full standard functional definition
+quantified over all continuous linear functionals.
+\texttt{no\_zero} checks the actual inclusion. The final theorem combines
+all hypotheses and the absence of any weak limit for the safe half-step.
+
+\textbf{Reproduction.}
+Use Lean 4.19.0 and public Mathlib revision
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}\end{center}
+Run \texttt{lake build} inside \texttt{lean/}. Axiom audits are printed,
+and the validation notes record the completed build and PDF inspection.
+\end{document}
