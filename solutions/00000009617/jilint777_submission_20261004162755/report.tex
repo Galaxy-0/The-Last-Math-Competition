@@ -1,5 +1,7 @@
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{booktabs}
 \usepackage{hyperref}
@@ -27,17 +29,25 @@ the even shift has a 2-state Fischer cover but Hankel rank 3}
 \begin{abstract}
 Conjecture 00000009617 asserts, among other things, that the Fischer
 (``Fisher'') minimal state count of a sofic shift equals the rank of the
-Hankel matrix of its language. We show that this clause is false. For the
-even shift $X$ (binary sequences in which every run of $1$s between two $0$s
-has even length) the Fischer cover has exactly $2$ states, and no
-presentation of any kind has fewer. But the Hankel matrix
-$H[u][v]=[uv\in\Lang(X)]$ has the $3\times 3$ minor
+Hankel matrix of its language. We show that this clause is false when rank
+has its standard meaning, rank over a field. For the even shift $X$ (binary
+sequences in which every run of $1$s between two $0$s has even length) the
+Fischer cover has exactly $2$ states, and no presentation of any kind has
+fewer. But the Hankel matrix $H[u][v]=[uv\in\Lang(X)]$ has the $3\times 3$ minor
 $\left(\begin{smallmatrix}1&1&1\\1&0&1\\0&1&1\end{smallmatrix}\right)$
-with determinant $-1$, so its rank is at least $3$ (in fact exactly $3$)
-over every field. The decisive facts (the presented shift, the minimal
-state count $2$, the language for all words, and the nonsingular minor) are
-formalized and checked in a self-contained Lean~4 project. An independent
-Python script confirms them.
+with determinant $-1$, so its rank is exactly $3$ over every field. A second
+example, the charge-constrained shift $X_c$, has Fischer count $3$, $6$ nonempty
+follower sets and Hankel rank $5$. It also defeats the reading of ``state
+count'' as the size of the follower-set graph. The decisive facts are formalized
+and checked in a self-contained Lean~4 project:
+\begin{itemize}
+\item the presented shifts;
+\item the state counts $2$ and $\le 3$;
+\item the language of the even shift for all words;
+\item the minors with determinant $-1$ and $1$.
+\end{itemize}
+An independent Python script confirms them. Under a Boolean (OR/AND) reading of
+rank, the clause is not refuted.
 \end{abstract}
 
 \section{The conjecture}
@@ -233,43 +243,134 @@ $\mathrm{Fis}(X)=2\ne 3=\operatorname{rank}_K H$ for every field $K$. Clause (C)
 with it Conjecture 00000009617, is false.
 \end{corollary}
 
+\section{A second counterexample: the charge-constrained shift}
+
+The even shift has exactly $3$ nonempty follower sets of words, and this
+number equals its Hankel rank. So the even shift alone does not refute the
+reading in which ``minimal state count'' means the size of the follower-set
+graph. The following shift separates all of these numbers.
+
+Let $G_c$ be the graph with vertices $0,1,2$ and edges
+\[
+0\xrightarrow{1}1,\qquad 1\xrightarrow{1}2,\qquad 2\xrightarrow{0}1,\qquad 1\xrightarrow{0}0,
+\]
+and let $X_c=X_{G_c}$ be the shift it presents. Read $1$ as charge $+1$ and $0$ as charge $-1$.
+A word is a path label iff its running charge (the partial sums) stays in a band of width $2$.
+So $X_c$ is the charge-constrained shift with $3$ charge levels
+\cite[Ex.~1.2.7]{lm}. $G_c$ is irreducible and right-resolving. It is
+follower-separated:
+\begin{itemize}
+\item the word $0$ labels a path from vertices $1$ and $2$ but not from $0$;
+\item the word $1$ labels a path from $0$ and $1$ but not from $2$;
+\item the word $11$ labels a path from $0$ but not from $1$.
+\end{itemize}
+
+\begin{proposition}\label{prop:charge}
+\begin{enumerate}
+\item $\mathrm{Fis}(X_c)=3$. Moreover, no presentation of $X_c$ has fewer than $3$ vertices.
+\item The terminal vertex sets $T(u)=\{q: \text{some path labelled } u \text{ ends at } q\}$
+of the words $u\in\Lang(X_c)$ are
+$\{0,1,2\},\{0,1\},\{1,2\},\{0\},\{2\},\{1\}$. They are attained by
+$u=\varepsilon,0,1,00,11,001$. $X_c$ has exactly $6$ distinct nonempty follower sets
+$\F(u)$, and $7$ with $\emptyset$.
+\item Over every field $K$, the Hankel matrix $H_c$ of $\Lang(X_c)$ has rank exactly $5$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) $G_c$ is an irreducible, right-resolving, follower-separated presentation,
+so it is the Fischer cover \cite[\S3.3]{lm}. For arbitrary presentations,
+\texttt{verify.py} checks all $1+4+256$ labelled graphs with at most $2$ vertices.
+Each one has a different set of blocks of length $\le 8$.
+
+(2) A right-resolving graph has $\F(u)=\bigcup_{q\in T(u)}\F_{G_c}(q)$, where
+$\F_{G_c}(q)$ is the set of labels of paths starting at $q$. Reading $0$ moves every
+vertex down by one, and reading $1$ moves every vertex up by one, inside $\{0,1,2\}$.
+So $T(u)$ is always an interval. All six intervals occur, as listed. Distinct
+intervals give distinct follower sets, by follower separation and the words $0$, $1$, $11$.
+
+(3) The lower bound: rows and columns $\varepsilon,0,1,00,11$ give the minor
+\[
+M_c=\begin{pmatrix}1&1&1&1&1\\1&1&1&0&1\\1&1&1&1&0\\1&0&1&0&1\\1&1&0&1&0\end{pmatrix},
+\qquad \det M_c=1 .
+\]
+Its entries are $0$ exactly for the words $000$, $0000$, $111$, $1111$. A
+determinant equal to $1$ is a unit in every ring.
+
+The upper bound: write $A=\F_{G_c}(0)$, $B=\F_{G_c}(1)$, $C=\F_{G_c}(2)$.
+A nonempty word in $A$ starts with $1$, and a nonempty word in $C$ starts with $0$.
+So $A\cap C=\{\varepsilon\}\subseteq B$. Hence
+\[
+\mathbf 1_{A\cup B}+\mathbf 1_{B\cup C}=\mathbf 1_{A\cup B\cup C}+\mathbf 1_{B\cup(A\cap C)}
+=\mathbf 1_{A\cup B\cup C}+\mathbf 1_{B},
+\]
+that is, $\mathbf 1_{\F(0)}+\mathbf 1_{\F(1)}=\mathbf 1_{\F(\varepsilon)}+\mathbf 1_{\F(001)}$.
+By (2), every row of $H_c$ is zero or one of the six follower sets. Those six
+span a space of dimension at most $5$. So $\operatorname{rank}_K H_c\le 5$.
+\end{proof}
+
+\begin{corollary}\label{cor:charge}
+For $X_c$ the Hankel rank is $5$, which differs from:
+\begin{itemize}
+\item the Fischer count $3$;
+\item the least size $3$ of any presentation;
+\item the number $6$ of nonempty follower sets (the follower-set graph, which is
+the trim minimal deterministic automaton);
+\item the size $7$ of the complete minimal deterministic automaton.
+\end{itemize}
+\end{corollary}
+
 \section{Readings of the clause}
+
+Only the standard reading, rank over a field, is refuted. Under that reading,
+the counterexamples work for every interpretation of ``minimal state count''
+listed below.
 
 \begin{itemize}
 \item \textbf{Rank over a field} ($\mathbb Q,\mathbb R,\mathbb C,\mathbb F_p$, or any other field).
-The rank is $3\ne2$. The determinant $-1$ is a unit in every ring, so the
-counterexample does not depend on the field. This is the standard meaning of
-the rank of a Hankel matrix (Section~2).
-\item \textbf{Fisher count.} We read it as the size of the minimal
-right-resolving presentation. If it means the least number of states of
-\emph{any} presentation, it is still $2$ (Theorem~\ref{thm:fis}). If it means
-the left Fischer cover (minimal left-resolving presentation), it is also $2$:
-$X$ is closed under reversal, and reversing $G$ gives a left-resolving
-presentation; Proposition~\ref{prop:lower} holds for all graphs.
+For the even shift the rank is $3\ne2$, and for $X_c$ it is $5\ne3$. The minors have
+determinant $\pm1$, so neither counterexample depends on the field. This is the
+standard meaning of the rank of a Hankel matrix (Section~2).
+\item \textbf{Which state count.} Possible meanings, with their values:
+\begin{itemize}
+\item the minimal right-resolving presentation: $2$ for $X$, $3$ for $X_c$;
+\item the least number of states of \emph{any} presentation: $2$ for $X$, $3$ for $X_c$;
+\item the left Fischer cover: $2$ for $X$, since $X$ is closed under reversal
+and Proposition~\ref{prop:lower} holds for all graphs; $3$ for $X_c$, since
+$X_c$ is also closed under reversal (the running charge of a reversed word has the same range);
+\item the number of nonempty follower sets (the follower-set graph or trim
+minimal automaton): $3$ for $X$, which equals its rank, but $6\ne5$ for $X_c$;
+\item the complete minimal automaton: $4\ne3$ for $X$ and $7\ne5$ for $X_c$.
+\end{itemize}
 \item \textbf{Indexing of $H$.} Rows and columns may range over all words, over
-nonempty words, or over words of length at most $n$ for any $n\ge2$. All these
-contain $M$, so the rank is at least $3$ in each case. Indexing by $u^{R}v$ or
-transposing does not change the rank.
-\item \textbf{Boolean rank (disclosure).} Over the Boolean semiring (OR/AND), the
-rank of $H$ is $2$. Indeed $\mathbf 1_{\Lang(X)}=\mathbf 1_{\F(0)}\vee\mathbf 1_{\F(01)}$:
-if $v$ has no $0$, then $v\in\F(0)$; otherwise $v\in\F(0)$ or $v\in\F(01)$ by
+nonempty words, or over words of length at most $n$ for any $n\ge2$. All of these
+contain $M$, so the rank of the even shift's matrix is at least $3$ in each case.
+For $X_c$, indexing sets that contain $\varepsilon,0,1,00,11$ contain $M_c$.
+Indexing by $u^{R}v$ or transposing does not change the rank.
+\item \textbf{Boolean rank (not refuted).} Over the Boolean semiring (OR/AND), the
+rank of the even shift's $H$ is $2$. Indeed $\mathbf 1_{\Lang(X)}=\mathbf 1_{\F(0)}\vee\mathbf 1_{\F(01)}$:
+if $v$ has no $0$ then $v\in\F(0)$; otherwise $v\in\F(0)$ or $v\in\F(01)$ by
 the parity of its leading run of $1$s. The fooling set $\{(0,0),(01,10)\}$ shows
-that the Boolean rank is at least $2$. Under this reading the even shift gives
-$2=2$ and is \emph{not} a counterexample. We do not claim anything about the
-Boolean reading. It is not the standard meaning: Boolean rank is a different
-notion and is always named as such. Over $\mathbb Q$ the vector
-$\mathbf 1_{\Lang(X)}$ is not $\mathbf 1_{\F(0)}+\mathbf 1_{\F(01)}$, since both
-follower sets contain every word $1^k$. This is why the field rank is $3$.
+that the Boolean rank is at least $2$.
+
+More generally, the Boolean rank is \emph{always} at most the Fischer count.
+If $G$ is a right-resolving presentation with $n$ vertices, then
+$\F(u)=\bigcup_{q\in T(u)}\F_G(q)$. So $H$ is the Boolean product of the
+$\{\text{words}\}\times n$ matrix $[q\in T(u)]$ and the $n\times\{\text{words}\}$
+matrix $[v\in\F_G(q)]$. Searches over small examples found no case where the two differ,
+so the clause may well be \emph{true} under the Boolean reading. We refute only the
+field-rank reading. Boolean rank is a different notion and is always named as
+such. Over $\mathbb Q$, $\mathbf 1_{\Lang(X)}\ne\mathbf 1_{\F(0)}+\mathbf 1_{\F(01)}$,
+because both follower sets contain every word $1^k$.
 \item \textbf{Hidden Markov model reading.} One could instead take the Hankel matrix
-of the probability function $P(w)$ of a measure on $X$. That matrix is not
-determined by the shift or by ``its language''. The clause speaks of the Hankel
-matrix of the language, so we use the indicator function of $\Lang(X)$.
-\item \textbf{Other covers.} The number of distinct nonempty follower sets of words
-of $X$ is $3$. This is the size of the follower-set graph and of the minimal
-deterministic automaton of $\Lang(X)$ without its dead state, and it equals
-the Hankel rank here. But that graph is not minimal, and it is not the Fischer
-cover. The Fischer cover only keeps the follower sets of synchronizing words,
-namely $\F(0)$ and $\F(01)$.
+of the probability function $P(w)$ of a measure on the shift. For a Markov
+measure carried by the Fischer cover (a hidden Markov model with $n$ hidden
+states), this rank is at most the Fischer count $n$. For the even shift with the
+Parry measure, or with any fully supported measure of this kind, it is exactly
+$2$. \texttt{verify.py} computes $2$ for a rational Markov measure. But the
+value depends on the measure: the point mass at $0^\infty\in X$ gives rank $1$.
+So it is not an invariant of the shift. The clause speaks of the Hankel matrix
+of the \emph{language}, i.e.\ of the indicator function of $\Lang(X)$, and that is
+what we use.
 \end{itemize}
 
 \section{Lean formalization}
@@ -290,69 +391,108 @@ same for arbitrary presentations.
 $0$ otherwise. \texttt{minor}, and \texttt{det} (Laplace expansion).
 \texttt{HankelRankAtLeast X r} means that some $r\times r$ minor has nonzero
 integer determinant, i.e.\ the rank over $\mathbb Q$ is at least $r$.
-\texttt{HankelRankAtLeastMod p} is the same over $\mathbb Z/p$.
-\texttt{HankelRankIs X m} means at least $m$ and not at least $m+1$.
+\texttt{HankelRankAtLeastMod p} means that the determinant is nonzero mod $p$.
+We prove it for every $p\ge2$, in particular for every prime $p$, where it means
+rank over $\mathbb F_p$. For composite $p$, $\mathbb Z/p$ is not a field, but our
+minors are unimodular. \texttt{HankelRankIs X m} means at least $m$ and not at least $m+1$.
 \item \texttt{Claim}: for every sofic $X$ and every $m$ with
 \texttt{IsFisherCount X m}, \texttt{HankelRankIs X m}. \texttt{ClaimMod p} and
 \texttt{ClaimAnyPresentation} are the variants for $\mathbb Z/p$ and for
 arbitrary presentations.
-\item \texttt{lang\_iff}: Lemma~\ref{lem:lang}, for all words.
-\texttt{fisher\_sound}, \texttt{fisher\_complete}, \texttt{fisher\_presents}:
-Proposition~\ref{prop:presents}. \texttt{no\_zero\_state}, \texttt{no\_one\_state}:
-Proposition~\ref{prop:lower}. \texttt{fisher\_count},
-\texttt{min\_presentation\_count}: Theorem~\ref{thm:fis}.
-\texttt{fisher\_rightResolving} and \texttt{fisher\_irreducible\_separated}
-check the properties of $G$.
-\item \texttt{minor\_eq}, \texttt{minor\_det} ($=-1$), \texttt{minor\_unimodular}
-(the inverse $N$), \texttt{rows\_independent} (the three rows are linearly
-independent over $\mathbb Q$), \texttt{hankel\_rank\_ge\_three} and
+\item Even shift, presentation:
+  \begin{itemize}
+  \item \texttt{lang\_iff}: Lemma~\ref{lem:lang}, for all words.
+  \item \texttt{fisher\_sound}, \texttt{fisher\_complete}, \texttt{fisher\_presents}:
+  Proposition~\ref{prop:presents}.
+  \item \texttt{no\_zero\_state}, \texttt{no\_one\_state}: Proposition~\ref{prop:lower}.
+  \item \texttt{fisher\_count}, \texttt{min\_presentation\_count}: Theorem~\ref{thm:fis}.
+  \item \texttt{fisher\_rightResolving}, \texttt{fisher\_irreducible\_separated}:
+  the properties of $G$.
+  \end{itemize}
+\item Even shift, Hankel rank: \texttt{minor\_eq}, \texttt{minor\_det} ($=-1$),
+\texttt{minor\_unimodular} (the inverse $N$), \texttt{rows\_independent} (the three rows
+are linearly independent over $\mathbb Q$), \texttt{hankel\_rank\_ge\_three} and
 \texttt{hankel\_rank\_ge\_three\_mod} (for every $p\ge2$).
-\item \texttt{conjecture\_00000009617\_false :}~$\neg$\,\texttt{Claim}. Also
-\texttt{conjecture\_00000009617\_false\_mod} ($\forall p\ge 2$, $\neg$\,\texttt{ClaimMod p})
-and \texttt{conjecture\_00000009617\_false\_any\_presentation}.
-\texttt{fisher\_lt\_rank}: every $m$ with \texttt{IsFisherCount X m} equals $2$, and the rank is
-at least $m+1$.
+\item Even shift, main theorems: \texttt{conjecture\_00000009617\_false :}~$\neg$\,\texttt{Claim};
+\texttt{conjecture\_00000009617\_false\_mod} ($\forall p\ge 2$, $\neg$\,\texttt{ClaimMod p});
+\texttt{conjecture\_00000009617\_false\_any\_presentation}. \texttt{fisher\_lt\_rank}:
+every $m$ with \texttt{IsFisherCount X m} equals $2$, and the rank is at least $m+1$.
+\item $X_c$:
+  \begin{itemize}
+  \item \texttt{charge} is $G_c$, and \texttt{ChargeShift} is the shift it presents.
+  \item \texttt{charge\_rightResolving}, \texttt{charge\_irreducible\_separated}:
+  the properties of $G_c$.
+  \item \texttt{not\_lang\_of\_bad}: $000$ and $111$ do not occur in $X_c$.
+  \item \texttt{per\_mem} and \texttt{lang\_of\_per}: the periodic point $(1100)^\infty$
+  lies in $X_c$, and all its factors are in $\Lang(X_c)$.
+  \item \texttt{chargeMinor\_eq}, \texttt{chargeMinor\_det} ($=1$): the minor $M_c$.
+  \item \texttt{charge\_minors}: minors with determinant $\pm1$ of every size $r\le5$.
+  \item \texttt{charge\_rank\_ge}, \texttt{charge\_rank\_ge\_mod}: rank at least $r$ for every $r\le 5$.
+  \item \texttt{charge\_counterexample}: the Fischer count exists and is $\le 3$
+  (\texttt{exists\_min}), and the rank is $\ge 5$.
+  \item \texttt{conjecture\_00000009617\_false\_charge}, \texttt{\_charge\_mod},
+  \texttt{\_charge\_any\_presentation}: three more proofs of $\neg$\,\texttt{Claim},
+  $\neg$\,\texttt{ClaimMod p} and $\neg$\,\texttt{ClaimAnyPresentation}.
+  \end{itemize}
 \end{itemize}
-Non-vacuity: \texttt{evenShift\_sofic} and \texttt{fisher\_count} show that the
-hypotheses of \texttt{Claim} hold for $X$. \texttt{allZero\_mem},
-\texttt{allOne\_mem} and \texttt{single\_one\_not\_mem} show that $X$ is neither
-empty nor full. The final examples show that \texttt{Lang} is nontrivial and
-that \texttt{det} returns $0$ on a singular matrix.
+Non-vacuity: \texttt{evenShift\_sofic}, \texttt{fisher\_count} and
+\texttt{charge\_counterexample} show that the hypotheses of \texttt{Claim} hold.
+\texttt{allZero\_mem}, \texttt{allOne\_mem} and \texttt{single\_one\_not\_mem} show
+that $X$ is neither empty nor full. The final examples show that \texttt{Lang} is
+nontrivial and that \texttt{det} returns $0$ on a singular matrix.
 
-\paragraph{Limitations.} Lean proves rank \emph{at least} $3$, which suffices.
-The upper bound in Theorem~\ref{thm:rank} and the Boolean-rank remark are proved
-in this report and checked on finite truncations by \texttt{verify.py}, but not
-in Lean. Lean works over the alphabet $\{0,1\}$. The clause quantifies over all
-sofic shifts, so a binary counterexample suffices. The project has no
-\texttt{sorry}, no \texttt{native\_decide} and no added axioms.
-\texttt{\#print axioms} reports only the standard \texttt{propext},
-\texttt{Classical.choice} and \texttt{Quot.sound}. Classical logic is used to
-define the path in \texttt{fisher\_complete} and the Hankel entries of an
-arbitrary shift.
+\paragraph{Limitations.} Lean proves rank \emph{at least} $3$ for the even shift
+and at least $5$ for $X_c$, which suffices. For $X_c$ it proves Fischer count at
+most $3$, which also suffices. The following are proved in this report and checked
+on finite truncations by \texttt{verify.py}, but not in Lean:
+\begin{itemize}
+\item the upper bounds on the rank;
+\item $\mathrm{Fis}(X_c)=3$ exactly;
+\item the count of $6$ follower sets, so the follower-set reading is not in Lean;
+\item the Boolean-rank and measure remarks.
+\end{itemize}
+Lean works over the alphabet $\{0,1\}$. The clause quantifies over all sofic shifts,
+so binary counterexamples suffice. The project has no \texttt{sorry}, no
+\texttt{native\_decide} and no added axioms. \texttt{\#print axioms} reports only
+the standard \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
+Classical logic is used to define the path in \texttt{fisher\_complete}, the Hankel
+entries of an arbitrary shift, and the minimum in \texttt{exists\_min}.
 
 \endgroup
 
 \section{Independent check}
 
-\texttt{verify.py} (Python~3 standard library) does the following:
+\texttt{verify.py} (Python~3 standard library) checks the following.
 \begin{itemize}
-\item It checks that three descriptions of $\Lang(X)$ agree on all words of length
-at most $14$: forbidden blocks, parities of inner runs, and paths in $G$.
-\item It enumerates all labelled graphs with $0$, $1$ or $2$ vertices. None with
-fewer than $2$ vertices matches, and the matching $2$-vertex graphs are $G$ up
-to relabelling.
-\item It recomputes the minor, its determinant $-1$ and its inverse.
-\item It computes the rank of the Hankel truncation on all $127$ words of length at
-most $6$: it is $3$ over $\mathbb Q$ and over $\mathbb F_2,\mathbb F_3,\mathbb F_5,\mathbb F_7$.
-\item It confirms that only $4$ distinct rows occur.
-\item It confirms the Boolean-rank identity.
+\item For the even shift:
+  \begin{itemize}
+  \item three descriptions of $\Lang(X)$ agree on all words of length at most $14$
+  (forbidden blocks, parities of inner runs, paths in $G$);
+  \item among all labelled graphs with at most $2$ vertices, none with fewer than
+  $2$ vertices matches, and the matching $2$-vertex graphs are $G$ up to relabelling;
+  \item the minor, its determinant $-1$ and its inverse;
+  \item the Hankel truncation on all $127$ words of length at most $6$ has rank
+  $3$ over $\mathbb Q$ and over $\mathbb F_2,\mathbb F_3,\mathbb F_5,\mathbb F_7$;
+  \item only $4$ distinct rows occur;
+  \item the Boolean-rank identity and the Boolean factorization through the
+  Fischer vertices hold;
+  \item the measure Hankel ranks are $2$ for a Markov measure and $1$ for the point mass.
+  \end{itemize}
+\item For $X_c$:
+  \begin{itemize}
+  \item graph paths agree with the charge-band description up to length $14$;
+  \item no graph with at most $2$ vertices matches;
+  \item the six terminal sets, and $6$ nonzero rows ($7$ with zero);
+  \item $M_c$ with $\det M_c=1$, and the row relation;
+  \item rank $5$ of the truncation over $\mathbb Q$ and over $\mathbb F_2,\mathbb F_3,\mathbb F_5,\mathbb F_7$.
+  \end{itemize}
 \end{itemize}
 
 \section{Reproduction}
 \begin{verbatim}
 cd lean4 && lake build       # Lean 4.19.0, core only
 python3 verify.py            # standard library only
-pdflatex report.tex
+pdflatex report.tex && pdflatex report.tex
 \end{verbatim}
 
 \begin{thebibliography}{9}

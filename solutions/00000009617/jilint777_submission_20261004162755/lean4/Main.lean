@@ -24,6 +24,12 @@ binary sequences `x : ℤ → {0,1}` that contain no block `0 1^(2k+1) 0`
   has an integer inverse (`minor_unimodular`).
 * Hence `2 ≠ rank H` and the clause is false
   (`conjecture_00000009617_false` and its variants).
+* Second counterexample, the charge-constrained shift `X_c` presented by the
+  3-vertex graph `0 -1-> 1 -1-> 2`, `2 -0-> 1 -0-> 0`: its Fischer count is at
+  most 3, and its Hankel matrix has a 5×5 minor with determinant 1 (rows and
+  columns `ε, 0, 1, 00, 11`), so rank ≥ 5 (`conjecture_00000009617_false_charge`
+  and its variants). On paper: Fischer count 3, rank exactly 5, and 6 nonempty
+  follower sets, so `X_c` also defeats the follower-set-count reading.
 
 Symbols: `false` is the letter 0 and `true` is the letter 1.
 Everything is core Lean 4 (no Mathlib).
@@ -137,7 +143,9 @@ def HankelRankAtLeast (X : Config → Prop) (r : Nat) : Prop :=
   ∃ rows cols : List (List Bool), rows.length = r ∧ cols.length = r ∧
     det (minor X rows cols) ≠ 0
 
-/-- Rank over `ℤ/p` is at least `r` (for prime `p`: rank over the field `𝔽_p`). -/
+/-- `r × r` minor nonsingular modulo `p`. We use it for every `p ≥ 2`, in
+particular every prime `p`, where it means rank over the field `𝔽_p` is at
+least `r`. (For composite `p`, `ℤ/p` is not a field; our minors are unimodular.) -/
 def HankelRankAtLeastMod (p : Nat) (X : Config → Prop) (r : Nat) : Prop :=
   ∃ rows cols : List (List Bool), rows.length = r ∧ cols.length = r ∧
     ¬ ((p : Int) ∣ det (minor X rows cols))
@@ -680,8 +688,8 @@ theorem not_dvd_neg_one (p : Nat) (hp : 2 ≤ p) : ¬ ((p : Int) ∣ -1) := by
   simp at this
   omega
 
-/-- Rank at least 3 over `ℤ/p` for every `p ≥ 2`, in particular over every
-prime field `𝔽_p`. -/
+/-- Minor nonsingular mod `p` for every `p ≥ 2` (in particular every prime, i.e.
+rank ≥ 3 over every prime field `𝔽_p`). -/
 theorem hankel_rank_ge_three_mod (p : Nat) (hp : 2 ≤ p) : HankelRankAtLeastMod p EvenShift 3 :=
   ⟨rows3, cols3, rfl, rfl, by rw [minor_det]; exact not_dvd_neg_one p hp⟩
 
@@ -707,8 +715,8 @@ theorem conjecture_00000009617_false : ¬ Claim := by
   intro h
   exact (h EvenShift evenShift_sofic 2 fisher_count).2 hankel_rank_ge_three
 
-/-- The clause is false with the rank over `ℤ/p`, for every `p ≥ 2`
-(so over every prime field, hence over every field). -/
+/-- The clause is false with the rank over `ℤ/p`, for every `p ≥ 2` (in
+particular every prime, so over every prime field, hence over every field). -/
 theorem conjecture_00000009617_false_mod (p : Nat) (hp : 2 ≤ p) : ¬ ClaimMod p := by
   intro h
   exact (h EvenShift evenShift_sofic 2 fisher_count).2 (hankel_rank_ge_three_mod p hp)
@@ -718,6 +726,194 @@ states of an arbitrary presentation. -/
 theorem conjecture_00000009617_false_any_presentation : ¬ ClaimAnyPresentation := by
   intro h
   exact (h EvenShift evenShift_sofic 2 min_presentation_count).2 hankel_rank_ge_three
+
+/-! ## Second counterexample: the charge-constrained shift
+
+The even shift has 3 nonempty follower sets, which happens to equal its Hankel
+rank. The charge-constrained shift `X_c` separates every reading: its Fischer
+cover has 3 states, it has 6 nonempty follower sets, and its Hankel rank is 5.
+Here we prove the Fischer count is at most 3 and the Hankel rank is at least 5
+(over `ℚ` and over every `ℤ/p`), which already refutes the clause. -/
+
+/-- Vertices `0, 1, 2`; edges `0 -1-> 1`, `1 -1-> 2`, `2 -0-> 1`, `1 -0-> 0`
+(the label 1 means charge `+1`, the label 0 means charge `-1`). -/
+def charge : LGraph 3 := fun p a q =>
+  (p.val == 0 && a && q.val == 1) || (p.val == 1 && a && q.val == 2) ||
+    (p.val == 2 && !a && q.val == 1) || (p.val == 1 && !a && q.val == 0)
+
+/-- The charge-constrained shift `X_c`: the sofic shift presented by `charge`
+(the running charge of every window stays within a band of width 2). -/
+def ChargeShift (x : Config) : Prop := IsPathLabel charge x
+
+theorem charge_presents : Presents charge ChargeShift := fun _ => Iff.rfl
+
+theorem charge_rightResolving : RightResolving charge := by
+  unfold RightResolving; decide
+
+/-- Irreducible (`0 → 1 → 2 → 1 → 0`) and follower-separated: the word `0`
+separates vertex 0 from 1 and 2, the word `1` separates vertex 2 from 0 and 1,
+and the word `11` separates vertex 0 from vertex 1. -/
+theorem charge_irreducible_separated :
+    charge 0 true 1 = true ∧ charge 1 true 2 = true ∧ charge 2 false 1 = true ∧
+    charge 1 false 0 = true ∧
+    (∀ q, charge 0 false q = false) ∧ charge 2 false 1 = true ∧
+    (∀ q, charge 2 true q = false) ∧ charge 0 true 1 = true ∧
+    (∀ q, charge 1 true q = true → ∀ q', charge q true q' = false) := by
+  decide
+
+theorem charge_three_same : ∀ (a : Bool) (p q r t : Fin 3),
+    charge p a q = true → charge q a r = true → charge r a t = true → False := by
+  decide
+
+/-- `w` has three equal consecutive letters (`000` or `111`). -/
+def BadB (w : List Bool) : Prop :=
+  ∃ j, j < w.length - 2 ∧ w.getD j true = w.getD (j + 1) true ∧
+    w.getD (j + 1) true = w.getD (j + 2) true
+
+instance (w : List Bool) : Decidable (BadB w) := by unfold BadB; infer_instance
+
+/-- `000` and `111` never occur in `X_c`. -/
+theorem not_lang_of_bad (w : List Bool) (h : BadB w) : ¬ Lang ChargeShift w := by
+  rintro ⟨x, ⟨s, hs⟩, i, hocc⟩
+  obtain ⟨j, hj, e1, e2⟩ := h
+  have g := occurs_get hocc
+  have h0 := hs (i + j)
+  have h1 := hs (i + j + 1)
+  have h2 := hs (i + j + 2)
+  have g0 := g j (by omega) true
+  have g1 := g (j + 1) (by omega) true
+  have g2 := g (j + 2) (by omega) true
+  rw [show i + ((j + 1 : Nat) : Int) = i + j + 1 by omega] at g1
+  rw [show i + ((j + 2 : Nat) : Int) = i + j + 2 by omega] at g2
+  rw [show i + j + 1 + 1 = i + j + 2 by omega] at h1
+  rw [g0] at h0; rw [g1, ← e1] at h1; rw [g2, ← e2, ← e1] at h2
+  exact charge_three_same _ _ _ _ _ h0 h1 h2
+
+/-- The periodic point `(1100)^∞`. -/
+def per (i : Int) : Bool := decide (i % 4 < 2)
+
+def perState : Nat → Fin 3
+  | 0 => 0
+  | 1 => 1
+  | 2 => 2
+  | _ => 1
+
+theorem per_mem : ChargeShift per := by
+  refine ⟨fun i => perState (i % 4).toNat, fun i => ?_⟩
+  have key : ∀ r : Nat, r < 4 →
+      charge (perState r) (decide (r < 2)) (perState ((r + 1) % 4)) = true := by decide
+  have h1 : per i = decide ((i % 4).toNat < 2) := by
+    unfold per; exact decide_eq_decide.mpr (by omega)
+  have h2 : ((i + 1) % 4).toNat = ((i % 4).toNat + 1) % 4 := by omega
+  show charge (perState (i % 4).toNat) (per i) (perState ((i + 1) % 4).toNat) = true
+  rw [h1, h2]; exact key _ (by omega)
+
+/-- `w` occurs in `(1100)^∞`. -/
+def InPer (w : List Bool) : Prop :=
+  ∃ i, i < 4 ∧ ∀ j, j < w.length → decide ((i + j) % 4 < 2) = w.getD j true
+
+instance (w : List Bool) : Decidable (InPer w) := by unfold InPer; infer_instance
+
+theorem lang_of_per (w : List Bool) (h : InPer w) : Lang ChargeShift w := by
+  obtain ⟨i, _, hi⟩ := h
+  refine ⟨per, per_mem, i, occurs_of_get fun j hj => ?_⟩
+  rw [← hi j hj]; unfold per; exact decide_eq_decide.mpr (by omega)
+
+theorem chargeEntry (u v : List Bool) (h : InPer (u ++ v) ∨ BadB (u ++ v)) :
+    hankelEntry ChargeShift u v = if InPer (u ++ v) then 1 else 0 := by
+  unfold hankelEntry
+  by_cases hp : InPer (u ++ v)
+  · rw [if_pos (lang_of_per _ hp), if_pos hp]
+  · rw [if_neg (not_lang_of_bad _ (h.resolve_left hp)), if_neg hp]
+
+/-- Rows and columns `ε, 0, 1, 00, 11`. -/
+def wordsC : List (List Bool) := [[], [false], [true], [false, false], [true, true]]
+
+/-- The 5×5 minor of the Hankel matrix of `L(X_c)`. -/
+theorem chargeMinor_eq : minor ChargeShift wordsC wordsC =
+    [[1, 1, 1, 1, 1], [1, 1, 1, 0, 1], [1, 1, 1, 1, 0], [1, 0, 1, 0, 1], [1, 1, 0, 1, 0]] := by
+  simp (disch := decide) only [minor, wordsC, List.map, chargeEntry]
+  decide
+
+theorem chargeMinor_det : det (minor ChargeShift wordsC wordsC) = 1 := by
+  rw [chargeMinor_eq]; decide
+
+/-- Nonsingular minors of every size `r ≤ 5` (all with determinant `±1`). -/
+theorem charge_minors : ∀ r, r ≤ 5 → ∃ rows cols : List (List Bool),
+    rows.length = r ∧ cols.length = r ∧
+      (det (minor ChargeShift rows cols) = 1 ∨ det (minor ChargeShift rows cols) = -1) := by
+  intro r hr
+  have m1 : minor ChargeShift [[]] [[]] = [[1]] := by
+    simp (disch := decide) only [minor, List.map, chargeEntry]; decide
+  have m2 : minor ChargeShift [[], [false]] [[], [false, false]] = [[1, 1], [1, 0]] := by
+    simp (disch := decide) only [minor, List.map, chargeEntry]; decide
+  have m3 : minor ChargeShift [[], [false], [true]] [[], [false, false], [true, true]] =
+      [[1, 1, 1], [1, 0, 1], [1, 1, 0]] := by
+    simp (disch := decide) only [minor, List.map, chargeEntry]; decide
+  have m4 : minor ChargeShift [[], [false], [true], [false, false]]
+      [[], [false], [false, false], [true, true]] =
+      [[1, 1, 1, 1], [1, 1, 0, 1], [1, 1, 1, 0], [1, 0, 0, 1]] := by
+    simp (disch := decide) only [minor, List.map, chargeEntry]; decide
+  rcases (show r = 0 ∨ r = 1 ∨ r = 2 ∨ r = 3 ∨ r = 4 ∨ r = 5 by omega) with
+    rfl | rfl | rfl | rfl | rfl | rfl
+  · exact ⟨[], [], rfl, rfl, Or.inl (by decide)⟩
+  · exact ⟨_, _, rfl, rfl, by rw [m1]; decide⟩
+  · exact ⟨_, _, rfl, rfl, by rw [m2]; decide⟩
+  · exact ⟨_, _, rfl, rfl, by rw [m3]; decide⟩
+  · exact ⟨_, _, rfl, rfl, by rw [m4]; decide⟩
+  · exact ⟨wordsC, wordsC, rfl, rfl, Or.inl chargeMinor_det⟩
+
+theorem charge_rank_ge (r : Nat) (hr : r ≤ 5) : HankelRankAtLeast ChargeShift r := by
+  obtain ⟨rows, cols, h1, h2, h3⟩ := charge_minors r hr
+  exact ⟨rows, cols, h1, h2, by rcases h3 with h | h <;> rw [h] <;> decide⟩
+
+theorem charge_rank_ge_mod (p : Nat) (hp : 2 ≤ p) (r : Nat) (hr : r ≤ 5) :
+    HankelRankAtLeastMod p ChargeShift r := by
+  obtain ⟨rows, cols, h1, h2, h3⟩ := charge_minors r hr
+  refine ⟨rows, cols, h1, h2, ?_⟩
+  rcases h3 with h | h <;> rw [h]
+  · intro hd; exact not_dvd_neg_one p hp (Int.dvd_neg.mpr hd)
+  · exact not_dvd_neg_one p hp
+
+/-- A property that holds at `n` has a least witness `m ≤ n`. -/
+theorem exists_min {P : Nat → Prop} (n : Nat) (h : P n) : ∃ m, m ≤ n ∧ MinOf P m := by
+  induction n using Nat.strongRecOn with
+  | ind n ih =>
+    by_cases hc : ∃ k, k < n ∧ P k
+    · obtain ⟨k, hk, pk⟩ := hc
+      obtain ⟨m, hm, hmin⟩ := ih k hk pk
+      exact ⟨m, by omega, hmin⟩
+    · exact ⟨n, Nat.le_refl n, h, fun k hk pk => hc ⟨k, hk, pk⟩⟩
+
+theorem charge_sofic : Sofic ChargeShift := ⟨3, charge, charge_presents⟩
+
+/-- The Fischer count of `X_c` exists and is at most 3, while the Hankel rank
+is at least 5. -/
+theorem charge_counterexample :
+    ∃ m, m ≤ 3 ∧ IsFisherCount ChargeShift m ∧ HankelRankAtLeast ChargeShift 5 := by
+  obtain ⟨m, hm, hmin⟩ := exists_min (P := HasRRPresentation ChargeShift) 3
+    ⟨charge, charge_rightResolving, charge_presents⟩
+  exact ⟨m, hm, hmin, charge_rank_ge 5 (Nat.le_refl 5)⟩
+
+/-- **The clause is false, second counterexample** (rank over `ℚ`). -/
+theorem conjecture_00000009617_false_charge : ¬ Claim := by
+  intro h
+  obtain ⟨m, hm, hmin, _⟩ := charge_counterexample
+  exact (h ChargeShift charge_sofic m hmin).2 (charge_rank_ge (m + 1) (by omega))
+
+/-- Second counterexample, rank over `ℤ/p` for every `p ≥ 2` (in particular
+every prime). -/
+theorem conjecture_00000009617_false_charge_mod (p : Nat) (hp : 2 ≤ p) : ¬ ClaimMod p := by
+  intro h
+  obtain ⟨m, hm, hmin, _⟩ := charge_counterexample
+  exact (h ChargeShift charge_sofic m hmin).2 (charge_rank_ge_mod p hp (m + 1) (by omega))
+
+/-- Second counterexample, arbitrary presentations. -/
+theorem conjecture_00000009617_false_charge_any_presentation : ¬ ClaimAnyPresentation := by
+  intro h
+  obtain ⟨m, hm, hmin⟩ := exists_min (P := HasPresentation ChargeShift) 3
+    ⟨charge, charge_presents⟩
+  exact (h ChargeShift charge_sofic m hmin).2 (charge_rank_ge (m + 1) (by omega))
 
 /-! ## Sanity checks (non-vacuity) -/
 
@@ -744,3 +940,8 @@ end EvenShiftHankel
 #print axioms EvenShiftHankel.conjecture_00000009617_false
 #print axioms EvenShiftHankel.conjecture_00000009617_false_mod
 #print axioms EvenShiftHankel.conjecture_00000009617_false_any_presentation
+#print axioms EvenShiftHankel.chargeMinor_det
+#print axioms EvenShiftHankel.charge_counterexample
+#print axioms EvenShiftHankel.conjecture_00000009617_false_charge
+#print axioms EvenShiftHankel.conjecture_00000009617_false_charge_mod
+#print axioms EvenShiftHankel.conjecture_00000009617_false_charge_any_presentation

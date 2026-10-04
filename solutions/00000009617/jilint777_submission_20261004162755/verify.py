@@ -14,7 +14,12 @@ Checks
      columns (0, 10, 1) has determinant -1; the truncation to all words of
      length <= 6 has rank 3 over Q and over GF(2), GF(3), GF(5), GF(7); every
      row equals one of 4 vectors (3 nonzero follower sets + the zero row).
-  4. Disclosure: the Boolean (OR/AND) rank of H is 2.
+  4. Disclosure: the Boolean (OR/AND) rank of H is 2; Boolean rank <= Fischer
+     count in general; a measure-based Hankel rank depends on the measure.
+  5. Second counterexample, the charge-constrained shift X_c (3-vertex graph
+     0-1->1-1->2, 2-0->1-0->0): no presentation with <= 2 vertices, 6 nonempty
+     follower sets, Hankel rank exactly 5 over Q and GF(2), GF(3), GF(5), GF(7)
+     (5x5 minor with det 1, and the row relation that gives rank <= 5).
 """
 
 from fractions import Fraction
@@ -216,4 +221,104 @@ print("Boolean rank of H is 2: row(eps) = row(0) OR row(01); fooling set {(0,0),
 # over Q, row(eps) is NOT row(0)+row(01): they overlap on 1^k
 assert any(e and o for e, o in zip(rE, rO))
 
-print("ALL CHECKS PASSED: Fischer count 2, Hankel rank 3 over every field")
+# Boolean rank <= Fischer count: H = B o C with B[u][q] = [q terminal for u],
+# C[q][v] = [v in F_G(q)] (Boolean product through the Fischer vertices)
+def fol_vertex(graph, q, v):
+    return bool(path_states(graph, {q}, v))
+for u in W6:
+    for v in W6:
+        assert H(u, v) == int(any(fol_vertex(FISCHER, q, v) for q in path_states(FISCHER, {"A", "B"}, u)))
+print("H = B o C (Boolean product through the 2 Fischer vertices): Boolean rank <= Fischer count")
+
+# measure readings: Hankel matrix of P(w) for measures on X
+def markov_prob(w):
+    # Markov measure on the Fischer cover: from A emit 0 or 1 w.p. 1/2, from B emit 1;
+    # stationary distribution pi(A) = 2/3, pi(B) = 1/3
+    trans = {("A", "0"): ("A", Fraction(1, 2)), ("A", "1"): ("B", Fraction(1, 2)), ("B", "1"): ("A", Fraction(1))}
+    dist = {"A": Fraction(2, 3), "B": Fraction(1, 3)}
+    for c in w:
+        nd = {}
+        for st, pr in dist.items():
+            if (st, c) in trans:
+                q, t = trans[(st, c)]
+                nd[q] = nd.get(q, 0) + pr * t
+        dist = nd
+    return sum(dist.values(), Fraction(0))
+assert all((markov_prob(w) > 0) == (w in L) for w in words(8))
+r_markov = rank_Q([[markov_prob(u + v) for v in W6] for u in W6])
+r_delta = rank_Q([[1 if set(u + v) <= {"0"} else 0 for v in W6] for u in W6])
+print(f"measure Hankel ranks on X: fully supported Markov measure -> {r_markov}, point mass at 0^inf -> {r_delta} (measure-dependent)")
+assert r_markov == 2 and r_delta == 1
+
+print("even shift: ALL CHECKS PASSED (Fischer count 2, Hankel rank 3 over every field)")
+
+# ---------- 5. charge-constrained shift X_c ----------
+CHG = {(0, "1"): {1}, (1, "1"): {2}, (2, "0"): {1}, (1, "0"): {0}}
+
+
+def in_Lc_graph(w):
+    return bool(path_states(CHG, {0, 1, 2}, w))
+
+
+def in_Lc_charge(w):
+    """running charge (+1 for 1, -1 for 0) stays in a band of width 2"""
+    ps = [0]
+    for ch in w:
+        ps.append(ps[-1] + (1 if ch == "1" else -1))
+    return max(ps) - min(ps) <= 2
+
+
+for w in words(MAXLEN):
+    assert in_Lc_graph(w) == in_Lc_charge(w), w
+print(f"X_c: Fischer-graph paths == charge band of width 2 on all words of length <= {MAXLEN}")
+Lc = {w for w in words(CMP) if in_Lc_charge(w)}
+for n in range(0, 3):
+    cand = all_edges(n)
+    cnt = 0
+    for mask in range(1 << len(cand)):
+        E = [cand[i] for i in range(len(cand)) if mask >> i & 1]
+        if graph_lang(n, E, CMP) == Lc:
+            cnt += 1
+    print(f"  {n}-vertex graphs with the blocks of X_c up to length {CMP}: {cnt}")
+    assert cnt == 0
+rr = all(len(CHG.get((p, a), set())) <= 1 for p in range(3) for a in "01")
+sep = len({frozenset(v for v in words(3) if fol_vertex(CHG, q, v)) for q in range(3)}) == 3
+print(f"  3-vertex graph is right-resolving={rr}, follower-separated={sep}: Fischer count of X_c = 3 = least size of any presentation")
+assert rr and sep
+
+def Hc(u, v):
+    return 1 if in_Lc_charge(u + v) else 0
+
+term = {}
+for u in words(6):
+    T = frozenset(path_states(CHG, {0, 1, 2}, u))
+    if T:
+        term.setdefault(T, u)
+print("  terminal vertex sets of words:", {tuple(sorted(k)): (v or "eps") for k, v in sorted(term.items(), key=lambda kv: (len(kv[1]), kv[1]))})
+W8c = list(words(8))
+rowsc = {tuple(Hc(u, v) for v in W8c) for u in W8c}
+nonzero = len([r for r in rowsc if any(r)])
+print(f"  distinct nonzero rows (follower sets) on words of length <= 8: {nonzero}; with the zero row: {len(rowsc)}")
+assert nonzero == 6 and len(rowsc) == 7
+
+
+def det(Mx):
+    if not Mx:
+        return 1
+    return sum((-1) ** j * Mx[0][j] * det([r[:j] + r[j + 1:] for r in Mx[1:]]) for j in range(len(Mx)) if Mx[0][j])
+
+
+R5 = ["", "0", "1", "00", "11"]
+M5 = [[Hc(u, v) for v in R5] for u in R5]
+print("  5x5 minor rows/cols (eps, 0, 1, 00, 11) =", M5, "det =", det(M5))
+assert M5 == [[1, 1, 1, 1, 1], [1, 1, 1, 0, 1], [1, 1, 1, 1, 0], [1, 0, 1, 0, 1], [1, 1, 0, 1, 0]] and det(M5) == 1
+f = lambda u: [Hc(u, v) for v in W8c]
+assert all(a + b == c + d for a, b, c, d in zip(f(""), f("001"), f("0"), f("1")))
+print("  row relation 1_F(eps) + 1_F(001) = 1_F(0) + 1_F(1) holds (so rank <= 5)")
+HMc = [[Hc(u, v) for v in W6] for u in W6]
+assert rank_Q(HMc) == 5
+for p in (2, 3, 5, 7):
+    assert rank_p(HMc, p) == 5
+print("  Hankel truncation on words of length <= 6: rank 5 over Q, GF(2), GF(3), GF(5), GF(7)")
+print("X_c: Fischer count 3, follower sets 6 (7 with the dead state), Hankel rank 5: all differ")
+print("ALL CHECKS PASSED")
