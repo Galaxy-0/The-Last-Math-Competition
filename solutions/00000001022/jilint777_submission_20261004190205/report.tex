@@ -1,0 +1,359 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\smax}{s_{\max}}
+\newcommand{\cl}{\lceil\log_2 q\rceil}
+
+\title{Disproof of Conjecture 00000001022:\\
+$\min(k,n-k)\cdot\lceil\log_2 q\rceil$ is not a lower bound on trellis complexity}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000001022 asserts that, beyond the MacWilliams identities for support
+weights, every $[n,k]_q$ linear code has trellis complexity at least
+$\min(k,n-k)\cdot\lceil\log_2 q\rceil$. This is Wolf's classical \emph{upper} bound
+turned into a lower bound, and it is false. The binary $[10,5]$ code
+$C=\{00,11\}^5$ (the direct sum of five repetition codes of length $2$) has a
+trellis with layer sizes $1,2,1,2,\dots,1$. In it, the maximum number of states is $2$, the
+maximum number of edges per section is $2$, there are $16$ vertices and $20$
+edges in total, and the Viterbi algorithm needs $25$ operations. Every one of
+these measures has $\log_2$ below the claimed bound $5$. Its minimal (BCJR)
+trellis has state profile $s_i=0,1,0,1,\dots,0$, so $\smax=1<5$. More generally,
+$\{00,11\}^m$ is a $[2m,m]_2$ code with $\smax=1$ against a claimed bound of $m$,
+so the gap is unbounded. The refutation covers state, edge, total-vertex,
+total-edge and Viterbi complexity on a logarithmic scale, as well as raw maximum
+state and edge counts. It holds for any trellis, for the minimal trellis, and for the
+minimum over coordinate orders. A separate $[4,2]$ example also defeats the
+\emph{worst} coordinate order. Trellises, path labels, the complexity measures,
+the BCJR profile and the whole family are formalized in Lean~4 (core library only).
+\end{abstract}
+
+\section{The conjecture and the clause we refute}
+The statement reads:
+\begin{quote}
+\emph{Conjecture:} Beyond the MacWilliams identities for support weights of
+subcode subsets of any $[n,k]_q$ code, the lower bound for trellis complexity is
+$\min(k,n-k)\cdot\lceil\log_2 q\rceil$ (a trellis lower bound).
+\end{quote}
+The Chinese version says the same. The opening phrase ``beyond the MacWilliams
+identities for support weights'' is a preamble. The MacWilliams-type identities
+for support weight distributions (Kl{\o}ve, Simonis) are known theorems, and the
+statement attaches no claim to them that the bound depends on. If the preamble is
+read as a conjunct ``$\mathrm{MacW}$'', the conjecture is
+$\mathrm{MacW}\wedge(\mathrm{TLB})$, and refuting (TLB) refutes the conjunction,
+whatever $\mathrm{MacW}$ says. The substantive clause is:
+\begin{quote}
+(TLB)\quad For every linear $[n,k]_q$ code $C$,\quad
+$\operatorname{TC}(C)\ \ge\ \min(k,n-k)\cdot\lceil\log_2 q\rceil$,
+\end{quote}
+where $\operatorname{TC}$ is ``trellis complexity''. The statement does not define
+$\operatorname{TC}$, so Section~\ref{sec:readings} goes through every standard
+meaning. The bound carries the factor $\lceil\log_2 q\rceil$, which is the number of
+bits per $q$-ary symbol. So $\operatorname{TC}$ is a logarithmic (bit) measure, and
+for $q=2$ the factor is $1$. Since (TLB) is claimed for all $q$, it suffices to
+refute its instance $q=2$.
+
+\paragraph{Where the bound comes from.} Wolf~\cite{Wolf} showed that the syndrome
+trellis of an $[n,k]_q$ code has at most $q^{\min(k,n-k)}$ states at each time.
+So the state complexity satisfies $\smax\le\min(k,n-k)$ in $q$-ary units, that is,
+at most $\min(k,n-k)\log_2 q$ bits. This is an \emph{upper} bound, valid for every code, and it is
+attained by many codes (for example MDS codes). As a lower bound it fails badly,
+as we now show.
+
+\section{Trellises and complexity measures}
+\begin{definition}
+A (binary) trellis of length $n$ consists of vertex layers $V_0,\dots,V_n$ with
+$|V_0|=|V_n|=1$ (root and toor) and edge sections $E_1,\dots,E_n$, where each
+$e\in E_i$ goes from a vertex of $V_{i-1}$ to a vertex of $V_i$ and carries a label
+in $\F_2$. The label sequence of a root-to-toor path is a word in $\F_2^n$. The
+trellis \emph{represents} $C\subseteq\F_2^n$ if the set of these label sequences is
+exactly $C$.
+\end{definition}
+The standard complexity measures of a trellis $T$ are
+\begin{itemize}
+\item state complexity $\smax(T)=\max_i\log_2|V_i|$ (``trellis width'');
+\item edge (branch) complexity $b_{\max}(T)=\max_i\log_2|E_i|$;
+\item total complexity $\log_2|V|$ and $\log_2|E|$, where $|V|=\sum|V_i|$ and $|E|=\sum|E_i|$;
+\item Viterbi complexity $\log_2(2|E|-|V|+1)$. This counts the additions and comparisons of
+the Viterbi algorithm~\cite{McEliece}.
+\end{itemize}
+The \emph{trellis complexity of a code} $C$ is the minimum of the chosen measure
+over all trellises representing $C$. Some authors also minimize over all coordinate
+orders of $C$. Alternatively, it is defined as the measure of the \emph{minimal}
+trellis of $C$. A linear code has a unique minimal trellis, the BCJR/Forney/Muder trellis
+\cite{BCJR,Forney,Muder,McEliece,Vardy}. It minimizes every $|V_i|$ and every
+$|E_i|$ simultaneously, so it minimizes all the measures above. Every reading of
+$\operatorname{TC}(C)$ is therefore bounded above by the measure of \emph{any one} trellis
+representing $C$:
+\begin{equation}\label{eq:upper}
+\operatorname{TC}(C)\ \le\ \mu(T)\qquad\text{for every trellis $T$ representing $C$.}
+\end{equation}
+To refute (TLB) it thus suffices to exhibit one code and one trellis for it whose
+measure lies below the claimed bound.
+
+\paragraph{The minimal trellis.} For a linear code $C$ of length $n$ and
+$0\le i\le n$, let
+$P_i=\{c\in C: c_j=0\ \forall j\ge i\}$ (past subcode) and
+$F_i=\{c\in C: c_j=0\ \forall j<i\}$ (future subcode). The minimal trellis has
+$|V_i|=|C|/(|P_i|\,|F_i|)$ states at time~$i$, that is,
+\begin{equation}\label{eq:bcjr}
+s_i\;=\;k-\dim P_i-\dim F_i\qquad(\text{in $q$-ary units})
+\end{equation}
+\cite{Forney,McEliece,Vardy}. Equivalently, $s_i=\operatorname{rk}G_{[0,i)}+\operatorname{rk}G_{[i,n)}-k$
+for any generator matrix $G$.
+
+\section{\texorpdfstring{The counterexample $\{00,11\}^5$}{The counterexample (00,11)\^{}5}}
+Let $R=\{00,11\}\subseteq\F_2^2$ be the binary repetition code of length $2$, and let
+\[
+C=R^5=R\oplus R\oplus R\oplus R\oplus R
+=\{(a_1,a_1,a_2,a_2,\dots,a_5,a_5): a_j\in\F_2\}\subseteq\F_2^{10}.
+\]
+It is generated by the five words $e_{2j}+e_{2j+1}$, $0\le j\le4$ (coordinates are
+numbered $0,\dots,9$). These have disjoint supports, so they are linearly independent and
+$C$ is a binary $[10,5]$ code with $32$ codewords. The claimed bound is
+$\min(5,5)\cdot\lceil\log_2 2\rceil=5$.
+
+\begin{theorem}\label{thm:main}
+Let $T$ be the trellis with layers $|V_{2j}|=1$ ($V_{2j}=\{0\}$) and $|V_{2j+1}|=2$
+($V_{2j+1}=\{0,1\}$), and sections
+\[
+E_{2j+1}=\{0\xrightarrow{0}0,\ 0\xrightarrow{1}1\},\qquad
+E_{2j+2}=\{0\xrightarrow{0}0,\ 1\xrightarrow{1}0\}\qquad(0\le j\le 4).
+\]
+Then $T$ represents $C$, and
+\[
+\max_i|V_i|=2,\quad \max_i|E_i|=2,\quad |V|=16,\quad |E|=20,\quad 2|E|-|V|+1=25 .
+\]
+Hence $\smax(T)=b_{\max}(T)=1$, $\log_2|V|=4$, $\log_2|E|\approx4.32$ and
+$\log_2 25\approx4.64$. All of these are $<5$.
+\end{theorem}
+\begin{proof}
+A root-to-toor path passes through the single vertex of $V_{2j}$ at every even time.
+Between times $2j$ and $2j+2$ there are exactly two sub-paths: $0\xrightarrow{0}0\xrightarrow{0}0$
+and $0\xrightarrow{1}1\xrightarrow{1}0$, with labels $00$ and $11$. Indeed, from state $0$ of
+$V_{2j+1}$ the only outgoing edge has label $0$, and from state $1$ the only one has
+label $1$. The paths are therefore the free concatenations of five such blocks, and
+their labels are exactly the words $(a_1,a_1,\dots,a_5,a_5)$, which is $C$. The counts
+are immediate: the layer sizes are $1,2,1,2,\dots,2,1$ (sum $6+10=16$), and each of the
+$10$ sections has $2$ edges (sum $20$).
+\end{proof}
+
+\begin{proposition}\label{prop:bcjr}
+The minimal trellis of $C$ has state profile $(s_0,\dots,s_{10})=(0,1,0,1,\dots,1,0)$,
+so $\smax=1<5$. Its sections have $2$ edges each, so $b_{\max}=1$.
+\end{proposition}
+\begin{proof}
+A codeword vanishes on the coordinates $\ge i$ iff all blocks meeting
+$\{i,\dots,9\}$ are $00$. For $i=2j$ this leaves the $j$ blocks before $i$ free, and for
+$i=2j+1$ it leaves the $j$ blocks strictly before block $j$ free. Hence $\dim P_{2j}=j$
+and $\dim P_{2j+1}=j$. Symmetrically, $\dim F_{2j}=5-j$ and $\dim F_{2j+1}=5-j-1$. By
+\eqref{eq:bcjr}, $s_{2j}=5-j-(5-j)=0$ and $s_{2j+1}=5-j-(4-j)=1$. The trellis of
+Theorem~\ref{thm:main} has these layer sizes, so by uniqueness of the minimal trellis it
+\emph{is} the minimal trellis. In particular the minimal trellis has $2$ edges per
+section. (The concrete numbers $|P_i|=1,1,2,2,\dots,16,16,32$ and
+$|F_i|=32,16,16,\dots,2,2,1,1$ are also checked in Lean and in \texttt{verify.py}.)
+\end{proof}
+
+\begin{corollary}\label{cor:main}
+(TLB) is false for $q=2$, and hence false, under each of the readings listed in
+Section~\ref{sec:readings}(a)--(e).
+\end{corollary}
+\begin{proof}
+By \eqref{eq:upper}, Theorem~\ref{thm:main} and Proposition~\ref{prop:bcjr}, every
+reading of $\operatorname{TC}(C)$ in (a)--(c) and (e) is at most $\log_2 25<5$, and many are
+equal to $1$. For the rounded readings in (d), see the discussion there; the only case
+that needs the next member $\{00,11\}^6$ of the family below is rounding up $\log_2|E|$ and the Viterbi count.
+\end{proof}
+
+\section{\texorpdfstring{A whole family: $\{00,11\}^m$}{A whole family: (00,11)\^{}m}}
+The same construction works for every $m\ge1$. The code $R^m$ is a $[2m,m]_2$ code, and
+the trellis with layer sizes $1,2,1,2,\dots,1$ (the $m$-fold concatenation of the
+two-section trellis of $R$) represents it. The argument is the proof of
+Theorem~\ref{thm:main} with $5$ replaced by $m$. The minimal profile is
+$0,1,0,1,\dots,0$ by the proof of Proposition~\ref{prop:bcjr}. The trellis has
+\[
+\max|V_i|=2,\quad\max|E_i|=2,\quad |V|=3m+1,\quad |E|=4m,\quad 2|E|-|V|+1=5m,
+\]
+against a claimed bound of $m$ bits, that is, $2^m$ in raw counts.
+
+\begin{center}
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+$m$ & bound & $\smax$ & $b_{\max}$ & $\log_2|V|$ & $\log_2|E|$ & $\log_2(5m)$ & measures $<$ bound\\
+\midrule
+$1$ & $1$ & $1$ & $1$ & $2$ & $2$ & $2.32$ & none\\
+$2$ & $2$ & $1$ & $1$ & $2.81$ & $3$ & $3.32$ & $\smax$, $b_{\max}$\\
+$3$ & $3$ & $1$ & $1$ & $3.32$ & $3.58$ & $3.91$ & $\smax$, $b_{\max}$\\
+$4$ & $4$ & $1$ & $1$ & $3.70$ & $4$ & $4.32$ & $\smax$, $b_{\max}$, $|V|$\\
+$5$ & $5$ & $1$ & $1$ & $4$ & $4.32$ & $4.64$ & all five\\
+$m\ge5$ & $m$ & $1$ & $1$ & $<m$ & $<m$ & $<m$ & all five\\
+\bottomrule
+\end{tabular}
+\end{center}
+For $m\ge5$ we have $5m<2^m$ (by induction: $25<32$, and $5(m+1)=5m+5<2^m+2^m$), and
+therefore also $3m+1<2^m$ and $4m<2^m$. So every member with $m\ge2$ refutes (TLB) for
+state and edge complexity, and every member with $m\ge5$ refutes it for all five
+measures. The gap between the claimed bound $m$ and the true $\smax=1$ is
+unbounded.
+
+The smallest instance is the $[4,2]$ code $\{0000,1100,0011,1111\}$ ($m=2$). Its
+minimal profile is $0,1,0,1,0$, so $\smax=1<2=\min(2,2)$.
+
+\begin{remark}[$q$-ary analogue]
+For any $q$, the code $\{aa:a\in\F_q\}^m$ is a $[2m,m]_q$ code. It has the analogous
+trellis with layer sizes $1,q,1,q,\dots,1$, so $\smax=\log_2 q$ bits, while the claimed bound is
+$m\lceil\log_2 q\rceil$. For $q=3$ the bound fails even at $m=1$
+($\log_2 3\approx1.585<2$). \texttt{verify.py} checks $q=3,5$; this remark is not in Lean.
+\end{remark}
+
+\section{Readings covered}\label{sec:readings}
+\begin{enumerate}
+\item[(a)] \textbf{Measure.} State complexity $\smax$, edge complexity $b_{\max}$, total
+vertex complexity $\log_2|V|$, total edge complexity $\log_2|E|$, and Viterbi complexity
+$\log_2(2|E|-|V|+1)$. All five are below $5$ for $C=R^5$.
+\item[(b)] \textbf{Which trellis.} The minimum over all trellises representing $C$, or the
+minimal (BCJR) trellis. By \eqref{eq:upper} one trellis suffices, and in addition the BCJR
+profile is computed directly (Proposition~\ref{prop:bcjr}). Our trellis is in fact the
+minimal one.
+\item[(c)] \textbf{Coordinate order.} The given order, or the minimum over all $10!$
+coordinate permutations (``trellis complexity of the equivalence class''). A minimum
+over orders is at most the value for the identity order.
+\item[(d)] \textbf{Units and rounding.} For $q=2$, bits and $q$-ary units coincide and
+$\lceil\log_2 q\rceil=1$. The values $\smax=b_{\max}=1$ and $\log_2|V|=4$ are integers, so
+rounding $\log_2$ up or down changes nothing for them. Rounding \emph{down} keeps all five
+measures below $5$. Rounding \emph{up} turns $\log_2 20$ and $\log_2 25$ into exactly $5$, so
+for these two measures $R^5$ does not refute the rounded-up reading. The next member $R^6$
+does: $\lceil\log_2 19\rceil=\lceil\log_2 24\rceil=\lceil\log_2 30\rceil=5<6$.
+\item[(e)] \textbf{Raw state and edge counts.} Even without logarithms,
+$\max|V_i|=\max|E_i|=2<5$.
+\item[(f)] \textbf{Worst coordinate order.} Some authors might take the
+\emph{worst} order (``some ordering of $C$ needs $\min(k,n-k)$ bits''). This reading needs
+another example, because $R^5$ in the interleaved order $0,2,4,6,8,1,3,5,7,9$ has
+$\smax=5$. The $[4,2]$ code generated by $1000$ and $0111$ has no zero coordinate, and
+in every one of its $24$ coordinate orders its minimal trellis has $\smax=1<2$. In order to
+have $s_i=2$ one needs $P_i=F_i=0$, so the first coordinate (the only one that
+sees the generator $1000$) would have to lie both before and after time $i$.
+\end{enumerate}
+
+\paragraph{The only escape: unitless total counts.} If ``trellis complexity'' were the raw
+number $|V|$ or $|E|$ of vertices or edges, compared with $\min(k,n-k)\lceil\log_2q\rceil$
+as a pure number, then $R^5$ would not be a counterexample ($16,20\ge5$). We do not claim
+to refute that reading, but it is not a sensible reading of the statement. The bound is
+stated in bits ($\lceil\log_2q\rceil$ bits per symbol), and a raw count of
+vertices or edges is not measured in bits. Moreover, for $|E|$ the raw inequality is
+trivially true and says nothing about trellis structure. Every $|E_i|\ge1$ and
+$x\ge1+\log_2x$ for every positive integer $x$. A $q$-ary code has $q^k$
+paths, so $\prod_i|E_i|\ge q^k$. Hence
+$|E|\ge n+\sum_i\log_2|E_i|\ge n+k\log_2q\ge k(\log_2q+1)\ge\min(k,n-k)\lceil\log_2q\rceil$.
+
+\paragraph{Non-vacuity.} The clause is not refuted for a trivial reason. The interleaved
+$[4,2]$ code $\{0000,1010,0101,1111\}$ has minimal profile $0,1,2,1,0$, so it
+\emph{attains} the bound $2$, and Wolf's bound is tight there. For $R=\{00,11\}$,
+\emph{every} trellis needs $2$ states at time $1$: if the paths for $00$ and $11$ met in
+a common middle state, then $01$ would also be a path label. So (TLB) holds for $R$
+over all trellises. An exhaustive scan (\texttt{verify.py}) of all $2+5+16+67+374+2825$
+binary linear codes of length $n\le6$ confirms Wolf's upper bound
+$\smax\le\min(k,n-k)$ for every one of them, and finds that
+$0,2,6,37,200,1785$ of them violate the claimed lower bound.
+
+\paragraph{A different statement.} One might read the conjecture as saying that
+$\min(k,n-k)\cdot\lceil\log_2q\rceil$ is the best \emph{universal upper} bound, that is, Wolf's
+bound. That is a different (known) statement, not a lower bound ``for any $[n,k]_q$
+code'', and we do not address it.
+
+\section{Formal verification (Lean 4)}
+The directory \texttt{lean4/} contains a self-contained Lean~4.19.0 project, using the
+core library only. All objects are defined from scratch:
+\begin{itemize}
+\item words are \texttt{List Bool}; \texttt{span n gens} lists the $2^k$
+$\F_2$-combinations of the generators; \texttt{IsGen n k gens} says that there are $k$
+generators of length $n$ that are linearly independent (all $2^k$ combinations are
+distinct);
+\item \texttt{Trellis} consists of a list of layer sizes and a list of sections of labelled
+edges $(\text{from},\text{bit},\text{to})$. \texttt{WF} requires one root, one toor,
+edge endpoints in the adjacent layers and no repeated edge. \texttt{IsPath} defines a
+root-to-toor path with a given label sequence. \texttt{Represents T n gens} says that the path labels are
+exactly the codewords. \texttt{labels} enumerates the paths, and \texttt{mem\_labels}
+proves that the enumeration is correct;
+\item the measures \texttt{maxStates}, \texttt{maxEdges}, \texttt{numVertices},
+\texttt{numEdges} and \texttt{viterbiOps}. The clause ``$\log_2 X\ge B$'' is stated as
+$2^B\le X$, which is equivalent for the real logarithm. \texttt{CeilLog2 q e} characterizes
+$e=\lceil\log_2q\rceil$ (and \texttt{ceilLog2\_unique} proves uniqueness);
+\item \texttt{pastSub}, \texttt{futSub} and \texttt{minProfile}, the BCJR profile
+$|C|/(|P_i||F_i|)$; \texttt{permW} and \texttt{IsPermOf} for coordinate orders.
+\end{itemize}
+The clause is \texttt{Clause $\mu$}: for all $n,k$, generators, $e$ with
+\texttt{IsGen n k gens} and \texttt{CeilLog2 2 e}, and every well-formed trellis $T$
+representing the code, $2^{\min(k,n-k)\cdot e}\le\mu(T)$. The main results are:
+\begin{itemize}
+\item \texttt{ex10\_isGen}, \texttt{ex10\_wf}, \texttt{ex10\_represents},
+\texttt{ex10\_numbers} (the values $2,2,16,20,25$), \texttt{ex10\_minProfile}
+($1,2,1,\dots,1$) and \texttt{ex10\_pastFut};
+\item \texttt{clause\_false : $\forall\mu$, $\neg$ Clause $\mu$} and
+\textbf{\texttt{conjecture\_00000001022\_false : $\forall$ MacW $\mu$, $\neg$ Conjecture MacW $\mu$}};
+\item \texttt{clauseMin\_false}, \texttt{clausePerm\_false} and
+\texttt{clauseMinPerm\_false}, for the minimal-trellis and coordinate-order readings;
+\item the family, for \emph{all} $m$: \texttt{family\_isGen}, \texttt{family\_wf},
+\texttt{family\_represents} and \texttt{family\_numbers}
+($\le2$, $\le2$, $3m+1$, $4m$); then \texttt{family\_viterbi} ($5m$),
+\texttt{family\_gap\_states} ($m\ge2$), \texttt{family\_gap\_all} ($m\ge5$),
+\texttt{clause\_false\_family} and \texttt{clause\_false\_family\_all};
+\texttt{family\_minProfile\_small} gives the BCJR maximum $2$ for $m\le6$;
+\item \texttt{worstOrder\_false}, the worst-order reading, via the $[4,2]$ code
+$\langle1000,0111\rangle$ and all orders;
+\item non-vacuity: \texttt{rep2\_clause\_holds} (every trellis for $\{00,11\}$ has
+$\ge2$ states) and \texttt{inter4\_meets\_bound}.
+\end{itemize}
+The project contains no \texttt{sorry}, no \texttt{native\_decide} and no added axioms.
+\texttt{\#print axioms} reports at most \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\paragraph{Limitations.} The Lean formalization is binary ($q=2$), which suffices to
+refute a statement made for all $q$. The theorem that the minimal trellis has
+$|C|/(|P_i||F_i|)$ states (equation~\eqref{eq:bcjr}) is cited, not formalized. Lean
+computes this quantity, and, independently, the explicit trellis already gives the
+upper bound~\eqref{eq:upper}. The BCJR profile of the family for general $m$, the
+$q$-ary remark and the raw-$|E|$ inequality are proved in this report only (the first
+two are checked numerically in \texttt{verify.py}).
+
+\section{Independent check}
+\texttt{verify.py} (Python~3 standard library) uses different methods. It computes the
+BCJR profile from ranks of generator submatrices (Gaussian elimination mod $p$) and
+cross-checks it by counting. It builds the minimal trellis explicitly as the pruned
+syndrome trellis from a parity-check matrix, and checks its layer sizes and its path labels.
+It also expands the explicit trellis forward, covers the family for $m\le8$, $q=3,5$ and
+all coordinate orders of the $[4,2]$ examples, and scans all binary linear codes of length $\le6$.
+
+\begin{thebibliography}{9}
+\bibitem{BCJR} L.~R. Bahl, J.~Cocke, F.~Jelinek, J.~Raviv, Optimal decoding of linear
+codes for minimizing symbol error rate, \emph{IEEE Trans. Inform. Theory} 20 (1974) 284--287.
+\bibitem{Wolf} J.~K. Wolf, Efficient maximum likelihood decoding of linear block codes
+using a trellis, \emph{IEEE Trans. Inform. Theory} 24 (1978) 76--80.
+\bibitem{Forney} G.~D. Forney, Jr., Coset codes II: Binary lattices and related codes,
+\emph{IEEE Trans. Inform. Theory} 34 (1988) 1152--1187.
+\bibitem{Muder} D.~J. Muder, Minimal trellises for block codes, \emph{IEEE Trans. Inform.
+Theory} 34 (1988) 1049--1053.
+\bibitem{McEliece} R.~J. McEliece, On the BCJR trellis for linear block codes,
+\emph{IEEE Trans. Inform. Theory} 42 (1996) 1072--1092.
+\bibitem{Vardy} A.~Vardy, Trellis structure of codes, in \emph{Handbook of Coding Theory},
+V.~S. Pless and W.~C. Huffman (eds.), Elsevier, 1998.
+\bibitem{Klove} T.~Kl{\o}ve, Support weight distribution of linear codes, \emph{Discrete
+Math.} 106/107 (1992) 311--316.
+\end{thebibliography}
+\end{document}
