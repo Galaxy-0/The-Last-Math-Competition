@@ -1,0 +1,42 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\newtheorem{proposition}{Proposition}
+\title{A nonconvex Pareto frontier over ergodic measures}
+\author{ziangni-sys}
+\date{Conjecture 00000008485}
+\begin{document}
+\maketitle
+\noindent\textbf{Claim addressed.} Both original versions define the image using integration pairs over ergodic measures and assert that its northeast Pareto frontier is always convex. A two-point compact system disproves this assertion.
+
+Let $X=\{0,1\}$ have the discrete topology and full measurable structure, let $T=\mathrm{id}_X$, and define the continuous real functions
+\[
+ f(0)=1,\quad f(1)=0,\qquad g(0)=0,\quad g(1)=1.
+\]
+The space is compact and the map is continuous. The reference probability system $(X,T,\delta_0)$ is genuinely ergodic: every measurable set has $\delta_0$-measure zero or one. No full-support requirement is imposed in the source.
+
+\begin{proposition}
+The integration image over all ergodic invariant probability measures and its northeast Pareto frontier are both exactly
+\[
+ \{(1,0),(0,1)\}.
+\]
+In particular the Pareto frontier is not convex.
+\end{proposition}
+\begin{proof}
+Every probability measure on $X$ is invariant under the identity. For an ergodic probability measure $\nu$, the invariant measurable singleton $\{0\}$ must have measure zero or one. If it has measure one, $\nu=\delta_0$; if it has measure zero, the complement $\{1\}$ has measure one, and $\nu=\delta_1$. These equalities follow by comparing the masses of both singletons, which determine a measure on $X$. Conversely both Dirac measures are ergodic for the identity. Thus these are exactly all the ergodic invariant probability measures.
+
+Their actual integrals are
+\[
+ \left(\int f\,d\delta_0,\int g\,d\delta_0\right)=(1,0),
+ \qquad
+ \left(\int f\,d\delta_1,\int g\,d\delta_1\right)=(0,1).
+\]
+A point in the image is on the northeast Pareto frontier when no distinct image point is at least as large in both coordinates. Neither of the displayed points dominates the other, so both and only both lie on this frontier. Their midpoint $(1/2,1/2)$ is absent from the image and hence absent from the frontier. Therefore the frontier is not convex, contradicting the universal assertion.
+\end{proof}
+
+\noindent\textbf{Scope.} The source explicitly varies the measure over ergodic measures. If one instead included all invariant probability measures or took the convex hull, the integration image here would be the full segment joining the two points. That alternative definition is different from the stated one. Specifying a reference ergodic measure does not impose full support or exclude the second invariant ergodic measure. The example disproves the first convexity clause; its frontier is compact, and no counterclaim about the remaining assertions is needed.
+
+\medskip
+\noindent\textbf{Formal correspondence.} Lean uses the actual compact discrete space $\mathrm{Fin}\,2$, its Borel measurable structure, the identity transformation, and actual continuous observables. Mathlib's genuine \texttt{Ergodic} predicate supplies the zero-one property and is proved for the two Diracs. The proof classifies every ergodic probability measure by equality of actual measures, computes the actual Bochner integrals, identifies the full image and its quantified northeast frontier, and proves failure of Mathlib's actual \texttt{Convex} predicate using the midpoint. It does not assume an image or a frontier certificate.
+\end{document}
