@@ -1,0 +1,47 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{A zero-free shifted difference of an order-one entire function}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Conjecture 00000002233.} The stated lower bound for zeros of a shifted difference fails for the actual entire function $f(z)=e^z$ and the nonzero real shift $c=1$. Neither language version excludes this example.
+
+The function is holomorphic everywhere. Its genuine maximum modulus is $M_f(r)=e^r$ for $r\geq0$: on $|z|\leq r$, $|e^z|\leq e^{|z|}\leq e^r$, with equality at the real point $z=r$. Therefore its actual order is the integer one:
+\[
+ \rho(f)=\limsup_{r\to\infty}\frac{\log\log M_f(r)}{\log r}
+ =\limsup_{r\to\infty}\frac{\log r}{\log r}=1.
+\]
+The quotient equals one for every $r>1$.
+
+The genuine shifted difference is
+\[
+ \Delta_1 f(z)=f(z+1)-f(z)=(e-1)e^z.
+\]
+Since $e>1$ and the exponential never vanishes, this difference has no zeros anywhere in $\mathbb C$. In particular the difference is not identically zero and $1$ is not a period of $f$.
+
+Every radial zero count is consequently zero. Counting multiplicities changes nothing, as there are no points to count. The corresponding integrated Nevanlinna zero count is also zero. In the usual expression
+\[
+ N(r,0;\Delta_1 f)=\int_0^r \frac{n(t,0;\Delta_1 f)-n(0,0;\Delta_1 f)}{t}\,dt
+ +n(0,0;\Delta_1 f)\log r,
+\]
+all counts and the entire integrand vanish. Thus any normalized zero-density version is zero too.
+
+The characteristic on the right-hand side is the actual Nevanlinna characteristic of this entire function. It has no pole-counting term, so it equals its proximity integral:
+\[
+ T(r,f)=\frac{1}{2\pi}\int_{-\pi}^{\pi}
+ \log^+\bigl|f(re^{i\theta})\bigr|\,d\theta
+ =\frac{1}{2\pi}\int_{-\pi}^{\pi}\max(0,r\cos\theta)\,d\theta.
+\]
+Here $\log^+ u=\max(0,\log u)$. For every $r>0$, the last integrand is continuous and nonnegative. At $\theta=0$ it equals $r>0$, so its integral is strictly positive. Since $2\pi>0$, we obtain $T(r,f)>0$ for every positive radius.
+
+Choose $\varepsilon=1/2$. The proposed bound would require
+\[
+ 0=N(r,0;\Delta_1 f)\geq T(r,f)(1-\varepsilon)
+ =\tfrac12 T(r,f)>0,
+\]
+which fails at every $r>0$, hence also at arbitrarily large radii. The same conclusion holds for a raw or normalized zero-density reading because the shifted difference is globally zero-free.
+
+\noindent\textbf{Scope and verification.} This disproves the unqualified shifted-difference lower bound as written, not a Bank--Lang theorem with additional hypotheses. The Lean project proves actual entire differentiability, maximum modulus and limsup order one, the actual difference formula and global zero-freeness, and the emptiness of every disk's zero set. It proves zero finite counts for \emph{every} weight on the actual zero points, covering genuine multiplicity weights, and zero integrated counts. It separately defines the actual circle parameter and angular characteristic integral, proves its integrand identity and strict positivity, and proves failure beyond every prescribed radius. No density is merely assigned a zero value.
+\end{document}
