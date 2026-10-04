@@ -10,7 +10,7 @@ archived under solutions/[number_ID]/review/. After the full re-audit of 2026-10
 reverted to open unless another valid submission remains); 98 PRs were closed unmerged with
 full review comments.
 
-**Total solved: 260 / 10000 conjectures** — 18 proven, 242 disproven.
+**Total solved: 282 / 10000 conjectures** — 22 proven, 260 disproven.
 
 Ranking is by **Solved** (accepted submissions), ties broken by first solves.
 
@@ -19,13 +19,14 @@ Ranking is by **Solved** (accepted submissions), ties broken by first solves.
 | 1 | [orionsheep](https://github.com/orionsheep) | 73 | 65 | 0 | 73 |
 | 2 | [earthking11](https://github.com/earthking11) | 65 | 58 | 0 | 65 |
 | 3 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 51 | 51 | 3 | 48 |
-| 4 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 34 | 33 | 8 | 26 |
-| 5 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
-| 6 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
-| 7 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
-| 8 | [ziangni-sys](https://github.com/ziangni-sys) | 16 | 16 | 1 | 15 |
+| 4 | [ziangni-sys](https://github.com/ziangni-sys) | 37 | 37 | 5 | 32 |
+| 5 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 34 | 33 | 8 | 26 |
+| 6 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
+| 7 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
+| 8 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
 | 9 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
 | 10 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
+| 11 | [C0ldSmi1e](https://github.com/C0ldSmi1e) | 1 | 1 | 0 | 1 |
 
 ## Solved conjectures per solver
 
@@ -94,8 +95,15 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 
 #252★ (D)
 
-### ziangni-sys — 16 solved (16 first)
+### C0ldSmi1e — 1 solved (1 first)
+
+#310★ (D)
+
+### ziangni-sys — 37 solved (37 first)
 
 #7683★ (D), #3327★ (D), #1101★ (D), #1000★ (D), #2153★ (D), #3943★ (D), #5508★ (D), #5781★ (D)
 #6406★ (P), #6672★ (D), #7167★ (D), #7400★ (D), #8178★ (D), #8230★ (D), #8557★ (D), #8843★ (D)
+#8855★ (D), #8844★ (P), #8847★ (P), #1414★ (D), #8842★ (P), #8850★ (D), #8841★ (D), #8839★ (D)
+#7152★ (D), #9118★ (D), #8550★ (D), #7177★ (D), #8430★ (D), #8574★ (D), #5449★ (D), #8411★ (D)
+#6837★ (P), #2333★ (D), #8492★ (D), #8232★ (D), #8873★ (D)
 

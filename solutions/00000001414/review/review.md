@@ -1,0 +1,26 @@
+# Solution Review — Conjecture 00000001414 (PR 389)
+
+**Submission:** ziangni-sys — `ziangni-sys_submission_20261004034446`
+**Reviewer:** competition review pipeline (structure + build + semantic audit)
+**Date:** 2026-10-04
+
+## Checklist results
+- Conjecture read: yes — "|K_{10}(Z)| = B_{12}/(2·6!) (i.e. an integral value with the explicit denominator of 691/2³·3²·5·6! type); the difference between this value and the rank-1 part of Borel's computation is exactly the order of the torsion part." Claimed and delivered as a DISPROOF of the displayed equality.
+- LaTeX: pdflatex compiled twice, exit 0 both passes; shipped 2-page report.pdf is genuine; text identical to my rebuild modulo subscript/glyph positioning artifacts of txtwrite extraction.
+- Lean build: exit 0 (1409/1410 Built Main; axioms line-wrapped but identical). No warnings (uses set_option maxHeartbeats/maxRecDepth — legitimate). `#print axioms` on `bernoulli_twelve`, `all_fractions_nonintegral`, `finite_group_orders_impossible`, `conjecture_00000001414_displayed_equality_false` = exactly [propext, Classical.choice, Quot.sound].
+- Forbidden content: grep over Main.lean + lakefile.lean: no hits (sorry/admit/native_decide/axiom decl/unsafe/implemented_by/extern/skipKernelTC).
+- Auxiliary code: verification/ dir with lean-build.txt, lean-check.txt, pdf-build.txt, source.md, eligibility.txt, README — recorded outputs match my live results exactly. Independent python3 re-derivation of the Bernoulli recurrence (b₁=1/2): b₁₂ = −691/2730; B₁₂/(2·6!) = −691/3931200; |B₁₂|/(2·6!) = 691/3931200; 691/(2³·3²·5·6!) = 691/259200 — all four values match the Lean theorems bit-for-bit.
+## Semantic audit
+Conjecture's literal displayed claim: |K_{10}(Z)| = B_{12}/(2·6!). The Lean project derives, from Mathlib's defining recurrence (`bernoulli'_def` unfolded stepwise b₀…b₁₂, then `bernoulli_eq_bernoulli'_of_ne_one`), `theorem bernoulli_twelve : bernoulli 12 = (-691/2730 : ℚ)`. Then:
+- `displayed_value : displayedValue = (-691/3931200 : ℚ)`, `absolute_value : absoluteValue = (691/3931200 : ℚ)`, `parenthetical_value : parentheticalValue = (691/259200 : ℚ)` — exact kernel-checked evaluations of the three candidate readings (literal, absolute-value, and the conjecture's own parenthetical "691/2³·3²·5·6! type" denominator).
+- `no_natural_in_open_unit_interval : 0 < q → q < 1 → ∀ n:ℕ, (n:ℚ) ≠ q` and negativity of the literal value give `all_fractions_nonintegral (n : ℕ) : (n:ℚ) ≠ displayedValue ∧ (n:ℚ) ≠ absoluteValue ∧ (n:ℚ) ≠ parentheticalValue`.
+- `finite_group_orders_impossible (G : Type*) [Group G] [Fintype G]` applies this to Fintype.card G — no finite group can have any of the three values as its order.
+- Final: `theorem conjecture_00000001414_displayed_equality_false : ¬ DisplayedOrderClaim` where `DisplayedOrderClaim := ∃ (G : Type) (_ : Group G) (_ : Fintype G), (Fintype.card G : ℚ) = displayedValue`.
+Since |K_{10}(Z)| is a group order (a natural number), the displayed equality is impossible for K_{10}(Z) — indeed for every finite group; the disproof does not need to know the true order of K_{10}(Z), making the refutation a priori complete. The negation formally targets the conjecture's own claim (group order = specific rational), so this is NOT a "numeric-facts-only" proof of the #286–288 kind: the numeric facts are derived from the standard Bernoulli definition and directly contradict the conjecture's displayed equality under all three textual readings (literal, absolute value, parenthetical denominator). The second clause (Borel rank-1 difference) is a conjunct made moot by refuting the first, as the report states. Not vacuous: the theorem's negation has real content, and the Bernoulli values are proven, not assumed.
+## Issues found
+none blocking. FLAG for coordinator awareness (interpretive): the conjecture is internally inconsistent — its parenthetical asserts the value is integral while the displayed formula is a negative non-integer rational. The submission refutes the literal authoritative statement plus the two parenthetical readings, and explicitly declines to formalize an unspecified "denominator-clearing" operation (e.g., reading the answer as the numerator 691), correctly arguing any such replacement changes the stated equality. Under the repo's literal-statement precedent this is the right call, but this PR's acceptability ultimately rests on that precedent — same class of judgment as other "formula as written is non-integral" TLMC disproofs.
+## Verdict rationale
+Build, axioms, PDF, recorded logs, and my independent arithmetic all check out exactly. The formalization faithfully encodes the conjecture's objects (Bernoulli number from the standard recurrence, factorial denominators, group order as Fintype.card) and proves a total impossibility of the displayed equality for any finite group, which subsumes K_{10}(Z). The report is honest about scope and does not smuggle in a redefined value.
+
+## Disposition
+APPROVED — merged into main (PR 389). Independent fresh rebuild of the Lean project (Mathlib-pinned, exit 0; only standard foundational axioms; no sorry/native_decide/extra axioms), LaTeX recompilation, auxiliary-script re-runs where shipped, independent recomputations, and a semantic audit confirming the Lean theorem establishes or refutes the conjecture as stated in both language versions.
