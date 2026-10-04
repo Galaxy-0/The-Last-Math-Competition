@@ -1,0 +1,104 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:345:0: 'Spin1753.conjecture_00000001753_false' does not depend on any axioms
+info: ././././Main.lean:346:0: 'Spin1753.conjecture_00000001753_false_both' does not depend on any axioms
+info: ././././Main.lean:347:0: 'Spin1753.spinRep' does not depend on any axioms
+info: ././././Main.lean:348:0: 'Spin1753.spans' does not depend on any axioms
+info: ././././Main.lean:349:0: 'Spin1753.normSq_t1t2' does not depend on any axioms
+info: ././././Main.lean:350:0: 'Spin1753.t1t2_perm' does not depend on any axioms
+info: ././././Main.lean:351:0: 'Spin1753.chi_z' does not depend on any axioms
+info: ././././Main.lean:352:0: 'Spin1753.z_ne_one' does not depend on any axioms
+info: ././././Main.lean:353:0: 'Spin1753.perm_relations' does not depend on any axioms
+info: ././././Main.lean:354:0: 'Spin1753.perm_words_distinct' does not depend on any axioms
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+Part A. The integral model T5 of lean4/Main.lean (exact, Z[zeta8])
+  ok   parsed 4 matrices of size 4x4 from Main.lean
+  ok   T5 satisfies the relations of hat S_5 (t^2 = 1) with z -> -I
+  ok   i*T5 satisfies the relations of tilde S_5 (t^2 = z) with z -> -I
+  ok   hat: the permutation of an element does not depend on the word
+  ok   Lean model, hat S_5: |G| = 240 = 2*5!
+  ok   Lean model, hat S_5: kernel of G -> S_5 is {I, -I}
+  ok   hat: <chi,chi> = 1 (irreducible)
+  ok   hat: chi(z) = -4 = -chi(1) (spin character)
+       even class (1, 1, 1, 1, 1): chi values [-4, 4]
+       even class (2, 2, 1): chi values [0]
+       even class (3, 1, 1): chi values [-2, 2]
+       even class (5,): chi values [-1, 1]
+       chi(t1 t2) = -2, t1 t2 lies over (1, 2, 0, 3, 4) (cycle type (3, 1, 1), sign 1)
+  ok   hat: |chi(t1 t2)|^2 = 4 > 1 = (2^(floor(5/4)-1))^2 at a lift of a 3-cycle
+  ok   tilde: the permutation of an element does not depend on the word
+  ok   Lean model, tilde S_5: |G| = 240 = 2*5!
+  ok   Lean model, tilde S_5: kernel of G -> S_5 is {I, -I}
+  ok   tilde: <chi,chi> = 1 (irreducible)
+  ok   tilde: chi(z) = -4 = -chi(1) (spin character)
+       even class (1, 1, 1, 1, 1): chi values [-4, 4]
+       even class (2, 2, 1): chi values [0]
+       even class (3, 1, 1): chi values [-2, 2]
+       even class (5,): chi values [-1, 1]
+       chi(t1 t2) = 2, t1 t2 lies over (1, 2, 0, 3, 4) (cycle type (3, 1, 1), sign 1)
+  ok   tilde: |chi(t1 t2)|^2 = 4 > 1 = (2^(floor(5/4)-1))^2 at a lift of a 3-cycle
+
+Part B. Clifford model for n = 5, exact in Q(zeta8): T_i = (xi_i - xi_{i+1})/sqrt2
+  ok   xi_1..xi_5 are anticommuting involutions (4x4)
+  ok   relations of hat S_5 with z -> -I
+  ok   i*T: relations of tilde S_5 with z -> -I
+  ok   permutation map well defined
+  ok   Clifford model, n = 5: |G| = 240 = 2*5!
+  ok   Clifford model, n = 5: kernel of G -> S_5 is {I, -I}
+  ok   <chi,chi> = 1
+  ok   chi(t1 t2) = -2
+
+Part C. Clifford model in F_p, p = 1000000009 (zeta8 -> 172252358), n = 4, 5, 6, 7
+  ok   n = 4: relations of hat S_4 hold exactly (degree 4)
+  ok   n = 4: |G| = 48 = 2*4!, permutation map well defined
+  ok   n = 4: kernel of G -> S_4 has 2 elements
+  ok   n = 4: <chi,chi> = 2 (= 2)
+  ok   n = 4: even-class values of the basic spin character agree with Schur's formula
+       n = 4: degree 2, bound 2^(floor(n/4)-1) = 1, |chi(lift of 3-cycle)| = 1, max |chi| over even non-identity classes = 1
+  ok   n = 4: the identity (degree 2) violates the bound (3-cycle value 1 does not)
+  ok   n = 5: relations of hat S_5 hold exactly (degree 4)
+  ok   n = 5: |G| = 240 = 2*5!, permutation map well defined
+  ok   n = 5: kernel of G -> S_5 has 2 elements
+  ok   n = 5: <chi,chi> = 1 (= 1)
+  ok   n = 5: even-class values of the basic spin character agree with Schur's formula
+       n = 5: degree 4, bound 2^(floor(n/4)-1) = 1, |chi(lift of 3-cycle)| = 2, max |chi| over even non-identity classes = 2
+  ok   n = 5: the lifted 3-cycle violates the bound
+  ok   n = 6: relations of hat S_6 hold exactly (degree 8)
+  ok   n = 6: |G| = 1440 = 2*6!, permutation map well defined
+  ok   n = 6: kernel of G -> S_6 has 2 elements
+  ok   n = 6: <chi,chi> = 2 (= 2)
+  ok   n = 6: even-class values of the basic spin character agree with Schur's formula
+       n = 6: degree 4, bound 2^(floor(n/4)-1) = 1, |chi(lift of 3-cycle)| = 2, max |chi| over even non-identity classes = 2
+  ok   n = 6: the lifted 3-cycle violates the bound
+  ok   n = 7: relations of hat S_7 hold exactly (degree 8)
+  ok   n = 7: |G| = 10080 = 2*7!, permutation map well defined
+  ok   n = 7: kernel of G -> S_7 has 2 elements
+  ok   n = 7: <chi,chi> = 1 (= 1)
+  ok   n = 7: even-class values of the basic spin character agree with Schur's formula
+       n = 7: degree 8, bound 2^(floor(n/4)-1) = 1, |chi(lift of 3-cycle)| = 4, max |chi| over even non-identity classes = 4
+  ok   n = 7: the lifted 3-cycle violates the bound
+
+Part D. Other readings
+  ok   n = 4: w^2 = -4
+  ok   n = 4: w commutes with every T_i
+  ok   n = 4: P = (1 - i w/2)/2 is a rank-2 projector
+  ok   n = 4: t1 t2 t3 lies over the odd 4-cycle (1, 2, 3, 0)
+       chi_+(t1 t2 t3) = ('0', '1', '0', '1') (a + b zeta + c zeta^2 + d zeta^3; zeta + zeta^3 = i*sqrt2)
+  ok   n = 4, odd-class reading: |chi_+(4-cycle)|^2 = 2 > 1 = bound^2
+  ok   n = 5: s = xi_1+...+xi_5 has s^2 = 5
+  ok   n = 5: s commutes with all T_i T_j (hence with 2.A_5)
+       lift of a 5-cycle: chi = 1, tr(g s) = -5; psi = (chi +- tr(gs)/sqrt5)/2
+  ok   2.A_5 reading: psi = (1 +- sqrt5)/2, and |(1+sqrt5)/2| > 1 (also psi(1) = 2 > 1)
+
+Part E. Schur's formula for the basic spin character (n >= 5)
+  ok   for 5 <= n <= 200: 2^floor((n-3)/2) (value at a lifted 3-cycle) > 2^(floor(n/4)-1)
+  ok   exponent inequality floor((n-3)/2) > floor(n/4)-1 for 5 <= n < 10^4 (it holds for all n >= 5)
+
+ALL CHECKS PASSED
+exit 0

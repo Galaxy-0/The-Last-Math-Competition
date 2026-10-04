@@ -1,0 +1,315 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\Sh}{\widehat{S}}
+\newcommand{\St}{\widetilde{S}}
+
+\title{Disproof of Conjecture 00000001753:\\
+spin character values of $2\cdot S_n$ on even classes}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000001753 asserts that every spin character $\chi$ of the double cover
+$2\cdot S_n$ satisfies $|\chi(g)|\le 2^{\lfloor n/4\rfloor-1}$ for every element $g$ in an
+``alternating class'', i.e.\ lying over an even permutation. This is false. For $n=5$ the
+bound is $2^{1-1}=1$, but the basic spin character $\chi$ of $2\cdot S_5$ (degree $4$,
+irreducible) takes the value $\mp2$ at the element $t_1t_2$, which lies over the
+$3$-cycle $(1\,2\,3)$. This holds for both double covers of $S_5$. By Schur's formula the
+lifted $3$-cycle violates the bound for every $n\ge5$, and the identity violates it for
+$n=4$. The $n=5$ counterexample is formalized in Lean~4 (core library only), using Schur's
+presentation of the double covers, an explicit $4$-dimensional representation over
+$\mathbb{Z}[\zeta_8]$, and an explicit irreducibility certificate.
+\end{abstract}
+
+\section{The conjecture and how we read it}
+\begin{quote}
+\emph{Definition:} The spin characters of $2\cdot S_n$ are the projective characters of the
+double cover. \emph{Conjecture:} The spin character values on alternating classes satisfy
+$|\langle\chi,g\rangle|\le 2^{\lfloor n/4\rfloor-1}$; controlled by the log-concavity of spin
+character degrees, improving the order-$n$ bound $2^{(n/2)-1}$ by the decay factor
+$2^{\lfloor n/4\rfloor}$.
+\end{quote}
+The Chinese version states the same inequality. We refute the following clause, which is the
+only mathematical assertion in the statement (the rest is commentary on why it should hold):
+\begin{equation}\label{eq:claim}
+\begin{gathered}
+|\chi(g)|\le 2^{\lfloor n/4\rfloor-1}\quad\text{for every spin character $\chi$ of $2\cdot S_n$}\\
+\text{and every $g\in 2\cdot S_n$ lying over an even permutation.}
+\end{gathered}
+\end{equation}
+We read the notation as follows.
+\begin{itemize}
+\item $\langle\chi,g\rangle$ is the value $\chi(g)$ of $\chi$ at $g$ (the evaluation pairing).
+  The comparison with ``the order-$n$ bound $2^{(n/2)-1}$'', which is of the size of the degree
+  $2^{\lfloor (n-1)/2\rfloor}$ of the basic spin character, shows that character values are
+  meant. Another reading is discussed in Section~\ref{sec:readings}.
+\item A \emph{spin character} of a double cover $1\to\{1,z\}\to\widetilde G\to S_n\to1$ is the
+  character of a representation $\rho$ with $\rho(z)=-1$. Equivalently, it is the character of a
+  projective representation of $S_n$ that does not lift to a linear one. We use an \emph{irreducible} spin character, so the
+  counterexample works whether or not reducible ones are allowed.
+\item An \emph{alternating class} is a conjugacy class of $2\cdot S_n$ lying over $A_n$, i.e.\ a
+  class contained in $2\cdot A_n$. Our element $t_1t_2$ lies over a $3$-cycle, which is even and
+  not the identity.
+\item There are two inequivalent double covers $\Sh_n$ and $\St_n$ for $n\ge4$
+  (Section~\ref{sec:covers}). We refute the claim for both.
+\end{itemize}
+
+\section{The double covers of \texorpdfstring{$S_n$}{S\_n}}\label{sec:covers}
+Schur~\cite{Schur} showed that, for $n\ge4$, $S_n$ has exactly two inequivalent non-split
+central extensions by a group of order $2$. They are given by the
+presentations with generators $t_1,\dots,t_{n-1}$ and a central involution $z$:
+\begin{align*}
+\Sh_n:&\quad t_i^2=1,\quad (t_it_{i+1})^3=1,\quad (t_it_j)^2=z\ \ (|i-j|\ge2);\\
+\St_n:&\quad t_i^2=z,\quad (t_it_{i+1})^3=z,\quad (t_it_j)^2=z\ \ (|i-j|\ge2).
+\end{align*}
+Each presented group has order $2\cdot n!$, and $t_i\mapsto(i\ i{+}1)$, $z\mapsto1$ defines a
+surjection onto $S_n$ with kernel $\{1,z\}$ (Schur~\cite{Schur}; see also Hoffman--Humphreys
+\cite[Ch.~2]{HH} and Stembridge~\cite{Stembridge}). Both are denoted $2\cdot S_n$ in the
+literature, with varying sign conventions ($2\cdot S_n^{\pm}$), so we name them by their
+relations.
+
+By von Dyck's theorem, a representation $\rho$ of $\Sh_n$ (resp.\ $\St_n$) with $\rho(z)=-I$ is
+the same thing as a list of matrices $T_1,\dots,T_{n-1}$ satisfying the relations with $z$
+replaced by $-I$. The scalar $-I$ is automatically central and squares to $I$. An element of the
+group is $\pm$ a word in the $t_i$, and the word $t_{i_1}\cdots t_{i_k}$ lies over the permutation
+$s_{i_1}\cdots s_{i_k}$, where $s_i=(i\ i{+}1)$.
+
+\begin{remark}
+If $T_1,\dots,T_{n-1}$ satisfy the $\Sh_n$ relations, then $iT_1,\dots,iT_{n-1}$ satisfy the
+$\St_n$ relations, since $(iT_i)^2=-T_i^2$, $(iT_iiT_{i+1})^3=-(T_iT_{i+1})^3$ and
+$(iT_iiT_j)^2=(T_iT_j)^2$. A word of even length $k$ gets the factor $i^k=\pm1$, so on elements
+lying over even permutations the two characters agree up to sign, and so do their absolute
+values.
+\end{remark}
+
+\section{The counterexample at \texorpdfstring{$n=5$}{n=5}}\label{sec:main}
+Let $\xi_1,\dots,\xi_5\in M_4(\mathbb{C})$ be pairwise anticommuting involutions:
+$\xi_a\xi_b+\xi_b\xi_a=2\delta_{ab}I$. For example, with the Pauli matrices
+$X,Y,Z$, take
+\[
+\xi_1=X\otimes I,\ \ \xi_2=Y\otimes I,\ \ \xi_3=Z\otimes X,\ \ \xi_4=Z\otimes Y,\ \ \xi_5=Z\otimes Z .
+\]
+For $v\in\mathbb{R}^5$ put $\xi(v)=\sum_a v_a\xi_a$; then $\xi(v)\xi(w)+\xi(w)\xi(v)=2(v\cdot w)I$.
+Let $\alpha_i=(e_i-e_{i+1})/\sqrt2$ for $i=1,\dots,4$, so that $\alpha_i\cdot\alpha_i=1$,
+$\alpha_i\cdot\alpha_{i+1}=-\tfrac12$ and $\alpha_i\cdot\alpha_j=0$ for $|i-j|\ge2$. Define
+\[
+T_i=\xi(\alpha_i)=\tfrac1{\sqrt2}(\xi_i-\xi_{i+1})\qquad(i=1,\dots,4).
+\]
+
+\begin{lemma}\label{lem:rel}
+The $T_i$ satisfy the relations of $\Sh_5$ with $z\mapsto -I$.
+\end{lemma}
+\begin{proof}
+$T_i^2=(\alpha_i\cdot\alpha_i)I=I$. For $|i-j|\ge2$ the anticommutator is
+$2(\alpha_i\cdot\alpha_j)I=0$, so $T_iT_j=-T_jT_i$ and $(T_iT_j)^2=-T_i^2T_j^2=-I$. For
+$j=i+1$ write $u=\alpha_i$, $v=\alpha_{i+1}$ and $P=\xi(u)\xi(v)$. From
+$\xi(u)\xi(v)+\xi(v)\xi(u)=-I$ we get $P+P^{-1}=P+\xi(v)\xi(u)=-I$, so $P^2+P+I=0$ and hence
+$P^3=I$.
+\end{proof}
+
+So $t_i\mapsto T_i$ defines a spin representation $\rho$ of $\Sh_5$, and $t_i\mapsto iT_i$ one of
+$\St_5$. Let $\chi=\tr\rho$; note $\chi(z)=\tr(-I)=-4=-\chi(1)$.
+
+\begin{lemma}\label{lem:irr}
+$\rho$ is irreducible. In fact the matrices $\rho(w)$, $w$ a word in the $t_i$, span $M_4(\mathbb{C})$.
+\end{lemma}
+\begin{proof}
+The $\alpha_i$ span the $4$-dimensional space $V=\{x\in\mathbb{R}^5:\sum x_a=0\}$, so the algebra
+$A$ generated by the $T_i$ is the image of the complex Clifford algebra $\mathrm{Cl}(V)_\mathbb{C}$
+under $\xi$. Since $\dim V=4$ is even, $\mathrm{Cl}(V)_\mathbb{C}\cong M_4(\mathbb{C})$ is a simple
+algebra of dimension $16$. The map to $M_4(\mathbb{C})$ is nonzero, hence injective, hence
+surjective by dimension. An invariant subspace of $\rho$ is invariant under $A=M_4(\mathbb{C})$,
+so it is $0$ or $\mathbb{C}^4$. Concretely, the $16$ products $T_{i_1}\cdots T_{i_k}$ with
+$i_1<\dots<i_k$ form a basis of $M_4(\mathbb{C})$ (they are the images of a basis of
+$\mathrm{Cl}(V)$).
+\end{proof}
+
+Hence $\chi$ is an irreducible spin character of $\Sh_5$ of degree $4$, the \emph{basic spin
+character}. (Its values, computed in \texttt{verify.py}, are $\pm4$ on $\pm1$, $\pm2$ on lifts of
+$3$-cycles, $\pm1$ on lifts of $5$-cycles, and $0$ elsewhere, so $\langle\chi,\chi\rangle=
+(2\cdot16+40\cdot4+48\cdot1)/240=1$.)
+
+\begin{theorem}\label{thm:main}
+Let $g=t_1t_2$. Then $g$ lies over the even permutation $s_1s_2=(1\,2\,3)$, and
+$\chi(g)=-2$ for $\Sh_5$ (and $+2$ for $\St_5$). So
+$|\chi(g)|=2>1=2^{\lfloor5/4\rfloor-1}$, and \eqref{eq:claim} fails for $n=5$ and both
+double covers.
+\end{theorem}
+\begin{proof}
+$s_1s_2=(1\,2)(2\,3)=(1\,2\,3)$ is a $3$-cycle, an even permutation. Next,
+\[
+T_1T_2=\tfrac12(\xi_1-\xi_2)(\xi_2-\xi_3)=\tfrac12(\xi_1\xi_2-\xi_1\xi_3-I+\xi_2\xi_3).
+\]
+For $a\ne b$, $\tr(\xi_a\xi_b)=\tr(\xi_b\xi_a)=-\tr(\xi_a\xi_b)$, so $\tr(\xi_a\xi_b)=0$.
+Hence $\chi(t_1t_2)=-\tfrac12\tr I=-2$. For $\St_5$ the element $t_1t_2$ acts by
+$(iT_1)(iT_2)=-T_1T_2$, with trace $+2$.
+\end{proof}
+
+The identity element already gives $|\chi(1)|=4>1$. We use the lifted $3$-cycle so that the
+counterexample does not depend on whether the trivial class counts as an ``alternating
+class''.
+
+\section{All \texorpdfstring{$n$}{n}}\label{sec:alln}
+The construction above works for every $n$: take $n$ anticommuting involutions $\xi_a$ of size
+$2^{\lfloor n/2\rfloor}$ and $T_i=(\xi_i-\xi_{i+1})/\sqrt2$. Schur's formula for the basic spin
+character $\langle n\rangle$ (Schur~\cite{Schur}; see also \cite{Stembridge} and
+\cite{HH}) reads as follows. Its degree is $2^{\lfloor (n-1)/2\rfloor}$. On the lifts of a
+permutation of cycle type $\pi$ with all parts odd it takes the values
+$\pm2^{\lfloor(\ell(\pi)-1)/2\rfloor}$, where $\ell(\pi)$ is the number of cycles (fixed points
+included). It vanishes on all other classes, except that for $n$ even the two associate
+characters are nonzero on the lifts of $n$-cycles, with absolute value $\sqrt{n/2}$.
+
+For a $3$-cycle, $\pi=(3,1^{n-3})$ and $\ell(\pi)=n-2$, so the value is $\pm2^{\lfloor(n-3)/2\rfloor}$.
+Now
+\[
+\Big\lfloor\frac{n-3}{2}\Big\rfloor\ \ge\ \frac{n-4}{2}\ >\ \frac n4-1\ \ge\ \Big\lfloor\frac n4\Big\rfloor-1
+\qquad(n\ge5),
+\]
+where the strict inequality is equivalent to $n>4$. So for \emph{every} $n\ge5$ the lifted
+$3$-cycle violates \eqref{eq:claim}, in both double covers. For $n=4$ the basic spin characters
+have degree $2>1=2^{0}$, so the identity violates it (the lifted $3$-cycle has value $\pm1$ and does
+not). Thus \eqref{eq:claim} fails for every $n\ge4$, and in particular for all large $n$.
+
+\texttt{verify.py} confirms Schur's formula on all even classes for $n=4,5,6,7$ by computing the
+groups ($|2\cdot S_n|=48,240,1440,10080$) and their characters.
+
+\section{Other readings}\label{sec:readings}
+\begin{enumerate}
+\item \textbf{Which double cover.} Both $\Sh_5$ and $\St_5$ are refuted (Theorem~\ref{thm:main}),
+  in Lean as well.
+\item \textbf{Classes of $2\cdot A_n$.} The element $t_1t_2$ lies in $2\cdot A_5$, so it is in an
+  alternating class under any reading (whether a class of $2\cdot S_5$ inside $2\cdot A_5$, or a
+  class of the group $2\cdot A_5$ itself). The character value does not depend on this choice.
+\item \textbf{Characters of $2\cdot A_n$.} If ``spin character'' meant a faithful irreducible
+  character of $2\cdot A_n$, the claim still fails at $n=5$. Restricted to
+  $2\cdot A_5\cong\mathrm{SL}(2,5)$, the basic spin character splits as $\psi_++\psi_-$ with
+  $\deg\psi_\pm=2$. On a lift of a $5$-cycle, $\psi_\pm=(1\pm\sqrt5)/2$, and
+  $|(1+\sqrt5)/2|>1$; also $\psi_\pm(1)=2>1$. (\texttt{verify.py}, Part~D. It uses the matrix $s=\xi_1+\dots+\xi_5$, which commutes with
+  $\rho(2\cdot A_5)$ and has $s^2=5$, so that $\psi_\pm(g)=\tfrac12(\chi(g)\pm\tr(gs)/\sqrt5)$.)
+\item \textbf{``Alternating classes'' read as odd classes.} The claim still fails. For $n=4$ the two
+  associate basic spin characters have $|\chi_\pm|=\sqrt2>1$ on the lifts of a $4$-cycle
+  (\texttt{verify.py}, Part~D, exact). For $n=5$, Schur's formula gives the associate pair of
+  degree $6$ (labelled by $(4,1)$) the absolute value $\sqrt{4\cdot1/2}=\sqrt2>1$ on the lifts of
+  cycle type $(4,1)$ (cited, not computed).
+\item \textbf{``For large $n$''.} The claim fails for every $n\ge5$ (Section~\ref{sec:alln}).
+\item \textbf{Strict or non-strict.} $|\chi(g)|=2>1$ violates both $\le$ and $<$.
+\item \textbf{Reducible spin characters.} Our $\chi$ is irreducible, so it is a spin character
+  under either convention.
+\item \textbf{$\langle\chi,g\rangle$ as an inner product.} If $\langle\chi,g\rangle$ meant the inner
+  product $\langle\chi,\mathbf 1_C\rangle=|C|\,\chi(g)/|G|$ with the indicator of the class $C$ of
+  $g$, the statement would be trivially true for $n\ge4$. Indeed
+  $|C|\,|\chi(g)|/|G|=|\chi(g)|/|C_G(g)|\le|C_G(g)|^{-1/2}\le1$ by column orthogonality
+  ($|\chi(g)|^2\le|C_G(g)|$). This makes the bound $2^{\lfloor n/4\rfloor-1}$ and the comparison
+  with ``the order-$n$ bound $2^{(n/2)-1}$'' meaningless, so we regard it as unintended. We make
+  no claim under this reading.
+\end{enumerate}
+
+\section{Lean formalization}\label{sec:lean}
+The folder \texttt{lean4/} is a Lean~4.19.0 project using only the core library. It builds in
+about 40 seconds with no \texttt{sorry}, no \texttt{native\_decide} and no added axioms. All
+displayed theorems depend on no axioms at all. Finite computations use \texttt{decide} and
+\texttt{decide +kernel}.
+
+\paragraph{Objects.}
+\begin{itemize}
+\item \texttt{Z8}: the ring $\mathbb{Z}[\zeta]$, $\zeta=e^{\pi i/4}$, as quadruples
+  $a+b\zeta+c\zeta^2+d\zeta^3$ with $\zeta^4=-1$. It has complex conjugation \texttt{conj}
+  ($\zeta\mapsto-\zeta^3$) and $\texttt{normSq}(x)=x\bar x=|x|^2$. It is a subring of $\mathbb{C}$.
+\item Matrices are lists of rows, with product \texttt{mmul}, \texttt{trace} and \texttt{ident}.
+  \texttt{eval d T w} is the matrix $T_{w_0}T_{w_1}\cdots$ of a word $w$.
+\item \texttt{wordPerm n w} is the permutation $s_{w_0}s_{w_1}\cdots$ (one-line notation), and
+  \texttt{IsEven} is evenness via the number of inversions.
+\item \texttt{Cover} $=\{\texttt{hat},\texttt{tilde}\}$. \texttt{IsSpinRep c n d T}: $T$ is a list of
+  $n-1$ square $d\times d$ matrices ($d>0$) satisfying Schur's relations for the cover $c$ with
+  $z\mapsto-I$. By von Dyck's theorem this is exactly a spin representation of the presented group.
+\item \texttt{SpansMatrices d T}: for all $a,b<d$ there are $0\ne N\in\mathbb{Z}[\zeta]$ and a
+  $\mathbb{Z}[\zeta]$-combination of matrices of words equal to $N E_{ab}$. Then the words span
+  $M_d(\mathbb{C})$, so the representation is irreducible over $\mathbb{C}$ (as in
+  Lemma~\ref{lem:irr}).
+\item \texttt{Claim c n}: for all $d$ and $T$ with \texttt{IsSpinRep c n d T} and
+  \texttt{SpansMatrices d T}, for every word $w$ in the generators with \texttt{wordPerm n w} even,
+  and for every $q\in\mathbb{Z}$, if $\texttt{normSq}(\tr\,\texttt{eval}\,d\,T\,w)=q$ then
+  $q\le 4^{\lfloor n/4\rfloor-1}$.
+\end{itemize}
+\texttt{Claim c n} is implied by \eqref{eq:claim} for the cover $c$. It only quantifies over
+irreducible spin representations realized over $\mathbb{Z}[\zeta]$, over elements given by words,
+and only constrains $|\chi(g)|^2$ when it is a rational integer. So $\neg\texttt{Claim}$ refutes
+\eqref{eq:claim}.
+
+\paragraph{The data.} \texttt{T5} is the representation of Section~\ref{sec:main}, written in a
+basis of a $\rho(\Sh_5)$-stable $\mathbb{Z}[\zeta]$-lattice, so that all entries lie in
+$\mathbb{Z}[\zeta]$. For $\St_5$ the generators are $i\cdot\texttt{T5}$. The certificate
+\texttt{irrCert} expresses each $5E_{ab}$ as a $\mathbb{Z}[\zeta]$-combination of the $16$ words
+$t_{i_1}\cdots t_{i_k}$ ($i_1<\dots<i_k$). The denominator $5$ is the discriminant of the
+$A_4$ root lattice.
+
+\paragraph{Theorems.}
+\begin{itemize}
+\item \texttt{spinRep c}: Schur's relations hold for both covers.
+\item \texttt{spans c}: the irreducibility certificate checks for both covers.
+\item \texttt{t1t2\_perm}, \texttt{t1t2\_even}: $t_1t_2$ lies over $[1,2,0,3,4]$, the $3$-cycle
+  $(1\,2\,3)$, which is even.
+\item \texttt{chi\_t1t2\_hat}, \texttt{chi\_t1t2\_tilde}, \texttt{normSq\_t1t2}: $\chi(t_1t_2)=-2$,
+  resp.\ $2$, and $|\chi(t_1t_2)|^2=4$.
+\item \texttt{chi\_z}: $\chi(z)=-4=-\chi(1)$.
+\item The main theorem \texttt{conjecture\_00000001753\_false} proves
+  $\neg\,\texttt{Claim}\ c\ 5$ for each cover $c$. The theorem
+  \texttt{conjecture\_00000001753\_false\_both} states both at once.
+\item \texttt{perm\_relations}: $t_i\mapsto s_i$, $z\mapsto1$ respects the relations, so the
+  projection to $S_5$ is well defined.
+\item \texttt{z\_ne\_one} and \texttt{perm\_words\_distinct}: $\rho(z)=-I\ne I$, and $120$ words lie
+  over $120$ distinct permutations. Hence the presented group has at least $2\cdot120=240$
+  elements, since its image in $S_5$ has $120$ elements and the kernel contains $1\ne z$.
+\end{itemize}
+
+\paragraph{What is cited rather than formalized.} Lean does not prove Schur's theorem that the
+presented groups have order exactly $2\cdot5!$, i.e.\ that they \emph{are} the double covers
+$2\cdot S_5$. (\texttt{verify.py} enumerates the image group of \texttt{T5}: $240$ elements, kernel
+$\{\pm I\}$ over $S_5$.) Schur's formula for general $n$ (Section~\ref{sec:alln}) and the
+odd-class value at $n=5$ are cited. Abstract group theory (von Dyck, Burnside-type spanning) is
+used in the interpretation of the definitions, as explained above.
+
+\section{Independent check}
+\texttt{verify.py} uses only the Python standard library and runs in a few seconds.
+\begin{itemize}
+\item[A.] It parses \texttt{T5} from \texttt{Main.lean} and checks the relations of both covers
+  exactly over $\mathbb{Z}[\zeta]$. It enumerates the generated groups ($240$ elements each),
+  checks that the projection to $S_5$ is well defined with kernel $\{\pm I\}$, and computes
+  $\langle\chi,\chi\rangle=1$ (irreducibility by a different method than Lean's certificate) and
+  $\chi(z)=-4$. It lists the values on all even classes and checks $\chi(t_1t_2)=\mp2$.
+\item[B.] It builds the Clifford model of Section~\ref{sec:main} exactly over $\mathbb{Q}(\zeta)$
+  and repeats the checks: $|G|=240$, $\langle\chi,\chi\rangle=1$, $\chi(t_1t_2)=-2$.
+\item[C.] For $n=4,5,6,7$ it checks the relations exactly. It enumerates the group in
+  $\mathbb{F}_p$ with $p=10^9+9\equiv1\pmod8$, via the ring map $\mathbb{Z}[\zeta,\tfrac12]\to\mathbb{F}_p$,
+  and finds $|G|=2\cdot n!$ with kernel of order $2$. It also checks $\langle\chi,\chi\rangle=1$
+  ($n$ odd) or $2$ ($n$ even, the sum of the two associates), and that all even-class values
+  agree with Schur's formula. The lifted $3$-cycle has $|\chi|=2,2,4$ for $n=5,6,7$, against the
+  bound $1$. For $n=4$ the identity violates the bound.
+\item[D.] It checks the other readings: odd classes at $n=4$ ($|\chi_\pm|^2=2$, exact) and the
+  characters of $2\cdot A_5$ ($\psi_\pm=(1\pm\sqrt5)/2$).
+\item[E.] It checks the exponent inequality of Section~\ref{sec:alln} for $5\le n<10^4$.
+\end{itemize}
+
+\begin{thebibliography}{9}
+\bibitem{Schur} I.~Schur, \emph{\"Uber die Darstellung der symmetrischen und der alternierenden
+Gruppe durch gebrochene lineare Substitutionen}, J.~Reine Angew.\ Math.\ \textbf{139} (1911),
+155--250.
+\bibitem{HH} P.~N.~Hoffman and J.~F.~Humphreys, \emph{Projective Representations of the Symmetric
+Groups: Q-Functions and Shifted Tableaux}, Oxford University Press, 1992.
+\bibitem{Stembridge} J.~R.~Stembridge, \emph{Shifted tableaux and the projective representations
+of symmetric groups}, Adv.\ Math.\ \textbf{74} (1989), 87--134.
+\end{thebibliography}
+\end{document}
