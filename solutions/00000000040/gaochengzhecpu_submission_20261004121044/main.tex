@@ -1,0 +1,87 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\R}{\mathbb R}
+\title{Quadratic Sum--Product Intersection:\newline A Disproof of Conjecture 00000000040}
+\author{GitHub: gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+We give finite sets of positive integers, viewed as subsets of $\R$, for which the intersection of the sumset and product set has quadratic size up to an absolute constant. This disproves the proposed uniform upper bound $|A|^{1+o(1)}$. The construction and its asymptotic contradiction are formally proved in the accompanying Lean project.
+\end{abstract}
+
+The original bilingual statement asserts that every finite $A\subset\R$ satisfies
+\[
+ |(A+A)\cap(A\cdot A)|\le |A|^{1+o(1)}
+ \quad\text{in the supremum sense}.
+\]
+Here $A+A=\{a+b:a,b\in A\}$ and $A\cdot A=\{ab:a,b\in A\}$. We interpret the supremum formulation in its usual uniform sense: for every $\varepsilon>0$, all sufficiently large finite sets $A$ should satisfy an upper bound $|A|^{1+\varepsilon}$. We disprove even the weaker uniform bound $O(|A|^{3/2})$.
+
+\begin{theorem}\label{thm:family}
+For each integer $n\ge1$, let
+\[
+ A_n=\{2^i:0\le i<2n\}\ \cup\ \{1+2^i:0\le i<2n\}.
+\]
+Then $A_n$ consists of positive integers and satisfies
+\[
+ 2n\le |A_n|\le4n,
+ \qquad |(A_n+A_n)\cap(A_n\cdot A_n)|\ge n^2.
+\]
+\end{theorem}
+\begin{proof}
+The powers $2^i$ are distinct, so the first part of the union has $2n$ elements. Each part has at most $2n$ elements, giving the stated size bounds.
+
+For $0\le i,j<n$, define
+\[
+ s_{ij}=2^i+2^{n+j}=2^i\bigl(1+2^{n+j-i}\bigr).
+\]
+Both summands belong to $A_n$. Also $1\le n+j-i<2n$, so both factors on the right belong to $A_n$. Consequently every $s_{ij}$ lies in the required intersection.
+
+The $n^2$ numbers $s_{ij}$ are distinct. Indeed $i<n\le n+j$ gives
+\[
+ 2^{n+j}<s_{ij}<2^{n+j+1}.
+\]
+These intervals are disjoint for distinct $j$. Thus $s_{ij}=s_{k\ell}$ first forces $j=\ell$; subtracting the common term $2^{n+j}$ then gives $2^i=2^k$, and hence $i=k$. This proves the intersection lower bound.
+\end{proof}
+
+\begin{theorem}\label{thm:asymptotic}
+For every pair of nonnegative integers $C,N$, there is a finite $A\subset\R$ with $|A|\ge N$ such that
+\[
+ C|A|^3<|(A+A)\cap(A\cdot A)|^2.
+\]
+In particular, the conjectured bound is false.
+\end{theorem}
+\begin{proof}
+Set $n=N+64C+1$ and take $A=A_n$. Writing $M=|A_n|$ and $I=|(A_n+A_n)\cap(A_n\cdot A_n)|$, Theorem~\ref{thm:family} gives $M\ge2n\ge N$ and
+\[
+ CM^3\le C(4n)^3=64Cn^3<n^4\le I^2.
+\]
+For the near-linear assertion, choose $\varepsilon=1/2$. Its asserted eventual inequality $I\le M^{3/2}$ implies $I^2\le M^3$, contradicting the displayed result with $C=1$. More generally an eventual bound $I\le K M^{3/2}$ with a real constant $K>0$ would give $I^2\le K^2 M^3$. Choosing an integer $C\ge K^2$ contradicts the same result. Thus allowing an implicit multiplicative constant does not rescue the assertion.
+\end{proof}
+
+\section*{Formal verification and scope}
+The proof in \texttt{lean/Main.lean} works with finite sets over $\R$. The definitions \texttt{sumset} and \texttt{productset} take images of the Cartesian product under addition and multiplication; \texttt{overlap} is their set intersection. The finite set \texttt{witness} is exactly $A_n$. Positivity and integrality are checked by the theorem \texttt{witness\_positive\_integer}.
+
+The formal proof establishes injectivity of the full $n\times n$ grid, its membership in both actual sets, and the cardinality bounds for every $n$. The quantitative theorem
+\begin{center}\small\texttt{arbitrarily\_large\_super\_three\_halves}\end{center}
+proves Theorem~\ref{thm:asymptotic} for every natural $C,N$. The final theorem, named \texttt{conjecture40\_false}, directly negates
+\[
+ \forall\varepsilon>0\ \exists N\ \forall A\subset\R\text{ finite},\quad
+ |A|\ge N\Longrightarrow |(A+A)\cap(A\cdot A)|\le |A|^{1+\varepsilon},
+\]
+using Mathlib's real powers, including the identity $(x^{3/2})^2=x^3$ for $x\ge0$.
+
+This is an infinite counterexample family, not an inference from numerical experiments. The optional Python script performs exact integer cross-checks for six sample sizes only; it is not used to justify the universal Lean theorems. No restriction on signs, integrality, or generic position is added to the source statement. In fact the displayed family already lies in the positive integers.
+
+\section*{Source and reproduction}
+The exact bilingual statement is preserved byte-for-byte in \texttt{SOURCE.md}; its repository path is
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000000040.md}{\texttt{conjectures/00000000040.md}}.
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+Run \texttt{lake build} and \texttt{lake env lean -DwarningAsError=true Main.lean} from \texttt{lean/}. The project uses public Git dependencies with locked revisions. Actual fresh-build logs, standard-axiom audits, source hashes, and PDF checks are included under \texttt{verification/}. See \texttt{README.md} for complete reproduction instructions.
+\end{document}
