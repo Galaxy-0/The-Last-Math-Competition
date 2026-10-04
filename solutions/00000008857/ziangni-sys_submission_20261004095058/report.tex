@@ -1,0 +1,56 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{A smooth monotone game without a Nash equilibrium}
+\author{ziangni-sys}
+\date{Conjecture 00000008857}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result.} The asserted universal nonemptiness of the Nash equilibrium set is false. Two players with unrestricted real actions and positive exponential costs give a counterexample, even with smooth, strictly convex costs in each player's own action.
+
+\paragraph{Scope and conventions.}
+Both original languages assert that the Nash equilibrium set of monotone games is always nonempty. Neither imposes compact strategy spaces, coercive costs, or another existence condition. We use the usual differentiable cost-minimization convention: on a product of convex strategy sets, a game is monotone when its pseudogradient
+\[
+F(x)=\bigl(\partial_{x_i}c_i(x)\bigr)_i
+\quad\hbox{satisfies}\quad
+\langle F(x)-F(y),x-y\rangle\geq0.
+\]
+Equivalently, one can use utilities $u_i=-c_i$ and maximize them. Our strategy sets are explicitly unbounded. This does not contradict existence theorems with compactness or suitable coercivity assumptions. Only the nonemptiness conjunct is refuted; the other clauses are unnecessary for the disproof.
+
+\paragraph{The game and its hypotheses.}
+There are two players, indexed by $i\in\{0,1\}$. Each has strategy set $\mathbb R$, a nonempty closed convex set, and a profile is $x=(x_0,x_1)\in\mathbb R^2$. Define
+\[
+c_i(x)=e^{x_i}.
+\]
+These costs are everywhere positive, so in particular bounded below by zero. They are smooth on the entire profile space. Holding the other player's action fixed, the first and second derivatives are both $e^{x_i}>0$, and the cost is strictly convex in its own action. The actual pseudogradient is
+\[
+F(x)=(e^{x_0},e^{x_1}).
+\]
+For any profiles $x,y$, monotonicity of the real exponential gives
+\[
+\langle F(x)-F(y),x-y\rangle
+=\sum_{i=0}^{1}(e^{x_i}-e^{y_i})(x_i-y_i)\geq0.
+\]
+Every summand is nonnegative: its two factors have the same sign. Thus this is a genuine monotone game on the Euclidean Hilbert space $\mathbb R^2$.
+
+\newpage
+\paragraph{There is no Nash equilibrium.}
+For $a\in\mathbb R$, write $x^{i\leftarrow a}$ for the profile that replaces only coordinate $i$ by $a$. The cost-minimizing Nash condition is exactly
+\[
+\forall i\in\{0,1\}\ \forall a\in\mathbb R,
+\qquad c_i(x)\leq c_i(x^{i\leftarrow a}).
+\]
+At every profile $x$, either player can choose the feasible action $a=x_i-1$. Since the exponential is strictly increasing,
+\[
+c_i(x^{i\leftarrow(x_i-1)})=e^{x_i-1}<e^{x_i}=c_i(x).
+\]
+This violates the Nash condition. It applies to every real profile, so the entire equilibrium set is empty. The failure comes from the absence of an attained minimizing action on the unbounded strategy space, not from negative or unbounded-below costs, nondifferentiability, or a failure of monotonicity.
+
+\paragraph{Exact formal correspondence.}
+The accompanying Lean 4.19.0 project is pinned to Mathlib commit \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}. Profiles are the actual space \texttt{EuclideanSpace} $\mathbb R$ \texttt{(Fin 2)}, with its standard inner product. The function \texttt{changeAction} is an actual coordinate update, and \texttt{IsNash} quantifies over both players and every real alternative action.
+
+The formal proof verifies the nonempty, closed, convex, unbounded strategy domain; positivity of the costs; smoothness on the full profile space; and strict convexity of each unilateral cost function. It proves an actual \texttt{HasDerivAt} statement and identifies the computed pseudogradient coordinates with these derivatives. Its monotonicity theorem uses the Hilbert inner product, expanded as the genuine finite coordinate sum. Finally, \texttt{profitable\_deviation} proves the strict cost improvement for every profile and either player, \texttt{nash\_set\_empty} identifies the full equilibrium set, and \texttt{counterexample} combines monotonicity with nonexistence.
+
+The definitions therefore model the stated game and equilibrium conditions directly; the proof does not assume a numerical payoff table or a monotonicity certificate. All audited dependencies are standard logical axioms. No admitted facts, custom axioms, or external decision procedures are used.
+\end{document}
