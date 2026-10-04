@@ -1,0 +1,42 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{Finite active-set identification can fail\\Conjecture 00000008829}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+The source asserts finite-time identification of active constraints without specifying an algorithm or imposing nondegeneracy. Under its unqualified universal interpretation, ordinary safe projected gradient is a counterexample. We do not claim that every algorithm must fail to identify the active set. The acceleration and noise clauses are unused.
+
+On the real Hilbert line minimize
+\[
+f(x)=\frac{x^2}{2}\quad\hbox{subject to}\quad c(x)=-x\le0.
+\]
+The feasible set $C=[0,\infty)$ is closed and convex. The objective is smooth, closed and strongly convex with modulus one: its actual gradient is $x$, and
+\[
+f(y)=f(x)+f'(x)(y-x)+\frac12|y-x|^2.
+\]
+The gradient is $1$-Lipschitz. The unique constrained minimizer is $x_*=0$, since $f(x)\ge0$ with equality only at zero. Its one constraint is active there.
+
+The actual metric projection onto $C$ is $P_C(y)=\max(0,y)$. For $y\ge0$ this is $y$ itself. For $y<0$ and every $z\ge0$, $(y-z)^2\ge y^2$, so zero is a nearest feasible point. Hence this formula is a genuine projection, rather than an assumed update.
+
+Use step $\eta=1/2$, satisfying $0<\eta<2/L$, and initial point $x_0=1$. The genuine projected-gradient update is
+\[
+T(x)=P_C(x-\eta f'(x))=P_C(x/2).
+\]
+For feasible $x\ge0$ this equals $x/2$. Induction therefore gives
+\[
+x_k=T^k(1)=2^{-k}>0\quad\hbox{for every finite }k,
+\qquad x_k\longrightarrow0.
+\]
+Define the actual active set as $I(x)=\{i:c_i(x)=0\}$, with the single constraint indexed by $i=1$. Then
+\[
+I(x_k)=\varnothing\quad\hbox{for every }k,\qquad I(x_*)=\{1\}.
+\]
+Thus no finite iterate identifies the solution's active set, and in particular there is no finite $N$ after which the active sets agree. This failure occurs despite genuine convergence to the unique solution, strong convexity, feasibility and a safe step.
+
+The missing nondegeneracy is transparent: the optimal multiplier is zero because stationarity is $f'(0)-\lambda=0$. Strict complementarity fails. Finite-identification results with appropriate nondegeneracy assumptions are not contradicted.
+
+\paragraph{Formal verification.}
+Lean verifies the actual real objective and gradient, convexity and closed epigraph, quadratic strong-convexity identity, closed convex feasible set, unique constrained minimizer, true metric-projection inequality, actual projected-gradient update and every iterate, convergence, and the indexed active sets with the quantified failure of finite identification. Lean 4.19.0 and Mathlib \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b} are pinned.
+\end{document}
