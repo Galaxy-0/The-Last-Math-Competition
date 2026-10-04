@@ -33,6 +33,10 @@ Suzuki–Tits ovoid (Tits 1962).
 - **Parenthetical remark.** The statement says Suzuki's counterexamples are in odd
   characteristic. In fact they live only in characteristic 2, with q = 2^{2e+1} ≥ 8.
   We do not use the remark.
+- **Scope.** We refute the statement as literally written (EN and CN). The parenthetical places
+  Suzuki's examples in odd characteristic, so it gives no exception for even q. A different
+  statement such as "every ovoid other than the Suzuki–Tits ovoids is elliptic" is the open
+  classification problem, and we make no claim about it.
 
 ## Contents
 
