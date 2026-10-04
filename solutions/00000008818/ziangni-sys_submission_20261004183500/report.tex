@@ -1,0 +1,66 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem*{proposition}{Counterexample}
+\title{A smooth strictly convex BFGS orbit with a fixed error ratio}
+\author{Conjecture 00000008818 \quad ziangni-sys}
+\date{}
+\begin{document}
+\maketitle
+The first clause asserts universal superlinear convergence of BFGS on smooth convex problems. We give an actual scalar BFGS orbit, with positive Hessian estimates and unit steps satisfying the Armijo and strong Wolfe conditions, whose convergence is strictly linear. The minimizer exists and is unique. The missing nondegeneracy is visible in the zero Hessian at that minimizer.
+
+\begin{proposition}
+For the $C^\infty$ strictly convex function $f(x)=x^4$ on $\mathbb R$, there is a BFGS run converging to its unique minimizer $0$, with
+\[
+ \frac{|x_{n+1}|}{|x_n|}=r\in(0,1)\qquad(n\geq0).
+\]
+Every unit step satisfies Armijo with $c_1=1/100$ and strong Wolfe with $c_2=9/10$.
+\end{proposition}
+\begin{proof}
+The intermediate value theorem supplies $r\in[3/4,4/5]$ satisfying
+\[
+ r^3+r^2=1:
+ \quad(3/4)^3+(3/4)^2<1<(4/5)^3+(4/5)^2.
+\]
+In particular $0<r<1$. Set, for every $n\geq0$,
+\[
+ x_n=r^n,\qquad B_n=\frac{4x_n^2}{1-r}>0,
+ \qquad p_n=-\frac{f'(x_n)}{B_n}=(r-1)x_n.
+\]
+Then $x_{n+1}=x_n+p_n$. These are genuine one-dimensional Hessian estimates: $B_n$ is the positive-definite linear map $v\mapsto B_nv$ on the Euclidean line.
+Put $s_n=x_{n+1}-x_n$ and $y_n=f'(x_{n+1})-f'(x_n)$. Direct calculation gives
+\[
+ s_n=(r-1)x_n\ne0,\qquad
+ y_n=4(r^3-1)x_n^3=B_{n+1}s_n.
+\]
+The last equality uses $r^3-1=-r^2$. Thus $y_ns_n=B_{n+1}s_n^2>0$, so all BFGS denominators are nonzero. The full Hessian update, specialized to dimension one, is
+\[
+ B_n-\frac{(B_ns_n)^2}{s_n^2B_n}
+       +\frac{y_n^2}{y_ns_n}
+ =\frac{y_n}{s_n}=B_{n+1}.
+\]
+Consequently the displayed sequences satisfy the actual BFGS iteration and update, starting at $x_0=1$, $B_0=4/(1-r)$.
+
+The direction is descending since $f'(x_n)p_n<0$. Because $0\leq r\leq1$, we have $r^4\leq r$ and $r\leq1+(r-1)/25$. Multiplying these bounds by $x_n^4$ proves Armijo:
+\[
+ f(x_{n+1})=r^4x_n^4
+ \leq f(x_n)+\frac1{100}f'(x_n)p_n.
+\]
+Also $f'(x_{n+1})p_n=r^3f'(x_n)p_n$. From $r\geq3/4$ and $r^3=1-r^2$ we get $r^3\leq7/16<9/10$, proving strong Wolfe:
+\[
+ |f'(x_{n+1})p_n|\leq\frac9{10}|f'(x_n)p_n|.
+\]
+A line search that first tries a unit step and accepts it when these tests hold therefore accepts every step in this run.
+
+Finally $r^n\to0$, while $|x_{n+1}|/|x_n|=r\geq3/4$ for every $n$. The ratio does not tend to zero, which is exactly the failure of $Q$-superlinear convergence to the minimizer. All iterates are nonzero, so this is not a finite-termination convention. The objective is globally smooth and strictly convex, $f(x)\geq f(0)$ with equality only at zero, but $f''(0)=0$.
+\end{proof}
+
+\paragraph{Scope.}
+Here smooth means $C^\infty$, and convexity is even strict. We do not claim strong convexity or a positive Hessian at the solution. The example refutes the source's unqualified universal claim, not BFGS superlinear-convergence theorems that impose nondegeneracy. It does not address the separate stochastic clause. Global Lipschitz continuity of the gradient is not asserted; on the bounded initial sublevel set $[-1,1]$, the Hessian is bounded by $12$.
+
+\paragraph{Formal verification.}
+The Lean project proves the actual derivative, smoothness, strict convexity, unique global minimizer, vanishing Hessian, existence and bounds of $r$, positive curvature, full scalar BFGS update, accepted Armijo--strong Wolfe steps, convergence, and failure of the actual error-ratio limit. All real divisions used by the algorithm are justified by positivity or nonvanishing. The project uses Lean 4.19.0 and the Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+Run \texttt{lake build} in \texttt{lean/}.
+\end{document}
