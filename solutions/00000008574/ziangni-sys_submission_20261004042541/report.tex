@@ -1,0 +1,72 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{A claimed Schatten triangle constant smaller than one\\Disproof of conjecture 00000008574}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\section*{The general-$p$ clause}
+Both language versions assert that the triangle constant for the Schatten quasi-norm is
+\[
+ C_p=2^{1-1/p}\qquad\text{for general }p.
+\]
+The Schatten classes and their quasi-norms are defined for $p>0$, including $p=1/2$. We disprove this clause at that positive value. The source gives no restriction excluding $p<1$. The assertions at $p=1$, about rank-one attainment, and about the large-$p$ limit are not needed for the disproof.
+
+By triangle constant we mean a coefficient $C$ for which
+\[
+ \|A+B\|_{S_p}\leq C\bigl(\|A\|_{S_p}+\|B\|_{S_p}\bigr)
+\]
+holds for all operators in the class. A proposed exact optimal constant must, in particular, satisfy this inequality. We show that the displayed coefficient does not even do that.
+
+\section*{Actual one-dimensional operators and singular values}
+Take the complex Hilbert space $H=\mathbb C$ with its standard orthonormal basis. Its operators have $1\times1$ complex matrices. For $M=[z]$, the actual adjoint and Gram matrix are
+\[
+ M^*=[\overline z],\qquad M^*M=[\overline z z]=[|z|^2].
+\]
+A $1\times1$ matrix $[w]$ has exactly one eigenvalue, $w$: if $wv=\mu v$ with $v\ne0$, cancellation gives $\mu=w$, and conversely the vector $v=1$ is an eigenvector. Thus the sole singular value of $M$ is the nonnegative square root of its sole Gram eigenvalue,
+\[
+ s(M)=\sqrt{|z|^2}=|z|.
+\]
+These identities concern actual conjugate transpose, matrix multiplication and nonzero eigenvectors; singular-value numbers are not postulated.
+
+The usual finite-dimensional Schatten formula is
+\[
+ \|M\|_{S_p}=\left(\sum_{i=1}^{\dim H}s_i(M)^p\right)^{1/p}.
+\]
+Here the sum has exactly one term. Every such finite-dimensional operator belongs to $S_p$ for all $p>0$.
+
+\newpage
+\section*{The counterexample}
+Let $A=B=I=[1]$. These are actual rank-one identity operators on $H$; $A+B=2I=[2]$. Their Gram matrices are $I,I,4I$, so their singular values are respectively $1,1,2$.
+
+At $p=1/2$, for every nonnegative singular value $s$ the Schatten expression is
+\[
+ (s^{1/2})^2=s.
+\]
+Consequently
+\[
+ \|A\|_{S_{1/2}}=1,\qquad
+ \|B\|_{S_{1/2}}=1,\qquad
+ \|A+B\|_{S_{1/2}}=2.
+\]
+The claimed coefficient, using actual real powers, equals
+\[
+ C_{1/2}=2^{1-1/(1/2)}=2^{-1}=\frac12.
+\]
+Its proposed triangle estimate becomes
+\[
+ 2\leq\frac12(1+1)=1,
+\]
+which is false. This proves that $2^{1-1/p}$ cannot be the general Schatten quasi-norm triangle constant. The same obstruction persists when the one-dimensional operators are embedded as rank-one operators in any larger Hilbert space.
+
+\section*{Formal coverage}
+The Lean project uses actual \texttt{Matrix (Fin 1) (Fin 1) Complex} values. It defines the Gram matrix by actual conjugate transpose and matrix multiplication. It proves the complete eigenvalue characterization for \emph{every} $1\times1$ complex matrix through actual matrix-vector multiplication and a nonzero vector. It proves that the Gram entry is the actual complex squared modulus, and that its nonnegative square root squares to the Gram eigenvalue.
+
+The singular-value array has one entry because the dimension is one. The project defines the standard finite-dimensional Schatten formula using that array, a genuine finite sum, and Mathlib's real powers. It proves the half-exponent specialization using the square-root identity for real powers and the nonnegativity of the singular value. The identity and doubled-identity singular values are computed from their actual Gram matrices. No norms, eigenvalues, singular values, or claimed constants are assumed as data.
+
+The final theorem negates the universal triangle-bound predicate for all $1\times1$ complex matrices at $p=1/2$ and the source's coefficient. Any universal Schatten triangle estimate would imply this finite-dimensional specialization, so the theorem supplies a complete counterexample to the general claim.
+
+\section*{Verification}
+Lean 4.19.0 with a pinned Mathlib v4.19.0 revision is used. Full project build and complete-source check logs include the theorem axiom audits. All identities and inequalities are kernel checked; no external numerical calculation, admitted proof, extra axiom or native decision shortcut is used. No auxiliary code is required. The compiled two-page PDF is visually inspected in full.
+\end{document}
