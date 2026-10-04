@@ -1,0 +1,106 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newcommand{\N}{\mathbb N}
+\newcommand{\R}{\mathbb R}
+\title{A cycle-family disproof of Conjecture 00000000464}
+\author{C0ldSmi1e}
+\date{October 4, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+For the connected simple $2$-regular graphs $G_k=C_{2^{k+2}}$, the number of spanning trees is $2^{k+2}$, so its largest prime factor is always $2$. Their orders tend to infinity. Consequently, every positive logarithmic lower bound fails eventually along this family. The accompanying Lean project proves the spanning-tree formula from actual graph definitions and refutes even an eventual version of the proposed bound.
+\end{abstract}
+
+\section{Statement, conventions, and scope}
+The English conjecture states:
+\begin{quote}
+Definition: $P(\tau(G))$ is the largest prime factor of $\tau(G)$. Conjecture: For families of connected $d$-regular graphs (vertex count $v\to\infty$), $P(\tau(G))\ge c(d)\cdot\log v$ for an explicit $c(d)>0$; and on random $d$-regular graphs, the distribution of $P(\tau(G))/\log v$ converges to an exponential distribution.
+\end{quote}
+The original English and Chinese texts are preserved in \texttt{conjecture.md}. Neither excludes $d=2$. We use $\tau(G)$ in its standard graph-theoretic sense: the number of spanning trees of $G$. A spanning tree is a connected acyclic subgraph retaining every vertex; distinct edge sets count separately. The formalization uses exactly this meaning. The logarithm is natural; changing its base to any fixed number greater than one only rescales a positive constant.
+
+We refute the deterministic lower-bound clause. This suffices to disprove the stated conjunction; no claim about the random-graph distribution clause is needed. The counterexample relies openly on the permitted degree $2$ and does not address a modified statement restricted to $d\ge3$.
+
+\section{An admissible family}
+For $k\in\N$, put $n_k=2^{k+2}$ and $G_k=C_{n_k}$. The cycle $C_n$ has vertices $\mathbb Z/n\mathbb Z$ and an undirected edge between consecutive residues. Since $n_k\ge4$, every vertex has exactly two distinct neighbors, and the cycle is connected. Thus $(G_k)$ is a family of connected simple $2$-regular graphs. Moreover $n_k\to\infty$.
+
+In Lean these are Mathlib's \texttt{SimpleGraph.cycleGraph} on \texttt{Fin n}. Its adjacency is difference $1$ in either orientation, and the formal proof establishes both connectedness and degree exactly $2$.
+\newpage
+
+\section{Counting the actual spanning trees}
+\begin{lemma}
+For every integer $n\ge3$, $\tau(C_n)=n$.
+\end{lemma}
+\begin{proof}
+The degree-sum formula gives $|E(C_n)|=n$. For any edge $e$, the graph $C_n-e$ is connected: after a cyclic relabeling, it contains the path visiting the vertices in the order $0,1,\ldots,n-1$. More precisely, if the removed edge is $\{d-1,d\}$, the translation $x\mapsto x+d$ maps the ordinary path on $n$ vertices onto a spanning connected subgraph of $C_n-e$. No path edge maps to the removed wraparound edge. Every cycle edge has this form.
+
+The graph $C_n-e$ has $n-1$ edges. A finite connected graph on $n$ vertices with $n-1$ edges is a tree, so each deletion gives a spanning tree.
+
+Conversely, a spanning tree $T\le C_n$ has $n-1$ edges. Because its edge set is a subset of the $n$ cycle edges, its complement consists of exactly one edge $e$, and $T=C_n-e$. Distinct deleted edges give distinct edge sets. Hence $e\mapsto C_n-e$ is a bijection from the $n$ cycle edges to all its spanning trees.
+\end{proof}
+
+The Lean definition of the count is
+\[
+ \texttt{Nat.card}\,\{T:\texttt{SimpleGraph}\,V
+       \mid T\le G\ \land\ T.\texttt{IsTree}\}.
+\]
+Here $V$ is the full vertex type of $G$. The proof constructs the above bijection; it does not define the count to equal $n$, count trees up to isomorphism, or assume a matrix-tree formula.
+
+\section{Failure of every positive eventual bound}
+\begin{theorem}
+There is no real $c>0$ and natural number $K$ such that
+\[
+ c\log |V(G_k)|\le P(\tau(G_k))\qquad\text{for every }k\ge K.
+\]
+\end{theorem}
+\begin{proof}
+The lemma gives $\tau(G_k)=2^{k+2}$. Because $2$ is prime and $k+2>0$, the set of prime divisors of this number is exactly $\{2\}$. Its largest prime factor is therefore $2$.
+
+For any fixed $c>0$, the expression $c\log n_k$ tends to positive infinity. In particular, there exists $M$ such that $c\log n_k>2$ for every $k\ge M$. If an eventual lower bound held from $K$ onward, applying both inequalities at $k=\max(K,M)$ would give $2<c\log n_k\le2$, a contradiction.
+\end{proof}
+This refutes even a constant allowed to depend on this particular family and even a bound required only for sufficiently large members. It therefore refutes the proposed positive $c(2)$ depending solely on the degree. No finite numerical experiment is used in this argument.
+\newpage
+
+\section{Formal verification and correspondence}
+The project pins Lean 4.19.0 and Mathlib v4.19.0 at commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}\end{center}
+The complete proof is split into four modules:
+\begin{itemize}
+\item \texttt{CycleFacts.lean}: deleting any edge of an arbitrary cycle of order at least three leaves a connected graph, proved using a translated spanning path.
+\item \texttt{CycleTrees.lean}: a bijection from edges to spanning trees and the theorem\\
+\texttt{cycle\_spanningTreeCount\_of\_three\_le}.
+\item \texttt{NumberTheory.lean}: the orders $2^{k+2}$ tend to infinity, their largest prime factor is $2$, and every positive logarithmic bound eventually exceeds $2$.
+\item \texttt{Conjecture464.lean}: the actual graph family and the concluding theorem\\
+\texttt{conjecture464\_counterexample}.
+\end{itemize}
+
+The final theorem bundles the following three facts about the same explicit family:
+\begin{enumerate}
+\item every graph is connected and $2$-regular;
+\item its vertex counts tend to infinity;
+\item no positive constant and starting index make the logarithmic lower bound hold thereafter.
+\end{enumerate}
+
+The function \texttt{largestPrimeFactor} is the supremum of the finite set \texttt{Nat.primeFactors}. Its convention on an empty set is irrelevant: every count in the family is a positive power of two, at least four. The noncomputable \texttt{Nat.card} tree count is evaluated by a proved finite bijection, rather than by unverified computation.
+
+\section{Reproduction}
+From the submitted \texttt{lean/} directory, install the pinned Lean toolchain and fetch dependencies, then run:
+\begin{verbatim}
+lake exe cache get
+lake build
+for source in CycleFacts.lean CycleTrees.lean \
+              NumberTheory.lean Conjecture464.lean Check.lean
+do
+  lake env lean -DwarningAsError=true "$source" || exit 1
+done
+\end{verbatim}
+The committed dependency manifest fixes the dependency revisions. If the native cache executable cannot load on a platform, the README supplies the equivalent source-run cache command. \texttt{Check.lean} prints the main definitions, the full final theorem type, and the axiom dependencies of eleven central results.
+
+All proof steps are checked by Lean's kernel. The audit permits only the standard foundational axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}; it uses no admitted proofs, custom axioms, or native-evaluation shortcut. No auxiliary numerical computation is required. The accompanying verification record describes the clean rebuild, source replay, and document checks. Those are local validation results, not a statement of maintainer acceptance.
+\end{document}
