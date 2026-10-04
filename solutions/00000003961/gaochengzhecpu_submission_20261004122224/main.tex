@@ -1,0 +1,83 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{proposition}{Proposition}
+\newcommand{\tmix}{t_{\mathrm{mix}}}
+\title{The Johnson Family $J(N,1)$ Has No\newline Total-Variation Cutoff}
+\author{Conjecture 00000003961}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+The assertion of total-variation cutoff for all $k\leq N/2$ is false. For the valid family $k=1$, the Johnson graph is $K_N$. Its standard half-lazy random walk has $\tmix(1/4)=2$ and $\tmix(3/4)=1$ for every $N\geq5$. Their ratio is constantly $2$, contrary to the cutoff criterion that it tend to $1$. We prove the exact transition and total-variation formulas, not merely an asymptotic estimate.
+\end{abstract}
+
+\section*{Definitions and the claimed range}
+The vertices of $J(N,1)$ are the singleton subsets of $\{1,\ldots,N\}$. Distinct singletons have symmetric difference of size $2$, so $i\mapsto\{i\}$ identifies this actual Johnson graph with the complete graph $K_N$. We use the standard lazy walk: stay at the current vertex with probability $1/2$, and otherwise choose uniformly among its $N-1$ neighbors. Thus
+\[
+ P(i,j)=\begin{cases}1/2,&i=j,\\[2pt]1/[2(N-1)],&i\ne j.\end{cases}
+ \qquad \pi(j)=\frac1N.
+\]
+The matrix is positive and doubly stochastic, so the uniform distribution $\pi$ is stationary. In particular, there is no disconnectedness or periodicity obstruction in this example.
+
+Write
+\[
+ d_N(t)=\max_i\frac12\sum_j|P^t(i,j)-\pi(j)|,
+ \qquad \tmix^{(N)}(\varepsilon)=\min\{t\geq0:d_N(t)\leq\varepsilon\}.
+\]
+The standard total-variation cutoff criterion is that, for every $0<\varepsilon<1/2$,
+\begin{equation}\label{eq:cutoff}
+ \frac{\tmix^{(N)}(\varepsilon)}{\tmix^{(N)}(1-\varepsilon)}\longrightarrow1
+ \quad (N\longrightarrow\infty).
+\end{equation}
+See~\cite{HermonPeres} for this formulation. The source quantifies over all $k\leq N/2$ and does not require $k\to\infty$. Hence the family $k=1$, $N\geq5$ is within its stated range.
+
+\begin{proposition}
+For the half-lazy walk on $J(N,1)$, $N\geq5$, set $a_N=(N-2)/[2(N-1)]$. For every nonnegative integer $t$,
+\begin{equation}\label{eq:tv}
+ d_N(t)=\frac{N-1}{N}a_N^t.
+\end{equation}
+In particular, $\tmix^{(N)}(1/4)=2$ and $\tmix^{(N)}(3/4)=1$.
+\end{proposition}
+\begin{proof}
+Let $U$ be the $N\times N$ matrix all of whose entries equal $1/N$. Direct multiplication gives $U^2=U$. The transition probabilities and induction then give
+\[
+ P=a_N I+(1-a_N)U,\qquad P^t=a_N^t I+(1-a_N^t)U.
+\]
+For a fixed starting state $i$, subtracting $\pi$ gives the diagonal difference $a_N^t(1-1/N)$ and each of the other $N-1$ differences $-a_N^t/N$. Since $a_N\geq0$, their absolute values sum to $2(N-1)a_N^t/N$. This proves~\eqref{eq:tv}; it is independent of $i$, so the maximum over initial states is exactly the same value. Also $a_N<1$, so these distances tend to zero for each fixed $N$ and every positive tolerance has a finite mixing time.
+
+At the first three times, the formula becomes
+\[
+ d_N(0)=\frac{N-1}{N}>\frac34,\qquad
+ d_N(1)=\frac{N-2}{2N},\qquad
+ d_N(2)=\frac{(N-2)^2}{4N(N-1)}.
+\]
+For $N\geq5$, $d_N(1)>1/4$ because $N>4$, while $d_N(1)<1/2<3/4$. Furthermore,
+\[
+ (N-2)^2\leq N(N-1)\quad\Longleftrightarrow\quad4\leq3N,
+\]
+so $d_N(2)\leq1/4$. These comparisons show both the upper bounds and the minimality of the asserted mixing times.
+\end{proof}
+
+Taking $\varepsilon=1/4$ in~\eqref{eq:cutoff} now yields the constant ratio $2/1=2$, whose limit is not $1$. Thus this family has no total-variation cutoff. This already refutes the universal cutoff clause and hence the conjecture as written; no analysis of its proposed cutoff-time multiplier is needed. This elementary complete-graph calculation is not claimed as a new result about Markov chains. The conclusion does not address a different statement restricted to growing $k$.
+
+\section*{Formal verification and reproduction}
+The accompanying Lean project uses Lean 4.19.0 and Mathlib at commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+It indexes $N\geq5$ by $N=n+5$. The actual singleton-subset graph, bijective labeling, adjacency, and neighbor count are verified. The transition matrix is matched to that graph. Mathlib's \texttt{doublyStochastic} structure verifies its probability entries and every matrix power, and the uniform distribution is proved stationary.
+
+The matrix-power identity, exact finite total-variation sum, convergence, and existence of mixing times are formalized. Mixing time is the infimum of the actual nonempty set of admissible integer times; its least values $2$ and $1$ are proved. Universal quantification over starting states implements the maximum bound. The final theorem \texttt{no\_total\_variation\_cutoff} contradicts the real-limit criterion~\eqref{eq:cutoff}. No spectral-gap assertion is assumed.
+
+The exact \href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000003961.md}{repository statement} is in \texttt{SOURCE.md}; build commands and detailed correspondence are in \texttt{README.md}. Dependencies use public, pinned Git revisions. The verification directory records actual fresh builds, axiom audits, hashes, and PDF checks. The auxiliary \texttt{verify.py} constructs the subset graphs and multiplies rational matrices at five finite sizes. It supplements the general Lean proof.
+
+\begin{thebibliography}{1}
+\bibitem{HermonPeres}
+J. Hermon and Y. Peres, \emph{On sensitivity of mixing times and cutoff},
+Electronic Journal of Probability \textbf{23} (2018), paper 25.
+\href{https://arxiv.org/abs/1610.04357}{arXiv:1610.04357}.
+The cutoff ratio criterion appears in the abstract; the counterexample calculation here is self-contained.
+\end{thebibliography}
+\end{document}
