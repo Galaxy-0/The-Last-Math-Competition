@@ -1,0 +1,77 @@
+def Conjecture3794.nonnegativeOrthant : (n : ℕ) → ConvexCone ℝ (Fin n → ℝ) :=
+fun n => ConvexCone.positive ℝ (Fin n → ℝ)
+def Conjecture3794.LCPSolutions : {n : ℕ} → Matrix (Fin n) (Fin n) ℝ → (Fin n → ℝ) → Set (Fin n → ℝ) :=
+fun {n} M q =>
+  {x |
+    x ∈ Conjecture3794.nonnegativeOrthant n ∧
+      M.mulVec x + q ∈ Conjecture3794.nonnegativeOrthant n ∧ x ⬝ᵥ (M.mulVec x + q) = 0}
+def Conjecture3794.counterMatrix : Matrix (Fin 2) (Fin 2) ℝ :=
+!![1, -1; -1, 1]
+def Conjecture3794.diagonalVector : ℝ → Fin 2 → ℝ :=
+fun t => ![t, t]
+def Conjecture3794.SolutionCountBound : Prop :=
+∀ (n : ℕ), 0 < n → ∀ (M : Matrix (Fin n) (Fin n) ℝ) (q : Fin n → ℝ), (Conjecture3794.LCPSolutions M q).encard ≤ 2 ^ n
+def Conjecture3794.solutionSequence : ℕ → Fin 2 → ℝ :=
+fun k => Conjecture3794.diagonalVector ↑k
+Conjecture3794.mem_nonnegativeOrthant {n : ℕ} (x : Fin n → ℝ) :
+  x ∈ Conjecture3794.nonnegativeOrthant n ↔ ∀ (i : Fin n), 0 ≤ x i
+'Conjecture3794.mem_nonnegativeOrthant' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.mem_LCPSolutions_iff {n : ℕ} (M : Matrix (Fin n) (Fin n) ℝ) (q x : Fin n → ℝ) :
+  x ∈ Conjecture3794.LCPSolutions M q ↔
+    (∀ (i : Fin n), 0 ≤ x i) ∧ (∀ (i : Fin n), 0 ≤ (M.mulVec x + q) i) ∧ x ⬝ᵥ (M.mulVec x + q) = 0
+'Conjecture3794.mem_LCPSolutions_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.dotProduct_eq_zero_iff_coordinatewise {n : ℕ} (x y : Fin n → ℝ) (hx : ∀ (i : Fin n), 0 ≤ x i)
+  (hy : ∀ (i : Fin n), 0 ≤ y i) : x ⬝ᵥ y = 0 ↔ ∀ (i : Fin n), x i * y i = 0
+'Conjecture3794.dotProduct_eq_zero_iff_coordinatewise' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.mem_LCPSolutions_iff_coordinatewise {n : ℕ} (M : Matrix (Fin n) (Fin n) ℝ) (q x : Fin n → ℝ) :
+  x ∈ Conjecture3794.LCPSolutions M q ↔ ∀ (i : Fin n), 0 ≤ x i ∧ 0 ≤ (M.mulVec x + q) i ∧ x i * (M.mulVec x + q) i = 0
+'Conjecture3794.mem_LCPSolutions_iff_coordinatewise' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.counterMatrix_mulVec (x : Fin 2 → ℝ) : Conjecture3794.counterMatrix.mulVec x = ![x 0 - x 1, x 1 - x 0]
+'Conjecture3794.counterMatrix_mulVec' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.counterMatrix_mul_diagonal (t : ℝ) :
+  Conjecture3794.counterMatrix.mulVec (Conjecture3794.diagonalVector t) = 0
+'Conjecture3794.counterMatrix_mul_diagonal' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.diagonalVector_mem (t : ℝ) (ht : 0 ≤ t) :
+  Conjecture3794.diagonalVector t ∈ Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0
+'Conjecture3794.diagonalVector_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.counterSolutions_iff (x : Fin 2 → ℝ) :
+  x ∈ Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0 ↔ ∃ t, 0 ≤ t ∧ x = Conjecture3794.diagonalVector t
+'Conjecture3794.counterSolutions_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.diagonalVector_injective : Function.Injective Conjecture3794.diagonalVector
+'Conjecture3794.diagonalVector_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.counterMatrix_ne_zero : Conjecture3794.counterMatrix ≠ 0
+'Conjecture3794.counterMatrix_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.counterMatrix_det : Conjecture3794.counterMatrix.det = 0
+'Conjecture3794.counterMatrix_det' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.counterMatrix_isHermitian : Conjecture3794.counterMatrix.IsHermitian
+'Conjecture3794.counterMatrix_isHermitian' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.counterMatrix_quadratic (x : Fin 2 → ℝ) :
+  star x ⬝ᵥ Conjecture3794.counterMatrix.mulVec x = (x 0 - x 1) ^ 2
+'Conjecture3794.counterMatrix_quadratic' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.counterMatrix_posSemidef : Conjecture3794.counterMatrix.PosSemidef
+'Conjecture3794.counterMatrix_posSemidef' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.solutionSequence_mem (k : ℕ) :
+  Conjecture3794.solutionSequence k ∈ Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0
+'Conjecture3794.solutionSequence_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.solutionSequence_injective : Function.Injective Conjecture3794.solutionSequence
+'Conjecture3794.solutionSequence_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.counterSolutions_infinite : (Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0).Infinite
+'Conjecture3794.counterSolutions_infinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.counterSolutions_encard : (Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0).encard = ⊤
+'Conjecture3794.counterSolutions_encard' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.counterSolutions_exceed_every_finite_bound (k : ℕ) :
+  ↑k < (Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0).encard
+'Conjecture3794.counterSolutions_exceed_every_finite_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.five_distinct_solutions : ∃ f, Function.Injective f
+'Conjecture3794.five_distinct_solutions' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.counterSolutions_not_le_two_pow_two :
+  ¬(Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0).encard ≤ 2 ^ 2
+'Conjecture3794.counterSolutions_not_le_two_pow_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.conjecture3794_counterexample :
+  Conjecture3794.counterMatrix ≠ 0 ∧
+    Conjecture3794.counterMatrix.PosSemidef ∧
+      (Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0).Infinite ∧
+        ¬(Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0).encard ≤ 2 ^ 2
+'Conjecture3794.conjecture3794_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture3794.conjecture3794_disproof : ¬Conjecture3794.SolutionCountBound
+'Conjecture3794.conjecture3794_disproof' depends on axioms: [propext, Classical.choice, Quot.sound]

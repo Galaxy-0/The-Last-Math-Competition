@@ -1,0 +1,499 @@
+{
+  "started_utc": "2026-10-04T08:46:47.816917+00:00",
+  "source_root": "/private/tmp/tlmc3794-proof",
+  "independent_root": "/private/tmp/tlmc3794-independent",
+  "dependency_root": "/private/tmp/tlmc310-proof/.lake/packages",
+  "fresh_build_outputs_absent": true,
+  "copied_files": [
+    "Conjecture3794/Problem.lean",
+    "Conjecture3794.lean",
+    "Check.lean",
+    "lakefile.toml",
+    "lake-manifest.json",
+    "lean-toolchain"
+  ],
+  "source_sha256": {
+    "Conjecture3794/Problem.lean": "c855d1cb4f594faa71d62dc2c958cc7a52ffb7a680cd4a84e6216537cff6f3b4",
+    "Conjecture3794.lean": "4d56153d30c2f6c5726e7757d48274cd514fb3a3637ab05dca44712706ca7efb",
+    "Check.lean": "c1a7df99c938726344f637418ce6e00a8a1387a5de175af03488185b4669ebf4",
+    "lakefile.toml": "d66453f57a54c0eb83c1d2c8de7ef735e80328a2f57d2b25ce51245809aafab3",
+    "lake-manifest.json": "ccf737330cc56f95cfef4f0efda291f14dd742659b94f844051ea5a12e35b501",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "dependencies": [
+    {
+      "name": "mathlib",
+      "expected_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "actual_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "plausible",
+      "expected_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "actual_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "expected_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "actual_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "importGraph",
+      "expected_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "actual_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "proofwidgets",
+      "expected_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "actual_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "aesop",
+      "expected_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "actual_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Qq",
+      "expected_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "actual_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "batteries",
+      "expected_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "actual_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Cli",
+      "expected_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "actual_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    }
+  ],
+  "strict_replay": [
+    {
+      "file": "Conjecture3794/Problem.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture3794/Problem.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.669,
+      "output": ""
+    },
+    {
+      "file": "Conjecture3794.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture3794.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.479,
+      "output": ""
+    },
+    {
+      "file": "Check.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Check.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 4.125,
+      "output": "def Conjecture3794.nonnegativeOrthant : (n : \u2115) \u2192 ConvexCone \u211d (Fin n \u2192 \u211d) :=\nfun n => ConvexCone.positive \u211d (Fin n \u2192 \u211d)\ndef Conjecture3794.LCPSolutions : {n : \u2115} \u2192 Matrix (Fin n) (Fin n) \u211d \u2192 (Fin n \u2192 \u211d) \u2192 Set (Fin n \u2192 \u211d) :=\nfun {n} M q =>\n  {x |\n    x \u2208 Conjecture3794.nonnegativeOrthant n \u2227\n      M.mulVec x + q \u2208 Conjecture3794.nonnegativeOrthant n \u2227 x \u2b1d\u1d65 (M.mulVec x + q) = 0}\ndef Conjecture3794.counterMatrix : Matrix (Fin 2) (Fin 2) \u211d :=\n!![1, -1; -1, 1]\ndef Conjecture3794.diagonalVector : \u211d \u2192 Fin 2 \u2192 \u211d :=\nfun t => ![t, t]\ndef Conjecture3794.SolutionCountBound : Prop :=\n\u2200 (n : \u2115), 0 < n \u2192 \u2200 (M : Matrix (Fin n) (Fin n) \u211d) (q : Fin n \u2192 \u211d), (Conjecture3794.LCPSolutions M q).encard \u2264 2 ^ n\ndef Conjecture3794.solutionSequence : \u2115 \u2192 Fin 2 \u2192 \u211d :=\nfun k => Conjecture3794.diagonalVector \u2191k\nConjecture3794.mem_nonnegativeOrthant {n : \u2115} (x : Fin n \u2192 \u211d) :\n  x \u2208 Conjecture3794.nonnegativeOrthant n \u2194 \u2200 (i : Fin n), 0 \u2264 x i\n'Conjecture3794.mem_nonnegativeOrthant' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.mem_LCPSolutions_iff {n : \u2115} (M : Matrix (Fin n) (Fin n) \u211d) (q x : Fin n \u2192 \u211d) :\n  x \u2208 Conjecture3794.LCPSolutions M q \u2194\n    (\u2200 (i : Fin n), 0 \u2264 x i) \u2227 (\u2200 (i : Fin n), 0 \u2264 (M.mulVec x + q) i) \u2227 x \u2b1d\u1d65 (M.mulVec x + q) = 0\n'Conjecture3794.mem_LCPSolutions_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.dotProduct_eq_zero_iff_coordinatewise {n : \u2115} (x y : Fin n \u2192 \u211d) (hx : \u2200 (i : Fin n), 0 \u2264 x i)\n  (hy : \u2200 (i : Fin n), 0 \u2264 y i) : x \u2b1d\u1d65 y = 0 \u2194 \u2200 (i : Fin n), x i * y i = 0\n'Conjecture3794.dotProduct_eq_zero_iff_coordinatewise' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.mem_LCPSolutions_iff_coordinatewise {n : \u2115} (M : Matrix (Fin n) (Fin n) \u211d) (q x : Fin n \u2192 \u211d) :\n  x \u2208 Conjecture3794.LCPSolutions M q \u2194 \u2200 (i : Fin n), 0 \u2264 x i \u2227 0 \u2264 (M.mulVec x + q) i \u2227 x i * (M.mulVec x + q) i = 0\n'Conjecture3794.mem_LCPSolutions_iff_coordinatewise' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.counterMatrix_mulVec (x : Fin 2 \u2192 \u211d) : Conjecture3794.counterMatrix.mulVec x = ![x 0 - x 1, x 1 - x 0]\n'Conjecture3794.counterMatrix_mulVec' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.counterMatrix_mul_diagonal (t : \u211d) :\n  Conjecture3794.counterMatrix.mulVec (Conjecture3794.diagonalVector t) = 0\n'Conjecture3794.counterMatrix_mul_diagonal' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.diagonalVector_mem (t : \u211d) (ht : 0 \u2264 t) :\n  Conjecture3794.diagonalVector t \u2208 Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0\n'Conjecture3794.diagonalVector_mem' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.counterSolutions_iff (x : Fin 2 \u2192 \u211d) :\n  x \u2208 Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0 \u2194 \u2203 t, 0 \u2264 t \u2227 x = Conjecture3794.diagonalVector t\n'Conjecture3794.counterSolutions_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.diagonalVector_injective : Function.Injective Conjecture3794.diagonalVector\n'Conjecture3794.diagonalVector_injective' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.counterMatrix_ne_zero : Conjecture3794.counterMatrix \u2260 0\n'Conjecture3794.counterMatrix_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.counterMatrix_det : Conjecture3794.counterMatrix.det = 0\n'Conjecture3794.counterMatrix_det' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.counterMatrix_isHermitian : Conjecture3794.counterMatrix.IsHermitian\n'Conjecture3794.counterMatrix_isHermitian' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.counterMatrix_quadratic (x : Fin 2 \u2192 \u211d) :\n  star x \u2b1d\u1d65 Conjecture3794.counterMatrix.mulVec x = (x 0 - x 1) ^ 2\n'Conjecture3794.counterMatrix_quadratic' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.counterMatrix_posSemidef : Conjecture3794.counterMatrix.PosSemidef\n'Conjecture3794.counterMatrix_posSemidef' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.solutionSequence_mem (k : \u2115) :\n  Conjecture3794.solutionSequence k \u2208 Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0\n'Conjecture3794.solutionSequence_mem' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.solutionSequence_injective : Function.Injective Conjecture3794.solutionSequence\n'Conjecture3794.solutionSequence_injective' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.counterSolutions_infinite : (Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0).Infinite\n'Conjecture3794.counterSolutions_infinite' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.counterSolutions_encard : (Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0).encard = \u22a4\n'Conjecture3794.counterSolutions_encard' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.counterSolutions_exceed_every_finite_bound (k : \u2115) :\n  \u2191k < (Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0).encard\n'Conjecture3794.counterSolutions_exceed_every_finite_bound' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.five_distinct_solutions : \u2203 f, Function.Injective f\n'Conjecture3794.five_distinct_solutions' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.counterSolutions_not_le_two_pow_two :\n  \u00ac(Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0).encard \u2264 2 ^ 2\n'Conjecture3794.counterSolutions_not_le_two_pow_two' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.conjecture3794_counterexample :\n  Conjecture3794.counterMatrix \u2260 0 \u2227\n    Conjecture3794.counterMatrix.PosSemidef \u2227\n      (Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0).Infinite \u2227\n        \u00ac(Conjecture3794.LCPSolutions Conjecture3794.counterMatrix 0).encard \u2264 2 ^ 2\n'Conjecture3794.conjecture3794_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture3794.conjecture3794_disproof : \u00acConjecture3794.SolutionCountBound\n'Conjecture3794.conjecture3794_disproof' depends on axioms: [propext, Classical.choice, Quot.sound]\n"
+    }
+  ],
+  "lean_version": {
+    "exit_code": 0,
+    "output": "Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)"
+  },
+  "lean_commit": {
+    "exit_code": 0,
+    "expected": "6caaee842e9495688c1567e78c0e68dbb96942aa",
+    "actual": "6caaee842e9495688c1567e78c0e68dbb96942aa"
+  },
+  "project_identity": {
+    "manifest_name": "tlmc3794",
+    "lake_name": "tlmc3794",
+    "default_targets": [
+      "Conjecture3794"
+    ],
+    "toolchain_pin": "leanprover/lean4:v4.19.0",
+    "source_file_count": 3,
+    "config_file_count": 3,
+    "dependency_symlink_target": "/private/tmp/tlmc310-proof/.lake/packages"
+  },
+  "proof_bypass_scan": {
+    "pattern": "\\b(?:sorry|admit|axiom|native_decide|unsafe|run_tac|elab|implemented_by)\\b|Lean\\.ofReduceBool|debug\\.skipKernelTC|trustLevel",
+    "hits": []
+  },
+  "build": {
+    "command": [
+      "lake",
+      "build"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 9.617,
+    "log": "build.txt"
+  },
+  "axiom_audit": {
+    "expected_count": 23,
+    "parsed_count": 23,
+    "expected_theorems": [
+      "Conjecture3794.mem_nonnegativeOrthant",
+      "Conjecture3794.mem_LCPSolutions_iff",
+      "Conjecture3794.dotProduct_eq_zero_iff_coordinatewise",
+      "Conjecture3794.mem_LCPSolutions_iff_coordinatewise",
+      "Conjecture3794.counterMatrix_mulVec",
+      "Conjecture3794.counterMatrix_mul_diagonal",
+      "Conjecture3794.diagonalVector_mem",
+      "Conjecture3794.counterSolutions_iff",
+      "Conjecture3794.diagonalVector_injective",
+      "Conjecture3794.counterMatrix_ne_zero",
+      "Conjecture3794.counterMatrix_det",
+      "Conjecture3794.counterMatrix_isHermitian",
+      "Conjecture3794.counterMatrix_quadratic",
+      "Conjecture3794.counterMatrix_posSemidef",
+      "Conjecture3794.solutionSequence_mem",
+      "Conjecture3794.solutionSequence_injective",
+      "Conjecture3794.counterSolutions_infinite",
+      "Conjecture3794.counterSolutions_encard",
+      "Conjecture3794.counterSolutions_exceed_every_finite_bound",
+      "Conjecture3794.five_distinct_solutions",
+      "Conjecture3794.counterSolutions_not_le_two_pow_two",
+      "Conjecture3794.conjecture3794_counterexample",
+      "Conjecture3794.conjecture3794_disproof"
+    ],
+    "audits": [
+      {
+        "theorem": "Conjecture3794.mem_nonnegativeOrthant",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.mem_LCPSolutions_iff",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.dotProduct_eq_zero_iff_coordinatewise",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.mem_LCPSolutions_iff_coordinatewise",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.counterMatrix_mulVec",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.counterMatrix_mul_diagonal",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.diagonalVector_mem",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.counterSolutions_iff",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.diagonalVector_injective",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.counterMatrix_ne_zero",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.counterMatrix_det",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.counterMatrix_isHermitian",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.counterMatrix_quadratic",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.counterMatrix_posSemidef",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.solutionSequence_mem",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.solutionSequence_injective",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.counterSolutions_infinite",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.counterSolutions_encard",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.counterSolutions_exceed_every_finite_bound",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.five_distinct_solutions",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.counterSolutions_not_le_two_pow_two",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.conjecture3794_counterexample",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture3794.conjecture3794_disproof",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
+    ],
+    "allowed_axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "all_names_match": true,
+    "only_allowed_axioms": true
+  },
+  "independent_sha256": {
+    "Conjecture3794/Problem.lean": "c855d1cb4f594faa71d62dc2c958cc7a52ffb7a680cd4a84e6216537cff6f3b4",
+    "Conjecture3794.lean": "4d56153d30c2f6c5726e7757d48274cd514fb3a3637ab05dca44712706ca7efb",
+    "Check.lean": "c1a7df99c938726344f637418ce6e00a8a1387a5de175af03488185b4669ebf4",
+    "lakefile.toml": "d66453f57a54c0eb83c1d2c8de7ef735e80328a2f57d2b25ce51245809aafab3",
+    "lake-manifest.json": "ccf737330cc56f95cfef4f0efda291f14dd742659b94f844051ea5a12e35b501",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "source_unchanged": true,
+  "copied_files_unchanged": true,
+  "definition_and_type_audit": {
+    "definition_names": [
+      "Conjecture3794.nonnegativeOrthant",
+      "Conjecture3794.LCPSolutions",
+      "Conjecture3794.counterMatrix",
+      "Conjecture3794.diagonalVector",
+      "Conjecture3794.SolutionCountBound",
+      "Conjecture3794.solutionSequence"
+    ],
+    "definition_count": 6,
+    "checked_theorem_names": [
+      "Conjecture3794.mem_nonnegativeOrthant",
+      "Conjecture3794.mem_LCPSolutions_iff",
+      "Conjecture3794.dotProduct_eq_zero_iff_coordinatewise",
+      "Conjecture3794.mem_LCPSolutions_iff_coordinatewise",
+      "Conjecture3794.counterMatrix_mulVec",
+      "Conjecture3794.counterMatrix_mul_diagonal",
+      "Conjecture3794.diagonalVector_mem",
+      "Conjecture3794.counterSolutions_iff",
+      "Conjecture3794.diagonalVector_injective",
+      "Conjecture3794.counterMatrix_ne_zero",
+      "Conjecture3794.counterMatrix_det",
+      "Conjecture3794.counterMatrix_isHermitian",
+      "Conjecture3794.counterMatrix_quadratic",
+      "Conjecture3794.counterMatrix_posSemidef",
+      "Conjecture3794.solutionSequence_mem",
+      "Conjecture3794.solutionSequence_injective",
+      "Conjecture3794.counterSolutions_infinite",
+      "Conjecture3794.counterSolutions_encard",
+      "Conjecture3794.counterSolutions_exceed_every_finite_bound",
+      "Conjecture3794.five_distinct_solutions",
+      "Conjecture3794.counterSolutions_not_le_two_pow_two",
+      "Conjecture3794.conjecture3794_counterexample",
+      "Conjecture3794.conjecture3794_disproof"
+    ],
+    "checked_theorem_count": 23,
+    "checked_names_match_audits": true
+  },
+  "dependencies_post_build": [
+    {
+      "name": "mathlib",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "plausible",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "importGraph",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "proofwidgets",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "aesop",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Qq",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "batteries",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Cli",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    }
+  ],
+  "status": "PASS",
+  "finished_utc": "2026-10-04T08:47:05.033790+00:00"
+}
