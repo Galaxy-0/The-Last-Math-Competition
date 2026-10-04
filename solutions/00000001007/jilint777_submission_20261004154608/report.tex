@@ -1,0 +1,299 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\F}{\mathbb{F}_8}
+\newcommand{\pol}{f}
+
+\title{Disproof of Conjecture 00000001007:\\
+the Suzuki--Tits ovoid of $Q(4,8)$ is not an elliptic quadric}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000001007 asserts that in even characteristic every ovoid of the
+parabolic quadric $Q(4,q)$ is an elliptic quadric. This is false for $q=8$.
+The Suzuki--Tits ovoid (Tits, 1962), lifted to $Q(4,8)$, is an ovoid: it has
+$q^2+1=65$ points and meets every line of $Q(4,8)$ exactly once. But it lies in
+no hyperplane of $\mathrm{PG}(4,8)$, so it is not a hyperplane section
+$Q^-(3,8)$ of $Q(4,8)$. Its projection from the nucleus to $\mathrm{PG}(3,8)$
+lies on no quadric at all, so it is not an elliptic quadric in that model
+either. All facts are checked in Lean~4 (core library only) and by an
+independent Python script. Short hand proofs are also given.
+\end{abstract}
+
+\section{The conjecture and what we refute}
+The statement reads:
+\begin{quote}
+\emph{Conjecture:} In even characteristic, every ovoid of $Q(4,q)$ is an
+elliptic quadric (uniqueness; the odd-characteristic case has Suzuki's
+counterexamples) --- the even-characteristic uniqueness conjecture.
+\end{quote}
+The Chinese version says the same thing. The clause we refute is
+\begin{center}
+(C)\quad \emph{for every even prime power $q$, every ovoid of $Q(4,q)$ is an
+elliptic quadric.}
+\end{center}
+One even value of $q$ with a non-elliptic ovoid is enough, and we use $q=8$.
+The parenthetical remark is not a mathematical claim we need. It is also
+inaccurate: the Suzuki--Tits ovoids exist only in characteristic $2$, for
+$q=2^{2e+1}\ge 8$. They are exactly the counterexamples to (C).
+
+\paragraph{Readings.}
+``Ovoid of $Q(4,q)$'' has a standard meaning (Definition~\ref{def:ovoid}). We
+also use the standard equivalent finite form (Lemma~\ref{lem:equiv}).
+``Elliptic quadric'' can be read in two models.
+\begin{itemize}
+\item[(R1)] \emph{Inside $\mathrm{PG}(4,q)$.} An elliptic quadric ovoid of
+$Q(4,q)$ is a section $Q(4,q)\cap H$ by a hyperplane $H$ such that $Q|_H$ is
+elliptic ($Q^-(3,q)$). The same holds for any image of such a section under a
+collineation or a semilinear isometry, since these maps send hyperplanes to
+hyperplanes. Every such set lies in a hyperplane of $\mathrm{PG}(4,q)$.
+\item[(R2)] \emph{Inside $\mathrm{PG}(3,q)$.} For $q$ even, projection from the
+nucleus $N$ of $Q(4,q)$ is a bijection from the points of $Q(4,q)$ onto the
+points of $\mathrm{PG}(3,q)$, and ovoids of $Q(4,q)$ map to ovoids of
+$\mathrm{PG}(3,q)$. In this model ``elliptic quadric'' means the zero set of an
+elliptic quadratic form on $\F^4$, possibly after a collineation. Every such
+set lies on a quadric, i.e.\ on the zero set of a nonzero quadratic form,
+since collineations map quadrics to quadrics.
+\end{itemize}
+We exhibit an ovoid $\mathcal{T}$ of $Q(4,8)$ that lies in no hyperplane and
+whose projection lies on no quadric. This defeats both readings and any reading
+that implies one of these two necessary conditions.
+
+\section{The objects}
+\paragraph{The field.}
+$\F=\mathbb{F}_2[\omega]/(\omega^3+\omega+1)$. We code $b_0+b_1\omega+b_2\omega^2$
+by the integer $b_0+2b_1+4b_2$. So $2=\omega$, $4=\omega^2$,
+$3=\omega^3$, $6=\omega^4$, $7=\omega^5$, $5=\omega^6$, and $\omega$ has
+order $7$. Addition is XOR of codes, and $\operatorname{char}\F=2$, so $q=8$ is
+even. The map $\sigma(x)=x^4$ is a field automorphism with
+$\sigma(\sigma(x))=x^{16}=x^2$, so $\sigma^2$ is the Frobenius map. This is the
+automorphism needed for the Tits ovoid when $q=2^{2e+1}$ with $e=1$.
+
+\paragraph{The quadric.}
+On $V=\F^5$ let
+\[
+Q(x)=x_0x_3+x_1x_2+x_4^2,\qquad
+\pol(x,y)=x_0y_3+x_3y_0+x_1y_2+x_2y_1 .
+\]
+The identities $(a+b)(c+d)=ac+bd+(ad+bc)$ and $(a+b)^2=a^2+b^2$ give
+$Q(x+y)=Q(x)+Q(y)+\pol(x,y)$, so $\pol$ is the polar form of $Q$. Also
+$\pol(x,x)=2(x_0x_3+x_1x_2)=0$. Pairing with the unit vectors
+$e_3,e_2,e_1,e_0$ gives $\pol(x,\cdot)=0$ if and only if
+$x_0=x_1=x_2=x_3=0$. So the radical of $\pol$ is spanned by the nucleus
+$N=(0,0,0,0,1)$, and $Q(N)=1\ne0$. Hence $Q$ is a nondegenerate quadratic form
+of parabolic type, and its zero set $Q(4,8)$ in $\mathrm{PG}(4,8)$ is the
+parabolic quadric. All nondegenerate quadrics of $\mathrm{PG}(4,q)$ are
+projectively equivalent, so the choice of model loses nothing: an isometry maps
+ovoids to ovoids and hyperplane sections to hyperplane sections.
+
+For points $x\ne y$ of $Q(4,8)$,
+$Q(sx+ty)=s^2Q(x)+t^2Q(y)+st\,\pol(x,y)=st\,\pol(x,y)$. So the line $xy$ lies on
+the quadric if and only if $\pol(x,y)=0$. Such points are called
+\emph{collinear}. The lines of $Q(4,8)$ are the totally singular
+$2$-dimensional subspaces of $V$.
+
+\paragraph{Counts.}
+$Q(4,q)$ is a generalized quadrangle of order $(q,q)$ \cite[\S3.1]{PT}. It has
+$(q+1)(q^2+1)$ points and $(q+1)(q^2+1)$ lines. Each line has $q+1$ points and
+each point lies on $q+1$ lines. For $q=8$ there are $585$ points, $585$ lines,
+$9$ points per line and $9$ lines per point. \texttt{verify.py} confirms these
+numbers by listing all $4681$ points of $\mathrm{PG}(4,8)$ and all lines of the
+quadric.
+
+\begin{definition}\label{def:ovoid}
+An \emph{ovoid} of $Q(4,q)$ is a set $\mathcal{O}$ of points of $Q(4,q)$ that
+meets every line of $Q(4,q)$ in exactly one point.
+\end{definition}
+
+\begin{lemma}\label{lem:equiv}
+A set $\mathcal{O}$ of points of $Q(4,q)$ is an ovoid if and only if
+$|\mathcal{O}|=q^2+1$ and no two points of $\mathcal{O}$ are collinear.
+\end{lemma}
+\begin{proof}
+($\Leftarrow$) Two points of $\mathcal{O}$ on a common line of $Q(4,q)$ would
+be collinear, so each line contains at most one point of $\mathcal{O}$. Each
+point of $\mathcal{O}$ lies on $q+1$ lines, and these lines are distinct for
+distinct points of $\mathcal{O}$. So $\mathcal{O}$ meets at least
+$(q^2+1)(q+1)$ lines, which is all of them.
+($\Rightarrow$) Two collinear points of $\mathcal{O}$ would put two points of
+$\mathcal{O}$ on one line. Counting incidences between $\mathcal{O}$ and lines
+gives $|\mathcal{O}|(q+1)=(q+1)(q^2+1)$.
+\end{proof}
+Lean formalizes the right-hand side as \texttt{IsOvoid}, for $q=8$. It also
+proves the ``at most one point per line'' half of ($\Leftarrow$) for every
+totally singular line (\texttt{IsOvoid.at\_most\_one}). The counting half is
+the argument above. \texttt{verify.py} checks the defining property directly:
+each of the $585$ lines meets our set in exactly one point.
+
+\section{The Suzuki--Tits ovoid}
+In $\mathrm{PG}(3,8)$ the Tits ovoid \cite{Tits} is
+\[
+\mathcal{T}_3=\{(1,x,y,\;xy+x^{\sigma+2}+y^{\sigma}) : x,y\in\F\}\cup\{(0,0,0,1)\},
+\qquad x^{\sigma+2}=x^6,\ y^\sigma=y^4 .
+\]
+We lift it to $Q(4,8)$. Every $a\in\F$ has a unique square root, because
+squaring is an automorphism. We append to $(p_0,p_1,p_2,p_3)$ the coordinate
+$\sqrt{p_0p_3+p_1p_2}$. For an affine point this square root is
+$\sqrt{x^6+y^4}=x^3+y^2$. So
+\[
+\mathcal{T}=\{t(x,y):=(1,\,x,\,y,\,xy+x^6+y^4,\,x^3+y^2) : x,y\in\F\}\cup\{(0,0,0,1,0)\}.
+\]
+The point $t(x,y)$ is on the quadric because
+$Q(t(x,y))=(xy+x^6+y^4)+xy+(x^3+y^2)^2=0$. The last point is on the quadric
+because $Q(0,0,0,1,0)=0$. Projection from $N$ (deleting $x_4$) maps
+$\mathcal{T}$ onto $\mathcal{T}_3$.
+
+\begin{proposition}\label{prop:ovoid}
+$\mathcal{T}$ is an ovoid of $Q(4,8)$. It consists of $65$ distinct points, no
+two of them collinear.
+\end{proposition}
+\begin{proof}
+The $64$ points $t(x,y)$ have distinct coordinates $(x_1,x_2)$ and first
+coordinate $1$. The point $(0,0,0,1,0)$ is the only one with $x_0=0$. So the
+65 points are pairwise non-proportional. Moreover
+$\pol\big((0,0,0,1,0),t(x,y)\big)=1$, and for $(x,y)\ne(x',y')$,
+\[
+\pol\big(t(x,y),t(x',y')\big)=(x+x')(y+y')+x^6+x'^6+(y+y')^4 .
+\]
+That this is nonzero is Tits' theorem \cite{Tits}. Here it is checked
+exhaustively for all $2080$ pairs, by \texttt{decide} in Lean and in
+\texttt{verify.py}. By Lemma~\ref{lem:equiv}, $\mathcal{T}$ is an ovoid.
+\texttt{verify.py} also checks Definition~\ref{def:ovoid} directly on all
+585 lines, and checks that $\mathcal{T}_3$ has no three collinear points (all
+$43680$ triples), so $\mathcal{T}_3$ is an ovoid of $\mathrm{PG}(3,8)$.
+\end{proof}
+
+\section{\texorpdfstring{$\mathcal{T}$ is not an elliptic quadric}{T is not an elliptic quadric}}
+We use one elementary fact: a polynomial over $\F$ of degree at most $7$ that
+vanishes at all $8$ elements of $\F$ is the zero polynomial.
+
+\begin{proposition}[reading R1]\label{prop:hyp}
+No hyperplane of $\mathrm{PG}(4,8)$ contains $\mathcal{T}$.
+\end{proposition}
+\begin{proof}
+Let $a\in\F^5$ satisfy $\sum_i a_ip_i=0$ for all $p\in\mathcal{T}$. The points
+$t(0,y)=(1,0,y,y^4,y^2)$ give $a_0+a_2y+a_4y^2+a_3y^4=0$ for all $y\in\F$. This
+polynomial has degree at most $4$, so $a_0=a_2=a_3=a_4=0$. Then
+$t(1,0)=(1,1,0,1,1)$ gives $a_1=0$. So $a=0$.
+\end{proof}
+
+\begin{proposition}[reading R2]\label{prop:quad}
+No nonzero quadratic form $c(x)=\sum_{0\le i\le j\le 3}c_{ij}x_ix_j$ on $\F^4$
+vanishes on $\mathcal{T}_3$. Hence $\mathcal{T}_3$ lies on no quadric of
+$\mathrm{PG}(3,8)$.
+\end{proposition}
+\begin{proof}
+The point $(0,0,0,1)$ gives $c_{33}=0$. The points $(1,0,y,y^4)$ give
+$c_{00}+c_{02}y+c_{22}y^2+c_{03}y^4+c_{23}y^5=0$ for all $y$. This polynomial has
+degree at most $5$, so these five coefficients vanish. The points
+$(1,x,0,x^6)$ now give $c_{01}x+c_{11}x^2+c_{13}x^7=0$ for all $x$, since
+the terms with $c_{00},c_{03},c_{33}$ are already zero. This polynomial has
+degree at most $7$, so $c_{01}=c_{11}=c_{13}=0$. Finally the point
+$(1,1,1,1)=t(1,1)$ with the last coordinate deleted gives $c_{12}=0$.
+\end{proof}
+
+\begin{theorem}
+Clause (C) is false: $\mathcal{T}$ is an ovoid of $Q(4,8)$, $q=8$ is even, and
+$\mathcal{T}$ is not an elliptic quadric under reading R1 or R2.
+\end{theorem}
+\begin{proof}
+Proposition~\ref{prop:ovoid} shows that $\mathcal{T}$ is an ovoid. An elliptic
+quadric under R1 lies in a hyperplane, which Proposition~\ref{prop:hyp} rules
+out. Under R2 its projection lies on a quadric, which
+Proposition~\ref{prop:quad} rules out.
+\end{proof}
+
+\paragraph{Control (the predicates are not vacuous).}
+The polynomial $x^2+x+1$ has no root in $\F$. So the hyperplane
+$H:\,x_4=x_1+x_2$ cuts $Q(4,8)$ in the elliptic quadric
+$x_0x_3+x_1^2+x_1x_2+x_2^2=0$. That section is
+$\mathcal{E}=\{(1,a,b,a^2+ab+b^2,a+b)\}\cup\{(0,0,0,1,0)\}$. Lean proves that
+$\mathcal{E}$ satisfies \texttt{IsOvoid}, lies in $H$, and lies on the quadric
+$x_0x_3+x_1^2+x_1x_2+x_2^2$ of $\mathrm{PG}(3,8)$. \texttt{verify.py} checks
+that $\mathcal{E}=Q(4,8)\cap H$ and that it meets every line once.
+$\mathcal{T}$ and $\mathcal{E}$ share only $5$ points.
+
+\begin{remark}
+For $q=2$ and $q=4$ every ovoid of $\mathrm{PG}(3,q)$ is an elliptic quadric
+(classical results of Barlotti and others), and hence so is every ovoid of $Q(4,q)$. So $q=8$ is the smallest
+counterexample. For every $q=2^{2e+1}\ge8$ the Tits ovoid gives a counterexample
+in the same way. For odd prime $q$, every ovoid of $Q(4,q)$ is an elliptic quadric
+(Ball, Govaerts and Storme). None of this is used above.
+\end{remark}
+
+\section{Lean formalization}
+The project \texttt{lean4/} uses Lean 4.19.0 and the core library only. It
+contains no \texttt{sorry}, no \texttt{native\_decide} and no added axioms.
+\begin{itemize}
+\item \texttt{F8}: the eight elements, with addition and multiplication tables
+generated from $\omega^3=\omega+1$. The theorems \texttt{add\_assoc},
+\texttt{mul\_inv}, \texttt{left\_distrib} and so on check the field axioms
+exhaustively. \texttt{char\_two} shows that the characteristic is $2$, and
+\texttt{omega\_generates} shows that $\omega$ has order $7$.
+\texttt{sigma\_props} shows that $\sigma(x)=x^4$ is an automorphism with
+$\sigma^2=$ Frobenius.
+\item \texttt{Q} and \texttt{pol} are $Q$ and $\pol$. The theorem
+\texttt{Q\_vadd} is the polarization identity, proved by algebra.
+\texttt{Q\_nondegenerate} shows that the radical is
+$\langle N\rangle$, that $Q(N)=1$, and that no nonzero singular vector lies in
+the radical.
+\item \texttt{IsOvoid O}: $O$ has $65$ distinct entries, all nonzero and on $Q$,
+and $\pol(p,p')\ne0$ for distinct entries. \texttt{IsOvoid.proj\_distinct}
+shows that the entries are distinct projective points.
+\texttt{IsOvoid.at\_most\_one} shows that every totally singular line
+$\{sx+ty\}$ contains at most one entry.
+\item \texttt{tits} is $\mathcal{T}$, written with \texttt{sigma}.
+\texttt{tits\_lift} shows that $(x^3+y^2)^2=x^{\sigma+2}+y^\sigma$, and
+\texttt{tits\_isOvoid} is proved by \texttt{decide +kernel}.
+\item \texttt{InHyperplane O} and \texttt{OnQuadricPG3 O} are the necessary
+conditions of R1 and R2. \texttt{tits\_not\_inHyperplane} and
+\texttt{tits\_not\_onQuadric} prove that $\mathcal{T}$ fails both. These proofs
+do not enumerate the $8^5$ or $8^{10}$ coefficient vectors. They use a general
+lemma (\texttt{dotL\_comb}, \texttt{kill}): if $c$ is orthogonal to the rows of
+$E$ and $NE=I$, then $c=0$. They also use explicit inverse matrices $N$ for $5$
+points (linear forms) and $10$ points (quadratic monomials) of $\mathcal{T}$,
+checked by \texttt{decide}.
+\item \texttt{conjecture\_00000001007\_false}:
+\texttt{$\neg$(\,$\forall$ O, IsOvoid O $\to$ InHyperplane O)}.
+\texttt{conjecture\_00000001007\_false\_any\_reading}: for every predicate
+\texttt{IsElliptic} whose instances satisfy \texttt{InHyperplane} or
+\texttt{OnQuadricPG3}, \texttt{$\neg$(\,$\forall$ O, IsOvoid O $\to$ IsElliptic O)}.
+\texttt{nonvacuous} and \texttt{ell\_isOvoid} show that $\mathcal{E}$ satisfies
+all of these predicates.
+\end{itemize}
+\paragraph{Limitations.}
+Lean fixes $q=8$ and the standard model of $Q(4,8)$; it does not formalize
+general finite fields. This is enough, because (C) quantifies over all even
+$q$. The ovoid predicate in Lean is the finite form of Lemma~\ref{lem:equiv}.
+Lean proves the ``at most one point per line'' half of that lemma. The
+counting half and the generalized-quadrangle counts are proved above, and
+\texttt{verify.py} checks the line definition exhaustively. ``Elliptic
+quadric'' enters Lean only through its necessary conditions. Refuting those
+weaker conditions gives a stronger disproof.
+
+\section{Reproduction}
+\begin{verbatim}
+cd lean4 && lake build        # about 40 s
+cd .. && python3 verify.py    # about 10 s, standard library only
+\end{verbatim}
+
+\begin{thebibliography}{9}
+\bibitem{Tits} J.~Tits, \emph{Ovo\"ides et groupes de Suzuki},
+Arch.\ Math.\ 13 (1962), 187--198.
+\bibitem{PT} S.~E.~Payne and J.~A.~Thas, \emph{Finite Generalized Quadrangles},
+2nd ed., EMS, 2009.
+\end{thebibliography}
+\end{document}
