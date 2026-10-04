@@ -1,0 +1,58 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\setlength{\emergencystretch}{1em}
+\begin{document}
+\title{A maximal semantic lattice identity: Conjecture 2610 is false}
+\author{Chengzhe Gao}\date{}\maketitle
+The source defines strength semantically, by classes of lattices satisfying
+identities, and asserts that every lattice identity has a strictly stronger
+one. Consider the identity
+\[
+ e:\qquad x_0=x_1.
+\]
+Variables themselves are lattice terms, so this is a lattice identity.
+
+\begin{theorem}
+No lattice identity is strictly stronger than $e$ in the asserted semantic
+sense.
+\end{theorem}
+\begin{proof}
+If a nonempty lattice satisfies $e$ under every assignment, assign arbitrary
+elements $a,b$ to $x_0,x_1$. This gives $a=b$. Thus the models of $e$ are
+exactly the one-element lattices. Conversely a one-element lattice
+satisfies every lattice identity, since any two evaluated terms have the
+same value. Consequently, for every proposed new identity $f$, every
+model of $e$ is already a model of $f$. Its model class cannot be a proper
+subclass of the model class of $e$. This rules out a strict refinement.
+\end{proof}
+
+The identity is consistent: the one-element lattice is an explicit model.
+Both language versions quantify over every identity and impose no
+requirement of a nontrivial model. Restricting identities to those admitting
+a nontrivial lattice would be a different assertion. This counterexample
+already refutes the necessary ``every identity'' clause, so the later
+proposed doubling construction cannot repair the stated conjunction.
+
+\paragraph{Formal verification.}
+\texttt{LatticeModel} has a nonempty carrier, meet and join, and the full
+commutativity, associativity, idempotence, and absorption axioms. These are
+the usual equational lattice axioms. \texttt{Term} is the inductive type of
+all finite variable/meet/join terms; \texttt{Satisfies} quantifies over all
+assignments. \texttt{StrictlyStronger new old} requires inclusion of the
+classes of models and a lattice satisfying the old identity but not the new
+one. Thus the formal strictness is proper semantic inclusion, not increased
+formula length. The universe-polymorphic theorem
+\texttt{collapse\_\allowbreak{}implies\_\allowbreak{}every\_\allowbreak{}identity} treats arbitrary lattices and
+arbitrary new terms, not just a finite list. It implies
+\texttt{collapse\_\allowbreak{}has\_\allowbreak{}no\_\allowbreak{}strict\_\allowbreak{}refinement} and the final
+\texttt{conjecture2610\_\allowbreak{}false}. The concrete one-element model and its
+satisfaction proof are also checked.
+
+Lean 4.19.0 with \texttt{Std} checks the file. The final negation depends
+only on the standard propositional extensionality axiom; no unproved
+axioms or evaluation oracles are introduced.
+
+\end{document}
