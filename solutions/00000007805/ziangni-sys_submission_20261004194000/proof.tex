@@ -1,0 +1,50 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{proposition}{Proposition}
+\title{Zero Brunn--Minkowski deficit does not force congruence}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Conjecture 00000007805.} The stated stability implication is false without a volume normalization. We disprove the assertion that a small Brunn--Minkowski deficit forces the two bodies, after rigid motions, to approach congruent simplices. We use the permitted dimension $n=1$.
+
+Let $K=[0,1]$ and $L=[0,2]$ in the real Euclidean line. These are compact convex bodies with nonempty interior, and are themselves one-dimensional simplices. Their genuine Minkowski sum is $K+L=[0,3]$: inclusion follows by adding the interval bounds, and every $z\in[0,3]$ equals $z/3+2z/3$ with the two summands in $K,L$. Lebesgue measure gives
+\[
+ |K|=1,\qquad |L|=2,\qquad |K+L|=3.
+\]
+Consequently the actual one-dimensional Brunn--Minkowski deficit is
+\[
+ \delta=|K+L|-|K|-|L|=0.
+\]
+\begin{proposition}
+For any isometries $f,g:\mathbb R\to\mathbb R$,
+\[
+ d_H(f(L),g(K))\geq \tfrac12.
+\]
+\end{proposition}
+\begin{proof}
+Write $H=d_H(f(L),g(K))$. Both images are nonempty compact sets, so the Hausdorff distance is finite and nearest points exist. Choose $a,b\in g(K)$ nearest to $f(0),f(2)$, respectively. Then
+\[
+ |f(0)-a|\leq H,\qquad |f(2)-b|\leq H.
+\]
+Isometries preserve diameters, so $|a-b|\leq\operatorname{diam}(g(K))=1$, whereas $|f(0)-f(2)|=2$. The triangle inequality therefore gives $2\leq H+1+H$, proving the claim.
+\end{proof}
+This covers all rigid motions, and even all isometric embeddings of the line. In particular no choice of rigid motions can make these bodies congruent or arbitrarily close to one another.
+
+For a quantified stability obstruction, put $\varepsilon_j=1/(j+1)>0$. Then $\delta\leq\varepsilon_j$ for every $j$, and $\varepsilon_j\to0$. For every fixed constant $C$, the claimed exponent in dimension one gives
+\[
+ C\varepsilon_j^{1/(1+1)}=C\sqrt{\varepsilon_j}\longrightarrow0.
+\]
+The proposition shows that there cannot be an eventual choice of rigid motions satisfying
+\[
+ d_H(f_j(L),g_j(K))\leq C\sqrt{\varepsilon_j}.
+\]
+More generally, the same argument excludes every proposed Hausdorff bound $m_j\to0$.
+
+\noindent\textbf{Scope of the stability measure.} The source leaves its monotone transform of Hausdorff distance unspecified. For any nondecreasing transform $\phi$ that is nondegenerate at this distance, namely $\phi(1/2)>0$, the transformed distance is at least $\phi(1/2)$ and cannot satisfy a vanishing bound either. We do not assert this for arbitrary degenerate transforms, such as the identically zero function.
+
+\noindent\textbf{Missing hypothesis.} Equality in Brunn--Minkowski permits homothetic bodies of different sizes; rigid motions preserve size. The source imposes no equal-volume normalization and permits dimension one. This example refutes its stated congruence stability implication. It does not refute normalized stability statements, stability modulo homotheties, or make a separate claim about the proposed randomized sharpness construction.
+
+\noindent\textbf{Formal verification.} The accompanying Lean project proves the actual compact convex bodies, Minkowski sum and Lebesgue volumes, the zero deficit, the Hausdorff bound for every pair of isometries, and the quantified obstruction to every vanishing modulus and to the proposed square-root bound. It uses Mathlib's Hausdorff distance, nearest-point, isometry, measure and limit definitions.
+\end{document}
