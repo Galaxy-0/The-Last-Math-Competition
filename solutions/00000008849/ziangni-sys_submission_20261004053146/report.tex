@@ -1,0 +1,84 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\newtheorem{proposition}{Proposition}
+\title{A constant-operator counterexample to conjecture 00000008849}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result.} The universal existence assertion is false, even on the real Hilbert line with full-domain maximal monotone operators and positive, invertible identity coupling.
+
+\paragraph{Source and scope.}
+Both original language versions define the coupled inclusion
+\(0\in Ax+MBx\) for two maximal monotone operators on Hilbert space and assert that solution pairs always exist. There is no coercivity, range, zero-existence, or other feasibility hypothesis. We disprove this existence clause. The further assertions about lattice endpoints, algorithms, and optimal permutations need not be decided to refute the conjunction.
+
+\paragraph{Actual operators.}
+Take the Hilbert space \(H=\mathbb R\), with inner product
+\(\langle u,v\rangle=uv\), and set
+\[
+ A(x)=B(x)=\{1\}\quad(x\in\mathbb R),\qquad
+ M=\operatorname{id}_{\mathbb R}.
+\]
+Thus both operators have full domain; the coupling is the bounded linear identity, represented by the \(1\times1\) matrix \([1]\). It is invertible and positive since \(\langle x,Mx\rangle=x^2\geq0\).
+
+\begin{proposition}
+For every real \(c\), the constant set-valued operator \(C_c(x)=\{c\}\) is maximal monotone.
+\end{proposition}
+\begin{proof}
+Its actual graph is \(G_c=\{(x,c):x\in\mathbb R\}\).
+For two graph points the monotonicity expression is
+\((x-y)(c-c)=0\).
+To prove maximality under inclusion, let \(K\supseteq G_c\) be any monotone graph and let \((p,q)\in K\).
+The points \((p-1,c)\) and \((p+1,c)\) belong to \(K\).
+Monotonicity with each gives
+\[
+ (p-(p-1))(q-c)=q-c\geq0,\qquad
+ (p-(p+1))(q-c)=-(q-c)\geq0.
+\]
+Consequently \(q=c\), so \((p,q)\in G_c\). Hence \(K=G_c\), which proves maximality.
+\end{proof}
+
+\paragraph{Failure of feasibility.}
+The sum of set-valued operators means the Minkowski sum after applying \(M\) to the second value:
+\[
+ A(x)+M B(y)
+ =\{a+Mb:a\in A(x),\ b\in B(y)\}
+ =\{1+1\}=\{2\}.
+\]
+It never contains zero. Therefore no pair of independent inputs \(x,y\) solves this inclusion; in particular the displayed inclusion with \(y=x\) has no solution. This also precludes a nonempty complete lattice of solutions. No nonexistence is being inferred merely from an unsuccessful algorithm.
+\newpage
+\paragraph{Why the counterexample meets the claim.}
+Constant single-valued maps, regarded as singleton-valued relations, are legitimate maximal monotone operators. Maximal monotonicity means that no proper monotone graph extension exists; it does not require a zero. Our graph-extension proof verifies precisely that definition. Indeed these maps are also continuous and Lipschitz with constant zero. The identity coupling avoids any reliance on singular or negatively signed coupling. Whether solution pairs denote shared inputs in the displayed formula or permit separate inputs, the same singleton computation excludes every candidate.
+
+\paragraph{Lean correspondence.}
+The accompanying Lean project uses the standard real Hilbert structure.
+Its definitions and proved statements are:
+\begin{itemize}
+\item \texttt{MonotoneGraph}: the standard inner-product inequality for every pair of graph points.
+\item \texttt{MaximalMonotoneGraph}: monotonicity and maximality against every monotone graph extension under inclusion.
+\item \texttt{constantOperator} and \texttt{graph}: the actual singleton-valued maps and their membership graphs.
+\item \texttt{inner\_real}, \texttt{constant\_monotone}, and \texttt{constant\_maximal}: inner-product/product correspondence, monotonicity, and the two-test-point maximality proof for every real constant.
+\item \texttt{coupling}: the actual continuous linear identity; \texttt{coupling\_positive} proves its positivity.
+\item \texttt{coupledValue}: the existential definition of the image-and-Minkowski sum, with both input variables retained.
+\item \texttt{coupled\_value}: equality of that actual set with \(\{2\}\).
+\item \texttt{no\_solution\_pairs}, \texttt{no\_shared\_input\_solution}, and \texttt{counterexample}: nonexistence in both readings together with the verified hypotheses.
+\end{itemize}
+Thus the final contradiction is about actual maximal monotone graphs and a genuine coupled inclusion, rather than asserted operator values or a weakened surrogate.
+
+\paragraph{Reproduction.}
+The project pins Lean 4.19.0 and Mathlib commit
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+From the \texttt{lean} directory, run
+\[
+ \texttt{lake build}
+\]
+and then run the direct source check:
+\begin{center}
+\small\texttt{lake env lean Main.lean -DwarningAsError=true}.
+\end{center}
+Printed audits of the principal theorems use only the standard logical axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+There are no admitted proofs, additional axioms, or external numerical computations.
+\end{document}
