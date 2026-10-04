@@ -1,0 +1,104 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\C}{\mathbb C}
+\newcommand{\A}{\mathcal A}
+\title{A Component Exchange Is Outer:\\A Disproof of Conjecture 00000003380}
+\author{GitHub: gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+The noncommutative complex algebra $M_2(\C)\times M_2(\C)$ has an
+automorphism exchanging its two components. This automorphism moves a
+central idempotent, whereas every inner automorphism fixes the center
+pointwise. It is therefore outer, even though it preserves the usual
+matrix adjoint. The complete counterexample is verified in Lean.
+\end{abstract}
+
+The first explicit assertion in both languages of the source is that
+every automorphism of a noncommutative algebra is inner. There is no
+simplicity or factor hypothesis. We refute this universal assertion.
+An inner automorphism of a unital algebra is a map $a\mapsto uau^{-1}$
+for a unit $u$ of that algebra.
+
+\begin{theorem}
+Let $\A=M_2(\C)\times M_2(\C)$, with componentwise algebra operations.
+The map
+\[
+ \sigma:\A\longrightarrow\A,\qquad \sigma(X,Y)=(Y,X),
+\]
+is a complex algebra automorphism, preserves the componentwise adjoint,
+and is not inner. The algebra $\A$ is noncommutative.
+\end{theorem}
+\begin{proof}
+Component exchange preserves addition, multiplication, the unit $(I,I)$,
+and complex scalar multiplication. It is its own inverse. Moreover,
+$\sigma(X^*,Y^*)=(Y^*,X^*)=\sigma(X,Y)^*$.
+
+The element $e=(I,0)$ is a central idempotent: $e^2=e$ and, for every
+$(X,Y)\in\A$,
+\[
+ e(X,Y)=(X,0)=(X,Y)e.
+\]
+Consequently every unit $u\in\A$ satisfies
+\[
+ ueu^{-1}=euu^{-1}=e.
+\]
+But $\sigma(e)=(0,I)\ne(I,0)=e$, so no unit of $\A$ can implement
+$\sigma$ by conjugation. In particular no unitary of $\A$ can do so.
+
+For noncommutativity, take
+\[
+ P=\begin{pmatrix}0&1\\0&0\end{pmatrix},\qquad
+ Q=\begin{pmatrix}0&0\\1&0\end{pmatrix}.
+\]
+Then $PQ=\operatorname{diag}(1,0)$ and
+$QP=\operatorname{diag}(0,1)$ differ. Hence $(P,0)$ and $(Q,0)$
+do not commute in $\A$.
+\end{proof}
+
+The implementing unit must belong to the algebra whose automorphism is
+being considered. A permutation matrix in a larger ambient matrix
+algebra would not establish innerness in $\A$.
+
+\section*{Formal verification and scope}
+The file \texttt{lean/Main.lean} uses actual $2\times2$ complex matrices
+and their product algebra. The object \texttt{exchange} has type
+$\A\simeq_{\C}\A$: it is a complete algebra equivalence, constructed
+from the library's product ring equivalence and the checked scalar
+compatibility. The standard matrix conjugate transpose defines the
+componentwise adjoint; its preservation is proved explicitly.
+
+The predicate \texttt{IsInner} quantifies over actual algebra units and
+all elements, with the formula $\varphi(a)=uau^{-1}$. Lean checks the
+central idempotent, its movement by exchange, its invariance under
+\emph{every} such conjugation, and the actual products witnessing
+noncommutativity. The theorem \texttt{conjecture\_false} directly negates
+the universal assertion that every complex algebra with a noncommuting
+pair has only inner complex algebra automorphisms.
+
+The proof does not assume the counterexample is outer, substitute an
+unrelated numerical invariant, or weaken innerness to conjugation by
+particular matrices. It proves failure even when all invertible
+implementers are allowed, and thus covers the more restrictive unitary
+meaning as well. It does not dispute innerness results that impose
+additional hypotheses such as a central simple algebra. No conclusion
+about the source's unspecified ``measure of innerness'' is needed:
+its first asserted universal clause already fails.
+
+\section*{Source and reproduction}
+The exact bilingual source is included byte-for-byte in \texttt{SOURCE.md};
+the original repository path is \texttt{conjectures/00000003380.md}.
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake build}, followed by
+\begin{center}\small\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The public Git dependency revisions are locked in the included manifest.
+Actual fresh-build logs, theorem-axiom reports, artifact hashes and PDF
+verification records are included in \texttt{verification/}.
+No numerical auxiliary experiment is required: the exact matrix and
+all-unit quantifier arguments are proved directly in Lean.
+\end{document}
