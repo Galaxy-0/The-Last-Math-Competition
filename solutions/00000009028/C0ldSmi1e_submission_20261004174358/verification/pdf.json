@@ -1,0 +1,49 @@
+{
+  "checked_utc": "2026-10-04T17:41:59.422576+00:00",
+  "source_sha256": "2878be51e6beb7f833cfc2b677684513be665c7873cf15885cea352ebc881d6b",
+  "pdf_sha256": "e346575e824ce789efc2f57e42cb67a15d599ba21b987712696cd04b3387d0bb",
+  "native_compile": {
+    "status": "success",
+    "source": "Codex compile_latex_document, final source"
+  },
+  "export_compile": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--keep-logs",
+      "main.tex"
+    ],
+    "exit_code": 0,
+    "version": "0.17.0",
+    "warnings": []
+  },
+  "pages": 2,
+  "render": {
+    "tool": "Poppler pdftoppm",
+    "scale_to": 1400,
+    "exit_code": 0,
+    "pages_inspected": [
+      1,
+      2
+    ]
+  },
+  "visual_inspection": {
+    "performed_by": "coordinating agent",
+    "result": "PASS",
+    "findings": "Both final pages read and inspected. Legible text and equations; no clipping, overlap, missing glyphs, blank pages, or orphan reference page. Page1 includes scope, theorem, and complete A2 proof; page2 includes complete diagonal proof, formal scope, and four primary references."
+  },
+  "text_extraction": {
+    "tool": "pypdf",
+    "normalization": "Unicode NFKC for typeset ligatures, join line-end hyphenation; visual review is authoritative for layout.",
+    "pages": 2,
+    "text_length": 5347,
+    "checks": {
+      "00000009028": true,
+      "determinant": true,
+      "sufficient": true,
+      "rank": true,
+      "character": true,
+      "Gram": true,
+      "A2": true
+    }
+  }
+}
