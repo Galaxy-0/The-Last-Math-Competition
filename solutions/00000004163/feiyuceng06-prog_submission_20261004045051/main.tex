@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\conjid}{00000004163}
+
+\title{Seven Prime Cubes Represent Every Class Modulo Nine\\[0.4em]\large The Last Math Competition, Conjecture \conjid}
+\author{Feiyu\\ \small Independent researcher}
+\date{2026-10-04}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The conjecture claims that sums of seven cubes of primes have exactly three local obstruction classes modulo nine. In fact, every class modulo nine is represented by a sum of exactly seven prime cubes. We give explicit prime tuples and formalize the representation property, with the primality of each summand, in Lean. Thus the stated obstruction table is false.
+\end{abstract}
+
+\section{The conjecture as stated}
+
+The original English text of conjecture \conjid{} reads:
+
+\begin{quote}
+Definition: The local obstruction of Waring-Goldbach is a congruence class with no representation modulo q. Conjecture: For sums of seven cubic powers of primes the local obstruction classes are exactly the three non-representable classes modulo 9, and adding one variable removes all obstructions. (exact table of WG cubic local obstructions)
+\end{quote}
+
+The conjecture file also contains the Chinese version. It makes the same claim that the seven-variable sum has exactly three obstruction classes modulo nine; the argument below refutes that shared clause.
+
+\section{Reading of the statement}
+
+% If the statement is ambiguous, under-specified, or contains an error, say so
+% HERE and fix a precise reading. State explicitly which reading is being
+% settled and why it is the faithful one. Do not silently repair the statement.
+
+We read a sum of seven cubic powers of primes literally as $p_1^3+\cdots+p_7^3$, where each $p_i$ is prime. A local obstruction class modulo nine is a residue with no such representation modulo nine. The English and Chinese statements both claim that there are exactly three such residues. It is enough to refute this shared clause; our proof establishes the stronger statement that all nine residue classes have representations using seven actual primes. The separate phrase about adding one variable does not need reinterpretation for this refutation.
+
+\section{Result}
+
+% State exactly what is established: proved, disproved, or partially resolved.
+
+There are zero local obstruction classes modulo nine for sums of exactly seven prime cubes, not three. In particular, the conjectured exact obstruction table is false.
+
+\section{Proof}
+
+The prime cubes of $19$, $3$, and $2$ are congruent to $1$, $0$, and $8$ modulo nine, respectively. For each residue $r$ with $0\leq r\leq 7$, take $r$ copies of $19$ and $7-r$ copies of $3$. The sum of their cubes is congruent to $r$. For residue $8$, take one copy of $2$ and six copies of $3$; the sum is congruent to $8$. These are exactly seven prime summands in every case, and the nine residue classes are all covered.
+
+\section{Formalization}
+
+The Lean 4 formalization against Mathlib is in \verb|lean/Submission/Basic.lean|. It defines \verb|primeCubeSum| for a tuple of exactly seven natural numbers and \verb|sevenWitness| as an explicit tuple for each residue in \verb|Fin 9|. The theorem \verb|sevenWitness_primes| verifies that every entry in each tuple is prime, and \verb|sevenWitness_represents| verifies its sum modulo nine. These imply \verb|every_residue_represented|, whose witnesses are actual prime tuples. The conjecture-facing predicate \verb|ClaimedThreeObstructions| states that three distinct residues, and exactly those residues, are unrepresented. The main theorem \verb|conjecture_00000004163_false| refutes that predicate using the representation of one of those alleged residues. The file prints the axiom dependencies of the main theorem; it introduces no custom axioms or proof holes.
+
+\section{Remarks}
+
+% Optional: what the truth is likely to be, what stays open, why the original
+% statement went wrong, what a repaired conjecture should say.
+
+The argument is finite and concerns the local congruence condition modulo nine only. It does not claim that every sufficiently large integer in each residue class is a sum of seven prime cubes; such a global Waring-Goldbach assertion is not needed here.
+
+\end{document}
