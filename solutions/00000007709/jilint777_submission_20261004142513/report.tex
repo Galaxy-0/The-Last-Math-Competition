@@ -92,8 +92,13 @@ only ``$k$ copies similar to itself''. Dropping condition~2 gives more rep-$k$ t
 counterexample under (R1) is also one under (R2): our pieces are congruent.
 \item[(R3)] \emph{Least order.} ``The order'' is the least $k\ge2$ for which the polygon
 is a rep-$k$ tile. ($k=1$ always works, and $1$ is a square anyway.)
-Proposition~\ref{prop:rect} gives a convex polygon whose least order is $3$. This holds
-with congruent pieces, and also when the pieces need only be similar to the tile.
+Under this reading the $1:2$ triangle $T$ is not a counterexample. With congruent pieces its
+least order is $4$: every triangle is a rep-$4$ tile, and by~\cite{snover} only the isosceles
+right triangle is rep-$2$ and only the $30$-$60$-$90$ triangle is rep-$3$. With merely
+similar pieces its least order is $2$, by cutting along the altitude. This is why a different
+polygon is needed here. Proposition~\ref{prop:rect} gives a convex polygon whose least order
+is $3$. This holds with congruent pieces, and also when the pieces need only be similar to
+the tile.
 \item[(R4)] \emph{Orientation-preserving copies only.} The pieces in
 Theorem~\ref{thm:main} are mirror images of the tile, which is allowed in the standard
 definition. If only orientation-preserving similarities were allowed, the rectangle of
@@ -215,7 +220,7 @@ consistency check, the doubled areas are $50$ for $T$ and $10$ for each $P_i$.
 \end{proof}
 
 \begin{remark}
-In general, a triangle is a rep-$k$ tile iff $k=n^2$, $k=n^2+m^2$ or $k=3n^2$~\cite{snover}.
+In general, some triangle is a rep-$k$ tile iff $k=n^2$, $k=n^2+m^2$ or $k=3n^2$~\cite{snover}.
 The present example is the case $5=1^2+2^2$. Readers who know this theorem can stop here;
 the point of this submission is a complete, self-contained and machine-checked proof of one
 instance. The rectangle with sides $1$ and $\sqrt k$ is a rep-$k$ tile for every $k$
@@ -338,8 +343,14 @@ formally from the rational one, as follows. The maps $f_i$ are given by the same
 over $\mathbb R$, and the distance identity is a polynomial identity. The pieces are closed
 and their union is closed. Rational points are dense in $T$, which is convex with nonempty
 interior and has rational vertices. So covering the rational points of $T$ means covering
-all of $T$. If two interiors met, their intersection would be a nonempty open set, which
-contains a rational point; this would contradict the rational statement. Containment
+all of $T$. In detail, Lean's \texttt{cover} gives every rational point $P$ of $T$ a
+rational preimage $Q\in T$ with $f_i(Q)=P$ for some $i$, so $P$ lies in the real piece
+$P_i=f_i(T)$. If two real interiors $f_i(\operatorname{int}T)$ and
+$f_j(\operatorname{int}T)$ met, their intersection would be a nonempty open set, so it would
+contain a rational point $P$. The inverse maps $g_i(z)=a_i\bar z+c_i$ and $g_j$ have rational
+coefficients. Hence $Q=f_i^{-1}(P)$ and $Q'=f_j^{-1}(P)$ are rational points of
+$\operatorname{int}T$ with $f_i(Q)=P=f_j(Q')$. This contradicts Lean's disjointness
+condition in \texttt{T\_rep5}. Containment
 $P_i\subseteq T$ follows from convexity, because the vertices are rational points of $T$.
 
 \paragraph{What is only in this report.} Proposition~\ref{prop:rect} (readings (R3) and
@@ -364,7 +375,10 @@ arithmetic. It checks:
 Containment, disjoint interiors and equal total area together imply covering: the uncovered
 part of $T$ is relatively open in $T$, so if it were nonempty it would have positive area.
 The script also tests $14641$ rational grid points of $T$ one by one. Finally, it verifies
-the rep-3 dissection of the $1\times\sqrt3$ rectangle exactly in $\mathbb Q(\sqrt3)$.
+the rep-3 dissection of the $1\times\sqrt3$ rectangle exactly in $\mathbb Q(\sqrt3)$, and the
+area obstruction to a rep-2 dissection of the rectangle with two congruent pieces of ratio
+$1/\sqrt3$. The general non-rep-2 proof, which also covers pieces that are only similar, is
+Proposition~\ref{prop:rect}(b) and is in this report only.
 
 \begin{thebibliography}{9}
 \bibitem{golomb} S.~W.~Golomb, Replicating figures in the plane, \emph{Math.\ Gazette} 48

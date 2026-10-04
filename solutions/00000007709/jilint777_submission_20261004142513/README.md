@@ -25,7 +25,9 @@ Here `|a|² = 5`, and `f_i(T) = P_i`. The pieces cover T, and their interiors ar
 - **Copies only similar, not congruent**: a fortiori, since our pieces are congruent.
 - **"The order" = least k ≥ 2**: refuted by the 1 × √3 rectangle. It is rep-3 (three strips, which are rotated
   copies), and it cannot be cut into 2 similar copies, congruent or not. The proof is a corner and area argument
-  (report, Proposition 5). This part is in the report and `verify.py`, not in Lean.
+  (report, Proposition 5). This part is in the report and `verify.py`, not in Lean. Under this reading the 1:2
+  triangle itself is not a counterexample. Its least order is 4 with congruent pieces, or 2 with merely similar
+  pieces (cut along the altitude). That is why the rectangle is needed here.
 - **Orientation-preserving copies only**: the rectangle again. The triangle's pieces are mirror images, which the
   standard definition (Golomb) allows.
 
@@ -40,7 +42,9 @@ Here `|a|² = 5`, and `f_i(T) = P_i`. The pieces cover T, and their interiors ar
   - pairwise separating edge lines;
   - the area sum;
   - a grid of 14641 rational points;
-  - the rectangle remark, exactly in ℚ(√3).
+  - the rep-3 dissection of the 1×√3 rectangle, exactly in ℚ(√3), and the area obstruction to a rep-2
+    dissection with congruent pieces. The general non-rep-2 proof, which also covers pieces that are only
+    similar, is in report Prop. 5(b) only.
 - `verification.txt`: the build log, the forbidden-token scan and the output of `verify.py`.
 
 ## Lean
@@ -94,7 +98,8 @@ pdflatex report.tex && pdflatex report.tex
 三角形 ABC 可剖分为 ADC、A M3 M1、M3 B M2、M1 M2 D、M3 M2 M1 五个全等三角形，
 每个都与原三角形相似，相似比为 1/√5。每一块都是原三角形在相似变换 z ↦ (a z̄ + b)/5 下的像，其中 |a|² = 5。
 
-若把"阶"理解为最小的 k ≥ 2，则 1 × √3 的矩形是反例：它是 rep-3 的（三条竖条，都是旋转后的拷贝），
+若把"阶"理解为最小的 k ≥ 2，则 1:2 直角三角形本身不是反例：要求全等时它的最小阶为 4，只要求相似时为 2（沿高剖开）。
+此时 1 × √3 的矩形是反例：它是 rep-3 的（三条竖条，都是旋转后的拷贝），
 并且不能剖分成 2 个与它相似的部分（无论是否要求全等）。这一部分的证明只在报告和 verify.py 中，没有在 Lean 中形式化。
 
 Lean 在有理平面 ℚ² 上从头定义了点、凸多边形、相似变换（用距离平方刻画）、rep-k tile 以及猜想的断言，
