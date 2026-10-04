@@ -1,0 +1,1001 @@
+{
+  "started_utc": "2026-10-04T17:20:12.120505+00:00",
+  "source_root": "/private/tmp/tlmc428-proof",
+  "independent_root": "/private/tmp/tlmc428-independent",
+  "dependency_root": "/private/tmp/tlmc310-proof/.lake/packages",
+  "fresh_build_outputs_absent": true,
+  "copied_files": [
+    "Conjecture428/Partitions.lean",
+    "Conjecture428/Expectation.lean",
+    "Conjecture428/Asymptotics.lean",
+    "Conjecture428.lean",
+    "Check.lean",
+    "lakefile.toml",
+    "lake-manifest.json",
+    "lean-toolchain"
+  ],
+  "source_sha256": {
+    "Conjecture428/Partitions.lean": "18bdcc0f4b89d8d27027e5bb33c15caa7c0665cbc2da25028038954a9cf67c72",
+    "Conjecture428/Expectation.lean": "68d6ce72720480f171d5f3c7fa1ff50d2414dbdd1017752e88cbabcfc7ee8ee1",
+    "Conjecture428/Asymptotics.lean": "9fb744f80cafdd9440d3a04d04dadad16ad3ea448db3fb97f97fe2717711a1cb",
+    "Conjecture428.lean": "0ffa441591d6e3ab582aafa1c8e9c125afaf5dbadb6251518ff7d0e0679570f2",
+    "Check.lean": "ad58da0a4f93beac8f721638e28f8cedbd8d61c2a24a4d8ae5ee38042203e30e",
+    "lakefile.toml": "5f3cb9630696f93e8b90900c446dec6e50d1aaa57e475818b3267a3cbe1cc911",
+    "lake-manifest.json": "9c000ecf0c0506db02d5bf000820610b52255d2e2f3a5bf33b64e9123dd1f7b9",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "dependencies": [
+    {
+      "name": "mathlib",
+      "expected_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "actual_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "plausible",
+      "expected_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "actual_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "expected_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "actual_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "importGraph",
+      "expected_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "actual_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "proofwidgets",
+      "expected_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "actual_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "aesop",
+      "expected_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "actual_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Qq",
+      "expected_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "actual_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "batteries",
+      "expected_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "actual_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Cli",
+      "expected_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "actual_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    }
+  ],
+  "strict_replay": [
+    {
+      "file": "Conjecture428/Partitions.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture428/Partitions.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.553,
+      "output": ""
+    },
+    {
+      "file": "Conjecture428/Expectation.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture428/Expectation.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.507,
+      "output": ""
+    },
+    {
+      "file": "Conjecture428/Asymptotics.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture428/Asymptotics.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.615,
+      "output": ""
+    },
+    {
+      "file": "Conjecture428.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture428.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.508,
+      "output": ""
+    },
+    {
+      "file": "Check.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Check.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.82,
+      "output": "def Conjecture428.rowsAtLeast : {n : \u2115} \u2192 n.Partition \u2192 \u2115 \u2192 \u2115 :=\nfun {n} p k => (Multiset.filter (fun x => k \u2264 x) p.parts).card\ndef Conjecture428.squareSides : {n : \u2115} \u2192 n.Partition \u2192 Finset \u2115 :=\nfun {n} p => {k \u2208 Finset.range (n + 1) | k \u2264 Conjecture428.rowsAtLeast p k}\ndef Conjecture428.durfee : {n : \u2115} \u2192 n.Partition \u2192 \u2115 :=\nfun {n} p => (Conjecture428.squareSides p).max' \u22ef\ndef Conjecture428.ferrers : {n : \u2115} \u2192 n.Partition \u2192 YoungDiagram :=\nfun {n} p =>\n  { cells := {c \u2208 Finset.range n \u00d7\u02e2 Finset.range n | c.1 < Conjecture428.rowsAtLeast p (c.2 + 1)}, isLowerSet := \u22ef }\ndef Conjecture428.partitionMeasurableSpace : (n : \u2115) \u2192 MeasurableSpace n.Partition :=\nfun n => \u22a4\ntheorem Conjecture428.partitionMeasurableSingletonClass : \u2200 (n : \u2115), MeasurableSingletonClass n.Partition :=\nfun n => { measurableSet_singleton := fun x => trivial }\ndef Conjecture428.partitionPMF : (n : \u2115) \u2192 PMF n.Partition :=\nfun n => PMF.uniformOfFintype n.Partition\ndef Conjecture428.partitionMeasure : (n : \u2115) \u2192 MeasureTheory.Measure n.Partition :=\nfun n => (Conjecture428.partitionPMF n).toMeasure\ntheorem Conjecture428.partitionMeasure_probability : \u2200 (n : \u2115),\n  MeasureTheory.IsProbabilityMeasure (Conjecture428.partitionMeasure n) :=\nfun n => id inferInstance\ndef Conjecture428.meanDurfee : \u2115 \u2192 \u211d :=\nfun n => \u222b (p : n.Partition), \u2191(Conjecture428.durfee p) \u2202Conjecture428.partitionMeasure n\ndef Conjecture428.scale : \u2115 \u2192 \u211d :=\nfun n => \u221a(6 * \u2191n) / Real.pi\ndef Conjecture428.mainTerm : \u2115 \u2192 \u211d :=\nfun n => Conjecture428.scale n * Real.log (Conjecture428.scale n)\ndef Conjecture428.ClaimedExpansion : Prop :=\n\u2203 c, Filter.Tendsto (fun n => Conjecture428.meanDurfee n - (Conjecture428.mainTerm n + c)) Filter.atTop (nhds 0)\nConjecture428.parts_card_le {n : \u2115} (p : n.Partition) : p.parts.card \u2264 n\n'Conjecture428.parts_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.rowsAtLeast_le {n : \u2115} (p : n.Partition) (k : \u2115) : Conjecture428.rowsAtLeast p k \u2264 n\n'Conjecture428.rowsAtLeast_le' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.rowsAtLeast_antitone {n : \u2115} (p : n.Partition) : Antitone (Conjecture428.rowsAtLeast p)\n'Conjecture428.rowsAtLeast_antitone' depends on axioms: [propext, Quot.sound]\nConjecture428.squareSides_nonempty {n : \u2115} (p : n.Partition) : (Conjecture428.squareSides p).Nonempty\n'Conjecture428.squareSides_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.mem_squareSides_iff {n : \u2115} (p : n.Partition) (k : \u2115) :\n  k \u2208 Conjecture428.squareSides p \u2194 k \u2264 Conjecture428.rowsAtLeast p k\n'Conjecture428.mem_squareSides_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.durfee_attained {n : \u2115} (p : n.Partition) :\n  Conjecture428.durfee p \u2264 Conjecture428.rowsAtLeast p (Conjecture428.durfee p)\n'Conjecture428.durfee_attained' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.le_durfee_of_square {n : \u2115} (p : n.Partition) {k : \u2115} (hk : k \u2264 Conjecture428.rowsAtLeast p k) :\n  k \u2264 Conjecture428.durfee p\n'Conjecture428.le_durfee_of_square' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.square_iff_le_durfee {n : \u2115} (p : n.Partition) (k : \u2115) :\n  k \u2264 Conjecture428.rowsAtLeast p k \u2194 k \u2264 Conjecture428.durfee p\n'Conjecture428.square_iff_le_durfee' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.square_area_le {n : \u2115} (p : n.Partition) {k : \u2115} (hk : k \u2264 Conjecture428.rowsAtLeast p k) : k ^ 2 \u2264 n\n'Conjecture428.square_area_le' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.durfee_sq_le {n : \u2115} (p : n.Partition) : Conjecture428.durfee p ^ 2 \u2264 n\n'Conjecture428.durfee_sq_le' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.durfee_le_sqrt {n : \u2115} (p : n.Partition) : \u2191(Conjecture428.durfee p) \u2264 \u221a\u2191n\n'Conjecture428.durfee_le_sqrt' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.column_index_lt {n : \u2115} (p : n.Partition) {i j : \u2115} (h : i < Conjecture428.rowsAtLeast p (j + 1)) : j < n\n'Conjecture428.column_index_lt' depends on axioms: [propext, Quot.sound]\nConjecture428.mem_ferrers_iff {n : \u2115} (p : n.Partition) (i j : \u2115) :\n  (i, j) \u2208 Conjecture428.ferrers p \u2194 i < Conjecture428.rowsAtLeast p (j + 1)\n'Conjecture428.mem_ferrers_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.square_subset_ferrers_iff {n : \u2115} (p : n.Partition) (k : \u2115) :\n  Finset.range k \u00d7\u02e2 Finset.range k \u2286 (Conjecture428.ferrers p).cells \u2194 k \u2264 Conjecture428.rowsAtLeast p k\n'Conjecture428.square_subset_ferrers_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.square_subset_ferrers_iff_le_durfee {n : \u2115} (p : n.Partition) (k : \u2115) :\n  Finset.range k \u00d7\u02e2 Finset.range k \u2286 (Conjecture428.ferrers p).cells \u2194 k \u2264 Conjecture428.durfee p\n'Conjecture428.square_subset_ferrers_iff_le_durfee' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.sum_column_counts (s : Multiset \u2115) (N : \u2115) (hs : \u2200 a \u2208 s, a \u2264 N) :\n  \u2211 j \u2208 Finset.range N, (Multiset.filter (fun x => j + 1 \u2264 x) s).card = s.sum\n'Conjecture428.sum_column_counts' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.ferrers_card_sum {n : \u2115} (p : n.Partition) :\n  (Conjecture428.ferrers p).card = \u2211 j \u2208 Finset.range n, Conjecture428.rowsAtLeast p (j + 1)\n'Conjecture428.ferrers_card_sum' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.ferrers_card {n : \u2115} (p : n.Partition) : (Conjecture428.ferrers p).card = n\n'Conjecture428.ferrers_card' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.partitionPMF_apply (n : \u2115) (p : n.Partition) :\n  (Conjecture428.partitionPMF n) p = (\u2191(Fintype.card n.Partition))\u207b\u00b9\n'Conjecture428.partitionPMF_apply' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.partitionMeasure_singleton (n : \u2115) (p : n.Partition) :\n  (Conjecture428.partitionMeasure n) {p} = (\u2191(Fintype.card n.Partition))\u207b\u00b9\n'Conjecture428.partitionMeasure_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.durfee_measurable (n : \u2115) : Measurable fun p => \u2191(Conjecture428.durfee p)\n'Conjecture428.durfee_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.durfee_integrable (n : \u2115) :\n  MeasureTheory.Integrable (fun p => \u2191(Conjecture428.durfee p)) (Conjecture428.partitionMeasure n)\n'Conjecture428.durfee_integrable' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.meanDurfee_eq_average (n : \u2115) :\n  Conjecture428.meanDurfee n = (\u2211 p, \u2191(Conjecture428.durfee p)) / \u2191(Fintype.card n.Partition)\n'Conjecture428.meanDurfee_eq_average' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.meanDurfee_nonneg (n : \u2115) : 0 \u2264 Conjecture428.meanDurfee n\n'Conjecture428.meanDurfee_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.meanDurfee_le_sqrt (n : \u2115) : Conjecture428.meanDurfee n \u2264 \u221a\u2191n\n'Conjecture428.meanDurfee_le_sqrt' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.scale_eq (n : \u2115) : Conjecture428.scale n = \u221a6 / Real.pi * \u221a\u2191n\n'Conjecture428.scale_eq' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.scale_coefficient_pos : 0 < \u221a6 / Real.pi\n'Conjecture428.scale_coefficient_pos' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.sqrt_nat_tendsto_atTop : Filter.Tendsto (fun n => \u221a\u2191n) Filter.atTop Filter.atTop\n'Conjecture428.sqrt_nat_tendsto_atTop' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.scale_tendsto_atTop : Filter.Tendsto Conjecture428.scale Filter.atTop Filter.atTop\n'Conjecture428.scale_tendsto_atTop' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.eventually_two_sqrt_le_mainTerm : \u2200\u1da0 (n : \u2115) in Filter.atTop, 2 * \u221a\u2191n \u2264 Conjecture428.mainTerm n\n'Conjecture428.eventually_two_sqrt_le_mainTerm' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.mainTerm_sub_tendsto_atTop (f : \u2115 \u2192 \u211d) (hf : \u2200 (n : \u2115), f n \u2264 \u221a\u2191n) :\n  Filter.Tendsto (fun n => Conjecture428.mainTerm n - f n) Filter.atTop Filter.atTop\n'Conjecture428.mainTerm_sub_tendsto_atTop' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.no_constant_correction (f : \u2115 \u2192 \u211d) (hf : \u2200 (n : \u2115), f n \u2264 \u221a\u2191n) (c : \u211d) :\n  \u00acFilter.Tendsto (fun n => f n - Conjecture428.mainTerm n) Filter.atTop (nhds c)\n'Conjecture428.no_constant_correction' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.proposed_excess_tendsto_atTop :\n  Filter.Tendsto (fun n => Conjecture428.mainTerm n - Conjecture428.meanDurfee n) Filter.atTop Filter.atTop\n'Conjecture428.proposed_excess_tendsto_atTop' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.no_finite_additive_correction (c : \u211d) :\n  \u00acFilter.Tendsto (fun n => Conjecture428.meanDurfee n - Conjecture428.mainTerm n) Filter.atTop (nhds c)\n'Conjecture428.no_finite_additive_correction' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.conjecture_false : \u00acConjecture428.ClaimedExpansion\n'Conjecture428.conjecture_false' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.partitionMeasurableSpace (n : \u2115) : MeasurableSpace n.Partition\n'Conjecture428.partitionMeasurableSpace' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.partitionMeasurableSingletonClass (n : \u2115) : MeasurableSingletonClass n.Partition\n'Conjecture428.partitionMeasurableSingletonClass' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture428.partitionMeasure_probability (n : \u2115) :\n  MeasureTheory.IsProbabilityMeasure (Conjecture428.partitionMeasure n)\n'Conjecture428.partitionMeasure_probability' depends on axioms: [propext, Classical.choice, Quot.sound]\n"
+    }
+  ],
+  "lean_version": {
+    "exit_code": 0,
+    "output": "Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)"
+  },
+  "lean_commit": {
+    "exit_code": 0,
+    "expected": "6caaee842e9495688c1567e78c0e68dbb96942aa",
+    "actual": "6caaee842e9495688c1567e78c0e68dbb96942aa"
+  },
+  "project_identity": {
+    "manifest_name": "tlmc428",
+    "lake_name": "tlmc428",
+    "default_targets": [
+      "Conjecture428"
+    ],
+    "toolchain_pin": "leanprover/lean4:v4.19.0",
+    "source_file_count": 5,
+    "config_file_count": 3,
+    "dependency_symlink_target": "/private/tmp/tlmc310-proof/.lake/packages"
+  },
+  "proof_bypass_scan": {
+    "pattern": "\\b(?:sorry|admit|axiom|native_decide|unsafe|run_tac|elab|implemented_by)\\b|Lean\\.ofReduceBool|debug\\.skipKernelTC|trustLevel",
+    "method": "Lexical scan after masking nested block comments, line comments, and string literals; raw matches retained for inspection.",
+    "raw_matches": [
+      {
+        "file": "Check.lean",
+        "line": 3,
+        "text": "-- All definitions, instances, theorem types and transitive axiom dependencies.",
+        "code_hit": false
+      }
+    ],
+    "hits": []
+  },
+  "build": {
+    "command": [
+      "lake",
+      "build"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 4.413,
+    "log": "build.txt"
+  },
+  "axiom_audit": {
+    "expected_count": 38,
+    "parsed_count": 38,
+    "expected_theorems": [
+      "Conjecture428.parts_card_le",
+      "Conjecture428.rowsAtLeast_le",
+      "Conjecture428.rowsAtLeast_antitone",
+      "Conjecture428.squareSides_nonempty",
+      "Conjecture428.mem_squareSides_iff",
+      "Conjecture428.durfee_attained",
+      "Conjecture428.le_durfee_of_square",
+      "Conjecture428.square_iff_le_durfee",
+      "Conjecture428.square_area_le",
+      "Conjecture428.durfee_sq_le",
+      "Conjecture428.durfee_le_sqrt",
+      "Conjecture428.column_index_lt",
+      "Conjecture428.mem_ferrers_iff",
+      "Conjecture428.square_subset_ferrers_iff",
+      "Conjecture428.square_subset_ferrers_iff_le_durfee",
+      "Conjecture428.sum_column_counts",
+      "Conjecture428.ferrers_card_sum",
+      "Conjecture428.ferrers_card",
+      "Conjecture428.partitionPMF_apply",
+      "Conjecture428.partitionMeasure_singleton",
+      "Conjecture428.durfee_measurable",
+      "Conjecture428.durfee_integrable",
+      "Conjecture428.meanDurfee_eq_average",
+      "Conjecture428.meanDurfee_nonneg",
+      "Conjecture428.meanDurfee_le_sqrt",
+      "Conjecture428.scale_eq",
+      "Conjecture428.scale_coefficient_pos",
+      "Conjecture428.sqrt_nat_tendsto_atTop",
+      "Conjecture428.scale_tendsto_atTop",
+      "Conjecture428.eventually_two_sqrt_le_mainTerm",
+      "Conjecture428.mainTerm_sub_tendsto_atTop",
+      "Conjecture428.no_constant_correction",
+      "Conjecture428.proposed_excess_tendsto_atTop",
+      "Conjecture428.no_finite_additive_correction",
+      "Conjecture428.conjecture_false",
+      "Conjecture428.partitionMeasurableSpace",
+      "Conjecture428.partitionMeasurableSingletonClass",
+      "Conjecture428.partitionMeasure_probability"
+    ],
+    "audits": [
+      {
+        "theorem": "Conjecture428.parts_card_le",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.rowsAtLeast_le",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.rowsAtLeast_antitone",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.squareSides_nonempty",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.mem_squareSides_iff",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.durfee_attained",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.le_durfee_of_square",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.square_iff_le_durfee",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.square_area_le",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.durfee_sq_le",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.durfee_le_sqrt",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.column_index_lt",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.mem_ferrers_iff",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.square_subset_ferrers_iff",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.square_subset_ferrers_iff_le_durfee",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.sum_column_counts",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.ferrers_card_sum",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.ferrers_card",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.partitionPMF_apply",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.partitionMeasure_singleton",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.durfee_measurable",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.durfee_integrable",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.meanDurfee_eq_average",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.meanDurfee_nonneg",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.meanDurfee_le_sqrt",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.scale_eq",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.scale_coefficient_pos",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.sqrt_nat_tendsto_atTop",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.scale_tendsto_atTop",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.eventually_two_sqrt_le_mainTerm",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.mainTerm_sub_tendsto_atTop",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.no_constant_correction",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.proposed_excess_tendsto_atTop",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.no_finite_additive_correction",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.conjecture_false",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.partitionMeasurableSpace",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.partitionMeasurableSingletonClass",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture428.partitionMeasure_probability",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
+    ],
+    "allowed_axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "all_names_match": true,
+    "only_allowed_axioms": true,
+    "theorem_lemma_count": 35,
+    "named_instance_count": 3,
+    "zero_axiom_declarations": []
+  },
+  "independent_sha256": {
+    "Conjecture428/Partitions.lean": "18bdcc0f4b89d8d27027e5bb33c15caa7c0665cbc2da25028038954a9cf67c72",
+    "Conjecture428/Expectation.lean": "68d6ce72720480f171d5f3c7fa1ff50d2414dbdd1017752e88cbabcfc7ee8ee1",
+    "Conjecture428/Asymptotics.lean": "9fb744f80cafdd9440d3a04d04dadad16ad3ea448db3fb97f97fe2717711a1cb",
+    "Conjecture428.lean": "0ffa441591d6e3ab582aafa1c8e9c125afaf5dbadb6251518ff7d0e0679570f2",
+    "Check.lean": "ad58da0a4f93beac8f721638e28f8cedbd8d61c2a24a4d8ae5ee38042203e30e",
+    "lakefile.toml": "5f3cb9630696f93e8b90900c446dec6e50d1aaa57e475818b3267a3cbe1cc911",
+    "lake-manifest.json": "9c000ecf0c0506db02d5bf000820610b52255d2e2f3a5bf33b64e9123dd1f7b9",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "source_unchanged": true,
+  "copied_files_unchanged": true,
+  "definition_and_type_audit": {
+    "definition_names": [
+      "Conjecture428.rowsAtLeast",
+      "Conjecture428.squareSides",
+      "Conjecture428.durfee",
+      "Conjecture428.ferrers",
+      "Conjecture428.partitionMeasurableSpace",
+      "Conjecture428.partitionMeasurableSingletonClass",
+      "Conjecture428.partitionPMF",
+      "Conjecture428.partitionMeasure",
+      "Conjecture428.partitionMeasure_probability",
+      "Conjecture428.meanDurfee",
+      "Conjecture428.scale",
+      "Conjecture428.mainTerm",
+      "Conjecture428.ClaimedExpansion"
+    ],
+    "definition_count": 13,
+    "checked_theorem_names": [
+      "Conjecture428.parts_card_le",
+      "Conjecture428.rowsAtLeast_le",
+      "Conjecture428.rowsAtLeast_antitone",
+      "Conjecture428.squareSides_nonempty",
+      "Conjecture428.mem_squareSides_iff",
+      "Conjecture428.durfee_attained",
+      "Conjecture428.le_durfee_of_square",
+      "Conjecture428.square_iff_le_durfee",
+      "Conjecture428.square_area_le",
+      "Conjecture428.durfee_sq_le",
+      "Conjecture428.durfee_le_sqrt",
+      "Conjecture428.column_index_lt",
+      "Conjecture428.mem_ferrers_iff",
+      "Conjecture428.square_subset_ferrers_iff",
+      "Conjecture428.square_subset_ferrers_iff_le_durfee",
+      "Conjecture428.sum_column_counts",
+      "Conjecture428.ferrers_card_sum",
+      "Conjecture428.ferrers_card",
+      "Conjecture428.partitionPMF_apply",
+      "Conjecture428.partitionMeasure_singleton",
+      "Conjecture428.durfee_measurable",
+      "Conjecture428.durfee_integrable",
+      "Conjecture428.meanDurfee_eq_average",
+      "Conjecture428.meanDurfee_nonneg",
+      "Conjecture428.meanDurfee_le_sqrt",
+      "Conjecture428.scale_eq",
+      "Conjecture428.scale_coefficient_pos",
+      "Conjecture428.sqrt_nat_tendsto_atTop",
+      "Conjecture428.scale_tendsto_atTop",
+      "Conjecture428.eventually_two_sqrt_le_mainTerm",
+      "Conjecture428.mainTerm_sub_tendsto_atTop",
+      "Conjecture428.no_constant_correction",
+      "Conjecture428.proposed_excess_tendsto_atTop",
+      "Conjecture428.no_finite_additive_correction",
+      "Conjecture428.conjecture_false",
+      "Conjecture428.partitionMeasurableSpace",
+      "Conjecture428.partitionMeasurableSingletonClass",
+      "Conjecture428.partitionMeasure_probability"
+    ],
+    "checked_theorem_count": 38,
+    "checked_names_match_audits": true,
+    "printed_definition_names": [
+      "Conjecture428.rowsAtLeast",
+      "Conjecture428.squareSides",
+      "Conjecture428.durfee",
+      "Conjecture428.ferrers",
+      "Conjecture428.partitionMeasurableSpace",
+      "Conjecture428.partitionMeasurableSingletonClass",
+      "Conjecture428.partitionPMF",
+      "Conjecture428.partitionMeasure",
+      "Conjecture428.partitionMeasure_probability",
+      "Conjecture428.meanDurfee",
+      "Conjecture428.scale",
+      "Conjecture428.mainTerm",
+      "Conjecture428.ClaimedExpansion"
+    ],
+    "printed_definition_count": 13,
+    "printed_definition_names_match": true,
+    "printed_theorem_type_names": [
+      "Conjecture428.parts_card_le",
+      "Conjecture428.rowsAtLeast_le",
+      "Conjecture428.rowsAtLeast_antitone",
+      "Conjecture428.squareSides_nonempty",
+      "Conjecture428.mem_squareSides_iff",
+      "Conjecture428.durfee_attained",
+      "Conjecture428.le_durfee_of_square",
+      "Conjecture428.square_iff_le_durfee",
+      "Conjecture428.square_area_le",
+      "Conjecture428.durfee_sq_le",
+      "Conjecture428.durfee_le_sqrt",
+      "Conjecture428.column_index_lt",
+      "Conjecture428.mem_ferrers_iff",
+      "Conjecture428.square_subset_ferrers_iff",
+      "Conjecture428.square_subset_ferrers_iff_le_durfee",
+      "Conjecture428.sum_column_counts",
+      "Conjecture428.ferrers_card_sum",
+      "Conjecture428.ferrers_card",
+      "Conjecture428.partitionPMF_apply",
+      "Conjecture428.partitionMeasure_singleton",
+      "Conjecture428.durfee_measurable",
+      "Conjecture428.durfee_integrable",
+      "Conjecture428.meanDurfee_eq_average",
+      "Conjecture428.meanDurfee_nonneg",
+      "Conjecture428.meanDurfee_le_sqrt",
+      "Conjecture428.scale_eq",
+      "Conjecture428.scale_coefficient_pos",
+      "Conjecture428.sqrt_nat_tendsto_atTop",
+      "Conjecture428.scale_tendsto_atTop",
+      "Conjecture428.eventually_two_sqrt_le_mainTerm",
+      "Conjecture428.mainTerm_sub_tendsto_atTop",
+      "Conjecture428.no_constant_correction",
+      "Conjecture428.proposed_excess_tendsto_atTop",
+      "Conjecture428.no_finite_additive_correction",
+      "Conjecture428.conjecture_false",
+      "Conjecture428.partitionMeasurableSpace",
+      "Conjecture428.partitionMeasurableSingletonClass",
+      "Conjecture428.partitionMeasure_probability"
+    ],
+    "printed_theorem_type_count": 38,
+    "printed_theorem_type_names_match": true
+  },
+  "execution_audit_scope": "Fresh independent build and trust/identity verification; separate from the independent semantic review.",
+  "dependencies_post_build": [
+    {
+      "name": "mathlib",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "revision_matches": true
+    },
+    {
+      "name": "plausible",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "revision_matches": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "revision_matches": true
+    },
+    {
+      "name": "importGraph",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "revision_matches": true
+    },
+    {
+      "name": "proofwidgets",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "revision_matches": true
+    },
+    {
+      "name": "aesop",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "revision_matches": true
+    },
+    {
+      "name": "Qq",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "revision_matches": true
+    },
+    {
+      "name": "batteries",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "revision_matches": true
+    },
+    {
+      "name": "Cli",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "revision_matches": true
+    }
+  ],
+  "status": "PASS",
+  "finished_utc": "2026-10-04T17:20:28.928429+00:00"
+}

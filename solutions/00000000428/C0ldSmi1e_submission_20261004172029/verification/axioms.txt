@@ -1,0 +1,122 @@
+def Conjecture428.rowsAtLeast : {n : ℕ} → n.Partition → ℕ → ℕ :=
+fun {n} p k => (Multiset.filter (fun x => k ≤ x) p.parts).card
+def Conjecture428.squareSides : {n : ℕ} → n.Partition → Finset ℕ :=
+fun {n} p => {k ∈ Finset.range (n + 1) | k ≤ Conjecture428.rowsAtLeast p k}
+def Conjecture428.durfee : {n : ℕ} → n.Partition → ℕ :=
+fun {n} p => (Conjecture428.squareSides p).max' ⋯
+def Conjecture428.ferrers : {n : ℕ} → n.Partition → YoungDiagram :=
+fun {n} p =>
+  { cells := {c ∈ Finset.range n ×ˢ Finset.range n | c.1 < Conjecture428.rowsAtLeast p (c.2 + 1)}, isLowerSet := ⋯ }
+def Conjecture428.partitionMeasurableSpace : (n : ℕ) → MeasurableSpace n.Partition :=
+fun n => ⊤
+theorem Conjecture428.partitionMeasurableSingletonClass : ∀ (n : ℕ), MeasurableSingletonClass n.Partition :=
+fun n => { measurableSet_singleton := fun x => trivial }
+def Conjecture428.partitionPMF : (n : ℕ) → PMF n.Partition :=
+fun n => PMF.uniformOfFintype n.Partition
+def Conjecture428.partitionMeasure : (n : ℕ) → MeasureTheory.Measure n.Partition :=
+fun n => (Conjecture428.partitionPMF n).toMeasure
+theorem Conjecture428.partitionMeasure_probability : ∀ (n : ℕ),
+  MeasureTheory.IsProbabilityMeasure (Conjecture428.partitionMeasure n) :=
+fun n => id inferInstance
+def Conjecture428.meanDurfee : ℕ → ℝ :=
+fun n => ∫ (p : n.Partition), ↑(Conjecture428.durfee p) ∂Conjecture428.partitionMeasure n
+def Conjecture428.scale : ℕ → ℝ :=
+fun n => √(6 * ↑n) / Real.pi
+def Conjecture428.mainTerm : ℕ → ℝ :=
+fun n => Conjecture428.scale n * Real.log (Conjecture428.scale n)
+def Conjecture428.ClaimedExpansion : Prop :=
+∃ c, Filter.Tendsto (fun n => Conjecture428.meanDurfee n - (Conjecture428.mainTerm n + c)) Filter.atTop (nhds 0)
+Conjecture428.parts_card_le {n : ℕ} (p : n.Partition) : p.parts.card ≤ n
+'Conjecture428.parts_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.rowsAtLeast_le {n : ℕ} (p : n.Partition) (k : ℕ) : Conjecture428.rowsAtLeast p k ≤ n
+'Conjecture428.rowsAtLeast_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.rowsAtLeast_antitone {n : ℕ} (p : n.Partition) : Antitone (Conjecture428.rowsAtLeast p)
+'Conjecture428.rowsAtLeast_antitone' depends on axioms: [propext, Quot.sound]
+Conjecture428.squareSides_nonempty {n : ℕ} (p : n.Partition) : (Conjecture428.squareSides p).Nonempty
+'Conjecture428.squareSides_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.mem_squareSides_iff {n : ℕ} (p : n.Partition) (k : ℕ) :
+  k ∈ Conjecture428.squareSides p ↔ k ≤ Conjecture428.rowsAtLeast p k
+'Conjecture428.mem_squareSides_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.durfee_attained {n : ℕ} (p : n.Partition) :
+  Conjecture428.durfee p ≤ Conjecture428.rowsAtLeast p (Conjecture428.durfee p)
+'Conjecture428.durfee_attained' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.le_durfee_of_square {n : ℕ} (p : n.Partition) {k : ℕ} (hk : k ≤ Conjecture428.rowsAtLeast p k) :
+  k ≤ Conjecture428.durfee p
+'Conjecture428.le_durfee_of_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.square_iff_le_durfee {n : ℕ} (p : n.Partition) (k : ℕ) :
+  k ≤ Conjecture428.rowsAtLeast p k ↔ k ≤ Conjecture428.durfee p
+'Conjecture428.square_iff_le_durfee' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.square_area_le {n : ℕ} (p : n.Partition) {k : ℕ} (hk : k ≤ Conjecture428.rowsAtLeast p k) : k ^ 2 ≤ n
+'Conjecture428.square_area_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.durfee_sq_le {n : ℕ} (p : n.Partition) : Conjecture428.durfee p ^ 2 ≤ n
+'Conjecture428.durfee_sq_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.durfee_le_sqrt {n : ℕ} (p : n.Partition) : ↑(Conjecture428.durfee p) ≤ √↑n
+'Conjecture428.durfee_le_sqrt' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.column_index_lt {n : ℕ} (p : n.Partition) {i j : ℕ} (h : i < Conjecture428.rowsAtLeast p (j + 1)) : j < n
+'Conjecture428.column_index_lt' depends on axioms: [propext, Quot.sound]
+Conjecture428.mem_ferrers_iff {n : ℕ} (p : n.Partition) (i j : ℕ) :
+  (i, j) ∈ Conjecture428.ferrers p ↔ i < Conjecture428.rowsAtLeast p (j + 1)
+'Conjecture428.mem_ferrers_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.square_subset_ferrers_iff {n : ℕ} (p : n.Partition) (k : ℕ) :
+  Finset.range k ×ˢ Finset.range k ⊆ (Conjecture428.ferrers p).cells ↔ k ≤ Conjecture428.rowsAtLeast p k
+'Conjecture428.square_subset_ferrers_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.square_subset_ferrers_iff_le_durfee {n : ℕ} (p : n.Partition) (k : ℕ) :
+  Finset.range k ×ˢ Finset.range k ⊆ (Conjecture428.ferrers p).cells ↔ k ≤ Conjecture428.durfee p
+'Conjecture428.square_subset_ferrers_iff_le_durfee' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.sum_column_counts (s : Multiset ℕ) (N : ℕ) (hs : ∀ a ∈ s, a ≤ N) :
+  ∑ j ∈ Finset.range N, (Multiset.filter (fun x => j + 1 ≤ x) s).card = s.sum
+'Conjecture428.sum_column_counts' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.ferrers_card_sum {n : ℕ} (p : n.Partition) :
+  (Conjecture428.ferrers p).card = ∑ j ∈ Finset.range n, Conjecture428.rowsAtLeast p (j + 1)
+'Conjecture428.ferrers_card_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.ferrers_card {n : ℕ} (p : n.Partition) : (Conjecture428.ferrers p).card = n
+'Conjecture428.ferrers_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.partitionPMF_apply (n : ℕ) (p : n.Partition) :
+  (Conjecture428.partitionPMF n) p = (↑(Fintype.card n.Partition))⁻¹
+'Conjecture428.partitionPMF_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.partitionMeasure_singleton (n : ℕ) (p : n.Partition) :
+  (Conjecture428.partitionMeasure n) {p} = (↑(Fintype.card n.Partition))⁻¹
+'Conjecture428.partitionMeasure_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.durfee_measurable (n : ℕ) : Measurable fun p => ↑(Conjecture428.durfee p)
+'Conjecture428.durfee_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.durfee_integrable (n : ℕ) :
+  MeasureTheory.Integrable (fun p => ↑(Conjecture428.durfee p)) (Conjecture428.partitionMeasure n)
+'Conjecture428.durfee_integrable' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.meanDurfee_eq_average (n : ℕ) :
+  Conjecture428.meanDurfee n = (∑ p, ↑(Conjecture428.durfee p)) / ↑(Fintype.card n.Partition)
+'Conjecture428.meanDurfee_eq_average' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.meanDurfee_nonneg (n : ℕ) : 0 ≤ Conjecture428.meanDurfee n
+'Conjecture428.meanDurfee_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.meanDurfee_le_sqrt (n : ℕ) : Conjecture428.meanDurfee n ≤ √↑n
+'Conjecture428.meanDurfee_le_sqrt' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.scale_eq (n : ℕ) : Conjecture428.scale n = √6 / Real.pi * √↑n
+'Conjecture428.scale_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.scale_coefficient_pos : 0 < √6 / Real.pi
+'Conjecture428.scale_coefficient_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.sqrt_nat_tendsto_atTop : Filter.Tendsto (fun n => √↑n) Filter.atTop Filter.atTop
+'Conjecture428.sqrt_nat_tendsto_atTop' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.scale_tendsto_atTop : Filter.Tendsto Conjecture428.scale Filter.atTop Filter.atTop
+'Conjecture428.scale_tendsto_atTop' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.eventually_two_sqrt_le_mainTerm : ∀ᶠ (n : ℕ) in Filter.atTop, 2 * √↑n ≤ Conjecture428.mainTerm n
+'Conjecture428.eventually_two_sqrt_le_mainTerm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.mainTerm_sub_tendsto_atTop (f : ℕ → ℝ) (hf : ∀ (n : ℕ), f n ≤ √↑n) :
+  Filter.Tendsto (fun n => Conjecture428.mainTerm n - f n) Filter.atTop Filter.atTop
+'Conjecture428.mainTerm_sub_tendsto_atTop' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.no_constant_correction (f : ℕ → ℝ) (hf : ∀ (n : ℕ), f n ≤ √↑n) (c : ℝ) :
+  ¬Filter.Tendsto (fun n => f n - Conjecture428.mainTerm n) Filter.atTop (nhds c)
+'Conjecture428.no_constant_correction' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.proposed_excess_tendsto_atTop :
+  Filter.Tendsto (fun n => Conjecture428.mainTerm n - Conjecture428.meanDurfee n) Filter.atTop Filter.atTop
+'Conjecture428.proposed_excess_tendsto_atTop' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.no_finite_additive_correction (c : ℝ) :
+  ¬Filter.Tendsto (fun n => Conjecture428.meanDurfee n - Conjecture428.mainTerm n) Filter.atTop (nhds c)
+'Conjecture428.no_finite_additive_correction' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.conjecture_false : ¬Conjecture428.ClaimedExpansion
+'Conjecture428.conjecture_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.partitionMeasurableSpace (n : ℕ) : MeasurableSpace n.Partition
+'Conjecture428.partitionMeasurableSpace' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.partitionMeasurableSingletonClass (n : ℕ) : MeasurableSingletonClass n.Partition
+'Conjecture428.partitionMeasurableSingletonClass' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture428.partitionMeasure_probability (n : ℕ) :
+  MeasureTheory.IsProbabilityMeasure (Conjecture428.partitionMeasure n)
+'Conjecture428.partitionMeasure_probability' depends on axioms: [propext, Classical.choice, Quot.sound]
