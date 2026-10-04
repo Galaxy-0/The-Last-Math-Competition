@@ -1,0 +1,82 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:896:0: 'Grid1230.conjecture_00000001230_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:897:0: 'Grid1230.conjecture_00000001230_false_edges' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:898:0: 'Grid1230.conjecture_00000001230_false_dim3' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:899:0: 'Grid1230.no_iso_22' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:900:0: 'Grid1230.no_iso_111_edges' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:901:0: 'Grid1230.no_injective_hom_C4' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:902:0: 'Grid1230.no_injective_hom_PicC4' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:903:0: 'Grid1230.no_injective_hom_Pic0C4' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:904:0: 'Grid1230.no_iso_22_Pic0' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:905:0: 'Grid1230.no_iso_22_Pic' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:906:0: 'Grid1230.no_injective_hom_Q3' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:907:0: 'Grid1230.no_injective_hom_23' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:908:0: 'Grid1230.no_iso_23_gcd_lcm_prod' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:909:0: 'Grid1230.no_iso_12_edges_gcd_lcm_prod' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:910:0: 'Grid1230.sandpile_C4_iso_Z4' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:911:0: 'Grid1230.sandpile_P3_trivial' depends on axioms: [propext, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+== the 2x2 grid is the 4-cycle
+ok   vertices of [2]x[2]: [(0, 0), (0, 1), (1, 0), (1, 1)]
+ok   reduced Laplacian = [[2, 0, -1], [0, 2, -1], [-1, -1, 2]]
+ok   full Laplacian is 2-regular with zero column sums (the cycle C4)
+ok   det of reduced Laplacian = number of spanning trees = 4
+ok   Jac([2]x[2]) invariant factors [4], i.e. Z/4
+ok   full Laplacian SNF [1, 1, 4, 0]: Z^V/im L = Z + Z/4
+== explicit witnesses used in Lean
+ok   Ltilde (3,1,2) = 4 e0
+ok   Ltilde z = 2 e0 has only the non-integral solution ['3/2', '1/2', '1']
+ok   L (0,3,1,2) = 4((0,1)-(0,0))
+ok   every column of L sums to 0, so degree is well defined
+ok   L z = 2((0,1)-(0,0)) has no integer solution (reduces to the sink-normalised system)
+ok   cube: Ltilde (3,3,6,2,3,3,4) = 8 e2 (vertex (0,1,1))
+ok   cube: Ltilde z = 4 e2 has no integer solution
+ok   Jac([2]^3) invariant factors [2, 8, 24]
+== phi(x) = 3x0 + x1 + 2x2 mod 4 kills the columns of Ltilde (Lean's iso Jac(C4) = Z/4)
+ok   columns annihilated mod 4
+== comparison with (+)_S (Z/gcd S)^{e(S)} for every exponent choice
+ok   grid 2x2: Jac invariants [4]; vertex-convention moduli [0, 2] -> representable False; edge-convention moduli [0, 1] -> representable False
+ok   grid 2x3: Jac invariants [15]; vertex-convention moduli [0, 1, 2, 3] -> representable False; edge-convention moduli [0, 1, 2] -> representable False
+ok   grid 3x3: Jac invariants [8, 24]; vertex-convention moduli [0, 3] -> representable False; edge-convention moduli [0, 2] -> representable False
+ok   grid 2x2x2: Jac invariants [2, 8, 24]; vertex-convention moduli [0, 2] -> representable False; edge-convention moduli [0, 1] -> representable False
+ok   grid 2x4: Jac invariants [56]; vertex-convention moduli [0, 2, 4] -> representable False; edge-convention moduli [0, 1, 3] -> representable False
+ok   grid 3x4: Jac invariants [2415]; vertex-convention moduli [0, 1, 3, 4] -> representable False; edge-convention moduli [0, 1, 2, 3] -> representable False
+== the gcd(empty set) convention does not matter
+ok   gcd(empty)=0: moduli [0, 2], Z/4 not representable
+ok   gcd(empty)=1: moduli [1, 2], Z/4 not representable
+== sanity: the predicate is satisfiable (trees, n = 1)
+ok   path [2]: Jac trivial, representable with e = 0
+ok   path [3]: Jac trivial, representable with e = 0
+ok   path [4]: Jac trivial, representable with e = 0
+ok   path [5]: Jac trivial, representable with e = 0
+ok   path [6]: Jac trivial, representable with e = 0
+ok   path [7]: Jac trivial, representable with e = 0
+== robustness: 'gcd' read as lcm or product (the 2x3 grid)
+ok   Jac([2]x[3]) = Z/15
+ok   Ltilde(2x3) (3,5,2,4,7) = 5 e4 (Lean witness)
+ok   e4 not in the image (element of order 5)
+ok   2x3 grid, vertex convention, rule gcd: moduli [0, 1, 2, 3], Z/15 not representable
+ok   2x3 grid, edge convention, rule gcd: moduli [0, 1, 2], Z/15 not representable
+ok   2x3 grid, vertex convention, rule lcm: moduli [1, 2, 3, 6], Z/15 not representable
+ok   2x3 grid, edge convention, rule lcm: moduli [1, 2], Z/15 not representable
+ok   2x3 grid, vertex convention, rule prod: moduli [1, 2, 3, 6], Z/15 not representable
+ok   2x3 grid, edge convention, rule prod: moduli [1, 2], Z/15 not representable
+ok   K_{m,n}-style moduli m, n, mn = 2, 3, 6: Z/15 not representable
+ok   (note) the 2x2 grid does NOT refute the product/lcm reading: Z/(2*2) = Z/4 -- hence the 2x3 grid
+== remark: torus / strong-product readings (not the stated object) also fail
+ok   multigraph C2 x C2 (doubled edges): Jac invariants [2, 2, 8] vs moduli [0, 2]
+ok   simple C2 x C2 is literally C4 = [2]x[2] (same counterexample)
+ok   multigraph C2 x C3: Jac invariants [7, 42] vs moduli [0, 1, 2, 3]
+ok   strong product 2 (x) 2 = K4: Jac invariants [4, 4] vs moduli [0, 2]
+ok   torus C3 x C3: Jac invariants [6, 6, 18, 18], moduli [0, 3]
+ok   torus C3 x C4: Jac invariants [5, 5, 35, 420], moduli [0, 1, 3, 4]
+
+ALL CHECKS PASSED
+exit 0
