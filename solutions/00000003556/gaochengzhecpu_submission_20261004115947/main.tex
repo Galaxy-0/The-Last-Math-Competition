@@ -1,0 +1,67 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{proposition}{Proposition}
+\newcommand{\diam}{\operatorname{diam}}
+\title{An Infinite Equilateral Set Refutes\newline Finite Borsuk Partitions in Infinite Dimension}
+\author{Conjecture 00000003556}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+The finiteness assertion in Conjecture 00000003556 fails for a bounded subset of the infinite-dimensional real Hilbert space $\ell^2(\mathbb N)$. Its coordinate unit vectors have pairwise distance $\sqrt2$. Consequently, every subset of strictly smaller diameter contains at most one unit vector, and no finite partition or finite cover by such subsets is possible.
+\end{abstract}
+
+\section*{Statement and interpretation}
+The source asserts an infinite-dimensional Borsuk principle: the chromatic number for diameter partitions of infinite-dimensional spaces is finite, followed by an assertion about its minimum and a hyperplane obstruction. We refute the finiteness clause under the usual Borsuk meaning of a diameter partition: a bounded set $A$ of positive diameter is partitioned into subsets whose diameters are strictly smaller than $\diam A$. This is the usual bounded-metric-space version of the problem; see~\cite{IvanovTuzhilin} for its formulation.
+
+Both language versions of the source impose no compactness restriction or other condition excluding the bounded set below. The counterexample lies in a Hilbert space, so it also applies if ``infinite-dimensional spaces'' is restricted to Hilbert spaces. No interpretation of the unspecified hyperplane obstruction is needed: the preceding finiteness assertion already fails.
+
+\begin{proposition}
+Let $H=\ell^2(\mathbb N,\mathbb R)$, and let $e_n$ have coordinate $1$ at $n$ and $0$ elsewhere. Then
+\[
+ S=\{e_n:n\in\mathbb N\}\subseteq H
+\]
+is nonempty and bounded, $\diam S=\sqrt2$, and $S$ has no finite cover by subsets of diameter strictly less than $\sqrt2$. In particular, it has no finite partition into subsets of strictly smaller diameter.
+\end{proposition}
+\begin{proof}
+The square-summable real sequences with their usual inner product form a complete inner product space. The family $(e_n)_{n\in\mathbb N}$ is linearly independent: evaluating any finite linear combination equal to zero at coordinate $j$ gives that its coefficient at $j$ is zero. Hence $H$ is infinite-dimensional.
+
+Each $e_n$ has norm $1$. For distinct $i,j$, their inner product is zero, and therefore
+\[
+ \|e_i-e_j\|^2=\|e_i\|^2-2\langle e_i,e_j\rangle+\|e_j\|^2=2.
+\]
+Thus every distance between points of $S$ is either $0$ or $\sqrt2$. Since $e_0,e_1\in S$, its diameter is exactly $\sqrt2$.
+
+Suppose $S=\bigcup_{c=1}^m A_c$, where every $A_c\subseteq S$ satisfies $\diam A_c<\sqrt2$. A part containing two distinct vectors $e_i,e_j$ would have diameter at least $\|e_i-e_j\|=\sqrt2$, which is impossible. Each $A_c$ therefore contains at most one point of the infinite set $S$, contradicting that finitely many such parts cover $S$. A partition is a special case of a cover, proving the final assertion.
+\end{proof}
+
+Equivalently, the diameter graph on $S$ joins every pair of distinct vertices. Every proper coloring must assign different colors to all the $e_n$, so its chromatic number is countably infinite, rather than finite. The singleton partition gives the countable upper bound. This example uses only attained distances; there is no issue about a diameter that is a supremum but not a maximum.
+
+\section*{Scope and formal verification}
+The statement concerns unrestricted bounded sets in infinite dimension. The set $S$ is not compact: balls of radius less than $\sqrt2/2$ contain at most one of its points, so no finite such family can cover it. A modified question restricted to compact sets is different and is not refuted here. The submission does not attempt to define or settle a separate hyperplane-obstruction invariant.
+
+The accompanying \texttt{lean/Main.lean} uses Lean 4.19.0 and Mathlib at commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+The formal ambient space is Mathlib's actual \texttt{lp (fun \_ : Nat => Real) 2}, with its existing norm, inner product, and completeness instances. Coordinate unit vectors are actual \texttt{lp.single} elements. The file proves their linear independence, infinite dimension of the ambient space, their norms and pairwise distances, boundedness of their range, and its exact \texttt{Metric.diam}.
+
+The definition \texttt{FiniteSmallerDiameterCover} uses actual subsets of the given set, actual set membership, finite index types, and Mathlib's metric diameter. Its parts are bounded because they lie in the bounded original set. The theorem \texttt{no\_finite\_smaller\_diameter\_cover} uses the infinite pigeonhole principle to find two unit vectors in the same part, and derives the contradictory diameter bounds. The theorem \texttt{conjecture\_false} negates the universal finiteness clause for all nonempty bounded positive-diameter subsets of this actual Hilbert space.
+
+The complete counterexample and the cover obstruction are formalized. The equivalent graph-coloring description, its exact infinite cardinal value, and the explanatory compactness observation above are proved in prose and are not separate Lean theorems. No abstract distance table is substituted for the ambient space. No numerical experiment or finite truncation is used to establish the infinite conclusion.
+
+\section*{Source and reproduction}
+The bilingual statement is preserved in \texttt{SOURCE.md}; see the
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000003556.md}{repository source}.
+See \texttt{README.md} for build commands. The portable Lake project has public Git dependency URLs and pinned revisions. The actual fresh-build results, theorem-axiom audit, source hashes, and PDF verification are recorded in \texttt{verification/BUILD.json} and adjacent logs. The proof uses only standard Lean foundational axioms and contains no admitted proof steps or custom axioms.
+
+\begin{thebibliography}{1}
+\bibitem{IvanovTuzhilin}
+A. Ivanov and A. Tuzhilin,
+\emph{Solution to Generalized Borsuk Problem in Terms of the Gromov--Hausdorff Distances to Simplexes},
+2019. \href{https://arxiv.org/abs/1906.10574}{arXiv:1906.10574}.
+This reference supplies the standard formulation; the counterexample proof above is self-contained.
+\end{thebibliography}
+\end{document}
