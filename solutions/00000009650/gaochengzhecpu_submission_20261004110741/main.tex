@@ -1,0 +1,123 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\newtheorem{proposition}{Proposition}
+\title{Disproof of Conjecture 00000009650\\\large Zero cross-overlaps in the real symmetric class}
+\author{gaochengzhecpu}
+\date{October 4, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+For the source's definition $o_{ij}=\langle u_i,u_j\rangle^2$ using
+eigenvectors of distinct eigenvalues of the same matrix, all such overlaps
+of a real symmetric matrix are zero. In particular the GOE case named in
+the source has a point-mass distribution, zero mean, and zero scaled mean.
+This contradicts the claimed density and universal $2/n$ scaling.
+\end{abstract}
+
+\section*{The elementary obstruction}
+We use the real symmetric class alone, so no interpretation of a square of
+a complex inner product is needed. Let $T$ be real symmetric and suppose
+$Tu_i=\lambda_i u_i$ and $Tu_j=\lambda_j u_j$, where $\lambda_i\ne\lambda_j$.
+Self-adjointness of $T$ gives
+\[
+ \lambda_i\langle u_i,u_j\rangle
+ =\langle Tu_i,u_j\rangle
+ =\langle u_i,Tu_j\rangle
+ =\lambda_j\langle u_i,u_j\rangle.
+\]
+Thus $(\lambda_i-\lambda_j)\langle u_i,u_j\rangle=0$ and
+\[
+                       o_{ij}=\langle u_i,u_j\rangle^2=0.
+\]
+The argument is exact; it holds for every such matrix and pair. In
+particular it applies to every distinct-eigenvalue pair of every GOE
+realization, since a GOE matrix is real symmetric.
+
+For a simple-spectrum matrix of size $n\geq2$, set
+\[
+ P_n=\{(i,j):1\leq i<j\leq n\},\qquad m_n=|P_n|=\binom n2.
+\]
+The strict upper triangle is the relevant one for the source's explicit
+``distinct eigenvalues'' requirement. Its empirical measure and mean are
+\[
+ \mu_n=\frac1{m_n}\sum_{(i,j)\in P_n}\delta_{o_{ij}}=\delta_0,
+ \qquad
+ \overline o_n=\frac1{m_n}\sum_{(i,j)\in P_n}o_{ij}=0.
+\]
+More strongly, for \emph{every} test function $f:\mathbb R\to\mathbb R$,
+\[
+             \frac1{m_n}\sum_{(i,j)\in P_n}f(o_{ij})=f(0).
+\]
+If eigenvalues repeat and only the distinct-eigenvalue pairs are retained,
+each retained overlap is still zero. GOE has simple spectrum almost surely:
+repeated eigenvalues are the zero set of the discriminant polynomial, this
+polynomial is nonzero (evaluate it on a diagonal matrix with distinct
+entries), and GOE has a density on the space of real symmetric matrices.
+Consequently the same empirical law is $\delta_0$ almost surely.
+
+\begin{proposition}
+The claimed law in Conjecture 00000009650 fails in the real symmetric class.
+\end{proposition}
+\begin{proof}
+For all $n\geq2$, the mean is $0\ne2/n$. If the mean assertion is intended
+as the asymptotic equivalent $\overline o_n\sim2/n$, it also fails, since
+$n\overline o_n=0$ for every $n$ and cannot tend to $2$.
+Furthermore $\mu_n=\delta_0$ for every $n$, so its limit is $\delta_0$.
+A probability measure with a Lebesgue density assigns zero mass to the
+singleton $\{0\}$, whereas $\delta_0(\{0\})=1$. Hence this limit cannot
+have the asserted density, with exponential tails or otherwise.
+\end{proof}
+
+\section*{Scope and interpretation}
+The counterargument uses the same-matrix inner products printed in both
+language versions, not overlaps between eigenvectors of independent
+matrices or non-Hermitian left/right eigenvector condition numbers.
+The Bourgade--Dubach paper mentioned in the source concerns nonnormal
+Ginibre matrices~\cite{BD}; it does not change the elementary identity above.
+
+If one includes diagonal entries despite the distinct-eigenvalue wording,
+normalized eigenvectors give $n$ ones and $n(n-1)/2$ zeros in the inclusive
+upper triangle. The empirical measure is then
+\[
+        \frac{n-1}{n+1}\delta_0+\frac{2}{n+1}\delta_1
+        \ \Longrightarrow\ \delta_0.
+\]
+Its mean is asymptotic to $2/n$, but its limit still has no Lebesgue density.
+This optional convention does not rescue the complete conjecture.
+
+\section*{Formalization and reproducibility}
+The Lean project proves the orthogonality identity over actual real inner
+product spaces. It defines the finite set of strict upper-triangle pairs,
+the stated overlaps and empirical test-function averages, and proves the
+point-mass identity for every test function. It derives the exact mean
+contradiction and the failure of convergence of the scaled mean to $2$ for
+\emph{any sequence} of real symmetric simple-spectrum eigensystems.
+
+To exhibit actual objects as well, it constructs, for every size $n\geq2$,
+$T_n=\operatorname{diag}(0,1,\ldots,n-1)$ with the standard unit basis.
+Lean checks symmetry, distinct eigenvalues, normalization, the eigenvector
+equations and the violated mean formula. These diagonal examples are not
+presented as random GOE samples: the general orthogonality theorem is what
+applies to GOE. The probability-zero discriminant observation, elementary
+measure interpretation and inclusive-diagonal remark above are explained
+in this manuscript; the formal contradiction already follows from the
+pointwise mean theorems. No random-matrix universality theorem is assumed.
+
+The project pins Lean 4.19.0 and Mathlib v4.19.0 at commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+Reproduction commands, successful build logs, foundational axiom outputs,
+file hashes and a separate adversarial self-review accompany the submission.
+The Python script performs exact rational finite checks as a supplement;
+the all-dimension proofs and real limits are in Lean.
+
+\begin{thebibliography}{1}
+\bibitem{BD} P. Bourgade and G. Dubach,
+\emph{The distribution of overlaps between eigenvectors of Ginibre matrices},
+Probability Theory and Related Fields 177 (2020), 397--464.
+\href{https://arxiv.org/abs/1801.01219}{arXiv:1801.01219}.
+\end{thebibliography}
+\end{document}
