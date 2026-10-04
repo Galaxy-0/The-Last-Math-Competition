@@ -37,6 +37,19 @@ So `M_4(1)⁴ = 2` and `M_4(1)² = √2 ≈ 1.414`. The formula gives `f(1) = 3/
   `Σ a_s λ(s)` the ratio is `2 − Σ|a_s|⁴/(Σ|a_s|²)² ∈ [1, 2)`. Disclosure: `u + u*` (arcsine law)
   has `M_4⁴ = 3/2 = f(1)`. That value is neither the optimal constant (`sup = 2`) nor the
   semicircular value the conjecture is about.
+  - **Other free-group analogues** were searched as well, all checked exactly in `verify.py`:
+    `Σ(u_i+u_i*)` gives `2 − 1/(2d)`, `Π(u_i+u_i*)` gives `1 + d/2`, free Bernoulli sums give
+    `2 − 1/d`, and so do sums of all reduced words of length `d` in `F_2` or `Z_2*Z_2*Z_2`.
+    None of them reproduces `f(d)` (or `f(d)²`, `f(d)⁴`) beyond `d = 1`.
+- **Disclosed coincidence: the non-centred element `1 + s`.** `τ((1+s)²) = 2` and
+  `τ((1+s)⁴) = 1 + 6 + 2 = 9`. So `‖1+s‖₄⁴/‖1+s‖₂⁴ = 9/4`, which gives `M_4² = 3/2 = f(1)`
+  exactly. It does not rescue the conjecture, for three reasons:
+  - (a) `1 + s` is not a free word of length 1 (it is not even centred).
+  - (b) The optimal constant over `a + Σ cᵢsᵢ` (complex coefficients) is `sup = 7/3`, attained at
+    `|a|²/|c|² = 1/2` (e.g. `1 + s₁ + s₂`). That is not `9/4` (report, Section 6).
+  - (c) The natural length-`d` extensions fail at `d = 2`. `1 + s₁s₂` has ratio `2`; in general
+    `1 + s₁⋯s_d` has ratio `(d+6)/4` for `d ≥ 2`. `Π(1+sᵢ)` has ratio `1 + 5d/4 = 7/2` at `d = 2`.
+    Both differ from `f(2)² = 169/64`, and by 2-adic valuation they never match for `d ≥ 2`.
 
 ## Contents
 
@@ -71,7 +84,9 @@ Key theorems:
 `f(d)² = ‖W‖₄⁴/‖W‖₂⁴`, cleared of denominators.
 
 The project has no `sorry` and no `native_decide`. The axioms used are at most `propext` and
-`Quot.sound`.
+`Quot.sound`. Two theorems (`semicircle_moments`, `first_chaos_three`) are preceded by
+`set_option maxRecDepth 100000 in`. This only raises the elaborator's recursion limit for the
+`decide`/`simp` unfolding of the list computations; it is harmless and adds no axioms.
 
 Limitations: the following are in the report only:
 
@@ -114,6 +129,15 @@ s = ℓ(e₀) + ℓ(e₀)*，τ 为真空态：
 - 在 d 阶混沌上比率恒 ≥ 2，下确界为 2，上确界 ≥ d+1，都不等于 f(d)²。
 - 若理解为 Haar 酉元（自由群生成元）的字：字是酉元，M_p = 1。线性组合的比率落在 [1, 2) 内。
   需要说明的是，u + u*（反正弦分布）的 M_4⁴ 恰为 3/2，但这既不是最优常数，也不是猜想所说的半圆情形。
+- 我们还检验了其他自由群类比，均在 `verify.py` 中精确验证：Σ(u_i+u_i*) 给出 2 − 1/(2d)，
+  Π(u_i+u_i*) 给出 1 + d/2，自由 Bernoulli 和给出 2 − 1/d，F_2 或 Z_2*Z_2*Z_2 中长度为 d 的全部既约字之和也一并检验。
+  d ≥ 2 时没有一个能重现 f(d)。
+- **需披露的巧合：非中心化元 1 + s。** τ((1+s)²) = 2，τ((1+s)⁴) = 1 + 6 + 2 = 9，
+  比率为 9/4，即 M_4² = 3/2 = f(1)，恰好相等。但这不能挽救猜想，原因有三：
+  - (a) 1 + s 不是长度为 1 的自由字（甚至不是中心化的）；
+  - (b) 在 a + Σ cᵢsᵢ 这一类中，最优常数（上确界）为 7/3，在 |a|²/|c|² = 1/2 处取到（例如 1 + s₁ + s₂），不是 9/4；
+  - (c) 自然的长度 d 推广在 d = 2 时即不成立：1 + s₁s₂ 的比率为 2（一般地，d ≥ 2 时 1 + s₁⋯s_d 的比率为 (d+6)/4），
+    Π(1+sᵢ) 的比率为 1 + 5d/4，d = 2 时为 7/2，均不等于 f(2)² = 169/64。由 2-adic 赋值可知 d ≥ 2 时都不会相等。
 
 **Lean 部分（仅核心库）**从零构造了：
 - 完全 Fock 空间的有限支撑向量与内积；
@@ -126,6 +150,8 @@ s = ℓ(e₀) + ℓ(e₀)*，τ 为真空态：
 - ‖X₀‖₄⁴ = 2，以及 d = 2, 3, 4 时 ‖X₀⋯X_{d−1}‖₄⁴ = d + 1；
 - 第一混沌中 τ(S⁴) = 2τ(S²)²（三个生成元，作为多项式恒等式）；
 - 最终定理 `conjecture_00000007739_false : ¬ (Conj ∧ C2)`。
+
+Lean 中有两处 `set_option maxRecDepth 100000 in`，仅提高展开列表计算时的递归深度上限，无害，不引入公理。
 
 局限：自由性（Voiculescu 定理）、复系数、一般 d、高阶混沌及酉元理解只在报告中证明，
 并由 `verify.py` 用两种独立方法（Fock 空间稀疏算子、非交叉配对计数）精确验证。

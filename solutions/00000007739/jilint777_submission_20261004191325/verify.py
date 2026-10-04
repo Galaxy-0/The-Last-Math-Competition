@@ -13,7 +13,7 @@ Two independent ways to compute the moments:
 """
 from fractions import Fraction as F
 from functools import lru_cache
-from itertools import product
+from itertools import combinations, product
 import math
 import random
 import sys
@@ -311,6 +311,122 @@ for trial in range(30):
     pred = 2 - sum((c.re ** 2 + c.im ** 2) ** 2 for c in coef.values()) / beta ** 2
     ok = ok and r == pred and 1 <= r < 2
 check(ok, "30 random x = sum a_s lambda(s): ratio = 2 - sum|a_s|^4/(sum|a_s|^2)^2 in [1, 2), never 9/4")
+
+print("\n== 8. disclosed coincidence: the NON-centred element 1 + s (not a free word)")
+n2, n4 = fock_norms([(G(1), ()), (G(1), (0,))])
+check(n2 == 2 and n4 == 9 and F(9, 4) == f(1) ** 2,
+      "1 + s: tau((1+s)^2) = 2, tau((1+s)^4) = 1 + 6 + 2 = 9, ratio 9/4 = f(1)^2 (so M_4^2 = 3/2 = f(1))")
+# optimal constant over x = a + sum c_i s_i: ratio = g(t) = (t^2+6t+2)/(t+1)^2 at most, t = |a|^2/|c|^2
+g = lambda t: (t * t + 6 * t + 2) / (t + 1) ** 2
+ok = all(g(F(p, q)) <= F(7, 3) for p in range(0, 60) for q in range(1, 20))
+n2, n4 = fock_norms([(G(1), ()), (G(1), (0,)), (G(1), (1,))])      # a = 1, |c|^2 = 2, t = 1/2
+ok = ok and g(F(1, 2)) == F(7, 3) and n4.re / n2.re ** 2 == F(7, 3)
+for trial in range(60):                                              # random complex a, c_i
+    n = random.randint(1, 3)
+    a = G(F(random.randint(-6, 6), random.randint(1, 3)), F(random.randint(-6, 6), random.randint(1, 3)))
+    cs = [G(F(random.randint(-6, 6), random.randint(1, 3)), F(random.randint(-6, 6), random.randint(1, 3)))
+          for _ in range(n)]
+    terms = [(a, ())] + [(c, (i,)) for i, c in enumerate(cs)]
+    n2, n4 = fock_norms(terms)
+    if n2.iszero():
+        continue
+    A = a.re ** 2 + a.im ** 2
+    B = sum(c.re ** 2 + c.im ** 2 for c in cs)
+    r = n4.re / n2.re ** 2
+    ok = ok and r <= F(7, 3) and (B == 0 or r <= g(A / B))
+check(ok, "sup over x = a + sum c_i s_i (complex) of ||x||_4^4/||x||_2^4 is 7/3 (attained at |a|^2/|c|^2 = 1/2), not 9/4")
+ok = True
+vals = []
+for d in range(1, 5):
+    n2, n4 = fock_norms([(G(1), ()), (G(1), tuple(range(d)))])
+    r1 = n4.re / n2.re ** 2
+    terms = [(G(1), tuple(S)) for k in range(d + 1) for S in combinations(range(d), k)]
+    n2, n4 = fock_norms(terms)
+    r2 = n4.re / n2.re ** 2
+    vals.append((d, r1, r2))
+    ok = ok and r2 == 1 + F(5 * d, 4) and (d == 1 or r1 == F(d + 6, 4))
+    if d >= 2:
+        ok = ok and all(r not in (f(d), f(d) ** 2, f(d) ** 4) for r in (r1, r2))
+check(ok, "length-d extensions: ratio(1 + s_1...s_d) = 9/4, 2, 9/4, 5/2 (= (d+6)/4 for d >= 2); "
+          "ratio(prod (1+s_i)) = 1 + 5d/4; for d = 2..4 neither equals f(d), f(d)^2 or f(d)^4 "
+          f"(f(2)^2 = 169/64); values {[(d, str(a), str(b)) for d, a, b in vals]}")
+
+print("\n== 9. further Haar-unitary / free-group analogues (group algebra, exact)")
+# group elements: reduced tuples of (generator, exponent); generators in INVOL have order 2
+
+
+def gmul(w1, w2, invol):
+    out = list(w1)
+    for x in w2:
+        if out and out[-1][0] == x[0] and (x[0] in invol or out[-1][1] == -x[1]):
+            out.pop()
+        else:
+            out.append(x)
+    return tuple(out)
+
+
+def ginv(w, invol):
+    return tuple((g, e if g in invol else -e) for g, e in reversed(w))
+
+
+def amul(x, y, invol):
+    out = {}
+    for w1, c1 in x.items():
+        for w2, c2 in y.items():
+            w = gmul(w1, w2, invol)
+            out[w] = out.get(w, 0) + c1 * c2
+    return {w: c for w, c in out.items() if c != 0}
+
+
+def gratio(x, invol=()):
+    """tau(|x|^4)/tau(|x|^2)^2 in the group von Neumann algebra (real coefficients)."""
+    xs = {ginv(w, invol): c for w, c in x.items()}
+    y = amul(xs, x, invol)                       # x^* x, self-adjoint
+    t2 = F(y.get((), 0))
+    t4 = sum(F(c) * c for c in y.values())       # tau(y^2) = sum |y_w|^2
+    return t4 / t2 ** 2
+
+
+def reduced_words(gens, d, invol):
+    letters = [(g, 1) for g in gens] + [(g, -1) for g in gens if g not in invol]
+    words = [()]
+    for _ in range(d):
+        words = [w + (l,) for w in words for l in letters if gmul(w, (l,), invol) == w + (l,)]
+    return words
+
+
+ok = True
+for d in range(1, 5):
+    x = {}
+    for i in range(d):
+        x[((i, 1),)] = 1
+        x[((i, -1),)] = 1
+    ok = ok and gratio(x) == 2 - F(1, 2 * d)
+check(ok, "sum_{i<=d} (u_i + u_i^*): ratio 2 - 1/(2d), d = 1..4")
+ok = True
+for d in range(1, 4):
+    x = {(): 1}
+    for i in range(d):
+        x = amul(x, {((i, 1),): 1, ((i, -1),): 1}, ())
+    ok = ok and gratio(x) == 1 + F(d, 2)
+check(ok, "prod_{i<=d} (u_i + u_i^*): ratio 1 + d/2, d = 1..3")
+ok = True
+for d in range(1, 5):
+    ok = ok and gratio({((i, 1),): 1 for i in range(d)}, invol=tuple(range(d))) == 2 - F(1, d)
+check(ok, "free Bernoulli sums b_1 + ... + b_d (b_i free symmetric +-1): ratio 2 - 1/d, d = 1..4")
+ok = True
+rad = []
+for d in range(1, 4):
+    r_f = gratio({w: 1 for w in reduced_words((0, 1), d, ())})
+    r_z = gratio({w: 1 for w in reduced_words((0, 1, 2), d, (0, 1, 2))}, invol=(0, 1, 2))
+    rad.append((d, str(r_f), str(r_z)))
+    if d >= 2:
+        ok = ok and all(r not in (f(d), f(d) ** 2, f(d) ** 4) for r in (r_f, r_z))
+check(ok, f"sum of all reduced words of length d in F_2 and in Z_2*Z_2*Z_2 (d, F_2, Z_2^*3) = {rad}: "
+          "none equals f(d), f(d)^2, f(d)^4 for d = 2, 3")
+ok = all(r not in (f(d), f(d) ** 2, f(d) ** 4)
+         for d in range(2, 30) for r in (2 - F(1, 2 * d), 1 + F(d, 2), 2 - F(1, d)))
+check(ok, "for d = 2..29 the three closed forms 2-1/(2d), 1+d/2, 2-1/d never equal f(d), f(d)^2, f(d)^4")
 
 print()
 if FAILS:
