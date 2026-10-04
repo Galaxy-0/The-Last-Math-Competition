@@ -1,0 +1,49 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{A finite group cannot realize a Tarski number\\Conjecture 00000001000}
+\author{ziangni-sys (prepared with OpenAI Codex)}
+\date{4 October 2026}
+\begin{document}\maketitle
+\paragraph{Verdict.} The explicit finite-quotient realization clause is impossible. No finite group admits a paradoxical decomposition with any finite number of pieces, so no finite quotient of $B(2,5)$ can have Tarski number six.
+
+\paragraph{Original claim and scope.} Both language versions assert that the smallest Tarski number is six, realized by a finite quotient of the Burnside group $B(m,n)$ at $(m,n)=(2,5)$, and make a further classification assertion about groups of Tarski number six. Refuting the finite-quotient realization already refutes this conjunction. We need no presentation or order calculation for the Burnside group, and make no claim here about the true minimum or the classification of infinite groups.
+
+\paragraph{Standard definitions.} A finite-piece paradoxical decomposition of a group $G$ is a partition into pieces $A_1,\ldots,A_r,B_1,\ldots,B_s$, with left multipliers $a_i,b_j\in G$, for which
+\[
+G=\bigsqcup_{i=1}^r a_iA_i
+ =\bigsqcup_{j=1}^s b_jB_j.
+\]
+The original pieces on both sides are pairwise disjoint and partition $G$. The translated pieces on each side separately partition $G$. The Tarski number, when finite, is the least total $r+s$ of pieces of such a decomposition. A group without a paradoxical decomposition therefore cannot realize any finite Tarski number. Whether its Tarski number is left undefined or assigned infinity does not affect the contradiction.
+
+\paragraph{Counting proof.} For finite $G$, left multiplication is a bijection and preserves the cardinality of every piece. The two reassembly equalities give
+\[
+|G|=\sum_i|A_i|,\qquad |G|=\sum_j|B_j|.
+\]
+The original partition gives
+\[
+|G|=\sum_i|A_i|+\sum_j|B_j|=2|G|.
+\]
+Thus $|G|=0$, which is impossible because a group contains its identity. This proves the general obstruction, independently of the number of pieces. It even applies if the original pieces only form disjoint subsets rather than exhausting $G$: then $2|G|\leq|G|$ is already impossible.
+
+\paragraph{The equivalent tagged-map proof.} The formal proof packages the same counting argument into an explicit map. Label each original piece by an index $i\in\{0,\ldots,n-1\}$. For $x\in G$, let $\lambda(x)$ be its unique piece label, let $\sigma(i)\in\{\mathrm{left},\mathrm{right}\}$ be the side of piece $i$, and let $t_i\in G$ be its left multiplier. Define
+\[
+F(x)=
+\begin{cases}
+\operatorname{inl}(t_{\lambda(x)}x),&\sigma(\lambda(x))=\mathrm{left},\\
+\operatorname{inr}(t_{\lambda(x)}x),&\sigma(\lambda(x))=\mathrm{right},
+\end{cases}
+\qquad F:G\longrightarrow G\sqcup G.
+\]
+Each side covers $G$, so $F$ is surjective. Disjoint translated pieces also make it injective; the formal project proves both facts from the actual piece data. Only surjectivity is needed for the contradiction: for finite $G$ it implies
+\[
+|G\sqcup G|=2|G|\leq|G|,
+\]
+whereas $|G|\geq1$.
+
+\paragraph{Why this refutes the stated finite quotient.} A quotient group that is finite is a nonempty finite group. The theorem applies to every such group, so it applies to every finite quotient of $B(2,5)$, regardless of the particular quotient map or presentation. To have Tarski number six would require a six-piece paradoxical decomposition. The universal finite-group obstruction excludes it. No property special to Burnside groups is assumed or needed.
+
+\paragraph{Formal correspondence and validation.} The Lean 4.19.0 project is pinned to Mathlib v4.19.0. Its decomposition structure contains actual group elements, a piece-label function, a side for each label and a left multiplier for each piece. The piece fibers are proved to cover the group and to be pairwise disjoint. Its covering field states the two genuine translated reassemblies; its separation field states disjointness of translated images on the same side. These are precisely the standard partition and reassembly conditions above, not an assumed numerical inequality.
+
+Lean constructs the tagged map from those fields, proves its surjectivity and injectivity, and derives the contradiction using finite cardinality and the group identity. The final theorem excludes six-piece paradoxes on every finite group, hence on every finite quotient in the conjecture. No existence of a group with a Tarski number, amenability theorem, Burnside-group finiteness theorem, added axiom, omitted proof, or native decision shortcut is used. All formal dependencies are standard logical axioms, listed in the audit logs. No auxiliary computation is required for this universal counting proof. Build commands and verification evidence accompany the submission.
+\end{document}
