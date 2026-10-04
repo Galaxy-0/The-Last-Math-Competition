@@ -1,0 +1,77 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:344:0: 'FreeK.inner_create' depends on axioms: [propext]
+info: ././././Main.lean:345:0: 'FreeK.inner_annih' depends on axioms: [propext]
+info: ././././Main.lean:346:0: 'FreeK.X_selfadjoint' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:347:0: 'FreeK.applyW_adjoint' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:348:0: 'FreeK.norm2sq_eq' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:349:0: 'FreeK.norm4pow4_eq' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:350:0: 'FreeK.semicircle_moments' does not depend on any axioms
+info: ././././Main.lean:351:0: 'FreeK.mixed_moments' does not depend on any axioms
+info: ././././Main.lean:352:0: 'FreeK.word1' does not depend on any axioms
+info: ././././Main.lean:353:0: 'FreeK.words_234' does not depend on any axioms
+info: ././././Main.lean:354:0: 'FreeK.first_chaos_three' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:355:0: 'FreeK.first_chaos_never_formula' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:356:0: 'FreeK.f_values' does not depend on any axioms
+info: ././././Main.lean:357:0: 'FreeK.clause_false_d1' does not depend on any axioms
+info: ././././Main.lean:358:0: 'FreeK.clause_false_small' does not depend on any axioms
+info: ././././Main.lean:359:0: 'FreeK.conjecture_00000007739_false' does not depend on any axioms
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+== 1. the semicircle law of X_0 on the Fock space
+PASS tau(X_0^k), k=0..12 = ['1', '0', '1', '0', '2', '0', '5', '0', '14', '0', '42', '0', '132'] (Catalan in even degree, 0 in odd)
+PASS NC pairings of [k] (one colour) agree
+
+== 2. mixed moments: Fock space vs non-crossing pairings (all words of length <= 8 in 3 letters)
+PASS 9841 words: <Omega, X_w Omega> = #monochromatic NC pairings (free semicircular family)
+
+== 3. the free word W_d = s_1 s_2 ... s_d, d = 1..5
+PASS d=1: ||W||_2^2 = 1 (NC: 1), ||W||_4^4 = 2 (NC: 2, Fuss-Catalan 2) = d+1
+PASS    M_4^2 = f(d)?  f(d)^2 = 9/4 vs M_4^4 = 2: differ
+PASS    M_4^4 = f(d)?  f(d) = 3/2 vs 2: differ
+PASS    M_4   = f(d)?  f(d)^4 = 81/16 vs 2: differ
+PASS d=2: ||W||_2^2 = 1 (NC: 1), ||W||_4^4 = 3 (NC: 3, Fuss-Catalan 3) = d+1
+PASS    M_4^2 = f(d)?  f(d)^2 = 169/64 vs M_4^4 = 3: differ
+PASS    M_4^4 = f(d)?  f(d) = 13/8 vs 3: differ
+PASS    M_4   = f(d)?  f(d)^4 = 28561/4096 vs 3: differ
+PASS d=3: ||W||_2^2 = 1 (NC: 1), ||W||_4^4 = 4 (NC: 4, Fuss-Catalan 4) = d+1
+PASS    M_4^2 = f(d)?  f(d)^2 = 1681/576 vs M_4^4 = 4: differ
+PASS    M_4^4 = f(d)?  f(d) = 41/24 vs 4: differ
+PASS    M_4   = f(d)?  f(d)^4 = 2825761/331776 vs 4: differ
+PASS d=4: ||W||_2^2 = 1 (NC: 1), ||W||_4^4 = 5 (NC: 5, Fuss-Catalan 5) = d+1
+PASS    M_4^2 = f(d)?  f(d)^2 = 12769/4096 vs M_4^4 = 5: differ
+PASS    M_4^4 = f(d)?  f(d) = 113/64 vs 5: differ
+PASS    M_4   = f(d)?  f(d)^4 = 163047361/16777216 vs 5: differ
+PASS d=5: ||W||_2^2 = 1 (NC: 1), ||W||_4^4 = 6 (NC: 6, Fuss-Catalan 6) = d+1
+PASS    M_4^2 = f(d)?  f(d)^2 = 83521/25600 vs M_4^4 = 6: differ
+PASS    M_4^4 = f(d)?  f(d) = 289/160 vs 6: differ
+PASS    M_4   = f(d)?  f(d)^4 = 6975757441/655360000 vs 6: differ
+PASS d = 1: (M_4(1)^2)^2 = 2  but  f(1)^2 = (3/2)^2 = 9/4
+
+== 4. all d (2-adic argument): f(d) has negative 2-adic valuation, M_4(d)^4 = d+1 is an integer
+PASS for d = 1..199: 3/2 <= f(d) < 2 and v_2(f(d)) = -(d + v_2(d)) < 0, so f(d), f(d)^2, f(d)^4 are never integers
+PASS v_2(f(d)) = -(d + v_2(d)) for d = 1..199
+
+== 5. first chaos (d = 1, optimal-constant reading): ratio tau(|S|^4)/tau(|S|^2)^2 = 2 always
+PASS 40 random S = sum a_i s_i (real and complex a_i, up to 4 generators): ||S||_4^4 = 2 ||S||_2^4
+PASS circular s1 + i s2: ||.||_2^2 = 2, ||.||_4^4 = 8, ratio 2
+PASS elliptic elements a s1 + i b s2: ratio 2 for several (a, b)
+
+== 6. higher chaoses: ratio >= 2, sup >= d+1, inf = 2 (so no extremal reading gives f(d)^2)
+PASS 25 random elements of the 2nd chaos: ratio >= 2 (smallest seen 2.4916)
+PASS s^2 - 1 (2nd chaos, self-adjoint): ||.||_2^2 = 1, ||.||_4^4 = 3
+PASS W_n = sum of n free copies of s_1...s_d: ratio = 2 + (d-1)/n for d = 2,3, n = 1,2,3
+PASS for d = 2..199: inf ratio = 2 < f(d)^2 < d + 1 <= sup ratio; at d = 1 the ratio is 2 < 9/4 = f(1)^2
+
+== 7. Haar unitary / free group reading
+PASS a single Haar unitary u (= any word in free group generators): |u| = 1, M_4 = 1
+PASS u + u^*: tau 2nd = 2, 4th = 6, ratio 3/2 (so M_4^2 = sqrt(3/2) != 3/2)
+PASS 30 random x = sum a_s lambda(s): ratio = 2 - sum|a_s|^4/(sum|a_s|^2)^2 in [1, 2), never 9/4
+
+ALL CHECKS PASSED: M_4(1)^4 = 2 but f(1)^2 = 9/4; the clause M_4(d)^2 = 2 - (1-2^-d)/d is false.
+exit 0
