@@ -1,0 +1,71 @@
+{
+  "status": "PASS",
+  "scope": "PDF artifact compilation, export, source identity, and layout only; Lean execution and independent semantic review are separate records.",
+  "source_sha256": "d32a20c3c523b848241d7117443fd350bf277ff310c6534960a7ac834dc534ca",
+  "pdf_sha256": "41c08fd25ec84239f9912f3957da42b9c2274b0edd9f63113f6c326ce6f79f9b",
+  "pdf_bytes": 61255,
+  "pages": 3,
+  "artifact_marker": {
+    "operation_kind": "create",
+    "expected_output_count": 1,
+    "output_format": "pdf",
+    "successful_invocations": 1,
+    "exit_code": 0,
+    "timing": "Immediately before the first authoring command for this new report."
+  },
+  "native_compilation": {
+    "tool": "compile_latex_document",
+    "status": "success",
+    "message": "The current source compiled successfully with the desktop editor's compiler."
+  },
+  "export": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--keep-logs",
+      "main.tex"
+    ],
+    "exit_code": 0,
+    "compiler": "Tectonic 0.17.0",
+    "log": "report.txt",
+    "warnings_or_box_diagnostics": [],
+    "log_normalization": "Trailing whitespace removed from compiler log lines; all diagnostic text retained."
+  },
+  "visual_review": {
+    "reviewer": "auxiliary-code report-author agent",
+    "scope": "All three complete rendered pages at 1500px re-rendered and inspected after the one-space source cleanup, including rational formulas, matrices, actual eigenspace/projection notation, statistic and spectral laws, interval injectivity, theorem, bibliography, page numbers, margins and page breaks. No clipping, overlap or broken glyphs. This is author visual QA, not independent semantic review.",
+    "render_command": [
+      "pdftoppm",
+      "-png",
+      "-scale-to",
+      "1500",
+      "main.pdf",
+      "page"
+    ],
+    "render_exit_code": 0,
+    "rendered_pages": [
+      "page-1.png",
+      "page-2.png",
+      "page-3.png"
+    ],
+    "status": "PASS"
+  },
+  "verified_utc": "2026-10-04T19:47:11.112649+00:00",
+  "source_whitespace_check": {
+    "command": [
+      "git",
+      "diff",
+      "--no-index",
+      "--check",
+      "--",
+      "/dev/null",
+      "/private/tmp/tlmc5960-package/main.tex"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "",
+    "direct_trailing_whitespace_scan_hits": 0,
+    "interpretation": "No whitespace diagnostics. Exit 1 is the normal --no-index indication that the nonempty source differs from /dev/null.",
+    "status": "PASS"
+  },
+  "source_cleanup": "Exactly one trailing space removed from line 46; no mathematical or other source edits. Native compilation, Tectonic export and all-page visual inspection repeated on this final source. No repeated artifact-creation marker."
+}

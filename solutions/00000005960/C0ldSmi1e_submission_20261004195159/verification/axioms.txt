@@ -1,0 +1,277 @@
+@[reducible] def Conjecture5960.Mat2 : Type :=
+Matrix (Fin 2) (Fin 2) ℝ
+@[reducible] def Conjecture5960.Plane : Type :=
+EuclideanSpace ℝ (Fin 2)
+def Conjecture5960.cosine : ℝ → ℝ :=
+fun t => (1 - t ^ 2) / (1 + t ^ 2)
+def Conjecture5960.sine : ℝ → ℝ :=
+fun t => 2 * t / (1 + t ^ 2)
+def Conjecture5960.rotation : ℝ → Conjecture5960.Mat2 :=
+fun t => !![Conjecture5960.cosine t, -Conjecture5960.sine t; Conjecture5960.sine t, Conjecture5960.cosine t]
+def Conjecture5960.diagonal : Conjecture5960.Mat2 :=
+!![1, 0; 0, 3]
+def Conjecture5960.matrixFamily : ℝ → Conjecture5960.Mat2 :=
+fun t => Conjecture5960.rotation t * Conjecture5960.diagonal * Matrix.transpose (Conjecture5960.rotation t)
+def Conjecture5960.firstVector : ℝ → Conjecture5960.Plane :=
+fun t => !₂[Conjecture5960.cosine t, Conjecture5960.sine t]
+def Conjecture5960.secondVector : ℝ → Conjecture5960.Plane :=
+fun t => !₂[-Conjecture5960.sine t, Conjecture5960.cosine t]
+def Conjecture5960.eigenspaceOne : Conjecture5960.Mat2 → Submodule ℝ Conjecture5960.Plane :=
+fun A => Module.End.eigenspace (Matrix.toEuclideanLin A) 1
+def Conjecture5960.firstAxis : Conjecture5960.Plane :=
+!₂[1, 0]
+def Conjecture5960.statistic : Conjecture5960.Mat2 → ℝ :=
+fun A => ‖(Conjecture5960.eigenspaceOne A).orthogonalProjection Conjecture5960.firstAxis‖ ^ 2
+def Conjecture5960.fairPMF : PMF (Fin 2) :=
+PMF.uniformOfFintype (Fin 2)
+def Conjecture5960.twoPointLaw.{u_1} : {α : Type u_1} → α → α → PMF α :=
+fun {α} x y => PMF.map (fun i => if i = 0 then x else y) Conjecture5960.fairPMF
+def Conjecture5960.randomMatrixA : Fin 2 → Conjecture5960.Mat2 :=
+fun i => if i = 0 then Conjecture5960.matrixFamily 0 else Conjecture5960.matrixFamily 1
+def Conjecture5960.randomMatrixB : Fin 2 → Conjecture5960.Mat2 :=
+fun i => if i = 0 then Conjecture5960.matrixFamily (1 / 2) else Conjecture5960.matrixFamily (-1 / 2)
+def Conjecture5960.ensembleA : PMF Conjecture5960.Mat2 :=
+Conjecture5960.twoPointLaw (Conjecture5960.matrixFamily 0) (Conjecture5960.matrixFamily 1)
+def Conjecture5960.ensembleB : PMF Conjecture5960.Mat2 :=
+Conjecture5960.twoPointLaw (Conjecture5960.matrixFamily (1 / 2)) (Conjecture5960.matrixFamily (-1 / 2))
+def Conjecture5960.parameterA : Fin 2 → ℝ :=
+fun i => if i = 0 then 0 else 1
+def Conjecture5960.parameterB : Fin 2 → ℝ :=
+fun i => if i = 0 then 1 / 2 else -1 / 2
+def Conjecture5960.ParametricSeparation : (ℝ → Conjecture5960.Mat2) → (Fin 2 → ℝ) → (Fin 2 → ℝ) → Prop :=
+fun F a b =>
+  Continuous F ∧
+    Set.InjOn F (Set.Icc 0 1) ∧
+      (∀ (t : ℝ),
+          Matrix.IsSymm (F t) ∧
+            Matrix.charpoly (F t) = (Polynomial.X - Polynomial.C 1) * (Polynomial.X - Polynomial.C 3) ∧
+              spectrum ℝ (F t) = {1, 3}) ∧
+        (∀ (N : Conjecture5960.Mat2),
+            (PMF.map (F ∘ a) Conjecture5960.fairPMF).toMeasure ≠ MeasureTheory.Measure.dirac N) ∧
+          (∀ (N : Conjecture5960.Mat2),
+              (PMF.map (F ∘ b) Conjecture5960.fairPMF).toMeasure ≠ MeasureTheory.Measure.dirac N) ∧
+            PMF.map Matrix.charpoly (PMF.map (F ∘ a) Conjecture5960.fairPMF) =
+                PMF.map Matrix.charpoly (PMF.map (F ∘ b) Conjecture5960.fairPMF) ∧
+              PMF.map (spectrum ℝ) (PMF.map (F ∘ a) Conjecture5960.fairPMF) =
+                  PMF.map (spectrum ℝ) (PMF.map (F ∘ b) Conjecture5960.fairPMF) ∧
+                MeasureTheory.Measure.map (Conjecture5960.statistic ∘ F ∘ a) Conjecture5960.fairPMF.toMeasure ≠
+                  MeasureTheory.Measure.map (Conjecture5960.statistic ∘ F ∘ b) Conjecture5960.fairPMF.toMeasure
+Conjecture5960.denominator_pos (t : ℝ) : 0 < 1 + t ^ 2
+'Conjecture5960.denominator_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.cosine_sq_add_sine_sq (t : ℝ) : Conjecture5960.cosine t ^ 2 + Conjecture5960.sine t ^ 2 = 1
+'Conjecture5960.cosine_sq_add_sine_sq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.transpose_rotation_mul_rotation (t : ℝ) :
+  Matrix.transpose (Conjecture5960.rotation t) * Conjecture5960.rotation t = 1
+'Conjecture5960.transpose_rotation_mul_rotation' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.rotation_mul_transpose_rotation (t : ℝ) :
+  Conjecture5960.rotation t * Matrix.transpose (Conjecture5960.rotation t) = 1
+'Conjecture5960.rotation_mul_transpose_rotation' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.det_rotation (t : ℝ) : Matrix.det (Conjecture5960.rotation t) = 1
+'Conjecture5960.det_rotation' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.matrixFamily_explicit (t : ℝ) :
+  Conjecture5960.matrixFamily t =
+    !![Conjecture5960.cosine t ^ 2 + 3 * Conjecture5960.sine t ^ 2,
+        -2 * Conjecture5960.cosine t * Conjecture5960.sine t;
+      -2 * Conjecture5960.cosine t * Conjecture5960.sine t, Conjecture5960.sine t ^ 2 + 3 * Conjecture5960.cosine t ^ 2]
+'Conjecture5960.matrixFamily_explicit' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.matrixFamily_isSymm (t : ℝ) : Matrix.IsSymm (Conjecture5960.matrixFamily t)
+'Conjecture5960.matrixFamily_isSymm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.matrixFamily_trace (t : ℝ) : Conjecture5960.matrixFamily t 0 0 + Conjecture5960.matrixFamily t 1 1 = 4
+'Conjecture5960.matrixFamily_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.det_matrixFamily (t : ℝ) : Matrix.det (Conjecture5960.matrixFamily t) = 3
+'Conjecture5960.det_matrixFamily' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.charpoly_matrixFamily (t : ℝ) :
+  Matrix.charpoly (Conjecture5960.matrixFamily t) = (Polynomial.X - Polynomial.C 1) * (Polynomial.X - Polynomial.C 3)
+'Conjecture5960.charpoly_matrixFamily' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.spectrum_matrixFamily (t : ℝ) : spectrum ℝ (Conjecture5960.matrixFamily t) = {1, 3}
+'Conjecture5960.spectrum_matrixFamily' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.spectrum_operator_matrixFamily (t : ℝ) :
+  spectrum ℝ (Matrix.toEuclideanCLM (Conjecture5960.matrixFamily t)) = {1, 3}
+'Conjecture5960.spectrum_operator_matrixFamily' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.firstVector_norm (t : ℝ) : ‖Conjecture5960.firstVector t‖ = 1
+'Conjecture5960.firstVector_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.secondVector_norm (t : ℝ) : ‖Conjecture5960.secondVector t‖ = 1
+'Conjecture5960.secondVector_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.firstVector_eigen (t : ℝ) :
+  (Matrix.toEuclideanLin (Conjecture5960.matrixFamily t)) (Conjecture5960.firstVector t) = Conjecture5960.firstVector t
+'Conjecture5960.firstVector_eigen' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.secondVector_eigen (t : ℝ) :
+  (Matrix.toEuclideanLin (Conjecture5960.matrixFamily t)) (Conjecture5960.secondVector t) =
+    3 • Conjecture5960.secondVector t
+'Conjecture5960.secondVector_eigen' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.firstVector_hasEigenvector (t : ℝ) :
+  Module.End.HasEigenvector (Matrix.toEuclideanLin (Conjecture5960.matrixFamily t)) 1 (Conjecture5960.firstVector t)
+'Conjecture5960.firstVector_hasEigenvector' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.secondVector_hasEigenvector (t : ℝ) :
+  Module.End.HasEigenvector (Matrix.toEuclideanLin (Conjecture5960.matrixFamily t)) 3 (Conjecture5960.secondVector t)
+'Conjecture5960.secondVector_hasEigenvector' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.continuous_cosine : Continuous Conjecture5960.cosine
+'Conjecture5960.continuous_cosine' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.continuous_sine : Continuous Conjecture5960.sine
+'Conjecture5960.continuous_sine' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.continuous_rotation : Continuous Conjecture5960.rotation
+'Conjecture5960.continuous_rotation' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.continuous_matrixFamily : Continuous Conjecture5960.matrixFamily
+'Conjecture5960.continuous_matrixFamily' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.firstVector_inner_secondVector (t : ℝ) :
+  inner (Conjecture5960.firstVector t) (Conjecture5960.secondVector t) = 0
+'Conjecture5960.firstVector_inner_secondVector' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.vector_decomposition (t : ℝ) (x : Conjecture5960.Plane) :
+  x =
+    (Conjecture5960.cosine t * x 0 + Conjecture5960.sine t * x 1) • Conjecture5960.firstVector t +
+      (-Conjecture5960.sine t * x 0 + Conjecture5960.cosine t * x 1) • Conjecture5960.secondVector t
+'Conjecture5960.vector_decomposition' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.firstVector_mem_eigenspaceOne (t : ℝ) :
+  Conjecture5960.firstVector t ∈ Conjecture5960.eigenspaceOne (Conjecture5960.matrixFamily t)
+'Conjecture5960.firstVector_mem_eigenspaceOne' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.eigenspaceOne_vector_formula (t : ℝ) (w : Conjecture5960.Plane)
+  (hw : w ∈ Conjecture5960.eigenspaceOne (Conjecture5960.matrixFamily t)) :
+  w = (Conjecture5960.cosine t * w 0 + Conjecture5960.sine t * w 1) • Conjecture5960.firstVector t
+'Conjecture5960.eigenspaceOne_vector_formula' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.eigenspaceOne_matrixFamily (t : ℝ) :
+  Conjecture5960.eigenspaceOne (Conjecture5960.matrixFamily t) = Submodule.span ℝ {Conjecture5960.firstVector t}
+'Conjecture5960.eigenspaceOne_matrixFamily' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.projection_matrixFamily (t : ℝ) (w : Conjecture5960.Plane) :
+  ↑((Conjecture5960.eigenspaceOne (Conjecture5960.matrixFamily t)).orthogonalProjection w) =
+    inner (Conjecture5960.firstVector t) w • Conjecture5960.firstVector t
+'Conjecture5960.projection_matrixFamily' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.inner_firstVector_firstAxis (t : ℝ) :
+  inner (Conjecture5960.firstVector t) Conjecture5960.firstAxis = Conjecture5960.cosine t
+'Conjecture5960.inner_firstVector_firstAxis' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.statistic_matrixFamily (t : ℝ) :
+  Conjecture5960.statistic (Conjecture5960.matrixFamily t) = Conjecture5960.cosine t ^ 2
+'Conjecture5960.statistic_matrixFamily' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.statistic_eq_normalized_eigenvector (t : ℝ) (w : Conjecture5960.Plane)
+  (hw : w ∈ Conjecture5960.eigenspaceOne (Conjecture5960.matrixFamily t)) (hn : ‖w‖ = 1) :
+  Conjecture5960.statistic (Conjecture5960.matrixFamily t) = w 0 ^ 2
+'Conjecture5960.statistic_eq_normalized_eigenvector' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.cosine_nonneg_on_unitInterval {t : ℝ} (ht : t ∈ Set.Icc 0 1) : 0 ≤ Conjecture5960.cosine t
+'Conjecture5960.cosine_nonneg_on_unitInterval' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.matrixFamily_injOn_unitInterval : Set.InjOn Conjecture5960.matrixFamily (Set.Icc 0 1)
+'Conjecture5960.matrixFamily_injOn_unitInterval' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.continuous_firstVector : Continuous Conjecture5960.firstVector
+'Conjecture5960.continuous_firstVector' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.continuous_secondVector : Continuous Conjecture5960.secondVector
+'Conjecture5960.continuous_secondVector' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.matrixMeasurableSpace : MeasurableSpace Conjecture5960.Mat2
+'Conjecture5960.matrixMeasurableSpace' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.matrixBorelSpace : BorelSpace Conjecture5960.Mat2
+'Conjecture5960.matrixBorelSpace' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.fairPMF_apply (i : Fin 2) : Conjecture5960.fairPMF i = 1 / 2
+'Conjecture5960.fairPMF_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.twoPointLaw_apply.{u_1} {α : Type u_1} (x y z : α) :
+  (Conjecture5960.twoPointLaw x y) z = (if z = x then 1 / 2 else 0) + if z = y then 1 / 2 else 0
+'Conjecture5960.twoPointLaw_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.map_twoPointLaw.{u_1, u_2} {α : Type u_1} {β : Type u_2} (f : α → β) (x y : α) :
+  PMF.map f (Conjecture5960.twoPointLaw x y) = Conjecture5960.twoPointLaw (f x) (f y)
+'Conjecture5960.map_twoPointLaw' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.twoPointLaw_self.{u_1} {α : Type u_1} (x : α) : Conjecture5960.twoPointLaw x x = PMF.pure x
+'Conjecture5960.twoPointLaw_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.twoPointLaw_ne_pure.{u_1} {α : Type u_1} {x y : α} (hxy : x ≠ y) (z : α) :
+  Conjecture5960.twoPointLaw x y ≠ PMF.pure z
+'Conjecture5960.twoPointLaw_ne_pure' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.twoPointLaw_toMeasure_not_dirac.{u_1} {α : Type u_1} [MeasurableSpace α] [MeasurableSingletonClass α]
+  {x y : α} (hxy : x ≠ y) (z : α) : (Conjecture5960.twoPointLaw x y).toMeasure ≠ MeasureTheory.Measure.dirac z
+'Conjecture5960.twoPointLaw_toMeasure_not_dirac' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.twoPointLaw_measure_map.{u_1} {α : Type u_1} [MeasurableSpace α] (x y : α) :
+  MeasureTheory.Measure.map (fun i => if i = 0 then x else y) Conjecture5960.fairPMF.toMeasure =
+    (Conjecture5960.twoPointLaw x y).toMeasure
+'Conjecture5960.twoPointLaw_measure_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleA_eq_map : Conjecture5960.ensembleA = PMF.map Conjecture5960.randomMatrixA Conjecture5960.fairPMF
+'Conjecture5960.ensembleA_eq_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleB_eq_map : Conjecture5960.ensembleB = PMF.map Conjecture5960.randomMatrixB Conjecture5960.fairPMF
+'Conjecture5960.ensembleB_eq_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.matrixFamily_zero_ne_one : Conjecture5960.matrixFamily 0 ≠ Conjecture5960.matrixFamily 1
+'Conjecture5960.matrixFamily_zero_ne_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.matrixFamily_half_ne_neg_half :
+  Conjecture5960.matrixFamily (1 / 2) ≠ Conjecture5960.matrixFamily (-1 / 2)
+'Conjecture5960.matrixFamily_half_ne_neg_half' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleA_ne_pure (A : Conjecture5960.Mat2) : Conjecture5960.ensembleA ≠ PMF.pure A
+'Conjecture5960.ensembleA_ne_pure' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleB_ne_pure (A : Conjecture5960.Mat2) : Conjecture5960.ensembleB ≠ PMF.pure A
+'Conjecture5960.ensembleB_ne_pure' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.randomMatrixA_not_constant : ¬∃ A, ∀ (i : Fin 2), Conjecture5960.randomMatrixA i = A
+'Conjecture5960.randomMatrixA_not_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.randomMatrixB_not_constant : ¬∃ A, ∀ (i : Fin 2), Conjecture5960.randomMatrixB i = A
+'Conjecture5960.randomMatrixB_not_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleA_charpoly_law :
+  PMF.map Matrix.charpoly Conjecture5960.ensembleA =
+    PMF.pure ((Polynomial.X - Polynomial.C 1) * (Polynomial.X - Polynomial.C 3))
+'Conjecture5960.ensembleA_charpoly_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleB_charpoly_law :
+  PMF.map Matrix.charpoly Conjecture5960.ensembleB =
+    PMF.pure ((Polynomial.X - Polynomial.C 1) * (Polynomial.X - Polynomial.C 3))
+'Conjecture5960.ensembleB_charpoly_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleA_spectrum_law : PMF.map (spectrum ℝ) Conjecture5960.ensembleA = PMF.pure {1, 3}
+'Conjecture5960.ensembleA_spectrum_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleB_spectrum_law : PMF.map (spectrum ℝ) Conjecture5960.ensembleB = PMF.pure {1, 3}
+'Conjecture5960.ensembleB_spectrum_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembles_same_spectrum_law :
+  PMF.map (spectrum ℝ) Conjecture5960.ensembleA = PMF.map (spectrum ℝ) Conjecture5960.ensembleB
+'Conjecture5960.ensembles_same_spectrum_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembles_same_charpoly_law :
+  PMF.map Matrix.charpoly Conjecture5960.ensembleA = PMF.map Matrix.charpoly Conjecture5960.ensembleB
+'Conjecture5960.ensembles_same_charpoly_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.randomMatrixA_measurable : Measurable Conjecture5960.randomMatrixA
+'Conjecture5960.randomMatrixA_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.randomMatrixB_measurable : Measurable Conjecture5960.randomMatrixB
+'Conjecture5960.randomMatrixB_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleA_measure_map :
+  MeasureTheory.Measure.map Conjecture5960.randomMatrixA Conjecture5960.fairPMF.toMeasure =
+    Conjecture5960.ensembleA.toMeasure
+'Conjecture5960.ensembleA_measure_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleB_measure_map :
+  MeasureTheory.Measure.map Conjecture5960.randomMatrixB Conjecture5960.fairPMF.toMeasure =
+    Conjecture5960.ensembleB.toMeasure
+'Conjecture5960.ensembleB_measure_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleA_measure_not_dirac (A : Conjecture5960.Mat2) :
+  Conjecture5960.ensembleA.toMeasure ≠ MeasureTheory.Measure.dirac A
+'Conjecture5960.ensembleA_measure_not_dirac' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleB_measure_not_dirac (A : Conjecture5960.Mat2) :
+  Conjecture5960.ensembleB.toMeasure ≠ MeasureTheory.Measure.dirac A
+'Conjecture5960.ensembleB_measure_not_dirac' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleA_statistic_law :
+  PMF.map Conjecture5960.statistic Conjecture5960.ensembleA = Conjecture5960.twoPointLaw 1 0
+'Conjecture5960.ensembleA_statistic_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleB_statistic_law : PMF.map Conjecture5960.statistic Conjecture5960.ensembleB = PMF.pure (9 / 25)
+'Conjecture5960.ensembleB_statistic_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleA_statistic_zero : (PMF.map Conjecture5960.statistic Conjecture5960.ensembleA) 0 = 1 / 2
+'Conjecture5960.ensembleA_statistic_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleB_statistic_zero : (PMF.map Conjecture5960.statistic Conjecture5960.ensembleB) 0 = 0
+'Conjecture5960.ensembleB_statistic_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembles_different_statistic_laws :
+  PMF.map Conjecture5960.statistic Conjecture5960.ensembleA ≠ PMF.map Conjecture5960.statistic Conjecture5960.ensembleB
+'Conjecture5960.ensembles_different_statistic_laws' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembles_distinct : Conjecture5960.ensembleA ≠ Conjecture5960.ensembleB
+'Conjecture5960.ensembles_distinct' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.statistic_randomMatrixA_measurable : Measurable (Conjecture5960.statistic ∘ Conjecture5960.randomMatrixA)
+'Conjecture5960.statistic_randomMatrixA_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.statistic_randomMatrixB_measurable : Measurable (Conjecture5960.statistic ∘ Conjecture5960.randomMatrixB)
+'Conjecture5960.statistic_randomMatrixB_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleA_statistic_measure_map :
+  MeasureTheory.Measure.map (Conjecture5960.statistic ∘ Conjecture5960.randomMatrixA) Conjecture5960.fairPMF.toMeasure =
+    (PMF.map Conjecture5960.statistic Conjecture5960.ensembleA).toMeasure
+'Conjecture5960.ensembleA_statistic_measure_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembleB_statistic_measure_map :
+  MeasureTheory.Measure.map (Conjecture5960.statistic ∘ Conjecture5960.randomMatrixB) Conjecture5960.fairPMF.toMeasure =
+    (PMF.map Conjecture5960.statistic Conjecture5960.ensembleB).toMeasure
+'Conjecture5960.ensembleB_statistic_measure_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.ensembles_different_statistic_measures :
+  (PMF.map Conjecture5960.statistic Conjecture5960.ensembleA).toMeasure ≠
+    (PMF.map Conjecture5960.statistic Conjecture5960.ensembleB).toMeasure
+'Conjecture5960.ensembles_different_statistic_measures' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.different_actual_statistic_pushforwards :
+  MeasureTheory.Measure.map (Conjecture5960.statistic ∘ Conjecture5960.randomMatrixA) Conjecture5960.fairPMF.toMeasure ≠
+    MeasureTheory.Measure.map (Conjecture5960.statistic ∘ Conjecture5960.randomMatrixB) Conjecture5960.fairPMF.toMeasure
+'Conjecture5960.different_actual_statistic_pushforwards' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.randomMatrixA_eq_parameter :
+  Conjecture5960.randomMatrixA = Conjecture5960.matrixFamily ∘ Conjecture5960.parameterA
+'Conjecture5960.randomMatrixA_eq_parameter' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.randomMatrixB_eq_parameter :
+  Conjecture5960.randomMatrixB = Conjecture5960.matrixFamily ∘ Conjecture5960.parameterB
+'Conjecture5960.randomMatrixB_eq_parameter' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.explicit_parametric_separation :
+  Conjecture5960.ParametricSeparation Conjecture5960.matrixFamily Conjecture5960.parameterA Conjecture5960.parameterB
+'Conjecture5960.explicit_parametric_separation' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture5960.conjecture_5960 : ∃ F a b, Conjecture5960.ParametricSeparation F a b
+'Conjecture5960.conjecture_5960' depends on axioms: [propext, Classical.choice, Quot.sound]

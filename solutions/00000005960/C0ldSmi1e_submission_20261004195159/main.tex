@@ -1,0 +1,131 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Law}{\operatorname{Law}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\spec}{\operatorname{spec}}
+\title{The same spectrum with different eigenvector laws}
+\author{C0ldSmi1e\\\small Proof of conjecture 00000005960}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+We construct two nonconstant random real symmetric $2\times2$ matrices whose complete ordered eigenvalue lists are both deterministically $(1,3)$, but whose eigenvector statistics have different probability laws. Both ensembles are specializations of one explicit continuous isospectral family defined for every real parameter. The statistic is the squared Euclidean norm of the actual orthogonal projection of a fixed coordinate vector onto the eigenvalue-$1$ eigenspace. We derive its equality with the squared first coordinate of every unit eigenvector for that simple eigenvalue, so the distinction is independent of eigenvector signs.
+\end{abstract}
+
+\section{The statement and the all-real family}
+Both language versions of conjecture 00000005960 assert the existence of two ensembles with equal eigenvalue spectra but different eigenvector statistics, realized through an explicit free parameter that changes orientation while preserving the spectrum. We prove that full existential assertion. Here an ensemble is a probability law on real symmetric matrices; the statement imposes no entry-independence, dimension-growth, or asymptotic hypotheses. The exact bilingual source accompanies the submission as \texttt{conjecture.md}.
+
+For every $t\in\R$, define
+\[
+ c(t)=\frac{1-t^2}{1+t^2},\qquad
+ s(t)=\frac{2t}{1+t^2},\qquad
+ Q(t)=\begin{pmatrix}c(t)&-s(t)\\s(t)&c(t)\end{pmatrix},
+ \qquad D=\diag(1,3),
+\]
+and set $M(t)=Q(t)DQ(t)^{\mathsf T}$. The denominator $1+t^2$ is strictly positive for every real $t$, and direct expansion gives
+\[
+ c(t)^2+s(t)^2=1,\qquad
+ Q(t)^{\mathsf T}Q(t)=Q(t)Q(t)^{\mathsf T}=I,\qquad \det Q(t)=1.
+\]
+In particular, $M(t)$ is a real symmetric matrix. Omitting the argument $t$ within a displayed formula, its entries are
+\begin{equation}\label{eq:entries}
+ M(t)=\begin{pmatrix}c^2+3s^2&-2cs\\-2cs&s^2+3c^2\end{pmatrix}.
+\end{equation}
+Orthogonal conjugation gives the characteristic polynomial identity
+\begin{equation}\label{eq:charpoly}
+ \det(XI-M(t))=\det\bigl(Q(t)(XI-D)Q(t)^{\mathsf T}\bigr)
+ =(X-1)(X-3).
+\end{equation}
+Thus the complete spectrum is $\{1,3\}$, with each eigenvalue of algebraic multiplicity one, for every real parameter.
+
+\clearpage
+\section{An intrinsic eigenvector statistic}
+Use the ordinary Euclidean inner product on $\R^2$ and write $e_0=(1,0)$. For a real symmetric matrix $N$, let
+\[
+ E_1(N)=\{x\in\R^2:Nx=x\},\qquad
+ S(N)=\|\Pi_{E_1(N)}e_0\|_2^2,
+\]
+where $\Pi_{E_1(N)}$ is the orthogonal projection onto this actual eigenspace. Every subspace of $\R^2$ is closed, so this definition is unambiguous.
+
+For our family the vectors
+\[
+ u(t)=(c(t),s(t)),\qquad v(t)=(-s(t),c(t))
+\]
+are an orthonormal basis. Matrix multiplication gives $M(t)u(t)=u(t)$ and $M(t)v(t)=3v(t)$. If $x=\alpha u(t)+\beta v(t)$ satisfies $M(t)x=x$, comparison in this basis gives $2\beta=0$. Hence
+\[
+ E_1(M(t))=\R u(t),\qquad
+ \Pi_{E_1(M(t))}e_0=\langle e_0,u(t)\rangle u(t)=c(t)u(t).
+\]
+Taking its Euclidean squared norm yields
+\begin{equation}\label{eq:statistic}
+ S(M(t))=c(t)^2.
+\end{equation}
+Moreover, if $x$ is \emph{any} unit vector in $E_1(M(t))$, then $x=\alpha u(t)$ and $\alpha^2=1$. Therefore $x_0^2=c(t)^2=S(M(t))$. The statistic depends on the eigenspace and fixed ambient coordinate, not a chosen sign for an eigenvector. Squared coordinate moduli are standard eigenvector observables; see \cite[Remark 1.8]{ky}. We use this reference only to explain the observable, not as an assumption or a universality theorem.
+
+\section{Two nonconstant random ensembles and their laws}
+Let $\Omega=\{0,1\}$ carry the probability measure assigning mass $1/2$ to each point. Define two matrix-valued random variables on this space by
+\[
+ A(0)=M(0),\quad A(1)=M(1),\qquad
+ B(0)=M(1/2),\quad B(1)=M(-1/2).
+\]
+All maps from this finite measurable space into a Borel space are measurable. Their actual matrix values, obtained from \eqref{eq:entries}, are
+\[
+ A(0)=\begin{pmatrix}1&0\\0&3\end{pmatrix},\qquad
+ A(1)=\begin{pmatrix}3&0\\0&1\end{pmatrix},
+\]
+\[
+ B(0)=\frac1{25}\begin{pmatrix}57&-24\\-24&43\end{pmatrix},\qquad
+ B(1)=\frac1{25}\begin{pmatrix}57&24\\24&43\end{pmatrix}.
+\]
+The two values of $A$ are distinct, as are those of $B$; both ensembles are nonconstant. Equation~\eqref{eq:charpoly} shows that their complete ordered spectral lists agree at every outcome. Writing $\Lambda(N)$ for the increasingly ordered eigenvalue list of a real symmetric $2\times2$ matrix,
+\[
+ \Law(\Lambda\circ A)=\Law(\Lambda\circ B)=\delta_{(1,3)}.
+\]
+On the other hand, \eqref{eq:statistic} gives
+\[
+ S(A(0))=1,\qquad S(A(1))=0,\qquad
+ S(B(0))=S(B(1))=\frac9{25},
+\]
+because $c(0)=1$, $c(1)=0$, and $c(1/2)=c(-1/2)=3/5$. Consequently the pushforward measures are
+\begin{equation}\label{eq:laws}
+ \Law(S\circ A)=\tfrac12\delta_0+\tfrac12\delta_1,
+ \qquad \Law(S\circ B)=\delta_{9/25}.
+\end{equation}
+These laws disagree on the Borel set $\{1\}$: their masses there are $1/2$ and $0$, respectively. Thus a sign-independent statistic of the actual eigenvectors has a different distribution even though the full spectral distributions coincide.
+
+\clearpage
+\section{The real parameter and interval injectivity}
+The rational formulas for $c$ and $s$ are continuous on all of $\R$ because their denominator never vanishes. Therefore $Q$, $M$, and the exhibited orthonormal eigenvectors vary continuously, with the same spectrum throughout. Both ensembles above come from this single family.
+
+In addition, $M$ is injective on $[0,1]$. To prove this, suppose $t,r\in[0,1]$ and $M(t)=M(r)$. On this interval $c(t),c(r)\ge0$. From $M(t)_{00}=3-2c(t)^2$ we obtain $c(t)^2=c(r)^2$, and hence $c(t)=c(r)$. Clearing the positive denominators yields
+\[
+ (1-t^2)(1+r^2)=(1-r^2)(1+t^2),
+\]
+so $t^2=r^2$ and, by nonnegativity, $t=r$. In particular this is a continuous, nonconstant real-parameter family with changing eigenspaces. Its all-real formula is not claimed to be globally injective: for $t\ne0$, one has $M(t)=M(-1/t)$.
+
+\begin{theorem}
+There exist two nonconstant real symmetric matrix ensembles with identical complete eigenvalue laws and different intrinsic eigenvector-statistic laws. They are realized within one explicit continuous all-real isospectral family, injective on $[0,1]$.
+\end{theorem}
+\begin{proof}
+Take the displayed family $M$, the two fair two-point ensembles $A,B$, and the intrinsic statistic $S$. Their spectral and eigenvector-statistic laws are the ones proved above. The parameter properties follow from the preceding paragraph.
+\end{proof}
+This establishes the full existential assertion in both language versions of conjecture 00000005960.
+
+\section{Formalization and verification scope}
+The accompanying project uses Lean 4.19.0 and Mathlib v4.19.0, with pinned dependency revisions. It uses actual matrices and characteristic polynomials, Euclidean vectors and eigenspaces, orthogonal projection, and probability-measure pushforwards. The scalar statistic is derived from those objects. Reproduction commands, declaration and axiom inspection, exact file hashes, execution results, and independent semantic scrutiny are recorded in the accompanying verification materials. Those materials describe the completed checks; this report itself does not certify a build result or repository acceptance. No external random-matrix theorem or numerical simulation is needed for the proof.
+
+\begin{thebibliography}{1}
+\bibitem{ky}
+A.~Knowles and J.~Yin,
+\emph{Eigenvector Distribution of Wigner Matrices},
+\href{https://arxiv.org/abs/1102.0057}{arXiv:1102.0057},
+Section~1.1 and Remark~1.8.
+\end{thebibliography}
+\end{document}
