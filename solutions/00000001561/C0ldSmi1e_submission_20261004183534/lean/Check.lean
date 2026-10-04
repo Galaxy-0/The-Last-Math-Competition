@@ -1,0 +1,58 @@
+import Conjecture1561
+
+#print Conjecture1561.Space
+#print Conjecture1561.sphereS2
+#print Conjecture1561.sphericalDistance
+#print Conjecture1561.closedHemisphere
+#print Conjecture1561.openHemisphere
+#print Conjecture1561.Admissible
+#print Conjecture1561.IsAreaMaximizer
+#print Conjecture1561.sphericalArea
+#print Conjecture1561.HemisphereExtremizerClaim
+#print Conjecture1561.ConjectureFirstClause
+#print Conjecture1561.interiorLeft
+#print Conjecture1561.interiorRight
+
+#check Conjecture1561.sphereS2_mem_iff
+#check Conjecture1561.sphericalDistance_eq_arccos_inner
+#check Conjecture1561.exists_unit_orthogonal
+#check Conjecture1561.closedHemisphere_antipodal_pair
+#check Conjecture1561.closedHemisphere_bad_pair
+#check Conjecture1561.closedHemisphere_not_admissible
+#check Conjecture1561.interiorLeft_norm
+#check Conjecture1561.interiorRight_norm
+#check Conjecture1561.inner_center_left
+#check Conjecture1561.inner_center_right
+#check Conjecture1561.interiorLeft_mem_open
+#check Conjecture1561.interiorRight_mem_open
+#check Conjecture1561.inner_interior_pair
+#check Conjecture1561.interior_distance_gt
+#check Conjecture1561.interior_bad_pair
+#check Conjecture1561.openHemisphere_bad_pair
+#check Conjecture1561.openHemisphere_not_admissible
+#check Conjecture1561.closedHemisphere_not_maximizer
+#check Conjecture1561.openHemisphere_not_maximizer
+#check Conjecture1561.no_hemisphere_extremizer
+#check Conjecture1561.conjecture_false
+
+#print axioms Conjecture1561.sphereS2_mem_iff
+#print axioms Conjecture1561.sphericalDistance_eq_arccos_inner
+#print axioms Conjecture1561.exists_unit_orthogonal
+#print axioms Conjecture1561.closedHemisphere_antipodal_pair
+#print axioms Conjecture1561.closedHemisphere_bad_pair
+#print axioms Conjecture1561.closedHemisphere_not_admissible
+#print axioms Conjecture1561.interiorLeft_norm
+#print axioms Conjecture1561.interiorRight_norm
+#print axioms Conjecture1561.inner_center_left
+#print axioms Conjecture1561.inner_center_right
+#print axioms Conjecture1561.interiorLeft_mem_open
+#print axioms Conjecture1561.interiorRight_mem_open
+#print axioms Conjecture1561.inner_interior_pair
+#print axioms Conjecture1561.interior_distance_gt
+#print axioms Conjecture1561.interior_bad_pair
+#print axioms Conjecture1561.openHemisphere_bad_pair
+#print axioms Conjecture1561.openHemisphere_not_admissible
+#print axioms Conjecture1561.closedHemisphere_not_maximizer
+#print axioms Conjecture1561.openHemisphere_not_maximizer
+#print axioms Conjecture1561.no_hemisphere_extremizer
+#print axioms Conjecture1561.conjecture_false

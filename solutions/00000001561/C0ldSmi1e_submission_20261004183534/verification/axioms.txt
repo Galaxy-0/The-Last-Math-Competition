@@ -1,0 +1,90 @@
+@[reducible] def Conjecture1561.Space : Type :=
+EuclideanSpace ℝ (Fin 3)
+def Conjecture1561.sphereS2 : Set Conjecture1561.Space :=
+Metric.sphere 0 1
+def Conjecture1561.sphericalDistance : Conjecture1561.Space → Conjecture1561.Space → ℝ :=
+fun x y => InnerProductGeometry.angle x y
+def Conjecture1561.closedHemisphere : Conjecture1561.Space → Set Conjecture1561.Space :=
+fun v => {x | x ∈ Conjecture1561.sphereS2 ∧ 0 ≤ inner v x}
+def Conjecture1561.openHemisphere : Conjecture1561.Space → Set Conjecture1561.Space :=
+fun v => {x | x ∈ Conjecture1561.sphereS2 ∧ 0 < inner v x}
+def Conjecture1561.Admissible : Set Conjecture1561.Space → Prop :=
+fun A => A ⊆ Conjecture1561.sphereS2 ∧ ∀ x ∈ A, ∀ y ∈ A, Conjecture1561.sphericalDistance x y ≤ Real.pi / 2
+def Conjecture1561.IsAreaMaximizer : MeasureTheory.Measure Conjecture1561.Space → Set Conjecture1561.Space → Prop :=
+fun μ A => Conjecture1561.Admissible A ∧ ∀ (B : Set Conjecture1561.Space), Conjecture1561.Admissible B → μ B ≤ μ A
+def Conjecture1561.sphericalArea : MeasureTheory.Measure Conjecture1561.Space :=
+MeasureTheory.Measure.hausdorffMeasure 2
+def Conjecture1561.HemisphereExtremizerClaim : MeasureTheory.Measure Conjecture1561.Space → Prop :=
+fun μ => ∃ v ∈ Conjecture1561.sphereS2, Conjecture1561.IsAreaMaximizer μ (Conjecture1561.closedHemisphere v)
+def Conjecture1561.ConjectureFirstClause : Prop :=
+Conjecture1561.HemisphereExtremizerClaim Conjecture1561.sphericalArea
+def Conjecture1561.interiorLeft : Conjecture1561.Space → Conjecture1561.Space → Conjecture1561.Space :=
+fun v w => (3 / 5) • v + (4 / 5) • w
+def Conjecture1561.interiorRight : Conjecture1561.Space → Conjecture1561.Space → Conjecture1561.Space :=
+fun v w => (3 / 5) • v - (4 / 5) • w
+Conjecture1561.sphereS2_mem_iff (x : Conjecture1561.Space) : x ∈ Conjecture1561.sphereS2 ↔ ‖x‖ = 1
+Conjecture1561.sphericalDistance_eq_arccos_inner (x y : Conjecture1561.Space) (hx : x ∈ Conjecture1561.sphereS2)
+  (hy : y ∈ Conjecture1561.sphereS2) : Conjecture1561.sphericalDistance x y = Real.arccos (inner x y)
+Conjecture1561.exists_unit_orthogonal (v : Conjecture1561.Space) (hv : v ∈ Conjecture1561.sphereS2) :
+  ∃ w, ‖w‖ = 1 ∧ inner v w = 0
+Conjecture1561.closedHemisphere_antipodal_pair (v : Conjecture1561.Space) (hv : v ∈ Conjecture1561.sphereS2) :
+  ∃ w ∈ Conjecture1561.closedHemisphere v,
+    -w ∈ Conjecture1561.closedHemisphere v ∧ Conjecture1561.sphericalDistance w (-w) = Real.pi
+Conjecture1561.closedHemisphere_bad_pair (v : Conjecture1561.Space) (hv : v ∈ Conjecture1561.sphereS2) :
+  ∃ x ∈ Conjecture1561.closedHemisphere v,
+    ∃ y ∈ Conjecture1561.closedHemisphere v, Real.pi / 2 < Conjecture1561.sphericalDistance x y
+Conjecture1561.closedHemisphere_not_admissible (v : Conjecture1561.Space) (hv : v ∈ Conjecture1561.sphereS2) :
+  ¬Conjecture1561.Admissible (Conjecture1561.closedHemisphere v)
+Conjecture1561.interiorLeft_norm {v w : Conjecture1561.Space} (hv : ‖v‖ = 1) (hw : ‖w‖ = 1) (hvw : inner v w = 0) :
+  ‖Conjecture1561.interiorLeft v w‖ = 1
+Conjecture1561.interiorRight_norm {v w : Conjecture1561.Space} (hv : ‖v‖ = 1) (hw : ‖w‖ = 1) (hvw : inner v w = 0) :
+  ‖Conjecture1561.interiorRight v w‖ = 1
+Conjecture1561.inner_center_left {v w : Conjecture1561.Space} (hv : ‖v‖ = 1) (hvw : inner v w = 0) :
+  inner v (Conjecture1561.interiorLeft v w) = 3 / 5
+Conjecture1561.inner_center_right {v w : Conjecture1561.Space} (hv : ‖v‖ = 1) (hvw : inner v w = 0) :
+  inner v (Conjecture1561.interiorRight v w) = 3 / 5
+Conjecture1561.interiorLeft_mem_open {v w : Conjecture1561.Space} (hv : ‖v‖ = 1) (hw : ‖w‖ = 1) (hvw : inner v w = 0) :
+  Conjecture1561.interiorLeft v w ∈ Conjecture1561.openHemisphere v
+Conjecture1561.interiorRight_mem_open {v w : Conjecture1561.Space} (hv : ‖v‖ = 1) (hw : ‖w‖ = 1) (hvw : inner v w = 0) :
+  Conjecture1561.interiorRight v w ∈ Conjecture1561.openHemisphere v
+Conjecture1561.inner_interior_pair {v w : Conjecture1561.Space} (hv : ‖v‖ = 1) (hw : ‖w‖ = 1) (hvw : inner v w = 0) :
+  inner (Conjecture1561.interiorLeft v w) (Conjecture1561.interiorRight v w) = -(7 / 25)
+Conjecture1561.interior_distance_gt {v w : Conjecture1561.Space} (hv : ‖v‖ = 1) (hw : ‖w‖ = 1) (hvw : inner v w = 0) :
+  Real.pi / 2 < Conjecture1561.sphericalDistance (Conjecture1561.interiorLeft v w) (Conjecture1561.interiorRight v w)
+Conjecture1561.interior_bad_pair {v w : Conjecture1561.Space} (hv : ‖v‖ = 1) (hw : ‖w‖ = 1) (hvw : inner v w = 0) :
+  ∃ x ∈ Conjecture1561.openHemisphere v,
+    ∃ y ∈ Conjecture1561.openHemisphere v, Real.pi / 2 < Conjecture1561.sphericalDistance x y
+Conjecture1561.openHemisphere_bad_pair (v : Conjecture1561.Space) (hv : v ∈ Conjecture1561.sphereS2) :
+  ∃ x ∈ Conjecture1561.openHemisphere v,
+    ∃ y ∈ Conjecture1561.openHemisphere v, Real.pi / 2 < Conjecture1561.sphericalDistance x y
+Conjecture1561.openHemisphere_not_admissible (v : Conjecture1561.Space) (hv : v ∈ Conjecture1561.sphereS2) :
+  ¬Conjecture1561.Admissible (Conjecture1561.openHemisphere v)
+Conjecture1561.closedHemisphere_not_maximizer (μ : MeasureTheory.Measure Conjecture1561.Space)
+  (v : Conjecture1561.Space) (hv : v ∈ Conjecture1561.sphereS2) :
+  ¬Conjecture1561.IsAreaMaximizer μ (Conjecture1561.closedHemisphere v)
+Conjecture1561.openHemisphere_not_maximizer (μ : MeasureTheory.Measure Conjecture1561.Space) (v : Conjecture1561.Space)
+  (hv : v ∈ Conjecture1561.sphereS2) : ¬Conjecture1561.IsAreaMaximizer μ (Conjecture1561.openHemisphere v)
+Conjecture1561.no_hemisphere_extremizer (μ : MeasureTheory.Measure Conjecture1561.Space) :
+  ¬Conjecture1561.HemisphereExtremizerClaim μ
+Conjecture1561.conjecture_false : ¬Conjecture1561.ConjectureFirstClause
+'Conjecture1561.sphereS2_mem_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.sphericalDistance_eq_arccos_inner' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.exists_unit_orthogonal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.closedHemisphere_antipodal_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.closedHemisphere_bad_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.closedHemisphere_not_admissible' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.interiorLeft_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.interiorRight_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.inner_center_left' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.inner_center_right' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.interiorLeft_mem_open' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.interiorRight_mem_open' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.inner_interior_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.interior_distance_gt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.interior_bad_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.openHemisphere_bad_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.openHemisphere_not_admissible' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.closedHemisphere_not_maximizer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.openHemisphere_not_maximizer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.no_hemisphere_extremizer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1561.conjecture_false' depends on axioms: [propext, Classical.choice, Quot.sound]
