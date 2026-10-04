@@ -1,0 +1,34 @@
+def Conjecture1259.substitution : Fin 3 → List (Fin 3) :=
+![[0, 1], [0, 2], [0]]
+def Conjecture1259.incidenceCounts : Matrix (Fin 3) (Fin 3) ℕ :=
+fun i j => List.count i (Conjecture1259.substitution j)
+def Conjecture1259.incidenceMatrix : Matrix (Fin 3) (Fin 3) ℝ :=
+fun i j => ↑(Conjecture1259.incidenceCounts i j)
+def Conjecture1259.tribonacciCubic : Cubic ℝ :=
+{ a := 1, b := -1, c := -1, d := -1 }
+def Conjecture1259.threeRealEigenvalues : Prop :=
+Conjecture1259.incidenceMatrix.charpoly.roots.card = 3
+Conjecture1259.incidenceMatrix_eq : Conjecture1259.incidenceMatrix = !![1, 1, 1; 1, 0, 0; 0, 1, 0]
+Conjecture1259.incidence_charpoly :
+  Conjecture1259.incidenceMatrix.charpoly = Polynomial.X ^ 3 - Polynomial.X ^ 2 - Polynomial.X - 1
+Conjecture1259.transpose_charpoly :
+  Conjecture1259.incidenceMatrix.transpose.charpoly = Conjecture1259.incidenceMatrix.charpoly
+Conjecture1259.charpoly_eq_cubic : Conjecture1259.incidenceMatrix.charpoly = Conjecture1259.tribonacciCubic.toPoly
+Conjecture1259.cubic_discriminant : Conjecture1259.tribonacciCubic.disc = -44
+Conjecture1259.cubic_not_splits : ¬Polynomial.Splits (RingHom.id ℝ) Conjecture1259.tribonacciCubic.toPoly
+Conjecture1259.incidence_charpoly_not_splits : ¬Polynomial.Splits (RingHom.id ℝ) Conjecture1259.incidenceMatrix.charpoly
+Conjecture1259.threeRealEigenvalues_iff_splits :
+  Conjecture1259.threeRealEigenvalues ↔ Polynomial.Splits (RingHom.id ℝ) Conjecture1259.incidenceMatrix.charpoly
+Conjecture1259.conjecture1259_disproof : ¬Conjecture1259.threeRealEigenvalues
+Conjecture1259.transpose_charpoly_not_splits :
+  ¬Polynomial.Splits (RingHom.id ℝ) Conjecture1259.incidenceMatrix.transpose.charpoly
+'Conjecture1259.incidenceMatrix_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1259.incidence_charpoly' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1259.transpose_charpoly' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1259.charpoly_eq_cubic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1259.cubic_discriminant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1259.cubic_not_splits' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1259.incidence_charpoly_not_splits' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1259.threeRealEigenvalues_iff_splits' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1259.conjecture1259_disproof' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture1259.transpose_charpoly_not_splits' depends on axioms: [propext, Classical.choice, Quot.sound]

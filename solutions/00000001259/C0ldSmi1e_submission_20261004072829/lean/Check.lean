@@ -1,0 +1,27 @@
+import Conjecture1259
+
+#print Conjecture1259.substitution
+#print Conjecture1259.incidenceCounts
+#print Conjecture1259.incidenceMatrix
+#print Conjecture1259.tribonacciCubic
+#print Conjecture1259.threeRealEigenvalues
+#check Conjecture1259.incidenceMatrix_eq
+#check Conjecture1259.incidence_charpoly
+#check Conjecture1259.transpose_charpoly
+#check Conjecture1259.charpoly_eq_cubic
+#check Conjecture1259.cubic_discriminant
+#check Conjecture1259.cubic_not_splits
+#check Conjecture1259.incidence_charpoly_not_splits
+#check Conjecture1259.threeRealEigenvalues_iff_splits
+#check Conjecture1259.conjecture1259_disproof
+#check Conjecture1259.transpose_charpoly_not_splits
+#print axioms Conjecture1259.incidenceMatrix_eq
+#print axioms Conjecture1259.incidence_charpoly
+#print axioms Conjecture1259.transpose_charpoly
+#print axioms Conjecture1259.charpoly_eq_cubic
+#print axioms Conjecture1259.cubic_discriminant
+#print axioms Conjecture1259.cubic_not_splits
+#print axioms Conjecture1259.incidence_charpoly_not_splits
+#print axioms Conjecture1259.threeRealEigenvalues_iff_splits
+#print axioms Conjecture1259.conjecture1259_disproof
+#print axioms Conjecture1259.transpose_charpoly_not_splits
