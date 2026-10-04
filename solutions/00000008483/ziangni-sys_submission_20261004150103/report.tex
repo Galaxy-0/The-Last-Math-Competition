@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\title{A compact matrix family without an extremal norm}
+\author{ziangni-sys}
+\date{Conjecture 00000008483}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result.} The singleton family consisting of a nontrivial unipotent Jordan matrix is compact and has joint spectral radius one, but admits no extremal norm. Consequently it admits no Barabanov norm.
+
+\paragraph{Scope and definitions.}
+Both source languages assert existence of Barabanov norms for compact matrix families without an irreducibility assumption. For a bounded family $\mathcal K$ of linear operators, write
+\[
+M_n(\mathcal K)=\sup\{\|L_1\cdots L_n\|:L_i\in\mathcal K\},
+\qquad
+\rho(\mathcal K)=\limsup_{n\to\infty}M_n(\mathcal K)^{1/n},
+\]
+using any fixed reference operator norm. An extremal norm $N$ must satisfy
+\[
+N(Lx)\leq\rho(\mathcal K)N(x)\qquad(L\in\mathcal K,\ x\in\mathbb R^2).
+\]
+The Barabanov equality $\max_{L\in\mathcal K}N(Lx)=\rho(\mathcal K)N(x)$ is stronger. We exclude even the displayed inequalities, for every norm. This does not contradict existence results with irreducibility hypotheses.
+
+\paragraph{The compact family and its actual growth.}
+Take
+\[
+J=\begin{pmatrix}1&1\\0&1\end{pmatrix},\qquad \mathcal K=\{J\}.
+\]
+This is a compact matrix family. On $\mathbb R^2$ use the reference norm $\|(x,y)\|_\infty=\max(|x|,|y|)$. Direct induction gives
+\[
+J^n(x,y)=(x+ny,y)\qquad(n\geq0).
+\]
+The triangle inequality implies $\|J^nv\|_\infty\leq(n+1)\|v\|_\infty$. At $v=(1,1)$, equality holds, so the actual induced operator norm is
+\[
+\|J^n\|_\infty=n+1.
+\]
+Every length-$n$ word in $\mathcal K$ is precisely $J^n$. Thus the supremum over all such words is $M_n(\mathcal K)=n+1$, and
+\[
+\rho(\mathcal K)=\lim_{n\to\infty}(n+1)^{1/n}=1.
+\]
+For example, the last limit follows from $\log(n+1)/n\to0$ and continuity of the exponential. This computes the actual joint spectral radius from products, not just an asserted eigenvalue.
+
+\newpage
+\begin{theorem}
+There is no norm $N$ on $\mathbb R^2$ such that $N(Jx)\leq N(x)$ for every $x$.
+\end{theorem}
+\begin{proof}
+Assume such a norm exists. Iterating the inequality yields $N(J^nx)\leq N(x)$ for every $n\geq0$. Let $e_1=(1,0)$ and $e_2=(0,1)$. Since $J^ne_2=ne_1+e_2$, homogeneity and the triangle inequality give
+\[
+nN(e_1)=N(J^ne_2-e_2)
+\leq N(J^ne_2)+N(e_2)\leq2N(e_2)
+\]
+for every natural number $n$. But $N(e_1)>0$ by positive definiteness. Choosing $n>2N(e_2)/N(e_1)$ is a contradiction.
+\end{proof}
+
+Since $\rho(\mathcal K)=1$, the theorem excludes every extremal norm and hence every Barabanov norm for this compact family. The invariant line $\mathbb R e_1$ makes the family reducible; this is precisely why compactness alone is insufficient. The other source conjuncts about uniqueness and computational rates are unnecessary to the disproof.
+
+\paragraph{Formal correspondence.}
+The Lean project defines the actual continuous linear map $J(x,y)=(x+y,y)$ on the product normed space $\mathbb R\times\mathbb R$, whose norm is the maximum norm. It also defines the displayed two-by-two matrix and proves that its matrix-vector multiplication is exactly this map. The singleton operator family is proved compact.
+
+The theorem \texttt{power\_apply} covers every power and vector. The theorem \texttt{power\_norm} proves the exact operator norm using both the universal upper bound and the unit vector $(1,1)$ attaining it. The definition \texttt{products} ranges over all finite lists of the prescribed length with every factor in the family; \texttt{products\_singleton} proves its full classification. The quantity \texttt{jointBound} is the genuine real supremum of norms of these products. Its exact value, the actual limit of its $n$-th roots, and the resulting \texttt{jointRadius} limsup are all proved.
+
+An arbitrary candidate norm is represented by a Mathlib \texttt{Seminorm} with the additional positive-definiteness condition $N(x)=0\Rightarrow x=0$. This includes every real norm and does not impose any extra continuity, coordinate, or reference-norm restriction. The theorem \texttt{no\_nonexpansive\_norm} proves the universal obstruction using its actual triangle inequality and scalar homogeneity. The final theorem \texttt{no\_extremal\_norm} combines it with the computed joint spectral radius.
+
+\paragraph{Reproduction.}
+The project pins Lean 4.19.0 and Mathlib commit \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}. Run \texttt{lake build} from \texttt{lean/}. Principal theorems print their axiom dependencies. No admitted facts, additional axioms or external decision procedures are used.
+\end{document}
