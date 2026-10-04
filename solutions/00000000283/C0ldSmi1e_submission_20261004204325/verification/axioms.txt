@@ -1,0 +1,67 @@
+def Conjecture283.factor : ℕ → ℝ :=
+fun n => Real.cos (Real.pi / (↑n + 3))
+def Conjecture283.prefix : ℕ → ℝ :=
+fun n => ∏ k ∈ Finset.range n, Conjecture283.factor k
+def Conjecture283.constant : ℝ :=
+∏' (n : ℕ), Conjecture283.factor n
+def Conjecture283.partialProduct : ℕ → ℝ :=
+fun N => ∏ k ∈ Finset.Icc 3 N, Real.cos (Real.pi / ↑k)
+def Conjecture283.CubicConvergence : Prop :=
+(fun N => Conjecture283.partialProduct N - Conjecture283.constant) =O[Filter.atTop] fun N => (↑N ^ 3)⁻¹
+Conjecture283.factor_pos (n : ℕ) : 0 < Conjecture283.factor n
+'Conjecture283.factor_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.factor_le_one (n : ℕ) : Conjecture283.factor n ≤ 1
+'Conjecture283.factor_le_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.factor_deficit_nonneg (n : ℕ) : 0 ≤ 1 - Conjecture283.factor n
+'Conjecture283.factor_deficit_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.factor_deficit_lower (n : ℕ) : 2 / (↑n + 3) ^ 2 ≤ 1 - Conjecture283.factor n
+'Conjecture283.factor_deficit_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.factor_deficit_upper (n : ℕ) : 1 - Conjecture283.factor n ≤ Real.pi ^ 2 / 2 / (↑n + 3) ^ 2
+'Conjecture283.factor_deficit_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.summable_factor_sub_one : Summable fun n => Conjecture283.factor n - 1
+'Conjecture283.summable_factor_sub_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.summable_log_factor : Summable fun n => Real.log (Conjecture283.factor n)
+'Conjecture283.summable_log_factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.constant_eq_exp_logSum : Conjecture283.constant = Real.exp (∑' (n : ℕ), Real.log (Conjecture283.factor n))
+'Conjecture283.constant_eq_exp_logSum' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.constant_pos : 0 < Conjecture283.constant
+'Conjecture283.constant_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.hasProd_factor : HasProd Conjecture283.factor Conjecture283.constant
+'Conjecture283.hasProd_factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.tendsto_prefix : Filter.Tendsto Conjecture283.prefix Filter.atTop (nhds Conjecture283.constant)
+'Conjecture283.tendsto_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.prefix_succ (n : ℕ) : Conjecture283.prefix (n + 1) = Conjecture283.prefix n * Conjecture283.factor n
+'Conjecture283.prefix_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.prefix_pos (n : ℕ) : 0 < Conjecture283.prefix n
+'Conjecture283.prefix_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.prefix_antitone : Antitone Conjecture283.prefix
+'Conjecture283.prefix_antitone' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.constant_le_prefix (n : ℕ) : Conjecture283.constant ≤ Conjecture283.prefix n
+'Conjecture283.constant_le_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.partialProduct_add_two (n : ℕ) : Conjecture283.partialProduct (n + 2) = Conjecture283.prefix n
+'Conjecture283.partialProduct_add_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.tendsto_partialProduct :
+  Filter.Tendsto Conjecture283.partialProduct Filter.atTop (nhds Conjecture283.constant)
+'Conjecture283.tendsto_partialProduct' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.prefix_error_lower (n : ℕ) :
+  2 * Conjecture283.constant / (↑n + 3) ^ 2 ≤ Conjecture283.prefix n - Conjecture283.constant
+'Conjecture283.prefix_error_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.error_lower (N : ℕ) (hN : 3 ≤ N) :
+  2 * Conjecture283.constant / (↑N + 1) ^ 2 ≤ Conjecture283.partialProduct N - Conjecture283.constant
+'Conjecture283.error_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.cubic_scaled_unbounded_of_lower (e : ℕ → ℝ) (K : ℝ) (hK : 0 < K)
+  (hlower : ∀ (N : ℕ), 3 ≤ N → 2 * K / (↑N + 1) ^ 2 ≤ e N) (C : ℝ) (N₀ : ℕ) : ∃ N, N₀ ≤ N ∧ C < ↑N ^ 3 * |e N|
+'Conjecture283.cubic_scaled_unbounded_of_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.not_cubic_bigO_of_lower (e : ℕ → ℝ) (K : ℝ) (hK : 0 < K)
+  (hlower : ∀ (N : ℕ), 3 ≤ N → 2 * K / (↑N + 1) ^ 2 ≤ e N) : ¬e =O[Filter.atTop] fun N => (↑N ^ 3)⁻¹
+'Conjecture283.not_cubic_bigO_of_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.cubic_scaled_error_unbounded (C : ℝ) (N₀ : ℕ) :
+  ∃ N, N₀ ≤ N ∧ C < ↑N ^ 3 * |Conjecture283.partialProduct N - Conjecture283.constant|
+'Conjecture283.cubic_scaled_error_unbounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.cubic_bound_counterexample (C : ℝ) (N₀ : ℕ) :
+  ∃ N, max N₀ 3 ≤ N ∧ C / ↑N ^ 3 < |Conjecture283.partialProduct N - Conjecture283.constant|
+'Conjecture283.cubic_bound_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.not_cubic_convergence : ¬Conjecture283.CubicConvergence
+'Conjecture283.not_cubic_convergence' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture283.conjecture_283 : ¬Conjecture283.CubicConvergence
+'Conjecture283.conjecture_283' depends on axioms: [propext, Classical.choice, Quot.sound]
