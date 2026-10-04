@@ -1,0 +1,26 @@
+# Solution Review — Conjecture 00000003556 (PR 455)
+
+**Submission:** gaochengzhecpu — `gaochengzhecpu_submission_20261004115947`
+**Reviewer:** independent competition review pipeline (structure + build + semantic audit)
+**Date:** 2026-10-04
+
+## Checklist results
+- Conjecture read: yes — the official bilingual statement says, in substance, that the infinite-dimensional Borsuk chromatic number for diameter partitions of infinite-dimensional spaces is finite, with the minimum governed by the hyperplane obstruction. The submission refutes the explicit finiteness clause by a bounded set in the genuine infinite-dimensional real Hilbert space \(\ell^2(\mathbb N)\).
+- Change scope: `git diff --name-status 4cc82278...bcb7c958` contains only the allowed new directory above. No conjecture, metadata, review, or root files were changed. Base metadata had neither `proven` nor `disproven` set and no prior solution.
+- LaTeX: independently compiled from a fresh copied tree with `latexmk -pdf -interaction=nonstopmode -halt-on-error -output-directory=independent-pdf main.tex` (exit 0; two pages; final log has no LaTeX errors or unresolved warnings). The shipped two-page PDF's extracted text agrees with the fresh output up to font-engine ligature/spacing extraction artifacts and the visually equivalent `\bigcup` glyph; normalized character similarity was 0.99979. Both shipped PDF pages were also split and rasterized successfully.
+- Lean build: fresh copied project, Lean 4.19.0 / Lake 5.0.0, Mathlib pinned at `c44e0c8ee63ca166450922a373c7409c5d26b00b`; official cache artifacts for that exact revision were staged, then `lake build` exited 0 (`[2079/2080] Built Main`, “Build completed successfully”). The direct warning-as-error check `lake env lean -DwarningAsError=true Main.lean` also exited 0. All nine audited results (`space_complete`, `unit_vectors_independent`, `space_infinite_dimensional`, `distance_unit_vectors`, `S_bounded`, `S_diameter`, `no_finite_smaller_diameter_cover`, `counterexample`, and `conjecture_false`) depend only on `[propext, Classical.choice, Quot.sound]`.
+- Forbidden content: executable-source scan found no `sorry`, `admit`, `native_decide`, axiom declaration, `unsafe`, `@[implemented_by]`, `extern`, or `skipKernelTC`. Broad textual hits are prose-only claims that these constructs are absent.
+- Auxiliary code: none claimed or needed; the argument is exact and infinite, not a finite truncation or numeric experiment.
+## Semantic audit
+The Lean ambient type is Mathlib's actual `lp (fun _ : ℕ => ℝ) 2`, not an abstract distance structure. Completeness is inferred from the library's Hilbert-space instance. The vectors are actual `lp.single 2 n 1`; their coordinate formula, norm one, pairwise orthogonality, and distance \(\sqrt2\) are proved. Linear independence is established by evaluating a finite relation at each coordinate, and this infinite independent family proves \(\neg \mathrm{FiniteDimensional}(\mathbb R,E)\). Thus the counterexample is non-vacuous in a genuine infinite-dimensional Hilbert space.
+
+For \(S=\{e_n:n\in\mathbb N\}\), every pair has distance at most \(\sqrt2\), while \(e_0\) and \(e_1\) attain \(\sqrt2\). The proof establishes both bounds, hence exactly `Metric.diam S = sqrt 2`; boundedness is proved before applying the diameter operation. If finitely many subsets of \(S\) each had diameter strictly below \(\sqrt2\), assigning every \(e_n\) to a covering part gives a finite coloring of infinitely many vectors. Infinite pigeonhole produces distinct \(e_i,e_j\) in one part. Their distance is exactly the full diameter, contradicting the part's strict-diameter hypothesis. This is stronger than refuting finite partitions because the parts need not be disjoint. The final `FinitenessClauseInE` is the universal finite-cover assertion for every nonempty bounded positive-diameter subset of this Hilbert space, and `conjecture_false` refutes it at the constructed witness.
+
+The LaTeX proof matches this formal argument and states its interpretation honestly: it refutes the source's finiteness clause under the standard bounded-metric Borsuk reading, works even if “infinite-dimensional spaces” means Hilbert spaces, leaves compact-set variants out of scope, and does not invent an interpretation of the separately unspecified hyperplane-obstruction invariant. Since the conjunction contains an explicit finite-chromatic-number assertion and \(S\)'s diameter graph is countably infinite and complete, the countable lower and upper coloring bounds described in prose are also mathematically correct.
+## Issues found
+none blocking
+## Verdict rationale
+The report and formal proof use a genuine infinite-dimensional Hilbert space and a simple equilateral coordinate-vector set to disprove decisively the conjecture's finiteness clause. All non-vacuity conditions and exact theorem/conjecture correspondence were checked independently. The LaTeX and Lean projects rebuild successfully, and only the three standard foundational axioms occur.
+
+## Disposition
+APPROVED — ready to merge (PR 455). Independent fresh rebuild, direct warning-as-error Lean check, axiom audit, PDF comparison/rebuild, source inspection, forbidden-pattern scan, and semantic audit all passed.
