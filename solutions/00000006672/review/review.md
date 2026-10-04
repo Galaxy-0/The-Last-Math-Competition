@@ -1,0 +1,31 @@
+# Solution Review — Conjecture 00000006672 (PR 373)
+
+**Submission:** ziangni-sys — `ziangni-sys_submission_20261004021401`
+**Reviewer:** competition review pipeline (structure + build + semantic audit)
+**Date:** 2026-10-04
+
+## Checklist results
+- Conjecture read: yes — for the transportation LP, "the polytope vertices are spanning trees; the criterion of nondegeneracy is full tree capacity; tree-structure enumeration is by the matrix-tree theorem" (disproof: a degenerate vertex whose positive support is disconnected, hence not a spanning tree).
+- LaTeX: compiled from scratch in /tmp/tlmc-review5/scratch/pr-373 (pdflatex twice, exit 0, 2 pages, no errors); shipped report.pdf is a real PDF with text identical to the recompile.
+- Lean build: fresh `rm -rf .lake && lake build` exit 0 (1215 tasks, "Build completed successfully", zero warnings), toolchain leanprover/lean4:v4.19.0, Mathlib pinned at c44e0c8ee63ca166450922a373c7409c5d26b00b (v4.19.0) and fetched from the public manifest; `lake env lean Main.lean` exit 0; `#print axioms` shows only [propext, Classical.choice, Quot.sound]. (Mathlib cloud cache binary crashes under dyld on this macOS, so the build compiled from source — an even stronger check.)
+- Forbidden content: grep over all .lean files for `sorry`, `admit`, `native_decide`, `axiom` declarations, `unsafe`, `@[implemented_by]`, `extern`, `skipKernelTC` — nothing found.
+- Auxiliary code: none shipped ("No auxiliary computational verifier is necessary for this symbolic proof") — none needed; the counterexample is 2×2 and I re-derived it by hand: P is the segment between I and the anti-diagonal, both endpoints are vertices, each support is 2 disjoint edges.
+## Semantic audit
+Conjecture (literal, EN+CN): "The polytope vertices are spanning trees" / "多面体顶点为支撑树" (support trees), followed by clauses on nondegeneracy and the matrix-tree theorem. The first clause carries no nondegeneracy restriction; the submission falsifies exactly that clause.
+
+Lean encodings (all in `Transport` namespace, Main.lean):
+- `def P : Set Mat := {X | (∀ i j, 0 ≤ X i j) ∧ (∀ i, X i false + X i true = 1) ∧ (∀ j, X false j + X true j = 1)}` — the real 2×2 transportation polytope with all four margins 1 (balanced, strictly positive margins), `Mat := Bool → Bool → ℝ`.
+- `theorem diagonal_extreme : diagonal ∈ P.extremePoints ℝ` — Mathlib's genuine real extreme-point set (`x ∈ A.extremePoints 𝕜 ↔ x ∈ A ∧ ∀ x₁ x₂ ∈ A, x ∈ openSegment 𝕜 x₁ x₂ → x₁ = x ∧ x₂ = x`, verified in the pinned Mathlib source): arbitrary real feasible endpoints, positive real weights summing to one; the proof forces off-diagonal entries of both endpoints to 0 and solves to A = B = D.
+- `def support (X : Mat) : SimpleGraph Node` on `Node := Sum Bool Bool` (all 4 row+column vertices retained) with adjacency across the bipartition exactly when `0 < X i j`; `support_disconnected : ¬ (support diagonal).Connected` via `support_walk_preserves_index` (walk induction: every edge preserves the Bool index, so no r₀→r₁ walk); `support_not_tree : ¬ (support diagonal).IsTree` — Mathlib `IsTree` = `isConnected ∧ IsAcyclic` (verified), and a spanning tree must be connected on all four vertices.
+- `theorem counterexample : ∃ X : Mat, X ∈ P.extremePoints ℝ ∧ ¬ (support X).IsTree` and `theorem not_all_vertices_have_tree_support : ¬ (∀ X ∈ P.extremePoints ℝ, (support X).IsTree)` — the direct negation of the first clause for this polytope.
+
+(i) Definitions faithful: real transportation polytope, genuine Mathlib extreme points/vertex notion, the standard bipartite positive-support graph on all row/column vertices, Mathlib tree = connected+acyclic. (ii) Hypotheses satisfied: the witness is a balanced transportation LP with strictly positive margins; D ∈ P is an extreme point. (iii) Contradiction: support = {r₀c₀, r₁c₁}, two components, not a spanning tree, yet D is a vertex — the universal claim "vertices are (spanning/support) trees" is false; since the conjecture is a conjunction, falsifying the first clause suffices. (iv) Not vacuous: the actual conjectural objects (transportation polytope, vertex, support tree) are all present and quantified; this is the textbook degenerate transportation example (rank 3 constraints, 2 positive entries), and the report §3 correctly explains why a spanning-tree *basis* (adding the zero entry r₀c₁ to get a 3-edge spanning tree of K₂,₂) is a different object than the positive support the statement names.
+
+FLAG (non-blocking): the counterexample is a degenerate vertex of a 2×2 polytope. The classical true statement behind the conjecture is "every vertex admits a spanning-tree basis"; under that basis-reading the first clause would be true. The literal bilingual wording says the vertices (their support) ARE spanning trees with no nondegeneracy restriction, and the submission's report explicitly analyzes and discloses this distinction. Per the repo's precedent that the literal bilingual statement is authoritative and degenerate counterexamples are acceptable when the text carries no restriction, this is approving — but the coordinator should be aware the disproof hinges on the support-vs-basis reading.
+## Issues found
+none blocking (interpretive flag above)
+## Verdict rationale
+The submission exhibits a genuine vertex (identity matrix) of a genuine real transportation polytope with positive margins whose positive-support graph is disconnected and therefore not a spanning tree, contradicting the conjecture's first clause exactly as literally worded in both languages. The Lean project builds fresh from source with only standard axioms, uses Mathlib's real extreme-point and tree definitions rather than surrogates, and the report honestly treats the degenerate-basis subtlety. LaTeX and PDF check out; the folder name conforms to the `[GitHub_ID]_submission_<14-digit ts>` pattern.
+
+## Disposition
+APPROVED — merged into main (PR 373). Independent fresh rebuild of the Lean project (exit 0; only standard foundational axioms; no sorry/native_decide/extra axioms), LaTeX recompilation, auxiliary-script re-runs where shipped, independent recomputations, and a semantic audit confirming the Lean theorem establishes or refutes the conjecture as stated in both language versions.
