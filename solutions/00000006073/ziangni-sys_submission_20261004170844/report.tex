@@ -1,0 +1,122 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=27mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\setlength{\emergencystretch}{2em}
+\title{An analytic spurious stationary point with a positive-measure basin\\
+\large Disproof of conjecture 00000006073}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+The source explicitly defines spurious minima as stationary
+points with zero gradient that are not minima. Its final
+conjunct states that their attraction basins have measure zero,
+including in the analytic case.
+The analytic function $f(x)=x^3$ disproves that assertion for
+the standard continuous gradient flow.
+The separate smoothing and Morse-index assertions are unused.
+
+\textbf{Actual analytic objective and stationary point.}
+Work on the real Euclidean line and set
+\[
+ f(x)=x^3.
+\]
+This polynomial is real analytic at every point. Its actual
+derivative and Hilbert-space gradient are
+\[
+ f'(x)=\nabla f(x)=3x^2.
+\]
+In particular $\nabla f(0)=0$.
+
+The origin is not a local minimum. Every neighborhood contains
+a negative point, where $f(x)<0=f(0)$.
+More explicitly, if a neighborhood ball has radius $\varepsilon>0$,
+then $-\varepsilon/2$ lies in that ball and satisfies
+\[
+ f(-\varepsilon/2)=-(\varepsilon/2)^3<0.
+\]
+Thus the origin is a spurious stationary point under the
+source's explicit definition.
+It is a degenerate stationary inflection point, rather than a
+nondegenerate strict saddle. No such nondegeneracy hypothesis
+appears in the source.
+
+\textbf{Exact gradient flow for all positive starts.}
+For each $s>0$, define
+\[
+ u_s(t)=\frac{s}{1+3st},\qquad t\geq0 .
+\]
+The denominator is strictly positive for every forward time,
+and $u_s(0)=s$. Direct differentiation gives
+\[
+ u_s'(t)=-\frac{3s^2}{(1+3st)^2}
+        =-3u_s(t)^2=-\nabla f(u_s(t)).
+\]
+This is an actual global forward gradient-flow solution.
+
+\newpage
+\textbf{Convergence of every such trajectory.}
+Since $s>0$, the denominator tends to infinity as $t\to\infty$.
+Consequently
+\[
+ \lim_{t\to\infty}u_s(t)=0.
+\]
+All positive initial conditions therefore lie in the attraction
+basin of the spurious point.
+
+For clarity, define the forward-flow basin directly by
+\[
+ B=\left\{s\in\mathbb R:
+ \begin{array}{l}
+ \text{there exists a forward trajectory }u,\ u(0)=s,\\
+ u'(t)=-\nabla f(u(t))\text{ for all }t\geq0,\\
+ u(t)\longrightarrow0\text{ as }t\to\infty
+ \end{array}\right\}.
+\]
+The derivative in this definition is the genuine real
+derivative, not a prescribed scalar value. The vector field
+$-3x^2$ is smooth and locally Lipschitz, so its usual local
+uniqueness also agrees with the standard gradient-flow basin.
+For the counterexample only the explicit global trajectories
+above are needed.
+
+\textbf{Actual positive Lebesgue measure.}
+The preceding formulas prove
+\[
+ (0,1)\subseteq B.
+\]
+For ordinary Lebesgue measure $\lambda$ on $\mathbb R$,
+monotonicity and the exact interval-measure formula give
+\[
+ \lambda(B)\geq\lambda((0,1))=1>0.
+\]
+The formal proof uses the actual Lebesgue outer measure on sets,
+so no measurability assumption about the basin is needed to
+exclude nullity. In particular the basin cannot have measure zero.
+
+\textbf{Scope.}
+The disproof targets the attraction-basin nullity assertion,
+under continuous gradient descent on the actual analytic
+objective. It does not assert a failure of a theorem restricted
+to nondegenerate strict saddles. The source's wider definition
+expressly includes stationary nonminima such as the analytic
+inflection point used here.
+No claim about the separate smoothing, index or critical-point
+count formulas is required.
+
+\textbf{Formal correspondence and reproduction.}
+Lean proves real analyticity, the actual derivative and gradient,
+stationarity, failure of local minimality, the explicit initial
+condition, the genuine differential equation at every
+nonnegative time, the actual limit, interval inclusion in the
+defined gradient-flow basin, and its actual Lebesgue measure
+lower bound. The final theorem combines those properties.
+
+Run \texttt{lake build} in \texttt{lean/} with Lean 4.19.0 and
+public Mathlib revision:
+\begin{center}\small
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}
+\end{center}
+The project prints the relevant axiom audits.
+\end{document}
