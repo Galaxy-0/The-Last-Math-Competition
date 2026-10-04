@@ -1,0 +1,75 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Alternating projections need not select the nearest point\\Disproof of conjecture 00000008858}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\paragraph{Source clause.}
+Both original versions assert that alternating orthogonal projections between two closed convex sets always converge weakly to nearest points in their intersection. We refute the nearest-point assertion even with a nonempty intersection in the Euclidean Hilbert space $\mathbb R^2$. The sequence actually stabilizes and converges strongly, so weak convergence is not the obstruction.
+
+\paragraph{The sets and projections.}
+Write a point as $(s,t)$ and put
+\[
+ A=\{(s,t):t\ge0\},\qquad B=\{(s,t):s\le t\}.
+\]
+Both are closed convex halfspaces. Their metric projections are
+\[
+ P_A(s,t)=(s,\max(0,t)),\qquad
+ P_B(s,t)=
+ \begin{cases}
+ (s,t),&s\le t,\\
+ ((s+t)/2,(s+t)/2),&s>t.
+ \end{cases}
+\]
+These formulas are genuine nearest-point projections. For $A$, the first coordinate is unchanged and the second minimizes squared distance to $[0,\infty)$. Explicitly, when $t<0$ and $v\ge0$,
+$(t-v)^2-t^2=v^2-2tv\ge0$.
+For $B$, the formula is the identity inside $B$. Outside, let $m=(s+t)/2$. For any $(u,v)\in B$,
+\[
+ (s-u)^2+(t-v)^2-\bigl((s-m)^2+(t-m)^2\bigr)
+ =(u-m)^2+(v-m)^2+(s-t)(v-u)\ge0.
+\]
+Both projections have their images in their respective sets. The inequalities prove minimization, and equality forces the displayed projected point, proving uniqueness.
+
+\begin{theorem}
+From $x_0=(2,-1)$, alternating projections onto $A$ and then $B$ converge to $(1,1)$, which is not a nearest point of $A\cap B$ to $x_0$.
+\end{theorem}
+\begin{proof}
+The first two projections are
+\[
+ (2,-1)\xrightarrow{P_A}(2,0)\xrightarrow{P_B}(1,1).
+\]
+Both projections fix $(1,1)$, which lies in $A\cap B$. Every later point is therefore $(1,1)$. In particular, for the usual complete-cycle iterates $x_{n+1}=P_BP_Ax_n$, every $x_n$ with $n\ge1$ is $(1,1)$.
+
+But $q=(1/2,1/2)$ also lies in $A\cap B$, and
+\[
+ \|x_0-q\|^2=\frac92<5=\|x_0-(1,1)\|^2.
+\]
+Thus the stabilized limit is not nearest to the initial point. The same limit holds if every individual projection is indexed separately. Every continuous linear functional is eventually constant on either sequence, so weak convergence has this unique limit and cannot instead select a nearest point.
+\end{proof}
+
+\newpage
+\paragraph{Scope.}
+The counterexample uses intersecting closed convex sets, actual orthogonal metric projections and a unique stabilized limit. It does not rely on infeasibility or infinite-dimensional issues. The source's later assertions about strong-convergence criteria, angle-dependent rates and empty intersections are separate conjuncts; failure of the first nearest-point assertion suffices to disprove the full conjunction. The example is consistent with convergence to some feasible point, which is a weaker assertion.
+
+\paragraph{Formal objects and full projection verification.}
+The Lean space is the actual Euclidean plane, using Mathlib\textquotesingle s \path{EuclideanSpace} over $\mathbb R$ indexed by \path{Fin 2}. Its norm and distance are Euclidean. The sets are the actual coordinate halfspaces. Their closedness follows from continuity of actual coordinate projections, and convexity is proved for all nonnegative convex-combination coefficients.
+
+The theorem \path{sq_dist} derives the squared Euclidean distance formula from Mathlib's actual norm. The predicate \path{Nearest} requires membership and a distance upper bound against every point in the set. Theorems \path{pA_nearest} and \path{pB_nearest} verify the projection formulas for every input and every candidate point. No claimed projection or minimized distance is assumed as data.
+
+The actual recurrence \path{iterates} applies \path{pB} after \path{pA} each cycle, starting at the displayed point. \path{projection_steps} proves the first two projections and both fixed-point identities. \path{all_iterates} covers every subsequent cycle by induction, and \path{strong_limit} is actual topological convergence in the Euclidean space.
+
+\paragraph{Weak limit and necessary failure.}
+The definition \path{WeaklyConverges} is the standard criterion that every actual continuous linear functional converges to its value at the proposed limit. It is not a new topology or a claim that a different topology API was used. Strong convergence yields \path{weak_limit}. To prove uniqueness, \path{weak_limit_unique} applies the criterion to the actual continuous linear coordinate maps and uses uniqueness of real limits. Thus any proposed weak limit must equal $(1,1)$.
+
+The theorem \path{strictly_nearer} proves the strict inequality using actual distances. The final theorem \path{no_nearest_weak_limit} negates the existence of a point that is both a weak limit of the actual cycle sequence and a nearest point in the intersection. The packaged \path{counterexample} also states closedness, convexity, intersection nonemptiness, projection correctness for all inputs, and weak convergence to a nonnearest point.
+
+The individually indexed sequence \path{fullOrbit} is also formalized. Its recurrence alternates the actual projections according to index parity; its strong limit is proved, and \path{fullOrbit_no_nearest_weak_limit} proves the same negation for this full sequence.
+
+\paragraph{Reproduction.}
+Lean 4.19.0 and Mathlib are pinned to the public commit:\\
+\path{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+From \path{lean}, run \texttt{lake build} and \texttt{lake env lean} with arguments \path{-DwarningAsError=true} and \path{Main.lean}. Principal statements print axiom audits. No admitted proof, additional axiom or computation-trust shortcut is used.
+\end{document}
