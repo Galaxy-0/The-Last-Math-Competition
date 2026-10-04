@@ -1,0 +1,7 @@
+# Completed verification
+
+Fresh complete project build passed (`lean-build.txt`). Direct checking of the whole final Main.lean with warnings treated as errors passed (`lean-check.txt`). Six audited theorem dependencies use only propext, Classical.choice and Quot.sound. No admitted proofs, custom axioms or native decision shortcuts are used. Actual complex matrix algebra and exact real powers/inequalities are kernel checked; no numerical auxiliary program is needed.
+
+Tectonic compiled the final two-page A4 PDF without boxwarnings (`pdf-build.txt`). Both pages were rendered with Poppler at1400pixels and inspected in full: clear formulas and readable layout, no clipping/overlap. The built-in editor/compiler were attempted; compiler returned known platform standard-directory lookup failure. Tectonic generated the actual final PDF successfully.
+
+Source and eligibility preserved in source.md and eligibility.txt. Scope: the general-p quasi-triangle coefficient2^(1−1/p), disproved atp1/2 by actual complex1×1 matrices. Gram matrix, full eigenvalue condition and nonnegative-square-root singular values are proved, followed by the actual Schatten finite-sum/rpow definition. The final theorem negates the universal bound in the genuine1D specialization, hence the broader source claim fails. Other source clauses are not addressed. Every finite-dimensional matrix belongs to all positive-p Schatten classes, so no compactness or summability restrictions exclude the witnesses. No dependency cache writes occurred.
