@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem*{proposition}{Counterexample}
+\title{Homothetic squares disprove the congruence equality condition}
+\author{Conjecture 00000007136 \quad ziangni-sys}
+\date{}
+\begin{document}
+\maketitle
+The conjecture defines mixed volumes through the volume polynomial of Minkowski sums, then asserts Alexandrov--Fenchel log-concavity with equality characterized by congruence. The equality classification is false already for two full-dimensional convex bodies in the Euclidean plane. This counterexample does not challenge the Alexandrov--Fenchel inequality.
+
+\begin{proposition}
+Let $K=[0,1]^2$ and $L=[0,2]^2\subset\mathbb R^2$. Then
+\[
+ V(K,L)^2=V(K,K)V(L,L),
+\]
+but $K$ and $L$ are not congruent.
+\end{proposition}
+\begin{proof}
+Both squares are compact and convex with nonempty interior. For arbitrary $s,t\geq0$, their actual Minkowski combination satisfies
+\[
+ sK+tL=[0,s+2t]^2.
+\]
+The forward inclusion follows coordinatewise. For the reverse inclusion, put $d=s+2t$. If $d=0$, all three sets reduce to the origin. If $d>0$ and $z\in[0,d]^2$, then $x=z/d\in K$, $y=2z/d\in L$, and $z=sx+ty$.
+
+Consequently, ordinary two-dimensional Lebesgue area gives the volume polynomial
+\[
+ \operatorname{area}(sK+tL)=(s+2t)^2=s^2+4st+4t^2.
+\]
+Under the standard mixed-area normalization
+\[
+ \operatorname{area}(sK+tL)
+ =s^2V(K,K)+2stV(K,L)+t^2V(L,L),
+\]
+its coefficients are $V(K,K)=1$, $V(K,L)=2$, and $V(L,L)=4$. Thus equality holds: $2^2=1\cdot4$. Equivalently, the cross coefficient is obtained by polarization:
+\[
+ V(K,L)=\frac{\operatorname{area}(K+L)-\operatorname{area}(K)-\operatorname{area}(L)}2=2.
+\]
+
+For any $x,y\in K$, each coordinate difference has absolute value at most $1$, so $\|x-y\|_2^2\leq2$. But the two points $(0,0),(2,2)\in L$ have squared Euclidean distance $8$. If an ambient Euclidean isometry sent $K$ onto $L$, their preimages in $K$ would also have squared distance $8$, a contradiction. This excludes all congruences, including arbitrary translations and orthogonal transformations.
+\end{proof}
+
+The squares are homothetic, with dilation factor $2$, but not congruent. No volume normalization or identification up to scaling is imposed by either version of the source; such an additional restriction would be a different equality statement.
+
+\paragraph{Formal verification.}
+The accompanying Lean project defines the actual squares as coordinate intervals, Minkowski combinations by their defining existential quantifiers, and area using Mathlib's Lebesgue measure. It proves the combination identity and the area polynomial for every $s,t\geq0$, and derives mixed area by polarization. It also transports the squares to \texttt{EuclideanSpace}, proving compactness, convexity, nonempty interior, and equality of coordinate and Euclidean volumes through Mathlib's volume-preserving coordinate equivalence. Noncongruence quantifies over every ambient \texttt{IsometryEquiv} and uses the genuine Euclidean distance formula. The proof uses Lean 4.19.0 and pinned Mathlib; printed axiom audits use only the standard axioms.
+\end{document}
