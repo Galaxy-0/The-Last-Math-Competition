@@ -1,0 +1,365 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\wt}{\operatorname{wt}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\tb}[2]{\mathtt{#1/#2}}
+
+\title{Disproof of Conjecture 00000003831:\\
+a seminormal $\mathfrak{gl}_3$ crystal whose character is $s_{21}-s_{111}$}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000003831 asserts that for every finite crystal $B$ the Schur expansion of the
+Weyl symmetrization of the character $\ch(B)$ has nonnegative coefficients, and that for
+$B=B(\lambda)\otimes B(\mu)$ these coefficients are the Littlewood--Richardson coefficients.
+The first clause is false. We exhibit a connected $7$-vertex \emph{seminormal} $\mathfrak{gl}_3$
+crystal $B_7$, obtained from $B(2,1,0)$ by deleting one of its two vertices of weight $(1,1,1)$
+and re-gluing the strings through the other one. It satisfies all of Kashiwara's crystal axioms,
+$\varepsilon_i,\varphi_i$ are the string lengths, and
+\[
+\ch(B_7)=m_{21}+m_{111}=s_{21}-s_{111}.
+\]
+The character is symmetric, so the Weyl symmetrizer $J(x^\rho f)/J(x^\rho)$ fixes it and the
+coefficient of $s_{111}$ is $-1$; the orbit sum gives $6s_{21}-6s_{111}$ and the orbit average
+gives $s_{21}-s_{111}$. Seven vertices is the minimum for a seminormal $\mathfrak{gl}_3$
+counterexample, and seminormal $\mathfrak{gl}_2$ crystals never give one. Clause~1 is true for
+\emph{normal} (Stembridge) crystals, so it can only be rescued by reading ``finite crystal'' as
+``normal crystal''. The refutation is formalised in Lean~4 (core library only): crystals,
+Kashiwara's axioms, seminormality, characters, Schur polynomials (from tableaux), the
+antisymmetrizer and the Weyl symmetrization are defined from scratch. An independent Python
+script rechecks everything and performs the minimality searches.
+\end{abstract}
+
+\section{The claim}
+
+The conjecture (English version): \emph{``Definition: the crystal character $\ch(B)$ denotes the
+generating function of vertex weights. Conjecture: for any finite crystal, the coefficients of the
+Schur expansion of the Weyl symmetrization of $\ch(B)$ are nonnegative, and for
+$B=B(\lambda)\otimes B(\mu)$ these coefficients are exactly the classical Littlewood--Richardson
+coefficients.''}
+
+It is a conjunction of two clauses:
+\begin{itemize}
+\item[(C1)] for every finite crystal $B$, the Schur expansion of the Weyl symmetrization of
+$\ch(B)$ has nonnegative coefficients;
+\item[(C2)] for $B=B(\lambda)\otimes B(\mu)$ these coefficients are the LR coefficients
+$c^\nu_{\lambda\mu}$.
+\end{itemize}
+We refute (C1); one false clause makes the conjunction false. Under the Weyl-symmetrizer reading
+(C2) is \emph{true}: $\ch(B(\lambda)\otimes B(\mu))=s_\lambda s_\mu$ is symmetric, so it is fixed
+by the symmetrizer, and $s_\lambda s_\mu=\sum_\nu c^\nu_{\lambda\mu}s_\nu$. The disproof rests
+entirely on (C1).
+
+\section{Definitions}
+
+\paragraph{Crystals.} We work with $\mathfrak{gl}_3$: weight lattice $P=\Z^3$ with basis
+$\epsilon_1,\epsilon_2,\epsilon_3$, simple roots $\alpha_1=\epsilon_1-\epsilon_2$,
+$\alpha_2=\epsilon_2-\epsilon_3$, and coroots acting by $\langle h_1,w\rangle=w_1-w_2$,
+$\langle h_2,w\rangle=w_2-w_3$. Following Kashiwara
+\cite{Kas93,Kas95} and Bump--Schilling \cite[Ch.~2]{BS17}, a \emph{crystal} is a set $B$ with
+maps $\wt\colon B\to P$, $\varepsilon_i,\varphi_i\colon B\to\Z\sqcup\{-\infty\}$ and
+$\tilde e_i,\tilde f_i\colon B\to B\sqcup\{0\}$ ($i=1,2$) such that
+\begin{enumerate}
+\item $\varphi_i(b)=\varepsilon_i(b)+\langle h_i,\wt(b)\rangle$;
+\item $\tilde f_i b=b'$ if and only if $\tilde e_i b'=b$;
+\item if $\tilde e_ib\in B$ then $\wt(\tilde e_ib)=\wt(b)+\alpha_i$,
+$\varepsilon_i(\tilde e_ib)=\varepsilon_i(b)-1$, $\varphi_i(\tilde e_ib)=\varphi_i(b)+1$;
+\item if $\tilde f_ib\in B$ then $\wt(\tilde f_ib)=\wt(b)-\alpha_i$,
+$\varepsilon_i(\tilde f_ib)=\varepsilon_i(b)+1$, $\varphi_i(\tilde f_ib)=\varphi_i(b)-1$;
+\item if $\varphi_i(b)=-\infty$ then $\tilde e_ib=\tilde f_ib=0$.
+\end{enumerate}
+A crystal is \emph{seminormal} if
+$\varepsilon_i(b)=\max\{k\ge 0:\tilde e_i^k b\ne 0\}$ and
+$\varphi_i(b)=\max\{k\ge0:\tilde f_i^kb\ne0\}$ for all $i,b$; it is \emph{normal} if it is
+(isomorphic to) the crystal of an integrable $U_q(\mathfrak{gl}_3)$-module, equivalently a
+disjoint union of highest-weight crystals $B(\lambda)$ (for simply-laced types this is
+equivalent to Stembridge's local axioms \cite{Ste03}). In these references seminormality and
+normality are \emph{extra} conditions; ``crystal'' alone means the abstract notion above.
+
+\paragraph{Characters and Schur polynomials.} For a finite crystal,
+$\ch(B)=\sum_{b\in B}x^{\wt(b)}\in\Z[x_1^{\pm1},x_2^{\pm1},x_3^{\pm1}]$. The Weyl group $S_3$
+permutes the variables. Let $J(f)=\sum_{w\in S_3}\sgn(w)\,w(f)$, $\rho=(2,1,0)$ and
+$a_\mu=J(x^\mu)$. For a dominant weight $\lambda$ ($\lambda_1\ge\lambda_2\ge\lambda_3$, integers)
+the Schur polynomial is $s_\lambda=a_{\lambda+\rho}/a_\rho$; for a partition $\lambda$ it equals
+$\sum_T x^T$ over semistandard Young tableaux of shape $\lambda$ with entries in $\{1,2,3\}$,
+and $s_{\lambda+(k,k,k)}=(x_1x_2x_3)^ks_\lambda$.
+
+\begin{lemma}[uniqueness of Schur expansions]\label{lem:unique}
+The $s_\lambda$, $\lambda$ dominant, are linearly independent, and a symmetric Laurent
+polynomial $f$ equals $\sum_\lambda c_\lambda s_\lambda$ with
+$c_\lambda=[x^{\lambda+\rho}]\,J(x^\rho f)$.
+\end{lemma}
+\begin{proof}
+If $f$ is symmetric then $J(x^\rho f)=f\,a_\rho$, an antisymmetric Laurent polynomial. An
+antisymmetric Laurent polynomial is determined by its coefficients on the strictly decreasing
+exponents $\mu_1>\mu_2>\mu_3$ (every exponent with two equal entries has coefficient $0$, and
+the others are $\pm$ a strictly decreasing one), so $J(x^\rho f)=\sum_\lambda c_\lambda
+a_{\lambda+\rho}$ with $c_\lambda$ as stated. Dividing by $a_\rho$ gives the expansion. If
+$\sum c_\lambda s_\lambda=0$ then $\sum c_\lambda a_{\lambda+\rho}=0$, and the $a_\mu$ with
+distinct strictly decreasing $\mu$ have disjoint supports, so all $c_\lambda=0$.
+\end{proof}
+
+\paragraph{Readings of ``Weyl symmetrization''.} For a Laurent polynomial $f$:
+\begin{itemize}
+\item[(W)] the Weyl symmetrizer $\pi(f)=J(x^\rho f)/J(x^\rho)$ (the Weyl character formula
+operator, equal to the Demazure operator $\pi_{w_0}=\pi_1\pi_2\pi_1$); its Schur coefficients are
+$[x^{\lambda+\rho}]J(x^\rho f)$ for any $f$;
+\item[(O)] the orbit sum $\sum_{w\in S_3}w(f)$;
+\item[(A)] the orbit average $\frac16\sum_{w\in S_3}w(f)$.
+\end{itemize}
+If $f$ is symmetric then $\pi(f)=f$ (because $J(x^\rho f)=f\,J(x^\rho)$), the orbit sum is $6f$
+and the average is $f$.
+
+\section{The counterexample}
+
+The crystal $B_7$ has seven vertices
+\[
+A\,(2,1,0),\ B\,(1,2,0),\ C\,(2,0,1),\ D\,(0,2,1),\ E\,(1,0,2),\ F\,(0,1,2),\ Z\,(1,1,1)
+\]
+(weights in brackets), and the edges
+\[
+\tilde f_1:\ A\to B,\quad C\to Z\to D,\quad E\to F;\qquad
+\tilde f_2:\ A\to C,\quad B\to Z\to E,\quad D\to F,
+\]
+with $\tilde e_i$ the inverse partial maps and $\tilde e_i,\tilde f_i=0$ elsewhere. The values of
+$\varepsilon_i,\varphi_i$ are the string lengths:
+\begin{center}
+\begin{tabular}{lccccccc}
+\toprule
+ & $A$ & $B$ & $C$ & $D$ & $E$ & $F$ & $Z$\\
+\midrule
+$\wt$ & $(2,1,0)$ & $(1,2,0)$ & $(2,0,1)$ & $(0,2,1)$ & $(1,0,2)$ & $(0,1,2)$ & $(1,1,1)$\\
+$(\varepsilon_1,\varphi_1)$ & $(0,1)$ & $(1,0)$ & $(0,2)$ & $(2,0)$ & $(0,1)$ & $(1,0)$ & $(1,1)$\\
+$(\varepsilon_2,\varphi_2)$ & $(0,1)$ & $(0,2)$ & $(1,0)$ & $(0,1)$ & $(2,0)$ & $(1,0)$ & $(1,1)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The crystal $B(2,1,0)$ has the eight tableaux
+$\tb{11}{2},\tb{12}{2},\tb{11}{3},\tb{12}{3},\tb{13}{2},\tb{13}{3},
+\tb{22}{3},\tb{23}{3}$ (written first row/second row), with
+$\tilde f_1$-edges $\tb{11}{2}\to\tb{12}{2}$, $\tb{11}{3}\to\tb{12}{3}\to\tb{22}{3}$,
+$\tb{13}{3}\to\tb{23}{3}$ and $\tilde f_2$-edges $\tb{11}{2}\to\tb{11}{3}$,
+$\tb{12}{2}\to\tb{13}{2}\to\tb{13}{3}$, $\tb{22}{3}\to\tb{23}{3}$. The two
+vertices of weight $(1,1,1)$ are $\tb{12}{3}$ (on a $1$-string of length $2$, alone in
+colour $2$) and $\tb{13}{2}$ (alone in colour $1$, on a $2$-string of length $2$).
+Identifying them to a single vertex $Z$ keeps all eight edges and gives exactly $B_7$.
+
+\begin{proposition}\label{prop:crystal}
+$B_7$ is a connected seminormal crystal (with all $\varepsilon_i,\varphi_i$ finite).
+\end{proposition}
+\begin{proof}
+Each $\tilde f_i$ is injective on its domain, so $\tilde e_i$ is a well-defined inverse and
+axiom~2 holds. Each edge $u\to v$ of colour $i$ has $\wt(u)-\wt(v)=\alpha_i$ (check the four
+edges of each colour, e.g.\ $C\to Z$: $(2,0,1)-(1,1,1)=(1,-1,0)=\alpha_1$, $Z\to E$:
+$(1,1,1)-(1,0,2)=(0,1,-1)=\alpha_2$). The $i$-strings are $A\to B$, $C\to Z\to D$, $E\to F$
+for $i=1$ and $A\to C$, $B\to Z\to E$, $D\to F$ for $i=2$; every vertex lies on exactly one
+string of each colour. Setting $\varepsilon_i(b)$ (resp.\ $\varphi_i(b)$) to the number of steps
+from $b$ to the top (resp.\ bottom) of its string gives the table above, makes $B_7$ seminormal
+by definition, and gives axioms~3 and~4 automatically. Axiom~1 is a direct check: for a string
+$b_0\to\dots\to b_\ell$ of colour $i$ we have
+$\langle h_i,\wt(b_j)\rangle=\langle h_i,\wt(b_0)\rangle-2j$, and from the table
+$\langle h_i,\wt(b_0)\rangle=\ell$ in all six strings (for instance
+$\langle h_1,\wt(C)\rangle=2-0=2$, $\langle h_2,\wt(B)\rangle=2-0=2$,
+$\langle h_1,\wt(A)\rangle=1$). Hence $\varphi_i(b_j)-\varepsilon_i(b_j)=(\ell-j)-j
+=\langle h_i,\wt(b_j)\rangle$. Axiom~5 is void. Connectedness: every vertex is joined to $A$.
+\end{proof}
+
+\begin{proposition}\label{prop:char}
+$\ch(B_7)=s_{(2,1,0)}-s_{(1,1,1)}$, and this is the unique Schur expansion.
+\end{proposition}
+\begin{proof}
+The weights of $B_7$ are the six permutations of $(2,1,0)$ and $(1,1,1)$, each once, so
+$\ch(B_7)=m_{21}+m_{111}$, which is symmetric. The semistandard tableaux of shape $(2,1)$ with
+entries $\le 3$ are the eight listed above, so $s_{21}=m_{21}+2m_{111}$, and $s_{111}=x_1x_2x_3
+=m_{111}$. Hence $\ch(B_7)=s_{21}-s_{111}$. Uniqueness is Lemma~\ref{lem:unique}; in degree $3$
+it is also visible directly, since the coefficients of $x^{300},x^{210},x^{111}$ in
+$s_{300},s_{210},s_{111}$ form the unitriangular matrix
+$\left(\begin{smallmatrix}1&0&0\\1&1&0\\1&2&1\end{smallmatrix}\right)$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+Clause (C1) fails for $B_7$ under each of the readings (W), (O), (A):
+\[
+\pi(\ch B_7)=s_{21}-s_{111},\qquad \sum_{w}w(\ch B_7)=6s_{21}-6s_{111},\qquad
+\tfrac16\sum_w w(\ch B_7)=s_{21}-s_{111}.
+\]
+The coefficient of $s_{111}$ is $-1$, $-6$, $-1$ respectively. Consequently the conjecture is
+false.
+\end{theorem}
+\begin{proof}
+$\ch B_7$ is symmetric, so by the remark after the readings the three symmetrizations are
+$f,6f,f$ with $f=\ch B_7$; Proposition~\ref{prop:char} and Lemma~\ref{lem:unique} give the
+expansions. Explicitly, $J(x^\rho\ch B_7)=a_{(4,2,0)}-a_{(3,2,1)}$, so
+$[x^{(1,1,1)+\rho}]J(x^\rho\ch B_7)=-1$.
+\end{proof}
+
+\section{What is true, and the boundary of the counterexample}
+
+\paragraph{Normal crystals.} If $B$ is normal then $B\cong\bigsqcup_k B(\lambda^{(k)})$ and
+$\ch B=\sum_k s_{\lambda^{(k)}}$ (the character of $B(\lambda)$ is the irreducible character
+$s_\lambda$), which is symmetric and Schur-nonnegative; all three readings then give
+nonnegative coefficients. In particular (C1) holds for $B(\lambda)\otimes B(\mu)$, and (C2) holds
+under (W) and (A); under (O) the coefficients are $6c^\nu_{\lambda\mu}$, so (C2) fails under (O).
+Our $B_7$ is not normal: a normal crystal has a Schur-positive character. So the only reading
+under which (C1) survives is ``finite crystal'' $=$ ``normal crystal''. The literal statement
+says ``any finite crystal'', and in the standard references \cite{Kas93,Kas95,BS17}
+``crystal'' does not include normality (or even seminormality); $B_7$ is moreover seminormal,
+the strongest condition short of normality that is usually attached to the word.
+
+\paragraph{Characters of seminormal crystals.}
+\begin{lemma}\label{lem:semi}
+Let $B$ be a finite seminormal $\mathfrak{gl}_r$ crystal and $m(\nu)$ the number of vertices of
+weight $\nu$. Then $m$ is $S_r$-invariant, and for every $i$ and every $\nu$ with
+$\langle h_i,\nu\rangle\ge0$ we have $m(\nu+\alpha_i)\le m(\nu)$ (the \emph{string condition}).
+Conversely every finitely supported $m\ge0$ with these two properties is the weight
+multiplicity function of a finite seminormal crystal.
+\end{lemma}
+\begin{proof}
+Seminormality makes every vertex lie on a unique $i$-string $b_0\to\dots\to b_\ell$ with
+$\varepsilon_i(b_0)=0$, $\varphi_i(b_0)=\ell$, so $\langle h_i,\wt b_0\rangle=\ell$ and the
+weights $\wt b_0-j\alpha_i$, $0\le j\le\ell$, are permuted by the reflection $s_i$. Hence $m$ is
+$s_i$-invariant for all $i$, i.e.\ $S_r$-invariant. If $\langle h_i,\nu\rangle=k\ge0$, a string
+through $\nu+\alpha_i$ contains $s_i(\nu+\alpha_i)=\nu-(k+1)\alpha_i$ and is contiguous, so it
+contains $\nu$; this gives $m(\nu+\alpha_i)\le m(\nu)$. Conversely, for each colour separately,
+cut every line $\nu+\Z\alpha_i$ into strings by the usual layering (the multiplicities along the
+line are symmetric about the reflecting point and weakly decrease away from it), and define
+$\tilde f_i,\tilde e_i,\varepsilon_i,\varphi_i$ along these strings. The axioms only involve one
+colour at a time, so the colours do not interact.
+\end{proof}
+
+\begin{proposition}[$\mathfrak{gl}_2$]
+Every finite seminormal $\mathfrak{gl}_2$ (or $\mathfrak{sl}_2$) crystal has a Schur-positive
+character; so no counterexample exists for $\mathfrak{gl}_2$ among seminormal crystals.
+\end{proposition}
+\begin{proof}
+There is one colour; $B$ is the disjoint union of its strings, and a string with top weight
+$(a,c)$ has $\ell=a-c\ge0$ and character $\sum_{j=0}^{\ell}x_1^{a-j}x_2^{c+j}=s_{(a,c)}$.
+\end{proof}
+For $\mathfrak{gl}_3$ each colour still decomposes $\ch B$ into $\mathfrak{sl}_2$-characters,
+but the two decompositions need not come from a common $\mathfrak{gl}_3$-structure; $B_7$
+exploits exactly this.
+
+\begin{proposition}[minimality]\label{prop:min}
+Every finite seminormal $\mathfrak{gl}_3$ crystal with at most $6$ vertices has a Schur-positive
+character. Hence $7$ is the minimum number of vertices of a seminormal $\mathfrak{gl}_3$
+counterexample to (C1).
+\end{proposition}
+\begin{proof}
+Edges preserve the degree $w_1+w_2+w_3$, and the Schur expansion is compatible with the
+decomposition by degree, so a minimal counterexample lives in one degree $d$; multiplying by
+$(x_1x_2x_3)^k$ maps $s_\lambda$ to $s_{\lambda+(k,k,k)}$ and preserves everything, so we may
+take $d\in\{0,1,2\}$. If a dominant $\lambda$ occurs, $p=\lambda_1-\lambda_2$, then by
+Lemma~\ref{lem:semi} the $p+1$ distinct weights $\lambda-j\alpha_1$ ($0\le j\le p$) all occur,
+so $p\le N-1$, and likewise $\lambda_2-\lambda_3\le N-1$, where $N$ is the number of vertices.
+This leaves a finite list of multiplicity functions; \texttt{verify.py} enumerates all of them
+for $N\le 6$, keeps those satisfying the conditions of Lemma~\ref{lem:semi} (necessary
+conditions suffice here) and finds exactly $12$, namely
+$k\,s_{000}$ ($1\le k\le6$), $s_{100}$, $2s_{100}$, $s_{110}$, $2s_{110}$, $s_{200}$ and
+$s_{(1,1,-1)}$, all Schur-positive. For $N=7$ there is exactly one non-positive admissible
+character up to the shift, $m_{(1,0,-1)}+m_{000}=s_{(1,0,-1)}-s_{000}$, which is
+$\ch(B_7)$ shifted by $(x_1x_2x_3)^{-1}$; the script also builds a seminormal crystal for it
+and rechecks the axioms.
+\end{proof}
+
+\begin{remark}[a cheaper abstract example]
+Without seminormality, one vertex suffices: the $\mathfrak{gl}_2$ crystal $\{b\}$ with
+$\wt(b)=(-1,2)$, $\varepsilon(b)=3$, $\varphi(b)=0$, $\tilde e b=\tilde f b=0$ satisfies
+Kashiwara's axioms ($\varphi-\varepsilon=-3=\langle h,\wt b\rangle$). Then
+$J(x^\rho x_1^{-1}x_2^2)=a_{(0,2)}=-a_{(2,0)}$, so the Weyl symmetrization is $-s_{(1,0)}$, and
+the orbit sum is $s_{(2,-1)}-s_{(1,0)}$. We do not rely on this example: it is far from the
+spirit of the conjecture, while $B_7$ is seminormal, connected and differs from $B(2,1,0)$
+only by one vertex.
+\end{remark}
+
+\section{Readings covered}
+\begin{itemize}
+\item \emph{Crystal}: abstract Kashiwara crystals and seminormal crystals ($B_7$ is
+seminormal). Only ``normal crystal'' rescues (C1).
+\item \emph{Weyl symmetrization}: the symmetrizer $J(x^\rho f)/J(x^\rho)$ (Demazure operator
+$\pi_{w_0}$), its bialternant coefficients $[x^{\lambda+\rho}]J(x^\rho f)$, the orbit sum and
+the orbit average all give a negative coefficient. Since $\ch B_7$ is symmetric, any
+symmetrization that fixes symmetric functions, or multiplies them by a positive constant, does.
+\item \emph{$\mathfrak{gl}_3$ versus $\mathfrak{sl}_3$}: projecting the weights to the
+$\mathfrak{sl}_3$ weight lattice turns $s_\lambda$ into the irreducible character
+$\chi_{\bar\lambda}$, and $\ch B_7=\chi_{(1,1)}-\chi_{(0,0)}$ (in fundamental-weight
+coordinates); the coefficient of the trivial character is $-1$.
+\item \emph{Polynomial versus Laurent}: all weights of $B_7$ are nonnegative, so $\ch B_7$ is
+an honest polynomial and the expansion is in ordinary Schur polynomials.
+\end{itemize}
+
+\section{Machine verification}
+
+\paragraph{Lean 4} (\texttt{lean4/Main.lean}, Lean 4.19.0, core library only, no \texttt{sorry},
+no \texttt{native\_decide}; the main theorems use only \texttt{propext} and \texttt{Quot.sound},
+some lemmas also \texttt{Classical.choice}). Everything is defined from scratch:
+\begin{itemize}
+\item \texttt{Crystal n}: $\wt\colon\texttt{Fin n}\to\Z^3$, $\tilde e_i,\tilde f_i\colon
+\texttt{Fin n}\to\texttt{Option (Fin n)}$, $\varepsilon_i,\varphi_i\colon\texttt{Fin n}\to\Z$;
+\texttt{IsCrystal} (axioms 1--4) and \texttt{IsSeminormal}; \texttt{seminormal\_eps\_max} and
+\texttt{seminormal\_phi\_max} prove that it means $\varepsilon_i=\max\{k:\tilde e_i^kb\neq0\}$
+(and likewise for $\varphi_i$).
+\item Laurent polynomials as finite formal sums with coefficient-wise equality \texttt{PolyEq}
+(a sound and complete decision procedure is proved), multiplication, the $S_3$-action, $J$, the
+orbit sum, the character \texttt{ch}.
+\item \texttt{schur}: Schur polynomials as sums over semistandard tableaux (all fillings of the
+shape with entries in $\{1,2,3\}$ are generated and filtered); the bialternant identities
+$s_\lambda a_\rho=a_{\lambda+\rho}$ for $\lambda\vdash3$; \texttt{schur3\_indep} (uniqueness of
+degree-$3$ Schur expansions).
+\item \texttt{WeylSym f q}: $q\cdot J(x^\rho)=J(x^\rho f)$; \texttt{schurCoeffW}:
+$[x^{\lambda+\rho}]J(x^\rho f)$.
+\item \texttt{B7\_isCrystal}, \texttt{B7\_seminormal}, \texttt{ch\_B7\_expands}
+($\ch B_7=s_{210}-s_{111}$), \texttt{weylSym\_B7}, \texttt{weyl\_forced} (for \emph{every} $q$
+with \texttt{WeylSym (ch B7) q} and every degree-3 expansion of $q$ the coefficients are
+$(0,1,-1)$), \texttt{orbit\_forced}, \texttt{avg\_forced}, \texttt{B7\_counterexample}.
+\item Main theorems: \texttt{conjecture\_00000003831\_false} : $\neg$\,\texttt{ClaimWeyl} and the variants
+\texttt{\_abstract}, \texttt{\_bialt}, \texttt{\_orbit}, \texttt{\_avg} for the other readings.
+\item Non-vacuity: \texttt{B100\_ok} ($B(1,0,0)$ is a seminormal crystal with character
+$s_{100}$), \texttt{B210\_ok} ($B(2,1,0)$ satisfies all hypotheses and has expansion $s_{210}$,
+nonnegative), \texttt{broken\_rejected} (a datum violating axiom~1 is rejected).
+\end{itemize}
+Limitations: in Lean the Schur expansions quantified over are the degree-$3$ ones
+$a s_{300}+b s_{210}+c s_{111}$ (sufficient because $\ch B_7$ is homogeneous of degree~3; general
+uniqueness is Lemma~\ref{lem:unique}). That the symmetrizer fixes symmetric polynomials is checked
+for $\ch B_7$, not proved in general. Normality, Lemma~\ref{lem:semi}, the $\mathfrak{gl}_2$
+statement and minimality are in this report and \texttt{verify.py} only.
+
+\paragraph{Python} (\texttt{verify.py}, standard library). It checks the axioms by a different
+method (string lengths computed by walking), computes Schur polynomials both from tableaux and
+by exact division $a_{\lambda+\rho}/a_\rho$, computes the symmetrizer by exact polynomial
+division and via Demazure operators $\pi_1\pi_2\pi_1$, the orbit sum and average (with
+fractions), runs the $\mathfrak{gl}_2$ (up to $10$ vertices) and $\mathfrak{gl}_3$ (up to $7$
+vertices) searches of Proposition~\ref{prop:min}, and sanity-checks the normal crystals
+$B(1,0,0)$, $B(2,1,0)$ and $B(1)^{\otimes3}$ (tensor rule).
+
+\begin{thebibliography}{9}
+\bibitem{BS17} D.~Bump and A.~Schilling, \emph{Crystal Bases: Representations and
+Combinatorics}, World Scientific, 2017.
+\bibitem{Kas93} M.~Kashiwara, The crystal base and Littelmann's refined Demazure character
+formula, \emph{Duke Math.\ J.} 71 (1993), 839--858.
+\bibitem{Kas95} M.~Kashiwara, On crystal bases, in: \emph{Representations of Groups}
+(Banff, 1994), CMS Conf.\ Proc.\ 16, Amer.\ Math.\ Soc., 1995, 155--197.
+\bibitem{Ste03} J.~R.~Stembridge, A local characterization of simply-laced crystals,
+\emph{Trans.\ Amer.\ Math.\ Soc.} 355 (2003), 4807--4823.
+\end{thebibliography}
+
+\end{document}
