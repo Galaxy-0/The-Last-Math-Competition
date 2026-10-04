@@ -1,0 +1,96 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Disproof of Conjecture 00000000156\\Prime determinants of random sign matrices}
+\author{GodBlf}
+\date{October 4, 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Verdict: false.} For every $n\ge3$, the probability in the
+conjecture is exactly zero. The general matrix obstruction, the probability
+statement, and the failure of the proposed asymptotic are all verified in Lean 4.
+
+\section{Statement and probability model}
+The conjecture asserts that the probability that the determinant of a random
+$n\times n$ matrix with entries in $\{1,-1\}$ is prime in absolute value is
+asymptotic to $c/n$, with an explicit constant $c$. We use the usual uniform
+model: the $n^2$ signs are independent and equally likely. Let
+\[
+ p_n=\frac{\#\{A\in\{1,-1\}^{n\times n}: |\det A|\text{ is prime}\}}
+ {2^{n^2}}.
+\]
+Here primes are positive integers at least 2. The standard meaning of
+$p_n\sim c/n$ for $c>0$ is $\lim_{n\to\infty}p_n/(c/n)=1$.
+
+\section{A uniform obstruction}
+\begin{theorem}
+For every integer $n\ge3$ and every sign matrix $A$ of size $n$,
+$4\mid\det A$. Consequently, $|\det A|$ is not prime.
+\end{theorem}
+\begin{proof}
+Subtract row 0 from rows 1 and 2. These two row operations preserve the
+determinant. Each entry in either resulting row is the difference of two signs,
+so it is in $\{-2,0,2\}$. Define integral row vectors
+\[
+ u_j=(A_{1j}-A_{0j})/2,\qquad v_j=(A_{2j}-A_{0j})/2.
+\]
+The transformed rows are $2u$ and $2v$. By multilinearity in the rows,
+\[
+ \det A=4\det C,
+\]
+where $C$ is the integral matrix obtained by replacing rows 1 and 2 of $A$
+with $u$ and $v$. Thus $4\mid\det A$ and $4\mid|\det A|$.
+If $|\det A|$ were prime, its divisor 2 would force $|\det A|=2$;
+but 4 does not divide 2. This is a contradiction, including the case
+$\det A=0$, since zero is not prime.
+\end{proof}
+Subtracting row 0 from \emph{all} other rows also gives the stronger familiar
+fact $2^{n-1}\mid\det A$. The Lean proof uses just two rows, since divisibility
+by 4 already proves the required obstruction in every dimension $n\ge3$.
+
+\section{Probability and asymptotics}
+The theorem makes the event defining $p_n$ empty for every $n\ge3$.
+Therefore $p_n=0$ for all $n\ge3$. For every $c>0$, the ratio $p_n/(c/n)$
+is eventually identically zero, hence converges to zero and cannot converge
+to one. This disproves the conjecture. Choosing $c=0$ cannot rescue a standard
+asymptotic equivalence: its comparison function is zero and the usual ratio
+definition is undefined. In Lean, real division is total; even with that
+convention, the ratio limit is zero for every real $c$.
+
+For context, $p_1=0$ and $p_2=1/2$. Indeed, for
+$A=\left(\begin{smallmatrix}a&b\\c&d\end{smallmatrix}\right)$,
+$\det A=ad-bc$, and the two independent uniform signs $ad$ and $bc$ differ
+with probability $1/2$. These small cases are not needed for the disproof.
+
+\section{Formal verification and previous submission}
+The directory \texttt{lean/} contains a pinned Mathlib-based Lean 4 project.
+\texttt{Main.lean} proves divisibility by 4 for arbitrary $n\ge3$ and
+arbitrary sign matrices, then proves the non-primality of the absolute
+determinant. Boolean matrices encode the uniform finite sample space;
+\texttt{primeProbability} is its favorable count divided by its total count.
+The final theorem \texttt{conjecture\_false} rules out any positive $c$ with
+the stated ratio limit. No finite enumeration substitutes for a general theorem.
+
+The earlier merged
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/pull/113}{PR \#113}
+was subsequently removed by semantic review in commit
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/commit/450454963d8a4a512a25c3bb9c8654e5c2da40f7}{4504549}.
+Its written mathematical argument was correct, but its Lean verification
+covered only conditional arithmetic and finite examples rather than the
+general matrix and asymptotic statements. This submission supplies those
+missing formal results.
+
+\medskip\noindent Reproduction, from \texttt{lean/}:
+\begin{verbatim}
+lake update
+lake exe cache get
+lake build
+lake env lean Check.lean
+\end{verbatim}
+The axiom audit uses only Lean/Mathlib's standard foundations
+(\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound});
+there are no admitted proofs, additional axioms, or \texttt{native\_decide}.
+\end{document}
