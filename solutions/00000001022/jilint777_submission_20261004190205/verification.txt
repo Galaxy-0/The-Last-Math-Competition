@@ -1,6 +1,4 @@
 == lake build (fresh, Lean 4.19.0)
-info: trellisLowerBound: no previous manifest, creating one from scratch
-info: toolchain not updated; already up-to-date
 ℹ [2/3] Built Main
 info: ././././Main.lean:665:0: 'Trellis1022.ex10_represents' depends on axioms: [propext, Quot.sound]
 info: ././././Main.lean:666:0: 'Trellis1022.ex10_minProfile' does not depend on any axioms
@@ -73,15 +71,24 @@ PASS q=5 m=2: [4,2]_5, s_max = log2 5 = 2.322 bits, bound 6 (violated)
 PASS every one of the 24 orders gives s_max = 1 < 2 = min(2,2)
 
 == 6. Exhaustive: all binary linear codes of length n <= 6
-PASS n=1: 2 codes; Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 0 codes violate the claimed LOWER bound
-PASS n=2: 5 codes; Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 2 codes violate the claimed LOWER bound
-PASS n=3: 16 codes; Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 6 codes violate the claimed LOWER bound
-PASS n=4: 67 codes; Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 37 codes violate the claimed LOWER bound
-PASS n=5: 374 codes; Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 200 codes violate the claimed LOWER bound
-PASS n=6: 2825 codes; Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 1785 codes violate the claimed LOWER bound
+PASS n=1: 2 distinct subspaces of F_2^n (incl. degenerate codes with zero coordinates and k in {0,n}); Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 0 violate the claimed LOWER bound
+PASS n=2: 5 distinct subspaces of F_2^n (incl. degenerate codes with zero coordinates and k in {0,n}); Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 2 violate the claimed LOWER bound
+PASS n=3: 16 distinct subspaces of F_2^n (incl. degenerate codes with zero coordinates and k in {0,n}); Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 6 violate the claimed LOWER bound
+PASS n=4: 67 distinct subspaces of F_2^n (incl. degenerate codes with zero coordinates and k in {0,n}); Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 37 violate the claimed LOWER bound
+PASS n=5: 374 distinct subspaces of F_2^n (incl. degenerate codes with zero coordinates and k in {0,n}); Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 200 violate the claimed LOWER bound
+PASS n=6: 2825 distinct subspaces of F_2^n (incl. degenerate codes with zero coordinates and k in {0,n}); Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 1785 violate the claimed LOWER bound
 
 == 7. Non-vacuity: {00,11} needs 2 states in every trellis
 PASS no trellis with one middle state represents {00,11}; so the bound (2 states) holds
+
+== 8. Unitless raw totals (report Section 'Unitless total counts')
+PASS q=5: [4,2]_q code F_q^2 + 0^2: every s_i = 0, raw |V| = 5 < 6 = bound (degenerate code: zero coordinates)
+PASS q=7: [4,2]_q code F_q^2 + 0^2: every s_i = 0, raw |V| = 5 < 6 = bound (degenerate code: zero coordinates)
+PASS q=8: [4,2]_q code F_q^2 + 0^2: every s_i = 0, raw |V| = 5 < 6 = bound (degenerate code: zero coordinates)
+PASS q=9: [2,1]_q code F_q^1 + 0^1: every s_i = 0, raw |V| = 3 < 4 = bound (degenerate code: zero coordinates)
+PASS q=16: [2,1]_q code F_q^1 + 0^1: every s_i = 0, raw |V| = 3 < 4 = bound (degenerate code: zero coordinates)
+PASS q <= 4: n+1 > min(k,n-k)*ceil(log2 q) (raw |V| reading true there)
+PASS raw |E| = 20 and raw Viterbi 2|E|-|V|+1 = 25 are >= 5 (not refuted; trivially true)
 
 ALL CHECKS PASSED
 exit 0

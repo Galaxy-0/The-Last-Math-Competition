@@ -14,6 +14,8 @@ Methods (different from the Lean proof, which enumerates paths and counts subcod
      and its path labels compared with C; all complexity measures are computed.
   4. The family {00,11}^m (m = 1..8), q-ary analogues (q = 3, 5), all coordinate orders for small
      codes, an exhaustive scan of ALL binary linear codes of length <= 6, and non-vacuity checks.
+  5. Unitless raw totals: raw |V| fails for q >= 5 (degenerate codes F_q^k + 0^(n-k)) and holds for
+     q <= 4; raw |E| and the raw Viterbi count are not refuted.
 """
 from itertools import product, permutations
 import math
@@ -258,8 +260,9 @@ for n in range(1, 7):
         prof = profile_count(set(words), n, 2)
         wolf_ok &= max(prof) <= min(k, n - k)
         viol += max(prof) < min(k, n - k)
-    check(wolf_ok, "n=%d: %d codes; Wolf's UPPER bound s_max <= min(k,n-k) holds for all; "
-          "%d codes violate the claimed LOWER bound" % (n, len(subs), viol))
+    check(wolf_ok, "n=%d: %d distinct subspaces of F_2^n (incl. degenerate codes with zero "
+          "coordinates and k in {0,n}); Wolf's UPPER bound s_max <= min(k,n-k) holds for all; "
+          "%d violate the claimed LOWER bound" % (n, len(subs), viol))
 
 print("\n== 7. Non-vacuity: {00,11} needs 2 states in every trellis")
 # a trellis with a single middle state: section edges are subsets of {(0,0,0),(0,1,0)}
@@ -267,6 +270,38 @@ single = [set(c) for c in [[], [(0, 0, 0)], [(0, 1, 0)], [(0, 0, 0), (0, 1, 0)]]
 reps = [(a, b) for a in single for b in single
         if path_labels([1, 1, 1], [sorted(a), sorted(b)]) == {(0, 0), (1, 1)}]
 check(reps == [], "no trellis with one middle state represents {00,11}; so the bound (2 states) holds")
+
+print("\n== 8. Unitless raw totals (report Section 'Unitless total counts')")
+
+
+def profile_alphabet(C, n):
+    """|C|/(|P_i||F_i|) by counting, for codewords over any alphabet with zero symbol 0."""
+    out = []
+    for i in range(n + 1):
+        P = sum(1 for c in C if not any(c[i:]))
+        F = sum(1 for c in C if not any(c[:i]))
+        out.append(len(C) // (P * F))
+    return out
+
+
+# degenerate codes F_q^k + 0^(n-k): linear over GF(q) for every prime power q (no field arithmetic
+# is needed to list them); minimal trellis has one state per layer, so raw |V| = n+1
+for q, (n, k) in [(5, (4, 2)), (7, (4, 2)), (8, (4, 2)), (9, (2, 1)), (16, (2, 1))]:
+    D = {w + (0,) * (n - k) for w in product(range(q), repeat=k)}
+    prof = profile_alphabet(D, n)
+    V = sum(prof)
+    Bq = min(k, n - k) * clog2(q)
+    check(len(D) == q ** k and prof == [1] * (n + 1) and V == n + 1 < Bq,
+          "q=%d: [%d,%d]_q code F_q^%d + 0^%d: every s_i = 0, raw |V| = %d < %d = bound "
+          "(degenerate code: zero coordinates)" % (q, n, k, k, n - k, V, Bq))
+check(all(n + 1 > min(k, n - k) * clog2(q) for q in (2, 3, 4) for n in range(1, 60)
+          for k in range(n + 1)), "q <= 4: n+1 > min(k,n-k)*ceil(log2 q) (raw |V| reading true there)")
+sz, sc = rep_trellis(5)
+V, E = sum(sz), sum(len(x) for x in sc)
+trim = all(any(t == s for (s, a, t) in sc[i - 1]) for i in range(1, len(sz)) for s in range(sz[i]))
+check(trim and E >= V - 1 and 2 * E - V + 1 >= E >= 5,
+      "raw |E| = %d and raw Viterbi 2|E|-|V|+1 = %d are >= 5 (not refuted; trivially true)"
+      % (E, 2 * E - V + 1))
 
 print("\nALL CHECKS PASSED" if OK else "\nSOME CHECK FAILED")
 raise SystemExit(0 if OK else 1)

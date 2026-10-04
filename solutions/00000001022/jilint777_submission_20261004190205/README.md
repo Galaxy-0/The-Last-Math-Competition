@@ -44,15 +44,24 @@ The smallest instance is `{0000,1100,0011,1111}` (`[4,2]`, `s_max = 1 < 2`).
   has `s_max = 1 < 2` in *all* 24 orders.
 - **Rounding:** floor or ceiling of `log₂`. Rounding up `log₂|E|` and the Viterbi count needs
   `m = 6`, where `⌈log₂ 30⌉ = 5 < 6`.
-- **Not refuted:** *unitless raw totals* `|V|`, `|E|` (16 and 20 are at least 5). The bound
-  is stated in bits (`⌈log₂ q⌉` bits per symbol), so this is not a natural reading. For `|E|` it
-  is also trivially true for every code. The report proves `|E| ≥ n + k·log₂ q`.
+- **Unitless raw totals.** The bound is stated in bits (`⌈log₂ q⌉` bits per symbol), so reading
+  it as a raw total count is not natural. Under that reading:
+  - **Raw `|V|`** is true for `q ≤ 4`, since `|V| ≥ n+1 > 2·min(k,n−k)`. It is **false for
+    `q ≥ 5`**: the `[4,2]_q` code `{(a,b,0,0)}` has every `s_i = 0`, so `|V| = 5 < 6 = 2⌈log₂ q⌉`
+    for `q = 5, 7, 8`. For `q ≥ 9` the `[2,1]_q` code `{(a,0)}` gives `3 < 4`. These codes have
+    zero coordinates and might be called degenerate, and we do not claim a non-degenerate
+    example. They are an extra observation (report and `verify.py` only).
+  - **Not refuted:** raw `|E|` and the raw Viterbi count `2|E|−|V|+1` (20 and 25 are at least 5).
+    Both are trivially true for every code. The report proves `|E| ≥ n + k·log₂ q`. For a trim
+    trellis `|E| ≥ |V|−1`, so `2|E|−|V|+1 ≥ |E|`. The Viterbi count is taken on trim
+    trellises, and the minimal trellis is trim.
+- The **main refutation** is the binary family `{00,11}^m`, which has no zero coordinates.
 
 **Non-vacuity.** Every trellis for `{00,11}` needs 2 states, so the bound holds for that code.
 The interleaved `[4,2]` code `{0000,1010,0101,1111}` attains the bound in its minimal trellis
 (profile `0,1,2,1,0`). An exhaustive scan of all binary linear codes of length `n ≤ 6` confirms
-Wolf's upper bound for every code, and finds 1785 of the 2825 codes of length 6 below the
-claimed lower bound.
+Wolf's upper bound for every code. Of the 2825 distinct subspaces of F₂⁶ (including degenerate
+codes with zero coordinates and `k ∈ {0, n}`), 1785 lie below the claimed lower bound.
 
 ## Contents
 
@@ -65,7 +74,8 @@ claimed lower bound.
   - the minimal trellis **built** as the pruned syndrome trellis of a parity-check matrix;
   - forward expansion of the explicit trellis;
   - the family for `m ≤ 8`, `q = 3, 5` analogues, and all coordinate orders of the `[4,2]` examples;
-  - an exhaustive scan of all binary codes of length `≤ 6`.
+  - an exhaustive scan of all binary codes of length `≤ 6`;
+  - the raw-total readings (`q`-ary raw `|V|` examples, raw `|E|` and raw Viterbi values).
 - `verification.txt`: a fresh `lake build` log with the axiom report, the forbidden-token scan
   and the output of `verify.py`.
 
@@ -114,8 +124,9 @@ The project has no `sorry`, no `native_decide` and no added axioms. `#print axio
 - Lean treats `q = 2` only, which is enough to refute a claim made for all `q`.
 - The theorem that the minimal trellis has `|C|/(|P_i||F_i|)` states is cited, not formalized.
   Lean computes this number, and the explicit trellis gives the upper bound independently.
-- The following are in the report only (the first two are also checked in `verify.py`): the
-  general-`m` BCJR profile, the `q`-ary remark, and the raw `|E|` inequality.
+- The following are in the report only: the general-`m` BCJR profile, the `q`-ary remarks
+  (including the raw-`|V|` examples), and the raw `|E|`, raw Viterbi and raw `|V|` (`q ≤ 4`)
+  inequalities. The profile and the `q`-ary remarks are also checked in `verify.py`.
 
 ## Reproduce
 
@@ -154,8 +165,17 @@ MacWilliams 部分只是前言，与该下界无关；即使把它当作合取�
 - 最坏坐标顺序：由 `1000, 0111` 生成的 `[4,2]` 码在全部 24 种顺序下 `s_max = 1 < 2`；
 - 对数取整：向上取整时，总边数和 Viterbi 运算数需用 `m = 6`。
 
-唯一不覆盖的是不带单位的原始总数 `|V|`、`|E|`。下界的单位是比特，这种理解并不自然；
-而且对 `|E|` 而言它对任何码都平凡成立（报告中证明了 `|E| ≥ n + k·log₂ q`）。
+不带单位的原始总数：下界的单位是比特，这种理解并不自然。在这种理解下：
+
+- 原始顶点数 `|V|`：`q ≤ 4` 时成立；`q ≥ 5` 时不成立。例如 `[4,2]_q` 码 `{(a,b,0,0)}`
+  的各 `s_i = 0`，`|V| = 5 < 6`（`q = 5, 7, 8`）；`q ≥ 9` 时 `[2,1]_q` 码 `{(a,0)}` 给出
+  `3 < 4`。这些码含零坐标，可视为退化码，我们不声称存在非退化的例子，此为附加观察
+  （仅在报告和 `verify.py` 中）。
+- 未被否定的只有原始总边数 `|E|` 和原始 Viterbi 运算数 `2|E|−|V|+1`，二者对任何码都平凡成立：
+  报告中证明了 `|E| ≥ n + k·log₂ q`；对修剪过的 trellis 有 `|E| ≥ |V|−1`，
+  故 `2|E|−|V|+1 ≥ |E|`，而最小 trellis 是修剪过的。
+
+主要的否定由不含零坐标的二元码族 `{00,11}^m` 给出。
 
 非空性：`{00,11}` 的任何 trellis 都至少需要 2 个状态，即该码满足此下界；
 交错排列的 `[4,2]` 码在最小 trellis 中恰好达到下界。
