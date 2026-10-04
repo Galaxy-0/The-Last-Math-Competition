@@ -21,7 +21,6 @@ def forced(N, strict=True):
     """True iff every 2-coloring of [N] has a monochromatic triple."""
     T = triples(N, strict)
     masks = [(1 << (x - 1)) | (1 << (y - 1)) | (1 << (z - 1)) for x, y, z in T]
-    full = (1 << N) - 1
     for col in range(1 << N):
         if not any((col & m) == m or (col & m) == 0 for m in masks):
             return False, format(col, "0%db" % N)[::-1]

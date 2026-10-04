@@ -38,7 +38,11 @@ anywhere else in the statement, and the coloring is explicitly a
 2-coloring. So the statement is: \emph{there exists $N$ such that every
 $c:[N]\to\{R,B\}$ has $x,y,z\in[N]$ with $x+y=z$, $xy+1$ prime and
 $c(x)=c(y)=c(z)$.} Since $N=17$ works for every value of $k$, any
-dependence on $k$ is harmless. We prove the stronger version that requires
+dependence on $k$ is harmless. If ``$N(k)$'' was intended as a $k$-color Schur
+number, with ``2-coloring'' a typo for ``$k$-coloring'', that would be a
+different (and much harder) statement, which this submission does not claim.
+We prove the conjecture as written in both languages, for 2-colorings. The
+Lean statement quantifies over every $k$ with $N$ independent of $k$. We prove the stronger version that requires
 $x<y$, which in particular makes $x,y,z$ distinct.
 
 \section{The triples}
@@ -126,6 +130,9 @@ and \texttt{clash}.
 $\forall k,\ \exists N,\ \forall c,\ \exists x\,y\,z,$ \texttt{SchurPrimeTriple N x y z}
 $\wedge\ c(x)=c(y)=c(z)$. \texttt{conjecture\_00000000035\_le} is the variant that
 only requires $x\le y$.
+\item \texttt{conjecture\_00000000035\_on\_interval}: the same statement with
+colorings defined only on $[N]$ (a subtype), and $x,y,z\in[N]$, $x\ne y$ stated
+explicitly.
 \item \texttt{sixteen\_avoids}: the coloring \texttt{good16} of $[16]$ avoids all
 triples.
 \end{itemize}

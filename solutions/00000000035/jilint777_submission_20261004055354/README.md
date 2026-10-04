@@ -7,7 +7,10 @@ prime.
 **Answer: true, with `N = 17`**, even when `x < y` is required. For `x < y`
 this is optimal: the coloring `0010101110110101` of `[16]` avoids every such
 triple. (If `x = y` is also allowed, `N = 7` already works.) The `k` in `N(k)`
-appears nowhere else in the statement, and `N = 17` works for every `k`.
+appears nowhere else in the statement, and `N = 17` works for every `k`. If `N(k)` was meant as a
+k-color Schur number, with "2-coloring" a typo for "k-coloring", that would be a different and much
+harder statement. This submission does not claim it: it proves the conjecture as written in both
+languages, for 2-colorings.
 
 The proof is a finite case analysis on the 31 triples `x < y`,
 `x + y ≤ 17`, `xy + 1` prime. A DPLL refutation tree with 11 branchings and
@@ -29,6 +32,7 @@ lists every branch, and each deduction is justified by a named triple.
   (`1 ≤ x < y`, `x + y = z ≤ 17`, `Prime (x*y+1)`).
 - `conjecture_00000000035 : ∀ k, ∃ N, ∀ c, ∃ x y z, SchurPrimeTriple N x y z ∧ c x = c y ∧ c y = c z`.
 - `conjecture_00000000035_le` is the variant that only requires `x ≤ y`.
+- `conjecture_00000000035_on_interval`: the same statement with colorings defined only on `[N]`.
 - `sixteen_avoids`: an explicit coloring of `[16]` with no such triple.
 
 The project has no `sorry`, no `native_decide`, and no added axioms.

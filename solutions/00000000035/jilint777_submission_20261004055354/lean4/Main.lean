@@ -256,9 +256,28 @@ theorem sixteen_avoids :
   subst h3
   exact good16_check x (by omega) y (by omega) ⟨h1, h2, h4, check_of_prime _ hp⟩
 
+/-- The same statement with colorings defined only on `[N] = {1, …, N}`
+(a subtype), and `x, y, z ∈ [N]` with `x ≠ y` stated explicitly. -/
+theorem conjecture_00000000035_on_interval :
+    ∃ N, ∀ c : {n : Nat // 1 ≤ n ∧ n ≤ N} → Bool,
+      ∃ (x y z : Nat) (hx : 1 ≤ x ∧ x ≤ N) (hy : 1 ≤ y ∧ y ≤ N) (hz : 1 ≤ z ∧ z ≤ N),
+        x ≠ y ∧ x + y = z ∧ Prime (x * y + 1) ∧
+        c ⟨x, hx⟩ = c ⟨y, hy⟩ ∧ c ⟨y, hy⟩ = c ⟨z, hz⟩ := by
+  refine ⟨17, fun c => ?_⟩
+  let c' : Nat → Bool := fun n => if h : 1 ≤ n ∧ n ≤ 17 then c ⟨n, h⟩ else false
+  obtain ⟨x, y, z, ⟨h1, h2, h3, h4, hp⟩, e1, e2⟩ := schur_17 c'
+  have hx : 1 ≤ x ∧ x ≤ 17 := ⟨h1, by omega⟩
+  have hy : 1 ≤ y ∧ y ≤ 17 := ⟨by omega, by omega⟩
+  have hz : 1 ≤ z ∧ z ≤ 17 := ⟨by omega, h4⟩
+  refine ⟨x, y, z, hx, hy, hz, by omega, h3, hp, ?_, ?_⟩
+  · simp only [c', dif_pos hx, dif_pos hy] at e1; exact e1
+  · simp only [c', dif_pos hy, dif_pos hz] at e2; exact e2
+
+
 end SchurPrime
 
 #print axioms SchurPrime.schur_17
 #print axioms SchurPrime.conjecture_00000000035
 #print axioms SchurPrime.conjecture_00000000035_le
 #print axioms SchurPrime.sixteen_avoids
+#print axioms SchurPrime.conjecture_00000000035_on_interval
