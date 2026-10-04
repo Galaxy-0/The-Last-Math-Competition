@@ -1,0 +1,63 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:661:0: 'CsNeighborly.crossFacts_1' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:662:0: 'CsNeighborly.crossFacts_2' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:663:0: 'CsNeighborly.crossFacts_3' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:664:0: 'CsNeighborly.crossFacts_4' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:665:0: 'CsNeighborly.crossFacts_6' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:666:0: 'CsNeighborly.cross_props' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:667:0: 'CsNeighborly.conjecture_00000001564_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:668:0: 'CsNeighborly.conjecture_00000001564_false_grunbaum' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:669:0: 'CsNeighborly.conjecture_00000001564_false_full' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:670:0: 'CsNeighborly.conjecture_00000001564_false_param' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:671:0: 'CsNeighborly.conjecture_00000001564_false_2k' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:672:0: 'CsNeighborly.conjecture_00000001564_false_2k_statement' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:673:0: 'CsNeighborly.conjecture_00000001564_false_2k_full' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:674:0: 'CsNeighborly.conjecture_00000001564_false_2k_grunbaum' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:675:0: 'CsNeighborly.conjecture_00000001564_false_2k_cs3' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:676:0: 'CsNeighborly.conjecture_00000001564_conjunction_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:677:0: 'CsNeighborly.fails_each_k' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:678:0: 'CsNeighborly.fullDim_linIndep' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:679:0: 'CsNeighborly.fullDim_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:680:0: 'CsNeighborly.hexagon_not_csNeighborly' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:681:0: 'CsNeighborly.true_min_k1' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:682:0: 'CsNeighborly.conjecture_00000001564_false_any' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:683:0: 'CsNeighborly.not_convexPosition' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:684:0: 'CsNeighborly.hanner_bounds' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:685:0: 'CsNeighborly.no_hanner_with_2pow_succ' depends on axioms: [propext, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+== cross-polytopes
+k=1: dim 1, cs, 2 = 2k vertices; the exposed vertex sets for c in {-1,0,1}^k are exactly the 2 antipodal-free subsets; 2k = 2 < 2^(k+1) = 4: True
+k=2: dim 2, cs, 4 = 2k vertices; the exposed vertex sets for c in {-1,0,1}^k are exactly the 8 antipodal-free subsets; 2k = 4 < 2^(k+1) = 8: True
+k=3: dim 3, cs, 6 = 2k vertices; the exposed vertex sets for c in {-1,0,1}^k are exactly the 26 antipodal-free subsets; 2k = 6 < 2^(k+1) = 16: True
+k=4: dim 4, cs, 8 = 2k vertices; the exposed vertex sets for c in {-1,0,1}^k are exactly the 80 antipodal-free subsets; 2k = 8 < 2^(k+1) = 32: True
+k=5: dim 5, cs, 10 = 2k vertices; the exposed vertex sets for c in {-1,0,1}^k are exactly the 242 antipodal-free subsets; 2k = 10 < 2^(k+1) = 64: True
+k=6: dim 6, cs, 12 = 2k vertices; the exposed vertex sets for c in {-1,0,1}^k are exactly the 728 antipodal-free subsets; 2k = 12 < 2^(k+1) = 128: True
+Chinese reading (dimension 2k): cross-polytope C_2k has 4k vertices vs claimed 2^(k+1)
+  k=1: dim 2, 4k = 4, 2^(k+1) = 4, counterexample: False
+  k=2: dim 4, 4k = 8, 2^(k+1) = 8, counterexample: False
+  k=3: dim 6, 4k = 12, 2^(k+1) = 16, counterexample: True
+  k=4: dim 8, 4k = 16, 2^(k+1) = 32, counterexample: True
+  k=5: dim 10, 4k = 20, 2^(k+1) = 64, counterexample: True
+k=1: same family of exposed sets for all c in {-2..2}^k
+k=2: same family of exposed sets for all c in {-2..2}^k
+k=3: same family of exposed sets for all c in {-2..2}^k
+support point in every direction: OK (random sanity)
+== lower bound 2k (cs point sets in {-1,0,1}^k)
+k=2: 11 full-dimensional cs point sets; each spans a polytope with at least 4 = 2k vertices (found by functional search)
+k=3: 8051 full-dimensional cs point sets; each spans a polytope with at least 6 = 2k vertices (found by functional search)
+== Hanner polytopes
+d=1: 1 explicit Hanner polytopes, vertex numbers [2]; range [2, 2], 2^(d+1) = 4 attained: False
+d=2: 2 explicit Hanner polytopes, vertex numbers [4]; range [4, 4], 2^(d+1) = 8 attained: False
+d=3: 6 explicit Hanner polytopes, vertex numbers [6, 8]; range [6, 8], 2^(d+1) = 16 attained: False
+d=4: 22 explicit Hanner polytopes, vertex numbers [8, 10, 12, 16]; range [8, 16], 2^(d+1) = 32 attained: False
+d=5: 90 explicit Hanner polytopes, vertex numbers [10, 12, 14, 16, 18, 20, 24, 32]; range [10, 32], 2^(d+1) = 64 attained: False
+d=6: 394 explicit Hanner polytopes, vertex numbers [12, 14, 16, 18, 20, 22, 24, 26, 28, 32, 34, 36, 40, 48, 64]; range [12, 64], 2^(d+1) = 128 attained: False
+ALL CHECKS PASSED
+exit 0
