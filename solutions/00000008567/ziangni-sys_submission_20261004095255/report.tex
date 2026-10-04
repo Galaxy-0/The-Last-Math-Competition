@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{Identity matrices cannot be paved to smaller block norms}
+\author{ziangni-sys}
+\date{Disproof of conjecture 00000008567}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result.} As explicitly stated without a zero-diagonal hypothesis, the proposed paving assertion is false. For $A=I_2$ and $\varepsilon=1/2$, no number of row blocks makes every block norm at most $(1-\varepsilon)^2\|A\|=1/4$. The same obstruction holds for $I_n$ in every positive dimension, so it also excludes the proposed asymptotic bound on the number of blocks.
+
+\paragraph{The source and its domain.}
+Both original language versions define paving by partitioning a matrix's rows into $r$ blocks whose norms are reduced to $(1-\varepsilon)^2$ times the full norm. Neither imposes a zero-diagonal condition or first removes the diagonal. The first conjectured clause says that $r$ of order $\varepsilon^{-2}\log n$ suffices. Our counterexample is to this unrestricted statement, not to the standard zero-diagonal Kadison--Singer paving theorem. The subsequent matching-bound and constant claims need not be decided once even the asserted paving is impossible.
+
+\paragraph{A genuine row partition and its operators.}
+Equip $H=\mathbb R^n$ with its usual Euclidean inner product, and let $e_1,\ldots,e_n$ be its orthonormal coordinate basis. A row partition is a finite family $S_1,\ldots,S_r$ of pairwise disjoint subsets whose union is $\{1,\ldots,n\}$. Empty blocks, if allowed, do not help. For $S$ let $K_S=\operatorname{span}\{e_i:i\in S\}$, and let $P_S:H\to K_S$ be the orthogonal projection.
+
+The actual row restriction of $A$ to $S$ is
+\[
+R_S=P_S A:H\longrightarrow K_S.
+\]
+In the coordinate bases, this is precisely the matrix consisting of the rows indexed by $S$: its output coordinates are $(Ax)_i$, $i\in S$. Identifying $K_S$ with its isometric copy in $H$ leaves its operator norm unchanged. Thus this formulation uses the ordinary Euclidean operator norm of a rectangular row block, not an entrywise or sup norm.
+
+For the usual principal-compression interpretation of paving, let $\widetilde P_S:H\to H$ be the same projection with codomain embedded in $H$, and put $C_S=\widetilde P_S A\widetilde P_S$. We will cover this interpretation as well.
+
+\newpage
+\paragraph{The norm obstruction.}
+Take $A=I_n$, where $n\ge1$, and $\varepsilon=1/2$. Then $\|A\|=1$. Since the blocks cover every coordinate, some block $S_j$ contains a coordinate $i$. The unit vector $e_i$ belongs to $K_{S_j}$, so
+\[
+R_{S_j}e_i=e_i,\qquad C_{S_j}e_i=e_i.
+\]
+The definition of operator norm gives
+\[
+1=\|e_i\|=\|R_{S_j}e_i\|
+\le \|R_{S_j}\|\|e_i\|=\|R_{S_j}\|,
+\]
+and likewise $\|C_{S_j}\|\ge1$. On the other hand, the requested bound is
+\[
+(1-\varepsilon)^2\|A\|=(1-1/2)^2\cdot1=1/4.
+\]
+Therefore that block cannot satisfy the paving bound. This applies to every finite partition, regardless of $r$. In fact only the covering property was used, so allowing overlapping blocks cannot repair the assertion.
+
+In particular $I_2=\left(\begin{smallmatrix}1&0\\0&1\end{smallmatrix}\right)$ is an explicit counterexample. Since the proof works for every $n\ge1$, there is no sufficiently-large-dimension escape from the failure: no function $r(n,\varepsilon)$, of the stated order or any other finite order, can provide the proposed unrestricted paving.
+
+\paragraph{Why the usual hypothesis matters.}
+The diagonal entries of $I_n$ survive every nonempty principal block, and each retained identity row already has norm one. The standard paving question restricts to zero-diagonal operators or measures the off-diagonal part. Applying that restriction to the identity changes the object to zero, which is easily paved. The original displayed definition does not make that restriction. Our argument concerns its literal domain and supplies no counterexample within the corrected zero-diagonal domain.
+
+\paragraph{Formal verification and correspondence.}
+The pinned Lean 4.19.0 project uses actual \texttt{EuclideanSpace}, its orthonormal coordinate basis, the identity continuous linear map and its actual matrix representation, finite coordinate spans and continuous orthogonal projections. The row map has the actual projected codomain; the principal map is the genuine composition $\widetilde P_S I\widetilde P_S$. The proof establishes their action on every retained unit coordinate and applies the actual continuous-linear-map operator-norm inequality.
+
+Theorems \texttt{no\_row\_paving} and \texttt{no\_principal\_paving} quantify over all covering block families. \texttt{no\_finite\_partition} excludes every finite disjoint covering partition in every positive dimension. The mathematical coordinate identification above explains exactly why these maps are the source's row blocks and customary principal blocks. No block norm or matrix action is assumed as scalar input data.
+\end{document}
