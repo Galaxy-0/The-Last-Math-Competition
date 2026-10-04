@@ -1,0 +1,41 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{A hyperconvex real line admits a fixed-point-free nonexpansive map}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Conjecture 00000000995.} The asserted fixed-point existence for set-valued nonexpansive maps on hyperconvex metric spaces fails without a bounded-domain or bounded-orbit hypothesis. Neither source language includes such a restriction.
+
+We first prove genuine hyperconvexity of \(\mathbb R\) with its ordinary distance. Recall its full meaning: for \emph{every arbitrary indexed family} of centers \(x_i\) and nonnegative radii \(r_i\) satisfying
+\[
+ |x_i-x_j|\le r_i+r_j\quad\text{for all }i,j,
+\]
+the closed balls \([x_i-r_i,x_i+r_i]\) have a common point. An empty family trivially has a common point. For a nonempty family, compatibility gives
+\[
+ x_i-r_i\le x_j+r_j\quad\text{for all }i,j.
+\]
+The nonempty set of lower endpoints is bounded above by any fixed upper endpoint. Let
+\[
+ y=\sup_i(x_i-r_i).
+\]
+For every \(j\), the supremum property gives
+\(x_j-r_j\le y\le x_j+r_j\), hence \(|y-x_j|\le r_j\). This proves the full arbitrary-family ball-intersection property, not merely a finite interval version. The real line is also a complete metric space.
+
+Now define the actual set-valued map
+\[
+ T:\mathbb R\longrightarrow\mathcal P(\mathbb R),\qquad T(x)=\{x+1\}.
+\]
+Every value is nonempty, closed, bounded, compact and convex. For the genuine Hausdorff distance,
+\[
+ d_H(T(x),T(y))=|(x+1)-(y+1)|=|x-y|.
+\]
+Thus \(T\) is nonexpansive in the standard set-valued Hausdorff sense. This is a singleton-valued special case, so it also satisfies the ordinary single-valued nonexpansiveness definition and any weaker corresponding selection-distance definition.
+
+A set-valued fixed point would satisfy \(x\in T(x)\), which is equivalent to \(x=x+1\). No real number satisfies this equation. Therefore the fixed-point set is empty despite the domain's genuine hyperconvexity and the strong regularity of every value.
+
+The unique selection is \(f(x)=x+1\); its actual orbit from zero is \(f^{\circ n}(0)=n\), which tends to positive infinity. This explicitly displays the missing bounded-orbit condition. Individual values being bounded does not make the whole domain or its orbits bounded.
+
+\medskip\noindent\textbf{Scope and verification.} This disproves the unrestricted hyperconvex existence clause, without contradicting fixed-point theorems with appropriate boundedness and admissibility hypotheses. The separate non-extension clause is unused. Lean proves full hyperconvexity by the actual supremum construction, uses the genuine singleton set map and Hausdorff distance, verifies its nonempty closed bounded convex values, proves absence of fixed points, and computes the actual iterated orbit and its divergence. No hyperconvexity or nonexpansiveness certificate is assumed. The pinned full project build prints theorem axiom audits.
+\end{document}
