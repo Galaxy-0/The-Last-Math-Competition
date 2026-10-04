@@ -1,0 +1,66 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{Feasible two-block ADMM with divergent iterates}
+\author{ziangni-sys}
+\date{Disproof of conjecture 00000008809}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result.} Closed proper convex objectives and feasibility alone do not ensure convergence of two-block ADMM. For $f(x)=-x$, $g(z)=0$, $A=1$, $B=-1$ and $c=0$, exact ADMM with penalty parameter one, started at zero, has $x_k=z_k=k$ and multiplier $u_k=0$. Its residual is zero, but its primal iterates do not converge even weakly.
+
+\paragraph{Scope.}
+Both original language versions assert that two-block ADMM always converges to the solution set for closed proper convex objectives. Neither requires attainment of a minimizer or existence of a saddle point. This example satisfies the stated hypotheses and has feasible points, but no optimal point. It identifies that missing assumption; it does not contradict ADMM convergence theorems imposing existence of a solution and suitable qualification conditions. The separate three-block and linearized-step assertions need not be settled to disprove the conjunction.
+
+\paragraph{A genuine feasible convex problem.}
+On the real Hilbert space consider
+\[
+\min_{x,z\in\mathbb R}\{-x+0:x-z=0\}.
+\]
+Both objectives are finite everywhere and affine, hence convex. Their epigraphs are the closed halfspaces $\{(x,t):-x\le t\}$ and $\{(z,t):0\le t\}$. They are proper in the standard extended-real sense: they never take $-\infty$ and have finite values, so are not identically $+\infty$. Properness does not mean boundedness below.
+
+Every pair $(a,a)$ is feasible. There is no minimizer: from $(a,a)$ move to $(a+1,a+1)$, which remains feasible and decreases the objective from $-a$ to $-a-1$.
+
+\paragraph{Exact subproblems.}
+With penalty parameter $\rho=1$, the quadratic augmented Lagrangian is
+\[
+\mathcal L(x,z,u)=-x+u(x-z)+\tfrac12(x-z)^2.
+\]
+The standard exact two-block ADMM updates are
+\begin{align*}
+x_{k+1}&=\mathop{\rm argmin}_{x}\mathcal L(x,z_k,u_k),\\
+z_{k+1}&=\mathop{\rm argmin}_{z}\mathcal L(x_{k+1},z,u_k),\\
+u_{k+1}&=u_k+x_{k+1}-z_{k+1}.
+\end{align*}
+Here $u$ is also the scaled multiplier because $\rho=1$.
+
+\newpage
+Completing the squares gives, for arbitrary $z,u,y$ and $x,u,y$,
+\begin{align*}
+\mathcal L(y,z,u)-\mathcal L(z-u+1,z,u)
+ &=\tfrac12\bigl(y-(z-u+1)\bigr)^2,\\
+\mathcal L(x,y,u)-\mathcal L(x,x+u,u)
+ &=\tfrac12\bigl(y-(x+u)\bigr)^2.
+\end{align*}
+Each difference is nonnegative and vanishes only at the displayed point. Thus both subproblems have a unique global minimizer for every state, and the actual updates are
+\[
+x_{k+1}=z_k-u_k+1,\qquad z_{k+1}=x_{k+1}+u_k,\qquad u_{k+1}=0.
+\]
+No failure of existence or choice within a subproblem is involved.
+
+\paragraph{The full trajectory and nonconvergence.}
+Set $(x_0,z_0,u_0)=(0,0,0)$. Induction gives
+\[
+(x_k,z_k,u_k)=(k,k,0)\quad\text{for every }k\ge0.
+\]
+Consequently the feasibility residual $x_k-z_k$ is identically zero. In particular, the residual bound alone does not rescue primal convergence.
+
+To check genuine weak nonconvergence, the identity $L:\mathbb R\to\mathbb R$ is a continuous linear functional. If $x_k$ converged weakly to $a$, then $L(x_k)=x_k$ would tend to $a$. The shifted sequence $x_{k+1}$ would have the same limit, so $x_{k+1}-x_k$ would tend to zero. But that difference is always one. Uniqueness of limits would give $1=0$, a contradiction. Thus neither a weak primal limit nor convergence to an optimal point occurs.
+
+\paragraph{Formal objects and verification.}
+The Lean project defines the actual real objective functions and proves convexity and closedness of their epigraphs. It checks properness after the standard lift into the extended reals. The constraint operators are genuine continuous linear maps $A=I$ and $B=-I$, and the augmented Lagrangian uses their actual residual.
+
+The two square-completion identities prove global optimality and uniqueness of both subproblem solutions for every state. The actual ADMM step includes multiplier ascent, and its full iterates are proved by induction. Weak convergence is quantified over all continuous real linear functionals; the identity-functional argument proves its failure. The project also establishes feasibility and absence of any optimizer.
+
+Lean 4.19.0 and Mathlib commit \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b} are publicly pinned. One successful full project build checks the entire proof and prints the axiom dependencies of the main results. No admitted facts, custom axioms or external computation shortcuts are used.
+\end{document}
