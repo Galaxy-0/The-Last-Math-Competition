@@ -1,5 +1,5 @@
 /-
-  Axiom audit for the formalisation in `Main.lean`.
+  Axiom audit for the formalisation in `Main.lean` and `Trees.lean`.
 
   Build and run with:
 
@@ -11,8 +11,11 @@
 -/
 
 import Main
+import Trees
 
 open Tlmc462
+
+/-! ## `Main.lean` -/
 
 -- Lucas numbers and the recurrence for the even-index Lucas numbers
 #print axioms L_rec
@@ -63,3 +66,19 @@ open Tlmc462
 
 -- The refutation
 #print axioms conjecture_00000000462_false
+
+/-! ## `Trees.lean`: the graph, its spanning trees, and the bridge -/
+
+-- The graph C_n(1,2) and its spanning trees
+#print axioms edgesC_5
+#print axioms edgesC_6
+#print axioms edgesC_7
+#print axioms trees_5
+#print axioms trees_6
+#print axioms trees_7
+
+-- The closed form agrees with the actual spanning-tree enumeration
+#print axioms tau_eq_trees_5
+#print axioms tau_eq_trees_6
+#print axioms tau_eq_trees_7
+#print axioms tau_matches_spanningTrees

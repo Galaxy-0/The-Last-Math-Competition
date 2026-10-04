@@ -190,9 +190,10 @@ actually governs `τ`.
 | `reproduce.py` | Python 3 (standard library only, exact integer arithmetic): matrix-tree determinant for `5 ≤ n ≤ 60`, the closed form, integrality, the six-term recurrence, the factorisation, and the exact `Z[√3]` computation. Prints `PASS`/`FAIL`, non-zero exit on failure. |
 | `lean4/lean-toolchain` | Pins `leanprover/lean4:v4.33.1`. |
 | `lean4/lakefile.toml` | Lake configuration; project `tlmc462`, library `Main`, no dependencies. |
-| `lean4/Main.lean` | Lean 4 formalisation, core Lean only (`import Std`, no Mathlib, no `sorry`, no `native_decide`). |
-| `lean4/Check.lean` | `#print axioms` audit for every theorem. |
-| `lean4/README.md` | Statement table, proof strategy, and scope note for the formalisation. |
+| `lean4/Main.lean` | Lean 4 formalisation, core Lean only (`import Std`, no Mathlib, no `sorry`, no `native_decide`): Lucas arithmetic, the recurrences, the factorisation, and the obstruction in `Z[√3]`. |
+| `lean4/Trees.lean` | The conjecture's own object: the graph `C_n(1,2)`, its spanning trees by exhaustive enumeration, and the proof that the closed form agrees with the enumeration for `n = 5, 6, 7`. |
+| `lean4/Check.lean` | `#print axioms` audit for every theorem in both modules. |
+| `lean4/README.md` | Statement tables for both modules, proof strategy, and the scope note / boundary of the formalisation. |
 
 ## Reproducing
 
@@ -212,8 +213,45 @@ tectonic --outdir build main.tex     # produces build/main.pdf
 cd lean4 && lake build && lake env lean Check.lean
 ```
 
-The Lean audit reports only `[propext, Quot.sound]` for every theorem, and no
-`sorryAx`.
+The Lean audit reports only `[propext, Quot.sound]` for the theorems that need
+them, **no axioms at all** for the whole spanning-tree enumeration layer
+(`Trees.lean`), and no `sorryAx`.
+
+## Boundary of the formalisation
+
+This boundary statement is part of the submission and should be read together
+with the formalisation. The same statement appears in `main.tex`
+(*Boundary of the formalisation*) and in `lean4/README.md`.
+
+* **Kernel-certified.** The Lucas arithmetic; the three-term recurrence for
+  `u(n) = L(2n) + 2(−1)^(n+1)`; the six-term recurrence for `c = n·u` and hence
+  for `τ`; the integrality `5 | u(n)`; the initial values `τ(5)…τ(12)`; the
+  factorisation `x³−2x²−2x+1 = (x+1)(x²−3x+1)` and its square, as an exact
+  identity of integer coefficient lists; the value
+  `p(α²) = 2615536 + 1510080√3` in the pair model of `Z[√3]`; and, for
+  `n = 5, 6, 7`, the equality of the closed-form sequence with the genuinely
+  enumerated spanning-tree count of `C_n(1,2)`.
+* **Not formalised, and why.** The general-`n` identification
+  “closed form = number of spanning trees of `C_n(1,2)`” rests on two classical
+  inputs proved in full in `main.tex` §I: the matrix-tree theorem (Kirchhoff)
+  and the evaluation of a product over the nontrivial `n`-th roots of unity.
+  Formalising Kirchhoff's theorem for arbitrary connected graphs is far outside
+  core Lean and would require substantial Mathlib infrastructure. The identity
+  is instead verified exactly and independently for `5 ≤ n ≤ 60` by the integer
+  Bareiss determinant in `reproduce.py`, and for `n = 5, 6, 7` it is
+  kernel-certified by brute-force enumeration in `Trees.lean`, without
+  appealing to Kirchhoff's theorem at all.
+* **The logical bridge to “characteristic root”.** The formalisation certifies
+  the arithmetic fact `p(α²) ≠ 0`. The step to “`α²` is not a characteristic
+  root of any recurrence satisfied by `τ`” uses the standard fact that the
+  minimal annihilating polynomial divides every annihilating polynomial. That
+  is proved in `main.tex` (Corollary, §III) but not itself formalised: core Lean
+  has no polynomial-ring or linear-algebra library. The step is elementary and
+  independent of the conjecture.
+* **Asymptotics.** `lim τ(n)^{1/n} = φ²` is a real-analysis limit statement and
+  is not formalised (core Lean has no reals or limits). It is verified
+  numerically to ten decimal places in `reproduce.py`, and it is not needed for
+  the refutation, which already follows from the algebraic obstruction.
 
 ## Status against the submission rules
 
@@ -226,7 +264,12 @@ contain only the personal submission under the problem folder.
   `geometry`, `amsmath`, `amssymb`, `amsthm`, `parskip`, `booktabs`, `array`;
   compiles with `tectonic main.tex`.
 * **PDF document** — present at `build/main.pdf`.
-* **Lean 4 project** — present under `lean4/`, core Lean only, no `sorry`, no
+* **Lean 4 project** — present under `lean4/`: `Main.lean` (Lucas arithmetic,
+  the recurrences, the factorisation, the obstruction in `Z[√3]`),
+  `Trees.lean` (the graph `C_n(1,2)`, its spanning trees by exhaustive
+  enumeration, and the agreement with the closed form for `n = 5, 6, 7`),
+  `Check.lean` (axiom audit), `lakefile.toml` (modules `Main` and `Trees`),
+  `lean-toolchain`, `README.md`. Core Lean only, no `sorry`, no
   `native_decide`; `lake build` and `lake env lean Check.lean` both succeed.
 * **Auxiliary code** — `reproduce.py`, dependency-free, exits `0` with `PASS`.
 * **Conjecture unsolved at submission time** — `metadata.csv` records
