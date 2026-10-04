@@ -1,0 +1,223 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newcommand{\F}{\mathbb F}
+\title{Matrices with Squarefree Characteristic Polynomial:\\A Disproof of Conjecture 00000001854}
+\author{GitHub: gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+The source asserts that the number of $n\times n$ matrices over $\F_q$
+with squarefree characteristic polynomial is exactly
+$q^{n^2}\prod(1-q^{-i^2})$. For the product over $1\le i\le n$ we show
+that the identity fails for every finite field and every $n\ge1$: for
+$n=1$ the count is $q$ and the formula gives $q-1$, and for $n\ge2$ the
+formula is not an integer. At $n=1$ the identity also fails for every
+non-empty truncation of the product and for the infinite product, and
+the product over $1\le i\le n-1$ fails at $n=5$. These
+statements are verified in Lean with Mathlib's matrices, characteristic
+polynomials and squarefree elements.
+\end{abstract}
+
+\paragraph{Notation and reading of the source.}
+For a finite field $F$ with $q$ elements and $n\ge0$ let
+\[
+ N_n(F)=\#\{M\in \mathrm{Mat}_n(F): \chi_M \text{ is squarefree}\},
+\]
+where $\chi_M=\det(XI-M)\in F[X]$ and a polynomial is squarefree if no
+square of a non-unit divides it. Both language versions of the source
+state
+\[
+ N_n(\F_q)=q^{n^2}\prod\bigl(1-q^{-i^2}\bigr)
+\]
+as an exact closed form, without giving the range of the index $i$. The
+shape of the formula imitates $|\mathrm{GL}_n(\F_q)|=q^{n^2}\prod_{i=1}^n
+(1-q^{-i})$, so the natural reading is the product over $1\le i\le n$
+(Reading~A). The other reading we treat is the infinite product over
+$i\ge1$ (Reading~B). The claim is read as an identity for all prime
+powers $q$ and all $n\ge1$.
+
+\begin{theorem}\label{thm:one}
+For every finite field $F$ with $q$ elements, $N_1(F)=q$.
+\end{theorem}
+\begin{proof}
+The characteristic polynomial of the $1\times1$ matrix $(a)$ is $X-a$.
+A polynomial of degree one over a field is irreducible, and an
+irreducible element is squarefree: if $d^2$ divides $X-a$ then $d$
+divides an irreducible element twice, which forces $d$ to be a unit.
+Hence all $q$ matrices are counted.
+\end{proof}
+
+\begin{theorem}[Reading A]\label{thm:A}
+Let $F$ be a finite field with $q$ elements and let $n\ge1$. Then
+\[
+ N_n(F)\ne q^{n^2}\prod_{i=1}^{n}\bigl(1-q^{-i^2}\bigr).
+\]
+For $n=1$ the right-hand side is $q-1$, and for $n\ge2$ it is not an
+integer.
+\end{theorem}
+\begin{proof}
+For $n=1$ the right-hand side is $q(1-q^{-1})=q-1$, while $N_1(F)=q$ by
+Theorem~\ref{thm:one}.
+
+Let $n\ge2$ and put $S=\sum_{i=1}^n i^2$. Suppose that the right-hand
+side equals an integer $N$. Multiplying by $q^{S}=\prod_{i=1}^n q^{i^2}$
+gives the identity of integers
+\[
+ N\,q^{S}=q^{n^2}\prod_{i=1}^{n}\bigl(q^{i^2}-1\bigr).
+\]
+Since $n\ge2$, the sum $S$ contains the two different terms $1^2$ and
+$n^2$, so $S\ge n^2+1$. Cancelling $q^{n^2}$ shows that $q$ divides
+$P=\prod_{i=1}^n(q^{i^2}-1)$. But every factor is coprime to $q$,
+because $q^{i^2-1}\cdot q-(q^{i^2}-1)=1$ for $i\ge1$; hence $P$ is
+coprime to $q$. A common divisor $q$ of $q$ and $P$ must then be a
+unit, contradicting $q\ge2$.
+\end{proof}
+
+\begin{theorem}[Other finite ranges]\label{thm:C}
+Let $q\ge2$ and let $n,m\ge1$ with $\sum_{i=1}^{m}i^2>n^2$. Then
+$q^{n^2}\prod_{i=1}^{m}(1-q^{-i^2})$ is not an integer. In particular,
+with the product over $1\le i\le n-1$ the identity fails at $n=5$ for
+every finite field, because $1+4+9+16=30>25$.
+\end{theorem}
+\begin{proof}
+The proof of Theorem~\ref{thm:A} for $n\ge2$ used only $S>n^2$, and it
+applies with $S=\sum_{i=1}^{m}i^2$ and the product over $1\le i\le m$.
+\end{proof}
+
+\begin{theorem}[Truncations and Reading B at $n=1$]\label{thm:B}
+Let $F$ be a finite field with $q$ elements.
+\begin{enumerate}
+\item For every $m\ge1$,
+ $q\prod_{i=1}^{m}(1-q^{-i^2})\le q-1<q=N_1(F)$.
+\item If the partial products $\prod_{i=1}^{m}(1-q^{-i^2})$ converge to
+ $L$ as $m\to\infty$, then $qL\le q-1<N_1(F)$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Every factor $1-q^{-i^2}$ lies in $[0,1]$, so the partial products are
+non-negative and non-increasing in $m$. For $m\ge1$ they are therefore
+at most the first factor $1-q^{-1}$, which gives (1). The limit of a
+sequence that is eventually at most $1-q^{-1}$ is at most $1-q^{-1}$,
+which gives (2).
+\end{proof}
+
+Thus the asserted identity is false in Reading~A for every $q$ and
+every $n\ge1$, and in Reading~B at $n=1$ for every $q$.
+
+\begin{remark}[The true values for small $n$; not formalised]
+For $n=2$ one has $N_2(\F_q)=q^4-q^3$. Indeed, a monic quadratic is not
+squarefree exactly when it equals $(X-a)^2$ for some $a\in\F_q$, and
+$a$ is then unique. A matrix $M$ has $\chi_M=(X-a)^2$ exactly when
+$M-aI=\bigl(\begin{smallmatrix}x&y\\z&-x\end{smallmatrix}\bigr)$ with
+$x^2+yz=0$. This equation has $q^2$ solutions: $q(q-1)$ with $y\ne0$
+(then $z=-x^2/y$) and $q$ with $y=0$ (then $x=0$). So $q\cdot q^2$
+matrices are excluded. Reading~A gives $(q^4-q^3)(1-q^{-4})$ instead.
+The supplementary script \texttt{verify.py} enumerates all
+matrices for small parameters and finds $N_1=q$ and $N_2=q^4-q^3$ for
+$q\in\{2,3,5\}$, $N_3(\F_2)=160$ and $N_3(\F_3)=11178$. In particular a
+product over $1\le i\le n-1$, which happens to agree with $N_n$ for
+$n\le2$, gives $240\ne160$ at $(n,q)=(3,2)$. This remark is supported by
+the paper argument and the enumeration only; it is not used in the
+theorems above.
+\end{remark}
+
+\section*{The earlier submission and its error}
+Pull request \#23 (orionsheep) treated this conjecture with the same
+counterexample at $n=1$ and the same two readings. It was merged on
+2026-10-01 and removed by the organisers in commit \texttt{4504549}
+the same day; the stated reason was that its Lean theorems carried none
+of the mathematical objects. The mathematics of that submission was
+correct. The error was in its Lean file, which used Lean core only. The
+squarefree predicate was defined as the constant function
+\begin{center}\small\texttt{def sqfree1b : Fin 2 -> Bool := fun \_ => true},\end{center}
+the count was the length of a two-element list filtered by this
+predicate, and the decisive statements were closed arithmetic facts
+such as \texttt{(2 : Nat) $\neq$ 1}. No matrix, characteristic
+polynomial, squarefreeness, finite field or quantifier over $q$ and $n$
+occurred. The present submission defines the count with Mathlib's
+\texttt{Matrix.charpoly} and \texttt{Squarefree}, proves $N_1(F)=q$ for
+every finite field, and proves the failure of the identity for all
+finite fields and all $n\ge1$.
+
+\section*{Formal verification and scope}
+The Lean definition
+\begin{center}\small\texttt{sqfreeCount F n}\end{center}
+is, for an arbitrary field \texttt{F}, the cardinality of the subtype of
+\begin{center}\small\texttt{Matrix (Fin n) (Fin n) F}\end{center}
+on which \texttt{Squarefree M.charpoly} holds. The right-hand side is
+\texttt{formula q n m}, the rational number
+$q^{n^2}\prod_{i=1}^{m}(1-1/q^{i^2})$, and
+\texttt{partialProduct q m} is the real partial product.
+
+The theorems
+\begin{center}\small
+\texttt{squarefree\_charpoly\_one},\qquad \texttt{sqfreeCount\_one}
+\end{center}
+are Theorem~\ref{thm:one} for every finite field. The theorem
+\begin{center}\small\texttt{formula\_not\_natural}\end{center}
+states that for $q\ge2$ and $n\ge2$ no natural number equals
+\texttt{formula q n n}. The theorem \texttt{formula\_fails} is
+Theorem~\ref{thm:A}: for every type \texttt{F} with \texttt{Field} and
+\texttt{Fintype} instances and every $n\ge1$,
+\begin{center}\small
+\texttt{(sqfreeCount F n : Rat) $\neq$ formula (Fintype.card F) n n}.
+\end{center}
+Theorem~\ref{thm:C} is
+\begin{center}\small
+\texttt{formula\_not\_natural\_of\_sum},\qquad \texttt{shifted\_formula\_fails},
+\end{center}
+the second being the case $n=5$, $m=4$ for every finite field.
+Theorem~\ref{thm:B}(1) is
+\begin{center}\small\texttt{truncated\_formula\_fails\_at\_one},\end{center}
+and Theorem~\ref{thm:B}(2) is
+\begin{center}\small\texttt{infinite\_product\_fails\_at\_one},\end{center}
+with convergence expressed by \texttt{Filter.Tendsto}. The propositions
+\begin{center}\small
+\texttt{ClaimedClosedForm},\qquad \texttt{ClaimedClosedFormInfinite}
+\end{center}
+are the universally quantified identities of Readings~A and~B. Their
+negations are the final theorems
+\begin{center}\small
+\texttt{conjecture\_false},\qquad \texttt{conjecture\_false\_infinite}.
+\end{center}
+
+The negations need one concrete finite field. The Mathlib module that
+declares the field structure on \texttt{ZMod p} is not among the
+modules imported here, so the file declares the instance
+\texttt{instFieldZModTwo} from Mathlib's commutative ring structure and
+inversion on \texttt{ZMod 2}, proving $a\,a^{-1}=1$ for $a\ne0$. The
+general theorems do not depend on this instance. No
+\texttt{native\_decide}, \texttt{sorry} or custom axiom occurs.
+
+Scope. The source does not fix the index range of the product. The
+formal results cover the product over $1\le i\le n$ for all $n\ge1$,
+and at $n=1$ every truncation $1\le i\le m$ with $m\ge1$ and the
+infinite product. Reading~B is refuted only at $n=1$, which suffices
+for a claim about all $n$. The product over $1\le i\le n-1$, which is
+empty at $n=1$ and agrees with $N_n$ for $n\le2$, is refuted formally
+at $n=5$ by Theorem~\ref{thm:C}. More generally a range
+$1\le i\le m(n)$ is refuted as soon as $m(1)\ge1$, or
+$\sum_{i\le m(n)}i^2>n^2$ for some $n$. Index ranges that do not start
+at $i=1$ are not covered. No claim is made about the asymptotic
+proportion of such matrices as $n$ or $q$ grows.
+
+\section*{Source and reproduction}
+The exact bilingual source is included byte-for-byte as
+\texttt{SOURCE.md}. Its repository path is
+\begin{center}\small\texttt{conjectures/00000001854.md}.\end{center}
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake build}, then
+\begin{center}\small\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The included public-Git manifest locks all dependency revisions.
+The \texttt{verification/} directory records the fresh-build logs,
+theorem-axiom reports, artifact hashes and the self-review. The script
+\texttt{verify.py} is supplementary and supports only the remark.
+\end{document}
