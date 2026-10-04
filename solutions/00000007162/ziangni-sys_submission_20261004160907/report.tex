@@ -1,0 +1,107 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\emergencystretch=2em
+\title{A nonnormal critical point of a convex spectral function\\
+\large Disproof of conjecture 00000007162}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+Both source versions assert that critical points of convex spectral
+functions are normal matrices. No restriction to symmetric or
+Hermitian matrices appears in either version.
+On the space of all real $2\times2$ matrices, a nonconstant convex
+function of the eigenvalues has a nonnormal critical point.
+
+\textbf{The actual spectral function.}
+On $\mathcal M=M_2(\mathbb R)$ define
+\[
+ f(M)=(\operatorname{tr}M)^2.
+\]
+Here \emph{spectral} means eigenvalue-dependent, with algebraic
+multiplicities. For the two complex eigenvalues $\lambda_1,\lambda_2$
+of a real matrix $M$,
+\[
+ \operatorname{tr}M=\lambda_1+\lambda_2,\qquad
+ f(M)=(\lambda_1+\lambda_2)^2.
+\]
+The sum is real, including for a nonreal conjugate pair.
+Thus $f$ is a real-valued spectral function on the entire real
+matrix space, not only its symmetric subspace.
+
+Algebraically, trace is the negative coefficient of $t$ in the
+actual characteristic polynomial of a $2\times2$ matrix.
+Equal characteristic polynomials therefore give equal values of $f$.
+Similarity preserves trace and hence $f$.
+The function is nonconstant: $f(0)=0$ and $f(I_2)=4$.
+
+\textbf{Convexity on the whole matrix space.}
+For $a,b\geq0$ with $a+b=1$ and any $M,N\in\mathcal M$, linearity
+of trace gives
+\[
+ af(M)+bf(N)-f(aM+bN)
+ =ab\bigl(\operatorname{tr}M-\operatorname{tr}N\bigr)^2\geq0.
+\]
+This proves convexity for every pair of real matrices, including
+nonnormal matrices.
+
+\newpage
+\textbf{A genuine critical point which is not normal.}
+For every perturbation $H$, the Fr\'echet derivative is
+\[
+ Df(M)[H]=2\operatorname{tr}M\,\operatorname{tr}H.
+\]
+Take the actual Jordan nilpotent
+\[
+ J=\begin{pmatrix}0&1\\0&0\end{pmatrix}.
+\]
+Its trace is zero, so $Df(J)$ is the zero functional.
+Hence $J$ is a critical point. This is the ordinary Fr\'echet
+derivative on a finite-dimensional matrix space; choosing an
+equivalent norm does not change the assertion.
+
+A real matrix is normal when $MM^{\mathsf T}=M^{\mathsf T}M$.
+But
+\[
+ JJ^{\mathsf T}=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+ \qquad
+ J^{\mathsf T}J=\begin{pmatrix}0&0\\0&1\end{pmatrix}.
+\]
+Their $(0,0)$ entries differ, so $J$ is not normal.
+
+\textbf{Scope.}
+This disproves the claimed necessity of normality on unrestricted
+real matrices under the eigenvalue-dependent, similarity-invariant
+interpretation of spectral function. It does not concern a
+singular-value function or a domain pre-restricted to Hermitian
+matrices. Within a Hermitian domain normality is automatic.
+The source states neither restriction.
+The separate minimizer-ordering clause is unnecessary.
+
+\textbf{Formal correspondence.}
+Lean constructs the actual real matrices and trace-square function.
+\texttt{objective\_spectral} proves dependence on the actual
+characteristic polynomial using Mathlib's trace/coefficient theorem.
+\texttt{objective\_similarity} proves invariance under every
+invertible-matrix conjugation, and \texttt{objective\_convex}
+proves \texttt{ConvexOn} on the entire matrix space.
+
+The formal matrix space carries the maximum-entry norm transported
+from its finite coordinate space. The actual trace linear map is
+converted to a continuous linear map.
+\texttt{objective\_derivative} proves \texttt{HasFDerivAt}
+with the displayed derivative at every matrix.
+\texttt{jordan\_critical} proves zero derivative at $J$, and
+\texttt{jordan\_not\_normal} disproves the actual matrix identity.
+The final \texttt{counterexample} combines these facts and
+nonconstancy.
+
+\textbf{Reproduction.}
+Run \texttt{lake build} in \texttt{lean/} with Lean 4.19.0 and
+public Mathlib revision
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}\end{center}
+The project prints the relevant axiom audits.
+\end{document}
