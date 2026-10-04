@@ -1,0 +1,39 @@
+== lake build (fresh, Lean 4.19.0)
+info: polytopeHamiltonicity: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+ℹ [2/3] Built Main
+info: ././././Main.lean:594:0: 'PolytopeHam.not_adj_of_cert' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:595:0: 'PolytopeHam.no_hamCycle' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:596:0: 'PolytopeHam.rd_adj_iff' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:597:0: 'PolytopeHam.RD_not_hamiltonian' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:598:0: 'PolytopeHam.exists_nonHamiltonian_3polytope' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:599:0: 'PolytopeHam.conjecture_00000007145_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:600:0: 'PolytopeHam.conjecture_00000007145_false'' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:601:0: 'PolytopeHam.exists_nonHamiltonian_4polytope' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:602:0: 'PolytopeHam.Oct_hamiltonian' depends on axioms: [propext, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+ok   rhombic dodecahedron: all 14 points are vertices
+ok   it is 3-dimensional
+ok   12 facets, all quadrilaterals (rhombi)
+ok   24 edges
+ok   Euler: V - E + F = 2
+ok   every edge joins a cube vertex (+-1,+-1,+-1) to an axis vertex: bipartite 8 + 6
+ok   exhaustive DFS: no Hamiltonian cycle
+ok   exhaustive DFS: not even a Hamiltonian path
+ok   Lean edge table = facet-computed edges; every exposing functional is valid
+ok   Lean non-edge table: 67 pairs, all non-edges, all certificates valid
+ok   the two tables cover all C(14,2) = 91 pairs
+ok   pyramid: 15 vertices, 4-dimensional
+ok   pyramid: 13 facets (base + 12 pyramids over rhombi), 38 edges
+ok   pyramid: cube vertices pairwise non-adjacent
+ok   pyramid: exhaustive DFS finds no Hamiltonian cycle
+ok   octahedron: 8 facets, 12 edges, Hamiltonian cycle [0, 1, 2, 3, 4, 5]
+ok   triakis octahedron (alternative): 14 vertices, 24 facets, 36 edges, non-Hamiltonian
+ALL CHECKS PASSED
+exit 0

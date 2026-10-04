@@ -1,0 +1,324 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of Conjecture 00000007145:\\
+a 3-dimensional polytope with a non-Hamiltonian graph}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000007145 asserts that non-Hamiltonian graphs of 4-dimensional
+polytopes exist and that \emph{the minimal dimension of such examples is four}.
+The minimality clause is false. The rhombic dodecahedron
+$\operatorname{conv}\{(\pm2,0,0),(0,\pm2,0),(0,0,\pm2),(\pm1,\pm1,\pm1)\}$ is a
+3-dimensional polytope. Its graph is bipartite with parts of sizes $8$ and $6$,
+so it has no Hamiltonian cycle (and not even a Hamiltonian path). Because every
+polygon has a Hamiltonian graph, the true minimal dimension is $3$. The first
+clause is true: the pyramid over the rhombic dodecahedron is a 4-polytope with a
+non-Hamiltonian graph. Polytopes, vertices, edges, dimension and Hamiltonian
+cycles are defined from scratch in Lean~4 (core library only). Lean proves that the
+rhombic dodecahedron is a 3-polytope, determines its whole graph, proves
+that the graph is not Hamiltonian, and proves $\neg$\,\texttt{MinDimIsFour}.
+\end{abstract}
+
+\section{The conjecture and its reading}
+\begin{quote}
+\emph{Definition:} The Hamiltonicity of polytope graphs with skeleton cycles.
+\emph{Conjecture:} Non-Hamiltonian examples of four-dimensional polytope graphs
+exist, and the minimal dimension of the examples is four. (minimal
+four-dimensional non-Hamiltonian skeletons)
+\end{quote}
+The Chinese version says the same: there are non-Hamiltonian examples of graphs of
+4-dimensional polytopes, and the minimal dimension of the examples is four.
+
+The \emph{graph} (1-skeleton) of a convex polytope $P$ has the vertices of $P$ as
+its vertices and the edges (1-dimensional faces) of $P$ as its edges. It is
+\emph{Hamiltonian} if it has a cycle through every vertex exactly once. An
+\emph{example} is a polytope whose graph is not Hamiltonian. The conjecture is the
+conjunction of
+\begin{itemize}
+\item[(A)] there is a 4-dimensional polytope with a non-Hamiltonian graph;
+\item[(B)] the minimal dimension of a polytope with a non-Hamiltonian graph is $4$;
+that is, every polytope of dimension $<4$ has a Hamiltonian graph.
+\end{itemize}
+We refute (B). This refutes the conjunction. We also prove (A), so the conjecture
+fails exactly through its minimality clause.
+
+\paragraph{Readings.}
+\begin{enumerate}
+\item \emph{Degenerate polytopes.} A point (dimension $0$) and a segment
+(dimension $1$) have graphs $K_1$ and $K_2$, which contain no cycle at all. Under
+the usual convention (a Hamiltonian cycle needs at least $3$ vertices) these are
+non-Hamiltonian, so the minimal dimension would trivially be $0$. We do not use this.
+We read (B) charitably as ``every polytope of dimension $2$ or $3$ has a
+Hamiltonian graph''. Our counterexample has dimension exactly $3$, so it refutes
+(B) under every convention for dimensions $0,1$. It even refutes the weakest
+consequence of (B): ``every 3-polytope has a Hamiltonian graph''.
+\item \emph{Cycle or path.} The graph of our example has no Hamiltonian cycle
+and also no Hamiltonian path (Remark~\ref{rem:path}). So (B) also fails if
+``Hamiltonian'' meant ``traceable''.
+\item \emph{Abstract graphs.} If ``examples'' are abstract non-Hamiltonian graphs
+and ``dimension'' is the least dimension of a polytope realising the graph, (B)
+still fails: our graph is the graph of a 3-polytope, so that least dimension is at
+most $3$.
+\item \emph{Simple polytopes.} If only simple polytopes (every vertex on exactly $d$
+facets) were meant, (B) still fails. Tutte's graph \cite{tutte} is cubic, planar
+and 3-connected. By Steinitz's theorem it is the graph of a simple 3-polytope, and
+it is not Hamiltonian. This reading is not formalized; we only cite it.
+\end{enumerate}
+
+\section{Definitions}\label{sec:defs}
+Let $V\subset\mathbb{R}^d$ be finite and $P=\operatorname{conv}V$. A
+\emph{face} of $P$ is a set $\{x\in P: c\cdot x=\max_P c\}$ for some
+$c\in\mathbb{R}^d$. The maximum of $c$ over $P$ equals its maximum over $V$, and the
+face is the convex hull of the maximising points of $V$. We always take $V$ to be
+the vertex set of $P$, so that every point of $V$ is a vertex. Then:
+\begin{itemize}
+\item $p\in V$ is a \emph{vertex} iff some $c$ satisfies $c\cdot q<c\cdot p$ for
+all $q\in V\setminus\{p\}$;
+\item $\{p,q\}\subseteq V$, $p\neq q$, is an \emph{edge} iff some $c$ satisfies
+$c\cdot p=c\cdot q$ and $c\cdot r<c\cdot p$ for all $r\in V\setminus\{p,q\}$
+(the face is then exactly the segment $[p,q]$);
+\item $\dim P=d$ iff some $d+1$ points $p,b_1,\dots,b_d\in V$ are affinely
+independent, i.e. $\det(b_1-p,\dots,b_d-p)\neq0$. (Every $d$-polytope is
+affinely isomorphic to a full-dimensional polytope in $\mathbb{R}^d$, and affine
+isomorphisms preserve the face lattice, hence the graph.)
+\end{itemize}
+
+\begin{lemma}[integer functionals suffice]\label{lem:int}
+Let $V\subset\mathbb{Q}^d$ be finite. In the definitions of vertex and edge above,
+the functional $c$ may be taken in $\mathbb{Z}^d$.
+\end{lemma}
+\begin{proof}
+For an edge $\{p,q\}$ let $L=\{x\in\mathbb{R}^d: x\cdot(p-q)=0\}$; for a vertex let
+$L=\mathbb{R}^d$. $L$ is the kernel of a rational matrix, so it has a basis
+$u_1,\dots,u_m$ of rational vectors. Write $c=\sum\lambda_iu_i$. The finitely many
+strict inequalities $(\sum\mu_iu_i)\cdot(p-r)>0$ define an open subset of
+$\mathbb{R}^m$ that contains $\lambda$. So it contains a rational point $\mu$, and
+$c'=\sum\mu_iu_i\in L\cap\mathbb{Q}^d$ satisfies the same conditions as $c$.
+Multiplying $c'$ by a positive common denominator gives an integer functional.
+\end{proof}
+So for polytopes with rational vertices the integer definitions used in Lean
+describe exactly the usual (real) vertices and edges. A rational polytope can be
+scaled to have integer vertices without changing its graph.
+
+\begin{definition}
+A \emph{Hamiltonian cycle} of the graph of $P$ is a sequence
+$v_0,v_1,\dots,v_{n-1}$ listing every vertex exactly once, with $n\ge3$, such that
+$v_i v_{i+1}$ (indices mod $n$) are edges.
+\end{definition}
+
+\section{Certificates for edges and non-edges}
+\begin{lemma}[non-edge certificate]\label{lem:cert}
+Let $p\ne q$ in $V$. Suppose there are an integer $k>0$, points
+$w_1,\dots,w_s\in V\setminus\{p,q\}$ and integers $m_i\ge0$ with
+$\sum m_i=2k$ and $k(p+q)=\sum m_iw_i$. Then $\{p,q\}$ is not an edge.
+\end{lemma}
+\begin{proof}
+Suppose $c$ satisfies $c\cdot p=c\cdot q=t$ and $c\cdot r<t$ for all other
+$r\in V$. Then
+\[2kt=c\cdot k(p+q)=\sum m_i\,c\cdot w_i<\sum m_i\,t=2kt,\]
+where the inequality is strict because $\sum m_i=2k>0$. This is a contradiction. The
+argument uses only the arithmetic of an ordered ring, so it applies to real $c$
+directly (Lemma~\ref{lem:int} is not even needed here). Geometrically, the
+midpoint of $[p,q]$ is the convex combination $\sum\frac{m_i}{2k}w_i$ of the
+other vertices.
+\end{proof}
+
+\begin{lemma}[independence criterion]\label{lem:indep}
+Let $G$ be a graph on $n$ vertices and let $I$ be a set of pairwise non-adjacent
+vertices with $|I|>n/2$. Then $G$ has no Hamiltonian cycle.
+\end{lemma}
+\begin{proof}
+In a Hamiltonian cycle $v_0,\dots,v_{n-1}$ the successor map
+$v_i\mapsto v_{i+1}$ is injective. It sends every vertex of $I$ to a vertex
+outside $I$, because $I$ is independent. Hence $|I|\le n-|I|$, a contradiction.
+\end{proof}
+The Lean proof of Lemma~\ref{lem:indep} is a list induction. If no two consecutive
+entries of a list are both in $I$, then the number of entries in $I$ is at most
+the number outside $I$, plus one if the list starts in $I$. A cycle that starts in
+$I$ is rotated by one step first.
+
+\section{The rhombic dodecahedron}
+Let
+\[V=\underbrace{\{(\pm2,0,0),(0,\pm2,0),(0,0,\pm2)\}}_{O\ (6\text{ axis points})}
+\cup\underbrace{\{(\pm1,\pm1,\pm1)\}}_{C\ (8\text{ cube points})},\qquad
+R=\operatorname{conv}V.\]
+This is the rhombic dodecahedron. Its $12$ facets are the rhombi
+$\pm x_i\pm x_j=2$ ($i<j$), for example
+$\{(2,0,0),(1,1,1),(0,2,0),(1,1,-1)\}\subset\{x+y=2\}$.
+
+\begin{proposition}\label{prop:R}
+\begin{enumerate}
+\item Every point of $V$ is a vertex of $R$, and $\dim R=3$.
+\item The edges of $R$ are exactly the $24$ pairs
+$\{s,\,2s_ie_i\}$ with $s\in C$ and $i\in\{1,2,3\}$, where $e_i$ is the $i$-th unit vector. Every edge joins
+a point of $C$ to a point of $O$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) For $p\in V$ take $c=p$. Then $c\cdot p=|p|^2\in\{3,4\}$. For $q\ne p$ in $V$ we
+have $p\cdot q\le 2<3$ if $p\in C$, and $p\cdot q\le 2<4$ if $p\in O$. The points
+$(0,0,-2),(2,0,0),(0,2,0),(0,0,2)$ give
+$\det\bigl((2,0,2),(0,2,2),(0,0,4)\bigr)=16\ne0$.
+
+(2) \emph{Edges.} For $s\in C$ and $a=2s_ie_i$ take $c=s+s_ie_i$. Then
+$c\cdot s=c\cdot a=4$, and every other point $r\in V$ has $c\cdot r\le2$: for the
+axis points $\pm2e_j$ with $j\ne i$ the value is $\pm2$, for $-2s_ie_i$ it is $-4$,
+and for a cube point $t\ne s$ it is $s\cdot t+s_it_i\le1+1=2$.
+
+\emph{Non-edges.} The remaining $\binom{14}{2}-24=67$ pairs have certificates as
+in Lemma~\ref{lem:cert}, all with $k\in\{1,2\}$, for example:
+\begin{align*}
+(1,1,1)+(1,1,-1)&=(2,0,0)+(0,2,0) &&\text{(cube points differing in one sign)},\\
+2\bigl((1,1,1)+(1,-1,-1)\bigr)&=2\cdot(2,0,0)+(0,2,0)+(0,-2,0) &&\text{(differing in two signs)},\\
+(1,1,1)+(-1,-1,-1)&=(2,0,0)+(-2,0,0) &&\text{(opposite)},\\
+(2,0,0)+(0,2,0)&=(1,1,1)+(1,1,-1) &&\text{(two axis points)},\\
+(2,0,0)+(-2,0,0)&=(0,2,0)+(0,-2,0) &&\text{(opposite axis points)},\\
+(2,0,0)+(-1,1,1)&=(0,2,0)+(1,-1,1) &&\text{(non-incident axis and cube points)}.
+\end{align*}
+All $67$ certificates are listed in \texttt{lean4/Main.lean} (\texttt{rdNonEdges}),
+checked there by \texttt{decide}, and re-checked by \texttt{verify.py}. Up to
+the symmetries of the cube, every non-edge is of one of the six types above.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+The graph of the 3-polytope $R$ has no Hamiltonian cycle. Hence clause (B) is
+false, and Conjecture 00000007145 is false.
+\end{theorem}
+\begin{proof}
+By Proposition~\ref{prop:R}, the $8$ cube points are pairwise non-adjacent, and
+$8>14/2$. Apply Lemma~\ref{lem:indep}.
+\end{proof}
+
+\begin{remark}\label{rem:path}
+The graph of $R$ is bipartite with parts $C$ and $O$ of sizes $8$ and $6$. A path
+alternates between the parts, so the numbers of its vertices in the two parts
+differ by at most $1$. Hence there is not even a Hamiltonian path.
+\end{remark}
+
+\begin{corollary}
+The minimal dimension $d\ge2$ of a polytope with a non-Hamiltonian graph is $3$.
+\end{corollary}
+\begin{proof}
+A convex $n$-gon ($n\ge3$) has the $n$-cycle as its graph, which is Hamiltonian.
+Theorem~\ref{thm:main} gives a 3-dimensional example.
+\end{proof}
+
+\begin{remark}
+Other classical 3-dimensional examples are the triakis octahedron (for example,
+$(\pm12,0,0),(0,\pm12,0),(0,0,\pm12)$ together with $(\pm5,\pm5,\pm5)$: $14$ vertices,
+of which the $8$ apexes are independent), the Herschel enneahedron ($11$ vertices,
+the smallest non-Hamiltonian polyhedral graph \cite{herschel}) and Tutte's simple
+polyhedron \cite{tutte}. \texttt{verify.py} also checks the triakis octahedron.
+\end{remark}
+
+\section{The first clause: a 4-dimensional example}
+Let $\Pi=\operatorname{conv}\bigl(\{(p,0):p\in V\}\cup\{(0,0,0,1)\}\bigr)\subset\mathbb{R}^4$
+be the pyramid over $R$.
+Every listed point is a vertex (again $c=p$ works: $|p|^2\in\{1,3,4\}$, while
+$p\cdot q\le2$ for $q\neq p$ and the apex pairs to $0$ with base points). The points
+$(0,0,-2,0)$, $(2,0,0,0)$, $(0,2,0,0)$, $(0,0,2,0)$ and $(0,0,0,1)$ are affinely independent,
+so $\dim\Pi=4$. For two distinct cube points of the base, the lifted certificate of
+Proposition~\ref{prop:R} (append a $0$ coordinate) satisfies Lemma~\ref{lem:cert}
+in $\Pi$. So the $8$ lifted cube points are pairwise non-adjacent in the graph
+of $\Pi$, and $8>15/2$. By Lemma~\ref{lem:indep}, $\Pi$ is a 4-polytope with a
+non-Hamiltonian graph, and (A) holds. (The facet computation in \texttt{verify.py}
+gives $13$ facets and $38$ edges.)
+
+\section{Lean formalization}
+\texttt{lean4/Main.lean} is a self-contained Lean~4.19.0 project (core library
+only, no Mathlib). All objects are defined from scratch:
+\begin{itemize}
+\item Points and functionals are integer vectors \texttt{Pt := List Int}, with
+\texttt{dot}, \texttt{vadd}, \texttt{smul} and \texttt{lincomb}, together with the
+linearity lemmas \texttt{dot\_vadd}, \texttt{dot\_smul} and \texttt{dot\_lincomb}.
+\texttt{det} is the Laplace-expansion determinant, with sanity examples.
+\item \texttt{IsVertex d V p}, \texttt{Adj d V p q} (edge), \texttt{FullDim d V}
+are the definitions of Section~\ref{sec:defs} with $c\in\mathbb{Z}^d$
+(justified by Lemma~\ref{lem:int}). \texttt{structure Polytope} bundles a dimension
+$d$, a vertex list in $\mathbb{Z}^d$ without repetitions, a proof that every listed
+point is a vertex, and a proof of full dimensionality.
+\item \texttt{HamCycle d V cyc}: \texttt{cyc} has no repetitions, has the same
+elements as \texttt{V}, has length $\ge3$, and \texttt{Path (Adj d V) (cyc ++
+cyc.take 1)}, i.e.\ cyclically consecutive entries are adjacent.
+\texttt{Polytope.Hamiltonian P} means $\exists$ \texttt{cyc}, \texttt{HamCycle}.
+\item \texttt{MinDimIsFour} is (A) $\wedge$ ``every polytope with $2\le d$ and a
+non-Hamiltonian graph has $d\ge4$''.
+\end{itemize}
+Main theorems:
+\begin{itemize}
+\item \texttt{not\_adj\_of\_cert} (Lemma~\ref{lem:cert}) and \texttt{no\_hamCycle}
+(Lemma~\ref{lem:indep}) are general, for any $d$ and $V$.
+\item The rhombic dodecahedron is \texttt{RD : Polytope}, with \texttt{RD.d = 3}.
+The theorem \texttt{rd\_adj\_iff} determines the full graph of $R$: the 24 edges come with exposing functionals
+(\texttt{rd\_edges\_ok}), the 67 non-edges come with certificates
+(\texttt{rd\_nonedges\_ok}), and \texttt{rd\_cover} shows that the two tables
+cover every pair. \texttt{rd\_edges\_bipartite} and \texttt{cube\_independent} follow.
+\item \texttt{RD\_not\_hamiltonian : $\neg$ RD.Hamiltonian};
+\texttt{exists\_nonHamiltonian\_3polytope}.
+\item The main theorem is \texttt{conjecture\_00000007145\_false :}
+\texttt{$\neg$ MinDimIsFour}. The variant \texttt{conjecture\_00000007145\_false'}
+covers the reading without the restriction $d\ge2$.
+\item \texttt{exists\_nonHamiltonian\_4polytope} (the pyramid \texttt{Pyr}) proves (A).
+\item Non-vacuity: \texttt{Oct\_hamiltonian} shows that the octahedron is a
+\texttt{Polytope} with a Hamiltonian cycle, and \texttt{oct\_nonedge} shows that
+\texttt{Adj} can fail. Together with \texttt{rd\_adj\_iff}, this shows the
+predicates are neither empty nor trivial.
+\end{itemize}
+There is no \texttt{sorry}, no \texttt{native\_decide}, and no added axioms.
+\texttt{\#print axioms} reports only \texttt{propext}, \texttt{Classical.choice}
+and \texttt{Quot.sound}.
+
+\paragraph{Limitations (stated precisely).} Lean polytopes have integer
+vertices and integer functionals. This is enough for the disproof: integer
+polytopes are polytopes, so refuting ``all integer 3-polytopes are Hamiltonian''
+refutes ``all 3-polytopes are Hamiltonian''. By Lemma~\ref{lem:int} (proved here,
+not in Lean), the integer notions of vertex and edge agree with the real ones. The
+Hamiltonian-path reading (Remark~\ref{rem:path}) and the simple-polytope reading
+(Tutte) are argued in this report only; \texttt{verify.py} also checks the path
+statement by exhaustive search.
+
+\section{Independent check}
+\texttt{verify.py} (Python~3 standard library) uses a different method. It
+finds all facets by brute force over $d$-subsets with exact integer hyperplanes.
+A point is a vertex iff the intersection of the facets containing it is the point
+itself. A pair $\{p,q\}$ is an edge iff the intersection of the facets containing
+both is exactly $\{p,q\}$. For $R$ it confirms $14$ vertices, $12$ rhombic facets,
+$24$ edges ($V-E+F=2$) and bipartiteness, and an exhaustive depth-first search
+finds no Hamiltonian cycle and no Hamiltonian path. It re-checks every edge
+functional and every non-edge certificate of the Lean tables against the
+facet-computed graph. For the pyramid it confirms dimension $4$, $13$ facets,
+$38$ edges and no Hamiltonian cycle. It finds a Hamiltonian cycle in the octahedron
+(a positive control) and checks the triakis octahedron.
+
+\section{Reproduction}
+\begin{verbatim}
+cd lean4 && lake build     # Lean 4.19.0, core only
+cd .. && python3 verify.py # Python 3 standard library
+pdflatex report.tex && pdflatex report.tex
+\end{verbatim}
+
+\begin{thebibliography}{9}
+\bibitem{gr} B.~Gr\"unbaum, \emph{Convex Polytopes}, 2nd ed., Springer, 2003.
+\bibitem{zi} G.~M.~Ziegler, \emph{Lectures on Polytopes}, Springer, 1995.
+\bibitem{tutte} W.~T.~Tutte, On Hamiltonian circuits, \emph{J. London Math. Soc.}
+21 (1946), 98--101.
+\bibitem{herschel} A.~S.~Herschel, Sir Wm.\ Hamilton's Icosian Game,
+\emph{Quart. J. Pure Appl. Math.} 17 (1880), 305.
+\end{thebibliography}
+\end{document}
