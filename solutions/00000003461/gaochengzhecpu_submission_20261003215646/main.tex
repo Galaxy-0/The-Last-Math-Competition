@@ -1,0 +1,98 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\begin{document}
+\title{The four-cycle contradicts the minimality claim in Conjecture 3461}
+\author{Chengzhe Gao}\date{}\maketitle
+
+The conjecture includes the claim that the smallest planar graph for which
+$\chi_{\rm DP}-\chi=1$ is a three-dimensional prism. The four-cycle already
+has this difference and has only four vertices. A prism over a genuine
+$m$-gon has $2m\geq6$ vertices, so the asserted minimality is false.
+
+Let $C_4$ have successive vertices $0,1,2,3$ and edges $01,12,23,30$.
+A DP cover assigns a color fiber to each vertex, makes each fiber a clique,
+and places a matching between fibers of each graph edge. There are no
+cross-fiber edges over a nonedge. A DP coloring is an independent transversal,
+choosing one color from every fiber. These are the standard definitions;
+see \href{https://arxiv.org/abs/1609.00763}{Bernshteyn, Kostochka, and Pron,
+On DP-coloring of graphs and multigraphs}.
+
+\begin{theorem}
+$C_4$ is planar, $\chi(C_4)=2$, and $\chi_{\rm DP}(C_4)=3$.
+\end{theorem}
+\begin{proof}
+The usual alternating coloring of the cycle uses two colors. An edge
+precludes a one-coloring, so the ordinary chromatic number is two.
+
+To rule out DP two-colorability, give every vertex the fiber $\{0,1\}$.
+On edges $01,12,23$, match equal colors. On edge $30$, instead match
+opposite colors. Avoiding the first three matchings forces successive
+chosen colors to alternate, so vertices $0$ and $3$ receive opposite
+colors. Their chosen pair is then forbidden by the last matching. Thus
+this genuine two-fold cover has no independent transversal.
+
+For the upper bound, take an arbitrary cover with at least three colors
+available at each vertex, and restrict each fiber to any three of them.
+Choose a color at vertex $0$. At vertex $1$ at most one color is forbidden
+by the previous choice, so choose another. At vertex $2$ again at most
+one is forbidden. At vertex $3$ its two already colored neighbors forbid
+at most two colors in total. One of its three colors therefore remains.
+This constructs an independent transversal for every cover, proving
+DP three-colorability. Covers with empty fibers cannot have a transversal,
+and a one-fold cover with its edge matchings present also has none; hence
+the exact DP chromatic number is three.
+
+Finally place the vertices at $(0,0),(1,0),(1,1),(0,1)$ in that order.
+Draw each edge as the corresponding side of the unit square. Its sides
+have disjoint interiors and meet only at the prescribed shared endpoints,
+so this is a planar embedding.
+\end{proof}
+
+The difference is $3-2=1$ on four vertices. This is smaller than any prism
+over a polygon; the four-cycle also has fewer edges. The counterexample
+targets the explicit minimality clause, and makes no claim to disprove
+the other planar DP-coloring bounds in the source. In particular no girth
+five hypothesis is imposed on the source's separate difference-spectrum
+and minimality clause.
+
+\paragraph{Formal verification of covers and chromatic numbers.}
+The Lean graph has the exact cyclic adjacency relation, with symmetry and
+absence of loops checked. Its cover structure uses arbitrary vertex-dependent
+color types and arbitrary symmetric, supported matchings; the matchings
+may be partial. The auxiliary graph on the disjoint union of fibers is
+defined with the required fiber cliques and cross-fiber edges. The program
+proves that avoiding all forbidden pairs is equivalent to an independent
+transversal in this graph.
+
+The twisted two-fold cover satisfies every cover axiom. All $16$ possible
+color selections are checked, and a proved tuple expansion shows that this
+checks every function on the four vertices. The upper-bound proof is instead
+symbolic in an arbitrary cover. A small three-color lemma proves that two
+sets each containing at most one forbidden color cannot exclude all three
+choices. Restriction from arbitrary color fibers to any three distinct
+colors is explicitly formalized, with its injectivity and matching bridge.
+Consequently the upper bound covers all lists of size at least three, not
+only one selected cover or uniform named color lists. Both chromatic
+parameters are proved minimal over every smaller natural number of colors.
+
+\paragraph{Formal verification of the drawing and final contradiction.}
+The square certificate defines the vertex positions, all four graph-edge
+endpoint pairs, and parametrized edge maps
+$(t,0),(1,t),(t,1),(0,t)$. Endpoint incidence, injectivity of vertices and
+edge maps, exclusion of other vertices from edge interiors, and disjointness
+of distinct edge interiors are all proved. The proofs quantify over
+arbitrary scalar types, distinct endpoint coordinates, and arbitrary
+interior parameters. In particular they apply to every real $t,u\in(0,1)$;
+the proof is not an integer-coordinate sampling test. Over the reals these
+explicit maps are the ordinary continuous straight segments, furnishing
+the standard planar drawing.
+
+Finally the program proves that $2m>4$ whenever $m\geq3$, and negates the
+necessary instance of the proposed prism minimality when confronted with
+this square drawing and the exact chromatic numbers. Lean 4.19.0 checks
+the package using \texttt{Std}, with no admitted declarations, custom
+axioms, or \texttt{native\_decide}.
+\end{document}
