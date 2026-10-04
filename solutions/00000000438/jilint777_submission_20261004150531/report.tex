@@ -60,7 +60,10 @@ objects preserves homogeneous dimensions, so the conjecture implies
 \begin{equation}\label{eq:clause}
 \dim \Prim(\NSym)_n \;=\; A(n,1)\qquad\text{for all } n\ge1 .
 \end{equation}
-We refute \eqref{eq:clause}. If the conjecture is read as a conjunction
+The clause about the ``$n$-th homogeneous dimension \dots\ verifiable for $n\le10$''
+only makes sense for $\Prim(\NSym)$ itself, so the graded reading is the only one
+with checkable content. An ungraded isomorphism to an undefined object would assert
+nothing that can be checked. We refute \eqref{eq:clause}. If the conjecture is read as a conjunction
 (``$\Prim(\NSym)\cong L$'' and ``$\dim L_n=A(n,1)$''), a graded isomorphism
 transfers the second conjunct to $\Prim(\NSym)$, so refuting
 \eqref{eq:clause} refutes the conjecture. The isomorphism part is therefore never
@@ -72,7 +75,11 @@ needed.
 $\{1,\dots,n\}$ with $k$ descents (Graham--Knuth--Patashnik), giving
 $A(3,1)=4$. In the $1$-based convention (OEIS A008292, $T(n,k)$ = permutations with $k$
 ascending runs, i.e.\ $k-1$ descents), $A(3,1)=1$. Ascents give the same
-numbers as descents. Section~\ref{sec:euler} shows that $A(m,1)\in\{2^m-m-1,\;1\}$
+numbers as descents.\footnote{Other Eulerian-type numbers give the same conclusion
+at $n=3$: the type-B Eulerian numbers have $B(3,1)\in\{23,1\}$ (row $1,23,23,1$), and
+the second-order Eulerian numbers have $\langle\!\langle 3,1\rangle\!\rangle\in\{8,1\}$
+(row $1,8,6$), depending on the indexing. None of these values is $2$.}
+Section~\ref{sec:euler} shows that $A(m,1)\in\{2^m-m-1,\;1\}$
 is never $2$. So $\dim\Prim(\NSym)_3=2$ refutes \eqref{eq:clause} under every
 convention and every index shift $n\mapsto n+s$.
 \item \emph{Coefficients.} We work over $\mathbb Q$ (any field of characteristic $0$),
@@ -83,7 +90,10 @@ symmetric functions, i.e.\ $\NSym$ of Gelfand, Krob, Lascoux, Leclerc, Retakh an
 For the commutative ring of symmetric functions, or for QSym, every primitive space
 is $1$-dimensional (spanned by $p_n$, respectively $M_{(n)}$). That would agree
 with the degenerate $1$-based value $A(n,1)=1$, but it is not the algebra named
-in the conjecture.
+in the conjecture. The same holds for two other readings with $1$-dimensional homogeneous
+pieces: the Lie algebra of infinitesimal characters of $\NSym$ ($=\Prim(\mathrm{QSym})$)
+and the space of indecomposables $Q(\NSym)=\NSym_+/(\NSym_+)^2$. Neither is the object the
+statement names.
 \end{itemize}
 
 \section{\texorpdfstring{The Hopf algebra $\NSym$}{The Hopf algebra NSym}}
@@ -153,6 +163,32 @@ is free with basis $\{(3,0,-3,1),(0,1,-1,0)\}$. In particular its dimension is $
 over every field.
 \end{remark}
 
+\begin{lemma}[From $\mathbb Z$ to $\mathbb Q$]\label{lem:ZQ}
+Let $M$ be an integer matrix and $K_{\mathbb Q}=\{x\in\mathbb Q^N:Mx=0\}$,
+$K_{\mathbb Z}=K_{\mathbb Q}\cap\mathbb Z^N$.
+\begin{enumerate}
+\item Every $x\in K_{\mathbb Q}$ has the form $x=y/D$ with $y\in K_{\mathbb Z}$ and $D\ge1$.
+In particular $K_{\mathbb Q}$ has a $\mathbb Q$-basis of integer vectors.
+\item Integer vectors $v_1,\dots,v_m$ are $\mathbb Z$-linearly independent iff they are
+$\mathbb Q$-linearly independent.
+\end{enumerate}
+Consequently $\dim_{\mathbb Q}K_{\mathbb Q}$ is the largest $m$ such that $K_{\mathbb Z}$
+contains $m$ $\mathbb Z$-independent vectors, and every $m+1$ vectors of $K_{\mathbb Z}$ are
+then $\mathbb Z$-dependent. This is exactly the predicate \texttt{PrimDim} used in Lean.
+\end{lemma}
+\begin{proof}
+(1) Let $D$ be a common denominator of the entries of $x$. Then $y=Dx$ is integral and
+$My=DMx=0$. Scaling a $\mathbb Q$-basis this way gives an integral basis.
+(2) A $\mathbb Z$-relation is a $\mathbb Q$-relation. Conversely, multiplying a nontrivial
+$\mathbb Q$-relation $\sum c_iv_i=0$ by a common denominator of the $c_i$ gives a nontrivial
+$\mathbb Z$-relation. For the last sentence: if $d=\dim_{\mathbb Q}K_{\mathbb Q}$, then by (1)
+$K_{\mathbb Z}$ contains $d$ independent vectors. By (2), any $d+1$ vectors of
+$K_{\mathbb Z}\subseteq K_{\mathbb Q}$ are $\mathbb Z$-dependent.
+\end{proof}
+Here $\Prim(\NSym)_n$ is the kernel of the integer matrix of $\bar\Delta$ in the bases
+$S^I$ and $S^J\otimes S^K$. So \texttt{PrimDim n m} over integer coefficient vectors holds
+iff $\dim_{\mathbb Q}\Prim(\NSym)_n=m$.
+
 \section{Eulerian numbers}\label{sec:euler}
 
 \begin{lemma}\label{lem:euler}
@@ -215,9 +251,7 @@ tensor-square algebra. An element $\sum_I x(I)S^I$ of degree $n$ is given by its
 function. \texttt{IsPrimitive n x} says that every coefficient of
 $\sum_I x(I)(\Delta S^I-S^I\otimes1-1\otimes S^I)$ vanishes. \texttt{PrimDim n m} says
 that there are $m$ linearly independent primitives and that every $m+1$ primitives
-are linearly dependent, which is the definition of dimension. Coefficients are integers.
-Linear (in)dependence over $\mathbb Z$ and over $\mathbb Q$ coincide (clear denominators),
-and rational primitives are rational multiples of integral ones.
+are linearly dependent, which is the definition of dimension. Coefficients are integers. By Lemma~\ref{lem:ZQ}, this computes the $\mathbb Q$-dimension.
 \item \texttt{isPrimitive\_three\_iff}: Theorem~\ref{thm:main}'s criterion, for all $x$.
 It uses a support lemma: only finitely many keys can carry nonzero coefficients.
 The coefficient table on those keys is evaluated by \texttt{decide}.
@@ -241,8 +275,8 @@ There is no \texttt{sorry}, \texttt{native\_decide} or added axiom. \texttt{\#pr
 reports at most \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
 
 \paragraph{Not in Lean.} The statement $A(m,1)\ne2$ for $m\ge7$ (Lemma~\ref{lem:euler}),
-the dimensions in degrees $n\ne3$, and the equality of $\mathbb Z$- and $\mathbb Q$-dimensions are
-proved here and checked by \texttt{verify.py}. None of them is needed for the
+the dimensions in degrees $n\ne3$, and the $\mathbb Z$-to-$\mathbb Q$ bridge (Lemma~\ref{lem:ZQ}) are
+proved here. The first two are also checked numerically by \texttt{verify.py}. None of them is needed for the
 refutation at $n=3$ under the stated conventions. The undefined
 ``generalized Lie $n$-algebra'' is not formalized and is not needed.
 
