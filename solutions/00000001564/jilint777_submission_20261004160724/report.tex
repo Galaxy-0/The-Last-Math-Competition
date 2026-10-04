@@ -1,0 +1,277 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of Conjecture 00000001564:\\
+a $k$-dimensional cs-neighborly polytope can have only $2k<2^{k+1}$ vertices}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000001564 asserts that the minimal number of vertices of a
+$k$-dimensional cs-neighborly polytope is $2^{k+1}$, and that the extremal
+bodies are the Hanner polytopes. The first clause is false for every $k\ge 1$.
+The $k$-dimensional cross-polytope $C_k^\Delta=\operatorname{conv}\{\pm e_1,\dots,\pm e_k\}$
+is centrally symmetric, has $2k$ vertices, and is cs-neighborly in the
+strongest possible sense: every set of its vertices containing no antipodal pair
+is the vertex set of a face. Since $2k<2^{k+1}$, the claimed minimum is wrong;
+the smallest cases are the square ($4<8$) and the octahedron ($6<16$). The
+counterexample works under every reading of ``cs-neighborly'' we know, including
+the statement's own definition. We also show that the true minimum is $2k$, and
+that no Hanner polytope has $2^{k+1}$ vertices. The refutation is formalized in
+Lean~4 (core library only) for $k=1,2,3,4$.
+\end{abstract}
+
+\section{The conjecture}
+\begin{quote}
+\emph{Definition:} A cs-neighborly polytope is centrally symmetric and has
+support points in every direction. \emph{Conjecture:} The minimal number of
+vertices of a $k$-dimensional cs-neighborly polytope is $2^{k+1}$; and the
+extremal bodies are the Hanner polytopes.
+\end{quote}
+The Chinese version says the same thing. The conjecture is a conjunction, so it is
+enough to refute the first clause:
+\begin{equation}\label{eq:claim}
+\textstyle\min\{\,f_0(P) : P \text{ a $k$-dimensional cs-neighborly polytope}\,\} = 2^{k+1}
+\qquad(k\ge 1),
+\end{equation}
+where $f_0(P)$ is the number of vertices of $P$. A statement ``the minimum is $n$''
+contains the lower bound ``every such $P$ has $f_0(P)\ge n$''. We refute this lower bound,
+which is the weakest part of~\eqref{eq:claim}.
+
+\paragraph{Readings of ``cs-neighborly''.}
+The definition in the statement is unusual. ``Having support points in every
+direction'' holds for every nonempty compact set, so under the literal reading a
+cs-neighborly polytope is simply a centrally symmetric polytope. The standard notion is
+Gr\"unbaum's~\cite{Gr}. A centrally symmetric (cs) polytope $P$ is
+\emph{cs-$j$-neighborly} if every set of at most $j$ vertices that contains no pair of
+antipodal vertices $\{v,-v\}$ is the vertex set of a face of $P$. ``cs-neighborly'' means
+cs-$2$-neighborly (any two non-antipodal vertices span an edge), or cs-$\lfloor k/2\rfloor$-neighborly
+for a $k$-polytope, depending on the author. We treat all these readings at
+once, via the strongest property:
+\begin{itemize}
+\item[(F)] every nonempty set of vertices without an antipodal pair is the vertex set of a face.
+\end{itemize}
+Property (F) implies cs-$j$-neighborliness for every $j$, and it implies the
+statement's literal definition. The cross-polytope has property (F)
+(Theorem~\ref{thm:cross}), so it is a counterexample under every reading.
+
+\section{Definitions}
+A \emph{polytope} is the convex hull $P=\operatorname{conv}V$ of a finite set
+$V\subset\mathbb R^k$. Its \emph{dimension} is the dimension of its affine hull. A
+point $v\in V$ is a \emph{vertex} of $P$ if some linear functional $c$ attains its
+maximum over $P$ only at $v$. Every vertex of $P$ lies in $V$. If $V$ is in
+\emph{convex position} (every point of $V$ is a vertex), then $f_0(P)=|V|$. For a
+functional $c$, the set $F_c=\{x\in P: c\cdot x=\max_P c\}$ is a face of $P$. Its
+vertex set is $F_c\cap V=\operatorname{argmax}_{v\in V} c\cdot v$, and every
+nonempty face of a polytope arises this way. So a set $S\subseteq V$ is the vertex set of a
+nonempty face iff $S=\operatorname{argmax}_{V}c$ for some $c$. $P$ is \emph{centrally
+symmetric} if $P-x_0=-(P-x_0)$ for some center $x_0$. For $x_0=0$ this means $V=-V$
+for the vertex set $V$.
+
+\section{The cross-polytope}
+\begin{theorem}\label{thm:cross}
+Let $k\ge1$ and $V_k=\{\pm e_1,\dots,\pm e_k\}\subset\mathbb R^k$, $C^\Delta_k=\operatorname{conv}V_k$.
+Then:
+\begin{enumerate}
+\item $C^\Delta_k$ is $k$-dimensional and centrally symmetric (about $0$);
+\item $V_k$ is in convex position, so $f_0(C^\Delta_k)=2k$;
+\item every nonempty $S\subseteq V_k$ containing no antipodal pair is the vertex
+set of a face, namely $S=\operatorname{argmax}_{V_k}c_S$ with $c_S=\sum_{s\in S}s$;
+\item $C^\Delta_k$ has a support point in every direction.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(1) $V_k=-V_k$. The affine hull contains $0=\tfrac12(e_1+(-e_1))$ and every $e_i$,
+so it is $\mathbb R^k$.
+(2) For $v\in V_k$ we have $v\cdot v=1$ and $v\cdot w\in\{0,-1\}$ for $w\in V_k\setminus\{v\}$.
+So $c=v$ is maximized over $V_k$ only at $v$, and hence over $C^\Delta_k$ only at $v$.
+(3) Since $S$ contains at most one of $e_i,-e_i$, the $i$-th coordinate of $c_S$
+is $+1$ if $e_i\in S$, $-1$ if $-e_i\in S$, and $0$ otherwise. Hence
+$c_S\cdot s=1$ for $s\in S$. For $w\in V_k\setminus S$ we get $c_S\cdot w\in\{0,-1\}$:
+it is $-1$ if $-w\in S$ and $0$ otherwise. So $\operatorname{argmax}_{V_k}c_S=S$.
+(4) Any functional attains its maximum on the compact set $C^\Delta_k$.
+\end{proof}
+
+\section{The disproof}
+\begin{theorem}\label{thm:main}
+For every $k\ge1$ there is a $k$-dimensional centrally symmetric polytope with
+property (F) (hence cs-$j$-neighborly for every $j$, and cs-neighborly in the sense
+of the statement) that has $2k<2^{k+1}$ vertices. Hence claim~\eqref{eq:claim} is false
+for every $k\ge1$, and so is the conjecture.
+\end{theorem}
+\begin{proof}
+Take $C^\Delta_k$ (Theorem~\ref{thm:cross}). We have $2k\le 2^k<2^{k+1}$, since
+$2\cdot1=2^1$ and $2(k+1)=2k+2\le 2^k+2^k$.
+\end{proof}
+The smallest instances are the segment ($k=1$: $2<4$), the square
+$\operatorname{conv}\{(\pm1,0),(0,\pm1)\}$ ($k=2$: $4<8$; its $8$ faces with
+antipodal-free vertex sets are the $4$ vertices and the $4$ edges), and the octahedron ($k=3$:
+$6<16$; all $26$ antipodal-free vertex sets are faces: $6$ vertices, $12$ edges, $8$ triangles).
+For $k=0$ the only polytope is a point, with $1\ne2^1$ vertex.
+
+\begin{remark}[Other readings]\label{rem:readings}
+\begin{enumerate}
+\item \emph{Center.} The cross-polytope is symmetric about the origin, so it is
+centrally symmetric about some center under any convention.
+\item \emph{$k$ as the neighborliness parameter.} If ``$k$-dimensional'' is read as
+``cs-$k$-neighborly'' in arbitrary dimension, then $C^\Delta_k$ is a cs-$k$-neighborly
+polytope with $2k<2^{k+1}$ vertices.
+\item \emph{Lattice vs.\ real polytopes.} Our example has integer vertices. A
+counterexample in a subclass is a counterexample to the universally quantified claim.
+\item \emph{Facets instead of vertices.} This is not what is written, but it also fails.
+$C^\Delta_k$ has $2^k<2^{k+1}$ facets. Under the literal definition, the cube $[-1,1]^k$
+qualifies and has $2k$ facets.
+\end{enumerate}
+\end{remark}
+
+\section{The true minimum and the Hanner clause}
+\begin{proposition}\label{prop:true}
+Every $k$-dimensional centrally symmetric polytope has at least $2k$ vertices. Equality
+holds exactly for the affine images of $C^\Delta_k$, and these have property (F). Hence,
+under each reading above, the minimal number of vertices of a $k$-dimensional
+cs-neighborly polytope is $2k$, attained exactly by the affine cross-polytopes.
+\end{proposition}
+\begin{proof}
+Translate the center to $0$, so $V=-V$. Since $0=\frac12(v+(-v))$ lies in the
+affine hull, the affine hull equals the linear span of $V$, which is therefore $\mathbb R^k$.
+Choose a basis $v_1,\dots,v_k\in V$. The $2k$ points $\pm v_i$ lie in $V$ and are distinct:
+$v_i\ne0$, and $v_i=\pm v_j$ for $i\ne j$ contradicts independence. If $|V|=2k$, then
+$V=\{\pm v_i\}=A V_k$ with $A$ the invertible linear map $e_i\mapsto v_i$. An invertible
+affine map preserves faces, central symmetry and antipodality, so $A C^\Delta_k$ has
+property (F). Conversely, every affine image of $C^\Delta_k$ has $2k$ vertices.
+\end{proof}
+
+\paragraph{Hanner polytopes.}
+Hanner polytopes are generated from the segment $[-1,1]$ by Cartesian products
+$P\times Q$ and free sums $P\oplus Q=\operatorname{conv}(P\times\{0\}\cup\{0\}\times Q)$.
+For centrally symmetric $P,Q$ with $0$ in the interior,
+$f_0(P\times Q)=f_0(P)f_0(Q)$ and $f_0(P\oplus Q)=f_0(P)+f_0(Q)$, and dimensions add.
+By induction, a $d$-dimensional Hanner polytope satisfies $2d\le f_0\le 2^d$. The base
+case is the segment, $f_0=2$. For the product step, $d_1+d_2\le 2d_1d_2$ and $2^{d_1}2^{d_2}=2^{d_1+d_2}$.
+For the free-sum step, $x+y\le xy$ for $x,y\ge2$ gives $2^{d_1}+2^{d_2}\le2^{d_1+d_2}$.
+So no Hanner polytope has $2^{d+1}$ vertices, and the conjecture's two clauses cannot both
+hold if ``extremal bodies'' means the bodies attaining the minimum. The cube ($2^d$
+vertices) and the cross-polytope ($2d$ vertices) are Hanner. By
+Proposition~\ref{prop:true}, the true minimizers are affine cross-polytopes, which are
+Hanner up to linear equivalence. So the corrected statement ``minimum $2k$, attained
+by (affine) Hanner polytopes'' is true. (The conjecture may be a garbled form
+of Kalai's $3^d$ conjecture on the total number of faces of cs polytopes, where Hanner
+polytopes are the conjectured extremal bodies. That is a different statement.)
+
+\section{Lean formalization}
+The project \texttt{lean4/} (Lean 4.19.0, core library only, no Mathlib) defines all
+objects from scratch.
+\begin{itemize}
+\item Points of $\mathbb Z^k$ are lists of $k$ integers, with the scalar product \texttt{dot}.
+A polytope is given by its vertex list \texttt{V}.
+  \begin{itemize}
+  \item \texttt{IsVertex V v}: $v$ is the unique maximizer over $V$ of some functional.
+  \item \texttt{ConvexPosition V}: no repetitions, and every point is a vertex, so the
+  polytope has \texttt{V.length} vertices.
+  \item \texttt{IsFace V S}: $S$ is exactly the set of maximizers of some functional.
+  \item \texttt{CentSymm V}: $V=-V$.
+  \end{itemize}
+\item \texttt{FullDim k V} is a dimension certificate: points $a,b_1,\dots,b_k\in V$ and
+functionals $f_i$ with $f_i(b_j-a)\ne0\iff i=j$. \texttt{fullDim\_linIndep} and
+\texttt{fullDim\_sound} prove that the $b_j-a$ are then linearly independent (the same
+argument works over $\mathbb R$). Together with all points lying in $\mathbb Z^k$, this
+gives \texttt{IsPolytopeOfDim k V}.
+\item The three readings are \texttt{StatementCsNeighborly} (the literal definition),
+\texttt{CsNeighborlyUpTo j} (Gr\"unbaum's cs-$j$-neighborliness) and \texttt{CsNeighborlyFull}
+(property (F)). \texttt{full\_upTo} shows that (F) implies the second for every $j$, and
+\texttt{statement\_def\_of\_cs} shows that every nonempty cs polytope satisfies the first.
+\item \texttt{MinVerticesIs N k n} says that the minimum is attained and is a lower bound;
+\texttt{MinClause N} is the clause $\forall k\ge1$, \texttt{MinVerticesIs N k (2\^{}(k+1))}.
+\item \texttt{crossFacts\_1} to \texttt{crossFacts\_4} check, by \texttt{decide} for the
+generated list \texttt{cross k}:
+  \begin{itemize}
+  \item length $2k$, no repetitions, central symmetry;
+  \item the vertex property (witness $c=v$) and the dimension certificate;
+  \item for every subset $S$ (every sublist), that if $S$ is nonempty and antipodal-free,
+  then the maximizers of $\sum S$ are exactly $S$.
+  \end{itemize}
+  \texttt{full\_of\_sublists} transfers the last check from sublists to arbitrary
+  subsets.
+\item Main theorems:
+  \begin{itemize}
+  \item \texttt{conjecture\_00000001564\_false : \textlnot\ MinClause StatementCsNeighborly};
+  \item \texttt{conjecture\_00000001564\_false\_grunbaum (j)}, for every $j$;
+  \item \texttt{conjecture\_00000001564\_false\_full};
+  \item \texttt{conjecture\_00000001564\_false\_any}, for any notion satisfied by the octahedron;
+  \item \texttt{conjecture\_00000001564\_false\_param}, the reading in Remark~\ref{rem:readings}(2);
+  \item \texttt{fails\_each\_k}: failure at each $k=1,2,3,4$;
+  \item \texttt{conjecture\_00000001564\_conjunction\_false}: the conjunction with any Hanner clause is false.
+  \end{itemize}
+\item Non-vacuity:
+  \begin{itemize}
+  \item \texttt{true\_min\_k1} proves a true instance, \texttt{MinVerticesIs \_ 1 2}, including its lower bound.
+  \item A centrally symmetric hexagon is a 2-polytope satisfying the literal definition
+  but not cs-$2$-neighborliness (\texttt{hexagon\_not\_csNeighborly}).
+  \item A set with an interior point is not in convex position.
+  \end{itemize}
+\item \texttt{HannerCount} records the (dimension, vertex number) pairs generated by
+segments, products and free sums. \texttt{hanner\_bounds} proves $2d\le v\le2^d$, and
+\texttt{no\_hanner\_with\_2pow\_succ} proves $v\ne2^{d+1}$.
+\end{itemize}
+There is no \texttt{sorry}, \texttt{native\_decide} or added axiom. \texttt{\#print axioms}
+reports only \texttt{propext}, \texttt{Quot.sound} and (for the generic linear-independence
+lemma) \texttt{Classical.choice}.
+
+\paragraph{Scope.}
+\begin{itemize}
+\item Lean checks the counterexample for $k=1,2,3,4$; one $k$ suffices to refute the clause.
+The case of general $k$ is Theorems~\ref{thm:cross} and~\ref{thm:main} above, and
+\texttt{verify.py} checks $k\le5$.
+\item The general lower bound $2k$ of Proposition~\ref{prop:true} is proved here. It is
+formalized only for $k=1$, and \texttt{verify.py} checks it for lattice sets in $\{-1,0,1\}^k$, $k=2,3$.
+\item For Hanner polytopes, only the vertex-count recursion is formalized. The facts
+$f_0(P\times Q)=f_0(P)f_0(Q)$ and $f_0(P\oplus Q)=f_0(P)+f_0(Q)$ are standard, and
+\texttt{verify.py} confirms them on explicit point sets.
+\end{itemize}
+The integer functionals used as witnesses are real functionals, so every Lean predicate
+implies its real counterpart. In particular, $\operatorname{conv}(\texttt{cross 3})$ is a
+genuine $3$-dimensional cs polytope in $\mathbb R^3$ with $6$ vertices and property (F).
+
+\section{Independent check (\texttt{verify.py})}
+The Python script uses only the standard library and a method different from the Lean proof.
+\begin{itemize}
+\item For $k\le5$, it enumerates all functionals $c\in\{-1,0,1\}^k\setminus\{0\}$, and for
+$k\le3$ also all $c\in\{-2,\dots,2\}^k\setminus\{0\}$. It collects every maximizer set and
+confirms that this family is exactly the family of antipodal-free vertex subsets ($2,8,26,80,242$
+for $k=1,\dots,5$). It also computes the dimension as an exact rank.
+\item It checks every centrally symmetric point set in $\{-1,0,1\}^k$ ($k=2,3$) that
+spans $\mathbb R^k$: each gives a polytope with at least $2k$ vertices.
+\item It builds all $1,2,6,22,90,394$ explicit Hanner polytopes of dimension $1,\dots,6$
+and confirms that their vertex numbers lie in $[2d,2^d]$ and never equal $2^{d+1}$.
+\end{itemize}
+
+\section{Reproduction}
+\begin{verbatim}
+cd lean4 && lake build        # Lean 4.19.0, core only
+cd .. && python3 verify.py    # Python 3 standard library
+pdflatex report.tex && pdflatex report.tex
+\end{verbatim}
+
+\begin{thebibliography}{9}
+\bibitem{Gr} B.~Gr\"unbaum, \emph{Convex Polytopes}, 2nd ed., Springer GTM 221, 2003
+(chapter on centrally symmetric polytopes).
+\bibitem{Ha} O.~Hanner, Intersections of translates of convex bodies,
+\emph{Math.\ Scand.} 4 (1956), 65--87.
+\bibitem{Ka} G.~Kalai, The number of faces of centrally-symmetric polytopes,
+\emph{Graphs Combin.} 5 (1989), 389--391.
+\end{thebibliography}
+\end{document}
