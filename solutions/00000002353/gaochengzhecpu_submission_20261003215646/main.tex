@@ -1,0 +1,67 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\begin{document}
+\title{The domain of matrix inversion is not matrix convex}
+\author{Chengzhe Gao}\date{}\maketitle
+Conjecture 2353 claims that the realization domain of a noncommutative
+rational function is matrix convex. Consider the one-variable rational
+function
+\[
+ r(x)=x^{-1}.
+\]
+Its level-$n$ domain is precisely the set of invertible $n\times n$ matrices.
+This is the standard matrix well-definedness domain of the inverse
+expression and of the inverse function itself.
+
+\begin{theorem}
+The domain of $r$ is not matrix convex, over either real or complex scalars.
+\end{theorem}
+\begin{proof}
+At level one, both $[1]$ and $[-1]$ are invertible, while
+\[
+ \tfrac12[1]+\tfrac12[-1]=[0]
+\]
+is not. A matrix-convex set is convex at every fixed size: in its defining
+matrix-convex-combination rule, take the two coefficient matrices to be
+$I/\sqrt2$. Hence closure under this particular midpoint is necessary.
+It already fails at size one. The same example consists of self-adjoint
+matrices, so restricting the domain to self-adjoint tuples does not help.
+\end{proof}
+
+This failure is not an extraneous singularity created by a badly chosen
+expression: any value for the inverse at zero would have to satisfy
+$0Y=Y0=I$, which is impossible. In particular the issue persists for the
+intrinsic inversion domain. A chosen positive-definite branch or a
+connected positivity component is a different set from the full domain
+asserted in the source. For standard matrix-domain conventions, see
+\href{https://arxiv.org/abs/1608.02594}{J. Vol\v{c}i\v{c}, On domains of
+noncommutative rational functions}.
+
+\paragraph{Formal verification.}
+The Lean theorem is universal over a scalar field with $1/2$, presented
+by its usual algebraic laws in \texttt{FieldData}. Those laws hold over
+$\mathbb R$ and $\mathbb C$; they are explicitly quantified hypotheses,
+not new axioms. A concrete field of order three checks consistency of the
+interface, but the theorem is not restricted to that finite field.
+
+Actual $n\times n$ matrices, finite-sum matrix multiplication, identity
+matrices, and two-sided inverses are defined. A rational-expression
+evaluation relation has a variable and inverse constructor. The theorem
+\texttt{reciprocal\_domain} proves that the expression is evaluable exactly
+when its input has a two-sided matrix inverse. A separate scalar-matrix
+bridge identifies one-by-one matrix inversion with the two scalar product
+equations. The two domain memberships, failure of any inverse at zero,
+and the entrywise midpoint identity are proved for arbitrary field values.
+The final theorem negates closure of this actual domain under midpoints
+at every matrix size. Since matrix convexity implies that necessary
+closure property, it directly contradicts the source's universal claim.
+
+Lean 4.19.0 checks all of these arguments using only \texttt{Std}; no
+unproved lemma or native computation oracle is used. The proof does not
+merely verify the numerical equality $1+(-1)=0$: it establishes the
+rational-expression/domain and matrix-inverse connections around it.
+
+\end{document}
