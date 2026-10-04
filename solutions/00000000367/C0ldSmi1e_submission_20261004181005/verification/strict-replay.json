@@ -1,0 +1,968 @@
+{
+  "started_utc": "2026-10-04T18:06:51.530346+00:00",
+  "source_root": "/private/tmp/tlmc367-proof",
+  "independent_root": "/private/tmp/tlmc367-independent",
+  "dependency_root": "/private/tmp/tlmc310-proof/.lake/packages",
+  "fresh_build_outputs_absent": true,
+  "copied_files": [
+    "Conjecture367/Definitions.lean",
+    "Conjecture367/Recurrence.lean",
+    "Conjecture367/Distance.lean",
+    "Conjecture367/Asymptotics.lean",
+    "Conjecture367.lean",
+    "Check.lean",
+    "lakefile.toml",
+    "lake-manifest.json",
+    "lean-toolchain"
+  ],
+  "source_sha256": {
+    "Conjecture367/Definitions.lean": "21961da49f15983b3844bd1d38fb3dd1ef7e94b3341b8204653f37e0fd70c939",
+    "Conjecture367/Recurrence.lean": "c37690828302a36fa3dcf32560b18483364e01854fa0390b3d6fa6ca84cb12ba",
+    "Conjecture367/Distance.lean": "127acd430b7ca5634ffb66e9f4948db613f6c7253364e2f819f4b8d64d53882b",
+    "Conjecture367/Asymptotics.lean": "99db7e6acb0701147020a90c0cbbe9a9be0e0660506a8eacbff572d5a298cc91",
+    "Conjecture367.lean": "4da4e7d0f7e7b7535c37620e9885bd0085339a5d23ad25fa58ea92027821b420",
+    "Check.lean": "6a61075f924ecf0a848385c822024d64c4ffa5d5642326f2d85c1405ac28704f",
+    "lakefile.toml": "41c91436a380339543f8e5f90735901a074da6aa195865f13959cbe76d1a6028",
+    "lake-manifest.json": "40e77959e02f718e712f3a3c529fb9f97c8ee94f3d4d543261e1a853ec7aeda1",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "dependencies": [
+    {
+      "name": "mathlib",
+      "expected_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "actual_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "plausible",
+      "expected_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "actual_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "expected_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "actual_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "importGraph",
+      "expected_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "actual_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "proofwidgets",
+      "expected_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "actual_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "aesop",
+      "expected_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "actual_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Qq",
+      "expected_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "actual_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "batteries",
+      "expected_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "actual_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Cli",
+      "expected_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "actual_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    }
+  ],
+  "strict_replay": [
+    {
+      "file": "Conjecture367/Definitions.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture367/Definitions.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.182,
+      "output": ""
+    },
+    {
+      "file": "Conjecture367/Recurrence.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture367/Recurrence.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.705,
+      "output": ""
+    },
+    {
+      "file": "Conjecture367/Distance.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture367/Distance.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.6,
+      "output": ""
+    },
+    {
+      "file": "Conjecture367/Asymptotics.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture367/Asymptotics.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.493,
+      "output": ""
+    },
+    {
+      "file": "Conjecture367.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture367.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.505,
+      "output": ""
+    },
+    {
+      "file": "Check.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Check.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.96,
+      "output": "def Conjecture367.sequence : \u211d \u2192 \u2115 \u2192 \u211d :=\nfun r n => 2 ^ n + r ^ n\ndef Conjecture367.recurrence : \u211d \u2192 LinearRecurrence \u211d :=\nfun r => { order := 2, coeffs := ![-2 * r, 2 + r] }\ndef Conjecture367.Nondegenerate : LinearRecurrence \u211d \u2192 Prop :=\nfun R =>\n  (\u2200 (a : \u2102), (Polynomial.map Complex.ofRealHom R.charPoly).IsRoot a \u2192 a \u2260 0) \u2227\n    \u2200 (a b : \u2102),\n      (Polynomial.map Complex.ofRealHom R.charPoly).IsRoot a \u2192\n        (Polynomial.map Complex.ofRealHom R.charPoly).IsRoot b \u2192 a \u2260 b \u2192 \u00acIsOfFinOrder (a / b)\ndef Conjecture367.IsMinimalRecurrence : LinearRecurrence \u211d \u2192 (\u2115 \u2192 \u211d) \u2192 Prop :=\nfun R u => R.IsSolution u \u2227 \u2200 (S : LinearRecurrence \u211d), S.IsSolution u \u2192 R.order \u2264 S.order\ndef Conjecture367.distanceToIntegers : \u211d \u2192 \u211d :=\nfun x => Metric.infDist x (Set.range Int.cast)\ndef Conjecture367.HasPolynomialLowerBound : (\u2115 \u2192 \u211d) \u2192 Prop :=\nfun u => \u2203 C N, \u2200 (n : \u2115), N \u2264 n \u2192 0 < n \u2192 \u2191n ^ (-C) < Conjecture367.distanceToIntegers (u n)\ndef Conjecture367.ClaimedLowerBound : Prop :=\n\u2200 (R : LinearRecurrence \u211d) (u : \u2115 \u2192 \u211d),\n  0 < R.order \u2192\n    Conjecture367.IsMinimalRecurrence R u \u2192 Conjecture367.Nondegenerate R \u2192 Conjecture367.HasPolynomialLowerBound u\nConjecture367.recurrence_order (r : \u211d) : (Conjecture367.recurrence r).order = 2\nConjecture367.sequence_isSolution (r : \u211d) : (Conjecture367.recurrence r).IsSolution (Conjecture367.sequence r)\nConjecture367.recurrence_charPoly (r : \u211d) :\n  (Conjecture367.recurrence r).charPoly = (Polynomial.X - Polynomial.C 2) * (Polynomial.X - Polynomial.C r)\nConjecture367.recurrence_complex_charPoly (r : \u211d) :\n  Polynomial.map Complex.ofRealHom (Conjecture367.recurrence r).charPoly =\n    (Polynomial.X - Polynomial.C 2) * (Polynomial.X - Polynomial.C \u2191r)\nConjecture367.recurrence_complex_root_iff (r : \u211d) (z : \u2102) :\n  (Polynomial.map Complex.ofRealHom (Conjecture367.recurrence r).charPoly).IsRoot z \u2194 z = 2 \u2228 z = \u2191r\nConjecture367.recurrence_minimal (r : \u211d) (hr : r \u2260 2) :\n  Conjecture367.IsMinimalRecurrence (Conjecture367.recurrence r) (Conjecture367.sequence r)\nConjecture367.recurrence_nondegenerate (r : \u211d) (hr : 0 < r) (hr2 : r \u2260 2) :\n  Conjecture367.Nondegenerate (Conjecture367.recurrence r)\nConjecture367.rational_recurrence_minimal :\n  Conjecture367.IsMinimalRecurrence (Conjecture367.recurrence (1 / 3)) (Conjecture367.sequence (1 / 3))\nConjecture367.rational_recurrence_nondegenerate : Conjecture367.Nondegenerate (Conjecture367.recurrence (1 / 3))\nConjecture367.rational_recurrence_coefficients :\n  (Conjecture367.recurrence (1 / 3)).coeffs = fun i => \u2191(![-2 / 3, 7 / 3] i)\nConjecture367.integer_recurrence_minimal :\n  Conjecture367.IsMinimalRecurrence (Conjecture367.recurrence 3) (Conjecture367.sequence 3)\nConjecture367.integer_recurrence_nondegenerate : Conjecture367.Nondegenerate (Conjecture367.recurrence 3)\nConjecture367.integer_recurrence_coefficients : (Conjecture367.recurrence 3).coeffs = fun i => \u2191(![-6, 5] i)\nConjecture367.distanceToIntegers_eq_round (x : \u211d) : Conjecture367.distanceToIntegers x = |x - \u2191(round x)|\nConjecture367.distanceToIntegers_intCast (z : \u2124) : Conjecture367.distanceToIntegers \u2191z = 0\nConjecture367.third_pow_le_third (n : \u2115) (hn : 1 \u2264 n) : (1 / 3) ^ n \u2264 1 / 3\nConjecture367.round_third_pow (n : \u2115) (hn : 1 \u2264 n) : round ((1 / 3) ^ n) = 0\nConjecture367.round_sequence_third (n : \u2115) (hn : 1 \u2264 n) : round (Conjecture367.sequence (1 / 3) n) = 2 ^ n\nConjecture367.distance_sequence_third (n : \u2115) (hn : 1 \u2264 n) :\n  Conjecture367.distanceToIntegers (Conjecture367.sequence (1 / 3) n) = (1 / 3) ^ n\nConjecture367.distance_sequence_third_pos (n : \u2115) (hn : 1 \u2264 n) :\n  0 < Conjecture367.distanceToIntegers (Conjecture367.sequence (1 / 3) n)\nConjecture367.sequence_third_not_integer (n : \u2115) (hn : 1 \u2264 n) : Conjecture367.sequence (1 / 3) n \u2209 Set.range Int.cast\nConjecture367.sequence_third_ne_intCast (n : \u2115) (hn : 1 \u2264 n) (z : \u2124) : Conjecture367.sequence (1 / 3) n \u2260 \u2191z\nConjecture367.sequence_third_rational (n : \u2115) : \u2203 q, Conjecture367.sequence (1 / 3) n = \u2191q\nConjecture367.sequence_tendsto_atTop {r : \u211d} (hr : 0 \u2264 r) :\n  Filter.Tendsto (Conjecture367.sequence r) Filter.atTop Filter.atTop\nConjecture367.sequence_third_tendsto_atTop : Filter.Tendsto (Conjecture367.sequence (1 / 3)) Filter.atTop Filter.atTop\nConjecture367.sequence_three_integer (n : \u2115) : Conjecture367.sequence 3 n = \u2191(2 ^ n + 3 ^ n)\nConjecture367.distance_sequence_three (n : \u2115) : Conjecture367.distanceToIntegers (Conjecture367.sequence 3 n) = 0\nConjecture367.third_pow_eq_exp (n : \u2115) : (1 / 3) ^ n = Real.exp (-Real.log 3 * \u2191n)\nConjecture367.polynomial_mul_third_pow_tendsto (C : \u211d) :\n  Filter.Tendsto (fun n => \u2191n ^ C * (1 / 3) ^ n) Filter.atTop (nhds 0)\nConjecture367.third_pow_eventually_lt_rpow_neg (C : \u211d) : \u2200\u1da0 (n : \u2115) in Filter.atTop, (1 / 3) ^ n < \u2191n ^ (-C)\nConjecture367.distance_eventually_lt_power (C : \u211d) :\n  \u2200\u1da0 (n : \u2115) in Filter.atTop, Conjecture367.distanceToIntegers (Conjecture367.sequence (1 / 3) n) < \u2191n ^ (-C)\nConjecture367.no_polynomial_lower_bound_third : \u00acConjecture367.HasPolynomialLowerBound (Conjecture367.sequence (1 / 3))\nConjecture367.no_polynomial_lower_bound_three : \u00acConjecture367.HasPolynomialLowerBound (Conjecture367.sequence 3)\nConjecture367.conjecture_false : \u00acConjecture367.ClaimedLowerBound\nConjecture367.conjecture_false_integer_example : \u00acConjecture367.ClaimedLowerBound\n'Conjecture367.recurrence_order' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.sequence_isSolution' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.recurrence_charPoly' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.recurrence_complex_charPoly' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.recurrence_complex_root_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.recurrence_minimal' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.recurrence_nondegenerate' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.rational_recurrence_minimal' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.rational_recurrence_nondegenerate' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.rational_recurrence_coefficients' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.integer_recurrence_minimal' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.integer_recurrence_nondegenerate' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.integer_recurrence_coefficients' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.distanceToIntegers_eq_round' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.distanceToIntegers_intCast' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.third_pow_le_third' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.round_third_pow' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.round_sequence_third' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.distance_sequence_third' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.distance_sequence_third_pos' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.sequence_third_not_integer' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.sequence_third_ne_intCast' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.sequence_third_rational' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.sequence_tendsto_atTop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.sequence_third_tendsto_atTop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.sequence_three_integer' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.distance_sequence_three' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.third_pow_eq_exp' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.polynomial_mul_third_pow_tendsto' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.third_pow_eventually_lt_rpow_neg' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.distance_eventually_lt_power' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.no_polynomial_lower_bound_third' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.no_polynomial_lower_bound_three' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.conjecture_false' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture367.conjecture_false_integer_example' depends on axioms: [propext, Classical.choice, Quot.sound]\n"
+    }
+  ],
+  "lean_version": {
+    "exit_code": 0,
+    "output": "Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)"
+  },
+  "lean_commit": {
+    "exit_code": 0,
+    "expected": "6caaee842e9495688c1567e78c0e68dbb96942aa",
+    "actual": "6caaee842e9495688c1567e78c0e68dbb96942aa"
+  },
+  "project_identity": {
+    "manifest_name": "tlmc367",
+    "lake_name": "tlmc367",
+    "default_targets": [
+      "Conjecture367"
+    ],
+    "toolchain_pin": "leanprover/lean4:v4.19.0",
+    "source_file_count": 6,
+    "config_file_count": 3,
+    "dependency_symlink_target": "/private/tmp/tlmc310-proof/.lake/packages"
+  },
+  "proof_bypass_scan": {
+    "pattern": "\\b(?:sorry|admit|axiom|native_decide|unsafe|run_tac|elab|implemented_by)\\b|Lean\\.ofReduceBool|debug\\.skipKernelTC|trustLevel",
+    "method": "Lexical scan after masking nested block comments, line comments, and string literals; raw matches retained for inspection.",
+    "raw_matches": [],
+    "hits": []
+  },
+  "build": {
+    "command": [
+      "lake",
+      "build"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 4.929,
+    "log": "build.txt"
+  },
+  "axiom_audit": {
+    "expected_count": 35,
+    "parsed_count": 35,
+    "expected_theorems": [
+      "Conjecture367.recurrence_order",
+      "Conjecture367.sequence_isSolution",
+      "Conjecture367.recurrence_charPoly",
+      "Conjecture367.recurrence_complex_charPoly",
+      "Conjecture367.recurrence_complex_root_iff",
+      "Conjecture367.recurrence_minimal",
+      "Conjecture367.recurrence_nondegenerate",
+      "Conjecture367.rational_recurrence_minimal",
+      "Conjecture367.rational_recurrence_nondegenerate",
+      "Conjecture367.rational_recurrence_coefficients",
+      "Conjecture367.integer_recurrence_minimal",
+      "Conjecture367.integer_recurrence_nondegenerate",
+      "Conjecture367.integer_recurrence_coefficients",
+      "Conjecture367.distanceToIntegers_eq_round",
+      "Conjecture367.distanceToIntegers_intCast",
+      "Conjecture367.third_pow_le_third",
+      "Conjecture367.round_third_pow",
+      "Conjecture367.round_sequence_third",
+      "Conjecture367.distance_sequence_third",
+      "Conjecture367.distance_sequence_third_pos",
+      "Conjecture367.sequence_third_not_integer",
+      "Conjecture367.sequence_third_ne_intCast",
+      "Conjecture367.sequence_third_rational",
+      "Conjecture367.sequence_tendsto_atTop",
+      "Conjecture367.sequence_third_tendsto_atTop",
+      "Conjecture367.sequence_three_integer",
+      "Conjecture367.distance_sequence_three",
+      "Conjecture367.third_pow_eq_exp",
+      "Conjecture367.polynomial_mul_third_pow_tendsto",
+      "Conjecture367.third_pow_eventually_lt_rpow_neg",
+      "Conjecture367.distance_eventually_lt_power",
+      "Conjecture367.no_polynomial_lower_bound_third",
+      "Conjecture367.no_polynomial_lower_bound_three",
+      "Conjecture367.conjecture_false",
+      "Conjecture367.conjecture_false_integer_example"
+    ],
+    "audits": [
+      {
+        "theorem": "Conjecture367.recurrence_order",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.sequence_isSolution",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.recurrence_charPoly",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.recurrence_complex_charPoly",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.recurrence_complex_root_iff",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.recurrence_minimal",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.recurrence_nondegenerate",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.rational_recurrence_minimal",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.rational_recurrence_nondegenerate",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.rational_recurrence_coefficients",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.integer_recurrence_minimal",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.integer_recurrence_nondegenerate",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.integer_recurrence_coefficients",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.distanceToIntegers_eq_round",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.distanceToIntegers_intCast",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.third_pow_le_third",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.round_third_pow",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.round_sequence_third",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.distance_sequence_third",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.distance_sequence_third_pos",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.sequence_third_not_integer",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.sequence_third_ne_intCast",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.sequence_third_rational",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.sequence_tendsto_atTop",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.sequence_third_tendsto_atTop",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.sequence_three_integer",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.distance_sequence_three",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.third_pow_eq_exp",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.polynomial_mul_third_pow_tendsto",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.third_pow_eventually_lt_rpow_neg",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.distance_eventually_lt_power",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.no_polynomial_lower_bound_third",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.no_polynomial_lower_bound_three",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.conjecture_false",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture367.conjecture_false_integer_example",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
+    ],
+    "allowed_axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "all_names_match": true,
+    "only_allowed_axioms": true,
+    "theorem_lemma_count": 35,
+    "named_instance_count": 0,
+    "zero_axiom_declarations": []
+  },
+  "independent_sha256": {
+    "Conjecture367/Definitions.lean": "21961da49f15983b3844bd1d38fb3dd1ef7e94b3341b8204653f37e0fd70c939",
+    "Conjecture367/Recurrence.lean": "c37690828302a36fa3dcf32560b18483364e01854fa0390b3d6fa6ca84cb12ba",
+    "Conjecture367/Distance.lean": "127acd430b7ca5634ffb66e9f4948db613f6c7253364e2f819f4b8d64d53882b",
+    "Conjecture367/Asymptotics.lean": "99db7e6acb0701147020a90c0cbbe9a9be0e0660506a8eacbff572d5a298cc91",
+    "Conjecture367.lean": "4da4e7d0f7e7b7535c37620e9885bd0085339a5d23ad25fa58ea92027821b420",
+    "Check.lean": "6a61075f924ecf0a848385c822024d64c4ffa5d5642326f2d85c1405ac28704f",
+    "lakefile.toml": "41c91436a380339543f8e5f90735901a074da6aa195865f13959cbe76d1a6028",
+    "lake-manifest.json": "40e77959e02f718e712f3a3c529fb9f97c8ee94f3d4d543261e1a853ec7aeda1",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "source_unchanged": true,
+  "copied_files_unchanged": true,
+  "definition_and_type_audit": {
+    "definition_names": [
+      "Conjecture367.sequence",
+      "Conjecture367.recurrence",
+      "Conjecture367.Nondegenerate",
+      "Conjecture367.IsMinimalRecurrence",
+      "Conjecture367.distanceToIntegers",
+      "Conjecture367.HasPolynomialLowerBound",
+      "Conjecture367.ClaimedLowerBound"
+    ],
+    "definition_count": 7,
+    "checked_theorem_names": [
+      "Conjecture367.recurrence_order",
+      "Conjecture367.sequence_isSolution",
+      "Conjecture367.recurrence_charPoly",
+      "Conjecture367.recurrence_complex_charPoly",
+      "Conjecture367.recurrence_complex_root_iff",
+      "Conjecture367.recurrence_minimal",
+      "Conjecture367.recurrence_nondegenerate",
+      "Conjecture367.rational_recurrence_minimal",
+      "Conjecture367.rational_recurrence_nondegenerate",
+      "Conjecture367.rational_recurrence_coefficients",
+      "Conjecture367.integer_recurrence_minimal",
+      "Conjecture367.integer_recurrence_nondegenerate",
+      "Conjecture367.integer_recurrence_coefficients",
+      "Conjecture367.distanceToIntegers_eq_round",
+      "Conjecture367.distanceToIntegers_intCast",
+      "Conjecture367.third_pow_le_third",
+      "Conjecture367.round_third_pow",
+      "Conjecture367.round_sequence_third",
+      "Conjecture367.distance_sequence_third",
+      "Conjecture367.distance_sequence_third_pos",
+      "Conjecture367.sequence_third_not_integer",
+      "Conjecture367.sequence_third_ne_intCast",
+      "Conjecture367.sequence_third_rational",
+      "Conjecture367.sequence_tendsto_atTop",
+      "Conjecture367.sequence_third_tendsto_atTop",
+      "Conjecture367.sequence_three_integer",
+      "Conjecture367.distance_sequence_three",
+      "Conjecture367.third_pow_eq_exp",
+      "Conjecture367.polynomial_mul_third_pow_tendsto",
+      "Conjecture367.third_pow_eventually_lt_rpow_neg",
+      "Conjecture367.distance_eventually_lt_power",
+      "Conjecture367.no_polynomial_lower_bound_third",
+      "Conjecture367.no_polynomial_lower_bound_three",
+      "Conjecture367.conjecture_false",
+      "Conjecture367.conjecture_false_integer_example"
+    ],
+    "checked_theorem_count": 35,
+    "checked_names_match_audits": true,
+    "printed_definition_names": [
+      "Conjecture367.sequence",
+      "Conjecture367.recurrence",
+      "Conjecture367.Nondegenerate",
+      "Conjecture367.IsMinimalRecurrence",
+      "Conjecture367.distanceToIntegers",
+      "Conjecture367.HasPolynomialLowerBound",
+      "Conjecture367.ClaimedLowerBound"
+    ],
+    "printed_definition_count": 7,
+    "printed_definition_names_match": true,
+    "printed_theorem_type_names": [
+      "Conjecture367.recurrence_order",
+      "Conjecture367.sequence_isSolution",
+      "Conjecture367.recurrence_charPoly",
+      "Conjecture367.recurrence_complex_charPoly",
+      "Conjecture367.recurrence_complex_root_iff",
+      "Conjecture367.recurrence_minimal",
+      "Conjecture367.recurrence_nondegenerate",
+      "Conjecture367.rational_recurrence_minimal",
+      "Conjecture367.rational_recurrence_nondegenerate",
+      "Conjecture367.rational_recurrence_coefficients",
+      "Conjecture367.integer_recurrence_minimal",
+      "Conjecture367.integer_recurrence_nondegenerate",
+      "Conjecture367.integer_recurrence_coefficients",
+      "Conjecture367.distanceToIntegers_eq_round",
+      "Conjecture367.distanceToIntegers_intCast",
+      "Conjecture367.third_pow_le_third",
+      "Conjecture367.round_third_pow",
+      "Conjecture367.round_sequence_third",
+      "Conjecture367.distance_sequence_third",
+      "Conjecture367.distance_sequence_third_pos",
+      "Conjecture367.sequence_third_not_integer",
+      "Conjecture367.sequence_third_ne_intCast",
+      "Conjecture367.sequence_third_rational",
+      "Conjecture367.sequence_tendsto_atTop",
+      "Conjecture367.sequence_third_tendsto_atTop",
+      "Conjecture367.sequence_three_integer",
+      "Conjecture367.distance_sequence_three",
+      "Conjecture367.third_pow_eq_exp",
+      "Conjecture367.polynomial_mul_third_pow_tendsto",
+      "Conjecture367.third_pow_eventually_lt_rpow_neg",
+      "Conjecture367.distance_eventually_lt_power",
+      "Conjecture367.no_polynomial_lower_bound_third",
+      "Conjecture367.no_polynomial_lower_bound_three",
+      "Conjecture367.conjecture_false",
+      "Conjecture367.conjecture_false_integer_example"
+    ],
+    "printed_theorem_type_count": 35,
+    "printed_theorem_type_names_match": true
+  },
+  "audit_inventory_sha256": "fc375dd733e254a8154d94614558d0343821e894343750bcfb789d8a3cfa988c",
+  "execution_audit_scope": "Fresh independent build and trust/identity verification; separate from the independent semantic review.",
+  "dependencies_post_build": [
+    {
+      "name": "mathlib",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "revision_matches": true
+    },
+    {
+      "name": "plausible",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "revision_matches": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "revision_matches": true
+    },
+    {
+      "name": "importGraph",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "revision_matches": true
+    },
+    {
+      "name": "proofwidgets",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "revision_matches": true
+    },
+    {
+      "name": "aesop",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "revision_matches": true
+    },
+    {
+      "name": "Qq",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "revision_matches": true
+    },
+    {
+      "name": "batteries",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "revision_matches": true
+    },
+    {
+      "name": "Cli",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "revision_matches": true
+    }
+  ],
+  "status": "PASS",
+  "finished_utc": "2026-10-04T18:07:10.290499+00:00"
+}

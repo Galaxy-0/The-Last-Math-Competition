@@ -1,0 +1,104 @@
+def Conjecture367.sequence : ℝ → ℕ → ℝ :=
+fun r n => 2 ^ n + r ^ n
+def Conjecture367.recurrence : ℝ → LinearRecurrence ℝ :=
+fun r => { order := 2, coeffs := ![-2 * r, 2 + r] }
+def Conjecture367.Nondegenerate : LinearRecurrence ℝ → Prop :=
+fun R =>
+  (∀ (a : ℂ), (Polynomial.map Complex.ofRealHom R.charPoly).IsRoot a → a ≠ 0) ∧
+    ∀ (a b : ℂ),
+      (Polynomial.map Complex.ofRealHom R.charPoly).IsRoot a →
+        (Polynomial.map Complex.ofRealHom R.charPoly).IsRoot b → a ≠ b → ¬IsOfFinOrder (a / b)
+def Conjecture367.IsMinimalRecurrence : LinearRecurrence ℝ → (ℕ → ℝ) → Prop :=
+fun R u => R.IsSolution u ∧ ∀ (S : LinearRecurrence ℝ), S.IsSolution u → R.order ≤ S.order
+def Conjecture367.distanceToIntegers : ℝ → ℝ :=
+fun x => Metric.infDist x (Set.range Int.cast)
+def Conjecture367.HasPolynomialLowerBound : (ℕ → ℝ) → Prop :=
+fun u => ∃ C N, ∀ (n : ℕ), N ≤ n → 0 < n → ↑n ^ (-C) < Conjecture367.distanceToIntegers (u n)
+def Conjecture367.ClaimedLowerBound : Prop :=
+∀ (R : LinearRecurrence ℝ) (u : ℕ → ℝ),
+  0 < R.order →
+    Conjecture367.IsMinimalRecurrence R u → Conjecture367.Nondegenerate R → Conjecture367.HasPolynomialLowerBound u
+Conjecture367.recurrence_order (r : ℝ) : (Conjecture367.recurrence r).order = 2
+Conjecture367.sequence_isSolution (r : ℝ) : (Conjecture367.recurrence r).IsSolution (Conjecture367.sequence r)
+Conjecture367.recurrence_charPoly (r : ℝ) :
+  (Conjecture367.recurrence r).charPoly = (Polynomial.X - Polynomial.C 2) * (Polynomial.X - Polynomial.C r)
+Conjecture367.recurrence_complex_charPoly (r : ℝ) :
+  Polynomial.map Complex.ofRealHom (Conjecture367.recurrence r).charPoly =
+    (Polynomial.X - Polynomial.C 2) * (Polynomial.X - Polynomial.C ↑r)
+Conjecture367.recurrence_complex_root_iff (r : ℝ) (z : ℂ) :
+  (Polynomial.map Complex.ofRealHom (Conjecture367.recurrence r).charPoly).IsRoot z ↔ z = 2 ∨ z = ↑r
+Conjecture367.recurrence_minimal (r : ℝ) (hr : r ≠ 2) :
+  Conjecture367.IsMinimalRecurrence (Conjecture367.recurrence r) (Conjecture367.sequence r)
+Conjecture367.recurrence_nondegenerate (r : ℝ) (hr : 0 < r) (hr2 : r ≠ 2) :
+  Conjecture367.Nondegenerate (Conjecture367.recurrence r)
+Conjecture367.rational_recurrence_minimal :
+  Conjecture367.IsMinimalRecurrence (Conjecture367.recurrence (1 / 3)) (Conjecture367.sequence (1 / 3))
+Conjecture367.rational_recurrence_nondegenerate : Conjecture367.Nondegenerate (Conjecture367.recurrence (1 / 3))
+Conjecture367.rational_recurrence_coefficients :
+  (Conjecture367.recurrence (1 / 3)).coeffs = fun i => ↑(![-2 / 3, 7 / 3] i)
+Conjecture367.integer_recurrence_minimal :
+  Conjecture367.IsMinimalRecurrence (Conjecture367.recurrence 3) (Conjecture367.sequence 3)
+Conjecture367.integer_recurrence_nondegenerate : Conjecture367.Nondegenerate (Conjecture367.recurrence 3)
+Conjecture367.integer_recurrence_coefficients : (Conjecture367.recurrence 3).coeffs = fun i => ↑(![-6, 5] i)
+Conjecture367.distanceToIntegers_eq_round (x : ℝ) : Conjecture367.distanceToIntegers x = |x - ↑(round x)|
+Conjecture367.distanceToIntegers_intCast (z : ℤ) : Conjecture367.distanceToIntegers ↑z = 0
+Conjecture367.third_pow_le_third (n : ℕ) (hn : 1 ≤ n) : (1 / 3) ^ n ≤ 1 / 3
+Conjecture367.round_third_pow (n : ℕ) (hn : 1 ≤ n) : round ((1 / 3) ^ n) = 0
+Conjecture367.round_sequence_third (n : ℕ) (hn : 1 ≤ n) : round (Conjecture367.sequence (1 / 3) n) = 2 ^ n
+Conjecture367.distance_sequence_third (n : ℕ) (hn : 1 ≤ n) :
+  Conjecture367.distanceToIntegers (Conjecture367.sequence (1 / 3) n) = (1 / 3) ^ n
+Conjecture367.distance_sequence_third_pos (n : ℕ) (hn : 1 ≤ n) :
+  0 < Conjecture367.distanceToIntegers (Conjecture367.sequence (1 / 3) n)
+Conjecture367.sequence_third_not_integer (n : ℕ) (hn : 1 ≤ n) : Conjecture367.sequence (1 / 3) n ∉ Set.range Int.cast
+Conjecture367.sequence_third_ne_intCast (n : ℕ) (hn : 1 ≤ n) (z : ℤ) : Conjecture367.sequence (1 / 3) n ≠ ↑z
+Conjecture367.sequence_third_rational (n : ℕ) : ∃ q, Conjecture367.sequence (1 / 3) n = ↑q
+Conjecture367.sequence_tendsto_atTop {r : ℝ} (hr : 0 ≤ r) :
+  Filter.Tendsto (Conjecture367.sequence r) Filter.atTop Filter.atTop
+Conjecture367.sequence_third_tendsto_atTop : Filter.Tendsto (Conjecture367.sequence (1 / 3)) Filter.atTop Filter.atTop
+Conjecture367.sequence_three_integer (n : ℕ) : Conjecture367.sequence 3 n = ↑(2 ^ n + 3 ^ n)
+Conjecture367.distance_sequence_three (n : ℕ) : Conjecture367.distanceToIntegers (Conjecture367.sequence 3 n) = 0
+Conjecture367.third_pow_eq_exp (n : ℕ) : (1 / 3) ^ n = Real.exp (-Real.log 3 * ↑n)
+Conjecture367.polynomial_mul_third_pow_tendsto (C : ℝ) :
+  Filter.Tendsto (fun n => ↑n ^ C * (1 / 3) ^ n) Filter.atTop (nhds 0)
+Conjecture367.third_pow_eventually_lt_rpow_neg (C : ℝ) : ∀ᶠ (n : ℕ) in Filter.atTop, (1 / 3) ^ n < ↑n ^ (-C)
+Conjecture367.distance_eventually_lt_power (C : ℝ) :
+  ∀ᶠ (n : ℕ) in Filter.atTop, Conjecture367.distanceToIntegers (Conjecture367.sequence (1 / 3) n) < ↑n ^ (-C)
+Conjecture367.no_polynomial_lower_bound_third : ¬Conjecture367.HasPolynomialLowerBound (Conjecture367.sequence (1 / 3))
+Conjecture367.no_polynomial_lower_bound_three : ¬Conjecture367.HasPolynomialLowerBound (Conjecture367.sequence 3)
+Conjecture367.conjecture_false : ¬Conjecture367.ClaimedLowerBound
+Conjecture367.conjecture_false_integer_example : ¬Conjecture367.ClaimedLowerBound
+'Conjecture367.recurrence_order' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.sequence_isSolution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.recurrence_charPoly' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.recurrence_complex_charPoly' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.recurrence_complex_root_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.recurrence_minimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.recurrence_nondegenerate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.rational_recurrence_minimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.rational_recurrence_nondegenerate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.rational_recurrence_coefficients' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.integer_recurrence_minimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.integer_recurrence_nondegenerate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.integer_recurrence_coefficients' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.distanceToIntegers_eq_round' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.distanceToIntegers_intCast' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.third_pow_le_third' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.round_third_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.round_sequence_third' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.distance_sequence_third' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.distance_sequence_third_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.sequence_third_not_integer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.sequence_third_ne_intCast' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.sequence_third_rational' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.sequence_tendsto_atTop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.sequence_third_tendsto_atTop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.sequence_three_integer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.distance_sequence_three' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.third_pow_eq_exp' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.polynomial_mul_third_pow_tendsto' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.third_pow_eventually_lt_rpow_neg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.distance_eventually_lt_power' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.no_polynomial_lower_bound_third' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.no_polynomial_lower_bound_three' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.conjecture_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture367.conjecture_false_integer_example' depends on axioms: [propext, Classical.choice, Quot.sound]
