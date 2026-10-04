@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{Divergent viscosity paths in conjecture 00000008834}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+The source claims that viscosity solution trajectories always converge
+to the zero set of a monotone inclusion. Neither version assumes that
+this zero set is nonempty. We exhibit actual divergent regularized
+solutions and an actual divergent viscosity flow, rather than merely
+pointing to an empty target set. The rate clause is not needed.
+
+On the real Hilbert line let $A(x)=\{1\}$ for every $x$. This graph is
+monotone, since any two of its points have the same second coordinate.
+It is also maximal monotone: if a monotone graph extension contains
+$(x,u)$, comparison with $(x-1,1)$ and $(x+1,1)$ gives respectively
+$u\ge1$ and $u\le1$, hence $u=1$. Thus every monotone extension equals
+the original graph. Clearly $A$ has no zero.
+
+\paragraph{Actual Tikhonov solutions.}
+For every $\varepsilon>0$ the regularized inclusion
+\[
+0\in A(x)+\varepsilon x
+\]
+is exactly $1+\varepsilon x=0$ and has the unique solution
+$x_\varepsilon=-1/\varepsilon$. Choose the genuine positive vanishing
+parameter
+\[
+\varepsilon(t)=\frac1{t+1},\qquad t\ge0.
+\]
+Then its solution trajectory is $v(t)=-(t+1)$, which tends to
+$-\infty$ as $t\to\infty$. This parameter ranges over $(0,1]$, so it
+also describes the full small-positive-parameter solution path.
+
+\paragraph{Actual regularized flow.}
+For the customary continuous viscosity dynamics
+\[
+u'(t)+A(u(t))+\varepsilon(t)u(t)\ni0
+\]
+there is an explicit solution
+\[
+u(t)=-\frac{t+1}{2},\qquad u(0)=-\frac12.
+\]
+Indeed $u'(t)=-1/2$ and
+\[
+u'(t)+1+\varepsilon(t)u(t)
+=-\frac12+1-\frac12=0
+\]
+for every $t\ge0$. This smooth solution also tends to $-\infty$.
+In particular neither actual trajectory converges to any finite real
+number, in norm or weakly (the identity continuous linear functional
+already detects the divergence). Both common meanings of the viscosity
+trajectory therefore fail the unqualified convergence claim. The
+missing zero-existence hypothesis is essential; the example makes no
+claim against a theorem that includes it.
+
+\paragraph{Lean correspondence.}
+The project uses the actual real inner product and proves maximality
+against every monotone graph extension. It proves the full regularized
+inclusion and unique solution for every positive parameter, positivity
+and convergence to zero of $\varepsilon(t)$, actual derivatives and the
+regularized differential inclusion on $t\ge0$, and actual nonconvergence
+of both real-time trajectories. Nonconvergence is verified via their
+affine integer samples and uniqueness of limits, not assumed from the
+absence of zeros. Lean 4.19.0 and Mathlib commit
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b} are pinned.
+\end{document}
