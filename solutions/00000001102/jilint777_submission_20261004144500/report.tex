@@ -128,7 +128,7 @@ Let $\rho$ be any of the following readings of ``$\max R_{x,w}$'':
 (a) the largest coefficient; (b) the largest absolute value of a coefficient;
 (c) the sum of the absolute values of the coefficients; (d) the leading
 coefficient; (e) the degree; (f) the number of nonzero terms; (g) the value
-$R_{x,w}(q_0)$ at a fixed point $q_0$ (any $q_0\in\mathbb C$); (h) the maximum
+$R_{x,w}(q_0)$ at a fixed point $q_0$ (any $q_0\in\mathbb C$; Lean: integer $q_0$); (h) the maximum
 of the function $q\mapsto R_{x,w}(q)$ over $\mathbb Z$ or $\mathbb R$. Then the identity
 $\rho(R_{x,w})=f(\ell(w)-\ell(x))$ fails for some pair $x<w$ of $S_3$.
 \end{theorem}
@@ -157,8 +157,22 @@ conjectured $f(d)$ & $1$ & $2$ & $6$ & \\
 For (g) with an arbitrary $q_0\in\mathbb C$: the case $d=1$ requires $q_0-1=1$, so
 $q_0=2$, and then $d=2$ gives $(q_0-1)^2=1\ne2$. For (h): $R_{e,s_1}(q)=q-1$ is
 unbounded above on $\mathbb Z$ (for instance $R_{e,s_1}(3)=2>1=f(1)$), so it has no
-maximum, let alone the maximum $f(1)=1$. If ``max'' means the maximum over a
-compact interval such as $[0,1]$, then $\max_{[0,1]}(q-1)=0\ne1$.
+maximum, let alone the maximum $f(1)=1$.
+
+Now let ``max'' mean the maximum over a fixed compact interval $[a,b]$ with
+$a<b$.
+\begin{itemize}
+\item \emph{Maximum of $R$.} For $d=1$ we need $\max_{[a,b]}(q-1)=b-1=1$, so $b=2$.
+The function $(q-1)^2$ is convex, so for $d=2$ its maximum on $[a,2]$ is
+$\max\{(a-1)^2,1\}$. Setting this equal to $2$ forces $(a-1)^2=2$, so
+$a=1-\sqrt2$ (the other root, $1+\sqrt2$, exceeds $b=2$). For $d=3$, the
+derivative of $q^3-2q^2+2q-1$ is $3q^2-4q+2$. Its discriminant is
+$16-24<0$, so the derivative is positive and the polynomial is increasing.
+Hence its maximum on $[1-\sqrt2,2]$ is its value at $2$, namely $8-8+4-1=3\ne6$.
+\item \emph{Maximum of $|R|$.} For $d=1$ we need $\max_{[a,b]}|q-1|=1$, which
+forces $[a,b]\subseteq[0,2]$. Then $\max_{[a,b]}(q-1)^2\le1\ne2$ at $d=2$.
+\end{itemize}
+For example, $\max_{[0,1]}(q-1)=0\ne1$.
 \end{proof}
 
 \begin{remark}[The pair $x=w$]
@@ -168,7 +182,7 @@ covers (a)--(d), (f), (g) and (h). Only the degree reading (e) survives $d=0$, a
 it fails at $d=3$.
 \end{remark}
 
-\begin{remark}[Maximum over all pairs with the same $d$]
+\begin{remark}[Maximum over all pairs with the same $d$]\label{rem:agg}
 One might read ``$\max R_{x,w}$'' as the maximum of $\rho(R_{x,w})$ over all pairs
 with the given length difference $d$. In $S_3$ all pairs with the same $d$ have
 the same R-polynomial (Proposition~\ref{prop:S3}), so this aggregated reading
@@ -195,9 +209,19 @@ change and to reversing the coefficient list.
 
 \begin{remark}[Scope]
 The conjecture is false as a statement about KL theory, and in particular about
-the symmetric groups. It is not claimed false in every individual Coxeter group:
-in $W=\mathbb Z/2$ the only strict pair has $R=q-1$, which matches $f(1)=1$ under
-several readings.
+the symmetric groups. We do not claim that it fails in every individual Coxeter
+group. In $W=\mathbb Z/2$ (type $A_1$) the only strict pair has $R=q-1$, which
+matches $f(1)=1$ under several readings. In $W=\mathbb Z/2\times\mathbb Z/2$
+(type $A_1\times A_1$) the strict pairs have $R=q-1$ ($d=1$) and $R=(q-1)^2$
+($d=2$). Reading (b) then gives $1,2=f(1),f(2)$. For all $x\le w$, the degree
+reading (e) gives $0,1,2=f(0),f(1),f(2)$.
+
+Every Coxeter group that contains an interval of length $3$ fails at $d=3$
+under both readings. For (e), $R_{x,w}$ is monic of degree $d$, so its degree is
+$3\ne6$. For (b), Dyer's formula (Remark~\ref{rem:agg}) gives largest absolute
+coefficient $2$ or $3\ne6$. A statement of the form ``the identity holds in some
+specific $W$'' is not the claim. The claim is made about KL theory in general,
+and $S_3$ is a Coxeter group.
 \end{remark}
 
 \begin{proposition}[The literal recursion]\label{prop:literal}

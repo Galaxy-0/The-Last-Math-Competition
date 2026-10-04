@@ -30,11 +30,17 @@ we found, and this already happens for strict pairs `x < w`:
 | number of nonzero terms | 2, 3, 4 | d = 1 |
 | value at any fixed `q₀` | `q₀−1`, `(q₀−1)²`, … | d = 1 forces `q₀ = 2`; then d = 2 gives `1 ≠ 2` |
 | maximum of `q ↦ R(q)` | `q − 1` is unbounded | d = 1 |
+| maximum of `R` or `\|R\|` on a compact interval `[a,b]` | see report | d = 1 forces `b = 2`, d = 2 forces `a = 1−√2`, and then d = 3 gives `3 ≠ 6`; for `\|R\|`, d = 1 forces `[a,b] ⊆ [0,2]` and d = 2 gives `≤ 1 ≠ 2` |
 
 More readings fail as well:
 - **The pair `x = w`.** `R_{w,w} = 1` but the formula gives `0`, so every reading with `ρ(1) ≠ 0` fails.
 - **Maximum over all pairs with the same `d`.** In `S_3` all pairs with the same `d` share the same R-polynomial, so this reading fails exactly as the per-pair one does.
 - **Other normalizations.** The variants `(−1)^d R` and `R̃` also fail (checked in `verify.py`).
+- **Scope.** The claim is about KL theory in general, and `S_3` is a Coxeter group. Some small
+  groups do satisfy some readings. In `A_1` the reading with strict pairs `x < w` holds under
+  several readings. In `A_1×A_1` the largest-absolute-coefficient reading holds for strict pairs,
+  and the degree reading holds for all pairs. Every group with an interval of length 3 fails
+  both of these readings at `d = 3`.
 
 The recursion printed in the statement, `R_{x,w} = q R_{xs,w} + R_{x,ws}`, is
 garbled. Taken literally, it forces `R ≡ 0` (proved in Lean), which contradicts
@@ -97,8 +103,8 @@ pdflatex report.tex && pdflatex report.tex
 在对称群 `S_3`（`A_2` 型）中，`R_{x,w}` 只依赖于 `d`：依次为 `1`、`q−1`、`(q−1)²`、`q³−2q²+2q−1`。
 题目没有定义"max R_{x,w}"。我们逐一检验了各种合理解读：最大系数、最大绝对值系数、
 系数绝对值之和、首项系数、次数、非零项个数、在任意固定点 `q₀` 处的取值、`q ↦ R(q)` 的最大值，
-以及"对同一 `d` 的所有区间取最大"。在每种解读下，即使只看严格的 `x < w`，等式也不成立。
-此外，`x = w` 时 `R = 1`，而公式给出 `0`。
+以及"对同一 `d` 的所有区间取最大"，还有在紧区间 `[a,b]` 上取 `R` 或 `|R|` 的最大值。在每种解读下，即使只看严格的 `x < w`，等式也不成立。
+此外，`x = w` 时 `R = 1`，而公式给出 `0`。猜想是针对一般 KL 理论的断言，`S_3` 本身就是 Coxeter 群。个别小群确实满足某些解读，例如 `A_1`，以及 `A_1×A_1` 下的最大绝对值系数解读和次数解读；但任何含长度为 3 的区间的 Coxeter 群，在这两种解读下都会在 `d = 3` 处不成立。
 
 题目中的递推 `R_{x,w} = qR_{xs,w} + R_{x,ws}` 有误：照字面理解，它迫使 `R ≡ 0`（已在 Lean 中证明），
 与 `R_{w,w} = 1` 矛盾。因此我们采用标准的 R-多项式。
