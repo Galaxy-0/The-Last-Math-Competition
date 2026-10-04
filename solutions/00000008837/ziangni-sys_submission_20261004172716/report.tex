@@ -1,0 +1,125 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=27mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\setlength{\emergencystretch}{2em}
+\title{Square-summable martingale noise without almost-sure convergence\\
+\large Disproof of conjecture 00000008837}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+The final source conjunct states that square summability of
+martingale-difference noise guarantees almost-sure convergence
+of stochastic splitting algorithms. Both language versions omit
+solvability. A genuine backward proximal iteration on an actual
+probability space disproves that unqualified implication.
+The separate asserted expected convergence rate is not needed.
+
+\textbf{Actual operator and resolvent.}
+On the real Hilbert space take
+\[
+ A(x)=\{1\}\quad(x\in\mathbb R).
+\]
+The graph $G=\{(x,1):x\in\mathbb R\}$ is monotone since every
+monotonicity inner product is $(x-y)(1-1)=0$.
+It is maximal monotone: if a monotone graph containing $G$
+contains $(u,v)$, its inequalities with $(u-1,1)$ and $(u+1,1)$
+give $v-1\geq0$ and $-(v-1)\geq0$, hence $v=1$.
+Its single-valued representative is globally Lipschitz.
+
+The actual unit-parameter resolvent equation
+$x\in y+A(y)$ is equivalent to $x=y+1$.
+Thus every input has the unique resolvent
+\[
+ J_A(x)=(I+A)^{-1}(x)=x-1.
+\]
+Nevertheless $A$ has no zero. This missing solvability hypothesis
+is explicitly part of the counterexample.
+
+\textbf{Probability space, filtration and noise.}
+Let $\Omega=\{\ast\}$ with its complete measurable space and
+actual Dirac probability measure $\mu=\delta_\ast$.
+For every $n\geq0$ use the trivial sigma-algebra
+$\mathcal F_n=\{\varnothing,\Omega\}$.
+This is an actual increasing filtration.
+Set
+\[
+ \xi_n(\omega)=0\qquad(n\geq0,\ \omega\in\Omega).
+\]
+The noise is adapted and integrable, and the actual conditional
+expectations satisfy
+\[
+ \mathbb E[\xi_{n+1}\mid\mathcal F_n]=0
+\]
+for every $n$. Thus it is martingale-difference noise, with no
+assumed probabilistic certificate.
+
+\newpage
+\textbf{Full square summability.}
+At every sample point, and in expectation, the actual squared
+noise norms vanish:
+\[
+ \sum_{n=0}^{\infty}|\xi_n(\omega)|^2=0,\qquad
+ \sum_{n=0}^{\infty}\mathbb E|\xi_n|^2=0.
+\]
+Both series are genuinely summable.
+Consequently the counterexample satisfies either usual
+pointwise or expected square-summability condition.
+
+\textbf{Actual stochastic backward iteration.}
+For an arbitrary deterministic initial point $x$, use the
+standard additive-noise proximal iteration
+\[
+ X_0(\omega)=x,\qquad
+ X_{n+1}(\omega)=J_A(X_n(\omega))+\xi_n(\omega).
+\]
+Every trajectory is adapted. Induction gives
+\[
+ X_n(\omega)=x-n
+ \quad\text{for every }n\geq0,\ \omega\in\Omega.
+\]
+With zero noise it is also an exact backward inclusion step:
+$X_n-X_{n+1}=1\in A(X_{n+1})$.
+The unit proximal parameter is strictly positive; all
+subproblems are defined and uniquely solved.
+
+The actual expectation is likewise
+$\mathbb E X_n=x-n$.
+Allowing degenerate noise is legitimate here: the universal
+square-summable-noise assertion does not require nonzero
+variance or nontrivial sample space.
+
+\textbf{No sample trajectory converges.}
+If $X_n(\omega)\to a$ for a finite real $a$, the shifted sequence
+has the same limit. Therefore
+$X_{n+1}(\omega)-X_n(\omega)\to0$.
+This difference is constantly $-1$, contradicting uniqueness
+of limits.
+
+Define the genuine convergence event
+\[
+ E_x=\{\omega:\exists a\in\mathbb R,\ X_n(\omega)\to a\}.
+\]
+The preceding argument gives $E_x=\varnothing$, hence
+$\mu(E_x)=0$. Its complement has probability one.
+In particular almost-sure convergence is false for every start.
+
+\textbf{Scope and formal correspondence.}
+The disproof concerns the source's unconditional stochastic
+splitting assertion. It does not contradict a stochastic
+proximal-point theorem that assumes a nonempty zero set.
+Lean constructs the actual measure and Mathlib filtration;
+checks adaptedness, integrability and actual conditional
+expectations; proves both squared-noise series and actual
+expectations; verifies the genuine resolvent and full recurrence;
+and proves the convergence event empty and the almost-sure
+statement false.
+
+Run \texttt{lake build} in \texttt{lean/} with Lean 4.19.0 and
+public Mathlib revision:
+\begin{center}\small
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}
+\end{center}
+The project prints the relevant axiom audits.
+\end{document}
