@@ -1,0 +1,297 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of Conjecture 00000001289:\\
+no graph on $2^n\ge 4$ vertices has diameter $2^n-1$ and chromatic number $2^n$}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000001289 asserts that the ``nim graph'' $Q_\oplus(n)$ of the
+hypercube (vertices: the $2^n$ vertices of the $n$-cube; edges ``given by
+$\oplus$'') has diameter $2^n-1$ and chromatic number $2^n$. The edge rule is
+not specified, but this does not matter: we show that \emph{no} simple graph on
+$N\ge 3$ vertices has chromatic number $N$ and diameter $N-1$, because
+chromatic number $N$ forces the graph to be complete, and a complete graph has
+diameter $1$. Hence the conjecture fails for every $n\ge2$, already at $n=2$,
+whatever graph $Q_\oplus(n)$ is. For the two natural readings we also compute
+the true values: the hypercube $Q_n$ ($u\sim v$ iff $u\oplus v$ is a power of
+two) has $\chi=2$ and diameter $n$; the complete reading ($u\sim v$ iff
+$u\oplus v\ne0$) has $\chi=2^n$ and diameter $1$. Everything is formalized in
+Lean~4 (core library only).
+\end{abstract}
+
+\section{The conjecture}
+\begin{quote}
+\emph{Definition:} The nim graph of the hypercube (edges given by $\oplus$).
+\emph{Conjecture:} The diameter and chromatic number of the nim graph
+$Q_\oplus(n)$ are $2^n-1$ and $2^n$ respectively (nim graph parameters).
+\end{quote}
+The Chinese version says the same. We write $N=2^n$. The vertex set of
+$Q_\oplus(n)$ is the vertex set $\{0,1\}^n$ of the $n$-cube; we identify a
+vertex with the integer $\{0,\dots,N-1\}$ whose binary digits it lists, so that
+$\oplus$ is bitwise exclusive or (nim addition). The claim to be refuted is
+\[
+\textbf{(C)}\qquad \text{for every } n\ge1:\quad
+\operatorname{diam}Q_\oplus(n)=2^n-1 \quad\text{and}\quad \chi(Q_\oplus(n))=2^n .
+\]
+It is a conjunction of two equalities for each $n$, and a statement about all
+$n$; to refute it, it suffices to show that the conjunction fails for one $n$.
+We show that it fails for every $n\ge2$.
+
+\section{Definitions and readings}
+\begin{definition}
+A \emph{simple graph} $G$ on $V=\{0,\dots,N-1\}$ is a symmetric, loopless
+adjacency relation on $V$. A \emph{proper $c$-colouring} is a map
+$\mathrm{col}:V\to\{0,\dots,c-1\}$ with $\mathrm{col}(u)\ne\mathrm{col}(v)$
+whenever $u\sim v$. The \emph{chromatic number} $\chi(G)$ is the least $c$ for
+which a proper $c$-colouring exists (it exists for $c=N$). A \emph{walk} of
+length $k$ from $u$ to $v$ is a sequence $u=w_0,w_1,\dots,w_k=v$ with
+$w_{i-1}\sim w_i$; $\operatorname{dist}(u,v)$ is the least length of such a walk
+($\infty$ if there is none) and $\operatorname{diam}G=\max_{u,v}\operatorname{dist}(u,v)$.
+A disconnected graph has infinite diameter.
+\end{definition}
+
+\paragraph{What ``edges given by $\oplus$'' can mean.} The conjecture does not
+say which pairs are adjacent. Any rule of the form ``$u\sim v$ iff $u\oplus v\in
+S$'' for a set $S$ gives the Cayley graph $\mathrm{Cay}((\mathbb Z/2)^n,S)$. Two
+choices are natural:
+\begin{itemize}
+\item[(H)] $S=\{1,2,4,\dots,2^{n-1}\}$: $u\sim v$ iff $u$ and $v$ differ in exactly
+one bit. This is the hypercube graph $Q_n$ itself.
+\item[(K)] $S=\{1,\dots,N-1\}$: $u\sim v$ iff $u\oplus v\ne0$. This is the complete
+graph $K_N$.
+\end{itemize}
+Every rule that depends only on $u\oplus v$ is symmetric, since $u\oplus
+v=v\oplus u$. It may be taken loopless, since $u\oplus u=0$. A graph with a
+loop has no proper colouring at all, so it cannot have $\chi=2^n$. Multiple
+edges change neither $\chi$ nor distances. We therefore make \emph{no}
+assumption about the edge set beyond simplicity: our main result covers every
+simple graph on the $2^n$ vertices. Directed readings are discussed in
+Remark~\ref{rem:directed}.
+
+\section{The main argument}
+\begin{lemma}\label{lem:complete}
+Let $G$ be a simple graph on $N$ vertices with $\chi(G)=N$. Then $G$ is
+complete.
+\end{lemma}
+\begin{proof}
+Suppose $u\ne v$ are not adjacent. Colour $v$ with the colour of $u$ and give
+the other $N-1$ vertices $N-1$ distinct colours. Explicitly, with
+$s(w)=w$ for $w<v$ and $s(w)=w-1$ for $w>v$, put $\mathrm{col}(w)=s(w)$ for
+$w\ne v$ and $\mathrm{col}(v)=s(u)$. Then $\mathrm{col}$ takes values in
+$\{0,\dots,N-2\}$, and $s$ is injective on $V\setminus\{v\}$. Two vertices with
+the same colour are either equal or the pair $\{u,v\}$, which is not an edge.
+So $\mathrm{col}$ is a proper $(N-1)$-colouring, and $\chi(G)\le N-1$, a
+contradiction.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+Let $N\ge3$. No simple graph on $N$ vertices has $\chi(G)=N$ and
+$\operatorname{diam}G=N-1$.
+\end{theorem}
+\begin{proof}
+If $\chi(G)=N$ then $G$ is complete by Lemma~\ref{lem:complete}, so every two
+vertices are joined by a walk of length at most $1$ and
+$\operatorname{diam}G\le1<2\le N-1$.
+\end{proof}
+
+\begin{corollary}\label{cor:main}
+For every $n\ge2$ and every simple graph $G$ on the $2^n$ vertices of the
+$n$-cube, $\operatorname{diam}G=2^n-1$ and $\chi(G)=2^n$ cannot both hold. In
+particular Conjecture 00000001289 is false, whatever edge set ``given by
+$\oplus$'' is meant; the smallest counterexample is $n=2$.
+\end{corollary}
+\begin{proof}
+Apply Theorem~\ref{thm:main} with $N=2^n\ge4$.
+\end{proof}
+
+For $n=1$ ($N=2$) the clause can hold: $Q_\oplus(1)=K_2$ under both readings,
+with diameter $1=2^1-1$ and $\chi=2$. So the predicates are not vacuous and the
+conjecture first fails at $n=2$.
+
+\section{The actual values under the natural readings}
+\begin{proposition}\label{prop:readings}
+Let $n\ge1$ and $N=2^n$.
+\begin{enumerate}
+\item[(H)] The hypercube $Q_n$ has $\chi(Q_n)=2$ and $\operatorname{diam}Q_n=n$.
+\item[(K)] The complete reading $K_N$ has $\chi(K_N)=N$ and
+$\operatorname{diam}K_N=1$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(H) Colour $u$ by the parity of the number of one-bits of $u$. Adjacent vertices
+differ in exactly one bit, so their parities differ; there is an edge, so
+$\chi=2$. A walk flips one bit per step, so $\operatorname{dist}(u,v)$ is at least the
+Hamming distance of $u$ and $v$, and flipping the differing bits one at a time
+achieves it. Hence $\operatorname{dist}(u,v)$ equals the Hamming distance, which is at most $n$,
+with equality for $u=0$, $v=N-1$.
+
+(K) Any two distinct vertices are adjacent, so a proper colouring is injective
+and needs $N$ colours (pigeonhole); the identity colouring uses $N$. Distinct
+vertices are at distance $1$.
+\end{proof}
+
+\begin{center}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+$n$ & claimed $(\operatorname{diam},\chi)$ & (H) hypercube & (K) complete & any simple graph\\
+\midrule
+$1$ & $(1,2)$ & $(1,2)$ & $(1,2)$ & holds for $K_2$\\
+$2$ & $(3,4)$ & $(2,2)$ & $(1,4)$ & impossible\\
+$3$ & $(7,8)$ & $(3,2)$ & $(1,8)$ & impossible\\
+$n\ge2$ & $(2^n-1,2^n)$ & $(n,2)$ & $(1,2^n)$ & impossible\\
+\bottomrule
+\end{tabular}
+\end{center}
+Under (H) both equalities fail for $n\ge2$; under (K) the chromatic number is
+correct but the diameter is not. Every other reading fails by
+Corollary~\ref{cor:main}. For $n=2,3$, \texttt{verify.py} also checks all $7$
+and $127$ Cayley graphs $\mathrm{Cay}((\mathbb Z/2)^n,S)$ ($S\ne\emptyset$)
+directly. For $N=4$ it checks all $64$ labelled graphs: the only one with
+$\chi=4$ is $K_4$, and it has diameter $1$.
+
+\section{Robustness remarks}
+\begin{remark}[Disconnected graphs]
+If $Q_\oplus(n)$ is disconnected its diameter is $\infty\ne2^n-1$, so the claim
+fails anyway. Theorem~\ref{thm:main} already covers this: $\chi=N$ forces
+completeness, hence connectivity. In the formalization, the diameter predicate
+requires every pair to be joined by a walk of length at most $D$, so a
+disconnected graph has no finite diameter.
+\end{remark}
+
+\begin{remark}[A different vertex count]\label{rem:count}
+The conjecture says the graph lives on the hypercube, so it has $2^n$
+vertices. For a reader who would allow other vertex sets, here is the general
+inequality: every connected graph on $N$ vertices satisfies
+\[
+\chi(G)+\operatorname{diam}G\le N+1 .
+\]
+Indeed, let $d=\operatorname{diam}G\ge1$ and let $v_0v_1\cdots v_d$ be a
+shortest path between two vertices at distance $d$. If $|i-j|\ge2$ then $v_i$
+and $v_j$ are not adjacent, since otherwise there would be a shorter path. So
+colour the $v_i$ with even $i$ by colour $1$, those with odd $i$ by colour $2$,
+and the remaining $N-d-1$ vertices with distinct new colours. This gives
+$\chi\le N-d+1$. The case $d=0$, i.e.\ $N=1$, is trivial. Hence
+$\operatorname{diam}=2^n-1$ and $\chi=2^n$ would need $N\ge2^{n+1}-2$
+vertices. For example, the clause fails at $n=2$ even on $5$ vertices.
+\texttt{verify.py} confirms the inequality for all $2^{15}+2^{10}+2^6+2^3$
+labelled graphs on $N=3,\dots,6$ vertices. This remark is not formalized in
+Lean, and it is not needed for the disproof.
+\end{remark}
+
+\begin{remark}[Directed readings]\label{rem:directed}
+Edges ``given by $\oplus$'' are undirected, because $u\oplus v=v\oplus u$.
+Suppose one nevertheless reads $Q_\oplus(n)$ as a game digraph (``nim'' moves),
+with $\chi$ taken from the underlying undirected graph and the diameter
+measured along directed paths. Then $\chi=N$ still forces the underlying graph
+to be complete, by Lemma~\ref{lem:complete}. If the digraph is acyclic, as a
+game graph is, then for each pair only one direction is reachable, so the
+directed diameter is $\infty$. If instead all distances are counted as
+reachable-only, the transitive tournament gives $1$; either way it is not
+$2^n-1$. Only an arbitrary non-symmetric, cyclic arc rule could reach directed
+diameter $3$ on $4$ vertices. \texttt{verify.py} finds $192$ such digraphs over
+$K_4$, none symmetric. Such a rule is not a function of $u\oplus v$, and it is
+not a reading of the conjecture. This remark is likewise only in the report and
+in \texttt{verify.py}.
+\end{remark}
+
+\section{Lean formalization}
+The directory \texttt{lean4/} is a self-contained Lean~4.19.0 project (core
+library only, no Mathlib). All objects are defined from scratch in
+\texttt{Main.lean}.
+\begin{itemize}
+\item \texttt{Graph := Nat -> Nat -> Bool}, restricted to $\{0,\dots,N-1\}$;
+\texttt{IsSimple G N} means symmetric and loopless.
+\item \texttt{IsProperColoring}, \texttt{Colorable G N c}, and
+\texttt{ChromaticNumberEq G N c}: a proper $c$-colouring exists and no proper
+$k$-colouring exists for $k<c$ (``$c$ is the least'').
+\item \texttt{WalkFrom G N u ws v} (an explicit list of vertices forming a walk),
+\texttt{WalkLe G N u v k} (a walk of length $\le k$ exists, i.e.\
+$\operatorname{dist}\le k$), \texttt{DistEq}, and \texttt{DiameterEq G N D}:
+all pairs are at distance $\le D$ and some pair is at distance exactly $D$. A
+Boolean reachability function \texttt{reach} is proved equivalent to
+\texttt{WalkLe} (\texttt{reach\_iff}), and is used only for decidability.
+\item Well-definedness: \texttt{chromatic\_unique}, \texttt{diameter\_unique},
+\texttt{colorable\_self}.
+\item Key lemma \texttt{adj\_of\_chromatic} (Lemma~\ref{lem:complete}),
+\texttt{diameter\_le\_one\_of\_chromatic}, and the general theorem
+\texttt{no\_graph\_diam\_chi}: for all $N\ge3$ and every simple $G$ on $N$
+vertices, $\neg(\operatorname{diam}=N-1\wedge\chi=N)$.
+\item The conjecture: \texttt{ClaimAt G n} is
+$\operatorname{diam}G=2^n-1\wedge\chi(G)=2^n$ on $2^n$ vertices, and
+\texttt{NimClaim Q} is $\forall n\ge1$, \texttt{ClaimAt (Q n) n}.
+\texttt{claimAt\_false}: for every $n\ge2$ and every simple $G$ on $2^n$ vertices,
+$\neg$\texttt{ClaimAt G n}. Main theorem:
+\begin{verbatim}
+theorem conjecture_00000001289_false (Q : Nat -> Graph)
+    (hQ : IsSimple (Q 2) (2 ^ 2)) : Not (NimClaim Q)
+\end{verbatim}
+(In \texttt{Main.lean} the arrows and the negation are written with the usual
+Unicode symbols.)
+This covers every family $Q_\oplus$, with no assumption on its edges beyond
+$Q_\oplus(2)$ being a simple graph.
+\item Concrete readings: \texttt{hypercube} ($u\oplus v$ a power of two) and
+\texttt{nimComplete} ($u\oplus v\ne0$), both defined with Lean's bitwise
+\texttt{\^{}\^{}\^{}}. Proved: \texttt{hypercube2\_chi}, \texttt{hypercube3\_chi}
+($\chi=2$), \texttt{hypercube2\_diam}, \texttt{hypercube3\_diam} (diameter $2$,
+$3$), \texttt{nimComplete\_chi} ($\chi=N$ for all $N$, via \texttt{pigeonhole}),
+\texttt{nimComplete\_diam} (diameter $1$ for $N\ge2$), and
+\texttt{hypercube\_reading\_false}, \texttt{complete\_reading\_false}.
+\item Non-vacuity: \texttt{claimAt\_one} (the clause holds at $n=1$ for both
+readings) and \texttt{nonvacuous\_four} (on $4$ vertices the path has diameter
+$3$ and $K_4$ has $\chi=4$, so each conjunct alone is satisfiable).
+\item Cross-check: \texttt{all\_masks\_fail}. For each of the $64$ labelled graphs
+on $\{0,1,2,3\}$, encoded by an edge bitmask, either a proper $3$-colouring is
+found or all distances are $\le2$; hence none has $\operatorname{diam}=3$ and
+$\chi=4$. This proof uses \texttt{decide} and is independent of the general
+lemma.
+\end{itemize}
+\texttt{lake build} succeeds with no errors or warnings. There is no
+\texttt{sorry}, no \texttt{native\_decide}, and no added axioms. \texttt{\#print
+axioms} reports only the standard \texttt{propext}, \texttt{Quot.sound} and, for the
+general theorems, \texttt{Classical.choice}, which comes from tactic-generated
+case splits.
+
+\paragraph{Scope of the formal result.} Lean covers every simple graph on the
+$2^n$ vertices $\{0,\dots,2^n-1\}$, i.e.\ every undirected reading of
+``edges given by $\oplus$''. Remarks~\ref{rem:count} and~\ref{rem:directed}
+(other vertex counts, directed readings) are only in this report and in
+\texttt{verify.py}. The general-$n$ values for the hypercube reading
+(Proposition~\ref{prop:readings}(H)) are proved here on paper, and in Lean only
+for $n=1,2,3$. None of these is needed for the disproof.
+
+\section{Independent check: \texttt{verify.py}}
+The Python~3 script (standard library only) uses brute force: breadth-first
+search for distances and backtracking for colourings. It checks:
+(i) all $64$ graphs on $4$ vertices, giving the distribution of
+$(\chi,\operatorname{diam})$, with no graph having $(4,3)$;
+(ii) $\chi=N$ only for $K_N$, and $\chi+\operatorname{diam}\le N+1$, for all graphs
+on $3\le N\le6$ vertices;
+(iii) readings (H) and (K) for $n=1,\dots,5$, and all Cayley graphs of
+$(\mathbb Z/2)^n$ for $n=2,3$;
+(iv) the directed remark on $4$ vertices.
+
+\section{Reproduction}
+\begin{verbatim}
+cd lean4 && lake build     # Lean 4.19.0, core only
+cd .. && python3 verify.py # Python 3 standard library
+pdflatex report.tex && pdflatex report.tex
+\end{verbatim}
+
+\end{document}

@@ -1,0 +1,56 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:394:0: 'NimGraph.conjecture_00000001289_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:395:0: 'NimGraph.no_graph_diam_chi' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:396:0: 'NimGraph.claimAt_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:397:0: 'NimGraph.hypercube_reading_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:398:0: 'NimGraph.complete_reading_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:399:0: 'NimGraph.nonvacuous_four' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:400:0: 'NimGraph.claimAt_one' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:401:0: 'NimGraph.hypercube3_diam' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:402:0: 'NimGraph.hypercube3_chi' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:403:0: 'NimGraph.all_masks_fail' depends on axioms: [propext, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+N=4: (chi, diam) -> number of labelled graphs: {'(1, inf)': 1, '(2, 2)': 7, '(2, 3)': 12, '(2, inf)': 21, '(3, 2)': 18, '(3, inf)': 4, '(4, 1)': 1}
+OK   no graph on 4 vertices has chi = 4 and diam = 3 (64 graphs)
+OK   the only graph with chi = 4 on 4 vertices is K4, with diam 1
+OK   N=3: chi = N only for the complete graph (8 graphs)
+OK   N=3: chi + diam <= N + 1 for every connected graph
+OK   N=4: chi = N only for the complete graph (64 graphs)
+OK   N=4: chi + diam <= N + 1 for every connected graph
+OK   N=5: chi = N only for the complete graph (1024 graphs)
+OK   N=5: chi + diam <= N + 1 for every connected graph
+OK   N=6: chi = N only for the complete graph (32768 graphs)
+OK   N=6: chi + diam <= N + 1 for every connected graph
+n=1: hypercube chi=2 diam=1; complete chi=2 diam=1; claim diam=1 chi=2
+OK   n=1: hypercube reading has chi = 2, diam = n
+OK   n=1: complete reading has chi = 2^n, diam = 1
+n=2: hypercube chi=2 diam=2; complete chi=4 diam=1; claim diam=3 chi=4
+OK   n=2: hypercube reading has chi = 2, diam = n
+OK   n=2: complete reading has chi = 2^n, diam = 1
+OK   n=2: both readings violate the claim
+n=3: hypercube chi=2 diam=3; complete chi=8 diam=1; claim diam=7 chi=8
+OK   n=3: hypercube reading has chi = 2, diam = n
+OK   n=3: complete reading has chi = 2^n, diam = 1
+OK   n=3: both readings violate the claim
+n=4: hypercube chi=2 diam=4; complete chi=16 diam=1; claim diam=15 chi=16
+OK   n=4: hypercube reading has chi = 2, diam = n
+OK   n=4: complete reading has chi = 2^n, diam = 1
+OK   n=4: both readings violate the claim
+n=5: hypercube chi=2 diam=5; complete chi=32 diam=1; claim diam=31 chi=32
+OK   n=5: hypercube reading has chi = 2, diam = n
+OK   n=5: complete reading has chi = 2^n, diam = 1
+OK   n=5: both readings violate the claim
+OK   n=2: none of the 7 Cayley graphs Cay((Z/2)^2, S) satisfies the claim
+OK   n=3: none of the 127 Cayley graphs Cay((Z/2)^3, S) satisfies the claim
+directed N=4: 192 non-symmetric orientations/digraphs over K4 reach directed diameter 3; 24 acyclic ones (all of infinite diameter)
+OK   the 24 acyclic orientations of K4 all have infinite directed diameter
+OK   every digraph over K4 with directed diameter 3 is non-symmetric (impossible for a rule depending on u xor v = v xor u)
+ALL CHECKS PASSED
+exit 0
