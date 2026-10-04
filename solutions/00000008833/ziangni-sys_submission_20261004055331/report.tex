@@ -1,0 +1,129 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Chambolle--Pock convergence with step-size product four}
+\author{ziangni-sys}
+\date{Conjecture 00000008833}
+\begin{document}
+\sloppy
+\maketitle
+\noindent Both originals assert that Chambolle--Pock convergence always
+requires the product of the two step sizes to be at most one. No
+normalization of the coupling operator is imposed. The following actual
+scalar convex problem disproves this necessary-condition claim.
+
+\section*{Problem and exact algorithm}
+Use the real Hilbert spaces $X=Y=\mathbb R$, and set
+\[
+ f(x)=\tfrac12x^2,\qquad g(z)=\tfrac12z^2,\qquad Kx=\tfrac14x,
+ \qquad \tau=\sigma=2,\qquad\theta=1.
+\]
+Both objectives are finite, continuous, proper and convex. The coupling is
+nonzero and bounded, with $K^*=K$. Completing the square gives
+\[
+ g^*(y)=\sup_z\{yz-\tfrac12z^2\}=\tfrac12y^2,
+ \qquad yz-\tfrac12z^2=\tfrac12y^2-\tfrac12(z-y)^2.
+\]
+The supremum is attained at $z=y$. For either proximal objective at step
+size two, completing the square gives the unique minimizer
+\[
+ \mathop{\rm prox}_{2f}(a)=\mathop{\rm prox}_{2g^*}(a)=a/3,
+ \qquad \tfrac12u^2+\tfrac14(u-a)^2
+       =\tfrac34(u-a/3)^2+\tfrac16a^2.
+\]
+The saddle function is $L(x,y)=x^2/2+xy/4-y^2/2$.
+The point $(0,0)$ is a saddle because $L(0,y)\le L(0,0)\le L(x,0)$.
+
+Algorithm 1 of Chambolle--Pock~\cite{CP} updates
+\[
+ y'=\mathop{\rm prox}_{\sigma g^*}(y+\sigma K\bar x),\quad
+ x'=\mathop{\rm prox}_{\tau f}(x-\tau K^*y'),\quad
+ \bar x'=x'+\theta(x'-x).
+\]
+Consequently this instance has the exact update
+\[
+ y'=(y+\bar x/2)/3,\qquad x'=(x-y'/2)/3,
+ \qquad \bar x'=2x'-x=-x/3-y'/3.
+\]
+The usual initialization $\bar x^0=x^0$ is included below.
+
+\begin{theorem}
+Every initial state $(x^0,y^0,\bar x^0)$ converges to $(0,0,0)$ under
+this iteration, although $\tau\sigma=4>1$.
+\end{theorem}
+\begin{proof}
+Let $M=\max(|x|,|y|,|\bar x|)$. The update satisfies
+\[
+ |y'|\le M/2,\qquad |x'|\le 5M/12\le M/2,
+ \qquad |\bar x'|\le M/3+M/6=M/2.
+\]
+Thus $M_n\le 2^{-n}M_0\to0$. Every coordinate converges to zero,
+so the primal-dual pair converges to the exhibited saddle from every
+initial pair. The positive step sizes have product four, contradicting
+the claimed universal necessity of a product at most one.
+\end{proof}
+
+\newpage
+\section*{Scope and the standard operator-norm condition}
+The counterexample concerns exactly the unqualified numerical product
+bound stated in both source versions. The operator $K$ is nonzero, the
+objectives meet the standard convex assumptions, and a saddle exists.
+Convergence is proved for every initial state, rather than only a fixed
+point initialization or a specially selected orbit. The extrapolation
+parameter is the standard value $\theta=1$.
+
+The usual sufficient condition in Chambolle--Pock's theorem is
+$\tau\sigma\|K\|^2<1$~\cite{CP}. Here $\|K\|=1/4$, so that product
+is $1/4$. Our result is therefore consistent with the standard theorem.
+The source omits this operator-norm factor and makes its step-product
+condition universal; it does not assume $\|K\|=1$. The direct proof above
+does not invoke the convergence theorem. Failure of this first conjunct
+suffices to disprove the conjunction; the separate preconditioning claim
+need not be resolved.
+
+\section*{Formal objects and complete coverage}
+The Lean file defines the actual real quadratic \texttt{energy} and
+proves \texttt{Continuous} and \texttt{ConvexOn} properties.
+Since it is real-valued everywhere, its properness has no exceptional
+infinite values. The operator \texttt{coupling} is a genuine bounded
+\texttt{ContinuousLinearMap} on the real Hilbert line. Its scalar action,
+nonzeroness and adjoint identity against every pair of vectors are proved.
+
+\texttt{fenchel\_conjugate} computes the genuine \texttt{sSup} of the
+range $z\mapsto yz-f(z)$. A universal upper bound and an attaining point
+establish boundedness, existence and the value of this supremum.
+\texttt{prox\_exact} proves an if-and-only-if characterization of all
+global minimizers of the actual proximal objective. Thus the proximal
+maps used by the algorithm are derived, including their uniqueness.
+\texttt{zero\_saddle} checks the saddle inequalities for all $x,y$.
+
+\texttt{step} implements both proximal updates, the bounded coupling
+operator and the extrapolation step with the stated parameters. The
+adjoint identity justifies using the same scalar coupling in the primal
+update. \texttt{step\_formula} derives the displayed recurrence.
+The orbit is defined by actual function iteration, and \texttt{size} is
+the maximum of all three absolute coordinate values.
+\texttt{one\_step} and \texttt{size\_contracts} prove its contraction.
+\texttt{orbit\_bound} proves the bound $2^{-n}M_0$ for every natural $n$.
+Finally, \texttt{orbit\_converges} proves convergence in the ordinary
+product topology for every initial triple, and
+\texttt{product\_bound\_counterexample} combines that convergence with
+positive steps, nonzero coupling and $\tau\sigma>1$.
+
+\section*{Reproduction}
+Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}\end{center}
+are pinned. From \texttt{lean/}, run \texttt{lake update},
+\texttt{lake exe cache get}, \texttt{lake build}, and
+\texttt{lake env lean Main.lean -DwarningAsError=true}.
+The six printed dependency audits use only standard logical axioms.
+No admitted statements or auxiliary computations are used.
+
+\begin{thebibliography}{1}
+\bibitem{CP} A. Chambolle and T. Pock,
+\emph{A first-order primal-dual algorithm for convex problems with applications to imaging},
+J. Math. Imaging Vis. 40 (2011), 120--145. Algorithm 1 and Theorem 1.
+\href{https://www.cmap.polytechnique.fr/preprint/repository/685.pdf}{Author preprint}.
+\end{thebibliography}
+\end{document}
