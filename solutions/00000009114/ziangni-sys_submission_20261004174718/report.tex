@@ -1,0 +1,43 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem*{proposition}{Counterexample}
+\title{Four indispensable planar balls violate the bound $n+1$}
+\author{Conjecture 00000009114 \quad ziangni-sys}
+\date{}
+\begin{document}
+\maketitle
+The source asserts that the Besicovitch multiplicity bound is always dimension plus one. We use the standard centered-ball selection formulation: from a given family of balls, one must choose a subfamily covering all their centers, with controlled overlap everywhere. Already a finite family in the Euclidean plane disproves the claimed bound.
+
+\begin{proposition}
+There is a family of four open balls in $\mathbb R^2$ such that every subfamily covering its centers has multiplicity four at the origin. Consequently the universal selection bound cannot be $2+1=3$.
+\end{proposition}
+\begin{proof}
+Let
+\[
+ c_0=(1,0),\quad c_1=(0,1),\quad
+ c_2=(-1,0),\quad c_3=(0,-1),
+ \qquad B_i=B(c_i,11/10).
+\]
+Each $B_i$ is an actual open ball for the Euclidean norm. Every center has distance one from the origin, so
+\[
+ 0\in B_i\qquad\text{for all }i\in\{0,1,2,3\}.
+\]
+For distinct centers, the squared distance is either $2$ or $4$. In particular it is at least $2>(11/10)^2$. Hence no ball contains another ball's center, whereas every ball contains its own center:
+\[
+ c_i\in B_j\quad\Longleftrightarrow\quad i=j.
+\]
+Now let $I\subseteq\{0,1,2,3\}$ index any subfamily covering all four centers. To cover $c_i$, the equivalence above forces $i\in I$. Thus $I=\{0,1,2,3\}$. Its multiplicity function
+\[
+ m_I(z)=\#\{i\in I:z\in B_i\}
+\]
+therefore satisfies $m_I(0)=4>3=\dim(\mathbb R^2)+1$. The full family does cover the centers, so the obstruction is its unavoidable overlap, not absence of a covering subfamily.
+\end{proof}
+
+\paragraph{Scope.}
+This is a given-family selection counterexample: the centers form a bounded finite set and all radii are the same positive number. It also forms a Besicovitch family in the usual sense of a common intersection with no center in another ball. We do not replace the supplied balls by smaller balls. A different theorem about fine covers supplying arbitrarily small replacement balls has different quantifiers; our conclusion concerns the source's unqualified universal multiplicity assertion. No conclusion about the separate needle-shaped extremizer clause is needed.
+
+\paragraph{Formal verification.}
+The Lean project uses the actual space \texttt{EuclideanSpace}\,$\mathbb R$\,\texttt{(Fin 2)} and actual \texttt{Metric.ball} sets. It proves the dimension, exact center norms, separation, common point, full-cover existence, forced equality of every covering subfamily with the full family, and the genuine filtered-cardinality multiplicity. Its final theorem excludes every subfamily satisfying an everywhere dimension-plus-one bound. The project pins Lean 4.19.0 and Mathlib in its manifest; run \texttt{lake build} in \texttt{lean/}.
+\end{document}
