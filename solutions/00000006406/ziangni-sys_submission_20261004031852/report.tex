@@ -1,0 +1,67 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\emergencystretch=2em
+\title{Complement is an isometric involution\\Proof of Conjecture 00000006406}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\section*{Set identity and distance preservation}
+Fix a universe $X$ and write $A^c=X\setminus A$ for complement.
+All complements are relative to this same universe.
+For arbitrary subsets $A,B\subseteq X$, their symmetric difference is
+$A\triangle B=(A\setminus B)\cup(B\setminus A)$.
+De Morgan's identities are
+\[
+(A\cup B)^c=A^c\cap B^c,\qquad
+(A\cap B)^c=A^c\cup B^c.
+\]
+Together with double complementation they give
+$A^c\setminus B^c=A^c\cap B=B\setminus A$. Therefore
+\[
+A^c\triangle B^c=(B\setminus A)\cup(A\setminus B)
+=A\triangle B.
+\]
+This proves preservation of every symmetric-difference distance:
+if $d(A,B)=W(A\triangle B)$ for any fixed set-size functional $W$, then
+\[
+d(A^c,B^c)=W(A^c\triangle B^c)
+=W(A\triangle B)=d(A,B).
+\]
+Whenever this distance is a metric, complement is an isometry.
+The equality itself requires no finiteness or positivity assumption.
+Examples include counting distance on a finite universe, and
+measure distance on a complement-closed measurable family
+(with sets identified modulo null sets when necessary).
+
+\section*{Involution and its composition}
+Let $C(A)=A^c$. Pointwise double complementation gives
+$C(C(A))=A$. Thus $C$ is an involution and is bijective, with inverse $C$.
+Moreover $C\circ C$ is the identity map and is itself an involution.
+This proves both the usual involution assertion and the literal wording
+about the composition of complements.
+For a restricted family, complement is considered on a family closed
+under this operation; on the full power set this condition is automatic.
+
+\section*{Formalization and a concrete metric}
+The Lean project proves the two De Morgan identities pointwise, the
+set-difference identity and the symmetric-difference equality above.
+It proves distance preservation for an arbitrary functional $W$, then
+an actual Mathlib \texttt{Isometry} theorem for every pseudometric whose
+distance has the stated symmetric-difference form.
+The hypothesis specifies what the difference distance is; it does not
+assume that complement preserves it.
+The final theorem \texttt{conjecture\_6406} collects isometry, both
+involution statements, and both De Morgan identities.
+
+Additionally, finite subsets are represented by their Boolean
+characteristic words. Mathlib's actual Hamming metric counts entries at
+which two such words differ, exactly the cardinality of their symmetric
+difference. Bitwise Boolean negation represents complement.
+The unconditional theorem \texttt{concrete\_hamming\_isometry} proves
+it is an isometry for every finite universe, and double negation is
+proved separately. All proofs are exact; no auxiliary computation is used.
+\end{document}
