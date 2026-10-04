@@ -1,0 +1,60 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\emergencystretch=2em
+\title{The identity operator disproves the half upper bound\\Conjecture 00000007167}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\section*{The original assertion}
+The English source concerns equivalence of numerical radius and operator
+norm and asserts that the upper bound of the ratio of numerical radius
+to operator norm is one half. The Chinese source states the same direction
+of the ratio and the same upper bound.
+The additional claim about tightness at a two-dimensional rotation is
+part of the conjunction; disproving the universal upper bound already
+disproves the conjecture.
+
+\section*{An actual bounded linear operator}
+Let $H=\mathbb C$ with its ordinary Hilbert norm and inner product, and
+let $I:H\to H$ be the identity operator. Define
+\[
+\|A\|=\sup_{\|v\|=1}\|Av\|,
+\qquad
+w(A)=\sup_{\|v\|=1}|\langle v,Av\rangle|.
+\]
+The identity is complex-linear and bounded. Every unit vector has
+$\|Iv\|=\|v\|=1$, and unit vectors exist, for example $v=1$.
+Thus $\|I\|=1$.
+For every unit vector,
+\[
+|\langle v,Iv\rangle|=\langle v,v\rangle=\|v\|^2=1.
+\]
+The set of real values whose supremum defines $w(I)$ is exactly
+the singleton $\{1\}$, so $w(I)=1$. Consequently
+\[
+\frac{w(I)}{\|I\|}=1>\frac12.
+\]
+This violates the proposed bound. The same calculation works for the
+identity on any nonzero Hilbert space, including a two-dimensional one.
+The numerical radius here is not a spectral-radius surrogate: its full
+unit-vector supremum is computed directly.
+
+\section*{Formal verification}
+The Lean project uses the standard complex inner product and norm, and
+the actual bounded operator
+\texttt{ContinuousLinearMap.id} on $\mathbb C$.
+The operator-norm calculation uses Mathlib's theorem for the norm of
+the identity.
+The numerical-value set is defined by existence of a complex unit vector
+with the corresponding norm of its inner product.
+The proof establishes equality of this entire set with $\{1\}$;
+the radius is its real supremum, rather than an assumed constant.
+The final theorem \texttt{conjecture\_7167\_false} refutes the claimed
+upper bound for all positive-norm operators on this Hilbert space.
+Any universal upper bound as in the original must apply to this case.
+There are no auxiliary computations or unproved analytic estimates.
+\end{document}
