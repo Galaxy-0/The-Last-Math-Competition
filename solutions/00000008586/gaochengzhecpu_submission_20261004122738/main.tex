@@ -1,0 +1,129 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.95in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\newtheorem{proposition}{Proposition}
+\title{Failure of the increasing-inclusion claim in Conjecture 00000008586}
+\author{gaochengzhecpu}
+\date{October 4, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+For the Hermitian matrix $T=\operatorname{diag}(0,1)$, the scalar $1/2$
+belongs to the first compression range but not to the second. This
+disproves the conjectured inclusion $\Lambda_1(T)\subseteq\Lambda_2(T)$.
+The proof uses the rank-of-compression definition printed in the source.
+The same matrix and scalar also contradict the proposed direction of
+inclusion under the usual scalar-compression definition. The accompanying
+Lean 4 project checks actual isometric compressions, their determinants,
+and their matrix ranks.
+\end{abstract}
+
+\section{The source's definition}
+Both language versions assert $\Lambda_k(T)\subseteq\Lambda_{k+1}(T)$.
+They describe membership using the condition that the compression of
+$\lambda I-T$ have rank at most $k-1$. Written with an orthonormal frame
+for a $k$-dimensional subspace, this is
+\begin{equation}\label{eq:source}
+\begin{split}
+\Lambda^{\rm src}_k(T)=\{\lambda\in\mathbb C:\ &\exists Q\in\mathbb C^{n\times k},\quad Q^*Q=I_k,\\[-2pt]
+&\operatorname{rank}\bigl(Q^*(\lambda I_n-T)Q\bigr)\leq k-1\}.
+\end{split}
+\end{equation}
+Here $Q^*$ is the conjugate transpose. The equation $Q^*Q=I_k$ says that
+$Q$ is an isometric embedding of the standard complex Euclidean space
+$\mathbb C^k$ into $\mathbb C^n$; the displayed product is its genuine
+compression. We use \eqref{eq:source} for the main disproof.
+
+\begin{proposition}
+For $T=\left(\begin{smallmatrix}0&0\\0&1\end{smallmatrix}\right)$ and
+$\lambda=1/2$, one has
+$\lambda\in\Lambda^{\rm src}_1(T)$ but
+$\lambda\notin\Lambda^{\rm src}_2(T)$.
+\end{proposition}
+\begin{proof}
+Take the one-column frame
+\[
+ q=\frac1{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix}.
+ \qquad q^*q=1,\qquad q^*Tq=\frac12.
+\]
+Thus $q^*((1/2)I_2-T)q=0$ has rank zero, proving first-order membership.
+
+For any two-column frame $Q$ with $Q^*Q=I_2$, taking determinants gives
+$\det(Q^*)\det(Q)=1$. Put $B=(1/2)I_2-T=\operatorname{diag}(1/2,-1/2)$.
+Then
+\[
+ \det(Q^*BQ)=\det(Q^*)\det(B)\det(Q)
+            =\det(B)=-\frac14\ne0.
+\]
+Consequently every such compression has rank two, which exceeds
+$2-1=1$. This excludes $1/2$ from $\Lambda^{\rm src}_2(T)$ and proves
+the failure of the asserted inclusion.
+\end{proof}
+
+\newpage
+\section{The usual scalar-compression convention}
+The standard higher-rank numerical range is conventionally defined by
+scalar compressions~\cite{CKZ}:
+\[
+ \Lambda^{\rm sc}_k(T)=\{\lambda\in\mathbb C:
+   \exists Q\in\mathbb C^{n\times k},\ Q^*Q=I_k,\ Q^*TQ=\lambda I_k\}.
+\]
+This convention is kept separate from \eqref{eq:source}. For every such
+scalar compression,
+\[
+ Q^*(\lambda I_n-T)Q
+ =\lambda Q^*Q-Q^*TQ=0,
+\]
+so $\Lambda^{\rm sc}_k(T)\subseteq\Lambda^{\rm src}_k(T)$ for $k\geq1$.
+The frame $q$ above gives $1/2\in\Lambda^{\rm sc}_1(T)$, while the
+determinant argument excludes $1/2$ even from the larger source-defined
+set at $k=2$. Thus the same witness disproves
+$\Lambda^{\rm sc}_1(T)\subseteq\Lambda^{\rm sc}_2(T)$.
+
+The inclusion is stated unconditionally. Our example uses the permitted
+dimensions $n=2$, $k=1$, and $k+1=2$. It refutes this clause; the separate
+generic-nonemptiness threshold, spectral envelopes, and arbitrary-dimensional
+compactness are outside the delivered conclusion.
+
+\section{Lean verification and reproducibility}
+The Lean 4.19.0 project uses a pinned Mathlib revision and its actual
+\texttt{Matrix.rank}, defined by the dimension of a linear-map range.
+In \texttt{lean/Main.lean}:
+\begin{itemize}
+\item \texttt{statedRange} and \texttt{scalarRange} are the two distinct
+existential sets above. The orthonormal-column equation is proved to induce
+an actual Euclidean \texttt{Isometry} using the Hilbert-space adjoint.
+\item The concrete frame identities are exact. For every two-column frame,
+the determinant is $-1/4$; Mathlib's invertibility and rank theorems then
+give rank two. The normalization uses the positive real square root.
+\item The final theorems negate both inclusions and the universal
+source-defined inclusion in dimension two, using the verified Hermitian
+matrix and membership/exclusion pair.
+\end{itemize}
+Run these commands inside \texttt{lean/}:
+\begin{verbatim}
+lake build
+lake env lean -DwarningAsError=true Main.lean
+\end{verbatim}
+The supplementary \texttt{verify.py} checks the witness using exact
+fractions and expands the general determinant identity as a polynomial
+in eight independent matrix-entry variables. Fresh-build logs, the axiom
+audit, and hashes are in \texttt{verification/}. The bilingual source is
+preserved byte for byte in \texttt{SOURCE.md}.
+
+\small
+\begin{thebibliography}{9}
+\bibitem{Source} The Last Math Competition, conjecture 00000008586,
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000008586.md}{repository statement}.
+\bibitem{CKZ} M.-D. Choi, D. W. Kribs, and K. \.Zyczkowski,
+\emph{Higher-Rank Numerical Ranges and Compression Problems},
+Linear Algebra Appl. 418 (2006), 828--839.
+\href{https://arxiv.org/abs/math/0511278}{arXiv:math/0511278}, definition (1).
+\end{thebibliography}
+\end{document}
