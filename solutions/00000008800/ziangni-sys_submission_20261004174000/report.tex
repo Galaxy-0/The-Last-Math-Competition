@@ -1,0 +1,58 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem*{proposition}{Counterexample}
+\title{A randomized trace benchmark has variance $1/m$}
+\author{Conjecture 00000008800 \quad ziangni-sys}
+\date{}
+\begin{document}
+\maketitle
+The source claims that seed variance in reproducible randomized numerical benchmarks is the reciprocal square root of the repetition count. The distinction between variance and standard deviation matters: an ordinary nondegenerate randomized trace estimator has variance $1/m$, not $1/\sqrt m$, after averaging $m$ independent repetitions. The discrepancy persists at the level of asymptotic order.
+
+\begin{proposition}
+There is an unbiased randomized matrix-trace benchmark with independent uniform seeds for which the averaged estimator $\widehat\tau_m$ satisfies
+\[
+ \operatorname{Var}(\widehat\tau_m)=\frac1m,\qquad
+ \frac{\operatorname{Var}(\widehat\tau_m)}{1/\sqrt m}\longrightarrow0.
+\]
+In particular, its variance admits no eventually positive constant multiple of $1/\sqrt m$ as a lower bound.
+\end{proposition}
+\begin{proof}
+Fix the actual matrix and diagonal-sampling algorithm
+\[
+ A=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad
+ J\text{ uniform on }\{0,1\},\qquad X(J)=2A_{JJ}.
+\]
+Thus $X$ equals $2$ or $0$, each with probability $1/2$. It is reproducible from its seed $J$, and
+\[
+ \mathbb E X=1=\operatorname{tr}A,\qquad
+ \operatorname{Var}(X)=\tfrac12(2-1)^2+\tfrac12(0-1)^2=1.
+\]
+For each integer $m\geq1$, use the finite product probability space
+\[
+ \Omega_m=\{0,1\}^{\{1,\ldots,m\}},\qquad
+ \mu_m=\left(\tfrac12\delta_0+\tfrac12\delta_1\right)^{\otimes m}.
+\]
+The coordinate seeds $J_1,\ldots,J_m$ are independent and uniformly distributed. Define $X_i=X(J_i)$ and the reported benchmark estimate
+\[
+ \widehat\tau_m=\frac1m\sum_{i=1}^m X_i.
+\]
+Its expectation is again $\operatorname{tr}A=1$. Independence and the actual one-run variance give
+\[
+ \operatorname{Var}(\widehat\tau_m)
+ =\frac1{m^2}\sum_{i=1}^m\operatorname{Var}(X_i)
+ =\frac1m.
+\]
+Therefore its ratio to the claimed reciprocal-root scale is $1/\sqrt m$, which tends to zero. For any $c>0$, sufficiently large $m$ satisfy
+\[
+ \operatorname{Var}(\widehat\tau_m)<\frac{c}{\sqrt m}.
+\]
+This excludes both equality with the stated expression and a two-sided asymptotic law of that order.
+\end{proof}
+
+The standard deviation in this example is exactly $1/\sqrt m$, consistent with the usual Monte Carlo scaling. The source explicitly uses variance in both languages; replacing it by standard deviation changes the claim. The counterexample uses the variance across independent seeds of the benchmark's arithmetic-mean output, a standard repetition-based benchmark quantity. It does not posit any failure of Bernoulli concentration inequalities.
+
+\paragraph{Formal verification.}
+Lean constructs the two-point probability mass function, the actual matrix and estimator, and every finite product measure. It proves uniform coordinate marginals, \texttt{iIndepFun} for the seeds and outputs, identical distribution with the one-run estimator, unbiasedness, and the exact \texttt{ProbabilityTheory.variance} for every positive repetition count. Finally it proves the ratio limit and explicitly negates every eventual positive reciprocal-root lower bound. The pinned Lean 4.19.0 project prints axiom audits of its main theorems.
+\end{document}
