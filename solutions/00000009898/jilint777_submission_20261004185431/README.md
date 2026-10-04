@@ -39,6 +39,8 @@ The following readings are all covered:
 - any definition of forest order, and either arrow or module convention;
 - either distributive law;
 - torsion classes with or without the empty class.
+- functorially finite torsion classes / support τ-tilting: `KA₂` is representation-finite, so nothing changes;
+- the wide-subcategory lattice of the Definition line: for `KA₂` it is the diamond M₃, also non-distributive (report only).
 
 The report also proves the correct criterion: `tors A` is distributive iff the quiver of `A` has
 no arrow between distinct vertices. So the "only if" half of (C1) is true, and the "if" half fails
