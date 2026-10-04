@@ -1,0 +1,83 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\Q}{\mathbb Q}
+\title{Jacobson Radical Powers Need Not Vanish\newline at Any Finite Stage in an FBN Ring}
+\author{Conjecture 00000009978}
+\date{}
+\begin{document}
+\begin{center}
+{\Large Jacobson Radical Powers Need Not Vanish\\
+at Any Finite Stage in an FBN Ring}\par\medskip
+Conjecture 00000009978
+\end{center}
+\begin{abstract}
+The finite-termination clause of Conjecture 00000009978 is false. The formal power series ring $R=\Q[[X]]$ is fully bounded Noetherian, its Jacobson radical is $J=(X)$, and $J^N\ne0$ for every $N\geq0$. Its finite power intersections therefore never vanish, although its infinite power intersection is zero. The distinction is proved both mathematically and in Lean using actual formal power series and ideals.
+\end{abstract}
+
+\section*{The clause and its precise meaning}
+The original English statement asserts that the intersection of Jacobson radical powers in FBN rings ``vanishes in finitely many steps''; the Chinese statement likewise says that the intersection is zero at a finite step. Neither version assumes that the ring is Artinian or finite dimensional over a field.
+
+Write $J=J(R)$ for the Jacobson radical, the intersection of maximal ideals in the commutative case. The finite stages of the descending power intersection are
+\[
+ F_N=\bigcap_{j=0}^{N}J^j=J^N,\qquad N\geq0,
+\]
+because ideal powers descend and $J^0=R$. Thus the finite-termination clause requires $J^N=0$ for some finite $N$. Omitting $J^0$ gives the same intersection for $N\geq1$.
+
+\begin{theorem}
+For the fully bounded Noetherian ring $R=\Q[[X]]$,
+\[
+ J(R)=(X),\qquad J(R)^N=(X^N)\ne0\quad (N\geq0).
+\]
+The powers descend strictly at every stage, while
+\[
+ \bigcap_{N\geq0}J(R)^N=0.
+\]
+In particular, $F_N\ne0$ for every finite $N$, disproving the finite-termination clause.
+\end{theorem}
+\begin{proof}
+Every nonzero formal power series $f$ has a least nonzero coefficient, say in degree $r$, and factors as $f=X^r u$ with $u$ a unit. A series is a unit exactly when its constant coefficient is nonzero. For a nonzero ideal $I$, choose the least order $r$ among its nonzero elements. The factorization shows $X^r\in I$, and minimality shows every element of $I$ is divisible by $X^r$. Hence $I=(X^r)$. Every ideal is therefore principal, so $R$ is Noetherian.
+
+The ring is also FBN: every essential right ideal of each prime quotient must contain a nonzero two-sided ideal \cite[p.~1]{cg}. Here ``essential'' means intersecting every nonzero right ideal nontrivially. Each prime quotient is a nonzero commutative ring, so its left, right, and two-sided ideals coincide. An essential ideal is nonzero by intersecting it with the whole ring, and contains the required two-sided ideal, namely itself.
+
+The nonunits of $R$ are exactly the series with zero constant coefficient, which form $(X)$. Therefore $(X)$ is the unique maximal ideal and $J(R)=(X)$. It follows that $J(R)^N=(X^N)$. The coefficient of degree $N$ in $X^N$ is $1$, so $X^N\ne0$ and $J(R)^N\ne0$. Moreover, every element of $(X^{N+1})$ has coefficient zero in degree $N$. Thus $X^N\notin J(R)^{N+1}$, proving strict descent.
+
+Finally, if $f$ lies in every $J(R)^N$, then for each $r\geq0$ it lies in $(X^{r+1})$. Its coefficient in degree $r$ is consequently zero. All its coefficients vanish, so $f=0$ and the infinite intersection is zero.
+\end{proof}
+
+\section*{Scope of the disproof}
+This refutes the source's finite-termination conjunct for a genuine FBN ring. It does not refute the zero \emph{infinite} intersection, which is proved for the same ring, or concern the nilpotence of radicals of Artinian rings. No numerical value or interpretation is assigned to the source's unspecified exponential decay constant.
+
+\section*{Lean formalization}
+The file \texttt{lean/Main.lean} uses Lean 4.19.0 and Mathlib at commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+The correspondence with the mathematical proof is explicit.
+\begin{itemize}
+\item \texttt{Ring} is Mathlib's actual \texttt{PowerSeries $\Q$}, with untruncated coefficients and formal-series ring operations.
+\item \texttt{comm\_noetherian\_fbn} proves \texttt{CommFBN} for every commutative Noetherian ring by checking essential ideals of prime quotients.
+\item \texttt{radical} is Mathlib\textquotesingle s \texttt{Ideal.jacobson} of the zero ideal; local-ring and power-series theorems identify it with $(X)$.
+\item \texttt{radical\_pow\_nonzero} and \texttt{radical\_powers\_strictly\_descend} hold for every natural $N$, witnessed by the coefficient of $X^N$.
+\item \texttt{prefixIntersection} is the actual finite ideal intersection indexed by \texttt{Fin (N+1)}. Its equality with $J^N$ and nontermination are proved.
+\item \texttt{infinite\_intersection\_zero} proves the zero infinite intersection by coefficient extensionality. \texttt{counterexample} combines this with FBN and finite-stage nontermination.
+\end{itemize}
+The FBN encoding specializes to commutative rings, where right ideals are precisely the ordinary ideals used in the file; their right-multiplication closure is also proved. This exactly covers the exhibited ring. Every stage is handled by a universally quantified theorem, with no numerical approximation or bounded search.
+
+\section*{Source and verification}
+\begin{flushleft}
+\texttt{SOURCE.md} preserves the original
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000009978.md}{conjecture 00000009978} verbatim, and \texttt{README.md} gives build instructions.
+The \texttt{verification} directory contains the provenance record
+\texttt{SOURCE\_PROVENANCE.md}, the report \texttt{BUILD.json}, and the build, axiom-audit, and PDF logs.
+\end{flushleft}
+
+\begin{thebibliography}{1}
+\bibitem{cg} S.~Caenepeel and T.~Gu\'ed\'enon,
+\emph{Fully bounded noetherian rings and Frobenius extensions},
+arXiv:math/0503686v3, 2006.
+\url{https://arxiv.org/abs/math/0503686v3}.
+\end{thebibliography}
+\end{document}
