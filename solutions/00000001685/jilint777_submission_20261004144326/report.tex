@@ -32,7 +32,9 @@ the six perfect-matching terms of the Pfaffian are negative, so the terms never
 all have the same sign. The obstruction, and its instances for $K_{3,3}$, for a
 proper even subdivision of $K_{3,3}$, and for the $6$-vertex M\"obius ladder, are
 formalized in Lean~4 (core library only). As a secondary result we give a
-nonplanar Pfaffian graph of crossing number $1$ that lies in neither family.
+nonplanar Pfaffian graph of crossing number $1$ that lies in neither family, and
+we show that the M\"obius clause also fails if the families are read as
+non-Pfaffian obstructions.
 \end{abstract}
 
 \section{The conjecture and the clause we refute}
@@ -74,6 +76,14 @@ More generally, the computations below show that the ladders with $3$, $5$ and $
 rungs are non-Pfaffian. If instead $M_{2k}$ has $2k$ rungs, the ladders with $2$, $4$
 and $6$ rungs are Pfaffian, and we make no claim against the M\"obius part. In
 both cases the refutation of (E) does not depend on this choice.
+\item \emph{Obstruction reading.} Some readers may take the ``minimal families''
+to be minimal \emph{non}-Pfaffian obstructions, in the spirit of Little's
+theorem~\cite{little}. Under that reading the M\"obius clause fails in both
+conventions. The Wagner graph $V_8$ is Pfaffian (Lean: \texttt{M8\_pfaffian}), and it
+lies in the family $M_{2k}$ either way: $k=4$ when counting vertices, and $k=2$ when
+counting rungs. Lean: \texttt{obstruction\_reading\_false} (rung count,
+$M_{2k}=\texttt{mobius}(2k)$) and
+\texttt{obstruction\_reading\_false\_vertex\_convention} ($M_{2k}=\texttt{mobius}\,k$).
 \end{itemize}
 
 \section{Definitions}
@@ -265,10 +275,11 @@ Lean theorem \texttt{M8\_pfaffian} exhibits a Pfaffian orientation of $V_8$, and
 \item $W$ is nonplanar. $V_8-\{04\}$ is a subdivision of $K_{3,3}$ with classes
 $\{1,3,6\}$ and $\{2,5,7\}$: the paths are $12$, $15$, $1\,0\,7$, $32$, $37$,
 $3\,4\,5$, $65$, $67$, $62$.
-\item $\operatorname{cr}(W)\le1$. Draw the ladder with rails $0\,1\,2\,3$ (top) and
-$4\,5\,6\,7$ (bottom), and with vertical rungs. Draw the edge $34$ around the top
-and down the left side, and draw $70$ around the bottom and up the left side. The
-two edges cross exactly once. Subdividing an edge does not change the drawing.
+\item $\operatorname{cr}(W)=1$. The Wagner graph has crossing number
+$\operatorname{cr}(V_8)=1$: Guy and Harary~\cite{gh} show that every M\"obius ladder with at
+least $3$ rungs has crossing number $1$. Crossing number is invariant under subdividing edges: a drawing
+of $G$ is a drawing of any subdivision of $G$ with the same crossings, and
+conversely, by suppressing the degree-$2$ vertices.
 \item $W$ is not a M\"obius ladder, since it has vertices of degree $2$. It is not an
 even subdivision of $K_{3,3}$, since $|E|-|V|=14-10=4$, whereas every subdivision of
 $K_{3,3}$ has $|E|-|V|=3$.
@@ -302,7 +313,8 @@ section.
 \texttt{lean4/} is a self-contained Lean~4.19.0 project (core library only, no
 Mathlib). Everything is defined from scratch:
 \begin{itemize}
-\item \texttt{Graph} is a vertex count and an edge list. \texttt{sel es M} is the edge
+\item \texttt{Graph} is a vertex count and an edge list (edge endpoints are assumed to
+be $<n$, which holds for every graph used). \texttt{sel es M} is the edge
 subset selected by the bit mask $M$. \texttt{isPM} says every vertex $v<n$ lies on
 exactly one selected edge. \texttt{PMs G} lists all perfect matchings among the
 $2^{|E|}$ masks, and \texttt{numPM G} is their number.
@@ -330,7 +342,9 @@ $\neg\,\forall G,\ \texttt{EvenSubdivisionK33}\ G\to Q\,G\wedge\texttt{IsPfaffia
 arbitrary extra property $Q$ such as ``nonplanar'' or ``minimal'';
 the same with \texttt{IsPfaffian'}; \texttt{\_false\_proper} (members other than
 $K_{3,3}$); \texttt{\_conjunction\_false} ($\neg((E)\wedge R)$ for any $R$); and
-\texttt{mobius\_clause\_false\_vertex\_convention}.
+\texttt{mobius\_clause\_false\_vertex\_convention}; and for the obstruction reading,
+\texttt{obstruction\_reading\_false} and
+\texttt{obstruction\_reading\_false\_vertex\_convention}.
 \item Non-vacuity: \texttt{K4\_pfaffian} ($K_4$, the ladder with $2$ rungs) and
 \texttt{M8\_pfaffian} (the nonplanar Wagner graph) have explicit Pfaffian
 orientations, so \texttt{IsPfaffian} is not empty. As a cross-check that
@@ -339,10 +353,12 @@ it with the recursive row expansion
 $\operatorname{Pf}(A)=\sum_j(-1)^{j}a_{1j}\operatorname{Pf}(A_{\hat1\hat j})$ of the skew
 matrix.
 \end{itemize}
-\paragraph{Not in Lean.} Three things are proved here but not in Lean: the induction
-of Lemma~\ref{lem:sub} for arbitrary even subdivisions (Lean covers $K_{3,3}$ and
-$S$, which already refute every reading of (E)); the invariance under
-relabelling; and Section~\ref{sec:second} apart from \texttt{M8\_pfaffian}. There is no
+\paragraph{Not in Lean.} Lean covers $K_{3,3}$ and $S$. These suffice for every
+reading in which the clause applies to all even subdivisions (with or without
+$K_{3,3}$ itself). The induction to all even subdivisions
+(Lemma~\ref{lem:sub}) is proved on paper only, as is the invariance under
+relabelling, and Section~\ref{sec:second} apart from \texttt{M8\_pfaffian}.
+There is no
 \texttt{sorry}, no \texttt{native\_decide}, and no added axiom.
 \texttt{\#print axioms} shows at most \texttt{propext} and \texttt{Quot.sound}.
 
@@ -356,6 +372,8 @@ pdflatex report.tex && pdflatex report.tex
 \begin{thebibliography}{9}
 \bibitem{little} C.~H.~C.~Little, A characterization of convertible $(0,1)$-matrices,
 \emph{J. Combin. Theory Ser. B} 18 (1975), 187--208.
+\bibitem{gh} R.~K.~Guy and F.~Harary, On the M\"obius ladders, \emph{Canad. Math. Bull.}
+10 (1967), 493--496.
 \bibitem{lp} L.~Lov\'asz and M.~D.~Plummer, \emph{Matching Theory}, North-Holland, 1986.
 \bibitem{rst} N.~Robertson, P.~D.~Seymour and R.~Thomas, Permanents, Pfaffian
 orientations, and even directed circuits, \emph{Ann. of Math.} 150 (1999), 929--975.

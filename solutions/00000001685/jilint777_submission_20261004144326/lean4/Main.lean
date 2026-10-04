@@ -28,7 +28,9 @@ namespace Pfaffian
 
 /-! ## Graphs, perfect matchings, orientations -/
 
-/-- A finite graph on the vertex set `{0, …, n-1}` given by its list of edges. -/
+/-- A finite graph on the vertex set `{0, …, n-1}` given by its list of edges.
+Assumption: every edge endpoint is `< n` (true for every graph used below: `K33`, `S`,
+`mobius r`, and the graphs produced by `subdivide2`). -/
 structure Graph where
   n : Nat
   edges : List (Nat × Nat)
@@ -39,7 +41,8 @@ def sel : List (Nat × Nat) → Nat → List (Nat × Nat)
   | [], _ => []
   | e :: es, M => if M % 2 = 1 then e :: sel es (M / 2) else sel es (M / 2)
 
-/-- `M` is a perfect matching: every vertex lies on exactly one selected edge. -/
+/-- `M` is a perfect matching: every vertex `v < n` lies on exactly one selected edge.
+(Faithful when all edge endpoints are `< n`, see `Graph`.) -/
 def isPM (G : Graph) (M : Nat) : Bool :=
   (List.range G.n).all fun v => ((sel G.edges M).countP fun e => e.1 == v || e.2 == v) == 1
 
@@ -419,6 +422,22 @@ theorem mobius_clause_false_vertex_convention (Q : Graph → Prop) :
     ¬ ∀ k, 3 ≤ k → Q (mobius k) ∧ IsPfaffian (mobius k) :=
   fun h => M6_not_pfaffian (h 3 (by decide)).2
 
+
+/-! ## Obstruction reading (minimal NON-Pfaffian families, as in Little's theorem) -/
+
+/-- If the families were read as minimal *non*-Pfaffian obstructions, the Möbius clause
+fails in the rung-count convention (`M_{2k}` = `mobius (2*k)`, `2k` rungs): at `k = 2` it
+is the Wagner graph `V_8 = mobius 4`, which is Pfaffian. -/
+theorem obstruction_reading_false (Q : Graph → Prop) :
+    ¬ ∀ k, 2 ≤ k → Q (mobius (2 * k)) ∧ ¬ IsPfaffian (mobius (2 * k)) :=
+  fun h => (h 2 (by decide)).2 M8_pfaffian
+
+/-- Same, vertex-count convention (`M_{2k}` = `mobius k`, `2k` vertices): at `k = 4`
+it is `V_8`, which is Pfaffian. -/
+theorem obstruction_reading_false_vertex_convention (Q : Graph → Prop) :
+    ¬ ∀ k, 3 ≤ k → Q (mobius k) ∧ ¬ IsPfaffian (mobius k) :=
+  fun h => (h 4 (by decide)).2 M8_pfaffian
+
 end Pfaffian
 
 #print axioms Pfaffian.not_pfaffian_of_invariant
@@ -435,3 +454,5 @@ end Pfaffian
 #print axioms Pfaffian.conjecture_00000001685_false_proper
 #print axioms Pfaffian.conjecture_00000001685_conjunction_false
 #print axioms Pfaffian.mobius_clause_false_vertex_convention
+#print axioms Pfaffian.obstruction_reading_false
+#print axioms Pfaffian.obstruction_reading_false_vertex_convention
