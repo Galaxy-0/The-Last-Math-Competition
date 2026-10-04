@@ -1,0 +1,146 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\begin{document}
+\begin{center}
+{\Large Dense sets with no nontrivial sum-product identity\par}
+\medskip
+{\large Counterexample to Conjecture 00000000038\par}
+\end{center}
+
+\begin{abstract}
+For every integer $N\ge4$, the set $A_N=\{3,4,\ldots,N\}$ has density at
+least $1/2$ in $[N]$ and admits no identity
+$x_1+\cdots+x_k=x_1\cdots x_k$ of length $k\ge2$, even with repeated
+choices. Thus Conjecture 00000000038 is false. The accompanying Lean 4
+proof verifies the inequality for arbitrary finite lists, the exact
+cardinality and density, arbitrarily large counterexamples, and the
+negation of the conjecture even with an additional eventual-$N$ threshold.
+\end{abstract}
+
+\section{Statement and the nontriviality requirement}
+The source asserts that for every $\delta>0$ there is a length $k(\delta)$
+such that every $A\subseteq[N]$ with density at least $\delta$ contains a
+nontrivial choice of $k$ elements, allowing repetition, whose sum equals
+their product. Here $[N]=\{1,\ldots,N\}$ and density means $|A|/N$.
+
+Both the English and Chinese source explicitly require nontriviality.
+A one-term list always satisfies $x_1=x_1$, independently of $A$, so it
+is the trivial case that must be excluded. We prove the stronger and
+unambiguous fact that \emph{every} sum-product identity in the proposed
+counterexample has length exactly one. Hence the counterexample applies
+to any nontriviality convention excluding these singleton identities.
+If singleton identities were admitted, taking $k=1$ would instead make
+the assertion immediate and render the source's nontriviality clause
+meaningless. Repetition is fully permitted in the proof below.
+
+\section{An elementary obstruction}
+\begin{lemma}\label{lem:inequality}
+For every integer $k\ge2$ and every sequence of integers
+$x_1,\ldots,x_k\ge3$,
+\[
+ \sum_{i=1}^k x_i < \prod_{i=1}^k x_i.
+\]
+\end{lemma}
+\begin{proof}
+If $u,v\ge3$, then
+\[
+ uv-u-v=(u-1)(v-1)-1\ge 2\cdot2-1=3>0.
+\]
+This proves the case $k=2$. Suppose now that $k\ge3$ and the result holds
+for $k-1$ terms. Put
+\[
+ a=x_1,\qquad S=\sum_{i=2}^k x_i,\qquad
+ P=\prod_{i=2}^k x_i.
+\]
+Then $a\ge3$, $S\ge6$, and $S<P$. Applying the two-variable inequality
+to $a,S$ gives
+\[
+ a+S<aS<aP,
+\]
+which completes the induction. No distinctness of the $x_i$ was used.
+\end{proof}
+
+\begin{theorem}\label{thm:counterexample}
+For every $N\ge4$, let $A_N=\{3,4,\ldots,N\}$. Then
+\[
+ A_N\subseteq[N],\qquad |A_N|=N-2,\qquad
+ \frac{|A_N|}{N}=1-\frac2N\ge\frac12.
+\]
+For every $k\ge2$ and every choice $x_1,\ldots,x_k\in A_N$, with repetitions
+allowed, the sum differs from the product.
+\end{theorem}
+\begin{proof}
+The inclusion and cardinality follow directly from the endpoints of the
+integer interval. Since $N\ge4$, $N-2\ge N/2$, proving the density claim.
+Every selected element is at least $3$, so Lemma~\ref{lem:inequality}
+gives a strict inequality and in particular excludes equality.
+\end{proof}
+
+Fix $\delta=1/2$. Any proposed nontrivial length $k(1/2)$ is excluded by
+Theorem~\ref{thm:counterexample}. Moreover, the counterexamples are
+arbitrarily large: for any proposed bound $B$, choose $N\ge\max\{B,4\}$.
+Thus inserting a ``for all sufficiently large $N$'' qualification would
+not repair the conjecture. Nor would allowing the chosen length to depend
+on $A$ or $N$, because $A_N$ excludes all lengths $k\ge2$ simultaneously.
+
+\section{Formal verification and scope}
+The project pins Lean \texttt{v4.19.0} and Mathlib commit
+\par\noindent
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\par
+The file \texttt{lean/Main.lean} contains the following kernel-checked
+statements:
+\begin{itemize}
+\item \texttt{sum\_lt\_prod}\par
+      The strict inequality for an arbitrary finite list with all entries
+      at least $3$ and length at least $2$.
+\item \texttt{only\_singleton\_solutions}\par
+      Any such list whose sum equals its product has length exactly one.
+\item \texttt{counterexampleSet\_half\_dense}\par
+      The real-valued density inequality, proved from the separately
+      checked exact interval cardinality.
+\item \texttt{arbitrarily\_large\_dense\_counterexamples}\par
+      A counterexample above every bound $B$ on the interval size.
+\item \texttt{no\_uniform\_length\_even\_eventually}\par
+      The negation of the fixed-density assertion, even after allowing a
+      threshold $N_0$.
+\end{itemize}
+
+In the formalization, $A_N$ is the standard finite integer interval
+\texttt{Finset.Icc 3 N}, and density is the actual real quotient
+\texttt{(A.card : Real) / (N : Real)}. Selections are ordinary finite
+lists of natural numbers, so repeated entries are retained rather than
+removed. The final theorem has the logical shape
+\[
+ \neg\exists k\ge2\;\exists N_0\;\forall N\ge N_0,\ N>0\Longrightarrow
+ \left[
+ \begin{gathered}
+  \text{every }A\subseteq[N]\text{ with }|A|/N\ge1/2\\
+  \text{has a length-}k\text{ sum-product identity}
+ \end{gathered}\right].
+\]
+This is a negation of a weaker assertion than the source's universal
+claim, so it suffices to refute that claim. The only semantic point is
+the source's explicit exclusion of trivial singleton identities; no
+replacement arithmetic, density, or solution relation is used.
+
+The full infinite family is proved by induction and exact algebra.
+There is no finite search or numerical experiment standing in for a
+universal proof. The Lean file contains no unfinished proofs or added
+axioms. The printed axiom audit lists only
+\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+
+\paragraph{Source.}
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000000038.md}{The Last Math Competition, Conjecture 00000000038}.
+The exact bilingual statement is preserved byte for byte in
+\texttt{SOURCE.md}. Build instructions are in \texttt{README.md}; source
+provenance and self-review are in the \texttt{verification} directory.
+
+\end{document}
