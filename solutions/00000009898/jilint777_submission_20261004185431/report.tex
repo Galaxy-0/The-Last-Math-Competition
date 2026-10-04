@@ -1,0 +1,290 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\tors}{\operatorname{tors}}
+\newcommand{\add}{\operatorname{add}}
+\newcommand{\Filt}{\operatorname{Filt}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\Ext}{\operatorname{Ext}}
+\newcommand{\md}{\operatorname{mod}}
+
+\title{Disproof of Conjecture 00000009898:\\
+the torsion lattice of $K(1\to 2)$ is the pentagon}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000009898 asserts that the lattice $\tors A$ of torsion classes of a
+finite-dimensional algebra $A$ is distributive \emph{if and only if} the oriented path partial
+order of the quiver of $A$ is a forest order, and that the minimal counterexample to
+distributivity is the three-vertex oriented cycle. Both claims are false. Over \emph{every} field
+$K$, the path algebra $A=KA_2$ of the quiver $1\to 2$ has a 2-element chain as its path order,
+which is a forest order under every reading. Yet $\tors A$ is the pentagon $N_5$, which is not
+distributive, and $A_2$ has only two vertices. The refutation is fully formalised in Lean~4
+(core library only, for an arbitrary field). It defines representations, morphisms, quotients,
+short exact sequences, torsion classes and the lattice operations from scratch. An independent
+Python script recomputes the whole lattice by brute force over $\mathbb F_2$ and $\mathbb F_3$.
+We also prove the correct criterion: $\tors A$ is distributive iff the quiver of $A$ has no arrow
+between distinct vertices. So the ``only if'' direction of the conjecture holds, and the ``if''
+direction fails for every quiver with such an arrow.
+\end{abstract}
+
+\section{The claim}
+
+The conjecture (English version): \emph{``The torsion class lattice of a finite-dimensional
+algebra is distributive if and only if the oriented path partial order of the quiver is a forest
+order; the minimal counterexample to distributivity is the three-vertex oriented cycle, and the
+length of distributive approximations of the lattice is bounded.''}
+
+The statement is a conjunction of three clauses:
+\begin{itemize}
+\item[(C1)] for every finite-dimensional algebra $A$: $\tors A$ is distributive $\iff$ the path
+order of the quiver $Q_A$ is a forest order;
+\item[(C2)] the minimal counterexample to distributivity is the oriented $3$-cycle. In particular,
+every algebra whose quiver has fewer than $3$ vertices has a distributive torsion lattice;
+\item[(C3)] ``the length of distributive approximations is bounded''. This is not defined in the
+statement, and we do not use it.
+\end{itemize}
+We refute the direction ``$\Leftarrow$'' of (C1), hence (C1), and also (C2). One false clause
+already makes the conjunction false.
+
+\section{Set-up}
+
+Let $K$ be an arbitrary field and $A=KA_2$ the path algebra of $A_2\colon 1\xrightarrow{\ a\ }2$.
+It has dimension $3$, with basis $e_1,e_2,a$. As usual, finite-dimensional $A$-modules are the
+same as finite-dimensional representations $M=(V_1\xrightarrow{f}V_2)$: finite-dimensional
+$K$-spaces $V_1,V_2$ with a $K$-linear map $f$. A morphism $(g_1,g_2)\colon M\to N$ is a pair of
+linear maps with $f_N g_1=g_2 f_M$. Kernels, images and cokernels are computed vertexwise, so
+$M\to N$ is an epimorphism (resp.\ monomorphism) iff $g_1,g_2$ are surjective (resp.\ injective),
+and a sequence $0\to L\to M\to N\to 0$ is exact iff it is exact at both vertices.
+
+The indecomposable representations are
+\[
+S_1=(K\to 0),\qquad S_2=(0\to K),\qquad P_1=(K\xrightarrow{\ \mathrm{id}\ }K).
+\]
+Here $S_1,S_2$ are the simples, $P_2=S_2$, and $P_1=I_2$ is projective-injective.
+
+\begin{definition}
+A \emph{torsion class} is a class $\mathcal T$ of modules that contains $0$ and is closed under
+quotients (images of epimorphisms) and extensions. Closure under isomorphisms is a special case
+of closure under quotients. $\tors A$ is the set of torsion classes ordered by inclusion. It is a
+complete lattice: the meet is the intersection, and the join $\mathcal T\vee\mathcal U$ is the
+intersection of all torsion classes containing $\mathcal T\cup\mathcal U$.
+\end{definition}
+
+If one does not require $0\in\mathcal T$, the only new torsion class is $\emptyset$, since a nonempty class closed under
+quotients contains $0$ (as a quotient $M\twoheadrightarrow 0$). All classes used
+below contain $0$, so the argument is unchanged.
+
+\paragraph{The path order.} For a quiver $Q$ write $i\le j$ if there is an oriented path (of
+length $\ge0$) from $i$ to $j$. For $A_2$ this is the chain $1<2$. Some authors orient the other
+way, which gives $2<1$, again a chain. A \emph{forest order} is defined in the literature in
+several ways: every principal down-set is a chain (a rooted forest); every principal up-set is a
+chain; or the Hasse diagram has no cycle. A 2-element chain satisfies all of these, and it is a
+partial order. The quiver of $A=KA_2$ (its Gabriel quiver) is $A_2$ itself, since $A$ is basic
+with $\operatorname{rad}A/\operatorname{rad}^2A=Ka$. Hence
+\begin{center}
+\emph{the path order of the quiver of $KA_2$ is a forest order, for every reading.}
+\end{center}
+
+\section{The five torsion classes}
+
+Define three classes of representations:
+\[
+x=\{M: V_2=0\},\qquad y=\{M: f\text{ surjective}\},\qquad z=\{M: V_1=0\}.
+\]
+Also let $0$ be the class of zero representations, and $\md A$ the class of all of them.
+
+\begin{lemma}\label{lem:tors}
+$x$, $y$ and $z$ are torsion classes.
+\end{lemma}
+\begin{proof}
+All three contain $0$.
+
+\emph{$x$.} Let $(g_1,g_2)\colon M\twoheadrightarrow N$ with $M\in x$. Then
+$V_2^N=g_2(V_2^M)=g_2(0)=0$. Let $0\to L\xrightarrow{i}M\xrightarrow{p}N\to0$ be exact with
+$L,N\in x$, and let $v\in V_2^M$. Then $p_2(v)\in V_2^N=0$, so $v=i_2(u)$ for some
+$u\in V_2^L=0$, and $v=0$.
+
+\emph{$z$.} The same argument at vertex $1$.
+
+\emph{$y$, quotients.} Let $w\in V_2^N$. Write $w=g_2(v)$, and $v=f_M(u)$. Then
+$w=g_2f_M(u)=f_N(g_1u)$.
+
+\emph{$y$, extensions.} Let $w\in V_2^M$. Since $N\in y$, we have $p_2(w)=f_N(a)$ for some $a$.
+Since $p_1$ is onto, $a=p_1(b)$. Then $p_2(w)=f_Np_1(b)=p_2f_M(b)$, so
+$w-f_M(b)\in\ker p_2=\operatorname{im} i_2$, say $w-f_M(b)=i_2(c)$. Since $L\in y$, $c=f_L(d)$,
+so $i_2(c)=i_2f_L(d)=f_M(i_1d)$. Therefore $w=f_M(b+i_1d)$.
+\end{proof}
+
+\begin{lemma}\label{lem:all}
+Every torsion class $\mathcal T$ with $S_1,S_2\in\mathcal T$ is $\md A$.
+\end{lemma}
+\begin{proof}
+The sequences $0\to S_i\to S_i^{n+1}\to S_i^n\to0$ (inclusion of the first coordinate,
+projection onto the others) are exact. By induction, $S_1^m,S_2^n\in\mathcal T$ for all $m,n$;
+the case $n=0$ is $0\in\mathcal T$. For an arbitrary $M=(K^{m}\xrightarrow{f}K^{n})$ the sequence
+\[
+0\to(0\to K^n)\xrightarrow{(0,\mathrm{id})}M\xrightarrow{(\mathrm{id},0)}(K^m\to0)\to0
+\]
+is exact. Its outer terms are $S_2^n$ and $S_1^m$, so $M\in\mathcal T$.
+\end{proof}
+
+\begin{proposition}\label{prop:N5}
+$\tors(KA_2)=\{0,\ x,\ y,\ z,\ \md A\}$. These classes form the pentagon $N_5$:
+\[
+0\subsetneq x\subsetneq y\subsetneq \md A,\qquad 0\subsetneq z\subsetneq\md A,
+\]
+with $z$ incomparable to $x$ and to $y$. Also $x=\add S_1$, $y=\add\{S_1,P_1\}$ and
+$z=\add S_2$.
+\end{proposition}
+\begin{proof}
+If $f\colon V_1\to V_2$ has rank $r$, choose a complement $C$ of $\ker f$ and a complement $D$
+of $\operatorname{im}f$. In adapted bases, $M\cong P_1^r\oplus S_1^{\dim V_1-r}\oplus
+S_2^{\dim V_2-r}$. A torsion class is closed under direct sums (split extensions) and under
+direct summands (quotients). So it is $\add$ of the set of indecomposables it contains. That set
+$I\subseteq\{S_1,S_2,P_1\}$ satisfies $P_1\in I\Rightarrow S_1\in I$, because
+$P_1\twoheadrightarrow S_1$. It also satisfies $S_1,S_2\in I\Rightarrow P_1\in I$, by
+Lemma~\ref{lem:all} or by the extension $0\to S_2\to P_1\to S_1\to0$. This leaves the
+possibilities $\emptyset$, $\{S_1\}$, $\{S_2\}$, $\{S_1,P_1\}$ and $\{S_1,S_2,P_1\}$. They give
+$0$, $x$, $z$, $y$ and $\md A$, which are torsion classes by Lemma~\ref{lem:tors}. The
+inclusions are witnessed by $S_1\in x\setminus 0$, $P_1\in y\setminus x$,
+$S_2\in z\setminus y$ and $S_1\in x\setminus z$.
+\end{proof}
+
+Only Lemmas~\ref{lem:tors} and~\ref{lem:all} are needed for the disproof. The classification in
+Proposition~\ref{prop:N5} shows that the counterexample is the whole lattice, not just a
+sublattice.
+
+\section{Failure of distributivity}
+
+\begin{theorem}\label{thm:main}
+For every field $K$, $\tors(KA_2)$ is not distributive:
+\[
+y\wedge(x\vee z)=y\neq x=(y\wedge x)\vee(y\wedge z).
+\]
+The dual law fails as well: $x\vee(y\wedge z)=x\neq y=(x\vee y)\wedge(x\vee z)$.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:all}, $x\vee z=\md A$, because $S_1\in x$ and $S_2\in z$. So
+$y\wedge(x\vee z)=y$. Next, $y\wedge x=x$ since $x\subseteq y$ (if $V_2=0$, $f$ is onto). Also
+$y\wedge z=0$: if $V_1=0$ and $f$ is onto, then $V_2=f(0)=0$. Since $x$ is a torsion class
+containing $x\cup 0$, we get $(y\wedge x)\vee(y\wedge z)=x$. Finally $P_1\in y\setminus x$. For
+the dual law, $x\vee y=y$ and $x\vee 0=x$.
+\end{proof}
+
+\begin{corollary}
+Clause (C1) is false: for $A=KA_2$ the path order is a forest order but $\tors A$ is not
+distributive. Clause (C2) is false: $A_2$ has $2<3$ vertices and a non-distributive torsion
+lattice. Since a one-vertex algebra $A$ is local, with $\tors A=\{0,\md A\}$ (a $2$-chain), the
+true minimum number of vertices is $2$.
+\end{corollary}
+
+\section{Readings covered}
+
+\begin{itemize}
+\item \textbf{Field.} Everything holds over every field. The Lean proof is for an arbitrary
+field, with instances $\mathbb F_2$ and $\mathbb F_3$.
+\item \textbf{Forest order.} The path order of $A_2$ is a 2-chain: a partial order whose down-sets
+and up-sets are chains and whose Hasse diagram is a single edge. It is a forest under every
+definition and for either orientation convention (left or right modules, i.e.\ $1<2$ or
+$2<1$). Lean uses the strongest version (antisymmetric, and both down-sets and up-sets are chains).
+\item \textbf{Distributivity.} Both distributive laws fail, so any definition of a distributive
+lattice is covered.
+\item \textbf{Torsion classes.} The result is the same whether or not $\emptyset$ is admitted, and
+closure under isomorphism is automatic.
+\item \textbf{Minimality (C2).} Measured by vertices (or arrows), $A_2$ is smaller than the
+3-cycle. If ``minimal counterexample'' means a minimal quiver whose path order is \emph{not} a
+forest, the 2-cycle $1\rightleftarrows2$ is smaller still. With relations
+$\operatorname{rad}^2=0$ this is the preprojective algebra of $A_2$, whose torsion lattice is the
+weak order of $S_3$, a hexagon.
+\item \textbf{(C3)} is undefined. The disproof does not depend on it.
+\end{itemize}
+
+\section{Remark: the correct criterion}
+
+The following is not needed for the disproof. It shows that only the ``if'' half of (C1) fails.
+
+\begin{proposition}
+Let $A$ be a finite-dimensional basic algebra over a field. Then $\tors A$ is distributive if and
+only if the quiver of $A$ has no arrow between two distinct vertices. In that case the path order
+is an antichain, hence a forest order.
+\end{proposition}
+\begin{proof}
+Suppose there is an arrow between distinct vertices $i\ne j$. Then
+$\Ext^1(S_i,S_j)\ne0$, possibly after exchanging $i$ and $j$ according to the convention, so
+there is a non-split extension $0\to S_j\to M\to S_i\to0$. For a class $\mathcal C$ let
+$T(\mathcal C)$ be the smallest torsion class containing it. The class
+$\{X:\Hom(X,S_j)=0\}$ is closed under quotients and extensions (left exactness of
+$\Hom(-,S_j)$), and it contains $M$: a nonzero map $M\to S_j$ would split the sequence. Hence
+$S_j\notin T(M)$, and since every nonzero $X\in T(S_j)\subseteq\Filt(S_j)$ has
+$\Hom(X,S_j)\ne0$, we get $T(M)\wedge T(S_j)=0$. Moreover $S_i\in T(M)$, and $M\in T(S_i)\vee
+T(S_j)$. But $M\notin T(S_i)\subseteq\Filt(S_i)$. Thus
+$T(M)\wedge(T(S_i)\vee T(S_j))=T(M)\ne T(S_i)=(T(M)\wedge T(S_i))\vee(T(M)\wedge T(S_j))$.
+
+Conversely, if no arrow joins distinct vertices, then $\Ext^1(S_i,S_j)=0$ for $i\ne j$. The
+blocks of $A$ correspond to the connected components of its quiver, so $A=\prod_iA_i$ with each
+$A_i$ local. A nonzero torsion class of a local algebra contains the unique simple module, hence
+all modules. So $\tors A\cong\prod_i\{0<1\}$ is Boolean, hence distributive.
+\end{proof}
+
+So the ``only if'' direction of (C1) is true. The ``if'' direction fails for every quiver with an
+arrow between distinct vertices, and $A_2$ is the smallest example.
+
+\section{Machine verification}
+
+\paragraph{Lean 4 (\texttt{lean4/Main.lean}, core only, v4.19.0).} Everything is defined from
+scratch:
+\begin{itemize}
+\item a field structure \texttt{Fld} (all field axioms), coordinate spaces $K^n$ and linear maps;
+\item representations \texttt{Rep K} of $A_2$ (dimensions $d_1,d_2$ arbitrary, $f$ any linear
+map), morphisms \texttt{Hom}, epimorphisms, isomorphisms, short exact sequences;
+\item \texttt{IsTors} (contains $0$, closed under quotients and extensions), meets and joins, with
+proofs that they are torsion classes and are the greatest lower and least upper bounds;
+\item the quiver $A_2$, oriented paths, \texttt{ForestOrder}.
+\end{itemize}
+Main results: \texttt{xC\_isTors}, \texttt{yC\_isTors}, \texttt{zC\_isTors} (Lemma~\ref{lem:tors},
+for all dimensions); \texttt{all\_of\_S1\_S2} (Lemma~\ref{lem:all}); \texttt{pentagon} (the $N_5$
+relations); \texttt{not\_distributive}, \texttt{not\_codistributive} (Theorem~\ref{thm:main});
+\texttt{a2\_forest}; and
+\[
+\texttt{conjecture\_00000009898\_false (K) [Fld K] : }\neg\,\texttt{IfClause K},
+\]
+where \texttt{IfClause K := ForestOrder A2Q → Distributive K}. Also \texttt{iffClause\_false} and
+\texttt{minClause\_false}.
+
+Non-vacuity: \texttt{five\_tors} shows that $0,x,y,z,\md A$ are torsion classes and that
+$\{f\text{ injective}\}=\add\{S_2,P_1\}$ is not. Field instances are provided for $\mathbb F_2$
+and $\mathbb F_3$. \texttt{c3\_facts} records that the 3-cycle has 3 vertices and a
+non-antisymmetric path relation. The axioms used are only \texttt{propext}, \texttt{Quot.sound}
+and \texttt{Classical.choice}.
+
+\emph{Limitations.} Representations use coordinate spaces $K^{d}$. Every finite-dimensional
+space is isomorphic to one, and torsion classes are closed under isomorphism, so this loses
+nothing. The equivalence between $KA_2$-modules and representations of $A_2$, the classification
+in Proposition~\ref{prop:N5}, and the general criterion are proved only in this report.
+
+\paragraph{Python (\texttt{verify.py}, standard library).} A different method: over $\mathbb F_2$
+and $\mathbb F_3$ it enumerates all representations with $d_1,d_2\le2$ and computes isomorphism
+classes by brute force under $GL\times GL$ (14 classes). It finds the quotient relation by
+searching for surjective morphisms, and the extension triples from kernels of surjective
+morphisms. It then tests all $2^{14}$ subsets for being torsion classes. It finds exactly five,
+equal to $0,x,y,z,\md A$, forming $N_5$. Distributivity fails, and exhaustively 2 of the 125
+triples violate it. It also checks the path orders of $A_2$ and of the 3-cycle.
+
+\end{document}

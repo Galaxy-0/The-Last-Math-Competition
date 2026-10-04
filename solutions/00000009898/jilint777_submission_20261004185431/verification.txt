@@ -1,0 +1,49 @@
+== lake build (fresh, Lean 4.19.0)
+info: torsA2: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+ℹ [2/3] Built Main
+info: ././././Main.lean:674:0: 'Tors.conjecture_00000009898_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:675:0: 'Tors.iffClause_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:676:0: 'Tors.minClause_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:677:0: 'Tors.not_distributive' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:678:0: 'Tors.not_codistributive' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:679:0: 'Tors.all_of_S1_S2' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:680:0: 'Tors.five_tors' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:681:0: 'Tors.pentagon' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:682:0: 'Tors.a2_forest' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:683:0: 'Tors.c3_facts' depends on axioms: [propext]
+info: ././././Main.lean:684:0: 'Tors.conjecture_false_F2' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:685:0: 'Tors.conjecture_false_F3' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+PASS F_2: 31 representations with d1,d2 <= 2, 14 isoclasses = sum(min(d1,d2)+1) (one per rank)
+PASS F_2: 66 quotient pairs, 69 extension triples computed
+PASS F_2: exactly 5 torsion classes (all 2^14 subsets tested)
+PASS F_2: the torsion classes are 0, x={V2=0}, y={F onto}, z={V1=0}, mod A
+PASS F_2: tors is a lattice (meet = intersection, join = least torsion upper bound)
+PASS F_2: Hasse diagram is the pentagon N5: 0<x<y<mod A, 0<z<mod A
+PASS F_2: y ^ (x v z) = y  but  (y ^ x) v (y ^ z) = x  -> NOT distributive
+PASS F_2: x v (y ^ z) = x but (x v y) ^ (x v z) = y (dual law fails)
+PASS F_2: exhaustive test: 2 of 125 triples violate distributivity
+PASS F_2: P1 = (K -id-> K) lies in y but not in x
+PASS F_2: {F injective} = add{S2,P1} is not a torsion class (P1 ->> S1)
+PASS F_3: 107 representations with d1,d2 <= 2, 14 isoclasses = sum(min(d1,d2)+1) (one per rank)
+PASS F_3: 66 quotient pairs, 69 extension triples computed
+PASS F_3: exactly 5 torsion classes (all 2^14 subsets tested)
+PASS F_3: the torsion classes are 0, x={V2=0}, y={F onto}, z={V1=0}, mod A
+PASS F_3: tors is a lattice (meet = intersection, join = least torsion upper bound)
+PASS F_3: Hasse diagram is the pentagon N5: 0<x<y<mod A, 0<z<mod A
+PASS F_3: y ^ (x v z) = y  but  (y ^ x) v (y ^ z) = x  -> NOT distributive
+PASS F_3: x v (y ^ z) = x but (x v y) ^ (x v z) = y (dual law fails)
+PASS F_3: exhaustive test: 2 of 125 triples violate distributivity
+PASS F_3: P1 = (K -id-> K) lies in y but not in x
+PASS F_3: {F injective} = add{S2,P1} is not a torsion class (P1 ->> S1)
+PASS path order of A2 is the 2-chain 0 < 1, a forest order (down- and up-sets are chains)
+PASS the oriented 3-cycle's path relation is not antisymmetric
+ALL CHECKS PASSED
+exit 0
