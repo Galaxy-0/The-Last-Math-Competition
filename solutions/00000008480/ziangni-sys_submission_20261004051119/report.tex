@@ -1,0 +1,115 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Linear growth under an unbounded additive driver}
+\author{ziangni-sys}
+\date{Conjecture 00000008480}
+\begin{document}
+\sloppy
+\maketitle
+\noindent The source defines nonautonomous optimization through the averages
+$n^{-1}\sum_i(f(T^i x)+h_i)$ and asserts sublinear growth of their supremum
+under unbounded driving. Here the supremum is over the initial state $x$
+for the displayed finite averaging window. We disprove this assertion using
+the unbounded driver $h_i=i$.
+
+\begin{theorem}
+There is a compact probability-preserving ergodic system with a continuous
+observable and an unbounded nonnegative driver such that the optimized
+averages grow linearly, rather than sublinearly.
+\end{theorem}
+\begin{proof}
+Let $\Omega=\{*\}$ with its usual topology and full sigma-algebra, let
+$\mu=\delta_*$, and let $T$ be the identity. This space is compact, $T$ is
+continuous and preserves probability, and it is ergodic: its only measurable
+sets are $\varnothing$ and $\Omega$. Set $f(*)=0$, a continuous observable,
+and $h_i=i$ for every integer $i\geq0$. This driver is nonnegative and
+unbounded, since for every $B\in\mathbb R$ there is an integer $i>B$.
+
+For a fixed window origin $k\geq0$ and $n\geq1$, define
+\[
+ A_{k,n}(x)=\frac1n\sum_{i=0}^{n-1}
+       \bigl(f(T^i x)+h_{k+i}\bigr),\qquad
+ M_{k,n}=\sup_{x\in\Omega} A_{k,n}(x).
+\]
+The source's displayed average is the case $k=0$. Since $\Omega$ has one
+element, the set being optimized is the singleton $\{A_{k,n}(*)\}$;
+its supremum is attained and equals that number. The arithmetic sum gives
+\[
+ M_{k,n}=\frac1n\sum_{i=0}^{n-1}(k+i)
+ =\frac{nk+n(n-1)/2}{n}=k+\frac{n-1}{2}.
+\]
+Thus, for every fixed $k$,
+\[
+ \frac{M_{k,n}}{n}
+ =\frac12+\left(k-\frac12\right)\frac1n
+ \longrightarrow\frac12\ne0.
+\]
+In particular, $M_{0,n}=(n-1)/2$ is not $o(n)$. The claimed universal
+sublinear growth under unbounded driving therefore fails.
+\end{proof}
+
+\section*{Scope}
+Both the English and Chinese versions state the unbounded-driver clause
+without a growth or cancellation restriction on the driver. Our driver is
+as simple as a nonnegative linear sequence; the autonomous observable is
+bounded and identically zero. The example satisfies the usual compactness,
+continuity, probability preservation and ergodicity conditions as well.
+The proof refutes the sublinear clause, so no claim about the other bounded
+or random-driver clauses is required.
+
+\newpage
+\section*{Which supremum is computed}
+The optimized set here consists of values over initial states for a given
+finite $n$-term average, exactly as specified by the displayed expression in
+the source. The extra parameter $k$ shows that the counterexample works at
+every fixed starting time. It is held fixed while $n$ tends to infinity.
+We do not identify this finite-window supremum with a different operation
+that also takes a supremum over all starting times. Such an additional
+operation is not needed for the counterexample.
+
+\section*{Formal correspondence}
+The Lean project defines the actual one-point Dirac probability measure and
+identity map. It proves \texttt{CompactSpace}, continuity of both $T$ and
+$f$, and Mathlib's actual \texttt{Ergodic} predicate, which includes measure
+preservation. The theorem \texttt{driver\_unbounded} states
+$\forall B\in\mathbb R,\ \exists i\in\mathbb N,\ B<h_i$.
+
+The definition \texttt{average} uses an actual finite sum over
+\texttt{Finset.range n}, actual iterates \texttt{T\^{}[i]}, the observable,
+and the shifted driver. The definition \texttt{optimal} is the actual real
+supremum \texttt{sSup (Set.range (average start n))}. The complete image set
+is proved to be a singleton in \texttt{average\_range};
+\texttt{optimal\_attained} then uses the genuine singleton supremum theorem.
+Thus no scalar formula for the supremum is assumed.
+
+The arithmetic identity is proved by induction on the natural index in
+\texttt{sum\_formula}. The theorem \texttt{shifted\_sum} accounts for every
+term of the shifted window, and \texttt{optimal\_formula} establishes
+\[
+ \forall k,n\in\mathbb N,\quad n\geq1\ \Longrightarrow\
+ M_{k,n}=k+(n-1)/2.
+\]
+The real reciprocal limit gives \texttt{ratio\_tendsto\_half}.
+Finally, \texttt{not\_sublinear} proves, for every fixed natural $k$, the
+negation of Mathlib's actual \texttt{Asymptotics.IsLittleO} predicate for
+\texttt{optimal k} relative to $n\mapsto n$ at infinity. If that predicate
+held, the ratio would tend to zero, contradicting uniqueness of its proved
+limit $1/2$.
+
+The index zero is harmless: Lean uses totalized division there, whereas
+every displayed finite-window formula requires $n\geq1$. All convergence
+claims are at infinity, and are unaffected by that single initial index.
+
+\section*{Reproduction}
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake update}, \texttt{lake exe cache get},
+and \texttt{lake build}. Check the complete source with
+\begin{center}\small\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+Six printed dependency audits cover the system, driver, actual supremum,
+formula, limit and final negation. Only standard logical axioms are used.
+No admitted statements, extra axioms or auxiliary numerical computations
+are needed.
+\end{document}
