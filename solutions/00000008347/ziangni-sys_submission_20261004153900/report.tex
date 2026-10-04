@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{Zero belongs to the reciprocal Hurwitz spectrum}
+\author{ziangni-sys}
+\date{Conjecture 00000008347}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result.} The proposed closed interval $[1/\sqrt5,1/2]$ omits the value zero attained by every Liouville number.
+
+\paragraph{Convention and scope.}
+For a real number $t$, let $\|t\|_{\mathbb Z}=\min_{p\in\mathbb Z}|t-p|$. The reciprocal Lagrange (or Hurwitz approximation) constant is
+\[
+c(\alpha)=\frac1{\nu(\alpha)}
+=\liminf_{q\to\infty}q\|q\alpha\|_{\mathbb Z}.
+\]
+This is the usual reciprocal-constant convention; see~\cite{G}. Infinite $\nu(\alpha)$ is allowed, with reciprocal zero. Both source languages specify \emph{all irrationals}, with no bounded-partial-quotient restriction or exclusion of zero. Set
+\[
+\mathcal S=\{c(\alpha):\alpha\in\mathbb R\setminus\mathbb Q\}.
+\]
+We refute the claimed equality $\overline{\mathcal S}=[1/\sqrt5,1/2]$.
+
+\paragraph{The actual approximation errors.}
+Let $L=\sum_{n=0}^{\infty}10^{-n!}$. This is an irrational Liouville number. Its rational approximations with exponent three occur at arbitrarily large denominators: there are unbounded positive integers $q$ and integers $p$ such that
+\[
+0<|L-p/q|<q^{-3}.
+\]
+Nearest-integer minimization then gives
+\[
+0\leq q\|qL\|_{\mathbb Z}
+\leq q|qL-p|=q^2|L-p/q|<q^{-1}.
+\]
+For every $\varepsilon>0$, such $q$ can be chosen arbitrarily large with $q^{-1}<\varepsilon$. Thus the sequence of nonnegative errors has limit inferior zero, so $c(L)=0$. This argument also proves the same assertion for every Liouville number, directly from its full rational approximation property.
+
+\paragraph{Contradiction in the actual spectrum.}
+Since $L$ is irrational, $0=c(L)\in\mathcal S\subseteq\overline{\mathcal S}$. But $1/\sqrt5>0$, so $0\notin[1/\sqrt5,1/2]$. The claimed closed-interval spectrum is therefore false. No conclusion about the conjecture's separate realization dimensions, golden-ratio uniqueness, or gap claims is needed.
+
+\paragraph{Formal verification.}
+Lean uses the actual factorial infinite series, Mathlib's full Liouville approximation predicate and its arbitrarily-large-denominator theorem. The error is $q|q\alpha-\operatorname{round}(q\alpha)|$, and Mathlib's verified nearest-integer inequality supplies the minimization bridge. The proof establishes both bounds needed for the genuine real \texttt{Filter.liminf}, proves its value is zero, and establishes membership in the actual set and its topological closure. The final theorem \texttt{Counterexample.counterexample} is the negation of the displayed set equality. The reciprocal convention is stated explicitly; no numerical approximation or assumed spectrum membership is used.
+
+\begin{thebibliography}{1}
+\bibitem{G} D.~Gayfulin, \emph{Attainable numbers and the Lagrange spectrum}, Acta Arithmetica \textbf{179} (2017), 185--199. The reciprocal-constant definition is stated in the abstract. \href{https://doi.org/10.4064/aa8588-12-2016}{doi:10.4064/aa8588-12-2016}.
+\end{thebibliography}
+\end{document}
