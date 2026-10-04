@@ -1,0 +1,15 @@
+import Conjecture308
+
+#print Conjecture308.BadC
+#print Conjecture308.realLine
+#print Conjecture308.lineEmptinessClaim
+#check Conjecture308.gaussian_sqrt_two_approximation_bound
+#check Conjecture308.conjecture308_disproof
+#print axioms Conjecture308.real_sqrt_two_bound
+#print axioms Conjecture308.gaussian_sqrt_two_linear_bound
+#print axioms Conjecture308.gaussian_sqrt_two_approximation_bound
+#print axioms Conjecture308.sqrt_two_mem_BadC
+#print axioms Conjecture308.realAxis_eq_range
+#print axioms Conjecture308.sqrt_two_mem_realAxis
+#print axioms Conjecture308.bad_inter_realAxis_nonempty
+#print axioms Conjecture308.conjecture308_disproof

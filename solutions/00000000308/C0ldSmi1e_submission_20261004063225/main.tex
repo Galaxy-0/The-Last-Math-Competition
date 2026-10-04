@@ -1,0 +1,128 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Bad}{\operatorname{Bad}_{\C}}
+\title{A real point badly approximable by Gaussian rationals\\A disproof of Conjecture 00000000308}
+\author{C0ldSmi1e}
+\date{October 4, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The real number $\sqrt2$, regarded as a complex number, satisfies
+$|\sqrt2-p/q|\ge 1/(4|q|^2)$ for every $p,q\in\Z[i]$ with $q\ne0$.
+Thus the standard complex badly approximable set meets the real axis, contradicting the conjecture's universal empty-intersection clause. The entire bound and the real-line counterexample are formalized in Lean.
+\end{abstract}
+
+\section{Definition and exact scope}
+Both language versions of Conjecture 00000000308 assert that complex bad approximation has empty intersection with every real line. They describe bad approximation informally as admitting no good approximation with Gaussian-integer denominators. We use its standard quantitative meaning, as in \cite[Eq.~(2)]{EK} and \cite[p.~1]{Hines}:
+\[
+ z\in\Bad\quad\Longleftrightarrow\quad
+ \exists c>0\ \forall p,q\in\Z[i],\ q\ne0:
+ \quad \left|z-\frac pq\right|\ge\frac{c}{|q|^2}.
+\]
+Absolute values are ordinary complex moduli. Division is in $\C$, not Euclidean division in $\Z[i]$. The original English and Chinese statement is preserved in \texttt{conjecture.md}; this standard-definition interpretation is explicit in the formalization. We impose no coprimality restriction on $p,q$.
+
+A real affine line is $L_{a,v}=\{a+tv:t\in\R\}$ with $v\ne0$. In particular, $L_{0,1}$ is the nondegenerate real axis. We prove $\sqrt2\in\Bad\cap L_{0,1}$. Refuting this first clause disproves the stated conjunction. We do not separately resolve the complement's measure or the proposed convergence rates.
+
+\section{A uniform real bound}
+\begin{lemma}
+For all integers $m\ne0$ and $n$,
+\[
+ \frac14\le |m|\,|m\sqrt2-n|.
+\]
+\end{lemma}
+\begin{proof}
+Let $r=|m\sqrt2-n|$ and $s=|m\sqrt2+n|$. The integer $2m^2-n^2$ is nonzero: if it vanished, the factorization
+\[
+ (m\sqrt2-n)(m\sqrt2+n)=2m^2-n^2
+\]
+would give $m\sqrt2=\pm n$, contrary to irrationality of $\sqrt2$. Hence $rs=|2m^2-n^2|\ge1$, and $|m|\ge1$.
+
+If $r\ge1$, then $|m|r\ge1$. If $r<1$, the triangle inequality and $\sqrt2<3/2$ give
+\[
+ s\le2\sqrt2\,|m|+r<3|m|+1\le4|m|.
+\]
+Therefore $1\le rs\le4|m|r$, establishing the claim in both cases.
+\end{proof}
+\newpage
+
+\section{All Gaussian denominators}
+\begin{theorem}
+For all $p,q\in\Z[i]$ with $q\ne0$,
+\[
+ \frac{1}{4|q|^2}\le\left|\sqrt2-\frac pq\right|.
+\]
+\end{theorem}
+\begin{proof}
+Write $q=u+iv$ and $p=a+ib$, with integer coordinates. Since $q\ne0$, at least one of $u,v$ is nonzero. Choose $(m,n)=(u,a)$ if $u\ne0$ and $(m,n)=(v,b)$ otherwise. The chosen coordinate of $q\sqrt2-p$ equals $m\sqrt2-n$. Each coordinate's absolute value is bounded by the complex modulus, so
+\[
+ \frac14\le |m|\,|m\sqrt2-n|
+ \le |q|\,|q\sqrt2-p|
+ =|q|^2\left|\sqrt2-\frac pq\right|.
+\]
+The lemma supplies the first inequality. Since $|q|>0$, division by $|q|^2$ proves the result.
+\end{proof}
+Taking $c=1/4$ shows $\sqrt2\in\Bad$. The same point belongs to $L_{0,1}$, whose direction is nonzero. Thus
+\[
+ \Bad\cap L_{0,1}\ne\varnothing,
+ \qquad
+ \neg\bigl(\forall a,v\in\C,\ v\ne0\Longrightarrow
+                  \Bad\cap L_{a,v}=\varnothing\bigr).
+\]
+This is a pointwise counterexample to the actual universal line claim. It uses all Gaussian rational approximants, not only ordinary rational approximants. No finite denominator search or numerical computation is part of the proof.
+
+\section{Formal correspondence}
+The project pins Lean 4.19.0 and Mathlib v4.19.0, commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+\begin{itemize}
+\item \texttt{Definitions.lean} defines the standard set using Mathlib's actual \texttt{GaussianInt} type, its complex embedding, complex division, and the square of the complex norm. It also defines the actual real affine lines.
+\item \texttt{RealBound.lean} proves the real bound for every pair of integers, with no upper bound on their sizes.
+\item \texttt{ComplexBound.lean} proves the unrestricted Gaussian approximation inequality with constant $1/4$, then membership of $\sqrt2$ in \texttt{BadC}.
+\item \texttt{Conjecture308.lean} identifies the selected line with the image of the real embedding and gives the final theorem\\
+\texttt{conjecture308\_disproof}.
+\end{itemize}
+The formal final theorem is the negation of the universal empty-intersection clause for all nonzero line directions. The witness is explicitly on the real axis, so it also works if ``real line'' is interpreted as a real linear line through the origin. The independent source review checks these definitions and quantifiers separately from compilation.
+\newpage
+
+\section{Reproduction and verification}
+With the pinned toolchain installed, enter the submitted \texttt{lean/} directory and run:
+\begin{verbatim}
+lake exe cache get
+lake build
+for source in Definitions.lean RealBound.lean \
+              ComplexBound.lean Conjecture308.lean Check.lean
+do
+  lake env lean -DwarningAsError=true "$source" || exit 1
+done
+\end{verbatim}
+The dependency cache is optional; \texttt{lake build} can compile dependencies from source. The committed manifest fixes their revisions. The README includes a source-run cache command for platforms where the native cache executable cannot load.
+
+\texttt{Check.lean} displays the bad-approximation set, real-line definition, universal claim, full Gaussian inequality, and final theorem type. It prints the axiom dependencies of eight central results. The audits contain only the standard foundational axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}. There are no admitted proofs, custom axioms, or native-evaluation shortcuts.
+
+The packaged project was rebuilt in a fresh directory, reusing only pinned dependency checkouts and their library cache. All five Lean sources were then replayed directly with warnings treated as errors. The submitted sources and configuration files were compared byte for byte with the independently checked copies. The verification folder contains the build and axiom output, document log, eligibility record, and artifact hashes.
+
+No auxiliary numerical computation is required. The elementary real estimate, extension to every Gaussian denominator, and real-line counterexample are all formally proved. The external references establish the standard terminology; their substantive results are not used as unproved premises in the Lean proof.
+
+These are local validation results, not official maintainer acceptance. The entire contribution is confined to the personal submission directory.
+
+\begin{thebibliography}{9}
+\bibitem{EK}
+R. Esdahl-Schou and S. Kristensen,
+\emph{On badly approximable complex numbers},
+Glasgow Mathematical Journal \textbf{52} (2010), 349--355.
+Equation (2), p.~349.
+\href{https://doi.org/10.1017/S0017089510000042}{doi:10.1017/S0017089510000042}.
+\bibitem{Hines}
+R. Hines, \emph{Badly approximable numbers over imaginary quadratic fields},
+arXiv:1707.07231v3, 19 September 2018, introduction, p.~1.
+\url{https://arxiv.org/abs/1707.07231v3}.
+\end{thebibliography}
+\end{document}
