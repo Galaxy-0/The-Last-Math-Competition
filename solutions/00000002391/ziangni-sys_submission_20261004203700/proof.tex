@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{A two-atom doubling measure has box dimension zero}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Conjecture 00000002391.} The asserted lower bound
+\(\dim_{\mathrm{box}}\operatorname{supp}\mu\ge\log 2/\log C\)
+is false even when \(C\) is the genuine smallest global doubling constant. No non-atomicity or absence of isolated support points is assumed in either source language.
+
+Consider the actual finite Borel measure on the real line
+\[
+ \mu=\delta_{-1}+\delta_1,\qquad S=\{-1,1\}.
+\]
+The measure's topological support is exactly \(S\): every positive-radius ball about either atom has positive mass. If \(x\notin S\), the ball of radius
+\(\frac12\min\{|x+1|,|x-1|\}>0\) about \(x\) contains neither atom and has zero mass.
+
+Use the standard doubling condition with centers in the support (equivalently, work on the induced metric space \(S\)):
+\[
+ \mu(B(x,2r))\le C\mu(B(x,r))\quad(x\in S,\ r>0).
+\]
+Every such smaller ball contains its central atom and has mass at least one, while every larger ball has mass at most two. Thus \(C=2\) is a valid constant at \emph{every} positive radius. It is minimal: with \(x=-1\) and \(r=3/2\), the smaller ball contains only \(-1\), whereas its doubled ball contains both atoms. Any valid constant therefore satisfies \(2\le C\).
+
+For completeness compute the true box covering numbers. Let \(N(\varepsilon)\) be the least cardinality of a finite set of real centers whose open \(\varepsilon\)-balls cover \(S\). For \(0<\varepsilon\le1\), the two atom-centered balls give a cover with two centers. A single ball cannot contain both atoms: otherwise the triangle inequality gives
+\[
+ 2=|-1-1|\le|-1-c|+|c-1|<2\varepsilon\le2,
+\]
+a contradiction. Therefore the actual minimum is
+\[
+ N(\varepsilon)=2\quad(0<\varepsilon\le1).
+\]
+Consequently both standard upper and lower box dimensions are zero:
+\[
+ \limsup_{\varepsilon\downarrow0}
+ \frac{\log N(\varepsilon)}{\log(1/\varepsilon)}
+ =\liminf_{\varepsilon\downarrow0}
+ \frac{\log N(\varepsilon)}{\log(1/\varepsilon)}=0.
+\]
+The equivalent parametrization \(\varepsilon=e^{-t}\), \(t\to\infty\), makes the genuine covering exponent \(\log2/t\), which tends to zero.
+
+The source also mentions \emph{local} box dimension. At each \(x\in S\), the actual neighborhood intersection \(S\cap B(x,1)\) is \(\{x\}\). Its least finite covering number is one at every positive scale, so its box dimension is likewise zero. The counterexample thus covers both the global and the stated local interpretation.
+
+But for the actual minimal doubling constant, \(\log2/\log C=\log2/\log2=1\). The proposed inequality would require \(0\ge1\). This disproves the unrestricted lower-bound clause and therefore the conjecture, without assessing a modified claim that excludes atoms or requires additional geometric hypotheses.
+
+\medskip\noindent\textbf{Formal verification.} The Lean project uses genuine Dirac measures and metric balls, computes their real masses, proves the support by positive mass in every neighborhood, and establishes both global doubling and its sharp minimal constant. Cover numbers are defined as the infimum of cardinalities of actual finite ball covers; the proof establishes their exact values and the resulting limits, upper and lower dimensions, and local singleton dimensions. No dimension or doubling certificate is assigned as input. The pinned full build prints final theorem axiom audits.
+\end{document}
