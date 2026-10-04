@@ -1,0 +1,155 @@
+{
+  "id": "00000003961",
+  "verified_at_utc": "2026-10-04T12:15:23.665539+00:00",
+  "clean_build_pass": true,
+  "commands": [
+    {
+      "command": [
+        "lake.exe",
+        "--version"
+      ],
+      "exit_code": 0,
+      "seconds": 0.046,
+      "log": "lean-version.log"
+    },
+    {
+      "command": [
+        "lake.exe",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 13.094,
+      "log": "lake-build.log"
+    },
+    {
+      "command": [
+        "lake.exe",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Main.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 13.281,
+      "log": "lean-axioms.log"
+    },
+    {
+      "command": [
+        "python.exe",
+        "-X",
+        "utf8",
+        "verify.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.11,
+      "log": "verify-output.json"
+    },
+    {
+      "command": [
+        "tectonic.exe",
+        "--keep-logs",
+        "main.tex"
+      ],
+      "exit_code": 0,
+      "seconds": 0.703,
+      "log": "pdf-build.log"
+    },
+    {
+      "command": [
+        "pdftoppm.exe",
+        "-scale-to",
+        "1500",
+        "-png",
+        "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\drafts\\00000003961\\main.pdf",
+        "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\qa\\00000003961\\f54747d63134\\page"
+      ],
+      "exit_code": 0,
+      "seconds": 0.344,
+      "log": "pdf-render.log"
+    }
+  ],
+  "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "lean_source_sha256": {
+    "lake-manifest.json": "499474ffc577c88f6410f656e4a340dc636908bab0ed0c8fab533910180036ad",
+    "lakefile.toml": "7349c09e073e43e36ed022e8a6477de2b39e3e96f9defbca176d456c232ddc0d",
+    "lean-toolchain": "f28855f24b5253d7e8949f38027066a06cdde238520086d421ba7ad24c27a691",
+    "Main.lean": "0a7e638ef7c03e50cc1995b1ee21fc7f76afdd0f41fff1dfc1bd36e717bca1ae"
+  },
+  "main_tex_sha256": "f54747d6313414680614fc11c7bbc14d2fb65e5a3e4b64d6deaae256e566deff",
+  "main_pdf_sha256": "2563cbca1653ebf07bf9de1032596bcb04e885be0a52f30f8487bd630628fb4e",
+  "pdf_pages": 2,
+  "pdf_warnings": [],
+  "pdf_visual_review": "PASS",
+  "review_mode": "agent development with parent adversarial review; no external independent review",
+  "native_compiler": "unavailable: Unable to find standard directories for platform; existing Tectonic export used",
+  "rendered_images": [
+    "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\qa\\00000003961\\f54747d63134\\page-1.png",
+    "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\round5\\qa\\00000003961\\f54747d63134\\page-2.png"
+  ],
+  "dependencies": [
+    {
+      "name": "mathlib",
+      "git_commit": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0"
+    },
+    {
+      "name": "plausible",
+      "git_commit": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\plausible"
+    },
+    {
+      "name": "LeanSearchClient",
+      "git_commit": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\LeanSearchClient"
+    },
+    {
+      "name": "importGraph",
+      "git_commit": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\importGraph"
+    },
+    {
+      "name": "proofwidgets",
+      "git_commit": "c4919189477c3221e6a204008998b0d724f49904",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\proofwidgets"
+    },
+    {
+      "name": "aesop",
+      "git_commit": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\aesop"
+    },
+    {
+      "name": "Qq",
+      "git_commit": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\Qq"
+    },
+    {
+      "name": "batteries",
+      "git_commit": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\batteries"
+    },
+    {
+      "name": "Cli",
+      "git_commit": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "tracked_sources_clean": true,
+      "dependency_cache": "C:\\Users\\CHENGZHE GAO\\OneDrive\\Documents\\知识库\\work\\math_competition_20261003\\tools\\mathlib4-v4.19.0\\.lake\\packages\\Cli"
+    }
+  ],
+  "dependency_note": "Only official commit-pinned dependency artifacts were reused; this submission was built in a fresh directory without its own .lake build artifacts.",
+  "pdf_refreshed_at_utc": "2026-10-04T12:17:24.204027+00:00",
+  "author_pdf_review": "Both final 1500-pixel Poppler page images opened with view_image; no clipping, overlap, unreadable equations, or pagination defects.",
+  "author_reviewed_at_utc": "2026-10-04T12:18:11.183885+00:00",
+  "parent_review": "PASS",
+  "parent_review_at_utc": "2026-10-04T12:21:50.883055+00:00"
+}
