@@ -1,0 +1,67 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,hyperref}
+\title{A nonintegral proposed group order\\Disproof of the displayed equality in conjecture 00000001414}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\section*{Statement and precise scope}
+Both versions of the source explicitly assert
+\[
+ |K_{10}(\mathbb Z)|=\frac{B_{12}}{2\cdot6!}.
+\]
+The English parenthetical calls this an integral value and mentions a fraction of the form $691/(2^3\cdot3^2\cdot5\cdot6!)$; the Chinese parenthetical refers to making that expression integral. The displayed equality nevertheless has a concrete right side. We disprove that equality interpreted as a finite group order. We also show that taking the absolute value of the Bernoulli number, or using the parenthetical fraction with the indicated denominator, cannot give an integer order.
+
+No algebraic $K$-group is computed here. No claim is made about an unspecified operation that clears a denominator or extracts a numerator: replacing the displayed rational by such an integer would change the stated equality. Refuting this explicit clause suffices to refute the full conjunction in the conjecture. Its later comparison with Borel's computation is not needed.
+
+\section*{The actual Bernoulli number}
+Let $b_n=B_n^+$ denote the Bernoulli convention with $b_1=1/2$. Its defining triangular recurrence is
+\[
+ b_n=1-\sum_{k=0}^{n-1}\frac{\binom nk}{n-k+1}b_k.
+\]
+The standard convention used here is $B_n=(-1)^nb_n$, so both conventions agree at $n=12$. Successive exact substitution gives:
+\[
+\begin{array}{c|rrrrrrr}
+n&0&1&2&3&4&5&6\\\hline
+b_n&1&1/2&1/6&0&-1/30&0&1/42
+\end{array}
+\]
+\[
+\begin{array}{c|rrrrrr}
+n&7&8&9&10&11&12\\\hline
+b_n&0&-1/30&0&5/66&0&-691/2730
+\end{array}
+\]
+In particular $B_{12}=-691/2730$. These are evaluations of the recursively defined Bernoulli numbers, not input assumptions. The Lean project proves every row directly from Mathlib's defining recurrence, then uses the theorem equating the conventions away from index one.
+
+\newpage
+\section*{The arithmetic contradiction}
+Since $6!=720$, the three relevant rationals are
+\[
+ q=\frac{B_{12}}{2\cdot6!}=-\frac{691}{3931200},\qquad
+ q_{\rm abs}=\frac{|B_{12}|}{2\cdot6!}=\frac{691}{3931200},
+\]
+\[
+ q_{\rm par}=\frac{691}{2^3\cdot3^2\cdot5\cdot6!}
+ =\frac{691}{259200}.
+\]
+The first is negative, and the other two lie strictly between zero and one. Every natural number is nonnegative. Furthermore, a natural number is either zero or at least one, so no natural number lies in $(0,1)$. Consequently, for every $n\in\mathbb N$,
+\[
+ n\ne q,\qquad n\ne q_{\rm abs},\qquad n\ne q_{\rm par}.
+\]
+For any finite group $G$, its order $|G|$ is a natural number (indeed a positive one). Applying these three inequalities to $n=|G|$ shows that no finite group whatsoever can have any of the proposed orders. In particular the stated finite-order formula for $K_{10}(\mathbb Z)$ is impossible. Interpreting the left side as an infinite cardinal would not make it equal to a finite rational either.
+
+\section*{Formal coverage and verification}
+The Lean project uses Lean 4.19.0 and a pinned Mathlib v4.19.0 revision. It contains:
+\begin{itemize}
+\item exact recurrence proofs for $b_0,\ldots,b_{12}$ and the actual value of \texttt{bernoulli 12};
+\item exact evaluations of the three specified rational expressions;
+\item a universal proof that none equals the rational embedding of any natural number;
+\item application to \texttt{Fintype.card G} for an arbitrary actual finite group;
+\item a final negation of the existential assertion that a finite group has the displayed order.
+\end{itemize}
+The final theorem establishes a stronger necessary obstruction than any particular calculation of an algebraic $K$-group could supply. It does not encode a hypothetical $K$-group by an asserted scalar order.
+
+All calculations use kernel-checked exact rational arithmetic. No external numerical computation, additional axiom, admitted proof, or native decision shortcut is used. Build and complete-source checking logs, including theorem axiom audits, accompany the submission. The compiled PDF is visually inspected in full.
+\end{document}
