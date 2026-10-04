@@ -1,0 +1,161 @@
+@[reducible] def Conjecture4107.V : Type :=
+Fin 3 → ℝ
+def Conjecture4107.U : Submodule ℝ Conjecture4107.V :=
+{ carrier := {x | x 2 = 0}, add_mem' := @Conjecture4107.U._proof_2, zero_mem' := Conjecture4107.U._proof_3,
+  smul_mem' := Conjecture4107.U._proof_4 }
+def Conjecture4107.W : Submodule ℝ Conjecture4107.V :=
+{ carrier := {x | x 0 = 0 ∧ x 1 = 0}, add_mem' := @Conjecture4107.W._proof_5, zero_mem' := Conjecture4107.W._proof_6,
+  smul_mem' := Conjecture4107.W._proof_7 }
+def Conjecture4107.planeEquiv : ↥Conjecture4107.U ≃ₗ[ℝ] Fin 2 → ℝ :=
+{ toFun := fun x => ![↑x 0, ↑x 1], map_add' := Conjecture4107.planeEquiv._proof_10,
+  map_smul' := Conjecture4107.planeEquiv._proof_11, invFun := fun y => ⟨![y 0, y 1, 0], ⋯⟩,
+  left_inv := Conjecture4107.planeEquiv._proof_15, right_inv := Conjecture4107.planeEquiv._proof_16 }
+def Conjecture4107.axisEquiv : ↥Conjecture4107.W ≃ₗ[ℝ] ℝ :=
+{ toFun := fun x => ↑x 2, map_add' := Conjecture4107.axisEquiv._proof_17,
+  map_smul' := Conjecture4107.axisEquiv._proof_18, invFun := fun t => ⟨![0, 0, t], ⋯⟩,
+  left_inv := Conjecture4107.axisEquiv._proof_21, right_inv := Conjecture4107.axisEquiv._proof_22 }
+@[reducible] def Conjecture4107.IntersectionPoset : {n m : ℕ} → (Fin m → Submodule ℝ (Fin n → ℝ)) → Type :=
+fun {n m} A => { S // ∃ s, s.inf A = S }ᵒᵈ
+def Conjecture4107.intersectionPoint : {n m : ℕ} →
+  (A : Fin m → Submodule ℝ (Fin n → ℝ)) → Finset (Fin m) → Conjecture4107.IntersectionPoset A :=
+fun {n m} A s => ⟨s.inf A, ⋯⟩
+def Conjecture4107.ambient : {n m : ℕ} → (A : Fin m → Submodule ℝ (Fin n → ℝ)) → Conjecture4107.IntersectionPoset A :=
+fun {n m} A => Conjecture4107.intersectionPoint A ∅
+def Conjecture4107.characteristicPolynomial : {n m : ℕ} → (Fin m → Submodule ℝ (Fin n → ℝ)) → Polynomial ℤ :=
+fun {n m} A =>
+  ∑ S, Polynomial.C ((IncidenceAlgebra.mu ℤ) (Conjecture4107.ambient A) S) * Polynomial.X ^ Module.finrank ℝ ↥↑S
+def Conjecture4107.arrangement : Fin 2 → Submodule ℝ Conjecture4107.V :=
+![Conjecture4107.U, Conjecture4107.W]
+@[reducible] def Conjecture4107.ConcretePoset : Type :=
+Conjecture4107.IntersectionPoset Conjecture4107.arrangement
+def Conjecture4107.planePoint : Conjecture4107.ConcretePoset :=
+Conjecture4107.intersectionPoint Conjecture4107.arrangement {0}
+def Conjecture4107.axisPoint : Conjecture4107.ConcretePoset :=
+Conjecture4107.intersectionPoint Conjecture4107.arrangement {1}
+def Conjecture4107.originPoint : Conjecture4107.ConcretePoset :=
+Conjecture4107.intersectionPoint Conjecture4107.arrangement {0, 1}
+def Conjecture4107.StrictSignAlternation : Polynomial ℤ → Prop :=
+fun p => ∀ k < p.natDegree, p.coeff k * p.coeff (k + 1) < 0
+def Conjecture4107.WeakSignAlternation : Polynomial ℤ → Prop :=
+fun p => ∀ k < p.natDegree, p.coeff k * p.coeff (k + 1) ≤ 0
+def Conjecture4107.ConjectureClaim : Prop :=
+∀ (n m : ℕ) (A : Fin m → Submodule ℝ (Fin n → ℝ)),
+  Conjecture4107.StrictSignAlternation (Conjecture4107.characteristicPolynomial A)
+Conjecture4107.mem_U (x : Conjecture4107.V) : x ∈ Conjecture4107.U ↔ x 2 = 0
+'Conjecture4107.mem_U' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.mem_W (x : Conjecture4107.V) : x ∈ Conjecture4107.W ↔ x 0 = 0 ∧ x 1 = 0
+'Conjecture4107.mem_W' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.finrank_U : Module.finrank ℝ ↥Conjecture4107.U = 2
+'Conjecture4107.finrank_U' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.finrank_W : Module.finrank ℝ ↥Conjecture4107.W = 1
+'Conjecture4107.finrank_W' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.finrank_top : Module.finrank ℝ ↥⊤ = 3
+'Conjecture4107.finrank_top' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.finrank_bot : Module.finrank ℝ ↥⊥ = 0
+'Conjecture4107.finrank_bot' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.U_inf_W : Conjecture4107.U ⊓ Conjecture4107.W = ⊥
+'Conjecture4107.U_inf_W' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.W_inf_U : Conjecture4107.W ⊓ Conjecture4107.U = ⊥
+'Conjecture4107.W_inf_U' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.U_not_le_W : ¬Conjecture4107.U ≤ Conjecture4107.W
+'Conjecture4107.U_not_le_W' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.W_not_le_U : ¬Conjecture4107.W ≤ Conjecture4107.U
+'Conjecture4107.W_not_le_U' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.U_ne_bot : Conjecture4107.U ≠ ⊥
+'Conjecture4107.U_ne_bot' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.W_ne_bot : Conjecture4107.W ≠ ⊥
+'Conjecture4107.W_ne_bot' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.U_ne_top : Conjecture4107.U ≠ ⊤
+'Conjecture4107.U_ne_top' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.W_ne_top : Conjecture4107.W ≠ ⊤
+'Conjecture4107.W_ne_top' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.intersectionPoint_surjective {n m : ℕ} (A : Fin m → Submodule ℝ (Fin n → ℝ)) :
+  Function.Surjective (Conjecture4107.intersectionPoint A)
+'Conjecture4107.intersectionPoint_surjective' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.ambient_val {n m : ℕ} (A : Fin m → Submodule ℝ (Fin n → ℝ)) : ↑(Conjecture4107.ambient A) = ⊤
+'Conjecture4107.ambient_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.intersection_le_iff {n m : ℕ} {A : Fin m → Submodule ℝ (Fin n → ℝ)}
+  (S T : Conjecture4107.IntersectionPoset A) : S ≤ T ↔ ↑T ≤ ↑S
+'Conjecture4107.intersection_le_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.ambient_le {n m : ℕ} (A : Fin m → Submodule ℝ (Fin n → ℝ)) (S : Conjecture4107.IntersectionPoset A) :
+  Conjecture4107.ambient A ≤ S
+'Conjecture4107.ambient_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.planePoint_val : ↑Conjecture4107.planePoint = Conjecture4107.U
+'Conjecture4107.planePoint_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.axisPoint_val : ↑Conjecture4107.axisPoint = Conjecture4107.W
+'Conjecture4107.axisPoint_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.originPoint_val : ↑Conjecture4107.originPoint = ⊥
+'Conjecture4107.originPoint_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.finrank_ambientPoint : Module.finrank ℝ ↥↑(Conjecture4107.ambient Conjecture4107.arrangement) = 3
+'Conjecture4107.finrank_ambientPoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.finrank_planePoint : Module.finrank ℝ ↥↑Conjecture4107.planePoint = 2
+'Conjecture4107.finrank_planePoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.finrank_axisPoint : Module.finrank ℝ ↥↑Conjecture4107.axisPoint = 1
+'Conjecture4107.finrank_axisPoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.finrank_originPoint : Module.finrank ℝ ↥↑Conjecture4107.originPoint = 0
+'Conjecture4107.finrank_originPoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.finTwo_subsets (s : Finset (Fin 2)) : s = ∅ ∨ s = {0} ∨ s = {1} ∨ s = {0, 1}
+'Conjecture4107.finTwo_subsets' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.concretePoset_cases (S : Conjecture4107.ConcretePoset) :
+  S = Conjecture4107.ambient Conjecture4107.arrangement ∨
+    S = Conjecture4107.planePoint ∨ S = Conjecture4107.axisPoint ∨ S = Conjecture4107.originPoint
+'Conjecture4107.concretePoset_cases' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.concretePoset_univ :
+  Finset.univ =
+    {Conjecture4107.ambient Conjecture4107.arrangement, Conjecture4107.planePoint, Conjecture4107.axisPoint,
+      Conjecture4107.originPoint}
+'Conjecture4107.concretePoset_univ' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.U_ne_W : Conjecture4107.U ≠ Conjecture4107.W
+'Conjecture4107.U_ne_W' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.concrete_eq_iff (S T : Conjecture4107.ConcretePoset) : S = T ↔ ↑S = ↑T
+'Conjecture4107.concrete_eq_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.Ico_ambient_plane :
+  Finset.Ico (Conjecture4107.ambient Conjecture4107.arrangement) Conjecture4107.planePoint =
+    {Conjecture4107.ambient Conjecture4107.arrangement}
+'Conjecture4107.Ico_ambient_plane' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.Ico_ambient_axis :
+  Finset.Ico (Conjecture4107.ambient Conjecture4107.arrangement) Conjecture4107.axisPoint =
+    {Conjecture4107.ambient Conjecture4107.arrangement}
+'Conjecture4107.Ico_ambient_axis' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.Ico_ambient_origin :
+  Finset.Ico (Conjecture4107.ambient Conjecture4107.arrangement) Conjecture4107.originPoint =
+    {Conjecture4107.ambient Conjecture4107.arrangement, Conjecture4107.planePoint, Conjecture4107.axisPoint}
+'Conjecture4107.Ico_ambient_origin' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.mu_ambient_plane :
+  (IncidenceAlgebra.mu ℤ) (Conjecture4107.ambient Conjecture4107.arrangement) Conjecture4107.planePoint = -1
+'Conjecture4107.mu_ambient_plane' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.mu_ambient_axis :
+  (IncidenceAlgebra.mu ℤ) (Conjecture4107.ambient Conjecture4107.arrangement) Conjecture4107.axisPoint = -1
+'Conjecture4107.mu_ambient_axis' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.mu_ambient_origin :
+  (IncidenceAlgebra.mu ℤ) (Conjecture4107.ambient Conjecture4107.arrangement) Conjecture4107.originPoint = 1
+'Conjecture4107.mu_ambient_origin' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.characteristicPolynomial_arrangement :
+  Conjecture4107.characteristicPolynomial Conjecture4107.arrangement =
+    Polynomial.X ^ 3 - Polynomial.X ^ 2 - Polynomial.X + 1
+'Conjecture4107.characteristicPolynomial_arrangement' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.strict_implies_weak {p : Polynomial ℤ} (h : Conjecture4107.StrictSignAlternation p) :
+  Conjecture4107.WeakSignAlternation p
+'Conjecture4107.strict_implies_weak' depends on axioms: [propext, Quot.sound]
+Conjecture4107.negative_pair_obstructs_weak {p : Polynomial ℤ} {k : ℕ} (hi : p.coeff k < 0) (hj : p.coeff (k + 1) < 0) :
+  ¬Conjecture4107.WeakSignAlternation p
+'Conjecture4107.negative_pair_obstructs_weak' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.negative_pair_obstructs_strict {p : Polynomial ℤ} {k : ℕ} (hi : p.coeff k < 0)
+  (hj : p.coeff (k + 1) < 0) : ¬Conjecture4107.StrictSignAlternation p
+'Conjecture4107.negative_pair_obstructs_strict' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.coefficient_zero : (Conjecture4107.characteristicPolynomial Conjecture4107.arrangement).coeff 0 = 1
+'Conjecture4107.coefficient_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.coefficient_one : (Conjecture4107.characteristicPolynomial Conjecture4107.arrangement).coeff 1 = -1
+'Conjecture4107.coefficient_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.coefficient_two : (Conjecture4107.characteristicPolynomial Conjecture4107.arrangement).coeff 2 = -1
+'Conjecture4107.coefficient_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.coefficient_three : (Conjecture4107.characteristicPolynomial Conjecture4107.arrangement).coeff 3 = 1
+'Conjecture4107.coefficient_three' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.arrangement_not_weak_alternating :
+  ¬Conjecture4107.WeakSignAlternation (Conjecture4107.characteristicPolynomial Conjecture4107.arrangement)
+'Conjecture4107.arrangement_not_weak_alternating' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.arrangement_not_strict_alternating :
+  ¬Conjecture4107.StrictSignAlternation (Conjecture4107.characteristicPolynomial Conjecture4107.arrangement)
+'Conjecture4107.arrangement_not_strict_alternating' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4107.conjecture4107_disproof : ¬Conjecture4107.ConjectureClaim
+'Conjecture4107.conjecture4107_disproof' depends on axioms: [propext, Classical.choice, Quot.sound]
