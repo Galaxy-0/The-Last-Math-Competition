@@ -1,0 +1,307 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\NSym}{\mathbf{Sym}}
+\newcommand{\Prim}{\operatorname{Prim}}
+
+\title{Disproof of Conjecture 00000000438:\\
+the degree-3 primitives of $\NSym$ form a $2$-dimensional space, but $A(3,1)\in\{1,4\}$}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000000438 asserts that the primitive Lie algebra of the Hopf
+algebra $\NSym$ of noncommutative symmetric functions has $n$-th homogeneous
+dimension equal to the Eulerian number $A(n,1)$. We show that the degree-$3$
+primitive space $\Prim(\NSym)_3$ has dimension exactly $2$, with basis
+$\Psi_3$ and $[S_2,S_1]$. The Eulerian number $A(3,1)$, however, is $4$ in the
+convention ``permutations with one descent'' and $1$ in the $1$-based
+convention of OEIS A008292. In fact $2$ is not of the form $A(m,1)$ for any
+$m$ in either convention, so no shift of the index can save the
+formula. A self-contained Lean~4 development (core library only) builds
+$\NSym$ in degree $3$ from its defining coproduct, proves that the primitive space
+has dimension $2$, defines the Eulerian numbers by counting descents and
+ascents of permutations, and proves that the dimension clause is false. More
+generally the dimensions are $1,1,2,3,6,9,18,30,56,99$ for $n=1,\dots,10$, which
+match $A(n,1)$ only at $n=2$ (both conventions) and at $n=1$ (1-based convention).
+\end{abstract}
+
+\section{The conjecture and the clause we refute}
+
+The statement reads:
+\begin{quote}
+\emph{Definition:} The copying structure of noncommutative symmetric
+functions Sym. \emph{Conjecture:} As a coalgebra, the primitive Lie algebra of
+Sym is isomorphic to the generalized Lie $n$-algebra, whose $n$-th homogeneous
+dimension equals the Eulerian number $A(n,1)$ (verifiable for $n\le10$).
+\end{quote}
+The Chinese version says the same. The ``copying structure'' is the coproduct
+(comultiplication) of $\NSym$, and its ``primitive Lie algebra'' is
+$\Prim(\NSym)=\{x:\Delta x=x\otimes1+1\otimes x\}$, a graded Lie algebra
+under the commutator. The phrase ``generalized Lie $n$-algebra'' names no
+standard object and is not defined in the statement. The only checkable
+content is the dimension formula, and it is meant to be checked on the
+primitive Lie algebra itself (``verifiable for $n\le10$''). An isomorphism of graded
+objects preserves homogeneous dimensions, so the conjecture implies
+\begin{equation}\label{eq:clause}
+\dim \Prim(\NSym)_n \;=\; A(n,1)\qquad\text{for all } n\ge1 .
+\end{equation}
+The clause about the ``$n$-th homogeneous dimension \dots\ verifiable for $n\le10$''
+only makes sense for $\Prim(\NSym)$ itself, so the graded reading is the only one
+with checkable content. An ungraded isomorphism to an undefined object would assert
+nothing that can be checked. We refute \eqref{eq:clause}. If the conjecture is read as a conjunction
+(``$\Prim(\NSym)\cong L$'' and ``$\dim L_n=A(n,1)$''), a graded isomorphism
+transfers the second conjunct to $\Prim(\NSym)$, so refuting
+\eqref{eq:clause} refutes the conjecture. The isomorphism part is therefore never
+needed.
+
+\paragraph{Readings covered.}
+\begin{itemize}
+\item \emph{Eulerian convention.} $A(n,k)$ is the number of permutations of
+$\{1,\dots,n\}$ with $k$ descents (Graham--Knuth--Patashnik), giving
+$A(3,1)=4$. In the $1$-based convention (OEIS A008292, $T(n,k)$ = permutations with $k$
+ascending runs, i.e.\ $k-1$ descents), $A(3,1)=1$. Ascents give the same
+numbers as descents.\footnote{Other Eulerian-type numbers give the same conclusion
+at $n=3$: the type-B Eulerian numbers have $B(3,1)\in\{23,1\}$ (row $1,23,23,1$), and
+the second-order Eulerian numbers have $\langle\!\langle 3,1\rangle\!\rangle\in\{8,1\}$
+(row $1,8,6$), depending on the indexing. None of these values is $2$.}
+Section~\ref{sec:euler} shows that $A(m,1)\in\{2^m-m-1,\;1\}$
+is never $2$. So $\dim\Prim(\NSym)_3=2$ refutes \eqref{eq:clause} under every
+convention and every index shift $n\mapsto n+s$.
+\item \emph{Coefficients.} We work over $\mathbb Q$ (any field of characteristic $0$),
+the standard setting. The degree-$3$ computation is valid over every commutative
+ring: there $\Prim(\NSym)_3$ is free of rank $2$ (Remark~\ref{rem:ring}).
+\item \emph{Which algebra.} The statement explicitly says \emph{noncommutative}
+symmetric functions, i.e.\ $\NSym$ of Gelfand, Krob, Lascoux, Leclerc, Retakh and Thibon~\cite{GKLLRT}.
+For the commutative ring of symmetric functions, or for QSym, every primitive space
+is $1$-dimensional (spanned by $p_n$, respectively $M_{(n)}$). That would agree
+with the degenerate $1$-based value $A(n,1)=1$, but it is not the algebra named
+in the conjecture. The same holds for two other readings with $1$-dimensional homogeneous
+pieces: the Lie algebra of infinitesimal characters of $\NSym$ ($=\Prim(\mathrm{QSym})$)
+and the space of indecomposables $Q(\NSym)=\NSym_+/(\NSym_+)^2$. Neither is the object the
+statement names.
+\end{itemize}
+
+\section{\texorpdfstring{The Hopf algebra $\NSym$}{The Hopf algebra NSym}}
+
+$\NSym=\mathbb Q\langle S_1,S_2,\dots\rangle$ is the free associative algebra on
+noncommuting generators $S_k$ of degree $k$. Its degree-$n$ part $\NSym_n$ has
+basis $S^I=S_{i_1}S_{i_2}\cdots S_{i_\ell}$, where $I=(i_1,\dots,i_\ell)$ runs over the
+$2^{n-1}$ compositions of $n$. The coproduct is the algebra morphism
+$\Delta:\NSym\to\NSym\otimes\NSym$ with
+\[
+\Delta S_k=\sum_{i+j=k}S_i\otimes S_j\qquad(S_0=1),
+\]
+so $\Delta S^I=\Delta S_{i_1}\cdots\Delta S_{i_\ell}$ \cite[\S3]{GKLLRT}. The power sums of the
+first kind $\Psi_k$ are defined by Newton's formula
+$kS_k=\sum_{j=0}^{k-1}S_j\Psi_{k-j}$. They are primitive, and $\Prim(\NSym)$ is the free
+Lie algebra generated by $\Psi_1,\Psi_2,\dots$ \cite{GKLLRT}. We do not need
+this structure theorem for degree $3$, which we compute from scratch.
+
+Write $\bar\Delta x=\Delta x-x\otimes1-1\otimes x$ for $x$ of positive degree. Then
+$x$ is primitive iff $\bar\Delta x=0$, and $\bar\Delta$ is linear.
+
+\section{\texorpdfstring{The degree-3 primitives}{The degree-3 primitives}}
+
+\begin{lemma}\label{lem:coprod}
+In degree $3$ (basis $S_3,S_{21},S_{12},S_{111}$, where $S_{21}=S_2S_1$ etc.):
+\begin{align*}
+\bar\Delta S_3&=S_2\otimes S_1+S_1\otimes S_2,\\
+\bar\Delta S_{21}=\bar\Delta S_{12}&=S_2\otimes S_1+S_1\otimes S_2+S_{11}\otimes S_1+S_1\otimes S_{11},\\
+\bar\Delta S_{111}&=3\,S_{11}\otimes S_1+3\,S_1\otimes S_{11}.
+\end{align*}
+\end{lemma}
+\begin{proof}
+Expand the products. For example,
+$\Delta S_{21}=(S_2\otimes1+S_1\otimes S_1+1\otimes S_2)(S_1\otimes1+1\otimes S_1)
+=S_{21}\otimes1+S_2\otimes S_1+S_{11}\otimes S_1+S_1\otimes S_{11}+S_1\otimes S_2+1\otimes S_{21}$.
+$\Delta S_{12}$ gives the same six terms, with $S_{12}$ in place of $S_{21}$ in the two outer ones.
+$\Delta S_{111}=(S_1\otimes1+1\otimes S_1)^3$ has middle terms $3S_{11}\otimes S_1+3S_1\otimes S_{11}$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+$x=aS_3+bS_{21}+cS_{12}+dS_{111}$ is primitive iff
+\[
+a+b+c=0\qquad\text{and}\qquad b+c+3d=0 .
+\]
+Hence $\Prim(\NSym)_3=\{d\,(3,0,-3,1)+b\,(0,1,-1,0)\}$, and
+$\dim_{\mathbb Q}\Prim(\NSym)_3=2$. A basis is
+\[
+\Psi_3=3S_3-S_{21}-2S_{12}+S_{111},\qquad [S_2,S_1]=S_{21}-S_{12}.
+\]
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:coprod},
+$\bar\Delta x=(a+b+c)(S_2\otimes S_1+S_1\otimes S_2)+(b+c+3d)(S_{11}\otimes S_1+S_1\otimes S_{11})$.
+The four tensors $S_J\otimes S_K$ are distinct basis elements of $\NSym\otimes\NSym$,
+so $\bar\Delta x=0$ iff both brackets vanish. The two equations have
+rank $2$, with solutions $a=3d$, $c=-b-3d$ for free $b,d$, so the kernel has dimension
+$4-2=2$. $\Psi_3$ ($a,b,c,d=3,-1,-2,1$) and $[S_2,S_1]$ ($0,1,-1,0$) both satisfy the
+equations. They are independent: the $S_3$-coordinate forces the coefficient of
+$\Psi_3$ to be $0$, and then the $S_{21}$-coordinate forces the other one to be $0$.
+The expression for $\Psi_3$ follows from Newton's formula: $\Psi_1=S_1$, $\Psi_2=2S_2-S_{11}$,
+$3S_3=\Psi_3+S_1\Psi_2+S_2\Psi_1=\Psi_3+2S_{12}-S_{111}+S_{21}$.
+\end{proof}
+
+\begin{remark}\label{rem:ring}
+The proof uses no division. Over any commutative ring $R$ the module $\Prim(\NSym_R)_3$
+is free with basis $\{(3,0,-3,1),(0,1,-1,0)\}$. In particular its dimension is $2$
+over every field.
+\end{remark}
+
+\begin{lemma}[From $\mathbb Z$ to $\mathbb Q$]\label{lem:ZQ}
+Let $M$ be an integer matrix and $K_{\mathbb Q}=\{x\in\mathbb Q^N:Mx=0\}$,
+$K_{\mathbb Z}=K_{\mathbb Q}\cap\mathbb Z^N$.
+\begin{enumerate}
+\item Every $x\in K_{\mathbb Q}$ has the form $x=y/D$ with $y\in K_{\mathbb Z}$ and $D\ge1$.
+In particular $K_{\mathbb Q}$ has a $\mathbb Q$-basis of integer vectors.
+\item Integer vectors $v_1,\dots,v_m$ are $\mathbb Z$-linearly independent iff they are
+$\mathbb Q$-linearly independent.
+\end{enumerate}
+Consequently $\dim_{\mathbb Q}K_{\mathbb Q}$ is the largest $m$ such that $K_{\mathbb Z}$
+contains $m$ $\mathbb Z$-independent vectors, and every $m+1$ vectors of $K_{\mathbb Z}$ are
+then $\mathbb Z$-dependent. This is exactly the predicate \texttt{PrimDim} used in Lean.
+\end{lemma}
+\begin{proof}
+(1) Let $D$ be a common denominator of the entries of $x$. Then $y=Dx$ is integral and
+$My=DMx=0$. Scaling a $\mathbb Q$-basis this way gives an integral basis.
+(2) A $\mathbb Z$-relation is a $\mathbb Q$-relation. Conversely, multiplying a nontrivial
+$\mathbb Q$-relation $\sum c_iv_i=0$ by a common denominator of the $c_i$ gives a nontrivial
+$\mathbb Z$-relation. For the last sentence: if $d=\dim_{\mathbb Q}K_{\mathbb Q}$, then by (1)
+$K_{\mathbb Z}$ contains $d$ independent vectors. By (2), any $d+1$ vectors of
+$K_{\mathbb Z}\subseteq K_{\mathbb Q}$ are $\mathbb Z$-dependent.
+\end{proof}
+Here $\Prim(\NSym)_n$ is the kernel of the integer matrix of $\bar\Delta$ in the bases
+$S^I$ and $S^J\otimes S^K$. So \texttt{PrimDim n m} over integer coefficient vectors holds
+iff $\dim_{\mathbb Q}\Prim(\NSym)_n=m$.
+
+\section{Eulerian numbers}\label{sec:euler}
+
+\begin{lemma}\label{lem:euler}
+For $m\ge1$, the number of permutations of $\{1,\dots,m\}$ with exactly one descent is
+$2^m-m-1$. Exactly one permutation (the identity) has no descent.
+By the reversal $w\mapsto w_m\cdots w_1$, the same holds for ascents.
+\end{lemma}
+\begin{proof}
+A permutation with at most one descent is an increasing word on a set $T$ followed by
+an increasing word on its complement. It is determined by $T$, giving $2^m$ choices.
+It has no descent iff $T=\{1,\dots,k\}$ for some $0\le k\le m$, which gives $m+1$
+choices that all produce the identity. Every other $T$ gives a distinct permutation
+with exactly one descent.
+\end{proof}
+
+So $A(m,1)=2^m-m-1$ in the descent convention, giving $0,1,4,11,26,57,120,247,502,1013$
+for $m=1,\dots,10$, and $A(m,1)=1$ for all $m\ge1$ in the $1$-based convention.
+Since $2^{m+1}-(m+1)-1-(2^m-m-1)=2^m-1\ge0$, the sequence $2^m-m-1$ is
+nondecreasing. It takes the values $0,0,1,4$ at $m=0,1,2,3$, so it never equals $2$. Thus
+
+\begin{corollary}\label{cor:main}
+$\dim\Prim(\NSym)_3=2\neq A(m,1)$ for every $m\ge0$ and every convention above.
+In particular \eqref{eq:clause} fails at $n=3$: $2\ne4$ and $2\ne1$.
+\end{corollary}
+
+\section{All degrees up to 10}
+
+$\NSym$ is the universal enveloping algebra of the free Lie algebra $\Prim(\NSym)$
+generated by $\Psi_1,\Psi_2,\dots$. By Poincar\'e--Birkhoff--Witt,
+$\prod_{k\ge1}(1-t^k)^{-p_k}=\sum_n\dim\NSym_n\,t^n=\frac{1-t}{1-2t}$, where
+$p_k=\dim\Prim(\NSym)_k$. Solving for $p_k$ gives the first row of the table below. The
+same values come from a direct kernel computation and from duality with QSym
+(Section~\ref{sec:verify}).
+
+\begin{center}
+\begin{tabular}{lcccccccccc}
+\toprule
+$n$ & 1&2&3&4&5&6&7&8&9&10\\
+\midrule
+$\dim\Prim(\NSym)_n$ & 1&1&2&3&6&9&18&30&56&99\\
+$A(n,1)$, one descent & 0&1&4&11&26&57&120&247&502&1013\\
+$A(n,1)$, 1-based & 1&1&1&1&1&1&1&1&1&1\\
+\bottomrule
+\end{tabular}
+\end{center}
+Agreement with both conventions holds only at $n=2$. At $n=1$ only the $1$-based value agrees.
+From $n=3$ on, the formula fails in every degree up to $10$ under both conventions.
+Only $n=3$ is needed for the disproof.
+
+\section{Lean formalization}
+
+\texttt{lean4/Main.lean} (Lean 4.19.0, core library only, no Mathlib) contains:
+\begin{itemize}
+\item \emph{Objects.} Compositions are lists of naturals, and \texttt{comps n} lists those of $n$.
+\texttt{comps\_valid} checks that it lists $2^{n-1}$ distinct compositions of $n$ for $n\le8$.
+A basis tensor $S^J\otimes S^K$ is the pair $(J,K)$, and a tensor is a formal integer
+combination of such pairs, compared coefficientwise (\texttt{coeffT}).
+\texttt{deltaS I} computes $\Delta S^I$ as the product of the $\Delta S_{i}$ in the
+tensor-square algebra. An element $\sum_I x(I)S^I$ of degree $n$ is given by its coefficient
+function. \texttt{IsPrimitive n x} says that every coefficient of
+$\sum_I x(I)(\Delta S^I-S^I\otimes1-1\otimes S^I)$ vanishes. \texttt{PrimDim n m} says
+that there are $m$ linearly independent primitives and that every $m+1$ primitives
+are linearly dependent, which is the definition of dimension. Coefficients are integers. By Lemma~\ref{lem:ZQ}, this computes the $\mathbb Q$-dimension.
+\item \texttt{isPrimitive\_three\_iff}: Theorem~\ref{thm:main}'s criterion, for all $x$.
+It uses a support lemma: only finitely many keys can carry nonzero coefficients.
+The coefficient table on those keys is evaluated by \texttt{decide}.
+\item \texttt{primDim\_three : PrimDim 3 2}. The witnesses are $\Psi_3$ and $[S_2,S_1]$.
+For the upper bound, any three primitives satisfy an explicit integer relation built from
+$2\times2$ minors (\texttt{dep3}, \texttt{three\_dep}).
+\item \texttt{primDim\_three\_unique}: \texttt{PrimDim 3 m} implies $m=2$.
+\item Eulerian numbers: \texttt{perms n} enumerates permutations of $[1,\dots,n]$. For $n\le5$
+it lists $n!$ distinct permutations, and for $n=3$ the membership criterion is checked.
+\texttt{eulerDes0}, \texttt{eulerDes1}, \texttt{eulerAsc0} and \texttt{eulerAsc1}
+count permutations by descents or ascents, $0$- or $1$-based.
+\texttt{eulerian\_three} gives $A(3,1)=4,1,4,1$.
+\texttt{eulerian\_ne\_two} shows that none of the four equals $2$ at $m\le6$.
+\item \texttt{DimClause A}: $\forall n\ge1$, \texttt{PrimDim n (A n 1)}.
+\texttt{conjecture\_00000000438\_false} proves $\neg$\texttt{DimClause} for all four
+conventions. \texttt{conjecture\_00000000438\_false\_degree3} packages
+$\dim\Prim(\NSym)_3=2$ (existence and uniqueness) and $\dim\ne A(m,1)$ for every
+$m\le6$ and every convention.
+\end{itemize}
+There is no \texttt{sorry}, \texttt{native\_decide} or added axiom. \texttt{\#print axioms}
+reports at most \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
+
+\paragraph{Not in Lean.} The statement $A(m,1)\ne2$ for $m\ge7$ (Lemma~\ref{lem:euler}),
+the dimensions in degrees $n\ne3$, and the $\mathbb Z$-to-$\mathbb Q$ bridge (Lemma~\ref{lem:ZQ}) are
+proved here. The first two are also checked numerically by \texttt{verify.py}. None of them is needed for the
+refutation at $n=3$ under the stated conventions. The undefined
+``generalized Lie $n$-algebra'' is not formalized and is not needed.
+
+\section{Independent verification}\label{sec:verify}
+
+\texttt{verify.py} uses only the Python 3 standard library. It computes
+$\dim\Prim(\NSym)_n$ in three ways:
+\begin{enumerate}
+\item as the kernel of $\bar\Delta$, by exact rational elimination for $n\le8$ and modulo
+the prime $2^{61}-1$ for $n\le10$;
+\item by duality with QSym, as $2^{n-1}$ minus the rank of the degree-$n$ quasi-shuffle
+products $M_\alpha M_\beta$, for $n\le7$;
+\item from the PBW identity above, for $n\le10$.
+\end{enumerate}
+All three agree. It computes Eulerian numbers by brute force over all permutations
+(descents and ascents, $n\le9$) and by the closed formula ($n\le10$), and it prints
+the degree-$3$ computation in full.
+
+\begin{thebibliography}{9}
+\bibitem{GKLLRT} I.~M.~Gelfand, D.~Krob, A.~Lascoux, B.~Leclerc, V.~S.~Retakh, J.-Y.~Thibon,
+\emph{Noncommutative symmetric functions}, Adv.\ Math.\ 112 (1995), 218--348.
+\bibitem{GKP} R.~L.~Graham, D.~E.~Knuth, O.~Patashnik, \emph{Concrete Mathematics}, 2nd ed.,
+Addison--Wesley, 1994, \S6.2.
+\bibitem{OEIS} OEIS Foundation, \emph{The On-Line Encyclopedia of Integer Sequences},
+A008292 (Eulerian numbers) and A000295 ($2^n-n-1$).
+\end{thebibliography}
+
+\end{document}

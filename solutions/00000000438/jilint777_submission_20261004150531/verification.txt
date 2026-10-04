@@ -1,0 +1,36 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:389:0: 'NSym.isPrimitive_three_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:390:0: 'NSym.primDim_three' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:391:0: 'NSym.primDim_three_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:392:0: 'NSym.eulerian_three' does not depend on any axioms
+info: ././././Main.lean:393:0: 'NSym.eulerian_ne_two' does not depend on any axioms
+info: ././././Main.lean:394:0: 'NSym.conjecture_00000000438_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:395:0: 'NSym.conjecture_00000000438_false_degree3' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+degree 3 basis: [(1, 1, 1), (1, 2), (2, 1), (3,)]
+  reduced coproduct of S^(1, 1, 1): {((1,), (1, 1)): 3, ((1, 1), (1,)): 3}
+  reduced coproduct of S^(1, 2): {((1,), (1, 1)): 1, ((1,), (2,)): 1, ((1, 1), (1,)): 1, ((2,), (1,)): 1}
+  reduced coproduct of S^(2, 1): {((1,), (1, 1)): 1, ((1,), (2,)): 1, ((1, 1), (1,)): 1, ((2,), (1,)): 1}
+  reduced coproduct of S^(3,): {((1,), (2,)): 1, ((2,), (1,)): 1}
+  Psi_3 primitive: True
+  [S_2,S_1] primitive: True
+dim P_n (direct kernel over Q), n=1..8: [1, 1, 2, 3, 6, 9, 18, 30]
+dim P_n (direct kernel mod p),  n=1..10: [1, 1, 2, 3, 6, 9, 18, 30, 56, 99]
+dim P_n (QSym duality),         n=1..7: [1, 1, 2, 3, 6, 9, 18]
+dim P_n (Hilbert series),       n=1..10: [1, 1, 2, 3, 6, 9, 18, 30, 56, 99]
+A(n,1), 0-based (perms with 1 descent),  n=1..10: [0, 1, 4, 11, 26, 57, 120, 247, 502, 1013]
+A(n,1), 1-based (perms with 1 run),      n=1..10: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+brute force over permutations agrees with the formula for n <= 9
+n in 1..10 where dim P_n differs from A(n,1) under some convention: [1, 3, 4, 5, 6, 7, 8, 9, 10]
+n in 1..10 where dim P_n differs from A(n,1) under every convention: [3, 4, 5, 6, 7, 8, 9, 10]
+smallest such n: 3  dim P_3 = 2, A(3,1) in {4, 1}
+2 occurs among A(m,1), m < 64, any convention: False
+ALL CHECKS PASSED
+exit 0
