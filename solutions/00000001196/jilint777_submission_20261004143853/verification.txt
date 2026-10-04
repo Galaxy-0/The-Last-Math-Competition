@@ -1,0 +1,75 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:485:0: 'SchurQ.coeff_insertTerm' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:486:0: 'SchurQ.q_relation' does not depend on any axioms
+info: ././././Main.lean:487:0: 'SchurQ.P_exact' does not depend on any axioms
+info: ././././Main.lean:488:0: 'SchurQ.Q321_eq' does not depend on any axioms
+info: ././././Main.lean:489:0: 'SchurQ.solveQ' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:490:0: 'SchurQ.solveP' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:491:0: 'SchurQ.QQ_in_Q' does not depend on any axioms
+info: ././././Main.lean:492:0: 'SchurQ.PP_in_P' does not depend on any axioms
+info: ././././Main.lean:493:0: 'SchurQ.expansion_exists' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:494:0: 'SchurQ.expansion_unique' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:495:0: 'SchurQ.max_coeff' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:496:0: 'SchurQ.value_fails' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:497:0: 'SchurQ.bound_fails' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:498:0: 'SchurQ.value_clause_false_P' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:499:0: 'SchurQ.value_clause_false_Q' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:500:0: 'SchurQ.conjecture_00000001196_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:501:0: 'SchurQ.bound_holds_P' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:502:0: 'SchurQ.value_holds_PQP' depends on axioms: [propext, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+q_r = sum_{a+b=r} e_a h_b = Q_(r) (tableaux), r = 0..8, 3 variables: OK
+relation sum_i (-1)^i q_i q_(r-i) = 0, r = 1..8: OK
+Pfaffian definition of Q_nu = marked-shifted-tableaux definition, all strict nu |- 6, 3 variables: OK
+Q_nu = 2^l(nu) P_nu (tableaux), all strict nu |- 6: OK
+
+k  claim2^(k-1) | max coefficient under readings P*P in P, Q*Q in Q, P*Q in P, P*Q in Q, Q*Q in P, P*P in Q
+1      1        | 1  2  2  1  4  1/2
+2      2        | 2  2  4  1  8  1/2
+3      4        | 2  2  4  1  8  1/2
+4      8        | 2  2  4  1  8  1/2
+5     16        | 2  2  4  1  8  1/2
+
+k=3: P*P = 1*P6 + 2*P51 + 2*P42
+k=3: Q*Q = 2*Q6 + 2*Q51 + 2*Q42
+k=3: P*Q = 2*P6 + 4*P51 + 4*P42
+k=3: P*Q = 1*Q6 + 1*Q51 + 1*Q42
+k=3: Q*Q = 4*P6 + 8*P51 + 8*P42
+k=3: P*P = 1/2*Q6 + 1/2*Q51 + 1/2*Q42
+
+k=4: P*P = 1*P8 + 2*P71 + 2*P62 + 2*P53
+k=4: Q*Q = 2*Q8 + 2*Q71 + 2*Q62 + 2*Q53
+k=4: P*Q = 2*P8 + 4*P71 + 4*P62 + 4*P53
+k=4: P*Q = 1*Q8 + 1*Q71 + 1*Q62 + 1*Q53
+k=4: Q*Q = 4*P8 + 8*P71 + 8*P62 + 8*P53
+k=4: P*P = 1/2*Q8 + 1/2*Q71 + 1/2*Q62 + 1/2*Q53
+
+Q_k Q_k = 2 sum_j Q_(2k-j,j) and P_k P_k = P_(2k) + 2 sum_(j>=1) P_(2k-j,j), k = 1..5: OK
+smallest k with M((k),(k)) != 2^(k-1) in the standard readings (P*P in P, Q*Q in Q): 3
+
+k=3, standard readings (Stembridge P*P in P; Q*Q in Q): max coefficient = 2 != 4: True
+  reading P*P in P: M((3),(3)) = 2; value clause M = 4: False; bound clause M <= 2: True
+  reading Q*Q in Q: M((3),(3)) = 2; value clause M = 4: False; bound clause M <= 2: True
+  reading P*Q in P: M((3),(3)) = 4; value clause M = 4: True; bound clause M <= 2: False
+  reading P*Q in Q: M((3),(3)) = 1; value clause M = 4: False; bound clause M <= 2: True
+  reading Q*Q in P: M((3),(3)) = 8; value clause M = 4: False; bound clause M <= 2: False
+  reading P*P in Q: M((3),(3)) = 1/2; value clause M = 4: False; bound clause M <= 2: True
+k=3: under every reading, the value clause or the bound clause fails: True
+strict partitions of 6: [(6,), (5, 1), (4, 2), (3, 2, 1)]
+coefficients of Q_nu at x^(6,0,0), x^(5,1,0), x^(4,2,0), x^(3,2,1):
+  Q6 [2, 4, 4, 8]
+  Q51 [0, 4, 8, 24]
+  Q42 [0, 0, 4, 24]
+  Q321 [0, 0, 0, 8]
+coefficients of Q3*Q3 at the same monomials: [4, 16, 32, 112]
+coefficients of P3*P3 at the same monomials: [1, 4, 8, 28]
+coefficients of P3*Q3 at the same monomials: [2, 8, 16, 56]
+ALL CHECKS PASSED
+exit 0
