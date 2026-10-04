@@ -1,0 +1,76 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prb}{\mathbb P}
+\title{Conjecture 00000006480:\\Equal covariance, different maximum laws}
+\author{C0ldSmi1e}
+\date{4 October 2026}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+\begin{abstract}
+Three independent fair signs $(A,B,C)$ and the process $(A,B,AB)$ have the same identity covariance matrix. Their maxima have different distributions: the first is $-1$ with probability $1/8$, whereas the second is always $1$. Both processes are non-Gaussian, and their joint laws differ. These explicit finite processes prove the stated existential conjecture.
+\end{abstract}
+
+\section{Source statement and scope}
+The English source says:
+\begin{quote}
+Definition: Covariance and extremal distributions are two layers. Conjecture: There exist two processes with the same covariance matrix but different extremal distributions, and the separation is realized by an explicit non-Gaussian pair with the same covariance but different jointness. (same covariance-different extreme non-Gaussian separation)
+\end{quote}
+The exact English and Chinese statement is included in \texttt{conjecture.md}. Both versions are existential. Neither specifies an infinite index set, stationarity, continuity, nor an asymptotic normalization. We use processes indexed by three times and take the extremal distribution to be the probability law of the maximum over those times. A process is an indexed family of random variables; finite index sets are allowed in the standard definition~\cite[\S2.2]{rw}.
+
+\section{The explicit probability model}
+Let $\Omega=\{-1,1\}^3$ with uniform probability $1/8$ on each of its eight points. Write $A,B,C$ for the three coordinate signs, and set
+\[
+ (X_0,X_1,X_2)=(A,B,C),\qquad
+ (Y_0,Y_1,Y_2)=(A,B,AB).
+\]
+This is a full specification of the processes and their dependence. All random variables and their products are measurable and integrable on this finite probability space. For a process $Z$, use the usual definitions
+\[
+ m_Z(i)=\E[Z_i],\qquad
+ \operatorname{Cov}_Z(i,j)=\E[(Z_i-m_Z(i))(Z_j-m_Z(j))].
+\]
+Each coordinate in either process is a fair sign, with mean zero and square one. For $X$ the distinct-coordinate products have mean zero. For $Y$ they are $AB$, $A(AB)=B$, and $B(AB)=A$, also with mean zero. Hence
+\[
+ m_X=m_Y=0,\qquad \operatorname{Cov}_X=\operatorname{Cov}_Y=I_3.
+\]
+
+\clearpage
+\section{Different extreme and joint laws; non-Gaussianity}
+\begin{theorem}
+The processes $X,Y$ have identical covariance matrices, distinct joint laws and distinct maximum laws, and neither is Gaussian.
+\end{theorem}
+\begin{proof}
+The covariance equality was computed above. Write $M_Z=\max\{Z_0,Z_1,Z_2\}$. For $X$, the event $M_X=-1$ is exactly $A=B=C=-1$, one of eight equally likely outcomes. For $Y$, if either $A$ or $B$ is $1$, the maximum is $1$; if both are $-1$, then $AB=1$, so again the maximum is $1$. Thus
+\[
+\begin{array}{c|cc}
+ & \Prb(M_Z=-1) & \Prb(M_Z=1) \\ \hline
+ Z=X & 1/8 & 7/8 \\
+ Z=Y & 0 & 1
+\end{array}
+\]
+The singleton $\{-1\}$ therefore distinguishes their actual maximum laws. The singleton vector $\{(-1,-1,-1)\}$ similarly has joint-law probability $1/8$ for $X$ and zero for $Y$, proving different joint laws directly.
+
+A finite real process is Gaussian when every real linear combination of its coordinates has a Gaussian law, allowing variance zero~\cite[\S2.3.4]{gardner}. In particular, each coordinate of a Gaussian process has a Gaussian law. Here the first coordinate of either process is a fair sign and has an atom of mass $1/2$ at $-1$. A Gaussian law with positive variance is absolutely continuous with respect to Lebesgue measure and has no atoms. A Gaussian law with zero variance is a point mass, so every singleton has mass zero or one. Neither case permits mass $1/2$. Both processes are consequently non-Gaussian.
+\end{proof}
+
+\section{Formal correspondence and reproduction}
+The Lean model uses the actual uniform PMF measure on the discrete space \texttt{Fin 8}. Its outcomes enumerate all eight sign triples, from $+++$ to $---$ in lexicographic order with $+$ first. The process $Y$ is constructed from $X$ as above.
+
+Covariance is the centered Bochner integral displayed above. Integrability is proved, and the finite-PMF integral formula computes its actual entries. Joint and maximum laws are actual measure pushforwards. Singleton probabilities are calculated from these measures. The nested maximum is proved to bound every coordinate and to be attained by one of them, so it is the maximum over the complete index set.
+
+The Gaussian-process predicate uses Mathlib's \texttt{gaussianReal} laws for every real linear combination of coordinates, including variance zero. The final theorem supplies the explicit processes, probability measure, measurability, integrability, both non-Gaussian properties, equal covariance and both unequal laws.
+
+Lean 4.19.0 and Mathlib v4.19.0 are pinned. The README gives build, strict replay and theorem-axiom audit commands. All computations are exact Lean proofs; no numerical program is needed. Internal verification is separate from maintainer acceptance. Source and rules were checked at revision \texttt{0862407e}.
+
+\begin{thebibliography}{2}\small
+\bibitem{rw} C. E. Rasmussen and C. K. I. Williams. \emph{Gaussian Processes for Machine Learning}. MIT Press, 2006, \S2.2, pp.~13--14. \href{https://gaussianprocess.org/gpml/chapters/RW2.pdf}{Author-hosted chapter}. Standard process definition, mean/covariance functions and finite-index convention.
+\bibitem{gardner} W. A. Gardner. \emph{Introduction to Random Processes with Applications to Signals and Systems}. \S2.3.4, p.~39. \href{https://faculty.engineering.ucdavis.edu/gardner/wp-content/uploads/sites/146/2014/05/Introduction_to_Random_Processes_with_applications_to_Signal.pdf}{Author-hosted text}. Linear-combination definition of joint Gaussianity.
+\end{thebibliography}
+\end{document}

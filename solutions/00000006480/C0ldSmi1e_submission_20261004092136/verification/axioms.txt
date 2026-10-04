@@ -1,0 +1,152 @@
+@[reducible] def Conjecture6480.Ω : Type :=
+Fin 8
+def Conjecture6480.μ : MeasureTheory.Measure Conjecture6480.Ω :=
+(PMF.uniformOfFintype Conjecture6480.Ω).toMeasure
+def Conjecture6480.X : Fin 3 → Conjecture6480.Ω → ℝ :=
+![![1, 1, 1, 1, -1, -1, -1, -1], ![1, 1, -1, -1, 1, 1, -1, -1], ![1, -1, 1, -1, 1, -1, 1, -1]]
+def Conjecture6480.Y : Fin 3 → Conjecture6480.Ω → ℝ :=
+![Conjecture6480.X 0, Conjecture6480.X 1, fun ω => Conjecture6480.X 0 ω * Conjecture6480.X 1 ω]
+def Conjecture6480.mean : (Fin 3 → Conjecture6480.Ω → ℝ) → Fin 3 → ℝ :=
+fun Z i => ∫ (ω : Conjecture6480.Ω), Z i ω ∂Conjecture6480.μ
+def Conjecture6480.covarianceMatrix : (Fin 3 → Conjecture6480.Ω → ℝ) → Matrix (Fin 3) (Fin 3) ℝ :=
+fun Z i j =>
+  ∫ (ω : Conjecture6480.Ω), (Z i ω - Conjecture6480.mean Z i) * (Z j ω - Conjecture6480.mean Z j) ∂Conjecture6480.μ
+def Conjecture6480.jointLaw : (Fin 3 → Conjecture6480.Ω → ℝ) → MeasureTheory.Measure (Fin 3 → ℝ) :=
+fun Z => MeasureTheory.Measure.map (fun ω i => Z i ω) Conjecture6480.μ
+def Conjecture6480.peak : (Fin 3 → Conjecture6480.Ω → ℝ) → Conjecture6480.Ω → ℝ :=
+fun Z ω => max (Z 0 ω) (max (Z 1 ω) (Z 2 ω))
+def Conjecture6480.extremeLaw : (Fin 3 → Conjecture6480.Ω → ℝ) → MeasureTheory.Measure ℝ :=
+fun Z => MeasureTheory.Measure.map (Conjecture6480.peak Z) Conjecture6480.μ
+def Conjecture6480.allNegative : Fin 3 → ℝ :=
+fun x => -1
+def Conjecture6480.GaussianProcess.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] → MeasureTheory.Measure Ω → (Fin 3 → Ω → ℝ) → Prop :=
+fun {Ω} [MeasurableSpace Ω] μ Z =>
+  ∀ (c : Fin 3 → ℝ), ∃ a v, MeasureTheory.Measure.map (fun ω => ∑ i, c i * Z i ω) μ = ProbabilityTheory.gaussianReal a v
+def Conjecture6480.ExplicitWitnessClaim : Prop :=
+MeasureTheory.IsProbabilityMeasure Conjecture6480.μ ∧
+  ∃ P Q,
+    (∀ (i : Fin 3), Measurable (P i) ∧ Measurable (Q i)) ∧
+      (∀ (i : Fin 3),
+          MeasureTheory.Integrable (P i) Conjecture6480.μ ∧ MeasureTheory.Integrable (Q i) Conjecture6480.μ) ∧
+        (∀ (i j : Fin 3),
+            MeasureTheory.Integrable (fun ω => (P i ω - Conjecture6480.mean P i) * (P j ω - Conjecture6480.mean P j))
+                Conjecture6480.μ ∧
+              MeasureTheory.Integrable (fun ω => (Q i ω - Conjecture6480.mean Q i) * (Q j ω - Conjecture6480.mean Q j))
+                Conjecture6480.μ) ∧
+          ¬Conjecture6480.GaussianProcess Conjecture6480.μ P ∧
+            ¬Conjecture6480.GaussianProcess Conjecture6480.μ Q ∧
+              Conjecture6480.covarianceMatrix P = Conjecture6480.covarianceMatrix Q ∧
+                Conjecture6480.jointLaw P ≠ Conjecture6480.jointLaw Q ∧
+                  Conjecture6480.extremeLaw P ≠ Conjecture6480.extremeLaw Q
+Conjecture6480.measurable_on_Ω.{u_1} {α : Type u_1} [MeasurableSpace α] (f : Conjecture6480.Ω → α) : Measurable f
+'Conjecture6480.measurable_on_Ω' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.integrable_on_Ω (f : Conjecture6480.Ω → ℝ) : MeasureTheory.Integrable f Conjecture6480.μ
+'Conjecture6480.integrable_on_Ω' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.coordinates_measurable (Z : Fin 3 → Conjecture6480.Ω → ℝ) (i : Fin 3) : Measurable (Z i)
+'Conjecture6480.coordinates_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.coordinates_integrable (Z : Fin 3 → Conjecture6480.Ω → ℝ) (i : Fin 3) :
+  MeasureTheory.Integrable (Z i) Conjecture6480.μ
+'Conjecture6480.coordinates_integrable' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.covariance_integrable (Z : Fin 3 → Conjecture6480.Ω → ℝ) (i j : Fin 3) :
+  MeasureTheory.Integrable (fun ω => (Z i ω - Conjecture6480.mean Z i) * (Z j ω - Conjecture6480.mean Z j))
+    Conjecture6480.μ
+'Conjecture6480.covariance_integrable' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.peak_measurable (Z : Fin 3 → Conjecture6480.Ω → ℝ) : Measurable (Conjecture6480.peak Z)
+'Conjecture6480.peak_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.peak_integrable (Z : Fin 3 → Conjecture6480.Ω → ℝ) :
+  MeasureTheory.Integrable (Conjecture6480.peak Z) Conjecture6480.μ
+'Conjecture6480.peak_integrable' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.joint_measurable (Z : Fin 3 → Conjecture6480.Ω → ℝ) : Measurable fun ω i => Z i ω
+'Conjecture6480.joint_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.integral_uniform (f : Conjecture6480.Ω → ℝ) :
+  ∫ (ω : Conjecture6480.Ω), f ω ∂Conjecture6480.μ = ∑ ω, 1 / 8 * f ω
+'Conjecture6480.integral_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.measure_uniform (s : Set Conjecture6480.Ω) : Conjecture6480.μ s = ∑ ω, if ω ∈ s then 1 / 8 else 0
+'Conjecture6480.measure_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.means_X (i : Fin 3) : Conjecture6480.mean Conjecture6480.X i = 0
+'Conjecture6480.means_X' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.means_Y (i : Fin 3) : Conjecture6480.mean Conjecture6480.Y i = 0
+'Conjecture6480.means_Y' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.covariance_X : Conjecture6480.covarianceMatrix Conjecture6480.X = 1
+'Conjecture6480.covariance_X' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.covariance_Y : Conjecture6480.covarianceMatrix Conjecture6480.Y = 1
+'Conjecture6480.covariance_Y' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.coordinate0_atom_X : (MeasureTheory.Measure.map (Conjecture6480.X 0) Conjecture6480.μ) {-1} = 1 / 2
+'Conjecture6480.coordinate0_atom_X' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.coordinate0_atom_Y : (MeasureTheory.Measure.map (Conjecture6480.Y 0) Conjecture6480.μ) {-1} = 1 / 2
+'Conjecture6480.coordinate0_atom_Y' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.coordinate_atom_X (i : Fin 3) :
+  (MeasureTheory.Measure.map (Conjecture6480.X i) Conjecture6480.μ) {-1} = 1 / 2
+'Conjecture6480.coordinate_atom_X' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.coordinate_atom_Y (i : Fin 3) :
+  (MeasureTheory.Measure.map (Conjecture6480.Y i) Conjecture6480.μ) {-1} = 1 / 2
+'Conjecture6480.coordinate_atom_Y' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.joint_negative_X : (Conjecture6480.jointLaw Conjecture6480.X) {Conjecture6480.allNegative} = 1 / 8
+'Conjecture6480.joint_negative_X' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.joint_negative_Y : (Conjecture6480.jointLaw Conjecture6480.Y) {Conjecture6480.allNegative} = 0
+'Conjecture6480.joint_negative_Y' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.extreme_negative_X : (Conjecture6480.extremeLaw Conjecture6480.X) {-1} = 1 / 8
+'Conjecture6480.extreme_negative_X' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.extreme_negative_Y : (Conjecture6480.extremeLaw Conjecture6480.Y) {-1} = 0
+'Conjecture6480.extreme_negative_Y' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.peak_Y_eq_one (ω : Conjecture6480.Ω) : Conjecture6480.peak Conjecture6480.Y ω = 1
+'Conjecture6480.peak_Y_eq_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.extremeLaw_Y : Conjecture6480.extremeLaw Conjecture6480.Y = MeasureTheory.Measure.dirac 1
+'Conjecture6480.extremeLaw_Y' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.extremeLaw_X :
+  Conjecture6480.extremeLaw Conjecture6480.X =
+    (1 / 8) • MeasureTheory.Measure.dirac (-1) + (7 / 8) • MeasureTheory.Measure.dirac 1
+'Conjecture6480.extremeLaw_X' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.μ_probability : MeasureTheory.IsProbabilityMeasure Conjecture6480.μ
+'Conjecture6480.μ_probability' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.jointLaw_probability (Z : Fin 3 → Conjecture6480.Ω → ℝ) :
+  MeasureTheory.IsProbabilityMeasure (Conjecture6480.jointLaw Z)
+'Conjecture6480.jointLaw_probability' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.extremeLaw_probability (Z : Fin 3 → Conjecture6480.Ω → ℝ) :
+  MeasureTheory.IsProbabilityMeasure (Conjecture6480.extremeLaw Z)
+'Conjecture6480.extremeLaw_probability' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.gaussianReal_singleton_zero_or_one (a : ℝ) (v : NNReal) (x : ℝ) :
+  (ProbabilityTheory.gaussianReal a v) {x} = 0 ∨ (ProbabilityTheory.gaussianReal a v) {x} = 1
+'Conjecture6480.gaussianReal_singleton_zero_or_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.not_gaussianReal_of_intermediate_atom (ν : MeasureTheory.Measure ℝ) (x : ℝ) (hzero : ν {x} ≠ 0)
+  (hone : ν {x} ≠ 1) (a : ℝ) (v : NNReal) : ν ≠ ProbabilityTheory.gaussianReal a v
+'Conjecture6480.not_gaussianReal_of_intermediate_atom' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.not_gaussianReal_of_half_atom (ν : MeasureTheory.Measure ℝ) (x : ℝ) (hhalf : ν {x} = 1 / 2) (a : ℝ)
+  (v : NNReal) : ν ≠ ProbabilityTheory.gaussianReal a v
+'Conjecture6480.not_gaussianReal_of_half_atom' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.GaussianProcess.coordinate.{u_1} {Ω : Type u_1} [MeasurableSpace Ω] {μ : MeasureTheory.Measure Ω}
+  {Z : Fin 3 → Ω → ℝ} (hG : Conjecture6480.GaussianProcess μ Z) (i : Fin 3) :
+  ∃ a v, MeasureTheory.Measure.map (Z i) μ = ProbabilityTheory.gaussianReal a v
+'Conjecture6480.GaussianProcess.coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.not_gaussianProcess_of_half_atom.{u_1} {Ω : Type u_1} [MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+  (Z : Fin 3 → Ω → ℝ) (i : Fin 3) (x : ℝ) (hhalf : (MeasureTheory.Measure.map (Z i) μ) {x} = 1 / 2) :
+  ¬Conjecture6480.GaussianProcess μ Z
+'Conjecture6480.not_gaussianProcess_of_half_atom' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.not_gaussianProcess_of_coordinate_zero_half_atom.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  (μ : MeasureTheory.Measure Ω) (Z : Fin 3 → Ω → ℝ) (x : ℝ) (hhalf : (MeasureTheory.Measure.map (Z 0) μ) {x} = 1 / 2) :
+  ¬Conjecture6480.GaussianProcess μ Z
+'Conjecture6480.not_gaussianProcess_of_coordinate_zero_half_atom' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Conjecture6480.same_covariance :
+  Conjecture6480.covarianceMatrix Conjecture6480.X = Conjecture6480.covarianceMatrix Conjecture6480.Y
+'Conjecture6480.same_covariance' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.different_joint_laws :
+  Conjecture6480.jointLaw Conjecture6480.X ≠ Conjecture6480.jointLaw Conjecture6480.Y
+'Conjecture6480.different_joint_laws' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.different_extreme_laws :
+  Conjecture6480.extremeLaw Conjecture6480.X ≠ Conjecture6480.extremeLaw Conjecture6480.Y
+'Conjecture6480.different_extreme_laws' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.X_nonGaussian : ¬Conjecture6480.GaussianProcess Conjecture6480.μ Conjecture6480.X
+'Conjecture6480.X_nonGaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.Y_nonGaussian : ¬Conjecture6480.GaussianProcess Conjecture6480.μ Conjecture6480.Y
+'Conjecture6480.Y_nonGaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.coordinate_le_peak (Z : Fin 3 → Conjecture6480.Ω → ℝ) (ω : Conjecture6480.Ω) (i : Fin 3) :
+  Z i ω ≤ Conjecture6480.peak Z ω
+'Conjecture6480.coordinate_le_peak' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.peak_attained (Z : Fin 3 → Conjecture6480.Ω → ℝ) (ω : Conjecture6480.Ω) :
+  ∃ i, Conjecture6480.peak Z ω = Z i ω
+'Conjecture6480.peak_attained' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6480.conjecture_true : Conjecture6480.ExplicitWitnessClaim
+'Conjecture6480.conjecture_true' depends on axioms: [propext, Classical.choice, Quot.sound]

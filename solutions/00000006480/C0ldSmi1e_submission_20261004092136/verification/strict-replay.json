@@ -1,0 +1,890 @@
+{
+  "started_utc": "2026-10-04T09:24:50.544944+00:00",
+  "source_root": "/private/tmp/tlmc6480-proof",
+  "independent_root": "/private/tmp/tlmc6480-independent",
+  "dependency_root": "/private/tmp/tlmc310-proof/.lake/packages",
+  "fresh_build_outputs_absent": true,
+  "copied_files": [
+    "Conjecture6480/Processes.lean",
+    "Conjecture6480/Gaussian.lean",
+    "Conjecture6480.lean",
+    "Check.lean",
+    "lakefile.toml",
+    "lake-manifest.json",
+    "lean-toolchain"
+  ],
+  "source_sha256": {
+    "Conjecture6480/Processes.lean": "05ff195f6231ba5828dc3336b35915071e88d56125bcec6dcc2d9f20c877d3fa",
+    "Conjecture6480/Gaussian.lean": "79724535556a8fcf37f44ca39c2f6a13b21976b3e0d82cb139bfc241ce8d039c",
+    "Conjecture6480.lean": "fd0f1a24e7f518a424facb259466278ba23a31b271fc805174e7673a73371ac8",
+    "Check.lean": "87e80f24c4e93586b4a9dd72f1ba1d888dd91df641bb0df69de1a76c6c43d7fc",
+    "lakefile.toml": "be8c185557c71b64316e70dc75536f58f17741b857128203dcfeed9139ed31d4",
+    "lake-manifest.json": "5d0955d3640a259fe42ef233a3861572564c9837c3e38c5c793b8c42ff7b07f5",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "dependencies": [
+    {
+      "name": "mathlib",
+      "expected_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "actual_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "plausible",
+      "expected_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "actual_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "expected_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "actual_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "importGraph",
+      "expected_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "actual_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "proofwidgets",
+      "expected_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "actual_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "aesop",
+      "expected_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "actual_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Qq",
+      "expected_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "actual_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "batteries",
+      "expected_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "actual_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Cli",
+      "expected_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "actual_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    }
+  ],
+  "strict_replay": [
+    {
+      "file": "Conjecture6480/Processes.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture6480/Processes.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.102,
+      "output": ""
+    },
+    {
+      "file": "Conjecture6480/Gaussian.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture6480/Gaussian.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.54,
+      "output": ""
+    },
+    {
+      "file": "Conjecture6480.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture6480.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.569,
+      "output": ""
+    },
+    {
+      "file": "Check.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Check.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 10.965,
+      "output": "@[reducible] def Conjecture6480.\u03a9 : Type :=\nFin 8\ndef Conjecture6480.\u03bc : MeasureTheory.Measure Conjecture6480.\u03a9 :=\n(PMF.uniformOfFintype Conjecture6480.\u03a9).toMeasure\ndef Conjecture6480.X : Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d :=\n![![1, 1, 1, 1, -1, -1, -1, -1], ![1, 1, -1, -1, 1, 1, -1, -1], ![1, -1, 1, -1, 1, -1, 1, -1]]\ndef Conjecture6480.Y : Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d :=\n![Conjecture6480.X 0, Conjecture6480.X 1, fun \u03c9 => Conjecture6480.X 0 \u03c9 * Conjecture6480.X 1 \u03c9]\ndef Conjecture6480.mean : (Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) \u2192 Fin 3 \u2192 \u211d :=\nfun Z i => \u222b (\u03c9 : Conjecture6480.\u03a9), Z i \u03c9 \u2202Conjecture6480.\u03bc\ndef Conjecture6480.covarianceMatrix : (Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) \u2192 Matrix (Fin 3) (Fin 3) \u211d :=\nfun Z i j =>\n  \u222b (\u03c9 : Conjecture6480.\u03a9), (Z i \u03c9 - Conjecture6480.mean Z i) * (Z j \u03c9 - Conjecture6480.mean Z j) \u2202Conjecture6480.\u03bc\ndef Conjecture6480.jointLaw : (Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) \u2192 MeasureTheory.Measure (Fin 3 \u2192 \u211d) :=\nfun Z => MeasureTheory.Measure.map (fun \u03c9 i => Z i \u03c9) Conjecture6480.\u03bc\ndef Conjecture6480.peak : (Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) \u2192 Conjecture6480.\u03a9 \u2192 \u211d :=\nfun Z \u03c9 => max (Z 0 \u03c9) (max (Z 1 \u03c9) (Z 2 \u03c9))\ndef Conjecture6480.extremeLaw : (Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) \u2192 MeasureTheory.Measure \u211d :=\nfun Z => MeasureTheory.Measure.map (Conjecture6480.peak Z) Conjecture6480.\u03bc\ndef Conjecture6480.allNegative : Fin 3 \u2192 \u211d :=\nfun x => -1\ndef Conjecture6480.GaussianProcess.{u_1} : {\u03a9 : Type u_1} \u2192\n  [inst : MeasurableSpace \u03a9] \u2192 MeasureTheory.Measure \u03a9 \u2192 (Fin 3 \u2192 \u03a9 \u2192 \u211d) \u2192 Prop :=\nfun {\u03a9} [MeasurableSpace \u03a9] \u03bc Z =>\n  \u2200 (c : Fin 3 \u2192 \u211d), \u2203 a v, MeasureTheory.Measure.map (fun \u03c9 => \u2211 i, c i * Z i \u03c9) \u03bc = ProbabilityTheory.gaussianReal a v\ndef Conjecture6480.ExplicitWitnessClaim : Prop :=\nMeasureTheory.IsProbabilityMeasure Conjecture6480.\u03bc \u2227\n  \u2203 P Q,\n    (\u2200 (i : Fin 3), Measurable (P i) \u2227 Measurable (Q i)) \u2227\n      (\u2200 (i : Fin 3),\n          MeasureTheory.Integrable (P i) Conjecture6480.\u03bc \u2227 MeasureTheory.Integrable (Q i) Conjecture6480.\u03bc) \u2227\n        (\u2200 (i j : Fin 3),\n            MeasureTheory.Integrable (fun \u03c9 => (P i \u03c9 - Conjecture6480.mean P i) * (P j \u03c9 - Conjecture6480.mean P j))\n                Conjecture6480.\u03bc \u2227\n              MeasureTheory.Integrable (fun \u03c9 => (Q i \u03c9 - Conjecture6480.mean Q i) * (Q j \u03c9 - Conjecture6480.mean Q j))\n                Conjecture6480.\u03bc) \u2227\n          \u00acConjecture6480.GaussianProcess Conjecture6480.\u03bc P \u2227\n            \u00acConjecture6480.GaussianProcess Conjecture6480.\u03bc Q \u2227\n              Conjecture6480.covarianceMatrix P = Conjecture6480.covarianceMatrix Q \u2227\n                Conjecture6480.jointLaw P \u2260 Conjecture6480.jointLaw Q \u2227\n                  Conjecture6480.extremeLaw P \u2260 Conjecture6480.extremeLaw Q\nConjecture6480.measurable_on_\u03a9.{u_1} {\u03b1 : Type u_1} [MeasurableSpace \u03b1] (f : Conjecture6480.\u03a9 \u2192 \u03b1) : Measurable f\n'Conjecture6480.measurable_on_\u03a9' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.integrable_on_\u03a9 (f : Conjecture6480.\u03a9 \u2192 \u211d) : MeasureTheory.Integrable f Conjecture6480.\u03bc\n'Conjecture6480.integrable_on_\u03a9' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.coordinates_measurable (Z : Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) (i : Fin 3) : Measurable (Z i)\n'Conjecture6480.coordinates_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.coordinates_integrable (Z : Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) (i : Fin 3) :\n  MeasureTheory.Integrable (Z i) Conjecture6480.\u03bc\n'Conjecture6480.coordinates_integrable' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.covariance_integrable (Z : Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) (i j : Fin 3) :\n  MeasureTheory.Integrable (fun \u03c9 => (Z i \u03c9 - Conjecture6480.mean Z i) * (Z j \u03c9 - Conjecture6480.mean Z j))\n    Conjecture6480.\u03bc\n'Conjecture6480.covariance_integrable' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.peak_measurable (Z : Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) : Measurable (Conjecture6480.peak Z)\n'Conjecture6480.peak_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.peak_integrable (Z : Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) :\n  MeasureTheory.Integrable (Conjecture6480.peak Z) Conjecture6480.\u03bc\n'Conjecture6480.peak_integrable' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.joint_measurable (Z : Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) : Measurable fun \u03c9 i => Z i \u03c9\n'Conjecture6480.joint_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.integral_uniform (f : Conjecture6480.\u03a9 \u2192 \u211d) :\n  \u222b (\u03c9 : Conjecture6480.\u03a9), f \u03c9 \u2202Conjecture6480.\u03bc = \u2211 \u03c9, 1 / 8 * f \u03c9\n'Conjecture6480.integral_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.measure_uniform (s : Set Conjecture6480.\u03a9) : Conjecture6480.\u03bc s = \u2211 \u03c9, if \u03c9 \u2208 s then 1 / 8 else 0\n'Conjecture6480.measure_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.means_X (i : Fin 3) : Conjecture6480.mean Conjecture6480.X i = 0\n'Conjecture6480.means_X' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.means_Y (i : Fin 3) : Conjecture6480.mean Conjecture6480.Y i = 0\n'Conjecture6480.means_Y' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.covariance_X : Conjecture6480.covarianceMatrix Conjecture6480.X = 1\n'Conjecture6480.covariance_X' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.covariance_Y : Conjecture6480.covarianceMatrix Conjecture6480.Y = 1\n'Conjecture6480.covariance_Y' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.coordinate0_atom_X : (MeasureTheory.Measure.map (Conjecture6480.X 0) Conjecture6480.\u03bc) {-1} = 1 / 2\n'Conjecture6480.coordinate0_atom_X' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.coordinate0_atom_Y : (MeasureTheory.Measure.map (Conjecture6480.Y 0) Conjecture6480.\u03bc) {-1} = 1 / 2\n'Conjecture6480.coordinate0_atom_Y' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.coordinate_atom_X (i : Fin 3) :\n  (MeasureTheory.Measure.map (Conjecture6480.X i) Conjecture6480.\u03bc) {-1} = 1 / 2\n'Conjecture6480.coordinate_atom_X' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.coordinate_atom_Y (i : Fin 3) :\n  (MeasureTheory.Measure.map (Conjecture6480.Y i) Conjecture6480.\u03bc) {-1} = 1 / 2\n'Conjecture6480.coordinate_atom_Y' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.joint_negative_X : (Conjecture6480.jointLaw Conjecture6480.X) {Conjecture6480.allNegative} = 1 / 8\n'Conjecture6480.joint_negative_X' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.joint_negative_Y : (Conjecture6480.jointLaw Conjecture6480.Y) {Conjecture6480.allNegative} = 0\n'Conjecture6480.joint_negative_Y' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.extreme_negative_X : (Conjecture6480.extremeLaw Conjecture6480.X) {-1} = 1 / 8\n'Conjecture6480.extreme_negative_X' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.extreme_negative_Y : (Conjecture6480.extremeLaw Conjecture6480.Y) {-1} = 0\n'Conjecture6480.extreme_negative_Y' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.peak_Y_eq_one (\u03c9 : Conjecture6480.\u03a9) : Conjecture6480.peak Conjecture6480.Y \u03c9 = 1\n'Conjecture6480.peak_Y_eq_one' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.extremeLaw_Y : Conjecture6480.extremeLaw Conjecture6480.Y = MeasureTheory.Measure.dirac 1\n'Conjecture6480.extremeLaw_Y' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.extremeLaw_X :\n  Conjecture6480.extremeLaw Conjecture6480.X =\n    (1 / 8) \u2022 MeasureTheory.Measure.dirac (-1) + (7 / 8) \u2022 MeasureTheory.Measure.dirac 1\n'Conjecture6480.extremeLaw_X' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.\u03bc_probability : MeasureTheory.IsProbabilityMeasure Conjecture6480.\u03bc\n'Conjecture6480.\u03bc_probability' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.jointLaw_probability (Z : Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) :\n  MeasureTheory.IsProbabilityMeasure (Conjecture6480.jointLaw Z)\n'Conjecture6480.jointLaw_probability' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.extremeLaw_probability (Z : Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) :\n  MeasureTheory.IsProbabilityMeasure (Conjecture6480.extremeLaw Z)\n'Conjecture6480.extremeLaw_probability' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.gaussianReal_singleton_zero_or_one (a : \u211d) (v : NNReal) (x : \u211d) :\n  (ProbabilityTheory.gaussianReal a v) {x} = 0 \u2228 (ProbabilityTheory.gaussianReal a v) {x} = 1\n'Conjecture6480.gaussianReal_singleton_zero_or_one' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.not_gaussianReal_of_intermediate_atom (\u03bd : MeasureTheory.Measure \u211d) (x : \u211d) (hzero : \u03bd {x} \u2260 0)\n  (hone : \u03bd {x} \u2260 1) (a : \u211d) (v : NNReal) : \u03bd \u2260 ProbabilityTheory.gaussianReal a v\n'Conjecture6480.not_gaussianReal_of_intermediate_atom' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.not_gaussianReal_of_half_atom (\u03bd : MeasureTheory.Measure \u211d) (x : \u211d) (hhalf : \u03bd {x} = 1 / 2) (a : \u211d)\n  (v : NNReal) : \u03bd \u2260 ProbabilityTheory.gaussianReal a v\n'Conjecture6480.not_gaussianReal_of_half_atom' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.GaussianProcess.coordinate.{u_1} {\u03a9 : Type u_1} [MeasurableSpace \u03a9] {\u03bc : MeasureTheory.Measure \u03a9}\n  {Z : Fin 3 \u2192 \u03a9 \u2192 \u211d} (hG : Conjecture6480.GaussianProcess \u03bc Z) (i : Fin 3) :\n  \u2203 a v, MeasureTheory.Measure.map (Z i) \u03bc = ProbabilityTheory.gaussianReal a v\n'Conjecture6480.GaussianProcess.coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.not_gaussianProcess_of_half_atom.{u_1} {\u03a9 : Type u_1} [MeasurableSpace \u03a9] (\u03bc : MeasureTheory.Measure \u03a9)\n  (Z : Fin 3 \u2192 \u03a9 \u2192 \u211d) (i : Fin 3) (x : \u211d) (hhalf : (MeasureTheory.Measure.map (Z i) \u03bc) {x} = 1 / 2) :\n  \u00acConjecture6480.GaussianProcess \u03bc Z\n'Conjecture6480.not_gaussianProcess_of_half_atom' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.not_gaussianProcess_of_coordinate_zero_half_atom.{u_1} {\u03a9 : Type u_1} [MeasurableSpace \u03a9]\n  (\u03bc : MeasureTheory.Measure \u03a9) (Z : Fin 3 \u2192 \u03a9 \u2192 \u211d) (x : \u211d) (hhalf : (MeasureTheory.Measure.map (Z 0) \u03bc) {x} = 1 / 2) :\n  \u00acConjecture6480.GaussianProcess \u03bc Z\n'Conjecture6480.not_gaussianProcess_of_coordinate_zero_half_atom' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\nConjecture6480.same_covariance :\n  Conjecture6480.covarianceMatrix Conjecture6480.X = Conjecture6480.covarianceMatrix Conjecture6480.Y\n'Conjecture6480.same_covariance' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.different_joint_laws :\n  Conjecture6480.jointLaw Conjecture6480.X \u2260 Conjecture6480.jointLaw Conjecture6480.Y\n'Conjecture6480.different_joint_laws' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.different_extreme_laws :\n  Conjecture6480.extremeLaw Conjecture6480.X \u2260 Conjecture6480.extremeLaw Conjecture6480.Y\n'Conjecture6480.different_extreme_laws' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.X_nonGaussian : \u00acConjecture6480.GaussianProcess Conjecture6480.\u03bc Conjecture6480.X\n'Conjecture6480.X_nonGaussian' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.Y_nonGaussian : \u00acConjecture6480.GaussianProcess Conjecture6480.\u03bc Conjecture6480.Y\n'Conjecture6480.Y_nonGaussian' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.coordinate_le_peak (Z : Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) (\u03c9 : Conjecture6480.\u03a9) (i : Fin 3) :\n  Z i \u03c9 \u2264 Conjecture6480.peak Z \u03c9\n'Conjecture6480.coordinate_le_peak' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.peak_attained (Z : Fin 3 \u2192 Conjecture6480.\u03a9 \u2192 \u211d) (\u03c9 : Conjecture6480.\u03a9) :\n  \u2203 i, Conjecture6480.peak Z \u03c9 = Z i \u03c9\n'Conjecture6480.peak_attained' depends on axioms: [propext, Classical.choice, Quot.sound]\nConjecture6480.conjecture_true : Conjecture6480.ExplicitWitnessClaim\n'Conjecture6480.conjecture_true' depends on axioms: [propext, Classical.choice, Quot.sound]\n"
+    }
+  ],
+  "lean_version": {
+    "exit_code": 0,
+    "output": "Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)"
+  },
+  "lean_commit": {
+    "exit_code": 0,
+    "expected": "6caaee842e9495688c1567e78c0e68dbb96942aa",
+    "actual": "6caaee842e9495688c1567e78c0e68dbb96942aa"
+  },
+  "project_identity": {
+    "manifest_name": "tlmc6480",
+    "lake_name": "tlmc6480",
+    "default_targets": [
+      "Conjecture6480"
+    ],
+    "toolchain_pin": "leanprover/lean4:v4.19.0",
+    "source_file_count": 4,
+    "config_file_count": 3,
+    "dependency_symlink_target": "/private/tmp/tlmc310-proof/.lake/packages"
+  },
+  "proof_bypass_scan": {
+    "pattern": "\\b(?:sorry|admit|axiom|native_decide|unsafe|run_tac|elab|implemented_by)\\b|Lean\\.ofReduceBool|debug\\.skipKernelTC|trustLevel",
+    "hits": []
+  },
+  "build": {
+    "command": [
+      "lake",
+      "build"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 12.93,
+    "log": "build.txt"
+  },
+  "axiom_audit": {
+    "expected_count": 42,
+    "parsed_count": 42,
+    "expected_theorems": [
+      "Conjecture6480.measurable_on_\u03a9",
+      "Conjecture6480.integrable_on_\u03a9",
+      "Conjecture6480.coordinates_measurable",
+      "Conjecture6480.coordinates_integrable",
+      "Conjecture6480.covariance_integrable",
+      "Conjecture6480.peak_measurable",
+      "Conjecture6480.peak_integrable",
+      "Conjecture6480.joint_measurable",
+      "Conjecture6480.integral_uniform",
+      "Conjecture6480.measure_uniform",
+      "Conjecture6480.means_X",
+      "Conjecture6480.means_Y",
+      "Conjecture6480.covariance_X",
+      "Conjecture6480.covariance_Y",
+      "Conjecture6480.coordinate0_atom_X",
+      "Conjecture6480.coordinate0_atom_Y",
+      "Conjecture6480.coordinate_atom_X",
+      "Conjecture6480.coordinate_atom_Y",
+      "Conjecture6480.joint_negative_X",
+      "Conjecture6480.joint_negative_Y",
+      "Conjecture6480.extreme_negative_X",
+      "Conjecture6480.extreme_negative_Y",
+      "Conjecture6480.peak_Y_eq_one",
+      "Conjecture6480.extremeLaw_Y",
+      "Conjecture6480.extremeLaw_X",
+      "Conjecture6480.\u03bc_probability",
+      "Conjecture6480.jointLaw_probability",
+      "Conjecture6480.extremeLaw_probability",
+      "Conjecture6480.gaussianReal_singleton_zero_or_one",
+      "Conjecture6480.not_gaussianReal_of_intermediate_atom",
+      "Conjecture6480.not_gaussianReal_of_half_atom",
+      "Conjecture6480.GaussianProcess.coordinate",
+      "Conjecture6480.not_gaussianProcess_of_half_atom",
+      "Conjecture6480.not_gaussianProcess_of_coordinate_zero_half_atom",
+      "Conjecture6480.same_covariance",
+      "Conjecture6480.different_joint_laws",
+      "Conjecture6480.different_extreme_laws",
+      "Conjecture6480.X_nonGaussian",
+      "Conjecture6480.Y_nonGaussian",
+      "Conjecture6480.coordinate_le_peak",
+      "Conjecture6480.peak_attained",
+      "Conjecture6480.conjecture_true"
+    ],
+    "audits": [
+      {
+        "theorem": "Conjecture6480.measurable_on_\u03a9",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.integrable_on_\u03a9",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.coordinates_measurable",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.coordinates_integrable",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.covariance_integrable",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.peak_measurable",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.peak_integrable",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.joint_measurable",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.integral_uniform",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.measure_uniform",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.means_X",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.means_Y",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.covariance_X",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.covariance_Y",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.coordinate0_atom_X",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.coordinate0_atom_Y",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.coordinate_atom_X",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.coordinate_atom_Y",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.joint_negative_X",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.joint_negative_Y",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.extreme_negative_X",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.extreme_negative_Y",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.peak_Y_eq_one",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.extremeLaw_Y",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.extremeLaw_X",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.\u03bc_probability",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.jointLaw_probability",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.extremeLaw_probability",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.gaussianReal_singleton_zero_or_one",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.not_gaussianReal_of_intermediate_atom",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.not_gaussianReal_of_half_atom",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.GaussianProcess.coordinate",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.not_gaussianProcess_of_half_atom",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.not_gaussianProcess_of_coordinate_zero_half_atom",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.same_covariance",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.different_joint_laws",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.different_extreme_laws",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.X_nonGaussian",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.Y_nonGaussian",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.coordinate_le_peak",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.peak_attained",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture6480.conjecture_true",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
+    ],
+    "allowed_axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "all_names_match": true,
+    "only_allowed_axioms": true
+  },
+  "independent_sha256": {
+    "Conjecture6480/Processes.lean": "05ff195f6231ba5828dc3336b35915071e88d56125bcec6dcc2d9f20c877d3fa",
+    "Conjecture6480/Gaussian.lean": "79724535556a8fcf37f44ca39c2f6a13b21976b3e0d82cb139bfc241ce8d039c",
+    "Conjecture6480.lean": "fd0f1a24e7f518a424facb259466278ba23a31b271fc805174e7673a73371ac8",
+    "Check.lean": "87e80f24c4e93586b4a9dd72f1ba1d888dd91df641bb0df69de1a76c6c43d7fc",
+    "lakefile.toml": "be8c185557c71b64316e70dc75536f58f17741b857128203dcfeed9139ed31d4",
+    "lake-manifest.json": "5d0955d3640a259fe42ef233a3861572564c9837c3e38c5c793b8c42ff7b07f5",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "source_unchanged": true,
+  "copied_files_unchanged": true,
+  "definition_and_type_audit": {
+    "definition_names": [
+      "Conjecture6480.\u03a9",
+      "Conjecture6480.\u03bc",
+      "Conjecture6480.X",
+      "Conjecture6480.Y",
+      "Conjecture6480.mean",
+      "Conjecture6480.covarianceMatrix",
+      "Conjecture6480.jointLaw",
+      "Conjecture6480.peak",
+      "Conjecture6480.extremeLaw",
+      "Conjecture6480.allNegative",
+      "Conjecture6480.GaussianProcess",
+      "Conjecture6480.ExplicitWitnessClaim"
+    ],
+    "definition_count": 12,
+    "checked_theorem_names": [
+      "Conjecture6480.measurable_on_\u03a9",
+      "Conjecture6480.integrable_on_\u03a9",
+      "Conjecture6480.coordinates_measurable",
+      "Conjecture6480.coordinates_integrable",
+      "Conjecture6480.covariance_integrable",
+      "Conjecture6480.peak_measurable",
+      "Conjecture6480.peak_integrable",
+      "Conjecture6480.joint_measurable",
+      "Conjecture6480.integral_uniform",
+      "Conjecture6480.measure_uniform",
+      "Conjecture6480.means_X",
+      "Conjecture6480.means_Y",
+      "Conjecture6480.covariance_X",
+      "Conjecture6480.covariance_Y",
+      "Conjecture6480.coordinate0_atom_X",
+      "Conjecture6480.coordinate0_atom_Y",
+      "Conjecture6480.coordinate_atom_X",
+      "Conjecture6480.coordinate_atom_Y",
+      "Conjecture6480.joint_negative_X",
+      "Conjecture6480.joint_negative_Y",
+      "Conjecture6480.extreme_negative_X",
+      "Conjecture6480.extreme_negative_Y",
+      "Conjecture6480.peak_Y_eq_one",
+      "Conjecture6480.extremeLaw_Y",
+      "Conjecture6480.extremeLaw_X",
+      "Conjecture6480.\u03bc_probability",
+      "Conjecture6480.jointLaw_probability",
+      "Conjecture6480.extremeLaw_probability",
+      "Conjecture6480.gaussianReal_singleton_zero_or_one",
+      "Conjecture6480.not_gaussianReal_of_intermediate_atom",
+      "Conjecture6480.not_gaussianReal_of_half_atom",
+      "Conjecture6480.GaussianProcess.coordinate",
+      "Conjecture6480.not_gaussianProcess_of_half_atom",
+      "Conjecture6480.not_gaussianProcess_of_coordinate_zero_half_atom",
+      "Conjecture6480.same_covariance",
+      "Conjecture6480.different_joint_laws",
+      "Conjecture6480.different_extreme_laws",
+      "Conjecture6480.X_nonGaussian",
+      "Conjecture6480.Y_nonGaussian",
+      "Conjecture6480.coordinate_le_peak",
+      "Conjecture6480.peak_attained",
+      "Conjecture6480.conjecture_true"
+    ],
+    "checked_theorem_count": 42,
+    "checked_names_match_audits": true,
+    "printed_definition_names": [
+      "Conjecture6480.\u03a9",
+      "Conjecture6480.\u03bc",
+      "Conjecture6480.X",
+      "Conjecture6480.Y",
+      "Conjecture6480.mean",
+      "Conjecture6480.covarianceMatrix",
+      "Conjecture6480.jointLaw",
+      "Conjecture6480.peak",
+      "Conjecture6480.extremeLaw",
+      "Conjecture6480.allNegative",
+      "Conjecture6480.GaussianProcess",
+      "Conjecture6480.ExplicitWitnessClaim"
+    ],
+    "printed_definition_count": 12,
+    "printed_definition_names_match": true,
+    "printed_theorem_type_names": [
+      "Conjecture6480.measurable_on_\u03a9",
+      "Conjecture6480.integrable_on_\u03a9",
+      "Conjecture6480.coordinates_measurable",
+      "Conjecture6480.coordinates_integrable",
+      "Conjecture6480.covariance_integrable",
+      "Conjecture6480.peak_measurable",
+      "Conjecture6480.peak_integrable",
+      "Conjecture6480.joint_measurable",
+      "Conjecture6480.integral_uniform",
+      "Conjecture6480.measure_uniform",
+      "Conjecture6480.means_X",
+      "Conjecture6480.means_Y",
+      "Conjecture6480.covariance_X",
+      "Conjecture6480.covariance_Y",
+      "Conjecture6480.coordinate0_atom_X",
+      "Conjecture6480.coordinate0_atom_Y",
+      "Conjecture6480.coordinate_atom_X",
+      "Conjecture6480.coordinate_atom_Y",
+      "Conjecture6480.joint_negative_X",
+      "Conjecture6480.joint_negative_Y",
+      "Conjecture6480.extreme_negative_X",
+      "Conjecture6480.extreme_negative_Y",
+      "Conjecture6480.peak_Y_eq_one",
+      "Conjecture6480.extremeLaw_Y",
+      "Conjecture6480.extremeLaw_X",
+      "Conjecture6480.\u03bc_probability",
+      "Conjecture6480.jointLaw_probability",
+      "Conjecture6480.extremeLaw_probability",
+      "Conjecture6480.gaussianReal_singleton_zero_or_one",
+      "Conjecture6480.not_gaussianReal_of_intermediate_atom",
+      "Conjecture6480.not_gaussianReal_of_half_atom",
+      "Conjecture6480.GaussianProcess.coordinate",
+      "Conjecture6480.not_gaussianProcess_of_half_atom",
+      "Conjecture6480.not_gaussianProcess_of_coordinate_zero_half_atom",
+      "Conjecture6480.same_covariance",
+      "Conjecture6480.different_joint_laws",
+      "Conjecture6480.different_extreme_laws",
+      "Conjecture6480.X_nonGaussian",
+      "Conjecture6480.Y_nonGaussian",
+      "Conjecture6480.coordinate_le_peak",
+      "Conjecture6480.peak_attained",
+      "Conjecture6480.conjecture_true"
+    ],
+    "printed_theorem_type_count": 42,
+    "printed_theorem_type_names_match": true
+  },
+  "dependencies_post_build": [
+    {
+      "name": "mathlib",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "plausible",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "importGraph",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "proofwidgets",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "aesop",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Qq",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "batteries",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Cli",
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true
+    }
+  ],
+  "status": "PASS",
+  "finished_utc": "2026-10-04T09:25:23.048822+00:00"
+}
