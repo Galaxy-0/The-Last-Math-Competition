@@ -1,0 +1,42 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{A divergent forward-backward iteration\\Conjecture 00000008819}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+Both source versions claim that the convergence domain of forward-backward splitting is all closed proper convex objectives, under Lipschitz gradients and cocoercivity. No minimizer-existence assumption is stated. This universal domain claim is false even with a safe step size and uniquely solvable proximal subproblems. The FISTA uniqueness and heavy-ball clauses are not used.
+
+Work on the real Hilbert line with its usual norm and inner product. Set
+\[
+f(x)=-x,\qquad g(x)=0,\qquad F(x)=f(x)+g(x)=-x.
+\]
+All three functions are finite everywhere and hence proper in the extended-real convex-analysis sense. They are convex, and their epigraphs are closed because they are continuous. The actual gradient is $\nabla f(x)=-1$. It is $1$-Lipschitz and $1$-cocoercive: for every $x,y$,
+\[
+|\nabla f(x)-\nabla f(y)|=0,\qquad
+\langle\nabla f(x)-\nabla f(y),x-y\rangle
+=0\ge |\nabla f(x)-\nabla f(y)|^2.
+\]
+Using a nonminimal Lipschitz constant $L=1$ is legitimate, and the step $\gamma=1$ satisfies $0<\gamma<2/L$.
+
+The genuine unit-step proximal problem for $g$ at $y$ is
+\[
+\min_{z\in\mathbb R}\left(g(z)+\frac12|z-y|^2\right)
+=\min_{z\in\mathbb R}\frac12|z-y|^2.
+\]
+Its unique minimizer is $z=y$: the objective is nonnegative, equals zero there, and equals zero only there. Consequently $\operatorname{prox}_g(y)=y$. The actual forward-backward update is therefore
+\[
+T(x)=\operatorname{prox}_g(x-\gamma\nabla f(x))=x+1.
+\]
+For every starting point $x_0$ and every integer $k\ge0$, induction gives
+\[
+x_k=T^k(x_0)=x_0+k.
+\]
+This sequence fails to converge to every finite real point. One can see the failure directly: if $x_k\to a$, then $x_{k+1}\to a$ as well, so the constantly-one difference $x_{k+1}-x_k$ would tend to zero, a contradiction. It also fails weak convergence, because the identity continuous linear functional already detects the same sequence. Meanwhile $F$ has no minimizer: $F(x+1)=F(x)-1<F(x)$ for every $x$.
+
+Thus a genuine forward-backward trajectory for a closed proper convex objective, with the advertised gradient properties and a safe step, does not converge. This identifies the missing attainment hypothesis. It does not refute the usual convergence theorem that additionally assumes a nonempty minimizer set, and makes no claim about an objective-gap rate relative to an unattained finite optimum.
+
+\paragraph{Formal verification.}
+The Lean project uses the actual real Hilbert structure, actual gradient, closed epigraphs and convexity, and the full proximal minimizer inequality over all competitors. It proves unique proximal solutions, the actual update and all iterates, absence of a minimizer, and norm and weak nonconvergence from every starting point. Lean 4.19.0 and Mathlib commit \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b} are pinned.
+\end{document}
