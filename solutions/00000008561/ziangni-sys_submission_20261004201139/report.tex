@@ -1,0 +1,55 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\title{A diagonalizable counterexample to the pseudospectral area bound}
+\author{ziangni-sys \quad Conjecture 00000008561}
+\date{}
+\begin{document}
+\maketitle
+\vspace{-2em}
+\textbf{Disproof.} The asserted universal inequality
+$\operatorname{Area}(\sigma_\varepsilon(T))\geq\pi\varepsilon^2\kappa^2$
+fails for a diagonalizable nonnormal operator on the ordinary Euclidean Hilbert space $\mathbb C^2$. No small-$\varepsilon$ qualification appears in either language version of the conjecture.
+
+All operator norms below are induced by the Euclidean norm. Set
+\[
+ T=\begin{pmatrix}1&3\\0&-1\end{pmatrix},\quad
+ D=\begin{pmatrix}1&0\\0&-1\end{pmatrix},\quad
+ V=\begin{pmatrix}1&-3/2\\0&1\end{pmatrix},\quad
+ W=\begin{pmatrix}1&3/2\\0&1\end{pmatrix}.
+\]
+Direct multiplication gives $VW=WV=I$ and $T=VDW$. Thus $T$ has a genuine eigenbasis, with distinct eigenvalues $1,-1$, and its eigenvector condition numbers are finite. It is nonnormal: the $(1,1)$ entries of $T^*T$ and $TT^*$ are respectively $1$ and $10$.
+
+Let $N=\left(\begin{smallmatrix}0&1\\0&0\end{smallmatrix}\right)$. Since $T=D+3N$, $\|D\|=\|N\|=1$, and $T(0,1)=(3,-1)$, we have
+\[
+ 3\leq\|T\|\leq4.
+\]
+For every invertible eigenbasis map $S$, order its columns so that $T=SDS^{-1}$. This ordering does not change the condition number, because exchanging columns is unitary. Submultiplicativity gives
+\[
+ 3\leq\|T\|\leq\|S\|\,\|D\|\,\|S^{-1}\|
+ =\|S\|\,\|S^{-1}\|.
+\]
+Consequently the same lower bound holds for the most favorable convention
+\[
+ \kappa_*:=\inf\{\|S\|\,\|S^{-1}\|: T=SDS^{-1}\}\geq3.
+\]
+The set is nonempty by the displayed $V,W$, and is bounded below, so this is a finite real infimum. The argument also applies to any specified eigenbasis condition number, including normalized eigenvectors.
+
+Take $\varepsilon=10$. If $|z|\geq14$, then $|z|>\|T\|$, so $zI-T$ is invertible. Writing $R=(zI-T)^{-1}$, the exact resolvent identity gives
+\[
+ zR=I+TR,\qquad
+ |z|\,\|R\|\leq1+\|T\|\,\|R\|\leq1+4\|R\|.
+\]
+Hence $\|R\|\leq1/10$. Therefore the actual resolvent-defined pseudospectrum is contained in the disk $\{|z|\leq14\}$. This remains true under the usual convention of adjoining the spectrum: every spectral value satisfies $|z|\leq\|T\|\leq4$.
+
+Monotonicity of two-dimensional Lebesgue measure now yields
+\[
+ \operatorname{Area}(\sigma_{10}(T))\leq196\pi
+ <900\pi\leq\pi\,10^2\kappa_*^2.
+\]
+Thus the proposed area lower bound is false, even when the smallest possible eigenvector condition number is used. The separate Jordan-saturation, connectivity, and direct-sum assertions need not be decided to disprove the conjunction.
+
+\textbf{Formal correspondence.} The Lean file constructs the matrices and transports them to continuous linear maps on \texttt{EuclideanSpace Complex (Fin 2)}, preserving multiplication and adjoints. It proves nonnormality, the actual inverse/diagonalization identities, both operator-norm bounds, and the condition-number infimum bound. It uses Mathlib's actual spectrum, resolvent and complex Lebesgue measure to establish the disk inclusion, finiteness of area and strict contradiction. The formal pseudospectrum includes the spectral points, so its upper bound also covers the smaller resolvent-only set in the source definition.
+\end{document}
