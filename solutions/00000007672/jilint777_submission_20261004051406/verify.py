@@ -149,6 +149,16 @@ def check_11_55():
         assert rem, k
     print("F_11 is divisible by no cyclotomic polynomial (checked all %d k with phi(k) <= 25)"
           % len(ks))
+    # (d, 5d) family: F_d(-1) does not divide F_5d(-1) for odd d >= 11, d != 15.
+    def f_at_minus_one(n):  # via Schur's recurrence f_n = f_{n-1} + (-1)^n f_{n-2}
+        a, b = 0, 1  # f_0, f_1
+        for k in range(2, n + 1):
+            a, b = b, b + (-1) ** k * a
+        return b if n >= 1 else 0
+    assert [f_at_minus_one(n) for n in range(1, 31)] == [ev(qfib(n), -1) for n in range(1, 31)]
+    fam = [d for d in range(5, 200, 2) if f_at_minus_one(5 * d) % f_at_minus_one(d) != 0]
+    assert fam == [d for d in range(11, 200, 2) if d != 15], fam
+    print("F_d(-1) does not divide F_5d(-1) for all odd d in [11,199] except d = 15")
     bad = [d for d in range(3, 31) if not mod_rem(qfib(2 * d), qfib(d)) == []]
     print("d in 3..30 with F_d not dividing F_2d:", bad)
 

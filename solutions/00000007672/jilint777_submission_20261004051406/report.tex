@@ -25,11 +25,17 @@ Conjecture 00000007672 asserts that for the $q$-Fibonacci polynomials
 $F_n(q)=\sum_j\qbinom{n-1-j}{j}q^{j^2}$, the greatest common divisor
 $\gcd(F_n,F_m)$ in $\mathbb Z[q]$ equals $F_{\gcd(n,m)}$ times a correction
 factor. We give two counterexamples. First, $\gcd(F_6,F_3)=1$ in
-$\mathbb Z[q]$ while $F_{\gcd(6,3)}=F_3=1+q$. Second, and robust under every
-reading of the exceptional set $E$: $\gcd(F_{55},F_{11})=1$ while
+$\mathbb Z[q]$ while $F_{\gcd(6,3)}=F_3=1+q$. Second, and robust under every reading in which the
+exceptional set $E$ depends only on primes $p\equiv\pm2\pmod5$:
+$\gcd(F_{55},F_{11})=1$ while
 $F_{\gcd(11,55)}=F_{11}$ is a monic polynomial of degree $25$ with no
 cyclotomic factor. Here all prime factors of $11$ and $55$ are $5$ or $11$,
-none $\equiv\pm2\pmod 5$. Both are formalized in Lean~4 (core library only).
+none $\equiv\pm2\pmod 5$. Lean~4 (core library only) proves the $(6,3)$
+counterexample completely, including the gcd computation, and proves that
+$F_{11}$ does not divide $F_{55}$. The facts that $\gcd(F_{55},F_{11})=1$ and
+that $F_{11}$ has no cyclotomic factor are certified computationally. Finally,
+$F_d\nmid F_{5d}$ for every odd $d\ge11$ with $d\ne15$, so the failures cannot be
+confined to finitely many indices either.
 \end{abstract}
 
 \section{The conjecture}
@@ -179,8 +185,20 @@ the $53$ such $\Phi_k$ divides $F_{11}$.
 
 Thus for $(n,m)=(11,55)$ the gcd is $1=F_{11}\cdot c$ only for $c=1/F_{11}$,
 which is not a polynomial. It is also not a correction made of finitely many
-primes or cyclotomic factors, under any reading of $E$. Failures are common:
+primes $\equiv\pm2\pmod5$ or of their cyclotomic factors. Failures are common:
 $F_d\nmid F_{2d}$ for every $3\le d\le30$ except $d=5$.
+
+\begin{remark}[Infinitely many indices]\label{rem:5d}
+Even a reading in which $E$ is an arbitrary finite set of exceptional
+indices does not rescue the conjecture. Let $d=2a+1$ be odd. By the formulas
+above, $F_d(-1)=\mathrm{Fib}_{a-1}$ and $F_{5d}(-1)=F_{2(5a+2)+1}(-1)=\mathrm{Fib}_{5a+1}$.
+For $a-1\ge3$ we have $\mathrm{Fib}_{a-1}\mid\mathrm{Fib}_{5a+1}$ if and only if
+$(a-1)\mid(5a+1)$, which holds if and only if $(a-1)\mid 6$. So for every odd
+$d\ge11$ with $d\ne15$, $F_d(-1)\nmid F_{5d}(-1)$. Hence no divisor of $F_{5d}$ is a
+multiple of $F_d=F_{\gcd(d,5d)}$, and \eqref{eq:clause} fails for $(d,5d)$. This
+gives infinitely many failures with unbounded $\gcd$, including every prime
+$d\equiv\pm1\pmod5$. (\texttt{verify.py} checks this for odd $d<200$.)
+\end{remark}
 
 \section{Lean formalization}
 
@@ -206,10 +224,15 @@ $c\in\mathbb Z[q]$. \texttt{conjecture\_00000007672\_false} proves
 $\neg$\texttt{GcdClause} using $(6,3)$.
 \texttt{no\_divisor\_of\_F6\_is\_multiple\_of\_F3} proves the stronger statement
 from the proof of Theorem~\ref{thm:main}.
-\item \texttt{GcdClauseExists} is the existential form: for all $n,m\ge1$ there
+\item Since a gcd in $\mathbb Z[q]$ always exists and is unique up to sign, the
+universal form (``every gcd is $F_{\gcd(n,m)}\cdot c$'') and the existential
+form (``some gcd is $F_{\gcd(n,m)}\cdot c$'') of \eqref{eq:clause} are
+equivalent. The Lean project refutes both.
+\texttt{GcdClauseExists} is the existential form: for all $n,m\ge1$ there
 are a gcd $G$ and $c\in\mathbb Z[q]$ with $G=F_{\gcd(n,m)}\cdot c$.
-\texttt{conjecture\_00000007672\_false\_11\_55} proves
-$\neg$\texttt{GcdClauseExists} using $(11,55)$, via
+\texttt{conjecture\_00000007672\_false\_exists\_6\_3} and
+\texttt{conjecture\_00000007672\_false\_11\_55} prove
+$\neg$\texttt{GcdClauseExists} using $(6,3)$ and $(11,55)$; the latter goes via
 \texttt{no\_divisor\_of\_F55\_is\_multiple\_of\_F11}. $F_{55}(-1)$ is computed
 with a row-by-row evaluation of Gaussian binomials (\texttt{row},
 \texttt{fastF}), proved equal to evaluating the polynomial

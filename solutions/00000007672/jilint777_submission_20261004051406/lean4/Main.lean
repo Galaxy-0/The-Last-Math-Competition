@@ -495,8 +495,16 @@ def GcdClauseExists : Prop :=
   ∀ n m, 1 ≤ n → 1 ≤ m → ∃ G c, IsGcd G (qfib n) (qfib m) ∧
     PEq G (mulL (qfib (Nat.gcd n m)) c)
 
+/-- The existential form also fails for `(6, 3)`. -/
+theorem conjecture_00000007672_false_exists_6_3 : ¬ GcdClauseExists := by
+  intro h
+  obtain ⟨G, c, hG, hc⟩ := h 6 3 (by decide) (by decide)
+  rw [gcd_6_3] at hc
+  exact no_divisor_of_F6_is_multiple_of_F3 G c hG.1 hc
+
 /-- Refutation with `(n, m) = (11, 55)`: all prime factors of `11, 55` are
-`5` or `11`, none `≡ ±2 (mod 5)`, and `F_11` has no cyclotomic factor. -/
+`5` or `11`, none `≡ ±2 (mod 5)`; moreover `F_11` has no cyclotomic factor
+(checked in `verify.py`, not used here). -/
 theorem conjecture_00000007672_false_11_55 : ¬ GcdClauseExists := by
   intro h
   obtain ⟨G, c, hG, hc⟩ := h 11 55 (by decide) (by decide)
@@ -515,4 +523,5 @@ end QFib
 #print axioms QFib.conjecture_00000007672_false
 #print axioms QFib.qfib_55_at_neg_one
 #print axioms QFib.no_divisor_of_F55_is_multiple_of_F11
+#print axioms QFib.conjecture_00000007672_false_exists_6_3
 #print axioms QFib.conjecture_00000007672_false_11_55

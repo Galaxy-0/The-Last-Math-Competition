@@ -24,7 +24,10 @@ A second counterexample, `(11, 55)`, holds up under every reading of the conject
 `gcd(F_55, F_11) = 1`, while `F_{gcd} = F_11` is monic of degree 25 with no
 cyclotomic factor. `F_11(−1) = 3` does not divide `F_55(−1) = 121393`, so no
 divisor of `F_55` is a multiple of `F_11`. No correction built from finitely
-many primes or cyclotomic factors can turn `F_11` into `1`.
+many primes ≡ ±2 (mod 5) or their cyclotomic factors can turn `F_11` into `1`.
+More generally, `F_d ∤ F_{5d}` for every odd `d ≥ 11` with `d ≠ 15`, since
+`F_d(−1) = Fib_{(d−3)/2}` does not divide `F_{5d}(−1)`. So the failures cannot be
+confined to finitely many indices either.
 
 ## Contents
 
@@ -48,6 +51,7 @@ the product formula for `n ≤ 7`. `qfib n` is the conjecture's sum.
   `n, m ≥ 1`, every gcd of `F_n, F_m` is `F_{gcd(n,m)} · c` for some `c ∈ ℤ[q]`.
 - `no_divisor_of_F6_is_multiple_of_F3` proves the stronger statement that no
   divisor of `F_6` is a multiple of `F_3`.
+- `conjecture_00000007672_false_exists_6_3` refutes the existential form with `(6,3)` as well.
 - `conjecture_00000007672_false_11_55` proves that for `(11, 55)` no gcd of `F_11` and `F_55`
   is `F_11 · c` (`GcdClauseExists` fails). It goes through
   `no_divisor_of_F55_is_multiple_of_F11`. `F_55(−1)` is computed by a proved-correct
