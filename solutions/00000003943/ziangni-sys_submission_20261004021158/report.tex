@@ -1,0 +1,89 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue,linkcolor=blue}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\title{A linear bound disproves conjecture 00000003943}
+\author{ziangni-sys\\Prepared with OpenAI Codex}
+\date{4 October 2026}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\maketitle
+\begin{abstract}
+The classical augmenting-path algorithm for maximum-cardinality matching uses at most $\lfloor n/2\rfloor$ augmenting paths on an $n$-vertex graph. Consequently its worst-case number of augmenting paths cannot be $\Theta(n^2\log n)$, as conjectured. The argument applies to general graphs, arbitrary initial matchings, and arbitrary choices of augmenting paths. A self-contained Lean 4 project verifies the matching bound, the actual path toggle, and the asymptotic contradiction.
+\end{abstract}
+
+\section{Original claim and the quantity being counted}
+The English statement is:
+\begin{quote}
+Definition: The augmenting path algorithm is the classical iterative method for matching in general graphs. Conjecture: In the worst case the total number of augmenting paths is Theta($n^2$ log $n$), and the ratio between the upper and lower bounds is at most 2. (tight augmenting path bound)
+\end{quote}
+We use $n=|V(G)|$, the conventional input vertex count. The source identifies the \emph{classical iterative method}: initialize a matching $M$, find an $M$-augmenting path $P$, replace $M$ by $M\mathbin{\triangle}E(P)$, and repeat until no such path exists. Thus the total number of augmenting paths in this algorithm is the number of paths selected and used for augmentation. This is the standard loop described in matching lectures and texts; see the university references below.
+
+This statement does not specify an enumeration of \emph{all available} augmenting paths or a count of failed search attempts, examined edges, blossom operations, or running-time instructions. Those are different quantities. In particular, the result here concerns the stated iterative matching method and its augmentations. Interpreting the conjecture as a different unspecified search-operation count would require a new definition. The disproof does not silently identify that count with augmentations.
+
+\section{Definitions and the size invariant}
+Let $G=(V,E)$ be a finite simple undirected graph. A matching $M\subseteq E$ is a set of pairwise vertex-disjoint edges. An $M$-augmenting path is a simple path
+\[
+P=(v_0,v_1,\ldots,v_{2r+1})
+\]
+whose endpoints are unmatched and whose edges alternate between outside and inside $M$, starting and ending outside $M$. Write $e_i=\{v_{i-1},v_i\}$ for $1\le i\le2r+1$. Then the $r$ even-indexed edges belong to $M$ and the $r+1$ odd-indexed edges do not.
+
+\begin{lemma}
+Augmentation along $P$ yields a matching $M'=M\mathbin{\triangle}E(P)$ with $|M'|=|M|+1$.
+\end{lemma}
+\begin{proof}
+The update removes the $r$ matching edges of the path and inserts its $r+1$ nonmatching edges, so
+\[
+|M'|=|M|-r+(r+1)=|M|+1.
+\]
+The inserted edges pair the vertices $(v_0,v_1),(v_2,v_3),\ldots,(v_{2r},v_{2r+1})$. They have disjoint endpoints because the path is simple. Every interior path vertex loses its previous matching edge, and the endpoints had no matching edge. Edges of $M$ outside the path therefore share no endpoint with an inserted edge. This proves that $M'$ is a matching.
+\end{proof}
+
+\begin{theorem}
+For any run with $k$ augmentations from $M_0$ to $M_k$ on an $n$-vertex graph,
+\[
+|M_k|=|M_0|+k,\qquad
+k\le\lfloor n/2\rfloor-|M_0|\le\lfloor n/2\rfloor.
+\]
+\end{theorem}
+\begin{proof}
+The first identity follows by induction using the lemma. Since matching edges use two distinct vertices each, $2|M_k|\le n$. Substitute the identity and rearrange. The proof also bounds every partial run, so it applies independently of the search procedure, tie breaking, blossoms, or termination criterion.
+\end{proof}
+The bound is tight when starting from the empty matching: a graph consisting of $\lfloor n/2\rfloor$ disjoint edges and, for odd $n$, one isolated vertex requires exactly one augmentation per edge. Every available augmenting path in that graph is a single edge. Hence the worst-case number is exactly $\lfloor n/2\rfloor$, in particular $\Theta(n)$.
+
+\section{Contradiction with the claimed growth}
+Suppose the asserted $\Theta(n^2\log n)$ growth held. Its lower bound would give $c>0$ and $N$ such that, for all sufficiently large $n$, some run has
+\[
+c n^2\log n\le k\le n/2.
+\]
+For $n$ with $\log n\ge1$ and $n>1/(2c)$, this is impossible. The purported second clause about the ratio of bounds cannot rescue a false first clause.
+
+Lean uses the equivalent asymptotic scale $n^2\lfloor\log_2 n\rfloor$ and an integer reciprocal lower-bound constant $C>0$. These changes preserve the lower-bound question: any positive real constant can be decreased to $1/C$, and changing a fixed logarithm base or taking its floor changes the scale by bounded constant factors for sufficiently large $n$. The formal negation assumes
+\[
+ n^2\lfloor\log_2 n\rfloor\le Ck
+\]
+for an admissible run at every $n\ge N$, chooses $n=C+N+2$, and derives
+\[
+ n^2\le n^2\lfloor\log_2 n\rfloor\le Ck\le Cn<n^2.
+\]
+This is an asymptotic contradiction, not an isolated numerical counterexample.
+
+\section{Formalization and reproducibility}
+The Lean project imports only \texttt{Std} and pins Lean 4.19.0. \texttt{Graph} records a vertex bound and a symmetric irreflexive adjacency relation. \texttt{Matching} records canonical graph edges, disjoint endpoints, and vertex bounds. The theorem \texttt{matching\_bound} proves the $2|M|\le n$ capacity bound from these definitions, using a duplicate-free endpoint list contained in $\{0,\ldots,n-1\}$.
+
+\texttt{AugmentingPath} contains the actual simple vertex list, even positive vertex count, alternating matching membership, graph membership, and unmatched endpoints. \texttt{freeEdges} and \texttt{matchedEdges} extract the two edge classes from consecutive vertices; \texttt{toggle} removes the latter and appends the former. \texttt{augmentation\_size} proves its exact cardinality change. An explicit duplicate-free condition on the removed edges is included; it is redundant for a simple path, and ensures the removal lemma applies without relying on an unstated list convention.
+
+\texttt{Run} records the actual matchings at every step, the selected augmenting path, and equality of the next edge list to the toggle. Thus its records include the matching invariants at every step. The formal proof does not separately construct the next matching from an arbitrary path; the elementary validity proof is the lemma above. Every run of the classical algorithm supplies precisely such records. \texttt{run\_size}, \texttt{run\_bound}, and the final disproof theorem establish the size identity, linear bound, and negation of the stated asymptotic lower law. No condition about finding shortest paths or starting from an empty matching is assumed.
+
+The theorem audits report only Lean's standard logical axioms:\\[2pt] \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.\\[2pt] There are no additional axioms, admitted proofs, or \texttt{native\_decide}. Run \texttt{lake build} and \texttt{lake env lean Main.lean} in \texttt{lean/}. The independent script \texttt{verify.py} exhaustively checks every labeled simple graph through five vertices, all its matchings, and all simple augmenting paths, including that every toggle remains a matching and increases its size by one. It also checks the tight disjoint-edge family. Its verification is supplementary: the universal disproof follows from the proofs above and the Lean theorems.
+
+\begin{thebibliography}{9}
+\bibitem{princeton} Princeton University, \emph{COS 423: Graph Matching}, lecture slides. \url{https://www.cs.princeton.edu/courses/archive/spr11/cos423/Lectures/GraphMatching.pdf}.
+\bibitem{dal} N. Zeh, Dalhousie University, \emph{Algorithms II: Augmenting Paths}. \url{https://web.cs.dal.ca/~nzeh/Teaching/4113/book/matching/bipartite_maximum_matching/augmenting_paths.html}.
+\end{thebibliography}
+\end{document}
