@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\emergencystretch=2em
+\title{Pairwise negative correlation does not ensure feasibility\\
+\large Disproof of conjecture 00000008790}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+The last clause of the English conjecture asserts that pairwise negatively
+correlated rounding is always feasible over any down-closed constraint
+family. The Chinese last clause states the same universal assertion.
+We disprove that clause by a marginal-preserving random rounding with
+strictly negative correlations. This concerns sufficiency of the correlation
+property; we do not claim a failure of a particular pipage implementation.
+
+\textbf{The constraint and fractional solution.}
+Let the ground set be $\{1,2\}$ and let
+\[
+ \mathcal F=\{\varnothing,\{1\},\{2\}\}
+          =\{S\subseteq\{1,2\}:|S|\leq1\}.
+\]
+This family is down-closed: a subset cannot have larger cardinality.
+Its integer feasible points are zero-one vectors with $y_1+y_2\leq1$.
+The LP relaxation
+\[
+ 0\leq x_1,x_2\leq1,\qquad x_1+x_2\leq1
+\]
+has the feasible point $x=(1/2,1/2)$. This is also the average of the
+feasible integer vectors $(1,0)$ and $(0,1)$ and belongs to their convex hull.
+
+\textbf{The actual rounding distribution.}
+On $\Omega=\{0,1\}^2$, assign these probability masses:
+\[
+\begin{array}{c|rrrr}
+\omega &(0,0)&(0,1)&(1,0)&(1,1)\\ \hline
+\mathbb P(\{\omega\})&1/8&3/8&3/8&1/8 .
+\end{array}
+\]
+They are nonnegative and sum to one. Set $Y_i(\omega)=\omega_i$ and
+$S(\omega)=\{i:Y_i(\omega)=1\}$. Both marginals satisfy
+\[
+ \mathbb E Y_i=\mathbb P(Y_i=1)=\tfrac12=x_i.
+\]
+For the only distinct coordinate pair, in either order,
+\[
+ \mathbb P(Y_1=Y_2=1)=\tfrac18
+       <\tfrac14=\mathbb P(Y_1=1)\mathbb P(Y_2=1),
+\]
+and also
+\[
+ \mathbb P(Y_1=Y_2=0)=\tfrac18
+       <\tfrac14=\mathbb P(Y_1=0)\mathbb P(Y_2=0).
+\]
+It satisfies both selected-coordinate and complement-coordinate pairwise
+negative correlation. Its covariance is $1/8-1/4=-1/8$.
+
+\newpage
+\textbf{Positive probability of infeasibility.}
+The output $S$ is outside $\mathcal F$ exactly at $\omega=(1,1)$.
+Consequently
+\[
+ \mathbb P(S\notin\mathcal F)=\tfrac18>0.
+\]
+Feasibility does not hold almost surely. Down-closedness and pairwise
+negative correlation, with exact feasible marginals and negative
+correlation of complements, do not imply universal feasibility.
+
+A procedure enforcing the constraint can avoid this output, for example
+by giving probability $1/2$ each to $(1,0)$ and $(0,1)$. Our example concerns
+the sufficiency of pairwise negative correlation alone. It makes no
+separate assertion about concrete pipage algorithms, approximation
+ratios, deterministic constructions, or perturbation radii. One false
+universal conjunct disproves the stated conjecture.
+
+\textbf{Formal correspondence.}
+The Lean project constructs a finite probability mass function with
+\texttt{PMF.ofFintype}, proves normalization, and uses its actual
+associated probability measure. The definitions \texttt{bit},
+\texttt{selected}, \texttt{family}, and \texttt{feasibleFractional}
+encode the zero-one coordinates, random output set, cardinality
+constraint, and displayed LP inequalities.
+
+Probabilities are the real values of the actual measure of the events.
+\texttt{zero\_one} proves that the coordinates are indicators.
+\texttt{expected\_coordinate} computes their finite weighted expectations.
+\texttt{marginals} and \texttt{complements} compute event probabilities
+for every coordinate. \texttt{joint\_selected} and
+\texttt{joint\_unselected} compute joint probabilities for every distinct
+ordered pair. \texttt{pairwise\_negative} verifies both inequalities.
+
+\texttt{down\_closed} proves the general subset property;
+\texttt{fractional\_feasible} checks every LP inequality.
+\texttt{infeasible\_probability} evaluates the actual event that the
+output violates the cardinality bound. The final \texttt{counterexample}
+assembles these hypotheses and the strictly positive failure probability.
+
+\textbf{Reproduction.}
+Use Lean 4.19.0 and public Mathlib revision
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}\end{center}
+Run \texttt{lake build} inside \texttt{lean/}.
+The source prints axiom audits for the main results. No unproved
+certificates, custom axioms, or computational trust extensions are used.
+The accompanying notes record the completed build and PDF validation.
+\end{document}
