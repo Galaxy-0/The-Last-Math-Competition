@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{Subdifferentials forget additive constants\\Conjecture 00000008843}
+\author{ziangni-sys (prepared with OpenAI Codex)}
+\date{4 October 2026}
+\begin{document}\maketitle
+\paragraph{Verdict.} The unqualified uniqueness assertion is false. The distinct closed convex functions $f(x)=0$ and $g(x)=1$ on $\mathbb R$ have identical subdifferentials at every point. The other maximal-monotonicity and cyclic-monotonicity clauses are not needed for this disproof.
+
+\paragraph{Original claim and scope.} Both the English and Chinese statements assert that closed convex functions are uniquely determined by their subdifferentials. Neither supplies a normalization at one point nor an ``up to an additive constant'' qualification. We address the stated equality of functions, using everywhere finite, proper closed convex functions on the real line.
+
+\paragraph{The actual subgradient definition.} For a real-valued convex function $h:\mathbb R\to\mathbb R$, the subdifferential at $x$ is
+\[
+\partial h(x)=\{v\in\mathbb R:
+  h(x)+v(y-x)\leq h(y)\ \text{for every }y\in\mathbb R\}.
+\]
+This is the usual global supporting-affine-function definition. The real dual space is identified with $\mathbb R$ by the linear functional $t\mapsto vt$; thus it is exactly the ordinary subdifferential in dimension one, not an assigned list of slopes.
+
+\paragraph{Closedness and convexity.} For every real constant $c$, put $h_c(x)=c$. For any $x,y\in\mathbb R$ and $a,b\geq0$ with $a+b=1$,
+\[
+h_c(ax+by)=c=ac+bc=ah_c(x)+bh_c(y),
+\]
+so $h_c$ is convex. Its epigraph is the genuine closed half-space
+\[
+\operatorname{epi}(h_c)=\{(x,t)\in\mathbb R^2:c\leq t\}.
+\]
+Indeed, the coordinate projection $(x,t)\mapsto t$ is continuous and $[c,\infty)$ is closed. Thus $h_c$ is a closed convex function. It is everywhere finite and never takes $-\infty$, so it also meets the usual properness requirement when closed convex functions are treated as extended-real functions.
+
+\paragraph{Computing every subgradient.} If $v\in\partial h_c(x)$, the defining inequality at $y=x+1$ gives $c+v\leq c$, hence $v\leq0$. At $y=x-1$ it gives $c-v\leq c$, hence $v\geq0$. Therefore $v=0$. Conversely $v=0$ satisfies the inequality for every real $y$. Consequently
+\[
+\partial h_c(x)=\{0\}\qquad\text{for all }c,x\in\mathbb R.
+\]
+Applying this to $c=0$ and $c=1$ proves $\partial f(x)=\partial g(x)$ at every point. But $f(0)=0\ne1=g(0)$, so $f\ne g$. This contradicts the universal uniqueness clause.
+
+\paragraph{Why normalization matters.} More generally, for any real-valued function $h$ and real constant $c$, the global inequalities
+\[
+(h(x)+c)+v(y-x)\leq h(y)+c
+\quad\Longleftrightarrow\quad
+h(x)+v(y-x)\leq h(y)
+\]
+are equivalent by cancellation. Hence $\partial(h+c)(x)=\partial h(x)$ for every $x$. The counterexample is intrinsic to the subdifferential definition. A uniqueness theorem with a suitable additive-constant qualification would be a different statement; the source does not include one.
+
+\paragraph{Formal correspondence.} The Lean 4.19.0 project uses Mathlib v4.19.0 pinned by commit. It defines the displayed global real subgradient inequality and its actual set of solutions, the epigraph in $\mathbb R\times\mathbb R$, and closed convexity using Mathlib's \texttt{ConvexOn} and \texttt{IsClosed}. It proves closedness and convexity for every constant function, computes all its subgradients, and proves general invariance under addition of a constant.
+
+The explicit witnesses are real functions, with their inequality-defined subdifferentials proved equal at every real point. Their distinctness follows by evaluation. The final theorem negates the universal unique-determination implication for closed convex real functions. This one-dimensional instance suffices to refute the unrestricted statement. No gradient table is supplied as an assumption, and no differentiability theorem or extra regularity hypothesis is needed.
+
+\paragraph{Verification.} The complete project build and a fresh direct source check are accompanied by theorem-axiom audits. Only standard logical axioms occur; no extra axioms, admitted proofs, or native decision shortcuts are used. The report's PDF was compiled and all pages visually inspected. No auxiliary numerical computation is necessary, because the proof establishes the inequalities for all real points and slopes. Reproduction instructions and verification evidence accompany the submission.
+\end{document}
