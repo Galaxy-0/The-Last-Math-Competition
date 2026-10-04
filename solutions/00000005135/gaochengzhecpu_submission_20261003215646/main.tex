@@ -1,0 +1,88 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{The ratio in Conjecture 00000005135 has the wrong upper endpoint}
+\author{gaochengzhecpu}
+\date{October 3, 2026}
+\hypersetup{hidelinks}
+\begin{document}
+\maketitle
+
+The source explicitly takes the ratio of the \emph{structured} condition
+number to the \emph{unstructured} one, and asserts an attainable upper
+endpoint $\sqrt n$. Under the standard comparison, which retains the same
+norm and sensitivity functional while restricting the perturbations, every
+defined finite positive-denominator ratio is at most one. The proposed
+endpoint already fails at $n=4$.
+
+Write $\mathcal H_n$ for the vector space of Hankel matrices:
+\[
+ E_{ij}=E_{k\ell}\quad\text{whenever }i+j=k+\ell.
+\]
+Let $a(E)$ be the amplification associated with a perturbation direction.
+For a differentiable matrix function it is the norm of its derivative
+applied to $E$. The relevant absolute condition numbers are
+\[
+ \kappa_{\rm u}=\sup_{\|E\|\leq1}a(E),\qquad
+ \kappa_{\rm s}=\sup_{\substack{\|E\|\leq1\\E\in\mathcal H_n}}a(E).
+\]
+Any common positive normalization for relative condition numbers cancels
+in their ratio. The structured domain is a subset of the unstructured
+domain. The defining least-upper-bound property therefore gives
+\[
+ \kappa_{\rm s}\leq\kappa_{\rm u}.
+\]
+This standard structured/unstructured comparison is also explicitly stated
+by Arslan, Noferini, and Tisseur\cite{ant}, who interpret a small ratio
+in this direction as a benefit of preserving structure.
+
+Whenever $0<\kappa_{\rm u}<\infty$ and the ratio is defined,
+\[
+ r=\frac{\kappa_{\rm s}}{\kappa_{\rm u}}\leq1.
+\]
+Consequently the supremum over \emph{any} family of these ratios, when
+it exists as a finite least upper bound, is also at most one. In dimension
+four the asserted upper endpoint is $\sqrt4=2>1$, so it cannot be attained,
+either by an individual pair of condition numbers or by a supremum over
+symbol pairs. The upper-end attainment clause of the conjecture is false.
+
+The positivity condition does not discard a possible endpoint witness:
+a finite ordinary ratio equal to two requires a nonzero denominator.
+Zero-over-zero and infinite-over-infinite do not define such a real ratio.
+This argument applies to the standard common-norm comparison. Comparing
+a parameter-vector norm on one side with a differently scaled matrix norm
+on the other would be a different definition; no such change is specified
+in the source.
+
+\newpage
+\paragraph{Formal verification.}
+The Lean 4.19.0 file \texttt{lean/Main.lean} uses only bundled Std.
+It defines Hankel matrices by all anti-diagonal equalities and defines
+both condition numbers by the full least-upper-bound predicate on their
+actual perturbation domains. The amplification and norm functions are
+arbitrary: proving the statement for all such functions covers every
+choice arising from a matrix derivative.
+
+The elementary scalar laws are packaged as the universally quantified
+\texttt{OrderedScale} interface. They are transitivity, positive
+multiplication cancellation, the multiplicative unit law, and ordinary
+strict-order facts. They are satisfied by real scalars; an explicit
+integer model is also included to verify consistency of this interface.
+The result is not restricted to integer-valued condition numbers.
+The equation $r\kappa_{\rm u}=\kappa_{\rm s}$ represents a ratio without
+division. The final theorem excludes a supremum of two for \emph{every}
+family of admissible Hankel ratios in dimension four, using the actual
+leastness property of the supremum. It is named
+\begin{quote}\texttt{conjecture\_5135\_endpoint\_false}.\end{quote}
+Its printed axiom list is empty. No \texttt{sorry}, \texttt{admit},
+\texttt{native\_decide}, or extra axiom is used.
+
+\begin{thebibliography}{1}
+\bibitem{ant}
+B. Arslan, V. Noferini, and F. Tisseur,
+\emph{The Structured Condition Number of a Differentiable Map Between
+Matrix Manifolds, with Applications}, MIMS EPrint 2017.36,
+especially the comparison on page 2 and Section 2.
+\url{https://eprints.maths.manchester.ac.uk/2579/}.
+\end{thebibliography}
+\end{document}
