@@ -2,7 +2,7 @@
 
 The conjecture says that the "nim graph" `Q_⊕(n)` of the hypercube has **diameter `2^n − 1`
 and chromatic number `2^n`**. Its vertices are the `2^n` vertices of the `n`-cube, and its
-edges are "given by ⊕". This is false for every `n ≥ 2`, **whatever edge set is meant**.
+edges are "given by ⊕". This is false for every `n ≥ 2`, **whatever symmetric (undirected) edge set is meant**.
 
 **Key fact.** A simple graph on `N` vertices with chromatic number `N` is complete. If `u` and
 `v` were non-adjacent, `v` could reuse the colour of `u`, and `N − 1` colours would suffice.
@@ -26,9 +26,20 @@ Scope and robustness:
   impossible. So `Q_⊕(n)` is a simple graph, and the Lean theorem covers all of them.
 - A disconnected graph has infinite diameter.
 - In the report and `verify.py` only (not in Lean):
-  - `χ + diam ≤ N + 1` for every connected graph, so other vertex counts are also excluded
-    up to `N < 2^{n+1} − 2`;
-  - acyclic (game-graph) directed readings give infinite directed diameter.
+  - **Other vertex counts.** `χ + diam ≤ N + 1` for every connected graph, so other vertex
+    counts are also excluded up to `N < 2^{n+1} − 2`. The bound is tight: `K_{2^n}` with a
+    pendant path of length `2^n − 2` has `2^{n+1} − 2` vertices, χ = 2^n and diameter `2^n − 1`.
+    This does not affect the conjecture, which fixes the vertex set to the `2^n` hypercube
+    vertices.
+  - **Acyclic directed readings.** The acyclic digraphs with complete underlying graph are
+    exactly the transitive tournaments. All their reachable distances are 1; otherwise the
+    directed diameter is ∞.
+  - **Cyclic non-symmetric digraphs.** These can reach directed diameter `N − 1` for every N.
+    Example: arcs `i→i+1` plus all backward arcs `j→i` with `j > i+1`. No rule depending on
+    `u ⊕ v` produces one, because ⊕ is commutative.
+  - **Grundy chromatic number.** If χ meant the Grundy (first-fit) chromatic number, Γ = N
+    would make the colour classes singletons. Each vertex is then adjacent to every vertex of
+    smaller colour, so G = K_N again, and this reading fails too.
 
 ## Contents
 
@@ -40,7 +51,9 @@ Scope and robustness:
   - `χ = N ⇒ complete` and `χ + diam ≤ N + 1` on all graphs with 3 to 6 vertices;
   - readings (H) and (K) for `n ≤ 5`;
   - all Cayley graphs `Cay((Z/2)^n, S)` for `n = 2, 3`;
-  - the directed remark.
+  - the directed remarks, including the family above for N = 3..8;
+  - the tight vertex-count example for n = 1, 2, 3;
+  - Grundy number 4 on 4 vertices only for K₄.
 - `verification.txt`: fresh build log, forbidden-token scan, and the `verify.py` output.
 
 ## Lean
@@ -83,7 +96,7 @@ pdflatex report.tex && pdflatex report.tex
 ## 中文说明
 
 猜想声称超立方体的 nim 图 `Q_⊕(n)`（顶点为 n 维立方体的 `2^n` 个顶点，边由 ⊕ 给出）的直径为
-`2^n − 1`，色数为 `2^n`。对每个 `n ≥ 2` 这都是错的，而且与边集的具体定义无关。
+`2^n − 1`，色数为 `2^n`。对每个 `n ≥ 2` 这都是错的，而且对任何对称（无向）边集都不成立。
 
 关键事实：`N` 个顶点的简单图若色数为 `N`，则必为完全图。否则，若 `u`、`v` 不相邻，可让 `v` 使用
 `u` 的颜色，`N − 1` 种颜色就够了。完全图的直径为 1。因此 `N ≥ 3` 时不存在色数为 `N` 且直径为
@@ -105,5 +118,11 @@ Lean（4.19.0，仅核心库）从零定义了以下概念：
 穷举检验。
 
 以下内容只在报告和 `verify.py` 中处理，未在 Lean 中形式化：
-- 不同顶点数的情形（`χ + diam ≤ N + 1`）；
-- 有向图解读。
+- 不同顶点数的情形：任何连通图都满足 `χ + diam ≤ N + 1`。这个界是紧的：在 `K_{2^n}` 上接一条长为
+  `2^n − 2` 的悬挂路，得到的图有 `2^{n+1} − 2` 个顶点，色数为 `2^n`，直径为 `2^n − 1`。这不影响本
+  猜想，因为猜想的顶点集固定为超立方体的 `2^n` 个顶点。
+- 有向图解读：底图为完全图的无环有向图恰好是传递竞赛图，其中所有可达距离都是 1，其余情形的有向
+  直径为 ∞。有环且非对称的有向图对每个 N 都可以达到有向直径 `N − 1`，例如取弧 `i→i+1` 以及所有满足
+  `j > i+1` 的反向弧 `j→i`。但由于 ⊕ 满足交换律，任何只依赖于 `u ⊕ v` 的规则都不会产生这样的有向图。
+- Grundy（首次适配）色数：若 Γ = N，则每个颜色类都只含一个顶点，而每个顶点都与所有颜色更小的顶点
+  相邻，所以图仍是 `K_N`，直径为 1。这种解读同样不成立。

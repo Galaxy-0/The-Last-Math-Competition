@@ -29,7 +29,7 @@ not specified, but this does not matter: we show that \emph{no} simple graph on
 $N\ge 3$ vertices has chromatic number $N$ and diameter $N-1$, because
 chromatic number $N$ forces the graph to be complete, and a complete graph has
 diameter $1$. Hence the conjecture fails for every $n\ge2$, already at $n=2$,
-whatever graph $Q_\oplus(n)$ is. For the two natural readings we also compute
+whatever symmetric (undirected) edge set is meant. For the two natural readings we also compute
 the true values: the hypercube $Q_n$ ($u\sim v$ iff $u\oplus v$ is a power of
 two) has $\chi=2$ and diameter $n$; the complete reading ($u\sim v$ iff
 $u\oplus v\ne0$) has $\chi=2^n$ and diameter $1$. Everything is formalized in
@@ -114,8 +114,8 @@ $\operatorname{diam}G\le1<2\le N-1$.
 \begin{corollary}\label{cor:main}
 For every $n\ge2$ and every simple graph $G$ on the $2^n$ vertices of the
 $n$-cube, $\operatorname{diam}G=2^n-1$ and $\chi(G)=2^n$ cannot both hold. In
-particular Conjecture 00000001289 is false, whatever edge set ``given by
-$\oplus$'' is meant; the smallest counterexample is $n=2$.
+particular Conjecture 00000001289 is false, whatever symmetric (undirected) edge set
+``given by $\oplus$'' is meant; the smallest counterexample is $n=2$.
 \end{corollary}
 \begin{proof}
 Apply Theorem~\ref{thm:main} with $N=2^n\ge4$.
@@ -190,6 +190,12 @@ and the remaining $N-d-1$ vertices with distinct new colours. This gives
 $\chi\le N-d+1$. The case $d=0$, i.e.\ $N=1$, is trivial. Hence
 $\operatorname{diam}=2^n-1$ and $\chi=2^n$ would need $N\ge2^{n+1}-2$
 vertices. For example, the clause fails at $n=2$ even on $5$ vertices.
+The bound is tight: $K_{2^n}$ with a pendant path of length $2^n-2$ attached
+to one of its vertices has $2^{n+1}-2$ vertices, chromatic number $2^n$, and
+diameter $1+(2^n-2)=2^n-1$ (from a clique vertex other than the attachment
+point to the far end of the path). This does not affect the conjecture, which
+fixes the vertex set to the $2^n$ vertices of the hypercube; there the clause
+is impossible by Corollary~\ref{cor:main}.
 \texttt{verify.py} confirms the inequality for all $2^{15}+2^{10}+2^6+2^3$
 labelled graphs on $N=3,\dots,6$ vertices. This remark is not formalized in
 Lean, and it is not needed for the disproof.
@@ -200,15 +206,30 @@ Edges ``given by $\oplus$'' are undirected, because $u\oplus v=v\oplus u$.
 Suppose one nevertheless reads $Q_\oplus(n)$ as a game digraph (``nim'' moves),
 with $\chi$ taken from the underlying undirected graph and the diameter
 measured along directed paths. Then $\chi=N$ still forces the underlying graph
-to be complete, by Lemma~\ref{lem:complete}. If the digraph is acyclic, as a
-game graph is, then for each pair only one direction is reachable, so the
-directed diameter is $\infty$. If instead all distances are counted as
-reachable-only, the transitive tournament gives $1$; either way it is not
-$2^n-1$. Only an arbitrary non-symmetric, cyclic arc rule could reach directed
-diameter $3$ on $4$ vertices. \texttt{verify.py} finds $192$ such digraphs over
-$K_4$, none symmetric. Such a rule is not a function of $u\oplus v$, and it is
-not a reading of the conjecture. This remark is likewise only in the report and
+to be complete, by Lemma~\ref{lem:complete}. The acyclic digraphs whose
+underlying graph is complete are exactly the transitive tournaments: there is
+one arc between each pair, and the arcs follow a linear order. In such a
+digraph every reachable ordered pair is joined by a single arc, so all
+reachable distances equal $1$. The reverse pairs are unreachable, so the
+directed diameter is $\infty$. In neither case is it $2^n-1$. A cyclic,
+non-symmetric arc rule can reach directed diameter $3$ on $4$ vertices, and
+\texttt{verify.py} finds $192$ such digraphs over $K_4$, none symmetric. Such
+digraphs exist for every $N\ge3$. For example, take the arcs $i\to i+1$ and
+all backward arcs $j\to i$ with $j>i+1$: the underlying graph is $K_N$, and the
+directed diameter is $N-1$. But no rule depending on $u\oplus v$ produces one,
+because $\oplus$ is commutative, so such a rule is not a reading of the
+conjecture. This remark is likewise only in the report and
 in \texttt{verify.py}.
+\end{remark}
+
+\begin{remark}[Grundy chromatic number]\label{rem:grundy}
+Suppose $\chi$ is read as the Grundy (first-fit) chromatic number $\Gamma$: the
+largest number of colours used by greedy colouring over all vertex orderings.
+In a Grundy colouring, every vertex of colour $k$ is adjacent to vertices of
+every colour $<k$. If $\Gamma=N$, the $N$ colour classes are singletons, so the
+vertex of each colour is adjacent to the vertex of every smaller colour. Then
+$G=K_N$ again, with diameter $1$, so this reading fails too. This remark is
+checked by \texttt{verify.py} for $N=4$ and is not formalized in Lean.
 \end{remark}
 
 \section{Lean formalization}
@@ -270,8 +291,8 @@ case splits.
 
 \paragraph{Scope of the formal result.} Lean covers every simple graph on the
 $2^n$ vertices $\{0,\dots,2^n-1\}$, i.e.\ every undirected reading of
-``edges given by $\oplus$''. Remarks~\ref{rem:count} and~\ref{rem:directed}
-(other vertex counts, directed readings) are only in this report and in
+``edges given by $\oplus$''. Remarks~\ref{rem:count}, \ref{rem:directed} and~\ref{rem:grundy}
+(other vertex counts, directed readings, Grundy number) are only in this report and in
 \texttt{verify.py}. The general-$n$ values for the hypercube reading
 (Proposition~\ref{prop:readings}(H)) are proved here on paper, and in Lean only
 for $n=1,2,3$. None of these is needed for the disproof.
@@ -285,7 +306,10 @@ $(\chi,\operatorname{diam})$, with no graph having $(4,3)$;
 on $3\le N\le6$ vertices;
 (iii) readings (H) and (K) for $n=1,\dots,5$, and all Cayley graphs of
 $(\mathbb Z/2)^n$ for $n=2,3$;
-(iv) the directed remark on $4$ vertices.
+(iv) the directed remark on $4$ vertices, and the directed family above for
+$N=3,\dots,8$;
+(v) the tight example for the vertex-count bound, for $n=1,2,3$;
+(vi) on $4$ vertices, only $K_4$ has Grundy number $4$.
 
 \section{Reproduction}
 \begin{verbatim}

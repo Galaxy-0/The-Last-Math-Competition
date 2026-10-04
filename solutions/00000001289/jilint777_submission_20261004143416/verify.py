@@ -175,5 +175,51 @@ check(acyclic_ok and acyc == 24, "the 24 acyclic orientations of K4 all have inf
 check(symmetric_ok, "every digraph over K4 with directed diameter 3 is non-symmetric (impossible for a rule"
       " depending on u xor v = v xor u)")
 
+# Directed family for every N: arcs i -> i+1 and j -> i for j > i + 1.
+for N in range(3, 9):
+    out = [set() for _ in range(N)]
+    for i in range(N - 1):
+        out[i].add(i + 1)
+    for j in range(N):
+        for i in range(j - 1):
+            out[j].add(i)
+    und_complete = all(j in out[i] or i in out[j] for i in range(N) for j in range(i + 1, N))
+    dm = max(max(bfs_dist(N, out, s)) for s in range(N))
+    check(und_complete and dm == N - 1,
+          f"N={N}: directed family has complete underlying graph and directed diameter N-1")
+
+# 5. Tightness of chi + diam <= N + 1: K_{2^n} plus a pendant path of length 2^n - 2.
+for n in (1, 2, 3):
+    k = 1 << n
+    N = 2 * k - 2
+    E = [(a, b) for a in range(k) for b in range(a + 1, k)]
+    prev = 0
+    for t in range(k, N):
+        E.append((prev, t))
+        prev = t
+    adj = adj_from_edges(N, E)
+    ch = k if all(set(range(k)) - {u} <= adj[u] for u in range(k)) and colorable(N, adj, k) else None
+    check(ch == k and diameter(N, adj) == k - 1,
+          f"n={n}: K_{k} + pendant path has {N} = 2^(n+1)-2 vertices, chi = {k}, diam = {k - 1}")
+
+
+# 6. Grundy (first-fit) chromatic number on 4 vertices: only K4 reaches 4.
+def grundy(N, adj):
+    best = 0
+    for order in itertools.permutations(range(N)):
+        col = {}
+        for v in order:
+            used = {col[w] for w in adj[v] if w in col}
+            c = 0
+            while c in used:
+                c += 1
+            col[v] = c
+        best = max(best, max(col.values()) + 1)
+    return best
+
+
+g4 = [E for E, adj in all_graphs(4) if grundy(4, adj) == 4]
+check(len(g4) == 1 and len(g4[0]) == 6, "on 4 vertices only K4 has Grundy number 4")
+
 print("ALL CHECKS PASSED" if ok else "SOME CHECK FAILED")
 sys.exit(0 if ok else 1)
