@@ -1,0 +1,118 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=27mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\setlength{\emergencystretch}{2em}
+\title{Summable inexact-inclusion errors do not ensure convergence\\
+\large Disproof of conjecture 00000008835}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+The conjecture asserts that summable tolerance sequences give
+strong convergence for approximate inclusions. Both language
+versions leave this assertion unqualified.
+An exact proximal-point iteration is already a counterexample:
+the tolerances are identically zero, but the operator has no zero.
+This refutes the convergence conjunct; the separate, unspecified
+product-rate assertion is not needed.
+
+\textbf{The operator.}
+Use the real Hilbert space $\mathbb R$ with its usual inner product,
+and the set-valued operator
+\[
+ A(x)=\{1\}\qquad(x\in\mathbb R).
+\]
+Its graph is $G=\{(x,1):x\in\mathbb R\}$.
+It is monotone, since for any two graph points
+\[
+ (x-y)(1-1)=0\geq0.
+\]
+It is also maximal monotone. Indeed, let a monotone graph $H$
+contain $G$, and take $(u,v)\in H$. Monotonicity with
+$(u-1,1)$ and $(u+1,1)$ gives respectively
+\[
+ v-1\geq0,\qquad -(v-1)\geq0.
+\]
+Thus $v=1$, so $(u,v)\in G$. No proper monotone enlargement exists.
+
+The single-valued representative $x\mapsto1$ is globally
+Lipschitz: its actual Lipschitz modulus is zero, and in particular
+it is $1$-Lipschitz. Nevertheless
+\[
+ \operatorname{zer} A=\varnothing.
+\]
+No degeneracy of the proximal parameter or failure of maximality
+is involved.
+
+\textbf{Actual resolvent.}
+With unit proximal parameter, the defining resolvent equation is
+\[
+ x\in y+A(y).
+\]
+Since $A(y)=\{1\}$, this is equivalent to $x=y+1$.
+It therefore has the unique solution
+\[
+ J_A(x)=(I+A)^{-1}(x)=x-1
+\]
+for every $x\in\mathbb R$.
+
+\newpage
+\textbf{Genuine approximate-inclusion steps.}
+The standard additive-error proximal inclusion with tolerances is
+\[
+ u_n-u_{n+1}-e_n\in A(u_{n+1}),\qquad
+ |e_n|\leq\varepsilon_n .
+\]
+Take an arbitrary initial point $u_0=x$ and iterate the actual
+resolvent:
+\[
+ u_{n+1}=J_A(u_n),\qquad e_n=0,\qquad\varepsilon_n=0.
+\]
+An induction gives the complete orbit
+\[
+ u_n=x-n.
+\]
+Consequently $u_n-u_{n+1}-e_n=1\in A(u_{n+1})$ and
+$|e_n|=0\leq\varepsilon_n$ for every $n$.
+The tolerances are nonnegative and summable, with
+\[
+ \sum_{n=0}^{\infty}\varepsilon_n=0.
+\]
+This is an exact method within the approximate-inclusion
+framework, rather than an arbitrary sequence satisfying a
+postulated convergence certificate.
+
+\textbf{Failure of strong convergence.}
+The orbit has no finite real limit for any initial point.
+For a direct argument, if $u_n\to a$, then also $u_{n+1}\to a$,
+so $u_{n+1}-u_n\to0$. But the actual difference is constantly
+$-1$. Uniqueness of limits would give $-1=0$, a contradiction.
+Thus summability, even zero total error, does not ensure strong
+convergence.
+
+\textbf{Scope and the missing hypothesis.}
+The counterexample does not contradict a proximal-point theorem
+that assumes a nonempty zero set. Solvability is precisely absent
+from the source's unconditional convergence assertion.
+The operator here is everywhere defined, maximal monotone and
+Lipschitz, and every proximal subproblem has a unique solution.
+The only essential obstruction is the absence of a target zero.
+No assertion is made about the source's vague product of a
+summable rate and a Lipschitz constant.
+
+\textbf{Formal correspondence and reproduction.}
+Lean defines the actual set-valued graph, the Hilbert inner-product
+monotonicity and maximality conditions, and the defining
+resolvent relation. It proves the unique formula $J_A(x)=x-1$,
+all iterates, the complete inexact-inclusion and norm-error
+conditions, nonnegative summable tolerances with sum zero,
+and nonconvergence in the real norm topology for every start.
+
+Run \texttt{lake build} in \texttt{lean/} using Lean 4.19.0.
+Public Mathlib revision:
+\begin{center}\small
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}
+\end{center}
+The project prints the relevant axiom audits.
+\end{document}
