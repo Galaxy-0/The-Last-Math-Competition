@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{Distinct dependent Mahler $U_1$-numbers}
+\author{ziangni-sys}
+\date{Conjecture 00000008326}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result.} The universal algebraic-independence assertion is false: two distinct Liouville numbers can differ by one.
+
+\paragraph{Scope.}
+Both source versions assert that two $U$-numbers are universally algebraically independent. We refute this conjunct using two numbers in the standard Mahler class $U_1$. No conclusion about the other conjectured laws is needed. In Mahler's classification, the Liouville numbers are precisely the $U_1$-numbers; see Adamczewski--Bugeaud, Definition~1.1 and the following sentence, p.~884~\cite{AB}. This standard classification is used here, independently of the source's separate designation of Liouville numbers as $U_\infty$.
+
+\paragraph{The actual numbers.}
+A real number $x$ is Liouville when, for every $N\in\mathbb N$, there are integers $a,b$ with $b>1$ such that
+\[
+0<\left|x-\frac ab\right|<\frac1{b^N}.
+\]
+Take the convergent factorial series
+\[
+L=\sum_{n=0}^{\infty}\frac1{10^{n!}},\qquad M=L+1.
+\]
+The index starts at zero. This is the base-ten Liouville series with its extra initial $1/10$ term, which does not affect the approximation property. For completeness, its truncation through $n=k$ has denominator $b=10^{k!}$ and integral numerator. For $k\geq\max(1,N)$, its positive tail is bounded by
+\[
+\sum_{n=k+1}^{\infty}10^{-n!}
+\leq \frac{10}{9}\,10^{-(k+1)!}
+<10^{-Nk!}=b^{-N}.
+\]
+Indeed the factorial exponents after $(k+1)!$ increase by at least one, and $((k+1)-N)k!\geq1$. Thus $L$ is Liouville.
+
+For every approximant $a/b$ of $L$, the integer numerator $a+b$ gives
+\[
+\left|M-\frac{a+b}{b}\right|=
+\left|L-\frac ab\right|.
+\]
+The strict positive error and the denominator are unchanged. Hence $M$ is also Liouville. Both numbers are individually transcendental, and $L\ne M$.
+
+\paragraph{Algebraic dependence.}
+The rational polynomial
+\[
+P(X,Y)=Y-X-1\in\mathbb Q[X,Y]
+\]
+is nonzero (its value at $(0,0)$ is $-1$), whereas $P(L,M)=0$. The pair is therefore not algebraically independent over $\mathbb Q$. This supplies two distinct $U_1$-numbers, hence two $U$-numbers, contradicting the universal conjunct.
+
+\paragraph{Formal verification.}
+The Lean project uses Mathlib's actual \texttt{liouvilleNumber} infinite sum, proves its summability, and applies the verified \texttt{liouville\_liouvilleNumber} approximation theorem. It proves preservation of the full \texttt{Liouville} predicate under translation, individual transcendence, and distinctness. The relation is an actual \texttt{MvPolynomial (Fin 2) \(\mathbb Q\)}; its nonzero value and vanishing evaluation refute Mathlib's \texttt{AlgebraicIndependent} predicate. The concluding existential theorem uses the Liouville approximation characterization of $U_1$, not a formalization of all Mahler classes. No numerical approximations or custom axioms are used.
+
+\begin{thebibliography}{1}
+\bibitem{AB} B.~Adamczewski and Y.~Bugeaud, \emph{Transcendence measures for continued fractions involving repetitive or symmetric patterns}, J.~Eur.~Math.~Soc. \textbf{12} (2010), 883--914, p.~884. \href{https://doi.org/10.4171/JEMS/218}{doi:10.4171/JEMS/218}.
+\end{thebibliography}
+\end{document}
