@@ -1,0 +1,34 @@
+== lake build (fresh, Lean 4.19.0)
+info: ternaryMDS: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+ℹ [2/3] Built Main
+info: ././././Main.lean:596:0: 'TernaryMDS.dep' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:598:0: 'TernaryMDS.no_mds_ternary' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:600:0: 'TernaryMDS.no_mds_12_6' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:602:0: 'TernaryMDS.conjecture_00000001090_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:604:0: 'TernaryMDS.conjecture_00000001090_monomial_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:606:0: 'TernaryMDS.no_mds_12_7' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:608:0: 'TernaryMDS.tetra_mds' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:610:0: 'TernaryMDS.golay_12_6_6' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:612:0: 'TernaryMDS.atMost660_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:614:0: 'TernaryMDS.pair_order_ge' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+pairs (u,v) in F_3^8 spanning a code with all 8 nonzero weights >= 7: 0
+largest minimum distance of a systematic ternary [8,2] code: 6
+systematic ternary [5,2] codes with minimum distance >= 4: 0
+systematic ternary [6,3] codes with minimum distance >= 4: 0
+Griesmer bound for a ternary [n,6,7] code: n >= 14
+300 random [12,6] ternary codes: the construction always gives weight <= 6
+tetracode: [4,2,3] MDS code (so n <= k+2 is sharp)
+Golay code weight distribution: {0: 1, 6: 264, 9: 440, 12: 24}
+pair code [12,6,2]: permutation automorphisms = 46080 = 2^6 * 6! = 46080
+the 768 permutations listed in Lean are distinct automorphisms of the pair code
+|M11| = 7920 does not divide 660, so M11 is not a subgroup of a group of order 660: True
+ALL CHECKS PASSED
+exit 0
