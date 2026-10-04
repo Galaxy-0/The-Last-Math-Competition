@@ -1,0 +1,316 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of Conjecture 00000001102:\\
+the R-polynomials of $S_3$ do not peak at $2^{d}(1-2^{-\lceil d/2\rceil})$}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000001102 asserts that for all $x\le w$ in a Coxeter group, the
+Kazhdan--Lusztig R-polynomial satisfies
+$\max R_{x,w}=2^{d}\,(1-2^{-\lceil d/2\rceil})$ with $d=\ell(w)-\ell(x)$.
+In the symmetric group $S_3$ (type $A_2$) the R-polynomials are
+$1,\ q-1,\ (q-1)^2,\ q^3-2q^2+2q-1$ for $d=0,1,2,3$, while the conjectured values
+are $0,1,2,6$. We show that the claim fails under every reasonable reading of
+``$\max R_{x,w}$'': the largest coefficient, the largest absolute value of a
+coefficient, the sum of the absolute values of the coefficients, the leading
+coefficient, the degree, the number of nonzero terms, the value at any fixed point
+$q_0$, and the maximum of $q\mapsto R_{x,w}(q)$. It fails even for strict pairs
+$x<w$ only, and also when ``max'' is taken over all pairs with a given $d$.
+The recursion printed in the statement, read literally, forces $R\equiv0$, so it
+cannot define anything else. Lean~4 (core library only) formalizes $S_3$, its
+Bruhat order, the R-polynomials (characterized by their defining recursion,
+with existence and uniqueness proved) and all of these refutations.
+\end{abstract}
+
+\section{The conjecture}
+
+The statement (English version) reads:
+\begin{quote}
+\emph{Definition:} The R-polynomials of KL theory are defined by the recursion
+$R_{x,w}=qR_{xs,w}+R_{x,ws}$. \emph{Conjecture:} For all $x\le w$,
+$\max R_{x,w}=2^{\ell(w)-\ell(x)}\cdot(1-2^{-\lceil(\ell(w)-\ell(x))/2\rceil})$;
+that is, the peak decays as a power of two, with decay exponent the ceiling of
+half the length difference.
+\end{quote}
+The Chinese version says the same. Write $d=\ell(w)-\ell(x)$ and
+\[
+f(d)=2^{d}\bigl(1-2^{-\lceil d/2\rceil}\bigr)=2^d-2^{d-\lceil d/2\rceil}=2^d-2^{\lfloor d/2\rfloor},
+\]
+so $f(0)=0$, $f(1)=1$, $f(2)=2$, $f(3)=6$, $f(4)=12$.
+
+\paragraph{Which R-polynomials.} ``The R-polynomials of KL theory'' are the
+polynomials $R_{x,w}\in\mathbb Z[q]$ of Kazhdan and Lusztig~\cite{kl}, defined
+for a Coxeter system $(W,S)$ by
+\[
+T_{w^{-1}}^{-1}=\varepsilon_w q^{-\ell(w)}\sum_{x\le w}\varepsilon_x R_{x,w}(q)\,T_x
+\]
+in the Hecke algebra ($\varepsilon_x=(-1)^{\ell(x)}$). They are characterized
+by (see \cite[\S7.5]{humphreys}, \cite[Ch.~5]{bb}):
+\begin{equation}\label{eq:R}
+\begin{aligned}
+&R_{x,w}=0 \text{ unless } x\le w,\qquad R_{w,w}=1,\\
+&\text{if } s\in S,\ ws<w: \quad R_{x,w}=\begin{cases}R_{xs,ws}& xs<x,\\
+(q-1)R_{x,ws}+qR_{xs,ws}& xs>x.\end{cases}
+\end{aligned}
+\end{equation}
+The recursion printed in the statement, $R_{x,w}=qR_{xs,w}+R_{x,ws}$, has no base
+case and no condition on $s$; it is a garbled version of~\eqref{eq:R}. Read
+literally (for all $x,w$ and one fixed $s$) it forces $R\equiv0$
+(Proposition~\ref{prop:literal}), which contradicts $R_{w,w}=1$; then
+$\max R_{x,w}=0\ne1=f(1)$ for every covering pair anyway. We therefore use the
+standard R-polynomials~\eqref{eq:R}.
+
+\paragraph{Which group.} The statement concerns KL theory in general, with no
+particular Coxeter group named. The symmetric group $S_3$ (type $A_2$) is a Coxeter
+group, so a counterexample in $S_3$ refutes ``for all $x\le w$''.
+
+\paragraph{Which ``max''.} ``$\max R_{x,w}$'' (the ``peak'') is not defined in the
+statement. We consider every reading we could think of
+(Section~\ref{sec:readings}) and refute each one, already restricted to strict
+pairs $x<w$. The pair $x=w$, where $R_{w,w}=1$ but $f(0)=0$, gives a second
+counterexample for every reading $\rho$ with $\rho(1)\ne0$.
+
+\section{\texorpdfstring{$S_3$, its Bruhat order and its R-polynomials}{S3, its Bruhat order and its R-polynomials}}
+
+We write permutations of $\{1,2,3\}$ in one-line notation $w=[w(1),w(2),w(3)]$.
+The length $\ell(w)$ is the number of inversions. The reflections are the three
+transpositions; right multiplication $w\mapsto wt$ by the transposition $t=(i\,j)$
+swaps the entries in positions $i$ and~$j$. The simple reflections are
+$s_1=(1\,2)$ and $s_2=(2\,3)$. Bruhat order is the reflexive--transitive closure
+of $x\to xt$ ($t$ a reflection, $\ell(xt)>\ell(x)$). Write
+$e=[1,2,3]$, $s_1=[2,1,3]$, $s_2=[1,3,2]$, $s_1s_2=[2,3,1]$, $s_2s_1=[3,1,2]$,
+$w_0=[3,2,1]$. The Hasse diagram has $e<s_1,s_2$, then $s_1,s_2<s_1s_2,s_2s_1$,
+then $s_1s_2,s_2s_1<w_0$, so there are $19$ comparable pairs: $6$ with $d=0$,
+$8$ with $d=1$, $4$ with $d=2$ and one ($e<w_0$) with $d=3$.
+
+\begin{proposition}\label{prop:S3}
+For $x\le w$ in $S_3$, $R_{x,w}$ depends only on $d=\ell(w)-\ell(x)$:
+\[
+R_{x,w}=1,\quad q-1,\quad (q-1)^2=q^2-2q+1,\quad q^3-2q^2+2q-1
+\qquad (d=0,1,2,3).
+\]
+\end{proposition}
+
+\begin{proof}
+We apply~\eqref{eq:R}. For $d=1$, take the covering pair $e<s_1$ and $s=s_1$: $ws=e$
+and $xs=s_1>e$, so $R_{e,s_1}=(q-1)R_{e,e}+qR_{s_1,e}=q-1$, because
+$s_1\not\le e$. For $d=2$, take $e<s_1s_2$ and $s=s_2$: $ws=s_1$ and $xs=s_2>e$,
+so $R_{e,s_1s_2}=(q-1)R_{e,s_1}+qR_{s_2,s_1}=(q-1)^2$, because $s_2\not\le s_1$.
+For $d=3$, take $w_0=s_1s_2s_1$ and $s=s_1$: $ws=s_1s_2$ and $xs=s_1>e$, so
+$R_{e,w_0}=(q-1)R_{e,s_1s_2}+qR_{s_1,s_1s_2}$. Here
+$R_{s_1,s_1s_2}=(q-1)R_{s_1,s_1}+qR_{s_1s_2,s_1}=q-1$ (using $s=s_2$). Hence
+$R_{e,w_0}=(q-1)^3+q(q-1)=q^3-2q^2+2q-1$. The remaining pairs are similar.
+Lean checks all $36$ pairs and all choices of $s$ (Section~\ref{sec:lean}), and
+\texttt{verify.py} recomputes everything from the Hecke algebra. It is also
+classical that $R_{x,w}=q-1$ whenever $d=1$ and $R_{x,w}=(q-1)^2$ whenever $d=2$,
+in every Coxeter group~\cite[Ch.~5]{bb}.
+\end{proof}
+
+\section{Refutation under every reading of ``max''}\label{sec:readings}
+
+\begin{theorem}\label{thm:main}
+Let $\rho$ be any of the following readings of ``$\max R_{x,w}$'':
+(a) the largest coefficient; (b) the largest absolute value of a coefficient;
+(c) the sum of the absolute values of the coefficients; (d) the leading
+coefficient; (e) the degree; (f) the number of nonzero terms; (g) the value
+$R_{x,w}(q_0)$ at a fixed point $q_0$ (any $q_0\in\mathbb C$; Lean: integer $q_0$); (h) the maximum
+of the function $q\mapsto R_{x,w}(q)$ over $\mathbb Z$ or $\mathbb R$. Then the identity
+$\rho(R_{x,w})=f(\ell(w)-\ell(x))$ fails for some pair $x<w$ of $S_3$.
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:S3}, with pairs $e<s_1$ ($d=1$), $e<s_1s_2$ ($d=2$) and
+$e<w_0$ ($d=3$):
+
+\begin{center}
+\begin{tabular}{lcccl}
+\toprule
+reading & $d=1$ & $d=2$ & $d=3$ & failure\\
+\midrule
+conjectured $f(d)$ & $1$ & $2$ & $6$ & \\
+(a) largest coefficient & $1$ & $1$ & $2$ & $d=2$: $1\ne2$\\
+(b) largest $|$coefficient$|$ & $1$ & $2$ & $2$ & $d=3$: $2\ne6$\\
+(c) sum of $|$coefficients$|$ & $2$ & $4$ & $6$ & $d=1$: $2\ne1$\\
+(d) leading coefficient & $1$ & $1$ & $1$ & $d=2$: $1\ne2$\\
+(e) degree & $1$ & $2$ & $3$ & $d=3$: $3\ne6$\\
+(f) number of nonzero terms & $2$ & $3$ & $4$ & $d=1$: $2\ne1$\\
+(g) value at $q_0=2$ & $1$ & $1$ & $3$ & $d=2$: $1\ne2$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+For (g) with an arbitrary $q_0\in\mathbb C$: the case $d=1$ requires $q_0-1=1$, so
+$q_0=2$, and then $d=2$ gives $(q_0-1)^2=1\ne2$. For (h): $R_{e,s_1}(q)=q-1$ is
+unbounded above on $\mathbb Z$ (for instance $R_{e,s_1}(3)=2>1=f(1)$), so it has no
+maximum, let alone the maximum $f(1)=1$.
+
+Now let ``max'' mean the maximum over a fixed compact interval $[a,b]$ with
+$a<b$.
+\begin{itemize}
+\item \emph{Maximum of $R$.} For $d=1$ we need $\max_{[a,b]}(q-1)=b-1=1$, so $b=2$.
+The function $(q-1)^2$ is convex, so for $d=2$ its maximum on $[a,2]$ is
+$\max\{(a-1)^2,1\}$. Setting this equal to $2$ forces $(a-1)^2=2$, so
+$a=1-\sqrt2$ (the other root, $1+\sqrt2$, exceeds $b=2$). For $d=3$, the
+derivative of $q^3-2q^2+2q-1$ is $3q^2-4q+2$. Its discriminant is
+$16-24<0$, so the derivative is positive and the polynomial is increasing.
+Hence its maximum on $[1-\sqrt2,2]$ is its value at $2$, namely $8-8+4-1=3\ne6$.
+\item \emph{Maximum of $|R|$.} For $d=1$ we need $\max_{[a,b]}|q-1|=1$, which
+forces $[a,b]\subseteq[0,2]$. Then $\max_{[a,b]}(q-1)^2\le1\ne2$ at $d=2$.
+\end{itemize}
+For example, $\max_{[0,1]}(q-1)=0\ne1$.
+\end{proof}
+
+\begin{remark}[The pair $x=w$]
+For $x=w$ we have $d=0$, $R_{w,w}=1$ and $f(0)=2^0(1-2^0)=0$. So the non-strict
+statement ``for all $x\le w$'' fails for every reading with $\rho(1)\ne0$, which
+covers (a)--(d), (f), (g) and (h). Only the degree reading (e) survives $d=0$, and
+it fails at $d=3$.
+\end{remark}
+
+\begin{remark}[Maximum over all pairs with the same $d$]\label{rem:agg}
+One might read ``$\max R_{x,w}$'' as the maximum of $\rho(R_{x,w})$ over all pairs
+with the given length difference $d$. In $S_3$ all pairs with the same $d$ have
+the same R-polynomial (Proposition~\ref{prop:S3}), so this aggregated reading
+coincides with the per-pair one and fails as above. Over all Coxeter groups,
+$R_{x,w}=q-1$ for $d=1$ and $(q-1)^2$ for $d=2$ always, so the failures at
+$d\le2$ in the table persist. The degree is always $d$, so (e) fails at $d=3$.
+For (b) at $d=3$, Dyer's formula~\cite{dyer} gives
+$\widetilde R_{x,w}(t)=t^3+at$ with $a\in\{0,1\}$, hence
+$R_{x,w}\in\{(q-1)^3,\ (q-1)^3+q(q-1)\}$, whose largest absolute coefficients are
+$3$ and $2$, never $6$. These general-group facts are quoted from the literature
+and are not formalized. \texttt{verify.py} also surveys $S_4$, where the
+aggregated maxima are far from $f(d)$ for every reading.
+\end{remark}
+
+\begin{remark}[Other normalizations]
+Some authors use $\varepsilon_x\varepsilon_w R_{x,w}=(-1)^dR_{x,w}$ or the
+polynomial $\widetilde R_{x,w}$ with
+$R_{x,w}(q)=q^{d/2}\widetilde R_{x,w}(q^{1/2}-q^{-1/2})$. For $S_3$ these are
+$1-q,\ (q-1)^2,\ 1-2q+2q^2-q^3$ and $t,\ t^2,\ t^3+t$ ($d=1,2,3$). Every reading
+(a)--(g) still fails, at $d=2$ or $d=3$ (and (g) for every $q_0$). This is checked
+by \texttt{verify.py}. Readings (b), (c), (e), (f) are insensitive to the sign
+change and to reversing the coefficient list.
+\end{remark}
+
+\begin{remark}[Scope]
+The conjecture is false as a statement about KL theory, and in particular about
+the symmetric groups. We do not claim that it fails in every individual Coxeter
+group. In $W=\mathbb Z/2$ (type $A_1$) the only strict pair has $R=q-1$, which
+matches $f(1)=1$ under several readings. In $W=\mathbb Z/2\times\mathbb Z/2$
+(type $A_1\times A_1$) the strict pairs have $R=q-1$ ($d=1$) and $R=(q-1)^2$
+($d=2$). Reading (b) then gives $1,2=f(1),f(2)$. For all $x\le w$, the degree
+reading (e) gives $0,1,2=f(0),f(1),f(2)$.
+
+Every Coxeter group that contains an interval of length $3$ fails at $d=3$
+under both readings. For (e), $R_{x,w}$ is monic of degree $d$, so its degree is
+$3\ne6$. For (b), Dyer's formula (Remark~\ref{rem:agg}) gives largest absolute
+coefficient $2$ or $3\ne6$. A statement of the form ``the identity holds in some
+specific $W$'' is not the claim. The claim is made about KL theory in general,
+and $S_3$ is a Coxeter group.
+\end{remark}
+
+\begin{proposition}[The literal recursion]\label{prop:literal}
+Let $m$ be an involution of a set $W$ (e.g.\ $x\mapsto xs$ for a fixed simple
+reflection $s$). Let $R_{x,w}$ ($x,w\in W$) be polynomials, or even formal power
+series, over $\mathbb Z$ with $R_{x,w}=qR_{m(x),w}+R_{x,m(w)}$ for all $x,w$.
+Then $R\equiv0$.
+\end{proposition}
+
+\begin{proof}
+Write $R_{x,w}=\sum_k r_k(x,w)q^k$. Apply the recursion to $(m(x),w)$ and
+$(m(x),m(w))$ and add. The terms $R_{m(x),w}+R_{m(x),m(w)}$ cancel, leaving
+$q\,(R_{x,w}+R_{x,m(w)})=0$. Hence $r_k(x,w)=-r_k(x,m(w))$ for all $k$. Now
+induct on $k$. The coefficient of $q^k$ in the recursion is
+$r_k(x,w)=r_{k-1}(m(x),w)+r_k(x,m(w))$, where $r_{-1}=0$ and $r_{k-1}=0$ by
+induction. So $r_k(x,w)=r_k(x,m(w))=-r_k(x,w)$, and $r_k(x,w)=0$.
+\end{proof}
+
+\section{Lean formalization}\label{sec:lean}
+
+The Lean project \texttt{lean4/} (Lean 4.19.0, core library only, namespace
+\texttt{KLR}) contains:
+\begin{itemize}
+\item \texttt{S3}: the six permutations as lists, with \texttt{S3\_spec}
+(distinct, each a permutation of $[1,2,3]$). \texttt{inv} is the inversion count
+(length) and \texttt{swapPos}/\texttt{rmul} are right multiplication by
+transpositions and simple reflections.
+\item \texttt{BruhatLe}: Bruhat order, defined inductively as the
+reflexive--transitive closure of $x\to xt$ with $\ell(xt)>\ell(x)$.
+\texttt{bruhatB} is a bounded chain search, and \texttt{bruhatB\_iff} proves
+$\texttt{bruhatB}\ x\ w=\texttt{true}\iff\texttt{BruhatLe}\ x\ w$ for $x\in S_3$.
+\texttt{bruhat\_count} counts $19$ comparable pairs, and \texttt{bruhat\_length}
+shows that $x\le w$ implies $\ell(x)\le\ell(w)$.
+\item Polynomials in $\mathbb Z[q]$ are normalized coefficient lists.
+\texttt{IsRFamily R} is exactly~\eqref{eq:R}: vanishing off the Bruhat order,
+$R_{w,w}=1$, and the recursion for \emph{every} simple $s$ with $ws<w$.
+\texttt{R0\_isRFamily} shows that the computed family satisfies it, so the
+recursion is consistent for every choice of descent. \texttt{RFamily\_unique}
+shows that any two families satisfying it agree (by induction on $\ell(w)$).
+So all statements are about \emph{the} R-polynomials.
+\item \texttt{R\_classification} proves Proposition~\ref{prop:S3}, and
+\texttt{R\_values} gives $R_{e,e},R_{e,s_1},R_{e,s_1s_2},R_{e,w_0}$.
+\item \texttt{Formula v d} is the conjectured identity multiplied by
+$2^{\lceil d/2\rceil}$: $v\cdot2^{c}=2^d(2^{c}-1)$ with
+$c=\lceil d/2\rceil=\lfloor (d+1)/2\rfloor$. \texttt{formula\_values} shows
+$f(0..4)=0,1,2,6,12$. \texttt{Claim}~$\rho$~\texttt{R} is ``for all $x\le w$ in
+$S_3$, \texttt{Formula}$(\rho(R_{x,w}),d)$''. \texttt{ClaimStrict} restricts to
+$x\ne w$, \texttt{ClaimAgg} is the aggregated reading, and
+\texttt{ClaimMaxValue} is reading (h) over $\mathbb Z$.
+\item \texttt{conjecture\_00000001102\_false}: for every \texttt{R} with
+\texttt{IsRFamily R}, $\neg$\texttt{Claim}, $\neg$\texttt{ClaimStrict} and
+$\neg$\texttt{ClaimAgg} hold for readings (a)--(f) and for (g) at every integer
+$q_0$, and $\neg$\texttt{ClaimMaxValue} holds.
+\texttt{conjecture\_00000001102\_false\_R0} instantiates this with the concrete
+family. \texttt{not\_claim\_diag} gives the $x=w$ counterexample for every
+$\rho$ with $\rho(1)\ne0$.
+\item \texttt{literal\_recursion\_forces\_zero} is
+Proposition~\ref{prop:literal} for coefficient sequences $\mathbb N\to\mathbb Z$
+and any involution. \texttt{literal\_recursion\_inconsistent} applies it to
+$S_3$ with $s=s_1$.
+\end{itemize}
+Not in Lean: evaluation at non-integer $q_0$ (the same two-line argument), the
+general-Coxeter-group facts of the remarks, and the alternative normalizations.
+\texttt{verify.py} checks the latter. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axioms. \texttt{\#print axioms} shows at most
+\texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
+
+\section{Reproduction}
+\begin{verbatim}
+cd lean4 && lake build       # Lean 4.19.0, core only
+python3 verify.py            # standard library only
+pdflatex report.tex
+\end{verbatim}
+\texttt{verify.py} uses a different method from the Lean code. It computes
+$T_{w^{-1}}^{-1}$ in the Hecke algebra of $S_3$ (and $S_4$) with Laurent
+polynomials and reads off $R_{x,w}$. It decides Bruhat order by the tableau
+criterion and checks that $R_{x,w}\ne0$ exactly when $x\le w$. It then evaluates
+every reading for $R$, $(-1)^dR$ and $\widetilde R$ against $f(d)$ computed with
+exact fractions, and searches $q_0\in[-50,50]$ for evaluation points.
+
+\begin{thebibliography}{9}
+\bibitem{kl} D.~Kazhdan and G.~Lusztig, Representations of Coxeter groups and
+Hecke algebras, \emph{Invent. Math.} 53 (1979), 165--184.
+\bibitem{humphreys} J.~E.~Humphreys, \emph{Reflection Groups and Coxeter Groups},
+Cambridge University Press, 1990.
+\bibitem{bb} A.~Bj\"orner and F.~Brenti, \emph{Combinatorics of Coxeter Groups},
+GTM 231, Springer, 2005.
+\bibitem{dyer} M.~J.~Dyer, Hecke algebras and shellings of Bruhat intervals,
+\emph{Compositio Math.} 89 (1993), 91--115.
+\end{thebibliography}
+
+\end{document}
