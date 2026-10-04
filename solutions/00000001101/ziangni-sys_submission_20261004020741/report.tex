@@ -1,0 +1,158 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\title{A rank-one counterexample to conjecture 00000001101}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The root system $A_1$ disproves the claim that every root system has a
+Kazhdan--Lusztig polynomial whose leading coefficient has an odd prime factor.
+Its three nonzero Kazhdan--Lusztig polynomials are all the constant polynomial
+$1$. A self-contained Lean 4 project proves the conclusion for every
+polynomial family satisfying the standard rank-one KL conditions, rather
+than merely checking a supplied table.
+\end{abstract}
+
+\section{The statement and counterexample}
+The original English statement is:
+\begin{quote}
+Definition: The Kazhdan--Lusztig polynomials $P_{x,w}(q)$ of Weyl groups.
+Conjecture: For every root system there exist $x,w$ such that the leading
+coefficient of $P_{x,w}$ contains an odd prime factor beyond powers of two
+(diversity of prime factors of KL coefficients).
+\end{quote}
+The universal quantifier includes the reduced, irreducible, crystallographic
+root system $\Phi=\{-1,1\}\subset\mathbb R$. The Euclidean inner product
+is $\langle a,b\rangle=ab$. For either root $\alpha$, the root reflection
+is
+\[
+r_\alpha(t)=t-2\frac{\langle t,\alpha\rangle}{\langle\alpha,\alpha\rangle}
+\alpha=-t.
+\]
+Thus $\Phi$ spans its one-dimensional ambient space, is stable under
+root reflections, satisfies the reducedness condition, and its Cartan
+integers $2\langle\beta,\alpha\rangle/\langle\alpha,\alpha\rangle$
+are $\pm2$. This is the standard root system $A_1$. Its Weyl group is
+$W=\{e,s\}$ with $s^2=e$. The Coxeter lengths are $\ell(e)=0$ and
+$\ell(s)=1$; its Bruhat order is $e<s$.
+
+\section{Derivation of the KL polynomials}
+We use the usual convention $P_{x,w}=0$ when $x\not\leq w$. For comparable
+pairs the KL polynomials obey
+\[
+P_{w,w}=1,\qquad P_{x,w}(0)=1,\qquad
+\deg P_{x,w}\leq\frac{\ell(w)-\ell(x)-1}{2}\quad(x<w).
+\]
+For $e<s$, the degree bound is zero, so $P_{e,s}$ is constant;
+its constant term forces $P_{e,s}=1$. Diagonal normalization gives the
+other two nonzero polynomials. Every pair in $W\times W$ is accounted for:
+\[
+\begin{array}{c|cc}
+P_{x,w}&w=e&w=s\\\hline
+x=e&1&1\\
+x=s&0&1
+\end{array}
+\]
+
+For completeness, the rank-one calculation can also be obtained directly
+from the defining Hecke-algebra construction, without using a precomputed
+table. Set $q=v^2$ and let $T=T_s$. The relation is
+\[
+T^2=(q-1)T+q,
+\quad T^{-1}=q^{-1}T+(q^{-1}-1).
+\]
+The bar operation sends $v$ to $v^{-1}$ and $T$ to $T^{-1}$. Consequently
+\[
+\overline{v^{-1}(T+1)}
+=v\bigl(q^{-1}T+(q^{-1}-1)+1\bigr)
+=v^{-1}(T+1).
+\]
+This element has the prescribed leading term $v^{-1}T$ and lower
+coefficient $v^{-1}\in v^{-1}\mathbb Z[v^{-1}]$. It is therefore the
+canonical basis element $C'_s$. Indeed, the difference of two such
+bar-invariant elements would be a scalar Laurent polynomial supported
+in strictly negative powers of $v$ and equal to its bar, hence zero.
+Comparing
+\[
+C'_s=v^{-\ell(s)}\sum_{x\leq s}P_{x,s}(v^2)T_x
+=v^{-1}(T+1)
+\]
+again yields $P_{e,s}=P_{s,s}=1$.
+
+\begin{theorem}
+Conjecture 00000001101 is false.
+\end{theorem}
+\begin{proof}
+Every nonzero KL polynomial of the root system $A_1$ equals $1$, so its
+leading coefficient is $1$. No prime divides $1$: if a natural prime $p$
+divided $1$, then $p=1$, contradicting $p\geq2$. In particular no odd
+prime divides the leading coefficient. The only remaining pair $(s,e)$
+has the zero polynomial, which has no leading nonzero coefficient and
+no prime factorization. It cannot witness the conjecture. The existential
+claim fails for this root system, disproving the universal statement.
+\end{proof}
+
+\section{Formal verification and semantic correspondence}
+The project uses Lean 4.19.0 and its standard library only.
+\texttt{W} is the two-element Weyl group indexing type, \texttt{action}
+is identity or integer negation, and \texttt{reflection\_preserves\_roots}
+checks preservation of the coordinate representatives $\{-1,1\}$.
+\texttt{len} and \texttt{bruhat} encode the lengths and order above.
+\texttt{Poly} encodes an integer polynomial as a coefficient function
+$\mathbb N\to\mathbb Z$ together with a finite support bound.
+
+\texttt{KLFamily P} is an explicit proposition on an arbitrary family
+of these polynomials. It records diagonal normalization, zero outside
+Bruhat order, constant term $1$ for comparable pairs, and the strict
+degree bound coefficientwise: for $x<w$, a coefficient at $k$ vanishes
+if $\ell(w)-\ell(x)\leq2k$. This is exactly
+$2\deg P_{x,w}<\ell(w)-\ell(x)$ for nonzero polynomials.
+In rank one these conditions uniquely determine all coefficients;
+\texttt{KL\_unique\_coeff} proves that fact. Thus the theorem applies
+to the actual KL family, which satisfies these standard conditions,
+and to any proposed implementation of it.
+
+\texttt{IsLeading p k} requires the coefficient at $k$ to be nonzero
+and all higher coefficients to vanish. This faithfully excludes the
+zero polynomial. \texttt{Prime} uses $p\geq2$ and the usual positive
+natural divisor condition; \texttt{OddPrimeDivisor} requires primality,
+oddness and divisibility of the absolute integer coefficient.
+\texttt{leading\_is\_one} proves the leading coefficient is $1$ for
+every pair and every proposed leading index.
+\texttt{rank\_one\_disproof} then proves the negation of the existential
+claim for every \texttt{KLFamily}; \texttt{certified\_counterexample}
+instantiates it with a family whose defining conditions are themselves
+proved in \texttt{table\_is\_KL}.
+
+No KL property is declared as a Lean axiom. The properties are explicit
+hypotheses of the generic theorem and are discharged for the rank-one
+witness. The project does not formalize general root-system or Hecke-algebra
+theory; the identification with $A_1$ and the direct canonical-basis
+derivation are provided above. No general KL positivity theorem or
+numerical search is needed. The final theorems depend only on the standard
+logical axioms \texttt{propext} and \texttt{Quot.sound}; there are no
+admitted proofs, custom axioms or native evaluation tactics.
+
+\section{Reproduction and sources}
+Run \texttt{lake build} and \texttt{lake env lean Main.lean} inside
+\texttt{lean/}. Run \texttt{python verify.py} in the submission directory
+for an independent exact Laurent-polynomial verification of the bar
+calculation and all four table entries. Compile this source with
+\texttt{tectonic report.tex}. The accompanying verification log records
+the compiler results and visual PDF inspection.
+
+The mathematical conventions are those of D.~Kazhdan and G.~Lusztig,
+\emph{Representations of Coxeter groups and Hecke algebras},
+Inventiones Mathematicae 53 (1979), 165--184,
+\href{https://doi.org/10.1007/BF01390031}{doi:10.1007/BF01390031}.
+For coefficient and indexing conventions see M.~Goresky's
+\href{https://www.math.ias.edu/~goresky/tables.html}{Tables of
+Kazhdan--Lusztig Polynomials} (Institute for Advanced Study).
+The repository statement is
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000001101.md}{conjectures/00000001101.md}.
+\end{document}
