@@ -1,0 +1,72 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\title{A discrete torus translation contradicting conjecture 00000005397}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\raggedright
+\maketitle
+\noindent\textbf{Result and convention.} Under the standard discrete dynamical meaning of a torus translation, rational independence of the frequency components alone does not imply a dense orbit.
+
+\paragraph{Scope of the original.}
+Both original language versions assert that the translation orbit on the two-dimensional torus is dense if and only if the components of the frequency vector are linearly independent over the rationals. We consider the orbit of one fixed translation map and refute this sufficiency clause. The source does not explicitly state discrete versus continuous time, so that convention is made explicit here. We do not assert a counterexample to a continuous-time linear flow.
+
+\paragraph{The actual torus and translation.}
+Let \(\mathbb T=\mathbb R/\mathbb Z\), writing \([r]\) for the class of \(r\), and let \(\mathbb T^2=\mathbb T\times\mathbb T\) with its quotient/product topology. Take the real frequency vector
+\[
+ \alpha=(\sqrt2,1),\qquad
+ \theta=([\sqrt2],[1])=([\sqrt2],0).
+\]
+The continuous invertible map is
+\[
+ T(x)=x+\theta,\qquad T^{-1}(x)=x-\theta.
+\]
+The two-sided discrete orbit of any \(x=(x_1,x_2)\) is exactly
+\[
+ {\cal O}(x)=\{x+n\theta:n\in\mathbb Z\}
+ =\{(x_1+[n\sqrt2],x_2):n\in\mathbb Z\}.
+\]
+For \(n\geq0\), \(T^n(x)=x+n\theta\). Addition and subtraction by \(\theta\) realize successive forward and backward steps.
+
+\paragraph{Rational independence.}
+Suppose \(a\sqrt2+b=0\) for rationals \(a,b\).
+If \(a\ne0\), then \(\sqrt2=-b/a\) would be rational, contradicting irrationality of \(\sqrt2\). Thus \(a=0\), and then \(b=0\). Consequently the two real components are linearly independent over \(\mathbb Q\).
+
+\paragraph{Non-density for every starting point.}
+The entire integer orbit lies in
+\[
+ F_x=\{y\in\mathbb T^2:y_2=x_2\}.
+\]
+This fiber is closed, since the second-coordinate projection is continuous and the circle is Hausdorff. It is proper: the point
+\((x_1,x_2+[1/2])\) does not belong to it, because \([1/2]\ne0\) in \(\mathbb R/\mathbb Z\). Therefore
+\(\overline{{\cal O}(x)}\subseteq F_x\ne\mathbb T^2\).
+No two-sided orbit is dense. In particular no forward orbit is dense, as each is contained in its two-sided orbit.
+\newpage
+\paragraph{Why the discrete criterion fails.}
+For a fixed translation, arithmetic resonance includes integral relations with an integer constant. Here the second frequency is the integer \(1\), so its circle increment vanishes. The homogeneous relation between the two real components required to defeat their rational independence does not occur. The omitted constant term is the source of the failure. One usually expresses the discrete density criterion by rational independence of \(1,\alpha_1,\alpha_2\), rather than of only \(\alpha_1,\alpha_2\).
+
+For the continuous-time flow \(x\mapsto x+t\alpha\), \(t\in\mathbb R\), the second coordinate is not fixed, and the independence condition has a different meaning. That flow is not the system refuted here. Likewise, choosing different real representatives of the same circle increments can change component independence while leaving the fixed translation unchanged. Our frequencies and their induced map are given explicitly, so no representative choice is hidden.
+
+\paragraph{Formal correspondence.}
+The Lean project uses Mathlib's actual quotient group
+\(\texttt{AddCircle}\,(1:\mathbb R)\), its topology, and the product torus. It does not replace the torus by a finite model or assume the orbit is non-dense.
+\begin{itemize}
+\item \texttt{frequency} is the \(\texttt{Fin 2}\)-indexed real family \((\sqrt2,1)\). \texttt{independent\_components} proves actual \(\texttt{LinearIndependent}\,\mathbb Q\) using irrationality of \(\sqrt2\).
+\item \texttt{theta\_from\_frequency} explicitly links the circle increment to the two real components.
+\item \texttt{translation}, \texttt{inverseTranslation}, and \texttt{integerOrbit} are the actual addition map, inverse, and integer orbit. Continuity, inverse identities, forward/backward orbit steps, and equality with forward iterates are proved.
+\item \texttt{fiber\_closed}, \texttt{half\_nonzero}, and \texttt{fiber\_proper} establish the closed proper obstruction using the circle quotient and actual topology.
+\item \texttt{integer\_orbit\_not\_dense} uses closure inclusion to negate density for every starting point. \texttt{forward\_orbit\_not\_dense} covers the forward iterates.
+\item \texttt{counterexample} combines actual rational independence, continuity, and both non-density conclusions.
+\end{itemize}
+
+\paragraph{Reproduction and scope limit.}
+The project pins Lean 4.19.0 and Mathlib commit
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+In \texttt{lean/}, run \texttt{lake build}, followed by:
+\begin{center}
+\small\texttt{lake env lean Main.lean -DwarningAsError=true}.
+\end{center}
+Audits use only \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}; no admitted proofs or added axioms are used. The remaining closure-count and unique-ergodicity clauses are not claimed to be resolved. The refutation concerns the ordinary fixed-map translation convention alone.
+\end{document}
