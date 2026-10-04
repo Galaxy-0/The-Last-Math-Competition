@@ -1,0 +1,145 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\title{A Frobenius Group of Order 155:\\A Disproof of Conjecture 00000002305}
+\author{GitHub: gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+The source asserts $k(G)\ge\tfrac12\,[G:H]$ for the class number $k(G)$ of
+a finite group and a maximal subgroup $H$. The Frobenius group
+$G=C_{31}\rtimes C_5$ of order $155$ has exactly $11$ conjugacy classes
+and a maximal subgroup of index $31$, and $11<31/2$. The group, the
+maximality of the subgroup, the exact class number and the negation of
+the universal bound are verified in Lean.
+\end{abstract}
+
+\paragraph{Reading of the source.}
+Both language versions state the bound $k(G)\ge c\,[G:H]$ ``for maximal
+$H$'' with $c=1/2$, without restricting $G$. We read this as a claim
+about every finite group $G$ and every maximal subgroup $H$ of $G$,
+where $k(G)$ is the number of conjugacy classes of elements and a
+maximal subgroup is a proper subgroup contained in no other proper
+subgroup.
+
+\begin{theorem}
+Let $G$ be the group of the $155$ affine maps
+$x\mapsto 2^{k}x+a$ of $\mathbb Z/31\mathbb Z$, where
+$a\in\mathbb Z/31\mathbb Z$ and $k\in\mathbb Z/5\mathbb Z$, and let
+$H=\{x\mapsto 2^{k}x\}$ be the stabiliser of $0$. Then $H$ is a maximal
+subgroup of index $31$, and $k(G)=11$. Consequently
+\[
+ k(G)=11<\tfrac{31}{2}=\tfrac12\,[G:H].
+\]
+\end{theorem}
+\begin{proof}
+Since $2^5=32\equiv1\pmod{31}$, the power $2^k$ depends only on $k$
+modulo $5$, and $2$ has multiplicative order exactly $5$. Write $(a,k)$
+for the map $x\mapsto2^kx+a$. Composition gives
+\[
+ (a,k)(b,l)=(a+2^kb,\;k+l),\qquad (a,k)^{-1}=(-2^{-k}a,\;-k),
+\]
+so these maps form a group. Distinct pairs give distinct maps, because
+the values at $0$ and $1$ determine $a$ and $2^k$. Hence $|G|=31\cdot5=155$.
+
+\emph{Maximality.} The subgroup $H=\{(0,k)\}$ has order $5$ and index
+$31$. Let $H<K\le G$. By Lagrange's theorem $5$ divides $|K|$ and $|K|$
+divides $155=5\cdot31$, so $|K|\in\{5,155\}$. As $K\ne H$ and $H\le K$,
+we get $|K|=155$ and $K=G$.
+
+\emph{Conjugacy classes.} A direct computation gives, for $c=(b,l)$ and
+$g=(a,k)$,
+\begin{equation}\label{eq:conj}
+ c\,g\,c^{-1}=\bigl(2^{l}a+(1-2^{k})b,\;k\bigr).
+\end{equation}
+If $k\ne0$, then $2^k\in\{2,4,8,16\}$ and
+$1-2^k\in\{-1,-3,-7,-15\}$ is a unit modulo the prime $31$. Taking
+$l=0$ in \eqref{eq:conj}, the first coordinate runs over all of
+$\mathbb Z/31\mathbb Z$ as $b$ varies. Thus $\{(a,k):a\in\mathbb
+Z/31\mathbb Z\}$ is a single class for each of the four values
+$k\ne0$.
+
+If $k=0$, then \eqref{eq:conj} reads $c\,(a,0)\,c^{-1}=(2^{l}a,0)$. The
+class of $(a,0)$ is therefore the orbit of $a$ under multiplication by
+the subgroup $\langle2\rangle$ of order $5$. The orbit of $0$ is
+$\{0\}$. The $30$ nonzero residues split into $30/5=6$ orbits.
+They are represented by $3^{j}$, $0\le j\le5$, since $3$ is a primitive
+root modulo $31$.
+
+In total there are $4+1+6=11$ classes. As a check, their sizes add up to
+$4\cdot31+1+6\cdot5=155$.
+\end{proof}
+
+\begin{corollary}
+The inequality $k(G)\ge c\,[G:H]$ fails for this pair for every constant
+$c>11/31$. In particular it fails for $c=\tfrac12$ and for
+$c=\tfrac12(1-\varepsilon)$ whenever $\varepsilon<9/31$.
+\end{corollary}
+
+\begin{remark}
+The example belongs to a family. Let $p$ be a prime and $q$ a divisor of
+$p-1$. The same argument shows that $C_p\rtimes C_q\le
+\mathrm{AGL}(1,p)$ has a maximal subgroup $C_q$ of index $p$ and
+exactly $q+(p-1)/q$ classes. The ratio $q/p+(p-1)/(pq)$ is not bounded
+below by a positive constant: for each $q$, Dirichlet's theorem gives a
+prime $p\equiv1\pmod q$ with $p>q^2$, and then the ratio is below $2/q$.
+For $q=p-1$ one obtains $\mathrm{AGL}(1,p)$ itself, with ratio $1$. This
+remark is not used in the disproof and is not formalised.
+\end{remark}
+
+\section*{Formal verification and scope}
+The Lean type \texttt{G} has two fields, $a\in\texttt{ZMod 31}$ and
+$k\in\texttt{ZMod 5}$, with the multiplication displayed above. The
+group axioms are proved, not assumed. The theorems \texttt{act\_mul}
+and \texttt{act\_faithful} show that \texttt{G} acts faithfully on
+\texttt{ZMod 31} by the affine maps $x\mapsto2^kx+a$, so it is the group
+of the theorem. \texttt{card\_G} gives the order $155$.
+
+\texttt{H} is a Mathlib \texttt{Subgroup}; \texttt{mem\_H} identifies
+it with the stabiliser of $0$. \texttt{index\_H} proves
+\texttt{H.index = 31} for Mathlib's subgroup index. \texttt{H\_maximal}
+proves \texttt{IsCoatom H}: $H$ is a coatom of the lattice of all
+subgroups, which is the definition of a maximal subgroup.
+
+The class number is the cardinality of Mathlib's quotient type
+\texttt{ConjClasses G}. \texttt{exists\_rep} proves that every element
+is conjugate to one of eleven explicit representatives. The class
+function $(a,k)\mapsto(k,\;a^5\text{ if }k=0)$ is invariant under
+conjugation (\texttt{label\_conj}) and separates the representatives
+(\texttt{label\_rep}). Hence \texttt{card\_conjClasses} proves that the
+number of classes is exactly $11$; it is not an upper bound only.
+
+The proposition \texttt{ClaimedBound} quantifies over every finite group
+and every coatom $M$ of its subgroup lattice and states
+$\tfrac12\,[\Gamma:M]\le k(\Gamma)$ in $\mathbb Q$. The final theorem
+\texttt{conjecture\_false} is its negation. \texttt{fails\_above} is the
+corollary. Finite checks use kernel evaluation by \texttt{decide}; no
+\texttt{native\_decide}, \texttt{sorry} or custom axiom occurs.
+
+This refutes the bound as stated. The source does not define
+$\varepsilon(G)$, so the parenthetical variant has no precise statement
+beyond the corollary. Besides the conjugates of $H$, the only maximal
+subgroup of $G$ is the normal subgroup of order $31$; it has index $5$
+and satisfies the inequality. The example therefore does not address a
+reading in which $H$ is only some maximal subgroup. No claim is made
+about the tightness clause.
+
+\section*{Source and reproduction}
+The exact bilingual source is included byte-for-byte as
+\texttt{SOURCE.md}. Its repository path is
+\begin{center}\small\texttt{conjectures/00000002305.md}.\end{center}
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake build}, then
+\begin{center}\small\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The included public-Git manifest locks all dependency revisions.
+The \texttt{verification/} directory records the fresh-build logs,
+theorem-axiom reports, artifact hashes, review and final PDF inspection.
+No supplementary numerical computation is required.
+\end{document}
