@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{Two congruence atoms on a three-element lattice\\Conjecture 00000008557}
+\author{ziangni-sys (prepared with OpenAI Codex)}
+\date{4 October 2026}
+\begin{document}\maketitle
+\paragraph{Verdict.} The atom-count upper bound is false. The lattice $C_3=\{0<1<2\}$ has exactly two congruence atoms, but $\log_2|C_3|=\log_2 3<2$.
+
+\paragraph{Original claim and scope.} Both language versions assert that the number of atoms of a lattice's congruence lattice is at most $\log_2|L|$. They also assert a lower bound for the number of subdirectly irreducible factors. We refute only the atom upper bound; no statement about subdirect representations is required. The logarithm is the ordinary real logarithm to base two, not a floor or integer logarithm.
+
+\paragraph{Definitions.} On $C_3$, meet is minimum and join is maximum. A lattice congruence is an equivalence relation $\theta$ such that
+\[
+x\mathrel\theta x',\ y\mathrel\theta y'
+\quad\Longrightarrow\quad
+\min(x,y)\mathrel\theta\min(x',y'),\quad
+\max(x,y)\mathrel\theta\max(x',y').
+\]
+Congruences are ordered by inclusion of related pairs. The bottom element is equality. An atom is a non-bottom congruence with no congruence strictly between it and equality.
+
+\paragraph{The full congruence lattice.} There are exactly four congruences:
+\[
+\begin{array}{c|c}
+\text{congruence}&\text{equivalence classes}\\\hline
+\Delta&\{0\},\{1\},\{2\}\\
+\alpha&\{0,1\},\{2\}\\
+\beta&\{0\},\{1,2\}\\
+\nabla&\{0,1,2\}
+\end{array}
+\]
+Each respects minimum and maximum. For example, $\alpha$ is the kernel of the order-preserving map sending $0,1$ to zero and $2$ to one; $\beta$ is the kernel of the map sending zero to zero and $1,2$ to one. A monotone map between chains preserves minimum and maximum, so both kernels are lattice congruences. Equality and the universal relation are immediate.
+
+For completeness, the only other partition of three elements is $\{0,2\},\{1\}$. It fails compatibility: $0\mathrel\theta2$ would imply $\min(0,1)=0\mathrel\theta\min(2,1)=1$. Thus it is not a congruence. This also proves that the displayed list is complete, rather than merely giving four examples.
+
+\paragraph{Atoms.} Inclusion gives the four-element diamond: equality lies below both $\alpha$ and $\beta$, each lies below the universal relation, and $\alpha,\beta$ are incomparable. Consequently both are atoms and no other congruence is an atom. In more direct terms, any nontrivial congruence below $\alpha$ must relate $0$ and $1$, hence equal $\alpha$; the same reasoning for $\beta$ uses $1$ and $2$. The universal relation has $\alpha$ strictly below it. The atom count is therefore exactly two.
+
+\paragraph{The real logarithmic contradiction.} Since $1<2$, $\log2>0$. Since $0<3<4$, strict monotonicity of the logarithm gives
+\[
+\log3<\log4=\log(2^2)=2\log2.
+\]
+Dividing by the positive denominator $\log2$ yields $\log_2 3<2$. This contradicts the claimed upper bound $2\leq\log_2 3$.
+
+\paragraph{Formal verification.} The Lean 4.19.0 project, pinned to Mathlib v4.19.0, uses the actual three-element chain \texttt{Fin 3} with its lattice instance and minimum/maximum operations. Relations are Boolean truth tables on its nine ordered pairs. Every relation on a finite set is representable by such a table, so this is a complete finite model of ordinary relations. The congruence predicate includes reflexivity, symmetry, transitivity and full two-argument compatibility with both operations.
+
+Lean classifies all $2^9=512$ truth tables by kernel decision and separately verifies each displayed relation. It defines inclusion and the usual minimal-nonzero atom condition, proves precisely $\alpha$ and $\beta$ are atoms, and computes the cardinality of the actual atom set. The final theorem compares this count with the real logarithm of the actual chain cardinality and negates the proposed bound. No supplied atom count, substituted arithmetic model, extra axioms, admitted proofs, or native decision shortcuts are used.
+
+The independent Python script separately enumerates all $512$ relation tables, checks all equivalence and operation-compatibility conditions, and computes the atoms under inclusion. Its integer inequality $3<2^2$ agrees with the exact real logarithm proof in Lean. Reproduction commands and build/audit logs accompany the submission. This is an independent solution to conjecture 00000008557; the same small lattice can naturally occur in other, distinct conjectures.
+\end{document}
