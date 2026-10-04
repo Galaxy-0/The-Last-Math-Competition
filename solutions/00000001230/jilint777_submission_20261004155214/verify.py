@@ -231,7 +231,59 @@ for m in range(2, 8):
     _, _, inv = jac([m])
     check(inv == [] and representable(inv, moduli([m])), "path [%d]: Jac trivial, representable with e = 0" % m)
 
-print("== remark: torus reading (not the stated object) also fails")
+print("== robustness: 'gcd' read as lcm or product (the 2x3 grid)")
+
+
+def moduli_rule(ms, rule):
+    out = []
+    for mask in range(1 << len(ms)):
+        S = [m for k, m in enumerate(ms) if mask >> k & 1]
+        if rule == "gcd":
+            g = 0
+            for m in S:
+                g = gcd(g, m)
+        elif rule == "lcm":
+            g = 1
+            for m in S:
+                g = lcm(g, m)
+        else:
+            g = 1
+            for m in S:
+                g *= m
+        out.append(g)
+    return sorted(set(out))
+
+
+_, L23, inv23 = jac([2, 3])
+R23 = reduced(L23)
+check(inv23 == [15], "Jac([2]x[3]) = Z/15")
+check(matvec(R23, [3, 5, 2, 4, 7]) == [0, 0, 0, 0, 5], "Ltilde(2x3) (3,5,2,4,7) = 5 e4 (Lean witness)")
+check(any(x.denominator != 1 for x in solve(R23, [0, 0, 0, 0, 1])), "e4 not in the image (element of order 5)")
+for rule in ("gcd", "lcm", "prod"):
+    for conv, ms in (("vertex", [2, 3]), ("edge", [1, 2])):
+        mods = moduli_rule(ms, rule)
+        check(all(d == 0 or 6 % d == 0 for d in mods) and not representable([15], mods),
+              "2x3 grid, %s convention, rule %s: moduli %s, Z/15 not representable" % (conv, rule, mods))
+check(not representable([15], [0, 2, 3, 6]), "K_{m,n}-style moduli m, n, mn = 2, 3, 6: Z/15 not representable")
+check(representable([4], moduli_rule([2, 2], "prod")),
+      "(note) the 2x2 grid does NOT refute the product/lcm reading: Z/(2*2) = Z/4 -- hence the 2x3 grid")
+
+print("== remark: torus / strong-product readings (not the stated object) also fail")
+V, L = torus([2, 2])
+inv = [d for d in smith(reduced(L)) if d != 1]
+check(inv == [2, 2, 8] and not representable(inv, [0, 2]),
+      "multigraph C2 x C2 (doubled edges): Jac invariants %s vs moduli [0, 2]" % inv)
+simple = [[(2 if i == j else (-1 if L[i][j] else 0)) for j in range(4)] for i in range(4)]
+check(simple == grid([2, 2])[1], "simple C2 x C2 is literally C4 = [2]x[2] (same counterexample)")
+V, L = torus([2, 3])
+inv = [d for d in smith(reduced(L)) if d != 1]
+check(inv == [7, 42] and not representable(inv, [0, 1, 2, 3]),
+      "multigraph C2 x C3: Jac invariants %s vs moduli [0, 1, 2, 3]" % inv)
+K4 = [[3 if i == j else -1 for j in range(4)] for i in range(4)]
+inv = [d for d in smith(reduced(K4)) if d != 1]
+check(inv == [4, 4] and not representable(inv, [0, 2]),
+      "strong product 2 (x) 2 = K4: Jac invariants %s vs moduli [0, 2]" % inv)
+
 for ms in ([3, 3], [3, 4]):
     V, L = torus(ms)
     inv = [d for d in smith(reduced(L)) if d != 1]

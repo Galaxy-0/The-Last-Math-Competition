@@ -709,6 +709,188 @@ theorem no_iso_111_edges (e : Nat → Nat) (φ : Sandpile ([1, 1, 1].map (· + 1
   fun ⟨hφ, hinj, _⟩ => no_injective_hom_Q3 (Idx [1, 1, 1] e) (fun i => modOf [1, 1, 1] i.1.val)
     (fun i => modOf_111 i.1.val i.1.isLt) φ hφ hinj
 
+/-! ## Robustness: "gcd" read as lcm or product — the `2 × 3` grid
+
+`Jac([2]×[3]) ≅ ℤ/15` has an element of order `5`, while every modulus `gcd S`, `lcm S`,
+`∏ S` with `S ⊆ {2,3}` (also `S ⊆ {1,2}`, edge convention) is `0` or a divisor of `6`.
+In `∏ ℤ/dᵢ` with `dᵢ ∈ {0,1,2,3,6}`, `5x = 0` forces `x = 0`. -/
+
+/-- `d = 0` or `d ∣ 6`. -/
+def Small6 (d : Nat) : Prop := d = 0 ∨ d = 1 ∨ d = 2 ∨ d = 3 ∨ d = 6
+
+theorem zm_five (d : Nat) (hd : Small6 d) (x : ZM d) (h : x + x + x + x + x = 0) : x = 0 := by
+  have hv := congrArg Subtype.val h
+  apply ZM.ext
+  show x.val = 0
+  have hx := x.property
+  change ((((x.val + x.val) % (d : Int) + x.val) % (d : Int) + x.val) % (d : Int) + x.val)
+    % (d : Int) = 0 at hv
+  rcases hd with rfl | rfl | rfl | rfl | rfl
+  · simp only [Int.ofNat_zero, Int.emod_zero] at hv hx; omega
+  all_goals omega
+
+theorem zm_cancel6 (d : Nat) (hd : Small6 d) (x : ZM d) (h : x + x = x) : x = 0 := by
+  have hv := congrArg Subtype.val h
+  apply ZM.ext
+  show x.val = 0
+  have hx := x.property
+  change (x.val + x.val) % (d : Int) = x.val at hv
+  rcases hd with rfl | rfl | rfl | rfl | rfl
+  · simp only [Int.ofNat_zero, Int.emod_zero] at hv hx; omega
+  all_goals omega
+
+/-- If `G` has `g ≠ 0` with `5g = 0`, there is no injective additive map `G → ∏ ℤ/dᵢ`
+with all `dᵢ ∈ {0,1,2,3,6}`. -/
+theorem no_injective_hom5 {G : Type} [Add G] [Zero G] (hz : (0 : G) + 0 = 0)
+    (g : G) (h5 : g + g + g + g + g = 0) (h1 : g ≠ 0)
+    (ι : Type) (d : ι → Nat) (hd : ∀ i, Small6 (d i))
+    (φ : G → Prod' ι d) (hφ : IsHom φ) (hinj : Injective φ) : False := by
+  have h0 : φ 0 = 0 := by
+    funext i
+    apply zm_cancel6 (d i) (hd i)
+    show (φ 0 + φ 0) i = φ 0 i
+    rw [← hφ, hz]
+  apply h1
+  apply hinj
+  rw [h0]
+  funext i
+  apply zm_five (d i) (hd i)
+  show (φ g + φ g + φ g + φ g + φ g) i = (0 : Prod' ι d) i
+  rw [← hφ, ← hφ, ← hφ, ← hφ, h5, h0]
+
+theorem five_eq (k : Nat) (M : Nat → Nat → Int) (x : Vec k)
+    (h : Rel k M (fun j => x j + x j + x j + x j + x j) (fun _ => 0)) :
+    mkC k M x + mkC k M x + mkC k M x + mkC k M x + mkC k M x = 0 :=
+  (mkC_eq k M _ _).2 h
+
+theorem one_ne (k : Nat) (M : Nat → Nat → Int) (x : Vec k)
+    (h : ¬ Rel k M x (fun _ => 0)) : mkC k M x ≠ 0 :=
+  fun h' => h ((mkC_eq k M _ _).1 h')
+
+/-- Explicit reduced Laplacian of `[2]×[3]` (non-sink vertices `(0,1),(0,2),(1,0),(1,1),(1,2)`). -/
+def T23 : Nat → Nat → Int
+  | 0, 0 => 3
+  | 0, 1 => -1
+  | 0, 3 => -1
+  | 1, 0 => -1
+  | 1, 1 => 2
+  | 1, 4 => -1
+  | 2, 2 => 2
+  | 2, 3 => -1
+  | 3, 0 => -1
+  | 3, 2 => -1
+  | 3, 3 => 3
+  | 3, 4 => -1
+  | 4, 1 => -1
+  | 4, 3 => -1
+  | 4, 4 => 2
+  | _, _ => 0
+
+theorem redLap_23 : ∀ i, i < 5 → ∀ j, j < 5 → redLap [2, 3] i j = T23 i j := by decide
+
+theorem app_23 (z : Vec 5) (i : Nat) (hi : i < 5) :
+    app 5 (redLap [2, 3]) z i = T23 i 0 * z 0 + T23 i 1 * z 1 + T23 i 2 * z 2 +
+      T23 i 3 * z 3 + T23 i 4 * z 4 := by
+  unfold app
+  simp only [sumTo]
+  rw [redLap_23 i hi 0 (by decide), redLap_23 i hi 1 (by decide), redLap_23 i hi 2 (by decide),
+    redLap_23 i hi 3 (by decide), redLap_23 i hi 4 (by decide)]
+  simp
+
+/-- `e₄`, the chip at vertex `(1,2)`. -/
+def e4 : Vec 5 := fun j => if j.val = 4 then 1 else 0
+
+def g23 : Coker 5 (redLap [2, 3]) := mkC 5 (redLap [2, 3]) e4
+
+/-- `5 e₄ = Δ̃ (3,5,2,4,7)`. -/
+theorem g23_five : g23 + g23 + g23 + g23 + g23 = 0 := by
+  apply five_eq
+  refine ⟨fun j => [3, 5, 2, 4, 7].getD j.val 0, ?_⟩
+  intro ⟨i, hi⟩
+  rw [app_23 _ i hi]
+  simp only [e4]
+  rcases (by omega : i = 0 ∨ i = 1 ∨ i = 2 ∨ i = 3 ∨ i = 4)
+    with rfl | rfl | rfl | rfl | rfl <;> rfl
+
+/-- `e₄ ∉ Δ̃ ℤ⁵`. -/
+theorem g23_ne : g23 ≠ 0 := by
+  refine one_ne 5 (redLap [2, 3]) e4 ?_
+  intro ⟨z, hz⟩
+  have h0 : (0 : Int) = (3) * z 0 + (-1) * z 1 + (0) * z 2 + (-1) * z 3 + (0) * z 4 := by
+    have := hz ⟨0, by decide⟩
+    rw [app_23 _ _ (by decide)] at this
+    exact this
+  have h1 : (0 : Int) = (-1) * z 0 + (2) * z 1 + (0) * z 2 + (0) * z 3 + (-1) * z 4 := by
+    have := hz ⟨1, by decide⟩
+    rw [app_23 _ _ (by decide)] at this
+    exact this
+  have h2 : (0 : Int) = (0) * z 0 + (0) * z 1 + (2) * z 2 + (-1) * z 3 + (0) * z 4 := by
+    have := hz ⟨2, by decide⟩
+    rw [app_23 _ _ (by decide)] at this
+    exact this
+  have h3 : (0 : Int) = (-1) * z 0 + (0) * z 1 + (-1) * z 2 + (3) * z 3 + (-1) * z 4 := by
+    have := hz ⟨3, by decide⟩
+    rw [app_23 _ _ (by decide)] at this
+    exact this
+  have h4 : (1 : Int) = (0) * z 0 + (-1) * z 1 + (0) * z 2 + (-1) * z 3 + (2) * z 4 := by
+    have := hz ⟨4, by decide⟩
+    rw [app_23 _ _ (by decide)] at this
+    exact this
+  omega
+
+theorem no_injective_hom_23 (ι : Type) (d : ι → Nat) (hd : ∀ i, Small6 (d i))
+    (φ : Sandpile [2, 3] → Prod' ι d) (hφ : IsHom φ) : ¬ Injective φ := fun hinj =>
+  no_injective_hom5 (G := Coker 5 (redLap [2, 3])) (coker_zero_add _ _) g23 g23_five g23_ne
+    ι d hd φ hφ hinj
+
+/-- lcm and product of a list (`lcm ∅ = ∏ ∅ = 1`). -/
+def lcmL (S : List Nat) : Nat := S.foldr Nat.lcm 1
+def prodL (S : List Nat) : Nat := S.foldr (· * ·) 1
+
+/-- `⊕_S (ℤ/f(S))^{e(S)}` for an arbitrary rule `f` attaching a modulus to each subset. -/
+def TargetF (f : List Nat → Nat) (ms : List Nat) (e : Nat → Nat) : Type :=
+  Prod' (Idx ms e) (fun i => f ((subsetsL ms).getD i.1.val []))
+
+instance (f : List Nat → Nat) (ms : List Nat) (e : Nat → Nat) : Add (TargetF f ms e) :=
+  inferInstanceAs (Add (Prod' _ _))
+
+theorem rules_23 : ∀ k, k < 4 →
+    Small6 (gcdL ((subsetsL [2, 3]).getD k [])) ∧ Small6 (lcmL ((subsetsL [2, 3]).getD k [])) ∧
+    Small6 (prodL ((subsetsL [2, 3]).getD k [])) ∧
+    Small6 (gcdL ((subsetsL [1, 2]).getD k [])) ∧ Small6 (lcmL ((subsetsL [1, 2]).getD k [])) ∧
+    Small6 (prodL ((subsetsL [1, 2]).getD k [])) := by
+  intro k hk
+  unfold Small6
+  rcases (by omega : k = 0 ∨ k = 1 ∨ k = 2 ∨ k = 3) with rfl | rfl | rfl | rfl <;> decide
+
+/-- **"gcd" read as gcd, lcm or product** (vertex convention, grid `[2]×[3]`): no exponents work. -/
+theorem no_iso_23_gcd_lcm_prod (f : List Nat → Nat) (hf : f = gcdL ∨ f = lcmL ∨ f = prodL)
+    (e : Nat → Nat) (φ : Sandpile [2, 3] → TargetF f [2, 3] e) : ¬ IsIso φ := by
+  intro ⟨hφ, hinj, _⟩
+  have hl : (subsetsL [2, 3]).length = 4 := by decide
+  refine no_injective_hom_23 (Idx [2, 3] e) (fun i => f ((subsetsL [2, 3]).getD i.1.val [])) ?_
+    φ hφ hinj
+  intro i
+  have hk := rules_23 i.1.val (hl ▸ i.1.isLt)
+  rcases hf with rfl | rfl | rfl
+  · exact hk.1
+  · exact hk.2.1
+  · exact hk.2.2.1
+
+/-- Same with the edge convention (`[2]×[3]` = `[1]×[2]` in edges). -/
+theorem no_iso_12_edges_gcd_lcm_prod (f : List Nat → Nat) (hf : f = gcdL ∨ f = lcmL ∨ f = prodL)
+    (e : Nat → Nat) (φ : Sandpile ([1, 2].map (· + 1)) → TargetF f [1, 2] e) : ¬ IsIso φ := by
+  intro ⟨hφ, hinj, _⟩
+  have hl : (subsetsL [1, 2]).length = 4 := by decide
+  refine no_injective_hom_23 (Idx [1, 2] e) (fun i => f ((subsetsL [1, 2]).getD i.1.val [])) ?_
+    φ hφ hinj
+  intro i
+  have hk := rules_23 i.1.val (hl ▸ i.1.isLt)
+  rcases hf with rfl | rfl | rfl
+  · exact hk.2.2.2.1
+  · exact hk.2.2.2.2.1
+  · exact hk.2.2.2.2.2
+
 end Grid1230
 
 #print axioms Grid1230.conjecture_00000001230_false
@@ -722,5 +904,8 @@ end Grid1230
 #print axioms Grid1230.no_iso_22_Pic0
 #print axioms Grid1230.no_iso_22_Pic
 #print axioms Grid1230.no_injective_hom_Q3
+#print axioms Grid1230.no_injective_hom_23
+#print axioms Grid1230.no_iso_23_gcd_lcm_prod
+#print axioms Grid1230.no_iso_12_edges_gcd_lcm_prod
 #print axioms Grid1230.sandpile_C4_iso_Z4
 #print axioms Grid1230.sandpile_P3_trivial

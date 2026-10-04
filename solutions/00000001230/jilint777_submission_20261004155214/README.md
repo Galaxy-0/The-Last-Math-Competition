@@ -28,6 +28,25 @@ The counterexample covers all of the following readings at once:
 - Dimension: `n = 2`, or the claim restricted to `n ≥ 3`. In the second case the cube `[2]³`
   works: `Jac = ℤ/2 ⊕ ℤ/8 ⊕ ℤ/24`, and `[2e₂]` has order 4.
 
+**"gcd" read as lcm or product.** Under this reading the 2×2 grid does *not* refute the claim,
+because `ℤ/(2·2) = ℤ/4`. The 2×3 grid does:
+
+- `Jac([2]×[3]) ≅ ℤ/15`, and the chip `e₄` at `(1,2)` has order exactly 5
+  (`L̃·(3,5,2,4,7) = 5e₄`, and `e₄ ∉ im L̃`).
+- Every gcd, lcm or product of a subset of `{2,3}` is 0 or a divisor of 6. The same holds for
+  `{1,2}` (edge convention) and for K_{m,n}-style moduli `m, n, mn = 2, 3, 6`.
+- In such a product of groups `ℤ/d`, `5x = 0` forces `x = 0`.
+
+This case is proved in Lean and checked in `verify.py`.
+
+**Torus and strong-product readings** (`verify.py` only; these are not the stated object):
+
+- The simple `C₂□C₂` is literally `C₄`, so it is the same counterexample.
+- The multigraph `C₂□C₂` has `Jac = ℤ/2⊕ℤ/2⊕ℤ/8`, with an element of order 8 against moduli
+  `{0,2}`.
+- The multigraph `C₂□C₃` has `Jac = ℤ/7⊕ℤ/42`.
+- The strong product `2⊠2 = K₄` has `Jac = (ℤ/4)²`, which fails for the same order-4 reason.
+
 The failure is generic. Smith normal form gives `Jac(2×3) = ℤ/15` and
 `Jac(3×3) = ℤ/8 ⊕ ℤ/24`; see the table in the report.
 
@@ -37,8 +56,9 @@ The failure is generic. Smith normal form gives `Jac(2×3) = ℤ/15` and
 - `lean4/`: a self-contained Lean 4.19.0 project (core library only, no Mathlib).
 - `verify.py` (Python 3 standard library) uses a different method. It computes exact Smith
   normal forms of grid Laplacians, then checks for both conventions that the largest invariant
-  factor does not divide the lcm of the nonzero moduli. It also re-checks every witness and two
-  sanity cases: paths have trivial Jacobian, and the torus remark.
+  factor does not divide the lcm of the nonzero moduli. It also re-checks every witness, the
+  lcm/product reading on the 2×3 grid, and the torus and strong-product remarks. As a sanity
+  check, it confirms that paths have trivial Jacobian.
 - `verification.txt`: a fresh `lake build` log with the axiom report, the forbidden-token scan
   and the output of `verify.py`.
 
@@ -65,6 +85,10 @@ Main theorems:
 - `no_injective_hom_C4`, `no_injective_hom_Q3`, `no_injective_hom_PicC4`,
   `no_injective_hom_Pic0C4`: no injective additive map into `∏_{i:ι} ℤ/dᵢ` for any type `ι` and
   any `dᵢ ∈ {0,1,2}`.
+- `no_iso_23_gcd_lcm_prod` and `no_iso_12_edges_gcd_lcm_prod`: the claim fails for the 2×3 grid
+  for every exponent choice, with the moduli rule `f ∈ {gcd, lcm, product}` and either
+  convention. The core lemma `no_injective_hom_23` allows any moduli in `{0,1,2,3,6}`; its
+  witnesses are `g23_five` and `g23_ne`.
 
 Sanity checks:
 
@@ -81,7 +105,8 @@ Limitations:
 - The vague 2-dimensional clause is not formalized.
 - The `gcd ∅ = 1` and value-set readings are covered by the strong lemmas, which allow any
   moduli in `{0,1,2}`, rather than by separate `Claim` predicates.
-- The torus remark and the table of larger grids are checked only in `verify.py`.
+- The torus and strong-product remarks and the table of larger grids are checked only in
+  `verify.py`.
 
 ## Reproduce
 
@@ -107,6 +132,18 @@ pdflatex report.tex && pdflatex report.tex
 - 子集按下标取或按数值取；
 - 指数可以是有限的，也可以是无限的；
 - “雅可比群”理解为沙堆群、Baker–Norine 的 Pic⁰，或完整的 ℤ^V/Δℤ^V。
+
+若把 “gcd” 理解为 lcm 或乘积的笔误，2×2 网格不再构成反例，因为 ℤ/(2·2) = ℤ/4。
+此时改用 2×3 网格：其雅可比群为 ℤ/15，顶点 (1,2) 上的筹码阶恰为 5。
+而 {2,3}（边约定下为 {1,2}）的任意子集的 gcd、lcm 或乘积都是 0 或 6 的因数
+（K_{m,n} 式的模 m、n、mn = 2、3、6 也包括在内）。
+在这样的群中 5x = 0 必推出 x = 0，故仍无同构。这一情形已在 Lean 中证明。
+
+环面与强积的理解（仅在 verify.py 中检验）：
+- 简单图 C₂□C₂ 就是 C₄，是同一个反例；
+- 重边图 C₂□C₂ 的雅可比群为 ℤ/2⊕ℤ/2⊕ℤ/8，含 8 阶元；
+- 重边图 C₂□C₃ 的雅可比群为 ℤ/7⊕ℤ/42；
+- 强积 2⊠2 = K₄ 的雅可比群为 (ℤ/4)²，同样因 4 阶元而不成立。
 
 若只考虑 n ≥ 3，可用立方体 [2]³，其雅可比群为 ℤ/2 ⊕ ℤ/8 ⊕ ℤ/24。
 

@@ -77,7 +77,10 @@ $\{m_1,\dots,m_n\}$;
 \item ``Jacobian'' is the sandpile group $\Z^{V\setminus\{s\}}/\tilde\Delta\Z^{V\setminus\{s\}}$,
 the Baker--Norine Jacobian $\Pic^0=\mathrm{Div}^0/\mathrm{Prin}$, or even the
 full cokernel $\Z^V/\Delta\Z^V$;
-\item dimension $n=2$, or the claim restricted to $n\ge3$.
+\item dimension $n=2$, or the claim restricted to $n\ge3$;
+\item ``$\gcd$'' read as a typo for $\operatorname{lcm}$ or product. Here the
+$2\times2$ grid is not enough, but the $2\times3$ grid is
+(Section~\ref{sec:readings}; also in Lean).
 \end{itemize}
 
 \section{Definitions}
@@ -231,18 +234,41 @@ does not divide that lcm. The order of $K$ is the number of spanning trees,
 and it is typically divisible by primes that do not divide any $m_i$, such as $5$
 in $\Z/15$ or $7$ in $\Z/2415$. Such primes can never come from the moduli.
 
+\paragraph{``gcd'' read as lcm or product.} If $\gcd(S)$ were a typo for
+$\operatorname{lcm}(S)$ or $\prod S$, the $2\times2$ grid would \emph{not} be a
+counterexample, because $\Z/(2\cdot2)=\Z/4$. The $2\times3$ grid is one. Its
+Jacobian is $K([2]\times[3])\cong\Z/15$. With sink $(0,0)$ and non-sink
+vertices ordered $(0,1),(0,2),(1,0),(1,1),(1,2)$, we have
+$\tilde\Delta(3,5,2,4,7)^{\mathsf T}=5e_4$, where $e_4$ is the chip at $(1,2)$.
+Since $\det\tilde\Delta=15$, the unique rational solution of $\tilde\Delta z=e_4$ is
+$\frac15(3,5,2,4,7)$, which is not integral. So $g=[e_4]$ has order exactly $5$. Now consider the
+gcds, lcms and products of all subsets of $\{2,3\}$, or of $\{1,2\}$ in the
+edge convention. With $\gcd\emptyset=0$ and $\operatorname{lcm}\emptyset=\prod\emptyset=1$,
+each of these is $0$ or a divisor of $6$. This also covers ``$K_{m,n}$-style'' moduli
+$m,n,mn=2,3,6$. In $\prod_i\Z/d_i$ with every $d_i=0$ or $d_i\mid6$, $5x=0$
+forces $x=0$. The proof of Lemma~\ref{lem:transfer}, with $5$ in place of
+$4$ and $2$, then shows that $K([2]\times[3])$ embeds in no such group. This is
+formalized in Lean (\texttt{no\_iso\_23\_gcd\_lcm\_prod},
+\texttt{no\_iso\_12\_edges\_gcd\_lcm\_prod}) and checked in \texttt{verify.py}.
+
 \begin{remark}
-The conjecture mentions ``torus gluing''. The object of the conjecture is the
-grid graph, not the torus. Still, \texttt{verify.py} also checks that the
-discrete tori fail: $K(C_3\square C_3)=(\Z/6)^2\oplus(\Z/18)^2$ against moduli
-$\{0,3\}$, and $K(C_3\square C_4)=(\Z/5)^2\oplus\Z/35\oplus\Z/420$ against
-moduli $\{0,1,3,4\}$. This remark is not formalized.
+The conjecture mentions ``torus gluing''. Its object is the grid graph, not
+the torus, but the torus readings fail too. The simple graph $C_2\square C_2$
+is literally $C_4=[2]\times[2]$, so it is the same counterexample. The
+multigraph $C_2\square C_2$ (each edge doubled) has
+$K=\Z/2\oplus\Z/2\oplus\Z/8$, which contains an element of order $8$, against
+moduli $\{0,2\}$. The multigraph $C_2\square C_3$ has $K=\Z/7\oplus\Z/42$, against
+moduli $\{0,1,2,3\}$. Also $K(C_3\square C_3)=(\Z/6)^2\oplus(\Z/18)^2$ against
+moduli $\{0,3\}$, and $K(C_3\square C_4)=(\Z/5)^2\oplus\Z/35\oplus\Z/420$ against
+$\{0,1,3,4\}$. The strong product $P_2\boxtimes P_2=K_4$ has
+$K=(\Z/4)^2$, which fails against moduli $\{0,2\}$ for the same order-$4$ reason.
+These facts are checked in \texttt{verify.py} only, not in Lean.
 \end{remark}
 
 \section{Lean formalization}
 The directory \texttt{lean4/} is a self-contained Lean~4.19.0 project (core
 library only, no Mathlib).
-\begin{itemize}
+\begin{itemize}\raggedright
 \item \texttt{gridVerts ms} lists the vertices of the grid for an
 \emph{arbitrary} list \texttt{ms} $=[m_1,\dots,m_n]$. \texttt{adj} is
 adjacency at $\ell^1$ distance $1$, \texttt{deg} the degree, \texttt{lap} the
@@ -283,6 +309,13 @@ $d_i\in\{0,1,2\}$.
 \texttt{p22\_two}, \texttt{g222\_four} and \texttt{g222\_two}. Each $4g=0$ is
 proved with the explicit vector $z$. Each $2g\ne0$ is proved by
 \texttt{omega} on the linear system.
+\item Lcm/product reading: \texttt{redLap\_23} (the $5\times5$ reduced Laplacian of
+$[2]\times[3]$, by \texttt{decide}), \texttt{g23\_five} ($5e_4=\tilde\Delta(3,5,2,4,7)$) and
+\texttt{g23\_ne} ($e_4\notin\operatorname{im}\tilde\Delta$, by \texttt{omega}).
+\texttt{no\_injective\_hom\_23} allows any moduli in $\{0,1,2,3,6\}$.
+\texttt{no\_iso\_23\_gcd\_lcm\_prod} and \texttt{no\_iso\_12\_edges\_gcd\_lcm\_prod}
+refute $K\cong\bigoplus_S(\Z/f(S))^{e(S)}$ for $f\in\{\gcd,\operatorname{lcm},\prod\}$
+and every $e$, in both conventions.
 \item Non-vacuity and sanity: \texttt{sandpile\_C4\_iso\_Z4} constructs the
 isomorphism $K([2]\times[2])\cong\Z/4$ of Proposition~\ref{prop:c4}. This
 shows that \texttt{Sandpile} is the right group and that \texttt{IsIso} can be
@@ -300,17 +333,18 @@ precisely. It is not needed, since the first clause already fails. The value-set
 ``subsets'' and the convention $\gcd(\emptyset)=1$ are not separate Lean
 predicates. They are covered by the strong lemmas, which allow every family of
 moduli in $\{0,1,2\}$. The isomorphisms $K\cong\Pic^0$ and $\Pic\cong\Z\oplus K$
-are not needed; Lean treats the three groups separately. The torus remark and
-the table above are checked only in \texttt{verify.py}.
+are not needed; Lean treats the three groups separately. The torus and strong-product
+remark and the table above are checked only in \texttt{verify.py}.
 
 \section{Independent check}
 \texttt{verify.py} (Python 3 standard library) builds the grids from
 coordinates. It computes Smith normal forms of the reduced and full Laplacians
 with exact integer arithmetic and recomputes the witnesses. For each listed grid and both
 conventions, it checks that the largest invariant factor of $K$ does not
-divide the lcm of the nonzero moduli. As sanity checks, it verifies that paths
-(trees) have trivial Jacobian, so the predicate holds for them, and the torus
-remark.
+divide the lcm of the nonzero moduli. It checks the lcm/product reading on the $2\times3$ grid. As sanity checks, it
+verifies that paths (trees) have trivial Jacobian, so the predicate holds for
+them, and it checks the torus and strong-product remark. It also notes that the
+$2\times2$ grid alone would not refute the product reading.
 
 \section{Reproduction}
 \begin{verbatim}

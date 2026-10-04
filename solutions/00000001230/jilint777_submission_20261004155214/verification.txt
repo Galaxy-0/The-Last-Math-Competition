@@ -1,18 +1,21 @@
 == lake build (fresh, Lean 4.19.0)
 ℹ [2/3] Built Main
-info: ././././Main.lean:714:0: 'Grid1230.conjecture_00000001230_false' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:715:0: 'Grid1230.conjecture_00000001230_false_edges' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:716:0: 'Grid1230.conjecture_00000001230_false_dim3' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:717:0: 'Grid1230.no_iso_22' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:718:0: 'Grid1230.no_iso_111_edges' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:719:0: 'Grid1230.no_injective_hom_C4' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:720:0: 'Grid1230.no_injective_hom_PicC4' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:721:0: 'Grid1230.no_injective_hom_Pic0C4' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:722:0: 'Grid1230.no_iso_22_Pic0' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:723:0: 'Grid1230.no_iso_22_Pic' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:724:0: 'Grid1230.no_injective_hom_Q3' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:725:0: 'Grid1230.sandpile_C4_iso_Z4' depends on axioms: [propext, Quot.sound]
-info: ././././Main.lean:726:0: 'Grid1230.sandpile_P3_trivial' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:896:0: 'Grid1230.conjecture_00000001230_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:897:0: 'Grid1230.conjecture_00000001230_false_edges' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:898:0: 'Grid1230.conjecture_00000001230_false_dim3' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:899:0: 'Grid1230.no_iso_22' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:900:0: 'Grid1230.no_iso_111_edges' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:901:0: 'Grid1230.no_injective_hom_C4' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:902:0: 'Grid1230.no_injective_hom_PicC4' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:903:0: 'Grid1230.no_injective_hom_Pic0C4' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:904:0: 'Grid1230.no_iso_22_Pic0' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:905:0: 'Grid1230.no_iso_22_Pic' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:906:0: 'Grid1230.no_injective_hom_Q3' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:907:0: 'Grid1230.no_injective_hom_23' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:908:0: 'Grid1230.no_iso_23_gcd_lcm_prod' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:909:0: 'Grid1230.no_iso_12_edges_gcd_lcm_prod' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:910:0: 'Grid1230.sandpile_C4_iso_Z4' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:911:0: 'Grid1230.sandpile_P3_trivial' depends on axioms: [propext, Quot.sound]
 Build completed successfully.
 exit 0
 
@@ -55,7 +58,23 @@ ok   path [4]: Jac trivial, representable with e = 0
 ok   path [5]: Jac trivial, representable with e = 0
 ok   path [6]: Jac trivial, representable with e = 0
 ok   path [7]: Jac trivial, representable with e = 0
-== remark: torus reading (not the stated object) also fails
+== robustness: 'gcd' read as lcm or product (the 2x3 grid)
+ok   Jac([2]x[3]) = Z/15
+ok   Ltilde(2x3) (3,5,2,4,7) = 5 e4 (Lean witness)
+ok   e4 not in the image (element of order 5)
+ok   2x3 grid, vertex convention, rule gcd: moduli [0, 1, 2, 3], Z/15 not representable
+ok   2x3 grid, edge convention, rule gcd: moduli [0, 1, 2], Z/15 not representable
+ok   2x3 grid, vertex convention, rule lcm: moduli [1, 2, 3, 6], Z/15 not representable
+ok   2x3 grid, edge convention, rule lcm: moduli [1, 2], Z/15 not representable
+ok   2x3 grid, vertex convention, rule prod: moduli [1, 2, 3, 6], Z/15 not representable
+ok   2x3 grid, edge convention, rule prod: moduli [1, 2], Z/15 not representable
+ok   K_{m,n}-style moduli m, n, mn = 2, 3, 6: Z/15 not representable
+ok   (note) the 2x2 grid does NOT refute the product/lcm reading: Z/(2*2) = Z/4 -- hence the 2x3 grid
+== remark: torus / strong-product readings (not the stated object) also fail
+ok   multigraph C2 x C2 (doubled edges): Jac invariants [2, 2, 8] vs moduli [0, 2]
+ok   simple C2 x C2 is literally C4 = [2]x[2] (same counterexample)
+ok   multigraph C2 x C3: Jac invariants [7, 42] vs moduli [0, 1, 2, 3]
+ok   strong product 2 (x) 2 = K4: Jac invariants [4, 4] vs moduli [0, 2]
 ok   torus C3 x C3: Jac invariants [6, 6, 18, 18], moduli [0, 3]
 ok   torus C3 x C4: Jac invariants [5, 5, 35, 420], moduli [0, 1, 3, 4]
 
