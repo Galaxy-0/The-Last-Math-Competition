@@ -1,0 +1,90 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\hypersetup{hidelinks}
+\begin{document}
+\title{A shellable bipartite graph with an induced six-cycle}
+\author{Chengzhe Gao}\date{}\maketitle
+Conjecture 541 asserts an equivalence between shellability of the
+independence complex of a bipartite graph and chordality. We give a
+counterexample under both ordinary chordality and chordal
+bipartiteness.
+
+\paragraph{Construction.}
+Let $v_0,\ldots,v_5$ form a six-cycle (indices modulo $6$), and attach
+one new leaf $w_i$ to each $v_i$. These are all twelve vertices and
+all twelve edges. Give $v_i$ the color $i\bmod2$ and $w_i$ the
+opposite color. This is a proper bipartition. The induced subgraph
+on the $v_i$ is $C_6$, so the graph is neither chordal nor chordal
+bipartite.
+
+\begin{theorem}
+The independence complex of this graph is pure and shellable.
+\end{theorem}
+\begin{proof}
+A maximal independent set contains exactly one of $v_i,w_i$ for
+every $i$. It cannot contain both because they are adjacent. If it
+contained neither, the leaf $w_i$ could be added, contradicting
+maximality. Thus its facets are exactly
+\[
+ F_I=\{v_i:i\in I\}\;\cup\;\{w_i:i\notin I\},
+\]
+where $I$ is an independent subset of $C_6$. Conversely, each such
+set is independent and maximal, because the omitted member of each
+pair is adjacent to the chosen one. Every facet therefore has six
+vertices. There are $1+6+9+2=18$ of them.
+
+Order these facets by increasing $|I|$, breaking ties arbitrarily.
+Consider an earlier facet $F_J$ and a later facet $F_I$. They are
+distinct and $|J|\leq|I|$, so there is an $i\in I\setminus J$.
+The independent set $I'=I\setminus\{i\}$ has smaller size and
+therefore its facet occurs earlier. Moreover,
+\[
+ F_I\setminus F_{I'}=\{v_i\}\subseteq F_I\setminus F_J.
+\]
+This is the standard facet-difference shelling criterion: for every
+earlier $F_J$ there is an earlier $F_{I'}$ whose difference from the
+current facet is one vertex belonging to $F_I\setminus F_J$.
+See \cite{matching}, Definition 2.7. Hence the displayed order is
+a shelling. Since the complex is pure, this argument works for the
+usual pure definition as well as the general nonpure definition.
+\end{proof}
+
+The graph consequently satisfies the bipartite hypothesis and the
+shellability side of the proposed equivalence, while failing either
+meaning of chordality relevant to the statement.
+
+\paragraph{Formal verification.}
+Lean uses vertices $0,\ldots,11$, with $i$ representing $v_i$ and
+$i+6$ representing $w_i$. The actual adjacency function is checked
+to be irreflexive and symmetric. A concrete two-coloring and an
+injective, induced embedding of $C_6$ are checked, giving the two
+failures of chordality from their definitions.
+
+Subsets are encoded as twelve-bit masks. The file proves that every
+Boolean subset and, classically, every proposition-valued subset
+has an encoding. It proves that the computable facet criterion
+(independence and inability to add an outside vertex) is equivalent
+to genuine inclusion-maximal independence against every subset.
+All $4096$ masks are checked, in 64 blocks, to show that the list
+of 18 facets is complete and has no repetitions. Every facet is
+checked to have six vertices. Finally the exact facet-difference
+criterion used in the proof is verified for every ordered pair of
+facets. Thus no facet, subset, or required pair is omitted.
+
+The proof uses only \texttt{Std} and Lean 4.19.0. Finite checks are
+kernel-reduced \texttt{decide} proofs, with no \texttt{native\_decide},
+unproved mathematical axioms, or admitted steps. The final theorem
+\texttt{conjecture541\_\allowbreak{}false} negates the asserted characterization;
+the stronger counterexample theorem also excludes chordal
+bipartiteness.
+
+\begin{thebibliography}{1}
+\bibitem{matching} S. Morey, E. Reyes and R. H. Villarreal,
+\emph{Cohen--Macaulay, shellable and unmixed clutters with a perfect
+matching of K\"onig type}, J. Pure Appl. Algebra 212 (2008), 1770--1786.
+\href{https://doi.org/10.1016/j.jpaa.2007.11.010}{doi:10.1016/j.jpaa.2007.11.010}.
+\end{thebibliography}
+\end{document}
