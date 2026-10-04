@@ -1,0 +1,95 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\R}{\mathbb R}
+\title{The proposed angular density is not normalized\\A disproof of Conjecture 00000000420}
+\author{C0ldSmi1e}
+\date{October 4, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The conjectured angular density integrates to $8\sqrt2/(3\pi)>1$ on its stated support. Its associated Lebesgue-density measure is therefore not a probability measure, and no sequence of probability measures can converge weakly to it. The accompanying Lean project proves the exact integral, the measure identity, and this weak-convergence obstruction.
+\end{abstract}
+
+\section{The exact claimed limit}
+Both the English and Chinese versions of Conjecture 00000000420 claim that angular distributions of jeu de taquin sliding paths converge to the density
+\[
+ \rho(\theta)=\frac2\pi\cos\theta\sqrt{1-\sin\theta},
+ \qquad \theta\in I=[-\pi/2,\pi/2].
+\]
+The original bilingual statement is preserved in \texttt{conjecture.md}. We use the ordinary meaning of an angular probability density: density with respect to Lebesgue measure $d\theta$ in the specified radian coordinate. The displayed equality is an exact formula, not proportionality up to an unspecified normalizing constant.
+
+On $I$, the cosine and square root are nonnegative. The function $\rho$ is continuous and integrable on $I$, including the endpoints. Define the finite measure
+\[
+ \nu(A)=\int_{A\cap I}\rho(\theta)\,d\theta
+ \quad\text{for Borel sets }A\subseteq\R.
+\]
+This is exactly the measure described by the proposed density and support.
+
+\section{Exact normalization failure}
+Substitute $u=1-\sin\theta$, so $du=-\cos\theta\,d\theta$. The endpoints become $2$ and $0$, respectively. Then
+\[
+ \nu(\R)=\int_{-\pi/2}^{\pi/2}\rho(\theta)\,d\theta
+ =\frac2\pi\int_0^2\sqrt u\,du
+ =\frac2\pi\left[\frac23u^{3/2}\right]_0^2
+ =\frac{8\sqrt2}{3\pi}.
+\]
+This value is strictly greater than $1$. For an exact inequality, $\sqrt2>7/5$ and $\pi<3.15=63/20$ imply $8\sqrt2>56/5>189/20>3\pi$. Lean checks these rational bounds and the division by the positive denominator $3\pi$. Thus the conclusion does not depend on floating-point quadrature or numerical rounding.
+\newpage
+
+\section{Why this disproves the conjecture}
+\begin{theorem}
+The measure $\nu$ is not a probability measure. No sequence of probability measures on $\R$ converges weakly to $\nu$.
+\end{theorem}
+\begin{proof}
+A probability measure has total mass exactly $1$, whereas $\nu(\R)=8\sqrt2/(3\pi)>1$. If probability measures $\mu_n$ converged weakly to $\nu$, applying weak convergence to the bounded continuous function identically equal to $1$ would give
+\[
+ 1=\lim_{n\to\infty}\int 1\,d\mu_n=\int 1\,d\nu=\nu(\R)>1,
+\]
+a contradiction.
+\end{proof}
+Every angular distribution of a random object is a probability measure. The theorem rules out the advertised limit for every sequence of such measures, so no detailed model of tableaux or sliding paths is needed for this contradiction. It addresses a necessary component of the statement itself, rather than a particular proposed mechanism for producing the limit.
+
+The argument does not rule out other angular limit laws, and it does not prove that a renormalized version of this expression is the correct limit. Renormalization would change the exact formula in the conjecture. Endpoint conventions do not affect the integral.
+
+\section{Formal objects and verification}
+The project pins Lean 4.19.0 and Mathlib v4.19.0 at commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}\end{center}
+The source files correspond directly to the argument:
+\begin{itemize}
+\item \texttt{Definitions.lean} defines the displayed density and interval, and their associated Lebesgue-density measure.
+\item \texttt{DensityIntegral.lean} proves continuity, integrability, and the exact integral by substitution and the power-integral formula.
+\item \texttt{DensityBounds.lean} proves nonnegativity on the support and the strict total-mass inequality.
+\item \texttt{Probability.lean} connects the real integral to the measure's mass, proves it is not a probability measure, and rules out weak limits of arbitrary probability-measure families along nontrivial filters.
+\item \texttt{Conjecture420.lean} packages non-normalization and the sequence specialization in\\
+\texttt{conjecture420\_disproof}.
+\end{itemize}
+The formal weak-convergence statement uses Mathlib's topology on \texttt{FiniteMeasure}; continuity of total mass supplies the constant-test-function argument. Nonnegativity on $I$ is explicitly proved before passing through \texttt{ENNReal.ofReal}, so that conversion does not silently truncate any negative part of the proposed density.
+\newpage
+
+\section{Reproduction and audit scope}
+From the submitted \texttt{lean/} directory, with the pinned toolchain installed, run:
+\begin{verbatim}
+lake exe cache get
+lake build
+for source in Definitions.lean DensityBounds.lean \
+              DensityIntegral.lean Probability.lean \
+              Conjecture420.lean Check.lean
+do
+  lake env lean -DwarningAsError=true "$source" || exit 1
+done
+\end{verbatim}
+The cache is an optional acceleration; \texttt{lake build} can build dependencies from source. The committed manifest records the exact dependency revisions. The README also provides a source-run cache command for platforms where the native cache executable cannot load.
+
+\texttt{Check.lean} displays the principal definitions and final theorem type, then prints the axiom dependencies of twelve central results. The checked results depend only on the standard foundational axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}. There are no admitted proofs, custom axioms, or native-evaluation shortcuts.
+
+The submission was rebuilt in a fresh project directory, followed by direct source replay with warnings treated as errors. Only pinned dependency checkouts and their library cache were reused. All submitted source and configuration files were compared to those successfully checked copies. A separate source reviewer checked the mathematical correspondence, including the actual density, support, measure, and weak-convergence interpretation.
+
+No auxiliary numerical computation is used or required. The antiderivative integral evaluation, exact inequality, density-to-mass identity, and probability contradiction are all formally proved. The verification folder contains build output, the axiom audit, document compilation output, eligibility checks, and hashes of the submitted files.
+
+These are local validation results, distinct from official maintainer acceptance. The complete contribution is confined to the personal submission directory.
+\end{document}

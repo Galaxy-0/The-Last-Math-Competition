@@ -1,0 +1,19 @@
+import Conjecture420
+
+#print Conjecture420.rho
+#print Conjecture420.angularInterval
+#print Conjecture420.candidateMeasure
+#print Conjecture420.candidateFiniteMeasure
+#check Conjecture420.conjecture420_disproof
+#print axioms Conjecture420.rho_nonneg
+#print axioms Conjecture420.rho_integrableOn
+#print axioms Conjecture420.rho_setIntegral
+#print axioms Conjecture420.mass_gt_one
+#print axioms Conjecture420.candidateMeasure_univ
+#print axioms Conjecture420.candidateMeasure_mass_gt_one
+#print axioms Conjecture420.candidateMeasure_not_probability
+#print axioms Conjecture420.no_probabilityMeasure_with_density
+#print axioms Conjecture420.candidateFiniteMeasure_mass_gt_one
+#print axioms Conjecture420.no_probability_weak_limit
+#print axioms Conjecture420.no_probability_sequence_weak_limit
+#print axioms Conjecture420.conjecture420_disproof

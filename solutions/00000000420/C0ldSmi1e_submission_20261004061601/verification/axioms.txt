@@ -1,0 +1,24 @@
+def Conjecture420.rho : ℝ → ℝ :=
+fun x => 2 / Real.pi * Real.cos x * √(1 - Real.sin x)
+def Conjecture420.angularInterval : Set ℝ :=
+Set.Icc Conjecture420.leftEndpoint Conjecture420.rightEndpoint
+def Conjecture420.candidateMeasure : MeasureTheory.Measure ℝ :=
+(MeasureTheory.volume.restrict Conjecture420.angularInterval).withDensity fun x => ENNReal.ofReal (Conjecture420.rho x)
+def Conjecture420.candidateFiniteMeasure : MeasureTheory.FiniteMeasure ℝ :=
+⟨Conjecture420.candidateMeasure, Conjecture420.candidateFiniteMeasure._proof_1⟩
+Conjecture420.conjecture420_disproof :
+  ¬MeasureTheory.IsProbabilityMeasure Conjecture420.candidateMeasure ∧
+    ∀ (μ : ℕ → MeasureTheory.ProbabilityMeasure ℝ),
+      ¬Filter.Tendsto (fun n => (μ n).toFiniteMeasure) Filter.atTop (nhds Conjecture420.candidateFiniteMeasure)
+'Conjecture420.rho_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture420.rho_integrableOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture420.rho_setIntegral' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture420.mass_gt_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture420.candidateMeasure_univ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture420.candidateMeasure_mass_gt_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture420.candidateMeasure_not_probability' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture420.no_probabilityMeasure_with_density' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture420.candidateFiniteMeasure_mass_gt_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture420.no_probability_weak_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture420.no_probability_sequence_weak_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture420.conjecture420_disproof' depends on axioms: [propext, Classical.choice, Quot.sound]
