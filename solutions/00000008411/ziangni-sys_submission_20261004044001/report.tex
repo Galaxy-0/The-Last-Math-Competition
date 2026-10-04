@@ -1,0 +1,125 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=26mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\newtheorem{proposition}{Proposition}
+\title{Infinitely many highly transitive complete designs\\\large Counterexample to TLMC 00000008411}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+For every $v\geq5$, the complements of single points in a $v$-point
+set form a $3$-$(v,v-1,v-3)$ design. Every point permutation is an
+automorphism, and the automorphism group is $3$-transitive. Different
+values of $v$ give nonisomorphic designs. This supplies infinitely many
+isomorphism classes with the fixed strength $t=3$.
+\end{abstract}
+
+\section{Scope of the assertion}
+The source defines a $t$-$(v,k,\lambda)$ design by the condition that
+each $t$-element subset is contained in exactly $\lambda$ blocks. It
+then asserts that for fixed $t\geq3$ only finitely many isomorphism
+classes have a $t$-transitive automorphism group.
+
+The following family consists of \emph{complete designs}, often called
+trivial designs in classification terminology. The stated definition
+does not exclude complete designs. Our parameters nevertheless satisfy
+$3<k<v$. We make no claim about a different classification problem that
+adds a noncomplete-design hypothesis. Only $t$ is fixed in the source;
+the parameters $v,k,\lambda$ are allowed to vary.
+
+\section{An explicit infinite family}
+For each $v\geq5$, let $X_v$ be a set of $v$ points and put
+\[
+ \mathcal B_v=\{X_v\setminus\{x\}:x\in X_v\}.
+\]
+Distinct omitted points give distinct blocks, so this is a simple
+block system with exactly $v$ blocks, each of cardinality $v-1$.
+It is precisely the family of all $(v-1)$-element subsets of $X_v$.
+
+\begin{proposition}
+$(X_v,\mathcal B_v)$ is a $3$-$(v,v-1,v-3)$ design, and its
+automorphism group is $3$-transitive.
+\end{proposition}
+\begin{proof}
+Fix any three-element subset $T\subseteq X_v$. The block
+$X_v\setminus\{x\}$ contains $T$ exactly when $x\notin T$.
+There are $v-3$ such points, and distinct points give distinct blocks.
+This proves the design property with $\lambda=v-3>0$.
+
+For every permutation $\sigma$ of $X_v$,
+\[
+ \sigma(X_v\setminus\{x\})=X_v\setminus\{\sigma(x)\}.
+\]
+Thus every permutation preserves the block family and is an
+automorphism. Given any two ordered triples of distinct points, send
+the first triple to the second in the prescribed order. This bijection
+between their three-element ranges extends to a permutation of $X_v$,
+because the two complements have equal cardinality $v-3$.
+The resulting automorphism sends the triples to one another, proving
+$3$-transitivity.
+\end{proof}
+
+\newpage
+\begin{proposition}
+These designs have infinitely many distinct isomorphism classes.
+\end{proposition}
+\begin{proof}
+An isomorphism of block designs includes a bijection of their point
+sets. Consequently the designs for $v$ and $w$ can be isomorphic only
+if $v=w$. Taking $v=n+5$ for every natural number $n$ therefore gives
+an infinite sequence of pairwise nonisomorphic designs. The value
+$t=3$ is fixed throughout, so this contradicts the claimed finiteness.
+\end{proof}
+
+The finiteness clause already fails, so the subsequent classification
+list cannot establish the conjecture as stated.
+
+\section{Formal correspondence}
+\raggedright
+The Lean project defines the actual point set as \texttt{Fin (n+5)}.
+The block omitting $i$ is \texttt{Finset.univ.erase i}, and the block
+family is its finite image over all points. The theorem
+\texttt{block\_injective} rules out duplicate blocks, while
+\texttt{block\_card} and \texttt{number\_of\_blocks} verify the sizes.
+
+The definition \texttt{IsThreeDesign} requires every block to have
+$n+4$ points and quantifies over every actual three-element subset,
+counting the blocks containing it. The theorem
+\texttt{incidence\_count} identifies this filtered family with the
+omitted points outside that subset and computes its cardinality $n+2$.
+Thus \texttt{actual\_design} proves the full defining incidence
+condition, not only a numerical parameter identity.
+
+\texttt{IsAutomorphism} is the actual block-preservation biconditional
+for a permutation of the point set. The theorem
+\texttt{permutation\_preserves} proves it for every permutation.
+Ordered triples of distinct points are represented by embeddings
+\texttt{Fin 3} into the point set. The theorem
+\texttt{three\_transitive} constructs a bijection of their ranges and
+uses the finite-set extension theorem to produce an actual permutation
+with the required action on all three entries.
+
+\texttt{Isomorphic} requires an actual point bijection preserving
+block membership in both directions. The theorem
+\texttt{isomorphic\_iff} proves that two family members are isomorphic
+exactly when their natural-number parameters are equal.
+The formal quotient by this isomorphism relation is proved infinite
+by an injective map from $\mathbb N$. Hence the final theorem
+\texttt{conjecture\_00000008411} includes actual designs, actual
+$3$-transitivity, the inequalities $3<k<v$, and an infinite type of
+isomorphism classes.
+
+\section{Verification}
+Lean 4.19.0 is used with Mathlib commit
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+Run \texttt{lake build}, then \texttt{lake env lean Main.lean} in the
+\texttt{lean} directory. The axiom audits of the design theorem,
+transitivity theorem and final theorem contain only the standard logical
+axioms \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
+There are no admitted proofs, extra axioms, native evaluation shortcuts,
+or auxiliary computational dependencies.
+\end{document}
