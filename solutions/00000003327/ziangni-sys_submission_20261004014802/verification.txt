@@ -1,0 +1,44 @@
+Local verification on 2026-10-04 (Windows x64).
+Toolchain: official Lean 4.19.0 release; standard library only.
+
+$ lake.exe --version
+Lake version 5.0.0-6caaee8 (Lean version 4.19.0)
+Exit code: 0
+
+$ lake.exe clean
+
+Exit code: 0
+
+$ lake.exe build
+ℹ [2/3] Built Main
+info: .\.\.\.\Main.lean:114:0: 'FineCounterexample.fine_two' does not depend on any axioms
+info: .\.\.\.\Main.lean:115:0: 'FineCounterexample.mem_paths_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: .\.\.\.\Main.lean:116:0: 'FineCounterexample.paths_nodup' depends on axioms: [propext, Quot.sound]
+info: .\.\.\.\Main.lean:117:0: 'FineCounterexample.fine_three' does not depend on any axioms
+info: .\.\.\.\Main.lean:118:0: 'FineCounterexample.fine_four' does not depend on any axioms
+info: .\.\.\.\Main.lean:119:0: 'FineCounterexample.violation' does not depend on any axioms
+info: .\.\.\.\Main.lean:120:0: 'FineCounterexample.not_logConcavePositiveTail' does not depend on any axioms
+info: .\.\.\.\Main.lean:121:0: 'FineCounterexample.conjecture_00000003327_false' does not depend on any axioms
+Build completed successfully.
+Exit code: 0
+
+$ lake.exe env lean Main.lean
+'FineCounterexample.fine_two' does not depend on any axioms
+'FineCounterexample.mem_paths_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FineCounterexample.paths_nodup' depends on axioms: [propext, Quot.sound]
+'FineCounterexample.fine_three' does not depend on any axioms
+'FineCounterexample.fine_four' does not depend on any axioms
+'FineCounterexample.violation' does not depend on any axioms
+'FineCounterexample.not_logConcavePositiveTail' does not depend on any axioms
+'FineCounterexample.conjecture_00000003327_false' does not depend on any axioms
+Exit code: 0
+
+$ python.exe verify.py
+F_2 = 1: UUDD
+F_3 = 2: UUUDDD, UUDUDD
+F_4 = 6: UUUUDDDD, UUUDUDDD, UUUDDUDD, UUDUUDDD, UUDUDUDD, UUDDUUDD
+Strict violation at n=3: F_3^2 = 4 < 6 = F_2 F_4.
+Enumeration and Catalan first-return recurrence agree for n=0..7.
+Exit code: 0
+
+Source audit: no sorry, admit, axiom declarations, unsafe, or native_decide.
