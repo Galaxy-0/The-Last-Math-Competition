@@ -1,0 +1,68 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\title{A continuous solution map without strong monotonicity\\Disproof of conjecture 00000008850's equivalence}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\section*{The clause being disproved}
+Both source languages assert that single-valued continuity of the solution map of
+\[
+ 0\in A(x)+\lambda x-p
+\]
+holds if and only if $A$ is strongly monotone and the parameter domain is connected. We disprove the necessity of strong monotonicity. The actual counterexample is on the real Hilbert space and even uses a maximal monotone operator, so adding that customary hypothesis does not repair the clause. We do not address the source's separate closed-graph, Hausdorff Lipschitz, or loop-lifting assertions.
+
+\section*{An actual variational inclusion}
+For every $x\in\mathbb R$, set $A(x)=\{0\}$. Use the parameter domain
+\[
+ D=\mathbb R\times(0,\infty).
+\]
+This is a nonempty convex subset of $\mathbb R^2$, hence connected. Indeed, a convex combination of two positive second coordinates is positive, and $(0,1)\in D$.
+
+For $(p,\lambda)\in D$, the stated inclusion means that some $u\in A(x)$ satisfies $u+\lambda x-p=0$. Membership in $A(x)$ forces $u=0$, so, since $\lambda>0$,
+\[
+ 0\in A(x)+\lambda x-p
+ \quad\Longleftrightarrow\quad
+ \lambda x=p
+ \quad\Longleftrightarrow\quad
+ x=\frac p\lambda.
+\]
+Thus the entire solution set is exactly
+\[
+ S(p,\lambda)=\left\{\frac p\lambda\right\}.
+\]
+The solution is unique for every parameter in $D$. Its value $s(p,\lambda)=p/\lambda$ is jointly continuous on $D$, because coordinate projections are continuous and the denominator is nonzero throughout $D$. This is ordinary continuity of the unique-valued solution, not a selected branch of a multivalued map.
+
+\newpage
+\section*{Monotonicity and maximality}
+In one real dimension, monotonicity requires
+\[
+ (u-v)(x-y)\geq0\qquad(u\in A(x),\ v\in A(y)).
+\]
+For $A(x)=\{0\}$ both $u$ and $v$ are zero, so the condition holds.
+
+For completeness, this operator is maximal monotone. Suppose a monotone operator $B$ contains its graph, and $u\in B(x)$. Then $0\in B(x+1)$ and $0\in B(x-1)$. Monotonicity against these two graph points gives
+\[
+ (u-0)(x-(x+1))=-u\geq0,\qquad
+ (u-0)(x-(x-1))=u\geq0.
+\]
+Hence $u=0$. Every graph point of $B$ belongs to $A$, so no proper monotone graph extension exists.
+
+\section*{Failure of every strong-monotonicity constant}
+Strong monotonicity would require some $m>0$ such that
+\[
+ (u-v)(x-y)\geq m|x-y|^2
+ \qquad\text{for all }u\in A(x),\ v\in A(y).
+\]
+Take $x=0$, $y=1$, $u=v=0$. The inequality becomes $0\geq m$, contradicting $m>0$. Thus no positive strong-monotonicity constant exists.
+
+We have established a maximal monotone $A$, a connected positive-$\lambda$ domain $D$, and an everywhere unique jointly continuous solution map on $D$, while $A$ is not strongly monotone. This contradicts the claimed ``only if'' direction. The term $\lambda x$ supplies the regularization responsible for uniqueness and continuity here; these properties do not force strong monotonicity of $A$ itself.
+
+\section*{Formal coverage and checks}
+The Lean project defines the actual set-valued operator, inclusion with an existential graph value, positive parameter domain, monotonicity, strong monotonicity, and maximality by absence of proper monotone graph extensions. It proves the complete solution equivalence and uniqueness, actual topological continuity of $p/\lambda$, and actual connectedness of $D$ using convexity. It proves maximal monotonicity and negates the existence of any positive strong-monotonicity constant.
+
+Its final theorem refutes the universal equivalence even when restricted to maximal monotone operators and domains contained in $D$. This restriction strengthens the counterexample's admissibility; the original unqualified equivalence would imply this restricted one.
+
+Lean 4.19.0 and a pinned Mathlib v4.19.0 revision are used. Complete build and source-check logs with theorem axiom audits accompany the report. No numerical auxiliary computation, additional axioms, admitted proofs, or native decision shortcut are used. The PDF is compiled and visually inspected in full.
+\end{document}
