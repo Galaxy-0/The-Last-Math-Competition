@@ -1,0 +1,78 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,lmodern}
+\setlength{\emergencystretch}{2em}
+\title{Orthogonal complements of adjoint invariant subspaces\\\large Proof of Conjecture 00000006837}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\begin{center}
+{\Large Orthogonal complements of adjoint invariant subspaces}\\[4pt]
+{\large Proof of Conjecture 00000006837}\\[6pt]
+ziangni-sys \qquad 4 October 2026
+\end{center}
+\section*{Precise statement and convention}
+The source pairs invariant subspaces of an operator and its adjoint
+through orthogonal complements. We prove this standard correspondence
+for every bounded linear operator $A$ on any real or complex Hilbert
+space $H$, without a finite-dimensional assumption.
+Write $A^*$ for the Hilbert-space adjoint, characterized by
+$\langle x,A^*y\rangle=\langle Ax,y\rangle$, and define
+\[
+U^\perp=\{y\in H:\langle x,y\rangle=0\text{ for every }x\in U\}.
+\]
+An invariant subspace means $A(U)\subseteq U$.
+In the invariant-subspace lattice of a Hilbert-space operator,
+subspaces are conventionally closed. We also prove the forward
+implication for arbitrary linear subspaces, and identify explicitly
+where closedness is needed for the converse.
+
+\section*{Adjoint invariance}
+Suppose $A(U)\subseteq U$. For $y\in U^\perp$ and $x\in U$,
+\[
+\langle x,A^*y\rangle=\langle Ax,y\rangle=0,
+\]
+because $Ax\in U$. Thus $A^*(U^\perp)\subseteq U^\perp$.
+No closedness of $U$ was used in this direction.
+Conversely, suppose $U$ is closed and $A^*(U^\perp)\subseteq U^\perp$.
+Apply the result just proved to $A^*$ and $U^\perp$.
+Using $(A^*)^*=A$ and $(U^\perp)^\perp=U$ gives $A(U)\subseteq U$.
+Therefore, for every closed $U$,
+\[
+ A(U)\subseteq U \quad\Longleftrightarrow\quad
+ A^*(U^\perp)\subseteq U^\perp.
+\]
+For a nonclosed subspace, the double orthogonal complement is
+$\overline U$, not necessarily $U$, so this converse is not asserted
+without closedness.
+
+\section*{Full correspondence and order}
+Every orthogonal complement is closed. Consequently
+$U\mapsto U^\perp$ maps closed $A$-invariant subspaces to closed
+$A^*$-invariant subspaces. Its inverse is the same orthogonal-complement
+operation in the other direction, since both double-adjoint and
+double-complement identities hold.
+For any closed subspaces $U,V$,
+\[
+U\subseteq V\quad\Longleftrightarrow\quad V^\perp\subseteq U^\perp.
+\]
+The forward implication follows from the definition of orthogonality;
+the reverse follows by taking orthogonal complements again.
+Thus this is an order-reversing bijection between the two closed
+invariant-subspace lattices. This establishes the orthogonal-complement
+pairing claimed in both source versions, in the standard bounded
+Hilbert-space adjoint setting.
+
+\section*{Formal verification}
+Lean is generic over a scalar field with \texttt{RCLike} structure
+and a complete inner-product space, hence covers both $\mathbb R$
+and $\mathbb C$. It uses actual Mathlib continuous linear operators,
+their adjoints, submodules, orthogonal complements, and topological
+closedness. The predicate of invariance is the actual condition
+$\forall x\in U,\ Ax\in U$.
+The project proves the arbitrary-subspace implication, the closed
+subspace equivalence, a bundled equivalence of the two types of closed
+invariant subspaces, and the inclusion-reversal equivalence.
+Its axiom audit uses only standard logical axioms; no analytic
+correspondence or invariance hypothesis is silently assumed as a result.
+\end{document}
