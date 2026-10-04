@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem*{proposition}{Counterexample}
+\title{Atomic congestion games with exact price of anarchy one}
+\author{Conjecture 00000008236 \quad ziangni-sys}
+\date{}
+\begin{document}
+\maketitle
+The conjecture asserts that the value spectrum of tight prices of anarchy of atomic congestion games, over all cost functions, has first value $4/3$. Positive constant latency functions already contradict this claim. We use the standard cost-minimization convention: price of anarchy is the worst equilibrium social cost divided by the minimum social cost.
+
+\begin{proposition}
+There is a finite atomic congestion game with positive nondecreasing latency functions and exact price of anarchy $1<4/3$. In fact the entire class of singleton-resource games with positive constant latencies has tight price of anarchy $1$.
+\end{proposition}
+\begin{proof}
+Let $P,R$ be any nonempty finite sets of players and resources. Each player chooses one resource, so a profile is $s:P\to R$. For a resource $r$, define its actual load
+\[
+ N_r(s)=|\{i\in P:s(i)=r\}|.
+\]
+Given any positive numbers $c_r$, take $\ell_r(k)=c_r$ for every load $k$. These latency functions are positive and nondecreasing. Player $i$ has cost $\ell_{s(i)}(N_{s(i)}(s))=c_{s(i)}$, and the social cost is $C(s)=\sum_{i\in P}c_{s(i)}>0$.
+
+The full pure Nash condition, including every unilateral alternative $r$, is exactly
+\[
+ c_{s(i)}\leq c_r\qquad(i\in P,\ r\in R).
+\]
+A cheapest resource exists because $R$ is finite and nonempty; assigning every player to it gives an equilibrium. At any equilibrium $s$, for every profile $t$ we have
+\[
+ C(s)=\sum_i c_{s(i)}\leq\sum_i c_{t(i)}=C(t).
+\]
+Thus each equilibrium attains the genuine global optimum. In particular,
+\[
+ \inf_t C(t)=C(s),\qquad
+ \left\{\frac{C(s)}{\inf_t C(t)}:s\text{ is Nash}\right\}=\{1\}.
+\]
+Its supremum is $1$. This holds for every positive constant-latency vector, so the supremum of exact prices of anarchy over this entire nonempty class is also $1$; the bound is attained.
+
+For an explicit two-player, two-resource member, take $P=R=\{0,1\}$ and $c_0=c_1=1$. All four profiles are equilibria, each with social cost $2$, and the optimum is $2$. Every probability distribution on these profiles likewise has expected social cost $2$, so allowing randomized equilibria does not change this example. Its exact price of anarchy is $1$.
+\end{proof}
+
+The full value spectrum therefore contains $1$ and cannot have smallest value $4/3$. Neither language version excludes price of anarchy $1$, constant latencies, or this finite atomic game. The proof targets only the first-value assertion; it does not require an interpretation of the proposed zeta lattice or of the separate smoothness formula. A different spectrum explicitly restricted to selected inefficient games would require an additional hypothesis.
+
+\paragraph{Formal verification.}
+Lean defines loads, latency-based individual and social costs, updates of actual profiles, and the full Nash condition. The optimum is a genuine \texttt{sInf} over all profile costs; price of anarchy is a genuine \texttt{sSup} over all Nash ratios. For arbitrary nonempty finite player and resource types it proves equilibrium existence, optimality of every equilibrium, the singleton ratio set, and the exact class supremum. The two-player instance belongs to the actual latency-function spectrum with positivity and monotonicity requirements. All normalized nonnegative probability weights on its four profiles have expected social cost $2$. Lean 4.19.0 and pinned Mathlib verify the source without additional axioms beyond the standard ones.
+\end{document}
