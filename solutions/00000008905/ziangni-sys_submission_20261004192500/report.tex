@@ -1,0 +1,50 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem*{proposition}{Counterexample}
+\title{Adjacency eigenvalues do not determine homomorphism counts}
+\author{Conjecture 00000008905 \quad ziangni-sys}
+\date{}
+\begin{document}
+\maketitle
+The source claims reconstruction of homomorphism counts from eigenvalues. Under the standard graph-homomorphism meaning of this statement, even the complete adjacency spectrum with algebraic multiplicities is insufficient. Both examples below have the same number of vertices; no loss of isolated vertices or of spectral multiplicities is involved.
+
+\begin{proposition}
+There are simple graphs $G,H$ on six vertices with the same adjacency characteristic polynomial but
+\[
+ \operatorname{hom}(P_3,G)=20\ne16=\operatorname{hom}(P_3,H),
+\]
+where $P_3$ is the path on three vertices. Thus no function of the adjacency eigenvalue multiset reconstructs these homomorphism counts.
+\end{proposition}
+\begin{proof}
+Take $G=K_{1,4}\sqcup K_1$ and $H=C_4\sqcup2K_1$. Explicitly, use vertex set $\{0,1,2,3,4,5\}$ for both. In $G$, the edges join $0$ to each of $1,2,3,4$, and $5$ is isolated. In $H$, all four edges join the part $\{0,2\}$ to the part $\{1,3\}$, and $4,5$ are isolated. All edges are undirected, with no loops.
+
+For the star, the space spanned by the central coordinate and the sum of its four leaf coordinates has adjacency matrix
+\[
+ \begin{pmatrix}0&4\\1&0\end{pmatrix}.
+\]
+The leaf-coordinate subspace of sum zero has dimension three and eigenvalue zero. Adding the isolated vertex gives
+\[
+ \chi_G(t)=t^4(t^2-4).
+\]
+For $C_4=K_{2,2}$, the two constant-on-part vectors span a space with adjacency matrix
+\[
+ \begin{pmatrix}0&2\\2&0\end{pmatrix}.
+\]
+The two within-part differences have eigenvalue zero; the two isolated vertices add two more zero eigenvalues. Hence
+\[
+ \chi_H(t)=t^4(t^2-4)=\chi_G(t).
+\]
+Thus both complex eigenvalue multisets are $\{2,-2,0,0,0,0\}$.
+
+For any simple graph $J$, a homomorphism from $P_3$ is determined by the image $v$ of its middle vertex and the ordered images of its two endpoints. Each endpoint independently has $\deg_J(v)$ choices. Repeated endpoint images are allowed in a graph homomorphism. Therefore
+\[
+ \operatorname{hom}(P_3,J)=\sum_{v\in V(J)}\deg_J(v)^2.
+\]
+The degree lists are $(4,1,1,1,1,0)$ and $(2,2,2,2,0,0)$, respectively, giving $20$ and $16$. Any reconstruction function applied to their common eigenvalue multiset would have to return both numbers, an impossibility.
+\end{proof}
+
+\paragraph{Scope and formal verification.}
+Only the asserted spectral reconstruction of unrestricted graph-homomorphism counts is refuted. This does not deny that adjacency spectra determine closed-walk counts. The Lean project constructs actual \texttt{SimpleGraph} objects and their adjacency matrices, proves equality of their characteristic polynomials over $\mathbb Q$ using an explicit invertible intertwiner, transports equality to $\mathbb C$, and proves equality of the full root multisets. It counts the actual types of \texttt{SimpleGraph.Hom} maps through an explicit equivalence with the complete finite set of adjacency-preserving functions. The final theorem rules out every reconstruction function on eigenvalue multisets. Finite computations use kernel-checked \texttt{decide}, never \texttt{native\_decide}. Run \texttt{lake build} in \texttt{lean/}; the project pins Lean 4.19.0 and Mathlib in its manifest.
+\end{document}
