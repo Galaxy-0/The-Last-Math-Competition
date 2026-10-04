@@ -1,0 +1,40 @@
+== lake build (fresh, Lean 4.19.0)
+info: ovoidQ48: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+ℹ [2/3] Built Main
+info: ././././Main.lean:617:0: 'Ovoid1007.Q_nondegenerate' depends on axioms: [propext]
+info: ././././Main.lean:618:0: 'Ovoid1007.IsOvoid.at_most_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:619:0: 'Ovoid1007.tits_isOvoid' does not depend on any axioms
+info: ././././Main.lean:620:0: 'Ovoid1007.tits_not_inHyperplane' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:621:0: 'Ovoid1007.tits_not_onQuadric' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:622:0: 'Ovoid1007.ell_isOvoid' does not depend on any axioms
+info: ././././Main.lean:623:0: 'Ovoid1007.conjecture_00000001007_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:624:0: 'Ovoid1007.conjecture_00000001007_false_any_reading' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:625:0: 'Ovoid1007.nonvacuous' does not depend on any axioms
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+PASS GF(8): associative, commutative, distributive, inverses, char 2
+PASS sigma(x)=x^4 is an automorphism with sigma^2 = Frobenius x->x^2
+PASS Tits set: 65 distinct points of PG(3,8)
+PASS Tits set: no three collinear (all 43680 triples have rank 3) => ovoid of PG(3,8)
+PASS polar form: the two identities giving Q(u+v) = Q(u) + Q(v) + pol(u,v) (exhaustive)
+PASS Q nondegenerate: radical of pol is <(0,0,0,0,1)> and Q(0,0,0,0,1) = 1
+PASS PG(4,8) has 4681 points, Q(4,8) has 585 = (q^4-1)/(q-1) points
+PASS Q(4,8) has 585 lines, 9 points each, all on the quadric
+PASS lift x4 = sqrt(x0x3+x1x2) equals x^3 + y^2 (formula used in Lean)
+PASS lifted Tits set is an ovoid of Q(4,8): every line meets it exactly once
+PASS lifted Tits set: 65 pairwise non-collinear points (pol != 0, 2080 pairs)
+PASS Tits ovoid lies in none of the 4681 hyperplanes of PG(4,8)
+PASS rank of the lifted Tits ovoid in GF(8)^5 is 5
+PASS projection to PG(3,8) lies on no quadric: 65x10 monomial matrix has rank 10
+PASS control: Q(4,8) n {x4 = x1 + x2} is exactly the 65-point set ELL
+PASS control: ELL is an ovoid of Q(4,8) (line definition) with pairwise non-collinear points
+PASS control: ELL lies in exactly one hyperplane, and its projection lies on a quadric (rank 9)
+PASS Tits ovoid != ELL (they share only 5 points)
+ALL CHECKS PASSED
+exit 0
