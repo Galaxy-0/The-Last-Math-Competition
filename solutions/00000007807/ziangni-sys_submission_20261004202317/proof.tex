@@ -1,0 +1,61 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{A convex interval has no positive boundary log-Sobolev constant}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Conjecture 00000007807.} The claimed positive universal bound $\alpha_K\geq c/\operatorname{ratio}(K)$ for every convex body fails in the allowed dimension one. Neither language version excludes this dimension.
+
+Take the genuine compact convex body $K=[-1,1]\subset\mathbb R$, which has nonempty interior. Its actual boundary is $\partial K=\{-1,1\}$. The intrinsic surface measure in dimension one is zero-dimensional Hausdorff measure restricted to this boundary. Each singleton has $\mathcal H^0$-measure one. Additivity on the disjoint endpoints therefore gives
+\[
+ \mathcal H^0\!\restriction_{\partial K}=\delta_{-1}+\delta_1,
+ \qquad \mathcal H^0(\partial K)=2.
+\]
+The true normalized boundary probability measure is
+\[
+ \sigma_K=\tfrac12(\delta_{-1}+\delta_1).
+\]
+Lebesgue volume is $|K|=2$, so its actual surface-to-volume ratio is $2/2=1$.
+
+Use the standard rate convention for a log-Sobolev constant: a nonnegative number $\alpha$ is admissible if every smooth test function $q$ satisfies
+\[
+ \alpha\operatorname{Ent}_{\sigma_K}(q^2)
+ \leq 2\int |\nabla q|^2\,d\sigma_K,
+\]
+where the true entropy is
+\[
+ \operatorname{Ent}_{\sigma_K}(q^2)
+ =\int q^2\log(q^2)\,d\sigma_K
+ -\Bigl(\int q^2\,d\sigma_K\Bigr)
+ \log\Bigl(\int q^2\,d\sigma_K\Bigr).
+\]
+Zero is always admissible, since the energy is nonnegative. We show that no positive number is admissible, so the supremum of all nonnegative admissible constants is exactly zero.
+
+Consider the actual smooth polynomial
+\[
+ P(x)=\frac{2+3x-x^3}{4},\qquad
+ P'(x)=\frac{3-3x^2}{4}.
+\]
+Its boundary values are $P(-1)=0$, $P(1)=1$, while $P'(-1)=P'(1)=0$. Thus the genuine Dirichlet energy of this test function is
+\[
+ \int |\nabla P|^2\,d\sigma_K
+ =\tfrac12\bigl(|P'(-1)|^2+|P'(1)|^2\bigr)=0.
+\]
+The same energy vanishes for the intrinsic tangential-gradient convention: the actual ambient gradient is zero at each boundary point, and its projection to the boundary tangent space is therefore zero. In dimension one these tangent spaces are themselves zero-dimensional.
+
+On the other hand,
+\[
+ \int P^2\,d\sigma_K=\tfrac12,
+ \qquad \int P^2\log(P^2)\,d\sigma_K=0,
+\]
+using the usual $0\log0=0$ convention. Consequently
+\[
+ \operatorname{Ent}_{\sigma_K}(P^2)
+ =-\tfrac12\log(\tfrac12)=\tfrac12\log2>0.
+\]
+For every $\alpha>0$, the log-Sobolev inequality would demand a strictly positive left-hand side to be at most zero. Hence the actual optimal nonnegative constant is $\alpha_K=0$. Since $\operatorname{ratio}(K)=1$, no positive universal $c$ can satisfy the conjectured bound for this body.
+
+\noindent\textbf{Scope and verification.} This refutes the unrestricted positive-universality clause in dimension one. It does not make a claim about versions restricted to $n\geq2$, or separately assess the curvature approximation or prism sharpness clauses. The Lean project proves the actual interval body and frontier, its restricted zero-dimensional Hausdorff measure and normalization, the surface-to-volume ratio, genuine polynomial smoothness and gradient, actual entropy and energy integrals, the complete set of admissible nonnegative constants, and its supremum zero. It uses actual measure and derivative definitions, not assigned scalar entropy or constant values.
+\end{document}
