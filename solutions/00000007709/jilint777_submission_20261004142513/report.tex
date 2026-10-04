@@ -1,0 +1,390 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of Conjecture 00000007709:\\
+the right triangle with legs $1:2$ is a convex rep-5 tile}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000007709 asserts, as its first clause, that the order $k$ of a convex
+rep-tile must be a perfect square or $k=2$. This is false. The right triangle with
+legs in ratio $1:2$ can be dissected into $5$ congruent triangles, each similar to it
+with ratio $1/\sqrt5$, and $5$ is neither a perfect square nor $2$. We give the
+dissection with integer vertex coordinates and explicit similarities
+$z\mapsto(a\bar z+b)/5$ with $|a|^2=5$, and prove that it is a tiling.
+
+A self-contained Lean~4 project (core library only) defines points, convex polygons,
+similarities (via squared distances) and rep-$k$ tiles from scratch. It proves that this
+triangle is a rep-5 tile and derives the negation of the clause. In Lean the plane is the
+rational plane $\mathbb Q^2$; we explain why the real case follows, and the
+human-readable proof below is carried out directly in $\mathbb R^2$. We also treat the
+reading in which ``the order'' means the least $k\ge2$. Under that reading the
+$1\times\sqrt3$ rectangle is a counterexample: its least order is $3$, and this is so
+even if the pieces need only be similar to the tile, not congruent to each other.
+\end{abstract}
+
+\section{The conjecture}
+
+The statement (English version) reads:
+\begin{quote}
+\emph{Definition:} The rep-tile order of a polygon is the value $k$ for which the polygon
+dissects into $k$ copies similar to itself. \emph{Conjecture:} The order $k$ of a convex
+rep-tile must be a perfect square or $k=2$; among convex quadrilaterals the class of
+rep-tile order exactly $4$ consists of parallelograms and three exceptional families,
+whose parameter spaces are two-dimensional.
+\end{quote}
+The Chinese version says the same thing. The conjecture is a conjunction, so refuting
+one clause refutes it. We refute the first clause:
+\begin{equation}\label{eq:clause}
+\text{if a convex polygon is a rep-}k\text{ tile, then } k \text{ is a perfect square or } k=2.
+\end{equation}
+We do not discuss the second clause.
+
+\section{Definitions and readings}\label{sec:defs}
+
+\begin{definition}\label{def:rep}
+A polygon $P\subset\mathbb R^2$ (compact, with nonempty interior) is a \emph{rep-$k$ tile}
+if there are closed sets $P_1,\dots,P_k$ such that:
+\begin{enumerate}
+\item each $P_i=f_i(P)$ for a similarity $f_i$ of the plane;
+\item the $P_i$ are pairwise congruent;
+\item $P_1\cup\dots\cup P_k=P$;
+\item the interiors of the $P_i$ are pairwise disjoint.
+\end{enumerate}
+Its \emph{orders} are the $k$ for which this holds.
+\end{definition}
+
+This is the standard notion of Golomb~\cite{golomb}, as used for example in~\cite{snover}.
+As usual, ``congruent'' and ``similar'' allow mirror images. Since the areas add up,
+condition~2 forces every $f_i$ to have ratio $1/\sqrt k$. Conversely, if every $f_i$ has
+ratio $1/\sqrt k$, then condition~2 holds automatically, because $f_j\circ f_i^{-1}$ is
+an isometry mapping $P_i$ onto $P_j$.
+
+The conjecture's wording admits several readings. We list them and say how each is handled.
+\begin{enumerate}
+\item[(R1)] \emph{Every order.} ``The order $k$ of a convex rep-tile'' refers to any $k$
+for which the polygon is a rep-$k$ tile. So~\eqref{eq:clause} says that every order of a
+convex rep-tile is a square or $2$. This is the reading used in the conjecture itself. Its
+second clause puts \emph{all} parallelograms into ``the class of rep-tile order exactly
+$4$''. But the parallelogram with sides $1$ and $\sqrt2$ is also a rep-2 tile, and the
+$1\times\sqrt3$ rectangle is also a rep-3 tile. So ``order $4$'' there means ``is a
+rep-$4$ tile'', not ``has least order $4$''. Under (R1), Theorem~\ref{thm:main} below
+refutes~\eqref{eq:clause}. This is the statement formalized in Lean.
+\item[(R2)] \emph{Similar, not necessarily congruent.} The conjecture's definition says
+only ``$k$ copies similar to itself''. Dropping condition~2 gives more rep-$k$ tiles, so a
+counterexample under (R1) is also one under (R2): our pieces are congruent.
+\item[(R3)] \emph{Least order.} ``The order'' is the least $k\ge2$ for which the polygon
+is a rep-$k$ tile. ($k=1$ always works, and $1$ is a square anyway.)
+Under this reading the $1:2$ triangle $T$ is not a counterexample. With congruent pieces its
+least order is $4$: every triangle is a rep-$4$ tile, and by~\cite{snover} only the isosceles
+right triangle is rep-$2$ and only the $30$-$60$-$90$ triangle is rep-$3$. With merely
+similar pieces its least order is $2$, by cutting along the altitude. This is why a different
+polygon is needed here. Proposition~\ref{prop:rect} gives a convex polygon whose least order
+is $3$. This holds with congruent pieces, and also when the pieces need only be similar to
+the tile.
+\item[(R4)] \emph{Orientation-preserving copies only.} The pieces in
+Theorem~\ref{thm:main} are mirror images of the tile, which is allowed in the standard
+definition. If only orientation-preserving similarities were allowed, the rectangle of
+Proposition~\ref{prop:rect} still refutes the clause. Its pieces are rotated copies, and
+since a rectangle is mirror-symmetric the question does not arise.
+\end{enumerate}
+The clause has the escape ``$k=2$'', which does not apply to $k=5$ or $k=3$. There is no
+other exceptional set.
+
+\section{\texorpdfstring{The rep-5 tiling}{The rep-5 tiling}}\label{sec:main}
+
+Identify $\mathbb R^2$ with $\mathbb C$. Let
+\[
+A=(0,0),\quad B=(10,0),\quad C=(0,5),\qquad
+D=(2,4),\quad M_1=(1,2),\quad M_2=(6,2),\quad M_3=(5,0),
+\]
+and let $T=\triangle ABC$. This is the right triangle with right angle at $A$ and legs
+$|AC|=5$ and $|AB|=10$, in ratio $1:2$. Its squared side lengths are $25,100,125$. The
+point $D$ is the foot of the altitude from $A$: it lies on $BC$ ($2+2\cdot4=10$), and
+$AD=(2,4)$ is orthogonal to $BC$, whose direction is $(-2,1)$. The points $M_1,M_2,M_3$
+are the midpoints of $AD$, $BD$ and $AB$. Define the five triangles
+\[
+P_1=\triangle ADC,\quad P_2=\triangle AM_3M_1,\quad P_3=\triangle M_3BM_2,\quad
+P_4=\triangle M_1M_2D,\quad P_5=\triangle M_3M_2M_1 .
+\]
+Geometrically, the altitude $AD$ cuts $T$ into $P_1$ (ratio $1/\sqrt5$) and
+$\triangle ABD$ (ratio $2/\sqrt5$). The midlines of $\triangle ABD$ cut it into four
+copies of ratio $1/\sqrt5$.
+
+\begin{lemma}\label{lem:sim}
+For $i=1,\dots,5$ let $f_i(z)=(a_i\bar z+b_i)/5$ with
+\begin{center}
+\begin{tabular}{cccccc}
+\toprule
+$i$ & 1 & 2 & 3 & 4 & 5\\
+\midrule
+$a_i$ & $-1-2i$ & $2-i$ & $2-i$ & $2-i$ & $-2+i$\\
+$b_i$ & $10+20i$ & $5+10i$ & $30+10i$ & $10+20i$ & $25$\\
+$(f_i(A),f_i(B),f_i(C))$ & $(D,A,C)$ & $(M_1,M_3,A)$ & $(M_2,B,M_3)$ & $(D,M_2,M_1)$ & $(M_3,M_1,M_2)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Then $f_i$ is a similarity with ratio $1/\sqrt5$ and $f_i(T)=P_i$. In particular the
+$P_i$ are pairwise congruent and similar to $T$.
+\end{lemma}
+
+\begin{proof}
+$|f_i(z)-f_i(w)|=|a_i|\,|\bar z-\bar w|/5=\sqrt5\,|z-w|/5=|z-w|/\sqrt5$, since
+$|a_i|^2=5$. The vertex images in the last row are direct computations. For example,
+$f_1(10)=((-1-2i)\cdot10+10+20i)/5=0=A$ and $f_1(5i)=((-1-2i)(-5i)+10+20i)/5=(-10+5i+10+20i)/5=5i=C$.
+An affine bijection maps the convex hull of three points onto the convex hull of their
+images, so $f_i(T)=P_i$. Two similarities of the same ratio differ by an isometry, so the
+$P_i$ are pairwise congruent.
+\end{proof}
+
+A nondegenerate triangle is the intersection of the three closed half-planes that are
+bounded by its edge lines and contain the opposite vertex. Its interior is the
+intersection of the corresponding open half-planes. For $T$ and the pieces this gives:
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+triangle & closed region (interior: all inequalities strict)\\
+\midrule
+$T$ & $x\ge0,\quad y\ge0,\quad x+2y\le10$\\
+$P_1=ADC$ & $x\ge0,\quad y\ge2x,\quad x+2y\le10$\\
+$P_2=AM_3M_1$ & $y\ge0,\quad y\le2x,\quad x+2y\le5$\\
+$P_3=M_3BM_2$ & $y\ge0,\quad 2x-y\ge10,\quad x+2y\le10$\\
+$P_4=M_1M_2D$ & $y\ge2,\quad y\le2x,\quad x+2y\le10$\\
+$P_5=M_3M_2M_1$ & $x+2y\ge5,\quad y\le2,\quad 2x-y\le10$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Each line passes through the two vertices of the corresponding edge, and the opposite
+vertex satisfies the inequality strictly. For instance, for $P_5$: $x+2y=5$ passes through
+$M_3,M_1$ and gives $10>5$ at $M_2$; $y=2$ passes through $M_1,M_2$ and gives $0<2$ at
+$M_3$; $2x-y=10$ passes through $M_3,M_2$ and gives $0<10$ at $M_1$.
+
+\begin{theorem}\label{thm:main}
+$T$ is a rep-5 tile. Hence~\eqref{eq:clause} is false: $T$ is convex, and $5$ is neither a
+perfect square nor $2$.
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:sim}, the pieces $P_i=f_i(T)$ are similar to $T$ and pairwise
+congruent. It remains to check conditions~3 and~4 of Definition~\ref{def:rep}.
+
+\emph{$P_i\subseteq T$.} Each vertex of each $P_i$ is one of $A,B,C,D,M_1,M_2,M_3$, and
+each of these satisfies $x\ge0$, $y\ge0$, $x+2y\le10$. Since $T$ is convex, $P_i\subseteq T$.
+
+\emph{$T\subseteq\bigcup P_i$.} Let $(x,y)\in T$, so $x\ge0$, $y\ge0$ and $x+2y\le10$.
+\begin{itemize}
+\item If $y\ge2x$, then $(x,y)\in P_1$.
+\item Otherwise $y\le2x$. If moreover $x+2y\le5$, then $(x,y)\in P_2$.
+\item Otherwise $y\le 2x$ and $x+2y\ge5$. If $y\ge2$, then $(x,y)\in P_4$.
+\item Otherwise $y\le2$ as well. If $2x-y\ge10$, then $(x,y)\in P_3$, using $y\ge0$ and $x+2y\le10$.
+\item Otherwise $x+2y\ge5$, $y\le2$ and $2x-y\le10$, so $(x,y)\in P_5$.
+\end{itemize}
+
+\emph{Interiors are disjoint.} For each pair $i<j$ we give an affine function $\ell$ with
+$\ell\ge0$ on $P_i$ and $\ell\le0$ on $P_j$. Then the interiors lie in $\{\ell>0\}$ and
+$\{\ell<0\}$ respectively. On a triangle, an affine function is nonnegative iff it is
+nonnegative at the three vertices, so this is a finite check.
+\begin{center}
+\begin{tabular}{llp{7.2cm}}
+\toprule
+pairs & $\ell$ & reason\\
+\midrule
+$(1,2),(1,3),(1,4),(1,5)$ & $y-2x$ & $\ell\ge0$ on $P_1$; $\ell\le0$ at every vertex of $P_2,\dots,P_5$\\
+$(2,3),(2,4),(2,5)$ & $5-x-2y$ & $\ell\ge0$ on $P_2$; $\ell\le0$ at every vertex of $P_3,P_4,P_5$\\
+$(3,4)$ & $2-y$ & the vertices of $P_3$ have $y\in\{0,2\}$; $P_4$ has $y\ge2$\\
+$(3,5)$ & $2x-y-10$ & $\ge0$ on $P_3$ and $\le0$ on $P_5$ (table above)\\
+$(4,5)$ & $y-2$ & $\ge0$ on $P_4$ and $\le0$ on $P_5$ (table above)\\
+\bottomrule
+\end{tabular}
+\end{center}
+The vertex values used are as follows. $2x-y$ equals $0$ at $A,D,M_1$, $10$ at
+$M_2,M_3$, and $20$ at $B$. $x+2y$ equals $5$ at $M_1,M_3$ and $10$ at $B,D,M_2$. As a
+consistency check, the doubled areas are $50$ for $T$ and $10$ for each $P_i$.
+\end{proof}
+
+\begin{remark}
+In general, some triangle is a rep-$k$ tile iff $k=n^2$, $k=n^2+m^2$ or $k=3n^2$~\cite{snover}.
+The present example is the case $5=1^2+2^2$. Readers who know this theorem can stop here;
+the point of this submission is a complete, self-contained and machine-checked proof of one
+instance. The rectangle with sides $1$ and $\sqrt k$ is a rep-$k$ tile for every $k$
+(Section~\ref{sec:least}). So under reading (R1) the clause fails for every non-square
+$k\ge3$.
+\end{remark}
+
+\section{\texorpdfstring{The least-order reading: the $1\times\sqrt3$ rectangle}{The least-order reading: the 1 x sqrt3 rectangle}}\label{sec:least}
+
+\begin{proposition}\label{prop:rect}
+Let $R=[0,\sqrt3]\times[0,1]$. Then:
+\begin{enumerate}
+\item[(a)] $R$ is a rep-3 tile, with three congruent pieces that are rotated (orientation-preserving) copies of $R$;
+\item[(b)] $R$ cannot be dissected into $2$ pieces similar to $R$, whether or not the pieces are congruent.
+\end{enumerate}
+Hence the least $k\ge2$ for which $R$ is a rep-$k$ tile is $3$, under both the congruent and the
+merely-similar notion. Since $3$ is neither a square nor $2$, the clause also fails under
+reading (R3), in all its variants.
+\end{proposition}
+
+\begin{proof}
+(a) For $j=1,2,3$ let $g_j(z)=iz/\sqrt3+j/\sqrt3$. This is a rotation by $90^\circ$
+composed with scaling by $1/\sqrt3$ and a translation. It maps $(x,y)$ to
+$\bigl((j-y)/\sqrt3,\;x/\sqrt3\bigr)$, so $g_j(R)=[(j-1)/\sqrt3,\,j/\sqrt3]\times[0,1]$. These three strips
+cover $R$, and their interiors are disjoint.
+
+(b) Suppose $R=Q_1\cup Q_2$, where $Q_i=h_i(R)$ for similarities $h_i$ of ratio $r_i$,
+and the interiors are disjoint. Comparing areas gives $r_1^2+r_2^2=1$, so $0<r_i<1$. Each
+$Q_i$ is a rectangle with sides $r_i\sqrt3$ and $r_i$ and diagonal $2r_i<2$.
+
+Every corner $c$ of $R$ lies in some $Q_i$. Since $c$ is an extreme point of $R$ and
+$Q_i\subseteq R$, $c$ is an extreme point of $Q_i$, that is, a vertex of $Q_i$. A single
+$Q_i$ cannot contain two opposite corners of $R$: they are at distance $2$, which exceeds
+the diameter $2r_i$ of $Q_i$. So each $Q_i$ contains at most two corners, and the two are
+adjacent. The four corners are covered, so each $Q_i$ contains exactly two adjacent
+corners, and the two pairs are complementary.
+
+If $Q_i$ contains the two endpoints of a side $s$ of $R$, it contains $s$, by convexity.
+The line through $s$ supports $R$, and hence $Q_i$. So $Q_i$ meets that line in an edge of
+$Q_i$ that contains $s$ and lies in $R\cap(\text{line})=s$. Thus $s$ is an edge of $Q_i$.
+A long side ($\sqrt3$) is impossible, since $r_i\sqrt3<\sqrt3$ and $r_i<1<\sqrt3$. So
+$Q_1$ and $Q_2$ each have one of the two short sides of $R$, of length $1$, as an edge.
+Then $r_i\sqrt3=1$ or $r_i=1$, and since $r_i<1$ this means $r_1=r_2=1/\sqrt3$. Now
+$r_1^2+r_2^2=2/3\ne1$, a contradiction.
+\end{proof}
+
+\section{Lean formalization}\label{sec:lean}
+
+The project \texttt{lean4/} (Lean 4.19.0, core library only, no Mathlib) builds everything
+from scratch. All decisive objects are defined explicitly: points, convex polygons and
+their interiors, similarities, rep-$k$ tiles, and the claim.
+
+\paragraph{The plane.} A point (\texttt{Pt}) is an integer triple $(x,y,w)$ with $w>0$. It
+stands for the rational point $(x/w,y/w)$, and every point of $\mathbb Q^2$ has this form.
+\texttt{Pt.same} is equality of rational points ($xw'=x'w$, $yw'=y'w$). The squared
+distance is $\texttt{sqNum}/\texttt{sqDen}$ with
+$\texttt{sqNum}(P,Q)=(x_Pw_Q-x_Qw_P)^2+(y_Pw_Q-y_Qw_P)^2$ and
+$\texttt{sqDen}(P,Q)=(w_Pw_Q)^2$.
+
+\paragraph{Polygons.} \texttt{orient A B P} is the $3\times3$ determinant of the
+homogeneous coordinates. Its sign is the sign of $(B-A)\times(P-A)$, since all $w>0$.
+\texttt{ConvexPolygon vs}: the list has at least $3$ vertices, and every vertex that is not
+an endpoint of an edge lies strictly to the left of that edge (counterclockwise, strictly
+convex position). \texttt{InPoly} (closed region) and \texttt{InPolyInt} (interior) require
+$\texttt{orient}\ge0$, respectively $>0$, for every edge. Both are invariant under
+\texttt{Pt.same} (\texttt{InPoly.congr}, \texttt{InPolyInt.congr}).
+
+\paragraph{Similarities and rep-tiles.} \texttt{IsSimilarity f n m} means
+$m\cdot\texttt{sqNum}(fP,fQ)\cdot\texttt{sqDen}(P,Q)=n\cdot\texttt{sqNum}(P,Q)\cdot\texttt{sqDen}(fP,fQ)$
+for all $P,Q$, that is, $|f(P)f(Q)|^2=\frac nm|PQ|^2$. Such an $f$ is automatically a
+well-defined map of rational points (\texttt{IsSimilarity.respects}).
+\texttt{RepTile vs k} asks for a list of $k$ maps $f_i$, each with
+\texttt{IsSimilarity f 1 k} (squared ratio $1/k$, so the pieces are similar to the tile and
+pairwise congruent). It further requires:
+\begin{enumerate}
+\item every $f_i$ maps the region into itself;
+\item every point of the region is $f_i(Q)$ for some $i$ and some $Q$ in the region;
+\item for $i\ne j$, no point of $f_i(\mathrm{int})$ equals a point of $f_j(\mathrm{int})$.
+\end{enumerate}
+For a similarity, the interior of $f_i(\text{region})$ is $f_i(\text{interior})$, so these
+are conditions 3 and 4 of Definition~\ref{def:rep}. Fixing the ratio at $1/\sqrt k$ only
+makes the definition stricter (Section~\ref{sec:defs}).
+
+\paragraph{The claim.}
+\texttt{Claim} $:=\forall\,\texttt{vs},\ \texttt{ConvexPolygon vs}\to\forall k,\ \texttt{RepTile vs k}\to(\exists m,\ k=m\cdot m)\lor k=2$.
+This is~\eqref{eq:clause} under reading (R1), and the main theorem is
+\begin{center}
+\texttt{theorem conjecture\_00000007709\_false : \textasciitilde Claim}
+\end{center}
+
+\paragraph{Proof structure in Lean.}
+\begin{itemize}\raggedright
+\item \texttt{ConjAffine} is the map $z\mapsto(a\bar z+b)/d$ in homogeneous coordinates.
+\texttt{ConjAffine.sqNum\_apply} and \texttt{ConjAffine.sqDen\_apply} are polynomial
+identities showing that it scales squared distances by $|a|^2/d^2$; they give
+\texttt{ConjAffine.isSimilarity}.
+\item The maps \texttt{f1}--\texttt{f5} are those of Lemma~\ref{lem:sim}. \texttt{f\_similar}
+shows each has squared ratio $1/5$. \texttt{f\_vertices} (by \texttt{decide}) checks the
+vertex images.
+\item \texttt{g1}--\texttt{g5} are the inverses $g_i(z)=a_i\bar z+c_i$. \texttt{back1}--\texttt{back5}
+show that $g_i(P_i)\subseteq T$ and that $f_i(g_i(P))$ is the point $P$. With \texttt{into}
+($f_i(T)\subseteq P_i$), this gives $f_i(T)=P_i$.
+\item \texttt{pieces\_sub}, \texttt{cover} and \texttt{disjoint} are the three parts of the
+proof of Theorem~\ref{thm:main}. They are linear-arithmetic goals in the homogeneous
+coordinates, closed by \texttt{omega}.
+\item \texttt{T\_rep5 : RepTile T 5} assembles these facts. \texttt{five\_not\_square} and
+$5\ne2$ then give the main theorem.
+\item Non-vacuity: \texttt{all\_convex} shows that $T$ and all five pieces satisfy
+\texttt{ConvexPolygon}. \texttt{interiors\_nonempty} exhibits an interior point (the
+centroid) of $T$ and of each piece, so the disjointness condition is not vacuous.
+\end{itemize}
+There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+\texttt{\#print axioms} reports at most \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}; \texttt{omega} uses \texttt{Classical.choice}.
+
+\paragraph{From $\mathbb Q^2$ to $\mathbb R^2$.} The Lean statement concerns rational
+points. The proof of Theorem~\ref{thm:main} above is written directly in $\mathbb R^2$, and
+it is the same linear case analysis that Lean checks. The real statement also follows
+formally from the rational one, as follows. The maps $f_i$ are given by the same formulas
+over $\mathbb R$, and the distance identity is a polynomial identity. The pieces are closed
+and their union is closed. Rational points are dense in $T$, which is convex with nonempty
+interior and has rational vertices. So covering the rational points of $T$ means covering
+all of $T$. In detail, Lean's \texttt{cover} gives every rational point $P$ of $T$ a
+rational preimage $Q\in T$ with $f_i(Q)=P$ for some $i$, so $P$ lies in the real piece
+$P_i=f_i(T)$. If two real interiors $f_i(\operatorname{int}T)$ and
+$f_j(\operatorname{int}T)$ met, their intersection would be a nonempty open set, so it would
+contain a rational point $P$. The inverse maps $g_i(z)=a_i\bar z+c_i$ and $g_j$ have rational
+coefficients. Hence $Q=f_i^{-1}(P)$ and $Q'=f_j^{-1}(P)$ are rational points of
+$\operatorname{int}T$ with $f_i(Q)=P=f_j(Q')$. This contradicts Lean's disjointness
+condition in \texttt{T\_rep5}. Containment
+$P_i\subseteq T$ follows from convexity, because the vertices are rational points of $T$.
+
+\paragraph{What is only in this report.} Proposition~\ref{prop:rect} (readings (R3) and
+(R4)) is proved here and checked numerically in \texttt{verify.py} (exactly, in
+$\mathbb Q(\sqrt3)$). It is not formalized in Lean.
+
+\section{Reproduction}
+\begin{verbatim}
+cd lean4 && lake build       # Lean 4.19.0, core only
+cd .. && python3 verify.py   # Python 3 standard library only
+pdflatex report.tex && pdflatex report.tex
+\end{verbatim}
+\texttt{verify.py} uses a method different from the Lean case analysis, with exact rational
+arithmetic. It checks:
+\begin{itemize}
+\item that $f_i(A,B,C)$ are the vertices of $P_i$ and that $|a_i|^2=5$;
+\item that all pieces have squared sides $5,20,25$ (one fifth of $25,100,125$);
+\item that each piece lies in $T$ (its vertices lie in $T$);
+\item that each pair of pieces is separated by an edge line of one of them;
+\item that the areas add up.
+\end{itemize}
+Containment, disjoint interiors and equal total area together imply covering: the uncovered
+part of $T$ is relatively open in $T$, so if it were nonempty it would have positive area.
+The script also tests $14641$ rational grid points of $T$ one by one. Finally, it verifies
+the rep-3 dissection of the $1\times\sqrt3$ rectangle exactly in $\mathbb Q(\sqrt3)$, and the
+area obstruction to a rep-2 dissection of the rectangle with two congruent pieces of ratio
+$1/\sqrt3$. The general non-rep-2 proof, which also covers pieces that are only similar, is
+Proposition~\ref{prop:rect}(b) and is in this report only.
+
+\begin{thebibliography}{9}
+\bibitem{golomb} S.~W.~Golomb, Replicating figures in the plane, \emph{Math.\ Gazette} 48
+(1964), 403--412.
+\bibitem{snover} S.~L.~Snover, C.~Waiveris, J.~K.~Williams, Rep-tiling for triangles,
+\emph{Discrete Math.} 91 (1991), 193--200.
+\end{thebibliography}
+
+\end{document}
