@@ -17,8 +17,8 @@ uses a different method with exact rational arithmetic:
 relatively open in T, so it would have positive area if it were nonempty.
 As an extra sanity check, a fine rational grid is tested point by point.
 
-It also checks the 30-60-90 remark from the report (minimal-order reading) exactly,
-with numbers in Q(sqrt 3).
+It also checks the rep-3 dissection of the 1 x sqrt(3) rectangle used in the report for the
+least-order reading, exactly, with numbers in Q(sqrt 3).
 """
 from fractions import Fraction as F
 from itertools import combinations
@@ -123,8 +123,8 @@ check(bad_cover == 0 and bad_overlap == 0,
 
 check(all(m * m != 5 for m in range(6)) and 5 != 2, "5 is not a perfect square and 5 != 2")
 
-# ---------------------------------------------------------------- 30-60-90 remark
-# numbers a + b*sqrt(3) with a, b rational, as pairs
+# ---------------------------------------------------------------- rectangle remark
+# Numbers a + b*sqrt(3) with a, b rational, stored as pairs (a, b).
 
 
 def q_add(x, y): return (x[0] + y[0], x[1] + y[1])
@@ -132,62 +132,50 @@ def q_sub(x, y): return (x[0] - y[0], x[1] - y[1])
 def q_mul(x, y): return (x[0] * y[0] + 3 * x[1] * y[1], x[0] * y[1] + x[1] * y[0])
 
 
-def q_sign(x):
-    a, b = x  # sign of a + b sqrt3
-    if b == 0:
-        return (a > 0) - (a < 0)
-    if a == 0:
-        return (b > 0) - (b < 0)
-    if a > 0 and b > 0:
-        return 1
-    if a < 0 and b < 0:
-        return -1
-    # opposite signs: compare a^2 with 3 b^2
-    s = (a * a > 3 * b * b) - (a * a < 3 * b * b)
-    return s if a > 0 else -s
-
-
 def Q(a, b=0): return (F(a), F(b))
+
+
 def qd2(p, q):
     dx, dy = q_sub(p[0], q[0]), q_sub(p[1], q[1])
     return q_add(q_mul(dx, dx), q_mul(dy, dy))
-def qcross(o, a, b):
-    return q_sub(q_mul(q_sub(a[0], o[0]), q_sub(b[1], o[1])), q_mul(q_sub(a[1], o[1]), q_sub(b[0], o[0])))
 
 
-O, Ap, Bp = (Q(0), Q(0)), (Q(0, 1), Q(0)), (Q(0), Q(1))      # legs 1 and sqrt3, hypotenuse 2
-P, Qm = (Q(0, F(1, 3)), Q(0)), (Q(0, F(1, 2)), Q(F(1, 2)))     # P = (1/sqrt3, 0), Q = midpoint of AB
-T3 = [O, Ap, Bp]
-pcs3 = [[O, P, Bp], [P, Qm, Bp], [P, Ap, Qm]]
-big3 = sorted(qd2(*e) for e in combinations(T3, 2))
-check(big3 == [Q(1), Q(3), Q(4)], "30-60-90 triangle: squared sides 1, 3, 4")
-for k, pc in enumerate(pcs3, 1):
-    s = sorted(qd2(*e) for e in combinations(pc, 2))
-    check(s == [Q(F(1, 3)), Q(1), Q(F(4, 3))], f"30-60-90 piece {k}: squared sides 1/3, 1, 4/3 (ratio 1/sqrt3)")
-    check(q_sign(qcross(*pc)) > 0, f"30-60-90 piece {k}: counterclockwise nondegenerate")
-ar = lambda pc: qcross(*pc)
+def qarea2(poly):
+    t = Q(0)
+    for i in range(len(poly)):
+        p, q = poly[i], poly[(i + 1) % len(poly)]
+        t = q_add(t, q_sub(q_mul(p[0], q[1]), q_mul(q[0], p[1])))
+    return t
+
+
+s3 = Q(0, 1)            # sqrt 3
+inv_s3 = Q(0, F(1, 3))  # 1/sqrt 3
+# R = [0, sqrt3] x [0, 1], counterclockwise
+R = [(Q(0), Q(0)), (s3, Q(0)), (s3, Q(1)), (Q(0), Q(1))]
+check(sorted({qd2(R[i], R[(i + 1) % 4]) for i in range(4)}) == [Q(1), Q(3)], "rectangle R has sides 1 and sqrt3")
+
+
+def rect_map(j, p):
+    # z -> i z / sqrt3 + j / sqrt3   (rotation by 90 degrees, scale 1/sqrt3, translation): direct similarity
+    x, y = p
+    return (q_add(q_mul(Q(-1), q_mul(y, inv_s3)), q_mul(Q(j), inv_s3)), q_mul(x, inv_s3))
+
+
+strips = []
+for j in (1, 2, 3):
+    x0, x1 = q_mul(Q(j - 1), inv_s3), q_mul(Q(j), inv_s3)
+    strip = [(x0, Q(0)), (x1, Q(0)), (x1, Q(1)), (x0, Q(1))]
+    strips.append(strip)
+    img = [rect_map(j, v) for v in R]
+    check(sorted(img) == sorted(strip), f"strip {j} = image of R under z -> i z/sqrt3 + {j}/sqrt3 (direct similarity, ratio 1/sqrt3)")
+    check(all(q_mul(Q(3), qd2(img[a], img[b])) == qd2(R[a], R[b]) for a in range(4) for b in range(4)),
+          f"strip {j}: all six squared vertex distances are 1/3 of those of R")
 tot = Q(0)
-for pc in pcs3:
-    tot = q_add(tot, ar(pc))
-check(tot == ar(T3), "30-60-90: piece areas add up to the area of the triangle")
-for v in [P, Qm]:
-    check(all(q_sign(qcross(T3[i], T3[(i + 1) % 3], v)) >= 0 for i in range(3)), "30-60-90: new vertex lies in the triangle")
-
-
-def qsep(P1, P2):
-    for poly, other in ((P1, P2), (P2, P1)):
-        for i in range(3):
-            if all(q_sign(qcross(poly[i], poly[(i + 1) % 3], q)) <= 0 for q in other):
-                return True
-    return False
-
-
-check(all(qsep(x, y) for x, y in combinations(pcs3, 2)), "30-60-90: pieces have pairwise disjoint interiors")
-# not rep-2: hypotenuse 2 is not a sum of one or two side lengths of pieces with sides {1, sqrt3, 2}/sqrt2.
-# (u+v)/sqrt2 = 2  <=>  (u+v)^2 = 8 ;  u/sqrt2 = 2 <=> u^2 = 8.
-lens = [Q(1), Q(0, 1), Q(2)]
-sums = [q_mul(u, u) for u in lens] + [q_mul(q_add(u, v), q_add(u, v)) for u in lens for v in lens]
-check(all(s != Q(8) for s in sums), "30-60-90: hypotenuse 2 is not a sum of <= 2 piece sides of a 2-piece dissection")
-
+for st in strips:
+    tot = q_add(tot, qarea2(st))
+check(tot == qarea2(R), "the three strips have total area equal to the area of R")
+check(strips[0][1][0] == strips[1][0][0] and strips[1][1][0] == strips[2][0][0] and strips[2][1][0] == s3,
+      "the strips are [0,1/sqrt3], [1/sqrt3,2/sqrt3], [2/sqrt3,sqrt3] times [0,1]: they tile R")
+check(F(1, 3) + F(1, 3) != 1, "not rep-2: two pieces with ratio 1/sqrt3 would have total area 2/3 of R, not 1")
 print("ALL CHECKS PASSED" if ok_all else "SOME CHECKS FAILED")
 sys.exit(0 if ok_all else 1)
