@@ -1,0 +1,126 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\title{A two-dimensional operator of minimal isometry order three}
+\author{ziangni-sys}
+\date{Conjecture 00000008576}
+\begin{document}
+\raggedright
+\maketitle
+\noindent Both source versions assert that the minimal order $m$ of an
+$m$-isometric operator is bounded above by the dimension of its space.
+We disprove this clause with a genuine operator on the complex Euclidean
+Hilbert space $H=\mathbb C^2$.
+
+\section*{Definitions and the actual operator}
+The inner product and norm on $H$ are
+\[
+ \langle v,w\rangle=\overline v_0w_0+\overline v_1w_1,
+ \qquad \|v\|^2=|v_0|^2+|v_1|^2.
+\]
+The standard basis is orthonormal. For a bounded linear operator $T$, define
+\[
+ B_m(T)=\sum_{j=0}^m(-1)^{m-j}\binom mj(T^*)^jT^j.
+\]
+The usual $m$-isometry condition is $B_m(T)=0$, with $m\geq1$.
+Equivalently, the corresponding alternating binomial sum of
+$\|T^jv\|^2$ vanishes for every $v$. The adjoint form follows from
+$\langle v,(T^*)^jT^jv\rangle=\|T^jv\|^2$ and the polarization identity.
+The alternative sign convention $(-1)^j$ multiplies the whole identity by
+$(-1)^m$ and gives the same zero condition.
+
+Let $T(v_0,v_1)=(v_0+v_1,v_1)$. Its actual matrix is
+\[
+ J=\begin{pmatrix}1&1\\0&1\end{pmatrix}.
+\]
+Every linear map on this finite-dimensional Hilbert space is bounded.
+Induction using matrix multiplication gives
+\[
+ J^j=\begin{pmatrix}1&j\\0&1\end{pmatrix},\qquad
+ (J^j)^*J^j=\begin{pmatrix}1&j\\j&j^2+1\end{pmatrix}
+ \quad(j\geq0).
+\]
+Here conjugate transpose is precisely the Hilbert adjoint in the standard
+orthonormal basis.
+
+\begin{theorem}
+$T$ is a $3$-isometry, is neither a $1$- nor a $2$-isometry, and therefore
+has minimal positive isometry order $3>\dim_{\mathbb C}H=2$.
+\end{theorem}
+\begin{proof}
+Write $G_j=(J^j)^*J^j$. Actual matrix computations yield
+\[
+ B_1(J)=G_1-G_0=\begin{pmatrix}0&1\\1&1\end{pmatrix}\ne0,
+ \qquad
+ B_2(J)=G_2-2G_1+G_0=\begin{pmatrix}0&0\\0&2\end{pmatrix}\ne0.
+\]
+For order three,
+\[
+ B_3(J)=G_3-3G_2+3G_1-G_0=0:
+\]
+each entry of $G_j$ is a polynomial in $j$ of degree at most two, whose
+third alternating binomial difference vanishes. These are identities of
+full matrices, so they hold for all vectors, not just a sample vector.
+The only positive orders below three are one and two, both excluded above.
+Thus the minimal positive order is three, contradicting the asserted
+upper bound by dimension two.
+\end{proof}
+
+\newpage
+\section*{Formal Hilbert-space correspondence}
+The Lean project uses the actual Mathlib space
+\texttt{EuclideanSpace} $\mathbb C$ \texttt{(Fin 2)}, with its Hermitian inner
+product and Euclidean norm. It does not use the default supremum norm on a
+function space to define an isometry.
+\texttt{ambient\_dimension} proves its actual complex \texttt{Module.finrank}
+is $2$. The theorem \texttt{jordan\_continuous} also verifies the
+continuity of the actual finite-dimensional operator.
+
+The definition \texttt{J} is the actual complex matrix displayed above.
+\texttt{jordan\_pow} proves its matrix power formula for every natural $j$.
+\texttt{gram m A} is exactly the full finite sum defining $B_m(A)$,
+with Mathlib's actual conjugate transpose, matrix powers and multiplication,
+and natural binomial coefficients cast into $\mathbb C$.
+The theorems \texttt{gram\_one}, \texttt{gram\_two} and
+\texttt{gram\_three} verify the three full matrix identities.
+Their nonzero witnesses are respectively entry $(0,1)$ and entry $(1,1)$;
+there are no asserted spectral or norm values.
+
+Crucially, the project also transports these matrix computations to
+actual Hilbert-space linear operators. The definition
+\texttt{representation} is the inverse of Mathlib's star-algebra equivalence
+\texttt{LinearMap.toMatrixOrthonormal}, taken in the actual standard
+orthonormal basis \texttt{EuclideanSpace.basisFun}. This equivalence
+preserves scalar multiplication, sums, products, powers and adjoints.
+In the linear endomorphism algebra, \texttt{star} is the Hilbert adjoint
+and multiplication is composition.
+
+\texttt{operatorGram} is the same binomial identity in that actual
+endomorphism algebra. \texttt{representation\_gram} proves that it is the
+image of the matrix Gram sum, and \texttt{gram\_operator\_iff} proves
+that one vanishes exactly when the other does.
+\texttt{jordan\_is\_three} therefore proves that the actual operator is a
+$3$-isometry. \texttt{no\_smaller\_positive\_order} quantifies every positive
+$m<3$ and excludes that order. The final theorem
+\texttt{dimension\_bound\_fails} combines genuine $3$-isometry,
+positive-order minimality and the strict actual dimension inequality.
+
+\section*{Scope}
+This is a disproof of the explicitly stated minimal-order dimension-bound
+conjunct in both languages. The example has positive finite dimension and
+positive minimal order. No claim about the separate spectrum, unitary
+criterion, or extension-decomposition clauses is needed to disprove the
+conjunction. The convention that an $m$-isometry may also satisfy identities
+at higher orders causes no ambiguity: we compute its least positive order.
+
+\section*{Reproduction}
+The project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake update}, \texttt{lake exe cache get},
+and \texttt{lake build}; then check the entire source with
+\begin{center}\small\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The source prints dependency audits for the main matrix, representation and
+minimality theorems. No statements are admitted, and only standard logical
+axioms are used.
+\end{document}
