@@ -1,0 +1,105 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\setlength{\emergencystretch}{2em}
+\title{Proof of conjecture 00000006340}
+\author{ziangni-sys}
+\date{}
+\begin{document}
+\maketitle
+\noindent\textbf{Source and scope.}
+Both source versions ask for an explicit orthogonal pair of matrices with the same rigidity function (the same rank-change costs) but different eigenvalues. We give such a pair using the standard entry-change matrix rigidity. Spectral rigidity is not assigned a separate formula in the source; our separation proves its stated concrete realization by distinct spectra. The pair consists of orthogonal matrices and is also orthogonal in the Frobenius inner product.
+
+\medskip
+\noindent\textbf{The matrices.}
+Set
+\[
+ A=I_2=\begin{pmatrix}1&0\\0&1\end{pmatrix},
+ \qquad J=\begin{pmatrix}0&-1\\1&0\end{pmatrix},
+ \qquad K=J^T=\begin{pmatrix}0&1\\-1&0\end{pmatrix}.
+\]
+Direct multiplication gives
+\[
+ J^TJ=JJ^T=I_2,\quad KJ=JK=I_2,\quad
+ A^TA=AA^T=I_2.
+\]
+Furthermore $\langle A,J\rangle_F=\sum_{i,j}A_{ij}J_{ij}=0$.
+Both meanings of an orthogonal pair, individually orthogonal matrices and Frobenius orthogonality, hold.
+
+\medskip
+\noindent\textbf{The genuine rigidity function.}
+For real $2\times2$ matrices $M,N$, let
+\[
+ c(M,N)=\#\{(i,j):M_{ij}\ne N_{ij}\},\qquad
+ R_M(r)=\min\{c(M,N):\operatorname{rank}N\le r\},
+ \quad r\in\mathbb N.
+\]
+The feasible set is nonempty, since $N=0$ is allowed. The costs are natural numbers, so the minimum exists and is attained. This is the usual rigidity function: the fewest entries one must change to reduce the rank to at most $r$. Equivalently one may write $N=M+E$ and count nonzero entries of $E$.
+
+\medskip
+\noindent\textbf{An exact bijection of all perturbations.}
+Left multiplication by $J$ is a signed row permutation:
+\[
+ JN=\begin{pmatrix}-N_{21}&-N_{22}\\N_{11}&N_{12}\end{pmatrix}.
+\]
+It is invertible, so $\operatorname{rank}(JN)=\operatorname{rank}N$.
+For any $M,N$, two entries are unequal exactly when their simultaneous negatives are unequal; a row permutation merely permutes these tests. Consequently
+\[
+ c(JM,JN)=c(M,N).
+\]
+In particular, $JA=J$ and
+\[
+ c(J,JN)=c(A,N).
+\]
+The map $N\mapsto JN$ therefore sends every rank-$\le r$ perturbation of $A$ to a rank-$\le r$ perturbation of $J$ with the identical cost. Its inverse is $N\mapsto KN$, which also preserves rank and changed-entry counts. Hence the complete sets of attainable costs agree for every $r$, and
+\[
+ \boxed{R_A(r)=R_J(r)\quad\text{for every }r\in\mathbb N.}
+\]
+This proves equality of the full rigidity functions, not just one selected rank or a common upper bound.
+
+\newpage
+\noindent\textbf{The actual eigenvalue separation.}
+Complex eigenvalues are characterized by actual nonzero eigenvectors:
+$\lambda\in\sigma(M)$ if and only if $Mv=\lambda v$ for some
+$v\in\mathbb C^2\setminus\{0\}$. For $A=I_2$, this gives
+$\sigma(A)=\{1\}$ immediately.
+
+For $J$, the eigenvector equations are
+\[
+ -v_2=\lambda v_1,\qquad v_1=\lambda v_2.
+\]
+A nonzero eigenvector must have $v_1\ne0$: otherwise the first equation also forces $v_2=0$. Combining the equations gives
+$(\lambda^2+1)v_1=0$, hence $\lambda^2+1=0$ and
+$\lambda=i$ or $\lambda=-i$. Conversely,
+\[
+ J\binom{1}{-i}=i\binom{1}{-i},
+ \qquad
+ J\binom{1}{i}=-i\binom{1}{i}.
+\]
+Both vectors are nonzero. Thus
+\[
+ \boxed{\sigma(A)=\{1\},\qquad \sigma(J)=\{i,-i\}.}
+\]
+In particular $1$ belongs to the first spectrum and not the second, proving that the spectra differ.
+
+\medskip
+\noindent\textbf{Formal correspondence.}
+The Lean development uses actual real matrices and Mathlib's matrix rank, defined as the finite dimension of the range of the associated linear map. The changed-entry count is the finite sum of the zero--one indicator of inequality at each entry. Actual natural-number cost sets define the rigidity as their \texttt{sInf}; nonemptiness and the well-ordering of the natural numbers prove this infimum is an attained minimum and is at most every feasible cost.
+
+The determinant identities $\det J=\det K=1$ prove rank preservation for every matrix through Mathlib's invertible-multiplication rank theorem. Explicit matrix multiplication proves entry-count preservation. Both directions of the perturbation transformation prove equality of the entire attainable-cost sets, and therefore equality of the entire rigidity functions.
+
+The source matrices are real, and their complexification is the actual entrywise inclusion into $\mathbb C$. The eigenvalue definition quantifies over actual nonzero complex vectors and the matrix-vector equation. The formal proof characterizes all eigenvalues in both directions, including explicit witnesses for both quarter-turn eigenvalues; it does not merely supply possible eigenvalues or characteristic-polynomial guesses. Matrix orthogonality and Frobenius orthogonality are separately verified.
+
+\medskip
+\noindent\textbf{Reproduction and validation.}
+Run \texttt{lake build} in the submitted \texttt{lean} directory with Lean 4.19.0. Mathlib is pinned publicly to
+\[
+ \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\]
+Printed axiom audits cover orthogonality, rank and cost preservation, attainable-cost equality, the genuine minimum, the full rigidity equality, both eigenvalue characterizations, the actual spectra and the final separation. The submission includes the complete LaTeX source and its compiled PDF.
+
+\medskip
+\noindent\textbf{Conclusion.}
+The explicit identity and quarter-turn matrices form the requested orthogonal pair: all rank-change costs, and thus the full standard rigidity functions, agree, while the eigenvalues differ. This establishes the concrete separation requested in both source versions.
+\end{document}
