@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\emergencystretch=2em
+\title{A metric spectral midpoint is not an optimal gradient step\\
+\large Disproof of conjecture 00000008854}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+The English conjecture asserts that the optimal step size is the midpoint
+of the spectral interval of the metric matrix. The Chinese version likewise
+specifies the metric matrix. We use the standard metric projected-gradient
+interpretation: for a positive definite metric $H$ and constraint set $C$,
+\[
+ x_{k+1}=P_C^H\bigl(x_k-\eta H^{-1}\nabla f(x_k)\bigr).
+\]
+Here $P_C^H(y)$ minimizes $(z-y)^\top H(z-y)$ over $z\in C$.
+The example is one dimensional, has a unique attained minimizer, and
+uses a smooth strongly convex objective. Its metric is the identity, so
+inverse-metric convention choices make no difference.
+
+\textbf{Actual metric and projection.}
+Take the real Hilbert space $\mathbb R$, $C=\mathbb R$, and $H=[1]$.
+This is symmetric positive definite. The eigenvalue equation $Hv=\lambda v$
+with $v\ne0$ gives $\lambda=1$, and $v=1$ witnesses this eigenvalue.
+Hence its actual spectrum is $\{1\}$, its spectral interval is $[1,1]$,
+and the proposed midpoint is
+\[
+ \eta_{\rm mid}=(1+1)/2=1.
+\]
+The metric projection is exactly $P_C^H(y)=y$: the objective
+$(z-y)^2$ is nonnegative, equals zero at $z=y$, and vanishes only there.
+
+\textbf{Objective, gradient, and iteration.}
+Let $f(x)=2x^2$. Its actual derivative and Hilbert gradient are $4x$.
+Its second derivative is $4>0$; directly, for every $x,y$,
+\[
+ f(y)=f(x)+4x(y-x)+2(y-x)^2.
+\]
+This identity gives strong convexity with curvature $4$.
+The gradient is globally $4$-Lipschitz and the unique minimizer is zero.
+Since the inverse metric and projection are identities, the actual update is
+\[
+ G_\eta(x)=x-\eta(4x)=(1-4\eta)x.
+\]
+For initial value $x_0=1$, induction yields the complete orbit
+\[
+ x_n=(1-4\eta)^n.
+\]
+
+\newpage
+\textbf{The proposed step diverges; the optimal step terminates.}
+For the spectral midpoint $\eta=1$, the orbit is $x_n=(-3)^n$.
+Its distance from the unique minimizer is
+\[
+ |x_n|=3^n\longrightarrow+\infty.
+\]
+Thus the proposed midpoint is not even a convergent step in this
+smooth strongly convex example.
+
+In contrast, $\eta=1/4$ gives $G_\eta(x)=0$ for every initial value,
+and every iterate after the first is the exact minimizer. More precisely,
+the global one-step error factor is
+\[
+ q(\eta)=|1-4\eta|.
+\]
+It is nonnegative and has its unique minimum zero at $\eta=1/4$.
+Indeed $q(\eta)=0$ if and only if $1-4\eta=0$. For every $x$,
+$|G_\eta(x)|=q(\eta)|x|$, so this is the actual error contraction
+factor, not an unrelated scalar surrogate.
+The midpoint factor is $q(1)=3$, whereas $q(1/4)=0$.
+Even among nonnegative step sizes, the midpoint cannot be optimal.
+
+This disproves the metric-matrix midpoint clause. The example distinguishes
+the metric matrix from the objective's Hessian: their spectra are
+$\{1\}$ and $\{4\}$ respectively. A valid step-size rule must account for
+the objective's curvature relative to the metric. We do not separately
+refute the other convergence-rate clause or assert a theorem for an
+unspecified meaning of generalized projection.
+
+\textbf{Formal correspondence.}
+The Lean project uses the actual identity continuous linear map on
+$\mathbb R$ as the metric and the actual one-by-one identity matrix.
+\texttt{matrix\_representation} links their actions.
+\texttt{actual\_spectrum} characterizes the full set of eigenvalues by
+nonzero eigenvectors; in finite dimension this is the metric spectrum.
+\texttt{actual\_projection} and \texttt{projection\_unique} verify the
+global metric minimization definition.
+
+\texttt{actual\_derivative} and \texttt{actual\_gradient} use Mathlib's
+derivative and gradient predicates. \texttt{unique\_minimum} proves
+global minimizer uniqueness. \texttt{step\_formula} and
+\texttt{actual\_iterates} prove the update and every iterate.
+\texttt{midpoint\_escape} proves divergence of the actual absolute
+errors to infinity. \texttt{quarter\_termination} proves exact termination,
+and \texttt{unique\_optimal\_step} proves global optimality of the
+error factor. The final \texttt{counterexample} assembles these objects.
+
+\textbf{Reproduction.}
+Use Lean 4.19.0 with public Mathlib revision
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}\end{center}
+Run \texttt{lake build} inside \texttt{lean/}. The project prints
+axiom audits; the validation notes record the completed build and
+compiled PDF inspection.
+\end{document}
