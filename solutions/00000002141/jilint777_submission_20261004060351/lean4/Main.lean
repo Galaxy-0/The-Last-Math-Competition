@@ -166,6 +166,71 @@ theorem not_iso_A2_B2 : ¬ Iso A2 B2 := fun hi => invariants.2.2.2.2.2 (iso_hasI
 theorem not_iso_A1_A2 : ¬ Iso A1 A2 := fun hi => invariants.1 (iso_hasNT (iso_symm hi) invariants.2.2.1)
 theorem not_iso_A1_B2 : ¬ Iso A1 B2 := fun hi => invariants.1 (iso_hasNT (iso_symm hi) invariants.2.2.2.1)
 
+/-! ## Spectrum certificates
+
+Two further certificates of cospectrality, independent of Newton's identities:
+an orthogonal similarity `A_h = (M/2) A_g (M/2)ᵀ` (a Godsil–McKay switching on
+`{0,4,5,6}` followed by a relabelling), and the characteristic polynomial
+coefficients themselves. -/
+def adjI (g : Graph) : List (List Int) :=
+  (List.range 10).map fun u => (List.range 10).map fun v => if g u v then 1 else 0
+def entI (M : List (List Int)) (i j : Nat) : Int := (M.getD i []).getD j 0
+def mulI (M N : List (List Int)) : List (List Int) :=
+  (List.range 10).map fun i => (List.range 10).map fun j =>
+    ((List.range 10).map fun l => entI M i l * entI N l j).foldr (· + ·) 0
+def trI (M : List (List Int)) : List (List Int) :=
+  (List.range 10).map fun i => (List.range 10).map fun j => entI M j i
+def fourI : List (List Int) :=
+  (List.range 10).map fun i => (List.range 10).map fun j => if i = j then 4 else 0
+/-- `M Mᵀ = 4I` (so `M/2` is orthogonal) and `M A_g = A_h M`: `A_h = (M/2) A_g (M/2)ᵀ`. -/
+def OrthSimilar (g h : Graph) (M : List (List Int)) : Prop :=
+  mulI M (trI M) = fourI ∧ mulI M (adjI g) = mulI (adjI h) M
+instance (g h : Graph) (M : List (List Int)) : Decidable (OrthSimilar g h M) := by
+  unfold OrthSimilar; infer_instance
+def M1 : List (List Int) := [[0,0,0,0,0,0,0,2,0,0],
+  [-1,0,0,0,1,1,1,0,0,0],
+  [0,0,0,0,0,0,0,0,0,2],
+  [1,0,0,0,-1,1,1,0,0,0],
+  [0,0,0,0,0,0,0,0,2,0],
+  [0,2,0,0,0,0,0,0,0,0],
+  [0,0,0,2,0,0,0,0,0,0],
+  [1,0,0,0,1,1,-1,0,0,0],
+  [0,0,2,0,0,0,0,0,0,0],
+  [1,0,0,0,1,-1,1,0,0,0]]
+def M2 : List (List Int) := [[-1,0,0,0,1,1,1,0,0,0],
+  [0,0,0,2,0,0,0,0,0,0],
+  [1,0,0,0,1,1,-1,0,0,0],
+  [0,0,0,0,0,0,0,0,0,2],
+  [0,0,2,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,2,0,0],
+  [1,0,0,0,1,-1,1,0,0,0],
+  [0,2,0,0,0,0,0,0,0,0],
+  [1,0,0,0,-1,1,1,0,0,0],
+  [0,0,0,0,0,0,0,0,2,0]]
+theorem orth_1 : OrthSimilar A1 B1 M1 := by decide
+theorem orth_2 : OrthSimilar A2 B2 M2 := by decide
+/-- Coefficients e_0..e_10 of the char poly from closed walks via Newton's identities. -/
+def newton (p : Nat → Int) : Nat → List Int
+  | 0 => [1]
+  | k + 1 =>
+    let e := newton p k
+    let s := ((List.range (k+1)).map fun i =>
+      (if i % 2 = 0 then (1:Int) else -1) * e.getD (k - i) 0 * p (i+1)).foldr (· + ·) 0
+    e ++ [s / (k+1 : Int)]
+def charCoeffs (g : Graph) : List Int :=
+  (newton (fun k => (closedWalks g k : Int)) 10).zipIdx.map fun (c, i) => if i % 2 = 0 then c else -c
+theorem cp_A1 : charCoeffs A1 = [1, 0, -20, -16, 110, 136, -180, -320, 9, 200, 80] := by decide
+theorem cp_B1 : charCoeffs B1 = [1, 0, -20, -16, 110, 136, -180, -320, 9, 200, 80] := by decide
+theorem cp_A2 : charCoeffs A2 = [1, 0, -20, -14, 108, 104, -183, -188, 80, 68, -16] := by decide
+theorem cp_B2 : charCoeffs B2 = [1, 0, -20, -14, 108, 104, -183, -188, 80, 68, -16] := by decide
+
+/-! ## Non-degeneracy sanity checks: `Iso` is not vacuous -/
+theorem iso_refl (g : Graph) : Iso g g := ⟨id, id, fun _ hx => ⟨hx, rfl⟩, fun _ hy => ⟨hy, rfl⟩, fun _ _ _ _ => rfl⟩
+def A1r : Graph := ofEdges [(6, 7), (6, 3), (6, 4), (6, 2), (8, 5), (8, 3), (8, 4), (8, 2), (9, 3), (9, 0), (9, 4), (9, 1), (7, 0), (7, 1), (7, 2), (5, 0), (5, 1), (5, 2), (3, 4), (0, 1)]
+def sg : Nat → Nat := fun n => match n with | 0 => 6 | 1 => 8 | 2 => 9 | 3 => 7 | 4 => 5 | 5 => 3 | 6 => 0 | 7 => 4 | 8 => 1 | 9 => 2 | _ => n
+def tg : Nat → Nat := fun n => match n with | 0 => 6 | 1 => 8 | 2 => 9 | 3 => 5 | 4 => 7 | 5 => 4 | 6 => 0 | 7 => 3 | 8 => 1 | 9 => 2 | _ => n
+theorem iso_A1_A1r : Iso A1 A1r := ⟨sg, tg, by decide, by decide, by decide⟩
+theorem not_cosp_12 : ¬ Cospectral A1 A2 := fun h => spectra_differ (h 3 (by decide))
 /-! ## The uniqueness clause and its refutation -/
 
 /-- A cospectral regular pair of order 10: two simple regular graphs on
@@ -194,6 +259,11 @@ theorem conjecture_00000002141_false : ¬ UniquePair := by
   · exact not_iso_A1_A2 h1
   · exact not_iso_A1_B2 h1
 
+/-- The conjecture is a conjunction (minimal order 10) ∧ (uniqueness); whatever
+the first clause is, the conjunction is false. -/
+theorem conjecture_00000002141_conjunction_false (MinOrder10 : Prop) :
+    ¬ (MinOrder10 ∧ UniquePair) := fun h => conjecture_00000002141_false h.2
+
 end Cospectral
 
 #print axioms Cospectral.cospectral_1
@@ -201,3 +271,8 @@ end Cospectral
 #print axioms Cospectral.pair_1
 #print axioms Cospectral.pair_2
 #print axioms Cospectral.conjecture_00000002141_false
+#print axioms Cospectral.conjecture_00000002141_conjunction_false
+#print axioms Cospectral.orth_1
+#print axioms Cospectral.orth_2
+#print axioms Cospectral.cp_A1
+#print axioms Cospectral.cp_B2

@@ -67,7 +67,8 @@ they have equally many closed walks of each length $k\le n$.
 
 \begin{proposition}
 $\operatorname{tr}(A_1^k)=\operatorname{tr}(B_1^k)$ and
-$\operatorname{tr}(A_2^k)=\operatorname{tr}(B_2^k)$ for $0\le k\le10$. Equivalently,
+$\operatorname{tr}(A_2^k)=\operatorname{tr}(B_2^k)$ for $0\le k\le10$. Equivalently, the
+characteristic polynomials agree; they are
 \begin{align*}
 \det(xI-A_1)=\det(xI-B_1)={}&x^{10}-20x^8-16x^7+110x^6+136x^5\\&-180x^4-320x^3+9x^2+200x+80,\\
 \det(xI-A_2)=\det(xI-B_2)={}&x^{10}-20x^8-14x^7+108x^6+104x^5\\&-183x^4-188x^3+80x^2+68x-16.
@@ -82,6 +83,15 @@ Direct computation, in Lean (\texttt{cospectral\_1}, \texttt{cospectral\_2},
 characteristic polynomials in two independent exact ways: Faddeev--LeVerrier,
 and $\det(xI-A)$ by exact Gaussian elimination at $x=0,\dots,10$.
 \end{proof}
+
+\paragraph{Certificates independent of Newton's identities.} Each pair is
+related by a Godsil--McKay switching \cite{bh} on the set $D=\{0,4,5,6\}$,
+followed by a relabelling. Concretely, Lean checks integer matrices $M_1,M_2$
+with $M_iM_i^{\mathsf T}=4I$ and $M_iA_i=B_iM_i$. Thus $Q_i=M_i/2$ is orthogonal and
+$B_i=Q_iA_iQ_i^{\mathsf T}$, so $A_i$ and $B_i$ are orthogonally similar and have the
+same spectrum (\texttt{orth\_1}, \texttt{orth\_2}). Lean also computes the
+coefficients of the characteristic polynomials displayed above from the
+closed-walk counts (\texttt{cp\_A1}, \dots, \texttt{cp\_B2}).
 
 \section{Non-isomorphism}
 Call an edge $uv$ \emph{triangle-free} if $u$ and $v$ have no common
@@ -101,7 +111,9 @@ The triangle-free edges are: none in $A_1$; $15,36$ in $B_1$; $25,28,36,48$ in
 $A_2$, where $36$ is isolated; and $29,48,49$ in $B_2$, which form the path
 $2\!-\!9\!-\!4\!-\!8$.
 \end{proof}
-Hence $A_1\not\cong B_1$ and $A_2\not\cong B_2$, so both are cospectral regular
+All four graphs are connected. This is forced anyway: the only
+disconnected 4-regular graph on 10 vertices is $2K_5$, which has eigenvalue $4$
+with multiplicity $2$ and so has no cospectral mate. Hence $A_1\not\cong B_1$ and $A_2\not\cong B_2$, so both are cospectral regular
 pairs. Also $A_1\not\cong A_2$ and $A_1\not\cong B_2$, so the unordered pairs
 $\{A_1,B_1\}$ and $\{A_2,B_2\}$ are different up to isomorphism. The two pairs
 also have different spectra.
@@ -137,6 +149,10 @@ every vertex has degree $k$.
 matrix products. \texttt{Cospectral g h} means equal closed-walk counts for
 all $k\le10$, which by the argument above is equivalent to having the same
 adjacency spectrum.
+\item \texttt{OrthSimilar g h M} ($MM^{\mathsf T}=4I$, $MA_g=A_hM$) is proved for both
+pairs by \texttt{orth\_1}, \texttt{orth\_2}. \texttt{charCoeffs} applies Newton's
+identities to the closed-walk counts, and \texttt{cp\_A1}, \dots, \texttt{cp\_B2} give the
+explicit coefficients.
 \item \texttt{Iso g h} is the existence of a bijection $\sigma$ of
 $\{0,\dots,9\}$ (with inverse $\tau$) such that $g(u,v)=h(\sigma u,\sigma v)$.
 \texttt{iso\_hasNT} and \texttt{iso\_hasIsolatedNT} prove that (P) and (Q) are
@@ -147,10 +163,14 @@ and non-isomorphic. \texttt{UniquePair} says any two such pairs coincide up to
 isomorphism, in either order. \texttt{conjecture\_00000002141\_false} proves
 $\neg$\texttt{UniquePair}, using \texttt{pair\_1}, \texttt{pair\_2},
 \texttt{not\_iso\_A1\_A2} and \texttt{not\_iso\_A1\_B2}.
+\texttt{conjecture\_00000002141\_conjunction\_false} negates the whole
+conjunction for any first clause. As sanity checks, \texttt{iso\_refl} and
+\texttt{iso\_A1\_A1r} (a nontrivial relabelling) show that \texttt{Iso} is not
+vacuous.
 \end{itemize}
 \texttt{lake build} succeeds. There is no \texttt{sorry}, no
 \texttt{native\_decide}, and no added axioms. \texttt{\#print axioms} shows at
-most \texttt{propext} and \texttt{Quot.sound}.
+most \texttt{propext} and \texttt{Quot.sound}; the certificates use no axioms.
 
 \section{Reproduction}
 \begin{verbatim}

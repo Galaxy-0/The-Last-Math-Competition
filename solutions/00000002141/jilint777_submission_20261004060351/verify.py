@@ -4,6 +4,8 @@
 2. A1, B1 have equal characteristic polynomials, and so do A2, B2, computed
    exactly in two ways (Faddeev-LeVerrier, and det(xI - A) by exact Gaussian
    elimination at 11 points); the two pairs have different polynomials.
+   Integer certificates M with M M^T = 4I and M A = B M (orthogonal similarity).
+   All four graphs are connected.
 3. A1 !~ B1, A2 !~ B2, A1 !~ A2, A1 !~ B2 by an exhaustive backtracking
    isomorphism search (complete, with degree-preserving pruning only).
 4. If nauty's geng is installed: enumerate all regular graphs on n <= 10
@@ -112,6 +114,28 @@ def g6_to_adj(s):
     return A
 
 
+M1 = [[0,0,0,0,0,0,0,2,0,0],[-1,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,0,0,2],
+      [1,0,0,0,-1,1,1,0,0,0],[0,0,0,0,0,0,0,0,2,0],[0,2,0,0,0,0,0,0,0,0],
+      [0,0,0,2,0,0,0,0,0,0],[1,0,0,0,1,1,-1,0,0,0],[0,0,2,0,0,0,0,0,0,0],
+      [1,0,0,0,1,-1,1,0,0,0]]
+M2 = [[-1,0,0,0,1,1,1,0,0,0],[0,0,0,2,0,0,0,0,0,0],[1,0,0,0,1,1,-1,0,0,0],
+      [0,0,0,0,0,0,0,0,0,2],[0,0,2,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,2,0,0],
+      [1,0,0,0,1,-1,1,0,0,0],[0,2,0,0,0,0,0,0,0,0],[1,0,0,0,-1,1,1,0,0,0],
+      [0,0,0,0,0,0,0,0,2,0]]
+
+
+def matmul(X, Y):
+    return [[sum(X[i][l] * Y[l][j] for l in range(10)) for j in range(10)] for i in range(10)]
+
+
+def g6_encode(A):
+    n = len(A)
+    bits = [A[i][j] for j in range(1, n) for i in range(j)]
+    bits += [0] * (-len(bits) % 6)
+    return chr(n + 63) + "".join(chr(63 + int("".join(map(str, bits[i:i + 6])), 2))
+                                 for i in range(0, len(bits), 6))
+
+
 def main():
     G = {k: adj(v) for k, v in E.items()}
     for k, A in G.items():
@@ -127,6 +151,22 @@ def main():
     for a, b in [("A1", "B1"), ("A2", "B2"), ("A1", "A2"), ("A1", "B2"), ("B1", "A2"), ("B1", "B2")]:
         assert not isomorphic(G[a], G[b]), (a, b)
     print("A1, B1, A2, B2 pairwise non-isomorphic (exhaustive search)")
+    for k, A in G.items():
+        seen, stack = {0}, [0]
+        while stack:
+            u = stack.pop()
+            for w in range(10):
+                if A[u][w] and w not in seen:
+                    seen.add(w)
+                    stack.append(w)
+        assert len(seen) == 10, k
+    print("all four graphs are connected")
+    for a, b, M in [("A1", "B1", M1), ("A2", "B2", M2)]:
+        MT = [list(r) for r in zip(*M)]
+        assert matmul(M, MT) == [[4 * (i == j) for j in range(10)] for i in range(10)]
+        assert matmul(M, G[a]) == matmul(G[b], M)
+    print("orthogonal similarity certificates M M^T = 4I, M A = B M verified")
+    ours = {g6_encode(A) for A in G.values()}
     geng = shutil.which("nauty-geng") or shutil.which("geng")
     if geng:
         for n in range(1, 11):
@@ -140,6 +180,8 @@ def main():
                 if fam:
                     print("n=%d, %d-regular: %d graphs, cospectral families %s" % (n, k, len(out), fam))
                     assert n == 10 and k in (4, 5) and [len(f) for f in fam] == [2, 2]
+                    if k == 4:
+                        assert {s for f in fam for s in f} == ours
         print("no cospectral regular graphs below order 10; at order 10 exactly two "
               "4-regular pairs and two 5-regular pairs")
     else:
