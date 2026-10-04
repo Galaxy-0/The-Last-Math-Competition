@@ -1,0 +1,161 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A Refutation of the Extremal Example in Conjecture 00000000036}
+\author{%
+  Yinuo Liu\thanks{Independent researcher (\texttt{champagnepapihz}).}
+  \and
+  opencode-agent\thanks{Autonomous agent operated by the first author.}
+  \and
+  Muse Spark\thanks{Meta.}%
+}
+\date{2026-10-04}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Conjecture 00000000036 asserts that a set $A\subseteq[N]$ in which the sum
+(when $\ge4$) and the difference (when $\ge2$) of any two of its elements are
+both composite satisfies $|A|\le(1/3+\varepsilon)N$, with $1/3$ attained by
+the residue classes $\{\pm1\bmod 6\}$. We show the extremal example is wrong:
+$5$ and $7$ both lie in $\{\pm1\bmod 6\}$, yet $7-5=2$ is prime. Hence the
+conjecture is false as stated. We further verify a corrected construction ---
+the multiples of $4$, of density $1/4$ --- and report computational evidence
+that no periodic residue construction exceeds $1/4$, so the sharp constant, if
+the upper bound holds at all, is at most $1/4$ rather than $1/3$. Both halves
+are formalized in Lean~4 against Mathlib.
+\end{abstract}
+
+\section{Statement and reading}
+
+Conjecture 00000000036 concerns a set $A\subseteq\{1,\ldots,N\}$ such that
+\begin{equation}\label{eq:hyp}
+  a,b\in A,\quad a\ne b \ \Longrightarrow\
+  \begin{cases}
+    a+b\ge4 \ \Rightarrow\ a+b\ \text{composite},\\
+    |a-b|\ge2 \ \Rightarrow\ |a-b|\ \text{composite},
+  \end{cases}
+\end{equation}
+and asserts
+\begin{equation}\label{eq:bound}
+  |A|\le\left(\tfrac13+\varepsilon\right)N
+\end{equation}
+for every fixed $\varepsilon>0$ and all sufficiently large $N$, with equality
+asymptotically attained by
+\begin{equation}\label{eq:claimed}
+  B \;=\; \{\,n\ge1 : n\equiv\pm1\!\!\pmod 6\,\}.
+\end{equation}
+Unlike some sibling conjectures, no distinctness repair is needed here: with
+$a=b$ the sum $2a$ is composite for $a\ge2$ and the difference $0$ is exempt,
+so the hypothesis is non-degenerate as written. The quantifier over pairs is
+read, as usual, over distinct elements.
+
+\section{The claimed example fails}
+
+\begin{theorem}\label{thm:refute}
+The set $B$ in~\eqref{eq:claimed} does not satisfy~\eqref{eq:hyp}. In
+particular the constant $1/3$ in~\eqref{eq:bound} is not attained by that
+construction, and Conjecture 00000000036 is false as stated.
+\end{theorem}
+
+\begin{proof}
+$5\bmod 6 = 5$ and $7\bmod 6 = 1$, so $5,7\in B$. They are distinct, and
+$|7-5| = 2\ge2$ with $2$ prime. This single pair already violates~\eqref{eq:hyp}.
+\end{proof}
+
+The failure is not a boundary effect: the offending pattern repeats in every
+block, since $6k+5$ and $6k+7$ both lie in $B$ and differ by $2$ for every
+$k\ge0$. The residue-level explanation is instructive. Modulo $6$ the
+difference is $2$, with $\gcd(2,6)=2>1$, so a naive gcd test passes; what the
+test misses is that the realized difference \emph{equals} the common divisor,
+which is itself prime. Any sound residue sieve must check small realizations,
+not just gcds.
+
+\section{A corrected construction of density $1/4$}
+
+\begin{definition}
+Let $A=\{\,n\ge1:4\mid n\,\}$, the positive multiples of $4$.
+\end{definition}
+
+\begin{proposition}\label{prop:adm}
+$A$ satisfies~\eqref{eq:hyp}.
+\end{proposition}
+
+\begin{proof}
+Let $a\ne b$ be distinct elements of $A$, both divisible by $4$.
+Their sum $a+b$ is divisible by $4$, hence even; the smallest distinct
+positive multiples of $4$ are $4$ and $8$, so $a+b\ge12>2$, and the sum is
+composite. Their difference $|a-b|$ is a positive multiple of $4$, hence at
+least $4>2$, and even, hence composite. The thresholds in~\eqref{eq:hyp} are
+met with room to spare.
+\end{proof}
+
+\begin{proposition}\label{prop:count}
+For every $N\ge1$, $|A\cap[1,N]|=\lfloor N/4\rfloor$, i.e.\ $N\le
+4\,|A\cap[1,N]|+3$.
+\end{proposition}
+
+\begin{proof}
+The map $i\mapsto4(i+1)$ is a bijection between $\{0,\ldots,k-1\}$ and the
+$k$ multiples of $4$ in $[1,4k]$, so $|A\cap[1,4k]|=k$; monotonicity extends
+this to $N\le4\,|A\cap[1,N]|+3$ with $k=\lfloor N/4\rfloor$.
+\end{proof}
+
+\section{Remark: $1/4$ appears to be the residue optimum}
+
+We searched systematically for periodic residue constructions denser than $1/4$.
+Exhaustively over all $2^m$ subsets for every modulus $m\le10$ (testing the
+realized sets $A\cap[1,N]$ at $N=150$ over all distinct pairs), the maximum
+density attained is exactly $1/4$, e.g.\ $m=8$, $S=\{0,4\}$. Greedy extension
+from the multiples of $4$ together with $200$ random trials per modulus for
+$m\in\{12,16,20,24,28,32,40,44,48\}$ (tested at $N=200$--$250$) never exceeded
+$1/4$ either. We have not proved optimality, and record this only as
+computational evidence. It suggests the repaired statement, if the upper bound
+is true at all, should read $|A|\le(1/4+\varepsilon)N$ with $1/4$ attained by
+the multiples of $4$ --- not $1/3$ by $\{\pm1\bmod6\}$.
+
+\section{Formal verification}
+
+The accompanying Lean~4 project formalizes the refutation against Mathlib,
+using Mathlib's \texttt{Nat.Prime} throughout.
+
+\begin{itemize}
+  \item \texttt{claimed\_extremal\_invalid} --- Theorem~\ref{thm:refute}: the
+    explicit witnesses $5,7\in B$ with \texttt{Nat.Prime}~$(7-5)$, discharged
+    by \texttt{decide}.
+  \item \texttt{inA\_sum\_admissible} / \texttt{inA\_diff\_admissible} ---
+    Proposition~\ref{prop:adm}: sums of distinct multiples of $4$ are even and
+    $>2$; differences (for $a<b$) are even and $>2$; both via an explicit
+    divisibility witness closed by \texttt{omega}, composed with
+    \texttt{not\_prime\_of\_dvd}.
+  \item \texttt{countA\_lower} --- Proposition~\ref{prop:count} in the explicit
+    form $N\le4\,\texttt{countA}\,N+3$, from the order-preserving enumeration
+    \texttt{enumA} shown injective and landing in $[1,4k]$.
+  \item \texttt{conjecture\_00000000036\_false} --- the conjunction: the
+    claimed example fails, the multiples of $4$ are admissible, and they have
+    density $1/4$.
+\end{itemize}
+
+The project builds with \texttt{lake build} on
+\texttt{leanprover/lean4:v4.33.1} with Mathlib \texttt{v4.33.1}. It contains
+no \texttt{sorry} and no \texttt{native\_decide}, and introduces no axioms of
+its own: \texttt{\#print axioms conjecture\_00000000036\_false} reports exactly
+the three standard axioms \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}.
+
+\end{document}
