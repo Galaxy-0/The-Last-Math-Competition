@@ -59,8 +59,9 @@ every v ≡ 4 (mod 12). The disproof does not use this result.
   - `clause2_le_false`: the non-strict reading `v ≤ 316`, where at most 20 values can be
     exceptional.
 - Non-vacuity:
-  - `not_hasKQS_two_three`: there is no KQS on 2 or 3 points, so `HasKQS` is not trivially
-    true.
+  - `not_hasKQS_two_three` and `not_hasKQS_five`: there is no KQS on 2, 3 or 5 points, so
+    `HasKQS` is not trivially true. For v = 5 a block fits, but no parallel class can split 5
+    points into 4-sets.
   - `exceptional_iff`: for admissible `v < 316`, `Exceptional v ↔ ¬ HasKQS v`.
   - `admissible_below_316`: the 26 admissible values.
 

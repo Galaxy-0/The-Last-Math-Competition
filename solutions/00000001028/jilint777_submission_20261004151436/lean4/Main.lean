@@ -559,7 +559,7 @@ theorem hasKQS_seven : HasKQS 4 ∧ HasKQS 16 ∧ HasKQS 28 ∧ HasKQS 40 ∧ Ha
 /-! ## Counting -/
 
 /-- A duplicate-free list contained in `S` is no longer than `S`. -/
-theorem length_le_of_nodup_subset : ∀ (E S : List Nat), E.Nodup → (∀ x ∈ E, x ∈ S) →
+theorem length_le_of_nodup_subset {α : Type} [DecidableEq α] : ∀ (E S : List α), E.Nodup → (∀ x ∈ E, x ∈ S) →
     E.length ≤ S.length := by
   intro E
   induction E with
@@ -643,6 +643,67 @@ theorem not_hasKQS_two_three (v : Nat) (h2 : 2 ≤ v) (h4 : v < 4) : ¬ HasKQS v
   simp at this
   omega
 
+/-- Two different members of `l` satisfying `p` force `countP p l ≥ 2`. -/
+theorem two_le_countP {α : Type} [DecidableEq α] (p : α → Bool) (l : List α) (a b : α)
+    (ha : a ∈ l) (hb : b ∈ l) (hab : a ≠ b) (hpa : p a = true) (hpb : p b = true) :
+    2 ≤ l.countP p := by
+  rw [List.countP_eq_length_filter]
+  have := length_le_of_nodup_subset [a, b] (l.filter p) (by simp [hab]) (by
+    intro x hx
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at hx
+    rcases hx with rfl | rfl
+    · exact List.mem_filter.mpr ⟨ha, hpa⟩
+    · exact List.mem_filter.mpr ⟨hb, hpb⟩)
+  simpa using this
+
+/-- `HasKQS` genuinely constrains `v`: there is no KQS on 5 points.  A block exists (the pair
+`{0,1}` must be covered); it misses some point `y`; the block through `y` in the same
+parallel class is a second 4-subset of the 5 points, so it meets the first block, and the
+common point lies in two blocks of one class. -/
+theorem not_hasKQS_five : ¬ HasKQS 5 := by
+  rintro ⟨R, hB, hC, hP⟩
+  have h1 := hP 0 (by decide) 1 (by decide) (by decide)
+  obtain ⟨B, hBm, -⟩ := List.countP_pos_iff.mp
+    (by omega : 0 < (blocksOf R).countP (fun B => decide (0 ∈ B ∧ 1 ∈ B)))
+  obtain ⟨C, hCR, hBC⟩ := List.mem_flatten.mp hBm
+  obtain ⟨hl, hnd, hlt⟩ := hB B hBm
+  -- some point `y < 5` is not in `B`
+  have hex : ∃ y, y < 5 ∧ y ∉ B := by
+    apply Classical.byContradiction
+    intro hno
+    have hsub : ∀ x ∈ List.range 5, x ∈ B := fun x hx => by
+      apply Classical.byContradiction
+      intro hxB
+      exact hno ⟨x, List.mem_range.mp hx, hxB⟩
+    have := length_le_of_nodup_subset (List.range 5) B List.nodup_range hsub
+    simp at this
+    omega
+  obtain ⟨y, hy5, hyB⟩ := hex
+  have hcy := hC C hCR y hy5
+  obtain ⟨B', hB'C, hyB'⟩ := List.countP_pos_iff.mp
+    (by omega : 0 < C.countP (fun B => decide (y ∈ B)))
+  have hyB'' : y ∈ B' := of_decide_eq_true hyB'
+  have hB'm : B' ∈ blocksOf R := List.mem_flatten.mpr ⟨C, hCR, hB'C⟩
+  obtain ⟨hl', hnd', hlt'⟩ := hB B' hB'm
+  -- `B` and `B'` (two 4-subsets of a 5-set) share a point
+  have hcommon : ∃ x, x ∈ B ∧ x ∈ B' := by
+    apply Classical.byContradiction
+    intro hno
+    have hnd2 : (B ++ B').Nodup := List.pairwise_append.mpr
+      ⟨hnd, hnd', fun a ha b hb hab => hno ⟨a, ha, hab ▸ hb⟩⟩
+    have := length_le_of_nodup_subset (B ++ B') (List.range 5) hnd2 (by
+      intro x hx
+      rcases List.mem_append.mp hx with hx | hx
+      · exact List.mem_range.mpr (hlt x hx)
+      · exact List.mem_range.mpr (hlt' x hx))
+    simp [hl, hl'] at this
+  obtain ⟨x, hxB, hxB'⟩ := hcommon
+  have hne : B ≠ B' := fun e => hyB (e ▸ hyB'')
+  have h2 := two_le_countP (fun B => decide (x ∈ B)) C B B' hBC hB'C hne
+    (decide_eq_true hxB) (decide_eq_true hxB')
+  have h3 := hC C hCR x (hlt x hxB)
+  omega
+
 /-- `Exceptional` means exactly what it should for admissible `v < 316`: no KQS exists. -/
 theorem exceptional_iff (v : Nat) (h12 : v % 12 = 4) (hlt : v < 316) :
     Exceptional v ↔ ¬ HasKQS v :=
@@ -668,4 +729,5 @@ end KQS
 #print axioms KQS.conjecture_00000001028_false
 #print axioms KQS.clause2_le_false
 #print axioms KQS.not_hasKQS_two_three
+#print axioms KQS.not_hasKQS_five
 #print axioms KQS.admissible_below_316
