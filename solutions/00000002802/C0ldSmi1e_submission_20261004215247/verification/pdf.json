@@ -1,0 +1,131 @@
+{
+  "status": "PASS",
+  "scope": "PDF source compilation, export, source identity and page layout. Lean execution and independent semantic review are recorded separately.",
+  "source_sha256": "ae973e03bee78c8198db83c2450d2d3119a2cad61c88bbb332d605071b70ca31",
+  "pdf_sha256": "44a5e485183c7cd1df70ad4810e7c9e481c62552bf7e4c010bc5a1fed27fe94e",
+  "pdf_bytes": 66515,
+  "pages": 4,
+  "artifact_marker": {
+    "operation_kind": "create",
+    "expected_output_count": 1,
+    "output_format": "pdf",
+    "successful_invocations": 1,
+    "exit_code": 0,
+    "timing": "Immediately before the first authoring command for this report."
+  },
+  "native_compilation": {
+    "tool": "compile_latex_document",
+    "status": "success",
+    "source": "/private/tmp/tlmc2802-package/main.tex",
+    "source_sha256": "ae973e03bee78c8198db83c2450d2d3119a2cad61c88bbb332d605071b70ca31",
+    "message": "The final source compiled successfully with the desktop editor compiler. The source was opened in its LaTeX editor (queued because this agent chat was not foreground)."
+  },
+  "export": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--keep-logs",
+      "--outdir",
+      "/private/tmp/tlmc2802-package",
+      "/private/tmp/tlmc2802-package/main.tex"
+    ],
+    "exit_code": 0,
+    "compiler": "Tectonic 0.17.0",
+    "compiler_version_exit_code": 0,
+    "log": "report.txt",
+    "log_sha256": "fa3f27c45b750f2c2c6f5a1e4344b85873c43afc7f6d0aaf3445a26f6887b901",
+    "warnings_or_box_diagnostics": []
+  },
+  "log_normalization": "Trailing whitespace was removed from compiler-log lines when saving report.txt; all diagnostic text was retained. The raw main.log remains with the authoring files.",
+  "pdf_inspection": {
+    "command": [
+      "pdfinfo",
+      "/private/tmp/tlmc2802-package/main.pdf"
+    ],
+    "exit_code": 0,
+    "page_size": "595.28 x 841.89 pts (A4)",
+    "pdf_version": "1.5",
+    "encrypted": false,
+    "all_pages_have_text": true,
+    "replacement_glyph_count": 0
+  },
+  "visual_review": {
+    "reviewer": "report2802 author agent",
+    "scope": "Personally inspected all four complete final rendered pages, including mathematical notation, page boundaries, margins, headings, theorem names, reproduction commands and references. This is author visual QA, not independent semantic review.",
+    "render_command": [
+      "pdftoppm",
+      "-r",
+      "110",
+      "-png",
+      "/private/tmp/tlmc2802-package/main.pdf",
+      "/private/tmp/tlmc2802-package/rendered/page"
+    ],
+    "render_exit_code": 0,
+    "rendered_pages": [
+      {
+        "path": "/private/tmp/tlmc2802-package/rendered/page-1.png",
+        "sha256": "9583ebb0358200da5ef05e7ef3d8075424aa29c0fdf904033a7f60491b123890"
+      },
+      {
+        "path": "/private/tmp/tlmc2802-package/rendered/page-2.png",
+        "sha256": "15256fe360c0932ff56f0d10cb7f538ad148aa2bf87dba9f0d8436682e9c6089"
+      },
+      {
+        "path": "/private/tmp/tlmc2802-package/rendered/page-3.png",
+        "sha256": "83017a8124e54613839acd3873e2a04ef3b111f0a89382bb651f6a1a395d5ff0"
+      },
+      {
+        "path": "/private/tmp/tlmc2802-package/rendered/page-4.png",
+        "sha256": "5e78233bac07187e425397b20c895f75abae472e38bcfc9aeae9cb85418ba0ad"
+      }
+    ],
+    "status": "PASS",
+    "findings": "No clipping, overlap, broken glyphs or sparse trailing pages. The mathematical exposition occupies pages 1\u20133; readable 10-point formal correspondence, commands, validation and references fit on page 4. No compiler warnings or box diagnostics remain."
+  },
+  "source_whitespace_check": {
+    "command": [
+      "git",
+      "diff",
+      "--no-index",
+      "--check",
+      "/dev/null",
+      "/private/tmp/tlmc2802-package/main.tex"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "",
+    "trailing_whitespace_lines": 0,
+    "interpretation": "The nonzero no-index comparison status reflects comparison against /dev/null; no whitespace diagnostics were emitted."
+  },
+  "verification_facts_source": {
+    "path": "/private/tmp/tlmc2802-verification/strict-replay.json",
+    "sha256": "b460b6cee5ac35801aa3a9548c39bf1f47be628db72294add14c7ba871155963",
+    "status": "PASS",
+    "finished_utc": "2026-10-04T21:42:42.258869+00:00",
+    "declarations": 62,
+    "definitions": 13,
+    "theorems": 48,
+    "named_instances": 1,
+    "type_and_axiom_audits": 49
+  },
+  "verified_utc": "2026-10-04T21:48:06.371900+00:00",
+  "second_visual_review": {
+    "reviewer": "root coordinating agent",
+    "status": "PASS",
+    "checked_at_utc": "2026-10-04T21:49:10.127832+00:00",
+    "source_sha256": "ae973e03bee78c8198db83c2450d2d3119a2cad61c88bbb332d605071b70ca31",
+    "pdf_sha256": "44a5e485183c7cd1df70ad4810e7c9e481c62552bf7e4c010bc5a1fed27fe94e",
+    "pages_viewed": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "rendered_page_hashes": [
+      "9583ebb0358200da5ef05e7ef3d8075424aa29c0fdf904033a7f60491b123890",
+      "15256fe360c0932ff56f0d10cb7f538ad148aa2bf87dba9f0d8436682e9c6089",
+      "83017a8124e54613839acd3873e2a04ef3b111f0a89382bb651f6a1a395d5ff0",
+      "5e78233bac07187e425397b20c895f75abae472e38bcfc9aeae9cb85418ba0ad"
+    ],
+    "scope": "Personally viewed all four complete final PNG pages and read the final report text. Checked formulas, distinct support interpretations, table, proof, theorem names, commands, references and page boundaries. No clipping, overlap, missing glyphs or problematic page breaks found. This visual inspection is separate from the semantic and execution reviews."
+  }
+}

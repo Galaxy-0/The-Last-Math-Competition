@@ -1,0 +1,185 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm,booktabs,array,microtype}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\usepackage{xcolor}
+\usepackage{fancyvrb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlength{\emergencystretch}{3em}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\intr}{\operatorname{int}}
+\newcommand{\conv}{\operatorname{conv}}
+\newcommand{\code}[1]{\nolinkurl{#1}}
+\newtheorem{proposition}{Proposition}
+\hypersetup{pdftitle={A lattice law with a smooth Cramer rate: disproof of conjecture 00000002802},pdfauthor={C0ldSmi1e}}
+\begin{document}
+\begin{center}
+{\LARGE A lattice law with a smooth Cram\'er rate}\\[5pt]
+{\large Disproof of conjecture 00000002802}\\[5pt]
+C0ldSmi1e \qquad 4 October 2026
+\end{center}
+\vspace{-3pt}
+\begin{abstract}
+The fair Bernoulli probability law is a nondegenerate lattice law with every exponential moment. Its actual logarithmic moment generating function has a convex dual equal to
+$\log 2+x\log x+(1-x)\log(1-x)$ for $0<x<1$, and this real representative is $C^\infty$ there. Thus interior twice differentiability does not imply a non-lattice law. We distinguish ordinary support, whose interior is empty, from convex support and the effective domain, whose interiors are both $(0,1)$. Lean verifies the necessary-implication failure for all three explicit readings.
+\end{abstract}
+
+\section{Statement and logical target}
+The complete English statement in the repository is:
+\begin{quote}\small
+Definition: Cram\'er's theorem: deviation rates of independent sums (convex-dual form). Conjecture: Second-order differentiability of the Cram\'er functional: the rate function is twice differentiable in the interior of the support if and only if the underlying distribution is non-lattice, the quadratic coefficient being the variance functional; the lattice correction is a superposed periodic function. (Cramer second-order differentiability criterion)
+\end{quote}
+Both the English and Chinese versions were read in full at the source revision cited below. Write $D$ for the asserted twice differentiability and $N$ for the non-lattice property. The equivalence $D\Longleftrightarrow N$, or the Chinese grouping $D\Longleftrightarrow(N\wedge V)$ with its additional variance assertion $V$, necessarily implies $D\Longrightarrow N$. The example below refutes that implication. No interpretation of the unspecified variance functional or periodic correction is needed; neither those clauses nor the converse implication is separately settled here.
+
+\section{The probability law and its actual convex dual}
+On the Borel real line, let
+\[
+\mu=\tfrac12\delta_0+\tfrac12\delta_1.
+\]
+This is a probability measure, with mass $1/2$ at each of $0$ and $1$, and it is not almost surely constant. A law is \emph{lattice} if, for some $a\in\R$ and $h>0$, it is concentrated on $a+h\Z$. Our law is lattice with $a=0$ and $h=1$. Non-lattice means the negation of this condition.
+
+For a probability law $\nu$, put
+\[
+T_\nu=\{t\in\R:y\mapsto e^{ty}\text{ is integrable against }\nu\},\qquad
+\Lambda_\nu(t)=\log\int_\R e^{ty}\,d\nu(y),
+\]
+where $\Lambda_\nu$ is used only for $t\in T_\nu$. Define the extended-real convex dual by
+\begin{equation}\label{eq:dual}
+I_\nu(x)=\sup_{t\in T_\nu}\{tx-\Lambda_\nu(t)\}.
+\end{equation}
+The restriction avoids the totalized real integral at nonintegrable parameters. The zero tilt is integrable for any probability law and gives $I_\nu(x)\ge0$. For $\mu$, all real tilts are integrable, so the supremum is over $\R$. Direct integration gives
+\begin{equation}\label{eq:mgf}
+M_\mu(t)=\int e^{ty}\,d\mu(y)=\frac{1+e^t}{2},\qquad
+\Lambda_\mu(t)=\log\frac{1+e^t}{2}.
+\end{equation}
+
+\section{Computing the supremum, rather than assigning a formula}
+Fix $0<x<1$ and define the auxiliary real expression
+\[
+F(x)=\log2+x\log x+(1-x)\log(1-x).
+\]
+We prove that the actual supremum \eqref{eq:dual} equals $F(x)$.
+
+\textbf{Upper bound for every tilt.}
+Apply concavity of $\log$ with weights $x,1-x$ and positive arguments $e^t/x$ and $1/(1-x)$. Their weighted sum is $e^t+1$, so
+\begin{align*}
+x\log\frac{e^t}{x}+(1-x)\log\frac1{1-x}
+&\le \log(e^t+1),\\
+xt-x\log x-(1-x)\log(1-x)
+&\le \log(e^t+1).
+\end{align*}
+Since $\log((1+e^t)/2)=\log(1+e^t)-\log2$, rearrangement yields
+\begin{equation}\label{eq:upper}
+tx-\Lambda_\mu(t)\le F(x)\qquad(t\in\R).
+\end{equation}
+
+\textbf{A tilt attaining equality.}
+Set $t_x=\log x-\log(1-x)$. Then
+\[
+e^{t_x}=\frac{x}{1-x},\qquad
+\frac{1+e^{t_x}}2=\frac1{2(1-x)}.
+\]
+Substitution into the dual objective gives
+\[
+t_xx-\Lambda_\mu(t_x)
+=x\log x-x\log(1-x)+\log2+\log(1-x)=F(x).
+\]
+Together with \eqref{eq:upper}, this proves
+\begin{equation}\label{eq:formula}
+\boxed{\ I_\mu(x)=F(x)=x\log(2x)+(1-x)\log(2(1-x)),\quad 0<x<1.\ }
+\end{equation}
+The equality in Lean is an equality in \code{EReal} between the actual supremum and the coercion of this real expression.
+
+\section{The effective-domain interior}
+Let $E_\mu=\{x:I_\mu(x)<+\infty\}$. Because $I_\mu\ge0$, this set really is its finite effective domain. Equation \eqref{eq:formula} proves $(0,1)\subseteq E_\mu$.
+
+For $t\le0$, one has $e^t\le1$, so $\Lambda_\mu(t)\le0$. If $x<0$, then for any $A\in\R$ the tilt $t=(|A|+1)/x<0$ satisfies
+\[
+tx-\Lambda_\mu(t)\ge |A|+1>A.
+\]
+Thus $I_\mu(x)=+\infty$. For $t\ge0$, one has $1\le e^t$, hence $(1+e^t)/2\le e^t$ and $\Lambda_\mu(t)\le t$. If $x>1$, choose $t=(|A|+1)/(x-1)>0$; then
+\[
+tx-\Lambda_\mu(t)\ge t(x-1)=|A|+1>A,
+\]
+again giving $I_\mu(x)=+\infty$. Consequently
+\[
+(0,1)\subseteq E_\mu\subseteq[0,1],\qquad \intr E_\mu=(0,1).
+\]
+Only this sandwich and the interior equality are needed. Endpoint values and the equality of the entire effective domain with $[0,1]$ are not claimed as results of this formal development.
+
+\section{Smoothness and the three support readings}
+On $(0,1)$ both $x$ and $1-x$ are positive. The logarithm is smooth there, so sums, products and composition show that $F$ is $C^\infty$ on $(0,1)$. By \eqref{eq:formula}, the actual rate has this finite smooth real representative on that open interval. This avoids using the totalized real projection of an infinite extended-real value.
+
+The ordinary topological support is defined by the usual open-neighborhood condition: $x\in\supp\mu$ if every open neighborhood of $x$ has nonzero measure. Both atoms are in the support because their singleton masses are positive. Its complement has measure zero, and is open, so
+\[
+\supp\mu=\{0,1\},\qquad \intr\supp\mu=\varnothing.
+\]
+Its convex hull is $[0,1]$. In particular, these three readings are explicitly different:
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Region used for differentiability & Interior & Certificate \\
+\midrule
+Ordinary topological support & $\varnothing$ & Vacuous \\
+Convex hull of that support & $(0,1)$ & Smooth finite representative \\
+Effective domain of the actual rate & $(0,1)$ & Smooth finite representative \\
+\bottomrule
+\end{tabular}
+\end{center}
+The last two interiors are nonempty, for example at $1/2$. Ordinary support is never silently replaced by convex support.
+
+\textbf{The exact differentiability predicate.}
+For an extended-real function $I$ on an open set $S$, the formal predicate \code{RateTwiceDifferentiableOn}, applied to $I$ and $S$, asserts the existence of a real function $f$ such that $f$ and its ordinary derivative $f'$ are differentiable on $S$, and $I(x)=(f(x):\texttt{EReal})$ for all $x\in S$. Since $S$ is open, equality holds on a neighborhood of each point and identifies the local differentiability of the rate itself.
+
+The stronger predicate \code{RateC2On} requires a $C^2$ real representative. Lean proves its sufficient implication to the twice-differentiability predicate on open sets. Mere twice differentiability is not identified with $C^2$ regularity. The proof of smoothness uses \code{ContDiffOn} with order $\infty$ (all finite orders); a $C^2$ certificate then follows. The empty-set certificate is recorded separately and vacuously.
+
+\begin{proposition}
+The source's necessary implication from interior twice differentiability to a non-lattice law fails for each of the ordinary-support, convex-support and effective-domain interiors.
+\end{proposition}
+\begin{proof}
+In every reading, $\mu$ satisfies the corresponding differentiability assertion, as proved above, but is a lattice law. It is also a nondegenerate probability law with every exponential moment. Thus the necessary implication fails even on this restricted class of particularly regular probability laws. Those restrictions strengthen the counterexample; they are not additional assumptions attributed to the source.
+\end{proof}
+
+\textbf{Formal scope.}
+The development constructs the actual probability-law convex dual specified in the source and refutes its analytic differentiability criterion. It does not formalize an infinite independent process, the full Cram\'er large-deviation theorem, or probability asymptotics. The definitions and proof do not rely on any of those unformalized results. The standard Bernoulli convex-dual formula and the conventional interior-smoothness context can also be found in Fischer's lecture notes, \S2.3~\cite{fischer}; the identities used here are proved directly.
+
+\section{Lean correspondence and reproducibility}
+\small
+All named declarations below belong to the namespace \code{Conjecture2802}. The Lean project is in \code{lean/}; each module is included in the default library build.
+\begin{description}\raggedright\setlength{\itemsep}{2pt}\setlength{\parsep}{0pt}
+\item[\code{Law.lean}] Defines \code{fairBernoulli}, \code{LatticeLaw} and \code{topologicalSupport}; proves the probability instance, both masses, nondegeneracy, exponential integrability, actual moment/cumulant formulas, and the ordinary/convex support identities.
+\item[\code{Formula.lean}] Proves \code{dual_objective_le_binaryRate} and \code{dual_objective_optimalTilt}: the upper bound and the attaining tilt.
+\item[\code{Transform.lean}] Defines \code{cramerRate} and \code{effectiveDomain}; proves \code{cramerRate_nonneg}, \code{cramerRate_fairBernoulli}, exterior infinity, the domain sandwich and \code{interior_effectiveDomain_fairBernoulli}.
+\item[\code{Regularity.lean}] Defines both regularity predicates; proves \code{binaryRate_contDiffOn} and the open-set bridge \code{RateC2On.twiceDifferentiableOn}.
+\item[\code{Conjecture2802.lean}] Supplies the explicit counterexample and the three precise necessary-implication refutations. The combined conclusion is \code{necessary_criterion_fails_all_three_readings}; the bundled witness is \code{explicit_counterexample}.
+\item[\code{Check.lean}] Prints the definitions, theorem types and axiom dependencies for the complete submitted declaration inventory.
+\end{description}
+
+\textbf{Pinned environment.}
+The project uses Lean 4.19.0 and Mathlib v4.19.0, with Mathlib commit
+\code{c44e0c8ee63ca166450922a373c7409c5d26b00b}. The included toolchain and lockfile fix the compiler and dependency revisions.
+
+From the submission directory, the reproduction commands are:
+\begin{Verbatim}[fontsize=\small]
+cd lean
+lake exe cache get
+lake build
+for f in Conjecture2802/Law.lean Conjecture2802/Formula.lean \
+  Conjecture2802/Transform.lean Conjecture2802/Regularity.lean \
+  Conjecture2802.lean Check.lean; do
+  lake env lean -DwarningAsError=true "$f" || exit 1
+done
+\end{Verbatim}
+
+\textbf{Validation status.}
+An independent fresh project build completed successfully on 4 October 2026 at 21:42:42 UTC. All six Lean sources were replayed with warnings treated as errors. The inventory contains 62 declarations: 13 definitions, 48 theorems and one named probability instance. All 49 theorem/instance type and transitive-axiom checks passed, with dependencies limited to the standard axioms \code{propext}, \code{Classical.choice} and \code{Quot.sound}. No admitted proofs, \code{native_decide}, custom axioms or other proof bypasses were found. The nine source/configuration hashes were unchanged; all nine pinned dependency checkouts were tracked-clean and the compiler identity was checked before and after execution. The full records and file identities are supplied in \code{verification/} and \code{VERIFICATION.md}. No auxiliary numerical computation is needed: all mathematical identities and inequalities are established in Lean. Local verification is distinct from maintainer acceptance.
+
+\begin{thebibliography}{2}\small
+\bibitem{source} The Last Math Competition, conjecture 00000002802, English and Chinese versions, source revision \code{fe1d06d431b0591b65d759c60035b1d2e293a819}. \href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/fe1d06d431b0591b65d759c60035b1d2e293a819/conjectures/00000002802.md}{Repository source}.
+\bibitem{fischer} Markus Fischer, \emph{Large deviations, weak convergence, and relative entropy}, revised 20 June 2013, \S2.3, pp.~6--7. \url{https://www.math.unipd.it/~fischer/Didattica/WeakConvergenceRE.pdf}.
+\end{thebibliography}
+\end{document}

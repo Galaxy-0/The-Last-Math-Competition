@@ -1,0 +1,114 @@
+import Conjecture2802
+
+#print Conjecture2802.fairBernoulli
+#print Conjecture2802.LatticeLaw
+#print Conjecture2802.topologicalSupport
+#print Conjecture2802.binaryRate
+#print Conjecture2802.optimalTilt
+#print Conjecture2802.cramerRate
+#print Conjecture2802.effectiveDomain
+#print Conjecture2802.RateC2On
+#print Conjecture2802.RateTwiceDifferentiableOn
+#print Conjecture2802.NonlatticeNecessaryOn
+#print Conjecture2802.OrdinarySupportNecessaryClaim
+#print Conjecture2802.ConvexSupportNecessaryClaim
+#print Conjecture2802.EffectiveDomainNecessaryClaim
+
+#check Conjecture2802.fairBernoulli_isProbabilityMeasure
+#print axioms Conjecture2802.fairBernoulli_isProbabilityMeasure
+#check Conjecture2802.fairBernoulli_mass_zero
+#print axioms Conjecture2802.fairBernoulli_mass_zero
+#check Conjecture2802.fairBernoulli_mass_one
+#print axioms Conjecture2802.fairBernoulli_mass_one
+#check Conjecture2802.ae_fairBernoulli_iff
+#print axioms Conjecture2802.ae_fairBernoulli_iff
+#check Conjecture2802.fairBernoulli_lattice
+#print axioms Conjecture2802.fairBernoulli_lattice
+#check Conjecture2802.fairBernoulli_not_ae_constant
+#print axioms Conjecture2802.fairBernoulli_not_ae_constant
+#check Conjecture2802.integrable_fairBernoulli
+#print axioms Conjecture2802.integrable_fairBernoulli
+#check Conjecture2802.integrable_exp_fairBernoulli
+#print axioms Conjecture2802.integrable_exp_fairBernoulli
+#check Conjecture2802.mgf_fairBernoulli
+#print axioms Conjecture2802.mgf_fairBernoulli
+#check Conjecture2802.cgf_fairBernoulli
+#print axioms Conjecture2802.cgf_fairBernoulli
+#check Conjecture2802.support_fairBernoulli
+#print axioms Conjecture2802.support_fairBernoulli
+#check Conjecture2802.interior_support_fairBernoulli
+#print axioms Conjecture2802.interior_support_fairBernoulli
+#check Conjecture2802.convexHull_support_fairBernoulli
+#print axioms Conjecture2802.convexHull_support_fairBernoulli
+#check Conjecture2802.interior_convexHull_support_fairBernoulli
+#print axioms Conjecture2802.interior_convexHull_support_fairBernoulli
+#check Conjecture2802.dual_objective_le_binaryRate
+#print axioms Conjecture2802.dual_objective_le_binaryRate
+#check Conjecture2802.exp_optimalTilt
+#print axioms Conjecture2802.exp_optimalTilt
+#check Conjecture2802.dual_objective_optimalTilt
+#print axioms Conjecture2802.dual_objective_optimalTilt
+#check Conjecture2802.binaryRate_eq_relativeEntropy
+#print axioms Conjecture2802.binaryRate_eq_relativeEntropy
+#check Conjecture2802.dualTerm_le_cramerRate
+#print axioms Conjecture2802.dualTerm_le_cramerRate
+#check Conjecture2802.cramerRate_nonneg
+#print axioms Conjecture2802.cramerRate_nonneg
+#check Conjecture2802.cramerRate_fairBernoulli_eq_iSup
+#print axioms Conjecture2802.cramerRate_fairBernoulli_eq_iSup
+#check Conjecture2802.cramerRate_fairBernoulli
+#print axioms Conjecture2802.cramerRate_fairBernoulli
+#check Conjecture2802.cgf_fairBernoulli_nonpos
+#print axioms Conjecture2802.cgf_fairBernoulli_nonpos
+#check Conjecture2802.cgf_fairBernoulli_le_self
+#print axioms Conjecture2802.cgf_fairBernoulli_le_self
+#check Conjecture2802.cramerRate_fairBernoulli_eq_top_of_neg
+#print axioms Conjecture2802.cramerRate_fairBernoulli_eq_top_of_neg
+#check Conjecture2802.cramerRate_fairBernoulli_eq_top_of_one_lt
+#print axioms Conjecture2802.cramerRate_fairBernoulli_eq_top_of_one_lt
+#check Conjecture2802.Ioo_subset_effectiveDomain_fairBernoulli
+#print axioms Conjecture2802.Ioo_subset_effectiveDomain_fairBernoulli
+#check Conjecture2802.effectiveDomain_fairBernoulli_subset_Icc
+#print axioms Conjecture2802.effectiveDomain_fairBernoulli_subset_Icc
+#check Conjecture2802.interior_effectiveDomain_fairBernoulli
+#print axioms Conjecture2802.interior_effectiveDomain_fairBernoulli
+#check Conjecture2802.RateC2On.twiceDifferentiableOn
+#print axioms Conjecture2802.RateC2On.twiceDifferentiableOn
+#check Conjecture2802.rateC2On_empty
+#print axioms Conjecture2802.rateC2On_empty
+#check Conjecture2802.binaryRate_contDiffOn
+#print axioms Conjecture2802.binaryRate_contDiffOn
+#check Conjecture2802.rateC2On_of_eq_binaryRate
+#print axioms Conjecture2802.rateC2On_of_eq_binaryRate
+#check Conjecture2802.fairBernoulli_rate_smooth
+#print axioms Conjecture2802.fairBernoulli_rate_smooth
+#check Conjecture2802.fairBernoulli_rate_c2_interval
+#print axioms Conjecture2802.fairBernoulli_rate_c2_interval
+#check Conjecture2802.fairBernoulli_rate_c2_support
+#print axioms Conjecture2802.fairBernoulli_rate_c2_support
+#check Conjecture2802.fairBernoulli_rate_c2_convexSupport
+#print axioms Conjecture2802.fairBernoulli_rate_c2_convexSupport
+#check Conjecture2802.fairBernoulli_rate_c2_effectiveDomain
+#print axioms Conjecture2802.fairBernoulli_rate_c2_effectiveDomain
+#check Conjecture2802.fairBernoulli_rate_twice_support
+#print axioms Conjecture2802.fairBernoulli_rate_twice_support
+#check Conjecture2802.fairBernoulli_rate_twice_convexSupport
+#print axioms Conjecture2802.fairBernoulli_rate_twice_convexSupport
+#check Conjecture2802.fairBernoulli_rate_twice_effectiveDomain
+#print axioms Conjecture2802.fairBernoulli_rate_twice_effectiveDomain
+#check Conjecture2802.fairBernoulli_convexSupport_interior_nonempty
+#print axioms Conjecture2802.fairBernoulli_convexSupport_interior_nonempty
+#check Conjecture2802.fairBernoulli_effectiveDomain_interior_nonempty
+#print axioms Conjecture2802.fairBernoulli_effectiveDomain_interior_nonempty
+#check Conjecture2802.not_nonlatticeNecessaryOn_of_fairBernoulli
+#print axioms Conjecture2802.not_nonlatticeNecessaryOn_of_fairBernoulli
+#check Conjecture2802.not_ordinarySupportNecessaryClaim
+#print axioms Conjecture2802.not_ordinarySupportNecessaryClaim
+#check Conjecture2802.not_convexSupportNecessaryClaim
+#print axioms Conjecture2802.not_convexSupportNecessaryClaim
+#check Conjecture2802.not_effectiveDomainNecessaryClaim
+#print axioms Conjecture2802.not_effectiveDomainNecessaryClaim
+#check Conjecture2802.necessary_criterion_fails_all_three_readings
+#print axioms Conjecture2802.necessary_criterion_fails_all_three_readings
+#check Conjecture2802.explicit_counterexample
+#print axioms Conjecture2802.explicit_counterexample
