@@ -1,0 +1,332 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of Conjecture 00000003481:\\
+Thue numbers of trees are at most $4$, and $\pi(T)\le 2\log\Delta(T)$ fails}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000003481 claims that the Thue number of the binary tree is four, that the Thue
+number of general trees is unbounded, that $2\log\Delta$ is an upper bound for the Thue number of
+a tree of maximum degree $\Delta$, and that this bound is attained asymptotically by subtrees of
+the complete binary tree. We show that three of the four clauses are false. (i)~The bound
+$\pi(T)\le 2\log\Delta(T)$ fails for every logarithm base $b>1$. The single edge $K_2$ has
+$\Delta=1$ and $\pi=2>0=2\log 1$. Even for $\Delta\ge2$, the path $P_4$ has $\pi=3>2\log_b2$ for
+every $b>4^{1/3}$, including bases $2$, $e$ and $10$. (ii)~The Thue number of trees is
+\emph{bounded}: $\pi(T)\le 4$ for every tree (Bre\v{s}ar, Grytczuk, Klav\v{z}ar, Niwczyk and
+Peterin, 2007). We include a complete proof of this bound that uses only Thue's theorem.
+(iii)~Since $\pi\le4$ while $2\log\Delta\to\infty$, the bound is never attained asymptotically.
+Moreover, subtrees of the complete binary tree have $\Delta\le3$, so they cannot form a family
+with $\Delta\to\infty$. The refutation of (i) is formalised in Lean~4 (core library only).
+Graphs, paths, square factors, Thue colourings, the Thue number and trees are all defined there
+from scratch. An independent Python script computes $\pi$ for all $987$ trees with at most $12$
+vertices. It also finds that the complete binary tree of depth $6$ has $\pi=4$, which is
+consistent with the remaining clause ``the Thue number of the binary tree is four''.
+\end{abstract}
+
+\section{The claim}
+
+The conjecture (English version): \emph{``Definition: Thue coloring requires the color sequence
+of any path to contain no square factor. Conjecture: The Thue number of the binary tree is four
+and the Thue number of general trees is unbounded; the Thue-number upper bound for trees is twice
+the logarithm of the maximum degree, attained asymptotically by subtree families of the complete
+binary tree.''} The Chinese version has the same content.
+
+It is a conjunction of four clauses:
+\begin{itemize}
+\item[(C1)] the Thue number of the binary tree is $4$;
+\item[(C2)] the Thue number of general trees is unbounded;
+\item[(C3)] $\pi(T)\le 2\log\Delta(T)$ for every tree $T$, where $\Delta(T)$ is the maximum degree;
+\item[(C4)] the bound in (C3) is attained asymptotically by a family of subtrees of the complete
+binary tree.
+\end{itemize}
+We show that (C2), (C3) and (C4) are false (Theorems~\ref{thm:c3}, \ref{thm:four},
+Corollaries~\ref{cor:c2}, \ref{cor:c4}). One false clause already makes the conjunction false.
+Section~\ref{sec:readings} lists the readings that each refutation covers. Clause~(C1) is not
+refuted: Section~\ref{sec:c1} gives what we verified about it.
+
+\section{Definitions}
+
+All graphs are simple. A \emph{path} in a graph $G$ is a sequence $(v_1,\dots,v_\ell)$,
+$\ell\ge1$, of pairwise distinct vertices in which $v_i v_{i+1}$ is an edge for every $i$. Any path
+counts, between any two vertices; for trees these are not only root-to-leaf paths. A word $s$ has
+a \emph{square factor} if $s=axxb$ for words $a,x,b$ with $x$ nonempty. A colouring $c$ of
+$V(G)$ is a \emph{Thue colouring} (also called \emph{nonrepetitive}) if no path has a colour
+sequence $c(v_1)\cdots c(v_\ell)$ with a square factor. The \emph{Thue number} $\pi(G)$ is the
+least number of colours of a Thue colouring~\cite{AGHR}. A Thue colouring is in particular proper (take
+$x$ of length~$1$), and $\pi$ is monotone under taking subgraphs. A word is \emph{square-free} if
+it has no square factor.
+
+\section{\texorpdfstring{Clause (C3) is false: $K_2$ and $P_4$}{Clause (C3) is false: K2 and P4}}
+
+For a base $b>1$ and integers $k\ge0$, $\Delta\ge1$,
+\begin{equation}\label{eq:log}
+k\le 2\log_b\Delta \iff b^k\le\Delta^2 ,
+\end{equation}
+because $t\mapsto b^t$ is increasing. For a rational base $b=p/q$ ($p>q\ge1$) the right-hand side
+reads $p^k\le \Delta^2q^k$. A larger base makes the bound smaller. So the claim for a base $b$
+implies the claim for every base $b'\in(1,b]$. Every real $b>1$ lies above some rational
+$p/q>1$, so refuting all rational bases $p/q>1$ refutes all real bases $b>1$.
+
+\begin{lemma}\label{lem:small}
+$\pi(K_2)=2$ and $\pi(P_4)=3$.
+\end{lemma}
+
+\begin{proof}
+$K_2$: one colour gives the colour sequence $aa$ on the path through the edge. Two distinct
+colours work, because the only paths are single vertices and the edge.
+
+$P_4=v_1v_2v_3v_4$: suppose there is a Thue colouring with two colours. Then
+$c(v_1)\ne c(v_2)\ne c(v_3)\ne c(v_4)$, because otherwise one edge carries the square $aa$. With
+two colours this forces $c(v_1)=c(v_3)$ and $c(v_2)=c(v_4)$, so the whole path has colour sequence
+$abab$, a square. Conversely, the colouring $1,2,3,1$ is a Thue colouring. Every path of $P_4$ is
+a factor of $1231$ or of its reverse. Their factors of length $2$ have distinct letters, and the
+only factor of length $4$ is $1231$ (or $1321$), which is not of the form $xx$.
+\end{proof}
+
+\begin{theorem}\label{thm:c3}
+For every base $b>1$, the inequality $\pi(T)\le2\log_b\Delta(T)$ fails for some tree:
+\begin{itemize}
+\item $T=K_2$: $\Delta=1$ and $\pi=2>0=2\log_b1$, for every $b>1$;
+\item $T=P_4$: $\Delta=2$ and $\pi=3>2\log_b2$ for every $b>4^{1/3}\approx1.587$; for example,
+$2\log_22=2$, $2\ln2\approx1.386$ and $2\log_{10}2\approx0.602$;
+\item $T=$ the complete binary tree $B_6$ of depth $6$ (computer search,
+Section~\ref{sec:c1}): $\Delta=3$ and $\pi=4>2\log_b3$ for every $b>\sqrt3$; for example,
+$2\log_23\approx3.17$.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+Use Lemma~\ref{lem:small} and~\eqref{eq:log}. $b^2\le1$ is false for $b>1$, and $b^3\le4$ is
+false for $b>4^{1/3}$.
+\end{proof}
+
+The last item shows that even the family named in (C4) violates the bound in (C3). The bound
+also fails when it is rounded up: $\lceil 2\log_b1\rceil=0<2$, and $\lceil2\log_22\rceil=
+\lceil2\ln2\rceil=2<3$. It fails as well for the Thue \emph{choice} number $\pi_{ch}\ge\pi$.
+
+\section{\texorpdfstring{Every tree has $\pi(T)\le4$}{Every tree has pi(T) <= 4}}
+
+This is a theorem of Bre\v{s}ar, Grytczuk, Klav\v{z}ar, Niwczyk and Peterin~\cite{BGKNP}; see
+also Wood's survey~\cite[Thm.~4.1]{Wood}. For completeness we give a full proof. It uses the
+following classical theorem.
+
+\begin{theorem}[Thue 1906~\cite{Thue}]\label{thm:thue}
+There is an infinite square-free word $w=w_0w_1w_2\cdots$ over $\{1,2,3\}$.
+\end{theorem}
+
+\begin{lemma}[K\"undgen--Pelsmajer~\cite{KP}; {\cite[Lemma~3.3]{Wood}}]\label{lem:kp}
+Let $w$ be a square-free word over $\{1,2,3\}$. Let $u$ be the word obtained by inserting the
+letter $4$ after every second letter,
+$u=w_0w_1\,4\,w_2w_3\,4\,w_4w_5\,4\cdots$. Then (i) any three consecutive letters of $u$ are
+pairwise distinct, and (ii) $u$ is square-free.
+\end{lemma}
+
+\begin{proof}
+(i) Three consecutive letters of $u$ have one of the forms $w_{2j}w_{2j+1}4$,
+$w_{2j+1}4w_{2j+2}$ or $4w_{2j+2}w_{2j+3}$. The two letters of $w$ in each are consecutive in $w$,
+so they differ, since $w$ has no factor $aa$. Neither of them equals $4$.
+
+(ii) Let $xx$ be a factor of $u$. Delete all letters $4$ from it. The result is a factor of $w$
+of the form $x'x'$, where $x'$ is $x$ with its letters $4$ deleted. This is because the two copies
+of $x$ have their $4$'s in the same positions. If $x'$ is empty, then $x$ consists of $4$'s only,
+so $u$ has the factor $44$, which contradicts~(i). Otherwise $x'x'$ is a square in $w$, which is
+a contradiction.
+\end{proof}
+
+\begin{lemma}[folding]\label{lem:fold}
+Let $u$ be a square-free word in which any three consecutive letters are pairwise distinct. Let
+$m,d_1,d_2\ge0$ with $m+\max(d_1,d_2)<|u|$ (or $u$ infinite). Then the word
+\[
+s=u_{m+d_1}u_{m+d_1-1}\cdots u_{m+1}\,u_m\,u_{m+1}\cdots u_{m+d_2}
+\]
+is square-free.
+\end{lemma}
+
+\begin{proof}
+Index $s$ by $t\in\{-d_1,\dots,d_2\}$, so that $s_t=u_{m+|t|}$. Suppose $s$ has a square factor
+occupying the positions $i,\dots,i+2k-1$ ($k\ge1$). Then $s_t=s_{t+k}$ for $i\le t\le i+k-1$.
+
+If $i\ge0$, the factor lies in the part $t\ge0$, where $s_t=u_{m+t}$. So it is a square factor of
+$u$, a contradiction. If $i+2k-1\le0$, it lies in the part $t\le0$, which is the reverse of a
+factor of $u$. The reverse of a square is a square, so this is again a contradiction. So
+$i<0<i+2k-1$.
+
+Reversing $s$, i.e.\ replacing $t$ by $-t$ and swapping $d_1$ and $d_2$, maps squares to squares
+and fixes the position $0$. If $0$ lies in the second half $[i+k,i+2k-1]$ of the square, then
+after reversal it lies in the first half. So we may assume $i<0\le i+k-1$, i.e.\
+$a:=-i\in[1,k-1]$.
+
+\emph{Case $a\le k-2$.} The positions $-1,0,1$ lie in the first half $[i,i+k-1]$. Hence
+$s_{k-1}=s_{-1}=u_{m+1}$ and $s_{k+1}=s_{1}=u_{m+1}$. Since $k-1\ge1>0$, we have
+$s_{k-1}=u_{m+k-1}$ and $s_{k+1}=u_{m+k+1}$. So $u_{m+k-1}=u_{m+k+1}$, which contradicts the
+hypothesis on three consecutive letters.
+
+\emph{Case $a=k-1$} (so $k\ge2$). The square occupies $[1-k,k]$, and for $t\in[1-k,0]$ we have
+$u_{m-t}=s_t=s_{t+k}=u_{m+t+k}$. Put $j=-t\in[0,k-1]$ and $y_j=u_{m+j}$ for $0\le j\le k$. Then
+$y_j=y_{k-j}$, so $y_0\cdots y_k$ is a palindrome of length $k+1\ge3$. If $k$ is even, then
+$y_{k/2-1}=y_{k/2+1}$. If $k$ is odd, then $y_{(k-1)/2}=y_{(k+1)/2}$. Both contradict the
+hypothesis.
+\end{proof}
+
+\begin{theorem}[\cite{BGKNP}]\label{thm:four}
+Every tree $T$, finite or infinite, satisfies $\pi(T)\le4$.
+\end{theorem}
+
+\begin{proof}
+Let $u$ be the infinite word of Lemma~\ref{lem:kp} built from Thue's word
+(Theorem~\ref{thm:thue}). Fix a root $r$, and colour every vertex $v$ with $u_{\mathrm{dist}(r,v)}$.
+Every non-root vertex has exactly one neighbour of smaller depth, its parent, and every edge joins
+a vertex to its parent. Let $P=(v_0,\dots,v_\ell)$ be a path. An interior vertex $v_j$ cannot have
+both $v_{j-1}$ and $v_{j+1}$ as its parent, because they are distinct. So the depth sequence along
+$P$ has no interior local maximum. It changes by exactly $1$ at each step, so it first decreases
+by steps of $1$ down to the depth $m$ of the top vertex, and then increases by steps of $1$. Hence
+the colour sequence of $P$ is exactly the word $s$ of Lemma~\ref{lem:fold}, with $d_1,d_2$ the
+lengths of the two monotone parts. That word is square-free.
+\end{proof}
+
+For a finite tree only a finite prefix of $u$ is needed. Its existence for every length is still
+Thue's theorem. Bre\v{s}ar et al.~\cite{BGKNP} also show that $\pi(T)=4$ for some trees, so the
+bound is tight. Section~\ref{sec:c1} gives an explicit example.
+
+\begin{corollary}\label{cor:c2}
+Clause (C2) is false: $\sup_T \pi(T)=4<\infty$ over all trees.
+\end{corollary}
+
+\begin{corollary}\label{cor:c4}
+Clause (C4) is false. Let $(T_n)$ be any family of trees with $\Delta(T_n)\to\infty$. Then
+$\pi(T_n)/(2\log\Delta(T_n))\le 4/(2\log\Delta(T_n))\to0$, so the bound $2\log\Delta$ is not
+attained asymptotically, in any base. Moreover, a subtree of the complete binary tree has maximum
+degree at most $3$. So subtree families of the complete binary tree have bounded $\Delta$, and an
+asymptotic statement in $\Delta$ about them is impossible. Every such subtree satisfies
+$\pi\le 4$, while $2\log_b\Delta\le 2\log_b 3$ is fixed.
+\end{corollary}
+
+\section{\texorpdfstring{What we know about clause (C1)}{What we know about clause (C1)}}
+\label{sec:c1}
+
+Let $B_h$ be the complete binary tree of depth $h$. Its root has degree $2$, and its other
+internal vertices have degree $3$. An exhaustive backtracking search (\texttt{verify.py}) gives
+\[
+\pi(B_1)=2,\quad \pi(B_2)=\pi(B_3)=\pi(B_4)=\pi(B_5)=3,\quad \pi(B_6)=4.
+\]
+The colourings found for $h\le5$ are re-checked on all paths. The non-existence of a Thue
+$3$-colouring of $B_6$ (127 vertices) is confirmed by two different searches: breadth-first order
+with colour-symmetry breaking, and depth-first order without it. By monotonicity and
+Theorem~\ref{thm:four}, $\pi(B_h)=4$ for all $h\ge6$, and also for the infinite binary tree. So
+(C1) holds for the infinite or sufficiently deep complete binary tree, and we do not refute it.
+Under the reading ``every binary tree has Thue number $4$'' it would be false, because $P_4$ is a
+binary tree with $\pi=3$. We do not rely on this reading. The result $\pi(B_6)=4$ is a computer
+result and is not formalised in Lean.
+
+\section{Readings covered}\label{sec:readings}
+
+\begin{itemize}
+\item \textbf{(C3) as a universal bound $\pi(T)\le2\log_b\Delta(T)$} (the literal reading).
+False for every base $b>1$ by $K_2$. False for every $b>4^{1/3}$, in particular $b=2,e,10$, by
+$P_4$ even when $\Delta\ge2$ is required, and false for $b>\sqrt3$ by $B_6$. Also false with
+$\lceil\cdot\rceil$, and for the choice number $\pi_{ch}\ge\pi$.
+\item \textbf{(C3) only ``for large $\Delta$'' or up to $O(1)$.} Then (C3) is true but trivial,
+by Theorem~\ref{thm:four}: $4\le2\log_b\Delta$ as soon as $\Delta\ge b^2$. In this case (C4)
+is false (Corollary~\ref{cor:c4}), and so is (C2). The conjunction is false under every reading.
+\item \textbf{(C2)} is false under every reading of ``Thue number'' as the chromatic-type
+parameter defined in the statement (Corollary~\ref{cor:c2}), for finite and for infinite trees.
+\emph{Disclosure:} for the different parameter $\pi_{ch}$ (nonrepetitive \emph{list}
+colouring), trees do have unbounded values (Fiorenzi, Ochem, Ossona de Mendez and
+Zhu~\cite{FOOZ}). The statement defines colourings, not list colourings, so this does not apply.
+Even for $\pi_{ch}$, the literal (C3) fails by $K_2$ and $P_4$.
+\end{itemize}
+
+\section{Formal verification (Lean 4)}
+
+The directory \texttt{lean4/} contains a Lean~4.19.0 project that uses only the core library.
+\texttt{Main.lean} defines, from scratch:
+\begin{itemize}
+\item \texttt{Graph} (vertices $0,\dots,n-1$, Boolean adjacency);
+\item \texttt{IsPath} (nonempty, duplicate-free, consecutive vertices adjacent; all paths, not
+only root-to-leaf ones);
+\item \texttt{HasSquare s} ($s=a\,x\,x\,b$ with $x\ne[\,]$);
+\item \texttt{Nonrepetitive}, \texttt{Colorable G k} and \texttt{IsThueNumber G k} (the least
+such $k$, proved unique);
+\item \texttt{IsTree} (simple, connected, $n-1$ edges) and \texttt{maxDeg};
+\item \texttt{LogBound p q $\Delta$ k} $:=p^k\le\Delta^2q^k$, which is~\eqref{eq:log} for the
+base $p/q$.
+\end{itemize}
+The main results are:
+\begin{itemize}
+\item \texttt{thue\_K2}: $\pi(K_2)=2$, and \texttt{thue\_P4}: $\pi(P_4)=3$;
+\item \texttt{K2\_tree} and \texttt{P4\_tree}: both are trees, with \texttt{maxDeg} $1$ and $2$;
+\item \texttt{conjecture\_00000003481\_false}: for all $p>q$, $\neg$\,\texttt{Claim p q}, where
+\texttt{Claim p q} says that every tree with $\Delta\ge1$ and Thue number $k$ satisfies
+\texttt{LogBound p q $\Delta$ k};
+\item \texttt{claimCol\_false}: the same for the colouring form ``some Thue colouring with
+$\le2\log\Delta$ colours exists'', which does not use the minimum;
+\item \texttt{claimDeg2\_false}: the claim restricted to $\Delta\ge2$ is false whenever
+$p^3>4q^3$, for example for bases $2$ and $27/10<e$;
+\item \texttt{claim\_mono}: a larger base gives a stronger claim;
+\item \texttt{nonvacuous}: the hypotheses are satisfiable, and Thue colouring is a nontrivial
+condition.
+\end{itemize}
+Nonrepetitiveness of the explicit colourings is decided over all candidate vertex sequences. The
+completeness of this enumeration is proved: by a pigeonhole lemma, a path has at most $n$
+vertices. Only the axioms \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}
+are used. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+The following are \emph{not} in Lean, only here and in \texttt{verify.py}:
+\begin{itemize}
+\item Theorem~\ref{thm:four} ($\pi\le4$ for all trees), which needs Thue's infinite square-free
+word;
+\item Corollaries~\ref{cor:c2}--\ref{cor:c4};
+\item the computation $\pi(B_6)=4$;
+\item the passage from rational to real bases, which is the one-line monotonicity argument after
+\eqref{eq:log}; its rational form is \texttt{claim\_mono}.
+\end{itemize}
+
+\section{Independent check (Python)}
+
+\texttt{verify.py} uses only the standard library. It does the following:
+\begin{itemize}
+\item computes $\pi(K_2)=2$ and $\pi(P_4)=3$ by enumerating all colourings and all paths;
+\item generates all trees with $n\le12$ vertices up to isomorphism ($987$ trees; the counts match
+OEIS A000055) and computes $\pi$ for each by backtracking, re-checking each colouring on all
+paths;
+\item finds the maximum to be $3$ for $n\le12$, and counts the trees that violate (C3): $10$ for
+base $2$ and $661$ for base $e$;
+\item computes $\pi(B_h)$ for $h\le6$, with the two independent searches for $B_6$;
+\item checks the construction of Theorem~\ref{thm:four}. It builds a ternary square-free word,
+applies the K\"undgen--Pelsmajer insertion and checks the depth colouring on all $11006$ rooted
+trees with $n\le12$ and on $B_1,\dots,B_8$.
+\end{itemize}
+
+\begin{thebibliography}{9}
+\bibitem{Thue} A.~Thue, \"Uber unendliche Zeichenreihen, \emph{Norske Vid.\ Selsk.\ Skr.\ I
+Mat.-Nat.\ Kl.\ Christiania} 7 (1906), 1--22.
+\bibitem{AGHR} N.~Alon, J.~Grytczuk, M.~Ha{\l}uszczak, O.~Riordan, Nonrepetitive colorings of
+graphs, \emph{Random Structures Algorithms} 21 (2002), 336--346.
+\bibitem{BGKNP} B.~Bre\v{s}ar, J.~Grytczuk, S.~Klav\v{z}ar, S.~Niwczyk, I.~Peterin,
+Nonrepetitive colorings of trees, \emph{Discrete Math.} 307 (2007), 163--172.
+\bibitem{KP} A.~K\"undgen, M.~J.~Pelsmajer, Nonrepetitive colorings of graphs of bounded
+tree-width, \emph{Discrete Math.} 308 (2008), 4473--4478.
+\bibitem{FOOZ} F.~Fiorenzi, P.~Ochem, P.~Ossona de Mendez, X.~Zhu, Thue choosability of trees,
+\emph{Discrete Appl.\ Math.} 159 (2011), 2045--2049.
+\bibitem{Wood} D.~R.~Wood, Nonrepetitive graph colouring, \emph{Electron.\ J.\ Combin.}, Dynamic
+Survey DS24 (2021); arXiv:2009.02001.
+\end{thebibliography}
+
+\end{document}
