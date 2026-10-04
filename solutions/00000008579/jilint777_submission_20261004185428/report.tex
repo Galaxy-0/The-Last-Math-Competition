@@ -235,16 +235,37 @@ $n\le d$, so for each fixed $d$ it fails at $n=d+1$ (checked in \texttt{verify.p
 $d\le3$). With infinitely many i.i.d.\ coordinates, the Hewitt--Savage $0$--$1$ law makes
 every exchangeable $L^2$ functional a.s.\ constant, so the multiplicities are $0$ for
 $n\ge1$.
-\item \emph{Is there any reading that gives $p(n)$?} Yes, but only for a different
-operator. The second quantization $d\Gamma(A)$ of $A=\operatorname{diag}(1,2,3,\dots)$,
-i.e.\ $\sum_k k(\partial_k^2-x_k\partial_k)$ (an Ornstein--Uhlenbeck operator with drift
-$-A$, or a string-oscillator energy operator), has eigenvalue $\sum_kk\alpha_k$ on
-$H_\alpha$. Its multiplicities are therefore $p(n)$ (\texttt{verify.py} checks this for
-$d=4,5$, $n\le d$). The conjecture names \emph{the} Ornstein--Uhlenbeck operator of
-Malliavin calculus, which is $d\Gamma(I)=-L$, the number operator. Its eigenspaces
-are the Wiener chaoses, and the ``Hermite spectrum law'' of clause (1) refers to
-exactly these Hermite eigenfunctions. We therefore regard the weighted operator as a
-different conjecture, not a reading of this one.
+\item \emph{The weighted reading: is there any reading that gives $p(n)$?} Yes, for a
+different operator. Take the second quantization $d\Gamma(A)$ of
+$A=\operatorname{diag}(1,2,3,\dots)$, i.e.\ $\sum_k k(\partial_k^2-x_k\partial_k)$ in
+infinitely many coordinates. This is an Ornstein--Uhlenbeck operator with drift $-A$, or a
+string-oscillator energy operator. It has eigenvalue $\sum_kk\alpha_k$ on $H_\alpha$, so
+its multiplicities are exactly $p(n)$. \texttt{verify.py} checks this for $d=4,5$ and
+$n\le d$. \textbf{For $d\Gamma(A)$, clause (2) holds}, so our disproof is specific to the
+operator the statement names.
+
+The strongest argument for this reading is the following. Clauses (3) and (4), Hardy--Ramanujan
+counting and the Rademacher correction, only make sense if the multiplicities are finite.
+For $N=d\Gamma(I)$ on Wiener space they are infinite (Theorem~\ref{thm:wiener}), so a reader
+might conclude that the author must have meant $d\Gamma(A)$.
+
+We still do not adopt this reading, for two reasons.
+\begin{itemize}
+\item \emph{Definition.} In Malliavin calculus ``the Ornstein--Uhlenbeck operator'' is by
+definition $L=-\delta D$, i.e.\ $N=-L=d\Gamma(I)$, the number operator (Nualart,
+\S1.4). Its eigenspaces are the Wiener chaoses, and the ``Hermite spectrum law'' of
+clause (1) refers to exactly these Hermite eigenfunctions.
+\item \emph{Canonicity.} On classical Wiener space there is no canonical operator $A$ with
+spectrum $\{1,2,3,\dots\}$ to quantize. The natural candidates are the Brownian
+covariance operator (kernel $\min(s,t)$ on $L^2[0,1]$) and the Cameron--Martin
+Laplacian ($-d^2/dt^2$ with $h(0)=0$, $h'(1)=0$). Their eigenvalues are
+$((k-\frac12)\pi)^{-2}$ and $((k-\frac12)\pi)^2$ respectively, and neither is an integer.
+Choosing $A=\operatorname{diag}(1,2,3,\dots)$ requires an extra, non-canonical choice of
+basis and weights that the statement does not make.
+\end{itemize}
+We therefore regard the weighted operator as a different conjecture, not a reading of
+this one. Under the named operator, clauses (3) and (4) also fail or are meaningless
+(item~4 above).
 \end{enumerate}
 
 \section{Lean formalization}

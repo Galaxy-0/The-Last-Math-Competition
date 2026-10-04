@@ -625,11 +625,24 @@ theorem p_ge_two (n : Nat) (hn : 2 ≤ n) : 2 ≤ p n := by
 
 /-! ## 8. The partition multiplicity law is false in every dimension -/
 
-/-- **Clause (2)** for the Gaussian space `ℝ^d`: the eigenvalue `n` of `N` has multiplicity
-`p(n)` for every `n`. -/
+/-- **Clause (2)** for the Gaussian space `ℝ^d`, *polynomial-core version*: for every `n`, the
+eigenvalue `n` of `N` restricted to polynomials has multiplicity exactly `p(n)`.  `Mult d n (p n)`
+has two halves: a lower bound (`MultGE d n (p n)`) and an upper bound (`¬ MultGE d n (p n + 1)`).
+The `L²` law implies the upper-bound half directly, because polynomial eigenvectors are `L²`
+eigenvectors.  It implies the lower-bound half only via Hermite completeness (proved in the report),
+because then all `L²` eigenvectors are polynomials. -/
 def PartitionLaw (d : Nat) : Prop := ∀ n, Mult d n (p n)
 
-/-- `d = 0`: fails at `n = 1`; `d = 1`: fails at `n = 2`; `d ≥ 2`: fails at `n = 1`. -/
+/-- The polynomial-core partition law fails in every dimension.
+* `d ≥ 2`: the **upper-bound half** fails at `n = 1`, because `x_0, x_1` are two independent
+  eigenvectors although `p(1) = 1`.  This transfers to the `L²` law with no extra input, since
+  polynomial eigenvectors are `L²` eigenvectors.  The same holds on Wiener space
+  (`partitionLawCyl_false`).
+* `d = 1`: the **lower-bound half** fails at `n = 2`, because no two independent polynomial
+  eigenvectors exist although `p(2) = 2`.  Transferring this to `L²(γ₁)` needs Hermite
+  completeness (every `L²` eigenvector is a polynomial), which is proved in the report.
+* `d = 0`: the lower-bound half fails at `n = 1` (on `ℝ⁰` every function is a constant
+  polynomial). -/
 theorem partitionLaw_false (d : Nat) : ¬ PartitionLaw d := by
   intro h
   obtain ⟨_, p1, p2, -⟩ := p_values
@@ -686,7 +699,8 @@ def MultGECyl (n m : Nat) : Prop :=
 
 def MultCyl (n m : Nat) : Prop := MultGECyl n m ∧ ¬ MultGECyl n (m + 1)
 
-/-- Clause (2) on Wiener space. -/
+/-- Clause (2) on Wiener space (cylinder-polynomial core).  It is refuted through its upper-bound
+half, which the `L²` law implies directly. -/
 def PartitionLawCyl : Prop := ∀ n, MultCyl n (p n)
 
 /-- On Wiener space every eigenvalue `n ≥ 1` has infinitely many independent eigenvectors. -/

@@ -48,9 +48,17 @@ Other readings (report, Section 4):
   are infinite.
 - **Symmetric functionals only.** The multiplicity is then the number of partitions of `n` into at
   most `d` parts. This fails at `n = d+1`, and on Wiener space it is 0 by Hewitt–Savage.
-- **The weighted operator `Σ_k k(∂_k² − x_k∂_k) = dΓ(diag(1,2,3,…))`.** This operator does have
-  multiplicities `p(n)`. It is a different operator, not the OU operator `dΓ(I)` of Malliavin
-  calculus. The report discusses this openly.
+- **The weighted reading.** The operator `dΓ(diag(1,2,3,…)) = Σ_k k(∂_k² − x_k∂_k)` does have
+  multiplicities `p(n)`, and **for it clause 2 holds**. The disproof is specific to the operator the
+  statement names.
+  - *For the weighted reading:* clauses 3 and 4 (Hardy–Ramanujan counting, Rademacher correction)
+    only make sense with finite multiplicities. That is the strongest argument a reader could give.
+  - *Against it, by definition:* in Malliavin calculus "the OU operator" is by definition
+    `L = −δD`, i.e. `N = dΓ(I)` (Nualart §1.4).
+  - *Against it, by canonicity:* on classical Wiener space there is no canonical `A` with spectrum
+    `{1, 2, 3, …}`. The Brownian covariance has eigenvalues `((k−½)π)^(−2)` and the Cameron–Martin
+    Laplacian has `((k−½)π)²`; neither is an integer.
+  - So we treat `dΓ(diag(1,2,3,…))` as a different conjecture (report §4, item 6).
 
 ## Contents
 
@@ -89,7 +97,8 @@ Key theorems:
   - `eig2_eq_H2`: every eigenvector for 2 is `c·(x²−1)`;
   - `mult1_exact`: the multiplicities of 0, 1, 2 are exactly 1.
 - `multGE_blocks`: `mult_d(n) ≥ m` whenever `n·m ≤ d`.
-- `p_values`: `p(0..5) = 1, 1, 2, 3, 5, 7`. `p_ge_two`: `p(n) ≥ 2` for `n ≥ 2`.
+- `p_values`: `p(0..5) = 1, 1, 2, 3, 5, 7`, proved by `decide +kernel` (checked by the kernel, not
+  `native_decide`). `p_ge_two`: `p(n) ≥ 2` for `n ≥ 2`.
 - **`partitionLaw_false d : ¬ PartitionLaw d` for every `d`.** `d1_fails_all` covers every
   `n ≥ 2` for `d = 1`.
 - `L_eq_of_isPoly`: `L` is consistent across dimensions. `multCyl_infinite`: on Wiener space no
@@ -146,8 +155,13 @@ pdflatex report.tex && pdflatex report.tex
 - 只取对称泛函：重数为"至多 d 个部分的分拆数"，在 n = d+1 处不成立；无穷维时由 Hewitt–Savage 定律为 0；
 - 在 ℚ、ℝ 或 ℂ 上计数，代数重数或几何重数（N 自伴，两者相同）。
 
-加权算子 Σ_k k(∂_k² − x_k∂_k) = dΓ(diag(1,2,3,…)) 的重数确实是 p(n)，
-但它是另一个算子，不是 Malliavin 分析中的 OU 算子 dΓ(I)。报告中对此作了说明。
+加权算子 dΓ(diag(1,2,3,…)) = Σ_k k(∂_k² − x_k∂_k) 的重数确实是 p(n)，**对它第（2）条成立**，
+所以本反证只针对题目所指的算子。
+- 支持加权理解的最强理由是：第（3）、（4）条（Hardy–Ramanujan 计数、Rademacher 修正）只在重数有限时才有意义。
+- 但按定义，Malliavin 分析中"OU 算子"就是 L = −δD，即 N = dΓ(I)（Nualart §1.4）。
+- 而且在经典维纳空间上不存在谱为 {1,2,3,…} 的典范算子 A：布朗运动协方差算子的本征值为 ((k−½)π)^(−2)，
+  Cameron–Martin 空间上 Laplace 算子的本征值为 ((k−½)π)²，都不是整数。
+- 因此我们把加权算子视为另一个猜想（见报告第 4 节第 6 条）。
 
 Lean 部分（仅核心库）从零定义了：
 - 多项式（系数映射）；
