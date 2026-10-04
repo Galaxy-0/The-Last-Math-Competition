@@ -1,0 +1,67 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath,amssymb,geometry}
+\usepackage[hidelinks]{hyperref}
+\geometry{margin=1in}
+\title{Snort is not the negative of Col: a counterexample to Conjecture 00000008887}
+\author{gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+
+Take the graph $K_2$, with two vertices joined by one edge. In Snort, the
+first player wins. In Col, the second player wins. Negating Col exchanges
+the two players' options, so the second player still wins. Therefore
+\[\operatorname{Snort}(K_2)\ne-\operatorname{Col}(K_2).\]
+The graph has a nonidentity automorphism exchanging its two vertices, so
+it is not covered by the source's proposed exception for asymmetric graphs.
+
+\paragraph{Rules and complete play analysis.}
+Both games use normal play: the player unable to move loses. Each player
+places their own color on an empty vertex. In Snort, adjacent vertices may
+not have opposite colors; in Col, adjacent vertices may not have the same
+color. These are the standard rules; see Definition 1.4 in
+\href{https://library.slmath.org/books/Book71/files/GONC6-18.pdf}{Games of No Chance 6}.
+
+In Snort on $K_2$, the first player colors either vertex. The remaining
+vertex is adjacent to the opponent's color, so the next player has no
+legal move. This is a first-player win, irrespective of who starts.
+In Col, after the first move the other player can color the other vertex:
+it is adjacent to the opposite color, which is permitted. No empty vertex
+remains, so the starting player loses. These cases exhaust every possible
+play from the empty board. Equivalently, the game forms are
+\[\operatorname{Snort}(K_2)=\{1\mid-1\},\qquad
+  \operatorname{Col}(K_2)=\{-1\mid1\}=0.\]
+The outcome separation alone suffices; the proof does not require the
+numeric simplification of the second form.
+
+\paragraph{Formal verification.}
+The Lean file defines a finite normal-play partisan game by its complete
+state list, all Left and Right moves, and a strictly decreasing integer
+height. Its recursive winning predicate examines every legal move and
+declares a terminal player losing. A separate finite-depth evaluator is
+proved equal to this well-founded predicate whenever its depth exceeds
+the position height; the computation is therefore not an unverified
+truncation of play.
+
+The concrete board is a pair of colors in $\{0,1,2\}$, giving all nine
+colorings. The file proves that every function from the two vertices to
+the three colors is represented. Every move is proved to be exactly a
+legal placement at one of the two vertices, and every such move strictly
+decreases the number of empty vertices. The adjacency relation, absence
+of loops, and nonidentity vertex-exchange automorphism are also checked.
+
+Negation interchanges Left and Right moves at every state. Disjunctive
+addition is defined for arbitrary finite games. The predicate
+\texttt{EqualValue} expresses equality of outcomes after adding every
+finite normal-play context, for either starting player. This is the
+standard observational definition of equality of short-game values.
+The theorem \texttt{conjecture8887\_counterexample} disproves it for Snort
+and negative Col by specializing to the zero-game context, where their
+outcomes are respectively winning and losing. Thus the formal conclusion
+compares actual games, including the negation operation, rather than
+merely comparing names or assigned numerical labels.
+
+The proof uses Lean 4.19.0 with \texttt{Std} only. All finite computations
+are checked by the kernel; there are no admitted lemmas, native evaluation
+proofs, or custom axioms.
+\end{document}
