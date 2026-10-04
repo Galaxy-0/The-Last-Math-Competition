@@ -1,0 +1,115 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\title{A two-point Gibbs family freezes at the minimum}
+\author{ziangni-sys}
+\date{Conjecture 00000008486}
+\begin{document}
+\sloppy
+\maketitle
+\noindent Both source versions specify the Gibbs density
+$\mu_t\propto e^{-f/t}$ as $t\downarrow0$, and assert that if the maximum
+set of $f$ is a periodic orbit, then the limit is the uniform measure on
+that orbit. The negative sign in the stated density makes this assertion
+false even for a compact two-point system.
+
+\begin{theorem}
+There is a continuous function on a compact dynamical system whose maximum
+set is a fixed orbit, but whose stated Gibbs family converges weakly to a
+different point mass, rather than the uniform measure on the maximum orbit.
+\end{theorem}
+\begin{proof}
+Take $\Omega=\{0,1\}$ with the discrete topology and its Borel sigma-algebra,
+and let $T$ be the identity. Set $f(0)=0$ and $f(1)=1$. The space is compact,
+both $T$ and $f$ are continuous, and the entire maximum set of $f$ is
+$\{1\}$, a periodic orbit of period one. Its uniform measure is $\delta_1$.
+
+Use counting measure on $\Omega$ as the reference measure for the Gibbs
+density. For $t>0$, its partition function and normalized measure are
+\[
+ Z_t=\sum_{x\in\Omega}e^{-f(x)/t}=1+e^{-1/t},\qquad
+ \mu_t=\frac{1}{1+e^{-1/t}}\delta_0+
+       \frac{e^{-1/t}}{1+e^{-1/t}}\delta_1.
+\]
+Both weights are positive and sum to one, so this is an actual probability
+measure with exactly the density prescribed in the source. Using the uniform
+reference probability instead gives the same normalized Gibbs measure.
+
+As $t\downarrow0$, the reciprocal $1/t$ tends to infinity, hence
+$e^{-1/t}\to0$. Therefore the weights of $0$ and $1$ tend respectively to
+$1$ and $0$. For every bounded continuous real function $g$ on $\Omega$,
+\[
+ \int g\,d\mu_t
+ =\frac{g(0)}{1+e^{-1/t}}+
+   \frac{e^{-1/t}g(1)}{1+e^{-1/t}}
+ \longrightarrow g(0)=\int g\,d\delta_0.
+\]
+Thus $\mu_t$ converges weakly to $\delta_0$. Since
+$\delta_0(\{0\})=1$ and $\delta_1(\{0\})=0$, these two probability
+measures are distinct. The weak topology on probabilities on this finite
+discrete space is Hausdorff, so $\mu_t$ cannot also converge to $\delta_1$.
+This contradicts the asserted maximum-orbit conclusion.
+\end{proof}
+
+\section*{Scope}
+The sign is exactly the negative sign appearing in both originals; it is
+not replaced by the positive sign that would favor maxima. The reference
+measure gives equal positive weight to both points, and the Gibbs measure
+is explicitly normalized. No limit point, normalization, or orbit property
+is assumed. Refuting the maximum-orbit clause suffices to disprove the
+conjunction, without resolving the other equilibrium or oscillation claims.
+
+\newpage
+\raggedright
+\section*{Actual probability measures and weak topology in Lean}
+The state type is \texttt{Fin 2} with its discrete topology and actual Borel
+measurable structure. \texttt{compact\_space}, \texttt{continuous\_T} and
+\texttt{continuous\_f} prove the topological hypotheses. The definition
+\texttt{maximizers} quantifies over every state; \texttt{maximum\_set}
+proves it equals $\{1\}$. The theorem \texttt{maximum\_orbit} proves that
+the range of all actual iterates of $T$ at $1$ is precisely this maximum set;
+\texttt{maximum\_fixed} proves period one directly.
+
+The nonnegative real weights \texttt{p t} and \texttt{q t} are defined using
+the actual real exponential. Their sum is proved to be one.
+The definition \texttt{raw t} is the sum of their scalar multiples of the
+actual Dirac measures. Its total mass is proved to be one, giving the
+bundled \texttt{ProbabilityMeasure} called \texttt{gibbs t}.
+The theorem \texttt{partition\_function} evaluates the actual finite
+exponential sum. For every state, \texttt{gibbs\_mass} proves exactly
+\[
+ \mu_t(\{x\})=\frac{e^{-f(x)/t}}{\sum_{y\in\Omega} e^{-f(y)/t}}.
+\]
+Point masses specify the whole measure on this finite space, so this is a
+complete correspondence with the source's Gibbs family relative to counting
+measure, rather than an asserted probability table.
+
+The theorem \texttt{integral\_gibbs} computes genuine Bochner integrals
+against the constructed measure. \texttt{weight\_limit}, \texttt{p\_limit}
+and \texttt{q\_limit} prove the exponential and normalized weight limits.
+The theorem \texttt{weak\_limit\_minimum} then proves convergence in
+Mathlib's actual weak topology on \texttt{ProbabilityMeasure}, using its
+characterization by integrals against every bounded continuous real function.
+No custom convergence relation is substituted.
+
+The definitions \texttt{point 0} and \texttt{point 1} are actual Dirac
+probability measures. \texttt{point\_masses\_distinct} distinguishes them
+by their measures of $\{0\}$. Finally, \texttt{not\_weak\_limit\_maximum}
+negates actual weak convergence to \texttt{point 1}, using uniqueness of
+limits in the Hausdorff probability-measure topology.
+
+All convergence statements use the actual right-hand neighborhood filter
+\texttt{nhdsWithin 0 (Set.Ioi 0)}. Totalized real division lets the definitions
+also exist at temperature zero, but that value plays no role in these
+positive-temperature limits.
+
+\section*{Reproduction}
+Lean 4.19.0 and Mathlib are pinned at commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+From \texttt{lean/}, run \texttt{lake update}, \texttt{lake exe cache get},
+and \texttt{lake build}; then check the complete source with
+\begin{center}\small\texttt{lake env lean Main.lean -DwarningAsError=true}.\end{center}
+The source prints five principal dependency audits. Only standard logical
+axioms are used, with no admitted statements or auxiliary computations.
+\end{document}
