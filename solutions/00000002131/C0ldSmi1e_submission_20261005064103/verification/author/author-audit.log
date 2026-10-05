@@ -1,0 +1,120 @@
+'Conjecture2131.Permutation' does not depend on any axioms
+'Conjecture2131.Contains' depends on axioms: [propext, Quot.sound]
+'Conjecture2131.Avoids' depends on axioms: [propext, Quot.sound]
+'Conjecture2131.avoidanceCount' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.directSum' depends on axioms: [propext, Quot.sound]
+'Conjecture2131.directSum_left' depends on axioms: [propext, Quot.sound]
+'Conjecture2131.directSum_right' depends on axioms: [propext, Quot.sound]
+'Conjecture2131.directSum_left_value' depends on axioms: [propext, Quot.sound]
+'Conjecture2131.directSum_right_value' depends on axioms: [propext, Quot.sound]
+'Conjecture2131.directSum_block_positions' depends on axioms: [propext, Quot.sound]
+'Conjecture2131.directSum_block_values' depends on axioms: [propext, Quot.sound]
+'Conjecture2131.increasing' does not depend on any axioms
+'Conjecture2131.decreasing' depends on axioms: [propext]
+'Conjecture2131.increasing_sum_increasing' depends on axioms: [propext, Quot.sound]
+'Conjecture2131.contains_one' depends on axioms: [propext, Quot.sound]
+'Conjecture2131.avoidanceCount_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.contains_two_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.avoids_two_iff_strictAnti' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.decreasing_strictAnti' depends on axioms: [propext, Quot.sound]
+'Conjecture2131.avoids_two_iff_decreasing' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.avoidanceCount_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.rootCount' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.rootSequence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.SW' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.rootCount_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.rootSequence_at_positive_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.sw_iff_unshifted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.sw_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.rootSequence_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.rootSequence_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.sw_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.sw_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.sw_one_directSum_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.nonmultiplicative_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.UniversalMultiplicativity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.not_universalMultiplicativity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.NumericalMultiplicativity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.universal_iff_numerical_of_verified_limits' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2131.not_numericalMultiplicativity_of_verified_limits' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Conjecture2131.not_source_conjunction' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem Conjecture2131.nonmultiplicative_witness : Conjecture2131.SW (Conjecture2131.increasing 1) 0 ∧
+  Conjecture2131.SW (Conjecture2131.increasing 1) 0 ∧
+    Conjecture2131.SW (Conjecture2131.directSum (Conjecture2131.increasing 1) (Conjecture2131.increasing 1)) 1 ∧
+      1 ≠ 0 * 0 :=
+⟨Conjecture2131.sw_one,
+  ⟨Conjecture2131.sw_one,
+    ⟨Conjecture2131.sw_one_directSum_one,
+      Mathlib.Meta.NormNum.isNat_eq_false (Mathlib.Meta.NormNum.isNat_ofNat ℝ Nat.cast_one)
+        (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul) (Mathlib.Meta.NormNum.isNat_ofNat ℝ Nat.cast_zero)
+          (Mathlib.Meta.NormNum.isNat_ofNat ℝ Nat.cast_zero) (Eq.refl 0))
+        (Eq.refl false)⟩⟩⟩
+theorem Conjecture2131.not_universalMultiplicativity : ¬Conjecture2131.UniversalMultiplicativity :=
+fun h =>
+  Exists.casesOn
+    (h 1 1 (of_decide_eq_true (id (Eq.refl true))) (of_decide_eq_true (id (Eq.refl true))) (Conjecture2131.increasing 1)
+      (Conjecture2131.increasing 1))
+    fun x h =>
+    Exists.casesOn h fun y h =>
+      Exists.casesOn h fun z h =>
+        And.casesOn h fun hx right =>
+          And.casesOn right fun hy right =>
+            And.casesOn right fun hz heq =>
+              let_fun hx0 := Conjecture2131.sw_unique hx Conjecture2131.sw_one;
+              let_fun hy0 := Conjecture2131.sw_unique hy Conjecture2131.sw_one;
+              let_fun hz1 :=
+                Conjecture2131.sw_unique
+                  (Eq.mp (congrArg (fun _a => Conjecture2131.SW _a z) (Conjecture2131.increasing_sum_increasing 1 1))
+                    hz)
+                  Conjecture2131.sw_two;
+              False.elim
+                (Eq.mp
+                  (Eq.trans
+                    (Eq.trans (congr (congrArg Eq hz1) (Eq.trans (congr (congrArg HMul.hMul hx0) hy0) (mul_zero 0)))
+                      _proof_2✝)
+                    (eq_false not_false))
+                  heq)
+def Conjecture2131.UniversalMultiplicativity : Prop :=
+∀ (k l : ℕ),
+  0 < k →
+    0 < l →
+      ∀ (p : Conjecture2131.Permutation k) (q : Conjecture2131.Permutation l),
+        ∃ x y z,
+          Conjecture2131.SW p x ∧ Conjecture2131.SW q y ∧ Conjecture2131.SW (Conjecture2131.directSum p q) z ∧ z = x * y
+theorem Conjecture2131.universal_iff_numerical_of_verified_limits : ∀ (L : (k : ℕ) → Conjecture2131.Permutation k → ℝ),
+  (∀ (k : ℕ), 0 < k → ∀ (p : Conjecture2131.Permutation k), Conjecture2131.SW p (L k p)) →
+    (Conjecture2131.UniversalMultiplicativity ↔ Conjecture2131.NumericalMultiplicativity L) :=
+fun L hL =>
+  {
+    mp := fun h k l hk hl p q =>
+      Exists.casesOn (h k l hk hl p q) fun x h =>
+        Exists.casesOn h fun y h =>
+          Exists.casesOn h fun z h =>
+            And.casesOn h fun hx right =>
+              And.casesOn right fun hy right =>
+                And.casesOn right fun hz heq =>
+                  let_fun hxL := Conjecture2131.sw_unique hx (hL k hk p);
+                  let_fun hyL := Conjecture2131.sw_unique hy (hL l hl q);
+                  let_fun hzL :=
+                    Conjecture2131.sw_unique hz
+                      (hL (k + l)
+                        (Decidable.byContradiction fun a =>
+                          Conjecture2131.universal_iff_numerical_of_verified_limits._proof_1 k l hk hl a)
+                        (Conjecture2131.directSum p q));
+                  Eq.mp (congr (congrArg Eq hzL) (congr (congrArg HMul.hMul hxL) hyL)) heq,
+    mpr := fun h k l hk hl p q =>
+      Exists.intro (L k p)
+        (Exists.intro (L l q)
+          (Exists.intro (L (k + l) (Conjecture2131.directSum p q))
+            ⟨hL k hk p,
+              ⟨hL l hl q,
+                ⟨hL (k + l)
+                    (Decidable.byContradiction fun a =>
+                      Conjecture2131.universal_iff_numerical_of_verified_limits._proof_1 k l hk hl a)
+                    (Conjecture2131.directSum p q),
+                  h k l hk hl p q⟩⟩⟩)) }
+theorem Conjecture2131.not_source_conjunction : ∀ (Extension : Prop),
+  ¬(Conjecture2131.UniversalMultiplicativity ∧ Extension) :=
+fun Extension h => Conjecture2131.not_universalMultiplicativity h.left

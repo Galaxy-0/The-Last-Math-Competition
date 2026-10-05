@@ -1,0 +1,71 @@
+import Conjecture2131
+
+#print Conjecture2131.Permutation
+#print Conjecture2131.Contains
+#print Conjecture2131.Avoids
+#print Conjecture2131.avoidanceCount
+#print Conjecture2131.directSum
+#print Conjecture2131.increasing
+#print Conjecture2131.decreasing
+#print Conjecture2131.rootCount
+#print Conjecture2131.rootSequence
+#print Conjecture2131.SW
+#print Conjecture2131.UniversalMultiplicativity
+#print Conjecture2131.NumericalMultiplicativity
+
+#check Conjecture2131.directSum_left
+#print axioms Conjecture2131.directSum_left
+#check Conjecture2131.directSum_right
+#print axioms Conjecture2131.directSum_right
+#check Conjecture2131.directSum_left_value
+#print axioms Conjecture2131.directSum_left_value
+#check Conjecture2131.directSum_right_value
+#print axioms Conjecture2131.directSum_right_value
+#check Conjecture2131.directSum_block_positions
+#print axioms Conjecture2131.directSum_block_positions
+#check Conjecture2131.directSum_block_values
+#print axioms Conjecture2131.directSum_block_values
+#check Conjecture2131.increasing_sum_increasing
+#print axioms Conjecture2131.increasing_sum_increasing
+#check Conjecture2131.contains_one
+#print axioms Conjecture2131.contains_one
+#check Conjecture2131.avoidanceCount_one
+#print axioms Conjecture2131.avoidanceCount_one
+#check Conjecture2131.contains_two_iff
+#print axioms Conjecture2131.contains_two_iff
+#check Conjecture2131.avoids_two_iff_strictAnti
+#print axioms Conjecture2131.avoids_two_iff_strictAnti
+#check Conjecture2131.decreasing_strictAnti
+#print axioms Conjecture2131.decreasing_strictAnti
+#check Conjecture2131.avoids_two_iff_decreasing
+#print axioms Conjecture2131.avoids_two_iff_decreasing
+#check Conjecture2131.avoidanceCount_two
+#print axioms Conjecture2131.avoidanceCount_two
+#check Conjecture2131.rootCount_zero
+#print axioms Conjecture2131.rootCount_zero
+#check Conjecture2131.rootSequence_at_positive_index
+#print axioms Conjecture2131.rootSequence_at_positive_index
+#check Conjecture2131.sw_iff_unshifted
+#print axioms Conjecture2131.sw_iff_unshifted
+#check Conjecture2131.sw_unique
+#print axioms Conjecture2131.sw_unique
+#check Conjecture2131.rootSequence_one
+#print axioms Conjecture2131.rootSequence_one
+#check Conjecture2131.rootSequence_two
+#print axioms Conjecture2131.rootSequence_two
+#check Conjecture2131.sw_one
+#print axioms Conjecture2131.sw_one
+#check Conjecture2131.sw_two
+#print axioms Conjecture2131.sw_two
+#check Conjecture2131.sw_one_directSum_one
+#print axioms Conjecture2131.sw_one_directSum_one
+#check Conjecture2131.nonmultiplicative_witness
+#print axioms Conjecture2131.nonmultiplicative_witness
+#check Conjecture2131.not_universalMultiplicativity
+#print axioms Conjecture2131.not_universalMultiplicativity
+#check Conjecture2131.universal_iff_numerical_of_verified_limits
+#print axioms Conjecture2131.universal_iff_numerical_of_verified_limits
+#check Conjecture2131.not_numericalMultiplicativity_of_verified_limits
+#print axioms Conjecture2131.not_numericalMultiplicativity_of_verified_limits
+#check Conjecture2131.not_source_conjunction
+#print axioms Conjecture2131.not_source_conjunction

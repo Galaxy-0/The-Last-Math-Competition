@@ -1,0 +1,117 @@
+@[reducible] def Conjecture2131.Permutation : ℕ → Type :=
+fun n => Equiv.Perm (Fin n)
+def Conjecture2131.Contains : {k n : ℕ} → Conjecture2131.Permutation k → Conjecture2131.Permutation n → Prop :=
+fun {k n} p s => ∃ e, StrictMono e ∧ ∀ (i j : Fin k), s (e i) < s (e j) ↔ p i < p j
+def Conjecture2131.Avoids : {k n : ℕ} → Conjecture2131.Permutation k → Conjecture2131.Permutation n → Prop :=
+fun {k n} p s => ¬Conjecture2131.Contains p s
+def Conjecture2131.avoidanceCount : {k : ℕ} → Conjecture2131.Permutation k → ℕ → ℕ :=
+fun {k} p n => Fintype.card { s // Conjecture2131.Avoids p s }
+def Conjecture2131.directSum : {k l : ℕ} →
+  Conjecture2131.Permutation k → Conjecture2131.Permutation l → Conjecture2131.Permutation (k + l) :=
+fun {k l} p q => finSumFinEquiv.symm.trans ((Equiv.sumCongr p q).trans finSumFinEquiv)
+def Conjecture2131.increasing : (k : ℕ) → Conjecture2131.Permutation k :=
+fun k => Equiv.refl (Fin k)
+def Conjecture2131.decreasing : (n : ℕ) → Conjecture2131.Permutation n :=
+fun n => Fin.revPerm
+def Conjecture2131.rootCount : {k : ℕ} → Conjecture2131.Permutation k → ℕ → ℝ :=
+fun {k} p n => ↑(Conjecture2131.avoidanceCount p n) ^ (1 / ↑n)
+def Conjecture2131.rootSequence : {k : ℕ} → Conjecture2131.Permutation k → ℕ → ℝ :=
+fun {k} p n => Conjecture2131.rootCount p (n + 1)
+def Conjecture2131.SW : {k : ℕ} → Conjecture2131.Permutation k → ℝ → Prop :=
+fun {k} p x => Filter.Tendsto (Conjecture2131.rootSequence p) Filter.atTop (nhds x)
+def Conjecture2131.UniversalMultiplicativity : Prop :=
+∀ (k l : ℕ),
+  0 < k →
+    0 < l →
+      ∀ (p : Conjecture2131.Permutation k) (q : Conjecture2131.Permutation l),
+        ∃ x y z,
+          Conjecture2131.SW p x ∧ Conjecture2131.SW q y ∧ Conjecture2131.SW (Conjecture2131.directSum p q) z ∧ z = x * y
+def Conjecture2131.NumericalMultiplicativity : ((k : ℕ) → Conjecture2131.Permutation k → ℝ) → Prop :=
+fun L =>
+  ∀ (k l : ℕ),
+    0 < k →
+      0 < l →
+        ∀ (p : Conjecture2131.Permutation k) (q : Conjecture2131.Permutation l),
+          L (k + l) (Conjecture2131.directSum p q) = L k p * L l q
+Conjecture2131.directSum_left {k l : ℕ} (p : Conjecture2131.Permutation k) (q : Conjecture2131.Permutation l)
+  (i : Fin k) : (Conjecture2131.directSum p q) (Fin.castAdd l i) = Fin.castAdd l (p i)
+'Conjecture2131.directSum_left' depends on axioms: [propext, Quot.sound]
+Conjecture2131.directSum_right {k l : ℕ} (p : Conjecture2131.Permutation k) (q : Conjecture2131.Permutation l)
+  (j : Fin l) : (Conjecture2131.directSum p q) (Fin.natAdd k j) = Fin.natAdd k (q j)
+'Conjecture2131.directSum_right' depends on axioms: [propext, Quot.sound]
+Conjecture2131.directSum_left_value {k l : ℕ} (p : Conjecture2131.Permutation k) (q : Conjecture2131.Permutation l)
+  (i : Fin k) : ↑((Conjecture2131.directSum p q) (Fin.castAdd l i)) = ↑(p i)
+'Conjecture2131.directSum_left_value' depends on axioms: [propext, Quot.sound]
+Conjecture2131.directSum_right_value {k l : ℕ} (p : Conjecture2131.Permutation k) (q : Conjecture2131.Permutation l)
+  (j : Fin l) : ↑((Conjecture2131.directSum p q) (Fin.natAdd k j)) = k + ↑(q j)
+'Conjecture2131.directSum_right_value' depends on axioms: [propext, Quot.sound]
+Conjecture2131.directSum_block_positions {k l : ℕ} (i : Fin k) (j : Fin l) : Fin.castAdd l i < Fin.natAdd k j
+'Conjecture2131.directSum_block_positions' depends on axioms: [propext, Quot.sound]
+Conjecture2131.directSum_block_values {k l : ℕ} (p : Conjecture2131.Permutation k) (q : Conjecture2131.Permutation l)
+  (i : Fin k) (j : Fin l) :
+  (Conjecture2131.directSum p q) (Fin.castAdd l i) < (Conjecture2131.directSum p q) (Fin.natAdd k j)
+'Conjecture2131.directSum_block_values' depends on axioms: [propext, Quot.sound]
+Conjecture2131.increasing_sum_increasing (k l : ℕ) :
+  Conjecture2131.directSum (Conjecture2131.increasing k) (Conjecture2131.increasing l) =
+    Conjecture2131.increasing (k + l)
+'Conjecture2131.increasing_sum_increasing' depends on axioms: [propext, Quot.sound]
+Conjecture2131.contains_one (n : ℕ) (s : Conjecture2131.Permutation (n + 1)) :
+  Conjecture2131.Contains (Conjecture2131.increasing 1) s
+'Conjecture2131.contains_one' depends on axioms: [propext, Quot.sound]
+Conjecture2131.avoidanceCount_one (n : ℕ) : Conjecture2131.avoidanceCount (Conjecture2131.increasing 1) (n + 1) = 0
+'Conjecture2131.avoidanceCount_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.contains_two_iff {n : ℕ} (s : Conjecture2131.Permutation n) :
+  Conjecture2131.Contains (Conjecture2131.increasing 2) s ↔ ∃ i j, i < j ∧ s i < s j
+'Conjecture2131.contains_two_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.avoids_two_iff_strictAnti {n : ℕ} (s : Conjecture2131.Permutation n) :
+  Conjecture2131.Avoids (Conjecture2131.increasing 2) s ↔ StrictAnti ⇑s
+'Conjecture2131.avoids_two_iff_strictAnti' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.decreasing_strictAnti (n : ℕ) : StrictAnti ⇑(Conjecture2131.decreasing n)
+'Conjecture2131.decreasing_strictAnti' depends on axioms: [propext, Quot.sound]
+Conjecture2131.avoids_two_iff_decreasing {n : ℕ} (s : Conjecture2131.Permutation n) :
+  Conjecture2131.Avoids (Conjecture2131.increasing 2) s ↔ s = Conjecture2131.decreasing n
+'Conjecture2131.avoids_two_iff_decreasing' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.avoidanceCount_two (n : ℕ) : Conjecture2131.avoidanceCount (Conjecture2131.increasing 2) n = 1
+'Conjecture2131.avoidanceCount_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.rootCount_zero {k : ℕ} (p : Conjecture2131.Permutation k) : Conjecture2131.rootCount p 0 = 1
+'Conjecture2131.rootCount_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.rootSequence_at_positive_index {k n : ℕ} (p : Conjecture2131.Permutation k) (hn : 0 < n) :
+  Conjecture2131.rootSequence p (n - 1) = Conjecture2131.rootCount p n
+'Conjecture2131.rootSequence_at_positive_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.sw_iff_unshifted {k : ℕ} (p : Conjecture2131.Permutation k) (x : ℝ) :
+  Conjecture2131.SW p x ↔ Filter.Tendsto (Conjecture2131.rootCount p) Filter.atTop (nhds x)
+'Conjecture2131.sw_iff_unshifted' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.sw_unique {k : ℕ} {p : Conjecture2131.Permutation k} {x y : ℝ} (hx : Conjecture2131.SW p x)
+  (hy : Conjecture2131.SW p y) : x = y
+'Conjecture2131.sw_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.rootSequence_one (n : ℕ) : Conjecture2131.rootSequence (Conjecture2131.increasing 1) n = 0
+'Conjecture2131.rootSequence_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.rootSequence_two (n : ℕ) : Conjecture2131.rootSequence (Conjecture2131.increasing 2) n = 1
+'Conjecture2131.rootSequence_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.sw_one : Conjecture2131.SW (Conjecture2131.increasing 1) 0
+'Conjecture2131.sw_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.sw_two : Conjecture2131.SW (Conjecture2131.increasing 2) 1
+'Conjecture2131.sw_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.sw_one_directSum_one :
+  Conjecture2131.SW (Conjecture2131.directSum (Conjecture2131.increasing 1) (Conjecture2131.increasing 1)) 1
+'Conjecture2131.sw_one_directSum_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.nonmultiplicative_witness :
+  Conjecture2131.SW (Conjecture2131.increasing 1) 0 ∧
+    Conjecture2131.SW (Conjecture2131.increasing 1) 0 ∧
+      Conjecture2131.SW (Conjecture2131.directSum (Conjecture2131.increasing 1) (Conjecture2131.increasing 1)) 1 ∧
+        1 ≠ 0 * 0
+'Conjecture2131.nonmultiplicative_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.not_universalMultiplicativity : ¬Conjecture2131.UniversalMultiplicativity
+'Conjecture2131.not_universalMultiplicativity' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.universal_iff_numerical_of_verified_limits (L : (k : ℕ) → Conjecture2131.Permutation k → ℝ)
+  (hL : ∀ (k : ℕ), 0 < k → ∀ (p : Conjecture2131.Permutation k), Conjecture2131.SW p (L k p)) :
+  Conjecture2131.UniversalMultiplicativity ↔ Conjecture2131.NumericalMultiplicativity L
+'Conjecture2131.universal_iff_numerical_of_verified_limits' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2131.not_numericalMultiplicativity_of_verified_limits (L : (k : ℕ) → Conjecture2131.Permutation k → ℝ)
+  (hL : ∀ (k : ℕ), 0 < k → ∀ (p : Conjecture2131.Permutation k), Conjecture2131.SW p (L k p)) :
+  ¬Conjecture2131.NumericalMultiplicativity L
+'Conjecture2131.not_numericalMultiplicativity_of_verified_limits' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Conjecture2131.not_source_conjunction (Extension : Prop) : ¬(Conjecture2131.UniversalMultiplicativity ∧ Extension)
+'Conjecture2131.not_source_conjunction' depends on axioms: [propext, Classical.choice, Quot.sound]
