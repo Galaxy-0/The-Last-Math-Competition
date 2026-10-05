@@ -1,0 +1,177 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\C}{\mathbb{C}}
+
+\title{A disproof of Conjecture 00000002167\\[2pt]
+\large The spectral-radius maximizer among graphs of girth $\ge 5$ is not unique}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000002167 reads:
+
+\begin{quote}
+\emph{Definition:} The spectral radius of $n$-vertex graphs of girth $\ge 5$. \emph{Conjecture:} The spectral
+radius is attained by Moore-approximate graphs (Brown type or PC-lab type); the classification of extremal
+graphs holds for all $n\ge5$ (uniqueness of spectral-radius extrema).
+\end{quote}
+
+\noindent The statement is a conjunction. Its last clause, made explicit by the parenthetical, is:
+\begin{quote}
+(U) for every $n\ge5$, the graphs that attain the maximum spectral radius among $n$-vertex graphs of girth
+$\ge5$ are unique up to isomorphism.
+\end{quote}
+The terms ``Moore-approximate'', ``Brown type'' and ``PC-lab type'' are not defined in the statement, and we
+do not need them: we show that (U) is false at $n=5$, so the conjunction is false whatever the first clause
+means. The failure persists if only connected graphs are considered.
+
+\section{Definitions}
+
+\begin{definition}
+The \emph{girth} of a graph is the length of a shortest cycle; a graph with no cycle (a forest) has girth
+$\infty$. ``If the graph does not contain any cycles (that is, it is a forest), its girth is defined to be
+infinity'' (Wikipedia, \emph{Girth (graph theory)},
+\url{https://en.wikipedia.org/wiki/Girth_(graph_theory)}). In Lean this is Mathlib's
+\texttt{SimpleGraph.egirth} (value in $\mathbb N\cup\{\infty\}$, equal to $\top$ exactly for acyclic graphs),
+and ``girth $\ge5$'' is \texttt{5 <= G.egirth}.
+\end{definition}
+
+\begin{definition}
+The \emph{spectral radius} $\rho(G)$ of a finite graph is $\max\{|\lambda| : \lambda$ an eigenvalue of its
+adjacency matrix$\}$. In Lean, \texttt{adjSpectralRadius G} is Mathlib's
+\texttt{spectralRadius} $\C$ \texttt{(G.adjMatrix} $\C$\texttt{)}, i.e.\ the supremum of $\|\lambda\|$ over
+the spectrum of the complex adjacency matrix.
+\end{definition}
+
+\noindent $C_5$ is Mathlib's \texttt{cycleGraph 5} (vertex $i$ adjacent to $i\pm1 \bmod 5$). $K_{1,4}$ is
+\texttt{starGraph 4} on $\{0,\dots,4\}$: $i\sim j$ iff $i\ne j$ and $0\in\{i,j\}$. $C_5$ is the smallest
+girth-$5$ (diameter-$2$) Moore graph: Wikipedia (\emph{Moore graph}) lists ``C5 with diameter 2, girth 5, degree 2, and order 5''.
+
+\section{The bound $\rho(G)\le\sqrt{n-1}$ for girth $\ge5$}
+
+\begin{lemma}\label{lem:girth}
+Let $G$ have girth $\ge5$. Then $G$ has no triangle $a\sim b\sim c\sim a$, and no $4$-cycle
+$a\sim b\sim c\sim d\sim a$ with $a\ne c$, $b\ne d$. Conversely, a graph with neither has girth $\ge5$.
+\end{lemma}
+
+\begin{proof}
+A triangle or such a quadrilateral is a cycle of length $3$ or $4$. Conversely, every cycle has length
+$\ge3$, and a cycle of length $3$ or $4$ is a triangle or such a quadrilateral (its support is duplicate-free).
+\end{proof}
+
+\begin{lemma}\label{lem:deg}
+If $G$ has girth $\ge5$ and $n$ vertices, then $\sum_{l\sim i}\deg l\le n-1$ for every vertex $i$.
+\end{lemma}
+
+\begin{proof}
+For $l\sim i$ let $T_l=N(l)\setminus\{i\}$, so $|T_l|=\deg l-1$. If $j\in T_l\cap T_{l'}$ with $l\ne l'$, then
+$i\sim l\sim j\sim l'\sim i$ is a $4$-cycle with $i\ne j$, $l\ne l'$. If $j\in T_l$ and $j\sim i$, then
+$i,l,j$ is a triangle. So the $T_l$ are pairwise disjoint subsets of $V\setminus(\{i\}\cup N(i))$, and
+$\sum_{l\sim i}(\deg l-1)\le n-1-\deg i$, i.e.\ $\sum_{l\sim i}\deg l\le n-1$.
+\end{proof}
+
+\begin{theorem}\label{thm:bound}
+If $G$ has girth $\ge5$ and $n$ vertices, every eigenvalue $\lambda$ of its adjacency matrix $A$ satisfies
+$|\lambda|^2\le n-1$; hence $\rho(G)\le\sqrt{n-1}$.
+\end{theorem}
+
+\begin{proof}
+An element of the spectrum has an eigenvector $v\ne0$ with $Av=\lambda v$ (the determinant of
+$\lambda I-A$ vanishes). Choose $i$ with $|v_i|$ maximal; then $|v_i|>0$. Since
+$(Av)_l=\sum_{j\sim l}v_j=\lambda v_l$,
+\[
+  |\lambda|^2|v_i| = \Big|\sum_{l\sim i}\sum_{j\sim l}v_j\Big| \le \sum_{l\sim i}\deg(l)\,|v_i|
+  \le (n-1)|v_i|
+\]
+by Lemma~\ref{lem:deg}. Divide by $|v_i|$.
+\end{proof}
+
+\section{Two non-isomorphic extremal graphs on five vertices}
+
+\begin{theorem}[main]\label{thm:main}
+\begin{enumerate}[label=(\alph*)]
+  \item $C_5$ and $K_{1,4}$ have girth $\ge5$, and both are connected.
+  \item $\rho(C_5)=\rho(K_{1,4})=2$, and $\rho(G)\le2$ for every graph $G$ of girth $\ge5$ on $5$ vertices.
+  \item Hence both $C_5$ and $K_{1,4}$ attain the maximum spectral radius among $5$-vertex graphs of girth
+        $\ge5$, and also among connected ones.
+  \item $C_5\not\cong K_{1,4}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a) Neither graph contains a triangle or a quadrilateral as in Lemma~\ref{lem:girth} (a finite check over
+$\{0,\dots,4\}$). $C_5$ is connected (Mathlib \texttt{cycleGraph\_connected}); every vertex of $K_{1,4}$ is
+$0$ or adjacent to $0$. (b) The all-ones vector is an eigenvector of $C_5$ with eigenvalue $2$, since $C_5$
+is $2$-regular. For $K_{1,4}$, $v=(2,1,1,1,1)$ gives $Av=(4,2,2,2,2)=2v$. So $2$ lies in both spectra and
+$\rho\ge2$; Theorem~\ref{thm:bound} with $n=5$ gives $\rho\le\sqrt4=2$ for every girth-$\ge5$ graph on
+$5$ vertices. (c) follows from (a) and (b). (d) An isomorphism preserves the number of edges, and $C_5$ has
+$5$ edges while $K_{1,4}$ has $4$.
+\end{proof}
+
+\begin{corollary}
+Clause (U) fails at $n=5$, both among all graphs and among connected graphs. Hence Conjecture 00000002167 is
+false.
+\end{corollary}
+
+\begin{remark}
+The same happens at every order of a girth-$5$ Moore graph: $n=10$ (Petersen graph and $K_{1,9}$) and
+$n=50$ (Hoffman--Singleton graph and $K_{1,49}$), since in each case both graphs have spectral radius
+$\sqrt{n-1}$. Only $n=5$ is formalized; one counterexample suffices for the ``for all $n\ge5$'' claim.
+\end{remark}
+
+\begin{remark}[reading]
+The refutation uses the standard convention that forests have girth $\infty$, so that $K_{1,4}$ has girth
+$\ge5$. With that convention the star $K_{1,n-1}$ attains the bound $\sqrt{n-1}$ for every $n$, so it is an
+extremal graph for every $n$.
+\end{remark}
+
+\section{Lean 4 formalization}
+
+The directory \texttt{lean/} is a Lean~4 project (Lean \texttt{v4.33.1}, Mathlib \texttt{v4.33.1}); the
+source is \texttt{Conjecture2167/Basic.lean} (namespace \texttt{C2167}). It contains:
+\begin{itemize}
+  \item \texttt{adjSpectralRadius}, \texttt{starGraph}, and the predicates
+        \texttt{IsSpecExtremal P G} (girth $\ge5$, side condition $P$, and maximal spectral radius among all
+        graphs $H$ on \texttt{Fin n} with girth $\ge5$ and $P\,H$) and \texttt{UniqueExtremal n P}
+        (any two such maximizers are isomorphic, \texttt{Nonempty (G $\simeq$g H)});
+  \item \texttt{no\_triangle}, \texttt{no\_quad}, \texttt{five\_le\_egirth} (Lemma~\ref{lem:girth}),
+        \texttt{sum\_degree\_neighbors\_le} (Lemma~\ref{lem:deg}),
+        \texttt{norm\_sq\_le\_of\_mem\_spectrum} and \texttt{spectralRadius\_le\_sqrt}
+        (Theorem~\ref{thm:bound}, for any finite vertex type);
+  \item \texttt{main} (Theorem~\ref{thm:main}): $\rho(C_5)=2$, $\rho(K_{1,4})=2$, the bound on
+        \texttt{Fin 5}, \texttt{IsSpecExtremal} for both graphs with $P=$ \texttt{True} and with
+        $P=$ \texttt{Connected}, and \texttt{IsEmpty (cycleGraph 5 $\simeq$g starGraph 4)};
+  \item \texttt{conjecture\_false}:
+        $\neg(\forall n\ge5,\ \texttt{UniqueExtremal}\ n\ \texttt{True})\ \wedge\
+        \neg(\forall n\ge5,\ \texttt{UniqueExtremal}\ n\ \texttt{Connected})$.
+\end{itemize}
+There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom. \texttt{\#print axioms} for
+\texttt{C2167.conjecture\_false}, \texttt{C2167.main} and \texttt{C2167.spectralRadius\_le\_sqrt} reports
+only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. The file also compiles with
+\texttt{-DwarningAsError=true}. To check:
+\begin{verbatim}
+cd lean
+lake exe cache get
+lake build
+\end{verbatim}
+
+\end{document}
