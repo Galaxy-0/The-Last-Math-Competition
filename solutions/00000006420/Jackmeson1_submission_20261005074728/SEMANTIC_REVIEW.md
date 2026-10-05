@@ -1,0 +1,17 @@
+# Semantic review (independent, pre-submission)
+
+An independent model reviewer (GPT-6 Astra, reasoning effort "xhigh", separate session) received the exact conjecture text, the full LaTeX report, the full Lean source and a reviewer checklist distilled from 93 closed-unmerged pull requests of this competition. It was asked whether the Lean main theorem settles the conjecture as written, whether the reading is faithful and not a loophole, whether the Lean definitions are faithful to the standard notions, whether the mathematics is correct, and whether report and Lean match. This is an automated review prepared by the submitter, not the competition's maintainer review.
+
+**Verdict:** accept = True; severity = minor; reading faithful = True.
+
+**Issues raised (verbatim):**
+
+- The report's opening assertion that 'Everything below is formalized' is too broad. As its final conventions paragraph correctly acknowledges, Lean neither defines the De Giorgi perimeter nor proves its equality with boundary Hausdorff measure for these sets. perimeter_axiomatic proves a conditional result for a functional satisfying translation invariance and compact-disjoint additivity; it does not instantiate that result with the De Giorgi perimeter. Qualify the opening assertion. This is a reporting issue, not a gap in the main proof using the explicitly defined geometric perimeter.
+
+**Changes made after the review:**
+
+- The opening sentence no longer says that "everything below is formalized". It now states that the main results are formalized for the perimeter H^1(boundary), that the De Giorgi perimeter is not defined in Lean, and that `perimeter_axiomatic` is only a conditional statement whose application to the De Giorgi perimeter is not formalized.
+
+**Reviewer notes (verbatim):**
+
+> The existential conjecture is established under a faithful interpretation: two-circle unions are unions of disks, asymmetry is the actual Fraenkel infimum over all centers, and perimeter is boundary length for these smooth disk unions. There is no connectedness or overlap requirement in the conjecture. separation and conjecture6420 provide the explicit witnesses, rather than an abstract arithmetic surrogate. Both witnesses have area 2*pi and perimeter 2*L, with 0<L<infinity proved. The comparison disk has radius sqrt(2) and perimeter sqrt(2)*L, so both deficits are sqrt(2)-1 without requiring L=2*pi. All relevant volumes are finite and the denominators are positive, so real-valued measure conversion and division introduce no degeneracy. The far estimate quantifies over every comparison center: a radius-sqrt(2) disk cannot meet both unit disks at distance 10, giving asymmetry at least 1. For the near witness, the comparison disk centered at (2/5,0) contains D_0 and the radius-1/10 disk centered at (8/5,0), yielding asymmetry at most 99/100. The infimum arguments have the needed lower bounds. These estimates suffice; an exact value for the far asymmetry is unnecessary. The report's core arguments and numerical constants match Lean. Boundary Hausdorff measure is the standard geometric perimeter on these witnesses, although its general identification with distributional perimeter is outside this formalization. Closed comparison disks are a legitimate convention, and positive common rescalings preserve separation. Accept with the minor scope clarification above; compilation and the axiom audit are taken as stipulated.

@@ -1,0 +1,184 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Hm}{\mathcal{H}^1}
+
+\title{A proof of Conjecture 00000006420\\[2pt]
+\large Two unions of two unit disks with the same isoperimetric deficit and different Fraenkel asymmetry}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000006420 reads (English version; the Chinese version agrees):
+
+\begin{quote}
+\emph{Definition:} The isoperimetric deficit and asymmetry are two layers.
+\emph{Conjecture:} There exist two sets with the same deficit but different asymmetry, and the
+separation is realized by an explicit two-circle union with the same deficit but different
+asymmetry.
+\end{quote}
+
+This is an existence claim. We exhibit two explicit sets in the plane, each the union of two
+disjoint closed unit disks, prove that they have the same isoperimetric deficit (namely
+$\sqrt2-1$), and prove that their Fraenkel asymmetries differ. The main results are formalized in
+Lean 4 / Mathlib for the perimeter $P(E)=\mathcal H^1(\partial E)$ defined below. The De Giorgi
+(distributional) perimeter is not defined in Lean: \texttt{perimeter\_axiomatic} is a conditional
+statement about any translation-invariant perimeter that is additive on disjoint compact sets, and
+its application to the De Giorgi perimeter (and that perimeter's agreement with $\mathcal H^1(\partial
+E)$ for these sets) is a standard fact that is not formalized; see the conventions paragraph at the
+end.
+
+\section{Reading and definitions}
+
+We work in the Euclidean plane $\R^2$ (Mathlib: \texttt{EuclideanSpace R (Fin 2)}) with Lebesgue
+measure $|\cdot|$. ``Asymmetry'' is read as the Fraenkel asymmetry, the asymmetry index that is
+paired with the isoperimetric deficit in the quantitative isoperimetric inequality
+$\alpha(E)^2\le C\,\delta(E)$. We use the normalizations of Cicalese and Leonardi
+(\emph{A selection principle for the sharp quantitative isoperimetric inequality},
+\url{https://arxiv.org/abs/1007.3899}, Section 2), which follow Fusco, Maggi and Pratelli. A
+``two-circle union'' is read as the union of two closed disks. Two circles as curves have area
+zero, so their deficit is not defined.
+
+\begin{definition}
+For $E\subset\R^2$ let $r_E=\sqrt{|E|/\pi}$, the radius of the disk $B_E$ with $|B_E|=|E|$.
+\begin{itemize}
+\item \emph{Perimeter:} $P(E)=\Hm(\partial E)$, the one-dimensional Hausdorff measure (length) of
+  the topological boundary. In Lean this is \texttt{perimeter E := muH[1] (frontier E)}. Mathlib's
+  $\mu_H[1]$ needs no normalizing constant in dimension one; on $\R$ it equals Lebesgue measure
+  (\texttt{hausdorffMeasure\_real}).
+\item \emph{Isoperimetric deficit:} $\delta(E)=\dfrac{P(E)-P(B_E)}{P(B_E)}=\dfrac{P(E)}{P(B_E)}-1$,
+  with $B_E=\bar B(0,r_E)$ (\texttt{deficit}).
+\item \emph{Fraenkel asymmetry:}
+  $\alpha(E)=\inf_{x\in\R^2}\dfrac{|E\,\triangle\,\bar B(x,r_E)|}{|E|}$ (\texttt{asymmetry}).
+\end{itemize}
+\end{definition}
+
+\section{The two sets}
+
+Let $D_a=\bar B((a,0),1)$ be the closed unit disk centred at $(a,0)$, and put
+\[
+E_{\rm near}=D_0\cup D_{5/2},\qquad E_{\rm far}=D_0\cup D_{10}.
+\]
+In both unions the centres are more than $2$ apart, so the two disks are disjoint
+(\texttt{disj}). Hence $|E_{\rm near}|=|E_{\rm far}|=2\pi$, $r_E=\sqrt2$ in both cases, and every
+comparison disk $\bar B(x,\sqrt2)$ has area $2\pi$ (\texttt{area\_near}, \texttt{area\_far},
+\texttt{eqRadius\_near}, \texttt{eqRadius\_far}, \texttt{vol\_comparison}).
+
+\section{Same deficit}
+
+\begin{lemma}[\texttt{frontier\_union\_of\_closed}]
+If $A,B$ are closed and disjoint, then $\partial(A\cup B)=\partial A\cup\partial B$.
+\end{lemma}
+\begin{proof}
+The inclusion $\subseteq$ holds in general. Conversely, let $p\in\partial A$. Then $p\in A$, so
+$p\in\overline{A\cup B}$. If $p$ were interior to $A\cup B$, then $U=\operatorname{int}(A\cup B)
+\setminus B$ would be an open neighbourhood of $p$ (because $p\notin B$ and $B$ is closed)
+contained in $A$, contradicting $p\in\partial A$.
+\end{proof}
+
+Let $L=\Hm(S^1)$ be the length of the unit circle.
+
+\begin{lemma}[\texttt{perimeter\_two}, \texttt{L\_pos}, \texttt{L\_lt\_top}]
+For $|a|>2$ we have $P(D_0\cup D_a)=2L$, and $0<L<\infty$. The proofs establish $L\le 2\pi$ and
+$2\le L$ as intermediate steps.
+\end{lemma}
+\begin{proof}
+By the previous lemma and $\partial \bar B(c,1)=S(c,1)$, the boundary is the disjoint union of two
+unit circles. $\Hm$ is a Borel measure and is invariant under translations (isometries), so
+$P=2L$. For the upper bound, every point of the unit circle in $\mathbb{C}\cong\R^2$ is
+$e^{i\theta}$ with $\theta=\arg z\in[-\pi,\pi]$, and $\theta\mapsto e^{i\theta}$ is
+$1$-Lipschitz, because $|e^{is}-e^{it}|=|e^{i(s-t)}-1|\le|s-t|$. Lipschitz maps do not increase
+$\Hm$, so $L\le\Hm([-\pi,\pi])=2\pi$. For the lower bound, the projection $z\mapsto\operatorname{Re}z$
+is $1$-Lipschitz and maps the circle onto $[-1,1]$, so $2=\Hm([-1,1])\le L$. The identification
+$\mathbb{C}\cong\R^2$ is the isometry given by the orthonormal basis $(1,i)$
+(\texttt{L\_eq\_complex}).
+\end{proof}
+
+\begin{theorem}[\texttt{deficit\_two}]
+$\delta(E_{\rm near})=\delta(E_{\rm far})=\sqrt2-1$.
+\end{theorem}
+\begin{proof}
+We have $\partial\bar B(0,\sqrt2)=S(0,\sqrt2)=\sqrt2\cdot S(0,1)$, and $\Hm$ scales by the factor
+$\sqrt2$ under this dilation (\texttt{Measure.hausdorffMeasure\_smul0}). So
+$P(B_E)=\sqrt2\,L$ (\texttt{perimeter\_comparison}), and
+$\delta=2L/(\sqrt2 L)-1=\sqrt2-1$, using $0<L<\infty$.
+\end{proof}
+
+\section{Different asymmetry}
+
+\begin{theorem}[\texttt{asymmetry\_far}]
+$\alpha(E_{\rm far})\ge 1$.
+\end{theorem}
+\begin{proof}
+Fix $x$ and let $B=\bar B(x,\sqrt2)$. The disk $B$ cannot meet both $D_0$ and $D_{10}$: otherwise
+$10=|(0,0)-(10,0)|\le 1+2\sqrt2+1<5$ (\texttt{far\_cases}). Say $B\cap D_{10}=\emptyset$; the other
+case is symmetric. Then $D_{10}\subseteq E\setminus B$ and $B\setminus D_0\subseteq B\setminus E$,
+and these two sets are disjoint. So
+$|E\triangle B|\ge |D_{10}|+|B|-|D_0|=\pi+2\pi-\pi=2\pi$ (\texttt{symmDiff\_lower}). Dividing by
+$|E|=2\pi$ gives a quotient of at least $1$ for every $x$, so the infimum is at least $1$.
+\end{proof}
+
+\begin{theorem}[\texttt{near\_value}, \texttt{asymmetry\_near\_le}, \texttt{asymmetry\_near}]
+$\alpha(E_{\rm near})\le 1-\tfrac1{100}<1$.
+\end{theorem}
+\begin{proof}
+Take $x_0=(2/5,0)$, $B_0=\bar B(x_0,\sqrt2)$ and $S=\bar B((8/5,0),1/10)$. Then:
+$D_0\subseteq B_0$ since $1+\tfrac25=\tfrac75\le\sqrt2$, because $\tfrac{49}{25}\le2$;
+$S\subseteq D_{5/2}$ since $\tfrac1{10}+\tfrac9{10}=1$;
+and $S\subseteq B_0$ since $\tfrac1{10}+\tfrac65=\tfrac{13}{10}\le\sqrt2$.
+So $K=D_0\cup S\subseteq E_{\rm near}\cap B_0$ is a disjoint union with
+$|K|=\pi+\pi/100$. Since $E\triangle B_0\subseteq (E\setminus K)\cup(B_0\setminus K)$, we get
+\[
+|E_{\rm near}\triangle B_0|\le (2\pi-|K|)+(2\pi-|K|)=2\pi-\tfrac{\pi}{50}.
+\]
+The quotient at $x_0$ is therefore at most $1-\tfrac1{100}$. The quotients are non-negative, so the
+infimum is at most this value.
+\end{proof}
+
+\begin{theorem}[\texttt{separation}, \texttt{conjecture6420}]
+$E_{\rm near}$ and $E_{\rm far}$ are unions of two disjoint closed unit disks. They have equal
+area $2\pi$, equal perimeter $2L\in(0,\infty)$, and equal deficit $\sqrt2-1$, while
+$\alpha(E_{\rm near})<1\le\alpha(E_{\rm far})$. Hence the conjecture holds.
+\end{theorem}
+
+\paragraph{Other conventions (\texttt{normalisations}, \texttt{perimeter\_axiomatic}).}
+(i) Any deficit that is a function of $(P(E),|E|)$, for example $P(E)^2/(4\pi|E|)-1$ or
+$P(E)-2\sqrt{\pi|E|}$, agrees on the two sets. (ii) Any positive rescaling of $\alpha$ still
+separates them. This covers the normalization $|E\triangle(x+B_E)|/r_E^{2}$, which is $\pi$ times
+ours. (iii) The De Giorgi (distributional) perimeter is the convention of the cited paper. Lean
+proves that \emph{every} perimeter functional that is translation invariant and additive on
+disjoint compact sets, a pair of properties that the De Giorgi perimeter has, takes the same value
+on $E_{\rm near}$ and $E_{\rm far}$. So every deficit built from such a perimeter and the area
+agrees. That the De Giorgi perimeter has these two properties, and that it equals $\Hm(\partial E)$
+for these smooth sets, are standard facts that are not formalized here.
+
+\section{Lean formalization and axiom audit}
+
+The file \texttt{lean/Conjecture6420/Basic.lean} (Lean 4.33.1, Mathlib v4.33.1, single import
+\texttt{Mathlib}) contains all definitions and proofs, in namespace \texttt{C6420}. Main
+theorems: \texttt{separation}, \texttt{conjecture6420}, \texttt{normalisations} and
+\texttt{perimeter\_axiomatic}. For each of them, \texttt{\#print axioms} reports exactly
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom. The value of $L$ ($=2\pi$) is never needed: only
+$0<L<\infty$ is used.
+
+\end{document}
