@@ -1,0 +1,105 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:833:0: 'SH_quasiPerfect' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:834:0: 'hamming_not_QP' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:835:0: 'EH_quasiPerfect' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:836:0: 'EW_quasiPerfect' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:837:0: 'QP_spectrum' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:838:0: 'onlyIf3_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:839:0: 'onlyIf4_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:840:0: 'onlyIfWeak_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:841:0: 'onlyIf_any_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:842:0: 'levenshteinAtLeast_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:843:0: 'conjecture_00000007964_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:844:0: 'EW_shellUniform' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:845:0: 'SH5_not_shellUniform' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:846:0: 'UQP_spectrum' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:847:0: 'onlyIfUniform_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:848:0: 'conjecture_00000007964_false_uniform' depends on axioms: [propext, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+== 1. shortened Hamming codes SH(n), n = 3..16 (brute force)
+PASS  SH(3) = [3,1,3] code, e=1, covering radius 1 -> perfect (Hamming)
+PASS  SH(4) = [4,1,3] code, e=1, covering radius 2 -> quasi-perfect
+PASS  SH(5) = [5,2,3] code, e=1, covering radius 2 -> quasi-perfect
+PASS  SH(6) = [6,3,3] code, e=1, covering radius 2 -> quasi-perfect
+PASS  SH(7) = [7,4,3] code, e=1, covering radius 1 -> perfect (Hamming)
+PASS  SH(8) = [8,4,3] code, e=1, covering radius 2 -> quasi-perfect
+PASS  SH(9) = [9,5,3] code, e=1, covering radius 2 -> quasi-perfect
+PASS  SH(10) = [10,6,3] code, e=1, covering radius 2 -> quasi-perfect
+PASS  SH(11) = [11,7,3] code, e=1, covering radius 2 -> quasi-perfect
+PASS  SH(12) = [12,8,3] code, e=1, covering radius 2 -> quasi-perfect
+PASS  SH(13) = [13,9,3] code, e=1, covering radius 2 -> quasi-perfect
+PASS  SH(14) = [14,10,3] code, e=1, covering radius 2 -> quasi-perfect
+PASS  SH(15) = [15,11,3] code, e=1, covering radius 1 -> perfect (Hamming)
+PASS  SH(16) = [16,11,3] code, e=1, covering radius 2 -> quasi-perfect
+== 2. extended Hamming codes EH(m), length 2^m, m = 2,3,4
+PASS  EH(2) = [4,1,4], e=1, covering radius 2 -> quasi-perfect
+PASS  EH(2) shells uniform: dist-2 words see {2} codewords at distance 2; dist-1 words see {(1, 0)}
+PASS  EH(3) = [8,4,4], e=1, covering radius 2 -> quasi-perfect
+PASS  EH(3) shells uniform: dist-2 words see {4} codewords at distance 2; dist-1 words see {(1, 0)}
+PASS  EH(4) = [16,11,4], e=1, covering radius 2 -> quasi-perfect
+PASS  EH(4) shells uniform: dist-2 words see {8} codewords at distance 2; dist-1 words see {(1, 0)}
+== 3. even-weight codes EW(n), n = 2..14, and their shell distribution
+PASS  EW(2): d=2, e=0, covering radius 1; each odd word has {2} codewords at distance 1
+PASS  EW(3): d=2, e=0, covering radius 1; each odd word has {3} codewords at distance 1
+PASS  EW(4): d=2, e=0, covering radius 1; each odd word has {4} codewords at distance 1
+PASS  EW(5): d=2, e=0, covering radius 1; each odd word has {5} codewords at distance 1
+PASS  EW(6): d=2, e=0, covering radius 1; each odd word has {6} codewords at distance 1
+PASS  EW(7): d=2, e=0, covering radius 1; each odd word has {7} codewords at distance 1
+PASS  EW(8): d=2, e=0, covering radius 1; each odd word has {8} codewords at distance 1
+PASS  EW(9): d=2, e=0, covering radius 1; each odd word has {9} codewords at distance 1
+PASS  EW(10): d=2, e=0, covering radius 1; each odd word has {10} codewords at distance 1
+PASS  EW(11): d=2, e=0, covering radius 1; each odd word has {11} codewords at distance 1
+PASS  EW(12): d=2, e=0, covering radius 1; each odd word has {12} codewords at distance 1
+PASS  EW(13): d=2, e=0, covering radius 1; each odd word has {13} codewords at distance 1
+PASS  EW(14): d=2, e=0, covering radius 1; each odd word has {14} codewords at distance 1
+== 4. repetition codes of even length n = 2m, n = 2..16
+PASS  Rep(2): d=2, e=0, covering radius 1
+PASS  Rep(4): d=4, e=1, covering radius 2
+PASS  Rep(6): d=6, e=2, covering radius 3
+PASS  Rep(8): d=8, e=3, covering radius 4
+PASS  Rep(10): d=10, e=4, covering radius 5
+PASS  Rep(12): d=12, e=5, covering radius 6
+PASS  Rep(14): d=14, e=6, covering radius 7
+PASS  Rep(16): d=16, e=7, covering radius 8
+== 5. exhaustive: all binary linear codes of length n <= 7
+PASS  n=0: 1 linear codes, 0 quasi-perfect
+PASS  n=1: 2 linear codes, 0 quasi-perfect
+PASS  n=2: 5 linear codes, 3 quasi-perfect (d values [1, 2]; with d>=3: 0)
+PASS  n=3: 16 linear codes, 7 quasi-perfect (d values [1, 2]; with d>=3: 0)
+PASS  n=4: 67 linear codes, 30 quasi-perfect (d values [1, 2, 3, 4]; with d>=3: 5)
+PASS  n=5: 374 linear codes, 111 quasi-perfect (d values [1, 2, 3]; with d>=3: 15)
+PASS  n=6: 2825 linear codes, 520 quasi-perfect (d values [1, 2, 3, 5, 6]; with d>=3: 107)
+PASS  n=7: 29212 linear codes, 3088 quasi-perfect (d values [1, 2, 3]; with d>=3: 1260)
+== 5b. uniform shell distribution (coset weight distributions depend only on the coset's minimum weight)
+PASS  SH(6) = SH(2^3-2) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s); min wt 2: 1 distinct profile(s))
+PASS  SH(14) = SH(2^4-2) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s); min wt 2: 1 distinct profile(s))
+PASS  EH(2) (length 4) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s); min wt 2: 1 distinct profile(s))
+PASS  EH(3) (length 8) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s); min wt 2: 1 distinct profile(s))
+PASS  EH(4) (length 16) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s); min wt 2: 1 distinct profile(s))
+PASS  EW(2) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(3) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(4) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(5) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(6) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(7) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(8) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(9) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(10) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(11) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  EW(12) is shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 1 distinct profile(s))
+PASS  among SH(n), 3<=n<=14, exactly n in [3, 6, 7, 14] are shell-uniform (2^m-1: perfect; 2^m-2: once shortened)
+PASS  SH(5) is quasi-perfect but NOT shell-uniform (min wt 0: 1 distinct profile(s); min wt 1: 2 distinct profile(s); min wt 2: 1 distinct profile(s)), cf. Lean SH5_not_shellUniform
+== 6. the bit lemma: 2^k <= s < 2^(k+1)  =>  s xor 2^k < 2^k  (k <= 12)
+PASS  bit lemma
+== 7. lengths outside {2^k - 1} carrying QP codes with d = 3 (SH) up to 64
+       57 lengths: [4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 16, 17] ...
+
+ALL CHECKS PASSED
+exit 0
