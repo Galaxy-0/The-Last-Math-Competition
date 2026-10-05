@@ -1,0 +1,194 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000007993\\[2pt]
+\large The singular set of the obstacle problem can have dimension $n-1$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000007993 (English text) reads: ``Definition: The stratification of free boundary
+regularity for the obstacle problem: the proportions of regular and singular parts of the free
+boundary FB(u) of solutions of obstacle problems of u = max(w,0) type. Conjecture: The regular
+part of FB is an (n-1)-dimensional C\^{}infinity surface, relatively open and dense in FB; the
+Hausdorff dimension of the singular part is at most n-3 for n at least 3, and at most 1 for n = 2
+(degenerating to points); and the codimension threshold of the regular-singular decomposition is
+given by the tangent cone classification: [...]''. The Chinese text says the same (the regular
+part is relatively open and dense in FB; the singular part has Hausdorff dimension at most $n-3$
+for $n\ge 3$).
+
+The conjecture is a conjunction. We refute two of its clauses:
+\begin{itemize}[nosep]
+\item[(D)] for $n\ge 3$, every solution has $\dim_{\mathcal H}\mathrm{Sing}(u)\le n-3$;
+\item[(R)] the regular part is dense in the free boundary, i.e.\ $\mathrm{FB}(u)\subseteq
+  \overline{\mathrm{Reg}(u)}$.
+\end{itemize}
+Refuting either clause refutes the conjecture. We do not address the $n=2$ clause (our example
+gives dimension $1$ there, which is allowed) or the tangent-cone clause.
+
+\section{Reading and definitions}
+
+\paragraph{The equation.} ``Obstacle problem'' is read as the classical (normalized) obstacle
+problem
+\[
+  \Delta u=\chi_{\{u>0\}},\qquad u\ge 0\qquad\text{in }\Omega,
+\]
+which is how Figalli, Ros-Oton and Serra write it (arXiv:1912.00714, Section~3, equation (3.1)).
+Its solutions satisfy $u=\max(u,0)$; this is our reading of the garbled phrase ``u = max(w,0)
+type''. Our witness is also $\max(w,0)$ for $w=x_1^2/2$, which solves $\Delta w=1$.
+
+\paragraph{Solution (Lean: \texttt{IsObstacleSolution}).} Here $\Omega\subseteq\mathbb R^n$ is open and
+$u:\mathbb R^n\to\mathbb R$. We require that $u$ is $C^\infty$, that $u\ge 0$ on $\Omega$, that
+$\Delta u=1$ at every point of $\{u>0\}\cap\Omega$, and that $\Delta u=\chi_{\{u>0\}}$ holds
+Lebesgue-almost everywhere in $\Omega$. Solutions are usually only $C^{1,1}$, and for them the
+equation holds a.e.; for smooth $u$ the a.e.\ equation is the same as the distributional one.
+This definition asks for more than the standard one. A stronger definition can only shrink the set of solutions, which
+weakens the universal claims (D) and (R). Refuting them is therefore at least as strong as refuting the
+standard versions.
+$\Delta$ is Mathlib's Laplacian $\Delta u(x)=\sum_i D^2u(x)[e_i,e_i]$ over an orthonormal basis.
+
+\paragraph{Free boundary.} $\mathrm{FB}(u)=\Omega\cap\partial\{u>0\}$ (Lean: \texttt{freeBoundary}).
+
+\paragraph{Regular and singular points.} We use the definitions of Figalli, Ros-Oton and Serra
+(arXiv:1912.00714, Section~3), quoted verbatim: ``Regular points: $x_\circ\in\partial\{u>0\}$ is a
+regular point if $\lim_{r\to 0}r^{-2}u(x_\circ+rx)=\frac12(\max\{0,e\cdot x\})^2$ for some
+$e\in\mathbb S^{n-1}$. Singular points: $x_\circ\in\partial\{u>0\}$ is a singular point if
+$p_{2,x_\circ}(x):=\lim_{r\to 0}r^{-2}u(x_\circ+rx)$ exists and $p_{2,x_\circ}$ is a quadratic
+polynomial belonging to the set $\mathcal P:=\{$convex 2-homogeneous polynomials $p$ with
+$\Delta p\equiv 1\}$.'' In Lean the rescaling is $u_{x_\circ,r}(x)=u(x_\circ+rx)/r^2$
+(\texttt{rescale}) and $r\to0^+$.
+\begin{itemize}[nosep]
+\item \texttt{IsRegularPt}: $x_\circ\in\mathrm{FB}$ and $u_{x_\circ,r}(x)\to\frac12(\max\{0,\langle e,x\rangle\})^2$
+  \emph{pointwise} for some unit $e$. Pointwise convergence is the weakest mode, so ``not regular'' is
+  the strongest form of the negation.
+\item \texttt{IsSingularPt}: $x_\circ\in\mathrm{FB}$ and $u_{x_\circ,r}\to p$ \emph{locally uniformly} for
+  some $p\in\mathcal P$ (\texttt{polyClass}: $p(x)=Q(x,x)$ for a continuous bilinear $Q$, $p$
+  convex on $\mathbb R^n$, $\Delta p\equiv 1$).
+\end{itemize}
+$\mathrm{Reg}(u)$ and $\mathrm{Sing}(u)$ are the sets of such points. Hausdorff dimension is
+Mathlib's \texttt{dimH} on $\mathbb R^n$ with the Euclidean metric
+(\texttt{EuclideanSpace}~$\mathbb R$~(\texttt{Fin}~$n$)). Coordinates are indexed from $0$ in Lean,
+so $x_1$ is \texttt{x 0}.
+
+\section{The counterexample}
+
+Let $n\ge 3$, $\Omega=B_1$ the open unit ball, and $u_0(x)=x_1^2/2$.
+
+\begin{lemma}[\texttt{laplacian\_u$_0$}, \texttt{isObstacleSolution\_u$_0$}]
+$u_0$ is $C^\infty$ and nonnegative, and $\Delta u_0\equiv 1$. Hence $u_0$ is a solution in every open set $\Omega$.
+\end{lemma}
+\begin{proof}
+$Du_0(x)=x_1\,dx_1$ and $D^2u_0(x)[v,w]=v_1w_1$, so $\Delta u_0=\sum_i (e_i)_1^2=1$. The set
+$\{u_0=0\}=\{x_1=0\}$ is a proper linear subspace, so it has Lebesgue measure $0$
+(Mathlib \texttt{Measure.addHaar\_submodule}). Hence $\chi_{\{u_0>0\}}=1=\Delta u_0$ a.e.
+\end{proof}
+
+\begin{lemma}[\texttt{freeBoundary\_u$_0$}, \texttt{contact\_density\_zero}]
+$\mathrm{FB}(u_0)=\Omega\cap\{x_1=0\}$. The contact set $\{u_0=0\}$ has measure zero, so its
+density $|\{u_0=0\}\cap B_r(x_\circ)|/|B_r(x_\circ)|$ is $0$ for every $x_\circ$ and every $r>0$ (for $r\le0$ the ball is empty; Lean's division in $[0,\infty]$ then also gives $0$, but only $r>0$ matters for the limit $r\to0^+$).
+\end{lemma}
+\begin{proof}
+$\{u_0>0\}$ is the complement of the hyperplane $H=\{x_1=0\}$. $H$ is closed with empty interior,
+since a proper subspace with nonempty interior would be everything. So
+$\partial\{u_0>0\}=\partial H=H$.
+\end{proof}
+
+\begin{lemma}[\texttt{rescale\_u$_0$}, \texttt{singular\_u$_0$}, \texttt{not\_regular\_u$_0$}]
+Every point of $\mathrm{FB}(u_0)$ is singular and none is regular.
+\end{lemma}
+\begin{proof}
+If $(x_\circ)_1=0$ and $r\neq0$, then $u_0(x_\circ+rx)/r^2=(rx_1)^2/(2r^2)=u_0(x)$. So every
+rescaling equals $u_0$, and the limit exists in every sense and is $u_0$. Moreover $u_0\in\mathcal P$:
+take $Q(x,y)=\frac12x_1y_1$. Then $u_0$ is convex because $t\mapsto t^2$ is, and $\Delta u_0=1$.
+Hence every free-boundary point is singular. Now suppose some point were regular with unit vector
+$e$. By uniqueness of limits, $u_0(x)=\frac12(\max\{0,\langle e,x\rangle\})^2$ for all $x$. At
+$x=-e$ this gives $e_1^2/2=0$, so $e_1=0$. At $x=e_1^{\mathrm{basis}}=(1,0,\dots,0)$ it then
+gives $\frac12=\frac12(\max\{0,e_1\})^2=0$, a contradiction.
+\end{proof}
+
+\begin{lemma}[\texttt{finrank\_plane}, \texttt{dimH\_inter\_plane}]
+If $\Omega$ is open and meets $H$, then $\dim_{\mathcal H}(\Omega\cap H)=n-1$.
+\end{lemma}
+\begin{proof}
+$H=\ker(x\mapsto x_1)$ has dimension $n-1$ by rank--nullity. The inclusion $H\to\mathbb R^n$ is an
+isometry, which preserves $\dim_{\mathcal H}$ (\texttt{Isometry.dimH\_image}). The preimage of
+$\Omega$ in $H$ is a nonempty open set, and a set with nonempty interior in a finite-dimensional real normed space has
+Hausdorff dimension equal to the vector-space dimension (\texttt{Real.dimH\_of\_nonempty\_interior}).
+\end{proof}
+
+\begin{theorem}[\texttt{witness}, \texttt{family}, \texttt{not\_singDimBound}, \texttt{not\_regDenseInFB}, \texttt{not\_conjecture}]
+For every $n\ge 3$, $u_0=x_1^2/2$ solves the obstacle problem in $B_1\subseteq\mathbb R^n$. It has
+$\mathrm{Reg}(u_0)=\emptyset$ and $\mathrm{Sing}(u_0)=\mathrm{FB}(u_0)=\mathrm{FB}(u_0)\setminus\mathrm{Reg}(u_0)=B_1\cap\{x_1=0\}$, and
+$\dim_{\mathcal H}\mathrm{Sing}(u_0)=n-1>n-3$. Hence clause (D) is false. Since
+$0\in\mathrm{FB}(u_0)$ and $\overline{\mathrm{Reg}(u_0)}=\emptyset$, clause (R) is false as well.
+\end{theorem}
+
+\begin{remark}
+The example is degenerate: the contact set $\{u_0=0\}$ is a hyperplane with empty interior. It is
+nevertheless a solution under the cited definition. On $B_1$ it is also the minimiser of
+$\int(\frac12|\nabla v|^2+v)$ over $v\ge0$ with the same boundary values, since the unconstrained
+minimiser (with $\Delta v=1$) is already nonnegative (this remark is not formalized). The literature
+records that the singular set can be this large. Figalli, Ros-Oton and Serra (arXiv:1912.00714,
+abstract) write: ``Explicit examples show that the singular set could be in general
+$(n-1)$-dimensional ---that is, as large as the regular set. Our main result establishes that,
+generically, the singular set has zero $\mathcal H^{n-4}$ measure [...]'' So a codimension-type bound on
+$\mathrm{Sing}$ holds only generically, and the conjecture states it for all solutions.
+\end{remark}
+
+\section{Lean formalization}
+
+The file \texttt{lean/Conjecture7993/Basic.lean} (311 lines, only \texttt{import Mathlib}, Lean
+v4.33.1 with Mathlib v4.33.1) proves:
+\begin{verbatim}
+def SingDimBound : Prop :=
+  forall n : Nat, 3 <= n -> forall Omega : Set (E n), IsOpen Omega ->
+    forall u : E n -> Real, IsObstacleSolution Omega u ->
+      dimH (singularSet Omega u) <= ((n - 3 : Nat) : ENNReal)
+def RegDenseInFB : Prop :=
+  forall n : Nat, 2 <= n -> forall Omega : Set (E n), IsOpen Omega ->
+    forall u : E n -> Real, IsObstacleSolution Omega u ->
+      freeBoundary Omega u <= closure (regularSet Omega u)
+theorem family (n : Nat) (hn : 3 <= n) :
+    exists u : E n -> Real, (forall x, u x = (x <0, _>) ^ 2 / 2) /\
+      IsObstacleSolution (ball 0 1) u /\ regularSet (ball 0 1) u = {} /\
+      dimH (singularSet (ball 0 1) u) = ((n - 1 : Nat) : ENNReal) /\
+      ((n - 3 : Nat) : ENNReal) < dimH (singularSet (ball 0 1) u)
+theorem not_singDimBound : Not SingDimBound
+theorem not_regDenseInFB : Not RegDenseInFB
+theorem not_conjecture : Not (SingDimBound /\ RegDenseInFB)
+\end{verbatim}
+(The Lean source uses the Unicode symbols; \texttt{E n} is \texttt{EuclideanSpace R (Fin n)}.)
+\texttt{witness} additionally records the free-boundary description, $\mathrm{Sing}=\mathrm{FB}\setminus\mathrm{Reg}$,
+and the zero contact-set density.
+
+\paragraph{Axiom audit.} \texttt{lake build} succeeds. \texttt{\#print axioms} for
+\texttt{not\_conjecture}, \texttt{not\_singDimBound}, \texttt{not\_regDenseInFB}, \texttt{family}
+and \texttt{witness} reports exactly \texttt{[propext, Classical.choice, Quot.sound]}. There is no
+\texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+
+\section*{Sources}
+\begin{itemize}[nosep]
+\item A.~Figalli, X.~Ros-Oton, J.~Serra, \emph{Generic regularity of free boundaries for the
+  obstacle problem}, arXiv:1912.00714 (equation (3.1), the definitions of regular and singular points
+  in Section~3, and the abstract).
+\end{itemize}
+
+\end{document}
