@@ -1,0 +1,69 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:694:0: 'Refl.conjecture_00000007608_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:695:0: 'Refl.conjecture_false_rot90_explicit' depends on axioms: [propext]
+info: ././././Main.lean:696:0: 'Refl.conjecture_false_ordered' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:697:0: 'Refl.every_nontrivial_rotation_fails' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:698:0: 'Refl.infinitely_many_decompositions' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:699:0: 'Refl.decomp_classification' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:700:0: 'Refl.refl_mul_refl' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:701:0: 'Refl.isRefl_iff' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:702:0: 'Refl.uniqueFor_id' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:703:0: 'Refl.rot90_two_decompositions' depends on axioms: [propext]
+info: ././././Main.lean:704:0: 'Refl.rot180_two_decompositions' depends on axioms: [propext]
+info: ././././Main.lean:705:0: 'Refl.Aref2_example' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:706:0: 'Refl.r3_two_decompositions' does not depend on any axioms
+info: ././././Main.lean:707:0: 'Refl.parallel_gives_translation' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:708:0: 'Refl.affine_two_decompositions' does not depend on any axioms
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+== 1. the 90 degree rotation
+PASS R1..R4 are reflections (orthogonal, det -1, involution)
+PASS rot90 = [[0,-1],[1,0]] is a nontrivial rotation
+PASS R2.R1 = R4.R3 = rot90
+PASS each mirror is a line: ['1', '0'], ['1', '1'], ['0', '1'], ['1', '-1']
+PASS the four mirrors (x-axis, y=x, y-axis, y=-x) are pairwise different lines
+PASS the unordered mirror pairs {x-axis, y=x} and {y-axis, y=-x} differ
+== 2. the 180 degree rotation
+PASS R3.R1 = R4.R2 = R2.R4 = -I
+PASS non-parallel mirror pairs {x-axis, y-axis} and {y=x, y=-x} differ
+== 3. symbolic identities (polynomial arithmetic over Z)
+PASS rho.A has the reflection shape [[a',b'],[b',-a']]
+PASS a'^2 + b'^2 = (x^2+y^2)(a^2+b^2) = (pq)^2, so rho.A is orthogonal with det -1 (and an involution)
+PASS (rho.A).A = (a^2+b^2) rho = q^2 rho, i.e. (rho.A).A = rho
+PASS A.A = (a^2+b^2) I: orthogonal + det -1 already forces the involution
+PASS (1-t^2)^2 + (2t)^2 = (1+t^2)^2 (Pythagorean family)
+PASS A_t (1,t) = (1,t): the mirror of A_t is the line of slope t
+== 4. the family (A_t, rho.A_t) for many rational rotations
+PASS 123 nontrivial rational rotations x 86 parameters t: every (A_t, rho.A_t) is a decomposition rho = B.A with non-parallel mirrors, and the mirrors of the A_t are pairwise different
+== 5. brute force: all decompositions inside a finite set of rational reflections
+PASS S = 124 rational reflections [[c,s],[s,-c]] (c^2+s^2=1, from Pythagorean triples (m^2-n^2, 2mn, m^2+n^2), 0 <= n < m < 9; largest denominator 113)
+PASS rot90: 124 decompositions B.A = rho with A, B in S, all non-parallel, 124 different unordered mirror pairs
+PASS rot180: 124 decompositions B.A = rho with A, B in S, all non-parallel, 62 different unordered mirror pairs
+PASS rot(3/5,4/5): 40 decompositions B.A = rho with A, B in S, all non-parallel, 40 different unordered mirror pairs
+PASS rot(5/13,12/13): 24 decompositions B.A = rho with A, B in S, all non-parallel, 24 different unordered mirror pairs
+PASS identity: the 124 decompositions in S are exactly (A, A): equal mirrors (the 'parallel' exception)
+PASS classification: for each first reflection A the second one is forced (B = rho.A)
+== 6. R^3: hyperplane reflections (block embedding diag(R, 1))
+PASS diag(Ri,1) are reflections of R^3, diag(rot90,1) is a rotation
+PASS diag(R2,1).diag(R1,1) = diag(R4,1).diag(R3,1) = 90 deg about e3
+PASS the four mirrors are planes (dim 2), pairwise different
+PASS R^3: 20 decompositions (M, rotz.M) with different mirror planes
+== 7. affine reflections
+PASS reflections in x = 0 and x = 1: involutions whose fixed sets are lines
+PASS the mirrors x = 0, x = 1 are parallel and distinct
+PASS their composition is the translation by (2, 0): no fixed point, so not a rotation (clause 1 fails, clause 4's exception)
+PASS equal mirrors: S.S = id
+PASS RotC = rotation by 90 deg about (1, 1)
+PASS Sy1, Sdiag, Sx1, Santi are affine reflections
+PASS RotC = S(y=x) o S(y=1) = S(x+y=2) o S(x=1): two decompositions, four non-parallel mirrors through (1,1)
+== 8. real angles (floating point illustration)
+PASS R_(alpha + theta/2) . R_alpha = rho_theta for 5 angles theta and 5 angles alpha each
+
+ALL CHECKS PASSED
+exit 0
