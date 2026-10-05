@@ -1,0 +1,195 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\M}{\mathcal{M}(\mathbb{C})}
+
+\title{A disproof of Conjecture 00000002251\\[2pt]
+\large The kernel of the difference operator on meromorphic functions is not one-dimensional}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000002251 reads (English version):
+
+\begin{quote}
+\emph{Definition:} The difference operator $\Delta_c f = f(z+c) - f(z)$.
+\emph{Conjecture:} The kernel of $\Delta_c$ has dimension 1, and the spectrum of $\Delta_c$ on
+meromorphic function spaces (differences of difference polynomials) is explicit of the
+$\{2\sin(kc/2)\}$ type (difference spectrum).
+\end{quote}
+
+The Chinese version says the same: the kernel of $\Delta_c$ has dimension $1$, and the spectrum of
+$\Delta_c$ on the meromorphic function space (\emph{ya chun han shu kong jian}) is explicitly of
+$\{2\sin(kc/2)\}$ type. The statement is a conjunction. Its first clause (kernel of dimension $1$) is
+unhedged; the second clause is hedged by the word ``type''. We refute the first clause, which refutes the
+conjunction, and we also compute the spectrum exactly.
+
+\section{Reading and conventions}
+
+\begin{definition}
+$\M$ is the set of meromorphic functions $f:\mathbb{C}\to\mathbb{C}$ (meromorphic at every point of
+$\mathbb{C}$), a complex vector space under pointwise operations. For $c\in\mathbb{C}$,
+$\Delta_c:\M\to\M$ is $(\Delta_c f)(z) = f(z+c)-f(z)$; it maps $\M$ into $\M$ because translates, sums and
+scalar multiples of meromorphic functions are meromorphic, and it is $\mathbb{C}$-linear.
+\end{definition}
+
+\begin{itemize}[nosep]
+\item \textbf{Domain.} We read $\Delta_c$ on the space the text names, ``meromorphic function spaces'',
+  with no growth, periodicity or polynomial restriction (Section~\ref{sec:readings} lists restricted
+  readings, which we do \emph{not} refute).
+\item \textbf{Values at poles.} Following Mathlib, a meromorphic function is an honest function
+  $\mathbb{C}\to\mathbb{C}$ with some value at each pole. Lemma~\ref{lem:germ} shows that the witnesses
+  stay independent if functions that agree off a discrete set are identified, so the result does not
+  depend on this convention.
+\item \textbf{Dimension} is the rank of a vector space (a cardinal, \texttt{Module.rank}); ``dimension 1''
+  means rank $=1$. \textbf{Spectrum} is the algebraic spectrum in $\mathrm{End}_{\mathbb{C}}(\M)$:
+  $\mu\in\sigma(\Delta_c)$ iff $\mu\cdot\mathrm{id}-\Delta_c$ is not bijective.
+\item \textbf{The shift $c$} ranges over all of $\mathbb{C}$; the kernel result holds for every $c$,
+  including the degenerate $c=0$. The spectrum result is stated for $c\neq 0$.
+\end{itemize}
+
+\section{The kernel has dimension at least two}
+
+\begin{lemma}\label{lem:eigen}
+For $b,c\in\mathbb{C}$ let $e_b(z)=e^{bz}$. Then $\Delta_c e_b = (e^{bc}-1)\,e_b$.
+\end{lemma}
+\begin{proof}
+$e^{b(z+c)}-e^{bz} = e^{bz}e^{bc}-e^{bz}$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+For every $c\in\mathbb{C}$, $\operatorname{rank}_{\mathbb{C}}\ker\Delta_c > 1$. In particular
+$\ker \Delta_c$ never has dimension $1$.
+\end{theorem}
+\begin{proof}
+\emph{Case $c\neq 0$.} Let $\omega = 2\pi i/c$, $u=1$ and $v=e_\omega$. Then $\Delta_c u = 0$ and, by
+Lemma~\ref{lem:eigen}, $\Delta_c v = (e^{2\pi i}-1)v = 0$. If $su+tv = s'u+t'v$, evaluate at $z=0$ and at
+$z=c/2$, where $v(0)=1$ and $v(c/2)=e^{\pi i}=-1$: $s+t=s'+t'$ and $s-t=s'-t'$, hence $s=s'$, $t=t'$. So
+$u,v$ are linearly independent elements of $\ker\Delta_c$.
+
+\emph{Case $c=0$.} $\Delta_0=0$, so $u=1$ and $v(z)=z$ lie in the kernel; evaluating at $z=0$ and $z=1$
+gives independence as above.
+
+In both cases $\ker\Delta_c$ contains a linearly independent pair, so its rank is at least $2>1$.
+\end{proof}
+
+\begin{lemma}\label{lem:germ}
+Let $c\neq0$ and $s,t\in\mathbb{C}$. If $s+t\,e^{2\pi i z/c}=0$ for all $z$ outside a discrete subset
+of $\mathbb{C}$ (i.e.\ on a set in the codiscrete filter), then $s=t=0$.
+\end{lemma}
+\begin{proof}
+The function $F(z)=s+te^{2\pi iz/c}$ is continuous and vanishes on a punctured neighbourhood of every
+point, hence everywhere. Now use $z=0$ and $z=c/2$ as before.
+\end{proof}
+
+\begin{remark}
+Both witnesses for $c\neq 0$ are entire, and $|e^{bz}|=e^{\operatorname{Re}(bz)}\le e^{|b||z|}$. Hence the
+same pair lies in the kernel of $\Delta_c$ on entire functions and on any class of meromorphic functions
+that contains entire functions of exponential type, so those readings are refuted as well.
+\end{remark}
+
+\section{The spectrum}
+
+\begin{theorem}\label{thm:spec}
+Let $c\neq0$. Every $\mu\neq-1$ is an eigenvalue of $\Delta_c$ on $\M$, and $-1\notin\sigma(\Delta_c)$.
+Hence $\sigma(\Delta_c)=\mathbb{C}\setminus\{-1\}$, which is uncountable; in particular
+$\sigma(\Delta_c)\ne\{2\sin(kc/2):k\in\mathbb{Z}\}$, and it is not the image of any countable index set.
+\end{theorem}
+\begin{proof}
+For $\mu\neq-1$ put $b=\log(1+\mu)/c$ (any branch; $1+\mu\neq0$). Then $e^{bc}=1+\mu$, and by
+Lemma~\ref{lem:eigen} $\Delta_c e_b=\mu e_b$ with $e_b(0)=1\neq0$. For $\mu=-1$:
+$(-\mathrm{id}-\Delta_c)f(z) = -f(z+c)$, which is a bijection of $\M$ with inverse $g\mapsto
+-g(\cdot-c)$. Finally $\mathbb{C}=(\mathbb{C}\setminus\{-1\})\cup\{-1\}$ is uncountable, while the image of
+a countable set is countable.
+\end{proof}
+
+Note that $0\in\sigma(\Delta_c)$: it is the eigenvalue of the (non-trivial) kernel.
+
+\section{Relation to the earlier PR \#270}
+
+PR \#270 (orionsheep, merged 2026-10-03) used the same reading and the same witness
+$e^{2\pi iz/c}$. It was removed in the re-audit commit \texttt{541cf4fb}, whose note reads
+``\#2251 (4-point cyclic shadow; meromorphic kernel prose-only)''. Its Lean file defined a function
+\texttt{unit4 : Nat -> Int x Int} cycling through four pairs labelled $1,i,-1,-i$ and proved
+\texttt{unit4 (z+4) = unit4 z} by \texttt{rfl}, plus the distinctness of four integer pairs. No complex
+function, no meromorphic function, no operator $\Delta_c$ and no kernel or dimension appeared in Lean; the
+theorem that the kernel has dimension $\ge2$ was prose only, so the Lean certified nothing about the
+conjecture's objects.
+
+PR \#270 also stated that the eigenvalues $e^{\lambda c}-1$ of the eigenfunctions $e^{\lambda z}$ ``sweep
+$\mathbb{C}\setminus\{0\}$''. That is wrong: as $\lambda$ ranges over $\mathbb{C}$ (and $c\ne0$),
+$e^{\lambda c}$ takes every nonzero value, so $e^{\lambda c}-1$ takes exactly the values in
+$\mathbb{C}\setminus\{-1\}$. The value $0$ \emph{is} attained (it is the eigenvalue of the non-trivial
+kernel, contradicting PR \#270's own kernel claim), and $-1$ is the omitted value
+(Theorem~\ref{thm:spec}). The present submission corrects both defects: $\Delta_c$ is a
+$\mathbb{C}$-linear endomorphism of the genuine space of meromorphic functions $\mathbb{C}\to\mathbb{C}$,
+and the rank of its kernel and its spectrum are theorems about that object.
+
+\section{Readings that are not refuted}\label{sec:readings}
+
+The kernel clause can hold if $\Delta_c$ is restricted to a smaller space that excludes non-constant
+periodic functions. We do \emph{not} refute such readings, for example: $\Delta_c$ on polynomials or
+rational functions (for $c\neq 0$ a $c$-periodic one is constant: if $z_0$ is not a pole, then
+$f-f(z_0)$ vanishes at $z_0+nc$ for all $n\in\mathbb{N}$); on meromorphic functions of order $<1$; or on $2\pi$-periodic trigonometric polynomials
+$\sum a_k e^{ikz}$ with $c/2\pi$ irrational. In the last setting
+$\Delta_c e^{ikz}=(e^{ikc}-1)e^{ikz}=2i\,e^{ikc/2}\sin(kc/2)\,e^{ikz}$, which is presumably where the
+$\{2\sin(kc/2)\}$ set comes from.
+
+We take the literal reading because the text itself names the domain: ``the spectrum of $\Delta_c$ on
+meromorphic function spaces'', with ``difference polynomials'' (polynomial expressions in shifts
+$f(z+c_j)$) as the objects $\Delta_c$ acts on. No growth bound, periodicity or polynomial restriction is
+stated, and the kernel clause carries no hedge. On that space the kernel of $\Delta_c$ is the space of all
+$c$-periodic meromorphic functions, which has dimension at least $2$ for every $c$.
+
+\section{Lean 4 formalization}
+
+The file \texttt{lean/Conjecture2251/Basic.lean} (221 lines, only \texttt{import Mathlib}; Lean
+\texttt{v4.33.1}, Mathlib \texttt{v4.33.1}) defines
+\begin{itemize}[nosep]
+\item \texttt{MeroFun : Submodule C (C -> C)}, carrier $\{f \mid \texttt{Meromorphic } f\}$ (Mathlib's
+  \texttt{Meromorphic}: meromorphic at every point);
+\item \texttt{diffOp c : Module.End C MeroFun}, $f\mapsto$ \texttt{fwdDiff c f}, i.e.\
+  $z\mapsto f(z+c)-f(z)$ (Mathlib's forward difference), with closure from
+  \texttt{Meromorphic.meromorphic\_fun\_comp\_add\_const\_iff\_meromorphic}.
+\end{itemize}
+Theorems (all in namespace \texttt{Tlmc2251}):
+\begin{itemize}[nosep]
+\item \texttt{diffOp\_expMF}: $\Delta_c e_b=(e^{bc}-1)e_b$ (Lemma~\ref{lem:eigen});
+  \texttt{expMF\_differentiable}, \texttt{expMF\_growth}: $e_b$ is entire and $\|e^{bz}\|\le
+  e^{\|b\|\|z\|}$;
+\item \texttt{kernel\_pair}: for every $c$, two elements of $\ker\Delta_c$ with
+  $su+tv=s'u+t'v\Rightarrow s=s',t=t'$;
+\item \texttt{rank\_ker\_diffOp\_gt\_one}: \texttt{1 < Module.rank C (LinearMap.ker (diffOp c))} for all
+  \texttt{c} (Theorem~\ref{thm:main}); \texttt{kernel\_not\_dim\_one}: the rank is $\ne 1$;
+\item \texttt{indep\_mod\_codiscrete}: Lemma~\ref{lem:germ}, with the filter \texttt{codiscrete C};
+\item \texttt{hasEigenvalue\_diffOp}, \texttt{neg\_one\_not\_mem\_spectrum}, \texttt{spectrum\_diffOp}
+  (\texttt{spectrum C (diffOp c) = \{-1\}\textasciicircum c} for $c\ne0$),
+  \texttt{spectrum\_not\_countable}, \texttt{spectrum\_ne\_sine\_set} (Theorem~\ref{thm:spec});
+\item \texttt{conjecture\_2251\_refuted}: the conjunction of \texttt{rank\_ker\_diffOp\_gt\_one} for all
+  $c$ and, for $c\ne0$, \texttt{spectrum\_diffOp} and \texttt{spectrum\_not\_countable}.
+\end{itemize}
+Here \texttt{C} stands for $\mathbb{C}$. \texttt{lake build} succeeds, and \texttt{\#print axioms} for
+\texttt{conjecture\_2251\_refuted}, \texttt{kernel\_not\_dim\_one}, \texttt{indep\_mod\_codiscrete},
+\texttt{spectrum\_ne\_sine\_set} and \texttt{expMF\_growth} reports only \texttt{propext},
+\texttt{Classical.choice} and \texttt{Quot.sound}. There is no \texttt{sorry}, no \texttt{native\_decide}
+and no added axiom.
+
+\end{document}
