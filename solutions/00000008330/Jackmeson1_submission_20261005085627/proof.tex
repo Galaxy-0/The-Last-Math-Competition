@@ -1,0 +1,130 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Conjecture 00000008330: $(-2,-1)\cup(1,2)$ is not the list of gaps of $C-C$}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\textbf{English.} Definition: The arithmetic sums of Cantor sets: the higher-dimensional products
+beyond the known $C + C = [0,2]$ for the middle-thirds Cantor set $C$. Conjecture: The product
+$C \times C$ has the critical dimension sum $4/3$ (a critical sum law); the complete list of gaps of
+the difference set $C - C$ (complement intervals) is the double gap $(-2,-1) \cup (1,2)$ (a double
+gap law); and the fullness criterion for arithmetic sums of digit-restricted sets (base-$b$
+digit-restricted sets) is critical at the Newhouse threshold $\dim_1 + \dim_2 = b$ (a Newhouse
+fullness threshold law).
+
+\textbf{Chinese text.} The Chinese version has the same three clauses; the second reads (translated)
+``the complete list of the holes of the difference set $C-C$ (the intervals of the complement of the
+difference set) is the double hole $(-2,-1)\cup(1,2)$''.
+
+\section{Reading}
+
+The conjecture is a conjunction of three clauses. We refute the second clause (the ``double gap
+law''); this refutes the conjunction. We do not use or assess the first clause (dimension sum $4/3$)
+or the third clause (Newhouse threshold).
+
+\begin{definition}
+$C$ is the middle-thirds Cantor set: $C=\bigcap_{n\ge 0} C_n$, where $C_0=[0,1]$ and
+$C_{n+1}=\tfrac13 C_n \cup \tfrac13(2+C_n)$. This is Mathlib's \texttt{cantorSet} (file
+\texttt{Mathlib/Topology/Instances/CantorSet.lean}). The difference set is
+$C-C=\{x-y : x,y\in C\}$ (pointwise subtraction, \texttt{cantorSet - cantorSet}).
+\end{definition}
+
+The text identifies the gaps with ``complement intervals''. We refute the clause under each of the
+following four readings of ``the complete list of gaps of $C-C$ is $(-2,-1)\cup(1,2)$'':
+\begin{itemize}
+\item[(R1)] \emph{complement reading:} $\mathbb R\setminus(C-C)=(-2,-1)\cup(1,2)$;
+\item[(R2)] \emph{standard gaps:} a gap of a set $S\subseteq\mathbb R$ is a bounded connected
+component of $\mathbb R\setminus S$ (Lean: \texttt{IsGap}); the clause says in particular that
+$(1,2)$ and $(-2,-1)$ are gaps of $C-C$;
+\item[(R3)] \emph{ambient interval $[-2,2]$:} $(1,2)$ is a connected component of
+$[-2,2]\setminus(C-C)$;
+\item[(R4)] \emph{gaps inside the hull:} gaps are the components of
+$[\inf(C-C),\sup(C-C)]\setminus(C-C)$, so each gap lies inside $[\inf(C-C),\sup(C-C)]$.
+\end{itemize}
+Every reading in which the listed intervals are complementary intervals of $C-C$ requires
+$(1,2)$ to be a component of the complement of $C-C$ in some ambient set; (R1)--(R4) are the ambient
+choices $\mathbb R$, $[-2,2]$ and the hull. A reading that takes the complement inside some other
+ambient set (for example $(1,2)$ itself) is not covered.
+
+\section{Proof}
+
+\begin{lemma}\label{lem:sub}
+$C\subseteq[0,1]$ and $0,1\in C$. Hence $C-C\subseteq[-1,1]$, $\pm1\in C-C$,
+$\sup(C-C)=1$ and $\inf(C-C)=-1$.
+\end{lemma}
+\begin{proof}
+$C\subseteq C_0=[0,1]$, and $0\in C$ (Mathlib \texttt{cantorSet\_subset\_unitInterval},
+\texttt{zero\_mem\_cantorSet}). By induction $1\in C_n$ for all $n$, since $1=(2+1)/3$; so $1\in C$.
+If $x,y\in[0,1]$ then $-1\le x-y\le 1$. Finally $1=1-0$ and $-1=0-1$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+\begin{enumerate}
+\item[(R1)] $\mathbb R\setminus(C-C)\ne(-2,-1)\cup(1,2)$.
+\item[(R2)] For every $x$, the connected component of $x$ in $\mathbb R\setminus(C-C)$ is neither
+$(1,2)$ nor $(-2,-1)$. In particular neither $(1,2)$ nor $(-2,-1)$ is a gap of $C-C$.
+\item[(R3)] For every $x$, the connected component of $x$ in $[-2,2]\setminus(C-C)$ is not $(1,2)$.
+\item[(R4)] $(1,2)\not\subseteq[\inf(C-C),\sup(C-C)]=[-1,1]$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:sub}, $(1,\infty)$ and $(-\infty,-1)$ lie in $\mathbb R\setminus(C-C)$.
+(R1): $3\notin C-C$ but $3\notin(-2,-1)\cup(1,2)$.
+(R2): suppose the component of $x$ equals $(1,2)$. It is nonempty, so $x$ lies in the complement,
+and then $x$ lies in its own component, so $x\in(1,2)$. The interval $(1,\infty)$ is connected,
+contains $x$ and lies in the complement, so it lies in the component of $x$. Then $3\in(1,2)$, a
+contradiction. The case $(-2,-1)$ is symmetric (use $(-\infty,-1)$ and $-3$).
+(R3): in the same way, $x\in(1,2)$, and $(1,2]$ is connected, contains $x$ and lies in
+$[-2,2]\setminus(C-C)$. So $2$ lies in the component, but $2\notin(1,2)$.
+(R4): $3/2\in(1,2)$ but $3/2>1=\sup(C-C)$.
+\end{proof}
+
+\begin{remark}
+The proof uses only $C\subseteq[0,1]$ and $0,1\in C$. In fact $C-C=[-1,1]$, because
+$C-C=C+C-1$ ($C$ is symmetric about $1/2$), but neither this nor $C+C=[0,2]$ is used or
+formalized.
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture8330/Basic.lean} (Lean 4, Mathlib v4.33.1; its only import is
+\texttt{Mathlib}). It uses Mathlib's \texttt{cantorSet} and defines
+\texttt{IsGap S I} $:=$ ($\exists x\in S^c$, \texttt{connectedComponentIn} $S^c$ $x = I$) $\wedge$
+$I$ bounded. Theorem names: \texttt{C8330.sub\_subset\_Icc}, \texttt{C8330.one\_mem\_cantorSet},
+\texttt{C8330.sSup\_sub}, \texttt{C8330.sInf\_sub} (Lemma~\ref{lem:sub});
+\texttt{C8330.compl\_ne\_double\_gap} (R1); \texttt{C8330.Ioo\_one\_two\_not\_component},
+\texttt{C8330.Ioo\_neg\_two\_neg\_one\_not\_component} (R2);
+\texttt{C8330.Ioo\_one\_two\_not\_component\_in\_Icc} (R3);
+\texttt{C8330.Ioo\_one\_two\_not\_subset\_hull} (R4). The main theorem combines them:
+\begin{align*}
+&\neg\,\mathtt{IsGap}\,(C-C)\,(1,2)\ \wedge\ \neg\,\mathtt{IsGap}\,(C-C)\,(-2,-1)\ \wedge\
+(C-C)^{c}\ne(-2,-1)\cup(1,2)\ \wedge\\
+&\bigl(\forall x,\ \mathtt{connectedComponentIn}\,([-2,2]\setminus(C-C))\,x\ne(1,2)\bigr)\ \wedge\\
+&\neg\bigl((1,2)\subseteq[\inf(C-C),\sup(C-C)]\bigr),
+\end{align*}
+where $C$ is \texttt{cantorSet}, $(a,b)$ is \texttt{Ioo a b}, $[a,b]$ is \texttt{Icc a b}, and
+$\inf,\sup$ are \texttt{sInf}, \texttt{sSup}.
+
+\textbf{Axiom audit.} \texttt{\#print axioms C8330.double\_gap\_law\_false} reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no
+\texttt{native\_decide}.
+
+\end{document}
