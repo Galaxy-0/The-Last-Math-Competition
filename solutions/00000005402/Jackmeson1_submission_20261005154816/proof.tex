@@ -1,0 +1,193 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\Fix}{\operatorname{Fix}}
+\newcommand{\mper}{\operatorname{mp}}
+
+\title{A disproof of Conjecture 00000005402\\[2pt]
+\large The Moebius conversion of periodic-orbit counts has no $\mu(d)\cdot d$ coefficients}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000005402 reads:
+
+\begin{quote}
+\emph{Definition:} The Mobius conversion inverts the counts of all periodic orbits to recover the primitive
+(exactly periodic) orbit counts. \emph{Conjecture:} The low-order conversion is always an explicit
+divisor-sum recursion with recursion coefficients small integer values of type mu(d) times d; the transfer
+matrix of the recursion is triangular with diagonal entries 1; and the inverse conversion, the cumulative
+counting, is the partial sums of the primitive counts with nonnegative summation coefficients.
+\end{quote}
+
+The Chinese text says the same; in particular the coefficients are of type $\mu(d)d$.
+The statement is a conjunction of three clauses:
+\begin{enumerate}[label=(\roman*)]
+  \item (\emph{coefficients}) at low order, the conversion from the total counts $T_n$ to the primitive counts
+        $B_n$ is the divisor-sum recursion $B_n=\sum_{d\mid n}\mu(d)\,d\,T_{n/d}$;
+  \item its matrix is triangular with diagonal $1$;
+  \item the inverse conversion has nonnegative coefficients.
+\end{enumerate}
+We refute clause (i), already at order $n=2$, which is the lowest order at which the clause says anything
+beyond $B_1=T_1$. This makes the conjunction false. We do not need clauses (ii) and (iii), and we do not
+claim that they are false.
+The placement $\mu(d)\,d$ on $T_{n/d}$ is the one compatible with clause (ii): its diagonal coefficient
+($d=1$) is $\mu(1)\cdot 1=1$. Theorem~\ref{thm:forced} below also excludes the other placement at order $2$.
+
+\section{Definitions and readings}
+
+A \emph{finite dynamical system} is a map $f:\beta\to\beta$ on a finite type $\beta$. A point $x$ is
+\emph{periodic of period $n$} if $f^n(x)=x$. The \emph{least period} $\mper(x)$ is the smallest $n>0$
+with $f^n(x)=x$. Following Mathlib's \texttt{Function.minimalPeriod}, we set $\mper(x)=0$ when $x$ is not
+periodic. The orbit of a periodic point $x$ is the cycle
+$[x,f(x),\dots,f^{\mper(x)-1}(x)]$ (Mathlib's \texttt{Function.periodicOrbit}). A \emph{primitive orbit of
+length $n$} is the orbit of a point of least period $n$. The Moebius function satisfies $\mu(1)=1$ and
+$\mu(2)=-1$; it is Mathlib's \texttt{ArithmeticFunction.moebius}.
+
+The text does not say whether points or orbits are counted, so we use the following counts
+(Lean names in typewriter font), for $n\ge 1$:
+\begin{itemize}[nosep]
+\item $\texttt{perPts}\ f\ n=\#\{x : f^n(x)=x\}$ (periodic points of period $n$);
+\item $\texttt{exactPts}\ f\ n=\#\{x : \mper(x)=n\}$ (points of least period $n$);
+\item $\texttt{primOrbits}\ f\ n$ = number of distinct orbits of the points with $\mper(x)=n$;
+\item $\texttt{divOrbits}\ f\ n$ = number of distinct orbits of the points with $f^n(x)=x$;
+\item $\texttt{cumPts}\ f\ n=\#\{x : 1\le \mper(x)\le n\}$;
+\item $\texttt{cumOrbits}\ f\ n$ = number of distinct orbits of the points with $1\le\mper(x)\le n$.
+\end{itemize}
+Here \texttt{divOrbits} counts the periodic orbits whose length divides $n$. The last two are the
+``cumulative'' counts read as ordinary partial sums. We test six readings of (total $T$, primitive $B$):
+\begin{center}
+\begin{tabular}{lll}
+R1: (\texttt{perPts}, \texttt{primOrbits}) & R2: (\texttt{perPts}, \texttt{exactPts}) &
+R3: (\texttt{divOrbits}, \texttt{primOrbits})\\
+R1$'$: (\texttt{cumPts}, \texttt{primOrbits}) & R2$'$: (\texttt{cumPts}, \texttt{exactPts}) &
+R3$'$: (\texttt{cumOrbits}, \texttt{primOrbits}).
+\end{tabular}
+\end{center}
+For the readings R2 and R3 the classical Moebius inversion formula applies. It says that if
+$g(n)=\sum_{d\mid n}f(d)$ for all $n\ge1$, then $f(n)=\sum_{d\mid n}\mu(d)\,g(n/d)$ [W1]. The resulting
+conversion has coefficients $\mu(d)$, not $\mu(d)\,d$. We use this only as motivation; the Lean proof below
+does not rely on it.
+
+\begin{definition}[\texttt{ConjecturedConversion T B N}]
+For every finite dynamical system $f$ and every order $1\le n\le N$,
+$B(f,n)=\sum_{d\mid n}\mu(d)\,d\,T(f,n/d)$ (the right side is \texttt{muDConv}).
+\end{definition}
+
+\section{Results}
+
+\begin{lemma}[\texttt{muDConv\_two}]
+$\sum_{d\mid 2}\mu(d)\,d\,a(2/d)=a(2)-2a(1)$.
+\end{lemma}
+
+\begin{theorem}[\texttt{g\_counterexample}]\label{thm:g}
+Let $g=(0)(1)(2\,3)$ be the permutation of $\{0,1,2,3\}$ with two fixed points and one $2$-cycle. Then
+$\texttt{perPts}=(2,4)$, $\texttt{divOrbits}=(2,3)$ at $n=1,2$, and $\texttt{exactPts}\ g\ 2=2$,
+$\texttt{primOrbits}\ g\ 2=1$. The $\mu(d)\,d$ conversion predicts
+$4-2\cdot2=0$ (R1, R2) and $3-2\cdot2=-1$ (R3), whereas the true values are $1$, $2$ and $1$.
+\end{theorem}
+\begin{proof}
+$g$ is an involution. For an involution, $\mper(x)=1$ if $f(x)=x$ and $\mper(x)=2$ otherwise
+(\texttt{minimalPeriod\_invol}, using Mathlib's \texttt{minimalPeriod\_eq\_prime} with $p=2$). The orbit is
+then $[x]$ or $[x,f(x)]$ (\texttt{periodicOrbit\_invol}). After this rewriting every count is a finite
+decidable computation (\texttt{decide}). The orbits $[2,3]$ and $[3,2]$ are equal as cycles, so
+$\texttt{primOrbits}\ g\ 2=1$.
+\end{proof}
+
+\begin{lemma}[\texttt{perPts\_eq\_cumPts}, \texttt{divOrbits\_eq\_cumOrbits}]
+For $n\in\{1,2\}$ and every finite system, $f^n(x)=x \iff 1\le \mper(x)\le n$. Hence
+$\texttt{perPts}=\texttt{cumPts}$ and $\texttt{divOrbits}=\texttt{cumOrbits}$ at orders $1$ and $2$.
+\end{lemma}
+\begin{proof}
+$f^n(x)=x\iff \mper(x)\mid n$ (Mathlib \texttt{isPeriodicPt\_iff\_minimalPeriod\_dvd}). The divisors of $1$
+and of $2$ are exactly the integers in $[1,1]$ and $[1,2]$.
+\end{proof}
+
+\begin{theorem}[Main theorem, \texttt{conjecture\_5402\_false}]
+For every $N\ge 2$, \texttt{ConjecturedConversion T B N} is false for each of the six readings
+R1, R2, R3, R1$'$, R2$'$, R3$'$.
+\end{theorem}
+\begin{proof}
+Instantiate the claim at $\beta=\mathrm{Fin}\,4$, $f=g$, $n=2$ and apply Theorem~\ref{thm:g}; for the
+primed readings, first rewrite the totals with the previous lemma.
+\end{proof}
+
+The next result shows that the failure is not an accident of the witness: at order $2$ the coefficients of
+any valid divisor-sum conversion are forced. We use the identity map of a one-point set and the swap of a
+two-point set.
+
+\begin{theorem}[\texttt{R1\_no\_integer\_conversion}, \texttt{R2\_coefficients\_forced},
+\texttt{R3\_coefficients\_forced}]\label{thm:forced}
+Suppose that $B_2=x\,T_2+y\,T_1$ with $x,y\in\mathbb Z$ holds for every finite dynamical system.
+\begin{itemize}[nosep]
+\item Under R1 there are no such integers: the one-point identity gives $0=x+y$, and the swap gives $1=2x$.
+\item Under R2, $x=1$ and $y=-1$ (from $0=x+y$ and $2=2x$).
+\item Under R3, $x=1$ and $y=-1$ (from $0=x+y$ and $1=x$).
+\end{itemize}
+\end{theorem}
+
+\begin{corollary}[\texttt{no\_placement\_of\_muD}]
+If $\{x,y\}=\{\mu(1)\cdot1,\ \mu(2)\cdot 2\}=\{1,-2\}$ (either placement of the order-$2$ coefficients),
+then $B_2=x\,T_2+y\,T_1$ fails for some finite system under each of R1, R2 and R3.
+\end{corollary}
+\begin{proof}
+Under R1 this follows from the first item of Theorem~\ref{thm:forced}. Under R2 and R3 we would need $y=-1$,
+but $-1\notin\{1,-2\}$.
+\end{proof}
+
+\begin{remark}
+Under R2 and R3 the correct order-2 coefficient is $-1=\mu(2)$, which is the classical Moebius
+coefficient. The factor $d$ demanded by the conjecture is what fails. Under R1 the true relation is
+$2B_2=T_2-T_1$, which has no integer form.
+\end{remark}
+
+\section{Scope}
+
+We refute clause (i) under the six readings R1--R3 and R1$'$--R3$'$, for finite dynamical systems, at order
+$2$. The witness $g$ is a genuine permutation with both fixed points and a $2$-cycle. We do not claim that
+every conceivable reading is refuted. In particular, a total count that weights each primitive $k$-orbit by
+$n/k$, namely $T_n=\sum_{k\mid n}(n/k)B_k$, would make the $\mu(d)\,d$ formula correct. That weighting does
+not appear in the text, so we do not treat it.
+
+\section{Lean formalization and axiom audit}
+
+The file \texttt{Conjecture5402/Basic.lean} (281 lines) imports only Mathlib (v4.33.1) and defines everything
+above in the namespace \texttt{C5402}. The main theorem is
+\begin{verbatim}
+theorem conjecture_5402_false (N : Nat) (hN : 2 <= N) :
+    not (ConjecturedConversion perPts primOrbits N) /\
+    not (ConjecturedConversion perPts exactPts N) /\
+    not (ConjecturedConversion divOrbits primOrbits N) /\
+    not (ConjecturedConversion cumPts primOrbits N) /\
+    not (ConjecturedConversion cumPts exactPts N) /\
+    not (ConjecturedConversion cumOrbits primOrbits N)
+\end{verbatim}
+Two further theorems are \texttt{R1\_no\_integer\_conversion} and \texttt{no\_placement\_of\_muD}. For each
+of the three, \texttt{\#print axioms} reports only \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\section*{Sources}
+[W1] Wikipedia, ``M\"obius inversion formula'', \url{https://en.wikipedia.org/wiki/M\%C3\%B6bius_inversion_formula}.
+The article states the formula as: if $g(n)=\sum_{d\mid n}f(d)$ for every integer $n\ge1$, then
+$f(n)=\sum_{d\mid n}\mu(d)\,g(n/d)$ for every integer $n\ge1$, and adds: ``In effect, the original f(n) can
+be determined given g(n) by using the inversion formula.''
+
+\end{document}
