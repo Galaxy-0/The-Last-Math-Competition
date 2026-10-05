@@ -1,0 +1,22 @@
+import Conjecture1066
+
+#print Conjecture1066.IsSidon
+#print Conjecture1066.UpperBound
+#print Conjecture1066.ExactAttainment
+#print Conjecture1066.UniversalConjecture
+#print Conjecture1066.ExistentialPrimeConjecture
+
+#check Conjecture1066.nat_cast_ne_sqrt_prime
+#print axioms Conjecture1066.nat_cast_ne_sqrt_prime
+#check Conjecture1066.cardinality_ne_sqrt_prime
+#print axioms Conjecture1066.cardinality_ne_sqrt_prime
+#check Conjecture1066.no_exact_attainment
+#print axioms Conjecture1066.no_exact_attainment
+#check Conjecture1066.no_prime_conjunction
+#print axioms Conjecture1066.no_prime_conjunction
+#check Conjecture1066.universal_conjecture_false
+#print axioms Conjecture1066.universal_conjecture_false
+#check Conjecture1066.no_prime_exact_attainment
+#print axioms Conjecture1066.no_prime_exact_attainment
+#check Conjecture1066.existential_prime_conjecture_false
+#print axioms Conjecture1066.existential_prime_conjecture_false

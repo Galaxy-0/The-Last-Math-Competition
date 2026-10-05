@@ -1,0 +1,60 @@
+{
+  "status": "PASS",
+  "created_utc": "2026-10-05T02:06:24.659743+00:00",
+  "source_sha256": "bc4da7471300ca9e672506a6c7397b094a3bb97dc2fad54b1549cb6a76896f40",
+  "pdf_sha256": "d994ed37181d1cdd4eb4b56bcba74be20dbb9fe26d3951a7d381cb4bb93b6985",
+  "page_count": 2,
+  "pdf_bytes": 44519,
+  "native_compiler": {
+    "kind": "success",
+    "tool": "compile_latex_document",
+    "source_sha256": "bc4da7471300ca9e672506a6c7397b094a3bb97dc2fad54b1549cb6a76896f40"
+  },
+  "export": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--outdir",
+      "/private/tmp/tlmc1066-report",
+      "/private/tmp/tlmc1066-report/main.tex"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.689,
+    "warnings_or_box_diagnostics": [],
+    "raw_log_local_path": "/private/tmp/tlmc1066-report/export-raw.txt",
+    "raw_log_sha256": "0d187bb72d2456cdd1b18bba58535e2de241e8e689a0c09b6c3fe12993e60726",
+    "packaged_log": "report-export.txt",
+    "packaged_log_sha256": "0d187bb72d2456cdd1b18bba58535e2de241e8e689a0c09b6c3fe12993e60726",
+    "log_normalization": "Strip trailing whitespace on each line, preserve all line contents and order, terminate with one newline."
+  },
+  "render": {
+    "command": [
+      "/Users/daniel/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override/pdftoppm",
+      "-scale-to",
+      "1600",
+      "-png",
+      "/private/tmp/tlmc1066-report/main.pdf",
+      "/private/tmp/tlmc1066-report/page"
+    ],
+    "exit_code": 0,
+    "images": [
+      {
+        "path": "/private/tmp/tlmc1066-report/page-1.png",
+        "sha256": "3c024b0968a2e5304a440811abf95c91e30c8acf8dba39411ff08406b7669d94"
+      },
+      {
+        "path": "/private/tmp/tlmc1066-report/page-2.png",
+        "sha256": "6037d9621bb561b20e890a5bd4088c663ffa94cd5f65f8485421502cff86edf0"
+      }
+    ]
+  },
+  "visual_review": {
+    "status": "PASS",
+    "reviewer": "coordinator",
+    "reviewed_utc": "2026-10-05T02:07:02.823080+00:00",
+    "pages": [
+      1,
+      2
+    ],
+    "findings": "Both rendered pages inspected: readable mathematics and typography, consistent margins and page numbers, no clipping/overlap/broken glyphs. The theorem statement ends page1 with its proof continuing normally on page2; scope statement completes on page2. Earlier overfull lines and sparse third page corrected before this final render."
+  }
+}
