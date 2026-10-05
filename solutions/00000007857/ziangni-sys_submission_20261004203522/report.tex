@@ -1,0 +1,55 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\title{The displayed random-graph spectral-gap scale is unbounded}
+\author{ziangni-sys \quad Conjecture 00000007857}
+\date{}
+\begin{document}
+\maketitle
+\vspace{-2em}
+\textbf{Disproof of the formula as written.} Both language versions display
+\[
+ \gamma_N(p)=\Theta\!\left(\max\!\left(1-\frac{\lambda_2(G)}{Np},\,Np^{-1}\right)\right)
+ \qquad\text{when }p\gg\frac{\log N}{N}.
+\]
+Here $Np^{-1}=N/p$ in standard notation. We disprove this formula, and make no assertion about a different formula obtained by replacing that term by $(Np)^{-1}$.
+
+Take $p=1$ and every integer $N\ge2$. In the actual Erd\H{o}s--R\'enyi model, the indicators of distinct unordered edges are independent Bernoulli random variables with parameter one. Each edge is present almost surely, so $G(N,1)=K_N$ almost surely. This is also a direct one-point probability-space realization of the model: all edge indicators are the constant true variable, with their genuine Bernoulli$(1)$ marginal laws and mutual independence. The stipulated dense regime holds, since
+\[
+ \frac{\log N}{N}\longrightarrow0.
+\]
+The source imposes no restriction excluding $p=1$.
+
+Let $A$ be the actual adjacency matrix of $K_N$. Every vertex has degree $d=N-1$, and for every vector $x\in\mathbb R^N$,
+\[
+ (Ax)_i=\sum_{j=1}^N x_j-x_i.
+\]
+The normalized Laplacian and lazy transition matrix are respectively
+\[
+ L=I-\frac{A}{N-1},\qquad P=\frac12I+\frac{A}{2(N-1)},
+ \qquad I-P=\frac12L.
+\]
+The entries of $P$ are nonnegative and each row sums to one. Thus $P$ is the actual lazy simple random-walk transition matrix, not a prescribed spectral surrogate.
+
+Writing $\mathbf1=(1,\ldots,1)$ gives
+\[
+ Lx=\frac{N}{N-1}x-\frac{\sum_i x_i}{N-1}\mathbf1.
+\]
+Therefore $L\mathbf1=0$, and on the nonzero sum-zero subspace it acts by the scalar $N/(N-1)$. For completeness, if $cLx=rx$ with $x\ne0$ and $r\ne0$, summing the coordinates gives $r\sum_i x_i=0$, hence $\sum_i x_i=0$ and $r=cN/(N-1)$. Conversely, $e_1-e_2$ is a genuine nonzero eigenvector for this scalar. For $c>0$, the full positive eigenvalue set is consequently the singleton $\{cN/(N-1)\}$.
+
+Taking the infimum of that actual positive eigenvalue set yields both conventions appearing in the source:
+\[
+ \gamma_N^{\mathrm{norm}}=\frac{N}{N-1}\le2,
+ \qquad
+ \gamma_N^{\mathrm{lazy}}=\frac{N}{2(N-1)}\le1.
+\]
+At $p=1$, however, the asserted comparison scale satisfies
+\[
+ F_N=\max\!\left(1-\frac{\lambda_2(K_N)}N,\,N\right)\ge N.
+\]
+This inequality holds regardless of the value or ordering convention for $\lambda_2$; no spectral table for that term is required. If the asserted $\Theta$ lower bound held, there would be $a>0$ and $N_0$ such that $aF_N\le\gamma_N$ for all sufficiently large $N$. Choosing $N\ge N_0$ with $aN>2$ contradicts either gap convention. The failure occurs with probability one, so a high-probability qualifier cannot repair it.
+
+\textbf{Formal correspondence.} Lean uses actual complete \texttt{SimpleGraph}s and adjacency matrices, proves their degrees and matrix actions, and computes the full positive eigenvalue sets and their \texttt{sInf} gaps for arbitrary positive scaling. It verifies the lazy matrix's nonnegative entries and row sums. A one-point probability space supplies genuinely independent edge functions whose pushed-forward measures equal the actual \texttt{PMF.bernoulli 1} measure. The logarithmic dense-regime limit is proved, followed by failure of every positive eventual lower constant, uniformly for every possible second-eigenvalue sequence. The separate concentration-width and GOE assertions are not needed.
+\end{document}
