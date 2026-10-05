@@ -1,0 +1,292 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{listings}
+\setlength{\emergencystretch}{4em}
+\hypersetup{hidelinks}
+\lstset{basicstyle=\ttfamily\small,breaklines=true,columns=fullflexible,keepspaces=true}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\title{A square-root counterexample to the proposed Kingman rate\\Conjecture 00000008482}
+\author{AlyciaBHZ, on behalf of the Omega Institute}
+\date{5 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The deterministic stationary subadditive family $X_{m,n}=\sqrt{n-m}$ has
+unit one-step costs, growth at most $n-m$, and successive increments at most
+one. Its limiting normalized expectation is zero, and its convergence error
+is exactly $n^{-1/2}$. This is not $O(\log n/n)$, refuting the proposed
+universal upper bound under the reading of bounded costs or bounded
+increments. We explicitly distinguish the alternative reading of a single
+bound over all interval lengths: under that reading every error is
+$O(1/n)$, which instead refutes the asserted logarithmic optimality.
+Both readings are checked in Lean 4 with Mathlib: the square-root
+counterexample refutes the upper bound, while uniform boundedness forces
+zero limit and error $o(\log n/n)$, refuting logarithmic sharpness.
+\end{abstract}
+
+\section{Statement and interpretation}
+Problem \textbf{00000008482} states, verbatim:
+\begin{quote}
+Definition: The convergence error of Kingman's subadditive ergodic theorem: the decay order of |n\textasciicircum\{-1\}E[X\_n] - gamma| in n. Conjecture: The universal upper bound for bounded subadditive families is O(log n/n) (a logarithmic harmonic law); the bound cannot be improved, extremal examples being realized by discretization deviations of Sturmian balanced words (a Sturmian extremal law); and in the unbounded case the error can decay arbitrarily slowly (an arbitrary slowness law). (Kingman Sturmian extremal logarithmic decay)
+\end{quote}
+We identify $X_n$ with $X_{0,n}$ of a stationary two-index subadditive
+process. The conjecture does not define ``bounded.'' Our primary reading
+is bounded local costs or bounded increments, as used for subadditive
+processes that can accumulate costs over an interval. We require the
+following explicit, simultaneous restrictions:
+\[
+0\le X_{m,n}\le n-m,\qquad X_{m,m+1}=1,\qquad
+|X_{m,n+1}-X_{m,n}|\le1\quad(m\le n).
+\]
+The first condition bounds all normalized interval costs, and also implies
+that each $X_{m,n}$ is a bounded random variable. The second uniformly
+bounds one-step costs; the third uniformly bounds successive increments.
+These are substantial restrictions, imposed together on the counterexample.
+
+There is another literal reading: one constant $B$ bounds $|X_{m,n}|$ for
+every interval, independently of its length. Our example does \emph{not}
+satisfy that condition, since $X_{0,n}=\sqrt n$ is unbounded as $n$ varies.
+We do not claim otherwise. Section~\ref{sec:global} addresses that reading
+directly. Under it the first conjunct is true, but the claimed optimality
+of the logarithmic rate is false. Thus we neither silently redefine
+boundedness nor claim that this particular counterexample refutes the
+first conjunct under every possible meaning of ``bounded.''
+
+\section{The deterministic process}
+For integers $0\le m\le n$, set
+\[X_{m,n}=\sqrt{n-m}.\]
+On a probability space this means the constant random variable with that
+value. In particular all expectations exist and
+$a_n=\mathbb E[X_{0,n}]=\sqrt n$. One can take a one-point probability
+space with the identity shift; this shift is measure preserving and
+ergodic. Thus the example belongs even to the ergodic setting, not merely
+the stationary setting. Joint stationarity holds pathwise, because
+\[X_{m+k,n+k}=\sqrt{(n+k)-(m+k)}=X_{m,n}.\]
+
+\begin{lemma}
+For $a,b\ge0$, $\sqrt{a+b}\le\sqrt a+\sqrt b$.
+\end{lemma}
+\begin{proof}
+Both sides are nonnegative and
+$(\sqrt a+\sqrt b)^2=a+b+2\sqrt{ab}\ge a+b$.
+Squaring therefore proves the inequality.
+\end{proof}
+For $l\le m\le n$, put $a=m-l$, $b=n-m$. The lemma yields
+\[X_{l,n}\le X_{l,m}+X_{m,n}.\]
+Nonnegativity is immediate. For an integer $d=n-m$, either $d=0$ or
+$d\ge1$, and in both cases $\sqrt d\le d$. This proves the linear bound.
+The one-step cost is $\sqrt1=1$. Monotonicity and the lemma with $b=1$
+give
+\[0\le\sqrt{d+1}-\sqrt d\le1.\]
+Hence the stated absolute increment bound holds for every interval.
+All negative-part integrability assumptions of Kingman's theorem are
+automatic, and $\mathbb E[X_{0,1}]=1<\infty$.
+
+\section{Limit and failure of the asserted rate}
+For every $n\ge1$,
+\[\frac{a_n}{n}=\frac{\sqrt n}{n}=\frac1{\sqrt n}.
+\]
+Consequently
+\[\gamma=\lim_{n\to\infty}\frac{a_n}{n}
+  =\inf_{n\ge1}\frac{a_n}{n}=0.
+\]
+The equality with the infimum follows because all terms are nonnegative
+and converge to zero. Thus the convergence error is exactly
+\[\left|\frac{a_n}{n}-\gamma\right|=\frac1{\sqrt n}.
+\]
+
+\begin{theorem}\label{thm:main}
+This error is not $O(\log n/n)$. There is no per-family big-O bound,
+and therefore no bound with a constant uniform over families.
+\end{theorem}
+\begin{proof}
+For $n\ge2$, the ratio of the error to the proposed scale is
+\[\frac{1/\sqrt n}{\log n/n}=\frac{\sqrt n}{\log n}\longrightarrow\infty.
+\]
+For completeness the elementary logarithm estimate is enough to establish
+this divergence: for $x\ge1$,
+\[\log x=\int_1^x\frac{dt}{t}
+   \le\int_1^x t^{-3/4}\,dt=4(x^{1/4}-1)\le4x^{1/4}.
+\]
+It follows that $\log x/\sqrt x\to0$ and the displayed reciprocal diverges.
+Equivalently, a purported eventual inequality
+$\sqrt n\le C\log n$ is incompatible with $\log n=o(\sqrt n)$.
+The latter is the form used in Lean. Multiplying the hypothetical big-O
+bound by $n$ gives $\sqrt n=O(\log n)$; composing with
+$\log n=o(\sqrt n)$ gives $\sqrt n=o(\sqrt n)$, impossible since
+$\sqrt n>0$ eventually. This argument allows both the constant and the
+starting index to depend on the family, so it disproves the weaker
+per-family reading as well as the uniform reading.
+\end{proof}
+The original conjecture is a conjunction. Under the bounded-costs reading,
+Theorem~\ref{thm:main} refutes its first conjunct, so no separate
+disproof of the Sturmian assertion or the arbitrary-slowness assertion
+is required. We make no claim here that the arbitrary-slowness assertion
+is false.
+
+\section{Robustness to the reading of 'bounded'}\label{sec:global}
+Suppose instead that a single $B<\infty$ satisfies
+$|X_{m,n}(\omega)|\le B$ for all intervals almost surely.
+Then $|\mathbb E[X_{0,n}]|\le B$, so $a_n/n\to0$, and
+\[\gamma=0,\qquad |a_n/n-\gamma|\le B/n.
+\]
+The same reasoning applies if the single bound is imposed directly on
+the expectations. Since $1/n=o(\log n/n)$, the logarithmic order is
+strictly improvable throughout this class. In particular no example in
+this class, Sturmian or otherwise, can attain a non-improvable
+$\log n/n$ order.
+
+The $1/n$ order itself can be attained. On a one-point probability space
+take $Y_{m,n}=1$ when $m<n$ and $Y_{m,m}=0$. It is stationary and globally
+bounded by one. For $l\le m\le n$, if $l=n$ the subadditivity inequality
+is zero on both sides. If $l<n$, at least one of $l<m$ or $m<n$ holds,
+so the right side is at least one, proving subadditivity. Now
+$\mathbb E[Y_{0,n}]=1$ for $n\ge1$ and the error is exactly $1/n$.
+The uniform-boundedness argument is now also formalized. In Lean,
+\texttt{UniformlyBounded X} means exactly
+\[
+\exists C\in\mathbb R,\quad \forall m,n\in\mathbb N,\quad |X_{m,n}|\le C.
+\]
+The theorem \texttt{uniformlyBounded\_limit} proves both convergence of
+$X_{0,n}/n$ to zero and \texttt{gamma X = 0};
+\texttt{uniformlyBounded\_error\_isLittleO} proves
+\[
+\left|X_{0,n}/n-\gamma X\right|=o(\log n/n).
+\]
+These results require only uniform boundedness. The little-o proof uses
+$X_{0,n}=O(1)$ and $1=o(\log n)$, then multiplies both comparison functions
+by $1/n$ and takes the absolute value. Thus the first upper-bound clause
+is true under this reading, but its claimed sharpness is false.
+
+For this reading the admissibility predicate
+\texttt{UniformlyBoundedStationarySubadditive} contains exactly translation
+stationarity, subadditivity on ordered triples, and
+\texttt{UniformlyBounded}. It imposes no nonnegativity, normalization,
+unit one-step cost, or separate increment restriction. The sharpness
+clause \texttt{SharpnessClauseUniform} asserts the existence of such a
+family whose error is \emph{not} $o(\log n/n)$.
+The checked theorem \texttt{sharpness\_false\_uniform} rules out every such
+witness. The combined theorem is
+\begin{lstlisting}
+theorem conjecture_00000008482_false_both_readings :
+    Not UniversalUpperBound /\ Not SharpnessClauseUniform
+\end{lstlisting}
+Under the linear-growth or bounded-increment reading the first conjunct
+fails, witnessed by the square-root family. Under the uniformly bounded
+reading the second conjunct fails for every admissible family. Either way
+the original conjunction is false. The $1/n$ witness just described is a
+written example; the universal limit and little-o conclusions, sharpness
+refutation, and combined result are all Lean theorems.
+
+\section{Formal statement and semantic audit}
+The project pins Lean \texttt{leanprover/lean4:v4.33.0} and Mathlib
+\texttt{v4.33.0}. The Mathlib revision is:
+\begin{lstlisting}
+db584cd6d46c92f209a44c0f1c829460d327499d
+\end{lstlisting}
+The single source file is \texttt{lean4/KingmanCounterexample.lean}.
+All declarations are in namespace \texttt{KingmanCounterexample}.
+\texttt{Family} abbreviates $\mathbb N\to\mathbb N\to\mathbb R$.
+The value of \texttt{sqrtFamily m n} is
+\texttt{Real.sqrt (n - m : Nat)}. Only ordered intervals are relevant;
+natural subtraction simply supplies harmless values elsewhere.
+
+The predicate \texttt{BoundedStationarySubadditive X} has exactly five
+fields: subadditivity on ordered triples, translation stationarity,
+the nonnegative linear bound, unit one-step costs, and the absolute
+successive-increment bound. Requiring exact unit costs narrows the class
+further, making the negative result stronger: the broader conjectured
+universal bound would imply this restricted universal bound.
+
+\texttt{gamma X} is defined as
+\begin{lstlisting}
+limUnder atTop (fun n : Nat => X 0 n / (n : Real))
+\end{lstlisting}
+This is Mathlib's limit operator. We do not presume convergence for an
+arbitrary function: the universal clause explicitly requires convergence
+to this value. Our witness satisfies this extra premise, as proved by
+\texttt{sqrtFamily\_limit} and \texttt{sqrtFamily\_gamma}.
+The universal clause is the following actual Lean definition (ASCII
+spellings of mathematical symbols are used here):
+\begin{lstlisting}
+def UniversalUpperBound : Prop :=
+  forall X : Family, BoundedStationarySubadditive X ->
+    Tendsto (fun n : Nat => X 0 n / (n : Real))
+      atTop (nhds (gamma X)) ->
+    Asymptotics.IsBigO atTop
+      (fun n : Nat => abs (X 0 n / (n : Real) - gamma X))
+      (fun n => Real.log (n : Real) / (n : Real))
+
+theorem conjecture_00000008482_false :
+    Not UniversalUpperBound
+\end{lstlisting}
+The displayed definition is a typographical transcription of the
+source's Unicode notation, with the same quantifiers and arguments.
+Mathlib's \texttt{IsBigO} has its usual meaning: an eventual norm bound
+with some real constant. The filter is the natural-number \texttt{atTop}.
+Therefore this is a genuine asymptotic assertion on the full sequence,
+not a finite sample or selected subsequence.
+
+The supporting checked theorems establish the following:
+\begin{itemize}
+\item \texttt{sqrtFamily\_hypotheses}: all five family conditions.
+\item \texttt{sqrtFamily\_error}: the error is the reciprocal square root.
+\item \texttt{sqrtFamily\_limit} and \texttt{sqrtFamily\_gamma}: the limit exists
+and equals zero.
+\item \texttt{sqrtFamily\_infimum}: the infimum over lengths $n+1$ is zero,
+covering every positive length without admitting length zero.
+\item \texttt{sqrtFamily\_not\_bigO}: the error fails the asserted big-O bound.
+\item \texttt{conjecture\_00000008482\_false}: the restricted universal clause
+is false, using that explicit witness.
+\item \texttt{uniformlyBounded\_limit}: uniform boundedness forces
+convergence and \texttt{gamma X = 0}.
+\item \texttt{uniformlyBounded\_error\_isLittleO}: every such error is
+$o(\log n/n)$.
+\item \texttt{sharpness\_false\_uniform}: the uniformly bounded sharpness
+clause is false with exactly the three relevant admissibility conditions.
+\item \texttt{conjecture\_00000008482\_false\_both\_readings}: the two
+refutations hold together.
+\end{itemize}
+At length zero Lean uses totalized division by zero, giving zero; this
+does not affect any \texttt{atTop} assertion or the positive-length infimum.
+The deterministic formulation needs no expectation machinery: constant
+random variables on any probability space have exactly these expectations.
+The probabilistic embedding and one-point ergodicity explanation above
+are elementary written arguments.
+
+\section{Verification and attribution}
+The Lean compilation succeeded with Lean and Mathlib \texttt{v4.33.0};
+\texttt{verification.txt} records the compiler output and axiom audit. The audited main and supporting theorems use
+only \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+There are no added axioms or incomplete proofs. The asymptotic step uses
+Mathlib's proved theorem \texttt{isLittleO\_log\_rpow\_atTop} with
+exponent $1/2$, composed with natural-number inclusion, and a proved
+big-O/little-o incompatibility.
+
+\texttt{verify.py} is an independent Python standard-library sanity check
+of subadditivity on finite ordered triples, stationarity under shifts,
+the bounds, the exact error formula numerically, and growing ratios on
+geometrically separated indices. Floating-point checks are explicitly
+supplementary; none is used as a proof of an infinite assertion. To
+reproduce in a fresh environment:
+\begin{lstlisting}
+cd lean4
+lake exe cache get && lake build
+cd ..
+python3 verify.py
+pdflatex report.tex
+pdflatex report.tex
+\end{lstlisting}
+No external project code is vendored. The source conjecture is available
+in the competition repository at
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000008482.md}{conjectures/00000008482.md}.
+
+\medskip\noindent
+Submitted by AlyciaBHZ on behalf of the Omega Institute (trureturing project,
+\url{https://github.com/the-omega-institute/trureturing}).
+\end{document}
