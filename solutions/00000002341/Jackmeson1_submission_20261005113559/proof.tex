@@ -1,0 +1,204 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\area}{\operatorname{area}}
+\newcommand{\hs}{\operatorname{hs}}
+
+\title{A disproof of Conjecture 00000002341\\[2pt]
+\large The pseudospectral area identity holds only for scalar matrices}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000002341 reads:
+
+\begin{quote}
+\emph{Definition:} The pseudospectrum is $\{z : \|(A-zI)^{-1}\| > \varepsilon^{-1}\}$.
+\emph{Conjecture:} The pseudospectral area of a random matrix is
+$\pi\varepsilon^2\,(1 + \|A^*A - AA^*\|_{HS}/2)$ (an explicit identity in the Hilbert--Schmidt deviation from
+normality); the area growth is exactly $\varepsilon^2$.
+\end{quote}
+
+It is the conjunction of two clauses:
+\begin{enumerate}[label=(\roman*)]
+  \item (\emph{identity}) $\area \Lambda_\varepsilon(A) = \pi\varepsilon^2(1 + \|A^*A-AA^*\|_{HS}/2)$ for every
+        $\varepsilon>0$;
+  \item (\emph{growth}) the area grows ``exactly like $\varepsilon^2$''.
+\end{enumerate}
+We show that (i) holds for an $n\times n$ complex matrix ($n\ge 1$) \textbf{if and only if $A$ is a scalar
+matrix $cI$} (Theorem~\ref{thm:iff}). So (i) fails for every non-scalar matrix, for instance
+$A=\mathrm{diag}(1,-1)$, and the conjunction is false. We also refute (ii) in the reading
+``$\area\Lambda_\varepsilon(A) = K\varepsilon^2$ for a constant $K$ and all $\varepsilon>0$'' for every matrix
+with two distinct eigenvalues (Theorem~\ref{thm:growth}).
+
+\section{Definitions and conventions}
+
+Let $n\ge1$ and $A\in M_n(\C)$.
+\begin{itemize}
+  \item $\|\cdot\|$ on matrices is the operator norm induced by the Euclidean norm on $\C^n$ (in Lean:
+        Mathlib's scoped instance \texttt{Matrix.Norms.L2Operator}). It is a C*-norm and $\|I\|=1$.
+  \item \textbf{Pseudospectrum.} Following the text, with the standard convention that
+        $\|(A-zI)^{-1}\| = \infty$ when $A-zI$ is not invertible,
+        \[ \Lambda_\varepsilon(A) = \{ z\in\C : A-zI \text{ is not invertible} \} \cup
+           \{ z\in\C : \|(A-zI)^{-1}\| > \varepsilon^{-1} \}. \]
+        The Wikipedia article ``Pseudospectrum'' (\url{https://en.wikipedia.org/wiki/Pseudospectrum}) uses the
+        same convention (``where we use the convention that'' $\|(A-\lambda I)^{-1}\|=\infty$ for non-invertible
+        $A-\lambda I$); it writes $\ge 1/\varepsilon$, whereas the conjecture writes $>\varepsilon^{-1}$, and we
+        follow the conjecture. In Lean: \texttt{pseudospectrum}.
+  \item \textbf{Area} is Lebesgue measure on $\C\cong\mathbb{R}^2$ (Mathlib's \texttt{volume}); the disc of
+        radius $r$ has area $\pi r^2$ (Mathlib: \texttt{Complex.volume\_ball}).
+  \item \textbf{Hilbert--Schmidt norm:} $\hs(M) = \big(\sum_{i,j}|M_{ij}|^2\big)^{1/2}$ (in Lean:
+        \texttt{hsNorm}). Write $c(A) = \hs(A^*A - AA^*)$, where $A^*$ is the conjugate transpose.
+  \item The identity (i) for a fixed $A$ is the Lean predicate \texttt{AreaIdentity A}:
+        for all $\varepsilon>0$, $\area\Lambda_\varepsilon(A) = \pi\varepsilon^2(1+c(A)/2)$.
+  \item $\sigma(A)$ is the spectrum (set of eigenvalues).
+\end{itemize}
+
+\section{Two inclusions}
+
+The following lemmas hold in any complex Banach algebra with $\|1\|=1$ (that is how they are stated in Lean),
+with $\Lambda_\varepsilon(a) = \sigma(a)\cup\{z : \|(a-z)^{-1}\|>\varepsilon^{-1}\}$ (Lean: \texttt{pseudo};
+\texttt{pseudospectrum\_eq} identifies it with \texttt{pseudospectrum} for matrices).
+
+\begin{lemma}[\texttt{ball\_subset\_pseudo}]\label{lem:in}
+If $\lambda\in\sigma(a)$ and $\varepsilon>0$, the open disc $D(\lambda,\varepsilon)$ lies in
+$\Lambda_\varepsilon(a)$.
+\end{lemma}
+\begin{proof}
+Let $|z-\lambda|<\varepsilon$ with $z\notin\sigma(a)$, and let $R=(a-z)^{-1}$. Since
+$\lambda - z\in\sigma(a-z)$ and $\lambda\ne z$, we get $(\lambda-z)^{-1}\in\sigma(R)$, and every spectral value is
+bounded by the norm, so $\|R\| \ge |\lambda-z|^{-1} > \varepsilon^{-1}$.
+\end{proof}
+
+\begin{lemma}[\texttt{norm\_inverse\_mul\_le}, \texttt{pseudo\_subset\_ball}]\label{lem:out}
+$\Lambda_\varepsilon(a) \subseteq D(0,\|a\|+\varepsilon)$ for $\varepsilon>0$.
+\end{lemma}
+\begin{proof}
+Let $|z|\ge\|a\|+\varepsilon$. Then $|z|>\|a\|$, so $z\notin\sigma(a)$. Put $R=(a-z)^{-1}$. From
+$R(a-z)=1$ we get $zR = Ra-1$, so $|z|\,\|R\| \le \|R\|\,\|a\|+1$, i.e.\ $\|R\|(|z|-\|a\|)\le 1$. Since
+$|z|-\|a\|\ge\varepsilon$, we get $\|R\|\le\varepsilon^{-1}$, so $z\notin\Lambda_\varepsilon(a)$.
+\end{proof}
+
+\begin{corollary}[\texttt{vol\_pseudo\_le}, \texttt{vol\_pseudo\_ge\_two}]\label{cor:area}
+$\area\Lambda_\varepsilon(a)\le\pi(\|a\|+\varepsilon)^2$. If $\lambda\ne\mu$ are in $\sigma(a)$ and
+$2\varepsilon\le|\lambda-\mu|$, the discs $D(\lambda,\varepsilon)$ and $D(\mu,\varepsilon)$ are disjoint, so
+$\area\Lambda_\varepsilon(a)\ge 2\pi\varepsilon^2$.
+\end{corollary}
+
+\section{Results}
+
+\begin{theorem}[\texttt{no\_exact\_eps\_sq\_law}]\label{thm:growth}
+Let $a$ be an element of a complex Banach algebra with $\|1\|=1$ that has two distinct spectral values. There is
+no real $K$ with $\area\Lambda_\varepsilon(a) = K\varepsilon^2$ for all $\varepsilon>0$.
+\end{theorem}
+\begin{proof}
+Let $\lambda\ne\mu$ in $\sigma(a)$. At $\varepsilon_0=|\lambda-\mu|/2$, Corollary~\ref{cor:area} gives
+$K\varepsilon_0^2 \ge 2\pi\varepsilon_0^2$, so $K\ge 2\pi$. At $\varepsilon_1=3R+1$ with $R=\|a\|$ it gives
+$2\pi\varepsilon_1^2\le K\varepsilon_1^2\le\pi(R+\varepsilon_1)^2$, i.e.\ $2(3R+1)^2\le(4R+1)^2$, i.e.\
+$2R^2+4R+1\le 0$, which is impossible.
+\end{proof}
+
+\begin{theorem}[\texttt{areaIdentity\_iff\_scalar}]\label{thm:iff}
+Let $A\in M_n(\C)$ with $n\ge1$ (in Lean: any nonempty finite index type). The identity (i) holds for all
+$\varepsilon>0$ if and only if $A=cI$ for some $c\in\C$.
+\end{theorem}
+\begin{proof}
+($\Leftarrow$) If $A=cI$ then $A^*A-AA^*=0$, so $c(A)=0$. For $z\ne c$, $(A-zI)^{-1}=(c-z)^{-1}I$ has norm
+$|c-z|^{-1}$, and $c\in\sigma(A)$. Hence $\Lambda_\varepsilon(A) = D(c,\varepsilon)$ (\texttt{pseudo\_scalar}),
+whose area is $\pi\varepsilon^2 = \pi\varepsilon^2(1+0/2)$.
+
+($\Rightarrow$) Assume (i) for all $\varepsilon>0$; write $c=c(A)\ge0$ and $R=\|A\|$.
+
+\emph{Step 1: $c=0$.} If $c>0$, take $\varepsilon = 2(2R+R^2)/c+1\ge1$. Corollary~\ref{cor:area} gives
+$\pi\varepsilon^2(1+c/2)\le\pi(R+\varepsilon)^2$, i.e.\ $c\varepsilon^2/2\le 2R\varepsilon+R^2$. But
+$c\varepsilon = 2(2R+R^2)+c$, so $c\varepsilon^2/2 = (2R+R^2)\varepsilon + c\varepsilon/2 > 2R\varepsilon+R^2$
+(using $\varepsilon\ge1$). So $c=0$, hence $A^*A=AA^*$ ($\hs(M)=0$ forces $M=0$; \texttt{eq\_zero\_of\_hsNorm\_eq\_zero}).
+
+\emph{Step 2: $\sigma(A)$ is one point.} $\sigma(A)$ is nonempty (Mathlib \texttt{spectrum.nonempty}). If
+$\lambda\ne\mu$ are in $\sigma(A)$, take $\varepsilon=|\lambda-\mu|/2$: Corollary~\ref{cor:area} gives
+$\area\Lambda_\varepsilon(A)\ge2\pi\varepsilon^2>\pi\varepsilon^2$, contradicting (i) with $c=0$.
+
+\emph{Step 3: $A$ is scalar.} Let $\sigma(A)=\{\lambda\}$ and $N=A-\lambda I$. Then $N$ is normal (because
+$A^*A=AA^*$) and $\sigma(N)=\{0\}$. For a normal element of a C*-algebra the spectral radius equals the norm
+(Mathlib \texttt{IsStarNormal.spectralRadius\_eq\_nnnorm}), so $\|N\|=0$ and $A=\lambda I$.
+\end{proof}
+
+\begin{corollary}[\texttt{conjecture\_2341\_false}, \texttt{diag\_counterexample}]
+Not every $2\times2$ complex matrix satisfies (i). For $A=\mathrm{diag}(1,-1)$ (eigenvalues $1$ and $-1$),
+(i) fails, and $\area\Lambda_\varepsilon(A)$ is not of the form $K\varepsilon^2$.
+\end{corollary}
+Concretely, $A=\mathrm{diag}(1,-1)$ is normal, so the claimed area is $\pi\varepsilon^2$, while for
+$0<\varepsilon\le1$ the pseudospectrum contains the two disjoint discs $D(\pm1,\varepsilon)$ and has area at least
+$2\pi\varepsilon^2$.
+
+\section{Readings}
+
+\begin{itemize}
+  \item \textbf{``A random matrix'' = an arbitrary square matrix} (the identity is claimed for every $A$):
+        refuted; by Theorem~\ref{thm:iff} it fails for every non-scalar matrix of every size $n\ge 2$.
+  \item \textbf{Pathwise reading for a random matrix} (the identity holds for the realization of $A$, almost
+        surely or with probability one, for some distribution): by Theorem~\ref{thm:iff} the event ``(i) holds''
+        equals the event ``$A$ is scalar''. So this reading fails for every distribution that gives positive
+        probability to non-scalar matrices (for example the Ginibre ensemble). This last probabilistic step is
+        immediate and is not formalized.
+  \item \textbf{Growth clause (ii)} in the reading $\area\Lambda_\varepsilon = K\varepsilon^2$ for all
+        $\varepsilon>0$: refuted for every matrix with two distinct eigenvalues (Theorem~\ref{thm:growth}).
+        \emph{Not refuted:} the asymptotic reading ``$\area\Lambda_\varepsilon(A)$ is of order $\varepsilon^2$ as
+        $\varepsilon\to0$''. We make no claim about it. The conjunction is already false because of (i).
+  \item \textbf{Not formalized:} an expected-area reading
+        $\mathbb{E}\,\area\Lambda_\varepsilon(A) = \pi\varepsilon^2(1+\mathbb{E}\,c(A)/2)$ for an unspecified
+        ensemble. Informally, Corollary~\ref{cor:area} gives
+        $\mathbb{E}\,\area\Lambda_\varepsilon\le\pi(\varepsilon^2+2\varepsilon\,\mathbb{E}\|A\|+\mathbb{E}\|A\|^2)$,
+        which is smaller than the claimed value for large $\varepsilon$ whenever $\mathbb{E}\,c(A)>0$ and
+        $\mathbb{E}\|A\|^2<\infty$ (for example Ginibre).
+  \item \textbf{Size $n=1$:} every $1\times1$ matrix is scalar, and the identity holds. The conjecture is true
+        in dimension $1$ only.
+  \item \textbf{Norm:} the resolvent norm is the operator 2-norm. Lemmas~\ref{lem:in}--\ref{lem:out} and
+        Theorem~\ref{thm:growth} are proved in Lean for an arbitrary complex Banach algebra with $\|1\|=1$, but
+        we instantiate them only for the operator 2-norm. Step 3 of Theorem~\ref{thm:iff} uses the C*-property
+        of the 2-norm.
+\end{itemize}
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture2341/Basic.lean} (Lean 4, Mathlib v4.33.1, 292 lines, namespace \texttt{C2341}).
+Main statements:
+\begin{verbatim}
+theorem areaIdentity_iff_scalar [Nonempty m] (A : Matrix m m C) :
+    AreaIdentity A <-> exists c : C, A = c . (1 : Matrix m m C)
+theorem conjecture_2341_false :
+    not (forall A : Matrix (Fin 2) (Fin 2) C, AreaIdentity A)
+theorem no_exact_eps_sq_law {a : A} {lam mu : C} (hl : lam in spectrum C a)
+    (hm : mu in spectrum C a) (hne : lam != mu) :
+    not (exists K : R, forall eps : R, 0 < eps ->
+      volume (pseudo a eps) = ENNReal.ofReal (K * eps ^ 2))
+\end{verbatim}
+(ASCII rendering; the Lean source uses Unicode.) Here
+\texttt{AreaIdentity A} is
+\texttt{forall eps > 0, volume (pseudospectrum A eps) = ENNReal.ofReal (pi * eps\^{}2 * (1 + hsNorm (A$^H$ * A - A * A$^H$) / 2))}.
+
+\texttt{lake build} succeeds. \texttt{\#print axioms} for \texttt{conjecture\_2341\_false},
+\texttt{areaIdentity\_iff\_scalar}, \texttt{no\_exact\_eps\_sq\_law} and \texttt{diag\_counterexample} reports
+only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. There is no \texttt{sorry},
+\texttt{native\_decide} or added axiom.
+
+\end{document}
