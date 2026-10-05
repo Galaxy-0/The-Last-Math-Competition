@@ -1,0 +1,146 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Conjecture 00000002491 is false:\\ in the partition lattice $\Pi_4$, $\mu(\hat 0,\{12\mid34\})=1\neq0$}
+\author{Jackmeson1}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+Conjecture 00000002491 (English text, verbatim): ``Definition: M\"obius inversion of partitions:
+poset inversion. Conjecture: The M\"obius function of the partition lattice is governed by
+squarefree partitions: the inversion formula closes on partitions without repeated parts, and the
+M\"obius values vanish otherwise.'' The Chinese text is garbled; it names the same objects (Moebius inversion,
+the partition lattice, squarefree partitions) and adds no further condition.
+
+\paragraph{Reading.} The partition lattice $\Pi_n$ is the set of all partitions of an $n$-element
+set into nonempty blocks, ordered by refinement. A partition $\sigma$ is ``squarefree'' (``without
+repeated parts'') when its type, the integer partition formed by its block sizes, has no repeated
+part, i.e.\ no two distinct blocks of $\sigma$ have the same size. ``The M\"obius values'' are the
+values $\mu(\hat0,\sigma)$ of the M\"obius function of $\Pi_n$, where $\hat0$ is the partition into
+singletons. The clause refuted is
+\[
+\text{(V)}\qquad \text{for every } n \text{ and every } \sigma\in\Pi_n \text{ with a repeated block size, } \mu(\hat0,\sigma)=0 .
+\]
+We also refute the dual reading (V$'$) in which the values are $\mu(\sigma,\hat1)$, with $\hat1$
+the one-block partition. One counterexample refutes these universal clauses, and then the
+conjunction is false. The vague clause ``the inversion formula closes on partitions without
+repeated parts'' is not formalized and not used.
+
+\section{Definitions}
+\begin{definition}
+For a locally finite poset $P$, the M\"obius function is defined recursively by
+$\mu(a,a)=1$, $\mu(a,b)=-\sum_{a\le x<b}\mu(a,x)$ for $a<b$, and $\mu(a,b)=0$ if
+$a\not\le b$.
+\end{definition}
+In Lean this is Mathlib's \texttt{IncidenceAlgebra.mu}; the recursion is Mathlib's lemma
+\texttt{mu\_eq\_neg\_sum\_Ico\_of\_ne}. The poset $\Pi_4$ is Mathlib's
+\texttt{Finpartition (univ : Finset (Fin 4))} with its refinement order ($P\le Q$ iff every block
+of $P$ lies in a block of $Q$), its bottom $\hat 0$ (singletons) and its top $\hat1$ (one block).
+We write the ground set as $\{0,1,2,3\}$, so $\sigma=\{01\mid23\}$ is the partition $\{12\mid34\}$
+of the title.
+
+\section{Proof}
+Let $\sigma=\{01\mid23\}$, $p_1=\{01\mid2\mid3\}$, $p_2=\{0\mid1\mid23\}$. The two blocks of
+$\sigma$ both have size $2$, so $\sigma$ has a repeated block size.
+
+\begin{lemma}\label{lem:int}
+The interval $[\hat0,\sigma]$ of $\Pi_4$ is $\{\hat0,p_1,p_2,\sigma\}$, and the four elements are
+distinct. Moreover $[\hat0,p_1)=[\hat0,p_2)=\{\hat0\}$.
+\end{lemma}
+\begin{proof}
+For $x\in\Pi_4$ and a point $a$, let $x(a)$ be the block of $x$ containing $a$. Then
+$x=\{x(0),x(1),x(2),x(3)\}$ as a set of blocks, and $x\le y$ iff $x(a)\subseteq y(a)$ for every
+$a$. If $x\le\sigma$ then $x(0),x(1)\subseteq\{0,1\}$. If $1\in x(0)$ then $x(1)=x(0)=\{0,1\}$;
+otherwise $x(0)=\{0\}$, $0\notin x(1)$ and $x(1)=\{1\}$. The same holds for the points $2,3$
+and the block $\{2,3\}$. The four combinations give $\hat0,p_1,p_2,\sigma$. Each of these is
+$\le\sigma$, and $\sigma\not\le p_1$, $\sigma\not\le p_2$, $p_1\not\le p_2$, $p_2\not\le p_1$,
+$p_1\not\le\hat0$, $p_2\not\le\hat0$, which shows distinctness and the last claim (an element
+below $p_1$ is below $\sigma$, hence one of the four, and only $\hat0$ is strictly below $p_1$).
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+$\mu(\hat0,\sigma)=1$ in $\Pi_4$. Hence (V) is false.
+\end{theorem}
+\begin{proof}
+By the recursion and Lemma~\ref{lem:int}, $\mu(\hat0,p_1)=-\mu(\hat0,\hat0)=-1$, likewise
+$\mu(\hat0,p_2)=-1$, and
+$\mu(\hat0,\sigma)=-\bigl(\mu(\hat0,\hat0)+\mu(\hat0,p_1)+\mu(\hat0,p_2)\bigr)=-(1-1-1)=1\neq0.$
+\end{proof}
+
+\begin{theorem}\label{thm:dual}
+$\mu(\sigma,\hat1)=-1$ in $\Pi_4$. Hence (V$'$) is false.
+\end{theorem}
+\begin{proof}
+If $\sigma\le x$, then $\{0,1\}\subseteq x(0)$ and $\{2,3\}\subseteq x(2)$. If $2\in x(0)$, every
+point lies in $x(0)$ and $x=\hat1$. Otherwise $3\notin x(0)$ (else $x(0)=x(3)=x(2)\ni2$), and
+similarly $0,1\notin x(2)$, so $x(0)=x(1)=\{0,1\}$, $x(2)=x(3)=\{2,3\}$ and $x=\sigma$. So
+$[\sigma,\hat1)=\{\sigma\}$ ($\hat1\not\le\sigma$) and $\mu(\sigma,\hat1)=-\mu(\sigma,\sigma)=-1$.
+\end{proof}
+
+\paragraph{Consistency check (not used in Lean).} The retrieved source below gives, for
+$\sigma\le\tau$ in the partition lattice with the $t$ blocks of $\tau$ splitting into
+$s_1,\dots,s_t$ blocks of $\sigma$ and $s=s_1+\dots+s_t$,
+$\mu(\sigma,\tau)=(-1)^{s-t}(s_1-1)!\cdots(s_t-1)!$. For $(\hat0,\sigma)$ this gives
+$(-1)^{2}\,1!\,1!=1$, and for $(\sigma,\hat1)$ it gives $(-1)^{1}\,1!=-1$, matching
+Theorems~\ref{thm:main} and~\ref{thm:dual}. The formula also shows that $\mu(\sigma,\tau)$ is
+never $0$ when $\sigma\le\tau$, so the vanishing clause fails at every repeated-type partition, but
+our proof uses only the single explicit counterexample.
+
+\section{Lean formalization}
+File \texttt{lean/Conjecture2491/Basic.lean} (317 lines, only import \texttt{Mathlib}), namespace
+\texttt{C2491}. Objects: \texttt{Pi4 := Finpartition (univ : Finset (Fin 4))} (Mathlib's
+partitions with the refinement order), \texttt{IncidenceAlgebra.mu} over $\mathbb Z$ (Mathlib's
+M\"obius function), the partitions \texttt{sigma}, \texttt{p1}, \texttt{p2} given by their blocks,
+and
+\begin{center}
+\texttt{HasRepeatedBlockSize P := exists B in P.parts, exists C in P.parts, B != C and \#B = \#C}.
+\end{center}
+The \texttt{LocallyFiniteOrder} instance is \texttt{Fintype.toLocallyFiniteOrder}; this choice
+does not matter, since \texttt{LocallyFiniteOrder} is a subsingleton, and the proofs use only
+membership in intervals. Main theorems:
+\begin{itemize}
+\item \texttt{mu\_bot\_sigma : mu Z (bot : Pi4) sigma = 1} (Theorem~\ref{thm:main}).
+\item \texttt{conjecture\_2491\_false : not (forall s : Pi4, HasRepeatedBlockSize s -> mu Z bot s = 0)},
+  i.e.\ (V) fails.
+\item \texttt{mu\_sigma\_top : mu Z sigma (top : Pi4) = -1} and
+  \texttt{conjecture\_2491\_false\_dual} (Theorem~\ref{thm:dual}, (V$'$) fails).
+\end{itemize}
+Supporting lemmas: \texttt{parts\_eq} and \texttt{le\_iff} (blocks through points),
+\texttt{pair\_cases}, \texttt{le\_sigma\_cases} and \texttt{Ico\_bot\_sigma},
+\texttt{Ico\_bot\_p1}, \texttt{Ico\_bot\_p2} (Lemma~\ref{lem:int}), \texttt{sigma\_le\_cases} and
+\texttt{Ico\_sigma\_top} (Theorem~\ref{thm:dual}). The order facts between the explicit partitions
+are decided by \texttt{decide} on their explicit block lists. The interval enumeration itself is
+proved by hand for an arbitrary partition; it is not a finite search over $\Pi_4$.
+\texttt{\#print axioms} for each main theorem gives \texttt{[propext, Classical.choice,
+Quot.sound]}; there is no \texttt{sorry} and no \texttt{native\_decide}. Build: \texttt{lake build}
+with Mathlib \texttt{v4.33.1}.
+
+\section{Relation to the earlier submission}
+An earlier submission (PR \#191, orionsheep) made the same mathematical point but was closed. The
+reviewer wrote: ``muAux runs on a hardcoded 4$\times$4 Boolean matrix with no partitions and no
+partition lattice defined in Lean; the identification with the interval $[\hat0, \sigma]$ exists
+only in comments, and the padding theorem (2 = 2 : Bool) confirms no conjecture object is
+formalized.'' This submission formalizes the actual objects: Mathlib's \texttt{Finpartition} of a
+4-set with its refinement order, Mathlib's M\"obius function \texttt{IncidenceAlgebra.mu}, and the
+predicate ``has a repeated block size''. The enumeration of $[\hat0,\sigma]$ is a Lean theorem
+about all partitions $x\le\sigma$ (\texttt{le\_sigma\_cases}). The earlier prose also said the
+$(2,1,1)$ type occurs twice in $\Pi_4$; it occurs six times, and that count is not used here.
+
+\section*{Source}
+Wikipedia, ``Incidence algebra'', section ``Partitions of a set'',
+\url{https://en.wikipedia.org/wiki/Incidence_algebra}: ``Partially order the set of all partitions
+of a finite set by saying $\sigma \le \tau$ if $\sigma$ is a finer partition than $\tau$. In
+particular, let $\tau$ have $t$ blocks which respectively split into $s_1, \dots, s_t$ finer blocks
+of $\sigma$, which has a total of $s = s_1 + \dots + s_t$ blocks. Then the M\"obius function is:
+$\mu(\sigma,\tau)=(-1)^{s-t}(s_1-1)!\dots(s_t-1)!$.'' Used only for the consistency check.
+\end{document}
