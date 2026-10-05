@@ -1,0 +1,147 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A proof of Conjecture 00000007000\\[2pt]
+\large A permutation pair that preserves the box norm but changes the scattering spectrum}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000007000 reads:
+
+\begin{quote}
+\emph{Definition:} Box norms and scattering spectra are two layers. \emph{Conjecture:} There exist
+two functions with identical box norms but different scattering spectra, and the separation is
+realized by an explicit permutation pair with the same norms but different phase.
+\end{quote}
+
+It is an existential statement. We prove it with two explicit real functions on the grid
+$\mathbb{Z}/4\times\mathbb{Z}/4$.
+
+\section{Reading and definitions}
+
+\begin{definition}[Box norm]
+For finite sets $X,Y$ and $f:X\times Y\to\mathbb{R}$, the (Gowers) box norm is
+\[
+  \|f\|_{\square}=\Bigl(\mathbb{E}_{x,x'\in X}\,\mathbb{E}_{y,y'\in Y}\,
+  f(x,y)f(x,y')f(x',y)f(x',y')\Bigr)^{1/4}.
+\]
+The inner quantity equals $|X|^{-2}|Y|^{-2}\sum_{x,x'}\bigl(\sum_y f(x,y)f(x',y)\bigr)^2\ge0$.
+For a function of two variables this is the box norm; we prove its invariance for every
+permutation pair.
+\end{definition}
+
+\begin{definition}[Permutation pair]
+A permutation pair is a pair $(\sigma,\tau)$ of a permutation $\sigma$ of $X$ and a permutation
+$\tau$ of $Y$. It acts by $f\mapsto f\circ(\sigma\times\tau)$, i.e.\ $(x,y)\mapsto
+f(\sigma x,\tau y)$.
+\end{definition}
+
+\begin{definition}[Scattering spectrum, phase]
+On $G=\mathbb{Z}/4\times\mathbb{Z}/4$ the Fourier transform is
+$\hat f(\xi)=\sum_{(x,y)\in G}f(x,y)\,e^{-2\pi i(\xi_1x+\xi_2y)/4}$. The scattering spectrum is the
+diffraction intensity (structure factor) $I_f(\xi)=|\hat f(\xi)|^2$, and the phase at $\xi$ is
+$\hat f(\xi)/|\hat f(\xi)|$.
+\end{definition}
+
+In Lean the character is written $i^{k}$ for $k\in\mathbb{Z}/4$ (using the representative
+$k\in\{0,1,2,3\}$); the lemma \texttt{exp\_eq} proves $i^{k}=e^{2\pi ik/4}$.
+
+\section{Results}
+
+\begin{lemma}[Permutation pairs preserve the box norm]\label{lem:inv}
+For all $f$ and every permutation pair, $\|f\circ(\sigma\times\tau)\|_\square=\|f\|_\square$.
+\end{lemma}
+
+\begin{proof}
+The sum over $(x,x',y,y')$ is reindexed by the bijection
+$(x,x',y,y')\mapsto(\sigma x,\sigma x',\tau y,\tau y')$ of $X\times X\times Y\times Y$.
+\end{proof}
+
+\paragraph{The explicit pair.} Let $f(x,y)=1$ if $x\in\{0,1\}$ and $y=0$, and $f=0$ otherwise.
+Let $\sigma=(1\ 2)$ and $\tau=(0\ 1)$ (transpositions of $\mathbb{Z}/4$), and $g=f\circ(\sigma\times
+\tau)$. Then $g(x,y)=1$ iff $x\in\{0,2\}$ and $y=1$.
+
+\begin{theorem}[Conjecture 00000007000]\label{thm:main}
+\begin{enumerate}[nosep]
+\item $\sigma\ne\mathrm{id}$, $\tau\ne\mathrm{id}$, and $g=f\circ(\sigma\times\tau)$;
+\item identical box norms: $\|g\|_\square=\|f\|_\square>0$;
+\item different scattering spectra: $I_f(1,0)=2$ while $I_g(1,0)=0$;
+\item different phase: $I_f(0,1)=I_g(0,1)=4$, but the phase of $\hat f(0,1)$ is $1$ and that of
+$\hat g(0,1)$ is $-i$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(2) The equality is Lemma~\ref{lem:inv}. The box-norm sum of $f$ is
+$\sum_{x,x'}(\sum_yf(x,y)f(x',y))^2=4$, so $\|f\|_\square=(4/256)^{1/4}>0$.
+
+(3) $\hat f(1,0)=1+e^{-2\pi i/4}=1-i$, so $I_f(1,0)=2$. $\hat g(1,0)=1+e^{-2\pi i\cdot 2/4}=1-1=0$.
+
+(4) $\hat f(0,1)=2$ (both points have $y=0$), while $\hat g(0,1)=2e^{-2\pi i/4}=-2i$. Both have
+modulus $2$; the phases are $1$ and $-i$.
+\end{proof}
+
+\begin{remark}
+A translation of $\mathbb{Z}/4$ is a permutation that changes only the phases of $\hat f$, never the
+intensities. The permutation $\sigma=(1\ 2)$ is not affine on $\mathbb{Z}/4$, which is why it can
+change the intensity at $(1,0)$. For the displayed function $f$, which is supported on the single column
+$y=0$, the transposition $\tau=(0\ 1)$ only moves that column to $y=1$ and so multiplies $\hat f$ by a phase in
+the $y$ direction; $\tau$ is not a translation, and for general functions it does change intensities. (This remark is
+explanatory only; it is not part of the Lean formalization.)
+\end{remark}
+
+\section{Lean formalization}
+
+The file \texttt{lean/Conjecture7000/Basic.lean} (Lean 4, Mathlib v4.33.1, namespace
+\texttt{Submission00000007000}) defines \texttt{boxSum}, \texttt{boxNorm} (with real power $1/4$),
+\texttt{permute}, \texttt{e4}, \texttt{fourier}, \texttt{intensity} (\texttt{Complex.normSq} of the
+Fourier coefficient) and \texttt{phase}. The main statements are \texttt{boxSum\_eq\_sq},
+\texttt{boxSum\_permute}, \texttt{boxNorm\_permute} (Lemma~\ref{lem:inv}), \texttt{exp\_eq},
+\texttt{g\_eq}, \texttt{fourier\_f\_10}, \texttt{fourier\_g\_10}, \texttt{fourier\_f\_01},
+\texttt{fourier\_g\_01}, \texttt{phase\_f\_01}, \texttt{phase\_g\_01}, \texttt{boxSum\_f}, and
+\begin{verbatim}
+theorem conjecture7000 :
+    exists (f g : G -> R) (s t : Equiv.Perm (ZMod 4)),
+      s != 1 /\ t != 1 /\ g = permute s t f /\
+      boxNorm g = boxNorm f /\ 0 < boxNorm f /\
+      intensity f != intensity g /\ intensity f (1, 0) = 2 /\
+      intensity g (1, 0) = 0 /\
+      intensity f (0, 1) = intensity g (0, 1) /\
+      phase f (0, 1) != phase g (0, 1)
+\end{verbatim}
+(written here in ASCII; the Lean source uses Unicode symbols and the names $\sigma,\tau$).
+
+\paragraph{Axiom audit.} \texttt{lake build} succeeds. \texttt{\#print axioms} for
+\texttt{conjecture7000}, \texttt{boxNorm\_permute} and \texttt{exp\_eq} reports only
+\texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom.
+
+\section{Scope}
+
+``Box norm'' is read as the Gowers box norm of a real function of two variables; ``scattering
+spectrum'' as the diffraction intensity $|\hat f|^2$ on the finite grid; ``permutation pair'' as a
+pair of coordinate permutations; ``phase'' as the unit phase of a Fourier coefficient. Under this
+reading both the intensity and the phase change. We do not treat the wavelet scattering transform
+(Mallat) or quantum-mechanical scattering matrices.
+
+\end{document}

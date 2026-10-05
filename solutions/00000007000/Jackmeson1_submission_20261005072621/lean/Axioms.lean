@@ -1,0 +1,2 @@
+import Conjecture7000
+#print axioms Submission00000007000.conjecture7000
