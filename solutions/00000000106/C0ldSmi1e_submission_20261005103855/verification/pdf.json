@@ -1,0 +1,68 @@
+{
+  "status": "PASS",
+  "created_utc": "2026-10-05T10:13:03.841444+00:00",
+  "source_sha256": "7b22e42d8c60320341c1dd1f5be198afa49ffe1d65193eb38193de002547a05b",
+  "pdf_sha256": "e1f8242eb2fbfbd6312b42ce7092f093ace886c420bd62ffc8a7cdbdb34471f8",
+  "page_count": 3,
+  "pdf_bytes": 50126,
+  "native_compiler": {
+    "kind": "success",
+    "message": "The current source compiled successfully with the desktop editor's compiler.",
+    "source_sha256": "7b22e42d8c60320341c1dd1f5be198afa49ffe1d65193eb38193de002547a05b",
+    "observed_utc": "2026-10-05T10:13:03.002308+00:00",
+    "path": "/private/tmp/tlmc106-report/main.tex"
+  },
+  "export": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--outdir",
+      "/private/tmp/tlmc106-report",
+      "/private/tmp/tlmc106-report/main.tex"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.804,
+    "warnings_or_box_diagnostics": [],
+    "raw_log_local_path": "/private/tmp/tlmc106-report/export-raw.txt",
+    "raw_log_sha256": "144e59d954f0d9de9c10b44abba02a646fdc83a3226f1ebec4df1b927695a5d9",
+    "packaged_log": "report-export.txt",
+    "packaged_log_sha256": "144e59d954f0d9de9c10b44abba02a646fdc83a3226f1ebec4df1b927695a5d9",
+    "log_normalization": "Strip trailing whitespace on each line, preserve all line contents and order, terminate with one newline."
+  },
+  "render": {
+    "command": [
+      "/Users/daniel/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override/pdftoppm",
+      "-scale-to",
+      "1600",
+      "-png",
+      "/private/tmp/tlmc106-report/main.pdf",
+      "/private/tmp/tlmc106-report/page"
+    ],
+    "exit_code": 0,
+    "images": [
+      {
+        "path": "/private/tmp/tlmc106-report/page-1.png",
+        "sha256": "52d8cc5d554fac8ca061572e3e0f0001689a81c7a7698fe0e24a130e74568de7"
+      },
+      {
+        "path": "/private/tmp/tlmc106-report/page-2.png",
+        "sha256": "f1db870557d4dc6e4656fae5f560834f6f8f0fc63c2f3b07032498a1c193aed7"
+      },
+      {
+        "path": "/private/tmp/tlmc106-report/page-3.png",
+        "sha256": "d387aace95d6278a4cfba130c30e1977018fa3e6a552e90c15ad5d60e9773191"
+      }
+    ]
+  },
+  "visual_review": {
+    "status": "PASS",
+    "reviewer": "coordinator",
+    "completed_utc": "2026-10-05T10:13:31.723901+00:00",
+    "all_pages_inspected": [
+      1,
+      2,
+      3
+    ],
+    "method": "Read every rendered page and complete extracted text; compared the statement, all inequalities, indices, CRT bounds, declaration map and command text with the source. No missing glyphs, clipping, overlap, or misleading domain statement. Largest-prime-factor supremum description explicitly restricted to m>=2."
+  },
+  "extracted_text_sha256": "fae3bc43a61149314b5c7e7d106c29f4b7b832c321880fdaeac40800d66a2c2b"
+}

@@ -1,0 +1,97 @@
+@Conjecture106.largestPrimeFactor_spec : ∀ {m : Nat},
+  @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) m →
+    And (Nat.Prime (Conjecture106.largestPrimeFactor m))
+      (And (@Dvd.dvd.{0} Nat Nat.instDvd (Conjecture106.largestPrimeFactor m) m)
+        (∀ (q : Nat),
+          Nat.Prime q →
+            @Dvd.dvd.{0} Nat Nat.instDvd q m → @LE.le.{0} Nat instLENat q (Conjecture106.largestPrimeFactor m)))
+@Conjecture106.threshold_iff_prime_divisor : ∀ {m : Nat},
+  @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) m →
+    ∀ (t : Real),
+      Iff (@LT.lt.{0} Real Real.instLT t (@Nat.cast.{0} Real Real.instNatCast (Conjecture106.largestPrimeFactor m)))
+        (@Exists.{1} Nat fun (p : Nat) =>
+          And (Nat.Prime p)
+            (And (@Dvd.dvd.{0} Nat Nat.instDvd p m)
+              (@LT.lt.{0} Real Real.instLT t (@Nat.cast.{0} Real Real.instNatCast p))))
+@Conjecture106.dyadic_primes : ∀ {t : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) t →
+    @Exists.{1} (Nat → Nat) fun (p : Nat → Nat) =>
+      And (@StrictMono.{0, 0} Nat Nat Nat.instPreorder Nat.instPreorder p)
+        (∀ (i : Nat),
+          And (Nat.Prime (p i))
+            (And
+              (@LT.lt.{0} Nat instLTNat
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@Monoid.toNatPow.{0} Nat Nat.instMonoid))
+                    (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) i)
+                  t)
+                (p i))
+              (@LE.le.{0} Nat instLENat (p i)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@Monoid.toNatPow.{0} Nat Nat.instMonoid))
+                    (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) i
+                      (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                  t))))
+@Conjecture106.bounded_representative : ∀ {k t : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) k →
+    @LT.lt.{0} Nat instLTNat k t →
+      @LE.le.{0} Nat instLENat
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@Monoid.toNatPow.{0} Nat Nat.instMonoid))
+            (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) k)
+          t →
+        @Exists.{1} Nat fun (n : Nat) =>
+          And (@LE.le.{0} Nat instLENat t n)
+            (And
+              (@LT.lt.{0} Nat instLTNat n
+                (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@Monoid.toNatPow.{0} Nat Nat.instMonoid)) t
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                    (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) k)))
+              (∀ (i : Nat),
+                @LT.lt.{0} Nat instLTNat i k →
+                  @Exists.{1} Nat fun (p : Nat) =>
+                    And (Nat.Prime p)
+                      (And
+                        (@Dvd.dvd.{0} Nat Nat.instDvd p
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) i
+                              (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))))
+                        (@LT.lt.{0} Nat instLTNat t p))))
+Conjecture106.unbounded_good : ∀ (k : Nat),
+  @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) k →
+    ∀ (N : Nat),
+      @Exists.{1} Nat fun (n : Nat) =>
+        And (@LT.lt.{0} Nat instLTNat N n)
+          (Conjecture106.Good k
+            (@Inv.inv.{0} Real Real.instInv
+              (@Nat.cast.{0} Real Real.instNatCast
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) k)))
+            n)
+Conjecture106.conjecture : Conjecture106.Statement
+def Real.instLT : LT.{0} Real :=
+@LT.mk.{0} Real _private.Mathlib.Data.Real.Basic.0.Real.lt
+def Real.instNatCast : NatCast.{0} Real :=
+@NatCast.mk.{0} Real fun (n : Nat) =>
+  Real.ofCauchy
+    (@Nat.cast.{0}
+      (@CauSeq.Completion.Cauchy.{0, 0} Rat Rat.instField Rat.linearOrder Rat.instIsStrictOrderedRing Rat
+        (@DivisionRing.toRing.{0} Rat Rat.instDivisionRing) (@abs.{0} Rat Rat.instLattice Rat.addGroup)
+        Real.equivCauchy._proof_1)
+      (@CauSeq.Completion.instNatCastCauchy.{0, 0} Rat Rat.instField Rat.linearOrder Rat.instIsStrictOrderedRing Rat
+        (@DivisionRing.toRing.{0} Rat Rat.instDivisionRing) (@abs.{0} Rat Rat.instLattice Rat.addGroup)
+        Real.equivCauchy._proof_1)
+      n)
+def Real.instInv : Inv.{0} Real :=
+@Inv.mk.{0} Real _private.Mathlib.Data.Real.Basic.0.Real.inv'
+def instLENat : LE.{0} Nat :=
+@LE.mk.{0} Nat Nat.le
+def instLTNat : LT.{0} Nat :=
+@LT.mk.{0} Nat Nat.lt
+def Nat.instDvd : Dvd.{0} Nat :=
+@Dvd.mk.{0} Nat fun (a b : Nat) =>
+  @Exists.{1} Nat fun (c : Nat) => @Eq.{1} Nat b (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) a c)
+def Nat.primeFactors : Nat → Finset.{0} Nat :=
+fun (n : Nat) => @List.toFinset.{0} Nat instDecidableEqNat (Nat.primeFactorsList n)
+protected def Set.Finite.{u} : {α : Type u} → Set.{u} α → Prop :=
+fun {α : Type u} (s : Set.{u} α) => Finite.{u + 1} (@Set.Elem.{u} α s)

@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+import datetime, json, os, pathlib, subprocess, sys, time
+base=pathlib.Path('/private/tmp/tlmc106-auxiliary')
+label=sys.argv[1]
+argv=sys.argv[2:]
+cwd='/private/tmp/tlmc106-proof'
+env=os.environ.copy()
+env['PATH']='/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin:'+env.get('PATH','')
+start=datetime.datetime.now(datetime.timezone.utc).isoformat()
+t=time.monotonic()
+r=subprocess.run(argv,cwd=cwd,env=env,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+(base/(label+'.log')).write_text(r.stdout)
+record={'label':label,'utc_start':start,'seconds':time.monotonic()-t,'cwd':cwd,'argv':argv,
+ 'returncode':r.returncode,'output_file':str(base/(label+'.log'))}
+(base/(label+'.json')).write_text(json.dumps(record,indent=2)+'\n')
+print(json.dumps(record))
+print(r.stdout)
+sys.exit(r.returncode)

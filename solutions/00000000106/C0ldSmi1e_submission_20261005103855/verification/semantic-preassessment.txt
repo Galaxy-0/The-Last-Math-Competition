@@ -1,0 +1,267 @@
+INDEPENDENT SOURCE-SEMANTIC PREASSESSMENT
+Conjecture: 00000000106
+Verdict: GO for independent mathematical authorship against the exact target below.
+Scope: interpretation and formalization fidelity only. This is not a proof, disproof,
+truth assessment, feasibility assessment, construction, or proof-strategy report.
+No direction of mathematical resolution has been selected.
+
+1. INPUT IDENTITY AND REVIEW BOUNDARY
+
+The following four inputs were read in full, and their SHA-256 hashes were checked:
+
+/private/tmp/tlmc106-eligibility/conjecture.md
+85bba37dc67988490c08421b91158d072c14cb3dc59e7972e6b0dd4fb884802a
+
+/private/tmp/tlmc106-eligibility/README.md
+baf790af419e0070f593eecea4861fd865cc7b544d2cde6ec674f8fc587b01d1
+
+/private/tmp/tlmc106-eligibility/README.zh-CN.md
+d07ac1ccd888b8ee08fed8eb2e06ae15f6aa4025dbafe98790f8e2b2fc18eba7
+
+/private/tmp/tlmc106-eligibility/clean-math-handoff.json
+3fe74968e838bd12c85cc582c82ea42d19b766212f6291bc7daf09c35921a43a
+
+All four identities agree with the supplied handoff. The handoff says eligibility
+PASS, contains_prior_proof_ideas=false, and remaining_eligibility_work=[]. Its
+eligibility_record_sha256 field is
+2400842563c3ac57106a3d32a8750eb602431d9ac5f9c1c60b71969919abf9e0.
+That eligibility record itself was NOT read or independently re-audited here.
+
+No eligibility lead/proof record, other conjecture, other agent's mathematical
+work, or solution literature was read. An initial directory listing exposed file
+names only; none of those additional files was opened. Supplementary inspection
+was limited to local pinned Mathlib meaning/definition searches and the runtime
+version. No mathematical project source was written; no dependencies, Git state,
+worktrees, external comments, or installations were changed.
+
+The checked runtime reports Lean 4.19.0, arm64-apple-darwin23.6.0,
+commit 6caaee842e94, Release. This report does not claim a target theorem has been
+compiled: it specifies what a later independently authored theorem must mean.
+
+2. EXACT BILINGUAL ASSERTION
+
+English:
+"Conjecture: (Family of consecutive rough numbers) For every k ≥ 2 there exists
+c_k > 0 such that infinitely many n satisfy: the largest prime factor of each of
+n+1, …, n+k exceeds n^{c_k}."
+
+Chinese:
+"猜想：(连续粗糙数族)对每个 k ≥ 2,存在 c_k > 0,使无穷多 n 满足
+n+1, …, n+k 的最大素因子均 > n^{c_k}。"
+
+The two mathematical assertions agree. In particular, "largest prime factor"
+and "最大素因子" agree, as do the universal quantifier over k, the positive
+exponent, strict inequality, and simultaneous requirement over every offset.
+The parenthetical label "rough numbers" / "粗糙数" does not replace the explicit
+largest-prime-factor assertion with a condition on the least prime factor or
+on every prime divisor. The explicit assertion is authoritative.
+
+The source leaves the standard domains implicit rather than introducing typed
+variables. A finite consecutive block indexed 1,...,k uses k in the natural
+numbers; the numbers whose prime factors are discussed are positive integers.
+The positive exponent c_k is a real number. These standard readings are coherent
+in both languages and require no substantive repair or conjecture amendment.
+
+3. CANONICAL EXPLICIT TARGET
+
+For integers m ≥ 2, write P(m) for the largest prime divisor of m. Its defining
+meaning is: P(m) is a natural prime, P(m) divides m, and every natural prime q
+which divides m satisfies q ≤ P(m). The multiplicity of a prime factor does not
+change P(m). To make this a total function on N in the displayed specification,
+set P(0)=P(1)=1 by convention; these two values do not denote actual prime factors
+and never enter a qualifying inequality below.
+
+For k,n in the natural numbers and c in the reals, put
+
+    Good(k,c,n) :⇔
+      2 ≤ n and
+      for every natural i with 1 ≤ i ≤ k,
+          (n cast to the reals)^c < (P(n+i) cast to the reals).
+
+The canonical source target is
+
+    C :⇔ for every k in N with 2 ≤ k,
+           there exists c in R such that 0 < c and
+             {n in N : Good(k,c,n)} is infinite.
+
+Equivalently, with every quantifier explicit:
+
+    for every k in N,
+      2 ≤ k implies
+        there exists c in R such that
+          0 < c and
+          for every N in N,
+            there exists n in N such that
+              N < n and 2 ≤ n and
+              for every i in N,
+                1 ≤ i implies i ≤ k implies
+                  (n cast to R)^c < (P(n+i) cast to R).
+
+Here the power is the ordinary real power on a positive real base. In Lean,
+Real.rpow (n : R) c, or notation with explicitly real base and exponent, has this
+meaning. It is not natural-number exponentiation, integer division in an
+exponent, a floor of the real power, or a power of the prime factor. The same base
+n occurs for every i; the stated threshold is not (n+i)^c.
+
+A specification avoiding any totalized P function is also exact: replace the
+last inequality for each i by the existence of a natural p satisfying all four
+conditions
+
+    p is prime;
+    p divides n+i;
+    every natural prime q dividing n+i satisfies q ≤ p;
+    (n cast to R)^c < (p cast to R).
+
+This p is the actual largest prime divisor, not an arbitrary chosen parameter.
+The canonical target is a mathematical specification in this report, not an
+unverified declaration that any particular Lean implementation has this type.
+
+4. QUANTIFIER AND SIMULTANEITY GATES
+
+G1 — Full family: every natural k ≥ 2 is quantified. A result for k=2, a finite
+list of k, or some unbounded sequence of lengths does not by itself constitute
+the exact source theorem without an explicit logical bridge covering every k.
+
+G2 — Uniform exponent within each family member: c may depend on k. It is
+chosen before the infinity claim, independently of n, the bound N, and offset i.
+The source does not require one c to work for every k, nor a specified formula
+or effective procedure for c. It permits any positive real c, with no additional
+upper bound stipulated by the source.
+
+G3 — Common n: for each qualifying n, ALL offsets i=1,...,k satisfy the inequality
+with that same c and that same n. Separate infinitude statements for individual
+offsets do not automatically yield an infinite simultaneous intersection.
+
+G4 — Offset endpoints: n+1 and n+k are both included; n itself is not. A Fin k
+encoding must use i+1. A bounded natural quantifier must include both inequalities
+1 ≤ i and i ≤ k. Every shift and cast must preserve these exact integers.
+
+G5 — Actual prime factors: any largest-prime representation needs a verified
+connection to all prime divisors of n+i. A least prime divisor, arbitrary divisor,
+prime power, factor count, number with an imposed name, or maximum of an unrelated
+finite set is not an acceptable replacement.
+
+G6 — Strict bound: "exceeds" and ">" mean strict real inequality. Replacing <
+with ≤ at the same fixed exponent changes the pointwise predicate. Any altered
+bound or exponent domain used internally needs a proved bridge to C; the final
+semantic claim must retain the full real-positive-exponent target.
+
+G7 — Ordinary infinitude: the set of qualifying natural n is infinite in the
+standard sense. One n, arbitrarily many repeated certificates for one n, or an
+infinite indexing type with non-distinct outputs is insufficient. The equivalent
+unbounded formulation above forces qualifying n beyond every natural bound.
+The source neither demands positive density nor says all sufficiently large n
+qualify; neither extra property is part of the required target.
+
+5. BOUNDARY CONVENTIONS AND EXACT REPRESENTATION BRIDGES
+
+B1 — Finite boundary deletion. The conventional choices N={0,1,2,...} or positive
+integers, and the exclusion n<2 in Good, differ by only finitely many n. For each
+fixed k and c, ordinary infinitude is unchanged by deleting those finitely many
+values. Thus restricting to n≥2 is an exact treatment of the source's infinitude
+statement, not a substantive weakening. It makes every n+i≥3, so the usual largest
+prime divisor exists and the real base is positive. The same reasoning allows
+n≥1, for which n+i≥2. No convention at 0 or 1 can manufacture infinitude.
+
+B2 — Totalized largest-prime functions. One may assign arbitrary fixed values to
+P(0) and P(1), or use a library finite-set maximum convention, provided agreement
+with the actual largest prime divisor is established for every m≥2. Because
+Good explicitly has n≥2, those exceptional assignments are never evaluated in
+its inequalities. In particular, the set of all prime divisors of 0 must not be
+silently regarded as a finite nonempty set with a largest element.
+
+B3 — Prime-factor finite set. P(m) can be represented by the maximum of
+Nat.primeFactors m for m≥2. The required semantic bridge is that membership is
+exactly primality and divisibility for nonzero m, that the set is nonempty for
+m≥2, and that its maximum belongs to it and dominates its members. Use of a
+finite supremum with a default value requires this same positive-domain bridge.
+
+B4 — Existential prime divisor threshold. For m≥2 and a real threshold t,
+
+    t < (P(m) cast to R)
+      if and only if
+    there exists a natural prime p dividing m with t < (p cast to R).
+
+This is an exact semantic equivalence from the defining maximum property.
+Consequently, a formulation using some prime divisor above the SAME threshold
+can be faithful, even though it does not name the largest divisor. The equivalence
+must be supplied in the formal/report correspondence; mere divisibility with no
+primality, or no threshold, does not give this equivalence. This bridge makes no
+claim that any n meeting the conjecture exists.
+
+B5 — Infinitude/unboundedness. For a subset S of the natural numbers,
+
+    S is infinite iff for every N in N there is n in S with N<n.
+
+This is the exact equivalence used between the two target forms. Bounds written
+with ≤ can also express unboundedness when universally quantified, but must not
+be confused with a single finite bound. A later implementation should explicitly
+justify its chosen standard infinitude representation.
+
+No other semantic surrogate is preapproved. In particular, rational or natural
+exponents, a different base, non-strict inequalities, density conclusions,
+restricted k-domains, or rearranged quantifiers cannot be called the source
+statement just by changing its name. Any internal variant must connect rigorously
+to the full canonical target.
+
+6. LOGICAL NEGATION, WITHOUT A TRUTH ASSESSMENT
+
+If a later independent author chooses disproof, the logical target is NOT C.
+With the same Good and P, this has the exact form
+
+    there exists k in N with 2 ≤ k such that
+      for every real c>0,
+        {n in N : Good(k,c,n)} is finite.
+
+Equivalently, there exists such a k for which every real c>0 has a natural bound
+B such that every n>B with n≥2 has at least one offset 1≤i≤k satisfying
+
+    (P(n+i) cast to R) ≤ (n cast to R)^c.
+
+Here c is universally quantified, B may depend on c and k, and the failing offset
+may depend on n. Failure for one chosen positive exponent alone is not this
+negation. This section records quantifier duality only; it selects no direction
+and supplies no counterexample, witness, construction, or mathematical strategy.
+
+7. PINNED DEFINITION CHECKS
+
+Local Mathlib inspection supports the semantic vocabulary above. These are
+meaning references, not solution literature:
+
+Mathlib/Data/Nat/PrimeFin.lean, especially lines 31, 35-39, 57-65:
+Nat.primeFactors is a finite set; membership is primality plus divisibility plus
+nonzero input; the sets at 0 and 1 are empty.
+SHA-256 fa1c9732a8e688ff205d651a06d66398278e92aecdf4ce1634705c2784705cea
+
+Mathlib/Analysis/SpecialFunctions/Pow/Real.lean, especially lines 26-48:
+Real.rpow and Pow R R implement real exponentiation; for a positive base it is
+exp(log(base)*exponent).
+SHA-256 97508f0dca4990b2bc4d87ab38aa839f1e013752ebf426662880ffb84475bb52
+
+Mathlib/Order/Interval/Finset/Basic.lean, especially lines 919-923:
+Set.infinite_iff_exists_gt states the relevant infinitude/unboundedness equivalence
+under the locally finite order assumptions satisfied by natural numbers.
+SHA-256 8d0daed9663023f9bd9e27c7489a819e31cf01930b9358116c068409158ccba4
+
+All three files are under
+/private/tmp/tlmc310-proof/.lake/packages/mathlib/.
+Searches of local natural-number factor definitions were used only to locate
+these meaning references. No mathematical theorem/source was authored or tested.
+
+8. GUIDE REQUIREMENTS AND FINAL DISPOSITION
+
+Both complete guides require the eventual report and Lean project to match the
+conjecture's definition and requirements and reject incomplete or semantically
+nonconforming submissions. The English solver rule expressly permits proof or
+disproof; both reviewer rules and both leaderboard audit descriptions also
+recognize proof or disproof. The current audit descriptions require no sorry,
+no native_decide, and no extra axioms. Those are later deliverable checks, not
+claims that this semantic report supplies a verified solution.
+
+GO: the bilingual mathematical assertion supports the explicit target C without
+repair, material ambiguity, or a weakened interpretation. An independent author
+may now choose proof or disproof against C. Preserve G1-G7 and establish every
+representation bridge actually used. This GO does not certify that C is true,
+false, solved, tractable, or already formalized. Reopen the semantic gate if the
+source/rule identities change or the proposed final theorem differs from C or
+its exact negation. No clarification is needed for the present semantic target.
