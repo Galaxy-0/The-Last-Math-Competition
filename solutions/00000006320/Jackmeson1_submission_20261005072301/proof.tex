@@ -1,0 +1,141 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\per}{\operatorname{per}}
+\newcommand{\supp}{\operatorname{supp}}
+
+\title{A proof of Conjecture 00000006320\\[2pt]
+\large Two classes of $2\times 2$ doubly stochastic matrices with the same permanent bound and different supports}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000006320 reads (English version; the Chinese version agrees):
+
+\begin{quote}
+\emph{Definition:} The permanent lower bound and the support structure are two layers.
+\emph{Conjecture:} There exist two matrix classes with the same lower-bound constant but different
+support structures, and the separation is realized by an explicit pair with the same constant but
+different support families.
+\end{quote}
+
+This is an existence claim. We give an explicit pair of matrix classes, prove that they have the
+same permanent lower-bound constant, and prove that their support families are different.
+
+\section{Reading and definitions}
+
+All matrices are real. The permanent of an $n\times n$ matrix is
+$\per M=\sum_{\sigma\in S_n}\prod_i M_{\sigma(i),i}$ (Mathlib's \texttt{Matrix.permanent}).
+
+\begin{definition}
+A \emph{matrix class} is a set $\mathcal{C}$ of real $n\times n$ matrices. Its \emph{permanent
+lower-bound constant} $c(\mathcal{C})$ is the optimal constant $c$ with $\per M\ge c$ for all
+$M\in\mathcal{C}$, that is, $c(\mathcal{C})=\inf\{\per M: M\in\mathcal{C}\}$. This is the form of
+a permanent lower bound such as van der Waerden's $\per M\ge n!/n^n$ for doubly stochastic
+matrices. We use that bound only as context, never in a proof.
+\end{definition}
+
+\begin{definition}
+The \emph{support} of $M$ is $\supp M=\{(i,j): M_{ij}\neq 0\}$. The \emph{support family} (support
+structure) of a class is $\{\supp M: M\in\mathcal{C}\}$.
+\end{definition}
+
+\paragraph{The explicit pair.} Let $\Omega_2$ be the set of $2\times2$ doubly stochastic matrices
+(nonnegative entries, all row and column sums equal to $1$; Mathlib's \texttt{doublyStochastic}).
+Let $\Omega_2^{+}\subseteq\Omega_2$ be the subset of those with all entries positive.
+
+\section{The proof}
+
+\begin{lemma}\label{lem:form}
+Every $M\in\Omega_2$ has the form $\begin{pmatrix} a & 1-a\\ 1-a & a\end{pmatrix}$ with
+$0\le a\le1$. Hence $\per M=a^2+(1-a)^2\ge\tfrac12$, with equality iff $a=\tfrac12$.
+\end{lemma}
+\begin{proof}
+The row sums give $M_{01}=1-M_{00}$ and $M_{10}=1-M_{11}$, and the first column sum gives
+$M_{10}=1-M_{00}$. So $M_{11}=M_{00}=a$. Nonnegativity of $M_{00}=a$ and $M_{01}=1-a$ gives
+$0\le a\le1$. Then
+$\per M=M_{00}M_{11}+M_{10}M_{01}=a^2+(1-a)^2=\tfrac12+2(a-\tfrac12)^2$.
+\end{proof}
+
+\begin{theorem}[same constant]\label{thm:const}
+$c(\Omega_2)=c(\Omega_2^{+})=\tfrac12=2!/2^2$. In both classes, $\tfrac12$ is the \emph{least}
+permanent: it is attained at $J_2/2$ (all entries $\tfrac12$), which lies in $\Omega_2^{+}$.
+\end{theorem}
+\begin{proof}
+Lemma~\ref{lem:form} gives the lower bound on $\Omega_2\supseteq\Omega_2^{+}$, and
+$\per(J_2/2)=\tfrac14+\tfrac14=\tfrac12$.
+\end{proof}
+
+\begin{theorem}[different support families]\label{thm:supp}
+The support family of $\Omega_2^{+}$ is $\{\text{full}\}$. The support family of $\Omega_2$ is
+$\{\text{diagonal},\ \text{anti-diagonal},\ \text{full}\}$. In particular the identity
+$I_2\in\Omega_2$ has diagonal support, which does not occur in $\Omega_2^{+}$.
+\end{theorem}
+\begin{proof}
+Members of $\Omega_2^{+}$ have all entries nonzero. In $\Omega_2$, Lemma~\ref{lem:form} gives
+supports anti-diagonal for $a=0$, diagonal for $a=1$, and full for $0<a<1$. All three occur: at
+the swap matrix, at $I_2$, and at $J_2/2$.
+\end{proof}
+
+Theorems~\ref{thm:const} and~\ref{thm:supp} together give the conjecture: $(\Omega_2,\Omega_2^{+})$ is
+an explicit pair of matrix classes with the same constant $\tfrac12$ but different support
+families. \qed
+
+\begin{remark}[scope and conventions]
+(1) We prove the constant in the strongest sense: an attained minimum (\texttt{IsLeast}) in both
+classes, and also as an infimum (\texttt{sInf}). (2) A support is a set of positions, not a set
+of positions up to row and column permutations. Even up to permutation, the support families
+differ: $\Omega_2$ contains supports with $2$ nonzero entries, while every support in
+$\Omega_2^{+}$ has $4$. (3) The example is the case $n=2$ of the van der Waerden setting, with
+$\Omega_n^{+}$ dense in $\Omega_n$. We do not use the general van der Waerden theorem. (4) The
+reading of ``explicit pair'' is a pair of explicit matrix classes. The pair of explicit matrices
+$(J_2/2, I_2)$ is also exhibited: $J_2/2$ attains the common constant in both classes, and $I_2$
+realizes a support that only $\Omega_2$ has.
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture6320/Basic.lean} (Lean 4.33.1, Mathlib \texttt{v4.33.1}). It defines
+\texttt{lbConst} (infimum of \texttt{Matrix.permanent} over a class), \texttt{supp},
+\texttt{suppFamily}, \texttt{Omega2} $:=$ Mathlib's \texttt{doublyStochastic} $\mathbb{R}$
+\texttt{(Fin 2)}, and the positive subclass \texttt{Omega2pos}. The theorems are:
+\begin{itemize}
+\item Lemma~\ref{lem:form}, with $a=M_{00}$:
+\begin{itemize}
+\item \texttt{Omega2\_form}: the three entry identities;
+\item \texttt{Omega2\_bounds}: $0\le a\le1$;
+\item \texttt{permanent\_fin\_two}, \texttt{perm\_eq}: $\per M=a^2+(1-a)^2$;
+\item \texttt{perm\_ge\_half}: $\per M\ge\tfrac12$;
+\item \texttt{perm\_eq\_half\_iff}: $\per M=\tfrac12$ iff $a=\tfrac12$.
+\end{itemize}
+\item \texttt{isLeast\_Omega2}, \texttt{isLeast\_Omega2pos}, \texttt{lbConst\_Omega2},
+\texttt{lbConst\_Omega2pos}, \texttt{const\_eq\_vdW}: Theorem~\ref{thm:const}.
+\item \texttt{suppFamily\_Omega2}, \texttt{suppFamily\_Omega2pos}: Theorem~\ref{thm:supp}.
+\item \texttt{separation}: the main theorem. It states \texttt{IsLeast} for both classes, equal
+\texttt{lbConst}, \texttt{suppFamily Omega2} $\neq$ \texttt{suppFamily Omega2pos}, and that the
+support of $I_2$ lies in the first support family and not in the second.
+\end{itemize}
+\texttt{lake build} succeeds. \texttt{\#print axioms} for \texttt{separation},
+\texttt{suppFamily\_Omega2} and \texttt{const\_eq\_vdW} reports only
+\texttt{[propext, Classical.choice, Quot.sound]}. The code contains no \texttt{sorry} and no
+\texttt{native\_decide}.
+
+\end{document}
