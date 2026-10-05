@@ -1,0 +1,123 @@
+import Conjecture978
+
+#print Conjecture978.witness
+#print Conjecture978.hermitianPart
+#print Conjecture978.imaginaryPart
+#print Conjecture978.pencilPolynomial
+#print Conjecture978.gradient
+#print Conjecture978.ProjectivelySmooth
+#print Conjecture978.algebraicClosure
+#print Conjecture978.scaledGradientImage
+#print Conjecture978.dualCone
+#print Conjecture978.complexAffinePoint
+#print Conjecture978.complexAffinePoints
+#print Conjecture978.realAffinePoints
+#print Conjecture978.numericalRange
+#print Conjecture978.realCoordinatePoint
+#print Conjecture978.circle
+#print Conjecture978.circlePolynomial
+#print Conjecture978.circleParam
+#print Conjecture978.algebraicBoundary
+#print Conjecture978.RealPointBoundClaim
+#print Conjecture978.DualPointBoundClaim
+
+#check Conjecture978.hermitianPart_isHermitian
+#print axioms Conjecture978.hermitianPart_isHermitian
+#check Conjecture978.imaginaryPart_isHermitian
+#print axioms Conjecture978.imaginaryPart_isHermitian
+#check Conjecture978.eval_pencilPolynomial
+#print axioms Conjecture978.eval_pencilPolynomial
+#check Conjecture978.hermitianPart_witness
+#print axioms Conjecture978.hermitianPart_witness
+#check Conjecture978.imaginaryPart_witness
+#print axioms Conjecture978.imaginaryPart_witness
+#check Conjecture978.pencilPolynomial_witness
+#print axioms Conjecture978.pencilPolynomial_witness
+#check Conjecture978.gradient_witness
+#print axioms Conjecture978.gradient_witness
+#check Conjecture978.pencilPolynomial_witness_smooth
+#print axioms Conjecture978.pencilPolynomial_witness_smooth
+#check Conjecture978.pencilPolynomial_witness_homogeneous
+#print axioms Conjecture978.pencilPolynomial_witness_homogeneous
+#check Conjecture978.pencilPolynomial_witness_ne_zero
+#print axioms Conjecture978.pencilPolynomial_witness_ne_zero
+#check Conjecture978.pencilPolynomial_witness_totalDegree
+#print axioms Conjecture978.pencilPolynomial_witness_totalDegree
+#check Conjecture978.witness_sq_zero
+#print axioms Conjecture978.witness_sq_zero
+#check Conjecture978.charpoly_witness
+#print axioms Conjecture978.charpoly_witness
+#check Conjecture978.subset_algebraicClosure
+#print axioms Conjecture978.subset_algebraicClosure
+#check Conjecture978.algebraicClosure_mono
+#print axioms Conjecture978.algebraicClosure_mono
+#check Conjecture978.algebraicClosure_zeroLocus
+#print axioms Conjecture978.algebraicClosure_zeroLocus
+#check Conjecture978.scaledGradientImage_ne_zero
+#print axioms Conjecture978.scaledGradientImage_ne_zero
+#check Conjecture978.scaledGradientImage_smul
+#print axioms Conjecture978.scaledGradientImage_smul
+#check Conjecture978.pencil_vanishes_on_scaledGradientImage
+#print axioms Conjecture978.pencil_vanishes_on_scaledGradientImage
+#check Conjecture978.dualCone_witness_equation
+#print axioms Conjecture978.dualCone_witness_equation
+#check Conjecture978.affine_conic_mem_scaledGradientImage
+#print axioms Conjecture978.affine_conic_mem_scaledGradientImage
+#check Conjecture978.complexAffinePoints_witness_eq
+#print axioms Conjecture978.complexAffinePoints_witness_eq
+#check Conjecture978.realAffinePoints_witness_eq
+#print axioms Conjecture978.realAffinePoints_witness_eq
+#check Conjecture978.unit_condition_iff
+#print axioms Conjecture978.unit_condition_iff
+#check Conjecture978.disk_quadratic_witness
+#print axioms Conjecture978.disk_quadratic_witness
+#check Conjecture978.quadraticForm_witness
+#print axioms Conjecture978.quadraticForm_witness
+#check Conjecture978.numericalRange_witness_normSq
+#print axioms Conjecture978.numericalRange_witness_normSq
+#check Conjecture978.numericalRange_witness_eq
+#print axioms Conjecture978.numericalRange_witness_eq
+#check Conjecture978.frontier_numericalRange_witness
+#print axioms Conjecture978.frontier_numericalRange_witness
+#check Conjecture978.circle_eq_zeroLocus
+#print axioms Conjecture978.circle_eq_zeroLocus
+#check Conjecture978.algebraicClosure_circle
+#print axioms Conjecture978.algebraicClosure_circle
+#check Conjecture978.realCoordinatePoint_mem_sphere
+#print axioms Conjecture978.realCoordinatePoint_mem_sphere
+#check Conjecture978.circleParam_mem
+#print axioms Conjecture978.circleParam_mem
+#check Conjecture978.circleParam_inverse
+#print axioms Conjecture978.circleParam_inverse
+#check Conjecture978.circleParam_injective
+#print axioms Conjecture978.circleParam_injective
+#check Conjecture978.circle_infinite
+#print axioms Conjecture978.circle_infinite
+#check Conjecture978.circle_encard
+#print axioms Conjecture978.circle_encard
+#check Conjecture978.realAffinePoints_witness_eq_circle
+#print axioms Conjecture978.realAffinePoints_witness_eq_circle
+#check Conjecture978.realAffinePoints_witness_infinite
+#print axioms Conjecture978.realAffinePoints_witness_infinite
+#check Conjecture978.realAffinePoints_witness_encard
+#print axioms Conjecture978.realAffinePoints_witness_encard
+#check Conjecture978.realAffinePoints_witness_no_finite_bound
+#print axioms Conjecture978.realAffinePoints_witness_no_finite_bound
+#check Conjecture978.algebraicBoundary_witness_eq_circle
+#print axioms Conjecture978.algebraicBoundary_witness_eq_circle
+#check Conjecture978.realAffinePoints_eq_algebraicBoundary_witness
+#print axioms Conjecture978.realAffinePoints_eq_algebraicBoundary_witness
+#check Conjecture978.algebraicBoundary_witness_infinite
+#print axioms Conjecture978.algebraicBoundary_witness_infinite
+#check Conjecture978.algebraicBoundary_witness_encard
+#print axioms Conjecture978.algebraicBoundary_witness_encard
+#check Conjecture978.algebraicBoundary_witness_no_finite_bound
+#print axioms Conjecture978.algebraicBoundary_witness_no_finite_bound
+#check Conjecture978.conjecture978_disproof
+#print axioms Conjecture978.conjecture978_disproof
+#check Conjecture978.dualPointBoundClaim_false
+#print axioms Conjecture978.dualPointBoundClaim_false
+#check Conjecture978.universal_algebraicBoundary_bound_false
+#print axioms Conjecture978.universal_algebraicBoundary_bound_false
+#check Conjecture978.witness_certificate
+#print axioms Conjecture978.witness_certificate

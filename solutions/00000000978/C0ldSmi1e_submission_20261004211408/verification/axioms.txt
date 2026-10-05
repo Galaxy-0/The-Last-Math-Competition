@@ -1,0 +1,203 @@
+def Conjecture978.witness : Matrix (Fin 2) (Fin 2) ℂ :=
+!![0, 2; 0, 0]
+def Conjecture978.hermitianPart : {n : ℕ} → Matrix (Fin n) (Fin n) ℂ → Matrix (Fin n) (Fin n) ℂ :=
+fun {n} A => (1 / 2) • (A + A.conjTranspose)
+def Conjecture978.imaginaryPart : {n : ℕ} → Matrix (Fin n) (Fin n) ℂ → Matrix (Fin n) (Fin n) ℂ :=
+fun {n} A => (1 / (2 * Complex.I)) • (A - A.conjTranspose)
+def Conjecture978.pencilPolynomial : {n : ℕ} → Matrix (Fin n) (Fin n) ℂ → MvPolynomial (Fin 3) ℂ :=
+fun {n} A =>
+  Matrix.det fun i j =>
+    MvPolynomial.C (Conjecture978.hermitianPart A i j) * MvPolynomial.X 0 +
+        MvPolynomial.C (Conjecture978.imaginaryPart A i j) * MvPolynomial.X 1 +
+      if i = j then MvPolynomial.X 2 else 0
+def Conjecture978.gradient : MvPolynomial (Fin 3) ℂ → (Fin 3 → ℂ) → Fin 3 → ℂ :=
+fun p q j => (MvPolynomial.eval q) ((MvPolynomial.pderiv j) p)
+def Conjecture978.ProjectivelySmooth : MvPolynomial (Fin 3) ℂ → Prop :=
+fun p => ∀ (q : Fin 3 → ℂ), q ≠ 0 → (MvPolynomial.eval q) p = 0 → Conjecture978.gradient p q ≠ 0
+def Conjecture978.algebraicClosure.{u_1, u_2} : {k : Type u_1} →
+  [inst : Field k] → {σ : Type u_2} → Set (σ → k) → Set (σ → k) :=
+fun {k} [Field k] {σ} S => MvPolynomial.zeroLocus (MvPolynomial.vanishingIdeal S)
+def Conjecture978.scaledGradientImage : MvPolynomial (Fin 3) ℂ → Set (Fin 3 → ℂ) :=
+fun p =>
+  {r |
+    ∃ q,
+      q ≠ 0 ∧
+        (MvPolynomial.eval q) p = 0 ∧ Conjecture978.gradient p q ≠ 0 ∧ ∃ c, c ≠ 0 ∧ r = c • Conjecture978.gradient p q}
+def Conjecture978.dualCone : MvPolynomial (Fin 3) ℂ → Set (Fin 3 → ℂ) :=
+fun p => Conjecture978.algebraicClosure (Conjecture978.scaledGradientImage p)
+def Conjecture978.complexAffinePoint : (Fin 2 → ℂ) → Fin 3 → ℂ :=
+fun z => ![z 0, z 1, 1]
+def Conjecture978.complexAffinePoints : MvPolynomial (Fin 3) ℂ → Set (Fin 2 → ℂ) :=
+fun p => {z | Conjecture978.complexAffinePoint z ∈ Conjecture978.dualCone p}
+def Conjecture978.realAffinePoints : MvPolynomial (Fin 3) ℂ → Set (Fin 2 → ℝ) :=
+fun p => {x | (fun i => ↑(x i)) ∈ Conjecture978.complexAffinePoints p}
+def Conjecture978.numericalRange : {n : ℕ} → Matrix (Fin n) (Fin n) ℂ → Set ℂ :=
+fun {n} A => {z | ∃ v, ∑ i, Complex.normSq (v i) = 1 ∧ ∑ i, (starRingEnd ℂ) (v i) * A.mulVec v i = z}
+def Conjecture978.realCoordinatePoint : (Fin 2 → ℝ) → ℂ :=
+fun x => ↑(x 0) + ↑(x 1) * Complex.I
+def Conjecture978.circle : Set (Fin 2 → ℝ) :=
+{x | x 0 ^ 2 + x 1 ^ 2 = 1}
+def Conjecture978.circlePolynomial : MvPolynomial (Fin 2) ℝ :=
+MvPolynomial.X 0 ^ 2 + MvPolynomial.X 1 ^ 2 - 1
+def Conjecture978.circleParam : ℝ → Fin 2 → ℝ :=
+fun t => ![(1 - t ^ 2) / (1 + t ^ 2), 2 * t / (1 + t ^ 2)]
+def Conjecture978.algebraicBoundary : {n : ℕ} → Matrix (Fin n) (Fin n) ℂ → Set (Fin 2 → ℝ) :=
+fun {n} A =>
+  Conjecture978.algebraicClosure {x | Conjecture978.realCoordinatePoint x ∈ frontier (Conjecture978.numericalRange A)}
+def Conjecture978.RealPointBoundClaim : Prop :=
+∀ (A : Matrix (Fin 2) (Fin 2) ℂ),
+  (Conjecture978.pencilPolynomial A).IsHomogeneous 2 →
+    Conjecture978.ProjectivelySmooth (Conjecture978.pencilPolynomial A) →
+      (Conjecture978.algebraicBoundary A).encard ≤ ↑(2 * (2 - 1) / 2)
+def Conjecture978.DualPointBoundClaim : Prop :=
+∀ (A : Matrix (Fin 2) (Fin 2) ℂ),
+  (Conjecture978.pencilPolynomial A).IsHomogeneous 2 →
+    Conjecture978.ProjectivelySmooth (Conjecture978.pencilPolynomial A) →
+      (Conjecture978.realAffinePoints (Conjecture978.pencilPolynomial A)).encard ≤ ↑(2 * (2 - 1) / 2)
+Conjecture978.hermitianPart_isHermitian {n : ℕ} (A : Matrix (Fin n) (Fin n) ℂ) :
+  (Conjecture978.hermitianPart A).IsHermitian
+'Conjecture978.hermitianPart_isHermitian' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.imaginaryPart_isHermitian {n : ℕ} (A : Matrix (Fin n) (Fin n) ℂ) :
+  (Conjecture978.imaginaryPart A).IsHermitian
+'Conjecture978.imaginaryPart_isHermitian' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.eval_pencilPolynomial {n : ℕ} (A : Matrix (Fin n) (Fin n) ℂ) (q : Fin 3 → ℂ) :
+  (MvPolynomial.eval q) (Conjecture978.pencilPolynomial A) =
+    (q 0 • Conjecture978.hermitianPart A + q 1 • Conjecture978.imaginaryPart A + q 2 • 1).det
+'Conjecture978.eval_pencilPolynomial' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.hermitianPart_witness : Conjecture978.hermitianPart Conjecture978.witness = !![0, 1; 1, 0]
+'Conjecture978.hermitianPart_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.imaginaryPart_witness :
+  Conjecture978.imaginaryPart Conjecture978.witness = !![0, -Complex.I; Complex.I, 0]
+'Conjecture978.imaginaryPart_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.pencilPolynomial_witness :
+  Conjecture978.pencilPolynomial Conjecture978.witness =
+    MvPolynomial.X 2 ^ 2 - MvPolynomial.X 0 ^ 2 - MvPolynomial.X 1 ^ 2
+'Conjecture978.pencilPolynomial_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.gradient_witness (q : Fin 3 → ℂ) :
+  Conjecture978.gradient (Conjecture978.pencilPolynomial Conjecture978.witness) q = ![-2 * q 0, -2 * q 1, 2 * q 2]
+'Conjecture978.gradient_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.pencilPolynomial_witness_smooth :
+  Conjecture978.ProjectivelySmooth (Conjecture978.pencilPolynomial Conjecture978.witness)
+'Conjecture978.pencilPolynomial_witness_smooth' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.pencilPolynomial_witness_homogeneous :
+  (Conjecture978.pencilPolynomial Conjecture978.witness).IsHomogeneous 2
+'Conjecture978.pencilPolynomial_witness_homogeneous' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.pencilPolynomial_witness_ne_zero : Conjecture978.pencilPolynomial Conjecture978.witness ≠ 0
+'Conjecture978.pencilPolynomial_witness_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.pencilPolynomial_witness_totalDegree :
+  (Conjecture978.pencilPolynomial Conjecture978.witness).totalDegree = 2
+'Conjecture978.pencilPolynomial_witness_totalDegree' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.witness_sq_zero : Conjecture978.witness ^ 2 = 0
+'Conjecture978.witness_sq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.charpoly_witness : Conjecture978.witness.charpoly = Polynomial.X ^ 2
+'Conjecture978.charpoly_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.subset_algebraicClosure.{u_1, u_2} {k : Type u_1} [Field k] {σ : Type u_2} (S : Set (σ → k)) :
+  S ⊆ Conjecture978.algebraicClosure S
+'Conjecture978.subset_algebraicClosure' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.algebraicClosure_mono.{u_1, u_2} {k : Type u_1} [Field k] {σ : Type u_2} {S T : Set (σ → k)} (h : S ⊆ T) :
+  Conjecture978.algebraicClosure S ⊆ Conjecture978.algebraicClosure T
+'Conjecture978.algebraicClosure_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.algebraicClosure_zeroLocus.{u_1, u_2} {k : Type u_1} [Field k] {σ : Type u_2}
+  (I : Ideal (MvPolynomial σ k)) : Conjecture978.algebraicClosure (MvPolynomial.zeroLocus I) = MvPolynomial.zeroLocus I
+'Conjecture978.algebraicClosure_zeroLocus' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.scaledGradientImage_ne_zero {p : MvPolynomial (Fin 3) ℂ} {r : Fin 3 → ℂ}
+  (hr : r ∈ Conjecture978.scaledGradientImage p) : r ≠ 0
+'Conjecture978.scaledGradientImage_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.scaledGradientImage_smul {p : MvPolynomial (Fin 3) ℂ} {r : Fin 3 → ℂ}
+  (hr : r ∈ Conjecture978.scaledGradientImage p) {c : ℂ} (hc : c ≠ 0) : c • r ∈ Conjecture978.scaledGradientImage p
+'Conjecture978.scaledGradientImage_smul' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.pencil_vanishes_on_scaledGradientImage :
+  Conjecture978.pencilPolynomial Conjecture978.witness ∈
+    MvPolynomial.vanishingIdeal
+      (Conjecture978.scaledGradientImage (Conjecture978.pencilPolynomial Conjecture978.witness))
+'Conjecture978.pencil_vanishes_on_scaledGradientImage' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.dualCone_witness_equation {r : Fin 3 → ℂ}
+  (hr : r ∈ Conjecture978.dualCone (Conjecture978.pencilPolynomial Conjecture978.witness)) :
+  r 2 ^ 2 - r 0 ^ 2 - r 1 ^ 2 = 0
+'Conjecture978.dualCone_witness_equation' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.affine_conic_mem_scaledGradientImage (z : Fin 2 → ℂ) (hz : z 0 ^ 2 + z 1 ^ 2 = 1) :
+  Conjecture978.complexAffinePoint z ∈
+    Conjecture978.scaledGradientImage (Conjecture978.pencilPolynomial Conjecture978.witness)
+'Conjecture978.affine_conic_mem_scaledGradientImage' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.complexAffinePoints_witness_eq :
+  Conjecture978.complexAffinePoints (Conjecture978.pencilPolynomial Conjecture978.witness) = {z | z 0 ^ 2 + z 1 ^ 2 = 1}
+'Conjecture978.complexAffinePoints_witness_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.realAffinePoints_witness_eq :
+  Conjecture978.realAffinePoints (Conjecture978.pencilPolynomial Conjecture978.witness) = {x | x 0 ^ 2 + x 1 ^ 2 = 1}
+'Conjecture978.realAffinePoints_witness_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.unit_condition_iff {n : ℕ} (v : Fin n → ℂ) :
+  ∑ i, Complex.normSq (v i) = 1 ↔ ∑ i, (starRingEnd ℂ) (v i) * v i = 1
+'Conjecture978.unit_condition_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.disk_quadratic_witness (z : ℂ) (hz : Complex.normSq z ≤ 1) :
+  ∃ a b, Complex.normSq a + Complex.normSq b = 1 ∧ 2 * (starRingEnd ℂ) a * b = z
+'Conjecture978.disk_quadratic_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.quadraticForm_witness (v : Fin 2 → ℂ) :
+  ∑ i, (starRingEnd ℂ) (v i) * Conjecture978.witness.mulVec v i = 2 * (starRingEnd ℂ) (v 0) * v 1
+'Conjecture978.quadraticForm_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.numericalRange_witness_normSq :
+  Conjecture978.numericalRange Conjecture978.witness = {z | Complex.normSq z ≤ 1}
+'Conjecture978.numericalRange_witness_normSq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.numericalRange_witness_eq : Conjecture978.numericalRange Conjecture978.witness = Metric.closedBall 0 1
+'Conjecture978.numericalRange_witness_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.frontier_numericalRange_witness :
+  frontier (Conjecture978.numericalRange Conjecture978.witness) = Metric.sphere 0 1
+'Conjecture978.frontier_numericalRange_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.circle_eq_zeroLocus :
+  Conjecture978.circle = MvPolynomial.zeroLocus (Ideal.span {Conjecture978.circlePolynomial})
+'Conjecture978.circle_eq_zeroLocus' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.algebraicClosure_circle : Conjecture978.algebraicClosure Conjecture978.circle = Conjecture978.circle
+'Conjecture978.algebraicClosure_circle' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.realCoordinatePoint_mem_sphere (x : Fin 2 → ℝ) :
+  Conjecture978.realCoordinatePoint x ∈ Metric.sphere 0 1 ↔ x ∈ Conjecture978.circle
+'Conjecture978.realCoordinatePoint_mem_sphere' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.circleParam_mem (t : ℝ) : Conjecture978.circleParam t ∈ Conjecture978.circle
+'Conjecture978.circleParam_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.circleParam_inverse (t : ℝ) : Conjecture978.circleParam t 1 / (1 + Conjecture978.circleParam t 0) = t
+'Conjecture978.circleParam_inverse' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.circleParam_injective : Function.Injective Conjecture978.circleParam
+'Conjecture978.circleParam_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.circle_infinite : Conjecture978.circle.Infinite
+'Conjecture978.circle_infinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.circle_encard : Conjecture978.circle.encard = ⊤
+'Conjecture978.circle_encard' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.realAffinePoints_witness_eq_circle :
+  Conjecture978.realAffinePoints (Conjecture978.pencilPolynomial Conjecture978.witness) = Conjecture978.circle
+'Conjecture978.realAffinePoints_witness_eq_circle' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.realAffinePoints_witness_infinite :
+  (Conjecture978.realAffinePoints (Conjecture978.pencilPolynomial Conjecture978.witness)).Infinite
+'Conjecture978.realAffinePoints_witness_infinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.realAffinePoints_witness_encard :
+  (Conjecture978.realAffinePoints (Conjecture978.pencilPolynomial Conjecture978.witness)).encard = ⊤
+'Conjecture978.realAffinePoints_witness_encard' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.realAffinePoints_witness_no_finite_bound (N : ℕ) :
+  ¬(Conjecture978.realAffinePoints (Conjecture978.pencilPolynomial Conjecture978.witness)).encard ≤ ↑N
+'Conjecture978.realAffinePoints_witness_no_finite_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.algebraicBoundary_witness_eq_circle :
+  Conjecture978.algebraicBoundary Conjecture978.witness = Conjecture978.circle
+'Conjecture978.algebraicBoundary_witness_eq_circle' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.realAffinePoints_eq_algebraicBoundary_witness :
+  Conjecture978.realAffinePoints (Conjecture978.pencilPolynomial Conjecture978.witness) =
+    Conjecture978.algebraicBoundary Conjecture978.witness
+'Conjecture978.realAffinePoints_eq_algebraicBoundary_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.algebraicBoundary_witness_infinite : (Conjecture978.algebraicBoundary Conjecture978.witness).Infinite
+'Conjecture978.algebraicBoundary_witness_infinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.algebraicBoundary_witness_encard : (Conjecture978.algebraicBoundary Conjecture978.witness).encard = ⊤
+'Conjecture978.algebraicBoundary_witness_encard' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.algebraicBoundary_witness_no_finite_bound (N : ℕ) :
+  ¬(Conjecture978.algebraicBoundary Conjecture978.witness).encard ≤ ↑N
+'Conjecture978.algebraicBoundary_witness_no_finite_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.conjecture978_disproof : ¬Conjecture978.RealPointBoundClaim
+'Conjecture978.conjecture978_disproof' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.dualPointBoundClaim_false : ¬Conjecture978.DualPointBoundClaim
+'Conjecture978.dualPointBoundClaim_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.universal_algebraicBoundary_bound_false :
+  ¬∀ (n : ℕ) (A : Matrix (Fin n) (Fin n) ℂ), (Conjecture978.algebraicBoundary A).encard ≤ ↑(n * (n - 1) / 2)
+'Conjecture978.universal_algebraicBoundary_bound_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture978.witness_certificate :
+  Conjecture978.witness.charpoly = Polynomial.X ^ 2 ∧
+    (Conjecture978.pencilPolynomial Conjecture978.witness).IsHomogeneous 2 ∧
+      Conjecture978.ProjectivelySmooth (Conjecture978.pencilPolynomial Conjecture978.witness) ∧
+        (Conjecture978.algebraicBoundary Conjecture978.witness).Infinite ∧
+          Conjecture978.realAffinePoints (Conjecture978.pencilPolynomial Conjecture978.witness) =
+            Conjecture978.algebraicBoundary Conjecture978.witness
+'Conjecture978.witness_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
