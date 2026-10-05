@@ -1,0 +1,81 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\setlength{\emergencystretch}{2em}
+\begin{document}
+\begin{center}
+{\Large Proof of conjecture 00000006380}\\[5pt]
+Pressure enrichment with unchanged inf--sup stability\\
+ziangni-sys
+\end{center}
+\textbf{Source and scope.}
+Both source versions request two mixed schemes with equal stability constants but different pressure spaces, realized by an explicit enrichment pair. We give finite-dimensional mixed Galerkin schemes for the same underlying weak problem. No particular PDE or finite-element shape is specified in the source. The construction uses genuine velocity and pressure subspaces, bilinear forms, the full inf--sup definition and uniquely solvable mixed systems.
+
+\textbf{Spaces and shared bilinear forms.}
+Use the Euclidean velocity space $V=\mathbb R^2$ and pressure spaces
+\[
+ Q_1=\{(q,0):q\in\mathbb R\},\qquad Q_2=\mathbb R^2.
+\]
+Both carry the inherited Euclidean norm. There is a strict enrichment $Q_1\subsetneq Q_2$, with dimensions one and two. For both schemes use the same forms
+\[
+ a(u,v)=\langle u,v\rangle,\qquad b(v,q)=\langle v,q\rangle.
+\]
+These are real bilinear forms. The form $a$ is coercive with constant one, because $a(v,v)=\|v\|^2$. The coupling $b$ has continuity bound one by Cauchy--Schwarz.
+
+\textbf{The actual inf--sup constants.}
+For a nonzero pressure $q$, define
+\[
+ S(q)=\sup_{v\in V,\ v\ne0}
+       \frac{b(v,q)}{\|v\|\|q\|}.
+\]
+Cauchy--Schwarz gives every quotient at most one. Choosing the actual velocity $v=q$ gives
+\[
+ \frac{\langle q,q\rangle}{\|q\|^2}=1.
+\]
+The supremum is therefore exactly one for \emph{every} nonzero pressure vector. Consequently, for each $i\in\{1,2\}$,
+\[
+ \beta_i=\inf_{q\in Q_i,\ q\ne0} S(q)=1.
+\]
+Each pressure space contains nonzero vectors, so both infima are over nonempty sets. This proves the equal stability constants with all velocity and pressure quantifiers, rather than assigning them in the model.
+
+\textbf{The common mixed weak problem.}
+For data $f,g\in\mathbb R^2$, seek $(u,p)\in V\times Q_i$ satisfying
+\[
+ \begin{aligned}
+ a(u,v)+b(v,p)&=a(f,v)&&\text{for every }v\in V,\\
+ b(u,q)&=b(g,q)&&\text{for every }q\in Q_i.
+ \end{aligned}
+\]
+The enriched scheme uses the full pressure test space; the smaller scheme restricts the same equations to the first coordinate line. Thus these are two Galerkin restrictions of one weak formulation.
+\newpage
+\textbf{Actual solutions and uniqueness.}
+The first weak equation is equivalent to $u+p=f$, by testing the two coordinate vectors. For $Q_1$, the pressure constraint gives $p_2=0$, and the second weak equation is equivalent to $u_1=g_1$. Hence the unique solution is
+\[
+ u=(g_1,f_2),\qquad p=(f_1-g_1,0).
+\]
+Conversely these vectors satisfy every velocity and pressure test equation. The second component of $g$ has no effect in this smaller pressure test space.
+
+For $Q_2$, the second weak equation tested against both coordinate vectors gives $u=g$. The first then gives the unique pressure $p=f-g$. Thus both schemes are genuinely well posed for all data, and the unchanged stability is not merely a property of a separately declared constant.
+
+\textbf{Different pressure modes.}
+The smaller pressure space contains exactly the first-axis modes. The second-axis vector $(0,1)$ belongs to $Q_2$ and does not belong to $Q_1$. The linear identification $q\mapsto(q,0)$ shows $\dim Q_1=1$, whereas $\dim Q_2=2$. This is an explicit strict pressure enrichment with the same velocity space, forms and stability constant.
+
+\textbf{Formal correspondence.}
+The Lean package uses Mathlib's actual Euclidean space of dimension two, coordinate vectors and projections. The smaller pressure space is the genuine kernel of the second-coordinate linear map, and the enriched pressure space is the top submodule. A genuine linear equivalence with the scalar field proves the smaller dimension; actual finite-dimensional calculations prove the larger dimension.
+
+Bilinearity and coercivity are proved for the actual inner-product forms. For each nonzero pressure, the development forms the actual set of normalized velocity quotients, proves it bounded above, and proves that it contains one. Mathlib's real \texttt{sSup} is therefore one. The pressure infimum is an actual \texttt{sInf} over the image of all nonzero pressures in the subspace; this image is proved to be the singleton $\{1\}$. Both inf--sup constants follow.
+
+The weak system is defined with all velocity and pressure tests. The package proves the displayed solutions satisfy the system and proves every solution equals them, giving actual existence-and-uniqueness theorems for both schemes. The final theorem combines strict enrichment, equal stability, different dimensions and well-posed mixed systems.
+
+\textbf{Reproduction.}
+Run \texttt{lake build} inside the submitted \texttt{lean} directory with Lean 4.19.0. Mathlib is pinned publicly to
+\[
+ \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\]
+Printed axiom audits cover actual enrichment, dimensions, forms, supremum, infimum, stability, unique mixed solutions and final separation. The submission contains this full source and its compiled PDF.
+
+\textbf{Conclusion.}
+The two pressure spaces have different modes and dimensions, while both mixed schemes have the identical genuine inf--sup constant one. The explicit enrichment realizes the conjectured separation.
+\end{document}
