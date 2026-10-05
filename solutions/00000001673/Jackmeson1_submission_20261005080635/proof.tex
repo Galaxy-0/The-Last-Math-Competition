@@ -1,0 +1,145 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\ind}{\operatorname{ind}}
+
+\title{Conjecture 00000001673 is false:\\ the inducibility of $C_6$ is at most $2/7 < (\sqrt3-1)/2$}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{The conjecture}
+\emph{Definition: the inducibility of $C_6$ is its maximal asymptotic density as an induced subgraph
+of $n$-vertex graphs. Conjecture: $\ind(C_6) = (\sqrt3-1)/2$; the extremal configuration is the
+balanced blow-up of the triangular prism, uniquely; and uniqueness is verified by the stabilizer
+structure of triangular-prism blow-ups.}
+
+We refute the value clause (A) for every graph on $n \ge 7$ vertices, and hence for the limit,
+the limsup and the liminf of the maximum induced density, and for the limsup along any sequence of
+graphs. We also refute the extremal-configuration clause (B): every blow-up of the triangular prism
+has no induced $C_6$ at all, while $\ind(C_6) \ge 5/324 > 0$. The clause about the ``stabilizer
+structure'' is not a mathematical statement we formalize; it presupposes (B).
+
+\section*{Definitions and reading}
+\begin{definition}[Induced copy]
+For a graph $G$ and a $6$-set $S \subseteq V(G)$, $S$ \emph{induces} $C_6$ if $S$ is the vertex set
+of an induced embedding of the $6$-cycle, i.e.\ an injective $f\colon \mathbb{Z}/6 \to V(G)$ with
+$f(i)f(j) \in E(G) \iff j-i \equiv \pm 1 \pmod 6$. Equivalently $G[S] \cong C_6$.
+\end{definition}
+
+\begin{definition}[Density and inducibility]
+For $G$ on $n$ vertices, $d(G) = \#\{S : |S|=6,\ S \text{ induces } C_6\} / \binom{n}{6}$, and
+$M(n) = \max_{|V(G)|=n} d(G)$. Following Pippenger and Golumbic, as quoted by Hatami, Hirst and Norine
+(arXiv:1108.5699): ``Let [$i_H(n)$] denote the maximum induced density of [$H$] in any graph on
+[$n$] vertices. ... The asymptotic behavior of [$i_H(n)$] is captured by the inducibility of [$H$]
+defined as [$\lim_{n\to\infty} i_H(n)$]. It is straightforward to see that this limit always
+exists.'' (Bracketed symbols were lost in text extraction.) The Lean development defines
+$\ind(C_6) := \limsup_{n} M(n)$ and also treats $\liminf_n M(n)$, any limit of $M(n)$, and
+$\limsup_n d(G_n)$ for an arbitrary sequence $(G_n)$.
+\end{definition}
+
+\begin{definition}[Prism and blow-ups]
+The triangular prism is $K_3 \,\Box\, K_2$ (``the Cartesian product of a cycle graph with a single
+edge'', Wikipedia, \emph{Prism graph}; ``Triangular prism graph -- 6 vertices, 9 edges''). A
+blow-up of $H$ along a map $p\colon V \to V(H)$ has $uv \in E \iff p(u)p(v) \in E(H)$; it is balanced
+when all fibres $p^{-1}(x)$ have equal size (Hatami--Hirst--Norine: ``the copies of two vertices are
+adjacent if and only if the originals are. If every vertex is replaced with the same number of
+copies, then the resulting graph is called a balanced blow-up.'').
+\end{definition}
+
+Conventions: graphs are simple and loopless; $\mathbb{N}$ includes $0$; densities are real numbers;
+$\sqrt{3}$ is the positive root. No normalisation other than $\binom n6$ is used.
+
+\section*{Proof of (A)}
+\begin{lemma}[Facts about $C_6$]
+$C_6$ is $2$-regular, has no twins (for $i \neq j$ some $k \notin\{i,j\}$ is adjacent to exactly one of
+$i,j$), and is triangle-free.
+\end{lemma}
+
+\begin{lemma}[Pair lemma]
+Let $b$ be a vertex set and $x \ne y$ in $b$ such that $b\setminus\{x\}$ and $b\setminus\{y\}$
+both induce $C_6$. Then every $w \in b\setminus\{x,y\}$ satisfies $w \sim x \iff w \sim y$.
+\end{lemma}
+\begin{proof}
+Let $S = b\setminus\{x,y\}$. In the copy $b\setminus\{y\} = S \cup\{x\}$ the vertex $w$ has
+degree $2 = |N(w)\cap S| + [w\sim x]$; in $b\setminus\{x\} = S\cup\{y\}$ it has degree
+$2 = |N(w)\cap S| + [w\sim y]$. Hence $[w\sim x] = [w \sim y]$.
+\end{proof}
+
+\begin{lemma}[Local bound]
+For every vertex set $b$, at most two $x \in b$ have $b\setminus\{x\}$ inducing $C_6$.
+\end{lemma}
+\begin{proof}
+Suppose $x,y,z$ are distinct and all three deletions induce $C_6$. By the pair lemma applied to $y,z$,
+the vertices $y,z$ have the same neighbours in $b\setminus\{y,z\}$. But $y,z$ both lie in the induced
+copy $b\setminus\{x\}$, and since $C_6$ has no twins there is $w \in b\setminus\{x\}$, $w\ne y,z$, adjacent
+to exactly one of $y,z$. Contradiction.
+\end{proof}
+
+\begin{theorem}[Main bound]
+For every $n \ge 7$ and every graph $G$ on $n$ vertices, $d(G) \le 2/7$.
+\end{theorem}
+\begin{proof}
+Let $c$ be the number of $6$-sets inducing $C_6$. Double count pairs $(S,T)$ with $S$ such a
+$6$-set, $|T| = 7$, $S \subset T$. Each $S$ lies in exactly $n-6$ sets $T = S\cup\{x\}$; each $T$ contains
+at most $2$ such $S$ (each $S \subset T$ is $T\setminus\{x\}$; local bound). So
+$c(n-6) \le 2\binom n7$. With $7\binom n7 = (n-6)\binom n6$ and $n-6>0$ this gives
+$7c \le 2\binom n6$.
+\end{proof}
+
+Since $(11/7)^2 = 121/49 < 3$, $\sqrt3 > 11/7$, so $(\sqrt3-1)/2 > 2/7$. Therefore $M(n) \le 2/7$ for
+$n\ge7$, hence $\limsup M$, $\liminf M$, any limit of $M$, and $\limsup d(G_n)$ along any sequence are
+all $\le 2/7 < (\sqrt3-1)/2$. In particular (A) fails in every one of these readings.
+
+\section*{Proof of (B)}
+\begin{theorem}
+No blow-up of the triangular prism (balanced or not) contains an induced $C_6$.
+\end{theorem}
+\begin{proof}
+Let $f$ be an induced embedding of $C_6$ into the blow-up along $p$, and $g = p\circ f$. If
+$g(i) = g(j)$ with $i\ne j$, then $f(i), f(j)$ have identical adjacency to every $f(k)$, so $i,j$ are
+twins in $C_6$, impossible. So $g$ is injective into the $6$ prism vertices, hence bijective, and
+$i\sim j \iff g(i)g(j) \in E(\text{prism})$. The prism triangle $(0,0),(1,0),(2,0)$ then pulls back to
+a triangle in $C_6$, impossible.
+\end{proof}
+
+\begin{theorem}[Lower bound]
+For $m\ge1$, $M(6m) \ge 5/324$; hence $\ind(C_6) = \limsup M \ge 5/324$.
+\end{theorem}
+\begin{proof}
+In the blow-up of $C_6$ on $\{0,\dots,6m-1\}$ along $v\mapsto v \bmod 6$, each $\varphi\colon \{0..5\}\to\{0..m-1\}$
+gives the induced copy $i\mapsto 6\varphi(i)+i$, and distinct $\varphi$ give distinct vertex sets. So
+$c \ge m^6$, while $\binom{6m}{6} \le (6m)^6/6!$, giving $d \ge 720/6^6 = 5/324$.
+\end{proof}
+Hence every sequence of prism blow-ups has density identically $0$, which does not tend to
+$\ind(C_6) \ge 5/324$, and at every $n = 6m$ the maximum density exceeds theirs by at least $5/324$.
+
+\section*{Lean formalization}
+File \texttt{lean/Conjecture1673/Basic.lean} (Lean 4, Mathlib \texttt{v4.33.1}, only \texttt{import Mathlib}).
+Key definitions: \texttt{C1673.InducesC6} (exists an embedding \texttt{f : cycleGraph 6 -> G} of type \texttt{SimpleGraph.Embedding} with image $S$),
+\texttt{c6Count}, \texttt{c6Density}, \texttt{maxC6Density} (\texttt{iSup} over all graphs on \texttt{Fin n}),
+\texttt{indC6} (\texttt{limsup maxC6Density atTop}), \texttt{prism} (\texttt{K3 box K2} via \texttt{SimpleGraph.boxProd}),
+blow-ups as \texttt{prism.comap p}.
+Key theorems: \texttt{pair\_twins}, \texttt{erase\_count\_le\_two}, \texttt{count\_mul\_le},
+\texttt{c6Density\_le}, \texttt{two\_sevenths\_lt}, \texttt{indC6\_le}, \texttt{liminf\_le}, \texttt{lim\_le},
+\texttt{seq\_limsup\_le}, \texttt{prism\_blowup\_no\_C6}, \texttt{prism\_c6Density}, \texttt{indC6\_ge}, and the
+main theorem \texttt{C1673.not\_conjecture}, which states the conjunction of: density $<(\sqrt3-1)/2$ for all
+$n\ge7$; \texttt{indC6} $\ne(\sqrt3-1)/2$; $\liminf \ne (\sqrt3-1)/2$; $M(n) \not\to (\sqrt3-1)/2$; for every graph
+sequence $\limsup d(G_n) \ne (\sqrt3-1)/2$; no sequence of prism blow-ups has density tending to \texttt{indC6};
+prism blow-ups on $6m$ vertices have density at least $5/324$ below $M(6m)$.
+
+Axiom audit: \texttt{\#print axioms C1673.not\_conjecture} reports
+\texttt{[propext, Classical.choice, Quot.sound]}; no \texttt{sorry}, no \texttt{native\_decide}. The finite
+facts about $C_6$ are checked by kernel \texttt{decide} on \texttt{Fin 6}.
+
+\end{document}
