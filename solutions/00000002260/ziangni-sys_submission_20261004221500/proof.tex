@@ -1,0 +1,51 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{An entire function of order five exceeds the planar bound}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Conjecture 00000002260.} The stated relation $\dim_H J(f)\geq\rho/2$ for entire functions is false without a restriction on the order $\rho$. Neither source version imposes $\rho\leq4$.
+
+Take the actual entire function
+\[
+ f(z)=\exp(z^5).
+\]
+It is holomorphic on all of $\mathbb C$, as the composition of the entire exponential and the polynomial $z^5$. We compute its genuine maximum modulus, rather than assume an order value.
+
+For $r\geq0$ and $|z|\leq r$, the usual exponential norm bound gives
+\[
+ |f(z)|=|\exp(z^5)|\leq\exp(|z^5|)
+ =\exp(|z|^5)\leq\exp(r^5).
+\]
+At the positive real point $z=r$, which lies on the circle $|z|=r$, equality holds:
+\[
+ |f(r)|=\exp(r^5).
+\]
+Consequently both the closed-disk supremum and the usual circular maximum modulus equal
+\[
+ M_f(r)=\exp(r^5).
+\]
+In particular the function's actual entire-function order is
+\[
+ \rho(f)=\limsup_{r\to\infty}\frac{\log\log M_f(r)}{\log r}=5.
+\]
+Indeed, for every $r>1$ the displayed quotient is exactly
+\[
+ \frac{\log(r^5)}{\log r}=\frac{5\log r}{\log r}=5.
+\]
+
+The complex plane is a real two-dimensional Euclidean space, so its Hausdorff dimension is two. Monotonicity gives the universal statement
+\[
+ \dim_H S\leq\dim_H\mathbb C=2
+ \qquad\text{for every subset }S\subseteq\mathbb C.
+\]
+Apply this to the genuine Julia set $J(f)$, which is a subset of the complex plane by definition. No computation of its dynamical structure is needed. The proposed lower bound would require
+\[
+ \frac52=\frac{\rho(f)}2\leq\dim_H J(f)\leq2,
+\]
+which is impossible.
+
+\noindent\textbf{Scope and verification.} This disproves the unrestricted order--dimension relation as written. It does not assert a dimension formula for this Julia set, nor refute bounds stated with appropriate restrictions or a different dependence on order. The Lean project proves actual entire differentiability, the maximum-modulus supremum and its exact value, the logarithmic growth limit and actual limsup order, and the Hausdorff bound for \emph{every} subset of $\mathbb C$. Its final theorem quantifies over all planar subsets; it does not invent a surrogate definition of a Julia set. Applying this stronger theorem to any genuine $J(f)$ gives the contradiction above. Extended-real Hausdorff dimensions are handled directly in Lean, using $\operatorname{ofReal}(\rho/2)$ and the finite bound two.
+\end{document}
