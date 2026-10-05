@@ -1,0 +1,186 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Zp}{\mathbb{Z}_p}
+\title{Conjecture 00000000716: the sign in the $p$-adic reflection formula\\ is not a function of $p \bmod 4$}
+\author{Jackmeson1}
+\date{}
+\begin{document}
+\maketitle
+
+\section{The conjecture and the readings refuted}
+
+\textbf{Statement (English).} \emph{Conjecture: The correction term in
+$\Gamma_p(a)\cdot\Gamma_p(1-a) = \pm 1$ is an explicit function of $p \bmod 4$ (the sign of the
+$p$-adic reflection formula).} The Chinese text says the same.
+
+Here $\Gamma_p$ is Morita's $p$-adic gamma function, $p$ an odd prime, $a \in \Zp$. The text claims
+that the sign $\Gamma_p(a)\Gamma_p(1-a)$ is a function of $p \bmod 4$. We refute exactly two readings.
+
+\begin{itemize}
+\item[(A)] \emph{The sign depends only on $p \bmod 4$}: there is $f : \mathbb{Z}/4 \to \mathbb{Z}$
+with $\Gamma_p(a)\Gamma_p(1-a) = f(p \bmod 4)$ for every odd prime $p$ and every $a \in \Zp$.
+We prove more: for every odd prime $p$, the map $a \mapsto \Gamma_p(a)\Gamma_p(1-a)$ is not
+constant on $\Zp$.
+\item[(B)] \emph{For each fixed integer $a$, the sign is a function of $p \bmod 4$}
+(the function may depend on $a$). We refute it for $a = 4$: there is no
+$s : \mathbb{Z}/4 \to \{\pm 1\}$ with $\Gamma_p(4)\Gamma_p(-3) = s(p \bmod 4)$ for all odd primes $p$.
+Indeed the product is $\equiv -1 \pmod 3$ for $p = 3$ and $\equiv 1 \pmod 7$ for $p = 7$, and
+$3 \equiv 7 \pmod 4$.
+\end{itemize}
+
+\textbf{Reading not refuted.} If the conjecture is read only at the point $a = 1/2$, it is
+\emph{true}: by the reflection formula quoted below, $\Gamma_p(1/2)^2 = (-1)^{(p+1)/2}$, because
+the representative of $1/2$ in $\{1,\dots,p\}$ is $(p+1)/2$. This is a function of
+$p \bmod 4$. The statement writes a general $a$, so we do not adopt this reading, but a reviewer
+who does would find the conjecture true at $a = 1/2$. We make no claim about rational $a$ other
+than integers.
+
+\textbf{Known formula (context only, not used in the proof).} Wikipedia, ``p-adic gamma
+function'' (\url{https://en.wikipedia.org/wiki/P-adic_gamma_function}), states:
+$\Gamma_p(x)\Gamma_p(1-x) = (-1)^{x_0}$, ``where $x_0$ is the first digit in the p-adic
+expansion of x, unless $x \in p\mathbb{Z}_p$, in which case $x_0 = p$ rather than 0.''
+So the sign depends on $x \bmod p$, not on $p \bmod 4$. Our Lean proof does not use this formula;
+it computes the needed values directly.
+
+\section{Definitions}
+
+\begin{definition}[Morita's product]
+For $n \in \mathbb{N}$ put $\mathrm{mor}_p(n) = (-1)^n \prod_{0 \le j < n,\ p \nmid j} j \in \mathbb{Z}$.
+The factor $j = 0$ never occurs, since $p \mid 0$; so this is $(-1)^n \prod_{0<j<n,\ p\nmid j} j$.
+\end{definition}
+
+\begin{definition}[Morita's $p$-adic gamma function]
+Wikipedia (same page) defines it as ``the unique continuous function of a p-adic integer x
+(with values in $\mathbb{Z}_p$) such that $\Gamma_p(x) = (-1)^x \prod_{0<i<x,\ p \nmid i} i$
+for positive integers x''.
+\end{definition}
+
+The definition presupposes that such a function exists. We construct it. For $x \in \Zp$ let
+$\mathrm{appr}(x,k) \in [0, p^k)$ be the natural number with $x \equiv \mathrm{appr}(x,k) \pmod{p^k}$
+(Mathlib's \texttt{PadicInt.appr}), and set
+\[
+  \Gamma_p(x) = \lim_{k \to \infty} \mathrm{mor}_p(\mathrm{appr}(x,k)).
+\]
+
+\section{Proof}
+
+\begin{lemma}[square roots of 1; \texttt{sq\_eq\_one\_zmod}]
+If $p$ is odd and $x^2 = 1$ in $\mathbb{Z}/p^k$, then $x = \pm 1$.
+\end{lemma}
+\begin{proof}
+Lift $x$ to $y \in \mathbb{Z}$. Then $p^k \mid (y-1)(y+1)$. The prime $p$ cannot divide both
+factors, since it would divide their difference $2$. So $p^k$ is coprime to one factor and
+divides the other.
+\end{proof}
+
+\begin{lemma}[generalized Wilson theorem; \texttt{prod\_units\_eq\_neg\_one}, \texttt{prod\_Ico\_fac}]
+For odd $p$ and $k \ge 1$, the product of all units of $\mathbb{Z}/p^k$ is $-1$. Hence, for every
+$n$, $\prod_{n \le j < n + p^k,\ p \nmid j} j \equiv -1 \pmod{p^k}$.
+\end{lemma}
+\begin{proof}
+Pair each unit $u$ with $u^{-1}$. By the previous lemma, only $\pm 1$ are their own inverses.
+So the product over the units other than $-1$ is $1$, and the full product is $-1$. The units
+of $\mathbb{Z}/p^k$ are exactly the residues of the $j \in [0,p^k)$ with $p \nmid j$. This gives
+the window $n = 0$. Moving the window from $[n, n+p^k)$ to $[n+1, n+1+p^k)$ removes the
+factor for $j = n$ and adds the factor for $j = n + p^k$. These factors are congruent, and each
+is a unit mod $p^k$ or equal to $1$. So every window has the same product.
+\end{proof}
+
+\begin{lemma}[Morita congruence; \texttt{mor\_add\_period}, \texttt{mor\_congr}]
+For odd $p$: if $n \equiv m \pmod{p^k}$ then $\mathrm{mor}_p(n) \equiv \mathrm{mor}_p(m) \pmod{p^k}$.
+\end{lemma}
+\begin{proof}
+$\mathrm{mor}_p(n+p^k) = \mathrm{mor}_p(n)\cdot (-1)^{p^k}\cdot\prod_{n\le j<n+p^k,\ p\nmid j} j
+\equiv \mathrm{mor}_p(n)\cdot(-1)\cdot(-1)$, because $p^k$ is odd. Then induct on $(m-n)/p^k$.
+\end{proof}
+
+\begin{theorem}[construction; \texttt{cauchySeq\_approx}, \texttt{toZModPow\_gammaP},
+\texttt{gammaP\_natCast}, \texttt{continuous\_gammaP}, \texttt{gammaP\_unique}]
+Let $p$ be an odd prime. The limit defining $\Gamma_p(x)$ exists. For all $x$ and $k$,
+$\Gamma_p(x) \equiv \mathrm{mor}_p(\mathrm{appr}(x,k)) \pmod{p^k}$, and hence
+$\Gamma_p(x) \equiv \mathrm{mor}_p(n) \pmod{p^k}$ whenever $x \equiv n \pmod{p^k}$ with
+$n \in \mathbb{N}$. Moreover $\Gamma_p(n) = \mathrm{mor}_p(n)$ for all $n \in \mathbb{N}$, and
+$\Gamma_p$ is continuous. Every continuous $G : \Zp \to \Zp$ with $G(n) = \mathrm{mor}_p(n)$
+for all positive integers $n$ equals $\Gamma_p$. So $\Gamma_p$ is Morita's function.
+\end{theorem}
+\begin{proof}
+Since $\mathrm{appr}(x,k+1) \equiv \mathrm{appr}(x,k) \pmod{p^k}$, the Morita congruence gives
+$|\mathrm{mor}_p(\mathrm{appr}(x,k+1)) - \mathrm{mor}_p(\mathrm{appr}(x,k))|_p \le p^{-k}$. So the
+sequence is Cauchy, and it converges because $\Zp$ is complete. The same bound for all $m \ge k$
+passes to the limit, which gives the congruence mod $p^k$. For $x = n \in \mathbb{N}$, these
+congruences hold for every $k$, so $\Gamma_p(n) = \mathrm{mor}_p(n)$. If $|x - y|_p \le p^{-k}$, then
+$\Gamma_p(x) \equiv \Gamma_p(y) \pmod{p^k}$, which gives continuity. Finally, the positive integers
+are dense in $\Zp$, and two continuous functions that agree on a dense set are equal.
+\end{proof}
+
+\begin{theorem}[reading (A); \texttt{reflection\_products}, \texttt{reflection\_product\_not\_constant},
+\texttt{not\_function\_of\_p\_mod\_four}]
+For every odd prime $p$: $\Gamma_p(1)\Gamma_p(1-1) = -1$, while
+$\Gamma_p(2)\Gamma_p(1-2) \equiv 1 \pmod p$. Hence $a \mapsto \Gamma_p(a)\Gamma_p(1-a)$ is not constant
+on $\Zp$, and no function $f$ of $p \bmod 4$ satisfies (A).
+\end{theorem}
+\begin{proof}
+We have $\Gamma_p(0) = \mathrm{mor}_p(0) = 1$, $\Gamma_p(1) = \mathrm{mor}_p(1) = -1$ and
+$\Gamma_p(2) = \mathrm{mor}_p(2) = 1$. Since $-1 \equiv p-1 \pmod p$, the construction theorem gives
+$\Gamma_p(-1) \equiv \mathrm{mor}_p(p-1) \pmod p$. Also
+$\mathrm{mor}_p(p) = \mathrm{mor}_p(p-1)\cdot(-1)\cdot(p-1) \equiv \mathrm{mor}_p(p-1) \pmod p$, and
+$\mathrm{mor}_p(p) \equiv \mathrm{mor}_p(0) = 1 \pmod p$ by the Morita congruence. So
+$\Gamma_p(2)\Gamma_p(-1) \equiv 1$, while $\Gamma_p(1)\Gamma_p(0) = -1$. Since $p > 2$, $1 \not\equiv -1 \pmod p$.
+If $f$ existed, then for $p = 3$ both products would equal $f(3)$, a contradiction.
+\end{proof}
+
+\begin{theorem}[reading (B); \texttt{reflection\_four}, \texttt{not\_function\_of\_p\_mod\_four\_at\_four}]
+$\Gamma_3(4)\Gamma_3(-3) \equiv -1 \pmod 3$ and $\Gamma_7(4)\Gamma_7(-3) \equiv 1 \pmod 7$. Hence there is no
+$s : \mathbb{Z}/4 \to \{\pm1\}$ with $\Gamma_p(4)\Gamma_p(1-4) = s(p \bmod 4)$ for all odd primes $p$.
+\end{theorem}
+\begin{proof}
+$\Gamma_3(4) = \mathrm{mor}_3(4) = 1\cdot 2 = 2$, and $-3 \equiv 0 \pmod 3$, so $\Gamma_3(-3) \equiv \mathrm{mor}_3(0) = 1$.
+The product is $\equiv 2 \equiv -1 \pmod 3$. Next, $\Gamma_7(4) = \mathrm{mor}_7(4) = 6$, and $-3 \equiv 4 \pmod 7$,
+so $\Gamma_7(-3) \equiv 6$. The product is $\equiv 36 \equiv 1 \pmod 7$. Since $3 \equiv 7 \pmod 4$,
+$s(3)$ would be $\equiv -1 \pmod 3$ and $\equiv 1 \pmod 7$. Neither $+1$ nor $-1$ satisfies both.
+\end{proof}
+
+\section{Lean formalization}
+
+The file \texttt{lean/Conjecture716/Basic.lean} (Lean 4, Mathlib v4.33.1, \texttt{import Mathlib}
+only) defines \texttt{C716.mor}, \texttt{C716.approx} and \texttt{C716.gammaP}, and proves all the
+results above under the names given in brackets. The two main statements are:
+{\footnotesize
+\begin{verbatim}
+theorem not_function_of_p_mod_four :
+    not exists f : ZMod 4 -> Int, forall (p : Nat) [Fact p.Prime], p != 2 ->
+      forall a : Z_[p], gammaP p a * gammaP p (1 - a) = ((f (p : ZMod 4) : Int) : Z_[p])
+theorem not_function_of_p_mod_four_at_four :
+    not exists s : ZMod 4 -> Int^x, forall (p : Nat) [Fact p.Prime], p != 2 ->
+      gammaP p 4 * gammaP p (1 - 4) = (((s (p : ZMod 4) : Int^x) : Int) : Z_[p])
+\end{verbatim}
+}
+(ASCII transcription of the Lean source: \texttt{not}, \texttt{exists}, \texttt{forall},
+\texttt{->} and \texttt{!=} stand for the Lean symbols for negation, the quantifiers, the
+arrow and $\ne$; \texttt{Int}, \texttt{Nat}, \texttt{Z\_[p]} and \texttt{Int\^{}x} stand for
+$\mathbb{Z}$, $\mathbb{N}$, the $p$-adic integers and the units $\mathbb{Z}^\times = \{\pm1\}$.)
+\texttt{reflection\_product\_not\_constant} proves that for every odd prime $p$, there is no $c \in \Zp$
+with $\Gamma_p(a)\Gamma_p(1-a) = c$ for all $a$. \texttt{gammaP\_unique} proves that \texttt{gammaP p} is the
+unique continuous function interpolating $\mathrm{mor}_p$ on the positive integers.
+
+\textbf{Conventions.} The primes are odd ($p \ne 2$), and $\mathbb{N}$ contains $0$.
+Congruences mod $p^k$ are stated in Lean through the ring map \texttt{PadicInt.toZModPow k}.
+The ``sign'' in reading (B) is a unit of $\mathbb{Z}$, i.e.\ $\pm 1$. In reading (A), $f$ may
+take any integer value.
+
+\textbf{Axiom audit.} \texttt{\#print axioms} for both main theorems, and for
+\texttt{gammaP\_unique}, \texttt{continuous\_gammaP} and \texttt{gammaP\_natCast}, reports only
+\texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. There is no \texttt{sorry}
+and no \texttt{native\_decide}. The finite checks in $\mathbb{Z}/3$ and $\mathbb{Z}/7$ use the
+kernel \texttt{decide}.
+
+\end{document}

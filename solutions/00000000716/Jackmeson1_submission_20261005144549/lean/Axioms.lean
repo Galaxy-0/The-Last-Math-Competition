@@ -1,0 +1,3 @@
+import Conjecture716
+#print axioms C716.not_function_of_p_mod_four
+#print axioms C716.not_function_of_p_mod_four_at_four
