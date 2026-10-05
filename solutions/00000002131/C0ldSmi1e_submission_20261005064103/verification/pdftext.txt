@@ -1,0 +1,77 @@
+A disproof of conjecture 00000002131
+Stanley–Wilf direct-sum multiplicativity
+C0ldSmi1e
+Abstract
+The one-element permutation has no avoiding permutations of positive size, so its Stanley–Wilf limit
+is zero. Its direct sum with itself is the increasing two-element permutation. At each size there is
+exactly one permutation avoiding that pattern, so its limit is one. Thus the displayed multiplicativity
+assertion would imply 1 = 0 · 0. We formalize the actual permutations, classical containment, avoidance
+cardinalities, direct sum, and real limits in Lean 4.
+1 The source and the domain
+Both language versions of conjecture 00000002131 assert
+L(p ⊕ q) = L(p)L(q),
+and add that the exponential law of direct sums is a “complete characterization. ” The displayed assertion is
+universal over ﬁnite patterns. The source imposes no lower bound on their lengths other than the ordinary
+nonempty-pattern convention. Our witness has length one in each input; it is an ordinary permutation, not
+an empty or repeated-value pattern. This length convention is essential to the stated counterexample and is
+not hidden.
+The characterization clause speciﬁes neither a characterized object nor a separate equivalence. We do
+not invent such a predicate. Refuting the displayed necessary assertion refutes the conjecture as written,
+regardless of any further clause that retains that assertion. No independent classiﬁcation theorem about the
+qualitative extension is claimed.
+2 Deﬁnitions and exact counts
+Write Sn for the bijections of {0, . . . , n− 1}. A permutation s ∈ Sn contains p ∈ Sk when there is a strictly
+increasing map e : {0, . . . , k− 1} → { 0, . . . , n− 1} satisfying, for every i, j,
+s(e(i)) < s(e(j)) ⇐ ⇒ p(i) < p(j).
+The positions need not be consecutive. Deﬁne A vn(p) to be the set of all s ∈ Sn that do not contain p, and
+let an(p) = | A vn(p)|. The direct sum of p ∈ Sk and q ∈ Sl is the bijection in Sk+l given by
+(p ⊕ q)(i) = p(i) ( i < k ), (p ⊕ q)(k + j) = k + q(j) ( j < l ).
+Let u ∈ S1 and v ∈ S2 be the identity permutations. These block equations give u ⊕ u = v.
+Lemma 1. For every n ≥ 1, an(u) = 0 . For every n ≥ 0, an(v) = 1 .
+Proof. Every nonempty permutation contains u: select any one position. The required relative-order com-
+parison on a one-element index set is vacuous. Thus no permutation of positive size avoids u.
+A permutation contains v precisely when it has two positions i < j with s(i) < s(j). Since a permutation
+is injective, absence of such a pair is precisely strict decrease. There is exactly one strictly decreasing bijection
+of the ﬁnite ordered set, namely i ↦→ n − 1 − i. Indeed, strict decrease and bijectivity force the values in order
+to be n − 1, n− 2, . . . ,0; equivalently, there are exactly n − 1 − i values below s(i), so s(i) = n − 1 − i. This
+also covers n = 0 , where the unique empty bijection avoids v. Hence the full avoidance set is a singleton,
+and its cardinality is one.
+1
+
+3 Genuine limits and the contradiction
+For each pattern, use the positive-index real root sequence
+bp(m) =
+(
+am+1(p)
+)1/(m+1)
+(m ∈ N),
+where the count and exponent are real numbers. This is the usual sequence an(p)1/n along n ≥ 1, reindexed
+by n = m + 1; no zeroth root or natural number division is involved. Write SW(p, x) when bp converges to
+x ∈ R. It speciﬁes a genuine real limit, not a limsup or a freely assigned growth value.
+The lemma gives bu(m) = 0 and bv(m) = 1 for every m. The exponent is positive, so the real power of
+zero is zero. Consequently
+SW(u,0), SW(v,1), L (u) = 0 , L (v) = 1 .
+Uniqueness of real limits identiﬁes every possible limit value for these patterns with the displayed numbers.
+Theorem 1. The universal equality in conjecture 00000002131 is false.
+Proof. Substitute p = q = u. Since u ⊕ u = v, the left side is L(v) = 1 , whereas the right side is L(u)L(u) =
+0 · 0 = 0 .
+A fully speciﬁed version of the displayed universal assertion is: for all positive k, l and p ∈ Sk, q ∈ Sl,
+there exist real x, y, zsuch that
+SW(p, x), SW(q, y), SW(p ⊕ q, z), z = xy.
+The formal disproof negates this assertion using the actual limits above and their uniqueness. It does not
+rely on nonexistence of a limit, an arbitrary deﬁnition of L, or a table of unproved growth constants. Proving
+general Stanley–Wilf limit existence for unrelated patterns is unnecessary here. This counterexample is to
+the source as stated; it does not purport to settle an amended claim excluding one-element input patterns.
+4 Formal veriﬁcation and reproduction
+The accompanying Lean project uses actual ﬁnite permutations, the classical containment predicate, and
+cardinalities of the full avoiding subtype. Its direct-sum construction and block formulas connect the per-
+mutation operation to the deﬁnition above. The count and convergence proofs are symbolic for all required
+sizes; no empirical enumeration or external numerical computation is needed.
+The project pins Lean 4.19.0 and Mathlib v4.19.0. From the lean/ directory, run:
+lake build
+lake env lean -DwarningAsError=true Conjecture2131.lean
+lake env lean -DwarningAsError=true Check.lean
+The accompanying veriﬁcation records give the fresh build, full theorem-type and axiom inspection, exhaus-
+tive compiled-declaration inventory, exact source identities, and separate semantic review. Local validation is
+distinct from maintainer acceptance. The byte-identical bilingual conjecture is included as conjecture.md.
+2

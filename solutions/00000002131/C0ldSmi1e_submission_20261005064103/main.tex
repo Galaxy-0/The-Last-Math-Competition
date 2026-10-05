@@ -1,0 +1,138 @@
+\documentclass[10pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\Av}{\operatorname{Av}}
+\newcommand{\Sym}{\mathfrak S}
+\title{A disproof of conjecture 00000002131\\\large Stanley--Wilf direct-sum multiplicativity}
+\author{C0ldSmi1e}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+The one-element permutation has no avoiding permutations of positive size, so
+its Stanley--Wilf limit is zero. Its direct sum with itself is the increasing
+two-element permutation. At each size there is exactly one permutation avoiding
+that pattern, so its limit is one. Thus the displayed multiplicativity assertion
+would imply $1=0\cdot0$. We formalize the actual permutations, classical
+containment, avoidance cardinalities, direct sum, and real limits in Lean 4.
+\end{abstract}
+
+\section{The source and the domain}
+Both language versions of conjecture 00000002131 assert
+\[
+ L(p\oplus q)=L(p)L(q),
+\]
+and add that the exponential law of direct sums is a ``complete
+characterization.'' The displayed assertion is universal over finite patterns.
+The source imposes no lower bound on their lengths other than the ordinary
+nonempty-pattern convention. Our witness has length one in each input; it is an
+ordinary permutation, not an empty or repeated-value pattern. This length
+convention is essential to the stated counterexample and is not hidden.
+
+The characterization clause specifies neither a characterized object nor a
+separate equivalence. We do not invent such a predicate. Refuting the displayed
+necessary assertion refutes the conjecture as written, regardless of any further
+clause that retains that assertion. No independent classification theorem about
+the qualitative extension is claimed.
+
+\section{Definitions and exact counts}
+Write $\Sym_n$ for the bijections of $\{0,\ldots,n-1\}$. A permutation
+$s\in\Sym_n$ contains $p\in\Sym_k$ when there is a strictly increasing map
+$e:\{0,\ldots,k-1\}\to\{0,\ldots,n-1\}$ satisfying, for every $i,j$,
+\[
+ s(e(i))<s(e(j))\quad\Longleftrightarrow\quad p(i)<p(j).
+\]
+The positions need not be consecutive. Define $\Av_n(p)$ to be the set of all
+$s\in\Sym_n$ that do not contain $p$, and let $a_n(p)=|\Av_n(p)|$.
+The direct sum of $p\in\Sym_k$ and $q\in\Sym_l$ is the bijection in
+$\Sym_{k+l}$ given by
+\[
+ (p\oplus q)(i)=p(i)\ (i<k),\qquad
+ (p\oplus q)(k+j)=k+q(j)\ (j<l).
+\]
+Let $u\in\Sym_1$ and $v\in\Sym_2$ be the identity permutations. These block
+equations give $u\oplus u=v$.
+
+\begin{lemma}
+For every $n\geq1$, $a_n(u)=0$. For every $n\geq0$, $a_n(v)=1$.
+\end{lemma}
+\begin{proof}
+Every nonempty permutation contains $u$: select any one position. The required
+relative-order comparison on a one-element index set is vacuous. Thus no
+permutation of positive size avoids $u$.
+
+A permutation contains $v$ precisely when it has two positions $i<j$ with
+$s(i)<s(j)$. Since a permutation is injective, absence of such a pair is
+precisely strict decrease. There is exactly one strictly decreasing bijection
+of the finite ordered set, namely $i\mapsto n-1-i$. Indeed, strict decrease and
+bijectivity force the values in order to be $n-1,n-2,\ldots,0$; equivalently,
+there are exactly $n-1-i$ values below $s(i)$, so $s(i)=n-1-i$.
+This also covers $n=0$, where the unique empty bijection avoids $v$.
+Hence the full avoidance set is a singleton, and its cardinality is one.
+\end{proof}
+
+\section{Genuine limits and the contradiction}
+For each pattern, use the positive-index real root sequence
+\[
+ b_p(m)=\bigl(a_{m+1}(p)\bigr)^{1/(m+1)}\qquad(m\in\mathbb N),
+\]
+where the count and exponent are real numbers. This is the usual sequence
+$a_n(p)^{1/n}$ along $n\geq1$, reindexed by $n=m+1$; no zeroth root or natural
+number division is involved. Write $\mathrm{SW}(p,x)$ when $b_p$ converges to
+$x\in\mathbb R$. It specifies a genuine real limit, not a limsup or a freely
+assigned growth value.
+
+The lemma gives $b_u(m)=0$ and $b_v(m)=1$ for every $m$. The exponent is positive,
+so the real power of zero is zero. Consequently
+\[
+ \mathrm{SW}(u,0),\qquad \mathrm{SW}(v,1),\qquad L(u)=0,\quad L(v)=1.
+\]
+Uniqueness of real limits identifies every possible limit value for these
+patterns with the displayed numbers.
+
+\begin{theorem}
+The universal equality in conjecture 00000002131 is false.
+\end{theorem}
+\begin{proof}
+Substitute $p=q=u$. Since $u\oplus u=v$, the left side is $L(v)=1$, whereas
+the right side is $L(u)L(u)=0\cdot0=0$.
+\end{proof}
+
+A fully specified version of the displayed universal assertion is: for all
+positive $k,l$ and $p\in\Sym_k$, $q\in\Sym_l$, there exist real $x,y,z$ such that
+\[
+ \mathrm{SW}(p,x),\quad \mathrm{SW}(q,y),\quad
+ \mathrm{SW}(p\oplus q,z),\quad z=xy.
+\]
+The formal disproof negates this assertion using the actual limits above and
+their uniqueness. It does not rely on nonexistence of a limit, an arbitrary
+definition of $L$, or a table of unproved growth constants. Proving general
+Stanley--Wilf limit existence for unrelated patterns is unnecessary here.
+This counterexample is to the source as stated; it does not purport to settle
+an amended claim excluding one-element input patterns.
+
+\section{Formal verification and reproduction}
+The accompanying Lean project uses actual finite permutations, the classical
+containment predicate, and cardinalities of the full avoiding subtype. Its
+direct-sum construction and block formulas connect the permutation operation
+to the definition above. The count and convergence proofs are symbolic for all
+required sizes; no empirical enumeration or external numerical computation is
+needed.
+
+The project pins Lean 4.19.0 and Mathlib v4.19.0. From the \texttt{lean/}
+directory, run:
+\begin{verbatim}
+lake build
+lake env lean -DwarningAsError=true Conjecture2131.lean
+lake env lean -DwarningAsError=true Check.lean
+\end{verbatim}
+The accompanying verification records give the fresh build, full theorem-type
+and axiom inspection, exhaustive compiled-declaration inventory, exact source
+identities, and separate semantic review. Local validation is distinct from
+maintainer acceptance. The byte-identical bilingual conjecture is included as
+\texttt{conjecture.md}.
+\end{document}

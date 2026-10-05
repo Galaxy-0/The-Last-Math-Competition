@@ -1,0 +1,250 @@
+Independent candidate-free semantic preassessment: 00000002131
+
+Scope and provenance
+--------------------
+This is a semantic assessment only. It supplies no candidate pattern, witness,
+counterexample, obstruction, enumeration, growth value, or mathematical solution
+strategy. It does not assess whether the equality is true or false.
+
+Read in full:
+  /private/tmp/tlmc2131-eligibility/conjecture.md
+  /private/tmp/tlmc2131-eligibility/README.md
+  /private/tmp/tlmc2131-eligibility/README.zh-CN.md
+  /private/tmp/tlmc-clean-selection-after4289/selection-note.md
+
+The conjecture's SHA-256 was independently recomputed as
+221a85de07555772cc81c7f5c563456208ef1247b8bd1d56aa1774cb22e68230.
+Both languages explicitly assert the same displayed equality and both append the
+same underspecified qualitative characterization claim. The coordinator supplied
+eligibility PASS d6c59e6a4d37563d7d7aa7015f0a77e234a3fc383e1465471c105ee82a03d04d;
+this report accepts that audit as a separate prerequisite and does not repeat it.
+No prior submissions, solution files, PR discussions, or other-problem material
+were inspected. No local mathematical construction was attempted.
+
+Verdict
+-------
+GO: A fresh independent author may address the explicitly displayed universal
+multiplicativity equality under the ordinary meanings specified below. A fully
+formal disproof of this equality is sufficient to disprove an explicit necessary
+assertion of the source, and hence to refute the source as stated.
+
+NO-GO: Do not authorize a claim that the entire compound conjecture has been
+proved. The source does not say what object the purported "complete
+characterization" characterizes, what conditions characterize it, or what the
+two directions of any equivalence would be. This clause needs an authoritative
+precise specification before a proof of every clause can be certified. A proof
+of the displayed equality alone must be labeled as such and is not, by itself,
+a proof of the whole compound assertion.
+
+The GO verdict is semantic permission to investigate the explicit assertion,
+not a feasibility prediction and not a mathematical conclusion.
+
+Object domains and standard meanings
+------------------------------------
+1. Patterns are actual finite permutations, with no repeated values. A faithful
+   formal domain is Perm(k) = Equiv.Perm (Fin k), for positive natural k, together
+   with its length. Positive lengths include length one. The source supplies no
+   additional minimum length, shape constraint, class restriction, or hypothesis
+   on either input. None may be silently introduced. If an implementation also
+   includes an empty permutation, its convention must be explicit; it must not
+   change the meaning on ordinary nonempty patterns or be used to manufacture
+   an interpretation-dependent result. The explicit equality on all nonempty
+   patterns is already an assertion of the source under the standard reading.
+
+2. For p in Perm(k) and s in Perm(n), classical containment means that there is
+   a strictly increasing position map e : Fin k -> Fin n such that, for every
+   i,j : Fin k,
+
+       s(e(i)) < s(e(j))  iff  p(i) < p(j).
+
+   The selected positions need not be consecutive. Avoidance is the negation of
+   this containment predicate. This is single classical permutation-pattern
+   avoidance, not consecutive avoidance, a generalized pattern notion, repeated
+   letter words, or avoidance of an arbitrarily chosen set of patterns.
+
+3. Av_n(p) is the finite set of ALL s in Perm(n) that avoid p, and
+
+       a_n(p) = |Av_n(p)|.
+
+   There is no weighting, factorial normalization, probability normalization,
+   additional subclass restriction, or replacement by all unrestricted
+   permutations. Finiteness follows from the finite permutation domain.
+
+4. The ordinary Stanley-Wilf limit in this single-pattern setting is the genuine
+   real limit
+
+       L(p) = lim_{n -> infinity, n >= 1} (a_n(p))^(1/n).
+
+   In particular, the root is taken after coercing the count to a nonnegative
+   real number and 1/n is real division. A limsup, exponential upper bound,
+   logarithmic rate, or arbitrary assigned number cannot be substituted without
+   proving the correspondence actually needed. Generic permutation-class
+   literature may use an upper growth rate defined by a limsup; that does not
+   authorize dropping genuine convergence for this named single-pattern limit.
+
+5. If p has length k and q has length l, p direct-sum q is the permutation of
+   length k+l whose first k positions have values p, and whose final l positions
+   have values k+q. With zero-based entries the equations are
+
+       (p direct-sum q)(i)   = p(i)        for i < k,
+       (p direct-sum q)(k+j) = k + q(j)    for j < l.
+
+   All values in the first block are smaller than all values in the second
+   block, and all its positions precede those of the second block. This is an
+   operation on patterns. It is not the Cartesian product or union of the two
+   avoidance classes, nor the skew sum or a tensor product.
+
+Precise assertion and limit formulation
+--------------------------------------
+Once L has been tied to these actual limits, the displayed assertion is exactly
+
+  P := forall k,l in N with k>0 and l>0,
+       forall p in Perm(k), forall q in Perm(l),
+       L(p direct-sum q) = L(p) * L(q).
+
+The universal quantifiers are part of the assertion even though the source uses
+free pattern symbols. There are no additional hypotheses on p or q.
+
+For a limit formulation that does not hide convergence in a totalized limit
+operator, define
+
+  b_p(n) := (a_{n+1}(p) : R) ^ (1 / ((n+1 : N) : R)),
+  SW(p,x) := Tendsto b_p atTop (nhds x),  where x : R.
+
+The index shift merely avoids the undefined ordinary zeroth root; its connection
+to the positive-index source sequence must be explicit. A fully specified
+relational version of the source's displayed limit equality is
+
+  P_SW := forall k,l in N with k>0 and l>0,
+          forall p in Perm(k), forall q in Perm(l),
+          exists x,y,z in R,
+            SW(p,x) and SW(q,y) and SW(p direct-sum q,z)
+            and z = x*y.
+
+This formulation includes the existence presupposed when the source writes its
+three real limits. Uniqueness of genuine real limits supplies its identification
+with the L formulation. A project may instead define L by a verified standard
+construction and prove the needed SW specification. It must not assume a free
+function L with unverified numerical values. For a disproof, the actual three
+growth limits involved must be established; it is not necessary to formalize the
+general existence theorem for every pattern merely to define unrelated limits.
+Any final negation must be connected formally to the universal statement above,
+rather than only to a conditional or a restricted replacement statement.
+
+Status of the qualitative extension
+----------------------------------
+The English "and the exponential law of direct sums is a complete
+characterization" and Chinese "且直和的指数律为完全刻画" provide no additional
+formal predicate. This omission is substantive for a positive solution: there
+is no identified domain, characterized property, or iff statement to prove.
+No author or reviewer should fill this gap with a convenient invented meaning.
+
+For a negative solution the gap does not prevent settlement of the explicit
+assertion. The source asserts P (as well as its further clause). Formally
+establishing not-P therefore refutes an assertion required by the source under
+every interpretation of the extension that retains the displayed equality.
+It does not establish that the vague extension is independently false. The
+report should say precisely that the universal displayed equality is disproved
+and that this suffices to disprove the compound source; it should not claim to
+have formalized or classified the extension. This assessment is a logical scope
+decision only, without any proposed means of establishing not-P.
+
+Required formalization bridges and completeness checks
+-----------------------------------------------------
+A. Permutations and containment:
+   - Encode genuine bijections on finite ordered index sets.
+   - If lists, arrays, matrices, words with a validity predicate, or another
+     model are used, prove the correspondence with actual permutations and
+     preserve both position order and relative value order.
+   - Define the containment relation above, avoidance as its negation, and the
+     finite subtype or finset of all avoiding permutations of each size.
+   - If an alternative containment test is used, prove its equivalence to
+     classical containment, with no implicit adjacency constraint.
+
+B. Counts and combinatorial models:
+   - Connect every count used to the actual cardinality a_n(p).
+   - Any recurrence, closed form, alternative finite model, encoding, estimate,
+     or auxiliary enumeration needed in the argument must have its relevant
+     correspondence or bound proved for all required indices.
+   - A finite table, empirical growth estimate, or extrapolation is not a proof
+     about the limiting sequence. Full exact formulas are not required when
+     the formal argument does not need them; all claims it does need are.
+
+C. Direct sum:
+   - Construct a bijection on the index type of length k+l.
+   - Prove its two block equations and resulting correspondence to the ordinary
+     direct sum, including any transport between different finite index types.
+   - Ensure the pattern whose limit occurs is this operation on p and q.
+
+D. Analysis and limits:
+   - Use a real root sequence and genuine convergence along positive integers.
+   - Handle zero counts with ordinary real root conventions and deal explicitly
+     with any artificial index-zero definition.
+   - Prove any bridge from an alternative root notation, shifted sequence,
+     asymptotic convention, limsup, or other limit formulation actually used.
+   - If a totalized limit operator is used, prove convergence and the value
+     specification for every use on which the final theorem depends.
+   - Relate the final quantities to the same a_n(p) already tied to actual
+     avoidance, and use uniqueness when identifying differently named limits.
+
+E. Final theorem and semantic coverage:
+   - State P or its faithfully specified relational equivalent explicitly.
+   - A positive equality theorem must cover every permitted pair of patterns
+     and all needed growth limits. It is still not a positive solution of the
+     compound source until the characterization clause is specified.
+   - A negative solution must prove the failure of this exact universal claim,
+     on genuine permitted objects, with the needed genuine limits justified.
+   - No free numerical assignment, strengthened input hypotheses, substitution
+     of another growth invariant, or finite-only assertion settles P.
+   - The mathematical report and Lean theorem must agree with one another and
+     with both source languages, and accurately identify which assertion is
+     refuted or established.
+
+F. Project and submission requirements from the guides and handoff:
+   - Supply complete LaTeX source, PDF, Lean 4 project, and all auxiliary sources
+     and configuration needed by the result.
+   - Compile the complete project independently with the handoff's pinned Lean
+     4.19 / Mathlib v4.19.0 dependency (Mathlib commit
+     c44e0c8ee63ca166450922a373c7409c5d26b00b). Library availability has not been
+     treated as a proof of any missing mathematical fact in this assessment.
+   - Audit imports and axiom dependencies, with no sorry, native_decide, extra
+     axioms, or incomplete/unverified claims. Standard permitted Lean foundation
+     principles should be distinguished from added conjectural axioms.
+   - Compile and run every auxiliary program needed by the result and verify
+     that all required computational claims are fully covered.
+   - Independently read the entire report, visually review the rendered PDF,
+     and check its definitions and final claims against the compiled theorem.
+   - Any eventual submission must remain wholly under the correctly named
+     personal directory solutions/00000002131/[GitHub_ID]_submission_[timestamp].
+     Do not alter conjectures, READMEs, metadata, leaderboard, or others' files.
+   - Recheck current eligibility immediately before opening a pull request.
+     The supplied audit is not perpetual authorization if solved status changes.
+
+Definition-only external verification
+-------------------------------------
+The established terminology was checked against primary authored material:
+
+1. Anders Claesson, Vit Jelinek, and Einar Steingrimsson, "Stanley-Wilf Limits
+   of Layered Patterns," Permutation Patterns 2012 slides. The definition
+   excerpts give Av_n(p), the genuine nth-root limit L(p), and the two-block
+   direct-sum formula used above.
+   https://combinatorics.cis.strath.ac.uk/static/pp2012-slides/JELINEK.pdf
+
+2. The introductory definition of classical occurrence in "Avoidance of boxed
+   mesh patterns on permutations," Discrete Applied Mathematics: a subsequence
+   with the same relative order. Only the introductory definition was used.
+   https://doi.org/10.1016/j.dam.2012.08.015
+
+Definition-focused web searches also returned incidental nondefinition snippets;
+these were not used to assess truth, select mathematical inputs, or form an
+argument, and none is included in the fresh-author handoff. No solution search
+was performed. The attempted PDF-page screenshot lookup was unavailable, so
+the above verification used the primary-source indexed definition excerpts.
+
+Final gate
+----------
+GO for a fresh attempt at the exact displayed universal assertion, including a
+complete formal disproof as sufficient negative settlement of the source.
+NO-GO for certifying a proof of the entire compound source without a precise
+authoritative specification of its characterization clause. All mathematical
+work and all outcome selection remain for the fresh independent author.

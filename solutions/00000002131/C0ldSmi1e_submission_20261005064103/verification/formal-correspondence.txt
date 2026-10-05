@@ -1,0 +1,162 @@
+INDEPENDENT AUTHOR NOTES: CONJECTURE 00000002131
+
+Status: READY for coordinator freeze and separate independent semantic review.
+This is a complete formal disproof of the displayed universal equality under the
+source's stated, unrestricted positive-length pattern domain. The unformalized
+qualitative characterization clause is not assigned an invented meaning.
+
+AUTHORIZED INPUTS AND PROVENANCE
+
+Read in full: the exact bilingual source, both complete repository guides,
+clean-math-handoff.json, and candidate-free semantic preassessment.txt supplied
+in the task. The source SHA-256 is
+221a85de07555772cc81c7f5c563456208ef1247b8bd1d56aa1774cb22e68230.
+No prior submissions, solutions, mathematical notes, PR contents, or earlier
+agent histories were inspected. The witness and derivation below were selected
+independently after reading the permitted source. Standard pinned Mathlib API
+source and inspection-only Lean files were used for implementation assistance.
+No web solution search and no numerical experiment were used.
+
+MATHEMATICAL DERIVATION
+
+Use one-based permutation notation in this prose. Let p=q=1, the only permutation
+of length one. These are permitted: the source supplies no minimum length beyond
+being ordinary nonempty patterns, and the semantic preassessment expressly
+includes positive length one.
+
+For each n>=1, every permutation of {1,...,n} contains the pattern 1 by selecting
+one position. Consequently a_n(1)=0 for every positive n. Taking the genuine real
+nth roots gives a constant zero sequence and L(1)=0.
+
+The direct sum p direct-sum q is 12: the first block has value 1 and the second
+block has value 2. A permutation s contains 12 precisely when there are two
+positions i<j with s(i)<s(j). Thus s avoids 12 precisely when i<j implies
+s(i)>s(j): it is strictly decreasing. Since s is a bijection onto the same
+finite ordered set, it is the unique reverse permutation n,n-1,...,1.
+Therefore a_n(12)=1 for every n>=0, and the genuine positive-index real nth-root
+sequence is constantly 1. Hence L(12)=1.
+
+All three limits in the asserted equality therefore exist, and
+L(1 direct-sum 1)=L(12)=1 != 0=L(1)*L(1).
+The universal displayed equality is false. Any conjunction asserting this
+equality and an additional characterization clause is consequently false,
+independently of the content of that additional clause. This argument does not
+assert that the unspecified clause is independently false.
+
+SEMANTICS TO LEAN CORRESPONDENCE
+
+Project: /private/tmp/tlmc2131-proof
+Only mathematical source: Conjecture2131.lean, namespace Conjecture2131.
+All 40 explicitly authored declarations have public ASCII names. There are no
+anonymous examples or private declarations.
+
+1. Permutation n is exactly Equiv.Perm (Fin n): genuine bijections on zero-based
+   indices 0,...,n-1. Thus no list/word validity bridge is needed.
+2. Contains p s is an existential map e : Fin k -> Fin n with StrictMono e and
+   the comparison equivalence for every i,j:
+     s(e(i)) < s(e(j)) iff p(i) < p(j).
+   This is arbitrary classical subsequence containment; there is no adjacency
+   restriction. Avoids is its negation.
+3. avoidanceCount p n is Fintype.card of the entire subtype
+     {s : Permutation n // Avoids p s}.
+   It has no normalization, weighting, or subclass restriction.
+4. directSum transports Equiv.sumCongr p q through finSumFinEquiv. It is itself
+   an equivalence on Fin(k+l). directSum_left/right and their value versions
+   prove both required ordinary block equations. directSum_block_positions and
+   directSum_block_values prove the positional/value separation of the blocks.
+   increasing_sum_increasing proves the relevant direct sum is increasing 2.
+5. contains_one and avoidanceCount_one prove the zero avoidance count for every
+   positive size n+1. The selected position is 0; the single pattern index has
+   no strict self-comparison to check.
+6. contains_two_iff proves both directions of the increasing-pair containment
+   test from the complete definition. The converse explicitly selects i,j.
+   avoids_two_iff_strictAnti uses bijectivity to exclude equal values.
+   decreasing is Fin.revPerm. decreasing_strictAnti proves its order reversal.
+   avoids_two_iff_decreasing proves uniqueness via Mathlib's StrictAnti.range_inj:
+   two strictly decreasing maps from the finite ordered index set with the same
+   image coincide; both permutations have full image. avoidanceCount_two then
+   proves cardinality exactly one for every n, including the harmless empty size.
+7. rootCount p n coerces the actual count to Real and takes Real.rpow with the
+   real exponent 1/(n:Real). rootSequence p n = rootCount p (n+1), so SW p x is
+   genuine Tendsto rootSequence atTop (nhds x), with no limsup replacement.
+   rootSequence_at_positive_index proves every positive original index appears.
+   rootCount_zero proves the totalized auxiliary zero-index value is 1.
+   sw_iff_unshifted uses the standard eventual-index shift theorem to prove that
+   adding/dropping this single index does not change real convergence.
+8. rootSequence_one and rootSequence_two prove exact constant real sequences.
+   In the zero case the exponent 1/(n+1) is proved nonzero before Real.zero_rpow
+   is applied. sw_one, sw_two, and sw_one_directSum_one prove the three actual
+   real limits. nonmultiplicative_witness packages their values and inequality.
+9. UniversalMultiplicativity is exactly the preassessment's relational P_SW:
+   every k,l>0 and every actual pair of permutations admit genuine real limits
+   x,y,z with z=x*y. not_universalMultiplicativity disproves this exact universal
+   statement. It obtains the asserted limits for k=l=1, identifies them by
+   sw_unique with 0,0,1, and contradicts their asserted equality.
+10. NumericalMultiplicativity is the source's usual L-function notation.
+    universal_iff_numerical_of_verified_limits proves the equivalence to P_SW
+    for any assignment whose values have verified SW specifications on all
+    nonempty patterns. No free numerical values are assumed, and no global
+    existence theorem is needed or assumed by the actual counterexample.
+    not_numericalMultiplicativity_of_verified_limits transfers the disproof.
+11. not_source_conjunction states for arbitrary Extension : Prop that
+    not (UniversalMultiplicativity and Extension). This records only the logical
+    refutation of the compound source, without defining its vague extension.
+
+FORMAL VERIFICATION AND IDENTITIES
+
+Compiler: Lean 4.19.0 (darwin_aarch64).
+Pinned Mathlib: v4.19.0, commit c44e0c8ee63ca166450922a373c7409c5d26b00b.
+Runtime used:
+  /private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin
+Dependencies accessed solely through the coordinator-provided shared
+.lake/packages link. No tracked dependency source or configuration was edited.
+
+Run from /private/tmp/tlmc2131-proof with the above bin prepended to PATH:
+  lake build
+  lake env lean -DwarningAsError=true Conjecture2131.lean
+  lake env lean -DwarningAsError=true /private/tmp/tlmc2131-auxiliary/AuthorAudit.lean
+
+The complete default target built successfully (2794 targets accounted for).
+Direct source replay passed with warnings treated as errors.
+AuthorAudit.lean imports the built project, prints axiom dependencies of all 40
+explicit declarations, and prints the final witness, exact universal proposition,
+negation, L-notation equivalence, and conjunction result. It passed.
+Every printed axiom dependency is a subset of the standard Lean foundation
+principles {propext, Classical.choice, Quot.sound}. There are no added axioms,
+sorry, admit, native_decide, unsafe, partial, or elaboration bypasses in source.
+Ordinary decide proves only elementary finite numeral facts; fin_cases, simp,
+omega, and norm_num construct kernel-checked proofs.
+
+Author audit files (verification evidence, not mathematical assumptions):
+  /private/tmp/tlmc2131-auxiliary/AuthorAudit.lean
+  /private/tmp/tlmc2131-auxiliary/author-audit.log
+  /private/tmp/tlmc2131-auxiliary/source-replay.log
+  /private/tmp/tlmc2131-auxiliary/default-build.log
+There is no required auxiliary numerical computation or enumeration program.
+
+Frozen file SHA-256 identities:
+  Conjecture2131.lean:
+    07b8245887ade2b63041ed870b7242d437f2d68ea23c32f439b74d857a2d149e
+  lakefile.toml:
+    55deafa1ac8559a8552687337bd9771605440c0d6df9588fced908134c472772
+  lean-toolchain:
+    55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea
+  lake-manifest.json:
+    9bd11550d871c04231007198997870221266db351cd0bdc7b48e163eab11e29d
+
+LIMITATIONS AND HANDOFF
+
+The explicit universal equality is disproved on the permitted nonempty domain.
+No positive proof or independent interpretation of the source's unspecified
+complete-characterization clause is offered. General existence of Stanley-Wilf
+limits for other patterns is unnecessary and has not been formalized. The actual
+three limits used in the disproof are all proved. No mathematical obligation for
+this disproof remains open in the author's assessment; independent review is
+still required.
+
+The coordinator owns report LaTeX/PDF preparation, separate independent semantic
+and formal review, visual PDF review, packaging, eligibility recheck, and any
+repository/PR activity. The author has made no repository branch writes, commits,
+pushes, PRs, external comments, or changes outside the assigned scratch artifacts.
+Source files have one final newline and no trailing whitespace. The author will
+stop editing after READY so the coordinator can freeze this exact source.

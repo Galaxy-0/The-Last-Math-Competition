@@ -1,0 +1,96 @@
+Verification record: conjecture 00000002131
+
+Local formal verification and report validation: PASS.
+Separate independent semantic approval is in SEMANTIC_REVIEW.md.
+Maintainer acceptance is not asserted by these records.
+
+Source identity
+Official bilingual source SHA-256: 221a85de07555772cc81c7f5c563456208ef1247b8bd1d56aa1774cb22e68230
+Audited upstream main: d7d4bc9f6918401d3fb22c6e473df63eba5dbb78
+Lean mathematical source SHA-256: 07b8245887ade2b63041ed870b7242d437f2d68ea23c32f439b74d857a2d149e
+Exact source/config identities: verification/frozen-sources.json.
+
+Mathematical scope
+Actual permutations are Equiv.Perm (Fin n). Classical containment is a strictly
+increasing position map preserving every pairwise strict comparison. Avoidance
+is its negation; the count is the cardinality of the entire avoiding subtype.
+Direct sum is an actual bijection with both block equations and their value and
+order bridges proved. The one-element pattern has zero avoiders for every
+positive size. Avoidance of the increasing two-element pattern is equivalent
+to strict decrease and hence to the unique reverse permutation at every size.
+These are universal symbolic cardinality proofs, not finite enumeration.
+
+Counts are coerced to Real before the real reciprocal exponent is applied.
+SW means genuine Tendsto of the positive-index root sequence. Both the explicit
+positive-index correspondence and invariance under the index shift are proved.
+The irrelevant totalized index zero is identified and excluded from the SW
+sequence. The actual limits 0,0,1 are proved, uniqueness is used to identify
+asserted limits, and the exact universal equality is formally negated.
+
+The input length-one convention is explicit and allowed by the source, which
+has no contrary restriction. No claim is made about an amended domain excluding
+these inputs. The function-notation equivalence requires genuine verified limits;
+the actual main disproof assumes no global assignment or general existence
+result. The undefined qualitative characterization clause is not invented.
+Its conjunction with the false displayed assertion is refuted logically.
+No external mathematical computation, estimate, or empirical extrapolation is
+needed. The complete author correspondence and the report have been read.
+
+Independent execution
+Fresh build directory: /private/tmp/tlmc2131-independent-final
+Compiler: Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)
+Compiler commit: 6caaee842e9495688c1567e78c0e68dbb96942aa
+All nine dependency revisions match the pinned manifest. Tracked dependency
+sources and compiler identities are unchanged before and after all checks.
+No candidate build outputs were copied into the independent project.
+lake build: exit 0.
+Both source and Check.lean replay with warnings treated as errors: exit zero.
+Check prints 12 definitions/abbreviations and all 28 theorem types/axiom lists.
+All 28 theorem closures use only propext, Classical.choice and Quot.sound.
+Exhaustive originating-module inventory: 55 constants, including all 40 authored
+declarations and all 15 generated/additional constants. Every constant has an
+emitted complete type, kind, safety flags and transitive axiom closure.
+All authored declarations are safe and nonpartial. There are no custom axiom
+constants, partial declarations, unexpected unsafe constants or extra axioms.
+
+Seven compiler-produced runtime constants carry the compiler's unsafe flag.
+They are the two decreasing cstage constants, two directSum cstage constants,
+two increasing cstage constants and increasing._closed_1._cstage2. All seven
+remain fully inventoried and axiom-audited, with only standard foundational
+axioms or none. They are distinguished from the safe authored logical
+functions/proofs. Their exact names/types/closures are in environment-inventory.
+The other eight generated constants are safe equation/proof declarations.
+The authored-source bypass scan has no hits. Source/config/inventory hashes are
+unchanged after every audit. Full audit source and transcripts are packaged.
+Started: 2026-10-05T06:24:10.242976+00:00
+Finished: 2026-10-05T06:24:26.378166+00:00
+
+Report
+main.tex SHA-256: 7927711ef5711bda4c270d564dfa781747f89e09717e44ca09532eae79190123
+main.pdf SHA-256: 540add081b1541a381beed1b38673fe5620c26c09a414cadfe67680564f1b798
+Built-in editor compilation: success for this exact source.
+Existing Tectonic export: exit zero, with no warnings or box diagnostics.
+Both final pages rendered and directly visually inspected: PASS.
+Complete text extracted with pypdf and read. Exact render/source/PDF hashes are
+recorded. Preliminary network/font and layout failures were resolved; their local
+logs are retained and described in pdf.json. No such failure remains in the
+final exported artifact.
+
+Contribution eligibility
+Initial audit: PASS; 602 all-state PRs,
+32 complete searches, and all 11 possible leads read in full with complete
+comments/reviews/inline comments. No prior submission or prior-invalid submission
+for this conjecture was found. Both remote branches, all 42 local refs/history
+and Discussions were checked. Both current guides were read in full. Limits of
+public indexed/accessible history are disclosed in the eligibility record.
+Prepublication and immediate-publication observations are packaged separately.
+
+Auxiliary coverage
+The mathematical argument needs no external computation. The independent Python
+verifier and its generated Lean inventory harness were actually executed, as was
+the report exporter. They inspect evidence and prove no submitted theorem.
+The author's separate AuthorAudit.lean and its successful type/axiom output,
+source replay and default build logs are included as additional audit evidence.
+The reproducible mathematical project depends only on its pinned Lean/Mathlib
+project files. Separate semantic review must independently inspect and reproduce
+the result before submission.
