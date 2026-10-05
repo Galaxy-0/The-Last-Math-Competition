@@ -1,0 +1,94 @@
+TLMC 00000007701 verification
+Verified UTC: 2026-10-05T10:07:53.092838+00:00
+Lean toolchain: leanprover/lean4:v4.33.0
+Mathlib: db584cd6d46c92f209a44c0f1c829460d327499d (v4.33.0)
+Lean source SHA256: ef0209f7566c0e347885cbb6d6965662108aa5ce8444ec05b5dc0735f0894fb2
+Report source SHA256: d2a84ed3b212f18e69fb6cdc7d86ab912f14fe132c10504209e4816322e0abe3
+Report PDF SHA256: 0b4aa3346c7e8cd50408352688af62cd16597b1bddf191e0f7abd0e0c7a1bae2
+Supplemental verifier SHA256: 3513be7a15fb0259051292a6ebf2c4eb81e45cbb04e94bd31f48bfe5bbedb010
+Upstream commit: 1be30b25c4fe6cd46397090ca09b5696eb62ea78
+
+Lean compilation against the pinned Mathlib environment:
+Source: BRSVolume.lean
+Compilation used only the designated shared compiler wrapper.
+Recorded successful compiler output:
+'BRSVolume.interval_counterexamples' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.circle_volume_clause_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.torus_volume_clause_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.circle_conjunction_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.interval_volumes_dense' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.physical_block_reindex' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.blockCount_reduction' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.physical_block_discrepancy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.literal_window_irrational_area' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.literal_window_areas_dense' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.modelSet_block_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.modelSet_block_discrepancy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.literal_block_counterexamples' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.literal_areas_dense' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.literal_window_discrepancy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.literal_window_isPhysicalBRS' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.literal_volume_clause_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.literal_physical_brs_areas_dense' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BRSVolume.literal_area_spectrum_not_discrete' depends on axioms: [propext, Classical.choice, Quot.sound]
+Compiler exit status: 0
+Compiler exit status: 0
+
+$ python3 verify.py
+PASS: 1680 exact rational orbit checks (including half-open endpoints,
+negative rotations, N=0, all q=1,...,8, and rectangle reduction).
+PASS: 4864 exact rational physical-counting checks (negative indices,
+canonical triples, physical cells, aligned blocks, and real interval endpoints).
+Finite checks are supplemental; irrationality and density are formally proved.
+Exit status: 0
+The arbitrary-interval checks use the strengthened bound q + 2.
+
+PDF verification:
+Final LaTeX passes: exit status 0.
+Output: report.pdf (7 pages, 257820 bytes).
+Final diagnostics: no warnings, undefined references, or Overfull/Underfull boxes.
+All seven rendered pages were visually inspected.
+Extracted PDF text agrees with the literal construction and formalization boundary.
+
+Source audit: no proof admissions, additional axioms, native-decision shortcuts,
+or unsafe declarations. All 19 theorem audits use only the standard foundations.
+Packaging audit: FIXMSG is deleted; public documents have no internal-status
+references or obsolete Lake-build disclaimer. Attribution and license are retained.
+
+Formal scope: actual model-set counts on every bounded real half-open interval,
+explicit local finiteness, discrepancy bound q + 2, IsPhysicalBRS membership,
+irrational Lebesgue area, literal universal half-integer volume-clause negation,
+area density within that same physical BRS class, and topological nondiscreteness
+of its full area spectrum.
+
+Human bridge required for the literal disproof: lattice admissibility only.
+The displayed image of Z^3 is a discrete full-rank lattice of covolume 6;
+its physical projection on the lattice is injective; its internal projection
+is dense in R^2. These facts are proved in the report and are neither Lean
+theorems nor additional Lean axioms. Optional closed-window, rational-polytope,
+and secondary internal-line observations are separate human arguments.
+
+== Fresh standalone build (lake build in a clean copy of lean4/, Mathlib v4.33.0 dependencies prebuilt) ==
+$ lake build
+ℹ [8706/8707] Built BRSVolume (95s)
+info: BRSVolume.lean:679:0: 'BRSVolume.interval_counterexamples' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:680:0: 'BRSVolume.circle_volume_clause_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:681:0: 'BRSVolume.torus_volume_clause_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:682:0: 'BRSVolume.circle_conjunction_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:684:0: 'BRSVolume.interval_volumes_dense' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:686:0: 'BRSVolume.physical_block_reindex' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:687:0: 'BRSVolume.blockCount_reduction' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:688:0: 'BRSVolume.physical_block_discrepancy' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:689:0: 'BRSVolume.literal_window_irrational_area' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:690:0: 'BRSVolume.literal_window_areas_dense' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:692:0: 'BRSVolume.modelSet_block_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:693:0: 'BRSVolume.modelSet_block_discrepancy' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:695:0: 'BRSVolume.literal_block_counterexamples' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:696:0: 'BRSVolume.literal_areas_dense' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:698:0: 'BRSVolume.literal_window_discrepancy' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:699:0: 'BRSVolume.literal_window_isPhysicalBRS' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:700:0: 'BRSVolume.literal_volume_clause_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:701:0: 'BRSVolume.literal_physical_brs_areas_dense' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: BRSVolume.lean:703:0: 'BRSVolume.literal_area_spectrum_not_discrete' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (8707 jobs).
+exit=0

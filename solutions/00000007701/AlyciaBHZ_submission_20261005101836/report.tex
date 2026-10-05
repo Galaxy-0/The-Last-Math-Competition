@@ -1,0 +1,472 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\makeatletter
+\g@addto@macro\UrlBreaks{\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X\do\Y\do\Z\do\0\do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8\do\9\do\_}
+\makeatother
+\usepackage{listings}
+\linespread{0.97}
+\lstset{basicstyle=\ttfamily\small,breaklines=true,columns=fullflexible,keepspaces=true}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\fr}[1]{\left\{#1\right\}}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
+\title{Irrational areas of bounded remainder windows\\A literal-dimension counterexample to TLMC 00000007701}
+\author{AlyciaBHZ, on behalf of the Omega Institute}
+\date{5 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+We construct a rank-three cut-and-project lattice with physical space
+$\R$ and internal space $\R^2$, preserving the conjecture's explicit
+window dimension. Its physical projection is injective and its internal
+projection is dense. The rectangles
+$W_q=[0,\fr{-q\sqrt2})\times[0,1)$ are bounded remainder windows:
+the discrepancy on every physical interval is at most $q+2$.
+Their actual Lebesgue areas are irrational and form a dense subset of
+$(0,1)$. Thus the claimed half-integer and discrete volume spectrum is
+false. Lean verifies the lattice parametrization, model-set definition,
+exact physical counting on every real interval, bounded remainder
+window membership, the universal half-integer volume-clause negation,
+and area density within that physical class. The only human bridge
+needed for the literal disproof is lattice admissibility: full rank and
+covolume, physical injectivity, and internal density.
+\end{abstract}
+
+\section{Statement, dimensions, and counting convention}
+The conjecture is reproduced verbatim:
+\begin{quote}
+Definition: For an irrational rotation T\_alpha on the circle, a set B is a bounded remainder set (BRS) if the Birkhoff sums of its indicator minus n|B| are uniformly bounded; higher-dimensional BRS are built by the cut-and-project construction with a window W in R\^{}m and lattice Gamma. Conjecture: W is a d-dimensional BRS if and only if W is a polytope defined by integer-coefficient half-spaces in R\^{}m; and for d=1, m=2 the volume spectrum of W is a discrete set with all values in (1/2)Z. (polytopal characterization of bounded remainder sets)
+\end{quote}
+We take $d=1$ to be the physical dimension and $m=2$ to be the
+internal dimension: $W\subset\R^2$ and $\Gamma\subset\R\times\R^2$.
+Our primary construction uses exactly these dimensions. A secondary
+interpretation with total lattice dimension two is discussed separately
+in Section~\ref{sec:secondary}; we make no assertion that it is the
+usual meaning of the conjecture's $m$.
+
+A cut-and-project scheme here consists of a full-rank lattice $\Gamma$
+in $\R\times\R^2$, the coordinate projections $\pi_{\rm phys}$ and
+$\pi_{\rm int}$, injectivity of $\pi_{\rm phys}|_\Gamma$, and density of
+$\pi_{\rm int}(\Gamma)$. For a bounded measurable window $W$, define
+\[
+\Lambda(W)=\{\pi_{\rm phys}(\gamma):\gamma\in\Gamma,
+                         \ \pi_{\rm int}(\gamma)\in W\}.
+\]
+Write $c=\operatorname{covol}(\Gamma)$ and
+$\operatorname{dens}(\Gamma)=1/c$. We call $W$ a bounded remainder
+window when $\Lambda(W)$ is locally finite and a constant $C$ satisfies
+\[
+\left|\#(\Lambda(W)\cap[x,y))-
+        \operatorname{dens}(\Gamma)\operatorname{vol}_2(W)(y-x)\right|
+\le C \qquad (x,y\in\R,\ x\le y).                 \tag{1}
+\]
+Counting is of distinct physical points, with both positive and negative
+lattice indices allowed. Intervals are bounded and half-open; the empty
+interval is included. This is the physical dimension-one bounded
+counting-discrepancy formulation of the bounded-distance-to-a-lattice
+notion used in cut-and-project theory. Grepstad--Lev~\cite{GL} discuss
+the relation between rotation BRS and cut-and-project bounded distance;
+Haynes--Kelly--Koivusalo~\cite{HKK} construct BRS and corresponding
+cut-and-project sets bounded distance to lattices. We prove the needed
+relation directly, rather than invoke an equivalence without checking
+its hypotheses. Grepstad--Lev's rotation definition is uniform in orbit
+length for almost every starting point; our elementary examples satisfy
+the stronger bound for every starting point.
+
+The windows below have boundary of planar measure zero. Formula (1)
+also proves, without needing a general model-set density theorem, that
+$\Lambda(W)$ has density $\operatorname{dens}(\Gamma)\operatorname{vol}_2(W)$.
+The area in the conjecture is $\operatorname{vol}_2(W)$ itself; it is
+not the physical point density.
+
+\section{A rank-three admissible lattice}
+Set $\alpha=\sqrt2$, $\beta=\sqrt3$, and define
+\[
+ A=\begin{pmatrix}1&\alpha&\beta\\-\alpha&1&0\\-\beta&0&1\end{pmatrix},
+ \qquad \Gamma=A\Z^3.
+\]
+Thus the three generators are $(1,-\alpha,-\beta)$,
+$(\alpha,1,0)$, and $(\beta,0,1)$, and
+\[
+\gamma(k,m,n)=(k+\alpha m+\beta n,\ m-k\alpha,\ n-k\beta).
+                                                        \tag{2}
+\]
+\begin{lemma}\label{lem:scheme}
+This is a cut-and-project scheme with physical space $\R$ and internal
+space $\R^2$, of lattice covolume $c=6$ and lattice density $1/6$.
+\end{lemma}
+\begin{proof}
+The determinant of $A$ is $1+\alpha^2+\beta^2=6$. Therefore $A$ is
+invertible, $A\Z^3$ is discrete and full rank, its three generators are
+a lattice basis, and its fundamental parallelepiped has volume $6$.
+
+The numbers $1,\sqrt2,\sqrt3$ are linearly independent over $\mathbb Q$.
+Here is an elementary verification. If
+$k+m\sqrt2+n\sqrt3=0$ with integer coefficients and $n=0$, irrationality
+of $\sqrt2$ gives $k=m=0$. If $n\ne0$, squaring gives
+\[
+3n^2=k^2+2m^2+2km\sqrt2.
+\]
+If $km\ne0$, this makes $\sqrt2$ rational, a contradiction. If $m=0$,
+then $3n^2=k^2$, which is impossible for $n\ne0$ by parity of the
+prime-$3$ valuation. If $k=0$, then $3n^2=2m^2$, also impossible by
+parity of the prime-$3$ valuation (and $m=0$ would force $n=0$).
+Consequently all coefficients vanish. The difference of two lattice
+parameters with equal physical coordinates thus vanishes, proving
+physical injectivity.
+
+The internal image is
+$\Z^2+\Z(-\alpha,-\beta)$. By Kronecker's density theorem, the orbit
+$k(\alpha,\beta)$ modulo $\Z^2$ is dense precisely when
+$1,\alpha,\beta$ are rationally independent, as just verified.
+Adding arbitrary integer coordinates lifts this density to $\R^2$.
+In particular the torus rotation is minimal; the full second-coordinate
+width of the windows is not a consequence of a zero or rational
+second rotation parameter.
+\end{proof}
+
+\section{Circle discrepancy used in the counting bridge}
+For any real $r$ and nonnegative integer $q$, put
+\[
+ a_q=\fr{qr},\quad I_q=[0,a_q),\quad
+ F_q(x)=\sum_{j=0}^{q-1}\fr{x-(j+1)r}.
+\]
+\begin{lemma}\label{lem:circle}
+For every $x\in\R$ and $N\ge0$,
+\[
+ \sum_{j=0}^{N-1}\mathbf1_{I_q}(\fr{x+jr})-Na_q
+ =F_q(x)-F_q(x+Nr),\qquad
+ \left|\sum_{j=0}^{N-1}\mathbf1_{I_q}(\fr{x+jr})-Na_q\right|\le q.
+                                                        \tag{3}
+\]
+\end{lemma}
+\begin{proof}
+Fractional-part subtraction satisfies
+\[
+ \fr{x-t}=\fr{x}-\fr{t}+\mathbf1_{\{\fr{x}<\fr{t}\}}.
+\]
+Indeed the difference of the two fractional parts lies in $(-1,1)$,
+and adding one is necessary exactly when it is negative. The strict
+comparison includes equality correctly for a half-open interval.
+Cancellation in the finite sum gives
+\[
+ F_q(x)-F_q(x+r)=\fr{x-qr}-\fr{x}
+                   =\mathbf1_{I_q}(\fr{x})-a_q.
+\]
+Telescoping along $N$ successive iterates proves the identity in (3).
+Every fractional part belongs to $[0,1)$, so $0\le F_q\le q$ and the
+absolute difference of two such values is at most $q$.
+\end{proof}
+This is the classical Hecke--Ostrowski interval construction. Kesten's
+interval theorem~\cite{Kesten} characterizes interval BRS lengths by
+membership in $\Z+r\Z$ for irrational $r$. We use only the elementary
+sufficient direction proved above.
+
+\section{Exact physical counting and arbitrary intervals}
+From now on $r=-\alpha=-\sqrt2$ and
+\[
+ W_q=[0,\fr{-q\alpha})\times[0,1),\qquad q\ge1,
+ \quad a_q=\fr{-q\alpha}.
+\]
+An internal coordinate $(m-k\alpha,n-k\beta)$ lies in $[0,1)^2$ if
+and only if
+\[
+ m=-\lfloor-k\alpha\rfloor,\qquad n=-\lfloor-k\beta\rfloor.
+                                                        \tag{4}
+\]
+This holds for every integer $k$, including negative ones: it is just
+uniqueness of the representative modulo $\Z$ in $[0,1)$.
+For these unique parameters write
+\[
+ u_k=\fr{-k\alpha},\quad v_k=\fr{-k\beta},\quad
+ t_k=ck+\alpha u_k+\beta v_k.
+                                                        \tag{5}
+\]
+Substitution in (2) proves (5), with internal coordinate $(u_k,v_k)$.
+The model set is consequently exactly
+\[
+ \Lambda(W_q)=\{t_k:k\in\Z,\ u_k<a_q\}.           \tag{6}
+\]
+Since $0\le\alpha u_k+\beta v_k<\alpha+\beta<6=c$, we have
+\[
+ t_k\in[ck,c(k+1)).                               \tag{7}
+\]
+There is at most one model point in each of these disjoint cells, and
+only finitely many cells meet a bounded interval. Thus local finiteness
+and distinctness of counted points hold directly.
+
+\begin{lemma}\label{lem:block}
+For every $K\in\Z$ and $N\in\mathbb N$,
+\[
+ \#(\Lambda(W_q)\cap[cK,c(K+N)))
+ =\sum_{j=0}^{N-1}\mathbf1_{I_q}(\fr{-K\alpha-j\alpha}),
+                                                        \tag{8}
+\]
+and the difference between either side and $Na_q$ is at most $q$.
+\end{lemma}
+\begin{proof}
+By (7), a selected point lies in that physical interval if and only if
+$K\le k<K+N$. Reindex by $k=K+j$. The selection condition in (6)
+is exactly the indicator in (8). Apply (3) with $x=-K\alpha$ and
+$r=-\alpha$. Also $Na_q=(a_q/c)\,cN$, with the correct lattice-density
+normalization. The counting reduction uses the actual physical positions
+(5), not only an abstract torus predicate.
+\end{proof}
+
+\begin{theorem}\label{thm:physical}
+For the admissible scheme of Lemma~\ref{lem:scheme}, every $W_q$ is a
+bounded remainder window in the sense of (1), with bound $q+2$ and
+physical density $a_q/6$.
+\end{theorem}
+\begin{proof}
+Fix $x\le y$ and put $\ell=(y-x)/6$. For the outer block set
+$K=\lfloor x/6\rfloor$, $J=\lceil y/6\rceil$, and $N=J-K\ge0$.
+Then
+\[
+ [x,y)\subseteq[6K,6J),\qquad N-\ell\le2.
+\]
+The outer model-set intersection is finite by Lemma~\ref{lem:block},
+so the intersection with $[x,y)$ is finite too. Monotonicity of finite-set
+cardinality and that lemma imply, writing $A=\#(\Lambda(W_q)\cap[x,y))$,
+\[
+ A-a_q\ell\le q+a_q(N-\ell)\le q+2.
+\]
+For the inner block set $L=\lceil x/6\rceil$, $H=\lfloor y/6\rfloor$.
+If $L\le H$, put $M=H-L$. Then
+\[
+ [6L,6H)\subseteq[x,y),\qquad \ell-M\le2,
+\]
+and the same count monotonicity gives
+$A-a_q\ell\ge-q-a_q(\ell-M)\ge-q-2$.
+If $H<L$, take the empty aligned block $[6L,6L)$; the interval has
+$\ell<2$, and $A\ge0$ gives the same lower bound.
+Thus in all cases
+\[
+ \left|\#(\Lambda(W_q)\cap[x,y))-\frac{a_q}{6}(y-x)\right|
+ \le q+2.
+\]
+The nonempty inner and outer blocks differ by at most two lattice steps;
+when the inner block is empty, the outer block has at most two steps.
+All constants are independent of $x,y$. This entire sandwich proof,
+including finiteness and the case without a complete cell, is formalized
+in \nolinkurl{literal_window_discrepancy}. Measurability of the rectangle
+then gives \nolinkurl{literal_window_isPhysicalBRS}.
+Dividing by $y-x$ as the length tends to infinity yields density $a_q/6$.
+\end{proof}
+Our formal witnesses use half-open windows. Replacing $W_q$ by its
+closed rectangle leaves the area unchanged and alters the entire model
+set by finitely many points. Indeed each boundary coordinate equation
+$m-k\alpha\in\{0,a_q\}$ or $n-k\beta\in\{0,1\}$ fixes at most one
+integer $k$, by irrationality, and the remaining bounded coordinate
+allows only finitely many integers. Thus a closed-window convention also
+gives bounded discrepancy. The same observation handles endpoint choices
+for physical intervals, with an additional count error of at most two.
+
+\section{Irrational area and the nondiscrete spectrum}
+\begin{theorem}\label{thm:negation}
+In the physical-$\R$, internal-$\R^2$ scheme (2),
+\[
+ \neg\bigl(\forall W\text{ a bounded remainder window},\quad
+                   \operatorname{vol}_2(W)\in\tfrac12\Z\bigr).
+\]
+Furthermore its BRS area spectrum is not discrete. In particular the
+conjecture's conjunction is false under its literal dimensions.
+\end{theorem}
+\begin{proof}
+Product Lebesgue measure gives
+$\operatorname{vol}_2(W_q)=a_q=\fr{-q\sqrt2}$.
+For $q\ge1$, the number $-q\sqrt2$ is irrational; subtracting its integer
+floor preserves irrationality. Hence $a_q$ is irrational, lies strictly
+between zero and one, and cannot equal an integer divided by two.
+Theorem~\ref{thm:physical} supplies the required membership in the
+cut-and-project BRS class, already for $q=1$. The Lean headline theorem
+\nolinkurl{literal_volume_clause_false} states precisely this universal
+negation over \nolinkurl{IsPhysicalBRS}.
+
+The positive multiples of an irrational circle element are dense in
+$\R/\Z$. Thus for every $0\le a<b\le1$, some $q\ge1$ has
+$a<\fr{-q\sqrt2}<b$. The source proves this as an ordinary real
+open-interval statement, using Mathlib's circle-orbit density and unique
+representatives in $[0,1)$. The declaration
+\nolinkurl{literal_physical_brs_areas_dense} includes physical BRS
+membership of every witness in this density statement. The areas of this family are therefore dense
+in $(0,1)$, with closure $[0,1]$. If a spectrum point $v\in(0,1)$
+were isolated, a sufficiently small interval $(v,v+\varepsilon)$ would
+contain no spectrum point, contradicting this density. This proves
+nondiscreteness of the full physical BRS area spectrum. We do not assert
+that its full closure is $[0,1]$, since other windows can have larger area.
+\end{proof}
+No polytopal classification is needed to negate the asserted conjunction.
+As an additional human observation, a bounded planar polytope defined
+by half-spaces with both integer normals and integer offsets has rational
+vertices (solve the active linear equations), hence rational area by
+triangulation. The irrational area of $W_q$ excludes that reading of the
+geometric characterization, even up to null sets. If arbitrary real
+offsets are permitted, this particular geometric argument does not apply;
+the independent area-spectrum contradiction still holds.
+
+\section{Precise formalization boundary}
+The single Lean file imports Mathlib, uses actual Lebesgue volume, and
+contains the following definitions:
+\begin{lstlisting}
+Index3 = Int * (Int * Int)
+Ambient3 = Real * (Real * Real)
+gamma alpha beta (k,m,n) =
+  (k + alpha*m + beta*n, (m-k*alpha, n-k*beta))
+lattice alpha beta = Set.range (gamma alpha beta)
+phys p = p.1
+internal p = p.2
+modelSet alpha beta W =
+  phys '' {p in lattice alpha beta | internal p in W}
+covol alpha beta = 1 + alpha^2 + beta^2
+physicalCount alpha beta W x y =
+  (modelSet alpha beta W intersect Set.Ico x y).ncard
+\end{lstlisting}
+The actual identifiers for the first two types use subscript $3$.
+\nolinkurl{IsPhysicalBRS} states measurability, finiteness of every counted
+intersection, and (1) for all real $x\le y$, using the actual set
+cardinality and actual product Lebesgue volume.
+The covolume expression is the determinant calculated in
+Lemma~\ref{lem:scheme}; its interpretation as lattice covolume is a
+human verification, not an assumed theorem hidden in the definition.
+
+The formal bridge includes:
+\begin{itemize}
+\item \nolinkurl{canonical_internal}, \nolinkurl{canonical_phys}, and
+\nolinkurl{internal_unit_unique}: equations (4)--(5) and uniqueness.
+\item \nolinkurl{canonical_cell}, \nolinkurl{physical_block_reindex}:
+cell membership and the exact reindexing of accepted lattice parameters,
+for all nonnegative real $\alpha,\beta$, all integers $K$, and all
+natural $N$. The general cell inequality follows from
+$1+\alpha^2+\beta^2>\alpha+\beta$.
+\item \nolinkurl{modelSet_block_eq}: the actual intersection of the model
+set with the aligned physical interval equals the explicitly finite set
+\nolinkurl{blockPoints}. \nolinkurl{canonical_phys_injective} and
+\nolinkurl{blockPoints_card} verify that no duplicates change its cardinality.
+\item \nolinkurl{physicalCount_eq_blockCount} and
+\nolinkurl{blockCount_reduction}: actual model-set counting becomes the
+circle Birkhoff sum in (8).
+\item \nolinkurl{modelSet_block_discrepancy}: the bound $q$ for actual
+model-set counts, with area divided by covolume as the expected density.
+\item \nolinkurl{literal_window_irrational_area} and
+\nolinkurl{literal_window_areas_dense}: irrational product Lebesgue area,
+exclusion from half-integers, and density of the same rectangle family.
+The concrete declarations \nolinkurl{literalGamma}, \nolinkurl{literalWindow},
+\nolinkurl{literal_block_counterexamples}, and \nolinkurl{literal_areas_dense}
+specialize to $\sqrt2,\sqrt3$.
+\end{itemize}
+
+The all-interval formal results, beyond the aligned-block bridge, are:
+\begin{itemize}
+\item \nolinkurl{literal_window_discrepancy}: explicit finiteness and
+bound $q+2$ on every real half-open physical interval, by inner/outer
+aligned-block inclusion and \nolinkurl{Set.ncard_le_ncard}.
+\item \nolinkurl{literal_window_isPhysicalBRS}: membership of each
+positive $W_q$ in the unchanged physical counting predicate.
+\item \nolinkurl{literal_volume_clause_false}: the headline negation
+\begin{lstlisting}
+not (forall W : Set (Real * Real),
+  IsPhysicalBRS (sqrt 2) (sqrt 3) W ->
+  exists k : Int, (volume W).toReal = k / 2)
+\end{lstlisting}
+\item \nolinkurl{literal_physical_brs_areas_dense}: every open subinterval
+of $(0,1)$ contains the area of a positive $W_q$, together with its
+physical BRS membership. \nolinkurl{literal_area_spectrum_not_discrete} formally proves that the
+full physical BRS area spectrum is not a discrete subset of $\R$.
+\end{itemize}
+
+The only human bridge required for the literal-dimension disproof is
+Lemma~\ref{lem:scheme}: the displayed image of $\Z^3$ is a discrete
+full-rank lattice of covolume $6$, its physical projection restricted to
+the lattice is injective, and its internal projection is dense in
+$\R^2$. No Lean theorem establishes these admissibility properties, and
+no additional axiom assumes them. The all-real-interval counting argument,
+BRS membership, universal half-integer negation, density in the
+physical BRS class, and topological nondiscreteness are Lean theorems. The optional closed-window and
+rational-polytope observations remain human arguments and are not needed
+for that negation.
+
+\section{Secondary internal-line reading}\label{sec:secondary}
+If one instead chooses a physical line and an internal line (total
+lattice dimension two), the circle results remain a separate
+counterexample. For every irrational rotation parameter $r$,
+$[0,\fr{qr})$ is a circle BRS with irrational length for $q\ge1$,
+and these lengths are dense in $(0,1)$. The source retains
+\nolinkurl{IsBRS}, \nolinkurl{interval_counterexamples},
+\nolinkurl{circle_volume_clause_false}, and
+\nolinkurl{interval_volumes_dense} for this reading.
+
+For a concrete internal-line scheme, put $a=\fr{\sqrt2}\in(0,1)$ and
+\[
+ \Gamma_a=\{(k-am,m-ak):k,m\in\Z\}\subset\R\times\R.
+\]
+Its determinant is $c_a=1-a^2>0$, its physical projection is injective
+by irrationality, and its internal image $\Z+a\Z$ is dense.
+For $W=[0,a)$ there is a selected point precisely when
+$m=\lceil ak\rceil$ and $\fr{-ak}<a$. Its physical coordinate is
+$t_k=c_a k-a\fr{-ak}$, a displacement of less than $a$ from $c_a k$.
+The circle sum with rotation $-a$ and interval length
+$a=\fr{-(-a)}$ has discrepancy at most one: its centered indicator is
+$\fr{x-a}-\fr{x}$, a coboundary for rotation $-a$ with transfer function
+$-\fr{x}$. Comparing physical intervals with the grid changes only a
+bounded number of indices within distance $a/c_a$ of their endpoints.
+Thus this secondary model also has bounded physical discrepancy and
+irrational internal length. This paragraph is a human proof.
+
+The source also retains the supporting two-torus predicate
+\nolinkurl{IsBRS}$ _2$ and \nolinkurl{rectangle_isBRS} for translation by
+$(r,s)$. That predicate is a Birkhoff-sum definition, and is not itself
+identified with a cut-and-project scheme. The rank-three counting proof
+in Sections 2--4 supplies the required primary bridge.
+
+\section{Verification, reproduction, and provenance}
+Lean and Mathlib are pinned to \nolinkurl{v4.33.0}. The successful compiler
+output and axiom audits are recorded in \nolinkurl{verification.txt}.
+The audited results depend only on
+\begin{lstlisting}
+[propext, Classical.choice, Quot.sound]
+\end{lstlisting}
+There are no additional axioms, admissions, or native-decision shortcuts.
+The Lean source was checked against the pinned Mathlib environment.
+\begin{lstlisting}
+cd lean4
+lake exe cache get && lake build
+cd ..
+python3 verify.py
+pdflatex -interaction=nonstopmode -halt-on-error report.tex
+pdflatex -interaction=nonstopmode -halt-on-error report.tex
+\end{lstlisting}
+The Python standard-library program checks exact rational examples of
+the coboundary, half-open endpoint conventions, physical-cell placement,
+model counting, and the arbitrary-interval estimate. These finite checks
+are supplemental and establish neither irrationality nor infinite density.
+
+The transfer-function definition and four coboundary lemmas were adapted
+from \nolinkurl{D5/S1/Phase/HeckeOstrowskiCoboundary.lean} in trureturing,
+immutable commit \nolinkurl{1be30b25c4fe6cd46397090ca09b5696eb62ea78}.
+The Apache-2.0 license is included as \nolinkurl{LICENSE.trureturing}.
+The namespace and imports were adapted; no trureturing import is needed.
+
+\begin{thebibliography}{9}
+\bibitem{Kesten} H.~Kesten, \emph{On a conjecture of Erd\H{o}s and Sz\H{u}sz
+related to uniform distribution mod~1}, Acta Arithmetica \textbf{12}
+(1966), 193--212. \url{https://doi.org/10.4064/aa-12-2-193-212}.
+\bibitem{GL} S.~Grepstad and N.~Lev, \emph{Sets of bounded discrepancy for
+multi-dimensional irrational rotation}, Geometric and Functional
+Analysis \textbf{25} (2015), 87--133.
+\url{https://doi.org/10.1007/s00039-015-0313-z}.
+\bibitem{HKK} A.~Haynes, M.~Kelly, and H.~Koivusalo,
+\emph{Constructing bounded remainder sets and cut-and-project sets which
+are bounded distance to lattices}, Israel Journal of Mathematics
+\textbf{212} (2016), 189--201.
+\url{https://doi.org/10.1007/s11856-016-1283-z}.
+\end{thebibliography}
+\medskip
+\noindent Submitted by AlyciaBHZ on behalf of the Omega Institute
+(trureturing project, \url{https://github.com/the-omega-institute/trureturing}).
+\end{document}
