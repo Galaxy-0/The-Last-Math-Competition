@@ -1,0 +1,3 @@
+import Conjecture6120
+#print axioms Conjecture6120.conjecture6120_false
+#print axioms Conjecture6120.no_realizing_pair
