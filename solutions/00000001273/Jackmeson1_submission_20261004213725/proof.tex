@@ -1,0 +1,351 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Per}{\mathrm{Per}}
+\newcommand{\lean}[1]{\texttt{#1}}
+
+\title{A disproof of Conjecture 00000001273\\[2pt]
+\large Periodic-point asymptotics for mixing $\Z^2$ subshifts of finite type}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000001273 reads (English version; the Chinese version in
+\texttt{conjectures/00000001273.md} states the same claim):
+
+\begin{quote}
+\emph{Conjecture: For any mixing SFT under a $\Z^2$ action, the count of periodic points has main term
+$\lambda^{t_1t_2}\cdot(1 + O(2^{-\min t}))$ as $t_1, t_2 \to \infty$ (periodic-point asymptotics).}
+\end{quote}
+
+We show that it is false under its literal reading, and also under the weaker reading in which ``main
+term'' only means that the ratio $P(t_1,t_2)/\lambda^{t_1t_2}$ tends to $1$. One explicit mixing
+$\Z^2$ SFT is a counterexample to both readings: for every $\lambda>0$ and every threshold $T$ there
+are periods $t_1,t_2\ge T$ at which the error exceeds both the conjectured bound and $\tfrac12\lambda^{t_1t_2}$.
+Every step below is a theorem of the accompanying Lean~4 file; the Lean names are given in brackets.
+
+\section{Definitions and the reading}
+
+Throughout, $A_n=\{0,\dots,n-1\}$ is a finite alphabet and $A_n^{\Z^2}$ is the full shift.
+
+\begin{definition}[Shift action; \lean{Config}, \lean{shift}]
+For $v\in\Z^2$ and $x\in A_n^{\Z^2}$ put $(\sigma^v x)(u)=x(u+v)$. Then $\sigma^0=\mathrm{id}$ and
+$\sigma^{v+w}=\sigma^v\sigma^w$, so this is the $\Z^2$ shift action. It is the shift map of the
+Wikipedia article ``Shift space'' (\url{https://en.wikipedia.org/wiki/Shift_space}), which defines
+$\sigma^g((x_i)_i)=(x_{gi})_i$ for a group $\mathbb{G}$, here $\mathbb{G}=\Z^2$ written additively.
+\end{definition}
+
+\begin{definition}[Patterns and SFTs; \lean{Pattern}, \lean{Occurs}, \lean{IsSFT}]
+A \emph{pattern} $p$ is a finite set $F_p\subset\Z^2$ (the window) together with symbols $p(u)\in A_n$
+for $u\in F_p$. A configuration $x$ \emph{shows $p$ at $v$} if $x(v+u)=p(u)$ for all $u\in F_p$. A set
+$X\subseteq A_n^{\Z^2}$ is a \emph{subshift of finite type} if there is a finite list $\mathcal F$ of
+patterns with
+\[
+  X=\{x : \text{no } p\in\mathcal F \text{ is shown by } x \text{ at any } v\in\Z^2\}.
+\]
+\end{definition}
+
+This is the standard definition. Wikipedia, ``Shift space'': ``An equivalent way to define a shift
+space is to take a set of forbidden patterns''. The resulting $X_F$ ``is the set of all infinite
+patterns that do not contain any forbidden finite pattern of'' $F$. The same article continues:
+``which leads to classical definition of a shift of finite type as those shift spaces'' that equal
+$X_F$ for a finite $F$. Wikipedia, ``Subshift of finite type''
+(\url{https://en.wikipedia.org/wiki/Subshift_of_finite_type}): ``subshifts of finite type are shift
+spaces defined by a finite set of forbidden words''.
+
+\begin{definition}[Mixing; \lean{supNorm}, \lean{IsMixing}]
+Write $\|v\|_\infty=\max(|v_1|,|v_2|)$. A set $X$ is \emph{mixing} if for any two patterns $p,q$ that
+occur in $X$ (some point of $X$ shows $p$ at $0$, some point shows $q$ at $0$) there is $N$ such that for
+every $v\in\Z^2$ with $\|v\|_\infty\ge N$ some $z\in X$ shows $p$ at $0$ and $q$ at $v$.
+\end{definition}
+
+This is topological mixing of the $\Z^2$ action, written with cylinder sets. Wikipedia, ``Mixing
+(mathematics)'' (\url{https://en.wikipedia.org/wiki/Mixing_(mathematics)}): ``A system is said to be
+topologically mixing if, given open sets'' $A$ and $B$, there is $N$ with $f^n(A)\cap B\neq\emptyset$
+for all $n>N$. For a non-discrete parameter $g$ (a flow $\varphi_g$) the article states the
+condition ``with the requirement that a non-empty intersection hold for all'' $\|g\|>N$. We use the
+same form with $g=v\in\Z^2$ and the sup norm. The cylinders
+$[p]=\{x : x \text{ shows } p \text{ at } 0\}$ form a basis of the product topology. The point $z$
+above lies in $[p]\cap\sigma^{-v}[q]\cap X$, because $\sigma^v z$ shows $q$ at $0$ exactly when $z$
+shows $q$ at $v$.
+
+\begin{definition}[Periodic points; \lean{perPts}, \lean{perCount}]
+For $t_1,t_2\ge1$ let $\Per_X(t_1,t_2)=\{x\in X:\sigma^{(t_1,0)}x=x,\ \sigma^{(0,t_2)}x=x\}$ (the points
+whose period lattice contains $t_1\Z\times t_2\Z$), and $P_X(t_1,t_2)=\#\Per_X(t_1,t_2)$ (Lean:
+\lean{Set.ncard}).
+\end{definition}
+
+\begin{lemma}[\lean{perPts\_finite}]\label{lem:finite}
+For every $X$ and all $t_1,t_2\ge1$ the set $\Per_X(t_1,t_2)$ is finite, so $P_X(t_1,t_2)$ is the
+cardinality of a finite set.
+\end{lemma}
+
+\begin{proof}
+A point $x\in\Per_X(t_1,t_2)$ satisfies $x(a,b)=x(a\bmod t_1,\ b\bmod t_2)$
+(\lean{perPts\_apply\_emod}, from $x(u+k(t_1,0))=x(u)$ and $x(u+k(0,t_2))=x(u)$ for $k\in\Z$). Hence
+$x$ is determined by its restriction to $(\Z/t_1)\times(\Z/t_2)$, and the restriction map is injective
+into the finite set $A_n^{(\Z/t_1)\times(\Z/t_2)}$.
+\end{proof}
+
+\paragraph{The two readings.} The \emph{literal reading} (\lean{HasPeriodicAsymptotics},
+\lean{Conjecture}) is: for every $n$ and every nonempty mixing SFT $X\subseteq A_n^{\Z^2}$ there are
+$\lambda>0$, $C\in\R$ and $T\in\N$ such that
+\begin{equation}\label{eq:literal}
+  \bigl|P_X(t_1,t_2)-\lambda^{t_1t_2}\bigr|\le C\cdot 2^{-\min(t_1,t_2)}\cdot\lambda^{t_1t_2}
+  \qquad\text{for all } t_1,t_2\ge\max(T,1).
+\end{equation}
+This is $P_X=\lambda^{t_1t_2}(1+E)$ with $|E|\le C\,2^{-\min t}$, i.e.\ the main term
+$\lambda^{t_1t_2}$ and the hedge $1+O(2^{-\min t})$ as $t_1,t_2\to\infty$. Both $\lambda$ and the
+$O$-constant may depend on $X$. The \emph{main-term reading} (\lean{HasMainTerm},
+\lean{ConjectureMainTerm}) keeps only the main term: there is $\lambda>0$ such that for every
+$\varepsilon>0$ there is $T$ with $|P_X(t_1,t_2)-\lambda^{t_1t_2}|\le\varepsilon\lambda^{t_1t_2}$ for all
+$t_1,t_2\ge\max(T,1)$, i.e.\ $P_X/\lambda^{t_1t_2}\to1$. The literal reading implies the main-term
+reading. We refute both directly.
+
+\paragraph{Conventions.} Periods are at least $1$. For $t=0$ the set $\Per_X$ can be infinite; since
+$T$ is existential and we also require $t_i\ge1$, nothing depends on $t=0$. Requiring $X\neq\emptyset$
+only weakens the conjecture: the empty SFT, which has $P=0$, is excluded, so it cannot serve as a
+trivial counterexample.
+
+\section{The counterexample}
+
+\begin{definition}[\lean{X3}]
+$X_3=\{x\in\{0,1,2\}^{\Z^2} : x(i,j)\neq x(i+1,j)\text{ for all } i,j\in\Z\}$: each row is a proper
+$3$-colouring of $\Z$, and there is no vertical constraint.
+\end{definition}
+
+\begin{proposition}[\lean{X3\_nonempty}, \lean{X3\_isSFT}]
+$X_3$ is nonempty (take $x(i,j)=0$ for even $i$ and $1$ for odd $i$). It is the SFT whose forbidden
+patterns are the three horizontal dominoes $aa$, $a\in\{0,1,2\}$, on the window $\{(0,0),(1,0)\}$
+(\lean{domino}).
+\end{proposition}
+
+\begin{proof}
+$x$ shows the domino $aa$ at $(i,j)$ iff $x(i,j)=a=x(i+1,j)$. So no domino occurs iff
+$x(i,j)\neq x(i+1,j)$ for all $i,j$.
+\end{proof}
+
+\begin{proposition}[\lean{X3\_isMixing}]\label{prop:mixing}
+$X_3$ is mixing.
+\end{proposition}
+
+\begin{proof}
+\emph{Gluing} (\lean{glue}, \lean{glue\_mem}, \lean{glue\_eq\_left}, \lean{glue\_eq\_right}). Let
+$x,y\in X_3$ and $G\subseteq\Z^2$. Call $(i,j)$ a \emph{$y$-site} if $(i,j)\in G$, or if both
+$(i-1,j)\in G$ and $(i+2,j)\in G$ (\lean{yZone}). Call it a \emph{buffer site} if it is not a $y$-site
+but $(i-1,j)$ or $(i+1,j)$ is one (\lean{buffer}). Let $g_0=y$ on $y$-sites and $g_0=x$ elsewhere.
+Let $g=g_0$ off the buffer sites. At a buffer site $(i,j)$ let $g(i,j)$ be a colour different from both
+$g_0(i-1,j)$ and $g_0(i+1,j)$ (\lean{third}; it exists because there are three colours).
+
+Two horizontally adjacent sites are never both buffer sites. Suppose $(i,j),(i+1,j)$ both were. Then
+$(i-1,j)$ and $(i+2,j)$ are $y$-sites, which forces $(i-1,j)\in G$ and $(i+2,j)\in G$. That makes
+$(i,j)$ a $y$-site, a contradiction. Now take a horizontal pair $(i,j),(i+1,j)$:
+\begin{itemize}[nosep]
+\item If one of them is a buffer site, it differs from the other by the choice of $g$.
+\item If neither is a buffer site, they are both $y$-sites or both not $y$-sites: a non-$y$-site next
+to a $y$-site is a buffer site. So $g$ agrees there with $y$ or with $x$, and these differ on the pair.
+\end{itemize}
+Hence $g\in X_3$. If $(i,j)$ has sup-distance $\ge2$ from $G$, then $(i,j),(i\pm1,j)\notin G$. So
+$(i,j)$ is neither a $y$-site nor a buffer site, and $g(i,j)=x(i,j)$. On $G$ we have $g=y$.
+
+\emph{Mixing.} Let $x\in X_3$ show $p$ at $0$ and $y\in X_3$ show $q$ at $0$. Let $M$ bound
+$\|\cdot\|_\infty$ on $F_p\cup F_q$, and let $N=2M+2$. For $\|v\|_\infty\ge N$ put $y'=\sigma^{-v}y$, which
+lies in $X_3$ and shows $q$ at $v$. Put $G=v+F_q$. For $a\in F_p$ and $b\in F_q$ we have
+$\|a-(v+b)\|_\infty\ge N-2M=2$. The glued point $z=g$ (built from $x$, $y'$ and $G$) lies in $X_3$,
+agrees with $x$ on $F_p$, and agrees with $y'$ on $v+F_q$. So $z$ shows $p$ at $0$ and $q$ at $v$.
+\end{proof}
+
+\subsection{Counting periodic points}
+
+Let $C(t)$ be the set of proper $3$-colourings of the cycle $\Z/t$, i.e.\ maps $r:\Z/t\to\{0,1,2\}$ with
+$r(i)\neq r(i+1)$ (\lean{CycCol}), and let $c(t)=\#C(t)$ (\lean{cycCount}).
+
+\begin{lemma}[\lean{perEquiv}, \lean{perCount\_X3}]
+For $t_1,t_2\ge1$, $\Per_{X_3}(t_1,t_2)$ is in bijection with the maps $\Z/t_2\to C(t_1)$. Hence
+$P_{X_3}(t_1,t_2)=c(t_1)^{t_2}$.
+\end{lemma}
+
+\begin{proof}
+Send $x$ to $b\mapsto(a\mapsto x(a,b))$, with $a\in\Z/t_1$ and $b\in\Z/t_2$ represented by
+$0\le a<t_1$ and $0\le b<t_2$. By periodicity $x(a+1,b)=x((a+1)\bmod t_1,b)$, so each row is a proper
+colouring of the cycle. The inverse sends $R$ to $x(i,j)=R(j\bmod t_2)(i\bmod t_1)$. This point lies in
+$X_3$ because $R(\cdot)$ is proper, and it is fixed by $\sigma^{(t_1,0)}$ and $\sigma^{(0,t_2)}$. The
+two maps are mutually inverse by Lemma~\ref{lem:finite}'s reduction mod $(t_1,t_2)$.
+\end{proof}
+
+\begin{lemma}[transfer matrix; \lean{pathCount}, \lean{pathCount\_succ}, \lean{pathCount\_formula}]
+Let $N_m(a,b)$ be the number of $r:\{0,\dots,m\}\to\{0,1,2\}$ with $r(0)=a$, $r(m)=b$ and
+$r(k)\neq r(k+1)$ for $k<m$ (the $(a,b)$ entry of $(J-I)^m$). Then
+$N_{m+1}(a,b)=\sum_{d\neq a}N_m(d,b)$, and
+\[
+  3N_m(a,b)=2^m+2(-1)^m\ (a=b),\qquad 3N_m(a,b)=2^m-(-1)^m\ (a\neq b).
+\]
+\end{lemma}
+
+\begin{proof}
+Splitting off the first vertex, $r=(a,s)$, gives $r(0)=a$, $r(m+1)=s(m)$, and $r$ is proper iff
+$a\neq s(0)$ and $s$ is proper. This is the recursion. The closed form holds for $m=0$
+($N_0(a,b)=[a=b]$). The induction step is $2(2^m-(-1)^m)=2^{m+1}+2(-1)^{m+1}$ for $a=b$, and
+$(2^m+2(-1)^m)+(2^m-(-1)^m)=2^{m+1}-(-1)^{m+1}$ for $a\neq b$.
+\end{proof}
+
+\begin{proposition}[\lean{cycCount\_eq\_sum}, \lean{cycCount\_formula}, \lean{perCount\_X3\_formula}]
+For $t\ge1$, $c(t)=2^t+2(-1)^t$. Hence for $t_1,t_2\ge1$
+\[
+  P_{X_3}(t_1,t_2)=\bigl(2^{t_1}+2(-1)^{t_1}\bigr)^{t_2}.
+\]
+\end{proposition}
+
+\begin{proof}
+Write $t=m+1$ and identify $\Z/(m+1)$ with $\{0,\dots,m\}$. Then $r$ is a proper cycle colouring iff
+it is a proper path colouring and $r(m)\neq r(0)$. So $c(m+1)=\sum_{a\neq b}N_m(a,b)$. There are six
+ordered pairs $a\neq b$, each with $3N_m(a,b)=2^m-(-1)^m$. Hence $c(m+1)=2(2^m-(-1)^m)=2^{m+1}+2(-1)^{m+1}$.
+\end{proof}
+
+In particular $P_{X_3}(2k,t_2)=(2^{2k}+2)^{t_2}$ for $k,t_2\ge1$ (\lean{perCount\_X3\_even}).
+
+\section{The refutation}
+
+\begin{lemma}[\lean{eq\_of\_pow\_comparable}]
+Let $a,b>0$ and $N\in\N$ with $a^t\le 2b^t$ and $b^t\le2a^t$ for all $t\ge N$. Then $a=b$.
+\end{lemma}
+
+\begin{proof}
+Suppose $a<b$. Then $b/a>1$, so $(b/a)^M>2$ for some $M$. For $t=\max(M,N)$ we get
+$b^t=(b/a)^ta^t\ge(b/a)^Ma^t>2a^t$, a contradiction. The case $b<a$ is symmetric.
+\end{proof}
+
+\begin{proposition}[core estimate; \lean{X3\_no\_half\_bound}]\label{prop:core}
+There are no $\lambda>0$ and $T\in\N$ with
+$|P_{X_3}(t_1,t_2)-\lambda^{t_1t_2}|\le\frac12\lambda^{t_1t_2}$ for all $t_1,t_2\ge\max(T,1)$.
+\end{proposition}
+
+\begin{proof}
+Suppose such $\lambda,T$ exist. Fix $k\ge T+1$ and put $t_1=2k$, $s=2^{2k}+2$, $\mu=\lambda^{2k}$. For
+all $t\ge T+1$ the hypothesis gives $|s^t-\mu^t|\le\frac12\mu^t$, so $s^t\le2\mu^t$ and
+$\mu^t\le2s^t$. The lemma gives $\mu=s$:
+\[
+  \lambda^{2k}=2^{2k}+2\qquad\text{for every }k\ge T+1.
+\]
+Take $k=T+1,T+2,T+3$ and put $A=2^{2(T+1)}>0$, $L=\lambda^2$. Then $\lambda^{2(T+1)}=A+2$,
+$(A+2)L=4A+2$ and $(A+2)L^2=16A+2$. Therefore
+\[
+  18A=\bigl(4A+2+(A+2)L\bigr)\bigl((A+2)L-(4A+2)\bigr)-(A+2)\bigl((A+2)L^2-(16A+2)\bigr)=0,
+\]
+contradicting $A>0$.
+\end{proof}
+
+\begin{theorem}[\lean{not\_hasMainTerm\_X3}, \lean{not\_hasPeriodicAsymptotics\_X3}]\label{thm:x3}
+$X_3$ satisfies neither the main-term reading nor the literal reading~\eqref{eq:literal}.
+\end{theorem}
+
+\begin{proof}
+Main term: take $\varepsilon=\frac12$ and apply Proposition~\ref{prop:core}. Literal: given $\lambda>0$,
+$C$ and $T$, choose $N$ with $2^{-N}<1/(2(|C|+1))$. For $t_1,t_2\ge\max(T,N)$ we get
+$C\,2^{-\min(t_1,t_2)}\le(|C|+1)2^{-N}\le\frac12$. Then \eqref{eq:literal} implies the bound of
+Proposition~\ref{prop:core} with threshold $\max(T,N)$, which is impossible.
+\end{proof}
+
+Equivalently, along an infinite family of periods (\lean{X3\_violates\_periodicAsymptotics},
+\lean{X3\_violates\_mainTerm}): for every $\lambda>0$, every $C$ and every $T$ there are
+$t_1,t_2\ge\max(T,1)$ with
+$|P_{X_3}(t_1,t_2)-\lambda^{t_1t_2}|>C\,2^{-\min(t_1,t_2)}\lambda^{t_1t_2}$. For every $\lambda>0$ and $T$
+there are $t_1,t_2\ge\max(T,1)$ with $|P_{X_3}(t_1,t_2)/\lambda^{t_1t_2}-1|>\frac12$.
+
+\begin{theorem}[\lean{conjecture\_00000001273\_false}, \lean{conjecture\_00000001273\_mainTerm\_false},
+\lean{conjecture\_00000001273\_disproved}]
+Both readings of Conjecture 00000001273 are false. $X_3$ is a nonempty mixing $\Z^2$ SFT over the
+alphabet $\{0,1,2\}$, with finitely many periodic points of each period. It admits no $\lambda>0$
+satisfying \eqref{eq:literal}, nor any $\lambda>0$ with $P_{X_3}(t_1,t_2)/\lambda^{t_1t_2}\to1$.
+\end{theorem}
+
+\begin{remark}
+The obstruction is that the ``main term'' cannot be of the form $\lambda^{t_1t_2}$. For fixed $t_1$ the
+count grows like $c(t_1)^{t_2}$ in $t_2$, and $c(t_1)^{1/t_1}=(2^{t_1}+2(-1)^{t_1})^{1/t_1}$ is not
+constant in $t_1$. The entropy of $X_3$ is $\log 2$, but $\lambda=2$ fails like every other $\lambda$:
+for even $t_1$, $P/2^{t_1t_2}=(1+2^{1-t_1})^{t_2}\to\infty$ as $t_2\to\infty$.
+\end{remark}
+
+\section{Lean 4 formalization}
+
+The directory \texttt{lean/} is a Lean~4 project (Lean \texttt{v4.33.1}, Mathlib \texttt{v4.33.1};
+package \texttt{conjecture1273}, library \texttt{Conjecture1273}). \texttt{Conjecture1273.lean}
+imports the single source file \texttt{Conjecture1273/Basic.lean}, namespace \texttt{Conjecture1273}.
+
+\paragraph{Definitions.}
+\begin{itemize}[nosep]
+\item \lean{Config n := Int x Int -> Fin n}; \lean{shift v x := fun u => x (u + v)}.
+\item \lean{Pattern n}: \lean{support : Finset (Int x Int)}, \lean{val : Int x Int -> Fin n};
+      \lean{Occurs x p v := forall u in p.support, x (v + u) = p.val u}.
+\item \lean{IsSFT X := exists forbidden : List (Pattern n), X = \{x | forall p in forbidden,
+      forall v, not Occurs x p v\}}.
+\item \lean{supNorm v := max |v.1| |v.2|} (as \lean{natAbs}); \lean{IsMixing X}: for all patterns
+      \lean{p q} occurring in \lean{X} at \lean{0} there is \lean{N : Nat} such that every \lean{v} with
+      \lean{N <= supNorm v} has some \lean{z in X} with \lean{Occurs z p 0} and \lean{Occurs z q v}.
+\item \lean{perPts X t1 t2 := \{x | x in X /\textbackslash{} shift (t1,0) x = x /\textbackslash{}
+      shift (0,t2) x = x\}}; \lean{perCount X t1 t2 := (perPts X t1 t2).ncard}.
+\item \lean{HasPeriodicAsymptotics X}, \lean{HasMainTerm X}, \lean{Conjecture},
+      \lean{ConjectureMainTerm} as in Section~2, with \lean{lam : Real}, \lean{0 < lam},
+      $2^{-\min}$ written \lean{(1/2 : Real) \^{} min t1 t2}, and the quantifier
+      \lean{forall t1 t2, 1 <= t1 -> 1 <= t2 -> T <= t1 -> T <= t2 -> ...}.
+\end{itemize}
+
+\paragraph{Main theorem.} \lean{conjecture\_00000001273\_false} states the literal conjecture in
+full and negates it:
+\begin{align*}
+\neg\ \forall n\ (X\subseteq \mathtt{Config}\ n),\ & X\neq\emptyset\to\mathtt{IsSFT}\,X\to
+\mathtt{IsMixing}\,X\to \exists\lambda>0,\ \exists C,\ \exists T,\\
+&\forall t_1\,t_2,\ 1\le t_1\to1\le t_2\to T\le t_1\to T\le t_2\to\\
+&\bigl|\mathtt{perCount}\,X\,t_1\,t_2-\lambda^{t_1t_2}\bigr|\le C\cdot(1/2)^{\min(t_1,t_2)}\cdot
+\lambda^{t_1t_2}.
+\end{align*}
+Its proof is \lean{not\_hasPeriodicAsymptotics\_X3 (h 3 X3 X3\_nonempty X3\_isSFT X3\_isMixing)}.
+\lean{conjecture\_00000001273\_mainTerm\_false} does the same for the main-term reading, and
+\lean{conjecture\_00000001273\_disproved : not Conjecture /\textbackslash{} not ConjectureMainTerm}
+combines the two.
+
+\paragraph{Other theorems.} \lean{perPts\_finite} (Lemma~\ref{lem:finite}); \lean{X3\_nonempty},
+\lean{X3\_isSFT}, \lean{X3\_isMixing} (with \lean{glue\_mem}, \lean{glue\_eq\_left},
+\lean{glue\_eq\_right}); \lean{perEquiv}, \lean{perCount\_X3}, \lean{pathCount\_succ},
+\lean{pathCount\_formula}, \lean{cycCount\_eq\_sum}, \lean{cycCount\_formula},
+\lean{perCount\_X3\_formula}, \lean{perCount\_X3\_even}; \lean{eq\_of\_pow\_comparable},
+\lean{X3\_no\_half\_bound}, \lean{not\_hasMainTerm\_X3}, \lean{not\_hasPeriodicAsymptotics\_X3},
+\lean{X3\_violates\_periodicAsymptotics}, \lean{X3\_violates\_mainTerm}. \lean{X3\_counterexample} is
+the conjunction: nonempty, SFT, mixing, finitely many periodic points of each period, the count
+formula, and the failure of both readings.
+
+\paragraph{Axiom audit.} There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+\texttt{\#print axioms} for \lean{conjecture\_00000001273\_false},
+\lean{conjecture\_00000001273\_mainTerm\_false}, \lean{conjecture\_00000001273\_disproved} and
+\lean{X3\_counterexample} reports only \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}. The file also elaborates without warnings under
+\texttt{-DwarningAsError=true}. To check:
+\begin{verbatim}
+cd lean
+lake exe cache get
+lake build
+\end{verbatim}
+
+\end{document}

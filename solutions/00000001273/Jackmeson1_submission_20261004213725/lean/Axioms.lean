@@ -1,0 +1,5 @@
+import Conjecture1273
+#print axioms Conjecture1273.conjecture_00000001273_false
+#print axioms Conjecture1273.conjecture_00000001273_mainTerm_false
+#print axioms Conjecture1273.conjecture_00000001273_disproved
+#print axioms Conjecture1273.X3_counterexample
