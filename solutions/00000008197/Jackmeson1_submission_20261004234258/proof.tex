@@ -1,0 +1,169 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000008197\\[2pt]
+\large Symmetry breaking of Weierstrass gap semigroups already happens in genus 2}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000008197 reads:
+
+\begin{quote}
+\emph{Definition:} The gap distribution of computed Weierstrass points: the distribution $\mathrm{wgap}(g)$
+of Weierstrass gap sequences of curves. \emph{Conjecture:} The multiplicity of the gaps (the number of
+symmetric gaps) is at most $g-1$ (a symmetry upper bound); the minimal genus of symmetry breaking of gaps
+(nonsymmetric semigroups) is $g = 3$ (a third-genus breaking); the realization density of semigroups (the
+semigroup distribution of random curves, realizing all numerical semigroups in genus $g$) concentrates on
+symmetric semigroups (a symmetry concentration law), with concentration $1 - 2^{-g}$ (a concentration
+formula); and the realization frequency of nonsymmetric semigroups at large $g$ is $2^{-g} g^c$ up to
+polynomial correction (a nonsymmetric polynomial correction).
+\end{quote}
+
+This is a conjunction of five clauses: (1) the symmetry upper bound, (2) third-genus breaking,
+(3) the symmetry concentration law, (4) the concentration formula $1-2^{-g}$, and (5) the nonsymmetric
+polynomial correction. A Weierstrass gap sequence at a point $P$ of a smooth projective curve of genus $g$
+is the complement of the semigroup $H(P)$ of pole orders at $P$, which is a numerical semigroup of genus $g$.
+The conjecture itself speaks of ``nonsymmetric semigroups'' and of ``realizing all numerical semigroups in
+genus $g$'', so its objects are numerical semigroups.
+
+\begin{itemize}
+  \item \textbf{Main reading.} $\mathrm{wgap}(g)$ ranges over the numerical semigroups of genus $g$ (all of
+  them realized, as the conjecture states). Clause (2) is then false: the least genus of a nonsymmetric
+  numerical semigroup is $2$, witnessed by $\langle 3,4,5\rangle$ (Theorem~\ref{thm:least}).
+  \item \textbf{Weierstrass-point reading.} Only semigroups at Weierstrass points proper are recorded,
+  i.e.\ the non-ordinary ones. Clause (4) is then false at $g=2$: every such semigroup of genus $2$ is
+  the symmetric $\langle 2,5\rangle$, so every distribution gives the symmetric semigroups mass
+  $1 \ne 1 - 2^{-2}$ (Theorem~\ref{thm:conc}).
+\end{itemize}
+In both cases the conjunction is false, whatever the other clauses mean.
+
+\section{Definitions}
+
+We follow Rosales and Garcia-Sanchez, \emph{Numerical Semigroups} (Springer, 2009), Ch.~1 and~3, and the
+Wikipedia page ``Numerical semigroup'' (\url{https://en.wikipedia.org/wiki/Numerical_semigroup}), which says:
+``The number of elements in the set of gaps G(S) is called the genus of S'' and ``A numerical semigroup S is
+symmetric if and only if g(S) = (F(S) + 1)/2.''
+
+\begin{definition}
+A \emph{numerical semigroup} is an additive submonoid $S \subseteq \mathbb{N}$ with finite complement (Lean:
+\texttt{NumericalSemigroup}, fields \texttt{carrier : AddSubmonoid} $\mathbb{N}$ and \texttt{finite\_gaps}).
+Its \emph{gaps} are $G(S) = \mathbb{N}\setminus S$ (\texttt{gaps}). Its \emph{genus} is $g(S) = |G(S)|$
+(\texttt{genus}, via \texttt{Set.ncard}). Its \emph{Frobenius number} $F(S)$ is the largest gap
+(\texttt{IsFrobenius S F := IsGreatest S.gaps F}).
+\end{definition}
+
+\begin{definition}
+$S$ is \emph{symmetric} (\texttt{IsSymmetric}) if either $S = \mathbb{N}$ (so $F = -1$, and
+$g = (F+1)/2 = 0$), or $F(S) - x \in S$ for every gap $x$ (Rosales and Garcia-Sanchez, Cor.~4.5: $S$ is
+symmetric iff $x \in \mathbb{Z}\setminus S$ implies $F(S) - x \in S$; for $x<0$ this is automatic).
+\end{definition}
+
+\begin{definition}
+The \emph{ordinary} semigroup of genus $g$ has gaps $\{1, \dots, g\}$ (\texttt{IsOrdinary}). The Wikipedia
+page ``Weierstrass point'' (\url{https://en.wikipedia.org/wiki/Weierstrass_point}) states:
+``The gap sequence is $1, 2, \dots, g$ for a non-Weierstrass point. For a Weierstrass point it contains at
+least one higher number.'' It also states: ``Multiplication of functions gives the non-gaps a numerical
+semigroup structure''. So the semigroups that occur at Weierstrass points of genus-$g$ curves are
+non-ordinary numerical semigroups of genus $g$ (\texttt{WeierstrassType g}).
+\end{definition}
+
+\section{Clause (2): third-genus breaking fails}
+
+\begin{lemma}[\texttt{S345\_gaps}, \texttt{S345\_genus}, \texttt{S345\_not\_symmetric}]
+$S_{345} = \langle 3,4,5\rangle = \{0\} \cup \{3,4,5,\dots\}$ is a numerical semigroup with gaps $\{1,2\}$,
+genus $2$ and Frobenius number $2$. It is not symmetric: the gap $x=1$ has $F - x = 1 \notin S$.
+Equivalently (\texttt{S345\_genus\_ne}), $2g = 4 \ne 3 = F+1$.
+\end{lemma}
+\begin{proof}
+A sum of two elements of $\{0\}\cup[3,\infty)$ is $0$ or at least $3$. The rest is direct.
+\end{proof}
+
+$S_{345}$ is the ordinary semigroup of genus $2$ (\texttt{S345\_isOrdinary}). It is the semigroup at every
+non-Weierstrass point of every curve of genus $2$, so it is realized.
+
+\begin{lemma}[\texttt{one\_mem\_gaps}, \texttt{isSymmetric\_of\_genus\_lt\_two}]
+If $g(S) \ge 1$ then $1$ is a gap. Every numerical semigroup of genus $0$ or $1$ is symmetric.
+\end{lemma}
+\begin{proof}
+If $1\in S$ then every $n = n\cdot 1 \in S$ and $g=0$. Genus $0$ means $S = \mathbb{N}$. Genus $1$ means
+$G(S)=\{1\}$, so $F=1$, and $F - 1 = 0 \in S$.
+\end{proof}
+
+\begin{theorem}[\texttt{least\_nonsymmetric\_genus}, \texttt{not\_thirdGenusBreaking}]\label{thm:least}
+The least genus of a nonsymmetric numerical semigroup is $2$:
+\texttt{IsLeast nonsymmetricGenera 2}. Hence \texttt{ThirdGenusBreaking}
+(\texttt{IsLeast nonsymmetricGenera 3}) is false.
+\end{theorem}
+
+\section{Clause (4) at genus 2 under the Weierstrass-point reading}
+
+\begin{lemma}[\texttt{gaps\_of\_genus\_two}]
+Every numerical semigroup of genus $2$ has gap set $\{1,2\}$ or $\{1,3\}$.
+\end{lemma}
+\begin{proof}
+$1$ is a gap. If $2$ and $3$ were both in $S$, then every $n\ge 2$ would be in $S$ (induction
+$n \mapsto n+2$, \texttt{mem\_of\_two\_three}), so $G(S)\subseteq\{1\}$ and $g\le 1$. Hence $\{1,2\}$ or
+$\{1,3\}$ is contained in $G(S)$, and both sides have two elements.
+\end{proof}
+
+\begin{theorem}[\texttt{isSymmetric\_of\_weierstrassType\_two}, \texttt{symmetric\_mass\_eq\_one},
+\texttt{no\_distribution\_with\_concentration\_formula}]\label{thm:conc}
+Every non-ordinary numerical semigroup of genus $2$ has gaps $\{1,3\}$, i.e.\ it is $\langle 2,5\rangle$,
+and it is symmetric ($F = 3$, with $3-1 = 2 \in S$ and $3-3 = 0\in S$). Consequently, for every probability
+mass function $\mu$ on \texttt{WeierstrassType 2}, the symmetric semigroups have mass $1$. Hence there is no
+distribution with symmetric mass $1 - 2^{-2} = 3/4$: \texttt{ConcentrationFormula 2} is false. The type is
+nonempty (\texttt{S25\_weierstrass}), so this is not vacuous.
+\end{theorem}
+
+\begin{remark}[Checks and other readings]
+A Python enumeration of all numerical semigroups of genus $\le 8$ reproduces the counts
+$1,1,2,4,7,12,23,39,67$ (OEIS A007323). It confirms that the least nonsymmetric genus is $2$. It also shows
+that the symmetric share under the uniform distribution ($1, 1/2, 1/2, 3/7, \dots$ for $g = 1,2,3,4$) is
+never $1-2^{-g}$ for $1 \le g \le 8$. Clause (1) uses the undefined notion ``number of symmetric gaps'' and
+plays no role here.
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture8197/Basic.lean} (Lean 4.33.1, Mathlib v4.33.1; only \texttt{import Mathlib}).
+The main theorem is
+\begin{quote}
+\texttt{theorem conjecture\_00000008197\_false (P Q : Prop) :}\\
+\quad $\neg(\texttt{ThirdGenusBreaking} \wedge P) \;\wedge\; \neg(\texttt{ConcentrationFormula 2} \wedge Q)
+\;\wedge$\\
+\quad $(\texttt{S345.genus} = 2 \wedge \neg\,\texttt{S345.IsSymmetric}) \;\wedge\;
+\texttt{IsLeast nonsymmetricGenera 2} \;\wedge$\\
+\quad $\texttt{Nonempty (WeierstrassType 2)} \;\wedge$\\
+\quad $(\forall \mu : \texttt{PMF (WeierstrassType 2)},\ \mu.\texttt{toOuterMeasure}
+\{S \mid S.1.\texttt{IsSymmetric}\} = 1)$
+\end{quote}
+where \texttt{ConcentrationFormula g} is
+$\exists \mu : \texttt{PMF (WeierstrassType g)},\ \mu.\texttt{toOuterMeasure}\{S \mid
+S.1.\texttt{IsSymmetric}\} = 1 - (2^{-1})^{g}$. The propositions $P$ and $Q$ stand for any formalization of
+the remaining clauses.
+
+\paragraph{Axiom audit.} \verb|#print axioms Conjecture8197.conjecture_00000008197_false| reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no
+\texttt{native\_decide}, and the file also compiles with \texttt{-DwarningAsError=true}.
+
+\end{document}
