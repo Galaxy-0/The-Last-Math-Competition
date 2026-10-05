@@ -1,0 +1,176 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\title{Conjecture 00000007864 is false:\\ the men-optimal stable matching is exactly uniform,\\ so the entropy deficit constant is $1$, not $\pi^2/6$}
+\author{Jackmeson1}
+\date{}
+\begin{document}
+\maketitle
+
+\section{The conjecture and the reading}
+
+\textbf{Statement (English text of the conjecture).} ``The spousal distribution concentration of random stable
+matching: the entropy $H(\sigma_m)$ of the men-optimal matching under uniform $n$ by $n$ preferences (the
+Gale-Shapley expected stable outcome). Conjecture: $H(\sigma_m) = n\log n - \Theta(n)$ (a linear entropy deficit)
+with deficit constant $c^* = \pi^2/6$, given by the eigenvalue distribution of a Hankel matrix and a Kotochyk-type
+integral; and the longest increasing subsequence of $\sigma_m$ has length $2\sqrt n + O(n^{1/6})$ with
+Tracy-Widom fluctuations, [...]'' The Chinese text states the same: the deficit constant is $c^*=\pi^2/6$.
+
+\textbf{Reading.} There are $n$ men and $n$ women, both indexed by $\{0,\dots,n-1\}$. Every person has a strict
+preference list over the other side; all $2n$ lists are independent and uniformly distributed over the $n!$
+orderings, i.e.\ the profile is uniform over all $(n!)^{2n}$ profiles. $\sigma_m$ is the men-optimal stable
+matching, $H(\sigma_m)$ is the Shannon entropy (natural logarithm) of the law of $\sigma_m$, and the deficit is
+$D_n = n\log n - H(\sigma_m)$. The refuted clause is ``deficit constant $c^*=\pi^2/6$'', read as
+$D_n/n \to \pi^2/6$. We prove $D_n/n \le 1 < \pi^2/6$ for every $n\ge 1$ and $D_n/n\to 1$; so the limit, limsup,
+liminf and asymptotic-equivalence ($D_n\sim c^* n$) readings of the deficit constant all fail. With base-$2$
+logarithms throughout, $D_n/n \to 1/\ln 2\approx 1.4427$, again not $\pi^2/6$.
+
+\textbf{What is not refuted.} The linear-deficit statement $D_n=\Theta(n)$ is true (it follows from our bounds).
+The clause on the longest increasing subsequence is not addressed. The conjecture is refuted as a conjunction,
+through its clause $c^*=\pi^2/6$.
+
+\textbf{Conventions.} A preference list is encoded as a rank bijection, rank $0$ being the most preferred; rank
+bijections correspond one-to-one to strict total orders, so the uniform law on rank bijections is the uniform law
+on preference lists. Matchings are bijections from men to women. $\log$ is the natural logarithm and
+$0\log 0=0$ (Mathlib's \texttt{Real.negMulLog}).
+
+\section{Definitions (as in the Lean file)}
+
+\begin{definition}
+A \emph{profile} $P=(r,s)$ consists of rank bijections $r_m:\{\text{women}\}\to\{0,\dots,n-1\}$ for each man $m$
+and $s_w:\{\text{men}\}\to\{0,\dots,n-1\}$ for each woman $w$ (\texttt{Profile n}). A \emph{matching} is a
+permutation $\mu$: man $m$ is married to woman $\mu(m)$ (\texttt{Matching n}). The pair $(m,w)$ \emph{blocks}
+$\mu$ if $r_m(w)<r_m(\mu(m))$ and $s_w(m)<s_w(\mu^{-1}(w))$ (\texttt{Blocks}); $\mu$ is \emph{stable} if no pair
+blocks it (\texttt{IsStable}); $\mu$ is \emph{men-optimal} if it is stable and $r_m(\mu(m))\le r_m(\nu(m))$ for
+every stable $\nu$ and every man $m$ (\texttt{IsMenOptimal}).
+\end{definition}
+
+This is the textbook notion: a matching is stable ``when there does not exist any pair (A, B) where both prefer
+each other to their current partner under the matching'' [W].
+
+\begin{definition}
+The law of $\sigma_m$ is the push-forward of the uniform distribution on profiles under the men-optimal map:
+\texttt{lawMenOpt n = (PMF.uniformOfFintype (Profile n)).map menOpt}. The entropy of a distribution $p$ on a
+finite set is $H(p)=\sum_a -p(a)\log p(a)$ (\texttt{entropy}); \texttt{deficit n} $= n\log n - H(\texttt{lawMenOpt n})$.
+\end{definition}
+
+\section{Gale-Shapley: existence and uniqueness}
+
+Gale and Shapley showed that stable matchings always exist, and the men-proposing algorithm ``always yields the
+one that is best for all men among all stable matchings'' [W]. We re-prove this in Lean.
+
+\begin{theorem}[\texttt{exists\_menOptimal}, \texttt{menOptimal\_unique}]
+Every profile has exactly one men-optimal stable matching.
+\end{theorem}
+
+\begin{proof}
+For a set $R$ of pairs (``$w$ has rejected $m$''), say $m$ \emph{proposes} to $w$ if $(m,w)\notin R$ and every
+woman $m$ ranks above $w$ has rejected him. The invariant $\mathrm{Inv}(R)$ says: (1) no pair of $R$ is married in
+any stable matching; (2) if $(m,w)\in R$ then some $m'$ proposes to $w$ and $s_w(m')<s_w(m)$. The empty set
+satisfies it. Take $R$ satisfying $\mathrm{Inv}$ of maximal size. Every man proposes to someone: otherwise every
+woman holds a proposal from a man other than $m$, and these men are distinct (a man proposes to one woman), so
+$n$ women would be covered by $n-1$ men. Let $p(m)$ be $m$'s proposal. If $p$ is injective it is a matching. It is
+stable: if $(m,w)$ blocked it, $w$ would have rejected $m$, so by (2) she holds a proposal $p(m')=w$ with
+$s_w(m')<s_w(m)$, i.e.\ she prefers her husband. It is men-optimal: if $r_m(\nu(m))<r_m(p(m))$ then
+$(m,\nu(m))\in R$, so $\nu$ is not stable by (1). If $p$ is not injective, two men $l\ne b$ propose to the same $w$,
+and $w$ prefers $b$. Then $R\cup\{(l,w)\}$ still satisfies $\mathrm{Inv}$: for (1), if a stable $\nu$ had
+$\nu(l)=w$, then $\nu(b)\ne w$, $(b,\nu(b))\notin R$ by (1), so $b$ ranks $w$ strictly above $\nu(b)$, and $w$
+prefers $b$ to $l=\nu^{-1}(w)$: $(b,w)$ blocks $\nu$. For (2), every proposal other than $l$'s is unchanged, and
+$b$ witnesses the new pair and any old pair whose witness was $l$ (transitivity). This contradicts maximality.
+Uniqueness: two men-optimal matchings give every man partners of equal rank, hence the same partner.
+\end{proof}
+
+\section{Exact uniformity of $\sigma_m$}
+
+For a permutation $\tau$ of the women let $\tau\cdot P$ rename woman $w$ as $\tau(w)$: man $m$ ranks $\tau(w)$ as he
+ranked $w$, and woman $\tau(w)$ gets $w$'s list (\texttt{relabel}).
+
+\begin{lemma}[\texttt{blocks\_relabel}, \texttt{stable\_relabel}, \texttt{menOpt\_relabel}]
+$(m,w)$ blocks $\tau\circ\mu$ under $\tau\cdot P$ iff $(m,\tau^{-1}w)$ blocks $\mu$ under $P$. Hence $\tau\circ\mu$
+is stable for $\tau\cdot P$ iff $\mu$ is stable for $P$, and $\sigma_m(\tau\cdot P)=\tau\circ\sigma_m(P)$.
+\end{lemma}
+
+\begin{theorem}[\texttt{law\_menOpt\_eq\_uniform}]
+Under uniform independent preferences, $\sigma_m$ is uniformly distributed on $S_n$.
+\end{theorem}
+
+\begin{proof}
+$P\mapsto\tau\cdot P$ is a bijection of the profiles with inverse $P\mapsto\tau^{-1}\cdot P$
+(\texttt{relabel\_relabel}), and it maps the fibre $\{P:\sigma_m(P)=\sigma\}$ onto the fibre of $\tau\circ\sigma$
+(\texttt{card\_fiber\_trans}). Taking $\tau=\sigma'\circ\sigma^{-1}$, all $n!$ fibres have the same size, so each has
+$(n!)^{2n}/n!$ elements (\texttt{card\_fiber\_mul}) and probability $1/n!$ (\texttt{lawMenOpt\_toReal}).
+\end{proof}
+
+\section{Entropy and the deficit}
+
+\begin{theorem}[\texttt{entropy\_menOpt}, \texttt{deficit\_eq}]
+$H(\sigma_m)=\log n!$ and $D_n=n\log n-\log n!$.
+\end{theorem}
+
+\begin{theorem}[\texttt{deficit\_le}, \texttt{deficit\_ge}]
+$D_n\le n$ for all $n$, and $D_n\ge n-1-\tfrac12\log n$ for $n\ge 1$.
+\end{theorem}
+
+\begin{proof}
+Upper bound: $n^n/n!\le e^n$ (Mathlib \texttt{Real.pow\_div\_factorial\_le\_exp}); take logarithms. Lower bound:
+Mathlib's Stirling sequence $s_k=k!/(\sqrt{2k}(k/e)^k)$ is antitone for $k\ge1$ (\texttt{Stirling.stirlingSeq'\_antitone}),
+so $s_n\le s_1=e/\sqrt2$. With \texttt{Stirling.log\_stirlingSeq\_formula},
+$\log n! = \log s_n+\tfrac12\log(2n)+n\log n-n\le 1+\tfrac12\log n+n\log n-n$.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_7864\_false}]
+For every $n\ge1$, $D_n/n\le 1<\pi^2/6$; moreover $D_n/n\to1$, and $D_n/n$ does not tend to $\pi^2/6$.
+\end{theorem}
+
+\begin{proof}
+The first claim is \texttt{deficit\_le} with $\pi>3$. The squeeze $1-\frac1n-\frac{\log n}{2n}\le D_n/n\le1$ and
+$\log n/n\to0$ give $D_n/n\to1$ (\texttt{deficit\_div\_tendsto}); limits are unique and $1\ne\pi^2/6$.
+\end{proof}
+
+\begin{corollary}[\texttt{bits\_version}]
+With base-$2$ logarithms in both $n\log n$ and the entropy, the normalised deficit tends to $1/\ln 2$, which is not
+$\pi^2/6$ (using $\ln 2>0.6931$ and $\pi>3.14$).
+\end{corollary}
+
+\begin{remark}
+(Not formalised.) If $H(\sigma_m)$ were read as the sum over men of the entropies of their wives' marginal laws,
+uniformity gives marginals uniform on $n$ women, so this sum is $n\log n$ and the deficit is $0$, which is not
+$\Theta(n)$ either.
+\end{remark}
+
+\section{Lean formalisation and axiom audit}
+
+File \texttt{Conjecture7864/Basic.lean} (390 lines, only import \texttt{Mathlib}, Lean 4.33.1 with the Mathlib
+\texttt{v4.33.1} tag). Main theorem:
+\begin{verbatim}
+theorem conjecture_7864_false :
+    (forall n : Nat, 1 <= n ->
+        deficit n / n <= 1 /\ deficit n / n < Real.pi ^ 2 / 6) /\
+    Tendsto (fun n : Nat => deficit n / n) atTop (nhds 1) /\
+    not Tendsto (fun n : Nat => deficit n / n) atTop (nhds (Real.pi ^ 2 / 6))
+\end{verbatim}
+(shown in ASCII; the file uses the usual Unicode symbols). \texttt{\#print axioms} for
+\texttt{conjecture\_7864\_false}, \texttt{bits\_version} and \texttt{law\_menOpt\_eq\_uniform} reports only
+\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}. There is no \texttt{sorry} and no
+\texttt{native\_decide}.
+
+\section*{Source}
+[W] Wikipedia, ``Stable matching problem'', \url{https://en.wikipedia.org/wiki/Stable_matching_problem}. Quoted:
+``In 1962, David Gale and Lloyd Shapley proved that, for any equal number in different groups, in the context of
+college admissions and individuals wanting marriage it is always possible to solve as matched couples to make all
+resultant pairings / matched factors stable.'' ``Among all possible different stable matchings, it always yields
+the one that is best for all men among all stable matchings, and worst for all women.'' ``In other words, a
+matching is stable when there does not exist any pair (A, B) where both prefer each other to their current partner
+under the matching.''
+
+\end{document}
