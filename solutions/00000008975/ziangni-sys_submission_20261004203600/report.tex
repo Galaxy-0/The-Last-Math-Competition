@@ -1,0 +1,97 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\setlength{\emergencystretch}{2em}
+\title{Disproof of conjecture 00000008975}
+\author{ziangni-sys}
+\date{}
+\begin{document}
+\maketitle
+\noindent\textbf{The clause disproved.}
+Both source versions assert that polynomial solutions of the boundary reflection equation have order at most two. Under its literal polynomial-degree meaning this is false, even for a normalized, primitive, non-scalar polynomial matrix. The source specifies neither a particular nonconstant $R$-matrix nor a restriction excluding constant Yang--Baxter solutions. We use the standard invertible tensor flip as a constant $R$-matrix. No conclusion about the separate, unspecified $G/H$ family-count formula is needed.
+
+\medskip
+\noindent\textbf{A genuine Yang--Baxter matrix.}
+Let $V=\mathbb R^2$ with basis $e_0,e_1$. On $V\otimes V$ define
+\[
+ P(e_a\otimes e_b)=e_b\otimes e_a,\qquad R(w)=P
+ \quad(w\in\mathbb R).
+\]
+The actual $4\times4$ matrix has entries
+$P_{(a,b),(c,d)}=1$ when $(c,d)=(b,a)$ and zero otherwise.
+Thus $P^2=I$, so $R$ is invertible for every parameter.
+The tensor legs $P_{12},P_{13},P_{23}$ on $V^{\otimes3}$ swap the indicated coordinates. Applying both sides to any elementary tensor gives
+\[
+ P_{12}P_{13}P_{23}(e_a\otimes e_b\otimes e_c)
+ =e_c\otimes e_b\otimes e_a
+ =P_{23}P_{13}P_{12}(e_a\otimes e_b\otimes e_c).
+\]
+Hence $R$ satisfies the parameter-dependent Yang--Baxter equation, since all its parameter values are this same flip. Also
+$R_{21}(w)=P R(w)P=P$.
+
+\medskip
+\noindent\textbf{The polynomial boundary matrix.}
+Take
+\[
+ K(u)=\begin{pmatrix}1&0\\0&1+u^3\end{pmatrix},
+ \qquad
+ K_1(u)=K(u)\otimes I_2,\quad K_2(u)=I_2\otimes K(u).
+\]
+These are actual tensor-product matrices. The boundary reflection equation is
+\[
+ R(u-v)K_1(u)R_{21}(u+v)K_2(v)
+ =
+ K_2(v)R(u+v)K_1(u)R_{21}(u-v).
+\]
+Conjugating a first-leg matrix by the flip gives
+$P K_1(u)P=K_2(u)$. The second-leg matrices are diagonal and commute for every $u,v$. Therefore the two sides are respectively
+\[
+ K_2(u)K_2(v)\quad\text{and}\quad K_2(v)K_2(u),
+\]
+and are equal for \emph{all} real spectral parameters. Thus this is a genuine polynomial solution of the full reflection equation, not just a scalar equation or a certificate assumed to hold.
+
+\medskip
+\noindent\textbf{Normalization and nondegeneracy.}
+We have $K(0)=I_2$ and
+\[
+ \det K(u)=1+u^3=(u+1)(u^2-u+1).
+\]
+Since $u^2-u+1=(u-\tfrac12)^2+\tfrac34>0$, $K(u)$ is invertible for every real $u\ne-1$. In particular the polynomial determinant is nonzero. At $u=1$, the two diagonal entries are $1$ and $2$, so $K$ is not a scalar matrix function.
+
+\newpage
+\noindent\textbf{Actual degree and primitiveness.}
+The matrix-valued polynomial is
+\[
+ \mathcal K(X)=\begin{pmatrix}1&0\\0&1+X^3\end{pmatrix}.
+\]
+Evaluating every entry at $u$ gives precisely $K(u)$.
+Its degree, the maximum degree of its nonzero entries, is exactly three:
+the lower-right entry has degree three and all other entries have degree at most three. Hence its order is not at most two.
+
+There is no common nonconstant polynomial factor to remove, since the upper-left entry is the constant one. More formally, any polynomial dividing all four entries divides one and is therefore a unit. This also precludes repairing the example by cancelling a scalar polynomial prefactor. If multiplication by arbitrary rational scalar functions is considered, any resulting polynomial matrix has that scalar as its first entry; its degree-three eigenvalue ratio remains unchanged, so there is still no polynomial representative of degree at most two.
+
+\medskip
+\noindent\textbf{Scope of the counterexample.}
+The construction targets the unqualified degree bound as written. Classifications for a specified spectral $R$-matrix, restrictions to a fixed quantum symmetric pair, or assumptions excluding constant flip solutions would be different statements. The source supplies no such restrictions. The example already satisfies regular normalization, generic invertibility and polynomial primitiveness, so no common scalar-factor issue is responsible for the degree violation. All entries are real; the same equations also hold after extending scalars to $\mathbb C$.
+
+\medskip
+\noindent\textbf{Formal correspondence.}
+The Lean project defines the two-dimensional index space, its actual pair and triple tensor coordinates, and the actual flip permutation matrix via Mathlib's partial-equivalence matrix construction. It proves $R^2=I$. The tensor lifts of $K$ are actual Mathlib Kronecker products. Their diagonal descriptions and the exact flip conjugation identity prove the reflection equation for every pair of parameters.
+
+The Yang--Baxter matrices are the actual eight-dimensional coordinate-permutation matrices. A general permutation-matrix multiplication identity reduces their products to composition of the three tensor-leg swaps, proving the full matrix equality. Thus the flip is supplied with an actual Yang--Baxter proof, rather than declared to be an admissible $R$-matrix.
+
+The polynomial matrix uses actual real polynomials. Entrywise polynomial evaluation is proved equal to the parameterized boundary matrix. The development proves its exact degree, normalization, determinant formula, invertibility away from $-1$, lack of a common nonunit polynomial divisor, and failure of scalarity at parameter one. The final theorem combines the universally satisfied reflection equation with degree strictly greater than two.
+
+\medskip
+\noindent\textbf{Reproduction.}
+Run \texttt{lake build} inside the submitted \texttt{lean} directory with Lean 4.19.0. Mathlib is pinned publicly to
+\[
+ \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\]
+Printed axiom audits cover the flip, reflection equation, Yang--Baxter identity, polynomial evaluation, degree and nondegeneracy properties, and final counterexample. Complete LaTeX source and its compiled PDF are included.
+
+\medskip
+\noindent\textbf{Conclusion.}
+The normalized primitive polynomial matrix $\operatorname{diag}(1,1+u^3)$ solves the actual boundary reflection equation for the invertible Yang--Baxter flip and has degree three. This disproves the stated universal order-two bound.
+\end{document}
