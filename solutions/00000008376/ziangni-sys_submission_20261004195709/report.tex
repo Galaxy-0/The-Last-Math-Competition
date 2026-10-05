@@ -1,0 +1,56 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\title{A full symmetric-group stabilizer on a tropical line}
+\author{ziangni-sys \quad Conjecture 00000008376}
+\date{}
+\begin{document}
+\maketitle
+\vspace{-2em}
+\textbf{Disproof of the maximum-stabilizer clause.} The statement asserts that the largest stabilizer for the $S_n$ permutation action on tropical cell structures and point orbits is $S_{n-1}$. The standard tropical hyperplane already has a point fixed by the whole $S_n$. We give the explicit $n=3$ example, including the projective interpretation.
+
+Work in the max-plus tropical semiring
+\[
+\mathbb T=\mathbb R\cup\{-\infty\},\qquad a\oplus b=\max(a,b),\qquad a\odot b=a+b.
+\]
+The genuine tropical polynomial $F=X_0\oplus X_1\oplus X_2$ evaluates, on finite coordinates $x\in\mathbb R^3$, to
+\[
+ h(x)=\max(x_0,x_1,x_2).
+\]
+Its tropical hypersurface is the corner locus
+\[
+ H=\{x:\text{at least two distinct coordinates attain }h(x)\}.
+\]
+For a subset $S\subseteq\{0,1,2\}$, write
+\[
+ C_S=\{x: x_i=h(x)\ \Longleftrightarrow\ i\in S\}.
+\]
+The nonempty $C_S$ with $|S|\ge2$ are precisely the relatively open cells of $H$. In particular,
+\[
+ C_{\{0,1,2\}}=\{(c,c,c):c\in\mathbb R\}.
+\]
+This central cell is nonempty and contains $o=(0,0,0)$.
+
+Define the coordinate action by $(\sigma\cdot x)_i=x_{\sigma^{-1}(i)}$. This is an actual action of $S_3$, and permutation invariance of the maximum gives
+\[
+ h(\sigma\cdot x)=h(x),\qquad \sigma\cdot C_S=C_{\sigma S}.
+\]
+Thus it acts on the tropical hypersurface and its cell structure. For every $\sigma\in S_3$ we have $\sigma\cdot o=o$, so
+\[
+ \operatorname{Stab}_{S_3}(o)=S_3,\qquad
+ |\operatorname{Stab}_{S_3}(o)|=3!=6>2=2!=|S_2|.
+\]
+The central cell also has setwise stabilizer $S_3$. Since every stabilizer is a subgroup of $S_3$, the full group is itself the largest stabilizer in this example, contradicting the proposed $S_{n-1}$ maximum. In particular it is not merely a differently embedded copy of $S_2$; the groups have different orders.
+
+\textbf{Projective version.} Tropical projective coordinates identify $x$ with $x+c(1,1,1)$. The identity
+\[
+ h(x+c(1,1,1))=h(x)+c
+\]
+shows that $H$ descends to this quotient, and the permutation action respects the equivalence relation. The central cell projects to the single point $[o]$, the central vertex of the standard tropical line. All six permutations fix $[o]$, whose actual projective stabilizer again has order six. The vector $o$ has three finite tropical coordinates; it is not the excluded tropical zero vector $(-\infty,-\infty,-\infty)$.
+
+\textbf{Scope and verification.} Both language versions make the largest-stabilizer assertion without excluding central cells, fixed points, or lower-dimensional cells. This disproof uses that unrestricted clause. It makes no assertion about a variant restricted to noncentral or maximal-dimensional cells, nor about the separate McKay-graph, orbit-count, or Young-subgroup clauses.
+
+The Lean project defines $F$ as an actual \texttt{MvPolynomial} over Mathlib's tropical semiring, proves its maximum evaluation, the complete corner-locus/cell description, permutation and translation invariance, and uses actual \texttt{MulAction.stabilizer} subgroups. It also constructs the quotient by common translations and its group action, proves that the central cell projects to a singleton, and computes both stabilizer cardinalities. All audited conclusions use only standard logical axioms. Reproduction instructions and pinned versions accompany the source and PDF.
+\end{document}
