@@ -1,0 +1,131 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\title{Conjecture 00000001025 is false:\\ the extended binary QR code of length 24 is a second exception}
+\author{Jackmeson1}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+
+\section*{Statement}
+\textbf{Conjecture 00000001025.} \emph{The only exception to the statement that the automorphism group of the
+extended $q$-ary quadratic-residue code is a semidirect product of $\mathrm{PSL}(2,q)$ with commutative automorphisms
+is $q = 7$ (a classification of QR-code automorphism groups).}
+
+\textbf{Verdict.} False. For $q = 23$ (the binary extended quadratic-residue code of length $24$) the automorphism
+group is not a semidirect product, in either order, of $\mathrm{PSL}(2,23)$ with a commutative group.
+
+\section*{Reading}
+The statement uses the letter $q$ both for the alphabet (``$q$-ary'') and in $\mathrm{PSL}(2,q)$, which acts on the
+$p+1$ coordinates of an extended QR code of prime length $p$. We refute two readings.
+\begin{itemize}
+\item \textbf{(R1)} $q$ is the prime length parameter: for $q = 23$ and the binary code (2 is a square mod 23), the
+automorphism group should be $\mathrm{PSL}(2,23)\rtimes A$ or $A\rtimes\mathrm{PSL}(2,23)$ with $A$ commutative.
+\item \textbf{(R2)} $q$ is the alphabet size: the same binary code ($q = 2 \ne 7$) should have group
+$\mathrm{PSL}(2,2)\rtimes A$ or $A\rtimes \mathrm{PSL}(2,2)$.
+\end{itemize}
+In both readings $A$ is an arbitrary commutative group (so ``commutative automorphisms'' of any kind are covered),
+and the semidirect product may have either factor normal. The automorphism group of a binary code $C\subseteq
+\mathbb{F}_2^{24}$ is the group of coordinate permutations $\sigma$ with $\sigma(C) = C$; for binary codes this
+equals the monomial automorphism group (the only nonzero scalar is 1) and there are no nontrivial field automorphisms of
+$\mathbb{F}_2$. Readings that use a different notion of ``automorphism group'' are not covered.
+
+\section*{The code}
+Coordinates are $\mathbb{Z}/23 \cup \{\infty\}$ (in Lean: \texttt{Fin 24}, with $23$ standing for $\infty$). Let $N$
+be the set of quadratic non-residues mod $23$ (the non-squares of $\mathbb{Z}/23$). For $t\in\mathbb{Z}/23$ let
+$S_t = (t+N)\cup\{\infty\}$, and let
+\[ W = \operatorname{span}_{\mathbb{F}_2}\bigl(\{\,\mathbf 1_{S_t} : t \in \mathbb{Z}/23\,\} \cup \{\mathbf 1\}\bigr). \]
+This is the construction quoted from Wikipedia (Binary Golay code): ``Consider the set N of quadratic non-residues
+(mod 23) ... Augment each translate to a 12-element set $S_t$ by adding an element $\infty$ ... W can be defined as the
+span of the words $S_t$ together with the word consisting of all basis vectors'', and ``the extended binary Golay code
+G24 consists of a 12-dimensional linear subspace W''. Wikipedia (Quadratic residue code) lists ``the (23,12) binary
+Golay code'' among the quadratic residue codes, defines the QR code of length $p$ over $GF(l)$ by the generator
+polynomial $\prod_{j\in Q}(x-\zeta^j)$, and says that ``adding an overall parity-check digit to a quadratic residue
+code gives an extended quadratic residue code''. The accompanying Python check (\texttt{check()} in the attempt file)
+builds $GF(2^{11})$, computes this generator polynomial for $p = 23$, appends the parity bit, and verifies that the
+resulting $4096$-word code is \emph{equal} to $W$. This identification is checked in Python only; the Lean file works
+with the $S_t$ description above.
+
+\section*{Proof}
+\begin{lemma}[\texttt{card\_aut\_ge}]
+$|\mathrm{Aut}(W)| \ge 24\cdot 23\cdot 22\cdot 21\cdot 20\cdot 16 = 81\,607\,680$.
+\end{lemma}
+\begin{proof}
+A systematic basis $B_0,\dots,B_{11}$ of $W$ on coordinates $0,\dots,11$ is given as bit masks; the kernel checks
+that every $S_t$ and $\mathbf 1$ equals the combination of the $B_k$ with its own coordinates $0..11$ as
+coefficients, and that each $B_k$ is an explicit combination of the $S_t$ and $\mathbf 1$ (\texttt{W\_eq}). Hence a
+permutation $\sigma$ with $B_k\circ\sigma = \sum_j (B_k\circ\sigma)(j)B_j$ for all $k$ maps $W$ into $W$, and, $W$ being
+finite, onto $W$ (\texttt{mem\_aut}). Eleven explicit permutations (among them $x\mapsto x+1$ and
+$x\mapsto -1/x$; the others were found by computer in the pointwise stabilizers) are certified this way
+(\texttt{gens\_mem}). Let $K_0 = \mathrm{Aut}(W)$ and let $K_{i+1}$ be the stabilizer in $K_i$ of the base point
+$a_i$, with $(a_0,\dots,a_5) = (\infty,0,1,2,3,4)$. For each $i$, the certified permutations fixing $a_0,\dots,a_{i-1}$
+move $a_i$, by explicit words, to $24, 23, 22, 21, 20, 16$ distinct points respectively. If $T$ is a set of points
+reachable from $a$ in $K$, then $(b,s)\mapsto g_b s$ is injective from $T\times K_a$ to $K$, so $|T|\,|K_a|\le |K|$
+(\texttt{card\_le\_of\_orbit}, \texttt{card\_le\_of\_words}). Chaining six steps gives the bound.
+\end{proof}
+(Consistently with this, Wikipedia (Mathieu group M24) states that $M_{24}$, of order $244{,}823{,}040$, is the
+permutation automorphism group of $W$; the proof uses only the lower bound.)
+
+\begin{lemma}[\texttt{abelian\_bound}, \texttt{card\_comm\_le}]
+A commutative group $A$ of permutations of $24$ points has $|A|\le 3^8 = 6561$.
+\end{lemma}
+\begin{proof}
+By strong induction on the size of a set $T$ outside which $A$ acts trivially: we show $|A|^3\le 3^{|T|}$. Pick
+$x\in T$, let $O = Ax\subseteq T$ and $A_x$ the stabilizer. Since $A$ is commutative, $A_x$ fixes $O$ pointwise, so
+$A_x$ acts trivially outside $T\setminus O$. The map $h\mapsto (hx, r_{hx}^{-1}h)$ (with $r_y\in A$, $r_y x = y$) is
+injective from $A$ to $O\times A_x$, so $|A|\le |O|\,|A_x|$. With $k^3\le 3^k$ for all $k\in\mathbb N$
+(\texttt{cube\_le}) and the induction hypothesis, $|A|^3 \le 3^{|O|}3^{|T\setminus O|} = 3^{|T|}$. For $T$ the whole
+set, $|A|^3\le 3^{24}$, so $|A|\le 3^8$.
+\end{proof}
+
+\begin{lemma}[\texttt{card\_SL\_le}, \texttt{card\_PSL\_le}, \texttt{card\_PSL2\_le}]
+$|\mathrm{PSL}(2,\mathbb{Z}/23)|\le|\mathrm{SL}(2,\mathbb{Z}/23)|\le 12144$ and $|\mathrm{PSL}(2,\mathbb{Z}/2)|\le 16$ (the Lean statements record the common bound $\le 12144$).
+\end{lemma}
+\begin{proof}
+Mathlib's \texttt{Matrix.card\_GL\_field} gives $|\mathrm{GL}(2,23)| = (23^2-1)(23^2-23) = 267168$. The map
+$(A,u)\mapsto \mathrm{diag}(u,1)A$ from $\mathrm{SL}(2,23)\times(\mathbb{Z}/23)^\times$ to $\mathrm{GL}(2,23)$ is
+injective (compare determinants, then cancel), so $22\,|\mathrm{SL}(2,23)|\le 267168$. $\mathrm{PSL}$ is a quotient of
+$\mathrm{SL}$ (Mathlib: $\mathrm{SL}$ modulo its center). $\mathrm{SL}(2,\mathbb{Z}/2)$ consists of $2\times2$ matrices
+over $\mathbb{F}_2$, at most $16$.
+\end{proof}
+
+\begin{theorem}[\texttt{not\_semidirect\_left}, \texttt{not\_semidirect\_right}, \texttt{conjecture\_1025\_false}]
+For every group $N$ with $|N|\le 12144$ and every commutative group $A$ there is no group isomorphism
+$\mathrm{Aut}(W)\cong N\rtimes_\varphi A$ or $\mathrm{Aut}(W)\cong A\rtimes_\varphi N$. In particular this holds for
+$N=\mathrm{PSL}(2,\mathbb{Z}/23)$ and $N = \mathrm{PSL}(2,\mathbb{Z}/2)$.
+\end{theorem}
+\begin{proof}
+An isomorphism gives $|\mathrm{Aut}(W)| = |N|\,|A|$ (Mathlib \texttt{SemidirectProduct.card}), and $A$ embeds
+(via \texttt{inr} resp.\ \texttt{inl}) into $\mathrm{Aut}(W)\le \mathrm{Sym}(24)$ as a commutative subgroup, so
+$|A|\le 6561$. Then $|\mathrm{Aut}(W)|\le 12144\cdot 6561 = 79\,676\,784 < 81\,607\,680$, a contradiction.
+\end{proof}
+Hence $q = 23$ (reading R1) and $q = 2$ (reading R2) are exceptions different from $q=7$, and the conjecture is false.
+
+\section*{Lean formalization}
+File \texttt{Conjecture1025/Basic.lean} (namespace \texttt{C1025}), only import \texttt{Mathlib}. Main theorem
+\texttt{C1025.conjecture\_1025\_false}: the four statements
+$\forall A\,[\mathrm{CommGroup}\ A]\,\forall\varphi,\ \mathrm{IsEmpty}(\mathrm{Aut}\ W \simeq^* N\rtimes_\varphi A)$ and
+$\mathrm{IsEmpty}(\mathrm{Aut}\ W \simeq^* A\rtimes_\varphi N)$ for $N = \texttt{PSL(2, ZMod 23)}$ and
+$N=\texttt{PSL(2, ZMod 2)}$. Definitions: \texttt{S}, \texttt{one24}, \texttt{W} (span of the $S_t$ and the all-ones
+word), \texttt{Aut} (the subgroup $\{\sigma : \forall v,\ v\in C \leftrightarrow v\circ\sigma\in C\}$ of
+\texttt{Equiv.Perm (Fin 24)}). Quadratic non-residue is \texttt{\textasciitilde IsSquare} in \texttt{ZMod 23}
+(0 is a square, so non-residues are nonzero). All finite computations use \texttt{decide +kernel}; there is no
+\texttt{native\_decide} and no \texttt{sorry}.
+
+\textbf{Axiom audit.} \texttt{\#print axioms C1025.conjecture\_1025\_false} reports
+\texttt{[propext, Classical.choice, Quot.sound]}.
+
+\section*{Sources}
+\begin{itemize}
+\item \url{https://en.wikipedia.org/wiki/Quadratic_residue_code} (definition, generator polynomial, extended code,
+examples).
+\item \url{https://en.wikipedia.org/wiki/Binary_Golay_code} (construction of $W$ from the $S_t$).
+\item \url{https://en.wikipedia.org/wiki/Mathieu_group_M24} (consistency only).
+\end{itemize}
+\end{document}
