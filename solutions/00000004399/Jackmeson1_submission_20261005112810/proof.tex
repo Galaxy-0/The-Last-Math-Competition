@@ -1,0 +1,165 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\homc}{\operatorname{hom}}
+\newcommand{\B}{\mathrm{B}}
+
+\title{A disproof of Conjecture 00000004399\\[2pt]
+\large The bowtie is a common graph of order 5}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000004399 reads:
+\begin{quote}
+\emph{Definition:} A common graph is a graph for which the sum of its density and that of its complement has a
+uniform lower bound over all graphs. \emph{Conjecture:} There exists a non-complete non-bipartite common graph of
+order 6, and 6 is the minimal order of such graphs.
+\end{quote}
+The Chinese version says the same. The conjecture is the conjunction of (E) some non-complete, non-bipartite
+common graph has 6 vertices, and (M) no non-complete, non-bipartite common graph has fewer than 6 vertices.
+
+\section{Definitions and readings}
+
+All graphs are finite simple graphs. For graphs $H$ (on $m$ vertices) and $G$ (on $n\ge1$ vertices),
+$\homc(H,G)$ is the number of maps $V(H)\to V(G)$ sending edges to edges, and $t(H,G)=\homc(H,G)/n^{m}$ is the
+homomorphism density. $\overline G$ is the complement of $G$, $e(H)$ the number of edges, the order is the
+number of vertices, ``non-complete'' means $H\ne K_m$ and ``non-bipartite'' means not properly 2-colourable.
+
+The standard notion is stated on Wikipedia's page ``Common graph''
+(\url{https://en.wikipedia.org/wiki/Common_graph}): ``A graph $F$ is common if the inequality
+$t(F,W)+t(F,1-W)\ge 2^{-e(F)+1}$ holds for any graphon $W$, where $e(F)$ is the number of edges of $F$'', with the
+interpretation $t(F,G)+t(F,\overline G)\gtrsim 2^{-e(F)+1}$ for finite graphs. The text of the conjecture leaves
+the bound unspecified, so we treat three readings:
+\begin{enumerate}[label=(\alph*)]
+  \item \textbf{Common} (standard, finite form): for every $\varepsilon>0$ there is $N$ such that every graph $G$
+        on $n\ge N$ vertices has $t(H,G)+t(H,\overline G)\ge 2^{1-e(H)}-\varepsilon$.
+  \item \textbf{CommonPos}: there are $b>0$ and $N$ with $t(H,G)+t(H,\overline G)\ge b$ for all $G$ on $n\ge N$
+        vertices.
+  \item \textbf{CommonUniform}: there is $b>0$ with $t(H,G)+t(H,\overline G)\ge b$ for all graphs $G$ with at least
+        one vertex (the exact bound $2^{1-e(H)}$ for all such $G$ is a special case).
+\end{enumerate}
+For the graphon definition quoted above, see Remark~\ref{rem:graphon}.
+
+\section{The bowtie}
+
+The bowtie $\B$ has vertices $0,\dots,4$ and the six edges of the triangles $\{0,1,2\}$ and $\{0,3,4\}$. It has
+order 5, is connected, is not complete ($1\not\sim3$), and is not bipartite (it contains a triangle).
+
+\begin{lemma}[\texttt{hom\_bowtie}]
+For $v\in V(G)$ let $T_G(v)$ be the number of ordered pairs $(a,b)$ with $va$, $vb$, $ab$ edges of $G$. Then
+$\homc(\B,G)=\sum_v T_G(v)^2$.
+\end{lemma}
+\begin{proof}
+A homomorphism is determined by the image $v$ of the centre $0$ and the images $(a,b)$, $(c,d)$ of $(1,2)$ and
+$(3,4)$, and the edge conditions say exactly that both pairs span triangles with $v$ (Lean: an explicit
+bijection \texttt{bowtieEquiv}).
+\end{proof}
+
+\begin{lemma}[Goodman's bound, \texttt{goodman}]
+For $G$ on $n\ge2$ vertices, $\sum_v T_G(v)+\sum_v T_{\overline G}(v)\ \ge\ n(n-1)(n-5)/4$.
+\end{lemma}
+\begin{proof}
+For vertices $x,y,z$ let $\mathrm{mono}(x,y,z)$ indicate that $xy,xz,yz$ are all edges of $G$ or all edges of
+$\overline G$, let $\mathrm{ang}(x,y,z)$ indicate that exactly one of $xy,xz$ is an edge of $G$ and the other an
+edge of $\overline G$, and let $\mathrm{dist}(x,y,z)$ indicate that $x,y,z$ are distinct. A triple of distinct
+vertices that is not monochromatic has exactly two bichromatic angles, so
+$2\,\mathrm{mono}(x,y,z)+\mathrm{ang}(x,y,z)+\mathrm{ang}(y,x,z)+\mathrm{ang}(z,x,y)=2\,\mathrm{dist}(x,y,z)$
+for all $x,y,z$ (\texttt{pointwise}). Summing over all triples and reindexing the angle sums gives
+$2M+3A=2n(n-1)(n-2)$ (\texttt{goodman\_identity}, \texttt{sum\_dist3}), where
+$M=\sum_v T_G(v)+\sum_v T_{\overline G}(v)$ and $A=\sum_x 2d_x\bar d_x$ with $d_x+\bar d_x=n-1$
+(\texttt{sum\_ang}). Since $4d\bar d\le(n-1)^2$, $A\le n(n-1)^2/2$, so $M\ge n(n-1)(n-2)-\tfrac34 n(n-1)^2
+=n(n-1)(n-5)/4$.
+\end{proof}
+This is the homomorphism-count form of Goodman's triangle bound; it is proved above in full and no
+external result is used.
+
+\begin{theorem}[\texttt{bowtie\_density\_bound}]
+Every graph $G$ on $n\ge1$ vertices satisfies $t(\B,G)+t(\B,\overline G)\ \ge\ \frac1{32}-\frac{3}{8n}$.
+\end{theorem}
+\begin{proof}
+For $n<12$ the right side is negative. Let $n\ge12$, $S_1=\sum_v T_G(v)$, $S_2=\sum_vT_{\overline G}(v)$. By
+Cauchy--Schwarz, $S_i^2\le n\sum_v T(v)^2$, so
+$n\,(\homc(\B,G)+\homc(\B,\overline G))\ge S_1^2+S_2^2\ge (S_1+S_2)^2/2$. By Goodman,
+$S_1+S_2\ge n(n-1)(n-5)/4\ge n^2(n-6)/4\ge0$. Hence $\homc(\B,G)+\homc(\B,\overline G)\ge n^3(n-6)^2/32$, and
+$t(\B,G)+t(\B,\overline G)\ge (n-6)^2/(32n^2)\ge (n-12)/(32n)=\frac1{32}-\frac3{8n}$ since
+$(n-6)^2-n(n-12)=36$.
+\end{proof}
+
+\begin{corollary}[\texttt{bowtie\_common}, \texttt{bowtie\_commonPos}]
+Since $e(\B)=6$ and $2^{1-6}=1/32$, the bowtie is Common (take $N>3/(8\varepsilon)$) and CommonPos ($b=1/64$).
+\end{corollary}
+
+\begin{remark}[graphon form]\label{rem:graphon}
+The same argument works for graphons (not formalized): $t(\B,W)=\int\tau_W(x)^2\,dx\ge t(K_3,W)^2$ with
+$\tau_W(x)=\int W(x,y)W(x,z)W(y,z)\,dy\,dz$, and the Wikipedia page proves $t(K_3,W)+t(K_3,1-W)\ge 1/4$, so
+$t(\B,W)+t(\B,1-W)\ge \tfrac12\cdot\tfrac1{16}=\tfrac1{32}=2^{1-e(\B)}$.
+\end{remark}
+
+\section{The uniform reading}
+
+\begin{lemma}[\texttt{not\_commonUniform}, \texttt{exists\_adj\_of\_not\_bipartite}]
+A non-bipartite graph $H$ has an edge, so $\homc(H,K_1)=0$; since $\overline{K_1}=K_1$,
+$t(H,K_1)+t(H,\overline{K_1})=0$. Hence no non-bipartite graph is CommonUniform.
+\end{lemma}
+
+\section{Conclusion}
+
+\begin{theorem}[\texttt{conjecture4399\_false}]
+Under reading (a) and under reading (b), clause (M) fails: the bowtie is a connected, non-complete, non-bipartite
+common graph of order $5<6$. Under reading (c), clause (E) fails: no non-bipartite graph is common.
+\end{theorem}
+
+\begin{remark}[scope]
+We do not decide clause (E) under readings (a) and (b), and we do not use injective (copy-counting) densities in
+Lean; they differ from homomorphism densities by $O(1/n)$, so the asymptotic readings (a), (b) are unchanged.
+The literal text says ``non-bipartite''; we refute that text as written.
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture4399/Basic.lean} (407 lines, \texttt{import Mathlib} only, namespace
+\texttt{Conjecture4399}). Graphs are \texttt{SimpleGraph (Fin n)}; $\hom$ is \texttt{Nat.card (H ->g G)};
+\texttt{homDensity}, \texttt{numEdges} (\texttt{Nat.card} of the edge set), \texttt{Common}, \texttt{CommonPos},
+\texttt{CommonUniform} and \texttt{ConjectureClaim} are as above, with non-complete \texttt{H != top} and
+non-bipartite \texttt{not H.Colorable 2}. In ASCII:
+\begin{verbatim}
+def ConjectureClaim
+    (IsCommon : forall m : Nat, SimpleGraph (Fin m) -> Prop) :=
+  (exists H : SimpleGraph (Fin 6),
+    H != top /\ not H.Colorable 2 /\ IsCommon 6 H) /\
+  forall m < 6, forall H : SimpleGraph (Fin m),
+    H != top -> not H.Colorable 2 -> not IsCommon m H
+
+theorem conjecture4399_false :
+    not ConjectureClaim (fun _ H => Common H) /\
+    not ConjectureClaim (fun _ H => CommonPos H) /\
+    not ConjectureClaim (fun _ H => CommonUniform H)
+\end{verbatim}
+Further theorems: \texttt{bowtie\_witness} (order 5, connected, non-complete, non-bipartite, 6 edges, Common,
+CommonPos), \texttt{bowtie\_density\_bound}, \texttt{goodman}, \texttt{hom\_bowtie}, \texttt{commonExact\_uniform}.
+
+\paragraph{Axiom audit.} \texttt{lake build} succeeds, and \texttt{\#print axioms} for
+\texttt{conjecture4399\_false}, \texttt{bowtie\_witness} and \texttt{bowtie\_density\_bound} reports only
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no \texttt{native\_decide} and no
+added axiom.
+
+\end{document}
