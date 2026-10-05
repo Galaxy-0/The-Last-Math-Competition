@@ -1,0 +1,227 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A disproof of Conjecture 00000001756\\[2pt]
+\large Unimodular submatrices of the character table of $S_3$: $d(3)=2\ne 3$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture and its reading}
+
+Conjecture 00000001756 reads: \emph{Definition: A unimodular submatrix of the character table of $S_n$ is
+a square submatrix with determinant $\pm1$. Conjecture: Its maximal order $d(n)$ is characterized by the
+hook-coprimality condition: $d(n)=\#\{\lambda\vdash n:\mathrm{hook}(\lambda)\text{ pairwise coprime}\}$, an
+explicit formula; a submatrix of that order can be selected from irreducible-character rows (sorted by
+dimension).}
+
+The conjecture is a conjunction. Its first clause asserts the identity
+$d(n)=\#\{\lambda\vdash n:\text{the hook lengths of }\lambda\text{ are pairwise coprime}\}$ for every $n$.
+We show that this identity fails at $n=3$, where $d(3)=2$ and the right side is $3$. The remaining clauses
+are not used.
+
+A submatrix is given by a choice of $k$ distinct rows and $k$ distinct columns, which we allow in any
+order. Reordering rows or columns changes the determinant only by a sign, so this does not affect $d(n)$.
+
+\section{The right-hand side: hook lengths of the partitions of 3}
+
+\begin{definition}
+A partition $\lambda\vdash n$ is a multiset of positive integers with sum $n$ (Mathlib's
+\texttt{Nat.Partition n}). Its Ferrers diagram is the set of cells $(i,j)$ such that at least $i+1$ parts
+are $\ge j+1$. It is a Mathlib \texttt{YoungDiagram}. The hook length of a cell $c=(i,j)$ is
+\[
+  h(c)=\#\{\text{cells to the right of }c\text{ in row }i\}+\#\{\text{cells below }c\text{ in column }j\}+1 ,
+\]
+that is, arm $+$ leg $+1$. The hook lengths of $\lambda$ are \emph{pairwise coprime} if
+$\gcd(h(c),h(c'))=1$ for every two distinct cells $c\ne c'$.
+\end{definition}
+
+\begin{lemma}\label{lem:hooks}
+The partitions of $3$ are exactly $(3)$, $(2,1)$ and $(1,1,1)$. Their Ferrers diagrams have cells
+$\{(0,0),(0,1),(0,2)\}$, $\{(0,0),(0,1),(1,0)\}$ and $\{(0,0),(1,0),(2,0)\}$. Their hook lengths are
+$3,2,1$, then $3,1,1$, then $3,2,1$. All three have pairwise coprime hook lengths. Hence the right side
+equals $3$.
+\end{lemma}
+\begin{proof}
+A multiset of positive integers with sum $3$ is $\{3\}$, $\{2,1\}$ or $\{1,1,1\}$. The cells and hook
+lengths are a finite computation, and every pair among $\{3,2,1\}$ or $\{3,1,1\}$ is coprime.
+\end{proof}
+
+\begin{remark}
+The value $3$ does not depend on how ``hook$(\lambda)$ coprime'' is read. Every reading implied by pairwise
+coprimality over distinct cells gives $3$, because every partition of $3$ satisfies that strongest
+condition. This covers pairwise coprimality of the distinct hook values and $\gcd$ of all hooks $=1$.
+\end{remark}
+
+\section{The left-hand side: $d(3)=2$}
+
+Let $G=S_3$ be the permutation group of $\{0,1,2\}$. All representations are finite-dimensional
+complex representations of $G$.
+
+\begin{definition}[Character table]\label{def:ct}
+A \emph{character table} of $G$ is a matrix $Y$ with entries $Y_{ij}=\chi_{V_i}(g_j)$, where
+$V_1,\dots,V_m$ is a list of irreducible representations containing every irreducible
+representation exactly once up to isomorphism, and $g_1,\dots,g_{m'}$ is a list of elements meeting
+every conjugacy class exactly once. Both lists may be in any order, and $m,m'$ are not fixed in
+advance. In Lean this is the predicate \texttt{IsCharTable}. Irreducibility is Mathlib's
+\texttt{Simple} in the category \texttt{FDRep} $\mathbb C$ \texttt{(Perm (Fin 3))}, and $\chi_V$ is Mathlib's
+\texttt{FDRep.character}, the trace of $\rho_V(g)$.
+\end{definition}
+
+\begin{lemma}[The irreducible representations of $S_3$]\label{lem:irr}
+Let $\rho_0$ be the trivial representation on $\mathbb C$ and $\rho_1=\mathrm{sgn}$ on $\mathbb C$.
+Let $\rho_2$ be the action of $G$ on the plane $P=\{x\in\mathbb C^3:x_0+x_1+x_2=0\}$ by permuting
+coordinates. We write it in the basis $f_j=e_j-e_2$ ($j=0,1$); a vector of $P$ has coordinates
+$(x_0,x_1)$ in this basis. So column $j$ of $\rho_2(\sigma)$ is $e_{\sigma(j)}-e_{\sigma(2)}$,
+restricted to its first two coordinates. Then:
+\begin{enumerate}
+\item the characters of $\rho_0,\rho_1,\rho_2$ are $\chi_0=1$, $\chi_1=\mathrm{sgn}$ and
+$\chi_2(\sigma)=\#\mathrm{Fix}(\sigma)-1$;
+\item $\rho_0,\rho_1,\rho_2$ are irreducible and pairwise non-isomorphic;
+\item every irreducible representation of $G$ is isomorphic to one of them.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The three maps $\sigma\mapsto\rho_i(\sigma)$ are integer matrices. Lean checks the homomorphism
+property and computes the traces over the six elements of $G$, then transports the matrices to
+$\mathbb C$ by \texttt{Matrix.toLinAlgEquiv'}.
+
+(2) Over an algebraically closed field of characteristic $0$, a representation $V$ is irreducible if
+and only if $\sum_g\chi_V(g)\chi_V(g^{-1})=|G|$. This is Mathlib's
+\texttt{FDRep.simple\_iff\_char\_is\_norm\_one}. For $i=0,1,2$ the sum equals $6$. Isomorphic
+representations have equal characters (\texttt{FDRep.char\_iso}), and the three characters are
+pairwise different.
+
+(3) Let $V$ be irreducible and assume it is isomorphic to none of the $\rho_i$. By the orthogonality
+relations (Mathlib's \texttt{FDRep.char\_orthonormal}),
+$\sum_g\chi_V(g)\chi_i(g^{-1})=0$ for $i=0,1,2$. The character $\chi_V$ is a class function. Let
+$a,b,c$ be its values on $\mathrm{id}$, $(0\,1)$ and $(0\,1\,2)$. The classes have sizes $1,3,2$,
+so
+\[
+a+3b+2c=0,\qquad a-3b+2c=0,\qquad 2a-2c=0 .
+\]
+Hence $a=b=c=0$ and $\chi_V=0$. This contradicts $\sum_g\chi_V(g)\chi_V(g^{-1})=6$, which holds by
+(2) applied to $V$.
+\end{proof}
+
+\begin{corollary}\label{cor:reindex}
+Let
+\[
+X=\begin{pmatrix}1&1&1\\1&-1&1\\2&0&-1\end{pmatrix},
+\]
+the table of $\chi_0,\chi_1,\chi_2$ at $\mathrm{id},(0\,1),(0\,1\,2)$. Every character table $Y$ of
+$G$ satisfies $Y_{ij}=X_{\pi(i)\tau(j)}$ for some bijections $\pi:\{1..m\}\to\{0,1,2\}$ and
+$\tau:\{1..m'\}\to\{0,1,2\}$. In particular, the table built from $\rho_0,\rho_1,\rho_2$ and the
+three representatives is a character table, and it equals $X$.
+\end{corollary}
+\begin{proof}
+By Lemma~\ref{lem:irr}(3), $V_i\cong\rho_{\pi(i)}$ for some $\pi(i)$. The map $\pi$ is injective
+because the $V_i$ are pairwise non-isomorphic. It is surjective because each $\rho_p$ is irreducible,
+so it is isomorphic to some $V_i$, and then $p=\pi(i)$ by Lemma~\ref{lem:irr}(2). Let $\tau(j)$ be
+the class of $g_j$. Then $\tau$ is a bijection because the $g_j$ meet every class exactly once.
+Finally, $\chi_{V_i}(g_j)=\chi_{\pi(i)}(g_j)=X_{\pi(i)\tau(j)}$, since characters of isomorphic
+representations agree and characters are class functions.
+\end{proof}
+
+\begin{theorem}\label{thm:d3}
+Every character table $Y$ of $S_3$ has $d(Y)=2$. In particular $d(3)=2$.
+\end{theorem}
+\begin{proof}
+By Corollary~\ref{cor:reindex}, rows $r$ and columns $c$ of $Y$ give the minor of $X$ on rows
+$\pi\circ r$ and columns $\tau\circ c$, cast to $\mathbb C$. Conversely, rows $r$ and columns $c$
+of $X$ arise from $\pi^{-1}\circ r$ and $\tau^{-1}\circ c$. An integer equals $\pm1$ exactly when
+its complex cast does. So $Y$ and $X$ have the same unimodular orders, and it suffices to treat $X$.
+
+Rows $\{\chi_0,\chi_2\}$ and columns $\{(0\,1),(0\,1\,2)\}$ give
+$\det\begin{pmatrix}1&1\\0&-1\end{pmatrix}=-1$, so $d(X)\ge2$. A $3\times3$ submatrix uses all rows
+and all columns in some order. Its determinant is therefore $\mathrm{sgn}(e)\,\mathrm{sgn}(f)\det X=\pm6$,
+where $e,f$ are the row and column permutations and $\det X=6$. No square submatrix has order
+$\ge4$.
+\end{proof}
+
+\begin{theorem}[Main theorem]
+For every character table of $S_3$, $d(3)=2$, and $\#\{\lambda\vdash3:\text{hooks pairwise coprime}\}=3$. Hence $d(3)\ne3$ and the conjectured
+formula fails.
+\end{theorem}
+
+\section{Relation to the earlier submission}
+PR \#214 by orionsheep was closed unmerged. The reviewer accepted the mathematics. The reason for closing
+was: ``the capstone theorem conjecture\_refuted : $\neg((3:\mathrm{Nat}) = 2)$ connects none of them: the
+refutation is assembled only in prose. Happy to re-review a version whose main theorem states
+$d(3) = 2 \ne 3$ on the actual hook/partition objects.''
+
+The present main theorem \texttt{conjecture\_1756\_false} states \texttt{d3 = 2 $\wedge$ hookCount 3 = 3
+$\wedge$ d3 $\ne$ hookCount 3}. Here \texttt{d3} is the supremum of the orders of $\pm1$-determinant
+square submatrices of the character table built in Lean from the irreducible representations of
+Lemma~\ref{lem:irr}. The companion theorem \texttt{conjecture\_1756\_false\_any\_table} gives the
+same value for every character table, in any order of rows and columns. \texttt{hookCount n} counts Mathlib partitions of $n$ whose
+Ferrers \texttt{YoungDiagram} has pairwise coprime hook lengths. The hook lengths are computed from the
+cells, not hardcoded.
+
+\section{Lean formalization}
+The file is \texttt{lean/Conjecture1756/Basic.lean} (namespace \texttt{C1756}), and it imports only
+Mathlib. The Ferrers-diagram construction (\texttt{rowsAtLeast}, \texttt{ferrers}) is adapted, with
+credit, from the accepted solution of conjecture 00000000428 by C0ldSmi1e, which is under GPL-3.0.
+
+\begin{itemize}
+\item Partitions and hooks:
+  \begin{itemize}
+  \item definitions \texttt{ferrers}, \texttt{hookLength}, \texttt{HookCoprime}, \texttt{hookCount};
+  \item \texttt{partitions\_three}: every partition of $3$ is $(3)$, $(2,1)$ or $(1,1,1)$;
+  \item \texttt{ferrers\_P3}, \texttt{ferrers\_P21}, \texttt{ferrers\_P111}: the diagrams;
+  \item \texttt{hooks\_P3}, \texttt{hooks\_P21}, \texttt{hooks\_P111}: the hook lengths;
+  \item \texttt{hookCount\_three}: the count is $3$.
+  \end{itemize}
+\item Irreducible representations (Lemma~\ref{lem:irr}):
+  \begin{itemize}
+  \item \texttt{matRep}: an integer matrix homomorphism $G\to M_n(\mathbb Z)$ as an object of
+  \texttt{FDRep} $\mathbb C$ \texttt{G}; \texttt{trivHom}, \texttt{signHom}, \texttt{stdHom} and \texttt{irr};
+  \item \texttt{irr\_character}: the characters are \texttt{chi 0}, \texttt{chi 1}, \texttt{chi 2};
+  \item \texttt{irr\_simple}: each \texttt{irr i} is \texttt{Simple};
+  \item \texttt{irr\_distinct}: they are pairwise non-isomorphic;
+  \item \texttt{irr\_complete}: every \texttt{Simple} object of \texttt{FDRep} $\mathbb C$ \texttt{G} is isomorphic to
+  some \texttt{irr i}.
+  \end{itemize}
+\item Character tables (Corollary~\ref{cor:reindex}):
+  \begin{itemize}
+  \item \texttt{IsCharTable}: the predicate of Definition~\ref{def:ct};
+  \item \texttt{IsCharTable.reindex}: every character table is \texttt{charTable} with rows and
+  columns permuted;
+  \item \texttt{trueTable}, \texttt{isCharTable\_trueTable}, \texttt{trueTable\_eq}: the table of
+  \texttt{irr} at \texttt{rep} is a character table, and it equals $X$.
+  \end{itemize}
+\item Unimodular orders (Theorem~\ref{thm:d3}):
+  \begin{itemize}
+  \item definitions \texttt{IsUnimodularOrder}, \texttt{maxUnimodularOrder} (for rectangular
+  matrices over any commutative ring) and \texttt{d3 := maxUnimodularOrder trueTable};
+  \item \texttt{det\_full\_submatrix}: every $3\times3$ submatrix of $X$ has determinant $\pm6$;
+  \item \texttt{unimodular\_two}, \texttt{unimodular\_le\_two}: the unimodular orders of $X$;
+  \item \texttt{isUnimodularOrder\_reindex}: permuting and casting to $\mathbb C$ preserves them;
+  \item \texttt{maxUnimodularOrder\_of\_isCharTable}: every character table has maximal unimodular
+  order $2$; \texttt{d3\_eq\_two}.
+  \end{itemize}
+\item Main theorems: \texttt{conjecture\_1756\_false : d3 = 2 $\wedge$ hookCount 3 = 3 $\wedge$
+d3 $\ne$ hookCount 3}, and \texttt{conjecture\_1756\_false\_any\_table}, the same statement for
+every \texttt{X} with \texttt{IsCharTable X}.
+\item Axiom audit: \texttt{\#print axioms} on both main theorems reports \texttt{[propext,
+Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no \texttt{native\_decide}. The
+\texttt{decide} calls run over the finite types \texttt{Perm (Fin 3)}, \texttt{Fin 3}, small integer
+matrices and explicit finite cell sets.
+\end{itemize}
+
+\end{document}
