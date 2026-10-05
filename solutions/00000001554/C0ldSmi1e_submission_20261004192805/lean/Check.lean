@@ -1,0 +1,48 @@
+import Conjecture1554
+
+#print Conjecture1554.Plane
+#print Conjecture1554.unitEquilateral
+#print Conjecture1554.height
+#print Conjecture1554.stripWidth
+#print Conjecture1554.stripIndex
+#print Conjecture1554.scalarColor
+#print Conjecture1554.stripeColor
+#print Conjecture1554.HasMonochromaticUnitTriangle
+#print Conjecture1554.UnitTriangleRamsey
+
+#check Conjecture1554.stripWidth_pos
+#print axioms Conjecture1554.stripWidth_pos
+#check Conjecture1554.stripWidth_sq
+#print axioms Conjecture1554.stripWidth_sq
+#check Conjecture1554.dist_sq_coordinates
+#print axioms Conjecture1554.dist_sq_coordinates
+#check Conjecture1554.height_identity
+#print axioms Conjecture1554.height_identity
+#check Conjecture1554.ordered_height_identity
+#print axioms Conjecture1554.ordered_height_identity
+#check Conjecture1554.ordered_height_bounds
+#print axioms Conjecture1554.ordered_height_bounds
+#check Conjecture1554.stripIndex_mono
+#print axioms Conjecture1554.stripIndex_mono
+#check Conjecture1554.stripIndex_le_add_one
+#print axioms Conjecture1554.stripIndex_le_add_one
+#check Conjecture1554.stripIndex_eq_of_sameColor_of_gap_le
+#print axioms Conjecture1554.stripIndex_eq_of_sameColor_of_gap_le
+#check Conjecture1554.gap_lt_of_stripIndex_eq
+#print axioms Conjecture1554.gap_lt_of_stripIndex_eq
+#check Conjecture1554.ordered_not_all_sameColor
+#print axioms Conjecture1554.ordered_not_all_sameColor
+#check Conjecture1554.scalarColor_zero
+#print axioms Conjecture1554.scalarColor_zero
+#check Conjecture1554.scalarColor_width
+#print axioms Conjecture1554.scalarColor_width
+#check Conjecture1554.stripeColor_surjective
+#print axioms Conjecture1554.stripeColor_surjective
+#check Conjecture1554.ordered_triangle_not_monochromatic
+#print axioms Conjecture1554.ordered_triangle_not_monochromatic
+#check Conjecture1554.triangle_not_monochromatic
+#print axioms Conjecture1554.triangle_not_monochromatic
+#check Conjecture1554.stripeColor_has_no_monochromatic_unit_triangle
+#print axioms Conjecture1554.stripeColor_has_no_monochromatic_unit_triangle
+#check Conjecture1554.unit_triangle_ramsey_false
+#print axioms Conjecture1554.unit_triangle_ramsey_false

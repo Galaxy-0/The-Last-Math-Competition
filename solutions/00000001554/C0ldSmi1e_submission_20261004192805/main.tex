@@ -1,0 +1,87 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
+\title{A striped coloring without a unit equilateral triangle}
+\author{C0ldSmi1e\\\small Disproof of conjecture 00000001554}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Color horizontal half-open strips of width $\sqrt3/2$ alternately red and blue. We prove that no three points of one color have all three pairwise Euclidean distances equal to one. The argument covers every orientation, negative heights, and points on strip boundaries. This disproves the unit-length assertion in both language versions of the conjecture. The construction is classical; our submission supplies a self-contained argument and a Lean formalization.
+\end{abstract}
+
+\section{The precise claim and coloring}
+Both language versions assert that every red--blue coloring of the plane contains a monochromatic unit equilateral triangle. They further propose obtaining this unit version from similarity images and rational-affine closure. The exact bilingual text accompanies this report as \texttt{conjecture.md}. No regularity assumption on a coloring is imposed. We refute the first assertion directly, which suffices to refute the conjunction. We do not dispute the existence of monochromatic triangles at other scales.
+
+Set $h=\sqrt3/2>0$. For $(x,y)\in\R^2$, define
+\[
+ s(y)=\left\lfloor\frac yh\right\rfloor\in\Z,
+ \qquad
+ c(x,y)=
+ \begin{cases}
+ \text{red},&s(y)\text{ is even},\\
+ \text{blue},&s(y)\text{ is odd}.
+ \end{cases}
+\]
+Thus strip $k$ is $\R\times[kh,(k+1)h)$, for every integer $k$.
+This is a total coloring of the entire plane: a boundary of height $kh$ belongs to strip $k$. Both colors occur, for example at heights $0$ and $h$.
+The alternating-strip construction is recorded in \cite[Section 1, p.~2]{jksv}; that source uses the opposite half-open convention, obtained from ours by reflection. No result from that paper is used as an assumption of the proof below.
+
+\section{The geometric identity}
+\begin{lemma}
+Let three points form an equilateral triangle of side length one. Order their heights as $y_0\le y_1\le y_2$, and put $a=y_1-y_0$, $b=y_2-y_1$. Then
+\[
+ a^2+ab+b^2=\frac34=h^2,
+ \qquad 0\le a\le h,\quad 0\le b\le h,\quad a+b\ge h.
+\]
+\end{lemma}
+\begin{proof}
+Translate the lowest vertex to the origin, and write the other two displacement vectors as $u=(X,Y)$ and $v=(Z,T)$, where $Y=a$ and $T=a+b$. The three unit-distance equations give
+\[
+ X^2+Y^2=1,\qquad Z^2+T^2=1,
+ \qquad XZ+YT=\frac12.
+\]
+Consequently
+\[
+ (1-Y^2)(1-T^2)=X^2Z^2=(XZ)^2
+   =\left(\frac12-YT\right)^2.
+\]
+Expanding and cancelling yields $Y^2-YT+T^2=3/4$, hence
+$a^2+ab+b^2=3/4$. Nonnegativity of $a,b$ gives $a^2,b^2\le h^2$, so $a,b\le h$. Finally $(a+b)^2=h^2+ab\ge h^2$, so $a+b\ge h$.
+\end{proof}
+
+\section{The boundary-sensitive contradiction}
+\begin{lemma}
+If $u\le v$, $v-u\le h$, and the heights $u,v$ have the same color, then $s(u)=s(v)$. If $s(u)=s(v)$, then $v-u<h$.
+\end{lemma}
+\begin{proof}
+Monotonicity of the floor gives $s(u)\le s(v)$. Since $v/h\le u/h+1$, it also gives $s(v)\le s(u)+1$. Equal colors mean equal residues modulo two, so the two integer indices must be equal. If their common value is $k$, the floor inequalities give $kh\le u$ and $v<(k+1)h$, which imply $v-u<h$. The upper inequality is strict, including when a vertex lies on a strip boundary.
+\end{proof}
+
+\begin{theorem}
+The coloring $c$ has no monochromatic unit equilateral triangle. Therefore conjecture 00000001554 is false.
+\end{theorem}
+\begin{proof}
+Suppose such a triangle exists and sort its three heights. The geometric lemma bounds each successive height gap by $h$. Since the three colors agree, the preceding lemma first gives $s(y_0)=s(y_1)$ and then $s(y_1)=s(y_2)$. Thus all three heights lie in one half-open strip, forcing $y_2-y_0<h$. The geometric lemma gives the contradictory inequality $y_2-y_0=a+b\ge h$.
+\end{proof}
+
+\section{Formalization and reproducibility}
+The Lean project is pinned to Lean 4.19.0 and Mathlib v4.19.0. Its plane is \texttt{EuclideanSpace} over $\R$ with two coordinates; a unit triangle is defined by three actual \texttt{dist} equalities. The geometric identity is derived from these equalities. Integer floor and parity define the coloring on all real heights. The final statement quantifies over arbitrary points and all two-colorings; a particular total coloring refutes the universal claim.
+
+The project includes declaration and axiom inspection commands. The accompanying verification records specify the exact source hashes, build, warning-as-error replays, and independent semantic scrutiny. These are local verification records; acceptance remains the repository reviewers' decision. The proof uses no auxiliary numerical computation.
+
+\begin{thebibliography}{1}
+\bibitem{jksv}
+V.~Jel\'inek, J.~Kyn\v{c}l, R.~Stola\v{r}, and T.~Valla,
+\emph{Monochromatic triangles in two-colored plane},
+Combinatorica \textbf{29} (2009), 699--718.
+\href{https://arxiv.org/abs/math/0701940}{arXiv:math/0701940}, Section~1.
+\end{thebibliography}
+\end{document}

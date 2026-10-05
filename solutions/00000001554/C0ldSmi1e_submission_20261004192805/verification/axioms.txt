@@ -1,0 +1,83 @@
+@[reducible] def Conjecture1554.Plane : Type :=
+EuclideanSpace ℝ (Fin 2)
+def Conjecture1554.unitEquilateral : Conjecture1554.Plane → Conjecture1554.Plane → Conjecture1554.Plane → Prop :=
+fun p q r => dist p q = 1 ∧ dist q r = 1 ∧ dist r p = 1
+def Conjecture1554.height : Conjecture1554.Plane → ℝ :=
+fun p => p 1
+def Conjecture1554.stripWidth : ℝ :=
+√3 / 2
+def Conjecture1554.stripIndex : ℝ → ℝ → ℤ :=
+fun w y => ⌊y / w⌋
+def Conjecture1554.scalarColor : ℝ → ℝ → Bool :=
+fun w y => decide (Conjecture1554.stripIndex w y % 2 = 0)
+def Conjecture1554.stripeColor : Conjecture1554.Plane → Bool :=
+fun p => Conjecture1554.scalarColor Conjecture1554.stripWidth (Conjecture1554.height p)
+def Conjecture1554.HasMonochromaticUnitTriangle : (Conjecture1554.Plane → Bool) → Prop :=
+fun c => ∃ p q r, Conjecture1554.unitEquilateral p q r ∧ c p = c q ∧ c q = c r
+def Conjecture1554.UnitTriangleRamsey : Prop :=
+∀ (c : Conjecture1554.Plane → Bool), Conjecture1554.HasMonochromaticUnitTriangle c
+Conjecture1554.stripWidth_pos : 0 < Conjecture1554.stripWidth
+'Conjecture1554.stripWidth_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.stripWidth_sq : Conjecture1554.stripWidth ^ 2 = 3 / 4
+'Conjecture1554.stripWidth_sq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.dist_sq_coordinates (p q : Conjecture1554.Plane) : dist p q ^ 2 = (p 0 - q 0) ^ 2 + (p 1 - q 1) ^ 2
+'Conjecture1554.dist_sq_coordinates' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.height_identity {p q r : Conjecture1554.Plane} (h : Conjecture1554.unitEquilateral p q r) :
+  (Conjecture1554.height q - Conjecture1554.height p) ^ 2 -
+        (Conjecture1554.height q - Conjecture1554.height p) * (Conjecture1554.height r - Conjecture1554.height p) +
+      (Conjecture1554.height r - Conjecture1554.height p) ^ 2 =
+    3 / 4
+'Conjecture1554.height_identity' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.ordered_height_identity {p q r : Conjecture1554.Plane} (h : Conjecture1554.unitEquilateral p q r) :
+  (Conjecture1554.height q - Conjecture1554.height p) ^ 2 +
+        (Conjecture1554.height q - Conjecture1554.height p) * (Conjecture1554.height r - Conjecture1554.height q) +
+      (Conjecture1554.height r - Conjecture1554.height q) ^ 2 =
+    3 / 4
+'Conjecture1554.ordered_height_identity' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.ordered_height_bounds {p q r : Conjecture1554.Plane} (h : Conjecture1554.unitEquilateral p q r)
+  (hpq : Conjecture1554.height p ≤ Conjecture1554.height q) (hqr : Conjecture1554.height q ≤ Conjecture1554.height r) :
+  Conjecture1554.height q - Conjecture1554.height p ≤ Conjecture1554.stripWidth ∧
+    Conjecture1554.height r - Conjecture1554.height q ≤ Conjecture1554.stripWidth ∧
+      Conjecture1554.stripWidth ≤ Conjecture1554.height r - Conjecture1554.height p
+'Conjecture1554.ordered_height_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.stripIndex_mono {w a b : ℝ} (hw : 0 < w) (hab : a ≤ b) :
+  Conjecture1554.stripIndex w a ≤ Conjecture1554.stripIndex w b
+'Conjecture1554.stripIndex_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.stripIndex_le_add_one {w a b : ℝ} (hw : 0 < w) (hgap : b - a ≤ w) :
+  Conjecture1554.stripIndex w b ≤ Conjecture1554.stripIndex w a + 1
+'Conjecture1554.stripIndex_le_add_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.stripIndex_eq_of_sameColor_of_gap_le {w a b : ℝ} (hw : 0 < w) (hab : a ≤ b) (hgap : b - a ≤ w)
+  (hcolor : Conjecture1554.scalarColor w a = Conjecture1554.scalarColor w b) :
+  Conjecture1554.stripIndex w a = Conjecture1554.stripIndex w b
+'Conjecture1554.stripIndex_eq_of_sameColor_of_gap_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.gap_lt_of_stripIndex_eq {w a b : ℝ} (hw : 0 < w)
+  (hindex : Conjecture1554.stripIndex w a = Conjecture1554.stripIndex w b) : b - a < w
+'Conjecture1554.gap_lt_of_stripIndex_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.ordered_not_all_sameColor {w a b c : ℝ} (hw : 0 < w) (hab : a ≤ b) (hbc : b ≤ c) (habgap : b - a ≤ w)
+  (hbcgap : c - b ≤ w) (hspan : w ≤ c - a) :
+  ¬(Conjecture1554.scalarColor w a = Conjecture1554.scalarColor w b ∧
+      Conjecture1554.scalarColor w b = Conjecture1554.scalarColor w c)
+'Conjecture1554.ordered_not_all_sameColor' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.scalarColor_zero (w : ℝ) : Conjecture1554.scalarColor w 0 = true
+'Conjecture1554.scalarColor_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.scalarColor_width {w : ℝ} (hw : 0 < w) : Conjecture1554.scalarColor w w = false
+'Conjecture1554.scalarColor_width' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.stripeColor_surjective : Function.Surjective Conjecture1554.stripeColor
+'Conjecture1554.stripeColor_surjective' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.ordered_triangle_not_monochromatic {p q r : Conjecture1554.Plane}
+  (h : Conjecture1554.unitEquilateral p q r) (hpq : Conjecture1554.height p ≤ Conjecture1554.height q)
+  (hqr : Conjecture1554.height q ≤ Conjecture1554.height r) :
+  ¬(Conjecture1554.stripeColor p = Conjecture1554.stripeColor q ∧
+      Conjecture1554.stripeColor q = Conjecture1554.stripeColor r)
+'Conjecture1554.ordered_triangle_not_monochromatic' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.triangle_not_monochromatic {p q r : Conjecture1554.Plane} (h : Conjecture1554.unitEquilateral p q r) :
+  ¬(Conjecture1554.stripeColor p = Conjecture1554.stripeColor q ∧
+      Conjecture1554.stripeColor q = Conjecture1554.stripeColor r)
+'Conjecture1554.triangle_not_monochromatic' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1554.stripeColor_has_no_monochromatic_unit_triangle :
+  ¬Conjecture1554.HasMonochromaticUnitTriangle Conjecture1554.stripeColor
+'Conjecture1554.stripeColor_has_no_monochromatic_unit_triangle' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Conjecture1554.unit_triangle_ramsey_false : ¬Conjecture1554.UnitTriangleRamsey
+'Conjecture1554.unit_triangle_ramsey_false' depends on axioms: [propext, Classical.choice, Quot.sound]
