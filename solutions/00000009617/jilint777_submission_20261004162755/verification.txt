@@ -1,0 +1,67 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:931:0: 'EvenShiftHankel.lang_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:932:0: 'EvenShiftHankel.fisher_presents' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:933:0: 'EvenShiftHankel.fisher_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:934:0: 'EvenShiftHankel.min_presentation_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:935:0: 'EvenShiftHankel.minor_det' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:936:0: 'EvenShiftHankel.minor_unimodular' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:937:0: 'EvenShiftHankel.rows_independent' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:938:0: 'EvenShiftHankel.evenShift_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:939:0: 'EvenShiftHankel.fisher_lt_rank' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:940:0: 'EvenShiftHankel.conjecture_00000009617_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:941:0: 'EvenShiftHankel.conjecture_00000009617_false_mod' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:942:0: 'EvenShiftHankel.conjecture_00000009617_false_any_presentation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: ././././Main.lean:943:0: 'EvenShiftHankel.chargeMinor_det' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:944:0: 'EvenShiftHankel.charge_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:945:0: 'EvenShiftHankel.conjecture_00000009617_false_charge' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:946:0: 'EvenShiftHankel.conjecture_00000009617_false_charge_mod' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:947:0: 'EvenShiftHankel.conjecture_00000009617_false_charge_any_presentation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+L(X): forbidden blocks == run parities == Fischer-graph paths on all 32767 words of length <= 14
+0-vertex labelled graphs whose shift has the same blocks of length <= 8 as X: 0
+1-vertex labelled graphs whose shift has the same blocks of length <= 8 as X: 0
+2-vertex labelled graphs whose shift has the same blocks of length <= 8 as X: 2
+  one vertex, loop labels []: first difference '0'
+  one vertex, loop labels ['0']: first difference '1'
+  one vertex, loop labels ['1']: first difference '0'
+  one vertex, loop labels ['0', '1']: first difference '010'
+  2-vertex presentation [(0, '0', 0), (0, '1', 1), (1, '1', 0)] right-resolving=True
+  2-vertex presentation [(0, '1', 1), (1, '0', 1), (1, '1', 0)] right-resolving=True
+Fischer count = minimal number of states of any presentation = 2
+minor rows ['11', '0', '01'] cols ['0', '10', '1'] = [[1, 1, 1], [1, 0, 1], [0, 1, 1]] det = -1
+integer inverse [[1, 0, -1], [1, -1, 0], [-1, 1, 1]] verified: the minor is unimodular
+Hankel truncation on all 127 words of length <= 6: rank over Q = 3
+  rank over GF(2) = 3
+  rank over GF(3) = 3
+  rank over GF(5) = 3
+  rank over GF(7) = 3
+  (same rank 3 when the empty word is excluded from rows and columns)
+distinct rows of H on words of length <= 8 (columns of length <= 8): 4 (one is the zero row)
+Boolean rank of H is 2: row(eps) = row(0) OR row(01); fooling set {(0,0),(01,10)} (disclosure)
+H = B o C (Boolean product through the 2 Fischer vertices): Boolean rank <= Fischer count
+measure Hankel ranks on X: fully supported Markov measure -> 2, point mass at 0^inf -> 1 (measure-dependent)
+even shift: ALL CHECKS PASSED (Fischer count 2, Hankel rank 3 over every field)
+X_c: Fischer-graph paths == charge band of width 2 on all words of length <= 14
+  0-vertex graphs with the blocks of X_c up to length 8: 0
+  1-vertex graphs with the blocks of X_c up to length 8: 0
+  2-vertex graphs with the blocks of X_c up to length 8: 0
+  3-vertex graph is right-resolving=True, follower-separated=True: Fischer count of X_c = 3 = least size of any presentation
+  terminal vertex sets of words: {(0, 1, 2): 'eps', (0, 1): '0', (1, 2): '1', (0,): '00', (2,): '11', (1,): '001'}
+  distinct nonzero rows (follower sets) on words of length <= 8: 6; with the zero row: 7
+  5x5 minor rows/cols (eps, 0, 1, 00, 11) = [[1, 1, 1, 1, 1], [1, 1, 1, 0, 1], [1, 1, 1, 1, 0], [1, 0, 1, 0, 1], [1, 1, 0, 1, 0]] det = 1
+  row relation 1_F(eps) + 1_F(001) = 1_F(0) + 1_F(1) holds (so rank <= 5)
+  Hankel truncation on words of length <= 6: rank 5 over Q, GF(2), GF(3), GF(5), GF(7)
+X_c: Fischer count 3, follower sets 6 (7 with the dead state), Hankel rank 5: all differ
+ALL CHECKS PASSED
+exit 0
