@@ -1,0 +1,113 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A disproof of Conjecture 00000000223\\[2pt]
+\large The density of $\{n : q \mid E_n\}$ is $0$, not a value of $q^{-2}$ type}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000000223 reads:
+\begin{quote}
+\emph{Definition:} Euclid numbers $E_n = p_n\# + 1$ (one plus the product of the first $n$ primes).
+\emph{Conjecture:} The least prime factor of $E_n$ exceeds $p_n$ uniformly for all sufficiently large $n$, and
+the least prime factors are uniformly distributed on the logarithmic scale over $(p_n, p_n^2)$; moreover, for a
+fixed prime $q$, the density of $n$ with $q$ dividing $E_n$ is an explicit value of $q^{-2}$ type.
+\end{quote}
+The Chinese text of the last clause says the density is a ``$q^{-2}$-type explicit value'' (a value of
+$q^{-2}$ form). The conjecture is the conjunction of three clauses: (A) least prime factor $> p_n$; (B)
+log-scale equidistribution of least prime factors; (C) the density clause. We refute (C), which refutes the
+conjunction. Clauses (A) and (B) are not addressed. (Clause (A) is in fact true by the same argument, and (B)
+is open; neither is used.)
+
+\section{Definitions and conventions}
+
+Following the conjecture and \url{https://en.wikipedia.org/wiki/Euclid_number} (``$E_n = p_n\# + 1$, where
+$p_n\#$ is the nth primorial (the product of the first n prime numbers)''):
+\begin{itemize}[nosep]
+\item $p_1 = 2, p_2 = 3, \dots$; in Lean $p_{i+1} = \texttt{Nat.nth Nat.Prime } i$.
+\item $p_n\# = \prod_{i<n} \texttt{nth Prime } i$ (Lean \texttt{primorialFirst}); Mathlib's \texttt{primorial}
+  is the product of the primes $\le n$, a different function, and is not used.
+\item $E_n = p_n\# + 1$ (Lean \texttt{euclid}); $D_q = \{n \in \mathbb{N} : q \mid E_n\}$ (Lean \texttt{divSet}).
+\item $S \subseteq \mathbb{N}$ has natural density $d$ if $\#(S \cap [0,N))/N \to d$ (Lean
+  \texttt{HasNatDensity}). We use $0 \in \mathbb{N}$; $E_0 = 2$. Adding or removing the single index $n=0$
+  does not change any density.
+\end{itemize}
+
+\section{Readings of ``an explicit value of $q^{-2}$ type''}
+
+We refute every reading that requires the density to be nonzero for at least one prime $q$, in particular:
+\begin{enumerate}[label=(\roman*),nosep]
+\item exact form: the density equals $c\,q^{-2}$ for every prime $q$, for some constant $c \neq 0$;
+\item asymptotic form: the densities $d(q)$ exist and $q^2 d(q) \to c \neq 0$ as $q \to \infty$ through the
+  primes (this is $d(q) \sim c\,q^{-2}$, and covers explicit values such as $1/(q^2-1)$).
+\end{enumerate}
+\textbf{Not refuted:} a pure upper-bound reading ``the density is $O(q^{-2})$''. The value $0$ satisfies it.
+We do not regard it as the literal reading: the text asks for an explicit \emph{value} of $q^{-2}$ type
+(form), not a bound, and $0$ has no dependence on $q$ at all. We state this reading explicitly so that the
+reviewer can weigh it.
+
+\section{The proof}
+
+\begin{lemma}[Euclid; Lean \texttt{not\_dvd\_euclid}]
+If $r < n$ then $p_{r+1} \nmid E_n$.
+\end{lemma}
+\begin{proof}
+$p_{r+1}$ is one of the factors of $p_n\#$. If it also divided $p_n\# + 1$ it would divide $1$; but it is
+prime. (Compare \url{https://en.wikipedia.org/wiki/Euclid%27s_theorem}: ``If p divides P and q, then p must
+also divide the difference of the two numbers, which is (P + 1) - P or just 1.'')
+\end{proof}
+
+\begin{lemma}[Lean \texttt{divSet\_subset}, \texttt{hasNatDensity\_zero\_of\_subset}]
+For a prime $q$ let $r = \#\{\text{primes} < q\}$, so $q = p_{r+1}$ (Mathlib \texttt{Nat.nth\_count}). Then
+$D_q \subseteq [0, r]$, hence $\#(D_q \cap [0,N)) \le r+1$ and $D_q$ has natural density $0$.
+\end{lemma}
+\begin{proof}
+The inclusion is the previous lemma. Then $0 \le \#(D_q \cap [0,N))/N \le (r+1)/N \to 0$.
+\end{proof}
+
+\begin{theorem}[Lean \texttt{conjecture\_223\_density\_clause\_false}]
+\leavevmode
+\begin{enumerate}[nosep]
+\item For every prime $q$, $D_q$ has natural density $0$ (\texttt{hasNatDensity\_divSet}).
+\item There is no prime $q$ and $d \ne 0$ such that $D_q$ has density $d$ (\texttt{no\_nonzero\_density}).
+\item Reading (i) is false: there is no $c \ne 0$ with density $c/q^2$ for all primes $q$
+  (\texttt{not\_exact\_form}; it already fails at $q = 2$).
+\item Reading (ii) is false: there are no $d(\cdot)$ and $c \ne 0$ with $D_q$ of density $d(q)$ for all primes
+  $q$ and $p_{r+1}^2\, d(p_{r+1}) \to c$ as $r \to \infty$ (\texttt{not\_asymptotic\_form}).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(1) is the lemma. Limits in $\mathbb{R}$ are unique, so any density of $D_q$ equals $0$; this gives (2), and
+(3) at $q = 2$. For (4), $p_{r+1}^2 d(p_{r+1}) = 0$ for all $r$, so the limit is $0 \ne c$.
+\end{proof}
+
+Example: $E_6 = 30031 = 59 \cdot 509$, so $59 \mid E_6$, but $59 = p_{17}$ divides no $E_n$ with $n \ge 17$.
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture223/Basic.lean} (129 lines; only import \texttt{Mathlib}). Main
+theorem \texttt{C223.conjecture\_223\_density\_clause\_false}, statement as in the Theorem above. Build:
+\texttt{lake build} succeeds; \texttt{\#print axioms} for the capstone and for \texttt{no\_nonzero\_density},
+\texttt{not\_exact\_form}, \texttt{not\_asymptotic\_form} reports only \texttt{propext},
+\texttt{Classical.choice}, \texttt{Quot.sound}. No \texttt{sorry}, no \texttt{native\_decide}, no new axioms.
+
+\end{document}
