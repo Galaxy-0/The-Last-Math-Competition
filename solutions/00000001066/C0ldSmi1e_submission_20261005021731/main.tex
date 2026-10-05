@@ -1,0 +1,136 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\title{Disproof of Conjecture 00000001066\\[4pt]
+\large Exact square-root attainment over prime fields}
+\author{C0ldSmi1e}
+\date{5 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The conjecture asserts a cardinality bound for Sidon subsets of
+$\mathbb F_p$ and attainment of $\sqrt p$ for prime $p$.
+We disprove the exact-attainment clause for every prime: a finite
+set has integer cardinality, whereas the square root of a prime is
+not an integer. The accompanying Lean project proves the negation
+of the full written conjunction under both universal-prime and
+existential-prime readings of the attainment clause.
+\end{abstract}
+
+\section{Statement and interpretation}
+The supplied English conjecture states:
+\begin{quote}
+Definition: A Sidon set $B\subset\mathbb F_p$ (all pairwise differences
+distinct). Conjecture: $|B|\le p^{1/2}+1$, and $p^{1/2}$ is attained
+for prime $p$ (finite-field Sidon extremality).
+\end{quote}
+The Chinese version has the same bound and attainment clause, joined
+by ``and.'' The exact, unmodified bilingual source is included as
+\texttt{conjecture.md}.
+
+We use the conventional difference formulation of the Sidon property:
+the map $(a,b)\mapsto a-b$ is injective on
+\[
+ D_B=\{(a,b)\in B\times B:a\ne b\}.
+\]
+Thus differences are ordered and diagonal pairs are excluded.
+The symbol $p^{1/2}$ denotes the nonnegative real square root, with
+the natural numbers $p$ and $|B|$ embedded in $\mathbb R$.
+``Attained'' is read as the equality $|B|=\sqrt p$.
+Neither language specifies rounding or an asymptotic qualifier.
+
+Write $U(p)$ for the stated bound for every Sidon subset of
+$\mathbb F_p$, and $A(p)$ for the existence of a Sidon subset of
+cardinality exactly $\sqrt p$. The standard reading is
+\[
+ C_{\forall}:
+ \quad\forall p\text{ prime},\quad U(p)\land A(p).
+\]
+For completeness, we also treat the weaker prime quantifier
+\[
+ C_{\exists}:
+ \quad\bigl(\forall p\text{ prime},\ U(p)\bigr)
+ \land\bigl(\exists p\text{ prime},\ A(p)\bigr).
+\]
+The argument below rules out $A(p)$ for every prime, so it refutes
+both readings without any claim about the truth of $U(p)$.
+
+\section{The cardinality obstruction}
+\begin{theorem}
+For every prime $p$ and every finite subset $B\subseteq\mathbb F_p$,
+one has $|B|\ne\sqrt p$.
+\end{theorem}
+\begin{proof}
+Put $n=|B|\in\mathbb N$ and suppose $n=\sqrt p$ as real numbers.
+Since $p\ge0$, squaring gives $n^2=p$; this is also an equality
+of natural numbers by injectivity of their embedding in the reals.
+If $n=0$ or $n=1$, then $p=0$ or $p=1$, contradicting primality.
+If $n\ge2$, then $p=n\cdot n$ has a proper divisor $n$, since
+$1<n<n^2=p$, again contradicting primality.
+\end{proof}
+
+The theorem applies to all finite subsets, hence to Sidon subsets.
+It gives $\neg A(p)$ and consequently $\neg(U(p)\land A(p))$ for
+every prime $p$. Specializing to the prime $2$ yields
+$\neg C_{\forall}$. Universal failure of $A(p)$ also yields
+$\neg C_{\exists}$.
+
+\section{Formalization and verification}
+The project uses Lean 4.19.0 and Mathlib v4.19.0, with exact
+dependency revisions pinned in \texttt{lean/lake-manifest.json}.
+Its objects are actual finite subsets \texttt{Finset (ZMod p)};
+for prime $p$, \texttt{ZMod p} is the prime field.
+All such subsets are finite, so this representation covers the
+subsets in the conjecture.
+
+The namespace \texttt{Conjecture1066} contains five definitions:
+\begin{center}
+\begin{tabular}{l}
+\texttt{IsSidon}, \texttt{UpperBound}, \texttt{ExactAttainment},\\
+\texttt{UniversalConjecture}, \texttt{ExistentialPrimeConjecture}.
+\end{tabular}
+\end{center}
+\begin{flushleft}
+The central theorem is \texttt{nat\_cast\_ne\_sqrt\_prime}.
+It uses \texttt{Real.sq\_sqrt} and exact transfer of the
+natural-number equality from the reals. The prime-power obstruction
+is \texttt{Nat.Prime.not\_prime\_pow}, used at exponent two.
+\end{flushleft}
+The final theorems are
+\begin{center}
+\texttt{universal\_conjecture\_false}\qquad and\\
+\texttt{existential\_prime\_conjecture\_false}.
+\end{center}
+
+A fresh copied project was built successfully. Both the proof
+source and \texttt{Check.lean} were replayed with warnings treated
+as errors. The audit prints all five definitions and all seven
+theorem types and axiom dependencies, and separately inventories
+all twelve constants originating in the compiled proof module.
+Every theorem depends only on \texttt{propext},
+\texttt{Classical.choice}, and \texttt{Quot.sound}.
+There are no admitted proofs, custom axioms, or
+\texttt{native\_decide} calls. The proof uses no auxiliary search
+or numerical computation; its sole decidable numeral check
+certifies $2\le2$ with ordinary kernel-checked \texttt{decide}.
+
+Reproduction instructions, complete execution and trust-audit
+records, and file hashes accompany the project. These are local
+validation records; repository acceptance is a separate maintainer
+decision.
+
+\section{Scope of the disproof}
+The submission refutes literal exact attainment of $\sqrt p$ over
+prime fields, hence the written conjunction. It does not prove
+or refute the upper-bound clause alone, determine a largest Sidon
+set, or address rounded or asymptotic attainment. Replacing the
+prime parameter by a prime power, adding a floor, or changing
+exact equality to an asymptotic statement would produce different
+claims. None of those changes is made here.
+\end{document}

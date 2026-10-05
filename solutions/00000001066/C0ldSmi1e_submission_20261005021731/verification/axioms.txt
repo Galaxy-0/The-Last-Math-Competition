@@ -1,0 +1,25 @@
+def Conjecture1066.IsSidon : {p : ℕ} → Finset (ZMod p) → Prop :=
+fun {p} B => ∀ ⦃a b c d : ZMod p⦄, a ∈ B → b ∈ B → c ∈ B → d ∈ B → a ≠ b → c ≠ d → a - b = c - d → a = c ∧ b = d
+def Conjecture1066.UpperBound : ℕ → Prop :=
+fun p => ∀ (B : Finset (ZMod p)), Conjecture1066.IsSidon B → ↑B.card ≤ √↑p + 1
+def Conjecture1066.ExactAttainment : ℕ → Prop :=
+fun p => ∃ B, Conjecture1066.IsSidon B ∧ ↑B.card = √↑p
+def Conjecture1066.UniversalConjecture : Prop :=
+∀ (p : ℕ), Nat.Prime p → Conjecture1066.UpperBound p ∧ Conjecture1066.ExactAttainment p
+def Conjecture1066.ExistentialPrimeConjecture : Prop :=
+(∀ (p : ℕ), Nat.Prime p → Conjecture1066.UpperBound p) ∧ ∃ p, Nat.Prime p ∧ Conjecture1066.ExactAttainment p
+Conjecture1066.nat_cast_ne_sqrt_prime {p : ℕ} (hp : Nat.Prime p) (n : ℕ) : ↑n ≠ √↑p
+'Conjecture1066.nat_cast_ne_sqrt_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1066.cardinality_ne_sqrt_prime {p : ℕ} (hp : Nat.Prime p) (B : Finset (ZMod p)) : ↑B.card ≠ √↑p
+'Conjecture1066.cardinality_ne_sqrt_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1066.no_exact_attainment {p : ℕ} (hp : Nat.Prime p) : ¬Conjecture1066.ExactAttainment p
+'Conjecture1066.no_exact_attainment' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1066.no_prime_conjunction {p : ℕ} (hp : Nat.Prime p) :
+  ¬(Conjecture1066.UpperBound p ∧ Conjecture1066.ExactAttainment p)
+'Conjecture1066.no_prime_conjunction' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1066.universal_conjecture_false : ¬Conjecture1066.UniversalConjecture
+'Conjecture1066.universal_conjecture_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1066.no_prime_exact_attainment : ¬∃ p, Nat.Prime p ∧ Conjecture1066.ExactAttainment p
+'Conjecture1066.no_prime_exact_attainment' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture1066.existential_prime_conjecture_false : ¬Conjecture1066.ExistentialPrimeConjecture
+'Conjecture1066.existential_prime_conjecture_false' depends on axioms: [propext, Classical.choice, Quot.sound]
