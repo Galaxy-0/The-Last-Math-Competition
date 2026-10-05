@@ -1,0 +1,9 @@
+# Semantic review (independent, pre-submission)
+
+An independent model reviewer (GPT-6 Astra, reasoning effort "xhigh", separate session) received the exact conjecture text, the full LaTeX report, the full Lean source and a reviewer checklist distilled from 93 closed-unmerged pull requests of this competition. It was asked whether the Lean main theorem settles the conjecture as written, whether the reading is faithful and not a loophole, whether the Lean definitions are faithful to the standard notions, whether the mathematics is correct, and whether report and Lean match. This is an automated review prepared by the submitter, not the competition's maintainer review.
+
+**Verdict:** accept = True; severity = none; reading faithful = True.
+
+**Reviewer notes (verbatim):**
+
+> Accept under the explicitly stated reading that each squared irreducible dimension must divide the algebra dimension. Refuting this universal divisibility conjunct suffices; the submission correctly makes no claim to refute unsquared divisibility. The Lean definitions use genuine Mathlib Hopf algebras, semisimple rings, and simple modules with compatible complex scalar actions. For H = C[S3], the proof establishes dimension 6 and noncommutativity. The assumed divisibility forces every simple left ideal to have dimension 1; commutators then annihilate all simple left ideals and, by semisimplicity, the regular module, contradicting noncommutativity. This is a complete counterexample argument without explicitly constructing the two-dimensional representation. The report correctly explains why the standard group-like basis also makes this particular coalgebra cosemisimple, addressing the conjecture definition despite the main theorem using algebra semisimplicity. The LaTeX mathematics and Lean argument agree. No substantive defect is identified; the vague uniqueness and alternating-type language is unnecessary because the asserted exception list is empty.
