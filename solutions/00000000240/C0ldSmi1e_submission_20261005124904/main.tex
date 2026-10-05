@@ -1,0 +1,222 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{booktabs,array}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlength{\emergencystretch}{2em}
+\newcommand{\R}{\mathbb R}
+\newcommand{\vol}{\operatorname{vol}}
+\newcommand{\ext}{\operatorname{ext}}
+\newcommand{\conv}{\operatorname{conv}}
+\newtheorem{proposition}{Proposition}
+\title{A counterexample to the equality clause\protect\\of conjecture 00000000240}
+\author{C0ldSmi1e}
+\date{October 5, 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The product of a segment and a three-dimensional cross-polytope is a
+four-dimensional origin-symmetric convex body with Mahler volume $32/3=4^4/4!$.
+It has twelve extreme points, whereas a four-dimensional cube and
+cross-polytope have sixteen and eight. Thus it attains the stated bound
+without belonging to either claimed equality class. The accompanying Lean
+project proves the actual body, polar, Lebesgue volumes and obstruction to
+every linear image. The conclusion concerns the equality classification in
+the repository's statement; it makes no claim to resolve the general
+Mahler lower-bound problem.
+\end{abstract}
+
+\section{Statement and scope}
+For a positive integer $n$ and an origin-symmetric convex body $S\subset\R^n$, let
+\[
+ S^\circ=\{y\in\R^n:\langle x,y\rangle\leq1\text{ for every }x\in S\},
+ \qquad M(S)=\vol_n(S)\vol_n(S^\circ).
+\]
+A convex body here is compact, convex, and has nonempty interior in the
+ambient space. Volume is ordinary Lebesgue volume, with unit coordinate
+boxes having volume one. Put
+\[
+ C_n=[-1,1]^n,\qquad
+ B_1^n=\left\{x\in\R^n:\sum_{i=1}^n|x_i|\leq1\right\}
+       =\conv\{\pm e_1,\ldots,\pm e_n\}.
+\]
+The source asserts $M(S)\geq4^n/n!$ and gives only linear images of $C_n$
+or $B_1^n$ as equality cases. The English text asserts the necessary
+direction of this classification; the Chinese text states it as an
+if-and-only-if. We refute their common necessary direction. A false
+four-dimensional instance refutes either universal assertion, including its
+conjunction with the lower bound. The source's parenthetical reference to
+dimensions at most three does not restrict its general claim.
+
+\section{The body and its polar}
+Use coordinates $(s,x_1,x_2,x_3)$ and define
+\[
+ K=[-1,1]\times B_1^3
+   =\{(s,x): |s|\leq1,\ |x_1|+|x_2|+|x_3|\leq1\}.
+\]
+Both factors are compact, convex and symmetric about zero. The open set
+\[
+ \{(s,x):|s|<1,\ |x_1|+|x_2|+|x_3|<1\}
+\]
+contains zero and lies in $K$. Consequently $K$ is a genuine
+four-dimensional origin-symmetric convex body.
+
+\begin{proposition}
+The actual polar of $K$ is
+\[
+ P=\{(t,y):|t|+|y_i|\leq1\text{ for }i=1,2,3\}
+   =\{(t,y):|t|+\max_i|y_i|\leq1\}.
+\]
+\end{proposition}
+\begin{proof}
+If $(t,y)\in K^\circ$, test its defining inequality against
+$(\operatorname{sgn}(t),\operatorname{sgn}(y_i)e_i)\in K$, choosing either
+sign when a coordinate is zero. This gives $|t|+|y_i|\leq1$ for every $i$.
+
+Conversely, suppose these inequalities hold. In particular $|t|\leq1$.
+For $(s,x)\in K$,
+\begin{align*}
+ st+\sum_i x_i y_i
+ &\leq |s||t|+\sum_i|x_i||y_i|\\
+ &\leq |t|+(1-|t|)\sum_i|x_i|\leq1.
+\end{align*}
+Thus $(t,y)\in K^\circ$.
+\end{proof}
+
+\section{Exact Lebesgue volumes}
+The three-dimensional cross-polytope consists of eight orthant simplices,
+each of volume
+\[
+ \int_0^1\int_0^{1-u}\int_0^{1-u-v}dw\,dv\,du=\frac16.
+\]
+Intersections along coordinate planes have zero three-dimensional measure.
+Hence $\vol_3(B_1^3)=4/3$ and the product formula gives
+\[
+ \vol_4(K)=2\cdot\frac43=\frac83.
+\]
+The Lean proof obtains the same actual cross-polytope volume from Mathlib's
+proved formula for the volume of $\ell_p$ balls, at $p=1$ and dimension
+three, with the Gamma factors evaluated exactly.
+
+At a fixed $t$ with $|t|\leq1$, the section of $P$ is the coordinate cube
+\[
+ [-(1-|t|),\,1-|t|]^3,
+\]
+of volume $8(1-|t|)^3$. If $|t|>1$, that section is empty.
+The set $P$ is closed and therefore measurable. The product-measure
+formula, followed by an ordinary integral on a compact interval, yields
+\[
+ \vol_4(P)=\int_{-1}^1 8(1-|t|)^3\,dt
+          =16\int_0^1(1-t)^3\,dt=4.
+\]
+In particular both volume factors are finite and positive. Since $P=K^\circ$,
+\[
+ \boxed{\ M(K)=\frac83\cdot4=\frac{32}{3}
+                   =\frac{4^4}{4!}.\ }
+\]
+
+\section{Excluding both classes of linear images}
+The extreme points of $B_1^n$ are exactly the $2n$ signed coordinate
+vectors. Here is a direct justification. The inequality defining $B_1^n$
+is convex. Every $x\in B_1^n$ is the convex combination
+\[
+ x=\sum_i |x_i|\bigl(\operatorname{sgn}(x_i)e_i\bigr)
+        +\left(1-\sum_i|x_i|\right)0,
+\]
+and zero itself is the midpoint of any opposite pair of coordinate vectors.
+Thus $B_1^n$ is their convex hull. Each signed coordinate vector is extreme:
+a convex combination attaining its coordinate value $1$ or $-1$ forces
+that value in both summands, and the $\ell_1$ bound forces their remaining
+coordinates to vanish. A finite convex hull has no other extreme points.
+
+The interval $[-1,1]$ has precisely the extreme points $-1$ and $1$.
+Extreme points of a Cartesian product are the products of extreme points.
+Consequently
+\[
+ |\ext K|=2\cdot6=12,\qquad
+ |\ext C_4|=2^4=16,\qquad
+ |\ext B_1^4|=2\cdot4=8.
+\]
+For the cube, the product rule equivalently says that every coordinate of
+an extreme point must be an endpoint of its interval.
+
+Every invertible linear map carries extreme points bijectively onto the
+extreme points of the image. Thus $K$ is neither an invertible linear
+image of $C_4$ nor of $B_1^4$. Allowing arbitrary linear maps does not
+enlarge the possible image class here: if $T(S)=K$, then the linear
+subspace $\operatorname{range}T$ contains a set with nonempty interior.
+It must be all of $\R^4$. A surjective endomorphism of a finite-dimensional
+space is invertible. This also rules out every singular map.
+
+The equality and the two non-image conclusions contradict the necessary
+equality condition asserted in both language versions. Therefore
+conjecture 00000000240, with its stated equality classification, is false.
+
+\section{Formalization and reproducible checks}
+The Lean project uses Lean 4.19.0 and Mathlib v4.19.0, with the exact
+dependency revisions recorded in its manifest. Its ambient space is
+$E=\R\times(\operatorname{Fin}3\to\R)$, with ordinary product
+Lebesgue measure. The four coordinates are indexed by
+\texttt{Option (Fin 3)}: the distinguished coordinate is the first factor,
+and the other three are the second factor. The code proves the ambient
+dimension, expands the coordinate map and Euclidean dot product, and
+identifies the transported cube and cross-polytope with the inequalities
+used above. The coordinate equivalence is also proved to preserve volume.
+
+\begin{center}
+\begin{tabular}{@{}p{0.27\linewidth}p{0.67\linewidth}@{}}
+\toprule
+Module & Mathematical content\\
+\midrule
+\texttt{Geometry240} & Convex-hull characterization, all extreme points,
+and exact cardinalities for cubes and cross-polytopes.\\
+\texttt{Objects240} & Concrete body and polar, compactness, convexity,
+interior and symmetry, dimension, coordinates, and exclusion of all
+linear images.\\
+\texttt{Volume240} & Actual Lebesgue volumes of the cross-polytope,
+body and polar, including the measurable sections and evaluated integral.\\
+\texttt{Conjecture240} & The explicit counterexample and negations of the
+four-dimensional English and Chinese assertions.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The principal theorem \texttt{Mahler240.counterexample} includes the body's
+admissibility, dimension, both real volumes, equality with $4^4/4!$, and
+both non-image conclusions. The theorems
+\texttt{conjecture\_00000000240\_english\_false} and
+\texttt{conjecture\_00000000240\_chinese\_false} negate the respective
+dimension-four conjunctions. This specialization suffices to refute the
+universal conjecture. The finite volume identities justify the real-valued
+measure conversions; numerical constants do not stand in for geometric
+objects or their measures.
+
+The independent script \texttt{reproduce.py} uses rational arithmetic to
+enumerate supporting facets, verify primal-polar vertex duality, construct
+the complete face lattices, and sum determinant volumes of barycentric
+simplices. Its separate section calculations agree with these volumes.
+Reference cube and cross-polytope volumes, and a nonsingular rational
+shear, check the normalization. The script reports
+\[
+ \begin{array}{c|c|c|c}
+ &\text{vertices}&\text{facets}&\text{volume}\\\hline
+ K&12&10&8/3\\
+ K^\circ&10&12&4
+ \end{array}
+\]
+These computations corroborate the formal proof. The Lean theorem does
+not assume their output.
+
+Reproduction instructions and exact verification records accompany the
+submission. The required validation covers a fresh project build,
+warnings-as-errors replay of every source module, the full types and axiom
+dependencies of authored and generated declarations, execution of all
+auxiliary checks, and inspection of every page of the matching PDF.
+Independent local verification is distinct from acceptance by repository
+maintainers.
+\end{document}

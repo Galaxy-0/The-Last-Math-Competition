@@ -1,0 +1,27 @@
+{
+  "created_utc": "2026-10-05T12:40:51.722798+00:00",
+  "reason": "First complete environment inventory rejected four compiler-generated unsafe specialization axiom declarations of axis/dot. All original authored theorem checks and logical closures passed; conservative gate retained unchanged.",
+  "author_READY_sha256": "8fb28c7e5747a097e31df1243ed247ed8179cc4a67fbc585fca7aabe0ad62b09",
+  "original_sources": "/private/tmp/tlmc240-author-frozen",
+  "first_attempt_evidence": "/private/tmp/tlmc240-verification-attempt001",
+  "mathematical_statements_and_bodies_unchanged": true,
+  "changes": [
+    {
+      "file": "Geometry240.lean",
+      "declaration": "axis",
+      "before_sha256": "48a9230ddaabd780be750ceb54f5ee707e1d6bd6c4587693fc3603b8527a8ecb",
+      "after_sha256": "a35d4dc719454352323abc7d6a066fec685e42950d44687a9d25f676ad56c48e",
+      "only_change": "Add explicit noncomputable modifier to disable unnecessary compiler specialization. Logical body, type, all theorem statements and proof bodies unchanged.",
+      "diff": "--- author/Geometry240.lean\n+++ final/Geometry240.lean\n@@ -16,7 +16,7 @@\n \n def signVal (b : Bool) : \u211d := if b then 1 else -1\n \n-def axis (p : Bool \u00d7 \u03b9) : \u03b9 \u2192 \u211d := Pi.single p.2 (signVal p.1)\n+noncomputable def axis (p : Bool \u00d7 \u03b9) : \u03b9 \u2192 \u211d := Pi.single p.2 (signVal p.1)\n \n lemma signVal_abs (b : Bool) : |signVal b| = 1 := by cases b <;> norm_num [signVal]\n lemma signVal_ne_zero (b : Bool) : signVal b \u2260 0 := by cases b <;> norm_num [signVal]\n"
+    },
+    {
+      "file": "Objects240.lean",
+      "declaration": "dot",
+      "before_sha256": "baf05478a787be51f48cf5369befe03d2e0d43e15fbe1c152d31f417503f3791",
+      "after_sha256": "45ed95a36249e35503b074b5130786b56388b6e47d661d450c0a7e5877578cf4",
+      "only_change": "Add explicit noncomputable modifier to disable unnecessary compiler specialization. Logical body, type, all theorem statements and proof bodies unchanged.",
+      "diff": "--- author/Objects240.lean\n+++ final/Objects240.lean\n@@ -16,7 +16,7 @@\n def Cube : Set E := coords '' cube Four\n def Cross : Set E := coords '' cross Four\n \n-def dot (x y : E) : \u211d := x.1 * y.1 + \u2211 i, x.2 i * y.2 i\n+noncomputable def dot (x y : E) : \u211d := x.1 * y.1 + \u2211 i, x.2 i * y.2 i\n \n def polar (S : Set E) : Set E := {y | \u2200 x \u2208 S, dot x y \u2264 1}\n \n"
+    }
+  ],
+  "status": "ANNOTATED_AWAITING_FRESH_VERIFICATION"
+}
