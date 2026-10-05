@@ -1,0 +1,193 @@
+def Conjecture2802.fairBernoulli : MeasureTheory.Measure ℝ :=
+(1 / 2) • MeasureTheory.Measure.dirac 0 + (1 / 2) • MeasureTheory.Measure.dirac 1
+def Conjecture2802.LatticeLaw : MeasureTheory.Measure ℝ → Prop :=
+fun μ => ∃ a h, 0 < h ∧ ∀ᵐ (x : ℝ) ∂μ, ∃ k, x = a + h * ↑k
+def Conjecture2802.topologicalSupport : MeasureTheory.Measure ℝ → Set ℝ :=
+fun μ => {x | ∀ (U : Set ℝ), IsOpen U → x ∈ U → μ U ≠ 0}
+def Conjecture2802.binaryRate : ℝ → ℝ :=
+fun x => Real.log 2 + x * Real.log x + (1 - x) * Real.log (1 - x)
+def Conjecture2802.optimalTilt : ℝ → ℝ :=
+fun x => Real.log x - Real.log (1 - x)
+def Conjecture2802.cramerRate : MeasureTheory.Measure ℝ → ℝ → EReal :=
+fun μ x => ⨆ t, ↑(↑t * x - ProbabilityTheory.cgf id μ ↑t)
+def Conjecture2802.effectiveDomain : MeasureTheory.Measure ℝ → Set ℝ :=
+fun μ => {x | Conjecture2802.cramerRate μ x < ⊤}
+def Conjecture2802.RateC2On : (ℝ → EReal) → Set ℝ → Prop :=
+fun I S => ∃ f, ContDiffOn ℝ 2 f S ∧ ∀ x ∈ S, I x = ↑(f x)
+def Conjecture2802.RateTwiceDifferentiableOn : (ℝ → EReal) → Set ℝ → Prop :=
+fun I S => ∃ f, DifferentiableOn ℝ f S ∧ DifferentiableOn ℝ (deriv f) S ∧ ∀ x ∈ S, I x = ↑(f x)
+def Conjecture2802.NonlatticeNecessaryOn : (MeasureTheory.Measure ℝ → Set ℝ) → Prop :=
+fun region =>
+  ∀ (μ : MeasureTheory.Measure ℝ),
+    MeasureTheory.IsProbabilityMeasure μ →
+      (∀ (t : ℝ), MeasureTheory.Integrable (fun x => Real.exp (t * x)) μ) →
+        (∀ (a : ℝ), ¬∀ᵐ (x : ℝ) ∂μ, x = a) →
+          Conjecture2802.RateTwiceDifferentiableOn (Conjecture2802.cramerRate μ) (region μ) →
+            ¬Conjecture2802.LatticeLaw μ
+def Conjecture2802.OrdinarySupportNecessaryClaim : Prop :=
+Conjecture2802.NonlatticeNecessaryOn fun μ => interior (Conjecture2802.topologicalSupport μ)
+def Conjecture2802.ConvexSupportNecessaryClaim : Prop :=
+Conjecture2802.NonlatticeNecessaryOn fun μ => interior ((convexHull ℝ) (Conjecture2802.topologicalSupport μ))
+def Conjecture2802.EffectiveDomainNecessaryClaim : Prop :=
+Conjecture2802.NonlatticeNecessaryOn fun μ => interior (Conjecture2802.effectiveDomain μ)
+Conjecture2802.fairBernoulli_isProbabilityMeasure : MeasureTheory.IsProbabilityMeasure Conjecture2802.fairBernoulli
+'Conjecture2802.fairBernoulli_isProbabilityMeasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.fairBernoulli_mass_zero : Conjecture2802.fairBernoulli {0} = 1 / 2
+'Conjecture2802.fairBernoulli_mass_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.fairBernoulli_mass_one : Conjecture2802.fairBernoulli {1} = 1 / 2
+'Conjecture2802.fairBernoulli_mass_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.ae_fairBernoulli_iff (P : ℝ → Prop) : (∀ᵐ (x : ℝ) ∂Conjecture2802.fairBernoulli, P x) ↔ P 0 ∧ P 1
+'Conjecture2802.ae_fairBernoulli_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.fairBernoulli_lattice : Conjecture2802.LatticeLaw Conjecture2802.fairBernoulli
+'Conjecture2802.fairBernoulli_lattice' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.fairBernoulli_not_ae_constant (a : ℝ) : ¬∀ᵐ (x : ℝ) ∂Conjecture2802.fairBernoulli, x = a
+'Conjecture2802.fairBernoulli_not_ae_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.integrable_fairBernoulli (f : ℝ → ℝ) : MeasureTheory.Integrable f Conjecture2802.fairBernoulli
+'Conjecture2802.integrable_fairBernoulli' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.integrable_exp_fairBernoulli (t : ℝ) :
+  MeasureTheory.Integrable (fun x => Real.exp (t * x)) Conjecture2802.fairBernoulli
+'Conjecture2802.integrable_exp_fairBernoulli' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.mgf_fairBernoulli (t : ℝ) :
+  ProbabilityTheory.mgf id Conjecture2802.fairBernoulli t = (1 + Real.exp t) / 2
+'Conjecture2802.mgf_fairBernoulli' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.cgf_fairBernoulli (t : ℝ) :
+  ProbabilityTheory.cgf id Conjecture2802.fairBernoulli t = Real.log ((1 + Real.exp t) / 2)
+'Conjecture2802.cgf_fairBernoulli' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.support_fairBernoulli : Conjecture2802.topologicalSupport Conjecture2802.fairBernoulli = {0, 1}
+'Conjecture2802.support_fairBernoulli' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.interior_support_fairBernoulli :
+  interior (Conjecture2802.topologicalSupport Conjecture2802.fairBernoulli) = ∅
+'Conjecture2802.interior_support_fairBernoulli' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.convexHull_support_fairBernoulli :
+  (convexHull ℝ) (Conjecture2802.topologicalSupport Conjecture2802.fairBernoulli) = Set.Icc 0 1
+'Conjecture2802.convexHull_support_fairBernoulli' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.interior_convexHull_support_fairBernoulli :
+  interior ((convexHull ℝ) (Conjecture2802.topologicalSupport Conjecture2802.fairBernoulli)) = Set.Ioo 0 1
+'Conjecture2802.interior_convexHull_support_fairBernoulli' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.dual_objective_le_binaryRate (x t : ℝ) (hx : 0 < x) (hx1 : x < 1) :
+  t * x - Real.log ((1 + Real.exp t) / 2) ≤ Conjecture2802.binaryRate x
+'Conjecture2802.dual_objective_le_binaryRate' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.exp_optimalTilt (x : ℝ) (hx : 0 < x) (hx1 : x < 1) :
+  Real.exp (Conjecture2802.optimalTilt x) = x / (1 - x)
+'Conjecture2802.exp_optimalTilt' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.dual_objective_optimalTilt (x : ℝ) (hx : 0 < x) (hx1 : x < 1) :
+  Conjecture2802.optimalTilt x * x - Real.log ((1 + Real.exp (Conjecture2802.optimalTilt x)) / 2) =
+    Conjecture2802.binaryRate x
+'Conjecture2802.dual_objective_optimalTilt' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.binaryRate_eq_relativeEntropy (x : ℝ) (hx : 0 < x) (hx1 : x < 1) :
+  Conjecture2802.binaryRate x = x * Real.log (2 * x) + (1 - x) * Real.log (2 * (1 - x))
+'Conjecture2802.binaryRate_eq_relativeEntropy' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.dualTerm_le_cramerRate (μ : MeasureTheory.Measure ℝ) (x t : ℝ)
+  (ht : MeasureTheory.Integrable (fun y => Real.exp (t * y)) μ) :
+  ↑(t * x - ProbabilityTheory.cgf id μ t) ≤ Conjecture2802.cramerRate μ x
+'Conjecture2802.dualTerm_le_cramerRate' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.cramerRate_nonneg (μ : MeasureTheory.Measure ℝ) [MeasureTheory.IsProbabilityMeasure μ] (x : ℝ) :
+  0 ≤ Conjecture2802.cramerRate μ x
+'Conjecture2802.cramerRate_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.cramerRate_fairBernoulli_eq_iSup (x : ℝ) :
+  Conjecture2802.cramerRate Conjecture2802.fairBernoulli x = ⨆ t, ↑(t * x - Real.log ((1 + Real.exp t) / 2))
+'Conjecture2802.cramerRate_fairBernoulli_eq_iSup' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.cramerRate_fairBernoulli (x : ℝ) (hx : 0 < x) (hx1 : x < 1) :
+  Conjecture2802.cramerRate Conjecture2802.fairBernoulli x = ↑(Conjecture2802.binaryRate x)
+'Conjecture2802.cramerRate_fairBernoulli' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.cgf_fairBernoulli_nonpos (t : ℝ) (ht : t ≤ 0) :
+  ProbabilityTheory.cgf id Conjecture2802.fairBernoulli t ≤ 0
+'Conjecture2802.cgf_fairBernoulli_nonpos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.cgf_fairBernoulli_le_self (t : ℝ) (ht : 0 ≤ t) :
+  ProbabilityTheory.cgf id Conjecture2802.fairBernoulli t ≤ t
+'Conjecture2802.cgf_fairBernoulli_le_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.cramerRate_fairBernoulli_eq_top_of_neg (x : ℝ) (hx : x < 0) :
+  Conjecture2802.cramerRate Conjecture2802.fairBernoulli x = ⊤
+'Conjecture2802.cramerRate_fairBernoulli_eq_top_of_neg' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.cramerRate_fairBernoulli_eq_top_of_one_lt (x : ℝ) (hx : 1 < x) :
+  Conjecture2802.cramerRate Conjecture2802.fairBernoulli x = ⊤
+'Conjecture2802.cramerRate_fairBernoulli_eq_top_of_one_lt' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.Ioo_subset_effectiveDomain_fairBernoulli :
+  Set.Ioo 0 1 ⊆ Conjecture2802.effectiveDomain Conjecture2802.fairBernoulli
+'Conjecture2802.Ioo_subset_effectiveDomain_fairBernoulli' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.effectiveDomain_fairBernoulli_subset_Icc :
+  Conjecture2802.effectiveDomain Conjecture2802.fairBernoulli ⊆ Set.Icc 0 1
+'Conjecture2802.effectiveDomain_fairBernoulli_subset_Icc' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.interior_effectiveDomain_fairBernoulli :
+  interior (Conjecture2802.effectiveDomain Conjecture2802.fairBernoulli) = Set.Ioo 0 1
+'Conjecture2802.interior_effectiveDomain_fairBernoulli' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.RateC2On.twiceDifferentiableOn {I : ℝ → EReal} {S : Set ℝ} (h : Conjecture2802.RateC2On I S)
+  (hS : IsOpen S) : Conjecture2802.RateTwiceDifferentiableOn I S
+'Conjecture2802.RateC2On.twiceDifferentiableOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.rateC2On_empty (I : ℝ → EReal) : Conjecture2802.RateC2On I ∅
+'Conjecture2802.rateC2On_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.binaryRate_contDiffOn : ContDiffOn ℝ (↑⊤) Conjecture2802.binaryRate (Set.Ioo 0 1)
+'Conjecture2802.binaryRate_contDiffOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.rateC2On_of_eq_binaryRate {I : ℝ → EReal} (h : ∀ x ∈ Set.Ioo 0 1, I x = ↑(Conjecture2802.binaryRate x)) :
+  Conjecture2802.RateC2On I (Set.Ioo 0 1)
+'Conjecture2802.rateC2On_of_eq_binaryRate' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.fairBernoulli_rate_smooth :
+  ∃ f,
+    ContDiffOn ℝ (↑⊤) f (Set.Ioo 0 1) ∧
+      ∀ x ∈ Set.Ioo 0 1, Conjecture2802.cramerRate Conjecture2802.fairBernoulli x = ↑(f x)
+'Conjecture2802.fairBernoulli_rate_smooth' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.fairBernoulli_rate_c2_interval :
+  Conjecture2802.RateC2On (Conjecture2802.cramerRate Conjecture2802.fairBernoulli) (Set.Ioo 0 1)
+'Conjecture2802.fairBernoulli_rate_c2_interval' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.fairBernoulli_rate_c2_support :
+  Conjecture2802.RateC2On (Conjecture2802.cramerRate Conjecture2802.fairBernoulli)
+    (interior (Conjecture2802.topologicalSupport Conjecture2802.fairBernoulli))
+'Conjecture2802.fairBernoulli_rate_c2_support' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.fairBernoulli_rate_c2_convexSupport :
+  Conjecture2802.RateC2On (Conjecture2802.cramerRate Conjecture2802.fairBernoulli)
+    (interior ((convexHull ℝ) (Conjecture2802.topologicalSupport Conjecture2802.fairBernoulli)))
+'Conjecture2802.fairBernoulli_rate_c2_convexSupport' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.fairBernoulli_rate_c2_effectiveDomain :
+  Conjecture2802.RateC2On (Conjecture2802.cramerRate Conjecture2802.fairBernoulli)
+    (interior (Conjecture2802.effectiveDomain Conjecture2802.fairBernoulli))
+'Conjecture2802.fairBernoulli_rate_c2_effectiveDomain' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.fairBernoulli_rate_twice_support :
+  Conjecture2802.RateTwiceDifferentiableOn (Conjecture2802.cramerRate Conjecture2802.fairBernoulli)
+    (interior (Conjecture2802.topologicalSupport Conjecture2802.fairBernoulli))
+'Conjecture2802.fairBernoulli_rate_twice_support' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.fairBernoulli_rate_twice_convexSupport :
+  Conjecture2802.RateTwiceDifferentiableOn (Conjecture2802.cramerRate Conjecture2802.fairBernoulli)
+    (interior ((convexHull ℝ) (Conjecture2802.topologicalSupport Conjecture2802.fairBernoulli)))
+'Conjecture2802.fairBernoulli_rate_twice_convexSupport' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.fairBernoulli_rate_twice_effectiveDomain :
+  Conjecture2802.RateTwiceDifferentiableOn (Conjecture2802.cramerRate Conjecture2802.fairBernoulli)
+    (interior (Conjecture2802.effectiveDomain Conjecture2802.fairBernoulli))
+'Conjecture2802.fairBernoulli_rate_twice_effectiveDomain' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.fairBernoulli_convexSupport_interior_nonempty :
+  (interior ((convexHull ℝ) (Conjecture2802.topologicalSupport Conjecture2802.fairBernoulli))).Nonempty
+'Conjecture2802.fairBernoulli_convexSupport_interior_nonempty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Conjecture2802.fairBernoulli_effectiveDomain_interior_nonempty :
+  (interior (Conjecture2802.effectiveDomain Conjecture2802.fairBernoulli)).Nonempty
+'Conjecture2802.fairBernoulli_effectiveDomain_interior_nonempty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Conjecture2802.not_nonlatticeNecessaryOn_of_fairBernoulli (region : MeasureTheory.Measure ℝ → Set ℝ)
+  (hreg :
+    Conjecture2802.RateTwiceDifferentiableOn (Conjecture2802.cramerRate Conjecture2802.fairBernoulli)
+      (region Conjecture2802.fairBernoulli)) :
+  ¬Conjecture2802.NonlatticeNecessaryOn region
+'Conjecture2802.not_nonlatticeNecessaryOn_of_fairBernoulli' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.not_ordinarySupportNecessaryClaim : ¬Conjecture2802.OrdinarySupportNecessaryClaim
+'Conjecture2802.not_ordinarySupportNecessaryClaim' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.not_convexSupportNecessaryClaim : ¬Conjecture2802.ConvexSupportNecessaryClaim
+'Conjecture2802.not_convexSupportNecessaryClaim' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.not_effectiveDomainNecessaryClaim : ¬Conjecture2802.EffectiveDomainNecessaryClaim
+'Conjecture2802.not_effectiveDomainNecessaryClaim' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.necessary_criterion_fails_all_three_readings :
+  ¬Conjecture2802.OrdinarySupportNecessaryClaim ∧
+    ¬Conjecture2802.ConvexSupportNecessaryClaim ∧ ¬Conjecture2802.EffectiveDomainNecessaryClaim
+'Conjecture2802.necessary_criterion_fails_all_three_readings' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture2802.explicit_counterexample :
+  ∃ μ,
+    MeasureTheory.IsProbabilityMeasure μ ∧
+      (∀ (t : ℝ), MeasureTheory.Integrable (fun x => Real.exp (t * x)) μ) ∧
+        (∀ (a : ℝ), ¬∀ᵐ (x : ℝ) ∂μ, x = a) ∧
+          Conjecture2802.LatticeLaw μ ∧
+            interior (Conjecture2802.topologicalSupport μ) = ∅ ∧
+              interior ((convexHull ℝ) (Conjecture2802.topologicalSupport μ)) = Set.Ioo 0 1 ∧
+                interior (Conjecture2802.effectiveDomain μ) = Set.Ioo 0 1 ∧
+                  (Set.Ioo 0 1).Nonempty ∧
+                    ∃ f, ContDiffOn ℝ (↑⊤) f (Set.Ioo 0 1) ∧ ∀ x ∈ Set.Ioo 0 1, Conjecture2802.cramerRate μ x = ↑(f x)
+'Conjecture2802.explicit_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
