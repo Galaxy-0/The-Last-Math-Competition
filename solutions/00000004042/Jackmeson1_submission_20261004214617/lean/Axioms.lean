@@ -1,0 +1,3 @@
+import Conjecture4042
+#print axioms Conjecture4042.conjecture_00000004042_false
+#print axioms Conjecture4042.conjecture_00000004042_false_of_any_clause2

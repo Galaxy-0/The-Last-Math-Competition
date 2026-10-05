@@ -1,0 +1,304 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\repdim}{\operatorname{repdim}}
+\newcommand{\gldim}{\operatorname{gl.dim}}
+\newcommand{\pd}{\operatorname{pd}}
+\newcommand{\add}{\operatorname{add}}
+\newcommand{\End}{\operatorname{End}}
+\newcommand{\Hom}{\operatorname{Hom}}
+
+\title{A disproof of Conjecture 00000004042\\[2pt]
+\large The values of the representation dimension are not dense above $3$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000004042 reads (English version):
+
+\begin{quote}
+\emph{Definition:} An interval algebra is an algebra constructed from a poset with repdim = 3.
+\emph{Conjecture:} The realizable values of repdim are dense above 3, and the class of algebras with
+repdim = 3 is closed under derived equivalence.
+\end{quote}
+
+The Chinese version (in \texttt{conjectures/00000004042.md}) says, in transliteration,
+``repdim de ke shixian zhi \emph{zai 3 yishang choumi}; repdim = 3 de daishu lei zai daochu dengjia xia
+fengbi'', i.e.\ ``the realizable values of repdim are \emph{dense in [the region] above 3}; the class of
+algebras with repdim $=3$ is closed under derived equivalence''.
+
+The conjecture is the conjunction of two clauses:
+\begin{enumerate}[label=(\arabic*)]
+  \item the set $V$ of realizable values of $\repdim$ is dense above $3$;
+  \item if $\repdim A = 3$ and $B$ is derived equivalent to $A$, then $\repdim B = 3$.
+\end{enumerate}
+The preliminary ``Definition'' only introduces the name ``interval algebra''. Neither clause mentions
+interval algebras, so the definition plays no role.
+
+\textbf{Result.} Clause (1) is false: $\repdim$ takes values in $\{0,1,2,\dots\}\cup\{\infty\}$ (and
+$-\infty$ for the zero algebra under Mathlib's conventions), so the nonempty open interval
+$(13/4, 15/4) \subset (3,\infty)$ contains no realizable value. Hence the conjunction (1)$\wedge$(2) is
+false, whatever clause (2) means. The proof is formalized in Lean~4 with Mathlib (Section~\ref{sec:lean}).
+
+\section{Reading}\label{sec:reading}
+
+\paragraph{repdim.} ``repdim'' is Auslander's representation dimension, the standard meaning of this
+abbreviation in the representation theory of algebras (Definition~\ref{def:repdim}). The algebras are
+finite-dimensional algebras over a field, the setting of the definition quoted below from
+Erdmann--Holm--Iyama--Schr\"oer.
+
+\paragraph{``Dense above 3''.} ``Dense'' is a technical term with a standard meaning. Wikipedia,
+\emph{Dense set}: ``a subset A of a topological space X is said to be dense in X if every point of X
+either belongs to A or else is arbitrarily ``close'' to members of A'' and ``Formally, $A$ is dense in
+$X$ if the smallest closed subset of $X$ containing $A$ is $X$ itself.'' The Chinese text uses the
+construction ``zai $X$ choumi'' (``dense in $X$''), which names the ambient space $X$, here ``3 yishang''
+(``above 3''). The realizable values are numbers, so the ambient space is the half-line of real numbers
+above $3$. Clause (1) therefore says:
+\[
+  \text{(1)}\qquad V \cap (3,\infty) \text{ is dense in the topological space } (3,\infty) \subset \mathbb{R}.
+\]
+Equivalently, every nonempty open subset of $(3,\infty)$ contains a realizable value. This is exactly
+what the Lean definition \texttt{DenseAbove3} states, using Mathlib's \texttt{Dense} in the subspace
+\texttt{Set.Ioi 3} of $\mathbb{R}$.
+
+Two remarks on this reading.
+\begin{itemize}
+  \item Density passes to open subspaces: if $V$ were dense in $[3,\infty)$, or in the extended
+        half-line $(3,+\infty]$, then it would be dense in the open subspace $(3,\infty)$. So the
+        statement refuted here is implied by these variants, and the refutation covers them too.
+  \item Scope of this reading. A different, more charitable reading is conceivable: if the ambient space
+        were taken to be the discrete set of integers $\ge 3$, density there would amount to ``every
+        integer $\ge 3$ is a realizable value''. Neither language version names such an ambient space or
+        replaces density by integer realizability, and the realizable values are compared with the real
+        number $3$; we therefore take the standard real-topological meaning stated above as the literal
+        one. We state explicitly that this submission does not address the integer-realizability
+        reading (nor clause (2) on its own); it refutes the conjecture as written, under the standard
+        meaning of ``dense''. Likewise ``dense above 3'' is not read as ``densely ordered'': the
+        construction ``dense in $X$'' (``zai $X$ choumi'') is the topological notion relative to the named
+        ambient space $X$.
+\end{itemize}
+
+\paragraph{Clause (2).} Following Wikipedia, \emph{Tilting theory}, ``A and B are derived equivalent
+(i.e. the derived categories Db(A-mod) and Db(B-mod) are equivalent as triangulated categories)''.
+Because clause (1) is false, the conjunction is false whatever clause (2) says. The Lean development
+makes this explicit. It proves $\neg(\texttt{DenseAbove3}\wedge P)$ for \emph{every} proposition $P$
+(\texttt{conjecture\_00000004042\_false\_of\_any\_clause2}). The main theorem is the instance of this
+at a concrete formalization \texttt{ClosedUnderDerivedEquivalence} of clause (2), built on Mathlib's
+derived categories (Section~\ref{sec:lean}). So the refutation does not depend on any choice made in
+formalizing clause (2): any other formalization (bounded derived categories of finitely generated
+modules, $k$-linear equivalences, \dots) is also an instance of the general theorem. The proof never
+uses the content of clause (2), so no fact about derived equivalence is needed.
+
+\section{Definitions and sources}
+
+All quotations below are verbatim from the retrieved sources. Mathematical symbols are transcribed
+into \LaTeX.
+
+\begin{definition}[Projective and global dimension]\label{def:gldim}
+The projective dimension $\pd X$ of a module $X$ is the minimal length of a projective resolution of
+$X$, or $\infty$. Wikipedia, \emph{Resolution (algebra)}: ``The minimal length of a finite projective
+resolution of a module $M$ is called its projective dimension'' and ``If $M$ does not admit a finite
+projective resolution then the projective dimension is infinite.'' The (left) global dimension of a ring
+$R$ is
+\[
+  \gldim R = \sup\{\pd X : X \text{ a left } R\text{-module}\}.
+\]
+Wikipedia, \emph{Global dimension}: the global dimension ``of a ring A denoted gl dim A, is a non-negative
+integer or infinity which is a homological invariant of the ring. It is defined to be the supremum of
+the set of projective dimensions of all A-modules.''
+\end{definition}
+
+In Lean we use Mathlib's \texttt{CategoryTheory.projectiveDimension X}, which takes values in
+\texttt{WithBot $\mathbb{N}_\infty$} $= \{\bot\}\cup\{0,1,2,\dots\}\cup\{\infty\}$. Its docstring
+reads: ``We also define the projective dimension in \texttt{WithBot $\mathbb{N}_\infty$} as
+\texttt{projectiveDimension}, \texttt{projectiveDimension X = $\bot$} iff \texttt{X} is zero and behaves
+as expected on non-negative values''. (``$X$ has projective dimension $< n$'' means that
+$\mathrm{Ext}^i(X,-)=0$ for all $i \ge n$.) The value $\bot$ occurs only for the zero module.
+
+\begin{definition}[Generator-cogenerator, representation dimension]\label{def:repdim}
+Let $A$ be a finite-dimensional algebra over a field $k$, and let $D = \Hom_k(-,k)$. For an $A$-module
+$M$, $\add M$ is the class of direct summands of finite direct sums $M^n$. A
+\emph{generator-cogenerator} is a finitely generated $A$-module $M$ with $A \in \add M$ and
+$D(A_A) \in \add M$ (equivalently $A \oplus D(A_A) \in \add M$). The \emph{representation dimension} is
+\[
+  \repdim A = \inf\{\gldim \End_A(M) : M \text{ a generator-cogenerator of } A\}.
+\]
+\end{definition}
+
+Sources:
+\begin{itemize}
+  \item K.~Erdmann, T.~Holm, O.~Iyama, J.~Schr\"oer, \emph{Radical embeddings and representation
+        dimension}, arXiv:math/0210362, Section~1 (\url{https://arxiv.org/html/math/0210362}):
+        ``Throughout, let k be a field, and let A be an associative finite-dimensional k-algebra. By
+        mod(A) we denote the category of finite-dimensional left A-modules. A generator-cogenerator of A
+        is an A-module Z such that $A \oplus A^* \in \add(Z)$, where $A^* = D(A_A)$ with
+        $D = \Hom_k(-,k)$ the usual duality. Recall that add(Z) is the subcategory of all A-modules which
+        are isomorphic to direct summands of finite direct sums of Z. The representation dimension of A
+        is defined as $\repdim(A) = \min\{\operatorname{gldim}(\End_A(Z)) \mid Z$ a generator-cogenerator
+        of $A\}$.''
+  \item W.~Hu, C.~C.~Xi, \emph{Derived equivalences and stable equivalences of Morita type, I},
+        arXiv:0810.4761v2, Section~5 (\url{https://arxiv.org/html/0810.4761v2}): ``An A-module M is
+        called a generator-cogenerator for A-mod if $A \oplus D(A) \in \add(M)$. The representation
+        dimension of A, denoted by rep.dim(A), is defined to be
+        $\mathrm{rep.dim}(A) := \inf\{\mathrm{gl.dim}(\End_A(M)) \mid M$ is a generator-cogenerator for
+        A-mod$\}$. This notion was introduced by Auslander in [1] to measure homologically how far an
+        algebra is from being representation-finite''.
+  \item C.~M.~Ringel, \emph{On the representation dimension of artin algebras}, arXiv:1107.1861v1,
+        abstract (\url{https://arxiv.org/html/1107.1861v1}): ``The representation dimension of an artin
+        algebra as introduced by M. Auslander in his Queen Mary Notes is the minimal possible global
+        dimension of the endomorphism ring of a generator-cogenerator.''
+\end{itemize}
+EHIS write $\min$, Hu--Xi write $\inf$. The proof below uses only that $\repdim A$ is an infimum of
+global dimensions, so it applies to both formulations.
+
+\begin{remark}[Conventions that do not affect the argument]\label{rem:conv}
+(a) A finitely generated module over a finite-dimensional algebra is finite-dimensional over $k$, and
+conversely, so ``finitely generated'' and EHIS's ``finite-dimensional'' agree.
+(b) $\End_A(M)$ acts on $M$ on the left, and we use its left global dimension. $\End_A(M)$ is a
+finite-dimensional $k$-algebra, hence Noetherian on both sides, and for such rings left and right global
+dimensions coincide (Wikipedia, \emph{Global dimension}: ``if A is a Noetherian ring, both of these
+dimensions turn out to be equal to weak global dimension''). In any case every global dimension, left or
+right, lies in $\{0,1,2,\dots\}\cup\{\infty\}$, and that is all the proof uses.
+(c) Universes. In Lean, the field $k$, the algebra $A$, the modules $M$, and the modules over
+$\End_A(M)$ all live in one universe $u$. This loses nothing. Every finitely generated $A$-module is
+isomorphic to a quotient of some $A^n$, which lives in universe $u$, so every isomorphism class of
+generator-cogenerators is represented. The global dimension of a ring is determined by its cyclic
+modules, which are quotients of the ring and so live in its universe (Wikipedia, \emph{Global
+dimension}: the right global dimension ``can be alternatively defined as: the supremum of the set of
+projective dimensions of all cyclic right A-modules'', and ``The left global dimension of A has
+analogous characterizations''). All Lean statements are universe polymorphic, and the theorem is proved
+in every universe $u$.
+\end{remark}
+
+\section{The proof}
+
+\begin{lemma}[Integrality]\label{lem:int}
+For every finite-dimensional algebra $A$ over a field $k$, $\repdim A \in \{-\infty\}\cup\{0,1,2,\dots\}\cup\{\infty\}$.
+In particular, every finite real value of $\repdim$ is a non-negative integer.
+\end{lemma}
+
+\begin{proof}
+Every projective dimension lies in $W := \{\bot\}\cup\{0,1,2,\dots\}\cup\{\infty\}$, a complete linear
+order. $\gldim R$ is a supremum of projective dimensions, so $\gldim R \in W$. $\repdim A$ is an
+infimum of global dimensions, so $\repdim A \in W$. Under the order embedding
+$W \hookrightarrow [-\infty,+\infty]$ ($\bot\mapsto-\infty$, $n\mapsto n$, $\infty\mapsto+\infty$), the only
+elements of $W$ that map to real numbers are the natural numbers.
+\end{proof}
+
+\begin{lemma}\label{lem:gap}
+No integer lies in the open interval $(13/4, 15/4)$.
+\end{lemma}
+
+\begin{proof}
+If $13/4 < m < 15/4$ then $3 < m < 4$, which is impossible for an integer $m$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+Clause (1) is false: the set $V$ of realizable values of $\repdim$ is not dense in $(3,\infty)$.
+\end{theorem}
+
+\begin{proof}
+$U = (13/4, 15/4)$ is an open subset of $(3,\infty)$, and it is nonempty because $7/2 \in U$. If $V$ were
+dense in $(3,\infty)$, then $U$ would contain some $r \in V$, i.e.\ $r = \repdim A$ for some
+finite-dimensional algebra $A$. By Lemma~\ref{lem:int}, $r$ is an integer, and by Lemma~\ref{lem:gap},
+$r \notin U$. This is a contradiction.
+\end{proof}
+
+\begin{corollary}
+Conjecture 00000004042 is false: for every proposition $P$, in particular for clause (2) however it is
+formalized, $\neg(\text{(1)} \wedge P)$.
+\end{corollary}
+
+\section{Lean 4 formalization}\label{sec:lean}
+
+The directory \texttt{lean/} contains a Lean~4 project (Lean \texttt{v4.33.1}, Mathlib \texttt{v4.33.1}).
+\texttt{Conjecture4042.lean} imports the single source file \texttt{Conjecture4042/Basic.lean}
+(228 lines, namespace \texttt{Conjecture4042}, one universe variable \texttt{u}), which contains the
+following.
+
+\paragraph{Definitions.}
+\begin{itemize}
+  \item \texttt{globalDimension R} $:= \sup_{X}$ \texttt{projectiveDimension X}, the supremum
+        (Lean \texttt{iSup}) over all \texttt{X : ModuleCat.\{u\} R}, valued in
+        \texttt{WithBot $\mathbb{N}_\infty$} (Definition~\ref{def:gldim}).
+  \item \texttt{DualRegular k A}, the type of $k$-linear maps $A \to k$, i.e.\ $D(A_A)=\Hom_k(A,k)$, with the left $A$-module
+        structure $(a\cdot f)(x) = f(xa)$, defined as \texttt{f.comp (LinearMap.mulRight k a)}.
+  \item \texttt{IsSummandOfPower X M}: there are $n$ and $A$-linear maps
+        \texttt{i : X $\to$ (Fin n $\to$ M)}, \texttt{r : (Fin n $\to$ M) $\to$ X} with
+        \texttt{r $\circ$ i = id}, i.e.\ $X \in \add M$.
+  \item \texttt{IsGeneratorCogenerator k A M}: \texttt{Module.Finite A M}, \texttt{A $\in$ add M} and
+        \texttt{D(A) $\in$ add M}.
+  \item \texttt{repdim k A} $:= \inf_{M}$ \texttt{globalDimension (Module.End A M)}, the infimum
+        (Lean \texttt{iInf}) over all \texttt{M : ModuleCat.\{u\} A} with
+        \texttt{IsGeneratorCogenerator k A M} (Definition~\ref{def:repdim}).
+  \item \texttt{toEReal : WithBot $\mathbb{N}_\infty$ $\to$ EReal}, the order embedding
+        $\bot\mapsto\bot$, $n\mapsto n$, $\top\mapsto\top$, used only to compare values of
+        \texttt{repdim} with real numbers.
+  \item \texttt{IsRealizable v}: there are \texttt{k A : Type u} with \texttt{[Field k] [Ring A]
+        [Algebra k A] [FiniteDimensional k A]} and \texttt{toEReal (repdim k A) = v}.
+  \item \texttt{DenseAbove3 := Dense \{x : Set.Ioi (3:$\mathbb{R}$) | IsRealizable ((x:$\mathbb{R}$) :
+        EReal)\}}: clause (1), density in the subspace $(3,\infty)$ of $\mathbb{R}$.
+  \item \texttt{DerivedEquivalent A B}: there is an equivalence
+        \texttt{e : DerivedCategory (ModuleCat A) $\simeq$ DerivedCategory (ModuleCat B)} of Mathlib's
+        derived categories whose functor commutes with the shift
+        (\texttt{e.functor.CommShift $\mathbb{Z}$}) and is triangulated
+        (\texttt{e.functor.IsTriangulated}). Mathlib provides the derived category of all modules. We
+        use it because it is the derived category available in Mathlib for a noncommutative ring. This
+        choice is not load-bearing; see Section~\ref{sec:reading}.
+  \item \texttt{ClosedUnderDerivedEquivalence}: for all finite-dimensional algebras $A$ over $k$ and $B$
+        over $k'$, \texttt{repdim k A = 3 $\to$ DerivedEquivalent A B $\to$ repdim k' B = 3}
+        (clause (2)).
+\end{itemize}
+
+\paragraph{Theorems.}
+\begin{itemize}
+  \item \texttt{exists\_nat\_of\_toEReal\_eq\_coe}: if \texttt{toEReal x = r} for a real $r$, then
+        \texttt{x = m} and \texttt{r = m} for some \texttt{m : $\mathbb{N}$}.
+  \item \texttt{repdim\_eq\_nat\_of\_toEReal\_eq}, \texttt{eq\_nat\_of\_isRealizable}:
+        Lemma~\ref{lem:int} (every real realizable value of \texttt{repdim} is a natural number).
+  \item \texttt{no\_nat\_in\_Ioo}: Lemma~\ref{lem:gap}.
+  \item \texttt{not\_isRealizable\_of\_mem\_Ioo}: no realizable value lies in $(13/4,15/4)$.
+  \item \texttt{not\_denseAbove3 : $\neg$ DenseAbove3} (Theorem~\ref{thm:main}), via
+        \texttt{dense\_iff\_inter\_open} applied to the open set
+        $\{x \in (3,\infty) : 13/4 < x < 15/4\}$, which contains $7/2$.
+  \item \texttt{conjecture\_00000004042\_false\_of\_any\_clause2 (P : Prop) : $\neg$ (DenseAbove3 $\wedge$ P)}.
+  \item The main theorem
+\[
+  \texttt{conjecture\_00000004042\_false} :\ \neg\,(\texttt{DenseAbove3} \wedge
+  \texttt{ClosedUnderDerivedEquivalence}).
+\]
+\end{itemize}
+
+\paragraph{Axiom audit.} There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+\texttt{\#print axioms conjecture\_00000004042\_false} reports
+\begin{verbatim}
+'Conjecture4042.conjecture_00000004042_false' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+\end{verbatim}
+and the same holds for \texttt{conjecture\_00000004042\_false\_of\_any\_clause2}. The file also
+elaborates with \texttt{-DwarningAsError=true}. To check:
+\begin{verbatim}
+cd lean
+lake exe cache get
+lake build
+\end{verbatim}
+
+\end{document}
