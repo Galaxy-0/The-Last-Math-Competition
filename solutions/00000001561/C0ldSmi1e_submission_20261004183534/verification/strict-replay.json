@@ -1,0 +1,808 @@
+{
+  "started_utc": "2026-10-04T18:35:10.063083+00:00",
+  "source_root": "/private/tmp/tlmc1561-proof",
+  "independent_root": "/private/tmp/tlmc1561-independent",
+  "dependency_root": "/private/tmp/tlmc310-proof/.lake/packages",
+  "fresh_build_outputs_absent": true,
+  "copied_files": [
+    "Conjecture1561/Definitions.lean",
+    "Conjecture1561/Boundary.lean",
+    "Conjecture1561/Interior.lean",
+    "Conjecture1561.lean",
+    "Check.lean",
+    "lakefile.toml",
+    "lake-manifest.json",
+    "lean-toolchain"
+  ],
+  "source_sha256": {
+    "Conjecture1561/Definitions.lean": "ff98abc40f083df4804e8a9b8ea41ce9333fcf0d74a1b9bd321d45b4f433d999",
+    "Conjecture1561/Boundary.lean": "84ea7adf14e9cd713c7b1b8b7254767ed8918a858eedf6f17f562e331455ea91",
+    "Conjecture1561/Interior.lean": "d796b6306bec6c22a79ac0cbd5b98fc5e41fc378c3d1480bb4ed38d1dcdbad55",
+    "Conjecture1561.lean": "1e7055409110d7a56ca89714b68408ddd7b08372a8943eb5abfaaa67a0901642",
+    "Check.lean": "4b25b016714ca45db499d6f1272c02c190a3e498053dbb28b4fe7883f7c121be",
+    "lakefile.toml": "d3ac9d84bdb3bcd27ce71f59920b4fb014aa9e708df8b140825f685b21b35324",
+    "lake-manifest.json": "a8c9be678435340e9e27372ff4dfaf1b675735e146af02b0c73f6b30cdacd325",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "dependencies": [
+    {
+      "name": "mathlib",
+      "expected_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "actual_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "plausible",
+      "expected_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "actual_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "expected_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "actual_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "importGraph",
+      "expected_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "actual_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "proofwidgets",
+      "expected_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "actual_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "aesop",
+      "expected_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "actual_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Qq",
+      "expected_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "actual_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "batteries",
+      "expected_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "actual_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Cli",
+      "expected_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "actual_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    }
+  ],
+  "strict_replay": [
+    {
+      "file": "Conjecture1561/Definitions.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture1561/Definitions.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.324,
+      "output": ""
+    },
+    {
+      "file": "Conjecture1561/Boundary.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture1561/Boundary.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.635,
+      "output": ""
+    },
+    {
+      "file": "Conjecture1561/Interior.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture1561/Interior.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.875,
+      "output": ""
+    },
+    {
+      "file": "Conjecture1561.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture1561.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.495,
+      "output": ""
+    },
+    {
+      "file": "Check.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Check.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.285,
+      "output": "@[reducible] def Conjecture1561.Space : Type :=\nEuclideanSpace \u211d (Fin 3)\ndef Conjecture1561.sphereS2 : Set Conjecture1561.Space :=\nMetric.sphere 0 1\ndef Conjecture1561.sphericalDistance : Conjecture1561.Space \u2192 Conjecture1561.Space \u2192 \u211d :=\nfun x y => InnerProductGeometry.angle x y\ndef Conjecture1561.closedHemisphere : Conjecture1561.Space \u2192 Set Conjecture1561.Space :=\nfun v => {x | x \u2208 Conjecture1561.sphereS2 \u2227 0 \u2264 inner v x}\ndef Conjecture1561.openHemisphere : Conjecture1561.Space \u2192 Set Conjecture1561.Space :=\nfun v => {x | x \u2208 Conjecture1561.sphereS2 \u2227 0 < inner v x}\ndef Conjecture1561.Admissible : Set Conjecture1561.Space \u2192 Prop :=\nfun A => A \u2286 Conjecture1561.sphereS2 \u2227 \u2200 x \u2208 A, \u2200 y \u2208 A, Conjecture1561.sphericalDistance x y \u2264 Real.pi / 2\ndef Conjecture1561.IsAreaMaximizer : MeasureTheory.Measure Conjecture1561.Space \u2192 Set Conjecture1561.Space \u2192 Prop :=\nfun \u03bc A => Conjecture1561.Admissible A \u2227 \u2200 (B : Set Conjecture1561.Space), Conjecture1561.Admissible B \u2192 \u03bc B \u2264 \u03bc A\ndef Conjecture1561.sphericalArea : MeasureTheory.Measure Conjecture1561.Space :=\nMeasureTheory.Measure.hausdorffMeasure 2\ndef Conjecture1561.HemisphereExtremizerClaim : MeasureTheory.Measure Conjecture1561.Space \u2192 Prop :=\nfun \u03bc => \u2203 v \u2208 Conjecture1561.sphereS2, Conjecture1561.IsAreaMaximizer \u03bc (Conjecture1561.closedHemisphere v)\ndef Conjecture1561.ConjectureFirstClause : Prop :=\nConjecture1561.HemisphereExtremizerClaim Conjecture1561.sphericalArea\ndef Conjecture1561.interiorLeft : Conjecture1561.Space \u2192 Conjecture1561.Space \u2192 Conjecture1561.Space :=\nfun v w => (3 / 5) \u2022 v + (4 / 5) \u2022 w\ndef Conjecture1561.interiorRight : Conjecture1561.Space \u2192 Conjecture1561.Space \u2192 Conjecture1561.Space :=\nfun v w => (3 / 5) \u2022 v - (4 / 5) \u2022 w\nConjecture1561.sphereS2_mem_iff (x : Conjecture1561.Space) : x \u2208 Conjecture1561.sphereS2 \u2194 \u2016x\u2016 = 1\nConjecture1561.sphericalDistance_eq_arccos_inner (x y : Conjecture1561.Space) (hx : x \u2208 Conjecture1561.sphereS2)\n  (hy : y \u2208 Conjecture1561.sphereS2) : Conjecture1561.sphericalDistance x y = Real.arccos (inner x y)\nConjecture1561.exists_unit_orthogonal (v : Conjecture1561.Space) (hv : v \u2208 Conjecture1561.sphereS2) :\n  \u2203 w, \u2016w\u2016 = 1 \u2227 inner v w = 0\nConjecture1561.closedHemisphere_antipodal_pair (v : Conjecture1561.Space) (hv : v \u2208 Conjecture1561.sphereS2) :\n  \u2203 w \u2208 Conjecture1561.closedHemisphere v,\n    -w \u2208 Conjecture1561.closedHemisphere v \u2227 Conjecture1561.sphericalDistance w (-w) = Real.pi\nConjecture1561.closedHemisphere_bad_pair (v : Conjecture1561.Space) (hv : v \u2208 Conjecture1561.sphereS2) :\n  \u2203 x \u2208 Conjecture1561.closedHemisphere v,\n    \u2203 y \u2208 Conjecture1561.closedHemisphere v, Real.pi / 2 < Conjecture1561.sphericalDistance x y\nConjecture1561.closedHemisphere_not_admissible (v : Conjecture1561.Space) (hv : v \u2208 Conjecture1561.sphereS2) :\n  \u00acConjecture1561.Admissible (Conjecture1561.closedHemisphere v)\nConjecture1561.interiorLeft_norm {v w : Conjecture1561.Space} (hv : \u2016v\u2016 = 1) (hw : \u2016w\u2016 = 1) (hvw : inner v w = 0) :\n  \u2016Conjecture1561.interiorLeft v w\u2016 = 1\nConjecture1561.interiorRight_norm {v w : Conjecture1561.Space} (hv : \u2016v\u2016 = 1) (hw : \u2016w\u2016 = 1) (hvw : inner v w = 0) :\n  \u2016Conjecture1561.interiorRight v w\u2016 = 1\nConjecture1561.inner_center_left {v w : Conjecture1561.Space} (hv : \u2016v\u2016 = 1) (hvw : inner v w = 0) :\n  inner v (Conjecture1561.interiorLeft v w) = 3 / 5\nConjecture1561.inner_center_right {v w : Conjecture1561.Space} (hv : \u2016v\u2016 = 1) (hvw : inner v w = 0) :\n  inner v (Conjecture1561.interiorRight v w) = 3 / 5\nConjecture1561.interiorLeft_mem_open {v w : Conjecture1561.Space} (hv : \u2016v\u2016 = 1) (hw : \u2016w\u2016 = 1) (hvw : inner v w = 0) :\n  Conjecture1561.interiorLeft v w \u2208 Conjecture1561.openHemisphere v\nConjecture1561.interiorRight_mem_open {v w : Conjecture1561.Space} (hv : \u2016v\u2016 = 1) (hw : \u2016w\u2016 = 1) (hvw : inner v w = 0) :\n  Conjecture1561.interiorRight v w \u2208 Conjecture1561.openHemisphere v\nConjecture1561.inner_interior_pair {v w : Conjecture1561.Space} (hv : \u2016v\u2016 = 1) (hw : \u2016w\u2016 = 1) (hvw : inner v w = 0) :\n  inner (Conjecture1561.interiorLeft v w) (Conjecture1561.interiorRight v w) = -(7 / 25)\nConjecture1561.interior_distance_gt {v w : Conjecture1561.Space} (hv : \u2016v\u2016 = 1) (hw : \u2016w\u2016 = 1) (hvw : inner v w = 0) :\n  Real.pi / 2 < Conjecture1561.sphericalDistance (Conjecture1561.interiorLeft v w) (Conjecture1561.interiorRight v w)\nConjecture1561.interior_bad_pair {v w : Conjecture1561.Space} (hv : \u2016v\u2016 = 1) (hw : \u2016w\u2016 = 1) (hvw : inner v w = 0) :\n  \u2203 x \u2208 Conjecture1561.openHemisphere v,\n    \u2203 y \u2208 Conjecture1561.openHemisphere v, Real.pi / 2 < Conjecture1561.sphericalDistance x y\nConjecture1561.openHemisphere_bad_pair (v : Conjecture1561.Space) (hv : v \u2208 Conjecture1561.sphereS2) :\n  \u2203 x \u2208 Conjecture1561.openHemisphere v,\n    \u2203 y \u2208 Conjecture1561.openHemisphere v, Real.pi / 2 < Conjecture1561.sphericalDistance x y\nConjecture1561.openHemisphere_not_admissible (v : Conjecture1561.Space) (hv : v \u2208 Conjecture1561.sphereS2) :\n  \u00acConjecture1561.Admissible (Conjecture1561.openHemisphere v)\nConjecture1561.closedHemisphere_not_maximizer (\u03bc : MeasureTheory.Measure Conjecture1561.Space)\n  (v : Conjecture1561.Space) (hv : v \u2208 Conjecture1561.sphereS2) :\n  \u00acConjecture1561.IsAreaMaximizer \u03bc (Conjecture1561.closedHemisphere v)\nConjecture1561.openHemisphere_not_maximizer (\u03bc : MeasureTheory.Measure Conjecture1561.Space) (v : Conjecture1561.Space)\n  (hv : v \u2208 Conjecture1561.sphereS2) : \u00acConjecture1561.IsAreaMaximizer \u03bc (Conjecture1561.openHemisphere v)\nConjecture1561.no_hemisphere_extremizer (\u03bc : MeasureTheory.Measure Conjecture1561.Space) :\n  \u00acConjecture1561.HemisphereExtremizerClaim \u03bc\nConjecture1561.conjecture_false : \u00acConjecture1561.ConjectureFirstClause\n'Conjecture1561.sphereS2_mem_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.sphericalDistance_eq_arccos_inner' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.exists_unit_orthogonal' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.closedHemisphere_antipodal_pair' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.closedHemisphere_bad_pair' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.closedHemisphere_not_admissible' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.interiorLeft_norm' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.interiorRight_norm' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.inner_center_left' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.inner_center_right' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.interiorLeft_mem_open' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.interiorRight_mem_open' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.inner_interior_pair' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.interior_distance_gt' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.interior_bad_pair' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.openHemisphere_bad_pair' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.openHemisphere_not_admissible' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.closedHemisphere_not_maximizer' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.openHemisphere_not_maximizer' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.no_hemisphere_extremizer' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture1561.conjecture_false' depends on axioms: [propext, Classical.choice, Quot.sound]\n"
+    }
+  ],
+  "lean_version": {
+    "exit_code": 0,
+    "output": "Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)"
+  },
+  "lean_commit": {
+    "exit_code": 0,
+    "expected": "6caaee842e9495688c1567e78c0e68dbb96942aa",
+    "actual": "6caaee842e9495688c1567e78c0e68dbb96942aa"
+  },
+  "project_identity": {
+    "manifest_name": "tlmc1561",
+    "lake_name": "tlmc1561",
+    "default_targets": [
+      "Conjecture1561"
+    ],
+    "toolchain_pin": "leanprover/lean4:v4.19.0",
+    "source_file_count": 5,
+    "config_file_count": 3,
+    "dependency_symlink_target": "/private/tmp/tlmc310-proof/.lake/packages"
+  },
+  "proof_bypass_scan": {
+    "pattern": "\\b(?:sorry|admit|axiom|native_decide|unsafe|run_tac|elab|implemented_by|extern|skipKernelTC)\\b|Lean\\.ofReduceBool|debug\\.skipKernelTC|trustLevel",
+    "method": "Lexical scan after masking nested block comments, line comments, and string literals; raw matches retained for inspection.",
+    "raw_matches": [],
+    "hits": []
+  },
+  "build": {
+    "command": [
+      "lake",
+      "build"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 4.829,
+    "log": "build.txt"
+  },
+  "axiom_audit": {
+    "expected_count": 21,
+    "parsed_count": 21,
+    "expected_theorems": [
+      "Conjecture1561.sphereS2_mem_iff",
+      "Conjecture1561.sphericalDistance_eq_arccos_inner",
+      "Conjecture1561.exists_unit_orthogonal",
+      "Conjecture1561.closedHemisphere_antipodal_pair",
+      "Conjecture1561.closedHemisphere_bad_pair",
+      "Conjecture1561.closedHemisphere_not_admissible",
+      "Conjecture1561.interiorLeft_norm",
+      "Conjecture1561.interiorRight_norm",
+      "Conjecture1561.inner_center_left",
+      "Conjecture1561.inner_center_right",
+      "Conjecture1561.interiorLeft_mem_open",
+      "Conjecture1561.interiorRight_mem_open",
+      "Conjecture1561.inner_interior_pair",
+      "Conjecture1561.interior_distance_gt",
+      "Conjecture1561.interior_bad_pair",
+      "Conjecture1561.openHemisphere_bad_pair",
+      "Conjecture1561.openHemisphere_not_admissible",
+      "Conjecture1561.closedHemisphere_not_maximizer",
+      "Conjecture1561.openHemisphere_not_maximizer",
+      "Conjecture1561.no_hemisphere_extremizer",
+      "Conjecture1561.conjecture_false"
+    ],
+    "audits": [
+      {
+        "theorem": "Conjecture1561.sphereS2_mem_iff",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.sphericalDistance_eq_arccos_inner",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.exists_unit_orthogonal",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.closedHemisphere_antipodal_pair",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.closedHemisphere_bad_pair",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.closedHemisphere_not_admissible",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.interiorLeft_norm",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.interiorRight_norm",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.inner_center_left",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.inner_center_right",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.interiorLeft_mem_open",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.interiorRight_mem_open",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.inner_interior_pair",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.interior_distance_gt",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.interior_bad_pair",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.openHemisphere_bad_pair",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.openHemisphere_not_admissible",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.closedHemisphere_not_maximizer",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.openHemisphere_not_maximizer",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.no_hemisphere_extremizer",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture1561.conjecture_false",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
+    ],
+    "allowed_axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "all_names_match": true,
+    "only_allowed_axioms": true,
+    "theorem_lemma_count": 21,
+    "named_instance_count": 0,
+    "zero_axiom_declarations": []
+  },
+  "independent_sha256": {
+    "Conjecture1561/Definitions.lean": "ff98abc40f083df4804e8a9b8ea41ce9333fcf0d74a1b9bd321d45b4f433d999",
+    "Conjecture1561/Boundary.lean": "84ea7adf14e9cd713c7b1b8b7254767ed8918a858eedf6f17f562e331455ea91",
+    "Conjecture1561/Interior.lean": "d796b6306bec6c22a79ac0cbd5b98fc5e41fc378c3d1480bb4ed38d1dcdbad55",
+    "Conjecture1561.lean": "1e7055409110d7a56ca89714b68408ddd7b08372a8943eb5abfaaa67a0901642",
+    "Check.lean": "4b25b016714ca45db499d6f1272c02c190a3e498053dbb28b4fe7883f7c121be",
+    "lakefile.toml": "d3ac9d84bdb3bcd27ce71f59920b4fb014aa9e708df8b140825f685b21b35324",
+    "lake-manifest.json": "a8c9be678435340e9e27372ff4dfaf1b675735e146af02b0c73f6b30cdacd325",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "source_unchanged": true,
+  "copied_files_unchanged": true,
+  "definition_and_type_audit": {
+    "definition_names": [
+      "Conjecture1561.Space",
+      "Conjecture1561.sphereS2",
+      "Conjecture1561.sphericalDistance",
+      "Conjecture1561.closedHemisphere",
+      "Conjecture1561.openHemisphere",
+      "Conjecture1561.Admissible",
+      "Conjecture1561.IsAreaMaximizer",
+      "Conjecture1561.sphericalArea",
+      "Conjecture1561.HemisphereExtremizerClaim",
+      "Conjecture1561.ConjectureFirstClause",
+      "Conjecture1561.interiorLeft",
+      "Conjecture1561.interiorRight"
+    ],
+    "definition_count": 12,
+    "checked_theorem_names": [
+      "Conjecture1561.sphereS2_mem_iff",
+      "Conjecture1561.sphericalDistance_eq_arccos_inner",
+      "Conjecture1561.exists_unit_orthogonal",
+      "Conjecture1561.closedHemisphere_antipodal_pair",
+      "Conjecture1561.closedHemisphere_bad_pair",
+      "Conjecture1561.closedHemisphere_not_admissible",
+      "Conjecture1561.interiorLeft_norm",
+      "Conjecture1561.interiorRight_norm",
+      "Conjecture1561.inner_center_left",
+      "Conjecture1561.inner_center_right",
+      "Conjecture1561.interiorLeft_mem_open",
+      "Conjecture1561.interiorRight_mem_open",
+      "Conjecture1561.inner_interior_pair",
+      "Conjecture1561.interior_distance_gt",
+      "Conjecture1561.interior_bad_pair",
+      "Conjecture1561.openHemisphere_bad_pair",
+      "Conjecture1561.openHemisphere_not_admissible",
+      "Conjecture1561.closedHemisphere_not_maximizer",
+      "Conjecture1561.openHemisphere_not_maximizer",
+      "Conjecture1561.no_hemisphere_extremizer",
+      "Conjecture1561.conjecture_false"
+    ],
+    "checked_theorem_count": 21,
+    "checked_names_match_audits": true,
+    "printed_definition_names": [
+      "Conjecture1561.Space",
+      "Conjecture1561.sphereS2",
+      "Conjecture1561.sphericalDistance",
+      "Conjecture1561.closedHemisphere",
+      "Conjecture1561.openHemisphere",
+      "Conjecture1561.Admissible",
+      "Conjecture1561.IsAreaMaximizer",
+      "Conjecture1561.sphericalArea",
+      "Conjecture1561.HemisphereExtremizerClaim",
+      "Conjecture1561.ConjectureFirstClause",
+      "Conjecture1561.interiorLeft",
+      "Conjecture1561.interiorRight"
+    ],
+    "printed_definition_count": 12,
+    "printed_definition_names_match": true,
+    "printed_theorem_type_names": [
+      "Conjecture1561.sphereS2_mem_iff",
+      "Conjecture1561.sphericalDistance_eq_arccos_inner",
+      "Conjecture1561.exists_unit_orthogonal",
+      "Conjecture1561.closedHemisphere_antipodal_pair",
+      "Conjecture1561.closedHemisphere_bad_pair",
+      "Conjecture1561.closedHemisphere_not_admissible",
+      "Conjecture1561.interiorLeft_norm",
+      "Conjecture1561.interiorRight_norm",
+      "Conjecture1561.inner_center_left",
+      "Conjecture1561.inner_center_right",
+      "Conjecture1561.interiorLeft_mem_open",
+      "Conjecture1561.interiorRight_mem_open",
+      "Conjecture1561.inner_interior_pair",
+      "Conjecture1561.interior_distance_gt",
+      "Conjecture1561.interior_bad_pair",
+      "Conjecture1561.openHemisphere_bad_pair",
+      "Conjecture1561.openHemisphere_not_admissible",
+      "Conjecture1561.closedHemisphere_not_maximizer",
+      "Conjecture1561.openHemisphere_not_maximizer",
+      "Conjecture1561.no_hemisphere_extremizer",
+      "Conjecture1561.conjecture_false"
+    ],
+    "printed_theorem_type_count": 21,
+    "printed_theorem_type_names_match": true
+  },
+  "audit_inventory_sha256": "93ccceaddc085c20e3b13a11180689496193a36ecf20d70cef737015af341717",
+  "execution_audit_scope": "Fresh independent build and trust/identity verification; separate from the independent semantic review.",
+  "dependencies_post_build": [
+    {
+      "name": "mathlib",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "revision_matches": true
+    },
+    {
+      "name": "plausible",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "revision_matches": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "revision_matches": true
+    },
+    {
+      "name": "importGraph",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "revision_matches": true
+    },
+    {
+      "name": "proofwidgets",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "revision_matches": true
+    },
+    {
+      "name": "aesop",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "revision_matches": true
+    },
+    {
+      "name": "Qq",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "revision_matches": true
+    },
+    {
+      "name": "batteries",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "revision_matches": true
+    },
+    {
+      "name": "Cli",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "revision_matches": true
+    }
+  ],
+  "status": "PASS",
+  "finished_utc": "2026-10-04T18:35:28.912900+00:00"
+}

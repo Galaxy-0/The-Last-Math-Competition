@@ -1,0 +1,82 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\R}{\mathbb R}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\title{Hemispheres fail the stated spherical diameter constraint}
+\author{C0ldSmi1e\\\small Disproof of conjecture 00000001561}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The conjecture proposes a closed hemisphere as the area-maximizing subset of the unit sphere with all pairwise spherical distances at most $\pi/2$. Every closed hemisphere contains an antipodal equatorial pair, at distance $\pi$. Moreover, even its open interior contains pairs at distance greater than $\pi/2$. Thus no hemisphere is an admissible competitor, independently of any area normalization.
+\end{abstract}
+
+\section{The exact feasibility requirement}
+Both language versions specify subsets of $S^2$ with \emph{pairwise spherical distances at most $\pi/2$}. They then assert that the extremal set is a closed hemisphere, followed by a claim about a second extremizer and an area ratio. The exact bilingual text accompanies this report as \texttt{conjecture.md}.
+
+Work in ordinary Euclidean $\R^3$, with
+\[
+ S^2=\{x:\|x\|=1\},\qquad
+ d_S(x,y)=\arccos\ip{x}{y}\quad(x,y\in S^2).
+\]
+This is great-circle distance in radians, not the ambient chord distance; the convention and the halfspace description of hemispheres are standard \cite{klartag}. For a unit pole $v$, write
+\[
+ H_v=\{x\in S^2:\ip{v}{x}\ge0\},\qquad
+ H_v^\circ=\{x\in S^2:\ip{v}{x}>0\}.
+\]
+An admissible set $A$ is a subset of $S^2$ satisfying $d_S(x,y)\le\pi/2$ for every $x,y\in A$. In particular, an area-maximizer among admissible sets must itself be admissible.
+
+\section{Every closed hemisphere is inadmissible}
+\begin{theorem}
+For every unit pole $v$, there exist $x,y\in H_v$ with $d_S(x,y)=\pi$. Consequently no closed hemisphere is admissible for the problem in the source.
+\end{theorem}
+\begin{proof}
+The orthogonal complement of $v$ in $\R^3$ has dimension two, so it contains a unit vector $w$. Then
+\[
+ \|w\|=\|-w\|=1,\qquad
+ \ip{v}{w}=\ip{v}{-w}=0.
+\]
+Both $w$ and $-w$ lie in $H_v$, whereas
+\[
+ d_S(w,-w)=\arccos(-1)=\pi>\pi/2.
+\]
+The construction works for every orientation of the hemisphere.
+\end{proof}
+
+Since the first asserted extremizer is not feasible, the full conjunctive conjecture is false. No definition or classification of the proposed second extremizer, and no area-ratio computation, is needed for this contradiction.
+
+\section{The open hemisphere also fails}
+The obstruction is not removed merely by deleting the equator. With the same orthonormal pair $v,w$, define
+\[
+ x=\frac35v+\frac45w,\qquad y=\frac35v-\frac45w.
+\]
+Orthogonality gives
+\[
+ \|x\|^2=\|y\|^2=\frac9{25}+\frac{16}{25}=1,
+ \qquad \ip{v}{x}=\ip{v}{y}=\frac35>0.
+\]
+Thus $x,y\in H_v^\circ$. But
+\[
+ \ip{x}{y}=\frac9{25}-\frac{16}{25}=-\frac7{25}<0,
+ \qquad d_S(x,y)=\arccos(-7/25)>\pi/2.
+\]
+This is a separate strengthening for the actual open hemisphere. It does not assert a theorem about every set equal to a hemisphere almost everywhere; no such claim is required by the literal statement.
+
+\section{Formalization and verification scope}
+The Lean project uses the actual \texttt{EuclideanSpace} $\R\,(\mathrm{Fin}\,3)$ with its Euclidean norm and inner product. The unit sphere is \texttt{Metric.sphere 0 1}. Spherical distance is Mathlib's \texttt{InnerProductGeometry.angle}; its equality to $\arccos\ip{x}{y}$ on the unit sphere is proved. A genuine orthonormal basis of the pole's orthogonal complement supplies the perpendicular unit vector. Hemisphere membership, antipodal angle, and the interior-pair identities are proved for the actual vectors.
+
+The predicate \texttt{Admissible} quantifies over all pairs of points in the actual set. The optimization predicate explicitly includes this feasibility condition, together with comparison of areas against all admissible competitors. The formal result excludes every hemisphere as a maximizer for \emph{every} measure on the ambient Euclidean space. It is then specialized to Mathlib's actual two-dimensional Hausdorff measure. That library uses a diameter-cover normalization; no surface-area normalization formula is assumed or needed, because the infeasibility argument is independent of the objective measure.
+
+The final theorem negates the necessary first-clause assertion that some oriented closed hemisphere is an admissible area-maximizer. It does not compute the correct optimum, classify actual maximizers, or interpret the unspecified second-extremizer terminology. All witness hypotheses are discharged. No auxiliary numerical computation is used.
+
+The submission includes full Lean source, pinned dependencies, strict build and axiom-audit records, and independent internal semantic scrutiny. These author-side checks are distinct from official maintainer acceptance. The matching PDF is compiled from this source and visually inspected.
+
+\begin{thebibliography}{1}
+\bibitem{klartag} B. Klartag, \emph{Isoperimetric inequalities in high-dimensional convex sets}, ETH Zurich, 2025. Lecture 1, Section 1.3, pp. 9--10 (geodesic distance and hemispheres). \url{https://www.weizmann.ac.il/math/klartag/sites/math.klartag/files/uploads/lecture1.pdf}.
+\end{thebibliography}
+\end{document}
