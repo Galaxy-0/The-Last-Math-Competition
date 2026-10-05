@@ -1,0 +1,169 @@
+\pdfmapfile{+symbols.map}
+\pdfmapfile{+cm.map}
+\pdfmapfile{+cmextra.map}
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\N}{\mathbb N}
+\title{Positive Tutte Evaluations and an Explicit Finite Count}
+\author{Galaxy-0}
+\date{October 5, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+For every finite undirected multigraph $G$ and integer $q\ge2$, we prove
+$T_G(q+1,q-1)\ge q^{r(E)}>0$. We construct a finite family of decorated
+spanning subgraphs whose cardinality is this evaluation and give a terminating
+algorithm to enumerate it. This proves the positivity and effective-count
+assertions in conjecture 00000000585, with no prime-power restriction needed.
+\end{abstract}
+
+\section{Statement and conventions}
+The published conjecture states: ``For every prime power $q$,
+$T_G(q+1,q-1)>0$ and yields an effective count (an arithmetization of the
+combinatorial positivity interpretation).'' Its preceding descriptive sentence
+mentions log-concavity but specifies no sequence, inequality, or additional
+log-concavity assertion. The theorem below addresses exactly the stated
+positivity and counting assertions; it does not assert an unspecified
+log-concavity property.
+
+Let $G=(V,E)$ be a finite undirected graph. Loops, parallel edges, isolated
+vertices, disconnected graphs, and the graph with no vertices are permitted.
+Edges are individually labeled; consequently parallel edges determine different
+subsets of $E$. For $A\subseteq E$, write $c(A)$ for the number of connected
+components of the spanning graph $(V,A)$, including isolated vertices, and put
+\[
+ r(A)=|V|-c(A),\qquad \nu(A)=|A|-r(A).
+\]
+For the empty vertex set the component count is zero. In particular
+$r(\varnothing)=0$. We use the standard rank-subset definition of the Tutte
+polynomial:
+\begin{equation}\label{eq:tutte}
+ T_G(x,y)=\sum_{A\subseteq E}
+ (x-1)^{r(E)-r(A)}(y-1)^{|A|-r(A)}.
+\end{equation}
+All exponents in this polynomial are nonnegative integers. Indeed, adding
+edges cannot increase the number of components, so $r(A)\le r(E)$. Starting
+with $|V|$ isolated vertices, each inserted edge decreases the component count
+by at most one, so $r(A)\le|A|$. These observations cover loops and parallel
+edges without any change. As usual a zeroth power is one, including $0^0=1$.
+
+\newpage
+\section{Positivity}
+\begin{theorem}\label{thm:positive}
+For every finite undirected multigraph $G$ and every integer $q\ge2$,
+\[
+ T_G(q+1,q-1)=\sum_{A\subseteq E}
+ q^{r(E)-r(A)}(q-2)^{\nu(A)}\ge q^{r(E)}>0.
+\]
+\end{theorem}
+\begin{proof}
+Substitute $x=q+1$ and $y=q-1$ into \eqref{eq:tutte}. Since $q\ge2$, the
+bases $q$ and $q-2$ are nonnegative. Every summand is therefore nonnegative.
+For $A=\varnothing$, the summand is
+$q^{r(E)-0}(q-2)^0=q^{r(E)}$, which is strictly positive. Keeping that
+summand and discarding the other nonnegative summands proves the assertion.
+\end{proof}
+If $q=p^k$ is a prime power, with $p$ a prime and $k\ge1$, then $q\ge2$.
+The conjectured positivity is thus an immediate instance of
+Theorem~\ref{thm:positive}. The stronger conclusion also includes integers
+that are not prime powers.
+
+\section{An explicit counting interpretation}
+For an integer $s\ge0$, let $[s]=\{0,\ldots,s-1\}$. The set of words of
+length $d$ over this alphabet is $[s]^d$, the set of functions from $[d]$ to
+$[s]$. Its cardinality is $s^d$. In particular there is one empty word over
+an empty alphabet and no positive-length word over that alphabet.
+
+Define the finite set
+\begin{equation}\label{eq:objects}
+ \mathcal C(G,q)=\coprod_{A\subseteq E}
+ \bigl(\{A\}\times[q]^{r(E)-r(A)}\times[q-2]^{\nu(A)}\bigr).
+\end{equation}
+An object is a selected spanning subgraph, a $q$-color word in its
+rank-deficiency slots, and a $(q-2)$-color word in its cycle-nullity slots.
+The selected edge set is part of the object, so contributions from different
+subsets cannot be confused. No equivalence of colorings is taken.
+
+\begin{theorem}\label{thm:count}
+For every $G$ and every integer $q\ge2$,
+\[
+ |\mathcal C(G,q)|=T_G(q+1,q-1).
+\]
+The family $\mathcal C(G,q)$ is nonempty and has a finite, explicit
+enumeration algorithm.
+\end{theorem}
+\begin{proof}
+The summand indexed by $A$ in \eqref{eq:objects} has cardinality
+$q^{r(E)-r(A)}(q-2)^{\nu(A)}$, by the product rule for cardinalities.
+Taking the disjoint union gives the sum in Theorem~\ref{thm:positive}.
+The empty edge set supplies $q^{r(E)}$ objects, so the family is nonempty.
+
+To enumerate it, order the vertices and individually labeled edges. Compute
+$c(E)$ by graph search. Enumerate the $2^{|E|}$ Boolean edge-selection masks.
+For each mask, compute $c(A)$ by graph search, calculate the two displayed
+nonnegative lengths, and enumerate the words over the corresponding finite
+alphabets in lexicographic order. Output the mask and the two words. Every
+loop of this procedure has a specified finite bound. Each valid object
+appears exactly once, because its mask and each word have unique encodings.
+Thus this is a terminating effective enumeration. Counting instead of
+materializing the output gives the same evaluation. No polynomial-time
+claim is made.
+\end{proof}
+At $q=2$, precisely the acyclic subsets contribute: if $\nu(A)>0$, their
+contribution is zero; if $\nu(A)=0$, it is $2^{r(E)-r(A)}$. The empty
+subset still contributes positively. This also explains why the endpoint
+$q=2$ does not present an exception.
+
+\section{Lean definitions and scope}
+The accompanying \texttt{Tutte585.lean} uses Lean 4.31.0 and its standard
+library only. The complete Lake project and executable examples compile
+successfully. The main theorem's audited dependencies are \texttt{propext},
+\texttt{Classical.choice}, and \texttt{Quot.sound}; no additional axiom
+or proof placeholder occurs.
+A graph has a finite vertex type $\operatorname{Fin}(n)$ and a list of pairs
+of vertices. List positions are edge labels, so repeated endpoint pairs
+represent parallel edges. Equal endpoints represent loops.
+
+The inductive relation \texttt{Connected} is generated by reflexivity,
+edges, symmetry, and transitivity. The definition \texttt{componentCount}
+counts the least vertex in each connected component. Each nonempty component
+has exactly one such least vertex, so this is precisely $c(A)$.
+The definition \texttt{rank} is $n-\texttt{componentCount}$, and
+\texttt{tutte} is exactly the rank-subset expansion above, evaluated in the
+natural numbers for $x,y\ge1$. Only $x=q+1$, $y=q-1$ with $q\ge2$ is claimed
+to represent the usual polynomial evaluation. Natural subtraction in the
+exponents equals integer subtraction by the graph inequalities proved in
+Section~1; these basic rank inequalities are not separately formalized in
+this file.
+
+The formal proof establishes empty-graph connectivity as equality and
+$r(\varnothing)=0$, proves the lower bound and strict positivity, and proves
+that the explicitly defined decorated-subgraph enumeration has the same
+length as the evaluation and has no duplicate objects. Decorations are represented by pairs of integers
+less than the corresponding powers; these are the ordinary finite word
+codes. Boolean masks preserve edge identity throughout enumeration.
+The main theorem is \texttt{conjecture\_00000000585}.
+
+The formal component count is executable. A finite cut test enumerates
+all vertex subsets and asks whether every edge-closed subset containing $u$
+also contains $v$. The file proves that this test is equivalent to
+\texttt{Connected}: connectivity preserves membership in a closed cut;
+conversely, the component of $u$ itself is an edge-closed cut containing $u$.
+Classical reasoning is used only inside this correctness proof. The decision
+procedure, component count, rank, and object enumeration are all computable
+Lean definitions. This exhaustive cut procedure is deliberately simple and
+may be exponential in the number of vertices; graph search gives the more
+practical implementation described above.
+
+There are no added axioms or proof placeholders. The final source prints
+its theorem's logical dependencies for audit. In particular, ordinary
+classical logical dependencies are not graph-theoretic assumptions.
+
+\section*{Source}
+The Last Math Competition, conjecture 00000000585, revision
+\texttt{d7d4bc9f6918}. \href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/d7d4bc9f6918401d3fb22c6e473df63eba5dbb78/conjectures/00000000585.md}{Published statement at the exact pinned revision}.
+\end{document}

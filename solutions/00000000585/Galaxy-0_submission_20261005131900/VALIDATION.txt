@@ -1,0 +1,20 @@
+Validation completed 2026-10-05, official Lean 4.31.0.
+Release commit: 68218e876d2a38b1985b8590fff244a83c321783.
+Official release archive SHA256:
+07a633cc8d9151cbc08825ea4cdda50d4b02a2c9cb852c0131b13046f49cad7f
+
+Commands passed:
+  lake build
+  lake env lean Tutte585.lean
+  lake env lean Examples.lean
+  python3 check_model.py
+
+Main theorem axiom output:
+  [propext, Classical.choice, Quot.sound]
+
+Executable example output: 13
+Python regression output: PASS, 753 graph/parameter cases.
+PDF: 3 pages, no overfull boxes, visually inspected after final build.
+
+The graph rank bounds are established in the written proof; they are not
+separate Lean lemmas. This scope is disclosed in the report and README.
