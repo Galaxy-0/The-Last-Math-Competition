@@ -1,0 +1,138 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Conjecture 00000002181 is false:\\ parity has sensitivity $n$ and spectral norm $1$}
+\author{Jackmeson1}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+Conjecture 00000002181 (English text, verbatim): ``Definition: The Gotsman--Linial conjecture
+relates the sensitivity of Boolean functions to their spectral norm. Conjecture: Sensitivity is
+always at most $\sqrt{2}\cdot\log n$ times the spectral norm; and the bound is controlled by the
+pointer maxima of real hypercubical faces.'' The Chinese text says the same (sensitivity never
+exceeds the spectral norm times a $\sqrt{2}\log n$ factor; and the bound is controlled by pointer
+maxima of real hypercube faces).
+
+\paragraph{Reading.} The conjecture is a conjunction. Its first clause says: for every Boolean
+function $f$ on $n$ variables,
+\[ s(f) \le \sqrt{2}\,\log n\cdot \|\hat f\|_1 . \tag{$\ast$} \]
+Here $n$ is the number of input variables. We refute $(\ast)$, which refutes the conjunction; the
+second clause (``pointer maxima of real hypercubical faces'') is not used. We refute $(\ast)$
+under each of the following choices, and do not claim more:
+\begin{itemize}
+\item sensitivity read as maximum sensitivity, as sensitivity at a point, or as average
+  sensitivity (all equal $n$ for the parity witness);
+\item spectral norm $\|\hat f\|_1=\sum_S|\hat f(S)|$ of the $\pm1$ encoding $(-1)^{f}$ or of the
+  $0/1$ encoding of $f$;
+\item $\log$ the natural logarithm or $\log_2$; in fact $\sqrt2\log n$ may be replaced by
+  $C\log n$ for any constant $C$, which covers every base $b>1$ since $\log_b n=\log n/\log b$;
+\item restricting $(\ast)$ to $n\ge 2$ (to avoid the degenerate value $\log 1=0$), or to linear
+  threshold functions.
+\end{itemize}
+
+\section{Definitions and conventions}
+Inputs are $x\in\{\mathrm{false},\mathrm{true}\}^n$ (Lean: \texttt{Fin n -> Bool}). The sign of a
+bit is $\mathrm{sgn}(\mathrm{false})=1$, $\mathrm{sgn}(\mathrm{true})=-1$. The point $x^{\oplus i}$
+is $x$ with bit $i$ flipped.
+\begin{definition}
+$s(f,x)=\#\{i : f(x^{\oplus i})\ne f(x)\}$; the sensitivity is $s(f)=\max_x s(f,x)$; the average
+sensitivity is $2^{-n}\sum_x s(f,x)$.
+For $S\subseteq[n]$ the Walsh character is $\chi_S(x)=\prod_{i\in S}\mathrm{sgn}(x_i)$. For
+$g:\{\mathrm{false},\mathrm{true}\}^n\to\mathbb R$ the (normalised) Fourier coefficient is
+$\hat g(S)=2^{-n}\sum_x g(x)\chi_S(x)$, and the spectral norm is
+$\|\hat g\|_1=\sum_{S}|\hat g(S)|$. The $\pm1$ encoding of $f$ is $x\mapsto \mathrm{sgn}(f(x))$,
+the $0/1$ encoding is $x\mapsto[f(x)=\mathrm{true}]$.
+Parity is $\mathrm{PAR}_n(x)=\mathrm{true}$ iff $\#\{i:x_i=\mathrm{true}\}$ is odd;
+$\mathrm{AND}_n(x)=\mathrm{true}$ iff all $x_i=\mathrm{true}$. A linear threshold function is one
+of the form $f(x)=[\theta\le\sum_i w_i x_i]$ with real $w_i,\theta$ (bits read as $0/1$).
+\end{definition}
+
+\section{Proof}
+\begin{lemma}[\texttt{sum\_prod\_bits}]
+$\sum_x\prod_i h_i(x_i)=\prod_i\big(h_i(\mathrm{true})+h_i(\mathrm{false})\big)$.
+\end{lemma}
+This is distributivity (Mathlib \texttt{Fintype.prod\_sum}).
+
+\begin{lemma}[\texttt{sgn\_parity}, \texttt{parity\_flipBit}]
+$\mathrm{sgn}(\mathrm{PAR}_n(x))=\prod_i\mathrm{sgn}(x_i)$, hence flipping any bit changes
+$\mathrm{PAR}_n(x)$.
+\end{lemma}
+\begin{proof}
+The product equals $(-1)^{\#\{i:x_i\}}$. Flipping bit $i$ negates exactly one factor.
+\end{proof}
+
+\begin{theorem}[\texttt{parity\_sensAt}, \texttt{parity\_sensitivity}, \texttt{parity\_avgSensitivity}]
+$s(\mathrm{PAR}_n,x)=n$ for every $x$; so $s(\mathrm{PAR}_n)=n$ and the average sensitivity is $n$.
+\end{theorem}
+
+\begin{theorem}[\texttt{fourierCoeff\_pm\_parity}, \texttt{spectralNorm\_pm\_parity},
+\texttt{spectralNorm\_zo\_parity}]
+The $\pm1$ parity has $\hat g(S)=[S=[n]]$, so $\|\hat g\|_1=1$. For $n\ge1$ the $0/1$ parity has
+$\hat g(S)=\tfrac12[S=\emptyset]-\tfrac12[S=[n]]$, so $\|\hat g\|_1=1$.
+\end{theorem}
+\begin{proof}
+$\mathrm{sgn}(\mathrm{PAR}_n(x))\chi_S(x)=\prod_i h_i(x_i)$ with
+$h_i(b)=\mathrm{sgn}(b)^2=1$ if $i\in S$ and $h_i(b)=\mathrm{sgn}(b)$ otherwise. By the first lemma
+the sum over $x$ is $\prod_i(h_i(\mathrm{true})+h_i(\mathrm{false}))$, which is $2^n$ if $S=[n]$
+and $0$ otherwise. Likewise $\sum_x\chi_S(x)=2^n[S=\emptyset]$. The $0/1$ encoding equals
+$(1-\mathrm{sgn}\circ f)/2$, which gives its coefficients; $\emptyset\ne[n]$ when $n\ge1$.
+\end{proof}
+
+\begin{lemma}[\texttt{sqrt\_two\_mul\_log\_lt}, \texttt{sqrt\_two\_mul\_logb\_lt}, \texttt{const\_mul\_log\_lt}]
+For every integer $n\ge1$: $\sqrt2\ln n<n$ and $\sqrt2\log_2 n<n$. For every real $C$ there is $N$
+with $C\ln n<n$ for all $n\ge N$.
+\end{lemma}
+\begin{proof}
+From $\ln y\le y-1$ with $y=n/e$ we get $\ln n\le n/e$. Since $\sqrt2<3/2<e$, the first claim
+follows. For $\log_2$: $e\ln2>2.718\cdot0.693>3/2>\sqrt2$, so $\sqrt2\ln n< e\ln 2\,\ln n\le n\ln2$
+when $n\ge2$, and $n=1$ is trivial. For the last claim, Mathlib's \texttt{Real.log\_le\_rpow\_div}
+with $\varepsilon=1/2$ gives $\ln n\le 2\sqrt n$, and $|C|\cdot2\sqrt n<n$ once
+$\sqrt n>2|C|+1$; we take $N=\lceil(2|C|+1)^2\rceil+1$.
+\end{proof}
+
+\begin{theorem}[\texttt{parity\_violates}, \texttt{conjecture\_2181\_false}, \texttt{no\_log\_bound}]
+For every $n\ge1$, $\sqrt2\,L(n)\,\|\hat g\|_1<s(\mathrm{PAR}_n)$ for $L\in\{\ln,\log_2\}$ and $g$
+either encoding of $\mathrm{PAR}_n$. Hence $(\ast)$, even restricted to $n\ge2$, is false for both
+logarithms and both encodings (witness $n=2$: $s=2$, $\|\hat g\|_1=1$,
+$\sqrt2\log_2 2\approx1.414$, $\sqrt2\ln2\approx0.980$). Moreover, for every constant $C$,
+$C\ln n\,\|\hat g\|_1<s(\mathrm{PAR}_n)$ for all large $n$.
+\end{theorem}
+
+\begin{theorem}[\texttt{andFun\_isLTF}, \texttt{andFun\_sensitivity}, \texttt{spectralNorm\_zo\_and},
+\texttt{spectralNorm\_pm\_and\_le}, \texttt{and\_no\_log\_bound}]
+$\mathrm{AND}_n$ is a linear threshold function (weights $1$, threshold $n$), $s(\mathrm{AND}_n)=n$
+(at the all-true input), its $0/1$ encoding has spectral norm $1$ (every coefficient has
+absolute value $2^{-n}$) and its $\pm1$ encoding has spectral norm at most $3$ (since
+$\mathrm{sgn}\circ f=1-2\cdot[f]$). So for every $C$, $C\ln n\,\|\hat g\|_1<s(\mathrm{AND}_n)$ for
+all large $n$: the bound fails even on linear threshold functions.
+\end{theorem}
+
+\section{Lean formalisation and axiom audit}
+File \texttt{lean/Conjecture2181/Basic.lean} (Lean 4, Mathlib v4.33.1, only \texttt{import Mathlib}).
+Main statement:
+\begin{verbatim}
+def FirstClause (L : R -> R)
+    (enc : forall {n}, BoolFun n -> (Fin n -> Bool) -> R) :=
+  forall n, 2 <= n -> forall f : BoolFun n,
+    (sensitivity f : R) <= sqrt 2 * L n * spectralNorm (enc f)
+theorem conjecture_2181_false :
+  ~ FirstClause Real.log pmEnc /\ ~ FirstClause (Real.logb 2) pmEnc /\
+  ~ FirstClause Real.log zoEnc /\ ~ FirstClause (Real.logb 2) zoEnc
+\end{verbatim}
+(written here in ASCII; $R=\mathbb R$). Also \texttt{parity\_violates}, \texttt{no\_log\_bound},
+\texttt{and\_no\_log\_bound}, \texttt{andFun\_isLTF}, \texttt{parity\_avgSensitivity}.
+\texttt{lake build} succeeds, and \texttt{\#print axioms} reports only
+\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound} for each of these theorems;
+there is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}
