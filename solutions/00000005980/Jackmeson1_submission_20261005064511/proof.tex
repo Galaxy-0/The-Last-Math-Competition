@@ -1,0 +1,164 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A proof of Conjecture 00000005980\\[2pt]
+\large Same singular spectrum, different polar decomposition}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000005980 reads:
+
+\begin{quote}
+\emph{Definition:} The singular spectrum and the eigenvector statistics are two layers.
+\emph{Conjecture:} There exist two non-Hermitian models with the same singular spectrum but different
+eigenvector statistics, and the separation is realized by an explicit pair with the same spectrum but
+different polar decompositions.
+\end{quote}
+
+The claim is existential. We prove it with explicit witnesses, and Lean formalises every step
+(\texttt{conjecture\_5980}). The construction and the eigenvector statistic adapt the accepted solution of
+the eigenvalue analogue 00000005960 (C0ldSmi1e, GPL-3.0).
+
+\section{Reading}
+
+\begin{itemize}[leftmargin=1.5em]
+\item A \emph{model} is a probability law on real $2\times2$ matrices (a \texttt{PMF}). It is
+\emph{non-Hermitian} if every matrix in its support is non-Hermitian, i.e.\ $A^{*}\ne A$. We also
+require each model to be non-degenerate (not a Dirac mass).
+\item The \emph{singular spectrum} of $A$ is Mathlib's \texttt{LinearMap.singularValues} of the Euclidean
+operator of $A$: the singular values ``are the square roots of the (necessarily non-negative) eigenvalues
+of the self-adjoint operator'' $T^*T$ [Wikipedia, \emph{Singular value}], in decreasing order with
+multiplicity. Two models have the \emph{same singular spectrum} if the push-forward laws of
+\texttt{singularValues} agree. We also show that the laws of the characteristic polynomial (the
+eigenvalues) agree.
+\item An \emph{eigenvector statistic} is a function of the eigenvectors. We use the intrinsic, sign-free
+statistic $S(A)=\|\Pi_{E_7(A)}e_0\|^2$, the squared length of the orthogonal projection of $e_0$ onto the
+eigenvalue-7 eigenspace. For a simple eigenvalue it equals the squared first coordinate of any unit
+eigenvector. The models have \emph{different eigenvector statistics} if the laws of $S$ differ.
+\item A \emph{polar decomposition} of $A$ is $A=UP$ with $U$ orthogonal and $P$ positive semidefinite
+[Wikipedia, \emph{Polar decomposition}] (\texttt{IsPolarDecomposition}). The \emph{explicit pair} is
+$X\in\operatorname{supp}A$ and $Y\in\operatorname{supp}B$. We require $X$ and $Y$ to have the same
+singular values \emph{and} the same eigenvalue spectrum, so both readings of ``same spectrum'' are covered.
+We require that every polar decomposition of $X$ differs from every polar decomposition of $Y$ in
+\emph{both} factors, and that $S(X)\ne S(Y)$.
+\end{itemize}
+
+\section{Construction}
+
+Let $c(t)=\frac{1-t^2}{1+t^2}$, $s(t)=\frac{2t}{1+t^2}$ and $R(t)=\begin{pmatrix}c&-s\\ s&c\end{pmatrix}$, so
+$R(t)^{T}R(t)=R(t)R(t)^T=I$ for all real $t$. Set
+\[
+S_0=\begin{pmatrix}7&12\\0&-2\end{pmatrix},\qquad F(t)=R(t)\,S_0\,R(t)^T,\qquad
+U_0=\tfrac15\begin{pmatrix}3&4\\4&-3\end{pmatrix},\quad P_0=\tfrac15\begin{pmatrix}21&28\\28&54\end{pmatrix}.
+\]
+Model $A$ is the fair law on $\{F(0),F(1)\}$ and model $B$ is the fair law on $\{F(\tfrac12),F(-\tfrac12)\}$.
+The explicit pair is $X=F(0)=S_0$ and $Y=F(\tfrac12)=\tfrac1{25}\begin{pmatrix}-113&216\\-84&238\end{pmatrix}$.
+
+\begin{lemma}[\texttt{family\_explicit}, \texttt{family\_not\_isHermitian}]
+$F(t)_{01}-F(t)_{10}=12(c^2+s^2)=12$, so no $F(t)$ is Hermitian.
+\end{lemma}
+
+\begin{lemma}[\texttt{charpoly\_family}, \texttt{spectrum\_family}]
+$\chi_{F(t)}=(X-7)(X+2)$ and $\operatorname{spec}F(t)=\{7,-2\}$ for all $t$.
+\end{lemma}
+\begin{proof}
+$\chi_{R N R^T}=\chi_{N R^T R}=\chi_N$ (\texttt{charpoly\_mul\_comm}), and $\chi_{S_0}=(X-7)(X+2)$.
+\end{proof}
+
+\begin{lemma}[\texttt{singularValues\_family}, \texttt{singularValues\_seed}]
+Every $F(t)$ has singular values $14,1$ (and $0$ beyond index $1$).
+\end{lemma}
+\begin{proof}
+$F(t)^TF(t)=R(t)(S_0^TS_0)R(t)^T$, so it has the characteristic polynomial of $S_0^TS_0$. Mathlib's
+\texttt{eigenvalues\_eq\_eigenvalues\_iff} says that the sorted eigenvalues of a symmetric operator are
+determined by its characteristic polynomial. So all $F(t)$ have the singular values of $S_0$. Here
+$S_0^TS_0=\begin{pmatrix}49&84\\84&148\end{pmatrix}$ has trace $197$ and determinant $196$, so its
+characteristic polynomial is $(X-196)(X-1)$. The sorted roots are $[196,1]$
+(\texttt{sort\_roots\_charpoly\_eq\_eigenvalues}), and their square roots are $14,1$.
+\end{proof}
+
+\begin{lemma}[\texttt{eigenspaceSeven\_family}, \texttt{statistic\_family}]
+$E_7(F(t))=\mathbb R\,(c(t),s(t))$, and hence $S(F(t))=c(t)^2$.
+\end{lemma}
+\begin{proof}
+$F(t)(c,s)^T=R S_0 e_0=7(c,s)^T$. Conversely, if $F(t)w=7w$, then
+$-s(F w-7w)_0+c(F w-7w)_1=-9u-2u(c^2+s^2-1)$ with $u=-sw_0+cw_1$, so $u=0$ and
+$w=(cw_0+sw_1)(c,s)$. The projection onto a unit line is $\langle v,e_0\rangle v$, so $S=c^2$.
+\end{proof}
+
+Hence the law of $S$ is $\tfrac12\delta_1+\tfrac12\delta_0$ under $A$ (since $c(0)=1$ and $c(1)=0$) and
+$\delta_{9/25}$ under $B$ (since $c(\pm\frac12)=\frac35$). The two laws differ, while both singular-value
+laws are $\delta_{(14,1,0,\dots)}$ and both characteristic-polynomial laws are $\delta_{(X-7)(X+2)}$.
+
+\begin{lemma}[\texttt{isPolar\_family}, \texttt{polar\_unique}]
+$F(t)=U(t)P(t)$ with $U(t)=R U_0R^T$ orthogonal and $P(t)=RP_0R^T$ positive semidefinite. For an
+invertible matrix the polar decomposition is unique.
+\end{lemma}
+\begin{proof}
+$U_0P_0=S_0$ and $U_0^TU_0=I$. Also $21(21x^2+56xy+54y^2)=(21x+28y)^2+350y^2\ge0$, so $P_0\succeq0$, and
+conjugation preserves both properties. For uniqueness: if $A=UP$, then $P\cdot P=A^TA$. Positive square
+roots are unique (\texttt{CFC.mul\_self\_eq\_mul\_self\_iff}), so $P$ is determined. Because $\det A\ne0$,
+$P$ is invertible, which determines $U$. Here $\det F(t)=-14$.
+\end{proof}
+
+So $X$ has the unique polar decomposition $(U_0,P_0)$, and $Y$ has the unique polar decomposition
+$\bigl(\tfrac1{125}\begin{pmatrix}-117&44\\44&117\end{pmatrix},
+\tfrac1{125}\begin{pmatrix}381&-592\\-592&1494\end{pmatrix}\bigr)$. Both factors differ, as the
+$(0,0)$ entries show. Finally, $S(X)=1\ne\frac{9}{25}=S(Y)$.
+
+\begin{theorem}[\texttt{explicit\_separation}, \texttt{conjecture\_5980}]
+$\mathtt{Separation}\ A\ B\ X\ Y$ holds. It asserts the following. Both models are supported on
+non-Hermitian matrices and are not Dirac. Their \texttt{singularValues} laws are equal, and their
+\texttt{charpoly} laws are equal. Their laws of $S$ differ. $X\in\operatorname{supp}A$ and
+$Y\in\operatorname{supp}B$, with equal singular values and equal spectra. Polar decompositions of $X$ and
+of $Y$ exist, any two of them (one for $X$, one for $Y$) differ in both factors, and $S(X)\ne S(Y)$. Hence
+$\exists A\,B\,X\,Y,\ \mathtt{Separation}\ A\ B\ X\ Y$.
+\end{theorem}
+
+\section{Lean formalisation and axiom audit}
+
+Lean 4 (\texttt{leanprover/lean4:v4.33.1}) with Mathlib \texttt{v4.33.1}; file
+\texttt{lean/Conjecture5980/Basic.lean} (412 lines, only \texttt{import Mathlib}). Main statement:
+{\small\begin{verbatim}
+theorem conjecture_5980 :
+    exists (A B : PMF Mat2) (X Y : Mat2), Separation A B X Y
+\end{verbatim}}
+\noindent Here \texttt{Mat2 = Matrix (Fin 2) (Fin 2) Real}. \texttt{singularValues A} is
+\texttt{(toEuclideanLin A).singularValues}, and \texttt{statistic A} is
+\texttt{norm ((eigenspaceSeven A).starProjection firstAxis) \^{} 2}. \texttt{lake build} succeeds.
+\texttt{\#print axioms} for \texttt{conjecture\_5980}, \texttt{explicit\_separation},
+\texttt{singularValues\_seed} and \texttt{polar\_unique} each reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no
+\texttt{native\_decide}.
+
+\paragraph{Scope.} The claim is existential, with no dimension-growth, independence or asymptotic
+hypothesis. We claim nothing about universality. The statistic is one specific eigenvector statistic.
+Eigenvector-overlap statistics are invariant under the orthogonal conjugation used here, so we do not
+claim that they separate the two models.
+
+\begin{thebibliography}{9}
+\bibitem{sv} Wikipedia, \emph{Singular value}, \url{https://en.wikipedia.org/wiki/Singular_value}.
+\bibitem{pd} Wikipedia, \emph{Polar decomposition}, \url{https://en.wikipedia.org/wiki/Polar_decomposition}.
+\end{thebibliography}
+
+\end{document}
