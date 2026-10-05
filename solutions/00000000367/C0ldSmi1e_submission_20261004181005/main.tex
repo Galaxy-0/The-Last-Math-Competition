@@ -1,0 +1,89 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\distZ}[1]{\lVert #1\rVert_{\Z}}
+\title{Nondegenerate recurrences can approach integers exponentially}
+\author{C0ldSmi1e\\\small Disproof of conjecture 00000000367}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The nondegenerate recurrence $u_n=2^n+3^{-n}$ has exact distance $3^{-n}$ from the integers for every $n\ge1$. Consequently no real exponent $C$ gives the conjectured eventual lower bound $\distZ{u_n}>n^{-C}$. Its true minimal order is two and its characteristic roots are $2$ and $1/3$. An additional example with integer coefficients and integer initial data refutes the assertion even under that restricted convention.
+\end{abstract}
+
+\section{The claim and the meaning of nondegeneracy}
+Both language versions claim that the distance of the general term of a nondegenerate linear recurrence from the integers is greater than $n^{-C}$, with an explicit $C$ determined by characteristic-root moduli gaps. The exact bilingual text is included as \texttt{conjecture.md}. Write
+\[
+ \distZ{x}=\inf_{m\in\Z}|x-m|.
+\]
+The usual nondegeneracy condition is that no quotient of two distinct characteristic roots is a root of unity; the roots belong to the minimal-order recurrence \cite{dcosta}. This condition does not exclude integral terms. The source imposes no condition that the coefficients be integers or that all terms be nonintegral. Our main example has rational coefficients and nonintegral terms for every positive index; the supplemental example has integer coefficients and integer initial data.
+
+We disprove even the weaker eventual existence statement
+\[
+ \exists C\in\R\ \exists N\in\mathbb N\ \forall n\ge N,
+ \qquad n>0\ \Longrightarrow\ n^{-C}<\distZ{u_n}.
+ \tag{1}
+\]
+Thus neither an explicit choice of $C$ nor a rule prescribing it from root gaps can make the asserted lower bound hold.
+
+\section{An unbounded nonintegral counterexample}
+Define $u_n=2^n+(1/3)^n$ for $n\ge0$. Direct calculation gives
+\[
+ u_{n+2}=\frac73u_{n+1}-\frac23u_n,
+ \qquad u_0=2,\quad u_1=\frac73.
+\]
+Its characteristic polynomial is genuinely
+\[
+ X^2-\frac73 X+\frac23=(X-2)(X-1/3).
+\]
+The order is minimal. An order-zero homogeneous recurrence would force the sequence to be zero. An order-one homogeneous recurrence would imply $u_0u_2=u_1^2$, whereas
+\[
+ u_0u_2-u_1^2=2\cdot\frac{37}{9}-\frac{49}{9}=\frac{25}{9}>0.
+\]
+Both characteristic roots are nonzero, and their distinct-root quotients are $6$ and $1/6$. Neither has complex modulus one, so neither is a root of unity. The sequence is therefore nondegenerate; its two root moduli even have the fixed positive gap $5/3$.
+
+For every $n\ge1$, the number $2^n$ is an integer and
+\[
+ 0<3^{-n}\le\frac13<\frac12.
+\]
+Consequently $2^n$ is a nearest integer and
+\[
+ \distZ{u_n}=3^{-n}>0. \tag{2}
+\]
+In particular, none of the positive-index terms is an integer. Also $u_n\ge2^n$, so the sequence tends to $+\infty$; the example does not arise from a sequence tending to zero.
+
+For any real $C$, the standard exponential-versus-power limit gives
+\[
+ n^C\,3^{-n}=n^C\exp(-n\log3)\longrightarrow0.
+\]
+For all sufficiently large positive $n$, this product is less than $1$. Multiplying by the positive number $n^{-C}$ and using (2), we obtain
+\[
+ \distZ{u_n}=3^{-n}<n^{-C}.
+\]
+This is the strict opposite of (1) on a full tail of the sequence, for every real $C$. It is not a finite-index exception or an estimate inferred from numerical samples.
+
+\section{Supplement with integer coefficients and initial data}
+Let $v_n=2^n+3^n$. Then
+\[
+ v_{n+2}=5v_{n+1}-6v_n,\qquad v_0=2,\quad v_1=5,
+\]
+and the characteristic polynomial is $(X-2)(X-3)$. Its true minimal order is two because $v_0v_2-v_1^2=2\cdot13-25=1\ne0$. The root quotients $2/3$ and $3/2$ are not roots of unity, so it too is nondegenerate. Every $v_n$ is an integer, hence $\distZ{v_n}=0$. Since $n^{-C}>0$ for every positive $n$ and every real $C$, the claimed inequality fails at every positive index. Thus restricting to monic recurrences with integer coefficients and integer initial values does not rescue the statement as written.
+
+\section{Formalization and verification scope}
+The accompanying Lean project uses Mathlib's actual \texttt{LinearRecurrence} structure, its \texttt{IsSolution} predicate and its characteristic polynomial. The common family $2^n+r^n$ has the actual coefficient vector $(-2r,2+r)$. The proof establishes the complete complex root set after extending the characteristic polynomial from $\R$ to $\C$, and checks the root-of-unity condition for all distinct roots. Minimality is proved against all recurrences of smaller order, not assumed from a displayed factorization.
+
+Distance is \texttt{Metric.infDist} to the range of the integer embedding into $\R$. Its equality to distance from a rounded nearest integer is proved before use. The exact distance formula, nonintegrality, growth and full limiting contradiction concern the actual sequence. The final theorem negates the existence claim over actual nondegenerate minimal recurrences; no witness hypotheses remain unproved. The supplemental integral sequence uses the same definitions.
+
+The recurrence, minimality, distance and limiting claims used in the disproof are kernel-checked in Lean. There is no auxiliary numerical program. The bundled instructions, full source, matching PDF and exact execution records allow reproduction; independent internal semantic review is distinguished from official maintainer acceptance.
+
+\begin{thebibliography}{1}
+\bibitem{dcosta} J. D'Costa, J. Ouaknine and J. Worrell, \emph{Nonnegativity Problems for Matrix Semigroups}, STACS 2024, LIPIcs 289, 27:1--27:16; Section~3, p.~27:3. \url{https://doi.org/10.4230/LIPIcs.STACS.2024.27}. Author copy: \url{https://people.mpi-sws.org/~joel/publications/matrix-nonnegativity24.pdf}.
+\end{thebibliography}
+\end{document}

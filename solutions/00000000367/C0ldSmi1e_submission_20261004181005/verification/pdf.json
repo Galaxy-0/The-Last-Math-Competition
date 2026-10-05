@@ -1,0 +1,50 @@
+{
+  "checked_utc": "2026-10-04T18:08:54.432865+00:00",
+  "source_sha256": "0707dd41a71a2f4bc7f873b1abb8b421c7ec9c004a17bfe950a37031929099e0",
+  "pdf_sha256": "c30ec444fb9f7d480d685ebefb1ec6c79d1b7b1cbd41acdc245e9190a7255708",
+  "native_compile": {
+    "status": "success",
+    "source": "Codex compile_latex_document, final source"
+  },
+  "export_compile": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--keep-logs",
+      "main.tex"
+    ],
+    "exit_code": 0,
+    "version": "0.17.0",
+    "warnings": []
+  },
+  "pages": 2,
+  "render": {
+    "tool": "Poppler pdftoppm",
+    "scale_to": 1400,
+    "exit_code": 0,
+    "pages_inspected": [
+      1,
+      2
+    ]
+  },
+  "visual_inspection": {
+    "performed_by": "coordinating agent",
+    "result": "PASS",
+    "findings": "Both final pages read and visually inspected in full. Legible text, formulas and reference; no clipping, overlap, missing glyphs, blank page or orphan reference page. Page1 gives the exact scope, main recurrence, minimality and nondegeneracy; page2 finishes its distance/limit proof, gives the integer supplement, formal verification scope and primary reference."
+  },
+  "text_extraction": {
+    "tool": "pypdf",
+    "normalization": "Unicode NFKC for typeset ligatures; visual inspection is authoritative for layout.",
+    "pages": 2,
+    "text_length": 5219,
+    "checks": {
+      "00000000367": true,
+      "nondegenerate": true,
+      "minimal": true,
+      "recurrence": true,
+      "Metric.infDist": true,
+      "exponential": true,
+      "integer": true,
+      "kernel-checked": true
+    }
+  }
+}

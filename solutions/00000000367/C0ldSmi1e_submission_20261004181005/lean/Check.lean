@@ -1,0 +1,81 @@
+import Conjecture367
+
+#print Conjecture367.sequence
+#print Conjecture367.recurrence
+#print Conjecture367.Nondegenerate
+#print Conjecture367.IsMinimalRecurrence
+#print Conjecture367.distanceToIntegers
+#print Conjecture367.HasPolynomialLowerBound
+#print Conjecture367.ClaimedLowerBound
+
+#check Conjecture367.recurrence_order
+#check Conjecture367.sequence_isSolution
+#check Conjecture367.recurrence_charPoly
+#check Conjecture367.recurrence_complex_charPoly
+#check Conjecture367.recurrence_complex_root_iff
+#check Conjecture367.recurrence_minimal
+#check Conjecture367.recurrence_nondegenerate
+#check Conjecture367.rational_recurrence_minimal
+#check Conjecture367.rational_recurrence_nondegenerate
+#check Conjecture367.rational_recurrence_coefficients
+#check Conjecture367.integer_recurrence_minimal
+#check Conjecture367.integer_recurrence_nondegenerate
+#check Conjecture367.integer_recurrence_coefficients
+#check Conjecture367.distanceToIntegers_eq_round
+#check Conjecture367.distanceToIntegers_intCast
+#check Conjecture367.third_pow_le_third
+#check Conjecture367.round_third_pow
+#check Conjecture367.round_sequence_third
+#check Conjecture367.distance_sequence_third
+#check Conjecture367.distance_sequence_third_pos
+#check Conjecture367.sequence_third_not_integer
+#check Conjecture367.sequence_third_ne_intCast
+#check Conjecture367.sequence_third_rational
+#check Conjecture367.sequence_tendsto_atTop
+#check Conjecture367.sequence_third_tendsto_atTop
+#check Conjecture367.sequence_three_integer
+#check Conjecture367.distance_sequence_three
+#check Conjecture367.third_pow_eq_exp
+#check Conjecture367.polynomial_mul_third_pow_tendsto
+#check Conjecture367.third_pow_eventually_lt_rpow_neg
+#check Conjecture367.distance_eventually_lt_power
+#check Conjecture367.no_polynomial_lower_bound_third
+#check Conjecture367.no_polynomial_lower_bound_three
+#check Conjecture367.conjecture_false
+#check Conjecture367.conjecture_false_integer_example
+
+#print axioms Conjecture367.recurrence_order
+#print axioms Conjecture367.sequence_isSolution
+#print axioms Conjecture367.recurrence_charPoly
+#print axioms Conjecture367.recurrence_complex_charPoly
+#print axioms Conjecture367.recurrence_complex_root_iff
+#print axioms Conjecture367.recurrence_minimal
+#print axioms Conjecture367.recurrence_nondegenerate
+#print axioms Conjecture367.rational_recurrence_minimal
+#print axioms Conjecture367.rational_recurrence_nondegenerate
+#print axioms Conjecture367.rational_recurrence_coefficients
+#print axioms Conjecture367.integer_recurrence_minimal
+#print axioms Conjecture367.integer_recurrence_nondegenerate
+#print axioms Conjecture367.integer_recurrence_coefficients
+#print axioms Conjecture367.distanceToIntegers_eq_round
+#print axioms Conjecture367.distanceToIntegers_intCast
+#print axioms Conjecture367.third_pow_le_third
+#print axioms Conjecture367.round_third_pow
+#print axioms Conjecture367.round_sequence_third
+#print axioms Conjecture367.distance_sequence_third
+#print axioms Conjecture367.distance_sequence_third_pos
+#print axioms Conjecture367.sequence_third_not_integer
+#print axioms Conjecture367.sequence_third_ne_intCast
+#print axioms Conjecture367.sequence_third_rational
+#print axioms Conjecture367.sequence_tendsto_atTop
+#print axioms Conjecture367.sequence_third_tendsto_atTop
+#print axioms Conjecture367.sequence_three_integer
+#print axioms Conjecture367.distance_sequence_three
+#print axioms Conjecture367.third_pow_eq_exp
+#print axioms Conjecture367.polynomial_mul_third_pow_tendsto
+#print axioms Conjecture367.third_pow_eventually_lt_rpow_neg
+#print axioms Conjecture367.distance_eventually_lt_power
+#print axioms Conjecture367.no_polynomial_lower_bound_third
+#print axioms Conjecture367.no_polynomial_lower_bound_three
+#print axioms Conjecture367.conjecture_false
+#print axioms Conjecture367.conjecture_false_integer_example
