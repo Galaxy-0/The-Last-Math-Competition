@@ -1,0 +1,76 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:736:0: 'OU.deriv_mulX_comm' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:737:0: 'OU.L_x0_x1' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:738:0: 'OU.linIndep_x' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:739:0: 'OU.eig_H2' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:740:0: 'OU.eig1_prop' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:741:0: 'OU.mult1_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:742:0: 'OU.eig2_eq_H2' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:743:0: 'OU.mult1_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:744:0: 'OU.p_values' does not depend on any axioms
+info: ././././Main.lean:745:0: 'OU.p_ge_two' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:746:0: 'OU.partitionLaw_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:747:0: 'OU.mult_one_ge_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:748:0: 'OU.d1_fails_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:749:0: 'OU.L_eq_of_isPoly' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:750:0: 'OU.multCyl_infinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:751:0: 'OU.partitionLawCyl_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:752:0: 'OU.conjecture_00000008579_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:753:0: 'OU.conjecture_00000008579_false_wiener' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+PASS p(n) by pentagonal recurrence agrees with direct enumeration for n <= 20
+PASS p(0..7) = 1, 1, 2, 3, 5, 7, 11, 15
+PASS d=2: L x_0 = -x_0
+PASS d=2: L x_1 = -x_1
+PASS d=3: L x_0 = -x_0
+PASS d=3: L x_1 = -x_1
+PASS d=3: L x_2 = -x_2
+PASS d=1: L(x^2 - 1) = -2 (x^2 - 1)
+PASS d=1: Hermite H_n (H_{n+1} = x H_n - n H_{n-1}) is monic and satisfies L H_n = -n H_n for n <= 12
+
+multiplicity of eigenvalue n of N on polynomials in d variables (degree <= n):
+   d \ n     0    1    2    3    4    5
+   p(n)      1    1    2    3    5    7
+   d=1       1    1    1    1    1    1
+   d=2       1    2    3    4    5    6
+   d=3       1    3    6   10   15   21
+   d=4       1    4   10   20   35   56
+PASS mult_d(n) = C(n+d-1, d-1) for d = 1..4, n = 0..5
+PASS same kernel dimension on degree <= n+2 (d = 1..3, n = 0..4): eigenvectors have degree n
+PASS d=1: every eigenvalue n <= 6 has multiplicity exactly 1 (degree <= 6)
+PASS d=1: partition law fails; first failure at n=2 (mult=1, p=2); all failures n<=5: [2, 3, 4, 5]
+PASS d=2: partition law fails; first failure at n=1 (mult=2, p=1); all failures n<=5: [1, 2, 3, 5]
+PASS d=3: partition law fails; first failure at n=1 (mult=3, p=1); all failures n<=5: [1, 2, 3, 4, 5]
+PASS d=4: partition law fails; first failure at n=1 (mult=4, p=1); all failures n<=5: [1, 2, 3, 4, 5]
+PASS mult_d(1) = d for d = 1..7 (unbounded as d grows: infinite on Wiener space)
+PASS mult_d(2) = d(d+1)/2 for d = 1..6
+PASS coincidence noted: d=2, n=4 gives mult = p(4) = 5 (the law still fails at n=1,2,3)
+
+PASS d = 1..29: C(n+d-1,d-1) != p(n) at some n <= 2 (n=2 for d=1, n=1 for d>=2)
+PASS shifted reading mult(n) = p(n-1) fails for every d = 1..29
+PASS shifted reading mult(n) = p(n+1) fails for every d = 1..29
+PASS shifted reading mult(n) = p(n+2) fails for every d = 1..29
+PASS d=1: p(n) > C(n+d-1,d-1) for all 400 > n > 1; lower bound p(n) >= C(floor(n/(d+1))+d, d) holds for n < 400
+PASS d=2: p(n) > C(n+d-1,d-1) for all 400 > n > 4; lower bound p(n) >= C(floor(n/(d+1))+d, d) holds for n < 400
+PASS d=3: p(n) > C(n+d-1,d-1) for all 400 > n > 13; lower bound p(n) >= C(floor(n/(d+1))+d, d) holds for n < 400
+PASS d=4: p(n) > C(n+d-1,d-1) for all 400 > n > 29; lower bound p(n) >= C(floor(n/(d+1))+d, d) holds for n < 400
+PASS d=5: p(n) > C(n+d-1,d-1) for all 400 > n > 55; lower bound p(n) >= C(floor(n/(d+1))+d, d) holds for n < 400
+PASS d=6: p(n) > C(n+d-1,d-1) for all 400 > n > 90; lower bound p(n) >= C(floor(n/(d+1))+d, d) holds for n < 400
+PASS d=1: S_d-symmetric eigenspaces have dims [1, 1, 1, 1, 1, 1] = #partitions into <= 1 parts; differs from p(n) first at n = d+1 = 2
+PASS d=2: S_d-symmetric eigenspaces have dims [1, 1, 2, 2, 3, 3] = #partitions into <= 2 parts; differs from p(n) first at n = d+1 = 3
+PASS d=3: S_d-symmetric eigenspaces have dims [1, 1, 2, 3, 4, 5] = #partitions into <= 3 parts; differs from p(n) first at n = d+1 = 4
+PASS weighted operator sum_k k(d_k^2 - x_k d_k) in d=4 variables: mults [1, 1, 2, 3, 5] = p(0..4) (a different operator: second quantisation of diag(1,2,3,...), not the OU operator)
+PASS weighted operator sum_k k(d_k^2 - x_k d_k) in d=5 variables: mults [1, 1, 2, 3, 5, 7] = p(0..5) (a different operator: second quantisation of diag(1,2,3,...), not the OU operator)
+PASS d=1: counting function #{eigenvalues <= lam} = C(lam+d, d), a polynomial in lam
+PASS d=2: counting function #{eigenvalues <= lam} = C(lam+d, d), a polynomial in lam
+PASS d=3: counting function #{eigenvalues <= lam} = C(lam+d, d), a polynomial in lam
+
+ALL CHECKS PASSED
+exit 0
