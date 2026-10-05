@@ -1,0 +1,184 @@
+import Conjecture5960
+
+#print Conjecture5960.Mat2
+#print Conjecture5960.Plane
+#print Conjecture5960.cosine
+#print Conjecture5960.sine
+#print Conjecture5960.rotation
+#print Conjecture5960.diagonal
+#print Conjecture5960.matrixFamily
+#print Conjecture5960.firstVector
+#print Conjecture5960.secondVector
+#print Conjecture5960.eigenspaceOne
+#print Conjecture5960.firstAxis
+#print Conjecture5960.statistic
+#print Conjecture5960.fairPMF
+#print Conjecture5960.twoPointLaw
+#print Conjecture5960.randomMatrixA
+#print Conjecture5960.randomMatrixB
+#print Conjecture5960.ensembleA
+#print Conjecture5960.ensembleB
+#print Conjecture5960.parameterA
+#print Conjecture5960.parameterB
+#print Conjecture5960.ParametricSeparation
+
+#check Conjecture5960.denominator_pos
+#print axioms Conjecture5960.denominator_pos
+#check Conjecture5960.cosine_sq_add_sine_sq
+#print axioms Conjecture5960.cosine_sq_add_sine_sq
+#check Conjecture5960.transpose_rotation_mul_rotation
+#print axioms Conjecture5960.transpose_rotation_mul_rotation
+#check Conjecture5960.rotation_mul_transpose_rotation
+#print axioms Conjecture5960.rotation_mul_transpose_rotation
+#check Conjecture5960.det_rotation
+#print axioms Conjecture5960.det_rotation
+#check Conjecture5960.matrixFamily_explicit
+#print axioms Conjecture5960.matrixFamily_explicit
+#check Conjecture5960.matrixFamily_isSymm
+#print axioms Conjecture5960.matrixFamily_isSymm
+#check Conjecture5960.matrixFamily_trace
+#print axioms Conjecture5960.matrixFamily_trace
+#check Conjecture5960.det_matrixFamily
+#print axioms Conjecture5960.det_matrixFamily
+#check Conjecture5960.charpoly_matrixFamily
+#print axioms Conjecture5960.charpoly_matrixFamily
+#check Conjecture5960.spectrum_matrixFamily
+#print axioms Conjecture5960.spectrum_matrixFamily
+#check Conjecture5960.spectrum_operator_matrixFamily
+#print axioms Conjecture5960.spectrum_operator_matrixFamily
+#check Conjecture5960.firstVector_norm
+#print axioms Conjecture5960.firstVector_norm
+#check Conjecture5960.secondVector_norm
+#print axioms Conjecture5960.secondVector_norm
+#check Conjecture5960.firstVector_eigen
+#print axioms Conjecture5960.firstVector_eigen
+#check Conjecture5960.secondVector_eigen
+#print axioms Conjecture5960.secondVector_eigen
+#check Conjecture5960.firstVector_hasEigenvector
+#print axioms Conjecture5960.firstVector_hasEigenvector
+#check Conjecture5960.secondVector_hasEigenvector
+#print axioms Conjecture5960.secondVector_hasEigenvector
+#check Conjecture5960.continuous_cosine
+#print axioms Conjecture5960.continuous_cosine
+#check Conjecture5960.continuous_sine
+#print axioms Conjecture5960.continuous_sine
+#check Conjecture5960.continuous_rotation
+#print axioms Conjecture5960.continuous_rotation
+#check Conjecture5960.continuous_matrixFamily
+#print axioms Conjecture5960.continuous_matrixFamily
+#check Conjecture5960.firstVector_inner_secondVector
+#print axioms Conjecture5960.firstVector_inner_secondVector
+#check Conjecture5960.vector_decomposition
+#print axioms Conjecture5960.vector_decomposition
+#check Conjecture5960.firstVector_mem_eigenspaceOne
+#print axioms Conjecture5960.firstVector_mem_eigenspaceOne
+#check Conjecture5960.eigenspaceOne_vector_formula
+#print axioms Conjecture5960.eigenspaceOne_vector_formula
+#check Conjecture5960.eigenspaceOne_matrixFamily
+#print axioms Conjecture5960.eigenspaceOne_matrixFamily
+#check Conjecture5960.projection_matrixFamily
+#print axioms Conjecture5960.projection_matrixFamily
+#check Conjecture5960.inner_firstVector_firstAxis
+#print axioms Conjecture5960.inner_firstVector_firstAxis
+#check Conjecture5960.statistic_matrixFamily
+#print axioms Conjecture5960.statistic_matrixFamily
+#check Conjecture5960.statistic_eq_normalized_eigenvector
+#print axioms Conjecture5960.statistic_eq_normalized_eigenvector
+#check Conjecture5960.cosine_nonneg_on_unitInterval
+#print axioms Conjecture5960.cosine_nonneg_on_unitInterval
+#check Conjecture5960.matrixFamily_injOn_unitInterval
+#print axioms Conjecture5960.matrixFamily_injOn_unitInterval
+#check Conjecture5960.continuous_firstVector
+#print axioms Conjecture5960.continuous_firstVector
+#check Conjecture5960.continuous_secondVector
+#print axioms Conjecture5960.continuous_secondVector
+#check Conjecture5960.matrixMeasurableSpace
+#print axioms Conjecture5960.matrixMeasurableSpace
+#check Conjecture5960.matrixBorelSpace
+#print axioms Conjecture5960.matrixBorelSpace
+#check Conjecture5960.fairPMF_apply
+#print axioms Conjecture5960.fairPMF_apply
+#check Conjecture5960.twoPointLaw_apply
+#print axioms Conjecture5960.twoPointLaw_apply
+#check Conjecture5960.map_twoPointLaw
+#print axioms Conjecture5960.map_twoPointLaw
+#check Conjecture5960.twoPointLaw_self
+#print axioms Conjecture5960.twoPointLaw_self
+#check Conjecture5960.twoPointLaw_ne_pure
+#print axioms Conjecture5960.twoPointLaw_ne_pure
+#check Conjecture5960.twoPointLaw_toMeasure_not_dirac
+#print axioms Conjecture5960.twoPointLaw_toMeasure_not_dirac
+#check Conjecture5960.twoPointLaw_measure_map
+#print axioms Conjecture5960.twoPointLaw_measure_map
+#check Conjecture5960.ensembleA_eq_map
+#print axioms Conjecture5960.ensembleA_eq_map
+#check Conjecture5960.ensembleB_eq_map
+#print axioms Conjecture5960.ensembleB_eq_map
+#check Conjecture5960.matrixFamily_zero_ne_one
+#print axioms Conjecture5960.matrixFamily_zero_ne_one
+#check Conjecture5960.matrixFamily_half_ne_neg_half
+#print axioms Conjecture5960.matrixFamily_half_ne_neg_half
+#check Conjecture5960.ensembleA_ne_pure
+#print axioms Conjecture5960.ensembleA_ne_pure
+#check Conjecture5960.ensembleB_ne_pure
+#print axioms Conjecture5960.ensembleB_ne_pure
+#check Conjecture5960.randomMatrixA_not_constant
+#print axioms Conjecture5960.randomMatrixA_not_constant
+#check Conjecture5960.randomMatrixB_not_constant
+#print axioms Conjecture5960.randomMatrixB_not_constant
+#check Conjecture5960.ensembleA_charpoly_law
+#print axioms Conjecture5960.ensembleA_charpoly_law
+#check Conjecture5960.ensembleB_charpoly_law
+#print axioms Conjecture5960.ensembleB_charpoly_law
+#check Conjecture5960.ensembleA_spectrum_law
+#print axioms Conjecture5960.ensembleA_spectrum_law
+#check Conjecture5960.ensembleB_spectrum_law
+#print axioms Conjecture5960.ensembleB_spectrum_law
+#check Conjecture5960.ensembles_same_spectrum_law
+#print axioms Conjecture5960.ensembles_same_spectrum_law
+#check Conjecture5960.ensembles_same_charpoly_law
+#print axioms Conjecture5960.ensembles_same_charpoly_law
+#check Conjecture5960.randomMatrixA_measurable
+#print axioms Conjecture5960.randomMatrixA_measurable
+#check Conjecture5960.randomMatrixB_measurable
+#print axioms Conjecture5960.randomMatrixB_measurable
+#check Conjecture5960.ensembleA_measure_map
+#print axioms Conjecture5960.ensembleA_measure_map
+#check Conjecture5960.ensembleB_measure_map
+#print axioms Conjecture5960.ensembleB_measure_map
+#check Conjecture5960.ensembleA_measure_not_dirac
+#print axioms Conjecture5960.ensembleA_measure_not_dirac
+#check Conjecture5960.ensembleB_measure_not_dirac
+#print axioms Conjecture5960.ensembleB_measure_not_dirac
+#check Conjecture5960.ensembleA_statistic_law
+#print axioms Conjecture5960.ensembleA_statistic_law
+#check Conjecture5960.ensembleB_statistic_law
+#print axioms Conjecture5960.ensembleB_statistic_law
+#check Conjecture5960.ensembleA_statistic_zero
+#print axioms Conjecture5960.ensembleA_statistic_zero
+#check Conjecture5960.ensembleB_statistic_zero
+#print axioms Conjecture5960.ensembleB_statistic_zero
+#check Conjecture5960.ensembles_different_statistic_laws
+#print axioms Conjecture5960.ensembles_different_statistic_laws
+#check Conjecture5960.ensembles_distinct
+#print axioms Conjecture5960.ensembles_distinct
+#check Conjecture5960.statistic_randomMatrixA_measurable
+#print axioms Conjecture5960.statistic_randomMatrixA_measurable
+#check Conjecture5960.statistic_randomMatrixB_measurable
+#print axioms Conjecture5960.statistic_randomMatrixB_measurable
+#check Conjecture5960.ensembleA_statistic_measure_map
+#print axioms Conjecture5960.ensembleA_statistic_measure_map
+#check Conjecture5960.ensembleB_statistic_measure_map
+#print axioms Conjecture5960.ensembleB_statistic_measure_map
+#check Conjecture5960.ensembles_different_statistic_measures
+#print axioms Conjecture5960.ensembles_different_statistic_measures
+#check Conjecture5960.different_actual_statistic_pushforwards
+#print axioms Conjecture5960.different_actual_statistic_pushforwards
+#check Conjecture5960.randomMatrixA_eq_parameter
+#print axioms Conjecture5960.randomMatrixA_eq_parameter
+#check Conjecture5960.randomMatrixB_eq_parameter
+#print axioms Conjecture5960.randomMatrixB_eq_parameter
+#check Conjecture5960.explicit_parametric_separation
+#print axioms Conjecture5960.explicit_parametric_separation
+#check Conjecture5960.conjecture_5960
+#print axioms Conjecture5960.conjecture_5960
