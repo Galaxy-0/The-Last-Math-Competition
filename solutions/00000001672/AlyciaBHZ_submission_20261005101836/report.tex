@@ -1,0 +1,270 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue,linkcolor=blue,citecolor=blue}
+\setlength{\emergencystretch}{3em}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\crn}{\operatorname{cr}}
+\newcommand{\N}{\mathbb{N}}
+\title{An internal inconsistency in TLMC conjecture 00000001672}
+\author{AlyciaBHZ, on behalf of the Omega Institute}
+\date{5 October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The conjecture identifies $77$ as the Zarankiewicz formula's value at
+$(7,7)$ and asserts both $\crn(K_{7,7})=77$ and that the formula holds
+for $\min(m,n)\leq 7$. The formula's value is actually $81$.
+Consequently the headline and its asserted restatement cannot both hold,
+regardless of the true crossing number. We formalize this contradiction
+for every natural-valued function in Lean~4, without defining crossing
+numbers or using any axioms. Independently, Woodall's published
+computer-assisted theorem gives $\crn(K_{7,7})=81$ and
+$\crn(K_{7,9})=144$, refuting the isolated headline as well.
+That crossing-number theorem is cited, not formalized here.
+The description of $K_{7,7}$ as the smallest open instance is also false;
+the smallest unsettled cases are $K_{7,11}$ and $K_{9,9}$.
+\end{abstract}
+
+\section{Statement and interpretation}
+The English statement of conjecture \textbf{00000001672} is reproduced
+verbatim below, with its mathematical notation typeset:
+\begin{quote}
+Definition: The Zarankiewicz formula asserts
+$\crn(K_{m,n}) = \lfloor m/2\rfloor\allowbreak\lfloor(m-1)/2\rfloor
+\allowbreak\lfloor n/2\rfloor\allowbreak\lfloor(n-1)/2\rfloor$.
+Conjecture: $\crn(K_{7,7}) = 77$ (the value of the formula at the smallest
+open instance); that is, the Zarankiewicz formula holds for
+$\min(m,n) \leq 7$.
+\end{quote}
+The source is the repository file
+\texttt{conjectures/00000001672.md}~\cite{tlmc}.
+
+For positive integers $m,n$, let $K_{m,n}$ be the complete bipartite
+graph with part sizes $m,n$. Its crossing number is the minimum number
+of edge crossings in a plane drawing. Write the displayed product as
+\[
+Z(m,n)=\left\lfloor\frac m2\right\rfloor
+\left\lfloor\frac{m-1}2\right\rfloor
+\left\lfloor\frac n2\right\rfloor
+\left\lfloor\frac{n-1}2\right\rfloor.
+\]
+The initial ``Definition'' specifies the formula under discussion; it
+does not supply a proof that the formula holds for crossing numbers.
+
+For a function $c:\N\times\N\longrightarrow\N$, distinguish the three
+claims in the text:
+\begin{align*}
+H(c)&:\quad c(7,7)=77,\\
+V&:\quad Z(7,7)=77,\\
+F(c)&:\quad \forall m,n\in\N,\quad
+\min(m,n)\leq7\ \Longrightarrow\ c(m,n)=Z(m,n).
+\end{align*}
+We read the declarative headline and the phrase ``that is'' as asserting
+both $H(c)$ and $F(c)$; the parenthesis additionally asserts $V$.
+This preserves the numerical headline, the exact product, the boundary
+$7$, and the universal range of the restatement. We prove that
+$H(c)\land F(c)$ is impossible, even after omitting $V$, and separately
+that $V$ is false. Thus the entire collection of assertions is inconsistent.
+
+Graph parameters are usually positive. The formalization also proves
+the same impossibility when $F$ quantifies only over $m,n\geq1$.
+Only $(7,7)$ is used, so the convention for zero-sized parts and the
+natural subtraction at $m=0$ or $n=0$ cannot affect the contradiction.
+For positive parameters, natural division by $2$ is precisely the floor
+in the displayed expression.
+
+\section{Full mathematical proof}
+\begin{lemma}
+$Z(7,7)=81$, and in particular $Z(7,7)\ne77$.
+\end{lemma}
+\begin{proof}
+Both $\lfloor7/2\rfloor$ and $\lfloor(7-1)/2\rfloor
+=\lfloor6/2\rfloor$ equal $3$. Therefore
+\[
+Z(7,7)=3\cdot3\cdot3\cdot3=81\ne77.
+\]
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+For every $c:\N\times\N\to\N$,
+\[
+\neg\bigl(c(7,7)=77\ \land\
+\forall m,n,\ \min(m,n)\leq7\Longrightarrow c(m,n)=Z(m,n)\bigr).
+\]
+The same conclusion holds if the universal quantifiers are restricted
+to positive integers.
+\end{theorem}
+\begin{proof}
+Suppose both assertions hold. Since $\min(7,7)=7\leq7$, the second
+assertion gives $c(7,7)=Z(7,7)=81$. The first gives $c(7,7)=77$.
+Transitivity yields $77=81$, a contradiction. The witness $(7,7)$ has
+both parameters positive, which proves the positive-parameter variant
+with exactly the same argument.
+\end{proof}
+
+In particular,
+\[
+F(c)\ \Longrightarrow\ c(7,7)\ne77.
+\]
+Even the weaker local assertion $c(7,7)=Z(7,7)$ contradicts the
+headline. All these conclusions are independent of the definition or
+actual value of the crossing number. Instantiating $c(m,n)$ with the
+actual crossing number is a legitimate mathematical specialization of
+the theorem; that specialization requires no crossing-number estimates.
+
+\section{Scope and other readings}\label{sec:scope}
+\textbf{Headline alone.} Woodall's computer-assisted theorem establishes
+$\crn(K_{7,7})=81$, so the isolated headline $\crn(K_{7,7})=77$ is
+false~\cite{woodall}. This is a cited mathematical refutation; Woodall's
+crossing-number computation is not formalized in this submission.
+The Lean proof independently refutes the headline and the asserted formula
+range taken jointly, without depending on that computation.
+
+\textbf{Formula range alone.} The assertion that the formula holds for
+all $\min(m,n)\leq7$ is a separate claim. The Lean arithmetic argument
+neither proves nor refutes that range for the actual crossing number.
+Woodall settles the instances $(7,7)$ and $(7,9)$, not the full range:
+$K_{7,11}$ remains among the smallest unsettled cases. Replacing $77$
+by $81$ repairs the headline and agrees with Woodall's theorem, but does
+not establish the universal range.
+
+\textbf{Bare logical equivalence.} If ``that is'' is interpreted as the
+single formula $H(c)\leftrightarrow F(c)$ without asserting either side,
+the universal negation of this equivalence is false. Both sides can be
+false. For example, let $c(m,n)=0$ for all $m,n$. Then $H(c)$ is false
+because $0\ne77$, and $F(c)$ is false because at $(7,7)$ it would require
+$0=81$. Hence $H(c)\leftrightarrow F(c)$ is true for this abstract
+function. Lean formally exhibits this example; the zero function is
+not proposed as the crossing-number function. For the actual crossing
+number, Woodall makes $H$ false and the \emph{local} formula assertion
+$\crn(K_{7,7})=Z(7,7)$ true, so the local equivalence is false.
+This does not settle $F$, which asserts the formula for an entire range,
+or the global bare equivalence $H\leftrightarrow F$.
+
+\textbf{Literature context.} Kleitman's 1970 result establishes the
+Zarankiewicz formula for complete bipartite graphs with smaller part at
+most $6$~\cite{kleitman}. Woodall, in \emph{Cyclic-order graphs and
+Zarankiewicz's crossing-number conjecture}, \emph{Journal of Graph Theory}
+\textbf{17} (1993), 657--671, proved by a computer-assisted search
+that~\cite{woodall}
+\[
+\crn(K_{7,7})=81,\qquad \crn(K_{7,9})=144
+\]
+Thus $K_{7,7}$ is a solved case, and both the isolated
+headline and its description as the ``smallest open instance'' are false.
+The smallest unsettled cases are $K_{7,11}$ and $K_{9,9}$.
+These crossing-number results are cited, not formalized here, and are not
+premises of the Lean proof. The formal result is the inconsistency of
+the stated assertions, including $Z(7,7)=81\ne77$, for every function $c$.
+
+\section{Lean statement and semantic correspondence}
+The file \texttt{lean4/ZarankiewiczConsistency.lean} begins with the exact
+statement and the interpretation formalized. It uses no imports, only
+core Lean natural arithmetic. The symbol \texttt{Nat} is Lean's type of
+natural numbers; the source supplies a local notation for that type.
+Automatic implicit parameters are disabled.
+
+The definition and main theorem, written using \texttt{Nat} and ASCII
+notations equivalent to those in the source, are:
+\begin{verbatim}
+def Z (m n : Nat) : Nat :=
+  (m / 2) * ((m - 1) / 2) * (n / 2) * ((n - 1) / 2)
+
+theorem conjecture_inconsistent (cr : Nat -> Nat -> Nat) :
+    Not (cr 7 7 = 77 /\
+      forall m n, min m n <= 7 -> cr m n = Z m n)
+\end{verbatim}
+The fully qualified name is
+\texttt{ZarankiewiczConsistency.conjecture\_inconsistent}.
+The curried function \texttt{cr} represents $c$ above. It has no imposed
+properties, so the result covers any natural-valued crossing-number
+function. The conjunction faithfully retains the headline and the full
+range assertion, rather than introducing a surrogate graph invariant.
+The proof specializes the universal quantifiers at $7,7$.
+
+The additional theorems are:
+\begin{itemize}
+\item \texttt{Z\_seven}: $Z(7,7)=81$.
+\item \texttt{not\_value\_of\_formula}: $Z(7,7)\ne77$.
+\item \texttt{local\_inconsistent}: the headline and the local formula
+equality cannot both hold.
+\item \texttt{formula\_range\_excludes\_77}: $F(c)\Rightarrow c(7,7)\ne77$.
+\item \texttt{positive\_parameters\_inconsistent}: the main contradiction
+with the additional premises $1\leq m$ and $1\leq n$ in the range assertion.
+\item \texttt{equivalence\_reading\_has\_abstract\_model}: there exists a
+natural-valued function satisfying the bare equivalence; the witness is
+the zero function described in Section~\ref{sec:scope}.
+\end{itemize}
+No assertion about the actual crossing number is hidden in these auxiliary
+theorems. Every claim in the proof of Theorem~\ref{thm:main}, including
+the arithmetic evaluation, is covered by the formalization.
+
+\section{Verification, axioms, and reproduction}
+The pinned toolchain is \texttt{leanprover/lean4:v4.33.0}. The project
+declares Mathlib \texttt{v4.33.0}; its manifest pins revision
+\texttt{db584cd6d46c92f209a44c0f1c829460d327499d}. Although Mathlib is
+declared in the project configuration, the proof needs only Lean's
+core library. The project has one library root and one proof file.
+
+Every theorem listed above ends with an axiom audit command. The actual
+compiler output in \texttt{verification.txt} reports that all seven
+theorems do not depend on any axioms, including:
+\begin{verbatim}
+'ZarankiewiczConsistency.conjecture_inconsistent'
+  does not depend on any axioms
+\end{verbatim}
+The source contains no \texttt{sorry}, \texttt{admit},
+\texttt{native\_decide}, or new axiom declarations. Closed arithmetic
+goals use the ordinary kernel-checked \texttt{decide} tactic.
+There are no unproved assumptions, graph-computation certificates, or
+external numerical dependencies in the main theorem.
+
+The final proof file compiled successfully with Lean \texttt{v4.33.0}.
+The compiler output and exit status are saved in \texttt{verification.txt}.
+A fresh project can be built with:
+\begin{verbatim}
+cd lean4
+lake exe cache get && lake build
+\end{verbatim}
+The independent sanity check \texttt{verify.py} uses only Python's
+standard library. It computes rational floors exactly, checks all four
+factors, checks $Z(7,7)=81\ne77$, and checks that $(7,7)$ lies in the
+specified range. It neither computes nor assumes a crossing number.
+Its actual output is appended to \texttt{verification.txt}. To reproduce
+the supplementary check and report from the submission directory:
+\begin{verbatim}
+python3 verify.py
+pdflatex -interaction=nonstopmode -halt-on-error report.tex
+pdflatex -interaction=nonstopmode -halt-on-error report.tex
+\end{verbatim}
+
+\paragraph{Attribution.}
+Submitted by AlyciaBHZ on behalf of the Omega Institute (trureturing
+project, \url{https://github.com/the-omega-institute/trureturing}).
+No code from trureturing or another submission is vendored.
+
+\begin{thebibliography}{9}
+\bibitem{tlmc}
+{\raggedright
+The Last Math Competition, conjecture 00000001672, English statement.
+\url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000001672.md}.\par}
+\bibitem{kleitman}
+D.~J.~Kleitman, The crossing number of $K_{5,n}$,
+\emph{Journal of Combinatorial Theory} \textbf{9}(4) (1970), 315--323.
+\href{https://doi.org/10.1016/S0021-9800(70)80087-4}
+{doi:10.1016/S0021-9800(70)80087-4}.
+\bibitem{woodall}
+D.~R.~Woodall, Cyclic-order graphs and Zarankiewicz's crossing-number
+conjecture, \emph{Journal of Graph Theory} \textbf{17}(6) (1993), 657--671.
+\href{https://doi.org/10.1002/jgt.3190170602}
+{doi:10.1002/jgt.3190170602}.
+\end{thebibliography}
+\end{document}
