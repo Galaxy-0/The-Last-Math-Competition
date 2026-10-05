@@ -1,0 +1,222 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small,breaklines=true,columns=fullflexible}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\N}{\mathbb N}
+\newcommand{\R}{\mathbb R}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\title{Conjecture 00000001209: the golden-ratio slope fails for 2-Wythoff}
+\author{AlyciaBHZ on behalf of the Omega Institute}
+\date{5 October 2026}
+\begin{document}
+\maketitle
+
+\textbf{Statement, verbatim (00000001209).}
+``Conjecture: For every t $\geq$ 1, the n-th P-position of t-Wythoff is asymptotic to ($\varphi$n, $\varphi$n + tn) with an explicit linear correction coefficient (t-Wythoff asymptotics).''
+
+\textbf{Result.} Under the standard definition of the game and the usual meaning of ``asymptotic to,'' the universal assertion is false. For $t=2$ the smaller heap has slope $\sqrt2$, and
+\[
+\frac{a_n}{\varphi n}\longrightarrow\frac{\sqrt2}{\varphi}\ne1,
+\qquad \varphi=\frac{1+\sqrt5}{2}.
+\]
+The accompanying Lean proof establishes the exact P-position characterization from the move relation, rather than assuming Fraenkel's theorem.
+
+\section{Definition and interpretation}
+We use Fraenkel's standard $t$-Wythoff game on two heaps, with an integer $t\ge1$: a move removes any positive number from one heap, or removes positive numbers $k,l$ from both heaps subject to $|k-l|<t$. Play is normal: a player with no move loses. A P-position is a position from which every move leads to a position that is not a P-position. This is a well-founded recursive definition because every move strictly decreases the sum of the heaps.
+
+Heap order is irrelevant to the winning status. We list the P-positions as $(a_n,b_n)$ with $a_n\le b_n$, in increasing order of $a_n$, and include $(0,0)$ at index $0$. Starting the list at $1$ makes no difference to any limit here. Coordinatewise asymptotic equivalence requires
+\[
+a_n/(\varphi n)\to1,\qquad b_n/((\varphi+ t)n)\to1.
+\]
+It suffices to refute the first requirement for $t=2$.
+
+\textbf{Robustness to the non-strict convention.}
+If simultaneous removals instead satisfy $|k-l|\le t$, integer removal
+amounts make this exactly the strict game with parameter $t+1$.
+Consequently its $t=1$ instance is already not classical Wythoff: the
+first positive sorted P-position is $(1,3)$, whereas classical Wythoff
+has $(1,2)$. Its exact P-positions are the strict $t=2$ positions described
+below, with smaller-heap slope $\sqrt2\ne\varphi$ and larger-heap slope
+$\sqrt2+2$. Thus the universal ratio-asymptotic claim fails under this
+convention too, already at $t=1$.
+
+The independent script \texttt{verify.py} directly computes the
+P-positions for $\le$ at $t=1$ on $[0,100]^2$. It implements the
+non-strict rule directly and finds exact agreement with strict $t=2$,
+and different positions from classical Wythoff.
+The first positions are $(0,0),(1,3),(2,6),(4,10),(5,13)$; at index
+$29$ the position $(41,99)$ gives $a_{29}/29\approx1.413793103$.
+The exact integer formula at index $10^6$ gives
+$a_n/n=1.414213$.
+These finite checks are supplementary. Lean also proves the exact
+move and P-position equivalences and the resulting slope and refutation.
+
+The words ``with an explicit linear correction coefficient'' do not specify a formula. They cannot preserve the stated asymptotic equivalence if the correction is of order $n$ with nonzero coefficient. We address the alternative expansion reading explicitly in Section~\ref{sec:correction}. We do not claim that an expansion allowing its leading slope to change is false.
+
+\section{A self-contained description of the P-positions for t=2}
+Put $r=\sqrt2$, $s=\sqrt2+2$ and, for $n\in\N$, set
+\[
+a_n=\lfloor nr\rfloor,\qquad b_n=a_n+2n=\lfloor ns\rfloor.
+\]
+Both sequences start at zero and are strictly increasing, since $r>1$ and $s>1$. Also $b_n\ge a_n$, with equality only for $n=0$.
+
+\begin{lemma}[Complementarity]
+The positive terms of $(a_n)$ and $(b_n)$ partition the positive integers: each positive integer appears exactly once in exactly one of the two sequences.
+\end{lemma}
+\begin{proof}
+We have $r^2=2$ and
+\[
+\frac1r+\frac1s=1.
+\]
+Both $r$ and $s$ are irrational. For each integer $N\ge0$, the number of positive indices $k$ for which $\lfloor kr\rfloor\le N$ is
+$\lfloor (N+1)/r\rfloor$. Indeed, the condition is $k<(N+1)/r$, whose right side is irrational. The analogous count for $s$ is $\lfloor (N+1)/s\rfloor$. Since these two irrational arguments sum to the integer $N+1$, their floors sum to $N$.
+
+Thus the total number of appearances, counted with multiplicity, in $\{1,\ldots,N\}$ is exactly $N$. Subtracting the count for $N-1$ shows that the integer $N\ge1$ has exactly one appearance. No positive index contributes zero because both slopes exceed one. This proves both coverage and disjointness. Lean uses Mathlib's proved Rayleigh--Beatty theorem for this step; its hypotheses are checked algebraically.
+\end{proof}
+
+Call a position a candidate if it is $(a_n,b_n)$ or $(b_n,a_n)$ for some $n\ge0$.
+
+\begin{lemma}[No move between candidates]
+A legal 2-Wythoff move cannot connect two candidate positions.
+\end{lemma}
+\begin{proof}
+A move on one heap leaves the other coordinate unchanged. Strict increase implies that equal coordinates within the same sequence have equal indices; complementarity implies that equality between an $a$-coordinate and a $b$-coordinate is possible only at index zero. In either case a strict one-heap reduction between candidates is impossible.
+
+For a move on both heaps, let the reductions be $k,l>0$. Between candidates with the same orientation, $k-l$ equals $2(n-m)$ or its negative. It can have absolute value less than $2$ only if $n=m$, which gives no strict reduction. Between opposite orientations, $k-l$ equals $2(n+m)$ or its negative. Its absolute value can be less than $2$ only if $n=m=0$, again with no strict reduction. Hence the required move is impossible.
+\end{proof}
+
+\begin{lemma}[Every other position can reach a candidate]
+Every noncandidate position has a legal move to a candidate.
+\end{lemma}
+\begin{proof}
+By symmetry suppose $x\le y$. Coverage gives either $x=a_n$ or $x=b_n$.
+
+If $x=b_n$, then $a_n\le b_n\le y$. If $y=a_n$, the position is already the reversed candidate, contrary to the hypothesis. Thus $y>a_n$, and reducing the second heap gives $(b_n,a_n)$. This also covers $n=0$ and $y>0$.
+
+If $x=a_n$, equality $y=b_n$ is excluded. If $y>b_n$, reduce the second heap to $b_n$. Otherwise $a_n\le y<b_n=a_n+2n$. Let
+\[
+d=y-a_n,\qquad m=\lfloor d/2\rfloor.
+\]
+Then $m<n$ and $a_m<a_n$. Since $2m\le d$, we have
+$b_m=a_m+2m<a_n+d=y$. Remove
+\[
+k=a_n-a_m>0,\qquad l=y-b_m>0.
+\]
+Their difference is $l-k=d-2m\in\{0,1\}$, so $|k-l|<2$. This is a legal move to $(a_m,b_m)$.
+\end{proof}
+
+\begin{theorem}[Exact game characterization]
+The P-positions of 2-Wythoff are precisely the candidates. Consequently the sorted P-positions are exactly $(a_n,b_n)$ in increasing order of $a_n$.
+\end{theorem}
+\begin{proof}
+Use strong induction on $x+y$. If a position is a candidate, all its followers are noncandidates by the no-move lemma; by induction they are not P-positions. Thus it is a P-position. If a position is not a candidate, it has a candidate follower, which is a P-position by induction; hence it is not a P-position. Strict increase gives the asserted enumeration and its uniqueness.
+\end{proof}
+
+This also recovers the mex description, although a mex theorem is not needed in the Lean proof. The number $a_n$ is absent from all earlier coordinates by strict increase and complementarity. Every $x<a_n$ appears as some $a_i$ or $b_i$; in either case $a_i\le x<a_n$ implies $i<n$. Thus
+\[
+a_n=\operatorname{mex}\{a_i,b_i:i<n\},\qquad b_n=a_n+2n.
+\]
+
+\section{Limit and contradiction}
+For $n>0$ the floor inequalities give
+\[
+0\le nr-a_n<1,\qquad
+0\le r-\frac{a_n}{n}<\frac1n.
+\]
+Since $1/n\to0$, the squeeze theorem yields $a_n/n\to r$. Therefore
+\[
+\frac{a_n}{\varphi n}\to\frac r\varphi.
+\]
+This limit is not one. Indeed, $r^2=2$, whereas $\varphi^2=\varphi+1$; equality $r=\varphi$ would imply $r=1$, contradicting $r>1$. Uniqueness of real limits rules out the conjectured convergence to one. A universal claim over $t\ge1$ implies its $t=2$ instance, so that claim is refuted.
+
+The same formulas give $b_n/n\to\sqrt2+2$. Thus the conjecture's second leading slope also fails at $t=2$.
+
+\section{Formal statement and semantic correspondence}
+The file \texttt{lean4/Wythoff.lean} defines \texttt{Move t p q} by the exact one-heap and two-heap move conditions. The two strict inequalities on the reductions encode $|k-l|<t$ without using signed subtraction. It defines \texttt{isP t p} recursively by
+\begin{lstlisting}
+isP t p = (forall q, Move t p q -> Not (isP t q))
+\end{lstlisting}
+with termination measured by the sum of the coordinates. The terminating function \texttt{decideP} supplies a decision procedure by finite search over all smaller follower heaps.
+
+The theorem \texttt{p\_characterization} identifies this recursively defined P-predicate with the candidate set. The theorem \texttt{sorted\_p\_positions} characterizes all pairs with the smaller coordinate first. \texttt{a\_strict} proves that their smaller heaps strictly increase.
+
+We define \texttt{lower t x} to mean that there exists $y\ge x$ for which $(x,y)$ is a P-position, and \texttt{nthLower t n := Nat.nth (lower t) n}. Thus \texttt{nthLower} refers directly to the game, not to an arbitrarily chosen Beatty sequence. \texttt{nthLower\_two} proves that its $t=2$ value equals \texttt{a n}. Infinitude and strict increase justify the use of \texttt{Nat.nth} without its finite-set fallback.
+
+The main theorem has this Lean statement (ASCII transcription of notation):
+\begin{lstlisting}
+theorem t_two_refutation :
+  Not (Tendsto
+    (fun n => (nthLower 2 n : Real) /
+      (Real.goldenRatio * n))
+    atTop (nhds 1))
+\end{lstlisting}
+The universal consequence is:
+\begin{lstlisting}
+theorem universal_refutation :
+  Not (forall t : Nat, 1 <= t ->
+    Tendsto
+      (fun n => (nthLower t n : Real) /
+        (Real.goldenRatio * n))
+      atTop (nhds 1))
+\end{lstlisting}
+A coordinatewise pair-asymptotic assertion entails this first-coordinate condition, so refuting the necessary condition refutes the full pair assertion. No assertion about the correction coefficient is substituted for the stated leading-term condition.
+
+For the alternative convention, \texttt{MoveLE} implements the non-strict
+inequalities and \texttt{isPLE} defines the P-predicate by the same
+well-founded normal-play recursion. \texttt{moveLE\_iff\_move\_succ} proves
+the exact move equivalence; \texttt{isPLE\_iff\_isP\_succ} proves its
+consequence for all P-positions, by induction on total heap size.
+\texttt{nthLowerLE} enumerates the smaller heaps directly from this
+alternative game's P-predicate. \texttt{nthLowerLE\_eq\_succ} identifies
+that enumeration with the strict game's at parameter $t+1$.
+\texttt{lowerLE\_one\_slope} proves its $\sqrt2$ limit at $t=1$;
+\texttt{t\_one\_le\_refutation} and \texttt{universal\_le\_refutation}
+refute the ratio assertion for that instance and universally, respectively.
+
+\section{Correction wording and other parameters}\label{sec:correction}
+If the intended assertion instead allows an expansion with a leading-order correction, then the actual $t=2$ result is
+\[
+(a_n,b_n)=(\varphi n,(\varphi+2)n)
+ +(\sqrt2-\varphi)n(1,1)+O(1).
+\]
+The same floor error appears in both coordinates and has absolute value less than one. Lean also proves \texttt{correction\_slope}, namely
+\[
+\frac{a_n-\varphi n}{n}\longrightarrow\sqrt2-\varphi.
+\]
+This is a true correction expansion. Its nonzero linear term changes the slope and therefore does not establish the literal asymptotic equivalence in the conjecture. A reading which permits that change is not refuted by this submission.
+
+For context, Fraenkel's general result gives
+\[
+\alpha_t=\frac{2-t+\sqrt{t^2+4}}2,\qquad
+\beta_t=\alpha_t+t,\qquad
+(a_n,b_n)=(\lfloor n\alpha_t\rfloor,\lfloor n\beta_t\rfloor).
+\]
+It gives $\alpha_1=\varphi$, so the stated leading asymptotics hold for $t=1$. They fail for every integer $t\ge2$: the relation
+$1/\alpha_t+1/(\alpha_t+t)=1$ is equivalent to
+$\alpha_t^2+(t-2)\alpha_t-t=0$. If $\alpha_t=\varphi$, using $\varphi^2=\varphi+1$ gives $(t-1)(\varphi-1)=0$, impossible for $t\ge2$. This general observation uses the cited theorem and is not claimed as an additional Lean result; the fully formalized $t=2$ case suffices for the disproof.
+
+\section{Verification and dependencies}
+The project pins Lean \texttt{leanprover/lean4:v4.33.0} and Mathlib \texttt{v4.33.0}. The Mathlib revision is
+\begin{center}\texttt{db584cd6d46c92f209a44c0f1c829460d327499d}.\end{center} In an independent checkout, run \texttt{lake exe cache get \&\& lake build} from \texttt{lean4/}. Compilation against this pinned Mathlib environment succeeded; the recorded compiler output and axiom audits are in \texttt{verification.txt}.
+
+The main theorem audits at the end of the Lean file list exactly these standard axioms:
+\begin{center}\texttt{[propext, Classical.choice, Quot.sound]}.\end{center} The proof uses no additional axioms, admissions, or native decision procedure. Mathlib's Beatty theorem and its analytic limit lemmas are proved library results.
+
+The independent standard-library Python script \texttt{verify.py} checks every heap pair in $[0,100]^2$ using the legal moves and the normal-play recursion. It verifies exact agreement with the closed form using the integer identity $\lfloor n\sqrt2\rfloor=\operatorname{isqrt}(2n^2)$, and checks the first 101 mex-generated pairs. It directly checks the non-strict $t=1$ game against both strict games
+$t=1$ and $t=2$, lists its initial P-positions, computes its box-derived
+slope, and prints large-index ratios using the verified exact formula. These finite checks are supplementary; the Lean proof establishes the infinite claims without relying on Python.
+
+\begin{thebibliography}{9}
+\bibitem{fraenkel} A.~S. Fraenkel, ``How to beat your Wythoff games' opponent on three fronts,'' \emph{The American Mathematical Monthly} \textbf{89} (1982), 353--361.
+\bibitem{mathlib} Mathlib contributors, Rayleigh's theorem on Beatty sequences, Mathlib v4.33.0, file \path{Mathlib/NumberTheory/Rayleigh.lean}.
+\end{thebibliography}
+
+\textbf{Attribution.} Submitted by AlyciaBHZ on behalf of the Omega Institute (trureturing project, \url{https://github.com/the-omega-institute/trureturing}). No trureturing code is vendored.
+\end{document}
