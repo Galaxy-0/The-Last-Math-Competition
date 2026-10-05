@@ -1,0 +1,159 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A proof of Conjecture 00000004930\\[2pt]
+\large Two MDPs with equal discounted values for every discount factor but different average
+rewards}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000004930 reads (English version; the Chinese version says the same, with
+``all discount-factor values identical''):
+
+\begin{quote}
+\emph{Definition:} Discounted value and average reward are two layers of optimality measures.
+\emph{Conjecture:} There exist two MDPs with identical values for all discount factors but
+different average rewards, and the separation is realized by an explicit construction
+concentrating the discount weights on transients.
+\end{quote}
+
+It is an existence statement. We give two explicit Markov decision processes with countable state
+spaces whose optimal discounted values agree for every discount factor, while under every policy
+the long-run average reward is $1$ in the first and $0$ in the second. The second MDP collects all
+of its reward on transient states. Everything is proved in Lean 4 with Mathlib.
+
+\section{Definitions}
+
+\begin{definition}[MDP, policies]
+An MDP $M$ (Lean: \texttt{MDP}) consists of a state type $S$, an action type $\mathcal A$, an initial
+state $s_0$, transition laws $P(s,a)\in\mathrm{PMF}(S)$ and rewards $r(s,a)\in\mathbb R_{\ge0}$. A
+history at time $t$ is $((s_0,a_0),\dots,(s_{t-1},a_{t-1});s_t)$ (Lean: \texttt{Hist}). A policy is
+history-dependent and randomized: $\pi(h)\in\mathrm{PMF}(\mathcal A)$ (Lean: \texttt{Policy}). The law
+of the history at time $t$ is defined recursively by $s_0$ at $t=0$ and, from a history $h$ with
+current state $s$, by drawing $a\sim\pi(h)$, $s'\sim P(s,a)$ and appending $(s,a)$ (Lean:
+\texttt{law}).
+\end{definition}
+
+\begin{definition}[Values and average reward]
+The expected reward at time $t$ is $\mathbb E^\pi[r(s_t,a_t)]$ (Lean: \texttt{expReward}). For a
+discount factor $\beta$, the discounted value of $\pi$ is $V_\beta(\pi)=\sum_{t\ge0}\beta^t\,
+\mathbb E^\pi[r(s_t,a_t)]$ (Lean: \texttt{discValue}), and the (optimal) value of $M$ is
+$V^*_\beta=\sup_\pi V_\beta(\pi)$ (Lean: \texttt{optValue}). The $T$-step average is
+$\frac1T\sum_{t<T}\mathbb E^\pi[r(s_t,a_t)]$ (Lean: \texttt{avgReward}); the average reward of $\pi$
+is its limit (or liminf, or limsup) as $T\to\infty$, and the optimal average reward is the supremum
+over policies. Lean computes the $T$-step average from the real numbers
+\texttt{(expReward M $\pi$ t).toReal}; since \texttt{toReal} sends $\infty$ to $0$, this agrees with
+the usual definition whenever the expected rewards are finite, e.g.\ for bounded rewards. Both
+witnesses have rewards in $\{0,1\}$, so their expected rewards are at most $1$
+(\texttt{expReward\_le\_one}) and the formal and usual averages coincide.
+
+Values are taken in $[0,\infty]$. The Lean statements let $\beta$ range over all of $[0,\infty]$ with
+the arithmetic of $[0,\infty]$, in which $1-\beta$ is truncated subtraction; so the Lean value
+$(1-\beta)^{-1}$ means $1/(1-\beta)$ for a discount factor $\beta\in[0,1)$ and $\infty$ for
+$\beta\ge1$ (where the series $\sum_t\beta^t$ indeed diverges). Below we write $(1-\beta)^{-1}$ in
+this sense; for every discount factor $\beta\in[0,1)$ it is the ordinary number $1/(1-\beta)$.
+\end{definition}
+
+\section{The two MDPs}
+
+\textbf{MDP $A$} (Lean: \texttt{A}): one state, one action, reward $1$.
+
+\textbf{MDP $B$} (Lean: \texttt{B}): states $\mathit{start}$, $\mathit{count}(k)$ for $k\in\mathbb N$, and
+$\mathit{sink}$; actions $n\in\mathbb N$; deterministic transitions (Lean: \texttt{next})
+\[ \mathit{start}\xrightarrow{n}\mathit{count}(n),\quad \mathit{count}(k+1)\to\mathit{count}(k),\quad
+\mathit{count}(0)\to\mathit{sink},\quad \mathit{sink}\to\mathit{sink}, \]
+where the action matters only at $\mathit{start}$; reward $1$ at every state except $\mathit{sink}$,
+where it is $0$. Playing $n$ first yields reward $1$ at times $0,1,\dots,n+1$ and $0$ afterwards.
+All rewarded states are transient: each is visited at most once, and the discount weights
+$\beta^t$ that make up $V_\beta$ are carried by this transient prefix.
+
+\section{Results}
+
+\begin{lemma}[\texttt{optValue\_A}, \texttt{avgReward\_A}]
+In $A$ every policy has expected reward $1$ at every time. Hence $V^*_\beta(A)=(1-\beta)^{-1}$ for
+every $\beta$, and every policy has average reward $1$.
+\end{lemma}
+
+\begin{lemma}[\texttt{optValue\_B}]
+$V^*_\beta(B)=(1-\beta)^{-1}$ for every $\beta$.
+\end{lemma}
+
+\begin{proof}
+Rewards are at most $1$, so the expected reward is at most $1$ (\texttt{expReward\_le\_one}) and
+$V_\beta(\pi)\le\sum_t\beta^t$. Conversely the deterministic policy that always plays $n$
+(\texttt{detPol}) has expected reward $1$ at times $t\le n+1$ (\texttt{expReward\_detPol}), so
+$V^*_\beta(B)\ge\sum_{t<n}\beta^t$ for every $n$, whose supremum is $\sum_t\beta^t=(1-\beta)^{-1}$.
+\end{proof}
+
+\begin{lemma}[\texttt{law\_state}]
+Let $\pi$ be any policy for $B$ and $q=\pi(\mathit{start})$ the law of the first action. For every
+$t\ge1$ the law of the state $s_t$ is the image of $q$ under $n\mapsto \mathrm{st}(n,t)$, where
+$\mathrm{st}(n,\cdot)$ is the state sequence obtained by playing $n$.
+\end{lemma}
+
+\begin{proof}
+Induction on $t$. For $t=1$ this is the first transition. If the claim holds at $t\ge1$, then every
+history in the support of the time-$t$ law has state $\ne\mathit{start}$; at such states the
+transition does not depend on the action, so the randomized, history-dependent choice of $a_t$ is
+irrelevant and the state law is pushed forward by the fixed step map.
+\end{proof}
+
+\begin{lemma}[\texttt{expReward\_B\_le}, \texttt{expReward\_B\_tendsto}, \texttt{avgReward\_B}]
+Under every policy for $B$: $\mathbb E^\pi[r_{t+1}]\le\sum_{k}q(k+t)$, so the expected reward
+tends to $0$, and by Cesaro's theorem the average reward is $0$.
+\end{lemma}
+
+\begin{theorem}[\texttt{conjecture4930}]
+For every $\beta$: $V^*_\beta(A)=V^*_\beta(B)=(1-\beta)^{-1}$. Under every policy the average reward
+of $A$ tends to $1$ and that of $B$ tends to $0$; in $B$ the expected reward at time $t$ tends to
+$0$ under every policy. Hence $A$ and $B$ have identical values for all discount factors and
+different (optimal) average rewards, $1\neq0$.
+\end{theorem}
+
+\section{Remarks on the reading}
+
+\begin{itemize}
+\item \emph{Values} are optimal values at the initial state, and \emph{average rewards} are long-run
+average rewards; since the limit exists for every policy, the lim, liminf and limsup versions and
+their suprema over policies all give $1$ for $A$ and $0$ for $B$.
+\item The separation needs a countably infinite state space. For finite MDPs it is impossible,
+because $g^*=\lim_{\beta\uparrow1}(1-\beta)V^*_\beta$ (Blackwell); for a single fixed policy it is
+impossible as well, because $\beta\mapsto V_\beta$ is the generating function of the expected
+reward sequence, which it therefore determines. The conjecture does not restrict to finite MDPs,
+and its phrase ``concentrating the discount weights on transients'' describes exactly this
+construction: all reward of $B$ lies on transient states, which the discounted criterion sees and
+the average criterion ignores.
+\item Rewards are taken nonnegative (both witnesses have rewards in $\{0,1\}$); policies are fully
+general (history-dependent and randomized).
+\end{itemize}
+
+\section{Lean formalization and axiom audit}
+
+The file \texttt{lean/Conjecture4930/Basic.lean} (300 lines, Lean 4.33.1, Mathlib v4.33.1) contains
+the definitions above and the theorems \texttt{optValue\_A}, \texttt{avgReward\_A},
+\texttt{optValue\_B}, \texttt{law\_state}, \texttt{expReward\_B\_le}, \texttt{expReward\_B\_tendsto},
+\texttt{avgReward\_B} and the main theorem \texttt{Conjecture4930.conjecture4930}. It builds with
+\texttt{lake build}. \texttt{\#print axioms conjecture4930} (and \texttt{law\_state}) reports exactly
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom.
+
+\end{document}
