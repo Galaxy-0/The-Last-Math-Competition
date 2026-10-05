@@ -1,0 +1,153 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000007664\\[2pt]
+\large $9\,\Gamma_{1/4}(3/2) + 8\,\Gamma_{1/4}(-1/2) = 0$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000007664 reads:
+
+\begin{quote}
+\emph{Definition:} The Jackson q-Gamma function is
+$\Gamma_q(x)=(1-q)^{1-x}(q;q)_\infty/(q^x;q)_\infty$, where $(a;q)_\infty$ is the infinite
+q-Pochhammer product. \emph{Conjecture:} For every algebraic $q$ in $(0,1)$ and any two distinct positive
+integers $m, n$, the numbers $\Gamma_q(m/n)$ and $\Gamma_q(1-m/n)$ are algebraically independent over
+$\mathbb{Q}(q)$, except when $m/n=1/2$.
+\end{quote}
+The Chinese text gives $(a;q)_\infty=\prod_{k\ge 0}(1-aq^k)$.
+
+\paragraph{Reading.} Literally: for every algebraic real $q \in (0,1)$ and all positive integers
+$m \ne n$ with $m/n \ne 1/2$, the two real numbers $\Gamma_q(m/n)$, $\Gamma_q(1-m/n)$ are algebraically
+independent over the field $\mathbb{Q}(q) \subset \mathbb{R}$. That is, no nonzero
+$P \in \mathbb{Q}(q)[X,Y]$ vanishes at the pair. The text allows $m > n$. We give a counterexample at
+which both values are finite and nonzero, every infinite product converges and no denominator vanishes.
+The counterexample therefore also refutes the restricted reading ``whenever both values are defined''.
+
+\section{Definitions and sources}
+
+\begin{definition}
+For real $a, q$: $(a;q)_\infty := \lim_{N\to\infty} \prod_{k=0}^{N-1} (1 - a q^k)$, and
+$\Gamma_q(x) := (1-q)^{1-x} (q;q)_\infty / (q^x;q)_\infty$ with real powers. This is the definition in the
+statement and in Wikipedia (\url{https://en.wikipedia.org/wiki/Q-gamma_function}):
+$\Gamma_q(x)=(1-q)^{1-x}\prod_{n\ge0}\frac{1-q^{n+1}}{1-q^{n+x}}=(1-q)^{1-x}\frac{(q;q)_\infty}{(q^x;q)_\infty}$
+for $|q|<1$. The page also records the functional equation
+$\Gamma_q(x+1)=\frac{1-q^x}{1-q}\Gamma_q(x)$. The proof below re-derives the instance it needs directly
+from the products, so this equation is not assumed.
+\end{definition}
+
+\section{The counterexample}
+
+Take $q = 1/4$, $m = 3$, $n = 2$. Then $q$ is rational, so it is algebraic and $\mathbb{Q}(q) = \mathbb{Q}$.
+We have $m \ne n$, $m/n = 3/2 \ne 1/2$ and $1 - m/n = -1/2$. Moreover $q^{3/2} = 1/8$, $q^{-1/2} = 2$ and
+$1-q = 3/4$.
+
+\begin{lemma}[Convergence]\label{lem:conv}
+If $0 \le a \le 1$ and $0 \le q < 1$, the partial products $P_N = \prod_{k<N}(1-aq^k)$ are non-increasing
+and non-negative, so they converge, and $(a;q)_\infty \ge 1 - a/(1-q)$. Hence $A := (1/4;1/4)_\infty \ge 2/3$
+and $L := (1/8;1/4)_\infty \ge 5/6$.
+\end{lemma}
+\begin{proof}
+Each factor lies in $[0,1]$, so $(P_N)$ is non-increasing and non-negative. By induction,
+$P_N \ge 1 - a\sum_{k<N} q^k$. Indeed $P_{N+1} = P_N(1-aq^N) \ge (1 - aS_N)(1-aq^N) \ge 1 - aS_N - aq^N$,
+where $S_N = \sum_{k<N} q^k \le 1/(1-q)$.
+\end{proof}
+
+\begin{lemma}[Shift]\label{lem:shift}
+$(2;1/4)_\infty$ exists and equals $-\tfrac12 L$.
+\end{lemma}
+\begin{proof}
+For every $N$:
+$\prod_{k<N+2}(1-2q^k) = (1-2)(1-\tfrac12)\prod_{k<N}(1-2q^{k+2}) = -\tfrac12\prod_{k<N}(1-\tfrac18 q^k)$,
+since $2q^{k+2} = q^k/8$. Let $N \to \infty$ and use Lemma~\ref{lem:conv}.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+With $q = 1/4$:
+$\Gamma_q(3/2) = (3/4)^{-1/2} A/L > 0$, $\Gamma_q(-1/2) = (3/4)^{3/2} A / (-\tfrac12 L) < 0$, and
+\[ 9\,\Gamma_q(3/2) + 8\,\Gamma_q(-1/2) = 0. \]
+Hence the nonzero polynomial $P(X,Y) = 9X + 8Y \in \mathbb{Q}(q)[X,Y]$ vanishes at
+$(\Gamma_q(3/2), \Gamma_q(1-3/2))$. These two numbers are not algebraically independent over
+$\mathbb{Q}(q)$, and Conjecture 00000007664 is false.
+\end{theorem}
+\begin{proof}
+The formulas for the two values follow from the definition, $q^{3/2} = 1/8$, $q^{-1/2} = 2$ and
+Lemma~\ref{lem:shift}. Their signs follow from $A, L > 0$. Then
+$9\Gamma_q(3/2) + 8\Gamma_q(-1/2) = \frac{A}{L}\bigl(9(3/4)^{-1/2} - 16(3/4)^{3/2}\bigr) = 0$, because
+$(3/4)^{3/2} = (3/4)^2 (3/4)^{-1/2} = \frac{9}{16}(3/4)^{-1/2}$. $P$ is nonzero because $P(1,0) = 9$.
+\end{proof}
+
+\begin{remark}[Scope]
+(a) The relation is the functional equation applied twice:
+$\Gamma_q(3/2) = [1/2]_q[-1/2]_q\,\Gamma_q(-1/2)$, with $[x]_q = (1-q^x)/(1-q)$. The same
+argument works whenever $m/n$ is a half-integer $\ge 3/2$, because then $m/n$ and $1-m/n$ differ by an
+integer. For $m/n \in \mathbb{Z}$, $m/n \ge 2$, the number $1 - m/n$ is a pole.
+(b) The phrase ``except when $m/n = 1/2$'' suggests that the author may have meant $m < n$, so that
+$m/n \in (0,1)$. Under that reading the statement is a genuine transcendence question, and it is
+\emph{not} addressed here. The text says ``any two distinct positive integers'', and we refute that
+literal statement.
+\end{remark}
+
+\section{Lean 4 formalization}
+
+The directory \texttt{lean/} contains a Lean~4 project (Lean \texttt{v4.33.1}, Mathlib \texttt{v4.33.1}).
+\texttt{Conjecture7664.lean} imports the single source file \texttt{Conjecture7664/Basic.lean}
+(236 lines, namespace \texttt{C7664}).
+
+\paragraph{Definitions.}
+\begin{itemize}[leftmargin=*]
+  \item \texttt{qPochPartial a q N := prod k in range N, (1 - a * q \^{} k)}.
+  \item \texttt{qPochInf a q := limUnder atTop (qPochPartial a q)} (the limit of the partial products).
+  \item \texttt{qGamma q x := (1 - q) \^{} (1 - x) * qPochInf q q / qPochInf (q \^{} x) q} with
+        \texttt{Real.rpow}.
+  \item \texttt{Conjecture}: for all \texttt{q : Real} with \texttt{IsAlgebraic Q q}, \texttt{0 < q < 1},
+        and all \texttt{m n : Nat} with \texttt{0 < m}, \texttt{0 < n}, \texttt{m != n},
+        \texttt{(m:Real)/n != 1/2}:
+        \texttt{AlgebraicIndependent (IntermediateField.adjoin Q \{q\}) ![qGamma q (m/n), qGamma q (1 - m/n)]}.
+        This uses Mathlib's \texttt{AlgebraicIndependent} over the subfield $\mathbb{Q}(q)$ of $\mathbb{R}$.
+\end{itemize}
+
+\paragraph{Theorems.}
+\texttt{tendsto\_partial} (Lemma~\ref{lem:conv}), \texttt{shift\_tendsto}, \texttt{shift\_eq}
+(Lemma~\ref{lem:shift}), \texttt{gamma\_three\_halves}, \texttt{gamma\_neg\_half},
+\texttt{linear\_relation : 9 * qGamma (1/4) (3/2) + 8 * qGamma (1/4) (-1/2) = 0},
+\texttt{counterexample\_values\_genuine}: the products $(q;q)_\infty$, $(q^{3/2};q)_\infty$ and
+$(q^{-1/2};q)_\infty$ at $q = 1/4$ converge (\texttt{Tendsto}), with $A > 0$, $(q^{3/2};q)_\infty > 0$
+and $(q^{-1/2};q)_\infty < 0$, and $\Gamma_q(3/2) > 0 > \Gamma_q(-1/2)$. This shows that no junk value
+of \texttt{limUnder} or of division by zero is involved.
+\texttt{not\_algebraicIndependent} is Theorem~\ref{thm:main} with $P = 9X_0 + 8X_1$. The main theorem is
+\begin{quote}
+\texttt{conjecture\_00000007664\_false : $\neg$ Conjecture}
+\end{quote}
+It is proved by instantiating $q = 1/4$, $m = 3$, $n = 2$.
+
+\paragraph{Axiom audit.} There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+The file compiles with no warnings.
+\begin{verbatim}
+'C7664.conjecture_00000007664_false' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+'C7664.counterexample_values_genuine' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+\end{verbatim}
+To check: \texttt{cd lean; lake exe cache get; lake build}.
+
+\end{document}
