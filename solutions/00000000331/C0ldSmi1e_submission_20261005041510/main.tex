@@ -1,0 +1,109 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\title{A disproof of conjecture 00000000331\\\large The literal fixed-numerator assertion}
+\author{C0ldSmi1e}
+\date{October 5, 2026}
+\begin{document}
+\maketitle
+
+\section{Statement and scope}
+The English and Chinese versions of the repository statement assert that
+\[
+ \sum_{n=1}^{\infty}\frac{\psi(n)}{n}=+\infty
+ \quad\Longrightarrow\quad
+ \left|\alpha-\frac{a}{n}\right|<\psi(n)
+ \text{ for infinitely many }n,
+\]
+for almost every $\alpha$, with $a$ arbitrary but fixed. Here denominators
+are positive integers, $\psi$ is a nonnegative real-valued function, and
+``almost every'' refers to Lebesgue measure. Our function is strictly positive,
+bounded by $1/2$, and nonincreasing. We prove failure for every fixed real $a$,
+so restricting the numerator to rational, integer, or positive integer values
+does not repair the assertion. We treat both the real line and a unit interval.
+
+The numerator stays fixed as $n$ varies. The formula contains neither a varying
+integer numerator nor an additive inhomogeneous shift. The conclusion below
+concerns this displayed formula, not the research problem suggested by its
+Duffin--Schaeffer label. No claim about the status of that research problem
+is made. The source imposes no condition $\psi(n)\to0$.
+
+\section{Counterexample and complete proof}
+Set $\psi(n)=1/4$ for every $n\geq1$. Write
+\[
+ S_N=\sum_{n=1}^{N}\frac{1}{4n}.
+\]
+For $j\geq0$, the block $2^j\leq n<2^{j+1}$ contains $2^j$ terms, each at
+least $1/(4\cdot2^{j+1})$. Consequently
+\[
+ S_{2^k-1}\geq \frac{k}{8}\qquad(k\geq0).
+\]
+Since the partial sums are nondecreasing, this proves $S_N\to+\infty$:
+given a real threshold $M$, choose $k$ with $k/8>M$; then every
+$N\geq2^k-1$ satisfies $S_N>M$. Thus the required hypothesis is genuine
+divergence to positive infinity, not merely failure of summability.
+
+\begin{theorem}
+For every fixed $a\in\mathbb R$, each $\alpha\in[1/2,3/4]$ satisfies
+$|\alpha-a/n|<1/4$ for only finitely many positive integers $n$.
+\end{theorem}
+\begin{proof}
+Choose a positive integer $N>4|a|$. For every integer $n\geq N$, we have
+$|a|/n<1/4$. If $\alpha\geq1/2$, then
+\[
+ \left|\alpha-\frac an\right|
+ \geq \alpha-\frac an
+ \geq \alpha-\frac{|a|}{n}
+ > \frac12-\frac14=\frac14.
+\]
+All successful denominators therefore lie in the finite set
+$\{1,\ldots,N-1\}$. This proves the assertion simultaneously for all
+$\alpha\in[1/2,3/4]$.
+\end{proof}
+
+The failure set contains $[1/2,3/4]$, whose Lebesgue measure is $1/4>0$.
+Consequently, the infinitely-many conclusion does not hold for almost every
+$\alpha$ on $\mathbb R$, or for almost every $\alpha$ in $[0,1]$. The same failure interval lies inside $(0,1)$ and $[0,1)$, so these
+endpoint conventions also retain the positive-measure obstruction. This refutes the implication for every fixed numerator $a$,
+even with a strictly positive approximation function.
+
+\section{Formal verification}
+The accompanying Lean project uses Lean 4.19.0 and Mathlib v4.19.0.
+Its mathematical definitions retain the fixed numerator, the radius
+$\psi(n)$, positive denominator indices, and Lebesgue measure.
+Positive-integer partial sums express the divergence hypothesis as a limit
+to positive infinity. The infinitely-many assertion is stated as infinitude
+of the set of successful positive denominators.
+
+The formal proof verifies positivity, divergence, and failure on the stated
+interval. Two theorems negate the almost-everywhere conclusions:
+\texttt{not\_ae\_real} and \texttt{not\_ae\_unit}.
+The theorem \texttt{literal\_claim\_false} refutes the implication for
+every fixed real numerator. The encoded implication requires a strictly
+positive approximation function; the example meets that requirement.
+A further theorem covers nonnegative functions. Open and half-open unit
+intervals are also formalized.
+The elementary harmonic-series argument above and the formal
+harmonic-divergence argument establish the same partial-sum limit.
+
+The project has an explicit default proof target. From \texttt{lean/}, run
+\begin{verbatim}
+lake build
+lake env lean -DwarningAsError=true Conjecture331.lean
+lake env lean -DwarningAsError=true Check.lean
+\end{verbatim}
+\texttt{Check.lean} prints the submitted definitions and the types and axiom
+dependencies of the authored theorems. The verification records document a
+fresh build, strict source replays, and an exhaustive inventory of constants
+originating in the submitted proof module, including generated declarations.
+No external numerical computation is a premise of the proof. Local formal
+verification and independent internal semantic review are distinct from
+maintainer acceptance.
+\end{document}

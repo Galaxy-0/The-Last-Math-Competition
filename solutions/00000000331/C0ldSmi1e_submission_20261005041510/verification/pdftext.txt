@@ -1,0 +1,81 @@
+PAGE 1
+A disproof of conjecture 00000000331
+The literal ﬁxed-numerator assertion
+C0ldSmi1e
+October 5, 2026
+1 Statement and scope
+The English and Chinese versions of the repository statement assert that
+∞∑
+n=1
+ψ(n)
+n = +∞ =⇒
+⏐⏐⏐⏐α− a
+n
+⏐⏐⏐⏐<ψ(n) for inﬁnitely many n,
+for almost every α, with a arbitrary but ﬁxed. Here denominators are positive integers, ψ
+is a nonnegative real-valued function, and “almost every” refers to Lebesgue measure. Our
+function is strictly positive, bounded by 1/ 2, and nonincreasing. We prove failure for every
+ﬁxed real a, so restricting the numerator to rational, integer, or positive integer values does
+not repair the assertion. We treat both the real line and a unit interval.
+The numerator stays ﬁxed as n varies. The formula contains neither a varying integer nu-
+merator nor an additive inhomogeneous shift. The conclusion below concerns this displayed
+formula, not the research problem suggested by its Duﬃn–Schaeﬀer label. No claim about
+the status of that research problem is made. The source imposes no condition ψ(n) → 0.
+2 Counterexample and complete proof
+Set ψ(n) = 1/ 4 for every n ≥ 1. Write
+SN =
+N∑
+n=1
+1
+4n.
+Forj ≥ 0, the block 2j ≤ n< 2j+1 contains 2j terms, each at least 1/ (4 ·2j+1). Consequently
+S2k−1 ≥ k
+8 (k ≥ 0).
+Since the partial sums are nondecreasing, this proves SN → +∞ : given a real threshold
+M , choose k with k/ 8 > M; then every N ≥ 2k − 1 satisﬁes SN > M. Thus the required
+hypothesis is genuine divergence to positive inﬁnity, not merely failure of summability.
+Theorem 1. For every ﬁxed a ∈ R, each α∈ [1/ 2, 3/ 4] satisﬁes |α− a/n |< 1/ 4 for only
+ﬁnitely many positive integers n.
+Proof. Choose a positive integer N >4|a|. For every integer n ≥ N , we have |a|/n< 1/ 4. If
+α≥ 1/ 2, then ⏐⏐⏐⏐α− a
+n
+⏐⏐⏐⏐ ≥ α− a
+n ≥ α− |a|
+n > 1
+2 − 1
+4 = 1
+4.
+1
+
+PAGE 2
+All successful denominators therefore lie in the ﬁnite set {1,...,N − 1}. This proves the
+assertion simultaneously for all α∈ [1/ 2, 3/ 4].
+The failure set contains [1/ 2, 3/ 4], whose Lebesgue measure is 1/ 4 > 0. Consequently, the
+inﬁnitely-many conclusion does not hold for almost every αon R, or for almost every αin
+[0, 1]. The same failure interval lies inside (0, 1) and [0, 1), so these endpoint conventions also
+retain the positive-measure obstruction. This refutes the implication for every ﬁxed numerator
+a, even with a strictly positive approximation function.
+3 Formal veriﬁcation
+The accompanying Lean project uses Lean 4.19.0 and Mathlib v4.19.0. Its mathematical
+deﬁnitions retain the ﬁxed numerator, the radius ψ(n), positive denominator indices, and
+Lebesgue measure. Positive-integer partial sums express the divergence hypothesis as a limit
+to positive inﬁnity. The inﬁnitely-many assertion is stated as inﬁnitude of the set of successful
+positive denominators.
+The formal proof veriﬁes positivity, divergence, and failure on the stated interval. Two
+theorems negate the almost-everywhere conclusions: not_ae_real and not_ae_unit. The
+theorem literal_claim_false refutes the implication for every ﬁxed real numerator. The
+encoded implication requires a strictly positive approximation function; the example meets
+that requirement. A further theorem covers nonnegative functions. Open and half-open unit
+intervals are also formalized. The elementary harmonic-series argument above and the formal
+harmonic-divergence argument establish the same partial-sum limit.
+The project has an explicit default proof target. From lean/, run
+lake build
+lake env lean -DwarningAsError=true Conjecture331.lean
+lake env lean -DwarningAsError=true Check.lean
+Check.lean prints the submitted deﬁnitions and the types and axiom dependencies of the
+authored theorems. The veriﬁcation records document a fresh build, strict source replays,
+and an exhaustive inventory of constants originating in the submitted proof module, including
+generated declarations. No external numerical computation is a premise of the proof. Local
+formal veriﬁcation and independent internal semantic review are distinct from maintainer
+acceptance.
+2

@@ -1,0 +1,70 @@
+Verification record: conjecture 00000000331
+
+Result: local formal verification and report validation PASS.
+Independent semantic approval is recorded separately in SEMANTIC_REVIEW.md.
+Maintainer acceptance is not asserted by these records.
+
+Source identity
+Official bilingual source SHA-256: f1e6613129913c38936392b8bace5d3f7ead6d7a43fc1f16d8deb39bee50a534
+Audited upstream main: d7d4bc9f6918401d3fb22c6e473df63eba5dbb78
+Lean source SHA-256: e74af17c4c8116a1ef08490f532df48c029bff44997cb6e2174e9ed95c5194d2
+Exact source/config identities: verification/frozen-sources.json.
+
+Mathematical scope
+The fixed numerator a is arbitrary real; psi(n)=1/4 is strictly positive.
+The weighted positive-index partial sums tend to positive infinity.
+For every alpha >= 1/2, the set of successful positive denominators is finite.
+The common failure interval [1/2,3/4] has actual Lebesgue measure 1/4.
+Theorems negate the a.e. conclusion on the real line and the closed, open and
+half-open unit interval. Final theorems refute the positive-function and
+nonnegative-function universal implications for every fixed a.
+Divergence and infinite-index semantic bridges are explicitly proved.
+This is the literal displayed formula, with no added varying numerator, shift,
+coprimality condition, or unstated requirement that psi tend to zero.
+It does not claim to settle the research problem suggested by the source label.
+No external mathematical computation is required.
+
+Independent execution
+Fresh build directory: /private/tmp/tlmc331-independent-final
+Compiler: Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)
+Compiler commit: 6caaee842e9495688c1567e78c0e68dbb96942aa
+All nine dependency revisions match the pinned manifest and their tracked
+sources are clean before and after. Candidate build outputs were absent before
+the independent build; no candidate olean files were copied.
+lake build: exit 0.
+Complete source and Check.lean replay with warnings treated as errors: exit zero.
+Check prints all eight definitions and all20 theorem types and axiom lists.
+Every theorem uses only propext, Classical.choice and Quot.sound, or a subset.
+Exhaustive module-of-origin inventory: 37 constants, including
+9 generated/additional declarations. All are retained with types,
+safety flags and transitive axiom closures. There are no custom axiom declarations,
+unsafe declarations, partial declarations or compiler runtime constants.
+All dependency closures use only the standard allowed axioms. The authored-source
+bypass scan has no hits. Source/config/inventory hashes and compiler/dependency
+identity remain unchanged after all checks.
+Started: 2026-10-05T04:02:51.538380+00:00
+Finished: 2026-10-05T04:03:15.552524+00:00
+
+Report
+main.tex SHA-256: 0ea67e0c841b1f81089ecfa532ad0a314a536b189637d116646872f1e7efe7fb
+main.pdf SHA-256: a192de8c20308af39364afe21184fcd6908698fbaf30c4da4ea6ae1c38f9d542
+Built-in editor compilation: success for this exact source.
+Existing Tectonic export: exit zero; no warnings or box diagnostics.
+All 2 final pages rendered and visually inspected: PASS.
+Complete text extracted with pypdf; render and source/PDF hashes recorded.
+The report's bound N>4|a| and the formal proof's sufficient bound N>4a both
+establish the same finite-denominator conclusion for every real a.
+The report gives an elementary dyadic proof of harmonic divergence; Lean uses
+the pinned Mathlib harmonic partial-sum limit theorem and an exact sum identity.
+
+Contribution eligibility
+Initial audit: PASS; 595 all-state PRs and
+34 complete identifier/semantic searches; all21 lead submissions'
+full bodies, comments and reviews read and distinguished. Both remote branches,
+all local refs/history and Discussions checked. No prior same-ID submission or
+rejected same-ID submission found. Both complete current guides read.
+Current prepublication and immediate-publication observations are recorded
+separately in the package.
+
+Reproduction commands are in README.md. Inspection/export Python and Lean
+files are verification tooling, not proof premises or external oracles.

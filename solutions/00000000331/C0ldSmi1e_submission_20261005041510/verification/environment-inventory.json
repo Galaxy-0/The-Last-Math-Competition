@@ -1,0 +1,512 @@
+{
+  "method": "Enumerate imported environment constants by actual originating module; emit full type, declaration kind, safety flags and transitive collectAxioms result for every constant. No name-prefix filter or silent exclusion.",
+  "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "IndependentEnvironmentInventory.lean"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 8.381,
+  "module_names": [
+    "Conjecture331"
+  ],
+  "harness_sha256": "a12373f03341c3a31528f393795065b465fd67717383e509ee49beb868cf0034",
+  "log": "environment-inventory.txt",
+  "parsed_count": 37,
+  "emitted_count_markers": [
+    37
+  ],
+  "authored_count": 28,
+  "all_authored_names_present": true,
+  "generated_or_additional_names": [
+    "Conjecture331.InfinitelyApproximable.eq_1",
+    "Conjecture331.failureInterval._proof_2",
+    "Conjecture331.failureInterval._proof_3",
+    "Conjecture331.failureInterval.eq_1",
+    "Conjecture331.hitSet.eq_1",
+    "Conjecture331.infinite_means_arbitrarily_large_denominators._proof_4",
+    "Conjecture331.partialSum.eq_1",
+    "Conjecture331.radius._proof_1",
+    "Conjecture331.radius.eq_1"
+  ],
+  "generated_or_additional_count": 9,
+  "compiler_runtime_generated_names": [],
+  "compiler_runtime_note": "All runtime constants remain included and axiom-audited; _cstage1/_cstage2 compiler outputs are distinguished from safe kernel-level authored declarations.",
+  "unexpected_unsafe": [],
+  "partial_declarations": [],
+  "axiom_declarations": [],
+  "only_allowed_axioms": true,
+  "declarations": [
+    {
+      "unsafe": false,
+      "type": "(Nat \u2192 Real) \u2192 Prop",
+      "partial": false,
+      "name": "Conjecture331.Diverges",
+      "module": "Conjecture331",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Real \u2192 (Nat \u2192 Real) \u2192 Real \u2192 Prop",
+      "partial": false,
+      "name": "Conjecture331.InfinitelyApproximable",
+      "module": "Conjecture331",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a : Real) (\u03c8 : Nat \u2192 Real) (\u03b1 : Real),\n  Eq.{1} (Conjecture331.InfinitelyApproximable a \u03c8 \u03b1) (Set.Infinite.{0} (Conjecture331.hitSet a \u03c8 \u03b1))",
+      "partial": false,
+      "name": "Conjecture331.InfinitelyApproximable.eq_1",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "MeasureTheory.Measure.{0} Real \u2192 Real \u2192 Prop",
+      "partial": false,
+      "name": "Conjecture331.LiteralClaim",
+      "module": "Conjecture331",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "MeasureTheory.Measure.{0} Real \u2192 Real \u2192 Prop",
+      "partial": false,
+      "name": "Conjecture331.NonnegativeLiteralClaim",
+      "module": "Conjecture331",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (\u03c8 : Nat \u2192 Real),\n  Iff (Conjecture331.Diverges \u03c8)\n    (\u2200 (B : Real), \u2203 N, \u2200 (M : Nat), GE.ge.{0} M N \u2192 LT.lt.{0} B (Conjecture331.partialSum \u03c8 M))",
+      "partial": false,
+      "name": "Conjecture331.divergence_means_exceeding_every_bound",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a \u03b1 : Real),\n  Membership.mem.{0, 0} Conjecture331.failureInterval \u03b1 \u2192\n    Not (Conjecture331.InfinitelyApproximable a Conjecture331.radius \u03b1)",
+      "partial": false,
+      "name": "Conjecture331.fails_on_interval",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Set.{0} Real",
+      "partial": false,
+      "name": "Conjecture331.failureInterval",
+      "module": "Conjecture331",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Nat.AtLeastTwo (HAdd.hAdd.{0, 0, 0} 0 2)",
+      "partial": false,
+      "name": "Conjecture331.failureInterval._proof_2",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": []
+    },
+    {
+      "unsafe": false,
+      "type": "Nat.AtLeastTwo (HAdd.hAdd.{0, 0, 0} 1 2)",
+      "partial": false,
+      "name": "Conjecture331.failureInterval._proof_3",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": []
+    },
+    {
+      "unsafe": false,
+      "type": "Eq.{1} Conjecture331.failureInterval (Set.Icc.{0} (1 / 2) (3 / 4))",
+      "partial": false,
+      "name": "Conjecture331.failureInterval.eq_1",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "HasSubset.Subset.{0} Conjecture331.failureInterval (Set.Icc.{0} 0 1)",
+      "partial": false,
+      "name": "Conjecture331.failureInterval_subset_unit",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Eq.{1} (MeasureTheory.MeasureSpace.volume.{0} Conjecture331.failureInterval) (ENNReal.ofReal (1 / 4))",
+      "partial": false,
+      "name": "Conjecture331.failureInterval_volume",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "LT.lt.{0} 0 (MeasureTheory.MeasureSpace.volume.{0} Conjecture331.failureInterval)",
+      "partial": false,
+      "name": "Conjecture331.failureInterval_volume_pos",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Real \u2192 (Nat \u2192 Real) \u2192 Real \u2192 Set.{0} Nat",
+      "partial": false,
+      "name": "Conjecture331.hitSet",
+      "module": "Conjecture331",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a : Real) (\u03c8 : Nat \u2192 Real) (\u03b1 : Real),\n  Eq.{1} (Conjecture331.hitSet a \u03c8 \u03b1)\n    (setOf.{0} fun n =>\n      And (LT.lt.{0} 0 n) (LT.lt.{0} (abs.{0} (HSub.hSub.{0, 0, 0} \u03b1 (HDiv.hDiv.{0, 0, 0} a \u2191n))) (\u03c8 n)))",
+      "partial": false,
+      "name": "Conjecture331.hitSet.eq_1",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a \u03b1 : Real),\n  LE.le.{0} (1 / 2) \u03b1 \u2192\n    \u2203 N, \u2200 (n : Nat), Membership.mem.{0, 0} (Conjecture331.hitSet a Conjecture331.radius \u03b1) n \u2192 LT.lt.{0} n N",
+      "partial": false,
+      "name": "Conjecture331.hits_bounded",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a \u03b1 : Real), LE.le.{0} (1 / 2) \u03b1 \u2192 Set.Finite.{0} (Conjecture331.hitSet a Conjecture331.radius \u03b1)",
+      "partial": false,
+      "name": "Conjecture331.hits_finite",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a \u03b1 : Real) (\u03c8 : Nat \u2192 Real),\n  Iff (Conjecture331.InfinitelyApproximable a \u03c8 \u03b1)\n    (\u2200 (N : Nat),\n      \u2203 n,\n        And (LT.lt.{0} N n)\n          (And (LT.lt.{0} 0 n) (LT.lt.{0} (abs.{0} (HSub.hSub.{0, 0, 0} \u03b1 (HDiv.hDiv.{0, 0, 0} a \u2191n))) (\u03c8 n))))",
+      "partial": false,
+      "name": "Conjecture331.infinite_means_arbitrarily_large_denominators",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {\u03b1 : Type u_2} [inst : LinearOrder.{u_2} \u03b1] [inst_1 : LocallyFiniteOrderBot.{u_2} \u03b1] {s : Set.{u_2} \u03b1}\n  [inst_2 : Nonempty.{u_2 + 1} \u03b1],\n  Eq.{1} (Set.Infinite.{u_2} s) (\u2200 (a : \u03b1), \u2203 b, And (Membership.mem.{u_2, u_2} s b) (LT.lt.{u_2} a b))",
+      "partial": false,
+      "name": "Conjecture331.infinite_means_arbitrarily_large_denominators._proof_4",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a : Real),\n  And (Not (Conjecture331.LiteralClaim MeasureTheory.MeasureSpace.volume.{0} a))\n    (Not\n      (Conjecture331.LiteralClaim\n        (MeasureTheory.Measure.restrict.{0} MeasureTheory.MeasureSpace.volume.{0} (Set.Icc.{0} 0 1)) a))",
+      "partial": false,
+      "name": "Conjecture331.literal_claim_false",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a : Real),\n  And (Not (Conjecture331.NonnegativeLiteralClaim MeasureTheory.MeasureSpace.volume.{0} a))\n    (Not\n      (Conjecture331.NonnegativeLiteralClaim\n        (MeasureTheory.Measure.restrict.{0} MeasureTheory.MeasureSpace.volume.{0} (Set.Icc.{0} 0 1)) a))",
+      "partial": false,
+      "name": "Conjecture331.nonnegative_literal_claim_false",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (\u03bc : MeasureTheory.Measure.{0} Real) (a : Real),\n  LT.lt.{0} 0 (\u03bc Conjecture331.failureInterval) \u2192\n    Not (\u2200\u1d50 (\u03b1 : Real) \u2202\u03bc, Conjecture331.InfinitelyApproximable a Conjecture331.radius \u03b1)",
+      "partial": false,
+      "name": "Conjecture331.not_ae_of_interval_positive",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a : Real), Not (\u2200\u1d50 (\u03b1 : Real), Conjecture331.InfinitelyApproximable a Conjecture331.radius \u03b1)",
+      "partial": false,
+      "name": "Conjecture331.not_ae_real",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a : Real) (s : Set.{0} Real),\n  HasSubset.Subset.{0} Conjecture331.failureInterval s \u2192\n    Not\n      (\u2200\u1d50 (\u03b1 : Real) \u2202MeasureTheory.Measure.restrict.{0} MeasureTheory.MeasureSpace.volume.{0} s,\n        Conjecture331.InfinitelyApproximable a Conjecture331.radius \u03b1)",
+      "partial": false,
+      "name": "Conjecture331.not_ae_restrict",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a : Real),\n  Not\n    (\u2200\u1d50 (\u03b1 : Real) \u2202MeasureTheory.Measure.restrict.{0} MeasureTheory.MeasureSpace.volume.{0} (Set.Icc.{0} 0 1),\n      Conjecture331.InfinitelyApproximable a Conjecture331.radius \u03b1)",
+      "partial": false,
+      "name": "Conjecture331.not_ae_unit",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a : Real),\n  Not\n    (\u2200\u1d50 (\u03b1 : Real) \u2202MeasureTheory.Measure.restrict.{0} MeasureTheory.MeasureSpace.volume.{0} (Set.Ico.{0} 0 1),\n      Conjecture331.InfinitelyApproximable a Conjecture331.radius \u03b1)",
+      "partial": false,
+      "name": "Conjecture331.not_ae_unit_half_open",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a : Real),\n  Not\n    (\u2200\u1d50 (\u03b1 : Real) \u2202MeasureTheory.Measure.restrict.{0} MeasureTheory.MeasureSpace.volume.{0} (Set.Ioo.{0} 0 1),\n      Conjecture331.InfinitelyApproximable a Conjecture331.radius \u03b1)",
+      "partial": false,
+      "name": "Conjecture331.not_ae_unit_open",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "(Nat \u2192 Real) \u2192 Nat \u2192 Real",
+      "partial": false,
+      "name": "Conjecture331.partialSum",
+      "module": "Conjecture331",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (\u03c8 : Nat \u2192 Real) (N : Nat),\n  Eq.{1} (Conjecture331.partialSum \u03c8 N)\n    (\u2211 k \u2208 Finset.range N, HDiv.hDiv.{0, 0, 0} (\u03c8 (HAdd.hAdd.{0, 0, 0} k 1)) \u2191(HAdd.hAdd.{0, 0, 0} k 1))",
+      "partial": false,
+      "name": "Conjecture331.partialSum.eq_1",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (N : Nat),\n  Eq.{1} (Conjecture331.partialSum Conjecture331.radius N)\n    (HMul.hMul.{0, 0, 0} (1 / 4) (\u2211 k \u2208 Finset.range N, HDiv.hDiv.{0, 0, 0} 1 (HAdd.hAdd.{0, 0, 0} (\u2191k) 1)))",
+      "partial": false,
+      "name": "Conjecture331.partialSum_radius",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Nat \u2192 Real",
+      "partial": false,
+      "name": "Conjecture331.radius",
+      "module": "Conjecture331",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Nat.AtLeastTwo (HAdd.hAdd.{0, 0, 0} 2 2)",
+      "partial": false,
+      "name": "Conjecture331.radius._proof_1",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": []
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (_n : Nat), Eq.{1} (Conjecture331.radius _n) (1 / 4)",
+      "partial": false,
+      "name": "Conjecture331.radius.eq_1",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Conjecture331.Diverges Conjecture331.radius",
+      "partial": false,
+      "name": "Conjecture331.radius_diverges",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat), LT.lt.{0} 0 (Conjecture331.radius n)",
+      "partial": false,
+      "name": "Conjecture331.radius_pos",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Eq.{1}\n  ((MeasureTheory.Measure.restrict.{0} MeasureTheory.MeasureSpace.volume.{0} (Set.Icc.{0} 0 1))\n    Conjecture331.failureInterval)\n  (ENNReal.ofReal (1 / 4))",
+      "partial": false,
+      "name": "Conjecture331.unit_failureInterval_volume",
+      "module": "Conjecture331",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    }
+  ]
+}

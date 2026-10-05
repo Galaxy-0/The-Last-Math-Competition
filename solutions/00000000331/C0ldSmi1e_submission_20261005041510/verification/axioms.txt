@@ -1,0 +1,78 @@
+def Conjecture331.partialSum : (ℕ → ℝ) → ℕ → ℝ :=
+fun ψ N => ∑ k ∈ Finset.range N, ψ (k + 1) / ↑(k + 1)
+def Conjecture331.Diverges : (ℕ → ℝ) → Prop :=
+fun ψ => Filter.Tendsto (Conjecture331.partialSum ψ) Filter.atTop Filter.atTop
+def Conjecture331.hitSet : ℝ → (ℕ → ℝ) → ℝ → Set ℕ :=
+fun a ψ α => {n | 0 < n ∧ |α - a / ↑n| < ψ n}
+def Conjecture331.InfinitelyApproximable : ℝ → (ℕ → ℝ) → ℝ → Prop :=
+fun a ψ α => (Conjecture331.hitSet a ψ α).Infinite
+def Conjecture331.LiteralClaim : MeasureTheory.Measure ℝ → ℝ → Prop :=
+fun μ a =>
+  ∀ (ψ : ℕ → ℝ),
+    (∀ (n : ℕ), 0 < n → 0 < ψ n) → Conjecture331.Diverges ψ → ∀ᵐ (α : ℝ) ∂μ, Conjecture331.InfinitelyApproximable a ψ α
+def Conjecture331.NonnegativeLiteralClaim : MeasureTheory.Measure ℝ → ℝ → Prop :=
+fun μ a =>
+  ∀ (ψ : ℕ → ℝ),
+    (∀ (n : ℕ), 0 < n → 0 ≤ ψ n) → Conjecture331.Diverges ψ → ∀ᵐ (α : ℝ) ∂μ, Conjecture331.InfinitelyApproximable a ψ α
+def Conjecture331.radius : ℕ → ℝ :=
+fun _n => 1 / 4
+def Conjecture331.failureInterval : Set ℝ :=
+Set.Icc (1 / 2) (3 / 4)
+Conjecture331.radius_pos (n : ℕ) : 0 < Conjecture331.radius n
+'Conjecture331.radius_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.divergence_means_exceeding_every_bound (ψ : ℕ → ℝ) :
+  Conjecture331.Diverges ψ ↔ ∀ (B : ℝ), ∃ N, ∀ M ≥ N, B < Conjecture331.partialSum ψ M
+'Conjecture331.divergence_means_exceeding_every_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.infinite_means_arbitrarily_large_denominators (a α : ℝ) (ψ : ℕ → ℝ) :
+  Conjecture331.InfinitelyApproximable a ψ α ↔ ∀ (N : ℕ), ∃ n, N < n ∧ 0 < n ∧ |α - a / ↑n| < ψ n
+'Conjecture331.infinite_means_arbitrarily_large_denominators' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.partialSum_radius (N : ℕ) :
+  Conjecture331.partialSum Conjecture331.radius N = 1 / 4 * ∑ k ∈ Finset.range N, 1 / (↑k + 1)
+'Conjecture331.partialSum_radius' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.radius_diverges : Conjecture331.Diverges Conjecture331.radius
+'Conjecture331.radius_diverges' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.hits_bounded (a α : ℝ) (hα : 1 / 2 ≤ α) : ∃ N, ∀ n ∈ Conjecture331.hitSet a Conjecture331.radius α, n < N
+'Conjecture331.hits_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.hits_finite (a α : ℝ) (hα : 1 / 2 ≤ α) : (Conjecture331.hitSet a Conjecture331.radius α).Finite
+'Conjecture331.hits_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.fails_on_interval (a α : ℝ) (hα : α ∈ Conjecture331.failureInterval) :
+  ¬Conjecture331.InfinitelyApproximable a Conjecture331.radius α
+'Conjecture331.fails_on_interval' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.failureInterval_volume : MeasureTheory.volume Conjecture331.failureInterval = ENNReal.ofReal (1 / 4)
+'Conjecture331.failureInterval_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.failureInterval_volume_pos : 0 < MeasureTheory.volume Conjecture331.failureInterval
+'Conjecture331.failureInterval_volume_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.not_ae_of_interval_positive (μ : MeasureTheory.Measure ℝ) (a : ℝ)
+  (hμ : 0 < μ Conjecture331.failureInterval) :
+  ¬∀ᵐ (α : ℝ) ∂μ, Conjecture331.InfinitelyApproximable a Conjecture331.radius α
+'Conjecture331.not_ae_of_interval_positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.not_ae_real (a : ℝ) : ¬∀ᵐ (α : ℝ), Conjecture331.InfinitelyApproximable a Conjecture331.radius α
+'Conjecture331.not_ae_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.failureInterval_subset_unit : Conjecture331.failureInterval ⊆ Set.Icc 0 1
+'Conjecture331.failureInterval_subset_unit' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.unit_failureInterval_volume :
+  (MeasureTheory.volume.restrict (Set.Icc 0 1)) Conjecture331.failureInterval = ENNReal.ofReal (1 / 4)
+'Conjecture331.unit_failureInterval_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.not_ae_unit (a : ℝ) :
+  ¬∀ᵐ (α : ℝ) ∂MeasureTheory.volume.restrict (Set.Icc 0 1),
+      Conjecture331.InfinitelyApproximable a Conjecture331.radius α
+'Conjecture331.not_ae_unit' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.not_ae_restrict (a : ℝ) (s : Set ℝ) (hs : Conjecture331.failureInterval ⊆ s) :
+  ¬∀ᵐ (α : ℝ) ∂MeasureTheory.volume.restrict s, Conjecture331.InfinitelyApproximable a Conjecture331.radius α
+'Conjecture331.not_ae_restrict' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.not_ae_unit_open (a : ℝ) :
+  ¬∀ᵐ (α : ℝ) ∂MeasureTheory.volume.restrict (Set.Ioo 0 1),
+      Conjecture331.InfinitelyApproximable a Conjecture331.radius α
+'Conjecture331.not_ae_unit_open' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.not_ae_unit_half_open (a : ℝ) :
+  ¬∀ᵐ (α : ℝ) ∂MeasureTheory.volume.restrict (Set.Ico 0 1),
+      Conjecture331.InfinitelyApproximable a Conjecture331.radius α
+'Conjecture331.not_ae_unit_half_open' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.literal_claim_false (a : ℝ) :
+  ¬Conjecture331.LiteralClaim MeasureTheory.volume a ∧
+    ¬Conjecture331.LiteralClaim (MeasureTheory.volume.restrict (Set.Icc 0 1)) a
+'Conjecture331.literal_claim_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture331.nonnegative_literal_claim_false (a : ℝ) :
+  ¬Conjecture331.NonnegativeLiteralClaim MeasureTheory.volume a ∧
+    ¬Conjecture331.NonnegativeLiteralClaim (MeasureTheory.volume.restrict (Set.Icc 0 1)) a
+'Conjecture331.nonnegative_literal_claim_false' depends on axioms: [propext, Classical.choice, Quot.sound]
