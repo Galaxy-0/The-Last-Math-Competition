@@ -1,0 +1,100 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\setlength{\emergencystretch}{2em}
+\title{Disproof of conjecture 00000008840}
+\author{ziangni-sys}
+\date{}
+\begin{document}
+\maketitle
+\noindent\textbf{Source and missing hypothesis.}
+Both source versions claim that, for monotone inclusions under splitting, the graph version of Minty's characterization always holds and the zero set is closed convex. They do not impose maximal monotonicity. We exhibit an everywhere-defined monotone operator on the real Hilbert line whose zero set is not closed. Its graph also fails the surjectivity condition in the usual Minty characterization. This does not contradict the valid maximal-monotone theorem: our graph has an explicit proper monotone extension.
+
+\medskip
+\noindent\textbf{An actual full-domain operator.}
+Define $A:\mathbb R\to\mathbb R$ by
+\[
+ A(x)=
+ \begin{cases}
+ -1,&x\le0,\\
+ 0,&0<x<1,\\
+ 1,&x\ge1.
+ \end{cases}
+\]
+Let $G=\{(x,A(x)):x\in\mathbb R\}$. Thus the domain is the entire real line, not a restricted or incomplete domain.
+
+The function $A$ is nondecreasing: its three regions are ordered from left to right and its values are $-1,0,1$. More explicitly, if $x\le y$, their region indices cannot decrease, giving $A(x)\le A(y)$. This proves monotonicity in the standard Hilbert-space sense:
+\[
+ \langle x-y,A(x)-A(y)\rangle
+ =(x-y)(A(x)-A(y))\ge0
+ \qquad(x,y\in\mathbb R).
+\]
+If $x\le y$, both factors are nonpositive; otherwise both are nonnegative. The same inequality proves that the actual graph $G$ is a monotone relation.
+
+\medskip
+\noindent\textbf{The actual zero set and its closure.}
+The definition gives exactly
+\[
+ Z=A^{-1}(\{0\})=(0,1),\qquad \overline Z=[0,1].
+\]
+In particular $0$ is a closure point but is not a zero: $A(0)=-1$.
+For example, $x_n=1/(n+2)$ are zeros converging to zero.
+Consequently $Z$ is not closed. The source asserts both closedness and convexity; failure of closedness alone disproves that conjunction. Our zero set is indeed convex, so no claim that this example fails convexity is made.
+
+\medskip
+\noindent\textbf{The Minty range obstruction.}
+For the actual map $I+A$, we have
+\[
+ (I+A)(x)=
+ \begin{cases}
+ x-1,&x\le0,\\
+ x,&0<x<1,\\
+ x+1,&x\ge1.
+ \end{cases}
+\]
+The values in these regions lie respectively in $(-\infty,-1]$,
+$(0,1)$ and $[2,\infty)$. None is zero. Thus
+\[
+ 0\notin\operatorname{ran}(I+A),
+\]
+and $I+A$ is not surjective. The standard maximal-monotone Minty characterization cannot be applied to merely monotone graphs without its maximality assumption. This second fact reinforces the missing-hypothesis explanation; the nonclosed zero set is already a complete disproof.
+
+\newpage
+\noindent\textbf{An explicit proper monotone extension.}
+Add the origin to the graph:
+\[
+ H=G\cup\{(0,0)\}.
+\]
+The new point is compatible with every old graph point. Indeed,
+\[
+ \langle x-0,A(x)-0\rangle=xA(x)\ge0,
+\]
+because for $x\le0$ this product is $-x\ge0$, for $0<x<1$ it is zero, and for $x\ge1$ it is $x\ge0$. Reversing the two points gives the same product. Pairs of old points satisfy monotonicity of $G$, and pairing the new point with itself gives zero. Therefore $H$ is monotone.
+
+The origin is not in $G$, since $A(0)=-1\ne0$, and is in $H$.
+Hence $G\subsetneq H$. This proves directly that $G$ is not maximal monotone. The failure of closedness is therefore fully consistent with the standard theorem for maximal monotone relations.
+
+\medskip
+\noindent\textbf{Formal correspondence.}
+The Lean package defines the actual piecewise real function $A$, its full graph and its actual zero preimage. A full case analysis proves that $A$ is nondecreasing for every ordered pair. The Hilbert monotonicity theorem uses the actual real inner product and proves the sign inequality for every pair of points. The graph theorem quantifies over every pair of actual graph points.
+
+The formal zero-set equality is exactly Mathlib's real open interval.
+Mathlib's actual order topology and interval-closure theorem prove its closure is the real closed interval; membership of zero in this closure and its absence from the zero set prove that the zero set is not \texttt{IsClosed}. Thus no substitute combinatorial notion of closedness is used.
+
+The range obstruction is a statement about the actual set-theoretic range of the function $x\mapsto x+A(x)$. The monotone extension is the actual union with the singleton origin. All old/new point cases are proved, and strict graph inclusion is established by the origin witness. The final counterexample theorem combines full domain, genuine graph monotonicity, nonclosed zeros and failure of Minty surjectivity.
+
+\medskip
+\noindent\textbf{Reproduction and scope.}
+Run \texttt{lake build} inside the submitted \texttt{lean} directory with Lean 4.19.0. Mathlib is pinned publicly to
+\[
+ \texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\]
+Printed axiom audits cover the actual full domain, monotonicity, graph, zero set, topological closure, nonclosedness, range obstruction, monotone extension and final counterexample. Complete LaTeX source and its compiled PDF are included.
+
+The conclusion addresses the source as written, with no maximality assumption. It makes no claim against Minty's theorem for maximal monotone operators and requires no interpretation of the separate graph-reflection fixed-point clause.
+
+\medskip
+\noindent\textbf{Conclusion.}
+The everywhere-defined monotone map above has the nonclosed zero set $(0,1)$. Therefore monotonicity alone does not imply the source's universal closed-zero-set claim.
+\end{document}
