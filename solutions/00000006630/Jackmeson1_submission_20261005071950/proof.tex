@@ -1,0 +1,170 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A proof of Conjecture 00000006630\\[2pt]
+\large Two hard-core lattice gases with identical correlation inequalities but different equilibria}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000006630 reads:
+
+\begin{quote}
+\emph{Definition:} Correlation inequalities and equilibria are two layers. \emph{Conjecture:} There
+exist two lattice-gas models with identical inequalities but different equilibria, and the
+separation is realized by an explicit violation with the same inequalities but different
+configuration counting.
+\end{quote}
+
+It is an existential statement. We prove it with two explicit hard-core lattice gases on two
+adjacent sites.
+
+\section{Reading and definitions}
+
+\begin{definition}[Hard-core lattice gas]
+A lattice-gas model on a finite site set $V$ is a simple graph $G$ on $V$ (the exclusion graph)
+together with an activity $\lambda>0$. A configuration is the set $\eta\subseteq V$ of occupied
+sites; it is \emph{allowed} if no two occupied sites are adjacent in $G$. The weight of $\eta$ is
+$\lambda^{|\eta|}$ if $\eta$ is allowed and $0$ otherwise.
+\end{definition}
+
+\begin{definition}[Configuration count, equilibrium]
+The \emph{configuration count} (partition function) is $Z=\sum_{\eta}\mathrm{weight}(\eta)$. The
+\emph{equilibrium} is the Gibbs state $\mu(\eta)=\mathrm{weight}(\eta)/Z$, and
+$\langle f\rangle=\sum_\eta f(\eta)\mu(\eta)$.
+\end{definition}
+
+\begin{definition}[Correlation inequalities]
+For $B\subseteq V$ let $n_B(\eta)=[B\subseteq\eta]$ be the occupation monomial. The
+\emph{correlation-inequality profile} of the model is
+\[
+  \mathrm{profile}(B,C)=\operatorname{sign}\bigl(\langle n_Bn_C\rangle-\langle n_B\rangle\langle
+  n_C\rangle\bigr)\in\{-1,0,1\}\qquad(B,C\subseteq V).
+\]
+It records, for every pair of occupation monomials, which of $>$, $=$, $<$ holds between
+$\langle n_Bn_C\rangle$ and $\langle n_B\rangle\langle n_C\rangle$; these are the FKG / Harris /
+Griffiths-type correlation inequalities. Two models have \emph{identical inequalities} if their
+profiles are equal as functions.
+\end{definition}
+
+\section{Results}
+
+\begin{lemma}\label{lem:sign}
+With $W(B)=\sum_\eta n_B(\eta)\,\mathrm{weight}(\eta)$, we have $Z>0$ and
+$\mathrm{profile}(B,C)=\operatorname{sign}\bigl(Z\,W(B\cup C)-W(B)W(C)\bigr)$.
+\end{lemma}
+
+\begin{proof}
+$Z\ge\mathrm{weight}(\emptyset)=1$. Since $n_Bn_C=n_{B\cup C}$, we get $\langle n_Bn_C\rangle-\langle
+n_B\rangle\langle n_C\rangle=(Z\,W(B\cup C)-W(B)W(C))/Z^2$, and dividing by $Z^2>0$ keeps the sign.
+\end{proof}
+
+Let $K_2(\lambda)$ be the model on $V=\{0,1\}$ with the two sites adjacent and activity $\lambda$.
+Its allowed configurations are $\emptyset,\{0\},\{1\}$, so $Z=1+2\lambda$ and
+$W(B)=n_B(\emptyset)+\lambda\,n_B(\{0\})+\lambda\,n_B(\{1\})$.
+
+\begin{lemma}[Profile is independent of the activity]\label{lem:profile}
+For every $\lambda>0$ and $B,C\subseteq\{0,1\}$: $\mathrm{profile}(B,C)=0$ if one of $B,C$ is
+$\emptyset$ or $\{0,1\}$; otherwise it is $1$ if $B=C$ and $-1$ if $B\ne C$. Hence all models
+$K_2(\lambda)$, $\lambda>0$, have identical correlation inequalities.
+\end{lemma}
+
+\begin{proof}
+By Lemma~\ref{lem:sign} we check the 16 pairs. If $B=\emptyset$, $Z\,W(C)-Z\,W(C)=0$. If
+$B=\{0,1\}$, $W(B)=W(B\cup C)=0$. If $B=C=\{0\}$, $(1+2\lambda)\lambda-\lambda^2=\lambda+\lambda^2>0$.
+If $B=\{0\}$, $C=\{1\}$, $B\cup C=\{0,1\}$ and the value is $-\lambda^2<0$. The remaining cases are
+symmetric.
+\end{proof}
+
+\begin{theorem}[Conjecture 00000006630]\label{thm:main}
+The models $M_1=K_2(1)$ and $M_2=K_2(2)$ satisfy:
+\begin{enumerate}[nosep]
+\item identical inequalities: $\mathrm{profile}_{M_1}=\mathrm{profile}_{M_2}$;
+\item different equilibria: $\mu_{M_1}(\{0\})=1/3\ne 2/5=\mu_{M_2}(\{0\})$;
+\item the same explicit violation in both: $\langle n_0n_1\rangle<\langle n_0\rangle\langle
+n_1\rangle$, i.e.\ the positive-correlation (FKG/Harris) inequality fails at the adjacent pair;
+\item different configuration counts: $Z_{M_1}=3$ and $Z_{M_2}=5$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(1) and (3) follow from Lemma~\ref{lem:profile} (the value $-1$ at $(\{0\},\{1\})$). (2):
+$\mu(\{0\})=\lambda/(1+2\lambda)$. (4): $Z=1+2\lambda$.
+\end{proof}
+
+\begin{remark}[Literal counts]
+For an integer activity $q$, $Z=1+2q$ is the number of configurations of the two-site exclusion
+gas whose particles carry one of $q$ internal states. In Lean, the type of maps
+$\omega:\{0,1\}\to\{\text{empty}\}\cup\{1,\dots,q\}$ with at most one occupied site has
+cardinality $3$ for $q=1$ and $5$ for $q=2$ (\texttt{card\_internal\_one},
+\texttt{card\_internal\_two}). Moreover, if $N_q(\eta)$ is the number of such configurations whose
+set of occupied sites is $\eta$, then $\mu_{K_2(q)}(\eta)=N_q(\eta)/(1+2q)$ for every $\eta$: the
+equilibrium is the occupation marginal of the uniform distribution on these configurations
+(\texttt{gibbs\_eq\_count\_one}, \texttt{gibbs\_eq\_count\_two}; the counts are $N_q=1,q,q,0$ for
+$\eta=\emptyset,\{0\},\{1\},\{0,1\}$, and the Lean name of $N_q$ is \texttt{countOcc}).
+\end{remark}
+
+\section{Lean formalization}
+
+The file \texttt{lean/Conjecture6630/Basic.lean} (Lean 4, Mathlib v4.33.1, namespace
+\texttt{Submission00000006630}) defines \texttt{LatticeGas}, \texttt{Allowed}, \texttt{weight},
+\texttt{Z}, \texttt{gibbs}, \texttt{expect}, \texttt{occ}, \texttt{cov}, \texttt{profile} (a
+\texttt{SignType}-valued function) and \texttt{W}, exactly as above. The main statements are
+\texttt{profile\_eq} (Lemma~\ref{lem:sign}), \texttt{profile\_K2} and \texttt{profile\_K2\_eq}
+(Lemma~\ref{lem:profile}), \texttt{violation\_K2}, and
+\begin{verbatim}
+theorem conjecture6630 :
+    exists M1 M2 : LatticeGas (Fin 2),
+      profile M1 = profile M2 /\
+      gibbs M1 != gibbs M2 /\
+      (expect M1 (fun e => occ {0} e * occ {1} e)
+         < expect M1 (occ {0}) * expect M1 (occ {1})) /\
+      (expect M2 (fun e => occ {0} e * occ {1} e)
+         < expect M2 (occ {0}) * expect M2 (occ {1})) /\
+      Z M1 = 3 /\ Z M2 = 5 /\
+      Fintype.card (InternalConfig 1) = 3 /\
+      Fintype.card (InternalConfig 2) = 5 /\
+      (forall e, gibbs M1 e
+         = countOcc 1 e / Fintype.card (InternalConfig 1)) /\
+      (forall e, gibbs M2 e
+         = countOcc 2 e / Fintype.card (InternalConfig 2))
+\end{verbatim}
+(written here in ASCII; the Lean source uses Unicode symbols).
+
+\paragraph{Axiom audit.} \texttt{lake build} succeeds. \texttt{\#print axioms} for
+\texttt{conjecture6630}, \texttt{profile\_K2\_eq} and \texttt{violation\_K2} reports only
+\texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom.
+
+\section{Scope}
+
+``Lattice-gas model'' is read as a hard-core (exclusion) lattice gas in the grand-canonical
+ensemble, ``equilibrium'' as its Gibbs state, ``correlation inequalities'' as the full sign
+profile of truncated correlations of occupation monomials, ``explicit violation'' as a violation
+of the positive-correlation (FKG/Harris) inequality shared by both models, and ``configuration
+counting'' as the partition function, which for integer activities is a literal count. The two
+models have the same set of allowed occupation patterns (three); they differ in the weighted
+count, which for $q=1,2$ is the literal number of internal-state configurations.
+Readings with soft (finite-energy) interactions or with infinite-volume Gibbs measures are not
+treated.
+
+\end{document}
