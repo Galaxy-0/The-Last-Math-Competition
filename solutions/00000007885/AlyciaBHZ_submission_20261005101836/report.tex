@@ -1,0 +1,262 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{listings}
+\hypersetup{colorlinks=true,urlcolor=blue,linkcolor=blue}
+\lstset{basicstyle=\ttfamily\small,breaklines=true,columns=fullflexible,keepspaces=true,
+literate={ℕ}{{$\mathbb{N}$}}1 {∏}{{$\prod$}}1 {∈}{{$\in$}}1
+{∃}{{$\exists$}}1 {∀}{{$\forall$}}1 {≠}{{$\ne$}}1
+{≤}{{$\le$}}1 {∧}{{$\land$}}1 {¬}{{$\neg$}}1}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\coeff}[2]{[t^{#1}]#2}
+\title{Disproof of TLMC Conjecture 00000007885:\\the doubling product does not count binary partitions}
+\author{AlyciaBHZ, on behalf of the Omega Institute}
+\date{5 October 2026}
+\begin{document}
+\sloppy
+\setlength{\emergencystretch}{3em}
+\maketitle
+
+\begin{abstract}
+The final explicit combinatorial assertion of Conjecture 00000007885 is false under the ordinary meaning of binary partitions: unordered partitions into powers of two, with repeated parts allowed. Every coefficient of $\prod_{k\geq0}(1+t^{2^k})$ is $1$, but there are two binary partitions of $2$. We prove the exact finite-product identity, its coefficientwise stabilization, and the exhaustive partition count at $2$ in Lean 4 using Mathlib's polynomial and integer-partition types. The refutation needs no assertion about topological Hochschild homology.
+\end{abstract}
+
+\section{Statement and interpretation}
+The conjecture, including its identifying label, is reproduced verbatim below. Mathematical notation is typeset without changing its content.
+\begin{quote}
+Definition: The higher iterates of topological Hochschild homology
+$\mathrm{THH}^{(n)}(A) = \mathrm{THH}(\mathrm{THH}^{(n-1)}(A))$,
+of homotopy-limit type $A^{S^n}$. Conjecture: For the sphere spectrum $S$,
+the grading of the $p$-completed homotopy groups of $\mathrm{THH}^{(n)}(S)$
+forms a skew-symmetric tridiagonal system in the three coordinates
+(weight, stem, $n$); its graded count polynomial $P_n(t)$ satisfies the
+self-similar doubling law $P_{n+1} = P_n(1+t^{2^n})$, so the dimension
+generating function of the homology of iterated THH is the infinite product
+over $k$ of $(1+t^{2^k})$, matching the binary partition numbers.
+(iterated THH binary partition grading)
+\end{quote}
+
+The problem identifier is \textbf{00000007885}. We address the last assertion: the coefficients of the displayed product match the binary partition numbers. We use indices $k\geq0$ and define a binary partition of $n$ to be a multiset of positive integers with sum $n$, each equal to $2^k$ for some integer $k\geq0$. This is the conventional unrestricted binary partition sequence, OEIS A018819:
+\[
+b(0),b(1),b(2),\ldots = 1,1,2,2,4,4,6,6,10,\ldots.
+\]
+The word ``unrestricted'' refers to multiplicities: a power of two may appear more than once. It does not permit parts other than powers of two. This is the standard meaning of ``binary partition numbers'' (OEIS A018819). With distinct powers of two, the count is instead $1$ in every degree, exactly the coefficient of the product; that matching clause would be trivially true. The conjecture explicitly identifies the product with binary partition numbers, so the standard unrestricted meaning is the faithful reading of that claimed identification.
+
+Let
+\[
+P_K(t)=\prod_{0\leq k<K}(1+t^{2^k}),\qquad K\in\N.
+\]
+The empty product $P_0$ is $1$. The infinite product means its formal, coefficientwise limit. For any fixed degree $n$, sufficiently large factors have their nonconstant term above degree $n$ and therefore cannot affect that coefficient. All computations take place over $\N$; there is no reduction modulo a prime and no evaluation of $t$ at a numerical value.
+
+The full conjecture asserts this matching as a consequence, rather than as a conditional hypothesis that might fail. A false asserted consequence suffices to refute the statement as written. We do not supply a formal definition of the preceding topological grading. The formal proof concerns the combinatorial matching clause. A separate human argument below gives an additional obstruction to the doubling law under the ordinary homotopy-degree interpretation; it is not formalized.
+
+\section{The finite products and their limit}
+\begin{theorem}\label{thm:finite}
+For every $K\in\N$,
+\[
+P_K(t)=\sum_{j=0}^{2^K-1}t^j.
+\]
+Consequently, for every $n\in\N$,
+\[
+\coeff{n}{P_K}=
+\begin{cases}1&n<2^K,\\0&n\geq2^K.\end{cases}
+\]
+\end{theorem}
+\begin{proof}
+For $K=0$, $2^0=1$ and the sum is $1$, the empty product. Suppose the result holds for $K$ and put $d=2^K$. The additional factor gives
+\begin{align*}
+P_{K+1}(t)
+ &=\left(\sum_{j=0}^{d-1}t^j\right)(1+t^d)\\
+ &=\sum_{j=0}^{d-1}t^j+\sum_{j=0}^{d-1}t^{j+d}
+ =\sum_{j=0}^{2d-1}t^j.
+\end{align*}
+The exponent intervals $[0,d-1]$ and $[d,2d-1]$ are disjoint and cover $[0,2d-1]$, so every displayed coefficient is exactly $1$. Since $2d=2^{K+1}$, induction proves the identity and coefficient formula.
+\end{proof}
+
+\begin{lemma}\label{lem:bound}
+For every $n\in\N$, $n<2^{n+1}$.
+\end{lemma}
+\begin{proof}
+For $n=0$ the inequality is $0<2$. If $n<2^{n+1}$, integrality gives $n+1\leq2^{n+1}$. The latter number is positive, hence $n+1<2\cdot2^{n+1}=2^{n+2}$.
+\end{proof}
+
+\begin{theorem}\label{thm:limit}
+The coefficientwise infinite product exists, is independent of the sufficiently large truncation chosen, and is
+\[
+\prod_{k\geq0}(1+t^{2^k})=\sum_{n\geq0}t^n=\frac{1}{1-t}.
+\]
+\end{theorem}
+\begin{proof}
+Define $a(n)=\coeff{n}{P_{n+1}}$. Lemma~\ref{lem:bound} and Theorem~\ref{thm:finite} imply $a(n)=1$. More generally, whenever $n<2^K$, Theorem~\ref{thm:finite} implies $\coeff{n}{P_K}=1=a(n)$. In particular this equality holds for all $K\geq n+1$, since powers of two are increasing. This is coefficientwise eventual stabilization, and proves that the definition gives the formal infinite product.
+
+The resulting series is therefore $\sum_{n\geq0}t^n$. The last equality is an identity of formal power series, not an assertion of analytic convergence: multiplying the series by $1-t$ leaves constant coefficient $1$ and makes every positive-degree coefficient $1-1=0$. Equivalently, the finite identity gives $(1-t)P_K=1-t^{2^K}$ in $\mathbb Z[t]$, whose right side stabilizes coefficientwise to $1$.
+\end{proof}
+
+Combinatorially, selecting either $1$ or $t^{2^k}$ from each factor allows each power of two at most once. The finite identity is precisely uniqueness and existence of binary expansion for the integers from $0$ to $2^K-1$.
+
+\section{Ordinary binary partitions and the contradiction}
+\begin{lemma}\label{lem:b2}
+There are exactly two binary partitions of $2$:
+\[
+\{2\}\quad\text{and}\quad\{1,1\}.
+\]
+Thus $b(2)=2$.
+\end{lemma}
+\begin{proof}
+Every part of a partition of $2$ is positive and at most $2$. If it contains a part $2$, removing that occurrence leaves sum zero; positivity forces the remainder to be empty, so the partition is $\{2\}$. If it contains no $2$, every part is $1$, and the sum condition forces exactly two parts. Both $1=2^0$ and $2=2^1$ are powers of two, so both partitions meet the restriction. They are distinct, for their numbers of parts are $1$ and $2$. This enumerates all partitions, proving the exact count rather than just a lower bound.
+\end{proof}
+
+\begin{theorem}\label{thm:refute}
+The coefficient sequence of $\prod_{k\geq0}(1+t^{2^k})$ is not the sequence of ordinary binary partition numbers. For every $K\geq2$,
+\[
+\coeff{2}{P_K}=1\ne2=b(2).
+\]
+Consequently the final explicit combinatorial assertion of Conjecture 00000007885 is false.
+\end{theorem}
+\begin{proof}
+For $K\geq2$, $2^K\geq4>2$, so the finite coefficient is $1$ by Theorem~\ref{thm:finite}. The stabilized infinite coefficient is also $1$ by Theorem~\ref{thm:limit}. Lemma~\ref{lem:b2} gives $b(2)=2$, and $1\ne2$.
+\end{proof}
+
+For comparison, the correct generating function for ordinary binary partitions is
+\[
+\sum_{n\geq0}b(n)t^n=\prod_{k\geq0}\frac{1}{1-t^{2^k}}.
+\]
+Indeed each factor expands as $1+t^{2^k}+t^{2\cdot2^k}+\cdots$, allowing every nonnegative multiplicity of the part $2^k$. Only finitely many factors or multiplicities can contribute to any fixed degree, so coefficient extraction is well defined. This identity explains exactly why the displayed doubling product has the wrong counting interpretation.
+
+\section{Lean statement and semantic correspondence}
+The file \texttt{lean4/BinaryPartitionMismatch.lean} uses Lean and Mathlib \texttt{v4.33.0}. All results are in the namespace \texttt{BinaryPartitionMismatch}. Its definitions are:
+\begin{lstlisting}
+noncomputable def truncatedProduct (K : ℕ) : Polynomial ℕ :=
+  ∏ k ∈ Finset.range K, (1 + X ^ (2 ^ k))
+noncomputable def infiniteProductCoeff (n : ℕ) : ℕ :=
+  (truncatedProduct (n + 1)).coeff n
+
+def IsPowerOfTwo (m : ℕ) : Prop := ∃ k : ℕ, m = 2 ^ k
+noncomputable def binaryPartitions (n : ℕ) : Finset (Nat.Partition n) := by
+  classical
+  exact Finset.univ.filter fun p => ∀ m ∈ p.parts, IsPowerOfTwo m
+noncomputable def binaryPartitionNumber (n : ℕ) : ℕ := (binaryPartitions n).card
+
+def MatchingClause : Prop := ∀ n : ℕ, infiniteProductCoeff n = binaryPartitionNumber n
+\end{lstlisting}
+
+The principal Lean theorem, including its proof, is:
+\begin{lstlisting}
+theorem conjecture_00000007885_false : ¬ MatchingClause := by
+  intro h
+  have hc := h 2
+  rw [infiniteProductCoeff_eq_one, binaryPartitionNumber_two] at hc
+  norm_num at hc
+\end{lstlisting}
+The equivalent sequence inequality and the finite counterexample have these exact signatures:
+\begin{lstlisting}
+theorem coefficient_sequences_ne :
+    infiniteProductCoeff ≠ binaryPartitionNumber
+
+theorem finite_counterexample (K : ℕ) (hK : 2 ≤ K) :
+    (truncatedProduct K).coeff 2 = 1 ∧ binaryPartitionNumber 2 = 2 ∧
+      (truncatedProduct K).coeff 2 ≠ binaryPartitionNumber 2
+\end{lstlisting}
+
+The semantic correspondence is as follows. \texttt{truncatedProduct} is an actual product in Mathlib's \texttt{Polynomial Nat}, not a stipulated coefficient list. \texttt{truncatedProduct\_coeff} proves the full coefficient formula for every pair $K,n$, by induction and the standard polynomial coefficient formula for multiplication by a power of $X$. \texttt{truncatedProduct\_eq\_sum} establishes the geometric-sum identity by polynomial extensionality. \texttt{coefficient\_stabilization} proves independence of any truncation satisfying $n<2^K$, and \texttt{coefficient\_eventually\_stable} proves that all $K\geq n+1$ qualify. Therefore \texttt{infiniteProductCoeff} faithfully represents the infinite product; it is not defined to equal $1$ without proving that it arises from the finite products.
+
+Mathlib's \texttt{Nat.Partition n} consists of a multiset of natural-number parts, with proofs of positivity and total sum $n$. Its finite type supplies \texttt{Finset.univ}. Our filter imposes exactly the condition that every part is a power of two. It adds no distinctness condition. \texttt{partition\_two\_classification} explicitly proves that every partition of $2$ equals \texttt{singleTwo} or \texttt{twoOnes}; \texttt{binaryPartitions\_two} proves that the filtered finset is exactly this pair. The distinctness proof uses the cardinality of the multiset of parts. Thus \texttt{binaryPartitionNumber\_two} establishes the standard count, including the repeated-part partition $\{1,1\}$.
+
+The main theorem applies the claimed equality at $n=2$ and rewrites its two sides to $1$ and $2$. Its proof does not use an uninhabited topological hypothesis. Noncomputable definitions use standard classical finite-set constructions; they add no assumptions about the mathematical values.
+
+The formalization works with the coefficient sequence instead of introducing a topological limit or a \texttt{PowerSeries} object. This suffices because equality of generating functions is exactly equality of their coefficients. The human formal-power-series inverse identity is supplementary; the Lean refutation rests on the proved stabilization and exact partition count.
+
+\section{Axiom audit and reproduction}
+The delivered compiler transcript is \texttt{verification.txt}. Its \texttt{\#print axioms} commands audit the main refutation, the sequence inequality, the finite counterexample, and the general product and counting lemmas. Every audited theorem depends only on
+\[
+\texttt{propext},\qquad\texttt{Classical.choice},\qquad\texttt{Quot.sound}.
+\]
+No additional axiom, admitted goal, or unchecked native decision procedure is used. In particular the finite partition count is a structural proof, not an external numerical computation.
+
+{\raggedright
+Lean and Mathlib are pinned to \texttt{v4.33.0}. The Mathlib revision is \texttt{db584cd6d46c92f209a44c0f1c829460d327499d}. The manifest pins all transitive dependencies. Normal reproduction commands are:\par}
+\begin{lstlisting}
+cd lean4
+lake exe cache get && lake build
+cd ..
+python3 verify.py
+pdflatex -interaction=nonstopmode -halt-on-error report.tex
+pdflatex -interaction=nonstopmode -halt-on-error report.tex
+\end{lstlisting}
+Lean compilation succeeded with the pinned versions. The compiler output and axiom audit are recorded in \texttt{verification.txt}.
+
+The independent standard-library program \texttt{verify.py} multiplies finite coefficient arrays for $K=0,\ldots,10$ and checks every coefficient against the finite identity. It separately computes unrestricted binary partition counts by dynamic programming, and compares them with explicit multiset enumeration for $n=0,\ldots,32$. It lists the two partitions of $2$ and the four partitions of $4$. These are sanity checks only; all unbounded assertions used in the refutation are established by Lean.
+
+\section{Remark: a sphere-spectrum obstruction (human proof, not formalized)}
+There is an additional obstruction independent of the meaning of binary
+partitions. Here $S$ denotes the sphere spectrum and $\wedge$ is the
+smash product of spectra. Standard topological Hochschild homology
+satisfies
+\[
+\mathrm{THH}(S)\simeq S.
+\]
+For a precise reference, Nikolaus--Scholze, \emph{On topological cyclic
+homology}, Example~II.1.2(ii), identifies $\mathrm{THH}(S)$ with the
+cyclotomic sphere; Definition~III.2.3 gives the cyclic-bar construction
+of THH. The paper appeared in \emph{Publications math\'ematiques de
+l'IH\'ES} \textbf{129} (2019), 219--353;
+\href{https://doi.org/10.1007/s10240-019-00104-9}
+{doi:10.1007/s10240-019-00104-9}; see also
+\url{https://arxiv.org/abs/1707.01799}.
+
+The equivalence follows directly because $S$ is the unit of the smash
+product: every term $S^{\wedge(q+1)}$ in its cyclic bar construction
+is $S$, with identity structure maps under the unit identifications.
+Its geometric realization is therefore $S$. Equivalently, the derived
+relative-smash description gives
+\[
+\mathrm{THH}(S)\simeq S\wedge_{S\wedge S}S
+\simeq S\wedge_S S\simeq S.
+\]
+These are equivalences of the underlying commutative ring spectra, so
+THH preserves them and induction gives $\mathrm{THH}^{(n)}(S)\simeq S$
+for every iterate. Completing these iterates at a prime $p$ gives the
+same spectrum $S^\wedge_p$. In particular their homotopy groups, graded
+by homotopy degree, are independent of $n$, and
+$\pi_0(S^\wedge_p)\cong\mathbb Z_p\ne0$.
+
+Thus a graded count $P_n(t)$ determined by these homotopy groups, using
+the same grading and counting rule for every iterate, satisfies
+$P_{n+1}=P_n$. If the stated doubling law also held, then
+\[
+P_n=P_n(1+t^{2^n})=P_n+P_n t^{2^n},
+\qquad\text{hence}\qquad P_n t^{2^n}=0.
+\]
+For an ordinary count polynomial or formal power series over the
+integers, multiplication by $t^{2^n}$ simply shifts coefficients and
+is injective. Therefore $P_n=0$. A count that records the nonzero
+$\pi_0$ has nonzero constant coefficient, a contradiction. The same
+cancellation argument applies to nonnegative-integer coefficients.
+
+This is a human proof, not part of the Lean formalization. It applies
+to a count of the actual homotopy grading that records $\pi_0$ and is
+invariant under the displayed equivalences. Extra labels or counting
+rules chosen to vary with $n$ would require a different, explicit
+definition; invariance of such additional bookkeeping is not inferred
+here. The formal partition mismatch remains independent of this remark.
+
+\section{Other readings and scope}
+If ``binary partition numbers'' were intended to mean partitions into \emph{distinct} powers of two, the product is correct: every natural number has exactly one such partition, its binary expansion. The full finite identity proved here also covers that product calculation. Under that different terminology, the final matching clause would be trivially true, with count $1$ in every degree. Requiring distinctness changes the conventional unrestricted binary partition sequence. The sphere-spectrum remark supplies a separate human obstruction to the doubling law for an invariant count of homotopy groups, even under this altered partition terminology; that obstruction is not formalized.
+
+If the product were instead indexed from $k=1$, it would equal $\sum_{m\geq0}t^{2m}=1/(1-t^2)$. Its coefficient at $t$ would be $0$, whereas unrestricted binary partitions of $1$ have count $1$. Its coefficient at $t^2$ would still be $1$, whereas $b(2)=2$. Thus merely omitting the factor $1+t$ does not restore agreement with the stipulated sequence. The Lean project formalizes $k\geq0$ indexing.
+
+A reduction of the counts modulo $p$ is not stated in the final combinatorial clause: a dimension or count is an ordinary nonnegative integer. In any event, $1$ and $2$ are distinct modulo every prime. No initial normalization of a separate recurrence is needed, because the conjecture explicitly names the infinite product itself. We do not replace its coefficients by counts from a chosen topological model.
+
+The conclusion is precisely the failure of the final asserted equality under the ordinary unrestricted-partition reading, and hence failure of the conjecture as stated with that reading.
+
+\paragraph{Attribution.}
+Submitted by AlyciaBHZ on behalf of the Omega Institute (trureturing project, \url{https://github.com/the-omega-institute/trureturing}). No trureturing code has been vendored.
+
+\paragraph{Sources.}
+Official conjecture: \href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000007885.md}{TLMC repository, conjecture 00000007885}. Conventional binary partition sequence: \url{https://oeis.org/A018819}. Neither source is used as an axiom or as a substitute for the proofs above.
+\end{document}
