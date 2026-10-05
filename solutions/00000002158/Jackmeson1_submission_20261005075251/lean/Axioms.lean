@@ -1,0 +1,3 @@
+import Conjecture2158
+#print axioms C2158.chromaticThreshold_cycle5_ne
+#print axioms C2158.chromaticThresholdInd_cycle5

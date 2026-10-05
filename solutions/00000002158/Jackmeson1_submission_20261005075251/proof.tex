@@ -1,0 +1,161 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Conjecture 00000002158 is false:\\ the chromatic threshold of $C_5$-free graphs is below $1/5$}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and its reading}
+
+\textbf{Statement.} \emph{Definition: The chromatic threshold is the minimum-degree/$|V|$ threshold keeping bounded
+chromatic number for $H$-free graphs. Conjecture: The chromatic threshold for $C_5$-free graphs is $1/5$; the
+determination of the threshold follows from a balancing analysis of the overlap structure.}
+
+The second clause (``follows from a balancing analysis'') is not a mathematical assertion; the statement is a
+conjunction whose first conjunct, $\delta_\chi(C_5)=1/5$, we refute.
+
+\begin{definition}[Allen, B\"ottcher, Griffiths, Kohayakawa, Morris, arXiv:1108.1746]
+``The chromatic threshold $\delta_\chi(H)$ of a graph $H$ is the infimum of $d>0$ such that there exists $C=C(H,d)$
+for which every $H$-free graph $G$ with minimum degree at least $d|G|$ satisfies $\chi(G)<C$.''
+\end{definition}
+
+\textbf{Conventions (all as in the Lean file).}
+\begin{itemize}
+\item Graphs are finite simple graphs; every finite graph is isomorphic to one on $\{0,\dots,n-1\}$, so we quantify
+  over all $n\in\mathbb{N}$ (including $n=0$) and all \texttt{G : SimpleGraph (Fin n)}.
+\item $C_5$ is Mathlib's \texttt{cycleGraph 5} on $\mathbb{Z}/5$. ``$H$-free'' means Mathlib's \texttt{H.Free G}:
+  $G$ has no subgraph (not necessarily induced) isomorphic to $H$, i.e.\ no injective homomorphism $H\to G$.
+\item $\delta(G)$ is Mathlib's \texttt{G.minDegree} (equal to $0$ on the empty vertex set).
+\item ``$\chi(G)<C$'' is expressed as \texttt{G.Colorable K} ($\chi(G)\le K$) with $K=C-1$; this gives the same set
+  of admissible $d$.
+\end{itemize}
+In Lean:
+\begin{verbatim}
+def admissible {k : N} (H : SimpleGraph (Fin k)) : Set R :=
+  {d | 0 < d /\ exists K : N, forall (n : N) (G : SimpleGraph (Fin n))
+      [DecidableRel G.Adj], H.Free G -> d * n <= G.minDegree -> G.Colorable K}
+noncomputable def chromaticThreshold H : R := sInf (admissible H)
+\end{verbatim}
+The set is bounded below by $0$, so its infimum is the usual one.
+
+\section{Main result}
+
+\begin{theorem}\label{thm:main}
+$d=1/6$ is admissible for $C_5$ with $K=264$. Hence $\delta_\chi(C_5)\le 1/6<1/5$; in particular
+$\delta_\chi(C_5)\neq 1/5$.
+\end{theorem}
+
+(It is known that in fact $\delta_\chi(C_5)=0$, by Thomassen; we only need the elementary bound.)
+
+Throughout, $G$ is a $C_5$-free graph on $n$ vertices with $6\,\delta(G)\ge n$, $N(v)$ is the neighbourhood of
+$v$ and $\mathrm{cn}(a,b)=N(a)\cap N(b)$.
+
+\begin{lemma}[five vertices give a $C_5$; \texttt{cycle5\_le}]
+If $a\sim b\sim c\sim d\sim e\sim a$ and $a\ne c$, $a\ne d$, $b\ne d$, $b\ne e$, $c\ne e$, then $C_5\subseteq G$.
+\end{lemma}
+\begin{proof}
+Adjacent vertices are distinct, so all five are distinct, and $i\mapsto(a,b,c,d,e)_i$ is an injective homomorphism
+from $C_5$.
+\end{proof}
+
+\begin{lemma}[\texttt{not\_free\_of\_class}]\label{lem:class}
+Let $u\sim u'$ with $u\ne s\ne u'$ and $|\mathrm{cn}(u,s)|\ge 3$, $|\mathrm{cn}(u',s)|\ge 3$. Then $G$ contains a
+$C_5$.
+\end{lemma}
+\begin{proof}
+Pick $w\in\mathrm{cn}(u,s)\setminus\{u'\}$ and then $w'\in\mathrm{cn}(u',s)\setminus\{u,w\}$ (possible by the
+cardinality bounds). Then $s\sim w\sim u\sim u'\sim w'\sim s$, and $s\ne u$, $s\ne u'$, $w\ne u'$, $w\ne w'$,
+$u\ne w'$, so the previous lemma applies.
+\end{proof}
+
+Call a vertex set $T$ \emph{good} if $|\mathrm{cn}(a,b)|\le 2$ for all distinct $a,b\in T$ (\texttt{Good}).
+
+\begin{lemma}[private neighbourhoods; \texttt{card\_mul\_minDegree\_le}]\label{lem:count}
+If $T$ is good, then $|T|\,\delta(G)\le n+|T|\cdot 2(|T|-1)$.
+\end{lemma}
+\begin{proof}
+For $s\in T$ let $P(s)=N(s)\setminus\bigcup_{t\in T\setminus\{s\}}N(t)$. Then
+$\delta\le |N(s)| = |P(s)| + \bigl|\bigcup_{t\ne s}\mathrm{cn}(s,t)\bigr| \le |P(s)|+2(|T|-1)$.
+The sets $P(s)$, $s\in T$, are pairwise disjoint (a vertex of $P(s)$ lies in $N(s)$, hence not in $P(s'')$ for
+$s''\ne s$), so $\sum_{s\in T}|P(s)|\le n$. Summing over $s\in T$ gives the claim.
+\end{proof}
+
+\begin{theorem}[\texttt{colorable22}]
+If $G$ is $C_5$-free, $n\le 6\,\delta(G)$ and $n>264$, then $G$ is $22$-colourable.
+\end{theorem}
+\begin{proof}
+Let $S$ be a good set of maximum cardinality (it exists: $\emptyset$ is good and $V$ is finite).
+\emph{Witnesses.} If $v\notin S$, then $S\cup\{v\}$ is not good by maximality, so some $s\in S$ has
+$|\mathrm{cn}(v,s)|\ge 3$.
+\emph{Size.} If $|S|\ge 12$, take a $12$-element $T\subseteq S$ (good). Lemma~\ref{lem:count} gives
+$12\delta\le n+264$, while $12\delta\ge 2n$; so $n\le 264$, a contradiction. Thus $|S|\le 11$.
+\emph{Colouring.} Colour $s\in S$ by $(\mathrm{true},s)$ and $v\notin S$ by $(\mathrm{false},s_v)$ where $s_v\in S$
+is a witness. Adjacent vertices in $S$ get different second coordinates; a vertex in $S$ and one outside get
+different first coordinates; two adjacent $u,v\notin S$ with $s_u=s_v=s$ would satisfy Lemma~\ref{lem:class}
+($u,v\ne s$ since $s\in S$), contradicting $C_5$-freeness. The colour set $\{\mathrm{true},\mathrm{false}\}\times S$
+has $2|S|\le 22$ elements.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main} (\texttt{one\_sixth\_admissible})]
+Let $G$ on $n$ vertices be $C_5$-free with $\frac16 n\le\delta(G)$. If $n\le 264$, colour each vertex by itself:
+$G$ is $n$-, hence $264$-colourable. Otherwise $G$ is $22$-colourable, hence $264$-colourable. So
+$1/6\in\texttt{admissible (cycleGraph 5)}$, the infimum is at most $1/6$
+(\texttt{chromaticThreshold\_cycle5\_le}), and $1/6<1/5$ (\texttt{chromaticThreshold\_cycle5\_ne}).
+\end{proof}
+
+\section{The induced reading}
+
+If ``$C_5$-free'' were read as ``no \emph{induced} $C_5$'' (Mathlib's \texttt{IsIndContained}, an embedding
+$C_5\hookrightarrow G$ preserving adjacency and non-adjacency), with the same definition otherwise
+(\texttt{admissibleInd}, \texttt{chromaticThresholdInd}), the threshold is exactly $1$:
+\begin{itemize}
+\item $K_n$ contains no induced $C_5$: an embedding $f$ would make $f(0)\ne f(2)$ adjacent in $K_n$, while $0,2$ are
+  non-adjacent in $C_5$ (\texttt{top\_not\_indContains}).
+\item If $d<1$ were admissible with constant $K$, choose $m>1/(1-d)$ and $n=m+K+1$; then
+  $\delta(K_n)=n-1\ge dn$, so $K_n$ would be $K$-colourable, but $\chi(K_n)=n>K$
+  (\texttt{one\_le\_of\_mem\_admissibleInd}).
+\item $d=1$ is admissible with $K=0$: for $n\ge1$, $\delta(G)\le n-1<n$, so the degree hypothesis fails; for $n=0$
+  the empty graph is $0$-colourable (\texttt{one\_mem\_admissibleInd}).
+\end{itemize}
+Hence $\delta_\chi^{\mathrm{ind}}(C_5)=1\ne 1/5$ (\texttt{chromaticThresholdInd\_cycle5}).
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture2158/Basic.lean} (246 lines, only \texttt{import Mathlib}, Lean/Mathlib v4.33.1),
+namespace \texttt{C2158}. Main theorems:
+\begin{verbatim}
+theorem chromaticThreshold_cycle5_ne :
+    chromaticThreshold (cycleGraph 5) < 1 / 5 /\
+    chromaticThreshold (cycleGraph 5) != 1 / 5
+theorem chromaticThresholdInd_cycle5 :
+    chromaticThresholdInd (cycleGraph 5) = 1 /\
+    chromaticThresholdInd (cycleGraph 5) != 1 / 5
+\end{verbatim}
+\texttt{\#print axioms} for \texttt{chromaticThreshold\_cycle5\_ne}, \texttt{chromaticThresholdInd\_cycle5} and
+\texttt{one\_sixth\_admissible}: \texttt{[propext, Classical.choice, Quot.sound]}. No \texttt{sorry}, no
+\texttt{native\_decide}, no new axioms.
+
+\textbf{Scope.} We refute exactly two readings: the standard (non-induced subgraph) reading of ABGKM, and the
+induced-subgraph reading. We do not treat other threshold notions, e.g.\ the homomorphism threshold, for which the
+value $1/5$ appears for $\{C_3,C_5\}$-free graphs (Letzter--Snyder); the statement's own definition is in terms of
+bounded chromatic number, which is the chromatic threshold.
+
+\section*{Source}
+P. Allen, J. B\"ottcher, S. Griffiths, Y. Kohayakawa, R. Morris, \emph{The chromatic thresholds of graphs},
+Adv. Math. 235 (2013); \url{https://arxiv.org/abs/1108.1746}.
+
+\end{document}
