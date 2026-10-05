@@ -1,0 +1,126 @@
+def Conjecture7662.convolution.{u_1} : {R : Type u_1} → [inst : CommRing R] → (ℕ → R) → ℕ → R :=
+fun {R} [CommRing R] a n => ∑ i, a ↑i * a (n - ↑i)
+@[irreducible] def Conjecture7662.coefficient.{u_1} : {R : Type u_1} → [inst : CommRing R] → R → ℕ → R :=
+fun {R} [CommRing R] q =>
+  Conjecture7662.coefficient._proof_1.fix fun a a_1 =>
+    (match (motive := (x : ℕ) → ((y : ℕ) → (invImage (fun x => x) instWellFoundedRelationOfSizeOf).1 y x → R) → R)
+        a with
+      | 0 => fun x => 1
+      | n.succ => fun x => ∑ i, x ↑i ⋯ * x (n - ↑i) ⋯ - q ^ (n + 1) * x n ⋯)
+      a_1
+def Conjecture7662.series.{u_1} : {R : Type u_1} → [inst : CommRing R] → R → PowerSeries R :=
+fun {R} [CommRing R] q => PowerSeries.mk (Conjecture7662.coefficient q)
+def Conjecture7662.FunctionalEquation.{u_1} : {R : Type u_1} → [inst : CommRing R] → R → PowerSeries R → Prop :=
+fun {R} [CommRing R] q F =>
+  F = (1 - (PowerSeries.C R) q * PowerSeries.X * (PowerSeries.rescale q) F) * (1 - PowerSeries.X * F).invOfUnit 1
+def Conjecture7662.catalanPolynomial : ℕ → Polynomial ℤ :=
+fun n => Conjecture7662.coefficient Polynomial.X n
+@[irreducible] def Conjecture7662.b : ℕ → ℤ :=
+Conjecture7662.b._proof_5.fix fun a a_1 =>
+  (match (motive := (x : ℕ) → ((y : ℕ) → (invImage (fun x => x) instWellFoundedRelationOfSizeOf).1 y x → ℤ) → ℤ) a with
+    | 0 => fun x => 1
+    | n.succ => fun x => 2 ^ (n + 1) * x n ⋯ - ∑ i, x ↑i ⋯ * x (n - ↑i) ⋯)
+    a_1
+def Conjecture7662.PositivePrime : ℤ → Prop :=
+fun z => ∃ p, Nat.Prime p ∧ z = ↑p
+def Conjecture7662.primeCounting : ℝ → ℕ :=
+fun x => {n | ↑n ≤ x ∧ Conjecture7662.PositivePrime (Polynomial.eval 2 (Conjecture7662.catalanPolynomial n))}.ncard
+Conjecture7662.coefficient_zero.{u_1} {R : Type u_1} [CommRing R] (q : R) : Conjecture7662.coefficient q 0 = 1
+'Conjecture7662.coefficient_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.coefficient_succ.{u_1} {R : Type u_1} [CommRing R] (q : R) (n : ℕ) :
+  Conjecture7662.coefficient q (n + 1) =
+    Conjecture7662.convolution (Conjecture7662.coefficient q) n - q ^ (n + 1) * Conjecture7662.coefficient q n
+'Conjecture7662.coefficient_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.convolution_range.{u_1} {R : Type u_1} [CommRing R] (a : ℕ → R) (n : ℕ) :
+  Conjecture7662.convolution a n = ∑ i ∈ Finset.range (n + 1), a i * a (n - i)
+'Conjecture7662.convolution_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.coeff_series.{u_1} {R : Type u_1} [CommRing R] (q : R) (n : ℕ) :
+  (PowerSeries.coeff R n) (Conjecture7662.series q) = Conjecture7662.coefficient q n
+'Conjecture7662.coeff_series' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.denominator_inverse.{u_1} {R : Type u_1} [CommRing R] (F : PowerSeries R) :
+  (1 - PowerSeries.X * F) * (1 - PowerSeries.X * F).invOfUnit 1 = 1
+'Conjecture7662.denominator_inverse' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.functionalEquation_iff.{u_1} {R : Type u_1} [CommRing R] (q : R) (F : PowerSeries R) :
+  Conjecture7662.FunctionalEquation q F ↔
+    F = 1 + PowerSeries.X * (F * F - (PowerSeries.C R) q * (PowerSeries.rescale q) F)
+'Conjecture7662.functionalEquation_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.coeff_square.{u_1} {R : Type u_1} [CommRing R] (F : PowerSeries R) (n : ℕ) :
+  (PowerSeries.coeff R n) (F * F) = Conjecture7662.convolution (fun k => (PowerSeries.coeff R k) F) n
+'Conjecture7662.coeff_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.functionalEquation_coefficients.{u_1} {R : Type u_1} [CommRing R] (q : R) (F : PowerSeries R) :
+  Conjecture7662.FunctionalEquation q F ↔
+    (PowerSeries.coeff R 0) F = 1 ∧
+      ∀ (n : ℕ),
+        (PowerSeries.coeff R (n + 1)) F =
+          Conjecture7662.convolution (fun k => (PowerSeries.coeff R k) F) n - q ^ (n + 1) * (PowerSeries.coeff R n) F
+'Conjecture7662.functionalEquation_coefficients' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.series_satisfies.{u_1} {R : Type u_1} [CommRing R] (q : R) :
+  Conjecture7662.FunctionalEquation q (Conjecture7662.series q)
+'Conjecture7662.series_satisfies' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.coefficients_unique.{u_1} {R : Type u_1} [CommRing R] (q : R) (a : ℕ → R) (h0 : a 0 = 1)
+  (hs : ∀ (n : ℕ), a (n + 1) = Conjecture7662.convolution a n - q ^ (n + 1) * a n) : a = Conjecture7662.coefficient q
+'Conjecture7662.coefficients_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.exists_unique_series.{u_1} {R : Type u_1} [CommRing R] (q : R) :
+  ∃! F, Conjecture7662.FunctionalEquation q F
+'Conjecture7662.exists_unique_series' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.coefficient_map.{u_1, u_2} {R : Type u_1} {S : Type u_2} [CommRing R] [CommRing S] (f : R →+* S) (q : R)
+  (n : ℕ) : f (Conjecture7662.coefficient q n) = Conjecture7662.coefficient (f q) n
+'Conjecture7662.coefficient_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.polynomial_evaluation (n : ℕ) :
+  Polynomial.eval 2 (Conjecture7662.catalanPolynomial n) = Conjecture7662.coefficient 2 n
+'Conjecture7662.polynomial_evaluation' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.b_zero : Conjecture7662.b 0 = 1
+'Conjecture7662.b_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.b_succ (n : ℕ) :
+  Conjecture7662.b (n + 1) = 2 ^ (n + 1) * Conjecture7662.b n - Conjecture7662.convolution Conjecture7662.b n
+'Conjecture7662.b_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.product_bound_from_growth (a : ℕ → ℤ) (n : ℕ) (h0 : a 0 = 1) (hnon : ∀ k ≤ n, 0 ≤ a k)
+  (hlow : ∀ k < n, 2 ^ k * a k ≤ a (k + 1)) (hupp : ∀ k < n, a (k + 1) ≤ 2 ^ (k + 1) * a k) (i j : ℕ) :
+  i + j ≤ n → a i * a j ≤ a (i + j)
+'Conjecture7662.product_bound_from_growth' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.index_bound (n : ℕ) : ↑n + 1 ≤ 2 ^ n
+'Conjecture7662.index_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.b_growth (n : ℕ) :
+  1 ≤ Conjecture7662.b n ∧
+    2 ^ n * Conjecture7662.b n ≤ Conjecture7662.b (n + 1) ∧ Conjecture7662.b (n + 1) ≤ 2 ^ (n + 1) * Conjecture7662.b n
+'Conjecture7662.b_growth' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.coefficient_signed (n : ℕ) : Conjecture7662.coefficient 2 n = (-1) ^ n * Conjecture7662.b n
+'Conjecture7662.coefficient_signed' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.convolution_odd (a : ℕ → ℤ) (k : ℕ) :
+  Conjecture7662.convolution a (2 * k + 1) = 2 * ∑ i ∈ Finset.range (k + 1), a i * a (2 * k + 1 - i)
+'Conjecture7662.convolution_odd' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.even_index_coefficient (k : ℕ) : Even (Conjecture7662.coefficient 2 (2 * k + 2))
+'Conjecture7662.even_index_coefficient' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.odd_index_negative {n : ℕ} (hn : Odd n) : Conjecture7662.coefficient 2 n < 0
+'Conjecture7662.odd_index_negative' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.even_index_positive {n : ℕ} (hn : Even n) : 1 ≤ Conjecture7662.coefficient 2 n
+'Conjecture7662.even_index_positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.b_large {n : ℕ} (hn : 3 ≤ n) : 4 ≤ Conjecture7662.b n
+'Conjecture7662.b_large' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.coefficient_one : Conjecture7662.coefficient 2 1 = -1
+'Conjecture7662.coefficient_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.coefficient_two : Conjecture7662.coefficient 2 2 = 2
+'Conjecture7662.coefficient_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.positivePrime_iff (n : ℕ) : Conjecture7662.PositivePrime (Conjecture7662.coefficient 2 n) ↔ n = 2
+'Conjecture7662.positivePrime_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.prime_indices_eq_singleton : {n | Conjecture7662.PositivePrime (Conjecture7662.coefficient 2 n)} = {2}
+'Conjecture7662.prime_indices_eq_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.not_infinite_prime_indices :
+  ¬{n | Conjecture7662.PositivePrime (Conjecture7662.coefficient 2 n)}.Infinite
+'Conjecture7662.not_infinite_prime_indices' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.solution_prime_iff (F : PowerSeries ℤ) (hF : Conjecture7662.FunctionalEquation 2 F) (n : ℕ) :
+  Conjecture7662.PositivePrime ((PowerSeries.coeff ℤ n) F) ↔ n = 2
+'Conjecture7662.solution_prime_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.formal_series_disproof :
+  (∃! F, Conjecture7662.FunctionalEquation 2 F) ∧
+    ∀ (F : PowerSeries ℤ),
+      Conjecture7662.FunctionalEquation 2 F → ¬{n | Conjecture7662.PositivePrime ((PowerSeries.coeff ℤ n) F)}.Infinite
+'Conjecture7662.formal_series_disproof' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.polynomial_prime_iff (n : ℕ) :
+  Conjecture7662.PositivePrime (Polynomial.eval 2 (Conjecture7662.catalanPolynomial n)) ↔ n = 2
+'Conjecture7662.polynomial_prime_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.primeCounting_eq (x : ℝ) : Conjecture7662.primeCounting x = if 2 ≤ x then 1 else 0
+'Conjecture7662.primeCounting_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7662.conjecture_00000007662_disproved :
+  ¬{n | Conjecture7662.PositivePrime (Polynomial.eval 2 (Conjecture7662.catalanPolynomial n))}.Infinite
+'Conjecture7662.conjecture_00000007662_disproved' depends on axioms: [propext, Classical.choice, Quot.sound]

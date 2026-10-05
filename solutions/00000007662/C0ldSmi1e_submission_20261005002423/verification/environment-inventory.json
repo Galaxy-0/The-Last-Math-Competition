@@ -1,0 +1,1338 @@
+{
+  "method": "Enumerate imported environment constants by actual originating module; emit full type, declaration kind, safety flags and transitive collectAxioms result for every constant. No name-prefix filter or silent exclusion.",
+  "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "IndependentEnvironmentInventory.lean"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 6.196,
+  "module_names": [
+    "Conjecture7662"
+  ],
+  "harness_sha256": "3b3fa6e69ba89271f6182435f7c34a0aba571f6e336604c4e02bcb8135658201",
+  "log": "environment-inventory.txt",
+  "parsed_count": 101,
+  "emitted_count_markers": [
+    101
+  ],
+  "authored_count": 42,
+  "all_authored_names_present": true,
+  "generated_or_additional_names": [
+    "Conjecture7662.FunctionalEquation.eq_1",
+    "Conjecture7662.b._proof_5",
+    "Conjecture7662.b._proof_6",
+    "Conjecture7662.b._proof_7",
+    "Conjecture7662.b._proof_8",
+    "Conjecture7662.b.eq_1",
+    "Conjecture7662.b.eq_2",
+    "Conjecture7662.b.eq_def",
+    "Conjecture7662.b_growth._proof_10",
+    "Conjecture7662.b_growth._proof_11",
+    "Conjecture7662.b_growth._proof_12",
+    "Conjecture7662.b_growth._proof_9",
+    "Conjecture7662.b_large._proof_10",
+    "Conjecture7662.b_large._proof_9",
+    "Conjecture7662.catalanPolynomial.eq_1",
+    "Conjecture7662.coefficient._proof_1",
+    "Conjecture7662.coefficient._proof_2",
+    "Conjecture7662.coefficient._proof_3",
+    "Conjecture7662.coefficient._proof_4",
+    "Conjecture7662.coefficient.eq_1",
+    "Conjecture7662.coefficient.eq_2",
+    "Conjecture7662.coefficient.eq_def",
+    "Conjecture7662.coefficient.match_1",
+    "Conjecture7662.coefficient.match_1._cstage1",
+    "Conjecture7662.coefficient_signed._proof_10",
+    "Conjecture7662.coefficient_signed._proof_11",
+    "Conjecture7662.coefficient_signed._proof_12",
+    "Conjecture7662.coefficient_signed._proof_9",
+    "Conjecture7662.coefficients_unique._proof_5",
+    "Conjecture7662.coefficients_unique._proof_6",
+    "Conjecture7662.coefficients_unique._proof_7",
+    "Conjecture7662.convolution.eq_1",
+    "Conjecture7662.convolution_odd._proof_10",
+    "Conjecture7662.convolution_odd._proof_11",
+    "Conjecture7662.convolution_odd._proof_9",
+    "Conjecture7662.even_index_coefficient._proof_9",
+    "Conjecture7662.positivePrime_iff._proof_10",
+    "Conjecture7662.positivePrime_iff._proof_11",
+    "Conjecture7662.positivePrime_iff._proof_12",
+    "Conjecture7662.positivePrime_iff._proof_13",
+    "Conjecture7662.positivePrime_iff._proof_9",
+    "Conjecture7662.primeCounting_eq._proof_10",
+    "Conjecture7662.primeCounting_eq._proof_11",
+    "Conjecture7662.primeCounting_eq._proof_12",
+    "Conjecture7662.primeCounting_eq._proof_9",
+    "Conjecture7662.prime_indices_eq_singleton._proof_9",
+    "Conjecture7662.product_bound_from_growth._proof_10",
+    "Conjecture7662.product_bound_from_growth._proof_11",
+    "Conjecture7662.product_bound_from_growth._proof_12",
+    "Conjecture7662.product_bound_from_growth._proof_13",
+    "Conjecture7662.product_bound_from_growth._proof_14",
+    "Conjecture7662.product_bound_from_growth._proof_9",
+    "Conjecture7662.series.eq_1",
+    "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.eq_1",
+    "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.eq_2",
+    "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.splitter",
+    "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.splitter._cstage1",
+    "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.splitter._cstage2",
+    "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.splitter._rarg._cstage2"
+  ],
+  "generated_or_additional_count": 59,
+  "compiler_runtime_generated_names": [
+    "Conjecture7662.coefficient.match_1._cstage1",
+    "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.splitter._cstage1",
+    "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.splitter._cstage2",
+    "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.splitter._rarg._cstage2"
+  ],
+  "compiler_runtime_note": "All runtime constants remain included and axiom-audited; _cstage1/_cstage2 compiler outputs are distinguished from safe kernel-level authored declarations.",
+  "unexpected_unsafe": [],
+  "partial_declarations": [],
+  "axiom_declarations": [],
+  "only_allowed_axioms": true,
+  "declarations": [
+    {
+      "unsafe": false,
+      "type": "{R : Type u_1} \u2192 [inst : CommRing.{u_1} R] \u2192 R \u2192 PowerSeries.{u_1} R \u2192 Prop",
+      "partial": false,
+      "name": "Conjecture7662.FunctionalEquation",
+      "module": "Conjecture7662",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (q : R) (F : PowerSeries.{u_1} R),\n  Eq.{1} (Conjecture7662.FunctionalEquation.{u_1} q F)\n    (Eq.{u_1 + 1} F\n      (HMul.hMul.{u_1, u_1, u_1}\n        (HSub.hSub.{u_1, u_1, u_1} 1\n          (HMul.hMul.{u_1, u_1, u_1} (HMul.hMul.{u_1, u_1, u_1} ((PowerSeries.C.{u_1} R) q) PowerSeries.X.{u_1})\n            ((PowerSeries.rescale.{u_1} q) F)))\n        (PowerSeries.invOfUnit.{u_1} (HSub.hSub.{u_1, u_1, u_1} 1 (HMul.hMul.{u_1, u_1, u_1} PowerSeries.X.{u_1} F))\n          1)))",
+      "partial": false,
+      "name": "Conjecture7662.FunctionalEquation.eq_1",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Int \u2192 Prop",
+      "partial": false,
+      "name": "Conjecture7662.PositivePrime",
+      "module": "Conjecture7662",
+      "kind": "definition",
+      "axioms": [
+        "propext"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Nat \u2192 Int",
+      "partial": false,
+      "name": "Conjecture7662.b",
+      "module": "Conjecture7662",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "WellFounded.{1} (invImage.{1, 1} (fun x => x) instWellFoundedRelationOfSizeOf.{1}).1",
+      "partial": false,
+      "name": "Conjecture7662.b._proof_5",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": []
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat), (invImage.{1, 1} (fun x => x) instWellFoundedRelationOfSizeOf.{1}).1 n (Nat.succ n)",
+      "partial": false,
+      "name": "Conjecture7662.b._proof_6",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat) (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)),\n  (invImage.{1, 1} (fun x => x) instWellFoundedRelationOfSizeOf.{1}).1 (\u2191i) (Nat.succ n)",
+      "partial": false,
+      "name": "Conjecture7662.b._proof_7",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat) (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)),\n  (invImage.{1, 1} (fun x => x) instWellFoundedRelationOfSizeOf.{1}).1 (HSub.hSub.{0, 0, 0} n \u2191i) (Nat.succ n)",
+      "partial": false,
+      "name": "Conjecture7662.b._proof_8",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Eq.{1} (Conjecture7662.b 0) 1",
+      "partial": false,
+      "name": "Conjecture7662.b.eq_1",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat),\n  Eq.{1} (Conjecture7662.b (Nat.succ n))\n    (HSub.hSub.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} 2 (HAdd.hAdd.{0, 0, 0} n 1)) (Conjecture7662.b n))\n      (\u2211 i, HMul.hMul.{0, 0, 0} (Conjecture7662.b \u2191i) (Conjecture7662.b (HSub.hSub.{0, 0, 0} n \u2191i))))",
+      "partial": false,
+      "name": "Conjecture7662.b.eq_2",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (x : Nat),\n  Eq.{1} (Conjecture7662.b x)\n    (match x with\n    | 0 => 1\n    | Nat.succ n =>\n      HSub.hSub.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} 2 (HAdd.hAdd.{0, 0, 0} n 1)) (Conjecture7662.b n))\n        (\u2211 i, HMul.hMul.{0, 0, 0} (Conjecture7662.b \u2191i) (Conjecture7662.b (HSub.hSub.{0, 0, 0} n \u2191i))))",
+      "partial": false,
+      "name": "Conjecture7662.b.eq_def",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat),\n  And (LE.le.{0} 1 (Conjecture7662.b n))\n    (And\n      (LE.le.{0} (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} 2 n) (Conjecture7662.b n))\n        (Conjecture7662.b (HAdd.hAdd.{0, 0, 0} n 1)))\n      (LE.le.{0} (Conjecture7662.b (HAdd.hAdd.{0, 0, 0} n 1))\n        (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} 2 (HAdd.hAdd.{0, 0, 0} n 1)) (Conjecture7662.b n))))",
+      "partial": false,
+      "name": "Conjecture7662.b_growth",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat) (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)), Not (LE.le.{0} (\u2191i) n) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.b_growth._proof_10",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat) (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)), Not (LE.le.{0} (HSub.hSub.{0, 0, 0} n \u2191i) n) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.b_growth._proof_11",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat) (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)),\n  Not (LE.le.{0} (HAdd.hAdd.{0, 0, 0} (\u2191i) (HSub.hSub.{0, 0, 0} n \u2191i)) n) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.b_growth._proof_12",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (k : Nat), Not (LT.lt.{0} k (HAdd.hAdd.{0, 0, 0} k 1)) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.b_growth._proof_9",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {n : Nat}, LE.le.{0} 3 n \u2192 LE.le.{0} 4 (Conjecture7662.b n)",
+      "partial": false,
+      "name": "Conjecture7662.b_large",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (k : Nat), Not (Eq.{1} (HAdd.hAdd.{0, 0, 0} 3 k) (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 2 k) 1)) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.b_large._proof_10",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (k : Nat), LE.le.{0} 3 (HAdd.hAdd.{0, 0, 0} 3 k) \u2192 Not (LE.le.{0} 2 (HAdd.hAdd.{0, 0, 0} 2 k)) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.b_large._proof_9",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat),\n  Eq.{1} (Conjecture7662.b (HAdd.hAdd.{0, 0, 0} n 1))\n    (HSub.hSub.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} 2 (HAdd.hAdd.{0, 0, 0} n 1)) (Conjecture7662.b n))\n      (Conjecture7662.convolution.{0} Conjecture7662.b n))",
+      "partial": false,
+      "name": "Conjecture7662.b_succ",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Eq.{1} (Conjecture7662.b 0) 1",
+      "partial": false,
+      "name": "Conjecture7662.b_zero",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Nat \u2192 Polynomial.{0} Int",
+      "partial": false,
+      "name": "Conjecture7662.catalanPolynomial",
+      "module": "Conjecture7662",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat), Eq.{1} (Conjecture7662.catalanPolynomial n) (Conjecture7662.coefficient.{0} Polynomial.X.{0} n)",
+      "partial": false,
+      "name": "Conjecture7662.catalanPolynomial.eq_1",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (q : R) (n : Nat),\n  Eq.{u_1 + 1} ((PowerSeries.coeff.{u_1} R n) (Conjecture7662.series.{u_1} q)) (Conjecture7662.coefficient.{u_1} q n)",
+      "partial": false,
+      "name": "Conjecture7662.coeff_series",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (F : PowerSeries.{u_1} R) (n : Nat),\n  Eq.{u_1 + 1} ((PowerSeries.coeff.{u_1} R n) (HMul.hMul.{u_1, u_1, u_1} F F))\n    (Conjecture7662.convolution.{u_1} (fun k => (PowerSeries.coeff.{u_1} R k) F) n)",
+      "partial": false,
+      "name": "Conjecture7662.coeff_square",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "{R : Type u_1} \u2192 [inst : CommRing.{u_1} R] \u2192 R \u2192 Nat \u2192 R",
+      "partial": false,
+      "name": "Conjecture7662.coefficient",
+      "module": "Conjecture7662",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "WellFounded.{1} (invImage.{1, 1} (fun x => x) instWellFoundedRelationOfSizeOf.{1}).1",
+      "partial": false,
+      "name": "Conjecture7662.coefficient._proof_1",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": []
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat) (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)),\n  (invImage.{1, 1} (fun x => x) instWellFoundedRelationOfSizeOf.{1}).1 (\u2191i) (Nat.succ n)",
+      "partial": false,
+      "name": "Conjecture7662.coefficient._proof_2",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat) (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)),\n  (invImage.{1, 1} (fun x => x) instWellFoundedRelationOfSizeOf.{1}).1 (HSub.hSub.{0, 0, 0} n \u2191i) (Nat.succ n)",
+      "partial": false,
+      "name": "Conjecture7662.coefficient._proof_3",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat), (invImage.{1, 1} (fun x => x) instWellFoundedRelationOfSizeOf.{1}).1 n (Nat.succ n)",
+      "partial": false,
+      "name": "Conjecture7662.coefficient._proof_4",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (q : R), Eq.{u_1 + 1} (Conjecture7662.coefficient.{u_1} q 0) 1",
+      "partial": false,
+      "name": "Conjecture7662.coefficient.eq_1",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (q : R) (n : Nat),\n  Eq.{u_1 + 1} (Conjecture7662.coefficient.{u_1} q (Nat.succ n))\n    (HSub.hSub.{u_1, u_1, u_1}\n      (\u2211 i,\n        HMul.hMul.{u_1, u_1, u_1} (Conjecture7662.coefficient.{u_1} q \u2191i)\n          (Conjecture7662.coefficient.{u_1} q (HSub.hSub.{0, 0, 0} n \u2191i)))\n      (HMul.hMul.{u_1, u_1, u_1} (HPow.hPow.{u_1, 0, u_1} q (HAdd.hAdd.{0, 0, 0} n 1))\n        (Conjecture7662.coefficient.{u_1} q n)))",
+      "partial": false,
+      "name": "Conjecture7662.coefficient.eq_2",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (q : R) (x : Nat),\n  Eq.{u_1 + 1} (Conjecture7662.coefficient.{u_1} q x)\n    (match x with\n    | 0 => 1\n    | Nat.succ n =>\n      HSub.hSub.{u_1, u_1, u_1}\n        (\u2211 i,\n          HMul.hMul.{u_1, u_1, u_1} (Conjecture7662.coefficient.{u_1} q \u2191i)\n            (Conjecture7662.coefficient.{u_1} q (HSub.hSub.{0, 0, 0} n \u2191i)))\n        (HMul.hMul.{u_1, u_1, u_1} (HPow.hPow.{u_1, 0, u_1} q (HAdd.hAdd.{0, 0, 0} n 1))\n          (Conjecture7662.coefficient.{u_1} q n)))",
+      "partial": false,
+      "name": "Conjecture7662.coefficient.eq_def",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "(motive : Nat \u2192 Sort u_1) \u2192 (x : Nat) \u2192 (Unit \u2192 motive 0) \u2192 ((n : Nat) \u2192 motive (Nat.succ n)) \u2192 motive x",
+      "partial": false,
+      "name": "Conjecture7662.coefficient.match_1",
+      "module": "Conjecture7662",
+      "kind": "definition",
+      "axioms": []
+    },
+    {
+      "unsafe": true,
+      "type": "(motive : Nat \u2192 Sort u_1) \u2192 (x : Nat) \u2192 (Unit \u2192 motive 0) \u2192 ((n : Nat) \u2192 motive (Nat.succ n)) \u2192 motive x",
+      "partial": false,
+      "name": "Conjecture7662.coefficient.match_1._cstage1",
+      "module": "Conjecture7662",
+      "kind": "definition",
+      "axioms": []
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} {S : Type u_2} [inst : CommRing.{u_1} R] [inst_1 : CommRing.{u_2} S] (f : RingHom.{u_1, u_2} R S)\n  (q : R) (n : Nat), Eq.{u_2 + 1} (f (Conjecture7662.coefficient.{u_1} q n)) (Conjecture7662.coefficient.{u_2} (f q) n)",
+      "partial": false,
+      "name": "Conjecture7662.coefficient_map",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Eq.{1} (Conjecture7662.coefficient.{0} 2 1) (-1)",
+      "partial": false,
+      "name": "Conjecture7662.coefficient_one",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat),\n  Eq.{1} (Conjecture7662.coefficient.{0} 2 n) (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} (-1) n) (Conjecture7662.b n))",
+      "partial": false,
+      "name": "Conjecture7662.coefficient_signed",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat) (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)),\n  Not (LT.lt.{0} (HSub.hSub.{0, 0, 0} n \u2191i) (HAdd.hAdd.{0, 0, 0} n 1)) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.coefficient_signed._proof_10",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat) (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)), Not (LE.le.{0} (\u2191i) n) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.coefficient_signed._proof_11",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat), Not (LT.lt.{0} n (HAdd.hAdd.{0, 0, 0} n 1)) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.coefficient_signed._proof_12",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat) (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)), Not (LT.lt.{0} (\u2191i) (HAdd.hAdd.{0, 0, 0} n 1)) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.coefficient_signed._proof_9",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (q : R) (n : Nat),\n  Eq.{u_1 + 1} (Conjecture7662.coefficient.{u_1} q (HAdd.hAdd.{0, 0, 0} n 1))\n    (HSub.hSub.{u_1, u_1, u_1} (Conjecture7662.convolution.{u_1} (Conjecture7662.coefficient.{u_1} q) n)\n      (HMul.hMul.{u_1, u_1, u_1} (HPow.hPow.{u_1, 0, u_1} q (HAdd.hAdd.{0, 0, 0} n 1))\n        (Conjecture7662.coefficient.{u_1} q n)))",
+      "partial": false,
+      "name": "Conjecture7662.coefficient_succ",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Eq.{1} (Conjecture7662.coefficient.{0} 2 2) 2",
+      "partial": false,
+      "name": "Conjecture7662.coefficient_two",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (q : R), Eq.{u_1 + 1} (Conjecture7662.coefficient.{u_1} q 0) 1",
+      "partial": false,
+      "name": "Conjecture7662.coefficient_zero",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (q : R) (a : Nat \u2192 R),\n  Eq.{u_1 + 1} (a 0) 1 \u2192\n    (\u2200 (n : Nat),\n        Eq.{u_1 + 1} (a (HAdd.hAdd.{0, 0, 0} n 1))\n          (HSub.hSub.{u_1, u_1, u_1} (Conjecture7662.convolution.{u_1} a n)\n            (HMul.hMul.{u_1, u_1, u_1} (HPow.hPow.{u_1, 0, u_1} q (HAdd.hAdd.{0, 0, 0} n 1)) (a n)))) \u2192\n      Eq.{u_1 + 1} a (Conjecture7662.coefficient.{u_1} q)",
+      "partial": false,
+      "name": "Conjecture7662.coefficients_unique",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat), Not (LT.lt.{0} n (HAdd.hAdd.{0, 0, 0} n 1)) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.coefficients_unique._proof_5",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat) (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)), Not (LT.lt.{0} (\u2191i) (HAdd.hAdd.{0, 0, 0} n 1)) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.coefficients_unique._proof_6",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat) (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)),\n  Not (LT.lt.{0} (HSub.hSub.{0, 0, 0} n \u2191i) (HAdd.hAdd.{0, 0, 0} n 1)) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.coefficients_unique._proof_7",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Not\n  (Set.Infinite.{0}\n    (setOf.{0} fun n => Conjecture7662.PositivePrime (Polynomial.eval.{0} 2 (Conjecture7662.catalanPolynomial n))))",
+      "partial": false,
+      "name": "Conjecture7662.conjecture_00000007662_disproved",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "{R : Type u_1} \u2192 [inst : CommRing.{u_1} R] \u2192 (Nat \u2192 R) \u2192 Nat \u2192 R",
+      "partial": false,
+      "name": "Conjecture7662.convolution",
+      "module": "Conjecture7662",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (a : Nat \u2192 R) (n : Nat),\n  Eq.{u_1 + 1} (Conjecture7662.convolution.{u_1} a n)\n    (\u2211 i, HMul.hMul.{u_1, u_1, u_1} (a \u2191i) (a (HSub.hSub.{0, 0, 0} n \u2191i)))",
+      "partial": false,
+      "name": "Conjecture7662.convolution.eq_1",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a : Nat \u2192 Int) (k : Nat),\n  Eq.{1} (Conjecture7662.convolution.{0} a (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 k) 1))\n    (HMul.hMul.{0, 0, 0} 2\n      (\u2211 i \u2208 Finset.range (HAdd.hAdd.{0, 0, 0} k 1),\n        HMul.hMul.{0, 0, 0} (a i) (a (HSub.hSub.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 k) 1) i))))",
+      "partial": false,
+      "name": "Conjecture7662.convolution_odd",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (k i : Nat),\n  LT.lt.{0} i (HAdd.hAdd.{0, 0, 0} k 1) \u2192\n    Not\n        (Eq.{1}\n          (HSub.hSub.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 k) 1)\n            (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} k 1) i))\n          (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} k 1) 1) i)) \u2192\n      False",
+      "partial": false,
+      "name": "Conjecture7662.convolution_odd._proof_10",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (k i : Nat),\n  LT.lt.{0} i (HAdd.hAdd.{0, 0, 0} k 1) \u2192\n    Eq.{1}\n        (HSub.hSub.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 k) 1)\n          (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} k 1) i))\n        (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} k 1) 1) i) \u2192\n      Not\n          (Eq.{1}\n            (HSub.hSub.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 k) 1)\n              (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} k 1) 1) i))\n            (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} k 1) i)) \u2192\n        False",
+      "partial": false,
+      "name": "Conjecture7662.convolution_odd._proof_11",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (k : Nat),\n  Not\n      (Eq.{1} (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 k) 1) 1)\n        (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} k 1) (HAdd.hAdd.{0, 0, 0} k 1))) \u2192\n    False",
+      "partial": false,
+      "name": "Conjecture7662.convolution_odd._proof_9",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (a : Nat \u2192 R) (n : Nat),\n  Eq.{u_1 + 1} (Conjecture7662.convolution.{u_1} a n)\n    (\u2211 i \u2208 Finset.range (HAdd.hAdd.{0, 0, 0} n 1), HMul.hMul.{u_1, u_1, u_1} (a i) (a (HSub.hSub.{0, 0, 0} n i)))",
+      "partial": false,
+      "name": "Conjecture7662.convolution_range",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (F : PowerSeries.{u_1} R),\n  Eq.{u_1 + 1}\n    (HMul.hMul.{u_1, u_1, u_1} (HSub.hSub.{u_1, u_1, u_1} 1 (HMul.hMul.{u_1, u_1, u_1} PowerSeries.X.{u_1} F))\n      (PowerSeries.invOfUnit.{u_1} (HSub.hSub.{u_1, u_1, u_1} 1 (HMul.hMul.{u_1, u_1, u_1} PowerSeries.X.{u_1} F)) 1))\n    1",
+      "partial": false,
+      "name": "Conjecture7662.denominator_inverse",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (k : Nat), Even.{0} (Conjecture7662.coefficient.{0} 2 (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 k) 2))",
+      "partial": false,
+      "name": "Conjecture7662.even_index_coefficient",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (k : Nat),\n  Not\n      (Eq.{1} (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 k) 2)\n        (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 k) 1) 1)) \u2192\n    False",
+      "partial": false,
+      "name": "Conjecture7662.even_index_coefficient._proof_9",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {n : Nat}, Even.{0} n \u2192 LE.le.{0} 1 (Conjecture7662.coefficient.{0} 2 n)",
+      "partial": false,
+      "name": "Conjecture7662.even_index_positive",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (q : R),\n  ExistsUnique.{u_1 + 1} fun F => Conjecture7662.FunctionalEquation.{u_1} q F",
+      "partial": false,
+      "name": "Conjecture7662.exists_unique_series",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "And (ExistsUnique.{1} fun F => Conjecture7662.FunctionalEquation.{0} 2 F)\n  (\u2200 (F : PowerSeries.{0} Int),\n    Conjecture7662.FunctionalEquation.{0} 2 F \u2192\n      Not (Set.Infinite.{0} (setOf.{0} fun n => Conjecture7662.PositivePrime ((PowerSeries.coeff.{0} Int n) F))))",
+      "partial": false,
+      "name": "Conjecture7662.formal_series_disproof",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (q : R) (F : PowerSeries.{u_1} R),\n  Iff (Conjecture7662.FunctionalEquation.{u_1} q F)\n    (And (Eq.{u_1 + 1} ((PowerSeries.coeff.{u_1} R 0) F) 1)\n      (\u2200 (n : Nat),\n        Eq.{u_1 + 1} ((PowerSeries.coeff.{u_1} R (HAdd.hAdd.{0, 0, 0} n 1)) F)\n          (HSub.hSub.{u_1, u_1, u_1} (Conjecture7662.convolution.{u_1} (fun k => (PowerSeries.coeff.{u_1} R k) F) n)\n            (HMul.hMul.{u_1, u_1, u_1} (HPow.hPow.{u_1, 0, u_1} q (HAdd.hAdd.{0, 0, 0} n 1))\n              ((PowerSeries.coeff.{u_1} R n) F)))))",
+      "partial": false,
+      "name": "Conjecture7662.functionalEquation_coefficients",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (q : R) (F : PowerSeries.{u_1} R),\n  Iff (Conjecture7662.FunctionalEquation.{u_1} q F)\n    (Eq.{u_1 + 1} F\n      (HAdd.hAdd.{u_1, u_1, u_1} 1\n        (HMul.hMul.{u_1, u_1, u_1} PowerSeries.X.{u_1}\n          (HSub.hSub.{u_1, u_1, u_1} (HMul.hMul.{u_1, u_1, u_1} F F)\n            (HMul.hMul.{u_1, u_1, u_1} ((PowerSeries.C.{u_1} R) q) ((PowerSeries.rescale.{u_1} q) F))))))",
+      "partial": false,
+      "name": "Conjecture7662.functionalEquation_iff",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat), LE.le.{0} (HAdd.hAdd.{0, 0, 0} (\u2191n) 1) (HPow.hPow.{0, 0, 0} 2 n)",
+      "partial": false,
+      "name": "Conjecture7662.index_bound",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Not (Set.Infinite.{0} (setOf.{0} fun n => Conjecture7662.PositivePrime (Conjecture7662.coefficient.{0} 2 n)))",
+      "partial": false,
+      "name": "Conjecture7662.not_infinite_prime_indices",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {n : Nat}, Odd.{0} n \u2192 LT.lt.{0} (Conjecture7662.coefficient.{0} 2 n) 0",
+      "partial": false,
+      "name": "Conjecture7662.odd_index_negative",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat), Eq.{1} (Polynomial.eval.{0} 2 (Conjecture7662.catalanPolynomial n)) (Conjecture7662.coefficient.{0} 2 n)",
+      "partial": false,
+      "name": "Conjecture7662.polynomial_evaluation",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat),\n  Iff (Conjecture7662.PositivePrime (Polynomial.eval.{0} 2 (Conjecture7662.catalanPolynomial n))) (Eq.{1} n 2)",
+      "partial": false,
+      "name": "Conjecture7662.polynomial_prime_iff",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat), Iff (Conjecture7662.PositivePrime (Conjecture7662.coefficient.{0} 2 n)) (Eq.{1} n 2)",
+      "partial": false,
+      "name": "Conjecture7662.positivePrime_iff",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat), Nat \u2192 Ne.{1} n 0 \u2192 \u2200 (k : Nat), Eq.{1} n (HAdd.hAdd.{0, 0, 0} k k) \u2192 Not (LT.lt.{0} 0 k) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.positivePrime_iff._proof_10",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Nat \u2192 Nat \u2192 \u2200 (k : Nat), LT.lt.{0} 0 k \u2192 Eq.{1} k 0 \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.positivePrime_iff._proof_11",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat),\n  Nat \u2192\n    \u2200 (j : Nat),\n      Eq.{1} n (HAdd.hAdd.{0, 0, 0} (Nat.succ j) (Nat.succ j)) \u2192\n        Not (Eq.{1} n (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 j) 2)) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.positivePrime_iff._proof_12",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n j : Nat), Eq.{1} n (HAdd.hAdd.{0, 0, 0} (Nat.succ j) (Nat.succ j)) \u2192 Not (Eq.{1} n 2) \u2192 Not (LE.le.{0} 3 n) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.positivePrime_iff._proof_13",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (p : Nat), LE.le.{0} 2 p \u2192 Eq.{1} 1 \u2191p \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.positivePrime_iff._proof_9",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Real \u2192 Nat",
+      "partial": false,
+      "name": "Conjecture7662.primeCounting",
+      "module": "Conjecture7662",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (x : Real), Eq.{1} (Conjecture7662.primeCounting x) (ite.{1} (LE.le.{0} 2 x) 1 0)",
+      "partial": false,
+      "name": "Conjecture7662.primeCounting_eq",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {\u03b1 : Type u} {a b : \u03b1}, Eq.{1} (Membership.mem.{u, u} (Singleton.singleton.{u, u} b) a) (Eq.{u + 1} a b)",
+      "partial": false,
+      "name": "Conjecture7662.primeCounting_eq._proof_10",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {\u03b1 : Type u} (x : \u03b1), Eq.{1} (Membership.mem.{u, u} EmptyCollection.emptyCollection.{u} x) False",
+      "partial": false,
+      "name": "Conjecture7662.primeCounting_eq._proof_11",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {a b : Prop}, Eq.{1} (Not (And a b)) (a \u2192 Not b)",
+      "partial": false,
+      "name": "Conjecture7662.primeCounting_eq._proof_12",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat),\n  Eq.{1} (Conjecture7662.PositivePrime (Polynomial.eval.{0} 2 (Conjecture7662.catalanPolynomial n))) (Eq.{1} n 2)",
+      "partial": false,
+      "name": "Conjecture7662.primeCounting_eq._proof_9",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Eq.{1} (setOf.{0} fun n => Conjecture7662.PositivePrime (Conjecture7662.coefficient.{0} 2 n))\n  (Singleton.singleton.{0, 0} 2)",
+      "partial": false,
+      "name": "Conjecture7662.prime_indices_eq_singleton",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (n : Nat), Eq.{1} (Conjecture7662.PositivePrime (Conjecture7662.coefficient.{0} 2 n)) (Eq.{1} n 2)",
+      "partial": false,
+      "name": "Conjecture7662.prime_indices_eq_singleton._proof_9",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (a : Nat \u2192 Int) (n : Nat),\n  Eq.{1} (a 0) 1 \u2192\n    (\u2200 (k : Nat), LE.le.{0} k n \u2192 LE.le.{0} 0 (a k)) \u2192\n      (\u2200 (k : Nat),\n          LT.lt.{0} k n \u2192\n            LE.le.{0} (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} 2 k) (a k)) (a (HAdd.hAdd.{0, 0, 0} k 1))) \u2192\n        (\u2200 (k : Nat),\n            LT.lt.{0} k n \u2192\n              LE.le.{0} (a (HAdd.hAdd.{0, 0, 0} k 1))\n                (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} 2 (HAdd.hAdd.{0, 0, 0} k 1)) (a k))) \u2192\n          \u2200 (i j : Nat),\n            LE.le.{0} (HAdd.hAdd.{0, 0, 0} i j) n \u2192\n              LE.le.{0} (HMul.hMul.{0, 0, 0} (a i) (a j)) (a (HAdd.hAdd.{0, 0, 0} i j))",
+      "partial": false,
+      "name": "Conjecture7662.product_bound_from_growth",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "(Nat \u2192 Int) \u2192\n  \u2200 (n i j : Nat),\n    LE.le.{0} (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} i 1) j) n \u2192 Not (LT.lt.{0} (HAdd.hAdd.{0, 0, 0} i j) n) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.product_bound_from_growth._proof_10",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "(Nat \u2192 Int) \u2192\n  \u2200 (n i j : Nat),\n    LE.le.{0} (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} i 1) j) n \u2192 Not (LE.le.{0} (HAdd.hAdd.{0, 0, 0} i j) n) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.product_bound_from_growth._proof_11",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "(Nat \u2192 Int) \u2192\n  \u2200 (n i j : Nat), LE.le.{0} (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} i 1) j) n \u2192 Not (LE.le.{0} j n) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.product_bound_from_growth._proof_12",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "(Nat \u2192 Int) \u2192\n  Nat \u2192 \u2200 (i j : Nat), Not (Eq.{1} j 0) \u2192 Not (LE.le.{0} (HAdd.hAdd.{0, 0, 0} i 1) (HAdd.hAdd.{0, 0, 0} i j)) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.product_bound_from_growth._proof_13",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "(Nat \u2192 Int) \u2192\n  Nat \u2192\n    \u2200 (i j : Nat),\n      Not (Eq.{1} (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} i j) 1) (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} i 1) j)) \u2192\n        False",
+      "partial": false,
+      "name": "Conjecture7662.product_bound_from_growth._proof_14",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "(Nat \u2192 Int) \u2192\n  \u2200 (n i j : Nat), LE.le.{0} (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} i 1) j) n \u2192 Not (LT.lt.{0} i n) \u2192 False",
+      "partial": false,
+      "name": "Conjecture7662.product_bound_from_growth._proof_9",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "{R : Type u_1} \u2192 [inst : CommRing.{u_1} R] \u2192 R \u2192 PowerSeries.{u_1} R",
+      "partial": false,
+      "name": "Conjecture7662.series",
+      "module": "Conjecture7662",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (q : R),\n  Eq.{u_1 + 1} (Conjecture7662.series.{u_1} q) (PowerSeries.mk.{u_1} (Conjecture7662.coefficient.{u_1} q))",
+      "partial": false,
+      "name": "Conjecture7662.series.eq_1",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {R : Type u_1} [inst : CommRing.{u_1} R] (q : R),\n  Conjecture7662.FunctionalEquation.{u_1} q (Conjecture7662.series.{u_1} q)",
+      "partial": false,
+      "name": "Conjecture7662.series_satisfies",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (F : PowerSeries.{0} Int),\n  Conjecture7662.FunctionalEquation.{0} 2 F \u2192\n    \u2200 (n : Nat), Iff (Conjecture7662.PositivePrime ((PowerSeries.coeff.{0} Int n) F)) (Eq.{1} n 2)",
+      "partial": false,
+      "name": "Conjecture7662.solution_prime_iff",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (motive : Nat \u2192 Sort u_1) (h_1 : Unit \u2192 motive 0) (h_2 : (n : Nat) \u2192 motive (Nat.succ n)),\n  Eq.{u_1}\n    (match 0 with\n    | 0 => h_1 Unit.unit\n    | Nat.succ n => h_2 n)\n    (h_1 Unit.unit)",
+      "partial": false,
+      "name": "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.eq_1",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": []
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (motive : Nat \u2192 Sort u_1) (n : Nat) (h_1 : Unit \u2192 motive 0) (h_2 : (n : Nat) \u2192 motive (Nat.succ n)),\n  Eq.{u_1}\n    (match Nat.succ n with\n    | 0 => h_1 Unit.unit\n    | Nat.succ n => h_2 n)\n    (h_2 n)",
+      "partial": false,
+      "name": "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.eq_2",
+      "module": "Conjecture7662",
+      "kind": "theorem",
+      "axioms": []
+    },
+    {
+      "unsafe": false,
+      "type": "(motive : Nat \u2192 Sort u_1) \u2192 (x : Nat) \u2192 motive 0 \u2192 ((n : Nat) \u2192 motive (Nat.succ n)) \u2192 motive x",
+      "partial": false,
+      "name": "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.splitter",
+      "module": "Conjecture7662",
+      "kind": "definition",
+      "axioms": []
+    },
+    {
+      "unsafe": true,
+      "type": "(motive : Nat \u2192 Sort u_1) \u2192 (x : Nat) \u2192 motive 0 \u2192 ((n : Nat) \u2192 motive (Nat.succ n)) \u2192 motive x",
+      "partial": false,
+      "name": "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.splitter._cstage1",
+      "module": "Conjecture7662",
+      "kind": "definition",
+      "axioms": []
+    },
+    {
+      "unsafe": true,
+      "type": "_neutral \u2192 _obj",
+      "partial": false,
+      "name": "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.splitter._cstage2",
+      "module": "Conjecture7662",
+      "kind": "definition",
+      "axioms": []
+    },
+    {
+      "unsafe": true,
+      "type": "_obj \u2192 _obj \u2192 _obj \u2192 _obj",
+      "partial": false,
+      "name": "_private.Conjecture7662.0.Conjecture7662.coefficient.match_1.splitter._rarg._cstage2",
+      "module": "Conjecture7662",
+      "kind": "definition",
+      "axioms": []
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+The only positive prime value occurs at index 2
+A disproof of conjecture 00000007662
+C0ldSmi1e
+October 2026
+Abstract
+For the formal series deﬁned by the equation in the conjecture, we prove that Cn(2) is a positive
+prime precisely when n = 2, with C2(2) = 2 . The prime-index set is therefore ﬁnite, contradicting
+the explicit inﬁnitude assertion. A Lean 4 project veriﬁes the full argument, including existence
+and uniqueness of the original formal series and the polynomial evaluation at q = 2.
+1 The stated equation and its actual coeﬃcients
+Both language versions of conjecture 00000007662 deﬁne the coeﬃcients by
+F (q, t) = 1 − qtF (q, qt)
+1 − tF (q, t) (1)
+and assert that inﬁnitely many indices n have Cn(2) prime, together with upper and lower bounds
+for the number of such indices up to x. We use the displayed equation literally: its minus sign and
+the argument t in the denominator are retained. Primes mean ordinary positive primes. The index
+set is N = {0,1,2, . . .}; starting at 1 makes no diﬀerence.
+Work ﬁrst in Z[Q][[t]]. More generally, in any commutative ring R with q ∈ R, the constant term of
+1 − tF is 1, so it is invertible. Thus ( 1) is equivalent to
+F = 1 + t
+(
+F 2 − qF (qt)
+)
+. (2)
+Here the coeﬃcient of tn in F (qt) is qn times that in F (t). Consequently the coeﬃcient sequence is
+exactly the triangular recursion
+a0(q) = 1 , a n+1(q) =
+n∑
+i=0
+ai(q)an−i(q) − qn+1an(q). (3)
+Every index on the right is smaller than n + 1. This constructs a unique sequence and a unique
+formal series. Conversely, the series with these coeﬃcients satisﬁes ( 2) coeﬃcientwise; invertibility
+of 1 − tF then gives ( 1). In Z[Q], each coeﬃcient is a polynomial. Applying evaluation Q ↦→ 2 to
+the ﬁnite sums and products in ( 3) gives the integer sequence an = Cn(2) with
+a0 = 1, a n+1 =
+n∑
+i=0
+aian−i − 2n+1an.
+No analytic convergence or unproved hypothesis about existence is used.
+1
+
+2 A positive transform and uniform growth
+Deﬁne integers bn by
+b0 = 1, b n+1 = 2 n+1bn −
+n∑
+i=0
+bibn−i. (4)
+We prove positivity and growth; neither is imposed as an assumption.
+Lemma 1. Fix n. Suppose u0 = 1, uk ≥ 0 for k ≤ n, and for every k < n ,
+2kuk ≤ uk+1 ≤ 2k+1uk.
+Then uiuj ≤ ui+j whenever i + j ≤ n.
+Proof. Induct on i. The case i = 0 is equality. At the induction step, j = 0 is also equality. For j ≥ 1
+and i + 1 +j ≤ n, all bounds below have index less than n, and nonnegativity permits multiplication:
+ui+1uj ≤ 2i+1uiuj ≤ 2i+1ui+j ≤ 2i+jui+j ≤ ui+j+1.
+The middle comparison uses i + 1 ≤ i + j.
+Lemma 2. For every n ≥ 0,
+bn ≥ 1, 2nbn ≤ bn+1 ≤ 2n+1bn. (5)
+Proof. Use strong induction on n, proving all three assertions together. If n = 0, bn = 1. If n = k + 1,
+the earlier lower bound and bk ≥ 1 give bn ≥ 2kbk ≥ 1. Thus bi ≥ 0 for all i ≤ n. All earlier growth
+bounds are now available, so Lemma 1 gives bibn−i ≤ bn. Hence
+0 ≤
+n∑
+i=0
+bibn−i ≤ (n + 1)bn ≤ 2nbn.
+The elementary bound n + 1 ≤ 2n follows by induction starting at n = 0 . Subtract the displayed
+convolution bounds from 2n+1bn in ( 4) to obtain the two required growth bounds at n. This proves
+the induction without using the bounds at n prematurely.
+In particular, for n ≥ 3 the lower bound at n − 1 gives
+bn ≥ 2n−1bn−1 ≥ 4. (6)
+2
+
+3 Signs, parity, and the exact prime-index set
+Lemma 3. For every n, an = (−1)nbn. Thus an < 0 for odd n, while an = bn ≥ 1 for even n.
+Proof. The case n = 0 is immediate. Assuming the formula at all indices at most n, every product
+in the convolution acquires the same factor (−1)n. Equation ( 3) at q = 2 therefore yields
+an+1 = (−1)n
+( n∑
+i=0
+bibn−i − 2n+1bn
+)
+= (−1)n+1bn+1.
+The sign assertions follow from Lemma 2.
+Lemma 4. Every coeﬃcient with a positive even index is even.
+Proof. Write the index as 2k + 2. Reﬂection i ↦→ 2k + 1− i pairs the terms of the preceding odd-index
+convolution with no ﬁxed point, giving
+2k+1∑
+i=0
+aia2k+1−i = 2
+k∑
+i=0
+aia2k+1−i.
+In ( 3), this even sum is reduced by 22k+2a2k+1, also even.
+Theorem 1. For the coeﬃcients of (1), evaluated at q = 2,
+Cn(2) is a positive prime ⇐ ⇒ n = 2.
+Proof. The ﬁrst three values from ( 3) are a0 = 1 , a1 = −1, and a2 = 2 . Odd indices have negative
+values by Lemma 3. For even n ≥ 4, Lemma 4 gives an even value, and ( 6) gives an = bn ≥ 4. Such
+a value cannot be a positive prime, because the only even positive prime is 2. This covers every
+index.
+It follows that the prime-index set is exactly {2}. This contradicts the explicit inﬁnitude conjunct,
+and therefore disproves the conjecture as a whole. For real x ≥ 0 its counting function is exactly
+A(x) = # {n ≤ x : Cn(2) is a positive prime } =
+{
+0, x < 2,
+1, x ≥ 2.
+Thus the asserted lower bound cannot hold under either the eventual lower-bound or the inﬁnitely-
+often convention for Ω(log log x). The disproof relies on the false inﬁnitude assertion and does not
+require formalizing either asymptotic convention or refuting the upper bound.
+3
+
+4 Formalization and reproducibility
+The accompanying Lean project pins Lean 4.19.0 and Mathlib v4.19.0. Its objects are actual formal
+power series, rather than a recurrence given the name of the conjectured sequence. In namespace
+Conjecture7662, the principal correspondence is:
+Lean declaration Mathematical role
+FunctionalEquation Exact quotient equation, with unit inverse
+functionalEquation_coefficients Equivalence with the coeﬃcient recursion
+exists_unique_series Existence and uniqueness over a commutative
+ring
+polynomial_evaluation Z[Q] coeﬃcients specialize to an
+b_growth, coefficient_signed Growth bounds and alternating sign
+even_index_coefficient Evenness at every positive even index
+positivePrime_iff Exact prime classiﬁcation of an
+formal_series_disproof Unique existence and failure of inﬁnitude for every
+actual solution
+polynomial_prime_iff The same classiﬁcation for Cn(2)
+primeCounting_eq Exact count for every real cutoﬀ
+The predicate PositivePrime(z) is ∃p ∈ N, Prime(p) ∧ z = ( p : Z). It does not take an absolute
+value or truncate negative coeﬃcients. The ﬁnal disproof has no additional growth, sign, or primality
+hypotheses.
+The standalone auxiliary Python checker compares two exact integer methods: the triangular recur-
+sion and iteration of the original quotient, using truncated formal-series inversion and substitution
+t ↦→ qt. It checks all coeﬃcients through degree 32 for q ∈ {− 2,−1,0,1,2,3,4} (231 comparisons)
+and veriﬁes each truncated quotient identity. The beginning at q = 2 is
+1, −1, 2, −11, 150, −4474.
+These ﬁnite checks provide implementation cross-checks; the all-index mathematical result is the
+Lean theorem, not an extrapolation of the tests.
+From the submitted lean/ directory, reproduce the proof with
+lake exe cache get
+lake build
+lake env lean -DwarningAsError=true Conjecture7662.lean
+lake env lean -DwarningAsError=true Check.lean
+The package README gives the auxiliary command and describes all evidence. Veriﬁcation records
+include a fresh independent project build, strict source replay, declared theorem axioms, a com-
+plete inventory of compiled module declarations, pinned dependency identities, and matching report
+source/PDF checks. These are local checks; acceptance belongs to the competition maintainers.
+Source. The oﬃcial bilingual statement is included byte-for-byte as conjecture.md and is available
+in the repository at conjectures/00000007662.md. The argument above is derived directly from
+that displayed equation.
+4

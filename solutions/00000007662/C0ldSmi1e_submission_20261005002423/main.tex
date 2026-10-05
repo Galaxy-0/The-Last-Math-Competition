@@ -1,0 +1,234 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.95in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\N}{\mathbb N}
+\newcommand{\conv}[2]{\sum_{i=0}^{#2} #1_i #1_{#2-i}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+\title{The only positive prime value occurs at index 2\\[3pt]
+\large A disproof of conjecture 00000007662}
+\author{C0ldSmi1e}
+\date{October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+For the formal series defined by the equation in the conjecture, we prove
+that $C_n(2)$ is a positive prime precisely when $n=2$, with $C_2(2)=2$.
+The prime-index set is therefore finite, contradicting the explicit
+infinitude assertion. A Lean 4 project verifies the full argument,
+including existence and uniqueness of the original formal series and
+the polynomial evaluation at $q=2$.
+\end{abstract}
+
+\section{The stated equation and its actual coefficients}
+Both language versions of conjecture 00000007662 define the coefficients by
+\begin{equation}\label{eq:original}
+ F(q,t)=\frac{1-qtF(q,qt)}{1-tF(q,t)}
+\end{equation}
+and assert that infinitely many indices $n$ have $C_n(2)$ prime, together
+with upper and lower bounds for the number of such indices up to $x$.
+We use the displayed equation literally: its minus sign and the argument
+$t$ in the denominator are retained. Primes mean ordinary positive primes.
+The index set is $\N=\{0,1,2,\ldots\}$; starting at 1 makes no difference.
+
+Work first in $\Z[Q][[t]]$. More generally, in any commutative ring $R$
+with $q\in R$, the constant term of $1-tF$ is 1, so it is invertible.
+Thus \eqref{eq:original} is equivalent to
+\begin{equation}\label{eq:cross}
+ F=1+t\bigl(F^2-qF(qt)\bigr).
+\end{equation}
+Here the coefficient of $t^n$ in $F(qt)$ is $q^n$ times that in $F(t)$.
+Consequently the coefficient sequence is exactly the triangular recursion
+\begin{equation}\label{eq:rec}
+ a_0(q)=1,\qquad
+ a_{n+1}(q)=\sum_{i=0}^{n}a_i(q)a_{n-i}(q)-q^{n+1}a_n(q).
+\end{equation}
+Every index on the right is smaller than $n+1$. This constructs a unique
+sequence and a unique formal series. Conversely, the series with these
+coefficients satisfies \eqref{eq:cross} coefficientwise; invertibility of
+$1-tF$ then gives \eqref{eq:original}. In $\Z[Q]$, each coefficient is a
+polynomial. Applying evaluation $Q\mapsto2$ to the finite sums and products
+in \eqref{eq:rec} gives the integer sequence $a_n=C_n(2)$ with
+\[
+ a_0=1,\qquad a_{n+1}=\sum_{i=0}^{n}a_i a_{n-i}-2^{n+1}a_n.
+\]
+No analytic convergence or unproved hypothesis about existence is used.
+
+\newpage
+\section{A positive transform and uniform growth}
+Define integers $b_n$ by
+\begin{equation}\label{eq:b}
+ b_0=1,\qquad b_{n+1}=2^{n+1}b_n-\sum_{i=0}^{n}b_i b_{n-i}.
+\end{equation}
+We prove positivity and growth; neither is imposed as an assumption.
+
+\begin{lemma}\label{lem:product}
+Fix $n$. Suppose $u_0=1$, $u_k\ge0$ for $k\le n$, and for every $k<n$,
+\[
+ 2^k u_k\le u_{k+1}\le2^{k+1}u_k.
+\]
+Then $u_i u_j\le u_{i+j}$ whenever $i+j\le n$.
+\end{lemma}
+\begin{proof}
+Induct on $i$. The case $i=0$ is equality. At the induction step,
+$j=0$ is also equality. For $j\ge1$ and $i+1+j\le n$, all bounds below
+have index less than $n$, and nonnegativity permits multiplication:
+\begin{align*}
+ u_{i+1}u_j
+ &\le2^{i+1}u_i u_j
+ \le2^{i+1}u_{i+j}
+ \le2^{i+j}u_{i+j}
+ \le u_{i+j+1}.
+\end{align*}
+The middle comparison uses $i+1\le i+j$.
+\end{proof}
+
+\begin{lemma}\label{lem:growth}
+For every $n\ge0$,
+\begin{equation}\label{eq:growth}
+ b_n\ge1,\qquad 2^n b_n\le b_{n+1}\le2^{n+1}b_n.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Use strong induction on $n$, proving all three assertions together.
+If $n=0$, $b_n=1$. If $n=k+1$, the earlier lower bound and
+$b_k\ge1$ give $b_n\ge2^k b_k\ge1$. Thus $b_i\ge0$ for all $i\le n$.
+All earlier growth bounds are now available, so Lemma~\ref{lem:product}
+gives $b_i b_{n-i}\le b_n$. Hence
+\[
+ 0\le\sum_{i=0}^{n}b_i b_{n-i}\le(n+1)b_n\le2^n b_n.
+\]
+The elementary bound $n+1\le2^n$ follows by induction starting at $n=0$.
+Subtract the displayed convolution bounds from $2^{n+1}b_n$ in
+\eqref{eq:b} to obtain the two required growth bounds at $n$.
+This proves the induction without using the bounds at $n$ prematurely.
+\end{proof}
+
+In particular, for $n\ge3$ the lower bound at $n-1$ gives
+\begin{equation}\label{eq:large}
+ b_n\ge2^{n-1}b_{n-1}\ge4.
+\end{equation}
+
+\newpage
+\section{Signs, parity, and the exact prime-index set}
+\begin{lemma}\label{lem:sign}
+For every $n$, $a_n=(-1)^n b_n$. Thus $a_n<0$ for odd $n$, while
+$a_n=b_n\ge1$ for even $n$.
+\end{lemma}
+\begin{proof}
+The case $n=0$ is immediate. Assuming the formula at all indices at most
+$n$, every product in the convolution acquires the same factor $(-1)^n$.
+Equation~\eqref{eq:rec} at $q=2$ therefore yields
+\[
+ a_{n+1}=(-1)^n\left(\sum_{i=0}^n b_i b_{n-i}-2^{n+1}b_n\right)
+ =(-1)^{n+1}b_{n+1}.
+\]
+The sign assertions follow from Lemma~\ref{lem:growth}.
+\end{proof}
+
+\begin{lemma}\label{lem:even}
+Every coefficient with a positive even index is even.
+\end{lemma}
+\begin{proof}
+Write the index as $2k+2$. Reflection $i\mapsto2k+1-i$ pairs the terms
+of the preceding odd-index convolution with no fixed point, giving
+\[
+ \sum_{i=0}^{2k+1}a_i a_{2k+1-i}
+ =2\sum_{i=0}^{k}a_i a_{2k+1-i}.
+\]
+In \eqref{eq:rec}, this even sum is reduced by
+$2^{2k+2}a_{2k+1}$, also even.
+\end{proof}
+
+\begin{theorem}
+For the coefficients of \eqref{eq:original}, evaluated at $q=2$,
+\[
+ C_n(2)\text{ is a positive prime}\quad\Longleftrightarrow\quad n=2.
+\]
+\end{theorem}
+\begin{proof}
+The first three values from \eqref{eq:rec} are $a_0=1$, $a_1=-1$,
+and $a_2=2$. Odd indices have negative values by Lemma~\ref{lem:sign}.
+For even $n\ge4$, Lemma~\ref{lem:even} gives an even value, and
+\eqref{eq:large} gives $a_n=b_n\ge4$. Such a value cannot be a positive
+prime, because the only even positive prime is 2. This covers every index.
+\end{proof}
+
+It follows that the prime-index set is exactly $\{2\}$. This contradicts
+the explicit infinitude conjunct, and therefore disproves the conjecture
+as a whole. For real $x\ge0$ its counting function is exactly
+\[
+ A(x)=\#\{n\le x:C_n(2)\text{ is a positive prime}\}
+ =\begin{cases}0,&x<2,\\1,&x\ge2.\end{cases}
+\]
+Thus the asserted lower bound cannot hold under either the eventual
+lower-bound or the infinitely-often convention for $\Omega(\log\log x)$.
+The disproof relies on the false infinitude assertion and does not require
+formalizing either asymptotic convention or refuting the upper bound.
+
+\newpage
+\section{Formalization and reproducibility}
+The accompanying Lean project pins Lean 4.19.0 and Mathlib v4.19.0.
+Its objects are actual formal power series, rather than a recurrence
+given the name of the conjectured sequence. In namespace
+\texttt{Conjecture7662}, the principal correspondence is:
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.49\linewidth}p{0.45\linewidth}@{}}
+\textbf{Lean declaration} & \textbf{Mathematical role}\\[4pt]
+\texttt{FunctionalEquation} & Exact quotient equation, with unit inverse\\[3pt]
+\texttt{functionalEquation\_coefficients} & Equivalence with the coefficient recursion\\[3pt]
+\texttt{exists\_unique\_series} & Existence and uniqueness over a commutative ring\\[3pt]
+\texttt{polynomial\_evaluation} & $\Z[Q]$ coefficients specialize to $a_n$\\[3pt]
+\texttt{b\_growth}, \texttt{coefficient\_signed} & Growth bounds and alternating sign\\[3pt]
+\texttt{even\_index\_coefficient} & Evenness at every positive even index\\[3pt]
+\texttt{positivePrime\_iff} & Exact prime classification of $a_n$\\[3pt]
+\texttt{formal\_series\_disproof} & Unique existence and failure of infinitude for every actual solution\\[3pt]
+\texttt{polynomial\_prime\_iff} & The same classification for $C_n(2)$\\[3pt]
+\texttt{primeCounting\_eq} & Exact count for every real cutoff
+\end{tabular}
+\end{center}
+The predicate \texttt{PositivePrime(z)} is
+$\exists p\in\N,\ \operatorname{Prime}(p)\land z=(p:\Z)$.
+It does not take an absolute value or truncate negative coefficients.
+The final disproof has no additional growth, sign, or primality hypotheses.
+
+The standalone auxiliary Python checker compares two exact integer methods:
+the triangular recursion and iteration of the original quotient, using
+truncated formal-series inversion and substitution $t\mapsto qt$.
+It checks all coefficients through degree 32 for
+$q\in\{-2,-1,0,1,2,3,4\}$ (231 comparisons) and verifies each
+truncated quotient identity.
+The beginning at $q=2$ is
+\[
+ 1,\ -1,\ 2,\ -11,\ 150,\ -4474.
+\]
+These finite checks provide implementation cross-checks; the all-index
+mathematical result is the Lean theorem, not an extrapolation of the tests.
+
+From the submitted \texttt{lean/} directory, reproduce the proof with
+\begin{verbatim}
+lake exe cache get
+lake build
+lake env lean -DwarningAsError=true Conjecture7662.lean
+lake env lean -DwarningAsError=true Check.lean
+\end{verbatim}
+The package README gives the auxiliary command and describes all evidence.
+Verification records include a fresh independent project build, strict
+source replay, declared theorem axioms, a complete inventory of compiled
+module declarations, pinned dependency identities, and matching report
+source/PDF checks. These are local checks; acceptance belongs to the
+competition maintainers.
+
+\textbf{Source.} The official bilingual statement is included byte-for-byte
+as \texttt{conjecture.md} and is available in the repository at
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000007662.md}{\texttt{conjectures/00000007662.md}}.
+The argument above is derived directly from that displayed equation.
+\end{document}
