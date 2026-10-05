@@ -1,0 +1,121 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Conjecture 00000001543 is false:\\ $n$ collinear points on the irreducible curve $y=0$ determine only $n-1$ distances}
+\author{Jackmeson1}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+Conjecture 00000001543 (English text, verbatim): ``Definition: Distinct distances on algebraic
+curves. Conjecture: Any n points on an irreducible real algebraic curve determine at least
+$c\cdot n^{4/3}$ distinct distances (the curve distance exponent).'' The Chinese text says the
+same: any $n$ points on any irreducible real algebraic curve determine at least $c\cdot n^{4/3}$
+distinct distances.
+
+\paragraph{Reading.} Points lie in the Euclidean plane $\mathbb R^2$ with the Euclidean distance.
+An irreducible real algebraic curve is the zero set $Z(f)=\{p\in\mathbb R^2: f(p)=0\}$ of an
+irreducible polynomial $f\in\mathbb R[x,y]$; we additionally require $Z(f)$ to be infinite, which
+only shrinks the class (it excludes degenerate zero sets such as $Z(x^2+y^2)=\{0\}$). The number
+of distinct distances of a finite set $P$ is $\#\{|p-q| : p,q\in P,\ p\neq q\}$. The constant $c$
+is positive and independent of $n$. We refute the following readings, and claim no more:
+\begin{itemize}
+\item[(U)] there is one $c>0$ that works for every curve and every finite point set on it;
+\item[(C)] every curve $C$ has its own $c_C>0$ and $N_C$ such that every set of $n\ge N_C$
+points on $C$ determines at least $c_C n^{4/3}$ distances.
+\end{itemize}
+(C) is the weakest of the natural quantifier orders (constant depending on the curve, bound only
+for large $n$), so (U) and every intermediate order (constant depending on the degree, bound for
+all $n$) are refuted too.
+
+\paragraph{Not refuted.} The statement as written does not exclude lines or circles. The known
+theorem of Pach and de Zeeuw (Section~\ref{sec:rel}) does exclude them, and the reading
+``irreducible curves other than lines and circles'' is a true theorem; we do not refute it.
+
+\section{The counterexample}
+\begin{lemma}\label{lem:curve}
+The $x$-axis $L=\{(x,y): y=0\}=Z(y)$ is an irreducible real algebraic curve.
+\end{lemma}
+\begin{proof}
+The variable $y$ is a prime, hence irreducible, element of $\mathbb R[x,y]$, and $Z(y)$ contains
+the infinitely many points $(t,0)$, $t\in\mathbb R$.
+\end{proof}
+
+\begin{lemma}\label{lem:count}
+Let $P_n=\{(k,0): k=0,1,\dots,n-1\}\subset L$. Then $|P_n|=n$ and $P_n$ determines at most $n-1$
+distinct distances.
+\end{lemma}
+\begin{proof}
+$|(a,0)-(b,0)|=|a-b|$, and for $a\neq b$ in $\{0,\dots,n-1\}$ this is an integer in
+$\{1,\dots,n-1\}$.
+\end{proof}
+
+\begin{lemma}\label{lem:growth}
+For every $c>0$ and every integer $n\ge \lceil c^{-3}\rceil+1$ we have $n-1<c\,n^{4/3}$.
+\end{lemma}
+\begin{proof}
+$n>c^{-3}$ gives $(c\,n^{1/3})^3=c^3n>1$, so $c\,n^{1/3}>1$ and
+$n-1<n<n\cdot c\,n^{1/3}=c\,n^{4/3}$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+For every $c>0$ there is $N$ such that for every $n\ge N$ some $n$ points of the irreducible curve
+$L$ determine fewer than $c\,n^{4/3}$ distinct distances. Consequently readings (U) and (C) are
+false.
+\end{theorem}
+\begin{proof}
+Take $N=\lceil c^{-3}\rceil+1$ and $P_n$; combine Lemmas~\ref{lem:count} and~\ref{lem:growth}.
+For (U): apply this to the given $c$ and $L$. For (C): given $c_L,N_L$, apply it with $c=c_L$
+and $n=\max(N_L,N)$.
+\end{proof}
+The same failure occurs on circles (a regular $n$-gon determines $\lfloor n/2\rfloor$ distances);
+we only use the line, and the circle remark is not formalized.
+
+\section{Lean formalization}
+File \texttt{lean/Conjecture1543/Basic.lean} (173 lines, only \texttt{import Mathlib}).
+\begin{itemize}
+\item \texttt{Plane := EuclideanSpace R (Fin 2)} (Euclidean metric; coordinates \texttt{p 0}, \texttt{p 1}).
+\item \texttt{zeroSet f}: $\{p : \texttt{MvPolynomial.eval}\,(i\mapsto p\,i)\,f=0\}$ for
+\texttt{f : MvPolynomial (Fin 2) R}.
+\item \texttt{IsIrreducibleRealCurve C}: $\exists f$, \texttt{Irreducible f} $\wedge$
+\texttt{C = zeroSet f} $\wedge$ \texttt{C.Infinite}.
+\item \texttt{distances P}: the image of $(p,q)\mapsto \mathrm{dist}\,p\,q$ over
+\texttt{P.offDiag} (ordered pairs of distinct points); its \texttt{card} is the number of
+distinct distances.
+\item \texttt{xAxis := zeroSet (X 1)}; \texttt{xAxis\_isIrreducibleRealCurve} (Lemma~\ref{lem:curve},
+via Mathlib's \texttt{MvPolynomial.X\_prime}).
+\item \texttt{collinear n}, \texttt{collinear\_card}, \texttt{collinear\_subset},
+\texttt{distances\_collinear\_card\_le} (card $\le n-1$; Lemma~\ref{lem:count}).
+\item \texttt{eventually\_lt} (Lemma~\ref{lem:growth}; real power \texttt{Real.rpow}).
+\item \texttt{xAxis\_violates} (Theorem~\ref{thm:main}),
+\texttt{not\_uniform} (reading U), \texttt{not\_per\_curve\_eventually} (reading C).
+\end{itemize}
+Axiom audit: \texttt{\#print axioms} for \texttt{xAxis\_violates}, \texttt{not\_uniform} and
+\texttt{not\_per\_curve\_eventually} each reports \texttt{[propext, Classical.choice, Quot.sound]}.
+No \texttt{sorry}, no \texttt{native\_decide}, no added axioms.
+
+\section{Relation to the known theorem and to the earlier submission}\label{sec:rel}
+Pach and de Zeeuw, \emph{Distinct distances on algebraic curves in the plane},
+\url{https://arxiv.org/abs/1308.0177}, abstract: ``We prove that the number of distinct distances
+determined by $P$ is at least $c_d n^{4/3}$, unless $C$ contains a line or a circle.'' The
+conjecture's text drops the exception ``unless $C$ contains a line or a circle'', and the
+exception is necessary: Theorem~\ref{thm:main} is exactly the line case.
+
+\paragraph{Relation to the earlier submission.} PR \#221 (by orionsheep) used the same
+counterexample, but its Lean theorem \texttt{no\_constant} was pure natural-number arithmetic. The
+review rejected it because ``the actual counterexample (collinear points determine $n-1$
+distances) is never formalized --- curves, points, and distances appear only in prose/Python.''
+This submission formalizes the objects themselves: the Euclidean plane, irreducible polynomials in
+\texttt{MvPolynomial (Fin 2) R} and their zero sets, finite point sets on the curve, and the
+distinct-distance count as the cardinality of the image of the distance map. It proves the
+violation for every $c>0$ and all large $n$, under both a uniform and a curve-dependent constant.
+\end{document}
