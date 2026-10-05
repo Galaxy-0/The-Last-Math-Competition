@@ -1,0 +1,128 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{1em}
+\newtheorem{proposition}{Proposition}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\HH}{\mathcal{H}}
+\title{Disproof of conjecture 00000002531\\\large The stated density equals two on the real line}
+\author{C0ldSmi1e}
+\date{October 5, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Claim and conventions.}
+Both language versions define the density by
+\[
+ \theta_E(x)=\lim_{r\downarrow0}\frac{\HH^k(E\cap B(x,r))}{r^k}
+\]
+and assert that every $\HH^k$-measurable set has, outside an $\HH^k$-null
+set, a density limit in $\{0,1\}$. They also assert dimension and sharpness
+bounds for the set of points where the limit fails to exist. The denominator
+above is exactly the source's $r^k$.
+
+The source leaves the ambient space and normalization implicit. We use the
+ordinary Euclidean interpretation, positive integer dimension, open balls
+centered at $x$, and all positive real radii approaching zero. Standard
+normalized Hausdorff measure is $\omega_k/2^k$ times the diameter-cover
+measure, where $\omega_k$ is the volume of the Euclidean unit ball
+\cite{Simon}. We take $k=n=1$. Then $\omega_1=2$, so the coefficient is
+one, and $\HH^1$ on $\R$ is ordinary length. These conventions are explicit
+in the Lean definitions. No unit-ball factor is inserted into the source's
+density denominator.
+
+\begin{proposition}
+Let $E=\R$ with its usual distance $d(x,y)=|x-y|$. With the stated density
+formula and standard $\HH^1$, the density exists and equals $2$ at every
+$x\in\R$. No $\HH^1$-null exceptional set makes this density binary.
+\end{proposition}
+\begin{proof}
+The set $E$ is Borel and hence $\HH^1$-measurable. For every $x\in\R$
+and every $r>0$,
+\[
+ E\cap B(x,r)=(x-r,x+r),\qquad
+ \HH^1(E\cap B(x,r))=2r,\qquad
+ \frac{\HH^1(E\cap B(x,r))}{r^1}=2.
+\]
+Thus the full positive-radius limit is $2$, which is neither $0$ nor $1$.
+If a null set $N$ made the binary conclusion true for every $x\in E\setminus N$,
+then $E\setminus N$ would be empty. This forces $N=\R$, contradicting
+$\HH^1(N)=0$, since $\HH^1(\R)=\infty$.
+\end{proof}
+
+\paragraph{Consequence and scope.}
+The first necessary assertion is false, so the conjunction in the conjecture
+is false. This example has a limit everywhere; it does not separately refute
+the later dimension or sharpness assertions. The source imposes no finite
+total measure hypothesis. Although $\HH^1(E)=\infty$, every ball numerator
+in the displayed calculation is finite. The disproof applies whether
+``almost everywhere'' is read on $E$ or on the ambient space, since here
+$E=\R$. It depends on the stated normalization and denominator; replacing
+the denominator by $\omega_k r^k$ would be a different assertion.
+
+\newpage
+\paragraph{Correspondence with Lean.}
+The project pins Lean 4.19.0 and Mathlib v4.19.0. All mathematics is in
+\texttt{Conjecture2531.lean}, under the namespace \texttt{Conjecture2531}.
+The genuine library measure \texttt{Measure.hausdorffMeasure 1} is multiplied
+by the explicitly defined coefficient $\omega_1/2^1$.
+Theorems prove this coefficient is one and the resulting measure equals
+\texttt{volume}, using Mathlib's \texttt{hausdorffMeasure\_real}. The genuine
+real metric, ball measure, finite ball measures, and infinite total measure
+are also checked.
+
+The function \texttt{densityQuotient} divides the ball-intersection measure
+by the extended nonnegative real value of $r^1$. Its extended codomain
+preserves infinity. For $r>0$, the denominator is positive and finite.
+
+\texttt{HasBinaryDensity} asserts convergence to a value equal to zero or one
+along \texttt{nhdsWithin 0 (Set.Ioi 0)}. The radius filter is proved
+nontrivial; the theorem uses uniqueness of limits, with the usual topology
+on the extended nonnegative reals.
+
+\texttt{NullExceptionalBinaryDensity} quantifies an arbitrary null set $N$
+for each $E$ and requires binary density at every point of $E\setminus N$.
+For Borel $E$, a theorem identifies this with the restricted-measure
+almost-everywhere formulation, without assuming the density predicate is
+measurable. A separate theorem shows that ambient almost-everywhere binary
+density implies this same necessary assertion.
+
+The definition \texttt{HausdorffMeasurable} uses the actual Carath\'eodory
+predicate of the Hausdorff outer measure. Borel measurability implies it.
+The formal propositions \texttt{BorelDensityClause} and
+\texttt{CaratheodoryDensityClause} are explicitly necessary specializations
+of the first source assertion to $k=n=1$. They are not definitions of the
+entire compound conjecture. The main results are:
+\begin{itemize}
+\item \texttt{counterexample}: $\R$ is measurable in both senses, its density
+converges to two everywhere, and no null exception restores binary density;
+\item \texttt{not\_borelDensityClause} and
+\texttt{not\_caratheodoryDensityClause}: negations of the necessary clauses;
+\item \texttt{not\_statement\_implying\_borelDensityClause}: a logical bridge
+from any explicitly supplied necessary-clause implication to its negation;
+\item \texttt{not\_borelDensityClause\_and}: further conjunctive assertions
+cannot rescue the false clause; those assertions remain uninterpreted.
+\end{itemize}
+
+\paragraph{Verification.}
+A fresh independent build and source replay with warnings treated as errors
+passed. The audit covers 31 authored declarations (nine definitions and
+22 theorems) and six generated declarations, including their logical
+dependencies. There are no admitted proofs, unsafe or partial dependencies,
+custom axioms, or \texttt{native\_decide} calls. All axioms belong to the
+standard set: \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}.
+The auxiliary inspection replay passed. No separate numerical experiment
+is required. Detailed records and reproduction instructions are included;
+local verification does not constitute maintainer acceptance.
+
+\begin{thebibliography}{9}
+\bibitem{Simon} Leon Simon, \emph{Introduction to Geometric Measure Theory},
+Chapter 1, \S2 (Hausdorff measure normalization),
+\href{https://math.stanford.edu/~lms/ntu-gmt-text.pdf}{author-hosted text}.
+The source conjecture's density denominator is retained independently.
+\bibitem{Mathlib} Mathlib v4.19.0,
+\texttt{Mathlib.MeasureTheory.Measure.Hausdorff} and the real Lebesgue
+measure library; exact revision is pinned in \texttt{lake-manifest.json}.
+\end{thebibliography}
+\end{document}

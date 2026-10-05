@@ -1,0 +1,115 @@
+def Conjecture2531.unitBallVolume : ENNReal :=
+MeasureTheory.volume (Metric.ball 0 1)
+theorem Conjecture2531.unitBallVolume_eq_two : Conjecture2531.unitBallVolume = 2 :=
+⋯
+def Conjecture2531.hausdorffNormalization : ENNReal :=
+Conjecture2531.unitBallVolume / 2 ^ 1
+theorem Conjecture2531.hausdorffNormalization_eq_one : Conjecture2531.hausdorffNormalization = 1 :=
+⋯
+def Conjecture2531.normalizedHausdorff1 : MeasureTheory.Measure ℝ :=
+Conjecture2531.hausdorffNormalization • MeasureTheory.Measure.hausdorffMeasure 1
+theorem Conjecture2531.normalizedHausdorff1_eq_raw : Conjecture2531.normalizedHausdorff1 =
+  MeasureTheory.Measure.hausdorffMeasure 1 :=
+⋯
+theorem Conjecture2531.normalizedHausdorff1_eq_volume : Conjecture2531.normalizedHausdorff1 = MeasureTheory.volume :=
+⋯
+theorem Conjecture2531.real_distance : ∀ (x y : ℝ), dist x y = |x - y| :=
+⋯
+theorem Conjecture2531.normalizedHausdorff1_ball : ∀ (x r : ℝ),
+  Conjecture2531.normalizedHausdorff1 (Metric.ball x r) = ENNReal.ofReal (2 * r) :=
+⋯
+theorem Conjecture2531.normalizedHausdorff1_ball_ne_top : ∀ (x r : ℝ),
+  Conjecture2531.normalizedHausdorff1 (Metric.ball x r) ≠ ⊤ :=
+⋯
+theorem Conjecture2531.normalizedHausdorff1_univ : Conjecture2531.normalizedHausdorff1 Set.univ = ⊤ :=
+⋯
+def Conjecture2531.densityQuotient : Set ℝ → ℝ → ℝ → ENNReal :=
+fun E x r => Conjecture2531.normalizedHausdorff1 (E ∩ Metric.ball x r) / ENNReal.ofReal (r ^ 1)
+def Conjecture2531.HasBinaryDensity : Set ℝ → ℝ → Prop :=
+fun E x =>
+  ∃ l, (l = 0 ∨ l = 1) ∧ Filter.Tendsto (Conjecture2531.densityQuotient E x) (nhdsWithin 0 (Set.Ioi 0)) (nhds l)
+def Conjecture2531.NullExceptionalBinaryDensity : Set ℝ → Prop :=
+fun E => ∃ N, Conjecture2531.normalizedHausdorff1 N = 0 ∧ ∀ x ∈ E \ N, Conjecture2531.HasBinaryDensity E x
+theorem Conjecture2531.ambient_ae_implies_nullExceptionalBinaryDensity : ∀ {E : Set ℝ},
+  (∀ᵐ (x : ℝ) ∂Conjecture2531.normalizedHausdorff1, Conjecture2531.HasBinaryDensity E x) →
+    Conjecture2531.NullExceptionalBinaryDensity E :=
+⋯
+def Conjecture2531.BorelDensityClause : Prop :=
+∀ (E : Set ℝ), MeasurableSet E → Conjecture2531.NullExceptionalBinaryDensity E
+def Conjecture2531.HausdorffMeasurable : Set ℝ → Prop :=
+fun E => Conjecture2531.normalizedHausdorff1.IsCaratheodory E
+theorem Conjecture2531.borel_is_HausdorffMeasurable : ∀ {E : Set ℝ},
+  MeasurableSet E → Conjecture2531.HausdorffMeasurable E :=
+⋯
+def Conjecture2531.CaratheodoryDensityClause : Prop :=
+∀ (E : Set ℝ), Conjecture2531.HausdorffMeasurable E → Conjecture2531.NullExceptionalBinaryDensity E
+theorem Conjecture2531.caratheodoryDensityClause_implies_borelDensityClause : Conjecture2531.CaratheodoryDensityClause →
+  Conjecture2531.BorelDensityClause :=
+⋯
+theorem Conjecture2531.nullExceptionalBinaryDensity_iff_ae : ∀ {E : Set ℝ},
+  MeasurableSet E →
+    (Conjecture2531.NullExceptionalBinaryDensity E ↔
+      ∀ᵐ (x : ℝ) ∂Conjecture2531.normalizedHausdorff1.restrict E, Conjecture2531.HasBinaryDensity E x) :=
+⋯
+theorem Conjecture2531.densityQuotient_univ : ∀ (x : ℝ) {r : ℝ},
+  0 < r → Conjecture2531.densityQuotient Set.univ x r = 2 :=
+⋯
+theorem Conjecture2531.positiveRadii_neBot : (nhdsWithin 0 (Set.Ioi 0)).NeBot :=
+⋯
+theorem Conjecture2531.densityQuotient_univ_tendsto_two : ∀ (x : ℝ),
+  Filter.Tendsto (Conjecture2531.densityQuotient Set.univ x) (nhdsWithin 0 (Set.Ioi 0)) (nhds 2) :=
+⋯
+theorem Conjecture2531.univ_has_no_binary_density : ∀ (x : ℝ), ¬Conjecture2531.HasBinaryDensity Set.univ x :=
+⋯
+theorem Conjecture2531.univ_not_nullExceptionalBinaryDensity : ¬Conjecture2531.NullExceptionalBinaryDensity Set.univ :=
+⋯
+theorem Conjecture2531.not_borelDensityClause : ¬Conjecture2531.BorelDensityClause :=
+⋯
+theorem Conjecture2531.not_caratheodoryDensityClause : ¬Conjecture2531.CaratheodoryDensityClause :=
+⋯
+theorem Conjecture2531.not_statement_implying_borelDensityClause : ∀ (statement : Prop),
+  (statement → Conjecture2531.BorelDensityClause) → ¬statement :=
+⋯
+theorem Conjecture2531.not_borelDensityClause_and : ∀ (remainingAssertions : Prop),
+  ¬(Conjecture2531.BorelDensityClause ∧ remainingAssertions) :=
+⋯
+theorem Conjecture2531.counterexample : MeasurableSet Set.univ ∧
+  Conjecture2531.HausdorffMeasurable Set.univ ∧
+    (∀ (x : ℝ), Filter.Tendsto (Conjecture2531.densityQuotient Set.univ x) (nhdsWithin 0 (Set.Ioi 0)) (nhds 2)) ∧
+      ¬Conjecture2531.NullExceptionalBinaryDensity Set.univ :=
+⋯
+'Conjecture2531.unitBallVolume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.unitBallVolume_eq_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.hausdorffNormalization' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.hausdorffNormalization_eq_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.normalizedHausdorff1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.normalizedHausdorff1_eq_raw' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.normalizedHausdorff1_eq_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.real_distance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.normalizedHausdorff1_ball' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.normalizedHausdorff1_ball_ne_top' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.normalizedHausdorff1_univ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.densityQuotient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.HasBinaryDensity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.NullExceptionalBinaryDensity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.ambient_ae_implies_nullExceptionalBinaryDensity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Conjecture2531.BorelDensityClause' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.HausdorffMeasurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.borel_is_HausdorffMeasurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.CaratheodoryDensityClause' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.caratheodoryDensityClause_implies_borelDensityClause' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Conjecture2531.nullExceptionalBinaryDensity_iff_ae' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.densityQuotient_univ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.positiveRadii_neBot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.densityQuotient_univ_tendsto_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.univ_has_no_binary_density' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.univ_not_nullExceptionalBinaryDensity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.not_borelDensityClause' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.not_caratheodoryDensityClause' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.not_statement_implying_borelDensityClause' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.not_borelDensityClause_and' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture2531.counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]

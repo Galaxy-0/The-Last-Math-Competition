@@ -1,0 +1,63 @@
+{
+  "status": "PASS",
+  "created_utc": "2026-10-05T08:40:06.043175+00:00",
+  "source_sha256": "bdf34598a729336ece9a96e96a518f92fd9bad15d83b3037f7d955e1d6cfceac",
+  "pdf_sha256": "711e39b5c352d1f805b4bdafec02871188fb8d65f94c6e1b2c40ea0cdb700f18",
+  "page_count": 2,
+  "pdf_bytes": 50488,
+  "native_compiler": {
+    "kind": "success",
+    "source_sha256": "bdf34598a729336ece9a96e96a518f92fd9bad15d83b3037f7d955e1d6cfceac",
+    "observed_utc": "2026-10-05T08:40:05.205736+00:00",
+    "tool": "mcp__codex_app__compile_latex_document",
+    "message": "The current source compiled successfully with the desktop editor's compiler."
+  },
+  "export": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--outdir",
+      "/private/tmp/tlmc2531-report",
+      "/private/tmp/tlmc2531-report/main.tex"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.806,
+    "warnings_or_box_diagnostics": [],
+    "raw_log_local_path": "/private/tmp/tlmc2531-report/export-raw.txt",
+    "raw_log_sha256": "4edf5775268462a55669ba9a2ee4820f611d228d94fdb6138950996749112e76",
+    "packaged_log": "report-export.txt",
+    "packaged_log_sha256": "4edf5775268462a55669ba9a2ee4820f611d228d94fdb6138950996749112e76",
+    "log_normalization": "Strip trailing whitespace on each line, preserve all line contents and order, terminate with one newline."
+  },
+  "render": {
+    "command": [
+      "/Users/daniel/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override/pdftoppm",
+      "-scale-to",
+      "1600",
+      "-png",
+      "/private/tmp/tlmc2531-report/main.pdf",
+      "/private/tmp/tlmc2531-report/page"
+    ],
+    "exit_code": 0,
+    "images": [
+      {
+        "path": "/private/tmp/tlmc2531-report/page-1.png",
+        "sha256": "53ca04ae2dd019557f8e3ff1d75bb04dc8110ef8fd924e0240a543a992715106"
+      },
+      {
+        "path": "/private/tmp/tlmc2531-report/page-2.png",
+        "sha256": "1d8313aefde480f5169744a1542d8e973ca4c27ccc0e4ff7b85af00ec6d80beb"
+      }
+    ]
+  },
+  "visual_review": {
+    "status": "PASS",
+    "reviewer": "coordinating agent",
+    "pages": [
+      1,
+      2
+    ],
+    "full_extracted_text_read": true,
+    "observations": "Both final rendered pages inspected: legible math and type, complete proof and references, no clipping, overlap or missing glyphs. Export has no box/warning diagnostics.",
+    "checked_utc": "2026-10-05T08:40:41.008957+00:00"
+  }
+}

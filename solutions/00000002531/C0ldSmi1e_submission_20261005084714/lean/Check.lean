@@ -1,0 +1,56 @@
+import Conjecture2531
+
+#print Conjecture2531.unitBallVolume
+#print Conjecture2531.hausdorffNormalization
+#print Conjecture2531.normalizedHausdorff1
+#print Conjecture2531.densityQuotient
+#print Conjecture2531.HasBinaryDensity
+#print Conjecture2531.NullExceptionalBinaryDensity
+#print Conjecture2531.BorelDensityClause
+#print Conjecture2531.HausdorffMeasurable
+#print Conjecture2531.CaratheodoryDensityClause
+
+#check Conjecture2531.unitBallVolume_eq_two
+#print axioms Conjecture2531.unitBallVolume_eq_two
+#check Conjecture2531.hausdorffNormalization_eq_one
+#print axioms Conjecture2531.hausdorffNormalization_eq_one
+#check Conjecture2531.normalizedHausdorff1_eq_raw
+#print axioms Conjecture2531.normalizedHausdorff1_eq_raw
+#check Conjecture2531.normalizedHausdorff1_eq_volume
+#print axioms Conjecture2531.normalizedHausdorff1_eq_volume
+#check Conjecture2531.real_distance
+#print axioms Conjecture2531.real_distance
+#check Conjecture2531.normalizedHausdorff1_ball
+#print axioms Conjecture2531.normalizedHausdorff1_ball
+#check Conjecture2531.normalizedHausdorff1_ball_ne_top
+#print axioms Conjecture2531.normalizedHausdorff1_ball_ne_top
+#check Conjecture2531.normalizedHausdorff1_univ
+#print axioms Conjecture2531.normalizedHausdorff1_univ
+#check Conjecture2531.ambient_ae_implies_nullExceptionalBinaryDensity
+#print axioms Conjecture2531.ambient_ae_implies_nullExceptionalBinaryDensity
+#check Conjecture2531.borel_is_HausdorffMeasurable
+#print axioms Conjecture2531.borel_is_HausdorffMeasurable
+#check Conjecture2531.caratheodoryDensityClause_implies_borelDensityClause
+#print axioms Conjecture2531.caratheodoryDensityClause_implies_borelDensityClause
+#check Conjecture2531.nullExceptionalBinaryDensity_iff_ae
+#print axioms Conjecture2531.nullExceptionalBinaryDensity_iff_ae
+#check Conjecture2531.densityQuotient_univ
+#print axioms Conjecture2531.densityQuotient_univ
+#check Conjecture2531.positiveRadii_neBot
+#print axioms Conjecture2531.positiveRadii_neBot
+#check Conjecture2531.densityQuotient_univ_tendsto_two
+#print axioms Conjecture2531.densityQuotient_univ_tendsto_two
+#check Conjecture2531.univ_has_no_binary_density
+#print axioms Conjecture2531.univ_has_no_binary_density
+#check Conjecture2531.univ_not_nullExceptionalBinaryDensity
+#print axioms Conjecture2531.univ_not_nullExceptionalBinaryDensity
+#check Conjecture2531.not_borelDensityClause
+#print axioms Conjecture2531.not_borelDensityClause
+#check Conjecture2531.not_caratheodoryDensityClause
+#print axioms Conjecture2531.not_caratheodoryDensityClause
+#check Conjecture2531.not_statement_implying_borelDensityClause
+#print axioms Conjecture2531.not_statement_implying_borelDensityClause
+#check Conjecture2531.not_borelDensityClause_and
+#print axioms Conjecture2531.not_borelDensityClause_and
+#check Conjecture2531.counterexample
+#print axioms Conjecture2531.counterexample
