@@ -1,0 +1,235 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000002291\\[2pt]
+\large A centralizer lower bound $|C_G(x)|\ge \tfrac18|G|^{1/2}$ in simple groups}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000002291 reads (English text; the Chinese text states the same bound, the same constant
+$c=1/8$ and the same example):
+
+\begin{quote}
+\emph{Definition:} The Brauer--Fowler theorem bounds centralizers of even-order simple groups:
+$|C_G(x)| \le (|G|-1)/2$ type.
+\emph{Conjecture:} The exact constant in the lower bound for centralizer sizes:
+$C_G(x) \ge c\cdot|G|^{1/2}$ $(c = 1/8)$; $c$ is tight, attained by low-order simple groups
+(e.g.\ involutions of $A_5$).
+\end{quote}
+
+\paragraph{Reading.} $G$ is a finite simple group of even order, $C_G(x)=\{g\in G: gx=xg\}$ is the
+centralizer, $|\cdot|$ is the order and $|G|^{1/2}$ the nonnegative square root. The statement does not
+say which $x$ are allowed, so we treat two readings:
+\begin{itemize}[leftmargin=2em]
+\item[(R1)] $x$ ranges over all nonidentity elements of $G$;
+\item[(R2)] $x$ ranges over involutions of $G$ (the Brauer--Fowler context and the $A_5$ example).
+\end{itemize}
+In both readings we add the hypothesis that $G$ is nonabelian. This only weakens the claim, which makes the
+refutation stronger. The second clause, (T), says that $c=1/8$ is tight and attained, with involutions of
+$A_5$ named as an example. We do not interpret the preamble's upper-bound remark, and nothing below depends
+on it.
+
+\paragraph{What is proved.}
+\begin{enumerate}[leftmargin=2em]
+\item Under (R1) the lower bound with $c=1/8$ is false: in $A_9$ the $9$-cycle has a centralizer of order at
+most $9$, and $9<\tfrac18\sqrt{181440}\approx 53.2$. In fact no constant $c>0$ works under (R1).
+\item Clause (T) is false. No element of $A_5$, and so no involution, satisfies $|C(x)|=\tfrac18\sqrt{60}$.
+Every nonidentity element of $A_5$ beats the bound by more than a factor of $2$.
+\item Under (R2) the lower bound with $c=1/8$ is false: $G=\mathrm{PSL}(2,\mathbb F_{128})$ is simple,
+nonabelian and of even order, and the image $t$ of $\begin{pmatrix}1&1\\0&1\end{pmatrix}$ is an involution with
+$|C_G(t)|\le128<\tfrac18\sqrt{|G|}\approx181$. In fact no constant $c>0$ works under (R2), using
+$\mathrm{PSL}(2,2^k)$ for large $k$.
+\end{enumerate}
+Since the conjecture is the conjunction of the lower bound and (T), it is false under both readings, and
+under each reading Lean refutes the lower bound itself (as well as the named attainment in $A_5$).
+
+\section{Definitions and conventions (as in the Lean file)}
+
+All groups are finite. $A_n=$ \texttt{alternatingGroup (Fin n)}, the even permutations of
+$\{0,\dots,n-1\}$; the centralizer is Mathlib's \texttt{Subgroup.centralizer \{x\}}, whose membership is
+$g\in C(x)\iff gx=xg$ (\texttt{Subgroup.mem\_centralizer\_singleton\_iff}); orders are \texttt{Nat.card};
+the square root is \texttt{Real.sqrt}; an involution is an $x$ with \texttt{orderOf x = 2}. Simplicity is Mathlib's \texttt{IsSimpleGroup} (nontrivial, and the
+only normal subgroups are $\bot$ and $\top$).
+
+\begin{definition}[\texttt{LowerBoundAllElements}, reading (R1)]
+For every finite group $G$ that is simple, nonabelian and of even order, and every $x\ne 1$ in $G$,
+$\tfrac18\sqrt{|G|}\le |C_G(x)|$.
+\end{definition}
+
+\begin{definition}[\texttt{LowerBoundInvolutions}, reading (R2)]
+For every finite group $G$ that is simple, nonabelian and of even order, and every $x\in G$ of order $2$,
+$\tfrac18\sqrt{|G|}\le |C_G(x)|$.
+\end{definition}
+
+\begin{definition}[\texttt{AttainedByA5Involution}, clause (T) at $A_5$]
+There is $t\in A_5$ with $\operatorname{ord}(t)=2$ and $|C_{A_5}(t)|=\tfrac18\sqrt{|A_5|}$.
+\end{definition}
+
+\section{Proofs}
+
+\begin{lemma}[\texttt{finRotate\_mem\_alternatingGroup}, \texttt{card\_centralizer\_finRotate\_perm},
+\texttt{card\_centralizer\_cyc\_le}]
+Let $n=2m+1\ge 3$ and $\sigma=(0\,1\,\cdots\,n-1)$ (Mathlib's \texttt{finRotate n}). Then $\sigma\in A_n$,
+$|C_{S_n}(\sigma)|=n$, and $|C_{A_n}(\sigma)|\le n$.
+\end{lemma}
+\begin{proof}
+$\operatorname{sign}\sigma=(-1)^{n-1}=1$ (\texttt{sign\_finRotate}). The cycle type of $\sigma$ is $\{n\}$
+(\texttt{cycleType\_finRotate\_of\_le}). Mathlib's formula \texttt{Equiv.Perm.nat\_card\_centralizer}
+gives $|C_{S_n}(g)|=(n-\Sigma)!\cdot\prod\lambda\cdot\prod_k m_k!$ for $g$ of cycle type $\lambda$ with sum
+$\Sigma$ and multiplicities $m_k$. For $\lambda=\{n\}$ this is $0!\cdot n\cdot 1!=n$. The map
+$C_{A_n}(\sigma)\to C_{S_n}(\sigma)$ forgetting evenness is injective, so $|C_{A_n}(\sigma)|\le n$.
+\end{proof}
+
+\begin{lemma}[\texttt{A\_hyps}, \texttt{factorial\_lower}, \texttt{cyc\_ne\_one}]
+For $n=2m+1$ with $m\ge 2$: $A_n$ is simple, nonabelian and of even order, $\sigma\ne1$, and
+$n!\ge n^2(n-3)$.
+\end{lemma}
+\begin{proof}
+Simplicity is \texttt{alternatingGroup.isSimpleGroup} (needs $n\ge5$). Write $n=(n-3)+3$; then
+$n!=n(n-1)(n-2)(n-3)!$, with $(n-1)(n-2)\ge n$ and $(n-3)!\ge n-3$. We have $2|A_n|=n!$
+(\texttt{two\_mul\_nat\_card\_alternatingGroup}), and $24=4!\mid n!$, so $|A_n|$ is even. If $A_n$ were
+abelian, then $C_{A_n}(\sigma)=A_n$, which would give $n!/2\le n$. That contradicts $n!\ge n^2(n-3)$. If
+$\sigma=1$, then $C_{S_n}(\sigma)=S_n$ has order $n!>n$, a contradiction.
+\end{proof}
+
+\begin{lemma}[\texttt{ratio\_aux}]
+Let $q,r,C,N\in\mathbb N$ and $c>0$ with $q>0$, $C\le q$, $q^2r\le N$ and $c^2r>1$. Then $C<c\sqrt N$.
+\end{lemma}
+\begin{proof}
+$q^2<c^2r\,q^2\le c^2N$, so $C\le q=\sqrt{q^2}<\sqrt{c^2N}=c\sqrt N$.
+\end{proof}
+
+\begin{theorem}[\texttt{not\_lowerBoundAllElements}]
+Reading (R1) with $c=1/8$ is false.
+\end{theorem}
+\begin{proof}
+Take $G=A_9$ and $x=\sigma$. Then $|G|=9!/2=181440=81\cdot2240$ and $|C_G(x)|\le 9$. Apply
+\texttt{ratio\_aux} with $q=9$, $r=2240$, $c=\tfrac18$: $c^2r=35>1$, so $|C_G(x)|<\tfrac18\sqrt{|G|}$.
+\end{proof}
+
+\begin{theorem}[\texttt{alternating\_centralizer\_ratio\_small}]
+For every real $c>0$ there are $n\ge5$ and $x\ne1$ in $A_n$ such that $A_n$ is simple, nonabelian and of even
+order, and $|C_{A_n}(x)|<c\sqrt{|A_n|}$.
+\end{theorem}
+\begin{proof}
+Let $m=\lceil 1/c^2\rceil+2$, $n=2m+1$ and $x=\sigma$. Since $2|A_n|=n!\ge n^2(2m-2)$, we get
+$|A_n|\ge n^2(m-1)$, and $c^2(m-1)=c^2(\lceil 1/c^2\rceil+1)>1$. Apply \texttt{ratio\_aux} with
+$q=n$, $r=m-1$.
+\end{proof}
+
+\begin{theorem}[\texttt{not\_attainedByA5Involution}, \texttt{a5\_not\_near\_tight}]
+$|A_5|=60$ and $\tfrac18\sqrt{60}<1$. Every $x\in A_5$ has $|C(x)|\ge1>\tfrac18\sqrt{60}$, so
+\texttt{AttainedByA5Involution} is false. Every $x\ne1$ has $|C(x)|\ge2>2\cdot\tfrac18\sqrt{60}$.
+\end{theorem}
+\begin{proof}
+$\sqrt{60}<8$ because $60<64$. Every subgroup has order $\ge1$. If $x\ne1$, then $1$ and $x$ are distinct
+elements of $C(x)$.
+\end{proof}
+
+For the record (checked by brute force in the attached Python, not used in Lean), the centralizer orders in
+$A_5$ are $3,4,5$ and $60$. All $15$ involutions have $|C(t)|=4$, so the involution ratio is
+$4/\sqrt{60}\approx0.516$, far from $1/8$. Exact equality $k=\tfrac18\sqrt{|G|}$ would need
+$|G|=64k^2$, and $60$ is not of that form.
+
+\subsection*{Reading (R2): involutions in $\mathrm{PSL}(2,2^k)$}
+
+Let $F$ be a finite field of characteristic $2$ with $q=|F|$. Recall
+$\mathrm{PSL}(2,F)=\mathrm{SL}(2,F)/Z(\mathrm{SL}(2,F))$ (Mathlib's \texttt{Matrix.ProjectiveSpecialLinearGroup}).
+
+\begin{lemma}[\texttt{eq\_one\_of\_sq\_eq\_one}, \texttt{center\_SL\_eq\_bot}, \texttt{toPSL}]
+If $a\in F$ and $a^2=1$ then $a=1$. The center of $\mathrm{SL}(2,F)$ is trivial, so the quotient map
+$\mathrm{SL}(2,F)\to\mathrm{PSL}(2,F)$ is an isomorphism.
+\end{lemma}
+\begin{proof}
+$(a+1)^2=a^2+1=1+1=0$, so $a=-1=1$. By \texttt{SpecialLinearGroup.mem\_center\_iff} a central element is a
+scalar $rI$ with $r^2=1$, hence $r=1$. A surjective homomorphism with trivial kernel is bijective.
+\end{proof}
+
+\begin{lemma}[\texttt{T\_sq}, \texttt{T\_ne\_one}, \texttt{entries\_of\_comm}]
+Let $T=\begin{pmatrix}1&1\\0&1\end{pmatrix}\in\mathrm{SL}(2,F)$. Then $T^2=1\ne T$. If
+$A=\begin{pmatrix}a&b\\c&d\end{pmatrix}\in\mathrm{SL}(2,F)$ commutes with $T$, then $a=d=1$ and $c=0$.
+\end{lemma}
+\begin{proof}
+$T^2=\begin{pmatrix}1&2\\0&1\end{pmatrix}=1$ in characteristic $2$. $AT=\begin{pmatrix}a&a+b\\c&c+d\end{pmatrix}$
+and $TA=\begin{pmatrix}a+c&b+d\\c&d\end{pmatrix}$, so $c=0$ and $a=d$; then $\det A=a^2=1$ gives $a=1$.
+\end{proof}
+
+\begin{lemma}[\texttt{card\_SL\_lower}, \texttt{card\_centralizer\_le}]
+$|\mathrm{SL}(2,F)|\ge(q-1)q^2$, and the centralizer of $t=\mathrm{toPSL}(T)$ in $\mathrm{PSL}(2,F)$ has order
+at most $q$.
+\end{lemma}
+\begin{proof}
+$(a,b,c)\mapsto\begin{pmatrix}a&b\\c&a^{-1}(1+bc)\end{pmatrix}$ is an injection $F^\times\times F\times F\to
+\mathrm{SL}(2,F)$. For the centralizer, $g\mapsto(\mathrm{toPSL}^{-1}g)_{01}$ is injective on $C(t)$: by the
+previous lemma $\mathrm{toPSL}^{-1}g=\begin{pmatrix}1&b\\0&1\end{pmatrix}$ is determined by $b$. (In fact
+$|C(t)|=q$ and $|G|=q(q^2-1)$; only the two inequalities are used.)
+\end{proof}
+
+\begin{lemma}[\texttt{psl\_facts}]
+If $q\ge4$, then $G=\mathrm{PSL}(2,F)$ is simple, nonabelian and of even order, $t$ has order $2$,
+$|C_G(t)|\le q$ and $|G|\ge(q-1)q^2$.
+\end{lemma}
+\begin{proof}
+Simplicity is Mathlib's \texttt{Matrix.ProjectiveSpecialLinearGroup.rank\_two\_simple} (for $|F|\ge4$). The
+order of $t$ is $2$ by \texttt{orderOf\_eq\_prime}, since $T^2=1\ne T$ and toPSL is injective; hence $2\mid|G|$.
+If $G$ were abelian, then $C_G(t)=G$ and $(q-1)q^2\le|G|\le q$, which is impossible for $q\ge4$.
+\end{proof}
+
+\begin{theorem}[\texttt{not\_lowerBoundInvolutions}]
+Reading (R2) with $c=1/8$ is false.
+\end{theorem}
+\begin{proof}
+Take $F=\texttt{GaloisField 2 7}$, so $q=128$ (\texttt{GaloisField.card}), and $x=t$. Apply
+\texttt{ratio\_aux} with $q=128$, $r=127$, $c=\tfrac18$: $c^2r=127/64>1$, so
+$|C_G(t)|<\tfrac18\sqrt{|G|}$. Numerically $|G|=128\cdot16383=2097024$ and $\tfrac18\sqrt{|G|}\approx181>128$.
+\end{proof}
+
+\begin{theorem}[\texttt{psl\_centralizer\_ratio\_small}]
+For every real $c>0$ there is $k$ such that $G=\mathrm{PSL}(2,\texttt{GaloisField 2 k})$ is simple, nonabelian
+and of even order and has an involution $t$ with $|C_G(t)|<c\sqrt{|G|}$.
+\end{theorem}
+\begin{proof}
+Let $k=\lceil1/c^2\rceil+2$ and $q=2^k\ge4$. Since $q-1\ge k>1/c^2$, apply \texttt{ratio\_aux} with $r=q-1$.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_2291\_false}, main theorem]
+The conjunction of: $\neg$\texttt{LowerBoundAllElements}; the every-$c>0$ statement for (R1);
+$\neg$\texttt{LowerBoundInvolutions}; the every-$c>0$ statement for (R2); $\neg$\texttt{AttainedByA5Involution};
+and the factor-$2$ slack at every nonidentity element of $A_5$.
+\end{theorem}
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture2291/Basic.lean} (namespace \texttt{C2291}, Lean 4 / Mathlib v4.33.1, only
+\texttt{import Mathlib}). Theorems: \texttt{finRotate\_mem\_alternatingGroup},
+\texttt{card\_centralizer\_finRotate\_perm}, \texttt{card\_centralizer\_cyc\_le}, \texttt{cyc\_ne\_one},
+\texttt{two\_mul\_card\_A'}, \texttt{factorial\_lower}, \texttt{A\_hyps}, \texttt{ratio\_aux},
+\texttt{alternating\_centralizer\_ratio\_small}, \texttt{not\_lowerBoundAllElements}, \texttt{card\_A5},
+\texttt{sqrt60\_div8\_lt\_one}, \texttt{a5\_not\_near\_tight}, \texttt{not\_attainedByA5Involution},
+\texttt{eq\_one\_of\_sq\_eq\_one}, \texttt{center\_SL\_eq\_bot}, \texttt{toPSL}, \texttt{T\_sq}, \texttt{T\_ne\_one},
+\texttt{entries\_of\_comm}, \texttt{card\_SL\_lower}, \texttt{card\_centralizer\_le}, \texttt{psl\_facts},
+\texttt{not\_lowerBoundInvolutions}, \texttt{psl\_centralizer\_ratio\_small}, and the main theorem \texttt{conjecture\_2291\_false}. \texttt{lake build} succeeds, and
+\texttt{\#print axioms C2291.conjecture\_2291\_false} reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}
