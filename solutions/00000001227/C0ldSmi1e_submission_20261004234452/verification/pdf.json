@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "checked_at_utc": "2026-10-04T23:41:01.670273+00:00",
+  "source_sha256": "d09f1892f3c7649c7ee2a129be42e418dc7ad9bc365035dcf327314e93f87d56",
+  "pdf_sha256": "10aaf1e3bd20a8f18846b83b7b6104892e8746f4084eda9e6df3482aa15b8d0c",
+  "pdf_size_bytes": 55141,
+  "page_count": 3,
+  "native_compilation": {
+    "status": "success",
+    "record": "native-compile.json",
+    "source_sha256": "d09f1892f3c7649c7ee2a129be42e418dc7ad9bc365035dcf327314e93f87d56"
+  },
+  "export": {
+    "command": [
+      "tectonic",
+      "-X",
+      "compile",
+      "main.tex",
+      "--outdir",
+      ".",
+      "--keep-logs"
+    ],
+    "version": "0.17.0",
+    "exit_code": 0,
+    "log_sha256": "8a25e8fd12de501572639e1f7434d79db8c2e9d89bdeb4fa43e127a79774bfb7",
+    "warnings_or_box_diagnostics": []
+  },
+  "visual_review": {
+    "status": "PASS",
+    "reviewer_role": "coordinator/report author",
+    "pages_inspected": [
+      1,
+      2,
+      3
+    ],
+    "render_command": [
+      "pdftoppm",
+      "-scale-to",
+      "1600",
+      "-png",
+      "main.pdf",
+      "page"
+    ],
+    "page_images": {
+      "page-1.png": "005ceb97664f4b547d11e44da0782b5b883b85b6a146d260ae66054784e9a467",
+      "page-2.png": "affa12fd61be2dc83158a1575820e9a90a8af7e5a17ecac8fffa9236eb23a9c7",
+      "page-3.png": "749ef6a8cd8e668580f96e5299e83d0f1666ebafd385d0ccbb8a7db3d5ff540b"
+    },
+    "findings": "All three final rendered pages inspected again after the command-ligature correction: complete legible formulas, intact table/references, no clipping or overlap. PDF text extraction confirms literal ASCII --max-n. Mathematics unchanged."
+  },
+  "review_requested_correction": "Suppressed LaTeX hyphen ligature in the Python --max-n option; recompiled natively, re-exported and visually reinspected all pages."
+}

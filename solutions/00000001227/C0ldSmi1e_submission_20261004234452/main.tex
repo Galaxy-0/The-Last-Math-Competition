@@ -1,0 +1,222 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[margin=0.82in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,array}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Conjecture 00000001227}
+\fancyhead[R]{\small Complete proof in the finite-game setting}
+\fancyfoot[C]{\small\thepage}
+\setlength{\headheight}{14pt}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\Win}{\mathsf{Win}}
+\newcommand{\Ess}{\mathsf{E}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Maximum matchings and vertex geography}\\[7pt]
+{\large A Lean 4 proof of conjecture 00000001227}\\[6pt]
+C0ldSmi1e \quad $\cdot$ \quad 4 October 2026
+\end{center}
+
+\section*{Statement and scope}
+For every finite simple undirected graph $G$ and specified initial vertex $v$,
+the first player wins normal-play vertex geography precisely when every
+maximum-cardinality matching of $G$ saturates $v$. We prove this for all such
+graphs, including disconnected graphs and isolated starting vertices.
+No perfect matching is assumed to exist.
+
+The accompanying \code{conjecture.md} preserves the exact English and Chinese
+statement. Both versions explicitly use \emph{every maximum matching} in the
+winning criterion. We interpret a vertex's belonging to a matching as being an
+endpoint of a matching edge, and ``maximum'' as maximum edge cardinality,
+not merely inclusion-maximal. The introductory mention of perfect matchings
+does not replace that quantifier or restrict the class of graphs.
+
+The short source does not explicitly specify finiteness, simplicity, turn order,
+or the losing condition. We use the conventional finite, simple, undirected,
+impartial normal-play game, as described in the literature
+\cite{fox,gates}. These are disclosed named-game conventions, not additional
+words attributed to the source. We do not assert an infinite-graph theorem:
+infinite play and draws would require a separately specified outcome convention.
+
+\section*{The actual game and matching objects}
+The token is already on $v$ before the first move. Players alternate moving it
+along an edge to a previously unvisited vertex. The starting vertex counts as
+visited. On leaving a vertex it is deleted, so it can never be revisited.
+A player with no legal move loses.
+
+A residual position is $(S,v)$, where $S$ is the finite set consisting of the
+current vertex and all still-unvisited vertices, and $v\in S$. Its legal moves
+are to $(S\setminus\{v\},w)$ with $w\in S\setminus\{v\}$ and $vw\in E(G)$.
+Each move decreases $|S|$ by one. Thus ordinary finite backward induction gives
+the winning predicate
+\[
+ \Win(S,v)\ \Longleftrightarrow\
+ \exists w\in S\setminus\{v\},\quad vw\in E(G)
+ \ \text{and}\ \neg\Win(S\setminus\{v\},w).
+\]
+This recurrence describes a winning strategy: choose a losing successor on
+one's own turn; every opponent move from a losing position returns a winning
+position. The decreasing vertex count ensures termination. With no successor,
+the existential statement is false, as normal play requires.
+
+A matching on $S$ is a finite set of unordered edges of $G$, all endpoints in
+$S$, with distinct edges sharing no endpoint. It saturates $v$ if some edge
+contains $v$. It is maximum if its number of edges is at least that of every
+matching on $S$. Write $\Ess(S,v)$ when every maximum matching on $S$ saturates
+$v$. A maximum always exists: all matchings lie in the finite powerset of the
+unordered pairs on $S$, and the empty matching is a candidate.
+
+\newpage
+\section*{Proof}
+\begin{lemma}[The matching recurrence]
+For every valid residual position $(S,v)$,
+\[
+ \Ess(S,v)\ \Longleftrightarrow\
+ \exists w\in S\setminus\{v\},\quad vw\in E(G)
+ \ \text{and}\ \neg\Ess(S\setminus\{v\},w).
+\]
+\end{lemma}
+\begin{proof}
+Suppose first that $\Ess(S,v)$ holds. Choose a maximum matching $M$ on $S$.
+It has an edge $e=vw$ incident to $v$. Since the graph has no loops,
+$w\in S\setminus\{v\}$. Put $N=M\setminus\{e\}$.
+The matching property ensures that $N$ saturates neither $v$ nor $w$;
+in particular, it is a matching on $S\setminus\{v\}$.
+
+We claim that $N$ is maximum there. Any matching $L$ on $S\setminus\{v\}$
+is also a matching on $S$, so $|L|\leq |M|$. Equality would make $L$ a maximum
+matching on $S$ that does not saturate $v$, contradicting $\Ess(S,v)$.
+Therefore $|L|<|M|$, and the integer inequality implies
+$|L|\leq |M|-1=|N|$. Thus $N$ is maximum on $S\setminus\{v\}$ and misses $w$,
+which proves $\neg\Ess(S\setminus\{v\},w)$.
+
+Conversely, suppose that $vw$ is a legal move and
+$\neg\Ess(S\setminus\{v\},w)$. There is a maximum matching $N$ on
+$S\setminus\{v\}$ that misses $w$. It also misses $v$, so
+$K=N\cup\{vw\}$ is a matching on $S$ with $|K|=|N|+1$.
+
+Let $M$ be any maximum matching on $S$. If it missed $v$, it would itself be
+a matching on $S\setminus\{v\}$, giving $|M|\leq |N|$ by maximal cardinality
+of $N$. But maximum cardinality of $M$ on $S$ gives
+$|N|+1=|K|\leq |M|$, a contradiction. Every such $M$ must saturate $v$.
+\end{proof}
+
+\begin{theorem}[The vertex-geography criterion]
+At every valid residual position $(S,v)$,
+$\Win(S,v)\longleftrightarrow\Ess(S,v)$.
+Consequently the first player wins from any specified vertex of any finite
+simple undirected graph if and only if every maximum matching saturates it.
+\end{theorem}
+\begin{proof}
+Induct on the size of $S$. The game recurrence and the matching recurrence
+have identical legal successors. Each successor has smaller available-vertex
+set and a valid current vertex. The induction hypothesis identifies the two
+predicates at each successor, and hence identifies their negations and the
+existential statements defining the current position. This establishes the
+equivalence. Initially take $S$ to be the entire vertex set.
+\end{proof}
+
+An isolated start has no legal successor and therefore loses, regardless of
+other components. The Lean project also states this case separately. When the
+vertex type is empty there is no start vertex; the universal initial theorem
+remains valid without needing a nonempty-graph assumption.
+
+\section*{Attribution}
+The characterization is already a known theorem. Gates et al.,
+Theorem 2.8, explicitly attribute it to Theorem 1.1 of
+Fraenkel, Scheinerman and Ullman's \emph{Undirected edge geography}
+\cite{gates,fsu}; Fox and Geissler also state the vertex criterion
+\cite{fox}. The source's description as an extension of an edge result is
+historically misleading. This submission gives a complete proof and formalization
+of its mathematical criterion; it makes no novelty claim and does not treat
+that historical sentence as a further Lean theorem.
+
+\newpage
+\section*{Formalization and verification}
+The project pins Lean 4.19.0 and Mathlib v4.19.0. Graphs are Mathlib
+\code{SimpleGraph} objects. Edges are \code{Sym2} unordered pairs;
+matchings are actual finite edge sets, and size counts edges.
+The seven authored definitions and fourteen theorems are distributed as follows.
+
+\begin{center}\small
+\begin{tabular}{@{}p{0.27\linewidth}p{0.67\linewidth}@{}}
+\toprule
+Module & Mathematical content \\
+\midrule
+\code{Matching.lean} & Matching, saturation, maximum cardinality, the universal
+matching condition, existence of a maximum, and the deletion recurrence. \\
+\code{Game.lean} & Legal moves and a separate well-founded definition of
+\code{Wins}, its normal-play recurrence and uniqueness, and the initial position. \\
+\code{Main.lean} & Equivalence at every valid residual position, the full initial
+criterion, and loss from an isolated start. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The main declaration, in namespace \code{Conjecture1227}, is
+\begin{center}\small\ttfamily
+first\_player\_wins\_iff\_every\_maximum\_matching\_saturates.
+\end{center}
+It quantifies over an arbitrary finite vertex type, arbitrary simple graph,
+arbitrary start and every maximum matching. The \code{Fintype} and
+\code{DecidableEq} instances provide finite-set representation, with no graph
+restriction. The stronger \code{wins\_iff\_essential} theorem allows an arbitrary
+finite residual set even in an otherwise unrestricted ambient vertex type.
+Invalid positions $v\notin S$ are assigned false by the game definition, but
+the criterion is asserted only for valid positions. Initially and after every
+legal move the validity condition holds.
+
+\code{Wins} is defined only through legal moves and normal play; it has no
+matching input. The general uniqueness theorem for this terminating recurrence
+is applied to the independently proved matching recurrence. The proof uses
+neither a matching oracle nor a hypothesis assuming the desired equivalence.
+
+From the bundled \code{lean/} directory, run \code{lake build}, then
+\code{lake env lean -DwarningAsError=true Check.lean}. The library build itself
+treats warnings as errors. \code{Check.lean} prints all authored definitions
+and every authored theorem's type and transitive axiom dependencies.
+The accompanying verification records document an independent build with fresh
+local outputs, strict replays of every source file, all nine pinned dependency
+revisions, compiler identity, source hashes, and a complete inventory of constants
+originating in the submitted modules, including generated declarations.
+Only the standard foundational axioms are permitted. No admitted proof,
+\code{native\_decide}, custom axiom or authored unsafe proof is used.
+
+As auxiliary evidence, run
+\code{python3 auxiliary/check\_vertex\_geography.py -{}-max-n 6} from the submission
+directory. Separate algorithms enumerate actual matchings and evaluate game
+trees. All 33,868 labelled simple graphs on zero through six vertices and
+202,013 starts agree, including 6,391 disconnected graphs and 6,505 isolated
+starts. The empty graph contributes no start. This exhaustive finite check is
+supplementary; the theorem above and its Lean proof cover every finite size.
+
+The package includes the exact bilingual source, the report and matching PDF,
+the Lean project, the auxiliary script and results, and verification records.
+An independent internal semantic review checks their correspondence.
+Local verification and internal review are distinct from repository maintainer
+acceptance.
+
+\begin{thebibliography}{9}\small
+\bibitem{fox} N. Fox and C. Geissler.
+\emph{On the Computational Complexities of Various Geography Variants}, 2021,
+\S1 and \S5. \url{https://arxiv.org/abs/2108.09367}.
+\bibitem{gates} Z. Gates, D. Hayes, R. Kelvey, W. Lillis and M. Phan.
+\emph{Cycle Games on Graphs}. Integers 24 (2024), article G4, \S2.1, Theorem 2.8.
+\url{https://math.colgate.edu/~integers/yg4/yg4.pdf}.
+\bibitem{fsu} A. S. Fraenkel, E. R. Scheinerman and D. Ullman.
+\emph{Undirected edge geography}. Theoretical Computer Science 112 (1993),
+371--381. \url{https://doi.org/10.1016/0304-3975(93)90026-P}.
+The vertex-theorem attribution is corroborated by \cite{gates}; the original
+full text was not inspected for this report.
+\end{thebibliography}
+\end{document}
