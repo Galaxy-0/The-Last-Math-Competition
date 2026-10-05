@@ -1,0 +1,3 @@
+import Conjecture7664
+#print axioms C7664.conjecture_00000007664_false
+#print axioms C7664.counterexample_values_genuine
