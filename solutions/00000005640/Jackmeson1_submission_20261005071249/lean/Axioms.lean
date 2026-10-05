@@ -1,0 +1,3 @@
+import Conjecture5640
+#print axioms Conjecture5640.conjecture5640_false
+#print axioms Conjecture5640.conjecture5640_separate_false
