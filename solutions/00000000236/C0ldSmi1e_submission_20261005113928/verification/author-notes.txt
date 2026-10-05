@@ -1,0 +1,129 @@
+AUTHOR NOTES — CONJECTURE 00000000236
+Status: READY for independent nonauthor review of the completed mathematical Lean project.
+Author: the same candidate-isolated agent that performed the source-semantic preassessment. These are not independent author/preassessor roles. The separate nonauthor review remains the coordinator's responsibility.
+
+FILES AND IDENTITIES
+Final proof project: /private/tmp/tlmc236-proof
+Final mathematical source: /private/tmp/tlmc236-proof/Conjecture236.lean
+Namespace: Conjecture236
+Final target: Conjecture236.conjecture236_false : ¬ Conjecture236.OriginalConjecture
+Source SHA-256: b159312a5ff44597b1005591400c5dc93a12c56fbee777c5c93da2e70ffed13f
+lakefile.toml SHA-256: c1a9ce617f618362d5cec25e52a5b907c088572d2bb86581419402880b00186b
+lake-manifest.json SHA-256: 8ac0056859cb138a79a4f16bf78f17ad950992b9f89473e13066518ad6a8dd8d
+lean-toolchain SHA-256: 55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea
+Original bilingual source: /private/tmp/tlmc236-eligibility/conjecture.md
+Original source SHA-256: f4eea1fdfa6a87766874091decf064e18eebca0455ea5a945b94c25f8c86169c
+Unchanged preassessment: /private/tmp/tlmc236-semantic/preassessment.txt
+Preassessment SHA-256: 549ee2f5df50920c86a2aa4b71b35b149f9ce8a084547365eb34cced798c31d1
+
+FULL SOURCE AND RESULT
+English: Definition: D(n) is the maximum absolute value of the determinant of an n-th order ±1 matrix. Conjecture: (i) Hadamard matrices exist for every 4 | n (the Hadamard conjecture); (ii) D(n)/n^{n/2} → 1.
+Chinese: 定义：D(n) = n 阶 ±1 方阵行列式的最大绝对值。猜想：(i) Hadamard 矩阵对一切 4 | n 存在(Hadamard 猜想);(ii) D(n)/n^{n/2} → 1。
+The result disproves this full conjunction. It does so by establishing the negation of clause (ii), with clause (i) retained faithfully in the formal original proposition. It makes no assertion settling clause (i) on its own. No hypothesis about the truth or falsity of the Hadamard conjecture is assumed anywhere in the disproof.
+
+COMPLETE MATHEMATICAL ARGUMENT
+1. Scalar product estimate.
+Let x_1,...,x_n be nonnegative reals with sum n and sum (x_i-1)^2 >= 1/2. Put u_i = sqrt(x_i) and S = sum (u_i-1)^2.
+If S < 1/18, each (u_i-1)^2 <= S < 1, and since u_i >= 0, we have u_i <= 2. Hence (u_i+1)^2 <= 9 and
+  (x_i-1)^2 = (u_i-1)^2 (u_i+1)^2 <= 9 (u_i-1)^2.
+Summing would give sum (x_i-1)^2 <= 9S < 1/2, a contradiction. Thus S >= 1/18.
+The standard exponential inequality 1+t <= exp(t), with t=u_i-1, gives u_i <= exp(u_i-1). Both sides are nonnegative, so squaring yields x_i <= exp(2(u_i-1)). The sum condition and u_i^2=x_i imply sum 2(u_i-1) = -S. Multiplication of the termwise inequalities therefore gives
+  product x_i <= exp(-S) <= exp(-1/18).
+This is the fully proved lemma product_gap. It allows zero x_i and never takes logarithms or assumes invertibility.
+
+2. Odd-order Gram matrices.
+Let A be any real n-by-n sign matrix, with n odd and n >= 2 (therefore n >= 3), and let G=A A^T. Then G is positive semidefinite and real symmetric, with diagonal entries n. Every G_ij is a sum of n terms in {−1,1}, so it is an odd integer. In particular G_ij is nonzero and G_ij^2 >= 1.
+For a fixed row i, the diagonal contribution is n^2 and each of the n-1 other contributions is at least 1. Thus sum_j G_ij^2 >= n^2+n-1. The Lean proof equivalently subtracts 1 from every squared entry and applies a single-term lower bound to the diagonal; no unproved counting formula is used. Summing rows, and using symmetry, gives
+  trace(G^2) = sum_i sum_j G_ij^2 >= n(n^2+n-1).
+Also trace(G)=n^2.
+
+3. Spectral normalization.
+Let lambda_i be the real eigenvalues of G and put x_i=lambda_i/n. Positive semidefiniteness gives lambda_i >= 0. The standard real spectral theorem gives
+  sum lambda_i = trace(G),
+  sum lambda_i^2 = trace(G^2),
+  product lambda_i = det(G).
+The two trace identities are explicitly proved in spectral_moments from Mathlib's unitary diagonalization and cyclic trace identities. The determinant identity is Mathlib's IsHermitian.det_eq_prod_eigenvalues.
+Consequently sum x_i=n and
+  sum (x_i-1)^2 = trace(G^2)/n^2 - n >= 1-1/n >= 1/2.
+By step 1,
+  det(A)^2/n^n = det(G)/n^n = product x_i <= exp(-1/18).
+The formal theorem sign_determinant_gap proves this uniformly for every sign matrix at every such odd order. This is an analytic universal proof, not a finite enumeration, numerical estimate, table, or asserted extremal-determinant theorem.
+
+4. Exact maximum and original normalization.
+The collection of Boolean n-by-n matrices is finite and nonempty. Send true to the integer 1 and false to the integer −1, then use the canonical embedding into the reals. This yields exactly all real sign matrices: realMatrix_isSignMatrix proves one direction, and sign_encoding_complete proves surjectivity onto the entire class in the other direction.
+D is defined as the finite supremum of the absolute real determinant over this nonempty encoded class. D_attained proves an actual matrix attains it. determinant_le_D applies to every arbitrary real sign matrix. D_isMaximum combines attainment and the universal upper-bound property, thereby identifying this D exactly with the original maximum.
+For n>0, n^(n/2) is positive and its square is n^n. The real-exponent interpretation and these two facts are explicit in normalization_pos and normalization_square. The exponent is real division, not natural-number division.
+Applying step 3 to a maximizing matrix and using absolute-value squares gives
+  D(n)/n^(n/2) <= exp(-1/36) < 1
+for every odd n>=2. The formal theorem normalizedMaximum_odd_gap proves this exact inequality without an approximate decimal constant.
+
+5. Failure of convergence and full logical target.
+If the normalized sequence converged to 1, it would eventually be strictly above c=exp(-1/36), since c<1. For any proposed threshold N, the order 2N+3 is odd, at least 3, and at least N. Step 4 says its normalized value is at most c, contradicting eventual strict inequality. This proves not_AllOrdersLimit.
+OriginalConjecture is defined as HadamardConjecture AND AllOrdersLimit. The final theorem conjecture236_false derives its actual negation from not_AllOrdersLimit. The mathematical report must retain this exact logical structure and must not present the work as disproving HadamardConjecture separately.
+
+SOURCE CORRESPONDENCE AND BOUNDARIES
+- SignMatrix n is only a finite encoding. D_isMaximum quantifies over all real matrices and is the semantic bridge to the original definition.
+- integerMatrix uses ordinary integer ±1; realMatrix uses the canonical integer-to-real embedding; gram uses ordinary matrix multiplication and transpose.
+- IsSignMatrix H is the explicit condition that every H_ij is 1 or −1.
+- IsHadamard H means IsSignMatrix H and H H^T = n I. isHadamard_iff_rows proves this is exactly the standard row-dot-product condition: sum_k H_ik H_jk is n if i=j and 0 otherwise.
+- HadamardConjecture quantifies over every natural n with 0<n and 4 dividing n, and existentially quantifies the corresponding real matrix. No zero-order or complex-matrix substitute is used.
+- normalizedMaximum n is D(n) divided by Real.rpow (n:Real) ((n:Real)/2).
+- AllOrdersLimit uses the usual real topology and the natural-number atTop filter, with no divisibility restriction or subsequence filter.
+- allOrdersLimit_iff_positive_epsilon proves the exact equivalence to: for every real epsilon>0, there is a natural N>0 such that for all n>=N, |normalizedMaximum n-1|<epsilon. This supplies the explicit positive-order interpretation and proves that the formal natural index zero is an irrelevant finite extension.
+- The uniform bound is used only on odd orders >=3. Nothing is inferred from order zero, natural floor division, totalized division by zero, or a finite initial exception. Orders 1 and 2 remain part of D's definition and cause no change to the limiting statement.
+
+DEFINITIONS, THEOREMS, INSTANCES, GENERATED CONSTANTS
+There are 33 explicitly written named declarations, listed in /private/tmp/tlmc236-auxiliary/named-declarations.json. Their full actual types, transitive axioms, all source definition bodies, and the types of generated namespace constants are printed by /private/tmp/tlmc236-auxiliary/Inspect.lean. The complete successful output is inspect014.log. Unlike the earlier inspection attempt, the final output has no ellipsis placeholders, errors, or warnings.
+All final mathematical declarations are inside namespace Conjecture236. No custom typeclass instances, axioms, unsafe definitions, partial definitions, admitted proofs, or native_decide calls are declared in the mathematical source.
+The source opens the standard ComplexOrder scope only to expose Mathlib's RCLike.toStarOrderedRing instance for the REAL scalar type used in the positive-semidefinite Gram theorem. The actual real order is Real.linearOrder; the scope does not turn the matrices into complex matrices or replace the usual real order. The inspection prints the resolved RCLike, star-order, linear-order, powers, topology/metric, finite-type, matrix-multiplication, and scalar-action instances. It also prints Real.instPow, whose real exponent operation is exactly Real.rpow.
+Lean creates ordinary equation lemmas, proof auxiliaries (_proof_*), and compiler implementation constants (_cstage1, _cstage2, _rarg, _closed_*). Some compiler-only implementation constants are flagged unsafe and have runtime-object types. These do not occur in the transitive kernel type/value dependency closure of any of the 33 written declarations. They are not mathematical assumptions or proof dependencies.
+The separate executable Audit.lean traverses the checked kernel environment starting from all 33 source declarations, follows both types and values (including opaque values through Lean's standard ConstantInfo utility), and rejects any unsafe/partial dependency or any axiom outside propext, Classical.choice, and Quot.sound. The successful audit015.log reports 29,160 visited declarations, no unsafe or partial logical dependency, and exactly those three standard axioms. It lists all compiler-only unsafe artifacts separately as outside the logical closure. The audit is inspection tooling outside the proof project; no mathematical theorem depends on it.
+
+TOOLCHAIN AND DEPENDENCY PROVENANCE
+Full compiler --githash: 6caaee842e9495688c1567e78c0e68dbb96942aa
+Compiler binary SHA-256: 5c1fe58db7d10b1cd0ddff1a1cbc49db2396fff9c6c983cc3b49f1c5c1ae241b
+Compiler: Lean 4.19.0, arm64-apple-darwin23.6.0, Release.
+Compiler binary: /private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lean
+Mathlib source and infrastructure were the authorized shared dependency cache, not prior competition mathematics.
+All nine actual HEAD revisions match the pinned manifest, and tracked working-tree/index changes are absent:
+  mathlib: c44e0c8ee63ca166450922a373c7409c5d26b00b
+  plausible: 77e08eddc486491d7b9e470926b3dbe50319451a
+  LeanSearchClient: 25078369972d295301f5a1e53c3e5850cf6d9d4c
+  importGraph: e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b
+  proofwidgets: c4919189477c3221e6a204008998b0d724f49904
+  aesop: 5d50b08dedd7d69b3d9b3176e0d58a23af228884
+  Qq: fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02
+  batteries: f5d04a9c4973d401c8c92500711518f7c656f034
+  Cli: 02dbd02bc00ec4916e99b04b2245b30200e200d0
+The full commands, actual revisions, status/diff outputs, compiler output and hashes were captured in provenance.{json,log} before the first build, and again in provenance-final018.{json,log} after completion. No shared dependency source or pin was edited.
+
+EXECUTION AND AUXILIARY INVENTORY
+All paths in this section are under /private/tmp/tlmc236-auxiliary unless absolute paths are given.
+- record.py is a build/inspection recorder. Current version refuses reused output labels, snapshots the exact mathematical source, binds source/config/explicit-input hashes at invocation, streams combined stdout/stderr directly to a persistent log, records honest UTC start/end times and actual child status, and catches interruptions/launch failures. It is not mathematical computation.
+- provenance.py reads the compiler and all dependency repositories. It was executed before the first build and after the final proof.
+- Inspect.lean prints full actual types/axioms/definitions/notation and resolved instances. Final SHA-256: cc23b732405847dcb02a46b323c241f09221a305b6a7f40b9d4c888ac6c673c5. Successful final run: inspect014.{json,log}; log SHA-256 54ceeee2e88e1d44176cdc0e7492d5cc5be9127c4b3b8a679b0da3fcd6035fd1.
+- Audit.lean checks all transitive logical dependencies as explained above. SHA-256: ecf731c0916cc628953bd2af334bd9ff2ebb38a517013c57e163073cc08562a6. Successful run: audit015.{json,log}; log SHA-256 e203af8731b696aef170d02e02eabf895c0eb52b7aa6a57f4dc0b20d2b79e384.
+- final-input-check.py verifies final source hashes, final newlines/whitespace, the absence of forbidden proof mechanisms, the absence of Check.lean, the unchanged semantic assessment and original source, lack of printer ellipses in final inspection, and integrity of recorded output hashes. Successful run: final-inputs016.{json,log}.
+- Lookup.lean is a developmental library-name/type inspection. It contains no mathematical result, is outside the proof project, and ran successfully as lookup001.{json,log}.
+- inspect012-inspection.lean and inspect013-inspection.lean retain earlier inspection source versions; their failed/successful records are preserved and neither is imported by the proof project.
+- Every completed developmental compile has a distinct lean002 through lean010 .json/.log pair plus a byte-for-byte <label>-source.lean snapshot. All recorded developmental failures remain present. Read-only library inspection and infrastructure checks also have separate named records.
+- Successful actual Lake build: build011.{json,log}, command lake build, exit 0, source hash b159312a5ff44597b1005591400c5dc93a12c56fbee777c5c93da2e70ffed13f. The log states Built Conjecture236 and Build completed successfully. Log SHA-256: 4444549d7fe8680e722d1360d7db58c7f75ba6718ea4fb8dd985c37083087c9c.
+- Successful final strict source replay: strict-final017.{json,log}, command lake env lean -DwarningAsError=true Conjecture236.lean, exit 0, same final source hash, empty diagnostic output. Log SHA-256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.
+- execution-index.json is a convenience index of JSON execution records; the authoritative individual files remain alongside it. Its generation-time cutoff is recorded by the validation run, so it does not imply coverage of future runs.
+There are no auxiliary numerical/mathematical computations whose answer the proof assumes. The mathematical argument, including parity and the exact rational exponential constants, is entirely inside Lean and has been kernel checked. The Python programs only record and validate infrastructure evidence.
+
+DEVELOPMENTAL FAILURES AND RESOLUTIONS
+- The initial broad-import lake build was interrupted before completion. It used import Mathlib, whose umbrella .olean was absent in the cache. Its exact original source remains build001-source.lean. The tool's session 35182 ultimately reported exit 130 after Ctrl-C, before the next compiler attempt. The initial recorder buffered child output until exit and failed to save it on KeyboardInterrupt. Therefore the original child stdout and exact start/end timestamps were NOT recovered. build001-interruption.txt states this limitation honestly. This attempt is not counted as a completed proof check, and no exit code has been invented for an unobserved child. Subsequent complete executions use the corrected streaming recorder and final successful verification is independent of this attempt.
+- A read-only process-list diagnostic could not launch because of the environment's permissions. Its tool-level exit was 1; no ps child ran. build001-process-snapshot-launch.txt records the command and PermissionError. This exposed a recorder launch-error case, subsequently handled explicitly.
+- lean003: a dependent rewrite, missing transpose notation scope, missing star-order instance, and an unnecessary-simpa linter diagnostic. Fixed by a scoped/right-side rewrite, standard Matrix notation scope, the standard real RCLike star-order instance, and a direct simplification.
+- lean004: an attempted dedicated real star-order import had no cached .olean. Removed that import and used the already available equivalent standard scoped instance. No library source or pin changed.
+- lean006: finite-sum normalization, division-goal shape, and spectral determinant coercion rewrites required explicit equalities. Fixed without changing the mathematical claim.
+- lean008: the sign-encoding negative branch and the cast of the exponent two required explicit normalization.
+- lean009: the Hadamard row-equation bridge needed entrywise matrix equality instead of an overaggressive simplification.
+- inspect012: three requested inspection spellings did not exist in this Lean release (#print prefix, Matrix.mul, Abs). Replaced them with an environment-name listing, the actual Matrix multiplication instance, and the standard abs operation.
+- inspect013 succeeded, but printing the entire imported generic star-order proof produced printer ellipses. inspect014 instead prints its complete actual type and resolved instance, while retaining all source definitions/types and standard operation bodies; the final output has no ellipsis placeholders. The mathematical source did not change during these inspection repairs.
+
+LIMITATIONS AND REVIEW HANDOFF
+The mathematical Lean target is complete and verified, with no outstanding proof hole or semantic obstacle. The first interrupted development attempt and failed diagnostic have the explicit historical record gaps described above; do not characterize the development record as having captured unavailable child output. All final verification records are complete and source-bound.
+The source-semantic assessment and mathematical authorship were performed by the same agent; an independent nonauthor must still review the finished mathematical correspondence and final artifacts. The author used only the approved candidate source, both complete guides, and ordinary pinned Mathlib/compiler infrastructure. No prior submission, PR/issue content, other candidate proof, solver note, or solution literature was read. The only earlier accidental exposure was a filename inventory during preassessment; no such file contents were opened or used.
+No Git-worktree, root-state, PDF/report, or publication file was edited. No external message or approval was sought. This author did not create the coordinator's Check.lean or freeze records. The coordinator remains responsible for the final report/PDF, separate nonauthor review, final fresh compilation/check, packaging, eligibility/publication gates, and any authorized submission.

@@ -1,0 +1,1017 @@
+@Conjecture236.product_gap : ∀ {n : Nat} (x : Fin n → Real),
+  (∀ (i : Fin n), @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) (x i)) →
+    @Eq.{1} Real
+        (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+          fun (i : Fin n) => x i)
+        (@Nat.cast.{0} Real Real.instNatCast n) →
+      @LE.le.{0} Real Real.instLE
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+            (@OfNat.ofNat.{0} Real 2
+              (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))
+          (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+            fun (i : Fin n) =>
+            @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+              (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (x i)
+                (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+              (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))) →
+        @LE.le.{0} Real Real.instLE
+          (@Finset.prod.{0, 0} (Fin n) Real Real.instCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+            fun (i : Fin n) => x i)
+          (Real.exp
+            (@Neg.neg.{0} Real Real.instNeg
+              (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+                (@OfNat.ofNat.{0} Real 18
+                  (@instOfNatAtLeastTwo.{0} Real 18 Real.instNatCast
+                    (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 16 (instOfNatNat 16))))))))
+'Conjecture236.product_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.spectral_moments : ∀ {n : Nat} (G : Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+  (hG :
+    @Matrix.IsHermitian.{0, 0} Real (Fin n)
+      (@InvolutiveStar.toStar.{0} Real
+        (@StarAddMonoid.toInvolutiveStar.{0} Real
+          (@AddCommMonoid.toAddMonoid.{0} Real
+            (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+              (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+                (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+                  (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                    (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                      (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing)))))))
+          (@StarRing.toStarAddMonoid.{0} Real
+            (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+                (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                  (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                    (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing)))))
+            instStarRingReal)))
+      G),
+  And
+    (@Eq.{1} Real
+      (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+        fun (i : Fin n) =>
+        @Matrix.IsHermitian.eigenvalues.{0, 0} Real Real.instRCLike (Fin n) (Fin.fintype n) G (instDecidableEqFin n) hG
+          i)
+      (@Matrix.trace.{0, 0} (Fin n) Real (Fin.fintype n) Real.instAddCommMonoid G))
+    (@Eq.{1} Real
+      (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+        fun (i : Fin n) =>
+        @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+          (@Matrix.IsHermitian.eigenvalues.{0, 0} Real Real.instRCLike (Fin n) (Fin.fintype n) G (instDecidableEqFin n)
+            hG i)
+          (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+      (@Matrix.trace.{0, 0} (Fin n) Real (Fin.fintype n) Real.instAddCommMonoid
+        (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+          (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+          (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin n) (Fin n) (Fin n) Real (Fin.fintype n)
+            Real.instMul Real.instAddCommMonoid)
+          G G)))
+'Conjecture236.spectral_moments' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.SignMatrix : Nat → Type
+'Conjecture236.SignMatrix' does not depend on any axioms
+@Conjecture236.integerMatrix : {n : Nat} → Conjecture236.SignMatrix n → Matrix.{0, 0, 0} (Fin n) (Fin n) Int
+'Conjecture236.integerMatrix' does not depend on any axioms
+@Conjecture236.realMatrix : {n : Nat} → Conjecture236.SignMatrix n → Matrix.{0, 0, 0} (Fin n) (Fin n) Real
+'Conjecture236.realMatrix' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.gram : {n : Nat} → Conjecture236.SignMatrix n → Matrix.{0, 0, 0} (Fin n) (Fin n) Real
+'Conjecture236.gram' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.gram_psd : ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Matrix.PosSemidef.{0, 0} (Fin n) Real (Fin.fintype n) Real.commRing Real.partialOrder instStarRingReal
+    (@Conjecture236.gram n A)
+'Conjecture236.gram_psd' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.gram_diag : ∀ {n : Nat} (A : Conjecture236.SignMatrix n) (i : Fin n),
+  @Eq.{1} Real (@Conjecture236.gram n A i i) (@Nat.cast.{0} Real Real.instNatCast n)
+'Conjecture236.gram_diag' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.gram_symmetric : ∀ {n : Nat} (A : Conjecture236.SignMatrix n) (i j : Fin n),
+  @Eq.{1} Real (@Conjecture236.gram n A i j) (@Conjecture236.gram n A j i)
+'Conjecture236.gram_symmetric' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.gram_odd_integer : ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Odd.{0} Nat Nat.instSemiring n →
+    ∀ (i j : Fin n),
+      @Exists.{1} Int fun (z : Int) =>
+        And (@Odd.{0} Int Int.instSemiring z)
+          (@Eq.{1} Real (@Conjecture236.gram n A i j) (@Int.cast.{0} Real Real.instIntCast z))
+'Conjecture236.gram_odd_integer' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.gram_entry_sq_lower : ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Odd.{0} Nat Nat.instSemiring n →
+    ∀ (i j : Fin n),
+      @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+          (@Conjecture236.gram n A i j) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+'Conjecture236.gram_entry_sq_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.gram_trace : ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Eq.{1} Real (@Matrix.trace.{0, 0} (Fin n) Real (Fin.fintype n) Real.instAddCommMonoid (@Conjecture236.gram n A))
+    (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+      (@Nat.cast.{0} Real Real.instNatCast n) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+'Conjecture236.gram_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.gram_square_trace_lower : ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Odd.{0} Nat Nat.instSemiring n →
+    @LE.le.{0} Real Real.instLE
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@Nat.cast.{0} Real Real.instNatCast n)
+        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+          (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+            (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+              (@Nat.cast.{0} Real Real.instNatCast n) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+            (@Nat.cast.{0} Real Real.instNatCast n))
+          (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))
+      (@Matrix.trace.{0, 0} (Fin n) Real (Fin.fintype n) Real.instAddCommMonoid
+        (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+          (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+          (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin n) (Fin n) (Fin n) Real (Fin.fintype n)
+            Real.instMul Real.instAddCommMonoid)
+          (@Conjecture236.gram n A) (@Conjecture236.gram n A)))
+'Conjecture236.gram_square_trace_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.sign_determinant_gap : ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Odd.{0} Nat Nat.instSemiring n →
+    @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) n →
+      @LE.le.{0} Real Real.instLE
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (@Matrix.det.{0, 0} (Fin n) (instDecidableEqFin n) (Fin.fintype n) Real Real.commRing
+              (@Conjecture236.realMatrix n A))
+            (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+          (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (@Nat.cast.{0} Real Real.instNatCast n) n))
+        (Real.exp
+          (@Neg.neg.{0} Real Real.instNeg
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+              (@OfNat.ofNat.{0} Real 18
+                (@instOfNatAtLeastTwo.{0} Real 18 Real.instNatCast
+                  (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 16 (instOfNatNat 16))))))))
+'Conjecture236.sign_determinant_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.IsSignMatrix : {n : Nat} → Matrix.{0, 0, 0} (Fin n) (Fin n) Real → Prop
+'Conjecture236.IsSignMatrix' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.realMatrix_isSignMatrix : ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Conjecture236.IsSignMatrix n (@Conjecture236.realMatrix n A)
+'Conjecture236.realMatrix_isSignMatrix' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.sign_encoding_complete : ∀ {n : Nat} (B : Matrix.{0, 0, 0} (Fin n) (Fin n) Real),
+  @Conjecture236.IsSignMatrix n B →
+    @Exists.{1} (Conjecture236.SignMatrix n) fun (A : Conjecture236.SignMatrix n) =>
+      @Eq.{1} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) (@Conjecture236.realMatrix n A) B
+'Conjecture236.sign_encoding_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.D : Nat → Real
+'Conjecture236.D' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.D_attained : ∀ (n : Nat),
+  @Exists.{1} (Conjecture236.SignMatrix n) fun (A : Conjecture236.SignMatrix n) =>
+    @Eq.{1} Real (Conjecture236.D n)
+      (@abs.{0} Real Real.lattice Real.instAddGroup
+        (@Matrix.det.{0, 0} (Fin n) (instDecidableEqFin n) (Fin.fintype n) Real Real.commRing
+          (@Conjecture236.realMatrix n A)))
+'Conjecture236.D_attained' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.determinant_le_D : ∀ {n : Nat} (B : Matrix.{0, 0, 0} (Fin n) (Fin n) Real),
+  @Conjecture236.IsSignMatrix n B →
+    @LE.le.{0} Real Real.instLE
+      (@abs.{0} Real Real.lattice Real.instAddGroup
+        (@Matrix.det.{0, 0} (Fin n) (instDecidableEqFin n) (Fin.fintype n) Real Real.commRing B))
+      (Conjecture236.D n)
+'Conjecture236.determinant_le_D' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.D_isMaximum : ∀ (n : Nat),
+  And
+    (@Exists.{1} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) fun (B : Matrix.{0, 0, 0} (Fin n) (Fin n) Real) =>
+      And (@Conjecture236.IsSignMatrix n B)
+        (@Eq.{1} Real
+          (@abs.{0} Real Real.lattice Real.instAddGroup
+            (@Matrix.det.{0, 0} (Fin n) (instDecidableEqFin n) (Fin.fintype n) Real Real.commRing B))
+          (Conjecture236.D n)))
+    (∀ (B : Matrix.{0, 0, 0} (Fin n) (Fin n) Real),
+      @Conjecture236.IsSignMatrix n B →
+        @LE.le.{0} Real Real.instLE
+          (@abs.{0} Real Real.lattice Real.instAddGroup
+            (@Matrix.det.{0, 0} (Fin n) (instDecidableEqFin n) (Fin.fintype n) Real Real.commRing B))
+          (Conjecture236.D n))
+'Conjecture236.D_isMaximum' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.IsHadamard : {n : Nat} → Matrix.{0, 0, 0} (Fin n) (Fin n) Real → Prop
+'Conjecture236.IsHadamard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.isHadamard_iff_rows : ∀ {n : Nat} (H : Matrix.{0, 0, 0} (Fin n) (Fin n) Real),
+  Iff (@Conjecture236.IsHadamard n H)
+    (And (@Conjecture236.IsSignMatrix n H)
+      (∀ (i j : Fin n),
+        @Eq.{1} Real
+          (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+            fun (k : Fin n) => @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (H i k) (H j k))
+          (@ite.{1} Real (@Eq.{1} (Fin n) i j) (instDecidableEqFin n i j) (@Nat.cast.{0} Real Real.instNatCast n)
+            (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))))
+'Conjecture236.isHadamard_iff_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.HadamardConjecture : Prop
+'Conjecture236.HadamardConjecture' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.normalizedMaximum : Nat → Real
+'Conjecture236.normalizedMaximum' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.AllOrdersLimit : Prop
+'Conjecture236.AllOrdersLimit' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.OriginalConjecture : Prop
+'Conjecture236.OriginalConjecture' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.allOrdersLimit_iff_positive_epsilon : Iff Conjecture236.AllOrdersLimit
+  (∀ (ε : Real),
+    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) ε →
+      @Exists.{1} Nat fun (N : Nat) =>
+        And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) N)
+          (∀ (n : Nat),
+            @LE.le.{0} Nat instLENat N n →
+              @LT.lt.{0} Real Real.instLT
+                (@abs.{0} Real Real.lattice Real.instAddGroup
+                  (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                    (Conjecture236.normalizedMaximum n)
+                    (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))
+                ε))
+'Conjecture236.allOrdersLimit_iff_positive_epsilon' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.normalization_pos : ∀ {n : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) n →
+    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+        (@Nat.cast.{0} Real Real.instNatCast n)
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@Nat.cast.{0} Real Real.instNatCast n)
+          (@OfNat.ofNat.{0} Real 2
+            (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))))
+'Conjecture236.normalization_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.normalization_square : ∀ {n : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) n →
+    @Eq.{1} Real
+      (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+          (@Nat.cast.{0} Real Real.instNatCast n)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@Nat.cast.{0} Real Real.instNatCast n)
+            (@OfNat.ofNat.{0} Real 2
+              (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))))
+        (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+      (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+        (@Nat.cast.{0} Real Real.instNatCast n) n)
+'Conjecture236.normalization_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Conjecture236.normalizedMaximum_odd_gap : ∀ {n : Nat},
+  @Odd.{0} Nat Nat.instSemiring n →
+    @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) n →
+      @LE.le.{0} Real Real.instLE (Conjecture236.normalizedMaximum n)
+        (Real.exp
+          (@Neg.neg.{0} Real Real.instNeg
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+              (@OfNat.ofNat.{0} Real 36
+                (@instOfNatAtLeastTwo.{0} Real 36 Real.instNatCast
+                  (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 34 (instOfNatNat 34))))))))
+'Conjecture236.normalizedMaximum_odd_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.not_AllOrdersLimit : Not Conjecture236.AllOrdersLimit
+'Conjecture236.not_AllOrdersLimit' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.conjecture236_false : Not Conjecture236.OriginalConjecture
+'Conjecture236.conjecture236_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[reducible] def Conjecture236.SignMatrix : Nat → Type :=
+fun (n : Nat) => Matrix.{0, 0, 0} (Fin n) (Fin n) Bool
+def Conjecture236.integerMatrix : {n : Nat} → Conjecture236.SignMatrix n → Matrix.{0, 0, 0} (Fin n) (Fin n) Int :=
+fun {n : Nat} (A : Conjecture236.SignMatrix n) (i j : Fin n) =>
+  @ite.{1} Int (@Eq.{1} Bool (A i j) Bool.true) (instDecidableEqBool (A i j) Bool.true)
+    (@OfNat.ofNat.{0} Int 1 (@instOfNat 1)) (@Neg.neg.{0} Int Int.instNegInt (@OfNat.ofNat.{0} Int 1 (@instOfNat 1)))
+def Conjecture236.realMatrix : {n : Nat} → Conjecture236.SignMatrix n → Matrix.{0, 0, 0} (Fin n) (Fin n) Real :=
+fun {n : Nat} (A : Conjecture236.SignMatrix n) (i j : Fin n) =>
+  @Int.cast.{0} Real Real.instIntCast (@Conjecture236.integerMatrix n A i j)
+def Conjecture236.gram : {n : Nat} → Conjecture236.SignMatrix n → Matrix.{0, 0, 0} (Fin n) (Fin n) Real :=
+fun {n : Nat} (A : Conjecture236.SignMatrix n) =>
+  @HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+    (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+    (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin n) (Fin n) (Fin n) Real (Fin.fintype n)
+      Real.instMul Real.instAddCommMonoid)
+    (@Conjecture236.realMatrix n A) (@Matrix.transpose.{0, 0, 0} (Fin n) (Fin n) Real (@Conjecture236.realMatrix n A))
+def Conjecture236.IsSignMatrix : {n : Nat} → Matrix.{0, 0, 0} (Fin n) (Fin n) Real → Prop :=
+fun {n : Nat} (A : Matrix.{0, 0, 0} (Fin n) (Fin n) Real) =>
+  ∀ (i j : Fin n),
+    Or (@Eq.{1} Real (A i j) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+      (@Eq.{1} Real (A i j)
+        (@Neg.neg.{0} Real Real.instNeg (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))
+def Conjecture236.D : Nat → Real :=
+fun (n : Nat) =>
+  @Finset.sup'.{0, 0} Real (Conjecture236.SignMatrix n) Real.instSemilatticeSup
+    (@Finset.univ.{0} (Conjecture236.SignMatrix n)
+      (@Matrix.instFintypeOfDecidableEq.{0, 0, 0} (Fin n) (Fin n) (Fin.fintype n) (instDecidableEqFin n) (Fin.fintype n)
+        (instDecidableEqFin n) Bool Bool.fintype))
+    (Conjecture236.D._proof_1 n) fun (A : Conjecture236.SignMatrix n) =>
+    @abs.{0} Real Real.lattice Real.instAddGroup
+      (@Matrix.det.{0, 0} (Fin n) (instDecidableEqFin n) (Fin.fintype n) Real Real.commRing
+        (@Conjecture236.realMatrix n A))
+def Conjecture236.IsHadamard : {n : Nat} → Matrix.{0, 0, 0} (Fin n) (Fin n) Real → Prop :=
+fun {n : Nat} (H : Matrix.{0, 0, 0} (Fin n) (Fin n) Real) =>
+  And (@Conjecture236.IsSignMatrix n H)
+    (@Eq.{1} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+        (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin n) (Fin n) (Fin n) Real (Fin.fintype n)
+          Real.instMul Real.instAddCommMonoid)
+        H (@Matrix.transpose.{0, 0, 0} (Fin n) (Fin n) Real H))
+      (@HSMul.hSMul.{0, 0, 0} Real (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+        (@instHSMul.{0, 0} Real (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+          (@Matrix.smul.{0, 0, 0, 0} (Fin n) (Fin n) Real Real
+            (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+              (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring) (@Algebra.id.{0} Real Real.instCommSemiring))))
+        (@Nat.cast.{0} Real Real.instNatCast n)
+        (@OfNat.ofNat.{0} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) 1
+          (@One.toOfNat1.{0} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+            (@Matrix.one.{0, 0} (Fin n) Real (instDecidableEqFin n) Real.instZero Real.instOne)))))
+def Conjecture236.HadamardConjecture : Prop :=
+∀ (n : Nat),
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) n →
+    @Dvd.dvd.{0} Nat Nat.instDvd (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) n →
+      @Exists.{1} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) fun (H : Matrix.{0, 0, 0} (Fin n) (Fin n) Real) =>
+        @Conjecture236.IsHadamard n H
+def Conjecture236.normalizedMaximum : Nat → Real :=
+fun (n : Nat) =>
+  @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+    (Conjecture236.D n)
+    (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+      (@Nat.cast.{0} Real Real.instNatCast n)
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@Nat.cast.{0} Real Real.instNatCast n)
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast Conjecture236.normalizedMaximum._proof_2))))
+def Conjecture236.AllOrdersLimit : Prop :=
+@Filter.Tendsto.{0, 0} Nat Real Conjecture236.normalizedMaximum (@Filter.atTop.{0} Nat Nat.instPreorder)
+  (@nhds.{0} Real
+    (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+    (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+def Conjecture236.OriginalConjecture : Prop :=
+And Conjecture236.HadamardConjecture Conjecture236.AllOrdersLimit
+SOURCE CONSTANT Conjecture236.AllOrdersLimit: Prop
+SOURCE CONSTANT Conjecture236.realMatrix.eq_1: ∀ {n : Nat} (A : Conjecture236.SignMatrix n) (i j : Fin n),
+  @Eq.{1} Real (@Conjecture236.realMatrix n A i j)
+    (@Int.cast.{0} Real Real.instIntCast (@Conjecture236.integerMatrix n A i j))
+SOURCE CONSTANT Conjecture236.allOrdersLimit_iff_positive_epsilon._proof_4: ∀ (N n : Nat),
+  @LE.le.{0} Nat instLENat
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) N (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))) n →
+    Not
+        (@GE.ge.{0} Nat
+          (@Preorder.toLE.{0} Nat
+            (@PartialOrder.toPreorder.{0} Nat
+              (@SemilatticeSup.toPartialOrder.{0} Nat (@Lattice.toSemilatticeSup.{0} Nat Nat.instLattice))))
+          n N) →
+      False
+SOURCE CONSTANT Conjecture236.gram_diag: ∀ {n : Nat} (A : Conjecture236.SignMatrix n) (i : Fin n),
+  @Eq.{1} Real (@Conjecture236.gram n A i i) (@Nat.cast.{0} Real Real.instNatCast n)
+SOURCE CONSTANT Conjecture236.normalization_pos: ∀ {n : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) n →
+    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+        (@Nat.cast.{0} Real Real.instNatCast n)
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@Nat.cast.{0} Real Real.instNatCast n)
+          (@OfNat.ofNat.{0} Real 2
+            (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))))
+SOURCE CONSTANT Conjecture236.gram_trace: ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Eq.{1} Real (@Matrix.trace.{0, 0} (Fin n) Real (Fin.fintype n) Real.instAddCommMonoid (@Conjecture236.gram n A))
+    (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+      (@Nat.cast.{0} Real Real.instNatCast n) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+SOURCE CONSTANT Conjecture236.gram_psd: ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Matrix.PosSemidef.{0, 0} (Fin n) Real (Fin.fintype n) Real.commRing Real.partialOrder instStarRingReal
+    (@Conjecture236.gram n A)
+SOURCE CONSTANT Conjecture236.integerMatrix.eq_1: ∀ {n : Nat} (A : Conjecture236.SignMatrix n) (i j : Fin n),
+  @Eq.{1} Int (@Conjecture236.integerMatrix n A i j)
+    (@ite.{1} Int (@Eq.{1} Bool (A i j) Bool.true) (instDecidableEqBool (A i j) Bool.true)
+      (@OfNat.ofNat.{0} Int 1 (@instOfNat 1)) (@Neg.neg.{0} Int Int.instNegInt (@OfNat.ofNat.{0} Int 1 (@instOfNat 1))))
+SOURCE CONSTANT Conjecture236.gram.eq_1: ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Eq.{1} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) (@Conjecture236.gram n A)
+    (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+      (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+      (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin n) (Fin n) (Fin n) Real (Fin.fintype n)
+        Real.instMul Real.instAddCommMonoid)
+      (@Conjecture236.realMatrix n A)
+      (@Matrix.transpose.{0, 0, 0} (Fin n) (Fin n) Real (@Conjecture236.realMatrix n A)))
+SOURCE CONSTANT Conjecture236.determinant_le_D: ∀ {n : Nat} (B : Matrix.{0, 0, 0} (Fin n) (Fin n) Real),
+  @Conjecture236.IsSignMatrix n B →
+    @LE.le.{0} Real Real.instLE
+      (@abs.{0} Real Real.lattice Real.instAddGroup
+        (@Matrix.det.{0, 0} (Fin n) (instDecidableEqFin n) (Fin.fintype n) Real Real.commRing B))
+      (Conjecture236.D n)
+SOURCE CONSTANT Conjecture236.not_AllOrdersLimit._proof_3: ∀ (N : Nat),
+  Not
+      (@Eq.{1} Nat
+        (@HMod.hMod.{0, 0, 0} Nat Nat Nat (@instHMod.{0} Nat Nat.instMod)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))
+              N)
+            (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)))
+          (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))) →
+    False
+SOURCE CONSTANT Conjecture236.OriginalConjecture: Prop
+SOURCE CONSTANT Conjecture236.normalizedMaximum_odd_gap: ∀ {n : Nat},
+  @Odd.{0} Nat Nat.instSemiring n →
+    @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) n →
+      @LE.le.{0} Real Real.instLE (Conjecture236.normalizedMaximum n)
+        (Real.exp
+          (@Neg.neg.{0} Real Real.instNeg
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+              (@OfNat.ofNat.{0} Real 36
+                (@instOfNatAtLeastTwo.{0} Real 36 Real.instNatCast
+                  (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 34 (instOfNatNat 34))))))))
+SOURCE CONSTANT Conjecture236.isHadamard_iff_rows: ∀ {n : Nat} (H : Matrix.{0, 0, 0} (Fin n) (Fin n) Real),
+  Iff (@Conjecture236.IsHadamard n H)
+    (And (@Conjecture236.IsSignMatrix n H)
+      (∀ (i j : Fin n),
+        @Eq.{1} Real
+          (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+            fun (k : Fin n) => @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (H i k) (H j k))
+          (@ite.{1} Real (@Eq.{1} (Fin n) i j) (instDecidableEqFin n i j) (@Nat.cast.{0} Real Real.instNatCast n)
+            (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))))
+SOURCE CONSTANT Conjecture236.not_AllOrdersLimit: Not Conjecture236.AllOrdersLimit
+SOURCE CONSTANT Conjecture236.gram_entry_sq_lower._proof_1: ∀ (z : Int),
+  @LT.lt.{0} Int Int.instLTInt (@OfNat.ofNat.{0} Int 0 (@instOfNat 0))
+      (@HPow.hPow.{0, 0, 0} Int Nat Int (@instHPow.{0, 0} Int Nat (@Monoid.toNatPow.{0} Int Int.instMonoid)) z
+        (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))) →
+    Not
+        (@LE.le.{0} Int Int.instLEInt (@OfNat.ofNat.{0} Int 1 (@instOfNat 1))
+          (@HPow.hPow.{0, 0, 0} Int Nat Int (@instHPow.{0, 0} Int Nat (@Monoid.toNatPow.{0} Int Int.instMonoid)) z
+            (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))) →
+      False
+SOURCE CONSTANT Conjecture236.IsSignMatrix: {n : Nat} → Matrix.{0, 0, 0} (Fin n) (Fin n) Real → Prop
+SOURCE CONSTANT Conjecture236.spectral_moments: ∀ {n : Nat} (G : Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+  (hG :
+    @Matrix.IsHermitian.{0, 0} Real (Fin n)
+      (@InvolutiveStar.toStar.{0} Real
+        (@StarAddMonoid.toInvolutiveStar.{0} Real
+          (@AddCommMonoid.toAddMonoid.{0} Real
+            (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+              (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+                (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+                  (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                    (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                      (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing)))))))
+          (@StarRing.toStarAddMonoid.{0} Real
+            (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+                (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                  (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                    (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing)))))
+            instStarRingReal)))
+      G),
+  And
+    (@Eq.{1} Real
+      (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+        fun (i : Fin n) =>
+        @Matrix.IsHermitian.eigenvalues.{0, 0} Real Real.instRCLike (Fin n) (Fin.fintype n) G (instDecidableEqFin n) hG
+          i)
+      (@Matrix.trace.{0, 0} (Fin n) Real (Fin.fintype n) Real.instAddCommMonoid G))
+    (@Eq.{1} Real
+      (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+        fun (i : Fin n) =>
+        @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+          (@Matrix.IsHermitian.eigenvalues.{0, 0} Real Real.instRCLike (Fin n) (Fin.fintype n) G (instDecidableEqFin n)
+            hG i)
+          (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+      (@Matrix.trace.{0, 0} (Fin n) Real (Fin.fintype n) Real.instAddCommMonoid
+        (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+          (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+          (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin n) (Fin n) (Fin n) Real (Fin.fintype n)
+            Real.instMul Real.instAddCommMonoid)
+          G G)))
+SOURCE CONSTANT Conjecture236.SignMatrix: Nat → Type
+SOURCE CONSTANT Conjecture236.HadamardConjecture: Prop
+SOURCE CONSTANT Conjecture236.normalizedMaximum_odd_gap._proof_3: ∀ {n : Nat},
+  @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) n →
+    Not (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) n) → False
+SOURCE CONSTANT Conjecture236.integerMatrix: {n : Nat} →
+  Conjecture236.SignMatrix n → Matrix.{0, 0, 0} (Fin n) (Fin n) Int
+SOURCE CONSTANT Conjecture236.D_isMaximum: ∀ (n : Nat),
+  And
+    (@Exists.{1} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) fun (B : Matrix.{0, 0, 0} (Fin n) (Fin n) Real) =>
+      And (@Conjecture236.IsSignMatrix n B)
+        (@Eq.{1} Real
+          (@abs.{0} Real Real.lattice Real.instAddGroup
+            (@Matrix.det.{0, 0} (Fin n) (instDecidableEqFin n) (Fin.fintype n) Real Real.commRing B))
+          (Conjecture236.D n)))
+    (∀ (B : Matrix.{0, 0, 0} (Fin n) (Fin n) Real),
+      @Conjecture236.IsSignMatrix n B →
+        @LE.le.{0} Real Real.instLE
+          (@abs.{0} Real Real.lattice Real.instAddGroup
+            (@Matrix.det.{0, 0} (Fin n) (instDecidableEqFin n) (Fin.fintype n) Real Real.commRing B))
+          (Conjecture236.D n))
+SOURCE CONSTANT Conjecture236.realMatrix: {n : Nat} → Conjecture236.SignMatrix n → Matrix.{0, 0, 0} (Fin n) (Fin n) Real
+SOURCE CONSTANT Conjecture236.allOrdersLimit_iff_positive_epsilon: Iff Conjecture236.AllOrdersLimit
+  (∀ (ε : Real),
+    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) ε →
+      @Exists.{1} Nat fun (N : Nat) =>
+        And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) N)
+          (∀ (n : Nat),
+            @LE.le.{0} Nat instLENat N n →
+              @LT.lt.{0} Real Real.instLT
+                (@abs.{0} Real Real.lattice Real.instAddGroup
+                  (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                    (Conjecture236.normalizedMaximum n)
+                    (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))
+                ε))
+SOURCE CONSTANT Conjecture236.sign_encoding_complete: ∀ {n : Nat} (B : Matrix.{0, 0, 0} (Fin n) (Fin n) Real),
+  @Conjecture236.IsSignMatrix n B →
+    @Exists.{1} (Conjecture236.SignMatrix n) fun (A : Conjecture236.SignMatrix n) =>
+      @Eq.{1} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) (@Conjecture236.realMatrix n A) B
+SOURCE CONSTANT Conjecture236.not_AllOrdersLimit._proof_4: ∀ (N : Nat),
+  Not
+      (@GE.ge.{0} Nat (@Preorder.toLE.{0} Nat Nat.instPreorder)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) N)
+          (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)))
+        N) →
+    False
+SOURCE CONSTANT Conjecture236.D: Nat → Real
+SOURCE CONSTANT Conjecture236.product_gap: ∀ {n : Nat} (x : Fin n → Real),
+  (∀ (i : Fin n), @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) (x i)) →
+    @Eq.{1} Real
+        (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+          fun (i : Fin n) => x i)
+        (@Nat.cast.{0} Real Real.instNatCast n) →
+      @LE.le.{0} Real Real.instLE
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+            (@OfNat.ofNat.{0} Real 2
+              (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))
+          (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+            fun (i : Fin n) =>
+            @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+              (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (x i)
+                (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+              (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))) →
+        @LE.le.{0} Real Real.instLE
+          (@Finset.prod.{0, 0} (Fin n) Real Real.instCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+            fun (i : Fin n) => x i)
+          (Real.exp
+            (@Neg.neg.{0} Real Real.instNeg
+              (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+                (@OfNat.ofNat.{0} Real 18
+                  (@instOfNatAtLeastTwo.{0} Real 18 Real.instNatCast
+                    (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 16 (instOfNatNat 16))))))))
+SOURCE CONSTANT Conjecture236.sign_determinant_gap: ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Odd.{0} Nat Nat.instSemiring n →
+    @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) n →
+      @LE.le.{0} Real Real.instLE
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (@Matrix.det.{0, 0} (Fin n) (instDecidableEqFin n) (Fin.fintype n) Real Real.commRing
+              (@Conjecture236.realMatrix n A))
+            (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+          (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (@Nat.cast.{0} Real Real.instNatCast n) n))
+        (Real.exp
+          (@Neg.neg.{0} Real Real.instNeg
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+              (@OfNat.ofNat.{0} Real 18
+                (@instOfNatAtLeastTwo.{0} Real 18 Real.instNatCast
+                  (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 16 (instOfNatNat 16))))))))
+SOURCE CONSTANT Conjecture236.IsHadamard: {n : Nat} → Matrix.{0, 0, 0} (Fin n) (Fin n) Real → Prop
+SOURCE CONSTANT Conjecture236.normalizedMaximum: Nat → Real
+SOURCE CONSTANT Conjecture236.D_attained: ∀ (n : Nat),
+  @Exists.{1} (Conjecture236.SignMatrix n) fun (A : Conjecture236.SignMatrix n) =>
+    @Eq.{1} Real (Conjecture236.D n)
+      (@abs.{0} Real Real.lattice Real.instAddGroup
+        (@Matrix.det.{0, 0} (Fin n) (instDecidableEqFin n) (Fin.fintype n) Real Real.commRing
+          (@Conjecture236.realMatrix n A)))
+SOURCE CONSTANT Conjecture236.conjecture236_false: Not Conjecture236.OriginalConjecture
+SOURCE CONSTANT Conjecture236.gram_square_trace_lower: ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Odd.{0} Nat Nat.instSemiring n →
+    @LE.le.{0} Real Real.instLE
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@Nat.cast.{0} Real Real.instNatCast n)
+        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+          (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+            (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+              (@Nat.cast.{0} Real Real.instNatCast n) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+            (@Nat.cast.{0} Real Real.instNatCast n))
+          (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))
+      (@Matrix.trace.{0, 0} (Fin n) Real (Fin.fintype n) Real.instAddCommMonoid
+        (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin n) (Fin n) Real) (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+          (Matrix.{0, 0, 0} (Fin n) (Fin n) Real)
+          (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin n) (Fin n) (Fin n) Real (Fin.fintype n)
+            Real.instMul Real.instAddCommMonoid)
+          (@Conjecture236.gram n A) (@Conjecture236.gram n A)))
+SOURCE CONSTANT Conjecture236.not_AllOrdersLimit._proof_5: ∀ (N : Nat),
+  Not
+      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) N)
+          (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)))) →
+    False
+SOURCE CONSTANT Conjecture236.realMatrix_isSignMatrix: ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Conjecture236.IsSignMatrix n (@Conjecture236.realMatrix n A)
+SOURCE CONSTANT Conjecture236.sign_determinant_gap._proof_3: ∀ {ι : Type u_1} {α : Type u_3}
+  [inst : NonUnitalNonAssocSemiring.{u_3} α] (s : Finset.{u_1} ι) (f : ι → α) (a : α),
+  @Eq.{u_3 + 1} α
+    (@Finset.sum.{u_1, u_3} ι α (@NonUnitalNonAssocSemiring.toAddCommMonoid.{u_3} α inst) s fun (i : ι) =>
+      @HMul.hMul.{u_3, u_3, u_3} α α α
+        (@instHMul.{u_3} α (@Distrib.toMul.{u_3} α (@NonUnitalNonAssocSemiring.toDistrib.{u_3} α inst))) a (f i))
+    (@HMul.hMul.{u_3, u_3, u_3} α α α
+      (@instHMul.{u_3} α (@Distrib.toMul.{u_3} α (@NonUnitalNonAssocSemiring.toDistrib.{u_3} α inst))) a
+      (@Finset.sum.{u_1, u_3} ι α (@NonUnitalNonAssocSemiring.toAddCommMonoid.{u_3} α inst) s fun (i : ι) => f i))
+SOURCE CONSTANT Conjecture236.normalization_square: ∀ {n : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) n →
+    @Eq.{1} Real
+      (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+          (@Nat.cast.{0} Real Real.instNatCast n)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@Nat.cast.{0} Real Real.instNatCast n)
+            (@OfNat.ofNat.{0} Real 2
+              (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))))
+        (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+      (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+        (@Nat.cast.{0} Real Real.instNatCast n) n)
+SOURCE CONSTANT Conjecture236.sign_determinant_gap._proof_1: ∀ {n : Nat},
+  @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) n →
+    Not (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) n) → False
+SOURCE CONSTANT Conjecture236.sign_determinant_gap._proof_2: ∀ {ι : Type u_1} {K : Type u_2}
+  [inst : DivisionSemiring.{u_2} K] (s : Finset.{u_1} ι) (f : ι → K) (a : K),
+  @Eq.{u_2 + 1} K
+    (@Finset.sum.{u_1, u_2} ι K
+      (@NonUnitalNonAssocSemiring.toAddCommMonoid.{u_2} K
+        (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{u_2} K
+          (@Semiring.toNonAssocSemiring.{u_2} K (@DivisionSemiring.toSemiring.{u_2} K inst))))
+      s fun (i : ι) =>
+      @HDiv.hDiv.{u_2, u_2, u_2} K K K
+        (@instHDiv.{u_2} K
+          (@DivInvMonoid.toDiv.{u_2} K
+            (@GroupWithZero.toDivInvMonoid.{u_2} K (@DivisionSemiring.toGroupWithZero.{u_2} K inst))))
+        (f i) a)
+    (@HDiv.hDiv.{u_2, u_2, u_2} K K K
+      (@instHDiv.{u_2} K
+        (@DivInvMonoid.toDiv.{u_2} K
+          (@GroupWithZero.toDivInvMonoid.{u_2} K (@DivisionSemiring.toGroupWithZero.{u_2} K inst))))
+      (@Finset.sum.{u_1, u_2} ι K
+        (@NonUnitalNonAssocSemiring.toAddCommMonoid.{u_2} K
+          (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{u_2} K
+            (@Semiring.toNonAssocSemiring.{u_2} K (@DivisionSemiring.toSemiring.{u_2} K inst))))
+        s fun (i : ι) => f i)
+      a)
+SOURCE CONSTANT Conjecture236.gram: {n : Nat} → Conjecture236.SignMatrix n → Matrix.{0, 0, 0} (Fin n) (Fin n) Real
+SOURCE CONSTANT Conjecture236.normalizedMaximum._proof_2: Nat.AtLeastTwo
+  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))
+    (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+SOURCE CONSTANT Conjecture236.D._proof_1: ∀ (n : Nat),
+  @Finset.Nonempty.{0} (Conjecture236.SignMatrix n)
+    (@Finset.univ.{0} (Conjecture236.SignMatrix n)
+      (@Matrix.instFintypeOfDecidableEq.{0, 0, 0} (Fin n) (Fin n) (Fin.fintype n) (instDecidableEqFin n) (Fin.fintype n)
+        (instDecidableEqFin n) Bool Bool.fintype))
+SOURCE CONSTANT Conjecture236.normalizedMaximum.eq_1: ∀ (n : Nat),
+  @Eq.{1} Real (Conjecture236.normalizedMaximum n)
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (Conjecture236.D n)
+      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+        (@Nat.cast.{0} Real Real.instNatCast n)
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@Nat.cast.{0} Real Real.instNatCast n)
+          (@OfNat.ofNat.{0} Real 2
+            (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast Conjecture236.normalizedMaximum._proof_2)))))
+SOURCE CONSTANT Conjecture236.product_gap._proof_1: ∀ (x : Real) (n : Nat),
+  @Eq.{1} Real
+    (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+      (Real.exp x) n)
+    (Real.exp
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@Nat.cast.{0} Real Real.instNatCast n) x))
+SOURCE CONSTANT Conjecture236.gram_entry_sq_lower: ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Odd.{0} Nat Nat.instSemiring n →
+    ∀ (i j : Fin n),
+      @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+          (@Conjecture236.gram n A i j) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+SOURCE CONSTANT Conjecture236.allOrdersLimit_iff_positive_epsilon._proof_3: ∀ (N : Nat),
+  Not
+      (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) N (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) →
+    False
+SOURCE CONSTANT Conjecture236.gram_odd_integer: ∀ {n : Nat} (A : Conjecture236.SignMatrix n),
+  @Odd.{0} Nat Nat.instSemiring n →
+    ∀ (i j : Fin n),
+      @Exists.{1} Int fun (z : Int) =>
+        And (@Odd.{0} Int Int.instSemiring z)
+          (@Eq.{1} Real (@Conjecture236.gram n A i j) (@Int.cast.{0} Real Real.instIntCast z))
+SOURCE CONSTANT Conjecture236.gram_symmetric: ∀ {n : Nat} (A : Conjecture236.SignMatrix n) (i j : Fin n),
+  @Eq.{1} Real (@Conjecture236.gram n A i j) (@Conjecture236.gram n A j i)
+def Matrix.{u, u', v} : Type u → Type u' → Type v → Type (max u u' v) :=
+fun (m : Type u) (n : Type u') (α : Type v) => m → n → α
+def Matrix.transpose.{v, u_2, u_3} : {m : Type u_2} →
+  {n : Type u_3} → {α : Type v} → Matrix.{u_2, u_3, v} m n α → Matrix.{u_3, u_2, v} n m α :=
+fun {m : Type u_2} {n : Type u_3} {α : Type v} (M : Matrix.{u_2, u_3, v} m n α) =>
+  @DFunLike.coe.{max (max (u_2 + 1) (u_3 + 1)) (v + 1), max (max (u_2 + 1) (u_3 + 1)) (v + 1),
+        max (max (u_2 + 1) (u_3 + 1)) (v + 1)}
+    (Equiv.{max (max (u_3 + 1) (u_2 + 1)) (v + 1), max (max (v + 1) (u_2 + 1)) (u_3 + 1)} (n → m → α)
+      (Matrix.{u_3, u_2, v} n m α))
+    (n → m → α) (fun (x : n → m → α) => Matrix.{u_3, u_2, v} n m α)
+    (@Equiv.instFunLike.{max (max (u_2 + 1) (u_3 + 1)) (v + 1), max (max (u_2 + 1) (u_3 + 1)) (v + 1)} (n → m → α)
+      (Matrix.{u_3, u_2, v} n m α))
+    (@Matrix.of.{v, u_3, u_2} n m α) fun (x : n) (y : m) => M y x
+def Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{v, u_1, u_2, u_3} : {l : Type u_1} →
+  {m : Type u_2} →
+    {n : Type u_3} →
+      {α : Type v} →
+        [inst : Fintype.{u_2} m] →
+          [inst : Mul.{v} α] →
+            [inst : AddCommMonoid.{v} α] →
+              HMul.{max (max v u_2) u_1, max (max v u_3) u_2, max (max v u_3) u_1} (Matrix.{u_1, u_2, v} l m α)
+                (Matrix.{u_2, u_3, v} m n α) (Matrix.{u_1, u_3, v} l n α) :=
+fun {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Type v} [inst : Fintype.{u_2} m] [inst_1 : Mul.{v} α]
+    [inst_2 : AddCommMonoid.{v} α] =>
+  @HMul.mk.{max (max u_1 u_2) v, max (max u_2 u_3) v, max (max u_1 u_3) v} (Matrix.{u_1, u_2, v} l m α)
+    (Matrix.{u_2, u_3, v} m n α) (Matrix.{u_1, u_3, v} l n α)
+    fun (M : Matrix.{u_1, u_2, v} l m α) (N : Matrix.{u_2, u_3, v} m n α) (i : l) (k : n) =>
+    @dotProduct.{v, u_2} m α inst inst_1 inst_2 (fun (j : m) => M i j) fun (j : m) => N j k
+@[reducible] def Matrix.det.{v, u_2} : {n : Type u_2} →
+  [inst : DecidableEq.{u_2 + 1} n] →
+    [inst : Fintype.{u_2} n] → {R : Type v} → [inst : CommRing.{v} R] → Matrix.{u_2, u_2, v} n n R → R :=
+fun {n : Type u_2} [inst : DecidableEq.{u_2 + 1} n] [inst_1 : Fintype.{u_2} n] {R : Type v} [inst_2 : CommRing.{v} R]
+    (M : Matrix.{u_2, u_2, v} n n R) =>
+  @DFunLike.coe.{max (u_2 + 1) (v + 1), max (u_2 + 1) (v + 1), v + 1}
+    (@AlternatingMap.{v, max u_2 v, v, u_2} R (@CommSemiring.toSemiring.{v} R (@CommRing.toCommSemiring.{v} R inst_2))
+      (n → R)
+      (@Pi.addCommMonoid.{u_2, v} n (fun (a : n) => R) fun (i : n) =>
+        @NonUnitalNonAssocSemiring.toAddCommMonoid.{v} R
+          (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{v} R
+            (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{v} R
+              (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{v} R (@CommRing.toNonUnitalCommRing.{v} R inst_2)))))
+      (@Pi.Function.module.{u_2, v, v} n R R (@CommSemiring.toSemiring.{v} R (@CommRing.toCommSemiring.{v} R inst_2))
+        (@NonUnitalNonAssocSemiring.toAddCommMonoid.{v} R
+          (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{v} R
+            (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{v} R
+              (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{v} R (@CommRing.toNonUnitalCommRing.{v} R inst_2)))))
+        (@Semiring.toModule.{v} R (@CommSemiring.toSemiring.{v} R (@CommRing.toCommSemiring.{v} R inst_2))))
+      R
+      (@NonUnitalNonAssocSemiring.toAddCommMonoid.{v} R
+        (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{v} R
+          (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{v} R
+            (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{v} R (@CommRing.toNonUnitalCommRing.{v} R inst_2)))))
+      (@Semiring.toModule.{v} R (@CommSemiring.toSemiring.{v} R (@CommRing.toCommSemiring.{v} R inst_2))) n)
+    (n → n → R) (fun (x : n → n → R) => R)
+    (@AlternatingMap.instFunLike.{v, max u_2 v, v, u_2} R
+      (@CommSemiring.toSemiring.{v} R (@CommRing.toCommSemiring.{v} R inst_2)) (n → R)
+      (@Pi.addCommMonoid.{u_2, v} n (fun (a : n) => R) fun (i : n) =>
+        @NonUnitalNonAssocSemiring.toAddCommMonoid.{v} R
+          (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{v} R
+            (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{v} R
+              (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{v} R (@CommRing.toNonUnitalCommRing.{v} R inst_2)))))
+      (@Pi.Function.module.{u_2, v, v} n R R (@CommSemiring.toSemiring.{v} R (@CommRing.toCommSemiring.{v} R inst_2))
+        (@NonUnitalNonAssocSemiring.toAddCommMonoid.{v} R
+          (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{v} R
+            (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{v} R
+              (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{v} R (@CommRing.toNonUnitalCommRing.{v} R inst_2)))))
+        (@Semiring.toModule.{v} R (@CommSemiring.toSemiring.{v} R (@CommRing.toCommSemiring.{v} R inst_2))))
+      R
+      (@NonUnitalNonAssocSemiring.toAddCommMonoid.{v} R
+        (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{v} R
+          (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{v} R
+            (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{v} R (@CommRing.toNonUnitalCommRing.{v} R inst_2)))))
+      (@Semiring.toModule.{v} R (@CommSemiring.toSemiring.{v} R (@CommRing.toCommSemiring.{v} R inst_2))) n)
+    (@Matrix.detRowAlternating.{v, u_2} n inst inst_1 R inst_2) M
+def Matrix.trace.{u_3, u_6} : {n : Type u_3} →
+  {R : Type u_6} → [inst : Fintype.{u_3} n] → [inst : AddCommMonoid.{u_6} R] → Matrix.{u_3, u_3, u_6} n n R → R :=
+fun {n : Type u_3} {R : Type u_6} [inst : Fintype.{u_3} n] [inst_1 : AddCommMonoid.{u_6} R]
+    (A : Matrix.{u_3, u_3, u_6} n n R) =>
+  @Finset.sum.{u_3, u_6} n R inst_1 (@Finset.univ.{u_3} n inst) fun (i : n) => @Matrix.diag.{u_6, u_3} n R A i
+def Matrix.IsHermitian.{u_1, u_4} : {α : Type u_1} →
+  {n : Type u_4} → [inst : Star.{u_1} α] → Matrix.{u_4, u_4, u_1} n n α → Prop :=
+fun {α : Type u_1} {n : Type u_4} [inst : Star.{u_1} α] (A : Matrix.{u_4, u_4, u_1} n n α) =>
+  @Eq.{max (u_1 + 1) (u_4 + 1)} (Matrix.{u_4, u_4, u_1} n n α) (@Matrix.conjTranspose.{u_1, u_4, u_4} n n α inst A) A
+def Matrix.PosSemidef.{u_2, u_3} : {n : Type u_2} →
+  {R : Type u_3} →
+    [inst : Fintype.{u_2} n] →
+      [inst : CommRing.{u_3} R] →
+        [inst_1 : PartialOrder.{u_3} R] →
+          [inst :
+              @StarRing.{u_3} R
+                (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{u_3} R
+                  (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{u_3} R
+                    (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{u_3} R
+                      (@CommRing.toNonUnitalCommRing.{u_3} R inst))))] →
+            Matrix.{u_2, u_2, u_3} n n R → Prop :=
+fun {n : Type u_2} {R : Type u_3} [inst : Fintype.{u_2} n] [inst_1 : CommRing.{u_3} R] [inst_2 : PartialOrder.{u_3} R]
+    [inst_3 :
+      @StarRing.{u_3} R
+        (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{u_3} R
+          (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{u_3} R
+            (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{u_3} R (@CommRing.toNonUnitalCommRing.{u_3} R inst_1))))]
+    (M : Matrix.{u_2, u_2, u_3} n n R) =>
+  And
+    (@Matrix.IsHermitian.{u_3, u_2} R n
+      (@InvolutiveStar.toStar.{u_3} R
+        (@StarAddMonoid.toInvolutiveStar.{u_3} R
+          (@AddCommMonoid.toAddMonoid.{u_3} R
+            (@NonUnitalNonAssocSemiring.toAddCommMonoid.{u_3} R
+              (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{u_3} R
+                (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{u_3} R
+                  (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{u_3} R
+                    (@CommRing.toNonUnitalCommRing.{u_3} R inst_1))))))
+          (@StarRing.toStarAddMonoid.{u_3} R
+            (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{u_3} R
+              (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{u_3} R
+                (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{u_3} R
+                  (@CommRing.toNonUnitalCommRing.{u_3} R inst_1))))
+            inst_3)))
+      M)
+    (∀ (x : n → R),
+      @LE.le.{u_3} R (@Preorder.toLE.{u_3} R (@PartialOrder.toPreorder.{u_3} R inst_2))
+        (@OfNat.ofNat.{u_3} R 0
+          (@Zero.toOfNat0.{u_3} R
+            (@MulZeroClass.toZero.{u_3} R
+              (@NonUnitalNonAssocSemiring.toMulZeroClass.{u_3} R
+                (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{u_3} R
+                  (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{u_3} R
+                    (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{u_3} R
+                      (@CommRing.toNonUnitalCommRing.{u_3} R inst_1))))))))
+        (@dotProduct.{u_3, u_2} n R inst
+          (@Distrib.toMul.{u_3} R
+            (@NonUnitalNonAssocSemiring.toDistrib.{u_3} R
+              (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{u_3} R
+                (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{u_3} R
+                  (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{u_3} R
+                    (@CommRing.toNonUnitalCommRing.{u_3} R inst_1))))))
+          (@NonUnitalNonAssocSemiring.toAddCommMonoid.{u_3} R
+            (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{u_3} R
+              (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{u_3} R
+                (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{u_3} R
+                  (@CommRing.toNonUnitalCommRing.{u_3} R inst_1)))))
+          (@Star.star.{max u_2 u_3} (n → R)
+            (@Pi.instStarForall.{u_2, u_3} n (fun (a : n) => R) fun (i : n) =>
+              @InvolutiveStar.toStar.{u_3} R
+                (@StarAddMonoid.toInvolutiveStar.{u_3} R
+                  (@AddCommMonoid.toAddMonoid.{u_3} R
+                    (@NonUnitalNonAssocSemiring.toAddCommMonoid.{u_3} R
+                      (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{u_3} R
+                        (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{u_3} R
+                          (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{u_3} R
+                            (@CommRing.toNonUnitalCommRing.{u_3} R inst_1))))))
+                  (@StarRing.toStarAddMonoid.{u_3} R
+                    (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{u_3} R
+                      (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{u_3} R
+                        (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{u_3} R
+                          (@CommRing.toNonUnitalCommRing.{u_3} R inst_1))))
+                    inst_3)))
+            x)
+          (@Matrix.mulVec.{u_3, u_2, u_2} n n R
+            (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{u_3} R
+              (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{u_3} R
+                (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{u_3} R
+                  (@CommRing.toNonUnitalCommRing.{u_3} R inst_1))))
+            inst M x)))
+def Matrix.IsHermitian.eigenvalues.{u_1, u_2} : {𝕜 : Type u_1} →
+  [inst : RCLike.{u_1} 𝕜] →
+    {n : Type u_2} →
+      [inst_1 : Fintype.{u_2} n] →
+        {A : Matrix.{u_2, u_2, u_1} n n 𝕜} →
+          [inst_2 : DecidableEq.{u_2 + 1} n] →
+            @Matrix.IsHermitian.{u_1, u_2} 𝕜 n
+                (@InvolutiveStar.toStar.{u_1} 𝕜
+                  (@StarAddMonoid.toInvolutiveStar.{u_1} 𝕜
+                    (@AddCommMonoid.toAddMonoid.{u_1} 𝕜
+                      (@NonUnitalNonAssocSemiring.toAddCommMonoid.{u_1} 𝕜
+                        (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{u_1} 𝕜
+                          (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{u_1} 𝕜
+                            (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{u_1} 𝕜
+                              (@NonUnitalNormedCommRing.toNonUnitalCommRing.{u_1} 𝕜
+                                (@NormedCommRing.toNonUnitalNormedCommRing.{u_1} 𝕜
+                                  (@NormedField.toNormedCommRing.{u_1} 𝕜
+                                    (@DenselyNormedField.toNormedField.{u_1} 𝕜
+                                      (@RCLike.toDenselyNormedField.{u_1} 𝕜 inst))))))))))
+                    (@StarRing.toStarAddMonoid.{u_1} 𝕜
+                      (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{u_1} 𝕜
+                        (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{u_1} 𝕜
+                          (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{u_1} 𝕜
+                            (@NonUnitalNormedCommRing.toNonUnitalCommRing.{u_1} 𝕜
+                              (@NormedCommRing.toNonUnitalNormedCommRing.{u_1} 𝕜
+                                (@NormedField.toNormedCommRing.{u_1} 𝕜
+                                  (@DenselyNormedField.toNormedField.{u_1} 𝕜
+                                    (@RCLike.toDenselyNormedField.{u_1} 𝕜 inst))))))))
+                      (@RCLike.toStarRing.{u_1} 𝕜 inst))))
+                A →
+              n → Real :=
+fun {𝕜 : Type u_1} [inst : RCLike.{u_1} 𝕜] {n : Type u_2} [inst_1 : Fintype.{u_2} n] {A : Matrix.{u_2, u_2, u_1} n n 𝕜}
+    [inst_2 : DecidableEq.{u_2 + 1} n]
+    (hA :
+      @Matrix.IsHermitian.{u_1, u_2} 𝕜 n
+        (@InvolutiveStar.toStar.{u_1} 𝕜
+          (@StarAddMonoid.toInvolutiveStar.{u_1} 𝕜
+            (@AddCommMonoid.toAddMonoid.{u_1} 𝕜
+              (@NonUnitalNonAssocSemiring.toAddCommMonoid.{u_1} 𝕜
+                (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{u_1} 𝕜
+                  (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{u_1} 𝕜
+                    (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{u_1} 𝕜
+                      (@NonUnitalNormedCommRing.toNonUnitalCommRing.{u_1} 𝕜
+                        (@NormedCommRing.toNonUnitalNormedCommRing.{u_1} 𝕜
+                          (@NormedField.toNormedCommRing.{u_1} 𝕜
+                            (@DenselyNormedField.toNormedField.{u_1} 𝕜
+                              (@RCLike.toDenselyNormedField.{u_1} 𝕜 inst))))))))))
+            (@StarRing.toStarAddMonoid.{u_1} 𝕜
+              (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{u_1} 𝕜
+                (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{u_1} 𝕜
+                  (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{u_1} 𝕜
+                    (@NonUnitalNormedCommRing.toNonUnitalCommRing.{u_1} 𝕜
+                      (@NormedCommRing.toNonUnitalNormedCommRing.{u_1} 𝕜
+                        (@NormedField.toNormedCommRing.{u_1} 𝕜
+                          (@DenselyNormedField.toNormedField.{u_1} 𝕜 (@RCLike.toDenselyNormedField.{u_1} 𝕜 inst))))))))
+              (@RCLike.toStarRing.{u_1} 𝕜 inst))))
+        A)
+    (i : n) =>
+  @Matrix.IsHermitian.eigenvalues₀.{u_1, u_2} 𝕜 inst n inst_1 A inst_2 hA
+    (@DFunLike.coe.{u_2 + 1, u_2 + 1, 1} (Equiv.{u_2 + 1, 1} n (Fin (@Fintype.card.{u_2} n inst_1))) n
+      (fun (x : n) => Fin (@Fintype.card.{u_2} n inst_1))
+      (@Equiv.instFunLike.{u_2 + 1, 1} n (Fin (@Fintype.card.{u_2} n inst_1)))
+      (@Equiv.symm.{1, u_2 + 1} (Fin (@Fintype.card.{u_2} n inst_1)) n
+        (@Fintype.equivOfCardEq.{0, u_2} (Fin (@Fintype.card.{u_2} n inst_1)) n
+          (Fin.fintype (@Fintype.card.{u_2} n inst_1)) inst_1
+          (@Matrix.IsHermitian.eigenvalues._proof_5.{u_2} n inst_1)))
+      i)
+def Real.sqrt : Real → Real :=
+fun (x : Real) =>
+  NNReal.toReal
+    (@DFunLike.coe.{1, 1, 1}
+      (@OrderIso.{0, 0} NNReal NNReal
+        (@Preorder.toLE.{0} NNReal (@PartialOrder.toPreorder.{0} NNReal instNNRealPartialOrder))
+        (@Preorder.toLE.{0} NNReal (@PartialOrder.toPreorder.{0} NNReal instNNRealPartialOrder)))
+      NNReal (fun (x : NNReal) => NNReal)
+      (@RelIso.instFunLike.{0, 0} NNReal NNReal
+        (fun (x1 x2 : NNReal) =>
+          @LE.le.{0} NNReal (@Preorder.toLE.{0} NNReal (@PartialOrder.toPreorder.{0} NNReal instNNRealPartialOrder)) x1
+            x2)
+        fun (x1 x2 : NNReal) =>
+        @LE.le.{0} NNReal (@Preorder.toLE.{0} NNReal (@PartialOrder.toPreorder.{0} NNReal instNNRealPartialOrder)) x1
+          x2)
+      NNReal.sqrt (Real.toNNReal x))
+def Real.rpow : Real → Real → Real :=
+fun (x y : Real) =>
+  Complex.re
+    (@HPow.hPow.{0, 0, 0} Complex Complex Complex (@instHPow.{0, 0} Complex Complex Complex.instPow) (Complex.ofReal x)
+      (Complex.ofReal y))
+def Real.exp : Real → Real :=
+fun (x : Real) => Complex.re (Complex.exp (Complex.ofReal x))
+def Finset.sup'.{u_2, u_3} : {α : Type u_2} →
+  {β : Type u_3} → [inst : SemilatticeSup.{u_2} α] → (s : Finset.{u_3} β) → @Finset.Nonempty.{u_3} β s → (β → α) → α :=
+fun {α : Type u_2} {β : Type u_3} [inst : SemilatticeSup.{u_2} α] (s : Finset.{u_3} β) (H : @Finset.Nonempty.{u_3} β s)
+    (f : β → α) =>
+  @WithBot.unbot.{u_2} α
+    (@Finset.sup.{u_2, u_3} (WithBot.{u_2} α) β (@WithBot.semilatticeSup.{u_2} α inst)
+      (@WithBot.orderBot.{u_2} α
+        (@Preorder.toLE.{u_2} α (@PartialOrder.toPreorder.{u_2} α (@SemilatticeSup.toPartialOrder.{u_2} α inst))))
+      s (@Function.comp.{u_3 + 1, u_2 + 1, u_2 + 1} β α (WithBot.{u_2} α) (@WithBot.some.{u_2} α) f))
+    (@Finset.sup'._proof_11.{u_2, u_3} α β inst s H f)
+def Filter.Tendsto.{u_1, u_2} : {α : Type u_1} → {β : Type u_2} → (α → β) → Filter.{u_1} α → Filter.{u_2} β → Prop :=
+fun {α : Type u_1} {β : Type u_2} (f : α → β) (l₁ : Filter.{u_1} α) (l₂ : Filter.{u_2} β) =>
+  @LE.le.{u_2} (Filter.{u_2} β)
+    (@Preorder.toLE.{u_2} (Filter.{u_2} β)
+      (@PartialOrder.toPreorder.{u_2} (Filter.{u_2} β) (@Filter.instPartialOrder.{u_2} β)))
+    (@Filter.map.{u_1, u_2} α β f l₁) l₂
+def Filter.atTop.{u_3} : {α : Type u_3} → [inst : Preorder.{u_3} α] → Filter.{u_3} α :=
+fun {α : Type u_3} [inst : Preorder.{u_3} α] =>
+  @iInf.{u_3, u_3 + 1} (Filter.{u_3} α) α (@Filter.instInfSet.{u_3} α) fun (a : α) =>
+    @Filter.principal.{u_3} α (@Set.Ici.{u_3} α inst a)
+@[irreducible] def nhds.{u_3} : {X : Type u_3} → [inst : TopologicalSpace.{u_3} X] → X → Filter.{u_3} X :=
+wrapped✝.{u_3}.1
+Real.instRCLike
+@RCLike.toStarOrderedRing.{0} Real Real.instRCLike
+Real.linearOrder
+@instHPow.{0, 0} Real Real Real.instPow
+@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)
+@abs.{u_1} : {α : Type u_1} → [inst : Lattice.{u_1} α] → [inst : AddGroup.{u_1} α] → α → α
+def abs.{u_1} : {α : Type u_1} → [inst : Lattice.{u_1} α] → [inst : AddGroup.{u_1} α] → α → α :=
+fun {α : Type u_1} [Lattice.{u_1} α] [inst_1 : AddGroup.{u_1} α] (a : α) =>
+  a ⊔
+    @Neg.neg.{u_1} α
+      (@NegZeroClass.toNeg.{u_1} α
+        (@SubNegZeroMonoid.toNegZeroClass.{u_1} α
+          (@SubtractionMonoid.toSubNegZeroMonoid.{u_1} α (@AddGroup.toSubtractionMonoid.{u_1} α inst_1))))
+      a
+@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace)
+Real.metricSpace
+instOrderTopologyReal
+@Matrix.instFintypeOfDecidableEq.{0, 0, 0} (Fin (@OfNat.ofNat.{0} Nat 5 (instOfNatNat 5)))
+  (Fin (@OfNat.ofNat.{0} Nat 5 (instOfNatNat 5))) (Fin.fintype (@OfNat.ofNat.{0} Nat 5 (instOfNatNat 5)))
+  (instDecidableEqFin (@OfNat.ofNat.{0} Nat 5 (instOfNatNat 5))) (Fin.fintype (@OfNat.ofNat.{0} Nat 5 (instOfNatNat 5)))
+  (instDecidableEqFin (@OfNat.ofNat.{0} Nat 5 (instOfNatNat 5))) Bool Bool.fintype
+@instNonemptyOfInhabited.{1} (Conjecture236.SignMatrix (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))
+  (@Matrix.inhabited.{0, 0, 0} (Fin (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))
+    (Fin (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))) Bool instInhabitedBool)
+@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin (@OfNat.ofNat.{0} Nat 5 (instOfNatNat 5)))
+  (Fin (@OfNat.ofNat.{0} Nat 5 (instOfNatNat 5))) (Fin (@OfNat.ofNat.{0} Nat 5 (instOfNatNat 5))) Real
+  (Fin.fintype (@OfNat.ofNat.{0} Nat 5 (instOfNatNat 5))) Real.instMul Real.instAddCommMonoid
+@Matrix.smul.{0, 0, 0, 0} (Fin (@OfNat.ofNat.{0} Nat 5 (instOfNatNat 5)))
+  (Fin (@OfNat.ofNat.{0} Nat 5 (instOfNatNat 5))) Real Real
+  (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+    (@Algebra.id.{0} Real Real.instCommSemiring))
+@Classical.choice.{u_1} : {α : Sort u_1} → Nonempty.{u_1} α → α
+Classical.propDecidable : (a : Prop) → Decidable a
+@Quot.sound.{u_1} : ∀ {α : Sort u_1} {r : α → α → Prop} {a b : α},
+  r a b → @Eq.{u_1} (@Quot.{u_1} α r) (@Quot.mk.{u_1} α r a) (@Quot.mk.{u_1} α r b)
+@propext : ∀ {a b : Prop}, Iff a b → @Eq.{1} Prop a b
+def Real.instPow : Pow.{0, 0} Real Real :=
+@Pow.mk.{0, 0} Real Real Real.rpow
+@RCLike.toStarOrderedRing.{u_1} : ∀ {K : Type u_1} [inst : RCLike.{u_1} K],
+  @StarOrderedRing.{u_1} K
+    (@NonUnitalCommSemiring.toNonUnitalSemiring.{u_1} K
+      (@NonUnitalCommRing.toNonUnitalCommSemiring.{u_1} K
+        (@NonUnitalNormedCommRing.toNonUnitalCommRing.{u_1} K
+          (@NormedCommRing.toNonUnitalNormedCommRing.{u_1} K
+            (@NormedField.toNormedCommRing.{u_1} K
+              (@DenselyNormedField.toNormedField.{u_1} K (@RCLike.toDenselyNormedField.{u_1} K inst)))))))
+    (@RCLike.toPartialOrder.{u_1} K inst) (@RCLike.toStarRing.{u_1} K inst)
