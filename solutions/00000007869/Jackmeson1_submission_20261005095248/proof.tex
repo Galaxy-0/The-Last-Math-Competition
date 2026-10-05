@@ -1,0 +1,159 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A disproof of Conjecture 00000007869\\[2pt]
+\large The random-order lower bound for all deterministic algorithms contradicts the stated upper bound for Best Fit}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000007869 reads (English):
+\begin{quote}
+\emph{Definition:} The random-order competitive ratio of online bin packing: the expected
+competitive ratio $R_{ro}^n$ under a uniformly random arrival order. \emph{Conjecture:} Every
+deterministic online algorithm has $R_{ro}^n \ge 3/2 + \epsilon_0$ for an explicit positive
+$\epsilon_0$, while Simple-Best-Fit achieves $R_{ro}^n \le 3/2 + O(n^{-1/2})$; and the optimal
+separation of the random-order advantage over the worst order is the explicit jump from $4/3$ to
+$3/2$, determined by extremal instances of bimodal volume distributions.
+\end{quote}
+The Chinese text agrees. It states the first clause for all deterministic online algorithms and
+calls $\epsilon_0$ an explicit positive constant.
+
+We show that the first two clauses contradict each other. Best Fit is a deterministic online
+algorithm, so clause 1 applies to it. The final clause (the ``jump from $4/3$ to $3/2$'') is not
+formalized and nothing is claimed about it.
+
+\section{Readings}
+
+Write $R(A,n)$ for $R_{ro}^n(A)$ and $A_0$ for Simple-Best-Fit.
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{Clause 1.} There is a constant $\epsilon_0>0$ with $R(A,n)\ge 3/2+\epsilon_0$ for every
+  deterministic online algorithm $A$. The constant does not depend on $n$ (it is called a constant).
+  We allow it to depend on $A$; this only weakens the clause.
+\item \textbf{Clause 2.} There is a constant $C\in\mathbb{R}$ with
+  $R(A_0,n)\le 3/2+C/\sqrt{n}$ for all sufficiently large $n$. This is the standard meaning of
+  $3/2+O(n^{-1/2})$, and it is implied by the ``for all $n\ge1$'' reading.
+\end{itemize}
+The quantifier on $n$ in clause 1 is not explicit, so we refute each of these readings:
+for all $n\ge 1$; for all sufficiently large $n$; for infinitely many $n$; as a limit
+($R(A,n)\to L\ge 3/2+\epsilon_0$); as a limit superior ($\limsup_n R(A,n)\ge 3/2+\epsilon_0$).
+We also refute clause 1 for all $n\ge1$, for all sufficiently large $n$, or as a limit, against
+the weaker clause 2 ``for infinitely many $n$''.
+
+\textbf{Not refuted.} (a) Clause 1 read as ``for some $n$''. (b) Clause 1 and clause 2 both read
+only ``for infinitely many $n$'' (the two sets of $n$ could be disjoint). (c) An $\epsilon_0$ that
+depends on $n$; the text excludes this by calling $\epsilon_0$ a constant.
+
+\textbf{Convention.} In Lean $x/0=0$. This matters only for $n=0$ (empty instances), which no
+reading uses.
+
+\section{The clash for an arbitrary ratio}
+
+\begin{lemma}[\texttt{eventually\_div\_sqrt\_lt}]
+For every $C\in\mathbb{R}$ and $\epsilon>0$, $C/\sqrt{n}<\epsilon$ for all sufficiently large $n$.
+\end{lemma}
+\begin{proof}
+$\sqrt{n}\to\infty$, so $C/\sqrt{n}\to 0$. Explicitly, $n>(\max(C,0)/\epsilon)^2$ suffices.
+\end{proof}
+
+\begin{theorem}\label{thm:abstract}
+Let $\mathcal{A}$ be any set, $R:\mathcal{A}\times\mathbb{N}\to\mathbb{R}$ any function and
+$A_0\in\mathcal{A}$, $\epsilon_0>0$, $C\in\mathbb{R}$.
+\begin{enumerate}[label=(\roman*)]
+\item If $R(A_0,n)\ge 3/2+\epsilon_0$ for infinitely many $n$ and
+  $R(A_0,n)\le 3/2+C/\sqrt{n}$ for all large $n$, we get a contradiction
+  (\texttt{clash\_frequently\_eventually}).
+\item If $R(A_0,n)\ge 3/2+\epsilon_0$ for all large $n$ and
+  $R(A_0,n)\le 3/2+C/\sqrt{n}$ for infinitely many $n$, we get a contradiction
+  (\texttt{clash\_eventually\_frequently}).
+\item If $R(A_0,n)\to L\ge 3/2+\epsilon_0$ and $R(A_0,n)\le 3/2+C/\sqrt{n}$ for infinitely many $n$,
+  we get a contradiction (\texttt{clash\_tendsto\_frequently}).
+\item If $R(A_0,\cdot)$ is bounded below, $\limsup_n R(A_0,n)\ge 3/2+\epsilon_0$ and
+  $R(A_0,n)\le 3/2+C/\sqrt{n}$ for all large $n$, we get a contradiction
+  (\texttt{clash\_limsup\_eventually}).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(i), (ii): by the lemma there is an $n$ with $3/2+\epsilon_0\le R(A_0,n)\le 3/2+C/\sqrt{n}<3/2+\epsilon_0$.
+(iii): $R(A_0,n)\ge 3/2+\epsilon_0/2$ for all large $n$; apply (ii) with $\epsilon_0/2$.
+(iv): eventually $R(A_0,n)\le 3/2+C/\sqrt{n}\le 3/2+\epsilon_0/2$, so
+$\limsup_n R(A_0,n)\le 3/2+\epsilon_0/2<3/2+\epsilon_0$. Lower boundedness is what Mathlib's
+\texttt{limsup\_le\_of\_le} needs for real sequences.
+\end{proof}
+
+\begin{corollary}[\texttt{clauses\_inconsistent}]
+For any $R$, any class $\mathrm{IsDetOnline}\subseteq\mathcal{A}$ and any $A_0$ in the class,
+the following two statements are not both true:
+\begin{itemize}
+\item for every $A$ in the class there is $\epsilon_0>0$ with $R(A,n)\ge 3/2+\epsilon_0$ for
+  infinitely many $n$;
+\item there is $C$ with $R(A_0,n)\le 3/2+C/\sqrt{n}$ for all large $n$.
+\end{itemize}
+\end{corollary}
+So neither the exact definition of $R_{ro}^n$ nor the exact meaning of the nonstandard name
+``Simple-Best-Fit'' matters, provided both clauses use the same $R_{ro}^n$ and the named algorithm
+is deterministic and online.
+
+\section{Concrete online bin packing}
+
+The Lean file also gives concrete definitions and states the main theorem for them.
+\begin{definition}
+An $n$-item instance $I$ is a size function $s:\{0,\dots,n-1\}\to(0,1]$; bins have capacity $1$.
+A deterministic online algorithm (\texttt{OnlineAlg}) is a function that, when an item of size $s$
+arrives, sees the sizes of the earlier items (in arrival order), the current bin loads and $s$, and
+returns a bin index. An out-of-range index, or a bin where the item does not fit, means ``open a new
+bin''. The decision never depends on future items. \texttt{binsUsed}$(A,\cdot)$ is the number of
+bins opened on an arrival sequence.
+\textbf{Best Fit} (\texttt{bestFit}) puts the item in the fullest open bin in which it fits, taking
+the lowest index among ties, and opens a new bin if it fits nowhere.
+$\mathrm{OPT}(I)$ (\texttt{opt}) is the least $k$ such that some map $f:\{0,\dots,n-1\}\to\{0,\dots,k-1\}$ has
+$\sum_{f(i)=b}s(i)\le 1$ for every $b$. For a permutation $\sigma$, the arrival sequence is
+$s(\sigma(0)),\dots,s(\sigma(n-1))$, and
+\[
+\mathrm{expRatio}(A,I)=\frac{\frac{1}{n!}\sum_{\sigma}\mathrm{binsUsed}(A,I_\sigma)}{\mathrm{OPT}(I)},\qquad
+R_{ro}^n(A)=\sup_{I\text{ with } n \text{ items}}\mathrm{expRatio}(A,I).
+\]
+\end{definition}
+The proofs use only that $R_{ro}^n\ge 0$ (\texttt{Rro\_nonneg}, needed for the limsup reading).
+
+\begin{theorem}[\texttt{conjecture\_7869\_false}]
+$\neg(\mathrm{Clause1}\wedge\mathrm{Clause2})$, where
+$\mathrm{Clause1}$: for every \texttt{OnlineAlg} $A$ there is $\epsilon_0>0$ with
+$R_{ro}^n(A)\ge 3/2+\epsilon_0$ for infinitely many $n$; and
+$\mathrm{Clause2}$: there is $C$ with $R_{ro}^n(\mathrm{bestFit})\le 3/2+C/\sqrt{n}$ for all large $n$.
+\end{theorem}
+Since ``for all $n\ge1$'' implies ``for all large $n$'', which implies ``for infinitely many $n$'',
+this covers the stronger readings. The Lean file also states them separately:
+\texttt{conjecture\_7869\_false\_forall} (one $\epsilon_0$ for all $A$ and all $n\ge1$; one $C$ for all
+$n\ge1$), \texttt{conjecture\_7869\_false\_eventually\_frequently},
+\texttt{conjecture\_7869\_false\_limsup} and \texttt{conjecture\_7869\_false\_tendsto}.
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture7869/Basic.lean} (192 lines, Lean 4.33.1, Mathlib v4.33.1), namespace
+\texttt{C7869}. Main theorem: \texttt{C7869.conjecture\_7869\_false : \textasciitilde (Clause1 /\textbackslash{} Clause2)}.
+\texttt{\#print axioms} for each of \texttt{conjecture\_7869\_false},
+\texttt{conjecture\_7869\_false\_forall}, \texttt{conjecture\_7869\_false\_eventually\_frequently},
+\texttt{conjecture\_7869\_false\_limsup}, \texttt{conjecture\_7869\_false\_tendsto} and
+\texttt{clauses\_inconsistent} reports only \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}
