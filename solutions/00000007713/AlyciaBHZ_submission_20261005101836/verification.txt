@@ -1,0 +1,42 @@
+TLMC 00000007713 — verification and axiom audit
+Lean toolchain: leanprover/lean4:v4.33.0
+Mathlib revision: db584cd6d46c92f209a44c0f1c829460d327499d
+
+Recorded successful Lean compiler output:
+'CoronaGrowth.discriminant_not_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoronaGrowth.equation_quadratic_irrational' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoronaGrowth.conjecture_00000007713_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoronaGrowth.conjecture_00000007713_false_on_every_tail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoronaGrowth.no_eventual_quantitative_clauses' depends on axioms: [propext, Classical.choice, Quot.sound]
+Compiler exit status: 0
+
+Independent sanity check
+Command: python3 verify.py
+Exit status: 0
+PASS: {4,6}, S=8, N=6, and both exact roots 3 +/- 2*sqrt(2).
+PASS: discriminants for every integer 3 <= N <= 10000.
+PASS: 9596 hyperbolic pairs with 3 <= p,q <= 100; 9586 have S outside the claimed list.
+PASS: diagonal witnesses t=max(K,6) for 0 <= K <= 1000.
+ALL CHECKS PASSED (finite sanity checks only).
+
+Lean source SHA-256: 3416e221419860fad1dc1205ca690449f1537d12a8c61771dbe2d5aee044b03e
+Source audit: no sorry, admit, native_decide, or added axiom declarations; automatic implicit parameters disabled.
+
+PDF build
+Command: pdflatex -interaction=nonstopmode -halt-on-error report.tex
+Pass 1 exit status: 0
+Pass 2 exit status: 0
+Output written on report.pdf (5 pages, 285613 bytes).
+No warnings, overfull boxes, underfull boxes, or unresolved references.
+All 5 pages rendered and visually inspected; no clipping or overlapping content.
+
+== Fresh standalone build (lake build in a clean copy of lean4/, Mathlib v4.33.0 dependencies prebuilt) ==
+$ lake build
+ℹ [3006/3007] Built CoronaGrowth (13s)
+info: CoronaGrowth.lean:169:0: 'CoronaGrowth.discriminant_not_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: CoronaGrowth.lean:170:0: 'CoronaGrowth.equation_quadratic_irrational' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: CoronaGrowth.lean:171:0: 'CoronaGrowth.conjecture_00000007713_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: CoronaGrowth.lean:172:0: 'CoronaGrowth.conjecture_00000007713_false_on_every_tail' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: CoronaGrowth.lean:173:0: 'CoronaGrowth.no_eventual_quantitative_clauses' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (3007 jobs).
+exit=0
