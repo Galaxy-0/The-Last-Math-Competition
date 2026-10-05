@@ -1,0 +1,164 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\tl}{\texttt}
+
+\title{Disproof of Conjecture 00000001195\\(Kronecker power-sum ``orthogonality'')}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+English text (verbatim apart from Unicode): \emph{Definition: The inner (Kronecker) product of
+symmetric functions. Conjecture: $\langle p_\lambda, p_\mu * p_\nu\rangle = z_\lambda\cdot\delta$
+with lexicographic counting (Kronecker power-sum orthogonality).} The Chinese text says the same:
+the definition line names the internal product (Kronecker) of symmetric functions, and the
+conjecture is $\langle p_\lambda, p_\mu * p_\nu\rangle = z_\lambda\delta$ (``Kronecker power-sum
+orthogonality'').
+
+\paragraph{Reading.} $p_\lambda$ is the power-sum symmetric function, $\langle\cdot,\cdot\rangle$ is
+the Hall inner product, $*$ is the Kronecker (internal) product named in the definition line,
+$z_\lambda=\prod_{i\ge1} i^{m_i}\,m_i!$ where $m_i$ is the number of parts of $\lambda$ equal to
+$i$, and $\delta$ is a Kronecker delta, i.e.\ a quantity with value $0$ or $1$ (the natural choice
+being $\delta_{\lambda\mu}\delta_{\mu\nu}$). The claim is that the identity holds for all partitions
+$\lambda,\mu,\nu$ of a common $n$.
+
+\paragraph{Result.} At $\lambda=\mu=\nu=(2)$ we prove
+$\langle p_{(2)}, p_{(2)} * p_{(2)}\rangle = 4 = z_{(2)}^2$, while $z_{(2)}=2$, so
+$z_{(2)}\cdot\delta\in\{0,2\}$ for every $\delta\in\{0,1\}$. The conjecture is therefore false
+for every choice of a $0/1$-valued $\delta$. (The correct identity is
+$\langle p_\lambda, p_\mu * p_\nu\rangle = z_\lambda^2\,\delta_{\lambda\mu}\delta_{\mu\nu}$; only
+the instance $\lambda=(2)$ is used and formalized.)
+
+\paragraph{Readings not covered.} (i) If $*$ were the ordinary product of symmetric functions,
+the formula $\langle p_\lambda, p_\mu p_\nu\rangle = z_\lambda\delta_{\lambda,\mu\cup\nu}$ is true;
+we do not use this reading because the text defines $*$ as the inner (Kronecker) product.
+(ii) If ``$\delta$ with lexicographic counting'' were meant as some integer count other than a
+$0/1$ delta, the statement does not say which; such readings are not addressed.
+
+\section{Definitions and conventions}
+
+\paragraph{Two variables suffice.} Wikipedia, \emph{Ring of symmetric functions}
+(\url{https://en.wikipedia.org/wiki/Ring_of_symmetric_functions}): ``It suffices to take for d the
+degree of the symmetric function, since the part in degree d of that ring is mapped isomorphically
+to rings with more indeterminates by'' [the restriction maps] ``This implies that for studying
+relations between individual elements, there is no fundamental difference between symmetric
+polynomials and symmetric functions.'' We therefore work with the degree-2 part of
+$\mathbb{Q}[x_0,x_1]^{S_2}$, inside Mathlib's \tl{MvPolynomial (Fin 2) Q}. The bases are Mathlib's:
+$p_\lambda=$ \tl{psumPart}, $h_\lambda=$ \tl{hsymmPart}, $m_\lambda=$ \tl{msymm}. Explicitly
+(lemmas \tl{psumPart\_two}, \tl{hsymmPart\_two}, \tl{hsymmPart\_oneOne}, \tl{msymm\_two},
+\tl{msymm\_oneOne}): $p_{(2)}=x_0^2+x_1^2=m_{(2)}$, $h_{(2)}=x_0^2+x_0x_1+x_1^2$,
+$h_{(1,1)}=(x_0+x_1)^2$, $m_{(1,1)}=x_0x_1$. The partitions $(2)$ and $(1,1)$ are the only
+partitions of $2$ (\tl{partition\_two\_cases}).
+
+\paragraph{$z_\lambda$.} \tl{zee} $\lambda=\prod_{i} i^{m_i}m_i!$, the product over the \emph{distinct} part sizes $i$ of $\lambda$ (Lean: \texttt{l.parts.toFinset}), not over the parts counted with multiplicity. Wikipedia,
+\emph{Kronecker coefficient} (\url{https://en.wikipedia.org/wiki/Kronecker_coefficient}) gives the
+same coefficients as $z_\rho=\prod_j j^{i_j}i_j! = n!/|C_\rho|$, $C_\rho$ the conjugacy class of
+cycle type $\rho$. Here $z_{(2)}=2$ (\tl{zee\_two}).
+
+\paragraph{Hall inner product.} A bilinear form $B$ is a Hall inner product on the degree-2 part
+if $B(h_\lambda,m_\mu)=\delta_{\lambda\mu}$ for all $\lambda,\mu\vdash2$
+(\tl{IsHallInner}). Since $\{h_\lambda\}$ and $\{m_\mu\}$ are bases of the degree-2 part, this
+determines $B$ there.
+
+\paragraph{Frobenius characteristic and Kronecker product.} For $\varphi:S_2\to\mathbb{Q}$ put
+\[ \mathrm{ch}(\varphi)=\frac1{2!}\sum_{w\in S_2}\varphi(w)\,p_{\rho(w)} \]
+(\tl{frob}), where $\rho(w)$ is the cycle type of $w$ with fixed points counted as parts $1$
+(Mathlib's \tl{Equiv.Perm.partition}). Grouping by classes and using $z_\rho=n!/|C_\rho|$ gives
+$\mathrm{ch}(\varphi)=\sum_\rho z_\rho^{-1}\varphi(\rho)p_\rho$, and Wikipedia, \emph{Schur
+polynomial} (\url{https://en.wikipedia.org/wiki/Schur_polynomial}) gives
+$s_\lambda=\sum_\nu \frac{\chi^\lambda_\nu}{z_\nu}p_\nu$, i.e.\ $s_\lambda=\mathrm{ch}(\chi^\lambda)$.
+Wikipedia, \emph{Kronecker coefficient}: ``Kronecker coefficients g$\lambda\mu\nu$ describe the
+decomposition of the tensor product (= Kronecker product) of two irreducible representations of a
+symmetric group into irreducible representations'', and ``One can interpret this on the level of
+symmetric functions, giving a formula for the Kronecker product of two Schur polynomials'',
+namely $s_\mu\star s_\nu=\sum_\lambda g^\lambda_{\mu\nu}s_\lambda$. Since the character of a tensor
+product is the pointwise product of characters, $\chi^\mu\chi^\nu=\sum_\lambda
+g^\lambda_{\mu\nu}\chi^\lambda$; applying the linear map ch gives
+$\mathrm{ch}(\chi^\mu)\star\mathrm{ch}(\chi^\nu)=\mathrm{ch}(\chi^\mu\chi^\nu)$, and by
+bilinearity
+\[ \mathrm{ch}(\varphi) * \mathrm{ch}(\psi) = \mathrm{ch}(\varphi\psi)\qquad
+(\varphi,\psi \text{ class functions}). \]
+A bilinear map $K$ is a Kronecker product on the degree-2 part if it satisfies this for all class
+functions $\varphi,\psi$ on $S_2$ (\tl{IsClassFun}, \tl{IsKronecker}). As ch maps onto the degree-2
+part, this determines $K$ there.
+
+\section{Proof}
+
+\begin{lemma}[\tl{hall\_p2\_p2}]
+For every Hall inner product $B$, $B(p_{(2)},p_{(2)})=2$.
+\end{lemma}
+\begin{proof}
+$p_{(2)}=x_0^2+x_1^2=2h_{(2)}-h_{(1,1)}$ (\tl{psumPart\_two\_eq\_h}) and $p_{(2)}=m_{(2)}$, so
+$B(p_{(2)},p_{(2)})=2B(h_{(2)},m_{(2)})-B(h_{(1,1)},m_{(2)})=2-0$.
+\end{proof}
+
+\begin{lemma}[\tl{frob\_eq}, \tl{frob\_classInd\_two}, \tl{kron\_p2\_p2}]
+$\mathrm{ch}(\varphi)=\tfrac12\big(\varphi(1)(x_0+x_1)^2+\varphi(s)(x_0^2+x_1^2)\big)$ with
+$s=(0\,1)$. With $\varphi_2=z_{(2)}\cdot\mathbf 1_{\{\rho(w)=(2)\}}$ (\tl{classInd two}, a class
+function by \tl{classInd\_isClassFun}) we have $\mathrm{ch}(\varphi_2)=p_{(2)}$. Hence for every
+Kronecker product $K$, $K(p_{(2)},p_{(2)})=\mathrm{ch}(\varphi_2^2)=\mathrm{ch}(2\varphi_2)
+=2p_{(2)}$.
+\end{lemma}
+\begin{proof}
+$S_2=\{1,s\}$, $\rho(1)=(1,1)$, $\rho(s)=(2)$ (\tl{univ\_perm\_two},
+\tl{parts\_partition\_one}, \tl{parts\_partition\_swap}). $\varphi_2(1)=0$, $\varphi_2(s)=2$, so
+$\mathrm{ch}(\varphi_2)=x_0^2+x_1^2$; $\varphi_2^2=2\varphi_2$ pointwise, and ch is linear
+(\tl{frob\_smul}).
+\end{proof}
+
+\begin{lemma}[existence: \tl{B0\_isHall}, \tl{K0\_isKronecker}]
+Let $a(f)=f(1,0)$, $b(f)=f(1,1)-2f(1,0)$ (on the degree-2 part these are the coordinates of $f$
+in the basis $m_{(2)},m_{(1,1)}$). Then
+$B_0(f,g)=(2a(f)-b(f))a(g)+(b(f)-a(f))b(g)$ is a Hall inner product and
+$K_0(F,G)=\tfrac12\big(b(F)b(G)(x_0+x_1)^2+(2a(F)-b(F))(2a(G)-b(G))(x_0^2+x_1^2)\big)$ is a
+Kronecker product.
+\end{lemma}
+\begin{proof}
+Direct evaluation on $h_{(2)},h_{(1,1)},m_{(2)},m_{(1,1)}$; and
+$a(\mathrm{ch}\varphi)=(\varphi(1)+\varphi(s))/2$, $b(\mathrm{ch}\varphi)=\varphi(1)$
+(\tl{ca\_frob}, \tl{cb\_frob}), so $K_0(\mathrm{ch}\varphi,\mathrm{ch}\psi)=\mathrm{ch}(\varphi\psi)$.
+\end{proof}
+
+\begin{theorem}[\tl{conjecture\_1195\_false}]
+Hall inner products and Kronecker products exist, and for all of them
+$\langle p_{(2)},p_{(2)}*p_{(2)}\rangle=4=z_{(2)}^2$, $z_{(2)}=2$, and
+$\langle p_{(2)},p_{(2)}*p_{(2)}\rangle\ne z_{(2)}\cdot\delta$ for $\delta\in\{0,1\}$.
+\end{theorem}
+\begin{proof}
+$B(p_{(2)},K(p_{(2)},p_{(2)}))=B(p_{(2)},2p_{(2)})=2\cdot 2=4$, while
+$z_{(2)}\delta\in\{0,2\}$.
+\end{proof}
+
+\section{Lean formalization}
+
+File \tl{lean/Conjecture1195/Basic.lean} (273 lines, only \tl{import Mathlib}, Lean v4.33.1,
+Mathlib v4.33.1). Main statement:
+\begin{verbatim}
+theorem conjecture_1195_false :
+    (exists B, IsHallInner B) /\ (exists K, IsKronecker K) /\
+    forall B K, IsHallInner B -> IsKronecker K ->
+      B (psumPart (Fin 2) Q two) (K (psumPart (Fin 2) Q two) (psumPart (Fin 2) Q two))
+          = (zee two : Q) ^ 2 /\ zee two = 2 /\
+      forall d : Q, (d = 0 \/ d = 1) ->
+        B (psumPart (Fin 2) Q two) (K (psumPart (Fin 2) Q two) (psumPart (Fin 2) Q two))
+          /= (zee two : Q) * d
+\end{verbatim}
+(written here in ASCII; $B$ and $K$ are $\mathbb{Q}$-bilinear maps on \tl{MvPolynomial (Fin 2) Q}).
+\tl{lake build} succeeds with no warnings; \tl{\#print axioms C1195.conjecture\_1195\_false}
+reports only \tl{propext}, \tl{Classical.choice}, \tl{Quot.sound}. No \tl{sorry}, no
+\tl{native\_decide}; \tl{decide} is used only for finite enumerations of $S_2$, of
+$\mathrm{Sym}^2(\mathrm{Fin}\,2)$ and of multiset (in)equalities.
+
+\end{document}
