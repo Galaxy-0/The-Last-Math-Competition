@@ -1,0 +1,198 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\e}{\operatorname{e}}
+
+\title{A disproof of Conjecture 00000001354\\[2pt]
+\large Square-root-phase prime sums admit no uniform bound $x^{1/4+\varepsilon}$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000001354 reads (English version):
+
+\begin{quote}
+\emph{Definition:} The square-phase prime sum is $\sum_{p\le x} e(\sqrt p)$. \emph{Conjecture:}
+$\sum_{p\le x} e(\sqrt p) \ll x^{1/4+\varepsilon}$; and the same upper bound holds uniformly after
+replacing $\sqrt p$ by $\alpha\sqrt p$ for any fixed $0<\alpha\le 1$ -- square-root cancellation for
+prime sums with square-root phases, uniformly.
+\end{quote}
+
+The Chinese version (in \texttt{conjectures/00000001354.md}) says, in transliteration, ``ba $\sqrt p$
+huan wei $\alpha\sqrt p$ (renyi guding $0<\alpha\le1$) hou tong yi shangjie \emph{yizhi chengli}, ji
+pingfanggen xiangwei de sushu he you \emph{junyun} pingfanggen dixiao'': ``after replacing $\sqrt p$ by
+$\alpha\sqrt p$ (any fixed $0<\alpha\le 1$) the same upper bound \emph{holds uniformly}, i.e.\ prime sums
+with square-root phases have \emph{uniform} square-root cancellation''.
+
+Write $e(t) = \exp(2\pi i t)$ and $S_\alpha(x) = \sum_{p\le x} e(\alpha\sqrt p)$, the sum over primes
+$p \le x$. The conjecture is the conjunction of
+\begin{enumerate}[label=(\arabic*)]
+\item for every $\varepsilon>0$: $S_1(x) \ll_\varepsilon x^{1/4+\varepsilon}$;
+\item for every $\varepsilon>0$: $S_\alpha(x) \ll_\varepsilon x^{1/4+\varepsilon}$ uniformly in
+  $0<\alpha\le1$.
+\end{enumerate}
+
+\textbf{Result.} Clause (2) is false for every $0<\varepsilon<3/4$, so the conjecture is false. Taking
+$\alpha = 1/(8\sqrt x)$ makes every phase lie in $[0,\pi/4]$, so $|S_\alpha(x)| \ge \cos(\pi/4)\,\pi(x)$,
+and Chebyshev's lower bound for $\pi(x)$ beats $C x^{1/4+\varepsilon}$ for every $C$. Everything is
+formalized in Lean~4 with Mathlib (Section~\ref{sec:lean}).
+
+\section{Reading}\label{sec:reading}
+
+\begin{enumerate}[label=(\alph*)]
+\item \textbf{Uniformity.} A bound $f(x,\alpha) \ll g(x)$ holds \emph{uniformly} in $\alpha \in A$ if
+  one implied constant (and one range of $x$) serves every $\alpha \in A$; when the constant may depend
+  on a parameter, this is indicated by a subscript (Section~\ref{sec:sources}). We formalize clause (2)
+  as: for every $\varepsilon > 0$ there are $C$ and $X$, independent of $\alpha$, with
+  $|S_\alpha(x)| \le C x^{1/4+\varepsilon}$ for all $\alpha\in(0,1]$ and all $x \ge X$. Allowing a
+  threshold $X$ only weakens the claim compared with the usual convention ($x\ge 2$), so the refutation
+  covers both.
+\item \textbf{Why this is the literal reading.} The Chinese text says the bound \emph{yizhi chengli}
+  (holds uniformly), and then restates the claim as \emph{junyun} (uniform) square-root cancellation.
+  \emph{Yizhi} is the standard Chinese term for ``uniform(ly)'' in analysis (\emph{yizhi shoulian},
+  uniform convergence; \emph{yizhi lianxu}, uniform continuity). The English says ``uniformly'' twice.
+  If the constant could depend on $\alpha$, both words would carry no content, because ``the same upper
+  bound'' already fixes the exponent $1/4+\varepsilon$. The phrase ``for any fixed $0<\alpha\le1$''
+  names the parameter range over which uniformity is asserted, as in the standard phrasing ``for fixed
+  $\alpha$ \dots, uniformly in $\alpha$''.
+\item \textbf{What is not claimed.} We do not refute clause (1) on its own, nor the non-uniform
+  reading in which $C$ may depend on $\alpha$. Both are open problems about primes in short intervals,
+  and nothing below depends on them. The conjecture, read with its uniform clause, is false because
+  that clause is false.
+\end{enumerate}
+
+\section{Definitions and sources}\label{sec:sources}
+
+\begin{definition}
+$e(t) = \exp(2\pi i t)$ for real $t$; $\pi(x)$ is the number of primes $p\le x$; for real $\alpha, x$,
+$S_\alpha(x) = \sum_{p\le x,\ p \text{ prime}} e(\alpha\sqrt p)$. The conjecture's square-phase prime
+sum is $S_1(x)$.
+\end{definition}
+
+Sources (quotations verbatim):
+\begin{itemize}
+\item Wikipedia, \emph{Big O notation}, \url{https://en.wikipedia.org/wiki/Big_O_notation}, on bounds
+  in several variables: ``In all of these examples, the bound is uniform in both variables.'' On a
+  parameter-dependent constant, marked by a subscript: ``Here the implied constant depends on the size
+  of the domain.''
+\item Chebyshev's lower bound, as formalized in Mathlib (file
+  \texttt{Mathlib/\allowbreak NumberTheory/\allowbreak Chebyshev.lean},
+  theorem \texttt{Chebyshev.pi\_ge'}): for real $x>1$,
+  \[ \pi(x) \;\ge\; \frac{(x-1)\log 2 - \log(x+2)}{\log x}. \]
+\end{itemize}
+
+\section{The proof}
+
+\begin{lemma}\label{lem:phase}
+For $x>0$ and $\alpha = 1/(8\sqrt x)$: $\ \operatorname{Re} S_\alpha(x) \ge \frac{\sqrt2}{2}\,\pi(x)$.
+\end{lemma}
+
+\begin{proof}
+$\operatorname{Re} e(t) = \cos(2\pi t)$. For a prime $p\le x$, the phase is
+$2\pi\alpha\sqrt p = \frac{\pi}{4}\cdot\frac{\sqrt p}{\sqrt x} \in [0,\pi/4]$. Since $\cos$ decreases on
+$[0,\pi]$, $\cos(2\pi\alpha\sqrt p) \ge \cos(\pi/4) = \sqrt2/2$. Summing over the $\pi(x)$ primes $p\le x$
+gives the claim.
+\end{proof}
+
+\begin{lemma}\label{lem:cheb}
+Let $0<\theta<1$. For all real $K$ and $X$ there is $x\ge\max(X,2)$ with $K x^\theta < \pi(x)$.
+\end{lemma}
+
+\begin{proof}
+Let $\eta = (1-\theta)/2 \in (0, 1/2)$ and choose $x \ge \max(X,2)$ with $y := x^\eta > 4(|K|+2)/\eta$
+(possible since $x^\eta\to\infty$). Put $z = x^{1-\eta}$, so $x = zy$, $x^\theta y = z$, and $y \le z$
+(as $\eta \le 1-\eta$ and $x\ge1$). We use $\log x \le x^\eta/\eta = y/\eta$, $\log(x+2) \le 2\log x$
+(since $x+2\le x^2$), $\log 2 > 1/2$ and hence $(x-1)\log 2 \ge x/4$. Chebyshev's bound gives
+$(x-1)\log 2 - \log(x+2) \le \pi(x)\log x$. Multiplying by $\eta$ and using the inequalities above,
+\[
+  \eta x/4 - 2y \;\le\; \eta\bigl((x-1)\log 2 - \log(x+2)\bigr) \;\le\; \eta\,\pi(x)\log x \;\le\; \pi(x)\, y .
+\]
+Since $\eta y/4 > |K|+2$, we get $\eta x/4 = (\eta y/4)\, z > (|K|+2) z \ge K z + 2y$, and so
+$K x^\theta y = K z < \eta x/4 - 2y \le \pi(x) y$. Dividing by $y>0$ gives $K x^\theta < \pi(x)$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+For every $0<\varepsilon<3/4$ and all $C, X$ there are $\alpha\in(0,1]$ and $x\ge X$ with
+$|S_\alpha(x)| > C x^{1/4+\varepsilon}$. Hence clause (2) is false, and so is the conjecture.
+\end{theorem}
+
+\begin{proof}
+Apply Lemma~\ref{lem:cheb} with $\theta = 1/4+\varepsilon$ and $K = 2C$ to get $x \ge \max(X,2)$ with
+$2Cx^\theta < \pi(x)$. Put $\alpha = 1/(8\sqrt x)$. Then $0<\alpha\le 1$ because $\sqrt x\ge1$, and by
+Lemma~\ref{lem:phase}
+\[
+ |S_\alpha(x)| \;\ge\; \operatorname{Re}S_\alpha(x) \;\ge\; \tfrac{\sqrt2}{2}\,\pi(x)
+ \;\ge\; \tfrac12\,\pi(x) \;>\; C x^{1/4+\varepsilon}.
+\]
+(For $\varepsilon \ge 3/4$ the bound is trivial, since $|S_\alpha(x)| \le \pi(x) \le x$.)
+\end{proof}
+
+\section{Lean 4 formalization}\label{sec:lean}
+
+The directory \texttt{lean/} contains a Lean~4 project (Lean \texttt{v4.33.1}, Mathlib \texttt{v4.33.1}).
+\texttt{Conjecture1354.lean} imports the single source file \texttt{Conjecture1354/Basic.lean}
+(179 lines, namespace \texttt{Conjecture1354}, only import \texttt{Mathlib}).
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \texttt{e t := Complex.exp (2 * $\pi$ * Complex.I * t)}.
+\item \texttt{S $\alpha$ x := $\sum$ p $\in$ Nat.primesLE $\lfloor$x$\rfloor_+$, e ($\alpha$ * $\sqrt{}$(p : $\mathbb{R}$))};
+  Mathlib's \texttt{Nat.primesLE n} is the finset of primes $\le n$, so this is $S_\alpha(x)$.
+\item \texttt{AlphaOneClause}: \texttt{$\forall$ $\varepsilon$ > 0, $\exists$ C X, $\forall$ x $\ge$ X,
+  $\|$S 1 x$\|$ $\le$ C * x \^{} (1/4 + $\varepsilon$)} (clause (1)).
+\item \texttt{UniformBound $\varepsilon$}: \texttt{$\exists$ C X, $\forall$ $\alpha$ $\in$ Set.Ioc 0 1,
+  $\forall$ x $\ge$ X, $\|$S $\alpha$ x$\|$ $\le$ C * x \^{} (1/4 + $\varepsilon$)}.
+\item \texttt{UniformClause := $\forall$ $\varepsilon$ > 0, UniformBound $\varepsilon$} (clause (2)).
+\item \texttt{Conjecture := AlphaOneClause $\wedge$ UniformClause}.
+\end{itemize}
+
+\paragraph{Theorems.}
+\begin{itemize}
+\item \texttt{e\_re : (e t).re = Real.cos (2 * $\pi$ * t)}.
+\item \texttt{re\_S\_ge (hx : 0 < x) : $\sqrt{2}$ / 2 * $\pi$($\lfloor$x$\rfloor_+$) $\le$ (S (1 / (8 * $\sqrt{}$x)) x).re}
+  (Lemma~\ref{lem:phase}; $\pi$ is \texttt{Nat.primeCounting}).
+\item \texttt{exists\_large (h$\theta$0 : 0 < $\theta$) (h$\theta$1 : $\theta$ < 1) (K X : $\mathbb{R}$) :
+  $\exists$ x, X $\le$ x $\wedge$ 2 $\le$ x $\wedge$ K * x \^{} $\theta$ < $\pi$($\lfloor$x$\rfloor_+$)}
+  (Lemma~\ref{lem:cheb}, from \texttt{Chebyshev.pi\_ge'} and \texttt{Real.log\_le\_rpow\_div}).
+\item \texttt{not\_uniformBound (h$\varepsilon$0 : 0 < $\varepsilon$) (h$\varepsilon$ : $\varepsilon$ < 3 / 4) :
+  $\neg$ UniformBound $\varepsilon$} (Theorem~\ref{thm:main}).
+\item \texttt{not\_uniformClause : $\neg$ UniformClause}.
+\item The main theorem
+\[
+  \texttt{conjecture1354\_false} :\ \neg\,\texttt{Conjecture}.
+\]
+\end{itemize}
+
+\paragraph{Axiom audit.} There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+\texttt{\#print axioms} reports
+\begin{verbatim}
+'Conjecture1354.conjecture1354_false' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+\end{verbatim}
+and the same for \texttt{not\_uniformBound}. The file also elaborates with
+\texttt{-DwarningAsError=true}. To check:
+\begin{verbatim}
+cd lean
+lake exe cache get
+lake build
+\end{verbatim}
+
+\end{document}
