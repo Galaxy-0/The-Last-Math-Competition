@@ -1,0 +1,229 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A proof of Conjecture 00000004910\\[2pt]
+\large Merging duplicate actions: two MDPs with the same optimal policies and value functions
+but different transition structures}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture and its reading}
+
+Conjecture 00000004910 reads (English version; the Chinese version says the same):
+
+\begin{quote}
+\emph{Definition:} The optimal policy and the transition structure are two layers of model data.
+\emph{Conjecture:} There exist two MDPs with identical optimal policies and value functions but
+different transition structures, and the separation is realized by an explicit construction
+merging redundant actions.
+\end{quote}
+
+\textbf{Reading.} An action is \emph{redundant} when another action has the same transition law
+and the same reward at every state (an exact duplicate): deleting or identifying it loses nothing.
+\emph{Merging} redundant actions identifies each class of duplicates into a single action, i.e.\
+the action set is replaced by its quotient. So we start from an MDP $M$ that genuinely has
+duplicate actions and let $M'$ be the merged MDP. The two MDPs then have different action sets
+and different transition kernels, and a policy of $M$ is not literally a policy of $M'$.
+``Identical optimal policies'' is therefore read \emph{modulo the identification of duplicate
+actions}: there is an explicit map $q_*$ from policies of $M$ onto policies of $M'$ (forget which
+duplicate was played) such that
+\[
+  \mathrm{Opt}(M)=q_*^{-1}\bigl(\mathrm{Opt}(M')\bigr)\qquad\text{and}\qquad
+  \mathrm{Opt}(M')=q_*\bigl(\mathrm{Opt}(M)\bigr),
+\]
+where $\mathrm{Opt}$ is the set of optimal history-dependent randomized policies. Thus the two
+optimal sets correspond exactly: a policy is optimal in $M$ iff its image is optimal in $M'$, and
+every optimal policy of $M'$ is the image of an optimal policy of $M$. The value functions are
+literally equal. We prove this for every MDP with duplicate actions and every discount factor,
+and give an explicit two-state witness.
+
+\section{Definitions (as formalized)}
+
+An MDP on a state type $S$ and an action type $A$ is a pair $(P,r)$ with transition laws
+$P(s,a)\in\mathrm{PMF}(S)$ and rewards $r(s,a)\in[0,\infty)$ (Lean: \texttt{MDP S A}). A history is
+a list of past state-action pairs together with the current state; a policy $\pi$ maps histories to
+probability distributions on $A$ (history-dependent and randomized; \texttt{Policy S A}). For a
+start state $s$, the law $\mathcal L^\pi_{s,t}$ of the history at time $t$ is defined by the usual
+recursion (\texttt{law}): $\mathcal L^\pi_{s,0}=\delta_{([],s)}$, and a time-$(t+1)$ history is
+obtained by drawing $h\sim\mathcal L^\pi_{s,t}$, $a\sim\pi(h)$, $s'\sim P(\text{current state of }
+h,a)$ and appending. $E^\pi_s[r_t]$ is the expected reward at time $t$ (\texttt{expReward}), and
+\[
+  v^\pi(s,\beta)=\sum_{t\ge0}\beta^t E^\pi_s[r_t],\qquad
+  V^*(s,\beta)=\sup_\pi v^\pi(s,\beta)
+\]
+(\texttt{discValue}, \texttt{optValue}). The \emph{value function} is $s\mapsto V^*(s,\beta)$. A
+policy is \emph{optimal} for $\beta$ if $v^\pi(s,\beta)=V^*(s,\beta)$ for every state $s$
+(\texttt{IsOptimal}). This framework is adapted from the package for conjecture 00000004930.
+
+\textbf{Conventions.} Values live in $[0,\infty]$ with truncated subtraction, so $(1-\beta)^{-1}$
+equals $1/(1-\beta)$ for $\beta\in[0,1)$ and $\infty$ for $\beta\ge1$. All results below are
+stated for every $\beta\in[0,\infty]$; the meaningful range is $\beta\in[0,1)$, including
+$\beta=0$. (For $\beta\ge1$ the witness has $V^*\equiv\infty$.)
+
+\section{Merging duplicate actions}
+
+Fix $q:A\to B$ and $g:B\to A$ with $q(g(b))=b$, and assume every $q$-fibre consists of
+duplicates:
+\[
+  P(s,g(q(a)))=P(s,a),\qquad r(s,g(q(a)))=r(s,a)\qquad\text{for all }s,a. \tag{D}
+\]
+The \emph{merged MDP} $M'=\texttt{quot M g}$ has action type $B$, $P'(s,b)=P(s,g(b))$ and
+$r'(s,b)=r(s,g(b))$; by (D) this does not depend on the choice of the section $g$.
+
+For a history $h$ of $M$, $\bar h=\texttt{histMap q h}$ replaces every past action $a$ by $q(a)$.
+The \emph{lift} of a policy $\pi'$ of $M'$ is $\mathrm{lift}\,\pi'(h)=g_*\pi'(\bar h)$ (look at the
+merged history, play the representative).
+
+\textbf{Pushforward} (\texttt{push}). For a history $h'$ of $M'$ let $\mathrm{start}(h')$ be its
+initial state and $|h'|$ its length (time). For a policy $\pi$ of $M$, start state $s$ and time
+$t$, let $J^\pi_{s,t}$ be the joint law of $(\bar h,q(a))$ where $h\sim\mathcal L^\pi_{s,t}$ and
+$a\sim\pi(h)$ (\texttt{joint}). Define
+\[
+  q_*\pi(h')(b)=\frac{J^\pi_{s,t}(h',b)}{\sum_{b'}J^\pi_{s,t}(h',b')}\qquad
+  (s=\mathrm{start}(h'),\ t=|h'|),
+\]
+the conditional law of the merged action given the merged history, when the denominator is
+nonzero; otherwise $q_*\pi(h')=q_*\bigl(\pi(\text{the history }h'\text{ with each }b\text{
+replaced by }g(b))\bigr)$. This is a history-dependent randomized policy of $M'$.
+
+\begin{lemma}[\texttt{law\_support}, \texttt{joint\_eq}]\label{lem:dis}
+Every history in the support of $\mathcal L^\pi_{s,t}$ has start state $s$ and length $t$. Hence
+$J^\pi_{s,t}$ disintegrates as ``draw $h'$ from the merged history law
+$q_\#\mathcal L^\pi_{s,t}$, then $b\sim q_*\pi(h')$'':
+$J^\pi_{s,t}(h',b)=q_\#\mathcal L^\pi_{s,t}(h')\cdot q_*\pi(h')(b)$.
+\end{lemma}
+\begin{proof}
+The support claim is an induction on $t$. The first marginal of $J^\pi_{s,t}$ is
+$q_\#\mathcal L^\pi_{s,t}$ (\texttt{joint\_fst}, \texttt{tsum\_pair}). If
+$m:=q_\#\mathcal L^\pi_{s,t}(h')=0$ both sides vanish. Otherwise $h'=\bar h$ for some $h$ in the
+support, so $\mathrm{start}(h')=s$ and $|h'|=t$; thus $q_*\pi(h')$ is computed from
+$J^\pi_{s,t}$ itself, the denominator equals $m\in(0,1]$, and $m\cdot J(h',b)/m=J(h',b)$.
+\end{proof}
+
+\begin{lemma}[\texttt{law\_push}, \texttt{discValue\_push}]\label{lem:push}
+Under (D), for every policy $\pi$ of $M$, start $s$ and time $t$:
+$\mathcal L^{q_*\pi}_{s,t}(M')=q_\#\mathcal L^\pi_{s,t}(M)$, i.e.\ the merged history process of
+$\pi$ (all states, merged actions) has exactly the law of the history process of $q_*\pi$ in $M'$.
+Consequently $v^{q_*\pi}_{M'}(s,\beta)=v^\pi_M(s,\beta)$ for all $s,\beta$.
+\end{lemma}
+\begin{proof}
+Induction on $t$; $t=0$ is immediate. For the step, by the induction hypothesis and
+Lemma~\ref{lem:dis} the time-$(t+1)$ law in $M'$ is obtained by drawing
+$(h',b)\sim J^\pi_{s,t}$ and then $s'\sim P'(\cdot,b)$. Unfolding $J$, this is: draw
+$h\sim\mathcal L^\pi_{s,t}$, $a\sim\pi(h)$, $s'\sim P(\cdot,g(q(a)))=P(\cdot,a)$ by (D), and append
+$(\cdot,q(a))$ to $\bar h$ --- which is the image under $h\mapsto\bar h$ of the time-$(t+1)$ law in
+$M$. For values, $E^{q_*\pi}_s[r'_t]=\sum_{(h',b)}J^\pi_{s,t}(h',b)\,r(\cdot,g(b))$ by
+Lemma~\ref{lem:dis}, and unfolding $J$ and using (D) for $r$ this is $E^\pi_s[r_t]$.
+\end{proof}
+
+\begin{lemma}[\texttt{law\_lift}, \texttt{discValue\_lift}, \texttt{push\_lift}]\label{lem:lift}
+For every policy $\pi'$ of $M'$: the merged history law of $\mathrm{lift}\,\pi'$ in $M$ is the
+history law of $\pi'$ in $M'$, so $v^{\mathrm{lift}\,\pi'}_M=v^{\pi'}_{M'}$; and
+$q_*(\mathrm{lift}\,\pi')=\pi'$. In particular $q_*$ is onto.
+\end{lemma}
+\begin{proof}
+The first two claims are an induction as before (only $q\circ g=\mathrm{id}$ is used). For the
+last, $J^{\mathrm{lift}\,\pi'}_{s,t}(h',b)=m(h')\,\pi'(h')(b)$ with
+$m=q_\#\mathcal L^{\mathrm{lift}\,\pi'}_{s,t}$; comparing with Lemma~\ref{lem:dis} gives
+$q_*(\mathrm{lift}\,\pi')(h')=\pi'(h')$ whenever $m(h')\neq0$. If $m(h')=0$ the fallback branch
+gives $q_*g_*\pi'(h')=\pi'(h')$.
+\end{proof}
+
+\begin{theorem}[\texttt{optValue\_quot}, \texttt{isOptimal\_push}, \texttt{isOptimal\_lift}]
+\label{thm:general}
+Under (D), for every $\beta\in[0,\infty]$: $V^*_{M'}(s,\beta)=V^*_M(s,\beta)$ for every $s$;
+$\pi$ is optimal in $M$ iff $q_*\pi$ is optimal in $M'$; $\pi'$ is optimal in $M'$ iff
+$\mathrm{lift}\,\pi'$ is optimal in $M$. Hence $\mathrm{Opt}(M)=q_*^{-1}(\mathrm{Opt}(M'))$ and
+$\mathrm{Opt}(M')=q_*(\mathrm{Opt}(M))$.
+\end{theorem}
+\begin{proof}
+Every value of $M'$ is a value of $M$ (Lemma~\ref{lem:lift}) and every value of $M$ is a value of
+$M'$ (Lemma~\ref{lem:push}), so the suprema agree; the optimality equivalences follow from the
+value identities. If $\pi'\in\mathrm{Opt}(M')$ then $\mathrm{lift}\,\pi'\in\mathrm{Opt}(M)$ and
+$q_*(\mathrm{lift}\,\pi')=\pi'$.
+\end{proof}
+
+Note that $q_*$ is many-to-one: optimal policies of $M$ that play $\mathrm{red}_2$ (below) at
+some histories, reachable or not, are sent to the same optimal policy of $M'$ as policies playing
+$\mathrm{red}_1$ there. This is exactly the identification of duplicates.
+
+\section{The witness}
+
+States $\{\mathrm{false},\mathrm{true}\}$. $M_2$ has actions $\{\mathrm{opt},\mathrm{red}_1,
+\mathrm{red}_2\}$: $\mathrm{opt}$ has reward $1$ and stays at the current state;
+$\mathrm{red}_1$ and $\mathrm{red}_2$ have reward $0$ and both move to the other state. So
+$\mathrm{red}_1,\mathrm{red}_2$ are exact duplicates. The merge map $q$ sends $\mathrm{opt}\mapsto
+\mathrm{opt}$ and $\mathrm{red}_1,\mathrm{red}_2\mapsto\mathrm{red}$, with section
+$\mathrm{rep}(\mathrm{red})=\mathrm{red}_1$, and $M_3=\texttt{quot}\ M_2\ \mathrm{rep}$ has actions
+$\{\mathrm{opt},\mathrm{red}\}$. (D) holds by inspection.
+
+\textbf{Different transition structures.} $M_2$ has three actions and $a\mapsto P_2(s,a)$ is not
+injective at any state ($P_2(s,\mathrm{red}_1)=P_2(s,\mathrm{red}_2)$); $M_3$ has two actions and
+$b\mapsto P_3(s,b)$ is injective at every state ($\delta_s\neq\delta_{\neg s}$).
+
+\begin{lemma}[\texttt{optValue\_eq}, \texttt{constPol\_optimal}]
+If $r\le1$ and some action $o$ has $r(s,o)=1$ at every state, then $V^*(s,\beta)=(1-\beta)^{-1}$
+for every $s$ and $\beta$, and the policy always playing $o$ is optimal.
+\end{lemma}
+\begin{proof}
+$E^\pi_s[r_t]\le1$, so $v^\pi(s,\beta)\le\sum_t\beta^t=(1-\beta)^{-1}$, attained by always
+playing $o$.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture4910}]
+$M_2$ has the duplicate actions $\mathrm{red}_1,\mathrm{red}_2$, $M_3=\texttt{quot}\ M_2\
+\mathrm{rep}$ merges them, $q\circ\mathrm{rep}=\mathrm{id}$, $P_2(s,\cdot)$ is not injective and
+$P_3(s,\cdot)$ is injective for every $s$. For every $s,t,\beta$ and policies $\pi$ of $M_2$,
+$\pi'$ of $M_3$:
+\begin{enumerate}
+\item $V^*_{M_2}(s,\beta)=V^*_{M_3}(s,\beta)=(1-\beta)^{-1}$;
+\item $\mathcal L^{q_*\pi}_{s,t}(M_3)=q_\#\mathcal L^\pi_{s,t}(M_2)$ and
+$v^{q_*\pi}_{M_3}(s,\beta)=v^\pi_{M_2}(s,\beta)$; $q_*(\mathrm{lift}\,\pi')=\pi'$;
+\item $\mathrm{Opt}_\beta(M_2)=q_*^{-1}(\mathrm{Opt}_\beta(M_3))$ and
+$\mathrm{Opt}_\beta(M_3)=q_*(\mathrm{Opt}_\beta(M_2))$;
+\item the policy always playing $\mathrm{opt}$ is optimal in both, so both sets are nonempty.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Theorem~\ref{thm:general} with $M=M_2$, and the previous lemma with $o=\mathrm{opt}$.
+\end{proof}
+
+\begin{remark}
+The witness is deliberately small (rewards depend only on the action, so $V^*$ is constant); the
+general Theorem~\ref{thm:general} holds for every MDP with duplicate actions. An earlier version of
+this package also treated a reading in which a dominated action is redirected to another action's
+law within the same action set; that reading has been dropped, since the redirected actions were
+not duplicates beforehand.
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture4910/Basic.lean} (namespace \texttt{Conjecture4910}), Lean 4.33.1 with
+Mathlib v4.33.1, 370 lines. Main theorem \texttt{Conjecture4910.conjecture4910}; general results
+\texttt{joint\_eq}, \texttt{law\_push}, \texttt{discValue\_push}, \texttt{law\_lift},
+\texttt{discValue\_lift}, \texttt{push\_lift}, \texttt{optValue\_quot}, \texttt{isOptimal\_push},
+\texttt{isOptimal\_lift}, \texttt{optValue\_eq}. \texttt{\#print axioms
+Conjecture4910.conjecture4910} reports only \texttt{propext}, \texttt{Classical.choice},
+\texttt{Quot.sound}. There is no \texttt{sorry} and no \texttt{native\_decide}. The MDP framework
+(structure, histories, policies, \texttt{law}, \texttt{expReward}, \texttt{discValue},
+\texttt{optValue}) is adapted from the package for conjecture 00000004930, with the start state
+made a parameter.
+
+\end{document}
