@@ -1,0 +1,94 @@
+TLMC 00000000399 — verification and axiom audit
+Lean toolchain: leanprover/lean4:v4.33.0
+Mathlib revision: db584cd6d46c92f209a44c0f1c829460d327499d
+Source: GoldenLaw.lean
+Source SHA-256: 09b700e670934c827f8c5449c5238211330f05562f27f280a4dfb23d3ec7d665
+Report SHA-256: 880343f6e587c368370a1ab47cce699c76dc64f4e639beea43b5cce07992c437
+PDF SHA-256: 6dcc11d2934dc82e9698994875a691e4a3b1fea9cbede77ed3b10da28e5c1aa6
+Python SHA-256: 15bc0bc8560e24be8f479cb7961f085ee013bf017944f76bfb2f221fab597af4
+
+Recorded successful Lean compiler output:
+'CalkinWilf399.level_wellformed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CalkinWilf399.fibonacci_witnesses' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CalkinWilf399.maxDigits_eq_size' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CalkinWilf399.maxDigits_eq_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CalkinWilf399.bounded_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CalkinWilf399.calkin_wilf_digit_golden_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CalkinWilf399.maxDigitsBase_eq_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CalkinWilf399.base_bounded_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CalkinWilf399.binary_coefficient_error_unbounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CalkinWilf399.binary_coefficient_error_not_isBigO_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CalkinWilf399.binary_coefficient_valid_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Compiler exit status: 0
+
+Independent sanity check
+Command: python3 verify.py
+Exit status: 0
+Direct Calkin-Wilf generation and independent Stern comparison:
+level  nodes   max denominator   max binary digits
+    0       1                 1                  1
+    1       2                 2                  2
+    2       4                 3                  2
+    3       8                 5                  3
+    4      16                 8                  4
+    5      32                13                  4
+    6      64                21                  5
+    7     128                34                  6
+    8     256                55                  6
+    9     512                89                  7
+   10    1024               144                  8
+   11    2048               233                  8
+   12    4096               377                  9
+   13    8192               610                 10
+   14   16384               987                 10
+   15   32768              1597                 11
+   16   65536              2584                 12
+   17  131072              4181                 13
+base=3, n=100: digits=44, error against binary coefficient=25.424191363
+base=4, n=100: digits=35, error against binary coefficient=34.424191363
+base=10, n=100: digits=21, error against binary coefficient=48.424191363
+base=16, n=100: digits=18, error against binary coefficient=51.424191363
+base=3, n=1000: digits=439, error against binary coefficient=255.241913631
+base=4, n=1000: digits=348, error against binary coefficient=346.241913631
+base=10, n=1000: digits=210, error against binary coefficient=484.241913631
+base=16, n=1000: digits=174, error against binary coefficient=520.241913631
+base=3, n=10000: digits=4381, error against binary coefficient=2561.419136306
+base=4, n=10000: digits=3472, error against binary coefficient=3470.419136306
+base=10, n=10000: digits=2090, error against binary coefficient=4852.419136306
+base=16, n=10000: digits=1736, error against binary coefficient=5206.419136306
+Binary slope log_2(phi) = 0.694241913630617
+Explicit proven bound log_2(phi)+1 = 1.694241913630617
+Largest observed error through level 10000 = 1.305758086369383
+PASS: exact level maxima for bases 2, 3, 4, 10, 16 through level 17.
+base=2: slope=0.694241913630617, explicit bound=1.694241913630617, largest observed base error=1.305758086369383
+base=3: slope=0.438017879485942, explicit bound=1.438017879485942, largest observed base error=1.143544850809121
+base=4: slope=0.347120956815309, explicit bound=1.347120956815309, largest observed base error=1.113714950321310
+base=10: slope=0.208987640249979, explicit bound=1.208987640249979, largest observed base error=1.068485982062725
+base=16: slope=0.173560478407654, explicit bound=1.173560478407654, largest observed base error=1.056762976367651
+ALL CHECKS PASSED (finite sanity checks, supplementary to Lean proof).
+
+PDF build
+Command: pdflatex -interaction=nonstopmode -halt-on-error report.tex
+Pass 1 exit status: 0
+Pass 2 exit status: 0
+Output written on report.pdf (6 pages, 292386 bytes).
+No layout warnings or unresolved references.
+All 6 pages rendered and visually inspected; no clipping or overlapping content.
+Source audit: no proof admissions, additional axioms, or kernel-bypass tactics.
+
+== Fresh standalone build (lake build in a clean copy of lean4/, Mathlib v4.33.0 dependencies prebuilt) ==
+$ lake build
+ℹ [3012/3013] Built GoldenLaw (15s)
+info: GoldenLaw.lean:365:0: 'CalkinWilf399.level_wellformed' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: GoldenLaw.lean:366:0: 'CalkinWilf399.fibonacci_witnesses' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: GoldenLaw.lean:367:0: 'CalkinWilf399.maxDigits_eq_size' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: GoldenLaw.lean:368:0: 'CalkinWilf399.maxDigits_eq_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: GoldenLaw.lean:369:0: 'CalkinWilf399.bounded_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: GoldenLaw.lean:370:0: 'CalkinWilf399.calkin_wilf_digit_golden_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: GoldenLaw.lean:371:0: 'CalkinWilf399.maxDigitsBase_eq_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: GoldenLaw.lean:372:0: 'CalkinWilf399.base_bounded_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: GoldenLaw.lean:373:0: 'CalkinWilf399.binary_coefficient_error_unbounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: GoldenLaw.lean:374:0: 'CalkinWilf399.binary_coefficient_error_not_isBigO_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: GoldenLaw.lean:375:0: 'CalkinWilf399.binary_coefficient_valid_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (3013 jobs).
+exit=0
