@@ -1,0 +1,205 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000007752\\[2pt]
+\large The B\"ottcher coordinate of $z^2-2$ takes algebraic values at algebraic points}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000007752 reads (English version):
+\begin{quote}
+\emph{Definition:} The Bottcher coordinate $\phi_c$ of $f(z)=z^2+c$ is the unique univalent analytic
+function near infinity with $\phi_c(f(z)) = \phi_c(z)^2$. \emph{Conjecture:} For every algebraic $c$
+(with $0$ non-escaping), the ratio $\phi_c(z)/z$ at algebraic points $z$ of sufficiently large modulus
+is transcendental; and for two distinct parameters $c_1, c_2$, the ratios
+$\phi_{c_1}(z)/\phi_{c_2}(z)$ are algebraically independent at algebraic points of the common domain.
+\end{quote}
+The Chinese version describes $\phi_c$ as the unique \emph{single-valued} (dan zhi) analytic function
+near $\infty$ with $\phi_c(f(z))=\phi_c(z)^2$; for every algebraic number $c$ for which $0$ does not
+escape, the ratio of $\phi_c(z)$ to $z$ at algebraic points $z$ with $|z|$ sufficiently large is
+transcendental; and for $c_1\ne c_2$ the ratios $\phi_{c_1}(z)/\phi_{c_2}(z)$ are algebraically
+independent. The formalization follows the English requirement of univalence and the standard meaning
+of a B\"ottcher coordinate.
+
+\textbf{Result.} Clause 1 is false for $c=-2$, where
+$\phi_{-2}(z)=\tfrac12\bigl(z+s(z)\bigr)$ is algebraic. Here $s(z)=z\,(1-4/z^2)^{1/2}$, with the principal
+root, is the square root of $z^2-4$ asymptotic to $z$ at $\infty$. It is \emph{not} the principal square
+root of $z^2-4$: the two differ in sign at $z=-4$. Clause 1 is also false for $c=0$, where $\phi_0(z)=z$.
+Clause 2 is false for $(c_1,c_2)=(0,-2)$. Every step is a Lean~4/Mathlib theorem (Section~\ref{sec:lean}).
+
+\section{Reading}\label{sec:reading}
+
+The text leaves three points open. We refute every combination (eight readings of clause 1).
+\begin{enumerate}[label=(R\arabic*)]
+\item \emph{``$0$ non-escaping''}: either the orbit $f_c^{n}(0)$ does not tend to $\infty$
+  (\texttt{ZeroNonEscaping}), or it is bounded, i.e.\ $c$ is in the Mandelbrot set
+  (\texttt{ZeroOrbitBounded}). Our parameters satisfy both.
+\item \emph{``Bottcher coordinate''}. The text omits the normalization. Reading (N),
+  \texttt{IsBottcherCoord}: $\phi$ is analytic and injective on $\{|z|>R\}$, $\phi(z^2+c)=\phi(z)^2$ there,
+  and $\phi(z)/z\to1$ as $z\to\infty$. This is the standard B\"ottcher coordinate, which conjugates $f_c$ to
+  $w\mapsto w^2$ near $\infty$. Reading (U), \texttt{IsBottcherSolution}: the text's own conditions
+  (analytic, injective, functional equation) with ``analytic near infinity'' read on the Riemann sphere,
+  i.e.\ $\zeta\mapsto\phi(1/\zeta)$ is meromorphic at $0$, and with no normalization. Under (U) the
+  solution is \emph{not} unique: $1/\phi$ is a solution as well (Lean \texttt{sol\_inv}, \texttt{sol2\_inv},
+  \texttt{sol0\_inv}). This is the ``$\phi$ versus $1/\phi$'' ambiguity.
+\item \emph{Quantifier.} Since ``the unique'' fails under (U), we refute both ``for every coordinate
+  $\phi$'' (\texttt{Clause1Forall}) and ``for some coordinate $\phi$'' (\texttt{Clause1Exists}).
+  ``Sufficiently large modulus'' is read in its weakest form, $\exists R\ \forall z$ algebraic with $|z|>R$.
+\end{enumerate}
+The conjecture is the conjunction of clauses 1 and 2. The main theorem refutes clause~1 conjoined
+with an arbitrary proposition $P$, so it does not depend on how clause~2 is read. Clause~2 is
+refuted separately (\texttt{Clause2}: the family $z\mapsto\phi_{c_1}(z)/\phi_{c_2}(z)$ over the algebraic
+$z$ with $|z|>R$ is algebraically independent over $\mathbb{Q}$).
+
+\section{Definitions and sources}
+
+$f_c(z)=z^2+c$ (\texttt{fc}). Algebraic and transcendental numbers are Mathlib's
+\texttt{IsAlgebraic~$\mathbb{Q}$} and \texttt{Transcendental~$\mathbb{Q}$}, and algebraic independence is
+\texttt{AlgebraicIndependent~$\mathbb{Q}$}. ``Near $\infty$'' is \texttt{nbhdInf R} $=\{z: R<|z|\}$, limits
+at $\infty$ use Mathlib's \texttt{cobounded~$\mathbb{C}$}, and meromorphy is \texttt{MeromorphicAt}.
+Wikipedia (\emph{B\"ottcher's equation}) states:
+``B\"ottcher's coordinate (the logarithm of the Schr\"oder function) conjugates h(z) in a neighbourhood
+of the fixed point to the function zn.'' and ``An especially important case is when h(z) is a polynomial
+of degree n, and a = $\infty$.'' The same article lists power maps and Chebyshev polynomials as cases
+where B\"ottcher coordinates can be computed explicitly. With $T_2(x)=2x^2-1$ one has
+$z^2-2=2\,T_2(z/2)$, so $z^2-2$ is linearly conjugate (via $z=2x$) to the Chebyshev polynomial $T_2$.
+The normalization $\phi(z)/z\to1$ in (N) is the standard one (Milnor, \emph{Dynamics in One Complex
+Variable}, Thm.~9.1). It is not needed under (U).
+
+\section{The proof}
+
+Let $\psi(z)=\frac z2\bigl(1+t(z)\bigr)$ with $t(z)=(1-4/z^2)^{1/2}$ (principal branch;
+\texttt{psi2}). So $\psi(z)=\frac12(z+s(z))$, where $s(z)=z\,t(z)$ is the square root of $z^2-4$
+asymptotic to $z$ at $\infty$ (not the principal square root of $z^2-4$).
+
+\begin{lemma}[\texttt{psi2\_quad}, \texttt{norm\_psi2}]
+For $z\neq0$, $\psi(z)^2-z\psi(z)+1=0$. For all $z$, $|\psi(z)|\ge|z|/2$.
+\end{lemma}
+\begin{proof}
+$t^2=1-4/z^2$ gives $\psi^2-z\psi+1=\frac{z^2}{4}(t^2-1)+1=0$. By Mathlib's \texttt{cpow\_inv\_two\_re},
+$\operatorname{Re}t=\sqrt{(|x|+\operatorname{Re}x)/2}\ge0$ with $x=1-4/z^2$. So $|1+t|\ge1$.
+\end{proof}
+
+\begin{lemma}[\texttt{model2}]
+On $|z|>3$: $\psi(z^2-2)=\psi(z)^2$; $\psi(z)\ne0$; $|z^2-2|\ge2|z|$; and $\psi(z)$ is algebraic whenever
+$z$ is. Moreover $\psi(z)/z\to1$ as $z\to\infty$.
+\end{lemma}
+\begin{proof}
+Put $a=z^2-2$. Both $\psi(a)$ and $\psi(z)^2$ are roots of $W^2-aW+1$. For the second root this follows
+from $\psi^4-(z^2-2)\psi^2+1=(\psi^2-z\psi+1)(\psi^2+z\psi+1)$. Both roots have modulus $>1$, because
+$|\psi(a)|\ge|a|/2>1$ and $|\psi(z)|^2>9/4$. Two distinct roots of $W^2-aW+1$ have product $1$, so the
+two values coincide (\texttt{root\_unique}). If $z$ is algebraic, so is $t^2$, hence $t$
+(\texttt{IsAlgebraic.of\_pow}), hence $\psi(z)$. Finally $\psi(z)/z=(1+t)/2$, and $t\to1^{1/2}=1$ by
+continuity of the power function at $1$.
+\end{proof}
+
+\begin{lemma}[\texttt{psi2\_analyticOn}, \texttt{psi2\_injOn}, \texttt{psi2\_mero}]
+$\psi$ is analytic and injective on $\{|z|>3\}$, and $\zeta\mapsto\psi(1/\zeta)=\zeta^{-1}\cdot\frac12
+(1+(1-4\zeta^2)^{1/2})$ is meromorphic at $0$. Hence $\psi$ satisfies both (N) and (U)
+(\texttt{coord2}, \texttt{sol2}).
+\end{lemma}
+\begin{proof}
+For $|z|>2$ the number $1-4/z^2$ has positive real part, so it lies in the slit plane, where $w^{1/2}$ is
+analytic. Injectivity holds because $z=(\psi^2+1)/\psi$.
+\end{proof}
+
+\begin{lemma}[Rigidity; \texttt{limit\_idem}, \texttt{rigid}]
+Suppose $|f_c(z)|\ge2|z|$ and $G(f_c(z))=G(z)^2$ for $|z|>R$. If $G\to\ell$ at $\infty$, then
+$\ell^2=\ell$. If $G\to1$, then $G=1$ on some $\{|z|>R'\}$.
+\end{lemma}
+\begin{proof}
+Since $f_c\to\infty$, the limit of $G\circ f_c=G^2$ is both $\ell$ and $\ell^2$. For the second claim,
+choose $R'$ so that $|G-1|<\frac12$ on $|z|>R'$, and put $u_k=G(f_c^k z)-1$. The orbit stays in the
+region, and $u_{k+1}=u_k(u_k+2)$ with $|u_k+2|\ge\frac32$. So $\frac12>|u_k|\ge(\frac32)^k|u_0|$ for all
+$k$, which forces $u_0=0$.
+\end{proof}
+
+\begin{theorem}[Classification; \texttt{Model.classify}, \texttt{Model.coord\_unique},
+\texttt{Model.solution\_alg}]
+Let $c\in\{0,-2\}$ with $\psi=\mathrm{id}$, resp.\ $\psi=$\texttt{psi2}.
+(a) Every $\phi$ satisfying (N) equals $\psi$ on some $\{|z|>R\}$. So (N) has a unique solution.
+(b) Every $\phi$ satisfying (U) is either $0$ or $\psi^{m}$ ($m\in\mathbb{Z}$) on some $\{|z|>R\}$.
+In both cases $\phi(z)$ is algebraic for every algebraic $z$ with $|z|>R$.
+\end{theorem}
+\begin{proof}
+(a) Apply the rigidity lemma to $G=\phi\psi^{-1}=(\phi/z)(\psi/z)^{-1}\to1$. (b) If the order of
+$\phi(1/\zeta)$ at $0$ is $\infty$, then $\phi=0$ near $\infty$. Otherwise
+$\phi(1/\zeta)=\zeta^n g(\zeta)$ with $g$ analytic and $g(0)\ne0$. Then
+$G=\phi\psi^n=(\psi/z)^n g(1/z)\to g(0)$, and $G\circ f_c=G^2$. The rigidity lemma gives $g(0)^2=g(0)$,
+hence $g(0)=1$, then $G=1$, i.e.\ $\phi=\psi^{-n}$. Integer powers of algebraic numbers are algebraic.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_7752\_false}, \texttt{refuted\_by\_zero}, \texttt{clause2\_false}]
+For both readings (R1), both readings (R2) and both quantifiers (R3), clause~1 fails for $c=-2$ (and for
+$c=0$), and so does its conjunction with any $P$. Clause~2 fails for $(c_1,c_2)=(0,-2)$.
+\end{theorem}
+\begin{proof}
+$c=-2$ is algebraic, and $0\mapsto-2\mapsto2\mapsto2$, so the orbit is bounded and does not escape
+(\texttt{bounded2}, \texttt{nonEscaping\_of\_bounded}). A coordinate exists (\texttt{coord2},
+\texttt{sol2}), and by the classification every coordinate has algebraic values at large algebraic $z$.
+For any $R$, take the integer $z=\lceil R'\rceil+1$, which exceeds $R$ and the classification radius
+(\texttt{exists\_big}). Then $\phi(z)/z$ is algebraic, not transcendental (\texttt{refute}). For
+clause~2, $z/\psi(z)$ is algebraic, and every member of an algebraically independent family is
+transcendental.
+\end{proof}
+
+\section{Lean 4 formalization}\label{sec:lean}
+
+File \texttt{lean/Conjecture7752/Basic.lean} (namespace \texttt{C7752}, 482 lines, Lean
+\texttt{v4.33.1}, Mathlib \texttt{v4.33.1}, only \texttt{import Mathlib}). Main theorem (ASCII rendering):
+\begin{verbatim}
+theorem conjecture_7752_false (P : Prop) :
+  forall Hyp in [ZeroNonEscaping, ZeroOrbitBounded],
+  forall IsBC in [IsBottcherCoord, IsBottcherSolution],
+    not (Clause1Forall Hyp IsBC /\ P) /\ not (Clause1Exists Hyp IsBC /\ P)
+\end{verbatim}
+where \texttt{Clause1Forall Hyp IsBC} is
+$\forall c,\ \mathrm{IsAlgebraic}\ \mathbb{Q}\ c\to\mathrm{Hyp}\ c\to\forall\phi,\ \mathrm{IsBC}\ c\ \phi\to
+\exists R,\ \forall z,\ \mathrm{IsAlgebraic}\ \mathbb{Q}\ z\to R<\|z\|\to
+\mathrm{Transcendental}\ \mathbb{Q}\ (\phi z/z)$, and \texttt{Clause1Exists} has $\exists\phi,\
+\mathrm{IsBC}\ c\ \phi\wedge\exists R\ldots$ instead. Further theorems: \texttt{refuted\_by\_zero}
+(same conclusion for $c=0$), \texttt{clause2\_false}, \texttt{Model.coord\_unique},
+\texttt{Model.solution\_alg}, \texttt{sol2\_inv}.
+
+\textbf{Axiom audit.} \texttt{lake build} succeeds, and the file also compiles with
+\texttt{-DwarningAsError=true}. \texttt{\#print axioms} for \texttt{conjecture\_7752\_false},
+\texttt{refuted\_by\_zero}, \texttt{clause2\_false}, \texttt{Model.coord\_unique} and \texttt{sol2\_inv}
+reports \texttt{[propext, Classical.choice, Quot.sound]} each. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom.
+
+\section{Remarks on scope}
+
+$c=0$ and $c=-2$ are the classical explicit cases: the power map, and a map linearly conjugate to the
+Chebyshev polynomial $T_2$ (Section~3). A reviewer may regard them as special, but the statement does
+not exclude them: it says ``every algebraic $c$ (with $0$ non-escaping)''. Both are in scope: $c$ is
+algebraic, $0$ is non-escaping, and the coordinate exists and is unique under (N). We do not claim
+anything about other parameters.
+
+\textbf{Formal scope.} The Lean theorems cover exactly the readings (R1)--(R3) above. In particular,
+\texttt{IsBottcherSolution} \emph{assumes} that $\phi$ is meromorphic at $\infty$
+(\texttt{MeromorphicAt}). The existential variant ``some $\phi$ univalent near $\infty$ with no
+condition at $\infty$'' is covered only mathematically: univalence on $\{|z|>R\}$ rules out an
+essential singularity at $\infty$, so such a $\phi$ is meromorphic there and falls under (U). That step
+is not formalized in Lean. The universal form of this variant needs no such step, because $\psi$ itself
+satisfies it.
+
+\end{document}
