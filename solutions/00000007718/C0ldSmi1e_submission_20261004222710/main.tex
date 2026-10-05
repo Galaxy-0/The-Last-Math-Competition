@@ -1,0 +1,173 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm,microtype}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\usepackage{fancyvrb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlength{\emergencystretch}{3em}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\N}{\mathbb N}
+\newcommand{\spec}{\operatorname{spec}}
+\newcommand{\code}[1]{\nolinkurl{#1}}
+\newtheorem{proposition}{Proposition}
+\hypersetup{pdftitle={Arbitrarily small positive substitution spectral ratios: disproof of conjecture 00000007718},pdfauthor={C0ldSmi1e}}
+\begin{document}
+\begin{center}
+{\LARGE Arbitrarily small positive\\[3pt] substitution spectral ratios}\\[7pt]
+{\large Disproof of conjecture 00000007718}\\[5pt]
+C0ldSmi1e \qquad 4 October 2026
+\end{center}
+\begin{abstract}
+A family of primitive three-letter substitutions has full-rank incidence matrices with complete spectrum $3m+3,3,1$, for every integer $m\ge1$. Its positive ratio $|\lambda_2|/\lambda_1=1/(m+1)$ can be arbitrarily small. At $m=2$ it equals $1/3<(3-\sqrt5)/2$, contradicting the conjectured minimum. The substitutions are actual words and admit genuine geometric realizations by three colored unit intervals. The Lean development proves the word counts, geometric patch conditions, complete complex spectra, eigenvalue ordering, and the lower-bound refutation.
+\end{abstract}
+
+\section{Statement and the clause being refuted}
+The complete English statement in the repository is:
+\begin{quote}\small
+Definition: The trace formula error for substitution tilings is the decay of the difference $|\nu(P)-[M^k]_{ij}/\lambda^k|$ between pattern frequencies and matrix powers, controlled by the second eigenvalue $|\lambda_2|$. Conjecture: For all primitive substitutions the error is exactly $O(|\lambda_2|^k)$, and the ratio $|\lambda_2|/\lambda_1$ is always an algebraic number of degree at most $r-1$, its smallest possible positive value at $r=3$ being $(3-\sqrt5)/2$. (sharp trace error decay)
+\end{quote}
+Both language versions were read in full at the source revision in reference~\cite{source}. Both assert the displayed positive minimum. A minimum $c$ necessarily gives a universal lower bound $\rho\ge c$ for every admissible positive ratio $\rho$. We refute this necessary consequence, hence the stated conjunction. We do not separately resolve the trace-error or algebraic-degree assertions.
+
+The source does not separately define $r$. We use the alphabet-size or matrix-size reading: exactly three letters and a $3\times3$ incidence matrix. The matrices also have actual rank three, covering the usual matrix-rank reading. No identification of $r$ with the Perron number's algebraic degree or the ambient Euclidean dimension is assumed.
+
+\section{Actual words and their incidence matrices}
+Let $A=\{a,b,c\}$. For each integer $m\ge1$, define
+\begin{equation}\label{eq:words}
+\begin{aligned}
+\sigma_m(a)&=a^{m+2}b^mc^{m+1},&
+\sigma_m(b)&=a^mb^{m+3}c^m,&
+\sigma_m(c)&=a^{m+1}b^mc^{m+2}.
+\end{aligned}
+\end{equation}
+Here powers mean repeated letters and juxtaposition means concatenation. Every image is nonempty and has the same length $q=3m+3$.
+
+\newpage
+The incidence entry $M_m(i,j)$ counts occurrences of letter $i$ in $\sigma_m(j)$, so direct word counting gives
+\begin{equation}\label{eq:matrix}
+M_m=\begin{pmatrix}
+m+2&m&m+1\\
+m&m+3&m\\
+m+1&m&m+2
+\end{pmatrix}.
+\end{equation}
+Every entry is positive. Thus every letter occurs in the image of every letter, and the substitution is primitive already at the first iterate. Equivalently, $M_m^1$ has strictly positive entries. The matrix is symmetric, so the alternative transposed incidence convention gives the same matrix. These are the usual word-count and positive-power conventions; see~\cite{berlinkov}.
+
+\section{A geometric colored-interval substitution}
+Give the three prototiles the common support $[0,1]\subset\R$ and distinct colors $a,b,c$. Inflate each by $x\mapsto qx$. If the word $\sigma_m(j)$ has letters $w_0,\ldots,w_{q-1}$, replace the inflated tile of color $j$ by
+\[
+([0,1],w_0),\ ([1,2],w_1),\ \ldots,\ ([q-1,q],w_{q-1}).
+\]
+Each support is the translate by $k$ of the support of the prototile colored $w_k$. Moreover,
+\[
+\bigcup_{k=0}^{q-1}[k,k+1]=[0,q]=q[0,1],
+\qquad (i,i+1)\cap(j,j+1)=\varnothing\quad(i\ne j).
+\]
+For coverage, any $0\le x<q$ lies in the interval with index $\lfloor x\rfloor$; the right endpoint $q$ lies in the last interval. For disjoint interiors, if $i<j$ then $i+1\le j$. These arguments are formalized over the real numbers, including endpoints.
+
+The colors are the actual word entries, so counting the geometric tiles of color $i$ in the patch for $j$ gives exactly $M_m(i,j)$. Thus the construction is a genuine expanding tile-substitution rule with the same primitive matrix. The standard geometric definition uses colored prototiles, translated pieces, coverage and disjoint interiors~\cite{solomyak}; equal supports with different colors cause no identification of the types.
+
+\section{Complete spectrum, ordering and full rank}
+Direct multiplication gives a strictly positive eigenvector:
+\[
+M_m\!\begin{pmatrix}1\\1\\1\end{pmatrix}
+=q\!\begin{pmatrix}1\\1\\1\end{pmatrix}.
+\]
+To establish the complete spectrum, direct determinant expansion gives
+\begin{equation}\label{eq:charpoly}
+\det(zI-M_m)=(z-q)(z-3)(z-1)\qquad(z\in\C).
+\end{equation}
+The Lean proof computes both the actual characteristic polynomial and this resolvent determinant. A complex square matrix is invertible exactly when its determinant is nonzero; hence
+\[
+\spec_{\C}(M_m)=\{q,3,1\}.
+\]
+Since $m\ge1$, one has $q\ge6>3>1>0$. All roots are simple. Thus $q$ is the unique eigenvalue of largest modulus, with a strictly positive eigenvector, and the second largest modulus is exactly $3$. In particular, $\lambda_1=q$ and $|\lambda_2|=3$. Also $\det M_m=3q\ne0$, so $M_m$ has rank three.
+
+\newpage
+\section{The exact counterexample and the stronger family result}
+The actual spectral ratio is
+\begin{equation}\label{eq:ratio}
+\rho_m=\frac{|\lambda_2|}{\lambda_1}
+=\frac3{3m+3}=\frac1{m+1}>0.
+\end{equation}
+For the single choice $m=2$, the words, matrix and spectrum are
+\[
+\sigma_2(a)=\text{\texttt{aaaabbccc}},\qquad
+\sigma_2(b)=\text{\texttt{aabbbbbcc}},\qquad
+\sigma_2(c)=\text{\texttt{aaabbcccc}},
+\]
+\[
+M_2=\begin{pmatrix}4&2&3\\2&5&2\\3&2&4\end{pmatrix},
+\qquad \spec_{\C}(M_2)=\{9,3,1\},\qquad \rho_2=\frac13.
+\]
+Because $\sqrt5\ge0$ and $5<49/9$, one has $\sqrt5<7/3$. Consequently,
+\begin{equation}\label{eq:strict}
+\boxed{\quad 0<\frac13<\frac{3-\sqrt5}{2}.\quad}
+\end{equation}
+This is an exact inequality. The formal proof uses $(\sqrt5)^2=5$ and nonnegativity, with no decimal approximation.
+
+\begin{proposition}
+Among primitive three-letter geometric substitutions with incidence rank three, there is no positive universal lower bound on the positive ratio $|\lambda_2|/\lambda_1$. In particular, there is no least positive ratio.
+\end{proposition}
+\begin{proof}
+Let $\varepsilon>0$. By the Archimedean property choose $n\in\N$ with $n>1/\varepsilon$, and put $m=n+1\ge1$. Then
+\[
+0<\rho_m=\frac1{n+2}<\varepsilon.
+\]
+Every $\rho_m$ is the actual ratio of the certified substitution above. Any proposed positive universal lower bound $c$ is contradicted by this construction with $\varepsilon=c$. A least positive attained value would be such a lower bound, so it cannot exist either.
+\end{proof}
+
+\section{The precise universal assertion negated in Lean}
+The predicate \code{AdmissibleRatio} describes actual ratios of a certified subclass. It existentially quantifies a substitution on \code{Fin 3}, an expansion factor $q$, and real numbers $p,s,t$. It requires word-level primitivity, nonempty words, the colored-interval substitution conditions, matrix rank three, and the following spectral certificate:
+\[
+0<t<s<p,\qquad
+\chi_M(X)=(X-p)(X-s)(X-t),
+\]
+with $p$ the greatest actual complex spectral modulus and $s$ the greatest modulus after removing the Perron eigenvalue $p$. The ratio is required to equal $s/p$. Strict ordering and the characteristic polynomial ensure that the roots are simple and their ordering is unambiguous.
+
+These extra properties specify a subclass of the primitive substitutions in the source; they are not assumptions added to its universal assertion. A universal minimum for the source class would apply to this subclass. With $c=(3-\sqrt5)/2$, its necessary lower-bound consequence is formalized as
+\[
+\forall\rho\in\R,\quad
+\bigl(\text{\code{AdmissibleRatio}}(\rho)\ \wedge\ 0<\rho\bigr)
+\ \Longrightarrow\ c\le\rho.
+\]
+The theorem \code{conjecture_00000007718_false} negates this precise consequence using \eqref{eq:strict}. It does not assign definitions to the other source clauses. The family additionally proves \code{no_positive_universal_lower_bound} and \code{no_least_positive_admissible_ratio}.
+
+\newpage
+\section{Formal scope and reproducibility}
+\small\setlength{\parskip}{4pt}
+No aperiodicity, unimodularity, irreducible characteristic polynomial or bound on substitution length appears in the bilingual source. Primitivity is the positive-power condition proved here. The geometric certificate concerns finite substitution patches; the formal development does not construct a two-sided fixed tiling, a tiling hull, an invariant measure, pattern frequencies or a trace-error asymptotic. None is used to refute the explicit matrix-valued minimum clause. Matrix eigenvalues are used throughout, not eigenvalues of a dynamical action.
+
+All named declarations below belong to the namespace \code{Conjecture7718}. The four implementation sources are included in the default library build in \code{lean/}.
+\begin{description}\raggedright\setlength{\itemsep}{2pt}\setlength{\parsep}{0pt}
+\item[\code{Substitution.lean}] Defines actual lists of letters and their counts. Theorems \code{incidenceCounts_substitution} and \code{incidenceMatrix_substitution} establish \eqref{eq:matrix}; \code{substitution_primitive} and \code{incidenceCounts_substitution_pow_one_pos} certify primitivity.
+\item[\code{Tiling.lean}] Defines the colored supports and expansion; proves actual coverage, disjoint interiors, translated supports and \code{substitution_tileColor_count}. The final geometric certificate is \code{substitution_unitInterval}.
+\item[\code{Spectrum.lean}] Proves \code{incidence_charpoly}, \code{incidence_mem_spectrum_iff}, \code{incidence_rank}, \code{incidence_positive_eigenvector}, \code{perron_isGreatest} and \code{second_isGreatest} for the actual incidence matrix.
+\item[\code{Conjecture7718.lean}] Defines ordered spectral data, admissible ratios and the necessary lower bound. It proves \code{spectralRatio_admissible}, the exact counterexample, the negation \code{conjecture_00000007718_false}, and the two stronger no-minimum conclusions.
+\item[\code{Check.lean}] Prints definitions, theorem types and transitive axiom dependencies for the submitted declaration inventory.
+\end{description}
+
+\textbf{Pinned environment.}
+The project uses Lean 4.19.0 and Mathlib v4.19.0, with Mathlib commit
+\code{c44e0c8ee63ca166450922a373c7409c5d26b00b}. The toolchain and included lockfile fix the compiler and dependency revisions. From the submission directory:
+\begin{Verbatim}[fontsize=\small]
+cd lean
+lake exe cache get
+lake build
+for f in Conjecture7718/Substitution.lean \
+  Conjecture7718/Tiling.lean Conjecture7718/Spectrum.lean \
+  Conjecture7718.lean Check.lean; do
+  lake env lean -DwarningAsError=true "$f" || exit 1
+done
+\end{Verbatim}
+Execution results, declaration inventories, input hashes and independent semantic review are recorded in \code{verification/} and \code{VERIFICATION.md}, including fresh-build, strict-replay and axiom checks. The project uses no admitted proofs, \code{native_decide} or custom axioms. All mathematical calculations have Lean proofs; no auxiliary numerical program is needed. Local verification is distinct from maintainer acceptance.
+
+\begin{thebibliography}{3}\small
+\bibitem{source} The Last Math Competition, conjecture 00000007718, English and Chinese versions, source revision \code{fe1d06d431b0591b65d759c60035b1d2e293a819}. \href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/fe1d06d431b0591b65d759c60035b1d2e293a819/conjectures/00000007718.md}{Repository source}.
+\bibitem{berlinkov} Artemi Berlinkov and Boris Solomyak, \emph{Singular substitutions of constant length}, 2017, introduction and \S2.1. \url{https://arxiv.org/abs/1705.00899}.
+\bibitem{solomyak} Boris Solomyak, \emph{Eigenfunctions for substitution tiling systems}, 2005 preprint, \S\S3.1--3.2. \url{https://arxiv.org/abs/math/0512602}.
+\end{thebibliography}
+\end{document}

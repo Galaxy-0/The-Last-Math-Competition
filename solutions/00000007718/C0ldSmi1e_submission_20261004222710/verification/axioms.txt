@@ -1,0 +1,204 @@
+@[reducible] def Conjecture7718.Letter : Type :=
+Fin 3
+def Conjecture7718.Substitution : Type :=
+Conjecture7718.Letter → List Conjecture7718.Letter
+def Conjecture7718.incidenceCounts : Conjecture7718.Substitution →
+  Matrix Conjecture7718.Letter Conjecture7718.Letter ℕ :=
+fun σ i j => List.count i (σ j)
+def Conjecture7718.incidenceMatrix : Conjecture7718.Substitution →
+  Matrix Conjecture7718.Letter Conjecture7718.Letter ℂ :=
+fun σ i j => ↑(Conjecture7718.incidenceCounts σ i j)
+def Conjecture7718.familyCounts : ℕ → Matrix Conjecture7718.Letter Conjecture7718.Letter ℕ :=
+fun m => !![m + 2, m, m + 1; m, m + 3, m; m + 1, m, m + 2]
+def Conjecture7718.substitution : ℕ → Conjecture7718.Substitution :=
+fun m j =>
+  List.replicate (Conjecture7718.familyCounts m 0 j) 0 ++ List.replicate (Conjecture7718.familyCounts m 1 j) 1 ++
+    List.replicate (Conjecture7718.familyCounts m 2 j) 2
+def Conjecture7718.wordMap : Conjecture7718.Substitution → List Conjecture7718.Letter → List Conjecture7718.Letter :=
+fun σ w => List.flatMap σ w
+def Conjecture7718.iterateWord : Conjecture7718.Substitution →
+  ℕ → List Conjecture7718.Letter → List Conjecture7718.Letter :=
+fun σ k w => (Conjecture7718.wordMap σ)^[k] w
+def Conjecture7718.PrimitiveSubstitution : Conjecture7718.Substitution → Prop :=
+fun σ => ∃ k, 0 < k ∧ ∀ (a b : Conjecture7718.Letter), a ∈ Conjecture7718.iterateWord σ k [b]
+def Conjecture7718.prototileSupport : Conjecture7718.Letter → Set ℝ :=
+fun _a => Set.Icc 0 1
+def Conjecture7718.expandedPrototileSupport : ℝ → Conjecture7718.Letter → Set ℝ :=
+fun q a => (fun x => q * x) '' Conjecture7718.prototileSupport a
+def Conjecture7718.wordTileColor : (w : List Conjecture7718.Letter) → Fin w.length → Conjecture7718.Letter :=
+fun w i => w.get i
+def Conjecture7718.wordTileSupport : (w : List Conjecture7718.Letter) → Fin w.length → Set ℝ :=
+fun w i => Set.Icc (↑↑i) (↑↑i + 1)
+def Conjecture7718.wordTileInterior : (w : List Conjecture7718.Letter) → Fin w.length → Set ℝ :=
+fun w i => interior (Conjecture7718.wordTileSupport w i)
+def Conjecture7718.UnitIntervalSubstitution : Conjecture7718.Substitution → ℝ → Prop :=
+fun σ q =>
+  1 < q ∧
+    ∀ (a : Conjecture7718.Letter),
+      ⋃ i, Conjecture7718.wordTileSupport (σ a) i = Conjecture7718.expandedPrototileSupport q a ∧
+        (Pairwise fun i j =>
+            Disjoint (Conjecture7718.wordTileInterior (σ a) i) (Conjecture7718.wordTileInterior (σ a) j)) ∧
+          ∀ (i : Fin (σ a).length),
+            Conjecture7718.wordTileSupport (σ a) i =
+              (fun x => ↑↑i + x) '' Conjecture7718.prototileSupport (Conjecture7718.wordTileColor (σ a) i)
+def Conjecture7718.perronValue : ℕ → ℝ :=
+fun m => 3 * ↑m + 3
+def Conjecture7718.OrderedSpectralData : Conjecture7718.Substitution → ℝ → ℝ → ℝ → Prop :=
+fun σ p s t =>
+  0 < t ∧
+    t < s ∧
+      s < p ∧
+        (Conjecture7718.incidenceMatrix σ).charpoly =
+            (Polynomial.X - Polynomial.C ↑p) * (Polynomial.X - Polynomial.C ↑s) * (Polynomial.X - Polynomial.C ↑t) ∧
+          IsGreatest ((fun z => ‖z‖) '' spectrum ℂ (Conjecture7718.incidenceMatrix σ)) p ∧
+            IsGreatest ((fun z => ‖z‖) '' (spectrum ℂ (Conjecture7718.incidenceMatrix σ) \ {↑p})) s
+def Conjecture7718.AdmissibleRatio : ℝ → Prop :=
+fun ρ =>
+  ∃ σ q p s t,
+    Conjecture7718.PrimitiveSubstitution σ ∧
+      (∀ (j : Conjecture7718.Letter), σ j ≠ []) ∧
+        Conjecture7718.UnitIntervalSubstitution σ q ∧
+          (Conjecture7718.incidenceMatrix σ).rank = 3 ∧ Conjecture7718.OrderedSpectralData σ p s t ∧ ρ = s / p
+def Conjecture7718.spectralRatio : ℕ → ℝ :=
+fun m => 3 / Conjecture7718.perronValue m
+def Conjecture7718.claimedMinimum : ℝ :=
+(3 - √5) / 2
+def Conjecture7718.ConjecturedPositiveLowerBound : Prop :=
+∀ (ρ : ℝ), Conjecture7718.AdmissibleRatio ρ → 0 < ρ → Conjecture7718.claimedMinimum ≤ ρ
+Conjecture7718.iterateWord_one (σ : Conjecture7718.Substitution) (b : Conjecture7718.Letter) :
+  Conjecture7718.iterateWord σ 1 [b] = σ b
+'Conjecture7718.iterateWord_one' depends on axioms: [propext, Quot.sound]
+Conjecture7718.incidenceCounts_substitution (m : ℕ) :
+  Conjecture7718.incidenceCounts (Conjecture7718.substitution m) = Conjecture7718.familyCounts m
+'Conjecture7718.incidenceCounts_substitution' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.incidenceMatrix_substitution (m : ℕ) :
+  Conjecture7718.incidenceMatrix (Conjecture7718.substitution m) =
+    !![↑m + 2, ↑m, ↑m + 1; ↑m, ↑m + 3, ↑m; ↑m + 1, ↑m, ↑m + 2]
+'Conjecture7718.incidenceMatrix_substitution' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.substitution_length (m : ℕ) (j : Conjecture7718.Letter) :
+  (Conjecture7718.substitution m j).length = 3 * m + 3
+'Conjecture7718.substitution_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.substitution_nonempty (m : ℕ) (j : Conjecture7718.Letter) : Conjecture7718.substitution m j ≠ []
+'Conjecture7718.substitution_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.familyCounts_pos (m : ℕ) (hm : 1 ≤ m) (i j : Conjecture7718.Letter) :
+  0 < Conjecture7718.familyCounts m i j
+'Conjecture7718.familyCounts_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.every_letter_mem_substitution (m : ℕ) (hm : 1 ≤ m) (a b : Conjecture7718.Letter) :
+  a ∈ Conjecture7718.substitution m b
+'Conjecture7718.every_letter_mem_substitution' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.substitution_primitive (m : ℕ) (hm : 1 ≤ m) :
+  Conjecture7718.PrimitiveSubstitution (Conjecture7718.substitution m)
+'Conjecture7718.substitution_primitive' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.incidenceCounts_substitution_pow_one_pos (m : ℕ) (hm : 1 ≤ m) (i j : Conjecture7718.Letter) :
+  0 < (Conjecture7718.incidenceCounts (Conjecture7718.substitution m) ^ 1) i j
+'Conjecture7718.incidenceCounts_substitution_pow_one_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.incidenceCounts_substitution_transpose (m : ℕ) :
+  (Conjecture7718.incidenceCounts (Conjecture7718.substitution m)).transpose =
+    Conjecture7718.incidenceCounts (Conjecture7718.substitution m)
+'Conjecture7718.incidenceCounts_substitution_transpose' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.incidenceMatrix_substitution_transpose (m : ℕ) :
+  (Conjecture7718.incidenceMatrix (Conjecture7718.substitution m)).transpose =
+    Conjecture7718.incidenceMatrix (Conjecture7718.substitution m)
+'Conjecture7718.incidenceMatrix_substitution_transpose' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.wordTileColors_eq (w : List Conjecture7718.Letter) : List.ofFn (Conjecture7718.wordTileColor w) = w
+'Conjecture7718.wordTileColors_eq' depends on axioms: [propext, Quot.sound]
+Conjecture7718.wordTileColor_count (w : List Conjecture7718.Letter) (a : Conjecture7718.Letter) :
+  List.count a (List.ofFn (Conjecture7718.wordTileColor w)) = List.count a w
+'Conjecture7718.wordTileColor_count' depends on axioms: [propext, Quot.sound]
+Conjecture7718.substitution_tileColor_count (m : ℕ) (a b : Conjecture7718.Letter) :
+  List.count a (List.ofFn (Conjecture7718.wordTileColor (Conjecture7718.substitution m b))) =
+    Conjecture7718.familyCounts m a b
+'Conjecture7718.substitution_tileColor_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.wordTileInterior_eq (w : List Conjecture7718.Letter) (i : Fin w.length) :
+  Conjecture7718.wordTileInterior w i = Set.Ioo (↑↑i) (↑↑i + 1)
+'Conjecture7718.wordTileInterior_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.wordTileSupport_translate (w : List Conjecture7718.Letter) (i : Fin w.length) :
+  Conjecture7718.wordTileSupport w i =
+    (fun x => ↑↑i + x) '' Conjecture7718.prototileSupport (Conjecture7718.wordTileColor w i)
+'Conjecture7718.wordTileSupport_translate' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.union_unit_intervals (L : ℕ) (hL : 0 < L) : ⋃ i, Set.Icc (↑↑i) (↑↑i + 1) = Set.Icc 0 ↑L
+'Conjecture7718.union_unit_intervals' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.union_wordTileSupport (w : List Conjecture7718.Letter) (hw : 0 < w.length) :
+  ⋃ i, Conjecture7718.wordTileSupport w i = Set.Icc 0 ↑w.length
+'Conjecture7718.union_wordTileSupport' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.pairwise_disjoint_wordTileInterior (w : List Conjecture7718.Letter) :
+  Pairwise fun i j => Disjoint (Conjecture7718.wordTileInterior w i) (Conjecture7718.wordTileInterior w j)
+'Conjecture7718.pairwise_disjoint_wordTileInterior' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.expandedPrototileSupport_eq (q : ℝ) (hq : 0 < q) (a : Conjecture7718.Letter) :
+  Conjecture7718.expandedPrototileSupport q a = Set.Icc 0 q
+'Conjecture7718.expandedPrototileSupport_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.substitution_unitInterval (m : ℕ) :
+  Conjecture7718.UnitIntervalSubstitution (Conjecture7718.substitution m) (3 * ↑m + 3)
+'Conjecture7718.substitution_unitInterval' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.substitution_primitive_unitInterval (m : ℕ) (hm : 1 ≤ m) :
+  Conjecture7718.PrimitiveSubstitution (Conjecture7718.substitution m) ∧
+    Conjecture7718.UnitIntervalSubstitution (Conjecture7718.substitution m) (3 * ↑m + 3)
+'Conjecture7718.substitution_primitive_unitInterval' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.perronValue_gt_three (m : ℕ) (hm : 1 ≤ m) : 3 < Conjecture7718.perronValue m
+'Conjecture7718.perronValue_gt_three' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.incidence_charpoly (m : ℕ) :
+  (Conjecture7718.incidenceMatrix (Conjecture7718.substitution m)).charpoly =
+    (Polynomial.X - Polynomial.C ↑(Conjecture7718.perronValue m)) * (Polynomial.X - Polynomial.C 3) *
+      (Polynomial.X - Polynomial.C 1)
+'Conjecture7718.incidence_charpoly' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.incidence_resolvent_det (m : ℕ) (z : ℂ) :
+  ((algebraMap ℂ (Matrix Conjecture7718.Letter Conjecture7718.Letter ℂ)) z -
+        Conjecture7718.incidenceMatrix (Conjecture7718.substitution m)).det =
+    (z - ↑(Conjecture7718.perronValue m)) * (z - 3) * (z - 1)
+'Conjecture7718.incidence_resolvent_det' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.incidence_mem_spectrum_iff (m : ℕ) (z : ℂ) :
+  z ∈ spectrum ℂ (Conjecture7718.incidenceMatrix (Conjecture7718.substitution m)) ↔
+    z = ↑(Conjecture7718.perronValue m) ∨ z = 3 ∨ z = 1
+'Conjecture7718.incidence_mem_spectrum_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.incidence_det (m : ℕ) :
+  (Conjecture7718.incidenceMatrix (Conjecture7718.substitution m)).det = 3 * ↑(Conjecture7718.perronValue m)
+'Conjecture7718.incidence_det' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.incidence_rank (m : ℕ) : (Conjecture7718.incidenceMatrix (Conjecture7718.substitution m)).rank = 3
+'Conjecture7718.incidence_rank' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.incidence_mulVec_one (m : ℕ) :
+  ((Conjecture7718.incidenceMatrix (Conjecture7718.substitution m)).mulVec fun x => 1) =
+    ↑(Conjecture7718.perronValue m) • fun x => 1
+'Conjecture7718.incidence_mulVec_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.incidence_positive_eigenvector (m : ℕ) :
+  ∃ v,
+    (∀ (i : Conjecture7718.Letter), 0 < v i) ∧
+      ((Conjecture7718.incidenceMatrix (Conjecture7718.substitution m)).mulVec fun i => ↑(v i)) =
+        ↑(Conjecture7718.perronValue m) • fun i => ↑(v i)
+'Conjecture7718.incidence_positive_eigenvector' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.perron_isGreatest (m : ℕ) (hm : 1 ≤ m) :
+  IsGreatest ((fun z => ‖z‖) '' spectrum ℂ (Conjecture7718.incidenceMatrix (Conjecture7718.substitution m)))
+    (Conjecture7718.perronValue m)
+'Conjecture7718.perron_isGreatest' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.second_isGreatest (m : ℕ) (hm : 1 ≤ m) :
+  IsGreatest
+    ((fun z => ‖z‖) ''
+      (spectrum ℂ (Conjecture7718.incidenceMatrix (Conjecture7718.substitution m)) \ {↑(Conjecture7718.perronValue m)}))
+    3
+'Conjecture7718.second_isGreatest' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.substitution_orderedSpectralData (m : ℕ) (hm : 1 ≤ m) :
+  Conjecture7718.OrderedSpectralData (Conjecture7718.substitution m) (Conjecture7718.perronValue m) 3 1
+'Conjecture7718.substitution_orderedSpectralData' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.spectralRatio_eq (m : ℕ) : Conjecture7718.spectralRatio m = 1 / (↑m + 1)
+'Conjecture7718.spectralRatio_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.spectralRatio_pos (m : ℕ) : 0 < Conjecture7718.spectralRatio m
+'Conjecture7718.spectralRatio_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.spectralRatio_admissible (m : ℕ) (hm : 1 ≤ m) :
+  Conjecture7718.AdmissibleRatio (Conjecture7718.spectralRatio m)
+'Conjecture7718.spectralRatio_admissible' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.spectralRatio_two : Conjecture7718.spectralRatio 2 = 1 / 3
+'Conjecture7718.spectralRatio_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.one_third_lt_claimedMinimum : 1 / 3 < Conjecture7718.claimedMinimum
+'Conjecture7718.one_third_lt_claimedMinimum' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.counterexample : ∃ ρ, Conjecture7718.AdmissibleRatio ρ ∧ 0 < ρ ∧ ρ < Conjecture7718.claimedMinimum
+'Conjecture7718.counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.conjecture_00000007718_false : ¬Conjecture7718.ConjecturedPositiveLowerBound
+'Conjecture7718.conjecture_00000007718_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.arbitrarily_small_positive_ratios (ε : ℝ) (hε : 0 < ε) :
+  ∃ m, 1 ≤ m ∧ 0 < Conjecture7718.spectralRatio m ∧ Conjecture7718.spectralRatio m < ε
+'Conjecture7718.arbitrarily_small_positive_ratios' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.no_positive_universal_lower_bound (c : ℝ) (hc : 0 < c) :
+  ∃ ρ, Conjecture7718.AdmissibleRatio ρ ∧ 0 < ρ ∧ ρ < c
+'Conjecture7718.no_positive_universal_lower_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7718.no_least_positive_admissible_ratio :
+  ¬∃ c, Conjecture7718.AdmissibleRatio c ∧ 0 < c ∧ ∀ (ρ : ℝ), Conjecture7718.AdmissibleRatio ρ → 0 < ρ → c ≤ ρ
+'Conjecture7718.no_least_positive_admissible_ratio' depends on axioms: [propext, Classical.choice, Quot.sound]
