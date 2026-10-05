@@ -1,0 +1,54 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\title{Essential spectrum is not a Fredholm-component invariant}
+\author{ziangni-sys \quad Conjecture 00000008570}
+\date{}
+\begin{document}
+\maketitle
+\vspace{-2em}
+\textbf{Disproof of the classification clause.} The conjecture says that the connected components of the Fredholm domain in the norm topology are completely classified by the index together with the essential spectrum. For exact essential spectrum to be such an invariant, it must be constant on each component. The identity and twice the identity already contradict this requirement.
+
+Let
+\[
+ H=\ell^2(\mathbb N,\mathbb C),\qquad \mathcal B(H)=\{\text{bounded complex-linear maps }H\to H\}.
+\]
+This is a genuine infinite-dimensional complex Hilbert space: the coordinate unit vectors form an infinite orthonormal family. For $A\in\mathcal B(H)$ use the full standard Fredholm condition
+\[
+ A\in\mathcal F
+ \quad\Longleftrightarrow\quad
+ \operatorname{ran}A\text{ is closed},\quad
+ \dim\ker A<\infty,\quad
+ \dim(H/\operatorname{ran}A)<\infty.
+\]
+For Fredholm operators the index is
+\[
+ \operatorname{ind}A=\dim\ker A-\dim(H/\operatorname{ran}A).
+\]
+We use the Fredholm essential spectrum
+\[
+ \sigma_{\mathrm{ess}}(A)=\{\lambda\in\mathbb C:A-\lambda I\notin\mathcal F\}.
+\]
+
+For every $a\ne0$, the actual operator $aI$ has inverse $a^{-1}I$. Its kernel is zero and its range is all of $H$, hence it is Fredholm with index zero. In contrast, the zero operator is not Fredholm: its kernel is the infinite-dimensional space $H$. Thus for every $a\in\mathbb C$,
+\[
+ \sigma_{\mathrm{ess}}(aI)=\{a\},
+\]
+since $aI-\lambda I=(a-\lambda)I$ is Fredholm exactly when $\lambda\ne a$. In particular,
+\[
+ \operatorname{ind}I=\operatorname{ind}(2I)=0,
+ \qquad \sigma_{\mathrm{ess}}(I)=\{1\}\ne\{2\}=\sigma_{\mathrm{ess}}(2I).
+\]
+
+Nevertheless, the actual norm-continuous path
+\[
+ \gamma:[0,1]\longrightarrow\mathcal F,\qquad \gamma(t)=(1+t)I
+\]
+joins $I$ to $2I$. Every point of the path is invertible because $1+t>0$, and continuity follows from continuity of scalar multiplication in the operator norm. Its connected image is contained in a single connected component of the Fredholm domain. Therefore $I$ and $2I$ belong to the same component despite having different essential spectra.
+
+This disproves classification of components by the pair consisting of the index and the exact essential spectrum. It does not dispute local or componentwise constancy of the Fredholm index, nor a classification that uses some separately specified equivalence class of essential spectra instead of the spectrum itself. The other family-index assertions are not needed to disprove the conjunction.
+
+\textbf{Formal correspondence.} The Lean development uses the actual \texttt{lp} Hilbert space, its standard Hilbert basis, bounded continuous linear maps and their norm topology. Since the pinned Mathlib version does not provide a bundled Fredholm predicate, the file explicitly defines it by closed range and finite-dimensional kernel and quotient. The essential spectrum is then defined by failure of this predicate, and its singleton value is proved for every scalar operator. The path is a genuine \texttt{Path} in the Fredholm subtype; the final theorem states membership in its actual \texttt{connectedComponent}, equality of integer indices and inequality of essential spectra.
+\end{document}
