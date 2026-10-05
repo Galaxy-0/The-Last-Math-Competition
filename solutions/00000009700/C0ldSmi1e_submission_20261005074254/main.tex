@@ -1,0 +1,138 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\dimH}{\dim_{\mathrm H}}
+\title{A nonempty counterexample to conjecture 00000009700}
+\author{C0ldSmi1e}
+\date{October 5, 2026}
+\begin{document}
+\begin{center}
+{\Large\bfseries A nonempty counterexample to conjecture 00000009700\par}
+\vspace{0.6em}
+C0ldSmi1e\qquad October 5, 2026
+\end{center}
+\vspace{0.3em}
+
+\begin{abstract}
+The conjecture asserts that every algebraically independent set of transcendental
+numbers has Hausdorff dimension one. A singleton consisting of a transcendental
+real number is algebraically independent over the rationals and has Hausdorff
+dimension zero. This refutes an explicit necessary clause of the conjecture.
+\end{abstract}
+
+\section{Source and conventions}
+The English source begins its conjecture with:
+\begin{quote}
+Every algebraically independent set of transcendental numbers has full Hausdorff
+dimension 1, and the box dimension spectrum of its complement is an explicit
+subinterval of $[0,1/2]$; algebraically independent number sets are full-measure
+dense G-delta under Lebesgue measure.
+\end{quote}
+The Chinese version likewise universally quantifies over algebraically independent
+sets of transcendental numbers and requires Hausdorff dimension one. Neither
+version imposes infinitude, maximality, or a transcendence-basis condition.
+The complete bilingual source is included as \texttt{conjecture.md}.
+
+We use real numbers with their ordinary metric, and algebraic independence and
+transcendence over $\Q$. These are explicit conventions: the source does not name
+the ground field or ambient space. The real-line interpretation is supported by
+its description of dimension one as full and its use of Lebesgue measure.
+
+For $S\subseteq\R$, algebraic independence means that evaluation on its inclusion
+$S\hookrightarrow\R$ is injective on the polynomial algebra
+$\Q[X_s:s\in S]$. A member $t$ is transcendental if no nonzero polynomial in
+$\Q[X]$ vanishes at $t$. Hausdorff dimension is the standard metric dimension
+obtained from Hausdorff measures. Write
+\[
+  H(S)\;:\Longleftrightarrow\;
+  S\text{ is algebraically independent over }\Q
+  \quad\text{and}\quad
+  (\forall t\in S)\ t\text{ is transcendental over }\Q.
+\]
+The precise first clause to be refuted is
+\begin{equation}\label{eq:clause}
+  (\forall S\subseteq\R)\quad H(S)\ \Longrightarrow\ \dimH S=1.
+\end{equation}
+
+\section{Counterexample and proof}
+\begin{lemma}
+There exists a transcendental real number.
+\end{lemma}
+\begin{proof}
+There are countably many polynomials with rational coefficients, and each
+nonzero such polynomial has finitely many real roots. The algebraic real numbers
+therefore form a countable union of finite sets and are countable. Since $\R$ is
+uncountable, some real number is not algebraic over $\Q$.
+\end{proof}
+
+\begin{theorem}\label{thm:counterexample}
+There exists a nonempty set $S\subseteq\R$ for which $H(S)$ holds and
+$\dimH S=0$. Consequently, \eqref{eq:clause} is false.
+\end{theorem}
+\begin{proof}
+Choose a transcendental real number $t$ and let $S=\{t\}$. This set is nonempty
+and every member is transcendental. The polynomial algebra with its single
+variable indexed by $S$ is the ordinary one-variable polynomial algebra over
+$\Q$. Evaluation at $t$ has zero kernel by transcendence, so it is injective.
+Thus the actual inclusion of $S$ into $\R$ is algebraically independent.
+
+For every exponent $s>0$, a singleton can be covered by an interval with
+arbitrarily small positive diameter. The $s$th power of that diameter tends to
+zero, so its $s$-dimensional Hausdorff measure is zero. It follows that its
+Hausdorff dimension is zero. Applying \eqref{eq:clause} to this $S$ would give
+$0=1$, a contradiction.
+\end{proof}
+
+\section{Relationship to the complete conjecture}
+The asserted dimension equality is a necessary conjunct in both source versions.
+The remaining assertions occur as conclusions, not as extra hypotheses restricting
+$S$. Failure of \eqref{eq:clause} therefore refutes the stated conjunction.
+The phrase ``box dimension spectrum'' has no parameter or convention specified
+in the source; this disproof does not assign it a new definition.
+The witness is finite and nonempty, as permitted by both source versions.
+
+\section{Formal verification}
+The accompanying Lean project uses the pinned Lean 4.19.0 and Mathlib v4.19.0.
+It formalizes real sets, the inclusion-indexed \texttt{AlgebraicIndependent}
+predicate over $\Q$, \texttt{Transcendental}, and the genuine Hausdorff dimension
+\texttt{dimH}. The dimension values are extended nonnegative reals.
+All new declarations are in namespace \texttt{Conjecture9700}.
+The theorem \texttt{exists\_nonempty\_counterexample} gives the actual nonempty
+witness, both source hypotheses, dimension zero, and failure of dimension one.
+The main theorem \texttt{hausdorff\_clause\_false} proves
+$\neg\,\texttt{HausdorffClause}$. The theorem
+\texttt{universal\_conjunction\_false} establishes the same obstruction for every
+additional predicate on the qualifying sets; it assigns no mathematical meaning
+to the unspecified spectrum.
+
+A fresh independent build and warning-as-error replays succeeded. All ten compiled
+declarations (one definition and nine theorems) were inventoried and inspected;
+their dependencies use only \texttt{propext}, \texttt{Classical.choice}, and
+\texttt{Quot.sound}. The complete type-and-body dependency audit found no unsafe,
+partial, or missing dependencies. The source contains no admitted proofs,
+\texttt{native\_decide}, or added axioms. Execution logs, theorem types, source
+identities, and reproduction instructions accompany the submission. No numerical
+approximation or auxiliary numerical computation is needed for the mathematics.
+
+\begin{thebibliography}{9}
+\raggedright
+\bibitem{stacks}
+The Stacks Project, Definition 9.26.1, ``Transcendence,''
+\href{https://stacks.math.columbia.edu/tag/030E}{tag 030E}.
+\bibitem{mathlib}
+Mathlib v4.19.0, modules
+\texttt{RingTheory.AlgebraicIndependent.Defs},
+\texttt{RingTheory.Algebraic.Defs}, and
+\texttt{Topology.MetricSpace.HausdorffDimension}.
+\end{thebibliography}
+\end{document}

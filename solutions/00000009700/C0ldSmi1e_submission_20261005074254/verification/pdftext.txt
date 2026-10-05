@@ -1,0 +1,75 @@
+PAGE 1
+A nonempty counterexample to conjecture 00000009700
+C0ldSmi1e October 5, 2026
+Abstract
+The conjecture asserts that every algebraically independent set of transcendental numbers
+has Hausdorﬀ dimension one. A singleton consisting of a transcendental real number is alge-
+braically independent over the rationals and has Hausdorﬀ dimension zero. This refutes an
+explicit necessary clause of the conjecture.
+1 Source and conventions
+The English source begins its conjecture with:
+Every algebraically independent set of transcendental numbers has full Hausdorﬀ di-
+mension 1, and the box dimension spectrum of its complement is an explicit subinterval
+of [0, 1/2]; algebraically independent number sets are full-measure dense G-delta under
+Lebesgue measure.
+The Chinese version likewise universally quantiﬁes over algebraically independent sets of tran-
+scendental numbers and requires Hausdorﬀ dimension one. Neither version imposes inﬁnitude,
+maximality, or a transcendence-basis condition. The complete bilingual source is included as
+conjecture.md.
+We use real numbers with their ordinary metric, and algebraic independence and transcendence
+over Q. These are explicit conventions: the source does not name the ground ﬁeld or ambient space.
+The real-line interpretation is supported by its description of dimension one as full and its use of
+Lebesgue measure.
+For S ⊆ R, algebraic independence means that evaluation on its inclusion S ↪→ R is injective on
+the polynomial algebra Q[Xs : s ∈ S]. A member t is transcendental if no nonzero polynomial in
+Q[X] vanishes at t. Hausdorﬀ dimension is the standard metric dimension obtained from Hausdorﬀ
+measures. Write
+H(S) : ⇐ ⇒ S is algebraically independent over Q and (∀t ∈ S) t is transcendental over Q.
+The precise ﬁrst clause to be refuted is
+(∀S ⊆ R) H(S) = ⇒ dimH S = 1. (1)
+2 Counterexample and proof
+Lemma 1. There exists a transcendental real number.
+Proof. There are countably many polynomials with rational coeﬃcients, and each nonzero such
+polynomial has ﬁnitely many real roots. The algebraic real numbers therefore form a countable
+union of ﬁnite sets and are countable. Since R is uncountable, some real number is not algebraic
+over Q.
+1
+
+PAGE 2
+Theorem 1. There exists a nonempty set S ⊆ R for which H(S) holds and dimH S = 0 . Conse-
+quently, (1) is false.
+Proof. Choose a transcendental real number t and let S = {t}. This set is nonempty and every
+member is transcendental. The polynomial algebra with its single variable indexed by S is the
+ordinary one-variable polynomial algebra over Q. Evaluation at t has zero kernel by transcendence,
+so it is injective. Thus the actual inclusion of S into R is algebraically independent.
+For every exponent s > 0, a singleton can be covered by an interval with arbitrarily small positive
+diameter. The sth power of that diameter tends to zero, so its s-dimensional Hausdorﬀ measure is
+zero. It follows that its Hausdorﬀ dimension is zero. Applying ( 1) to this S would give 0 = 1 , a
+contradiction.
+3 Relationship to the complete conjecture
+The asserted dimension equality is a necessary conjunct in both source versions. The remaining
+assertions occur as conclusions, not as extra hypotheses restricting S. Failure of ( 1) therefore refutes
+the stated conjunction. The phrase “box dimension spectrum” has no parameter or convention
+speciﬁed in the source; this disproof does not assign it a new deﬁnition. The witness is ﬁnite and
+nonempty, as permitted by both source versions.
+4 Formal veriﬁcation
+The accompanying Lean project uses the pinned Lean 4.19.0 and Mathlib v4.19.0. It formalizes
+real sets, the inclusion-indexed AlgebraicIndependent predicate over Q, Transcendental, and the
+genuine Hausdorﬀ dimension dimH. The dimension values are extended nonnegative reals. All new
+declarations are in namespace Conjecture9700. The theorem exists_nonempty_counterexample
+gives the actual nonempty witness, both source hypotheses, dimension zero, and failure of dimen-
+sion one. The main theorem hausdorff_clause_false proves ¬HausdorffClause. The theorem
+universal_conjunction_false establishes the same obstruction for every additional predicate on
+the qualifying sets; it assigns no mathematical meaning to the unspeciﬁed spectrum.
+A fresh independent build and warning-as-error replays succeeded. All ten compiled declarations
+(one deﬁnition and nine theorems) were inventoried and inspected; their dependencies use only
+propext, Classical.choice, and Quot.sound. The complete type-and-body dependency au-
+dit found no unsafe, partial, or missing dependencies. The source contains no admitted proofs,
+native_decide, or added axioms. Execution logs, theorem types, source identities, and reproduc-
+tion instructions accompany the submission. No numerical approximation or auxiliary numerical
+computation is needed for the mathematics.
+References
+[1] The Stacks Project, Deﬁnition 9.26.1, “Transcendence,” tag 030E .
+[2] Mathlib v4.19.0, modules RingTheory.AlgebraicIndependent.Defs,
+RingTheory.Algebraic.Defs, and Topology.MetricSpace.HausdorffDimension.
+2

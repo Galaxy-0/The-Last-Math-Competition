@@ -1,0 +1,194 @@
+AUTHOR HANDOFF: CONJECTURE 00000009700
+
+Status: READY for separate root verification and fresh semantic review.
+This is an author handoff, not an acceptance decision and not a publication.
+
+SOURCE AND SCOPE
+
+Exact bilingual source read:
+/private/tmp/tlmc9700-eligibility/conjecture.md
+SHA256 c5981f9f79d7718626657135ef176acbacaeb15827c5603c9997944ef70bb1a9
+
+Both complete current guides were read:
+/private/tmp/tlmc9700-eligibility/README.md
+SHA256 84cd9992c3b4027d90044109df969e22390051df4a5f7f21ca81138e5f717795
+/private/tmp/tlmc9700-eligibility/README.zh-CN.md
+SHA256 167c69fba1d5592feb55117da9a0151b0355ff6b2a0fb773115f367e58c59b47
+
+Clean eligibility input read:
+/private/tmp/tlmc9700-eligibility/clean-math-handoff.json
+It reported PASS, no remaining eligibility work, and no prior proof ideas.
+Eligibility must be checked again by the publishing workflow when appropriate.
+
+Complete candidate-free semantic preassessment read:
+/private/tmp/tlmc9700-semantic/preassessment.txt
+SHA256 f59f737fa39526fd7181c233cac68f3fc28ed6dcc1e9e3156f04cf63e49df4bd
+
+No other submissions, old scratch, prior proof sources, agent inventory, or prior
+chat history were read. Read-only API delegation was attempted but refused by the
+concurrency limit; no assisting agent was created. Mathematical API exploration
+was confined to pinned Mathlib sources. No repository files or dependency
+configuration were edited. No report, PDF, commit, pull request, or publication
+was created by this author.
+
+CONVENTIONS AND EXACT NECESSARY CLAUSE
+
+The result takes S to be an arbitrary subset of the usual real line, with its
+standard Euclidean metric, and uses algebraic independence and transcendence
+over Q. The source does not literally print R or Q. The supported ordinary
+number-theoretic convention is declared explicitly in the Lean source and here;
+no arbitrary-field or complex-ambient coverage is claimed.
+
+The first clause says that every algebraically independent set of transcendental
+numbers has Hausdorff dimension 1. Its formal statement is exactly:
+
+  forall S : Set R,
+    AlgebraicIndependent Q (Subtype.val : S -> R) ->
+    (forall x in S, Transcendental Q x) -> dimH S = 1.
+
+The English "Every" and Chinese "一切" agree. Neither language restricts to
+maximal, infinite, uncountable, measurable, positive-measure, or basis sets.
+Both source hypotheses are retained. The counterexample is additionally
+nonempty, so it does not depend on admitting the empty set.
+
+DEFINITION CORRESPONDENCE
+
+1. AlgebraicIndependent is the actual Mathlib predicate, defined as injectivity
+   of MvPolynomial.aeval. The variable type is S itself, and Subtype.val is the
+   inclusion S -> R. Thus the polynomial variables are indexed by actual distinct
+   members of the source set. There is no unrelated family or changed domain.
+2. Transcendental Q x is the actual Mathlib negation of IsAlgebraic Q x.
+   IsAlgebraic means that a nonzero rational-coefficient univariate polynomial
+   evaluates to zero. Irrationality is not substituted for transcendence.
+3. dimH is the pinned library's Hausdorff dimension, taking values in ENNReal.
+   In this Mathlib revision its actual declaration name is the root-level dimH,
+   despite documentation and the preassessment referring to MeasureTheory.dimH.
+   The inspection log prints its body: the supremum of dimensions at which the
+   corresponding Hausdorff measure is infinite. Its argument is the same S as
+   in the algebraic hypotheses, under the existing standard real metric.
+4. The equality to 1 is exact equality in ENNReal. The dimension theorem is
+   exactly 0, and zero_ne_one in that type rules out equality to 1.
+5. The only new proposition is HausdorffClause, an abbreviation in mathematical
+   content for the displayed universal statement. Its body is printed by the
+   inspection harness. There is no replacement definition of independence,
+   transcendence, dimension, measure, density, or spectrum.
+
+MATHEMATICS
+
+The set of real numbers algebraic over Q is countable. One standard justification
+is that rational polynomials form a countable set and each nonzero polynomial
+has finitely many real roots; Mathlib's Algebraic.countable supplies the proved
+general result. The real line is uncountable (Cardinal.not_countable_real).
+Consequently there exists a real x transcendental over Q.
+
+Take S = {x}. This set is nonempty. For a singleton index type, evaluation on the
+multivariable polynomial ring identifies with one-variable polynomial evaluation.
+Mathlib's algebraicIndependent_singleton_iff proves that its inclusion is
+algebraically independent if and only if x is transcendental. Applied directly
+to the subtype {x}, it establishes the exact set-level independence required.
+Every member of S equals x and is therefore transcendental over Q.
+
+Every singleton has Hausdorff dimension zero, by dimH_singleton. Thus this S
+satisfies both antecedents of the conjecture's first clause, but not its
+conclusion. This refutes the universal Hausdorff clause.
+
+SOURCE-TO-CLAUSE LOGICAL BRIDGE AND LIMITATIONS
+
+The source connects the dimension assertion and the complement-spectrum assertion
+with "and" / "且". Its later assertions cannot make a failed first conjunct true.
+The formal conjunction_implies_hausdorff_clause proves this projection for an
+arbitrary additional predicate P on the same sets, preserving the original
+domain and hypotheses. universal_conjunction_false then proves such a universal
+conjunction impossible for EVERY P. P is a universally quantified logical
+placeholder, not a definition or interpretation of a box-dimension spectrum.
+The final theorem also proves that any proposition entailing HausdorffClause is
+false, so the further semicolon assertion does not affect the obstruction.
+
+The box-dimension-spectrum phrase is not defined in the source and is not
+formalized here. The full-measure/dense/G-delta clause is not needed. This result
+does not claim to prove or independently disprove those clauses, define their
+missing parameters, or establish a repaired conjecture with additional
+cardinality or maximality assumptions. It is a disproof of the source conjunction
+under the declared real/rational convention through a necessary precise clause.
+
+COMPLETE DECLARATION INVENTORY
+
+Conjecture9700.HausdorffClause
+Conjecture9700.exists_transcendental_real
+Conjecture9700.singleton_independent_iff
+Conjecture9700.singleton_members_transcendental
+Conjecture9700.singleton_dimension_zero
+Conjecture9700.exists_nonempty_counterexample
+Conjecture9700.hausdorff_clause_false
+Conjecture9700.conjunction_implies_hausdorff_clause
+Conjecture9700.universal_conjunction_false
+Conjecture9700.not_statement_implying_hausdorff_clause
+
+Main theorem: Conjecture9700.hausdorff_clause_false : not HausdorffClause.
+Explicit witness theorem: Conjecture9700.exists_nonempty_counterexample.
+Unconditional arbitrary-conjunct bridge: Conjecture9700.universal_conjunction_false.
+All declarations are public and have ASCII names. There are no anonymous or
+private theorem declarations, additional axioms, unproved obligations, admitted
+proofs, unsafe/partial code, or native-decision proof bypasses in the proof source.
+
+PINNED PRIMARY LIBRARY REFERENCES
+
+All paths below are relative to the authorized Mathlib source root
+/private/tmp/tlmc310-proof/.lake/packages/mathlib/Mathlib.
+No external mathematical reference is needed for the formal result.
+
+Algebra/AlgebraicCard.lean:
+  Algebraic.countable; algebraic elements over a countable base are countable.
+Data/Real/Cardinality.lean:
+  Cardinal.not_countable_real; the whole real line is uncountable.
+RingTheory/AlgebraicIndependent/Defs.lean:
+  AlgebraicIndependent; the actual injective polynomial-evaluation definition.
+RingTheory/AlgebraicIndependent/Transcendental.lean:
+  algebraicIndependent_singleton_iff and its unique-index-type equivalence proof.
+RingTheory/Algebraic/Defs.lean:
+  IsAlgebraic and Transcendental.
+Topology/MetricSpace/HausdorffDimension.lean:
+  dimH and dimH_singleton; standard Hausdorff measure definition and dimension zero.
+
+AUTHOR VERIFICATION AND REPRODUCTION
+
+Project: /private/tmp/tlmc9700-proof
+Only authored proof module: Conjecture9700.lean
+SHA256 3180becac5ea37a91bcb2d03d5e83969e64f2a196156eae1c211b0c7ea5e8d0d
+Toolchain: leanprover/lean4:v4.19.0
+Mathlib: v4.19.0, commit c44e0c8ee63ca166450922a373c7409c5d26b00b
+The original lakefile.toml, lean-toolchain, and lake-manifest.json were not edited.
+
+Successful checks:
+- Default lake build, covering the only authored proof module and dependencies.
+- Full replay of Conjecture9700.lean with -DwarningAsError=true.
+- Inspection harness compilation with -DwarningAsError=true.
+- Final theorem types and definition bodies inspected.
+- Axiom inspection of every public declaration: exactly the standard foundational
+  list propext, Classical.choice, Quot.sound, with no extra axiom or sorryAx.
+- Source scan for prohibited constructs and ASCII public names.
+- Exact one-final-newline and no-trailing-whitespace checks on every proof source.
+- Fixed toolchain/Mathlib pins and default-target coverage checked.
+
+Reproduce (paths can be adapted when packaging):
+python3 /private/tmp/tlmc9700-auxiliary/verify_author.py --project /private/tmp/tlmc9700-proof --lake /private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake --output /private/tmp/tlmc9700-auxiliary/author-checks
+
+Inspection-only source outside the proof project:
+/private/tmp/tlmc9700-auxiliary/Inspect.lean
+Reproducible check script:
+/private/tmp/tlmc9700-auxiliary/verify_author.py
+Meaningful successful logs:
+/private/tmp/tlmc9700-auxiliary/initial-build.txt
+/private/tmp/tlmc9700-auxiliary/author-checks/lean-version.txt
+/private/tmp/tlmc9700-auxiliary/author-checks/default-build.txt
+/private/tmp/tlmc9700-auxiliary/author-checks/warning-replay-Conjecture9700.txt
+/private/tmp/tlmc9700-auxiliary/author-checks/types-and-axioms.txt
+/private/tmp/tlmc9700-auxiliary/author-checks/verification-summary.txt
+
+Mathematical auxiliary computations: NONE. No numerical experiment, external
+calculation, generated certificate, or non-Lean computation supports the proof.
+The Python script performs reproducibility and source-hygiene checks only.
+
+Outstanding workflow beyond author scope: separate root verification, fresh
+semantic review, report/PDF and submission packaging, current eligibility check,
+and any authorized publication steps. No final acceptance is claimed.
