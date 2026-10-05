@@ -1,0 +1,188 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\Per}{\operatorname{Per}}
+\newcommand{\Fix}{\operatorname{Fix}}
+
+\title{A disproof of Conjecture 00000000741\\[2pt]
+\large The squaring map never has exactly three periodic points}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000000741 reads:
+
+\begin{quote}
+\emph{Definition:} Let $n(p)$ denote the number of periodic points (counting distinct periodic orbits) of
+$f(x) = x^2$ on $\mathbb{Z}_p$. \emph{Conjecture:} For a density-one set of primes, $n(p) = 3$ (the fixed
+points $0$, $1$ and $-1$); the exceptional primes (with extra periodic points) have count
+$\le x^{1/2+\varepsilon}$, and all exceptions are characterized by $p^2 - 1$ containing large power factors.
+\end{quote}
+
+The Chinese version defines $n(p)$ as the number of periodic points and specifies in its parenthesis that
+the count is of the distinct points lying on periodic orbits. We therefore read $n(p)$ as the number of
+periodic points of $f$. For $\mathbb{Z}_p$ we treat both usual meanings: the field $\mathbb{Z}/p\mathbb{Z}$
+and the ring of $p$-adic integers. The argument works in every integral domain, so both are covered at once.
+
+The conjecture is a conjunction of three clauses:
+\begin{enumerate}[label=(\roman*)]
+  \item (\emph{density one}) there is a set $S$ of primes of relative density one among the primes such that
+        $n(p) = 3$ for every $p \in S$;
+  \item (\emph{exception count}) the number of exceptional primes up to $x$ is at most $x^{1/2+\varepsilon}$;
+  \item (\emph{characterization}) all exceptions are characterized by $p^2-1$ having large power factors.
+\end{enumerate}
+We show that clause (i) is false. Hence the conjunction (i)$\wedge$(ii)$\wedge$(iii) is false, whatever
+(ii) and (iii) mean. In fact $n(p) \ne 3$ for \emph{every} prime $p$, so the set of primes with $n(p)=3$ is
+empty.
+
+\section{Definitions}
+
+\begin{definition}[Periodic point]
+Let $f : X \to X$. A point $x$ is \emph{periodic} if $f^{k}(x) = x$ for some $k \ge 1$, where $f^k$ is the
+$k$-fold iterate. It is \emph{fixed} if $f(x) = x$. We write $\Per(f)$ and $\Fix(f)$ for these sets. This is
+Mathlib's \texttt{Function.periodicPts f}, the set of $x$ such that \texttt{IsPeriodicPt f n x}
+($f^{n}(x) = x$) for some $n > 0$, and \texttt{Function.fixedPoints f}.
+\end{definition}
+
+\begin{definition}[The count $n(p)$]
+For a ring $R$ let $f_R(x) = x^2$ and $N(R) = |\Per(f_R)|$ (Lean: \texttt{numPeriodic R}, the
+\texttt{Nat.card} of the set). Then $n(p) = N(\mathbb{Z}/p\mathbb{Z})$ (Lean: \texttt{n p}) and, for $p$
+prime, $n_{\mathrm{adic}}(p) = N(\mathbb{Z}_p)$ (Lean: \texttt{nPadic p}).
+\end{definition}
+
+\begin{definition}[Relative density among the primes]
+For $S \subseteq \mathbb{N}$ let
+\[
+  r_S(N) = \frac{\#\{p < N : p \text{ prime}, \ p \in S\}}{\#\{p < N : p \text{ prime}\}}
+\]
+(Lean: \texttt{primeRatio S N}; the denominator is Mathlib's \texttt{Nat.primeCounting' N}). $S$ has
+relative density one if $r_S(N) \to 1$ as $N \to \infty$ (Lean: \texttt{HasPrimeDensityOne S}). Clause (i)
+for a count function $m$ is \texttt{DensityOneClause m}: some $S$ with $r_S(N)\to 1$ has $m(p) = 3$ for
+every prime $p\in S$.
+\end{definition}
+
+\section{The proof}
+
+Throughout, $R$ is an integral domain and $f(x) = x^2$. Since $f^{k}(x) = x^{2^k}$ (Lean:
+\texttt{iterate\_sq}), $x \in \Per(f)$ if and only if $x^{2^k} = x$ for some $k \ge 1$
+(\texttt{mem\_periodicPts\_sq}). Clearly $0, 1 \in \Per(f)$.
+
+\begin{lemma}[\texttt{fixedPoints\_sq}]\label{lem:fix}
+$\Fix(f) = \{0, 1\}$.
+\end{lemma}
+\begin{proof}
+$x^2 = x$ means $x(x-1) = 0$, so $x = 0$ or $x = 1$ because $R$ has no zero divisors.
+\end{proof}
+
+\begin{lemma}[\texttt{neg\_one\_mem\_periodicPts\_iff}]\label{lem:neg}
+$-1 \in \Per(f)$ if and only if $-1 = 1$ in $R$.
+\end{lemma}
+\begin{proof}
+For $k \ge 1$ the exponent $2^k$ is even, so $(-1)^{2^k} = 1$; thus $(-1)^{2^k} = -1$ forces $1 = -1$.
+Conversely, if $-1 = 1$ then $-1$ is fixed.
+\end{proof}
+
+\begin{lemma}[\texttt{exists\_inv\_periodic}]\label{lem:inv}
+If $x \in \Per(f)$ and $x \ne 0$, there is $y \in \Per(f)$ with $xy = 1$.
+\end{lemma}
+\begin{proof}
+Let $x^{2^k} = x$ with $k \ge 1$. Then $x \cdot x^{2^k-1} = x \cdot 1$, and cancelling $x$ gives
+$x^{2^k - 1} = 1$. Put $y = x^{2^k-2}$; then $xy = x^{2^k-1} = 1$. Moreover
+$x\, y^{2^k} = x^{2^k} y^{2^k} = (xy)^{2^k} = 1 = xy$, and cancelling $x$ gives $y^{2^k} = y$.
+\end{proof}
+
+\begin{theorem}[\texttt{card\_periodicPts\_ne\_three}]\label{thm:main}
+In every integral domain $R$, the squaring map does not have exactly three periodic points:
+$N(R) \ne 3$.
+\end{theorem}
+\begin{proof}
+Suppose $|\Per(f)| = 3$. Then $\Per(f)$ is finite and contains the two distinct points $0, 1$, so it contains
+a third point $x \notin \{0,1\}$, and $\Per(f) = \{0, 1, x\}$. By Lemma~\ref{lem:inv} there is
+$y \in \Per(f)$ with $xy = 1$. Here $y \ne 0$ because $xy = 1$, and $y \ne 1$ because otherwise $x = 1$.
+Hence $y = x$ and $x^2 = 1$, so $(x-1)(x+1) = 0$ and $x = -1$. By Lemma~\ref{lem:neg}, $-1 = 1$, so $x = 1$,
+a contradiction.
+\end{proof}
+
+\begin{corollary}[\texttt{n\_ne\_three}, \texttt{nPadic\_ne\_three}]
+For every prime $p$, $n(p) \ne 3$, both on $\mathbb{Z}/p\mathbb{Z}$ and on the $p$-adic integers.
+\end{corollary}
+\begin{proof}
+Both rings are integral domains (Mathlib provides the instances).
+\end{proof}
+
+\begin{theorem}[\texttt{not\_densityOneClause}]
+If $m(p) \ne 3$ for every prime $p$, then \texttt{DensityOneClause m} is false. In particular clause (i)
+fails for $n$ and for $n_{\mathrm{adic}}$.
+\end{theorem}
+\begin{proof}
+Let $S$ have $m(p) = 3$ for every prime $p \in S$. Then no prime lies in $S$, so the numerator of
+$r_S(N)$ is $0$ for every $N$, and $r_S(N) = 0$ for every $N$. The constant sequence $0$ does not converge
+to $1$.
+\end{proof}
+
+We also record (Lean: \texttt{neg\_one\_not\_periodic}) that for odd primes $p$ the element $-1$ is not
+periodic, because $-1 \ne 1$ in $\mathbb{Z}/p\mathbb{Z}$. Together with Lemma~\ref{lem:fix}, this shows that
+the three points named in the conjecture, ``the fixed points $0$, $1$ and $-1$'', are never all fixed or
+even periodic for $p > 2$.
+
+\begin{remark}[Exact value, not used in the proof]
+In $\mathbb{Z}/p\mathbb{Z}$ a unit $x$ is periodic exactly when its multiplicative order is odd, so
+$n(p) = 1 + m$, where $m$ is the odd part of $p-1$. Thus $n(p)$ is always even:
+$n(2)=n(3)=n(5)=2$, $n(7)=4$, $n(11)=6$, $n(13)=4$. A Python check confirms this formula for all
+$p < 1500$. So every prime except $2$ and the Fermat primes has more than three periodic points.
+\end{remark}
+
+\begin{remark}[The orbit-count reading]
+The English parenthesis ``counting distinct periodic orbits'' could also be read as counting orbits rather
+than points. Under that reading the claim is false as well, although this remark is not formalized. For
+every prime $p \equiv 1 \pmod 7$, the group $(\mathbb{Z}/p\mathbb{Z})^\times$ contains six elements of
+order $7$. Since $2$ has order $3$ modulo $7$, squaring splits them into two $3$-cycles. Together with
+$\{0\}$ and $\{1\}$ this gives at least four periodic orbits. By Dirichlet's theorem in its density form,
+these primes have relative density $1/6$, so the primes with exactly three orbits do not have density one,
+and the exceptions are not $O(x^{1/2+\varepsilon})$. Even under this reading, the three orbits are never
+``the fixed points $0$, $1$ and $-1$'', since $-1$ is not fixed for $p>2$ (Lemma~\ref{lem:fix}).
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture741/Basic.lean} (Lean 4.33.1, Mathlib v4.33.1; only \texttt{import Mathlib}).
+The main theorem is
+\begin{quote}
+\texttt{theorem conjecture\_00000000741\_false (Q : Prop) :}\
+\quad $\neg(\texttt{DensityOneClause n} \wedge Q) \;\wedge\; \neg(\texttt{DensityOneClause nPadic} \wedge Q)
+\;\wedge$\
+\quad $(\forall p,\ p\ \text{prime} \to \texttt{n}\ p \ne 3) \;\wedge$\
+\quad $(\forall p,\ p\ \text{prime} \to \texttt{fixedPoints}\,(y \mapsto y^2 : \mathbb{Z}/p \to \mathbb{Z}/p)
+= \{0,1\}) \;\wedge$\
+\quad $(\forall p,\ p\ \text{prime} \to p \ne 2 \to (-1 : \mathbb{Z}/p) \notin
+\texttt{periodicPts}\,(y \mapsto y^2))$
+\end{quote}
+The proposition \texttt{Q} stands for any formalization of clauses (ii) and (iii). The supporting
+results are \texttt{iterate\_sq}, \texttt{mem\_periodicPts\_sq}, \texttt{fixedPoints\_sq},
+\texttt{neg\_one\_mem\_periodicPts\_iff}, \texttt{exists\_inv\_periodic},
+\texttt{card\_periodicPts\_ne\_three}, \texttt{n\_ne\_three}, \texttt{nPadic\_ne\_three},
+\texttt{neg\_one\_not\_periodic} and \texttt{not\_densityOneClause}.
+
+\paragraph{Axiom audit.} \verb|#print axioms Conjecture741.conjecture_00000000741_false| reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no
+\texttt{native\_decide}, and the file also compiles with \texttt{-DwarningAsError=true}.
+
+\end{document}
