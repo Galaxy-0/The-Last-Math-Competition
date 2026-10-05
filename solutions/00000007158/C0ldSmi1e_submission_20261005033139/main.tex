@@ -1,0 +1,124 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{proposition}{Proposition}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\im}{\operatorname{Im}}
+\title{A zero-bandwidth counterexample to Conjecture 00000007158}
+\author{C0ldSmi1e}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+A real $2\times2$ matrix has complex spectrum $\{0\}$ while its
+antisymmetric part has Euclidean operator norm $1$. This disproves the
+conjecture's asserted equality between actual spectral imaginary bandwidth
+and that norm. The discrepancy persists under the usual positive-factor
+conventions for bandwidth and antisymmetric part.
+\end{abstract}
+
+\section{Statement and interpretation}
+The English source asserts: ``The imaginary-part bandwidth of the spectrum
+is the norm of the antisymmetric part, and the minimizer of the norm is the
+normal matrix.'' The accompanying Chinese version likewise states the
+bandwidth--norm equality. The exact bilingual source is included as
+\texttt{conjecture.md}.
+
+For a real square matrix $A$, take its eigenvalues over $\mathbb C$, and put
+\[
+ K(A)=\frac{A-A^{\mathsf T}}2,
+ \qquad
+ W(A)=\max_{\lambda\in\Spec(A)}\im\lambda
+       -\min_{\lambda\in\Spec(A)}\im\lambda.
+\]
+The norm $\|K(A)\|_2$ is the operator norm induced by the Euclidean vector
+norm. Thus the first assertion includes the universal equality
+$W(A)=\|K(A)\|_2$. No normality or diagonalizability hypothesis on $A$ is
+stated. The subsequent assertion about a normal minimizer does not supply
+such a hypothesis.
+
+\section{Exact counterexample}
+Consider
+\[
+ N=\begin{pmatrix}0&2\\0&0\end{pmatrix},
+ \qquad
+ K(N)=\begin{pmatrix}0&1\\-1&0\end{pmatrix}=:J.
+\]
+\begin{proposition}
+The matrix $N$ satisfies $\Spec(N)=\{0\}$, $W(N)=0$, and
+$\|K(N)\|_2=1$. In particular $W(N)\ne\|K(N)\|_2$.
+\end{proposition}
+\begin{proof}
+For every $z\in\mathbb C$,
+\[
+ \det(zI-N)=\det\begin{pmatrix}z&-2\\0&z\end{pmatrix}=z^2.
+\]
+The matrix $zI-N$ is invertible exactly when $z\ne0$. Thus its algebraic
+spectrum, equivalently its set of complex eigenvalues, is exactly
+$\{0\}$. This excludes every other eigenvalue. Both imaginary extremes
+are zero, hence $W(N)=0$.
+
+For every real or complex vector $(x,y)$, we have
+$J(x,y)=(y,-x)$ and
+\[
+ \|J(x,y)\|_2^2=|y|^2+|-x|^2
+                =|x|^2+|y|^2=\|(x,y)\|_2^2.
+\]
+Thus $J$ is an isometry, and its operator norm is exactly $1$:
+it is at most $1$ on all vectors and attains $1$ on
+$e_1=(1,0)^{\mathsf T}$. Equivalently, $J^*J=I$ and
+$\|J^*J\|_2=\|J\|_2^2$ yield the same norm calculation.
+The asserted equality would give $0=1$, a contradiction.
+\end{proof}
+
+\section{Conventions and logical scope}
+This is a strict gap, independent of the familiar factor conventions.
+The maximum absolute imaginary part and half the full imaginary bandwidth
+are also zero for $N$. Using $A-A^{\mathsf T}$ instead of
+$(A-A^{\mathsf T})/2$ gives $2J$, whose operator norm is $2$.
+More generally, $J\ne0$, so every genuine norm on the matrix space assigns
+it a positive value. The failure therefore does not depend on choosing a
+special norm or on a missing factor of two.
+
+The same real matrix is also a complex matrix; its transpose equals its
+adjoint. Accordingly its antisymmetric part equals its skew-Hermitian
+part. For the Hermitian imaginary-part convention $(N-N^*)/(2i)$,
+multiplication by a complex scalar of modulus one leaves the operator
+norm equal to $1$.
+
+The conclusion concerns the equality for the actual spectrum written in
+the conjecture. It does not refute an inequality placing the spectrum
+inside a norm-controlled strip, nor an equality restricted to a class
+with extra hypotheses. A containing strip may have positive width even
+when the actual spectrum has zero width.
+
+The minimization clause does not specify an admissible class or fixed
+constraints. No optimization problem is invented here. A counterexample
+to the explicit first assertion already disproves the conjunction as
+written; no claim is made about possible repaired minimization statements.
+
+\section{Formal verification}
+The accompanying Lean project targets Lean 4.19.0 and Mathlib v4.19.0.
+It uses Mathlib's algebraic \texttt{spectrum} and proves its equivalence
+to the existence of a nonzero complex eigenvector. Bandwidth is defined
+as \texttt{sSup} minus \texttt{sInf} of the imaginary spectrum; for the
+proved singleton these are exactly the maximum and minimum above.
+The \texttt{Matrix.L2OpNorm} scope selects the Euclidean operator norm,
+with an explicit bridge to the associated continuous linear map.
+
+The main theorem \texttt{bandwidthEquality\_false} negates the universal
+equality. A further theorem negates its conjunction with an arbitrary
+additional proposition, without assigning a meaning to the minimization
+clause. The source also proves the radius, positive-scaling, unhalved-part,
+complex-adjoint, and zero-separating-norm statements used above.
+All computations are exact symbolic proofs in Lean; no numerical
+eigenvalue computation or external mathematical computation is required.
+
+The submission includes reproducible build and source-replay records,
+an audit of theorem axiom dependencies, and an independent semantic
+review. These records describe local verification; maintainer acceptance
+is a separate decision.
+\end{document}

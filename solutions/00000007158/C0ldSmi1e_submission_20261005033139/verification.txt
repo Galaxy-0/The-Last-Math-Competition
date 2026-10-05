@@ -1,0 +1,71 @@
+Verification record: conjecture 00000007158
+
+Result: local formal verification and report validation PASS.
+Independent semantic approval is recorded separately in SEMANTIC_REVIEW.md.
+Maintainer acceptance is not asserted by these local records.
+
+Source identity
+Official bilingual source SHA-256: 39be5d77db8687d90fa65b08d9966b7d90bd561b825e1eb4a2f9646e7042bf04
+Audited upstream main: d7d4bc9f6918401d3fb22c6e473df63eba5dbb78
+Lean source SHA-256: ed150cebf44b9f91853685881b091d1696158fd5a4657d7fda2e37b01dae7c44
+Exact source/config identities: verification/frozen-sources.json.
+
+Mathematical scope
+N = [[0,2],[0,0]] has actual complex spectrum {0} and bandwidth zero.
+Its normalized antisymmetric part has Euclidean operator norm one.
+bandwidthEquality_false negates the universal equality for positive finite
+dimensions. conjecture_conjunction_false handles any additional conjunct.
+No minimization class or constraints are invented. The proof does not refute
+a containing-strip inequality or claim an equality under added hypotheses.
+The spectrum/eigenvector and Euclidean matrix/operator-norm bridges are
+formal theorems. Radius, scaling, unhalved, complex-adjoint and generic
+zero-separation robustness are also checked. No external computation required.
+
+Independent execution
+Fresh build directory: /private/tmp/tlmc7158-independent-final
+Compiler: Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)
+Compiler commit: 6caaee842e9495688c1567e78c0e68dbb96942aa
+All nine dependency revisions match the pinned manifest, with tracked
+dependency sources clean before and after. Candidate build outputs were
+absent before the fresh build. No prior candidate olean files were copied.
+lake build: exit 0.
+Both full proof source and Check.lean replay with warnings treated as errors:
+all exit zero. Check prints all 8 definitions and 24 theorem types/axiom lists.
+Every theorem uses only propext, Classical.choice and Quot.sound (or a subset).
+Exhaustive module-of-origin inventory: 42 constants,
+including 10 generated/additional constants.
+All are retained in the inventory, with types, safety flags and axiom closure.
+No custom axiom declarations, partial declarations or unexpected unsafe
+constants; all dependency closures use only the standard allowed axioms.
+Authored source bypass scan: no hits. Source/config/inventory hashes and
+compiler/dependency identity remain unchanged after all checks.
+Started: 2026-10-05T02:56:55.356699+00:00
+Finished: 2026-10-05T02:57:18.607199+00:00
+
+Initial audit and resolution
+The first exhaustive audit rejected two compiler-generated runtime constants
+that referenced an imported real-numeral implementation axiom. Safe logical
+definitions and all named theorems already used only standard axioms.
+The author explicitly marked complexification, counterexample and quarterTurn
+noncomputable. Their mathematical types, bodies and all proofs are identical.
+The final audit used a new build directory and the same strict criteria; no
+check was weakened. See verification/initial-audit-resolution.json for hashes
+and exact transformation, and the final complete inventory for resulting scope.
+
+Report
+main.tex SHA-256: 823b20cc6c62a1f56138b1478b578984a0dab69a9b1e9473cb468f274549ff69
+main.pdf SHA-256: 9c2930beb0eba565e0ee9b7a390a24812f7fed7dde5bf16a35e141b2063cac54
+Built-in editor compilation: success for this exact source.
+Existing Tectonic export: exit zero; no warnings or box diagnostics.
+All 2 final pages rendered and visually inspected: PASS.
+Complete text extracted with pypdf; rendering and source/PDF hashes recorded.
+
+Contribution eligibility
+Initial candidate audit: PASS; 593 all-state PRs,
+32 complete identifier/semantic searches, all related leads read,
+both remote branches and all local refs/history checked. No previous same-ID
+submission or invalid submission found. Both full bilingual guides read.
+Final prepublication observations are recorded separately in the package.
+
+Reproduction commands are in README.md. Inspection/export Python and Lean
+files are verification tooling, not mathematical premises or external oracles.

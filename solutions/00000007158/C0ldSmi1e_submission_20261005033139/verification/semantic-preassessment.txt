@@ -1,0 +1,34 @@
+Independent candidate-free semantic preassessment — conjecture 00000007158
+Decision: GO, subject to the semantic requirements below.
+
+Sources read in full:
+- /private/tmp/tlmc7158-eligibility/conjecture.md
+  SHA-256 39be5d77db8687d90fa65b08d9966b7d90bd561b825e1eb4a2f9646e7042bf04 (independently checked)
+- /private/tmp/tlmc7158-eligibility/README.md
+- /private/tmp/tlmc7158-eligibility/README.zh-CN.md
+The supplied eligibility audit is PASS at upstream d7d4bc9f6918401d3fb22c6e473df63eba5dbb78. This note does not independently repeat that eligibility audit. No candidate, proof, solution files, or prior-problem notes were consulted.
+
+1. Faithful finite-dimensional scope
+The reference to Bendixson's eigenvalue bounds, together with “antisymmetric part” and “normal matrix,” supports the conventional setting of finite square real matrices, with their eigenvalues evaluated over C. No dimension restriction, diagonalizability condition, or assumption of normality is stated. A real square matrix is also an admissible special case of a complex-matrix reading using the adjoint. The subsequent mention of a normal minimizer is a claimed conclusion; it does not grammatically impose normality on every matrix in the first assertion.
+
+For a real matrix A, define the antisymmetric part explicitly as K=(A-A^T)/2. The natural default norm in eigenvalue bounds is the Euclidean induced operator norm (spectral norm). “Imaginary-part bandwidth of the spectrum” naturally denotes max_{lambda in spectrum(A)} Im(lambda) minus min_{lambda in spectrum(A)} Im(lambda). State that convention and the complex spectrum explicitly. Eigenvalue multiplicities do not affect either extreme. An alternative use of “bandwidth” is the maximum absolute imaginary part, or half the total width for real matrices. An alternative normalization of the antisymmetric component omits the factor 1/2. These are conventional factor differences and must be acknowledged rather than exploited as the entire objection.
+
+For complex matrices the usual analogue is the skew-Hermitian part (A-A*)/2, or the Hermitian imaginary part (A-A*)/(2i). On real matrices, transpose and adjoint agree. A submission using real entries therefore can address the real interpretation and the conventional complex-adjoint interpretation without conflating a complex transpose with an adjoint. State normality as AA*=A*A (or AA^T=A^TA in the real case) wherever it is mentioned.
+
+2. Equality, not merely an upper bound
+Both the English “is the norm” and the Chinese “为……范数” explicitly assert equality. The Chinese preface “虚部的界” and the Bendixson reference supply bounds context, but neither version writes an inequality or restricts equality to normal matrices. It is therefore legitimate to assess the stated equality as a universal assertion about actual spectral imaginary extent. A solver must carefully distinguish the extent of the actual spectrum from the size of a containing strip obtained from K. Defining “bandwidth” to be a norm-controlled enclosure would change the first quantity; refuting such a definition would be circular or a strawman. Conversely, the final report must not claim to refute Bendixson's bounding inequality merely by refuting an equality.
+
+3. The minimization clause
+The English second clause does not specify the admissible class, which quantities are fixed, what “the norm” is applied to, or whether a minimum or infimum is intended. The Chinese clause is additionally linguistically incomplete. A full positive theorem about that clause cannot be certified without added assumptions. However, the first equality is an explicit standalone assertion joined by “and”/“且.” A valid disproof of that first universal assertion suffices to refute the conjecture as written as a bundle of claims, without supplying an interpretation or disproof of the underdefined minimization clause. The report must state this logical scope and must not imply that it has settled every possible repaired optimization problem.
+
+4. Requirements for a sound eventual submission
+- Supply complete, exact spectral evidence for the particular finite matrix, including exclusion of any other eigenvalues; do not infer its bandwidth merely from a list of some eigenvalues or from numerical approximations.
+- Relate the formal object to the ordinary matrix spectrum and the stated definition of its imaginary extent.
+- Establish the required norm fact for an actual matrix norm. A different scalar surrogate, a sum of selected entries, or a spectral-radius calculation for a nonnormal matrix is insufficient unless its equivalence in the case at hand is proved.
+- Address the full-width/half-width and normalized/unnormalized antisymmetric-part conventions explicitly. Prefer a conclusion that survives these conventional positive factors. Explain the extent to which the result is independent of the choice of genuine matrix norm if claiming that robustness.
+- Ensure the Lean theorem and the entire LaTeX report establish the same negation. Exact hand computations in the report must be connected to formal definitions, not merely mirrored by unrelated arithmetic lemmas.
+- Follow both guides: source, PDF, complete Lean project, all auxiliary computations verified; no sorry, native_decide, or added axioms. Submission changes stay inside the personal submission directory.
+
+Residual semantic risk: A reader may reinterpret the wording as a correct bounding statement, a sharp bound optimized over a specified class, or an equality restricted to normal matrices. Such interpretations require changes or extra hypotheses absent from both supplied versions. The final report should acknowledge this limited ambiguity concisely, quote the actual equality, and make clear that its verdict concerns the equality literally asserted for general matrices. GO does not preapprove any candidate or proof and does not resolve the unspecified optimization problem.
+
+This is a candidate-free preassessment only. No solution, witness, or proof is provided.

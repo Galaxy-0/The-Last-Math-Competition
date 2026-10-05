@@ -1,0 +1,59 @@
+import Conjecture7158
+
+#print Conjecture7158.complexification
+#print Conjecture7158.imaginarySpectrum
+#print Conjecture7158.imaginaryBandwidth
+#print Conjecture7158.imaginaryRadius
+#print Conjecture7158.antisymmetricPart
+#print Conjecture7158.BandwidthEquality
+#print Conjecture7158.counterexample
+#print Conjecture7158.quarterTurn
+
+#check Conjecture7158.mem_spectrum_iff_eigenvector
+#print axioms Conjecture7158.mem_spectrum_iff_eigenvector
+#check Conjecture7158.norm_is_euclidean_operator_norm
+#print axioms Conjecture7158.norm_is_euclidean_operator_norm
+#check Conjecture7158.counterexample_antisymmetricPart
+#print axioms Conjecture7158.counterexample_antisymmetricPart
+#check Conjecture7158.counterexample_spectrum
+#print axioms Conjecture7158.counterexample_spectrum
+#check Conjecture7158.counterexample_imaginarySpectrum
+#print axioms Conjecture7158.counterexample_imaginarySpectrum
+#check Conjecture7158.counterexample_imaginaryBandwidth
+#print axioms Conjecture7158.counterexample_imaginaryBandwidth
+#check Conjecture7158.counterexample_imaginaryRadius
+#print axioms Conjecture7158.counterexample_imaginaryRadius
+#check Conjecture7158.quarterTurn_conjTranspose_mul
+#print axioms Conjecture7158.quarterTurn_conjTranspose_mul
+#check Conjecture7158.quarterTurn_norm
+#print axioms Conjecture7158.quarterTurn_norm
+#check Conjecture7158.quarterTurn_complex_conjTranspose_mul
+#print axioms Conjecture7158.quarterTurn_complex_conjTranspose_mul
+#check Conjecture7158.quarterTurn_complex_norm
+#print axioms Conjecture7158.quarterTurn_complex_norm
+#check Conjecture7158.counterexample_complex_skewPart
+#print axioms Conjecture7158.counterexample_complex_skewPart
+#check Conjecture7158.counterexample_complex_skewPart_norm
+#print axioms Conjecture7158.counterexample_complex_skewPart_norm
+#check Conjecture7158.counterexample_hermitianImaginaryPart
+#print axioms Conjecture7158.counterexample_hermitianImaginaryPart
+#check Conjecture7158.counterexample_hermitianImaginaryPart_norm
+#print axioms Conjecture7158.counterexample_hermitianImaginaryPart_norm
+#check Conjecture7158.counterexample_antisymmetricPart_norm
+#print axioms Conjecture7158.counterexample_antisymmetricPart_norm
+#check Conjecture7158.counterexample_bandwidth_ne_norm
+#print axioms Conjecture7158.counterexample_bandwidth_ne_norm
+#check Conjecture7158.counterexample_bandwidth_ne_scaled_norm
+#print axioms Conjecture7158.counterexample_bandwidth_ne_scaled_norm
+#check Conjecture7158.counterexample_radius_ne_norm
+#print axioms Conjecture7158.counterexample_radius_ne_norm
+#check Conjecture7158.counterexample_unhalved_norm
+#print axioms Conjecture7158.counterexample_unhalved_norm
+#check Conjecture7158.counterexample_not_normal
+#print axioms Conjecture7158.counterexample_not_normal
+#check Conjecture7158.counterexample_bandwidth_ne_any_separating_norm
+#print axioms Conjecture7158.counterexample_bandwidth_ne_any_separating_norm
+#check Conjecture7158.bandwidthEquality_false
+#print axioms Conjecture7158.bandwidthEquality_false
+#check Conjecture7158.conjecture_conjunction_false
+#print axioms Conjecture7158.conjecture_conjunction_false

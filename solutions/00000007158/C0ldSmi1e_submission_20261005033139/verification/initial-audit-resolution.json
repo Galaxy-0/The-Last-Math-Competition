@@ -1,0 +1,19 @@
+{
+  "status": "RESOLVED_FINAL_FRESH_AUDIT_PASS",
+  "original_source_sha256": "fdd589069a1135f061b5ac7603c68c96b2e12ff1ee28e4ecccfb979508d63a76",
+  "final_source_sha256": "ed150cebf44b9f91853685881b091d1696158fd5a4657d7fda2e37b01dae7c44",
+  "exact_diff": "--- original\n+++ final\n@@ -22,7 +22,7 @@\n namespace Conjecture7158\n \n /-- A real matrix viewed as a complex matrix, entry by entry. -/\n-def complexification {n : \u2115} (A : Matrix (Fin n) (Fin n) \u211d) :\n+noncomputable def complexification {n : \u2115} (A : Matrix (Fin n) (Fin n) \u211d) :\n     Matrix (Fin n) (Fin n) \u2102 := A.map Complex.ofReal\n \n /-- The algebraic spectrum is exactly the usual set of complex eigenvalues. -/\n@@ -68,10 +68,10 @@\n     imaginaryBandwidth A = \u2016antisymmetricPart A\u2016\n \n /-- A nonzero nilpotent real matrix. -/\n-def counterexample : Matrix (Fin 2) (Fin 2) \u211d := !![0, 2; 0, 0]\n+noncomputable def counterexample : Matrix (Fin 2) (Fin 2) \u211d := !![0, 2; 0, 0]\n \n /-- Its antisymmetric part. -/\n-def quarterTurn : Matrix (Fin 2) (Fin 2) \u211d := !![0, 1; -1, 0]\n+noncomputable def quarterTurn : Matrix (Fin 2) (Fin 2) \u211d := !![0, 1; -1, 0]\n \n theorem counterexample_antisymmetricPart :\n     antisymmetricPart counterexample = quarterTurn := by\n",
+  "mathematical_definitions_and_proofs_unchanged": true,
+  "only_changes": "Explicit noncomputable modifiers on complexification, counterexample, quarterTurn. This prevents execution-code generation without altering logical definitions.",
+  "initial_failure": "Two generated unsafe runtime constants depended on imported numeral runtime axiom Nat.cast._at.Real.instNatCast._spec_2. All safe logical theorem closures were standard.",
+  "original_evidence_directory": "/private/tmp/tlmc7158-verification-attempt1",
+  "author_provenance_directory": "/private/tmp/tlmc7158-solver/revision-1",
+  "audit_criteria_unchanged": true,
+  "final_audit_sha256": "e5fcf599c33326371a8e1565f964324d59c550a9cf5eb7fc18c07473da3470c3",
+  "final_environment_constants": 42,
+  "final_generated_logical_constants": 10,
+  "final_compiler_runtime_constants": 0,
+  "final_axiom_declarations": 0,
+  "all_compiled_origin_axiom_closures_standard": true,
+  "fresh_final_build_directory": "/private/tmp/tlmc7158-independent-final"
+}

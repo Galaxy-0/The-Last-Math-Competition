@@ -1,0 +1,103 @@
+def Conjecture7158.complexification : {n : ℕ} → Matrix (Fin n) (Fin n) ℝ → Matrix (Fin n) (Fin n) ℂ :=
+fun {n} A => A.map Complex.ofReal
+def Conjecture7158.imaginarySpectrum : {n : ℕ} → Matrix (Fin n) (Fin n) ℝ → Set ℝ :=
+fun {n} A => Complex.im '' spectrum ℂ (Conjecture7158.complexification A)
+def Conjecture7158.imaginaryBandwidth : {n : ℕ} → Matrix (Fin n) (Fin n) ℝ → ℝ :=
+fun {n} A => sSup (Conjecture7158.imaginarySpectrum A) - sInf (Conjecture7158.imaginarySpectrum A)
+def Conjecture7158.imaginaryRadius : {n : ℕ} → Matrix (Fin n) (Fin n) ℝ → ℝ :=
+fun {n} A => sSup ((fun z => |z.im|) '' spectrum ℂ (Conjecture7158.complexification A))
+def Conjecture7158.antisymmetricPart : {n : ℕ} → Matrix (Fin n) (Fin n) ℝ → Matrix (Fin n) (Fin n) ℝ :=
+fun {n} A => (1 / 2) • (A - A.transpose)
+def Conjecture7158.BandwidthEquality : Prop :=
+∀ (n : ℕ),
+  0 < n → ∀ (A : Matrix (Fin n) (Fin n) ℝ), Conjecture7158.imaginaryBandwidth A = ‖Conjecture7158.antisymmetricPart A‖
+def Conjecture7158.counterexample : Matrix (Fin 2) (Fin 2) ℝ :=
+!![0, 2; 0, 0]
+def Conjecture7158.quarterTurn : Matrix (Fin 2) (Fin 2) ℝ :=
+!![0, 1; -1, 0]
+Conjecture7158.mem_spectrum_iff_eigenvector {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) (z : ℂ) :
+  z ∈ spectrum ℂ (Conjecture7158.complexification A) ↔ ∃ v, v ≠ 0 ∧ (Conjecture7158.complexification A).mulVec v = z • v
+'Conjecture7158.mem_spectrum_iff_eigenvector' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.norm_is_euclidean_operator_norm {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) : ‖A‖ = ‖Matrix.toEuclideanCLM A‖
+'Conjecture7158.norm_is_euclidean_operator_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_antisymmetricPart :
+  Conjecture7158.antisymmetricPart Conjecture7158.counterexample = Conjecture7158.quarterTurn
+'Conjecture7158.counterexample_antisymmetricPart' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_spectrum :
+  spectrum ℂ (Conjecture7158.complexification Conjecture7158.counterexample) = {0}
+'Conjecture7158.counterexample_spectrum' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_imaginarySpectrum : Conjecture7158.imaginarySpectrum Conjecture7158.counterexample = {0}
+'Conjecture7158.counterexample_imaginarySpectrum' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_imaginaryBandwidth : Conjecture7158.imaginaryBandwidth Conjecture7158.counterexample = 0
+'Conjecture7158.counterexample_imaginaryBandwidth' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_imaginaryRadius : Conjecture7158.imaginaryRadius Conjecture7158.counterexample = 0
+'Conjecture7158.counterexample_imaginaryRadius' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.quarterTurn_conjTranspose_mul : Conjecture7158.quarterTurn.conjTranspose * Conjecture7158.quarterTurn = 1
+'Conjecture7158.quarterTurn_conjTranspose_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.quarterTurn_norm : ‖Conjecture7158.quarterTurn‖ = 1
+'Conjecture7158.quarterTurn_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.quarterTurn_complex_conjTranspose_mul :
+  (Conjecture7158.complexification Conjecture7158.quarterTurn).conjTranspose *
+      Conjecture7158.complexification Conjecture7158.quarterTurn =
+    1
+'Conjecture7158.quarterTurn_complex_conjTranspose_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.quarterTurn_complex_norm : ‖Conjecture7158.complexification Conjecture7158.quarterTurn‖ = 1
+'Conjecture7158.quarterTurn_complex_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_complex_skewPart :
+  (1 / 2) •
+      (Conjecture7158.complexification Conjecture7158.counterexample -
+        (Conjecture7158.complexification Conjecture7158.counterexample).conjTranspose) =
+    Conjecture7158.complexification Conjecture7158.quarterTurn
+'Conjecture7158.counterexample_complex_skewPart' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_complex_skewPart_norm :
+  ‖(1 / 2) •
+        (Conjecture7158.complexification Conjecture7158.counterexample -
+          (Conjecture7158.complexification Conjecture7158.counterexample).conjTranspose)‖ =
+    1
+'Conjecture7158.counterexample_complex_skewPart_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_hermitianImaginaryPart :
+  (1 / (2 * Complex.I)) •
+      (Conjecture7158.complexification Conjecture7158.counterexample -
+        (Conjecture7158.complexification Conjecture7158.counterexample).conjTranspose) =
+    -Complex.I • Conjecture7158.complexification Conjecture7158.quarterTurn
+'Conjecture7158.counterexample_hermitianImaginaryPart' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_hermitianImaginaryPart_norm :
+  ‖(1 / (2 * Complex.I)) •
+        (Conjecture7158.complexification Conjecture7158.counterexample -
+          (Conjecture7158.complexification Conjecture7158.counterexample).conjTranspose)‖ =
+    1
+'Conjecture7158.counterexample_hermitianImaginaryPart_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_antisymmetricPart_norm :
+  ‖Conjecture7158.antisymmetricPart Conjecture7158.counterexample‖ = 1
+'Conjecture7158.counterexample_antisymmetricPart_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_bandwidth_ne_norm :
+  Conjecture7158.imaginaryBandwidth Conjecture7158.counterexample ≠
+    ‖Conjecture7158.antisymmetricPart Conjecture7158.counterexample‖
+'Conjecture7158.counterexample_bandwidth_ne_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_bandwidth_ne_scaled_norm (c : ℝ) (hc : 0 < c) :
+  Conjecture7158.imaginaryBandwidth Conjecture7158.counterexample ≠
+    c * ‖Conjecture7158.antisymmetricPart Conjecture7158.counterexample‖
+'Conjecture7158.counterexample_bandwidth_ne_scaled_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_radius_ne_norm :
+  Conjecture7158.imaginaryRadius Conjecture7158.counterexample ≠
+    ‖Conjecture7158.antisymmetricPart Conjecture7158.counterexample‖
+'Conjecture7158.counterexample_radius_ne_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_unhalved_norm :
+  ‖Conjecture7158.counterexample - Conjecture7158.counterexample.transpose‖ = 2
+'Conjecture7158.counterexample_unhalved_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_not_normal :
+  Conjecture7158.counterexample * Conjecture7158.counterexample.transpose ≠
+    Conjecture7158.counterexample.transpose * Conjecture7158.counterexample
+'Conjecture7158.counterexample_not_normal' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.counterexample_bandwidth_ne_any_separating_norm (ν : Matrix (Fin 2) (Fin 2) ℝ → ℝ)
+  (hν : ∀ (M : Matrix (Fin 2) (Fin 2) ℝ), ν M = 0 ↔ M = 0) :
+  Conjecture7158.imaginaryBandwidth Conjecture7158.counterexample ≠
+    ν (Conjecture7158.antisymmetricPart Conjecture7158.counterexample)
+'Conjecture7158.counterexample_bandwidth_ne_any_separating_norm' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Conjecture7158.bandwidthEquality_false : ¬Conjecture7158.BandwidthEquality
+'Conjecture7158.bandwidthEquality_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7158.conjecture_conjunction_false (minimizationAssertion : Prop) :
+  ¬(Conjecture7158.BandwidthEquality ∧ minimizationAssertion)
+'Conjecture7158.conjecture_conjunction_false' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "created_utc": "2026-10-05T02:50:54.677591+00:00",
+  "source_sha256": "823b20cc6c62a1f56138b1478b578984a0dab69a9b1e9473cb468f274549ff69",
+  "pdf_sha256": "9c2930beb0eba565e0ee9b7a390a24812f7fed7dde5bf16a35e141b2063cac54",
+  "page_count": 2,
+  "pdf_bytes": 42917,
+  "native_compiler": {
+    "kind": "success",
+    "tool": "compile_latex_document",
+    "source_sha256": "823b20cc6c62a1f56138b1478b578984a0dab69a9b1e9473cb468f274549ff69"
+  },
+  "export": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--outdir",
+      "/private/tmp/tlmc7158-report",
+      "/private/tmp/tlmc7158-report/main.tex"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.738,
+    "warnings_or_box_diagnostics": [],
+    "raw_log_local_path": "/private/tmp/tlmc7158-report/export-raw.txt",
+    "raw_log_sha256": "18413787c535b1deabfdf5c2cad1c7421acd72f194831be4fa5e3a81a2457f7b",
+    "packaged_log": "report-export.txt",
+    "packaged_log_sha256": "18413787c535b1deabfdf5c2cad1c7421acd72f194831be4fa5e3a81a2457f7b",
+    "log_normalization": "Strip trailing whitespace on each line, preserve all line contents and order, terminate with one newline."
+  },
+  "render": {
+    "command": [
+      "/Users/daniel/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override/pdftoppm",
+      "-scale-to",
+      "1600",
+      "-png",
+      "/private/tmp/tlmc7158-report/main.pdf",
+      "/private/tmp/tlmc7158-report/page"
+    ],
+    "exit_code": 0,
+    "images": [
+      {
+        "path": "/private/tmp/tlmc7158-report/page-1.png",
+        "sha256": "74c8aa2dfcc5ee487e5245ec57fa28f5b096e242cec5842e9ba90505c7279f45"
+      },
+      {
+        "path": "/private/tmp/tlmc7158-report/page-2.png",
+        "sha256": "8c388d15bba19b6096bc338535495fa0b504e4bc6a3ad031eaa0875dfd9e959c"
+      }
+    ]
+  },
+  "visual_review": {
+    "status": "PASS",
+    "inspected_utc": "2026-10-05T02:52:48.746318+00:00",
+    "pages": [
+      1,
+      2
+    ],
+    "method": "Viewed every current pdftoppm render; checked readability, mathematical symbols, proof continuity, margins and page numbers. No overlap, clipping or missing glyphs."
+  },
+  "text_extraction": {
+    "engine": "pypdf",
+    "pages": 2,
+    "output": "pdftext.txt",
+    "sha256": "fe7bb5551717f7a72fb6d0d8142fe5ab847bb510a75f38e12b268d0b89e4a2b9"
+  }
+}
