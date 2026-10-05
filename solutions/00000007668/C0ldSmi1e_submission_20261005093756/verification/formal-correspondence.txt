@@ -1,0 +1,328 @@
+AUTHOR NOTES — conjecture 00000007668
+
+Outcome and exact scope
+
+The explicit necessary relative asymptotic clause is false under the standard
+finite q-Pochhammer meaning of (z;q)_N. In fact it fails for every fixed real
+q with 0<q<1. The root module contains a complete kernel-checked proof of this
+claim, starting from an actual polynomial over C and its actual root multiset.
+It does not assign invented definitions to the unspecified Jensen/theta or
+transcendence refinements. Their interpretation is unnecessary to negate the
+conjunction containing the already false explicit clause.
+
+Root module: /private/tmp/tlmc7668-proof/Conjecture7668.lean
+Author verification: /private/tmp/tlmc7668-auxiliary/author-check-record.json
+Full types, definitions, axioms: /private/tmp/tlmc7668-auxiliary/declarations-and-axioms.log
+
+Clean inputs and restrictions
+
+I read the complete bilingual conjecture, complete current English and Chinese
+rules, clean eligibility handoff, and candidate-free semantic preassessment.
+Their SHA256 identities, rechecked by the author verification script, are:
+
+conjecture.md:
+  93008606e83dadd0d3e73d1592768d1476f3ee8127cd601ded63df7549ced28b
+README.md:
+  baf790af419e0070f593eecea4861fd865cc7b544d2cde6ec674f8fc587b01d1
+README.zh-CN.md:
+  d07ac1ccd888b8ee08fed8eb2e06ae15f6aa4025dbafe98790f8e2b2fc18eba7
+clean-math-handoff.json:
+  19f0aa2869aedff7017b81ab5d7508103144631d5bccb6ea940b6b734be421d9
+preassessment.txt:
+  150ef75d66ffcfc3432fa8fcb42a53cf4a0fdd94bfbf92696394cdeb08ef1ee0
+
+The first four are in /private/tmp/tlmc7668-eligibility; the last is in
+/private/tmp/tlmc7668-semantic. Eligibility PASS is taken from that clean
+handoff, not independently re-investigated by this author. Neither a witness
+nor a proof strategy nor a truth-value assessment was supplied there.
+
+I inspected the pinned Mathlib dependency sources, not the enclosing previous
+proof project. No unrelated conjecture, submission, prior proof, or agent
+history was read for this proof. Writes were limited to the new proof project,
+new auxiliary directory, and these notes. No repository/worktree/Git metadata
+was changed, no external comment was sent, and no PDF/TeX was produced. The
+project configuration and dependency sources were preserved. An attempted
+helper-agent spawn was denied by the agent thread limit, so this author wrote
+the mathematical proof without a helper.
+
+Independent mathematical argument
+
+1. The standard finite q-Pochhammer polynomial is
+
+     P(q,N)(z) = product_{k=0}^{N-1} (1 - z q^k).
+
+   For q>0 every q^k is nonzero. The k-th factor is the nonzero constant
+   -q^k times z-q^{-k}; its root multiset is therefore the singleton
+   {q^{-k}}. The roots of the nonzero finite product are the multiset sum of
+   these singleton multisets. Consequently the actual complex root multiset
+   contains q^{-k} for k=0,...,N-1, with all multiplicities represented, and
+   its cardinality is N. This conclusion does not assume an arbitrary list
+   of roots, squarefreeness, or simplicity. Nonzeroness of every factor is
+   separately proved by evaluating at z=0, which gives 1.
+
+2. Since q>0, the root q^{-k} is positive real and its complex modulus is
+   q^{-k}. The product of all moduli is
+
+     M(q,N) = product_{k<N} q^{-k} = q^{-N(N-1)/2}.
+
+   The summation formula sum_{k<N} k=N(N-1)/2 is proved with real arithmetic
+   by induction; there is no natural-number division in this exponent.
+   For N>0 the nonnegative N-th root is exactly
+
+     g(q,N) = M(q,N)^{1/N} = q^{-(N-1)/2}.
+
+   Separate Lean theorems establish nonnegativity of M and g and the identity
+   g(q,N)^N=M(q,N) for N>0, confirming the intended N-th-root convention.
+
+3. The proposed main term A(q,N)=q^{-(N-1)/2}/(1+q) is positive for q>0.
+   Its relative error is therefore exactly
+
+     E(q,N) = g(q,N)/A(q,N)-1 = (1+q)-1 = q,
+
+   for every positive integer N, not only asymptotically.
+
+4. For a fixed 0<q<1, put r=q^{1/2}. Then 0<=r<1 and
+   B(q,N)=q^{N/2}=r^N tends to zero along all natural-number indices.
+   This uses real exponents and the ordinary theorem on powers of a fixed
+   number in [0,1); no even-index substitution or subsequence is taken.
+
+5. If the source's relative Big-O bound held, there would be C>0 and N0>=1
+   such that |E(q,N)|<=C B(q,N) for every N>=N0. Since C B(q,N) tends to 0
+   and q>0, eventually C B(q,N)<q. Intersecting this eventual condition with
+   N>=N0 gives q<=C B(q,N)<q, a contradiction. This works for every admissible
+   q. The final negation of the universally quantified necessary clause
+   instantiates this proved general failure at the exact rational q=1/2.
+
+Original-to-formal correspondence
+
+The displayed standard notation is the only convention being supplied to the
+source. NIST DLMF equation 17.2.1, independently opened and checked on
+2026-10-05, gives the finite product definition:
+  https://dlmf.nist.gov/17.2.E1
+Its page explicitly calls this a q-Pochhammer symbol/q-shifted factorial. The
+informal phrase "partial q-binomial" in the source does not give a different
+series or coefficient formula. The source does not define any alternate
+truncated q-series, rescaling of z, or replacement for q. If authoritative
+clarification later assigns a nonstandard object to the symbol, that would
+require a new semantic assessment; this proof does not secretly choose one.
+
+All definitions below are in namespace Conjecture7668.
+
+- qPochhammer : Real -> Nat -> Polynomial Complex constructs the product
+  from Polynomial.C, Polynomial.X, subtraction, multiplication, and Finset.prod.
+  qPochhammer_eval proves its evaluation is exactly product_{k<N}(1-z q^k).
+  q is included into C by Complex.ofReal. There is no surrogate polynomial.
+
+- rootModulusProduct : Real -> Nat -> Real is the multiset product of the
+  Complex norm over (qPochhammer q N).roots. Mathlib Polynomial.roots is the
+  multiset of actual roots including multiplicities; count_roots identifies
+  each count with rootMultiplicity. Complex's norm is sqrt(re^2+im^2).
+  qPochhammer_roots and qPochhammer_roots_card prove the actual multiset and
+  its size, with q != 0, which follows from every admissible source q.
+
+- geometricMean : Real -> Nat -> Real is
+  (rootModulusProduct q N)^(1/(N:Real)), using Real.rpow. This is the standard
+  nonnegative real root, as additionally checked by geometricMean_nonneg and
+  geometricMean_pow. N=0 is merely a total-function extension; every claim
+  about the source's N-th root and relative error requires N>0. The eventual
+  threshold in RelativeAsymptotic is explicitly at least 1.
+
+- claimedMainTerm : Real -> Nat -> Real is
+  q^(-((N:Real)-1)/2)/(1+q). The sign, real subtraction, real half-exponent,
+  and factor 1/(1+q) are exactly retained.
+
+- errorScale : Real -> Nat -> Real is q^((N:Real)/2), with real division.
+  It is not q^(N/2) with a rounded natural-number exponent.
+
+- relativeError : Real -> Nat -> Real is geometricMean/claimedMainTerm-1.
+  Thus the claim concerns error inside multiplicative parentheses, not an
+  unnormalized additive error. The main term's nonzeroness used in the
+  cancellation is proved from q>0 and 1+q>0.
+
+- RelativeAsymptotic(q) is the proposition
+    exists C:Real, 0<C and exists N0:Nat, 1<=N0 and
+    forall N:Nat, N0<=N -> |relativeError(q,N)|<=C*errorScale(q,N).
+  Each q gets its own C,N0. No uniformity in q is imposed. There is no coupled
+  q=q_N limit, finite-prefix test, or restricted subsequence.
+
+- relativeAsymptotic_iff_isBigO proves, for q>=0, that the preceding explicit
+  quantifiers are equivalent to the actual Mathlib proposition
+    Asymptotics.IsBigO Filter.atTop (relativeError q) (errorScale q).
+  It uses the positive-constant version isBigO_iff', nonnegativity of the
+  scale, and the characterization of eventual conditions atTop on Nat.
+  Therefore removing the harmless N=0 extension is explicitly justified.
+
+- NecessaryClause is forall q:Real, 0<q -> q<1 -> RelativeAsymptotic q.
+  This is S from the source's displayed asymptotic, not a claimed equivalent
+  formalization of all later prose. not_relativeAsymptotic proves its inner
+  clause fails for every source-admissible q. conjecture7668_disproof proves
+  Not NecessaryClause; not_relative_isBigO gives the direct Mathlib version.
+
+The English and Chinese sources both assert this displayed formula and then
+append the refinements. Hence every completion of the source retaining that
+polynomial and formula has the logical implication FullSource -> S, even
+though the later objects have not been defined. S is a necessary conjunct.
+The theorem no_completion records exactly the valid logical consequence:
+  forall FullSource:Prop, (FullSource -> NecessaryClause) -> Not FullSource.
+Its implication premise expresses the textual scope judgment; it is not a
+mathematical assumption used to compute roots or obtain the contradiction.
+Proving only S would not prove the undefined refinements. Proving Not S, as
+here, suffices to disprove their conjunction with S.
+
+No assertion is made about which theta functions, Jensen integrand/contour,
+normalization, correction coefficient, or "limit constant" was intended.
+No transcendence predicate is assigned to an invented constant. These are
+limits on positive formalization of the remainder of the text, not a gap in
+the disproof of the explicit necessary clause. Algebraicity of q is not a
+hypothesis of the main asymptotic assertion; it occurs only in the later
+refinement. The general disproof does not require or replace it. The final
+witness 1/2 is nevertheless an admissible exact real number in (0,1).
+
+Declaration inventory
+
+The one authored source file contains 8 definitions and 21 theorems, 29
+explicit declarations in total, and no authored instance. Every declaration
+was checked with its fully explicit type and with #print axioms; each
+definition was additionally printed with its full body. The complete output
+is retained in declarations-and-axioms.log. The names, in source order, are:
+
+qPochhammer, rootModulusProduct, geometricMean, qPochhammer_eval,
+linear_factor_ne_zero, qPochhammer_ne_zero, linear_factor_roots,
+qPochhammer_roots, qPochhammer_roots_card, rootModulusProduct_eq,
+sum_range_real, rootModulusProduct_rpow, geometricMean_eq,
+rootModulusProduct_nonneg, geometricMean_nonneg, geometricMean_pow,
+claimedMainTerm, errorScale, relativeError, RelativeAsymptotic,
+NecessaryClause, errorScale_nonneg, relativeAsymptotic_iff_isBigO,
+relativeError_eq, errorScale_tendsto_zero, not_relativeAsymptotic,
+conjecture7668_disproof, not_relative_isBigO, no_completion.
+
+The final full types are, without notation expansion:
+  conjecture7668_disproof : Not NecessaryClause
+  not_relativeAsymptotic (q:Real) (hq:0<q) (hq1:q<1) : Not (RelativeAsymptotic q)
+  not_relative_isBigO (q:Real) (hq:0<q) (hq1:q<1) :
+    Not (Asymptotics.IsBigO atTop (relativeError q) (errorScale q))
+  no_completion (FullSource:Prop) (hnecessary:FullSource -> NecessaryClause) :
+    Not FullSource
+There are no remaining mathematical hypotheses, freely supplied root lists,
+custom axioms, proof admissions, unsafe/partial declarations, native_decide,
+or kernel-check bypasses in the authored mathematical source.
+
+Imports and primary grounding
+
+Direct imports are exactly:
+  Mathlib.Algebra.Polynomial.Roots
+  Mathlib.Analysis.SpecialFunctions.Pow.Real
+  Mathlib.Analysis.SpecificLimits.Basic
+  Mathlib.Analysis.Asymptotics.Defs
+  Mathlib.Tactic
+
+Mathlib is pinned at c44e0c8ee63ca166450922a373c7409c5d26b00b (v4.19.0).
+The dependency sources read for semantic and proof grounding include:
+  Mathlib/Algebra/Polynomial/Roots.lean:
+    roots at line 52; count_roots at 93; roots_mul at 146;
+    roots_X_sub_C at 163; roots_C_mul at 187; roots_prod at 223.
+  Mathlib/Data/Complex/Norm.lean:
+    instNorm at 21; norm_eq_sqrt_sq_add_sq at 185.
+  Mathlib/Analysis/SpecialFunctions/Pow/Real.lean:
+    rpow at 30; Pow Real Real at 33; rpow_def_of_pos at 46;
+    rpow_sum_of_pos at 217; rpow_mul at 393;
+    rpow_inv_natCast_pow at 488; rpow_mul_natCast at 495; rpow_lt_one at 651.
+  Mathlib/Analysis/SpecificLimits/Basic.lean:
+    tendsto_pow_atTop_nhds_zero_of_lt_one at 164.
+  Mathlib/Analysis/Asymptotics/Defs.lean:
+    IsBigOWith at 77; IsBigO at 89; isBigO_iff' at 104.
+Permanent source URLs use this base plus the indicated path:
+  https://github.com/leanprover-community/mathlib4/blob/c44e0c8ee63ca166450922a373c7409c5d26b00b/
+
+The compiled auxiliary inspection also prints Real.instPow, Real.rpow,
+Complex.instNorm, Polynomial.roots, and the Asymptotics definitions, and checks
+the full types of count_roots, norm_eq_sqrt_sq_add_sq, and rpow_def_of_pos.
+I inspected these outputs and the actual source definitions. Real powers in
+our formulas are therefore Mathlib Real.rpow; on q>0 they are exp(log q*t),
+and the root-modulus bases are nonnegative. Neither a custom real power nor
+a custom complex modulus is being substituted.
+
+Verification and exact logs
+
+Final verification invocation (completed, exit 0):
+  python3 /private/tmp/tlmc7668-auxiliary/author_check.py
+
+The script explicitly removes LEAN_PATH and LEAN_SRC_PATH from its process
+environment and prefixes PATH with
+  /private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin
+It uses /private/tmp/tlmc7668-proof as the working directory for Lean/Lake.
+
+The complete command arrays, working directories, return codes, timestamps,
+log paths, SHA256s, input identities, and pins are recorded in
+  /private/tmp/tlmc7668-auxiliary/author-check-record.json
+All 31 subprocess commands in that final pass returned 0. They comprise:
+
+- For every one of the nine packages before the build:
+    git --no-optional-locks status --porcelain --untracked-files=no
+  Each dependency-before-<package>-tracked.log is empty: all tracked-clean.
+- lean --version:
+    Lean 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release.
+  Exact output: lean-version.log.
+- lake build:
+    Build completed successfully.
+  Exact output: lake-build.log. The preserved project configuration sets
+  moreLeanArgs=["-DwarningAsError=true"] for the complete root library.
+- lake env lean -DwarningAsError=true /private/tmp/tlmc7668-proof/Conjecture7668.lean
+  Exit 0 with empty direct-source-00.log. This is all authored mathematical
+  source, not just a test importing a stale compiled theorem.
+- lake env lean -DwarningAsError=true /private/tmp/tlmc7668-auxiliary/Inspect.lean
+  Exit 0. Output in declarations-and-axioms.log. All 29 axiom sets contain
+  only propext, Classical.choice, Quot.sound. No sorryAx or additional axiom
+  appears. These are the standard Lean/Mathlib logical foundations.
+- For every package: git rev-parse HEAD, then the same tracked-status command.
+  Nine dependency-<package>.log files exactly match all manifest revisions;
+  nine dependency-after-<package>-tracked.log files are empty.
+
+The nine checked package names are mathlib, plausible, LeanSearchClient,
+importGraph, proofwidgets, aesop, Qq, batteries, and Cli. Their exact expected
+and observed revision pairs are in the record. Before/after tracked-clean
+snapshots surround the final author build/replay/inspection. They are not
+claimed to be historical snapshots from before the earliest draft compile;
+none was collected at that earlier point. No dependency source edit was made.
+
+The inspection script is verification support only, outside the mathematical
+project. It performs no mathematical/numerical computation. It was executed
+successfully, including its assertions. The generated Inspect.lean was
+compiled successfully. No numerical experiment, quadrature, finite search,
+external data, or computationally asserted witness is needed by the exact
+kernel proof, so there is no additional mathematical auxiliary program.
+
+During authoring, preliminary draft compiles exposed ordinary errors: the
+uncached umbrella Mathlib import was replaced by the five cached specific
+imports; one unnecessarySimpa warning was corrected; one field_simp goal
+needed ring; the topology notation scope was added; a nonnegative multiset
+product proof was written directly; and an already-closed tactic goal was
+removed. An initial inspection-only run rejected unknown option pp.width;
+it was replaced by format.width and pp.all. The exact initial inspection
+failure remains in declarations-and-axioms-initial-option-error.log. These
+draft failures preceded the passing full verification and are not evidence
+for any theorem. The final source has exactly one newline at EOF and no
+trailing whitespace. An external no-index Git whitespace check emitted no
+diagnostic; its status 1 reflects the all-new file comparison, not a Lean
+failure. No coordinator freeze/verifier was run by this author.
+
+Final immutable mathematical source/configuration identities
+
+Conjecture7668.lean SHA256:
+  24c387e09c82f3ac4fa8dbc34437f501c334a3b065aada299c67eb17c35c7138
+lakefile.toml SHA256:
+  8ad51c8bf8277f69b008c369709c5a1b1df5021ad7ae18e77685814b7b7a0509
+lake-manifest.json SHA256:
+  b2479997d6710d6be123f5da09f5193e76b15ba1bd326e2f661e36b581e768e1
+lean-toolchain SHA256:
+  55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea
+
+Final auxiliary source identities:
+Inspect.lean SHA256:
+  ddd266c7d686dbcb29b21e75169eaf18f76093b8dd48f1bc95558334bb91c076
+author_check.py SHA256:
+  139f8ad9b114b4f54caf199c804feb36b6105e1f90000942f13b5aa47baeda3f
+
+The author proof and all verification processes have completed. Independent
+coordinator rebuilding, audit, semantic review, and final report preparation
+remain the coordinator's separate responsibilities.

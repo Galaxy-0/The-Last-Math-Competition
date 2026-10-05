@@ -1,0 +1,69 @@
+def Conjecture7668.qPochhammer : ℝ → ℕ → Polynomial ℂ :=
+fun q N => ∏ k ∈ Finset.range N, (1 - Polynomial.C (↑q ^ k) * Polynomial.X)
+def Conjecture7668.rootModulusProduct : ℝ → ℕ → ℝ :=
+fun q N => (Multiset.map (fun z => ‖z‖) (Conjecture7668.qPochhammer q N).roots).prod
+def Conjecture7668.geometricMean : ℝ → ℕ → ℝ :=
+fun q N => Conjecture7668.rootModulusProduct q N ^ (1 / ↑N)
+def Conjecture7668.claimedMainTerm : ℝ → ℕ → ℝ :=
+fun q N => q ^ (-(↑N - 1) / 2) / (1 + q)
+def Conjecture7668.errorScale : ℝ → ℕ → ℝ :=
+fun q N => q ^ (↑N / 2)
+def Conjecture7668.relativeError : ℝ → ℕ → ℝ :=
+fun q N => Conjecture7668.geometricMean q N / Conjecture7668.claimedMainTerm q N - 1
+def Conjecture7668.RelativeAsymptotic : ℝ → Prop :=
+fun q =>
+  ∃ C, 0 < C ∧ ∃ N₀, 1 ≤ N₀ ∧ ∀ (N : ℕ), N₀ ≤ N → |Conjecture7668.relativeError q N| ≤ C * Conjecture7668.errorScale q N
+def Conjecture7668.NecessaryClause : Prop :=
+∀ (q : ℝ), 0 < q → q < 1 → Conjecture7668.RelativeAsymptotic q
+Conjecture7668.qPochhammer_eval (q : ℝ) (N : ℕ) (z : ℂ) :
+  Polynomial.eval z (Conjecture7668.qPochhammer q N) = ∏ k ∈ Finset.range N, (1 - z * ↑q ^ k)
+'Conjecture7668.qPochhammer_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.linear_factor_ne_zero (a : ℂ) : 1 - Polynomial.C a * Polynomial.X ≠ 0
+'Conjecture7668.linear_factor_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.qPochhammer_ne_zero (q : ℝ) (N : ℕ) : Conjecture7668.qPochhammer q N ≠ 0
+'Conjecture7668.qPochhammer_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.linear_factor_roots (a : ℂ) (ha : a ≠ 0) : (1 - Polynomial.C a * Polynomial.X).roots = {a⁻¹}
+'Conjecture7668.linear_factor_roots' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.qPochhammer_roots (q : ℝ) (hq : q ≠ 0) (N : ℕ) :
+  (Conjecture7668.qPochhammer q N).roots = Multiset.map (fun k => (↑q ^ k)⁻¹) (Finset.range N).val
+'Conjecture7668.qPochhammer_roots' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.qPochhammer_roots_card (q : ℝ) (hq : q ≠ 0) (N : ℕ) : (Conjecture7668.qPochhammer q N).roots.card = N
+'Conjecture7668.qPochhammer_roots_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.rootModulusProduct_eq (q : ℝ) (hq : 0 < q) (N : ℕ) :
+  Conjecture7668.rootModulusProduct q N = ∏ k ∈ Finset.range N, (q ^ k)⁻¹
+'Conjecture7668.rootModulusProduct_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.sum_range_real (N : ℕ) : ∑ k ∈ Finset.range N, ↑k = ↑N * (↑N - 1) / 2
+'Conjecture7668.sum_range_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.rootModulusProduct_rpow (q : ℝ) (hq : 0 < q) (N : ℕ) :
+  Conjecture7668.rootModulusProduct q N = q ^ (-(↑N * (↑N - 1) / 2))
+'Conjecture7668.rootModulusProduct_rpow' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.geometricMean_eq (q : ℝ) (hq : 0 < q) (N : ℕ) (hN : 0 < N) :
+  Conjecture7668.geometricMean q N = q ^ (-(↑N - 1) / 2)
+'Conjecture7668.geometricMean_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.rootModulusProduct_nonneg (q : ℝ) (N : ℕ) : 0 ≤ Conjecture7668.rootModulusProduct q N
+'Conjecture7668.rootModulusProduct_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.geometricMean_nonneg (q : ℝ) (N : ℕ) : 0 ≤ Conjecture7668.geometricMean q N
+'Conjecture7668.geometricMean_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.geometricMean_pow (q : ℝ) (N : ℕ) (hN : 0 < N) :
+  Conjecture7668.geometricMean q N ^ N = Conjecture7668.rootModulusProduct q N
+'Conjecture7668.geometricMean_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.errorScale_nonneg (q : ℝ) (hq : 0 ≤ q) (N : ℕ) : 0 ≤ Conjecture7668.errorScale q N
+'Conjecture7668.errorScale_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.relativeAsymptotic_iff_isBigO (q : ℝ) (hq : 0 ≤ q) :
+  Conjecture7668.RelativeAsymptotic q ↔ Conjecture7668.relativeError q =O[Filter.atTop] Conjecture7668.errorScale q
+'Conjecture7668.relativeAsymptotic_iff_isBigO' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.relativeError_eq (q : ℝ) (hq : 0 < q) (N : ℕ) (hN : 0 < N) : Conjecture7668.relativeError q N = q
+'Conjecture7668.relativeError_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.errorScale_tendsto_zero (q : ℝ) (hq : 0 < q) (hq1 : q < 1) :
+  Filter.Tendsto (Conjecture7668.errorScale q) Filter.atTop (nhds 0)
+'Conjecture7668.errorScale_tendsto_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.not_relativeAsymptotic (q : ℝ) (hq : 0 < q) (hq1 : q < 1) : ¬Conjecture7668.RelativeAsymptotic q
+'Conjecture7668.not_relativeAsymptotic' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.conjecture7668_disproof : ¬Conjecture7668.NecessaryClause
+'Conjecture7668.conjecture7668_disproof' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.not_relative_isBigO (q : ℝ) (hq : 0 < q) (hq1 : q < 1) :
+  ¬Conjecture7668.relativeError q =O[Filter.atTop] Conjecture7668.errorScale q
+'Conjecture7668.not_relative_isBigO' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.no_completion (FullSource : Prop) (hnecessary : FullSource → Conjecture7668.NecessaryClause) :
+  ¬FullSource
+'Conjecture7668.no_completion' depends on axioms: [propext, Classical.choice, Quot.sound]

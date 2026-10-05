@@ -1,0 +1,136 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{1em}
+\newtheorem{proposition}{Proposition}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\title{Disproof of Conjecture 00000007668\\\large The geometric mean of finite q-Pochhammer zeros}
+\author{C0ldSmi1e}
+\date{October 5, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{The explicit source assertion.}
+Both language versions define $g_N$ as the nonnegative $N$th root of the
+product of the moduli of all $N$ zeros of $(z;q)_N$, and assert, for each
+fixed real $0<q<1$, that
+\[
+ g_N=q^{-(N-1)/2}(1+q)^{-1}\bigl(1+O(q^{N/2})\bigr)
+ \quad\text{as }N\longrightarrow\infty.
+\]
+Here $N$ is a positive integer, zeros are counted with algebraic multiplicity,
+and all exponents and divisions are real. The implicit constant and starting
+index in the $O$ term may depend on $q$.
+
+\paragraph{Meaning of the polynomial.}
+We use the standard finite q-Pochhammer notation \cite{DLMF}:
+\[
+ P_{q,N}(z)=(z;q)_N=\prod_{j=0}^{N-1}(1-zq^j),\qquad z\in\C.
+\]
+The source calls this a ``partial q-binomial'' without giving another formula.
+The displayed standard symbol supplies the convention used here. An
+alternative truncated series would require its own definition; it is not
+silently substituted for this polynomial.
+
+\begin{proposition}
+For every real $0<q<1$ and every positive integer $N$, the geometric mean of
+all complex zero moduli of $P_{q,N}$ is exactly $q^{-(N-1)/2}$.
+Consequently the displayed relative-error assertion in the source is false.
+\end{proposition}
+\begin{proof}
+Each factor is a nonzero degree-one polynomial whose root is $q^{-j}$.
+The product has degree $N$, and its complete multiset of roots is therefore
+$q^{-j}$ for $j=0,\ldots,N-1$, counting the multiplicities supplied by these
+factors. All these numbers are positive real numbers. Hence
+\[
+ \prod_{i=1}^{N}|z_i|
+ =\prod_{j=0}^{N-1}q^{-j}
+ =q^{-N(N-1)/2},\qquad
+ g_N=\left(q^{-N(N-1)/2}\right)^{1/N}=q^{-(N-1)/2}.
+\]
+Let $A_N=q^{-(N-1)/2}/(1+q)$. It is positive, and the source's relative error
+is thus exactly
+\[
+ \frac{g_N}{A_N}-1=q.
+\]
+If the asserted $O$ bound held, there would be a real $C>0$ and an integer
+$N_0\ge1$ such that $q\le Cq^{N/2}$ for every $N\ge N_0$.
+But $q^{N/2}\to0$ for fixed $0<q<1$, so this would imply $q\le0$,
+contradicting the hypothesis.
+\end{proof}
+
+\newpage
+\raggedright
+\paragraph{Relation to the whole conjecture.}
+The displayed asymptotic formula is a necessary assertion in both language
+versions. Its negation disproves the conjunction under the declared standard
+notation. The later phrases do not specify the theta functions, Jensen mean,
+correction coefficient or referent of ``this limit constant.'' This argument
+does not assign definitions to those phrases or separately settle the stated
+transcendence refinement. Establishing the displayed formula alone would
+not prove those refinements; refuting it suffices for the stated conjunction.
+
+
+\paragraph{Exact formal target.}
+In \texttt{Conjecture7668.lean}, \texttt{qPochhammer} is a polynomial over
+$\C$. Its evaluation is proved to equal the displayed finite product.
+\texttt{rootModulusProduct} multiplies the norms in Mathlib's actual
+\texttt{Polynomial.roots} multiset. The theorems
+\texttt{qPochhammer\_roots} and \texttt{qPochhammer\_roots\_card}
+prove both the full multiset identity and its cardinality $N$.
+\texttt{geometricMean} uses \texttt{Real.rpow} with exponent $1/(N:\R)$;
+nonnegativity and the $N$th-power identity are proved for $N>0$.
+The totalized value at $N=0$ is irrelevant to the eventual assertion.
+
+\texttt{RelativeAsymptotic q} is exactly
+\[
+ \exists C\in\R,\ C>0\ \land\ \exists N_0\in\mathbb N,\ N_0\ge1\ \land\
+ \forall N\ge N_0,\quad
+ \left|\frac{g_N}{A_N}-1\right|\le Cq^{N/2}.
+\]
+The lemma \texttt{relativeAsymptotic\_iff\_isBigO} proves equivalence
+to Mathlib's \texttt{Asymptotics.IsBigO} along \texttt{Filter.atTop}.
+There is no uniformity requirement in $q$, finite cutoff, or restriction to a
+subsequence. The exponents use real subtraction and real division.
+
+\texttt{NecessaryClause} universally quantifies the preceding statement
+over all $0<q<1$. The theorem \texttt{conjecture7668\_disproof} proves its
+negation; \texttt{not\_relativeAsymptotic} and
+\texttt{not\_relative\_isBigO} give the stronger failure for every such $q$.
+The final logical lemma \texttt{no\_completion} accepts the premise
+$\mathrm{FullSource}\Rightarrow\mathrm{NecessaryClause}$ and derives
+$\neg\mathrm{FullSource}$. This premise records the semantic implication
+explained above; it is not a formal definition of the source's unspecified
+later refinements.
+
+\paragraph{Verification and reproduction.}
+Lean 4.19.0 and Mathlib v4.19.0 are pinned by the included toolchain and
+manifest. The unchanged proof was rebuilt in fresh independent projects,
+then both proof and inspection sources were replayed with warnings treated
+as errors. The audit covers all 29 authored declarations (8 definitions and
+21 theorems), plus all 9 additional compiler-generated constants.
+Their types, definitions, axiom dependencies and logical dependency
+closures were inspected. Only \texttt{propext}, \texttt{Classical.choice}
+and \texttt{Quot.sound} occur; there are no admitted proofs, custom axioms,
+\texttt{native\_decide}, or unsafe/partial proof dependencies.
+All nine dependency revisions and tracked sources were checked before and
+after replay. No numerical experiment or external mathematical computation
+is needed. The auxiliary programs inspect and reproduce the formal checks.
+
+From the included \texttt{lean/} directory, after fetching the pinned
+packages and Mathlib cache, run \texttt{lake build}, then
+\texttt{lake env lean -DwarningAsError=true Conjecture7668.lean}
+and the same command for \texttt{Check.lean}. The submission's
+\texttt{VERIFICATION.md} gives the full audit commands, exact file hashes,
+independent review and report checks. These are local validation records;
+maintainer acceptance is a separate decision.
+
+\begin{thebibliography}{9}
+\raggedright
+\bibitem{DLMF} NIST Digital Library of Mathematical Functions,
+\href{https://dlmf.nist.gov/17.2.E1}{equation 17.2.1}, standard finite
+q-Pochhammer symbol.
+\end{thebibliography}
+\end{document}

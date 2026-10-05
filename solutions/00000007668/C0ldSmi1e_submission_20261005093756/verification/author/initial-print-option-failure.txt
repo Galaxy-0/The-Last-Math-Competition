@@ -1,0 +1,304 @@
+/private/tmp/tlmc7668-auxiliary/Inspect.lean:7:0: error: unknown option 'pp.width'
+Conjecture7668.qPochhammer : Real → Nat → @Polynomial.{0} Complex Complex.instSemiring
+'Conjecture7668.qPochhammer' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Conjecture7668.qPochhammer : Real → Nat → @Polynomial.{0} Complex Complex.instSemiring :=
+fun q N =>
+  @Finset.prod.{0, 0} Nat (@Polynomial.{0} Complex Complex.instSemiring)
+    (@CommRing.toCommMonoid.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+      (@Polynomial.commRing.{0} Complex Complex.commRing))
+    (Finset.range N) fun k =>
+    @HSub.hSub.{0, 0, 0} (@Polynomial.{0} Complex Complex.instSemiring) (@Polynomial.{0} Complex Complex.instSemiring)
+      (@Polynomial.{0} Complex Complex.instSemiring)
+      (@instHSub.{0} (@Polynomial.{0} Complex Complex.instSemiring) (@Polynomial.sub.{0} Complex Complex.instRing))
+      (@OfNat.ofNat.{0} (@Polynomial.{0} Complex Complex.instSemiring) 1
+        (@One.toOfNat1.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+          (@Polynomial.one.{0} Complex Complex.instSemiring)))
+      (@HMul.hMul.{0, 0, 0} (@Polynomial.{0} Complex Complex.instSemiring)
+        (@Polynomial.{0} Complex Complex.instSemiring) (@Polynomial.{0} Complex Complex.instSemiring)
+        (@instHMul.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+          (@Polynomial.mul'.{0} Complex Complex.instSemiring))
+        (@DFunLike.coe.{1, 1, 1}
+          (@RingHom.{0, 0} Complex (@Polynomial.{0} Complex Complex.instSemiring)
+            (@Semiring.toNonAssocSemiring.{0} Complex Complex.instSemiring)
+            (@Semiring.toNonAssocSemiring.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+              (@Polynomial.semiring.{0} Complex Complex.instSemiring)))
+          Complex (fun x => @Polynomial.{0} Complex Complex.instSemiring)
+          (@RingHom.instFunLike.{0, 0} Complex (@Polynomial.{0} Complex Complex.instSemiring)
+            (@Semiring.toNonAssocSemiring.{0} Complex Complex.instSemiring)
+            (@Semiring.toNonAssocSemiring.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+              (@Polynomial.semiring.{0} Complex Complex.instSemiring)))
+          (@Polynomial.C.{0} Complex Complex.instSemiring)
+          (@HPow.hPow.{0, 0, 0} Complex Nat Complex
+            (@instHPow.{0, 0} Complex Nat
+              (@Monoid.toNatPow.{0} Complex
+                (@MonoidWithZero.toMonoid.{0} Complex (@Semiring.toMonoidWithZero.{0} Complex Complex.instSemiring))))
+            (↑q) k))
+        (@Polynomial.X.{0} Complex Complex.instSemiring))
+Conjecture7668.rootModulusProduct : Real → Nat → Real
+'Conjecture7668.rootModulusProduct' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Conjecture7668.rootModulusProduct : Real → Nat → Real :=
+fun q N =>
+  @Multiset.prod.{0} Real Real.instCommMonoid
+    (@Multiset.map.{0, 0} Complex Real (fun z => @Norm.norm.{0} Complex Complex.instNorm z)
+      (@Polynomial.roots.{0} Complex Complex.commRing ⋯ (Conjecture7668.qPochhammer q N)))
+Conjecture7668.geometricMean : Real → Nat → Real
+'Conjecture7668.geometricMean' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Conjecture7668.geometricMean : Real → Nat → Real :=
+fun q N =>
+  @HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) (Conjecture7668.rootModulusProduct q N)
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) (@Nat.cast.{0} Real Real.instNatCast N))
+Conjecture7668.qPochhammer_eval : ∀ (q : Real) (N : Nat) (z : Complex),
+  @Eq.{1} Complex (@Polynomial.eval.{0} Complex Complex.instSemiring z (Conjecture7668.qPochhammer q N))
+    (@Finset.prod.{0, 0} Nat Complex (@CommRing.toCommMonoid.{0} Complex Complex.commRing) (Finset.range N) fun k =>
+      @HSub.hSub.{0, 0, 0} Complex Complex Complex (@instHSub.{0} Complex Complex.instSub)
+        (@OfNat.ofNat.{0} Complex 1 (@One.toOfNat1.{0} Complex Complex.instOne))
+        (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul) z
+          (@HPow.hPow.{0, 0, 0} Complex Nat Complex
+            (@instHPow.{0, 0} Complex Nat
+              (@Monoid.toNatPow.{0} Complex
+                (@MonoidWithZero.toMonoid.{0} Complex (@Semiring.toMonoidWithZero.{0} Complex Complex.instSemiring))))
+            (↑q) k)))
+'Conjecture7668.qPochhammer_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.linear_factor_ne_zero : ∀ (a : Complex),
+  @Ne.{1} (@Polynomial.{0} Complex Complex.instSemiring)
+    (@HSub.hSub.{0, 0, 0} (@Polynomial.{0} Complex Complex.instSemiring) (@Polynomial.{0} Complex Complex.instSemiring)
+      (@Polynomial.{0} Complex Complex.instSemiring)
+      (@instHSub.{0} (@Polynomial.{0} Complex Complex.instSemiring) (@Polynomial.sub.{0} Complex Complex.instRing))
+      (@OfNat.ofNat.{0} (@Polynomial.{0} Complex Complex.instSemiring) 1
+        (@One.toOfNat1.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+          (@Polynomial.one.{0} Complex Complex.instSemiring)))
+      (@HMul.hMul.{0, 0, 0} (@Polynomial.{0} Complex Complex.instSemiring)
+        (@Polynomial.{0} Complex Complex.instSemiring) (@Polynomial.{0} Complex Complex.instSemiring)
+        (@instHMul.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+          (@Polynomial.mul'.{0} Complex Complex.instSemiring))
+        (@DFunLike.coe.{1, 1, 1}
+          (@RingHom.{0, 0} Complex (@Polynomial.{0} Complex Complex.instSemiring)
+            (@Semiring.toNonAssocSemiring.{0} Complex Complex.instSemiring)
+            (@Semiring.toNonAssocSemiring.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+              (@Polynomial.semiring.{0} Complex Complex.instSemiring)))
+          Complex (fun x => @Polynomial.{0} Complex Complex.instSemiring)
+          (@RingHom.instFunLike.{0, 0} Complex (@Polynomial.{0} Complex Complex.instSemiring)
+            (@Semiring.toNonAssocSemiring.{0} Complex Complex.instSemiring)
+            (@Semiring.toNonAssocSemiring.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+              (@Polynomial.semiring.{0} Complex Complex.instSemiring)))
+          (@Polynomial.C.{0} Complex Complex.instSemiring) a)
+        (@Polynomial.X.{0} Complex Complex.instSemiring)))
+    (@OfNat.ofNat.{0} (@Polynomial.{0} Complex Complex.instSemiring) 0
+      (@Zero.toOfNat0.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+        (@Polynomial.zero.{0} Complex Complex.instSemiring)))
+'Conjecture7668.linear_factor_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.qPochhammer_ne_zero : ∀ (q : Real) (N : Nat),
+  @Ne.{1} (@Polynomial.{0} Complex Complex.instSemiring) (Conjecture7668.qPochhammer q N)
+    (@OfNat.ofNat.{0} (@Polynomial.{0} Complex Complex.instSemiring) 0
+      (@Zero.toOfNat0.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+        (@Polynomial.zero.{0} Complex Complex.instSemiring)))
+'Conjecture7668.qPochhammer_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.linear_factor_roots : ∀ (a : Complex),
+  @Ne.{1} Complex a (@OfNat.ofNat.{0} Complex 0 (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+    @Eq.{1} (Multiset.{0} Complex)
+      (@Polynomial.roots.{0} Complex Complex.commRing ⋯
+        (@HSub.hSub.{0, 0, 0} (@Polynomial.{0} Complex Complex.instSemiring)
+          (@Polynomial.{0} Complex Complex.instSemiring) (@Polynomial.{0} Complex Complex.instSemiring)
+          (@instHSub.{0} (@Polynomial.{0} Complex Complex.instSemiring) (@Polynomial.sub.{0} Complex Complex.instRing))
+          (@OfNat.ofNat.{0} (@Polynomial.{0} Complex Complex.instSemiring) 1
+            (@One.toOfNat1.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+              (@Polynomial.one.{0} Complex Complex.instSemiring)))
+          (@HMul.hMul.{0, 0, 0} (@Polynomial.{0} Complex Complex.instSemiring)
+            (@Polynomial.{0} Complex Complex.instSemiring) (@Polynomial.{0} Complex Complex.instSemiring)
+            (@instHMul.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+              (@Polynomial.mul'.{0} Complex Complex.instSemiring))
+            (@DFunLike.coe.{1, 1, 1}
+              (@RingHom.{0, 0} Complex (@Polynomial.{0} Complex Complex.instSemiring)
+                (@Semiring.toNonAssocSemiring.{0} Complex Complex.instSemiring)
+                (@Semiring.toNonAssocSemiring.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+                  (@Polynomial.semiring.{0} Complex Complex.instSemiring)))
+              Complex (fun x => @Polynomial.{0} Complex Complex.instSemiring)
+              (@RingHom.instFunLike.{0, 0} Complex (@Polynomial.{0} Complex Complex.instSemiring)
+                (@Semiring.toNonAssocSemiring.{0} Complex Complex.instSemiring)
+                (@Semiring.toNonAssocSemiring.{0} (@Polynomial.{0} Complex Complex.instSemiring)
+                  (@Polynomial.semiring.{0} Complex Complex.instSemiring)))
+              (@Polynomial.C.{0} Complex Complex.instSemiring) a)
+            (@Polynomial.X.{0} Complex Complex.instSemiring))))
+      (@Singleton.singleton.{0, 0} Complex (Multiset.{0} Complex) (@Multiset.instSingleton.{0} Complex)
+        (@Inv.inv.{0} Complex Complex.instInv a))
+'Conjecture7668.linear_factor_roots' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.qPochhammer_roots : ∀ (q : Real),
+  @Ne.{1} Real q (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) →
+    ∀ (N : Nat),
+      @Eq.{1} (Multiset.{0} Complex) (@Polynomial.roots.{0} Complex Complex.commRing ⋯ (Conjecture7668.qPochhammer q N))
+        (@Multiset.map.{0, 0} Nat Complex
+          (fun k =>
+            @Inv.inv.{0} Complex Complex.instInv
+              (@HPow.hPow.{0, 0, 0} Complex Nat Complex
+                (@instHPow.{0, 0} Complex Nat
+                  (@Monoid.toNatPow.{0} Complex
+                    (@MonoidWithZero.toMonoid.{0} Complex
+                      (@Semiring.toMonoidWithZero.{0} Complex Complex.instSemiring))))
+                (↑q) k))
+          (@Finset.val.{0} Nat (Finset.range N)))
+'Conjecture7668.qPochhammer_roots' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.qPochhammer_roots_card : ∀ (q : Real),
+  @Ne.{1} Real q (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) →
+    ∀ (N : Nat),
+      @Eq.{1} Nat
+        (@Multiset.card.{0} Complex (@Polynomial.roots.{0} Complex Complex.commRing ⋯ (Conjecture7668.qPochhammer q N)))
+        N
+'Conjecture7668.qPochhammer_roots_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.rootModulusProduct_eq : ∀ (q : Real),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) q →
+    ∀ (N : Nat),
+      @Eq.{1} Real (Conjecture7668.rootModulusProduct q N)
+        (@Finset.prod.{0, 0} Nat Real Real.instCommMonoid (Finset.range N) fun k =>
+          @Inv.inv.{0} Real Real.instInv
+            (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+              q k))
+'Conjecture7668.rootModulusProduct_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.sum_range_real : ∀ (N : Nat),
+  @Eq.{1} Real
+    (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (Finset.range N) fun k => @Nat.cast.{0} Real Real.instNatCast k)
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@Nat.cast.{0} Real Real.instNatCast N)
+        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (@Nat.cast.{0} Real Real.instNatCast N)
+          (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))
+      (@OfNat.ofNat.{0} Real 2 (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast ⋯)))
+'Conjecture7668.sum_range_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.rootModulusProduct_rpow : ∀ (q : Real),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) q →
+    ∀ (N : Nat),
+      @Eq.{1} Real (Conjecture7668.rootModulusProduct q N)
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) q
+          (@Neg.neg.{0} Real Real.instNeg
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@Nat.cast.{0} Real Real.instNatCast N)
+                (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                  (@Nat.cast.{0} Real Real.instNatCast N)
+                  (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))
+              (@OfNat.ofNat.{0} Real 2 (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast ⋯)))))
+'Conjecture7668.rootModulusProduct_rpow' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.geometricMean_eq : ∀ (q : Real),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) q →
+    ∀ (N : Nat),
+      @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) N →
+        @Eq.{1} Real (Conjecture7668.geometricMean q N)
+          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) q
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@Neg.neg.{0} Real Real.instNeg
+                (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                  (@Nat.cast.{0} Real Real.instNatCast N)
+                  (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))
+              (@OfNat.ofNat.{0} Real 2 (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast ⋯))))
+'Conjecture7668.geometricMean_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.rootModulusProduct_nonneg : ∀ (q : Real) (N : Nat),
+  @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+    (Conjecture7668.rootModulusProduct q N)
+'Conjecture7668.rootModulusProduct_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.geometricMean_nonneg : ∀ (q : Real) (N : Nat),
+  @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+    (Conjecture7668.geometricMean q N)
+'Conjecture7668.geometricMean_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.geometricMean_pow : ∀ (q : Real) (N : Nat),
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) N →
+    @Eq.{1} Real
+      (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+        (Conjecture7668.geometricMean q N) N)
+      (Conjecture7668.rootModulusProduct q N)
+'Conjecture7668.geometricMean_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.claimedMainTerm : Real → Nat → Real
+'Conjecture7668.claimedMainTerm' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Conjecture7668.claimedMainTerm : Real → Nat → Real :=
+fun q N =>
+  @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+    (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) q
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@Neg.neg.{0} Real Real.instNeg
+          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (@Nat.cast.{0} Real Real.instNatCast N)
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast Conjecture7668.claimedMainTerm._proof_1))))
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+      (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) q)
+Conjecture7668.errorScale : Real → Nat → Real
+'Conjecture7668.errorScale' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Conjecture7668.errorScale : Real → Nat → Real :=
+fun q N =>
+  @HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) q
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@Nat.cast.{0} Real Real.instNatCast N)
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast Conjecture7668.claimedMainTerm._proof_1)))
+Conjecture7668.relativeError : Real → Nat → Real
+'Conjecture7668.relativeError' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Conjecture7668.relativeError : Real → Nat → Real :=
+fun q N =>
+  @HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (Conjecture7668.geometricMean q N) (Conjecture7668.claimedMainTerm q N))
+    (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+Conjecture7668.RelativeAsymptotic : Real → Prop
+'Conjecture7668.RelativeAsymptotic' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Conjecture7668.RelativeAsymptotic : Real → Prop :=
+fun q =>
+  @Exists.{1} Real fun C =>
+    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) C)
+      (@Exists.{1} Nat fun N₀ =>
+        And (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) N₀)
+          (∀ (N : Nat),
+            @LE.le.{0} Nat instLENat N₀ N →
+              @LE.le.{0} Real Real.instLE
+                (@abs.{0} Real Real.lattice Real.instAddGroup (Conjecture7668.relativeError q N))
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) C
+                  (Conjecture7668.errorScale q N))))
+Conjecture7668.NecessaryClause : Prop
+'Conjecture7668.NecessaryClause' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Conjecture7668.NecessaryClause : Prop :=
+∀ (q : Real),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) q →
+    @LT.lt.{0} Real Real.instLT q (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+      Conjecture7668.RelativeAsymptotic q
+Conjecture7668.errorScale_nonneg : ∀ (q : Real),
+  @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) q →
+    ∀ (N : Nat),
+      @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+        (Conjecture7668.errorScale q N)
+'Conjecture7668.errorScale_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.relativeAsymptotic_iff_isBigO : ∀ (q : Real),
+  @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) q →
+    Iff (Conjecture7668.RelativeAsymptotic q)
+      (@Asymptotics.IsBigO.{0, 0, 0} Nat Real Real Real.norm Real.norm (@Filter.atTop.{0} Nat Nat.instPreorder)
+        (Conjecture7668.relativeError q) (Conjecture7668.errorScale q))
+'Conjecture7668.relativeAsymptotic_iff_isBigO' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.relativeError_eq : ∀ (q : Real),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) q →
+    ∀ (N : Nat),
+      @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) N →
+        @Eq.{1} Real (Conjecture7668.relativeError q N) q
+'Conjecture7668.relativeError_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.errorScale_tendsto_zero : ∀ (q : Real),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) q →
+    @LT.lt.{0} Real Real.instLT q (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+      @Filter.Tendsto.{0, 0} Nat Real (Conjecture7668.errorScale q) (@Filter.atTop.{0} Nat Nat.instPreorder)
+        (@nhds.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+          (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+'Conjecture7668.errorScale_tendsto_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.not_relativeAsymptotic : ∀ (q : Real),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) q →
+    @LT.lt.{0} Real Real.instLT q (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+      Not (Conjecture7668.RelativeAsymptotic q)
+'Conjecture7668.not_relativeAsymptotic' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.conjecture7668_disproof : Not Conjecture7668.NecessaryClause
+'Conjecture7668.conjecture7668_disproof' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.not_relative_isBigO : ∀ (q : Real),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) q →
+    @LT.lt.{0} Real Real.instLT q (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+      Not
+        (@Asymptotics.IsBigO.{0, 0, 0} Nat Real Real Real.norm Real.norm (@Filter.atTop.{0} Nat Nat.instPreorder)
+          (Conjecture7668.relativeError q) (Conjecture7668.errorScale q))
+'Conjecture7668.not_relative_isBigO' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7668.no_completion : ∀ (FullSource : Prop), (FullSource → Conjecture7668.NecessaryClause) → Not FullSource
+'Conjecture7668.no_completion' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,69 @@
+{
+  "status": "PASS",
+  "created_utc": "2026-10-05T09:30:45.502400+00:00",
+  "source_sha256": "bd8d1d5f3089422f31e20d9fb20870132d97d5845c4d5c94775653e6e3d35ffd",
+  "pdf_sha256": "0917d1e651d92700fe54ff93c8415e084c7d109435c2d05021c01b0caf16692e",
+  "page_count": 2,
+  "pdf_bytes": 53828,
+  "native_compiler": {
+    "path": "/private/tmp/tlmc7668-report/main.tex",
+    "status": "success",
+    "message": "The current source compiled successfully with the desktop editor's compiler.",
+    "source_sha256": "bd8d1d5f3089422f31e20d9fb20870132d97d5845c4d5c94775653e6e3d35ffd",
+    "observed_utc": "2026-10-05T09:30:44.679409+00:00",
+    "scope": "Final report source actual native compiler result, not inferred from editor opening.",
+    "kind": "success"
+  },
+  "export": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--outdir",
+      "/private/tmp/tlmc7668-report",
+      "/private/tmp/tlmc7668-report/main.tex"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.791,
+    "warnings_or_box_diagnostics": [],
+    "raw_log_local_path": "/private/tmp/tlmc7668-report/export-raw.txt",
+    "raw_log_sha256": "6628c8d3016fb9adcb5ad9ae9c287daa7f811ce7f45ceeddfc39735ebd01d73f",
+    "packaged_log": "report-export.txt",
+    "packaged_log_sha256": "6628c8d3016fb9adcb5ad9ae9c287daa7f811ce7f45ceeddfc39735ebd01d73f",
+    "log_normalization": "Strip trailing whitespace on each line, preserve all line contents and order, terminate with one newline."
+  },
+  "render": {
+    "command": [
+      "/Users/daniel/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override/pdftoppm",
+      "-scale-to",
+      "1600",
+      "-png",
+      "/private/tmp/tlmc7668-report/main.pdf",
+      "/private/tmp/tlmc7668-report/page"
+    ],
+    "exit_code": 0,
+    "images": [
+      {
+        "path": "/private/tmp/tlmc7668-report/page-1.png",
+        "sha256": "756bf74e1b1bced06230eebead9155ab4026e58e84b5159c0a3b00a74a891f11"
+      },
+      {
+        "path": "/private/tmp/tlmc7668-report/page-2.png",
+        "sha256": "19975b3c78cccac1d129b36a1e62eca00f64569507776c3f3b92f3eee38a29fc"
+      }
+    ]
+  },
+  "visual_review": {
+    "status": "PASS",
+    "reviewer": "coordinator",
+    "all_pages": [
+      1,
+      2
+    ],
+    "findings": "Both final rendered pages viewed in full. Readable formulas and code identifiers, correct page breaks, no missing glyphs, overlaps or clipping. Page 1 contains complete mathematical argument; page 2 contains scope, correspondence and verification.",
+    "reviewed_utc": "2026-10-05T09:31:40.408871+00:00"
+  },
+  "text_review": {
+    "method": "pypdf extraction; entire two-page text read against final source",
+    "sha256": "595325bea895d2cabc8f54987fe977d00f6290b47300eb58ee6901d4a896dce9",
+    "status": "PASS"
+  }
+}
