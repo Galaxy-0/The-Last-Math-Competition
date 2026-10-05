@@ -1,0 +1,147 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000002310\\[2pt]
+\large Base sizes of almost simple groups are unbounded}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000002310 reads (English version): ``Definition: The base size $b(G)$ is the minimal
+size of a base with trivial pointwise stabilizer. Conjecture: The supremum of $b$ over almost
+simple groups is 7 (attained by the action of $\mathrm{Sp}_8(2)$); the complete exception table
+for $b=6$ or $7$ contains exactly 3 groups.'' The Chinese version has the same content.
+
+\paragraph{Reading.} The statement is a conjunction, and we refute its first conjunct:
+$\sup b = 7$ over almost simple groups. The class in the text is \emph{all} almost simple
+permutation groups. The text does not restrict to ``non-standard'' actions or exclude the
+natural actions of alternating groups. We use the narrowest standard version of this class:
+finite almost simple groups acting faithfully and primitively on a finite set. A larger class,
+for example one without primitivity, only increases the supremum.
+
+\section{Definitions (as in Lean)}
+
+\begin{definition}
+Let $G$ act on $\Omega$. A finite set $B\subseteq\Omega$ is a \emph{base} if the only $g\in G$
+fixing every point of $B$ is $g=1$. The \emph{base size} $b(G)$ is the least cardinality of a base
+(\texttt{baseSize}, an infimum in $\mathbb N$).
+\end{definition}
+
+\begin{definition}
+$G$ is \emph{almost simple} (\texttt{IsAlmostSimple}) if it has a normal subgroup $T$ that is a
+nonabelian simple group and has trivial centralizer $C_G(T)=1$. Then conjugation embeds
+$T\cong\mathrm{Inn}(T)\le G\le\mathrm{Aut}(T)$.
+\end{definition}
+
+\begin{definition}
+\texttt{almostSimpleBaseSizes} is the set of values $b(G)\in\mathbb N\cup\{\infty\}$ over finite
+groups $G$ that are almost simple and act faithfully (\texttt{FaithfulSMul}) and primitively
+(Mathlib's \texttt{IsPreprimitive}) on a finite set $\Omega$.
+\end{definition}
+
+\section{The alternating groups}
+
+Let $|\Omega| = n$ and let $A_n$ act naturally on $\Omega$.
+
+\begin{lemma}\label{lem:lower}
+A set $B$ with $|B|\le n-3$ is not a base.
+\end{lemma}
+\begin{proof}
+The complement of $B$ contains three distinct points $a,b,c$. The 3-cycle
+$\sigma=(a\,b)(b\,c)$ is even and fixes every point of $B$, but $\sigma(c)=a\ne c$.
+\end{proof}
+
+\begin{lemma}\label{lem:upper}
+For any $a,b\in\Omega$, the complement $\Omega\setminus\{a,b\}$ is a base.
+\end{lemma}
+\begin{proof}
+If $g\in A_n$ fixes every point outside $\{a,b\}$, then its support lies in $\{a,b\}$, so it has
+size $0$, $1$ or $2$. Size $1$ is impossible for a permutation. Size $2$ makes $g$ a transposition,
+which is odd. Hence the support is empty and $g=1$.
+\end{proof}
+
+\begin{theorem}\label{thm:b}
+For $n\ge2$, $b(A_n)=n-2$ in the natural action.
+\end{theorem}
+\begin{proof}
+Take $a\ne b$. Lemma~\ref{lem:upper} gives a base of size $n-2$, and Lemma~\ref{lem:lower} shows
+that every base has size at least $n-2$.
+\end{proof}
+
+\begin{lemma}\label{lem:as}
+For $n\ge5$, $A_n$ is almost simple, and its natural action is faithful and primitive.
+\end{lemma}
+\begin{proof}
+Mathlib proves that $A_n$ is simple for $n\ge5$ (\texttt{alternatingGroup.isSimpleGroup}). Take
+$T=A_n$ itself. $T$ is nonabelian: for distinct $a,b,c,d$, the elements $x=(a\,b)(a\,c)$ and
+$y=(a\,b)(a\,d)$ satisfy $xy(d)=a$ and $yx(d)=b$. The centralizer of $T$ is the center, which is a
+normal subgroup. It is not all of $T$, because $x$ and $y$ do not commute, so by simplicity it is
+trivial. The action is faithful because $A_n$ is a group of permutations. It is primitive for
+$n\ge3$ (\texttt{alternatingGroup.isPreprimitive\_of\_three\_le\_card} in Mathlib).
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+The supremum of $b$ over finite almost simple groups in faithful primitive actions is $\infty$.
+In particular it is not $7$. Concretely, $A_{10}$ acting on $10$ points is almost simple and
+primitive with $b=8>7$.
+\end{theorem}
+\begin{proof}
+For each $N$, the group $A_{N+5}$ lies in the class by Lemma~\ref{lem:as} and has base size
+$N+3>N$ by Theorem~\ref{thm:b}.
+\end{proof}
+
+\begin{remark}
+Theorem~\ref{thm:main} uses only the natural action of $A_n$. If the intended class is restricted
+to non-standard actions, which excludes these natural actions, our counterexample does not
+apply.
+\end{remark}
+
+\section{Lean 4 formalization}
+
+The file \texttt{lean/Conjecture2310/Basic.lean} (namespace \texttt{C2310}) imports only Mathlib. It
+contains:
+\begin{itemize}
+\item \texttt{IsBase}, \texttt{baseSize}, \texttt{IsAlmostSimple}, \texttt{almostSimpleBaseSizes};
+\item \texttt{not\_isBase} (Lemma~\ref{lem:lower}), \texttt{isBase\_compl\_pair}
+(Lemma~\ref{lem:upper}), \texttt{baseSize\_alternating} (Theorem~\ref{thm:b}, for any finite type
+with at least 2 elements), \texttt{isAlmostSimple\_alternating} (Lemma~\ref{lem:as});
+\item \texttt{conjecture\_2310\_false}:
+\texttt{sSup almostSimpleBaseSizes = \(\top\)} and \texttt{sSup almostSimpleBaseSizes \(\ne\) 7};
+\item \texttt{conjecture\_2310\_false\_A10}: $A_{10}$ on \texttt{Fin 10} is almost simple and
+primitive, with \texttt{baseSize = 8}.
+\end{itemize}
+The file has no \texttt{sorry} and no \texttt{native\_decide}. \texttt{\#print axioms} reports only
+\texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
+
+\section{Relation to the earlier submission}
+
+PR 222 (orionsheep) made the same mathematical point but was not merged. The reviewer wrote:
+``conjecture\_refuted is $\neg(7\ge8)$, decide trivia with no groups in Lean, and the substantive
+part does not prove $b=8$: seven\_points\_fail exhibits only ONE non-base 7-subset, whereas
+$b\ge8$ requires every 7-subset to fail --- that universal step is verified only in
+reproduce.py, and $S_9$'s almost-simplicity is prose.'' This submission formalizes the missing
+pieces. It defines bases, base size and almost simplicity on actual group actions. It proves in
+Lean that \emph{every} set of at most $n-3$ points fails to be a base. It proves almost simplicity
+and primitivity of $A_n$ in Lean. It gets the whole infinite family $b(A_n)=n-2$, not one
+instance.
+
+\end{document}
