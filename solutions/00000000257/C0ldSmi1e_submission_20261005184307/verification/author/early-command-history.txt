@@ -1,0 +1,69 @@
+Author command history before the structured runner
+=================================================
+This is a retrospective record, not a claim of shell history captured automatically.
+The tool conversation is the primary exact command transcript. All named proof
+attempt snapshots and compiler/cache output below were preserved when run.
+
+1. Read in full using cat:
+   /private/tmp/tlmc257-author-input/00000000257.md
+   /private/tmp/tlmc257-author-input/README.md
+   /private/tmp/tlmc257-author-input/README.zh-CN.md
+   /private/tmp/tlmc257-author-input/pinned-dependencies.json
+2. Used rg searches and cat/sed reads solely within the permitted Mathlib package,
+   looking for standard classNumber, NumberField, IntermediateField.adjoin,
+   integrality, minpoly and quadratic polynomial APIs. A few tentative paths for
+   complex square-root and IntermediateField/Defs did not exist; these failed
+   searches did not provide mathematical facts. No other proof roots were read.
+3. Created /private/tmp/tlmc257-proof and /private/tmp/tlmc257-author/{logs,attempts}.
+   Python copied the supplied dependency manifest, changing only its name to
+   tlmc257, and wrote lakefile.toml and lean-toolchain. Initially symlinked
+   .lake/packages to the permitted package path, then removed only that symlink
+   and privately copied the same package directory with:
+   cp -cR /private/tmp/tlmc310-proof/.lake/packages /private/tmp/tlmc257-proof/.lake/packages
+   No preceding project source was copied/read.
+4. Strict initial source attempt:
+   cd /private/tmp/tlmc257-proof
+   /private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake env lean -DwarningAsError=true Conjecture257.lean
+   Snapshot: attempts/001.lean. Output: logs/001.log.
+   FAILED: missing NumberTheory/NumberField/ClassNumber.olean.
+   The initial shell wrapper displayed the log with cat and hence itself exited 0;
+   this did not mean Lean succeeded. Subsequent structured runner preserves true statuses.
+5. Cache attempts, all run from /private/tmp/tlmc257-proof, all logs retained:
+   lake exe cache get Mathlib/NumberTheory/NumberField/ClassNumber.lean Mathlib/FieldTheory/IntermediateField/Adjoin/Basic.lean Mathlib/Analysis/SpecialFunctions/Pow/Real.lean
+   logs/cache.log: native binary rejected by macOS dyld.
+   lake env lean --run .lake/packages/mathlib/Cache/Main.lean get [same slash paths]
+   logs/cache-interpreted.log: invalid path (the root project isn't Mathlib).
+   lake env lean --run .lake/packages/mathlib/Cache/Main.lean get Mathlib.NumberTheory.NumberField.ClassNumber Mathlib.FieldTheory.IntermediateField.Adjoin.Basic Mathlib.Analysis.SpecialFunctions.Pow.Real
+   logs/cache-interpreted-2.log: default cache directory write blocked.
+   Same command with MATHLIB_CACHE_DIR=/private/tmp/tlmc257-author/mathlib-cache:
+   logs/cache-interpreted-3.log: sandbox DNS blocked github.com.
+   Same command under approved network escalation:
+   logs/cache-interpreted-4.log: SUCCESS, standard unpacker and module caches downloaded.
+   Additional approved cache command for Mathlib.Algebra.Polynomial.SpecificDegree Mathlib.Tactic:
+   logs/cache-interpreted-5.log: SUCCESS.
+   Every lake command above used the same explicit pinned 4.19.0 binary path as step 4.
+6. Draft Pell/finish and adequacy text blocks were preserved respectively in
+   pell_and_finish.txt and adequacy.txt, then inserted into Conjecture257.lean.
+7. Second strict source attempt used the step 4 command; snapshot attempts/002.lean,
+   output logs/002.log. FAILED: SpecificDegree.olean missing. Again the old shell
+   wrapper's final cat status was not Lean's status.
+8. Created, reviewed and ran run_check.py. From attempt 003 onward commands,
+   actual exit statuses, timestamps and source hashes are in commands.jsonl.
+   Compiler outputs and complete source snapshots are retained for every attempt.
+   003 failed on API arguments, polynomial simplification and class-number transport.
+   004, 005 and 006 failed only on dependent class-number transport.
+   007 passed strict Lean source verification.
+   008-build passed fresh lake build, including Conjecture257 and Audit257.
+   009-final-source and 010-final-audit passed warningAsError strict replay.
+9. generate_audit.py was saved, reviewed and run to enumerate all 17 named
+   top-level declarations; it performs no mathematical computation.
+   verify_dependencies.py was saved, reviewed and run successfully to compare
+   exact manifest/revisions and clean tracked dependency states.
+   verify_and_freeze.py was saved, reviewed and run successfully to verify complete
+   axiom coverage, allowed axioms and the frozen source SHA-256 inventory.
+10. All edits and setup were confined to the two newly authorized author/proof
+    scratch roots; author-input was read only. No repository edits, publication,
+    LaTeX report or PDF were made. The external primary-source exposure is recorded
+    in provenance.txt. No extra mathematics agent was created (slot limit rejected
+    the sole delegation attempt), and no solution/strategy input from another
+    competition candidate was received.

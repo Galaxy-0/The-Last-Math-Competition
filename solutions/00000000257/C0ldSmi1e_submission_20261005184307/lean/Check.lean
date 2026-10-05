@@ -1,0 +1,34 @@
+import Conjecture257
+import Audit257
+
+#print Conjecture257.imaginaryRoot
+#print Conjecture257.quadraticField
+#print Conjecture257.imaginaryClassNumber
+#print Conjecture257.Conjecture
+
+#check Conjecture257.imaginaryRoot_sq
+#print axioms Conjecture257.imaginaryRoot_sq
+#check Conjecture257.imaginaryRoot_integral
+#print axioms Conjecture257.imaginaryRoot_integral
+#check Conjecture257.quadraticFieldNumberField
+#print axioms Conjecture257.quadraticFieldNumberField
+#check Conjecture257.imaginaryRoot_im_pos
+#print axioms Conjecture257.imaginaryRoot_im_pos
+#check Conjecture257.definingPolynomial_irreducible
+#print axioms Conjecture257.definingPolynomial_irreducible
+#check Conjecture257.quadraticField_finrank
+#print axioms Conjecture257.quadraticField_finrank
+#check Conjecture257.imaginaryRoot_mul_square
+#print axioms Conjecture257.imaginaryRoot_mul_square
+#check Conjecture257.quadraticField_mul_square
+#print axioms Conjecture257.quadraticField_mul_square
+#check Conjecture257.classNumber_congr
+#print axioms Conjecture257.classNumber_congr
+#check Conjecture257.imaginaryClassNumber_mul_square
+#print axioms Conjecture257.imaginaryClassNumber_mul_square
+#check Conjecture257.pell_unbounded
+#print axioms Conjecture257.pell_unbounded
+#check Conjecture257.counterexample_for_every_constant
+#print axioms Conjecture257.counterexample_for_every_constant
+#check Conjecture257.conjecture_false
+#print axioms Conjecture257.conjecture_false
