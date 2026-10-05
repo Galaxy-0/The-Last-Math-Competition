@@ -1,0 +1,57 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\title{Stable inertia above the proposed inverse-norm bound}
+\author{ziangni-sys \quad Conjecture 00000008859}
+\date{}
+\begin{document}
+\maketitle
+\vspace{-2em}
+\textbf{Disproof of the universal supremum formula.} The conjecture asserts that the supremum of admissible inertial parameters is always the reciprocal of the inverse norm of the splitting operator. Consider the standard inertial proximal-point iteration, equivalently forward--backward splitting with zero forward operator. On the Hilbert space $\mathbb R$, let
+\[
+ A(x)=9x,\qquad T=(I+A)^{-1}=\tfrac1{10}I.
+\]
+The operator $A$ is maximal monotone and has the unique zero $0$. Its resolvent is the actual map $T(p)=p/10$, because $x+A(x)=p$ is equivalent to $x=p/10$. Moreover,
+\[
+ T^{-1}=10I,\qquad \|T^{-1}\|=10,\qquad b_*:=\|T^{-1}\|^{-1}=\tfrac1{10}.
+\]
+All norms here are the ordinary induced operator norms, and the inverse is a genuine two-sided inverse.
+
+For completeness, maximality is immediate directly from the graph. The graph is monotone since
+$(9x-9y)(x-y)=9(x-y)^2\ge0$. If a point $(x,u)$ is monotonically related to every $(y,9y)$, substitute
+\[
+ y=x+\frac{u-9x}{18}.
+\]
+Then $(u-9y)(x-y)=-(u-9x)^2/36\ge0$, forcing $u=9x$. Thus no proper monotone extension exists.
+
+For arbitrary two initial values $x_{-1},x_0\in\mathbb R$, use the actual constant-inertia recurrence
+\[
+ x_{k+1}=T\bigl(x_k+\beta(x_k-x_{k-1})\bigr).
+\]
+Set $\beta=1/2$, which lies strictly inside the conventional range $[0,1)$. The recurrence becomes
+\[
+ x_{k+1}=\tfrac3{20}x_k-\tfrac1{20}x_{k-1}.
+\]
+Introduce the weighted state $z_k=(x_k,x_{k-1}/2)$ with its genuine product sup norm. Its update is
+\[
+ z_{k+1}=F(z_k),\qquad F(x,y)=\left(\tfrac3{20}x-\tfrac1{10}y,\tfrac12x\right).
+\]
+For every state,
+\[
+ \|F(x,y)\|_\infty
+ \le\max\left(\left(\tfrac3{20}+\tfrac1{10}\right)\|(x,y)\|_\infty,
+                    \tfrac12\|(x,y)\|_\infty\right)
+ \le\tfrac12\|(x,y)\|_\infty.
+\]
+Hence
+\[
+ |x_k|\le\|z_k\|_\infty\le2^{-k}\max\left(|x_0|,\tfrac12|x_{-1}|\right)\longrightarrow0
+\]
+for \emph{every} pair of initial values. In particular, the iteration is globally stable and converges to the unique zero, with an explicit geometric estimate.
+
+Let $\mathcal A$ be the set of constant inertial parameters for which this actual recurrence converges to zero for every pair of initial values. We have $1/2\in\mathcal A$ but $1/2>1/10=b_*$. Thus $b_*$ is not even an upper bound of $\mathcal A$, and cannot be its supremum. The same obstruction holds if admissible parameters are restricted to $[0,1)$. No assumption about boundedness or attainment of the true supremum is needed.
+
+\textbf{Scope and formalization.} This refutes the universal first clause in both language versions, without disputing theorems that impose other, correctly stated sufficient bounds. Lean constructs actual continuous linear maps and their inverses, verifies full maximal monotonicity and the resolvent equation, computes the actual inverse norm, and derives the exact inertial recurrence from its state orbit. It proves the geometric state bound and convergence for every pair of initial values, then formally disproves \texttt{IsLUB} at the proposed value. The separate oscillation and optimal-schedule clauses are unnecessary.
+\end{document}
