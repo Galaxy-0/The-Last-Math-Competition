@@ -1,0 +1,179 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\GL}{\mathrm{GL}}
+
+\title{Conjecture 00000005600:\\ same determinant, non-isomorphic echelon forms,\\
+separated by a noncommutative unimodular pair}
+\author{Jackmeson1 (AI-assisted)}
+\date{2026-10-04}
+
+\begin{document}
+\maketitle
+
+\section*{Statement}
+\emph{English.} Definition: The determinant and the echelon form are two layers.
+Conjecture: There exist two matrices with the same determinant but non-isomorphic
+echelon forms, and the separation is realized by an explicit noncommutative pair of
+unimodular transformations.
+(The Chinese text says the same: the two matrices have equal determinants while their
+echelon forms are not isomorphic, and the separation is realized by an explicit
+noncommutative pair of unimodular transformations.)
+
+\textbf{Verdict: proved.} The statement is existential; we give explicit integer
+matrices and an explicit pair in $\GL_2(\Z)$, and the whole statement below is a single
+Lean theorem, \texttt{Conjecture5600.conjecture\_5600}, checked against Mathlib.
+
+\section{Definitions and reading}
+All matrices are $2\times 2$ integer matrices. \emph{Unimodular transformations} are the
+elements of $\GL_2(\Z)$ (integer matrices with integer inverse, equivalently
+$\det=\pm1$); in Lean this is Mathlib's \texttt{GL (Fin 2) Z}. A unimodular row
+transformation sends $A$ to $WA$, $W\in\GL_2(\Z)$; $A$ and $H$ are \emph{row equivalent}
+if $H=WA$ for some such $W$.
+
+\emph{Echelon form.} Over $\Z$ the echelon form of a nonsingular matrix is its row
+Hermite normal form: $H=WA$ with $W\in\GL_2(\Z)$, $H$ upper triangular, positive
+diagonal (pivot) entries, and every entry above a pivot in $[0,\text{pivot})$. This is the
+Lean predicate \texttt{IsHermiteNormalForm} (stated for all $n\times n$).
+
+\emph{Isomorphism type of an echelon form.} The row lattice $L(A)=\{wA : w\in\Z^2\}$
+(Mathlib: \texttt{LinearMap.range A.vecMulLinear}, proved equal to the $\Z$-span of the
+rows) is unchanged by row transformations, so all echelon forms of $A$ have the same
+row lattice and the same cokernel $\operatorname{coker}A=\Z^2/L(A)$. We say two echelon
+forms are \emph{non-isomorphic} in the strongest sense: their cokernels are not
+isomorphic as abelian groups. This implies that they are different matrices, that the
+matrices are not row equivalent, and that their Smith forms differ.
+
+\emph{The separating pair.} We prove two readings, with the same explicit pair
+\[
+U=\begin{pmatrix}1&1\\0&1\end{pmatrix},\qquad
+V=\begin{pmatrix}1&0\\1&1\end{pmatrix},\qquad
+UV=\begin{pmatrix}2&1\\1&1\end{pmatrix}\neq
+VU=\begin{pmatrix}1&1\\1&2\end{pmatrix},
+\]
+the two standard elementary generators of $\mathrm{SL}_2(\Z)$, with $\det U=\det V=1$.
+\begin{itemize}
+\item[(A)] \emph{The pair carries the two matrices to their separated echelon forms:}
+$UM$ and $VN$ are the Hermite forms of $M$ and $N$, $\det M=\det N$, and the echelon
+forms are non-isomorphic.
+\item[(B)] \emph{The separation comes from the noncommutativity itself:} for one base
+matrix $X$, the matrices $XUV$ and $XVU$ (the pair applied in the two orders) have equal
+determinants, since $\det(UV)=\det(VU)$, but distinct echelon forms.
+\end{itemize}
+
+\section{Theorem and proof}
+Let
+\[
+M=\begin{pmatrix}1&-4\\0&4\end{pmatrix},\quad
+N=\begin{pmatrix}2&0\\-2&2\end{pmatrix},\quad
+X=\begin{pmatrix}1&0\\0&2\end{pmatrix}.
+\]
+
+\begin{theorem}\label{thm:main}
+\begin{enumerate}
+\item $\det M=\det N=4$, $UM=\operatorname{diag}(1,4)$ and $VN=\operatorname{diag}(2,2)$
+are in Hermite normal form, and $UM\neq VN$.
+\item For all matrices $H_1$ row equivalent to $M$ and $H_2$ row equivalent to $N$
+(in particular for all echelon forms of $M$ and $N$, under any convention),
+$\operatorname{coker}H_1\not\cong\operatorname{coker}H_2$ and $H_1\neq H_2$.
+\item There are no $P,Q\in\GL_2(\Z)$ with $PNQ=M$; so $M$ and $N$ are not even
+equivalent under two-sided unimodular transformations, and their Smith forms differ.
+\item $\det(XUV)=\det(XVU)=2$; $XUV$ has Hermite form $\operatorname{diag}(2,1)$ and
+$XVU$ has Hermite form $\begin{pmatrix}1&1\\0&2\end{pmatrix}$; and every matrix row
+equivalent to $XUV$ differs from every matrix row equivalent to $XVU$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(1) Direct multiplication: $\det M=4-0=4$, $\det N=4-0=4$,
+$UM=\begin{pmatrix}1&0\\0&4\end{pmatrix}$, $VN=\begin{pmatrix}2&0\\0&2\end{pmatrix}$.
+Both are upper triangular with positive diagonal and zero above-pivot entries, so they
+are Hermite forms; their $(1,1)$ entries $1\neq 2$ differ.
+
+(2) If $H=WA$ with $W\in\GL_2(\Z)$, then $wH=(wW)A$ and $wA=(wW^{-1})H$, so
+$L(H)=L(A)$. Now $L(M)=\{(a,\,-4a+4b)\}=\Z\times 4\Z$ and
+$L(N)=\{(2a-2b,\,2b)\}=2\Z\times 2\Z$. Every class $y$ in
+$\Z^2/L(N)$ satisfies $y+y=0$, because $2v\in 2\Z\times 2\Z$ for every $v$. In
+$\Z^2/L(M)$ the class $x$ of $(0,1)$ satisfies $x+x\neq 0$, because $(0,2)\notin\Z\times
+4\Z$. An additive isomorphism $e$ would give $e(x+x)=e(x)+e(x)=0$, hence $x+x=0$, a
+contradiction. (The cokernels are $\Z/4$ and $(\Z/2)^2$.) Equal matrices have equal
+cokernels, so also $H_1\neq H_2$.
+
+(3) All entries of $N$ are even, so all entries of $PNQ$ are even for all integer
+$P,Q$; explicitly $(PNQ)_{11}=2\big((P_{11}-P_{12})Q_{11}+P_{12}Q_{21}\big)$, while
+$M_{11}=1$.
+
+(4) $XUV=\begin{pmatrix}2&1\\2&2\end{pmatrix}$ and
+$XVU=\begin{pmatrix}1&1\\2&4\end{pmatrix}$, both of determinant $2$. With
+$W_1=\begin{pmatrix}2&-1\\-1&1\end{pmatrix}$ and
+$W_2=\begin{pmatrix}1&0\\-2&1\end{pmatrix}$ (determinant $1$) we get
+$W_1XUV=\operatorname{diag}(2,1)$ and $W_2XVU=\begin{pmatrix}1&1\\0&2\end{pmatrix}$, both
+Hermite forms. Every vector of $L(XUV)=\{(2a+2b,\,a+2b)\}$ has even first coordinate,
+while $(1,1)$ is a row of $XVU$. By the invariance of $L$ under row transformations,
+a matrix row equivalent to both would give $L(XUV)=L(XVU)$, which is false.
+\end{proof}
+
+\begin{remark}
+In reading (B) both matrices are obtained from the same $X$ by unimodular column
+operations, so they are two-sided equivalent and their cokernels are necessarily
+isomorphic for every choice of $X$, $U$, $V$. In that reading, the layer that the
+determinant fails to see is the row-equivalence class, which the echelon form
+classifies; part (4) proves that these classes differ. Part (2) gives the cokernel
+form of the separation for reading (A). The conjecture is existential, and the
+theorem satisfies both readings with the same explicit noncommutative pair.
+\end{remark}
+
+\section{Lean formalization}
+File \texttt{lean/Conjecture5600/Basic.lean} (Lean 4.33.1, Mathlib \texttt{v4.33.1}; the
+root file \texttt{Conjecture5600.lean} only imports it). Main theorem:
+\begin{verbatim}
+theorem conjecture_5600 :
+  exists (A B : Mat) (U V : GL (Fin 2) Int),
+    (U : Mat).det = 1 /\ (V : Mat).det = 1 /\ U * V != V * U /\
+    A.det = B.det /\
+    IsHermiteNormalForm ((U : Mat) * A) /\ IsHermiteNormalForm ((V : Mat) * B) /\
+    (U : Mat) * A != (V : Mat) * B /\
+    (forall H1 H2, RowEquiv A H1 -> RowEquiv B H2 -> H1 != H2) /\
+    (forall H1 H2, RowEquiv A H1 -> RowEquiv B H2 ->
+        IsEmpty (coker H1 ~+ coker H2)) /\
+    (forall P Q : GL (Fin 2) Int, (P : Mat) * B * Q != A) /\
+    exists Y : Mat, (Y * U * V).det = (Y * V * U).det /\
+      (forall H1 H2, RowEquiv (Y*U*V) H1 -> RowEquiv (Y*V*U) H2 -> H1 != H2) /\
+      (exists H1 H2, RowEquiv (Y*U*V) H1 /\ IsHermiteNormalForm H1 /\
+                     RowEquiv (Y*V*U) H2 /\ IsHermiteNormalForm H2)
+\end{verbatim}
+(ASCII transcription; the source uses the Unicode symbols, \texttt{Mat} is
+\texttt{Matrix (Fin 2) (Fin 2) Int}, \texttt{\~{}+} is Mathlib's additive equivalence
+\texttt{AddEquiv}, and $Y\,U\,V$ is the product of matrices with $U,V$ coerced from
+$\GL$.) Correspondence: \texttt{det} is Mathlib's \texttt{Matrix.det}; unimodular
+transformations are Mathlib's \texttt{GL (Fin 2) Int}, with noncommutativity stated in
+the group; \texttt{RowEquiv A H} is $\exists W\in\GL_2(\Z),\ WA=H$;
+\texttt{coker X} is the quotient module $\Z^2/L(X)$ with \texttt{rowModule X} $=L(X)$
+and \texttt{rowModule\_eq\_span} identifying it with the span of the rows. The witnesses
+are $A=M$, $B=N$, $Y=X$ and the pair $U,V$ above.
+
+Checks: \texttt{lake build} succeeds, \texttt{lake env lean -DwarningAsError=true} on
+the file succeeds, there is no \texttt{sorry} or \texttt{native\_decide}, and
+\texttt{\#print axioms Conjecture5600.conjecture\_5600} reports only
+\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}.
+
+\section*{Credit}
+The pair $\operatorname{diag}(1,4)$, $\operatorname{diag}(2,2)$ and the parity
+obstruction in part (3) are adapted from the accepted solution of the near-duplicate
+conjecture 00000006330 by gaochengzhecpu
+(\url{solutions/00000006330/gaochengzhecpu_submission_20261003215646/}), used under the
+repository's GPL-3.0 license. The Mathlib formalization, the cokernel invariant, the
+unimodular pair and reading (B) are new here.
+
+\end{document}
