@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "created_utc": "2026-10-05T04:03:18.869238+00:00",
+  "source_sha256": "0ea67e0c841b1f81089ecfa532ad0a314a536b189637d116646872f1e7efe7fb",
+  "pdf_sha256": "a192de8c20308af39364afe21184fcd6908698fbaf30c4da4ea6ae1c38f9d542",
+  "page_count": 2,
+  "pdf_bytes": 42338,
+  "native_compiler": {
+    "kind": "success",
+    "tool": "compile_latex_document",
+    "source_sha256": "0ea67e0c841b1f81089ecfa532ad0a314a536b189637d116646872f1e7efe7fb"
+  },
+  "export": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--outdir",
+      "/private/tmp/tlmc331-report",
+      "/private/tmp/tlmc331-report/main.tex"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.732,
+    "warnings_or_box_diagnostics": [],
+    "raw_log_local_path": "/private/tmp/tlmc331-report/export-raw.txt",
+    "raw_log_sha256": "7f2afe2b35474873d0d716755b7296700d0c2b580862af1541175331390d01e0",
+    "packaged_log": "report-export.txt",
+    "packaged_log_sha256": "7f2afe2b35474873d0d716755b7296700d0c2b580862af1541175331390d01e0",
+    "log_normalization": "Strip trailing whitespace on each line, preserve all line contents and order, terminate with one newline."
+  },
+  "render": {
+    "command": [
+      "/Users/daniel/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override/pdftoppm",
+      "-scale-to",
+      "1600",
+      "-png",
+      "/private/tmp/tlmc331-report/main.pdf",
+      "/private/tmp/tlmc331-report/page"
+    ],
+    "exit_code": 0,
+    "images": [
+      {
+        "path": "/private/tmp/tlmc331-report/page-1.png",
+        "sha256": "c055a0a0c068ddd30e96a862f7db238ba6fcee30f73070c73ef7854e89d39fef"
+      },
+      {
+        "path": "/private/tmp/tlmc331-report/page-2.png",
+        "sha256": "b920f1cafc1ff0b76bb4459a15b12657259b62752eb915c1e4b39ab57e68d005"
+      }
+    ]
+  },
+  "visual_review": {
+    "status": "PASS",
+    "reviewer": "root",
+    "inspected_pages": [
+      1,
+      2
+    ],
+    "checked_utc": "2026-10-05T04:03:41.412420+00:00",
+    "notes": "Both final pages rendered and inspected; equations, prose, commands and page numbers legible with no clipping or overlap. No final warning or box diagnostics. Text extracted and checked."
+  },
+  "text_extraction": {
+    "tool": "pypdf",
+    "path": "pdftext.txt",
+    "sha256": "1aa7f71abf44b5faadd87af1dac8167e3428f01acac3cb9c8aa20880fe24affe"
+  }
+}
