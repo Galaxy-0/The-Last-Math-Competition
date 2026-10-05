@@ -1,0 +1,168 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\DM}{\operatorname{DM}}
+
+\title{A disproof of Conjecture 00000002591\\[2pt]
+\large No finite poset with at least three elements has $2^{|P|}$ Dedekind--MacNeille cuts}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000002591 reads:
+
+\begin{quote}
+\emph{Definition:} The Dedekind--MacNeille completion $\DM(P)$ is the smallest complete extension of a
+poset $P$ preserving all existing joins and meets. \emph{Conjecture:} The size law of MacNeille
+completions: $|\DM(P)| \le 2^{|P|}$ with the upper bound attained by unbounded dense antichains; the
+isomorphism types of $P$ attaining the bound are superpolynomial in number, with the minimal generator
+characterization by three-chain cross products.
+\end{quote}
+
+It is a conjunction of four clauses:
+\begin{enumerate}[label=(\roman*)]
+\item $|\DM(P)| \le 2^{|P|}$;
+\item the bound is attained by (unbounded dense) antichains;
+\item the number $E(n)$ of isomorphism types of $n$-element posets $P$ with $|\DM(P)| = 2^n$ is
+  superpolynomial in $n$;
+\item a ``minimal generator characterization by three-chain cross products''.
+\end{enumerate}
+We prove (i) for finite posets (the Lean theorem \texttt{card\_cuts\_le} assumes \texttt{Fintype}; the
+same injection of cuts into subsets gives the inequality for arbitrary cardinals, but that general
+statement is not formalized), and we refute (iii) and (ii) for finite posets: $E(n) = 0$ for every
+$n \ge 3$.
+Clause (iv) is too vague to formalize and is not addressed; refuting (iii) already refutes the
+conjunction.
+
+\paragraph{Readings of (iii) that are refuted.} $E(n)$ is counted either up to isomorphism or as labelled
+partial orders on $\{0,\dots,n-1\}$; ``attaining the bound'' is read either as $|\DM(P)| = 2^n$ or as
+$|\DM(P)| \ge 2^n$ (by (i) these are the same); ``superpolynomial'' is read either strongly (for every
+$k$, $E(n) > n^k$ for all large $n$) or weakly (for every $k$ and $C$, $E(n) > C n^k$ for infinitely many
+$n$, i.e.\ $E$ is not $O(n^k)$ for any $k$). All of these are refuted.
+
+\paragraph{Not refuted / not formalized.} Clause (ii) for infinite posets is not formalized. (In prose:
+an infinite antichain of cardinality $\kappa$ has $\kappa + 2 = \kappa < 2^\kappa$ cuts, so infinite
+antichains do not attain the bound either; infinite dense linear orders such as $\mathbb{Q}$ do attain
+$2^{\aleph_0}$, but they are not antichains.) Clause (iv) is not addressed.
+
+\section{Definitions and conventions}
+
+For $A \subseteq P$ let $A^u$ be the set of upper bounds of $A$ and $A^\ell$ the set of lower bounds.
+Following the retrieved Wikipedia article on the Dedekind--MacNeille completion
+(\url{https://en.wikipedia.org/wiki/Dedekind%E2%80%93MacNeille_completion}), $\DM(P)$ ``consists of all
+subsets $A$ for which $(A^u)^\ell = A$, ordered by inclusion''; equivalently a \emph{cut} is ``a pair of
+sets $(A, B)$ for which $A^u = B$ and $A = B^\ell$''.
+
+In Lean we use Mathlib's \texttt{DedekindCut P}, which is \texttt{Concept P P (. <= .)}: pairs
+(\texttt{left}, \texttt{right}) with \texttt{upperBounds left = right} and \texttt{lowerBounds right =
+left}. This is exactly the pair form of a cut; a cut is determined by its left set
+(\texttt{Concept.extent\_injective}), and a set $s$ is a left set iff
+$\texttt{lowerBounds}(\texttt{upperBounds}\ s) = s$ (Lean: \texttt{exists\_cut\_iff}). So
+$|\DM(P)|$ is \texttt{Nat.card (DedekindCut P)}.
+
+\emph{Empty-set convention.} No extra elements are adjoined. The empty set is a left set iff $P$ has no
+least element; $P$ itself is always a left set. For example, an antichain with $n \ge 2$ elements has the
+$n+2$ cuts $\emptyset$, the $n$ singletons and $P$, matching the Wikipedia description of the completion
+of an antichain as ``$S$ itself together with two additional elements''. The argument below uses only
+subsets with one or two elements, so the conclusion does not change if $\emptyset$ and $P$ are always
+counted as cuts.
+
+\emph{Counting.} Isomorphism types of $n$-element posets are represented by partial orders on
+\texttt{Fin n}. \texttt{Attaining n} is the type of partial orders $Q$ on \texttt{Fin n} with $2^n \le
+|\texttt{DedekindCut}|$ for $Q$, and $E(n)$ is the cardinality of its quotient by order isomorphism:
+\texttt{E n = Nat.card (Quot Iso)}. Both types are finite (Lean instances), so $E(n)$ is a genuine count.
+
+\section{Proof}
+
+\begin{lemma}[\texttt{no\_three\_of\_cuts}]
+If every singleton and every two-element subset of $P$ is the left set of a cut, then $P$ has no three
+pairwise distinct elements.
+\end{lemma}
+
+\begin{proof}
+For $u \in P$, $\{u\}^u = {\uparrow}u$ and $({\uparrow}u)^\ell = {\downarrow}u$, so $\{u\}$ being closed
+gives ${\downarrow}u = \{u\}$ for all $u$. Let $x, y, z$ be pairwise distinct. If $u$ is an upper bound of
+$\{x, y\}$ then $x, y \in {\downarrow}u = \{u\}$, so $x = u = y$, a contradiction; hence $\{x,y\}^u =
+\emptyset$ and $(\{x,y\}^u)^\ell = \emptyset^\ell = P$. Since $\{x,y\}$ is closed, $P = \{x, y\}$, so
+$z \in \{x, y\}$, a contradiction.
+\end{proof}
+
+\begin{lemma}[\texttt{exists\_proper\_not\_cut}]
+If $|P| \ge 3$, some nonempty proper subset of $P$ (of size one or two) is not the left set of a cut.
+\end{lemma}
+
+\begin{proof}
+Pick three distinct elements. If some singleton $\{u\}$ is not a left set, it is nonempty and proper
+(it misses one of the other elements). Otherwise, by the previous lemma some pair $\{u, v\}$ is not a
+left set; it is proper because it cannot contain three distinct elements.
+\end{proof}
+
+\begin{theorem}[\texttt{card\_cuts\_le}, \texttt{card\_cuts\_lt}]
+For a finite poset $P$, $|\DM(P)| \le 2^{|P|}$; if $|P| \ge 3$ then $|\DM(P)| < 2^{|P|}$.
+\end{theorem}
+
+\begin{proof}
+The map from cuts to their left sets is injective into the power set, which has $2^{|P|}$ elements. If
+$|P| \ge 3$, the previous lemma gives a subset outside its range, so the inequality is strict.
+\end{proof}
+
+In particular no antichain with at least three elements attains the bound, which refutes clause (ii) for
+finite antichains.
+
+\begin{theorem}[\texttt{not\_superpolynomial}]
+$E(n) = 0$ for all $n \ge 3$. Consequently it is false that for every $k$, $E(n) > n^k$ eventually, and
+it is false that for every $k, C$, $E(n) > C n^k$ infinitely often.
+\end{theorem}
+
+\begin{proof}
+By the previous theorem, \texttt{Attaining n} is empty for $n \ge 3$ (\texttt{attaining\_isEmpty}), so
+both the labelled count (\texttt{card\_attaining\_eq\_zero}) and $E(n)$ are $0$. Taking $k = 0$ (and
+$C = 0$), either growth statement would give some $n \ge 3$ with $E(n) > 0$.
+\end{proof}
+
+\begin{remark}[non-vacuity, \texttt{antichain2\_attains}, \texttt{E\_two\_pos}]
+The bound is sharp at $n = 2$: the two-element antichain on \texttt{Fin 2} has all four subsets as left
+sets of cuts, so $E(2) > 0$. This checks that the definitions of \texttt{Attaining} and $E$ are not
+vacuous. A brute-force check also confirms that no poset on $3$ or $4$ points has $2^n$ cuts and that
+antichains on $3$ and $4$ points have $n + 2$ cuts.
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture2591/Basic.lean} (namespace \texttt{Conjecture2591}, 206 lines, only import
+\texttt{Mathlib}). Main theorem (ASCII rendering):
+\begin{verbatim}
+theorem not_superpolynomial :
+    (forall n, 3 <= n -> E n = 0) /\
+    not (forall k : Nat, forall^f n in atTop, n ^ k < E n) /\
+    not (forall k C : Nat, exists^f n in atTop, C * n ^ k < E n)
+\end{verbatim}
+(\texttt{forall\^{}f} and \texttt{exists\^{}f} stand for Lean's \texttt{Filter.Eventually} and
+\texttt{Filter.Frequently}.) Supporting results: \texttt{exists\_cut\_iff}, \texttt{no\_three\_of\_cuts},
+\texttt{exists\_proper\_not\_cut}, \texttt{card\_cuts\_le}, \texttt{card\_cuts\_lt},
+\texttt{attaining\_isEmpty}, \texttt{card\_attaining\_eq\_zero}, \texttt{E\_eq\_zero},
+\texttt{antichain2\_attains}, \texttt{E\_two\_pos}.
+
+\paragraph{Axiom audit.} \texttt{\#print axioms} for \texttt{not\_superpolynomial},
+\texttt{card\_cuts\_lt} and \texttt{E\_two\_pos} reports only \texttt{propext}, \texttt{Classical.choice},
+\texttt{Quot.sound}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}
