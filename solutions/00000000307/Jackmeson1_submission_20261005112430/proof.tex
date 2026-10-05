@@ -1,0 +1,153 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\BadA}{\mathrm{Bad}_A}
+\newcommand{\BadB}{\mathrm{Bad}_B}
+
+\title{A disproof of Conjecture 00000000307\\[2pt]
+\large $\mathrm{Bad}_A(i,j)=\emptyset$ for $i,j\le 0$ and $\mathrm{Bad}_B(i,j)=\emptyset$ for $i,j\le -3/4$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000000307 reads:
+\begin{quote}
+\emph{Definition:} Weighted bad approximation $\mathrm{Bad}(i,j)$ is the set of pairs simultaneously badly
+approximable when the two coordinates are weighted by $q^{1+i}$ and $q^{1+j}$.
+\emph{Conjecture:} For $i+j=0$, $\mathrm{Bad}(i,j)$ is a full-dimensional winning set; moreover, for every
+weighting with $i+j<0$, the intersection remains full-dimensional, with winning given explicitly by a
+Schmidt-game strategy.
+\end{quote}
+The Chinese version says the same (the second clause: for every choice of weights with $i+j<0$ the
+intersection is still of full dimension).  There are two clauses:
+\begin{enumerate}[label=(\Roman*)]
+  \item for every $(i,j)$ with $i+j=0$, $\mathrm{Bad}(i,j)\subseteq\mathbb{R}^2$ has Hausdorff dimension $2$
+        (and is winning);
+  \item for every weighting $(i,j)$ with $i+j<0$, ``the intersection'' has Hausdorff dimension $2$ (and is
+        winning).
+\end{enumerate}
+We only use the full-dimension conjuncts; the winning conjuncts are not formalized.
+
+\section{Readings and conventions}
+
+The phrase ``weighted by $q^{1+i}$'' admits two literal readings. In both, $q\ge 1$, $p$, $r$ range over
+the integers, $i,j$ range over the reals (integer weights are a special case), $q^{1+i}$ is the real power,
+and the plane carries its Euclidean metric.
+
+\begin{definition}[Reading A: the weight multiplies the error $|x-p/q|$]
+$(x,y)\in\BadA(i,j)$ iff there is $c>0$ such that for all integers $q\ge 1$, $p$, $r$:
+\[ \max\bigl(q^{1+i}\,|x-p/q|,\ q^{1+j}\,|y-r/q|\bigr)\ \ge\ c. \]
+\end{definition}
+
+\begin{definition}[Reading B: the weight multiplies $\|qx\|$]
+$(x,y)\in\BadB(i,j)$ iff there is $c>0$ such that for all integers $q\ge 1$:
+$\max\bigl(q^{1+i}\|qx\|,\ q^{1+j}\|qy\|\bigr)\ge c$, where $\|t\|=\min_{p\in\mathbb{Z}}|t-p|$; equivalently,
+for all integers $q\ge1$, $p$, $r$: $\max\bigl(q^{1+i}|qx-p|,\ q^{1+j}|qy-r|\bigr)\ge c$.
+\end{definition}
+
+The maximum is written in Lean as a disjunction of two inequalities. Variants that require both inequalities
+(``each coordinate badly approximable''), a strict inequality, or all nonzero integers $q$ define subsets of
+these sets, so they are empty as well.  ``The intersection'' in clause (II) is not defined in the text. We
+only assume that, for the weighting $(i,j)$, it is a subset of $\mathrm{Bad}(i,j)$; this covers
+$\bigcap_{i+j<0}\mathrm{Bad}(i,j)$ (the natural reading of the Chinese text) and $\mathrm{Bad}(i,j)\cap K$ for any $K$.
+The Hausdorff dimension of the empty set is $0$ (Mathlib's \texttt{dimH\_empty}).
+
+\section{The key lemma: two-dimensional Dirichlet}
+
+\begin{lemma}[\texttt{dirichlet\_two}]\label{lem:dir}
+For all real $x,y$ and every integer $N\ge1$ there are an integer $q$ with $1\le q\le N^2$ and integers $p,r$
+with $|qx-p|<1/N$ and $|qy-r|<1/N$.
+\end{lemma}
+\begin{proof}
+For $k=0,1,\dots,N^2$ put $f(k)=(\lfloor N\{kx\}\rfloor,\lfloor N\{ky\}\rfloor)\in\{0,\dots,N-1\}^2$, where
+$\{t\}=t-\lfloor t\rfloor$. There are $N^2+1$ values of $k$ and $N^2$ boxes, so $f(k)=f(l)$ for some $l<k$
+(pigeonhole). Then $|N\{kx\}-N\{lx\}|<1$, and with $q=k-l\in[1,N^2]$ and
+$p=\lfloor kx\rfloor-\lfloor lx\rfloor$ we get $|qx-p|=|\{kx\}-\{lx\}|<1/N$; likewise for $y$
+(Lean: \texttt{close\_of\_floor\_eq}).
+\end{proof}
+
+\section{The sets are empty}
+
+\begin{theorem}[\texttt{badA\_eq\_empty}]
+If $i\le 0$ and $j\le 0$ then $\BadA(i,j)=\emptyset$.
+\end{theorem}
+\begin{proof}
+Let $c>0$ and pick $M\ge1$ with $1/M<c$. Lemma~\ref{lem:dir} with $N=M$ gives $q\ge1$, $p$, $r$ with
+$|qx-p|,|qy-r|<1/M$. Since $q\ge1$ and $1+i\le 1$, $q^{1+i}\le q$, so
+$q^{1+i}|x-p/q|\le q|x-p/q|=|qx-p|<1/M<c$, and likewise for $y$. So no $c$ works.
+\end{proof}
+
+\begin{theorem}[\texttt{badB\_eq\_empty}]
+If $i\le -3/4$ and $j\le -3/4$ then $\BadB(i,j)=\emptyset$.
+\end{theorem}
+\begin{proof}
+Let $c>0$ and pick $M\ge1$ with $1/M<c$. Lemma~\ref{lem:dir} with $N=M^2$ gives $1\le q\le M^4$, $p$, $r$ with
+$|qx-p|,|qy-r|<1/M^2$. Since $1+i\le 1/4$ and $q\ge1$, $q^{1+i}\le q^{1/4}\le (M^4)^{1/4}=M$
+(\texttt{rpow\_le\_of\_le\_pow\_four}), so $q^{1+i}|qx-p|<M\cdot M^{-2}=1/M<c$, and likewise for $y$.
+\end{proof}
+
+\begin{corollary}[the two clauses]
+\begin{enumerate}[label=(\alph*)]
+  \item Reading A, clause (I) fails: $\dim_H\BadA(0,0)=\dim_H\emptyset=0\neq2$, and $0+0=0$
+        (\texttt{clause1\_false\_readingA}).
+  \item Reading A, clause (II) fails: at the weighting $(-1/2,-1/2)$ (sum $-1<0$), every subset of
+        $\BadA(-1/2,-1/2)=\emptyset$ has dimension $0\ne2$ (\texttt{clause2\_false\_readingA}); in particular
+        $\dim_H\bigcap_{i+j<0}\BadA(i,j)=0$ (\texttt{dimH\_iInter\_badA}).
+  \item Reading B, clause (II) fails: at $(-3/4,-3/4)$ (sum $-3/2<0$) every subset of
+        $\BadB(-3/4,-3/4)=\emptyset$ has dimension $0$ (\texttt{clause2\_false\_readingB}); in particular
+        $\dim_H\bigcap_{i+j<0}\BadB(i,j)=0$ (\texttt{dimH\_iInter\_badB}).
+\end{enumerate}
+Integer weightings are covered too: $\BadA(-1,-1)$ and $\BadB(-1,-1)$ are empty by the same theorems.
+\end{corollary}
+
+\begin{remark}[what is not refuted]
+Under reading B, clause (I) is \emph{not} refuted: for example $\BadB(0,0)$ contains $\mathrm{Bad}\times\mathbb{R}$,
+where $\mathrm{Bad}$ is the set of badly approximable reals. The conjecture is a conjunction, so it is false
+under both readings, but under reading B only through clause (II). The winning conjuncts are not formalized
+(an empty set is not winning, but we do not use this). We do not treat readings in which the weights enter as
+exponents, or in which the defining inequality is only required for sufficiently large $q$.
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture307/Basic.lean} (238 lines, \texttt{import Mathlib} only, namespace
+\texttt{Conjecture307}). The plane is \texttt{EuclideanSpace R (Fin 2)}; the sets are \texttt{BadA i j} and
+\texttt{BadB i j} exactly as in Section 2. The main theorem is
+\begin{verbatim}
+theorem conjecture307_false :
+    (not forall i j : R, i + j = 0 -> dimH (BadA i j) = 2) /\
+    (forall I : R -> R -> Set Plane, (forall i j, I i j <= BadA i j) ->
+      not forall i j : R, i + j < 0 -> dimH (I i j) = 2) /\
+    (forall I : R -> R -> Set Plane, (forall i j, I i j <= BadB i j) ->
+      not forall i j : R, i + j < 0 -> dimH (I i j) = 2)
+\end{verbatim}
+(written here in ASCII; in Lean $\subseteq$, $\forall$, $\neg$, $\mathbb{R}$). Supporting theorems:
+\texttt{dirichlet\_two}, \texttt{close\_of\_floor\_eq}, \texttt{badA\_eq\_empty}, \texttt{badB\_eq\_empty},
+\texttt{clause1\_false\_readingA}, \texttt{clause2\_false\_readingA}, \texttt{clause2\_false\_readingB},
+\texttt{dimH\_iInter\_badA}, \texttt{dimH\_iInter\_badB}. The structure (empty set, then \texttt{dimH\_empty})
+follows the accepted solution of conjecture 00000000310 in this repository (GPL-3.0).
+
+\paragraph{Axiom audit.} \texttt{lake build} succeeds, and \texttt{\#print axioms} for
+\texttt{conjecture307\_false}, \texttt{dimH\_iInter\_badA} and \texttt{dimH\_iInter\_badB} reports only
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no \texttt{native\_decide} and no
+added axiom.
+
+\end{document}
