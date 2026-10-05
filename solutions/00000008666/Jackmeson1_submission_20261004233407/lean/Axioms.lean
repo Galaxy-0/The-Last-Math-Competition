@@ -1,0 +1,3 @@
+import Conjecture8666
+#print axioms Conjecture8666.conjecture8666_false
+#print axioms Conjecture8666.exceptionOrders_infinite
