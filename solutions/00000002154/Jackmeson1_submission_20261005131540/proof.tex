@@ -1,0 +1,147 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Conjecture 00000002154 is false:\\ every cycle $C_m$ is closed Eulerian, but its critical group maps onto $\mathbb Z/m$}
+\author{Jackmeson1}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+Conjecture 00000002154 (English text, verbatim): ``Definition: The number of cyclic factors of the
+critical group Jac(G) (the sandpile group) is the number of its cyclic Z-components. Conjecture:
+The classification of graphs with zero cyclic factors (i.e. Jac entirely cyclic-free): exactly
+subdivisions of closed Eulerian graphs (trivial exceptions exhausted).'' The Chinese text says the
+same.
+
+\paragraph{Reading.} Graphs are finite simple graphs. For a \emph{connected} graph, $\mathrm{Jac}(G)$ is a finite abelian group (for a disconnected graph $\mathrm{Div}^0(G)/\mathrm{im}\,L$ can be infinite, e.g.\ $\mathbb Z$ for two isolated vertices; every graph used below is connected);
+its ``cyclic factors'' are the nontrivial cyclic summands in a decomposition of $\mathrm{Jac}(G)$
+as a direct sum of cyclic groups. ``Zero cyclic factors'' (the text's gloss: ``Jac entirely
+cyclic-free'') therefore means $\mathrm{Jac}(G)=0$. The conjecture asserts
+\[ \mathrm{Jac}(G)=0 \iff G \text{ is a subdivision of a closed Eulerian graph}. \]
+We refute the direction $\Leftarrow$ for the infinite family of all cycles $C_m$, $m\ge 3$. These
+include $C_3$, the smallest closed Eulerian simple graph with an edge, so they are not ``trivial
+exceptions''.
+
+\paragraph{Not refuted.} If ``cyclic $\mathbb Z$-components'' meant summands isomorphic to the
+infinite cyclic group $\mathbb Z$, then every connected graph would have zero of them, because
+$\mathrm{Jac}(G)$ is finite. The conjecture would then say that every connected graph is a
+subdivision of a closed Eulerian graph. That is also false, for example for $K_2$, but this
+reading is not formalized here.
+
+\section{Definitions}
+For a finite vertex set $V$ let $L=D-A$ be the integer Laplacian of $G$, which is Mathlib's
+\texttt{SimpleGraph.lapMatrix}.
+\begin{definition}
+$\mathrm{Div}^0(G)=\{x\in\mathbb Z^V:\sum_v x_v=0\}$, $\mathrm{Prin}(G)=L\,\mathbb Z^V$
+(contained in $\mathrm{Div}^0$, Lean \texttt{prin\_le\_divZero}), and
+$\mathrm{Jac}(G)=\mathrm{Div}^0(G)/\mathrm{Prin}(G)$.
+For a sink $q\in V$ let $\Delta'$ be $L$ with the row and column of $q$ deleted. The second standard
+model is the cokernel $\mathbb Z^{V\setminus q}/\Delta'\mathbb Z^{V\setminus q}$.
+\end{definition}
+Wikipedia, \emph{Abelian sandpile model} (\url{https://en.wikipedia.org/wiki/Abelian_sandpile_model}),
+calls the second model ``the cokernel of the reduced graph Laplacian'' and says that it ``is most
+commonly referred to as the sandpile group. Other common names for the same group are critical
+group, Jacobian group or (less often) Picard group.'' We prove the result for both models.
+
+\begin{definition}
+A walk is an \emph{Eulerian circuit} if it is closed and uses every edge exactly once. Wikipedia,
+\emph{Eulerian path} (\url{https://en.wikipedia.org/wiki/Eulerian_path}): ``an Eulerian circuit or
+Eulerian cycle is an Eulerian trail that starts and ends on the same vertex.'' A graph is
+\emph{closed Eulerian} if it is connected and has an Eulerian circuit. Wikipedia mentions a second
+meaning of ``Eulerian graph'': ``a graph with every vertex of even degree''. $C_m$ satisfies this
+one too, since every vertex has degree $2$.
+\end{definition}
+
+\begin{definition}
+Wikipedia, \emph{Homeomorphism (graph theory)}: ``The subdivision of some edge $e$ with endpoints
+$\{u,v\}$ yields a graph containing one new vertex $w$, and with an edge set replacing $e$ by two
+new edges, $\{u,w\}$ and $\{w,v\}$.'' $H$ is a \emph{subdivision} of $G$ if $H$ is isomorphic to a
+graph obtained from $G$ by finitely many such steps, possibly none.
+\end{definition}
+
+\section{The counterexample}
+Let $C_m$ ($m\ge 3$) be the cycle on $\mathbb Z/m$, with $i\sim i\pm1$ (Mathlib's \texttt{cycleGraph m}).
+
+\begin{lemma}\label{lem:euler}
+$C_m$ is closed Eulerian, hence a subdivision (with no subdivided edge) of a closed Eulerian graph.
+\end{lemma}
+\begin{proof}
+$C_m$ is connected. Mathlib's closed walk \texttt{cycleGraph.cycle} is a cycle of length $m$, so it
+is a trail with $m$ distinct edges. All $m$ degrees equal $2$, so by the handshake lemma $C_m$ has
+exactly $m$ edges, and the walk uses each of them exactly once.
+\end{proof}
+
+\begin{lemma}\label{lem:phi}
+Define $\varphi:\mathbb Z^{\mathbb Z/m}\to\mathbb Z/m$ by $\varphi(x)=\sum_i i\,x_i \bmod m$. Then
+$\varphi(Lf)=0$ for every $f$, and $\varphi(\delta_1-\delta_0)=1$.
+\end{lemma}
+\begin{proof}
+$(Lf)_i=2f_i-f_{i-1}-f_{i+1}$. Reindexing, $\varphi(Lf)=\sum_j f_j\,(2j-(j+1)-(j-1))=0$ in
+$\mathbb Z/m$. The second claim is immediate.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+For every $m\ge3$, $\varphi$ induces a surjection $\mathrm{Jac}(C_m)\to\mathbb Z/m$. The
+restriction $\varphi'(y)=\sum_{i\ne0} i\,y_i$ induces a surjection
+$\mathbb Z^{V\setminus 0}/\Delta'\mathbb Z^{V\setminus 0}\to\mathbb Z/m$. In particular
+$\mathrm{Jac}(C_m)\neq0$, and every decomposition of $\mathrm{Jac}(C_m)$ as a direct sum has a
+nontrivial summand. Together with Lemma~\ref{lem:euler}, the class ``subdivisions of closed
+Eulerian graphs'' contains graphs with a nonzero number of cyclic factors, so the classification is
+false.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:phi}, $\varphi$ kills $\mathrm{Prin}$, and the class of $\delta_1-\delta_0$ maps to
+the generator $1$. For the reduced model, extend $f\in\mathbb Z^{V\setminus0}$ by $0$ at the sink.
+Then $(\Delta'f)_i=(L\tilde f)_i$ for $i\neq0$, and the weight of vertex $0$ is $0$, so
+$\varphi'(\Delta'f)=\varphi(L\tilde f)=0$; the class of $\delta_1$ maps to $1$. If all summands of
+a direct sum were trivial, the sum would be trivial, which contradicts $\mathrm{Jac}(C_m)\ne0$.
+\end{proof}
+\noindent\emph{Remark (not formalized).} By the same Wikipedia article, ``the order of the sandpile
+group is the determinant of $\Delta'$, which by the matrix tree theorem is the number of spanning
+trees''. $C_m$ has $m$ spanning trees, so the surjection is an isomorphism:
+$\mathrm{Jac}(C_m)\cong\mathbb Z/m$.
+
+\section{Lean formalization}
+File \texttt{lean/Conjecture2154/Basic.lean} (324 lines, only \texttt{import Mathlib}), namespace
+\texttt{C2154}.
+\begin{itemize}
+\item \texttt{divZero}, \texttt{prin} (range of \texttt{mulVecLin (lapMatrix Z G)}), \texttt{prin\_le\_divZero},
+\texttt{Jac G := divZero V / (prin G).comap (divZero V).subtype}.
+\item \texttt{redLap G q} (submatrix of \texttt{lapMatrix}), \texttt{SandpileGroup G q} (its cokernel).
+\item \texttt{subdivideEdge H u v} (new vertex \texttt{none : Option W}), the inductive
+\texttt{IsSubdivision} (constructors \texttt{refl}, \texttt{step}, \texttt{iso}), \texttt{IsClosedEulerian}
+(\texttt{Connected} and a closed \texttt{Walk.IsEulerian}), \texttt{IsSubdivOfClosedEulerian}.
+\item \texttt{cycleGraph\_isClosedEulerian}, \texttt{cycleGraph\_isSubdivOfClosedEulerian} (Lemma~\ref{lem:euler}).
+\item \texttt{lap\_cycle\_apply}, \texttt{phi\_lap}, \texttt{phi\_witness} (Lemma~\ref{lem:phi});
+\texttt{jacToZMod\_surjective}, \texttt{sandpileToZMod\_surjective}, \texttt{jac\_cycle\_nontrivial},
+\texttt{jac\_cycle\_has\_cyclic\_factor} (Theorem~\ref{thm:main}).
+\item Main: \texttt{not\_classification : forall n, IsSubdivOfClosedEulerian (cycleGraph (n+3)) /\textbackslash{}
+Nontrivial (Jac (cycleGraph (n+3))) /\textbackslash{} (surjection Jac -> ZMod (n+3)) /\textbackslash{}
+(surjection SandpileGroup -> ZMod (n+3))}; and \texttt{not\_conjecture}.
+\end{itemize}
+Axiom audit: \texttt{\#print axioms} for \texttt{not\_classification}, \texttt{not\_conjecture} and
+\texttt{jac\_cycle\_has\_cyclic\_factor} each reports \texttt{[propext, Classical.choice, Quot.sound]}.
+No \texttt{sorry}, no \texttt{native\_decide}, no added axioms.
+
+\section{Relation to the earlier submission}
+PR \#267 (by orionsheep) used $C_6$, a subdivision of $C_3$, with $\mathrm{Jac}(C_6)\cong\mathbb Z/6$.
+Its Lean theorem proved only
+$3\cdot2=6\wedge 2\bmod 2=0\wedge 6=2\cdot3\wedge 6>1\wedge2\ne0\wedge3\ne0$. The review rejected
+it because the decisive content ``(Jac(C6) = Z/6 via Matrix--Tree and Smith normal form, and that
+C6 subdivides the Eulerian C3) is prose- and script-only, with `6 > 1' standing in for
+nontriviality by fiat.'' This submission defines the critical group in Lean (both
+$\mathrm{Div}^0/\mathrm{Prin}$ and the reduced-Laplacian cokernel, from Mathlib's Laplacian), the
+subdivision relation, and closed Eulerian graphs. It proves nontriviality through an explicit
+surjection onto $\mathbb Z/m$ for every cycle $C_m$, $m\ge3$, not for a single graph. It uses the
+trivial subdivision ($C_m$ itself), which is already in the class; the isomorphism
+$\mathrm{Jac}(C_m)\cong\mathbb Z/m$ is not needed and is left as a remark.
+\end{document}
