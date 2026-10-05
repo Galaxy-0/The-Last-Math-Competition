@@ -1,0 +1,171 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000007785\\[2pt]
+\large The cube has Mahler product $4^n/n! < 4^n$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000007785 reads (English version):
+
+\begin{quote}
+Definition: The Mahler product $M(K) = \mathrm{vol}(K)\,\mathrm{vol}(K^\circ)$ with polar $K^\circ$;
+the Mahler conjecture asserts $M(K) \ge 4^n$ in the symmetric case. Conjecture: The symmetric
+$n$-dimensional extremal bodies are the Hanner polytopes (equality cases), with strict inequality
+outside finite products of the Hanner family and finitely many low-dimensional exceptions
+($n\le 3$); the nonsymmetric case $M(K) \ge (n+1)^{n+1}/(n!)^2$ is attained uniquely by the
+simplex; and both statements have stability versions: $M(K) \le 4^n(1+\varepsilon)$ implies $K$ is
+$O(\varepsilon^{1/2})$ close to a Hanner body.
+\end{quote}
+
+The Chinese version states the same formulas: the symmetric bound $M(K)\ge 4^n$, the Hanner
+polytopes as the equality cases, and the stability hypothesis $M(K)\le 4^n(1+\varepsilon)$.
+
+\paragraph{Reading.} We read the text literally. Its symmetric clause contains two claims about
+origin-symmetric convex bodies $K\subset\mathbb{R}^n$:
+\begin{enumerate}[label=(\alph*)]
+\item the inequality $M(K)\ge 4^n$;
+\item the Hanner polytopes are the equality cases of this bound, so every Hanner polytope satisfies
+$M(K)=4^n$.
+\end{enumerate}
+We refute both (a) and (b) in every dimension $n\ge 2$. The conjecture is a conjunction, so it is
+false. We do not address the nonsymmetric clause $(n+1)^{n+1}/(n!)^2$ or the stability clause,
+and we make no claim about the statement obtained by replacing $4^n$ with $4^n/n!$ (which is the
+classical Mahler conjecture; see Remark~\ref{rem:const}).
+
+\section{Definitions and conventions}
+
+We work in $\mathbb{R}^n$, modelled in Lean as \texttt{Fin n -> R}, with the standard dot product
+$x\cdot y=\sum_i x_iy_i$ and Lebesgue measure \texttt{volume} (the product measure, which is
+Euclidean volume). Volumes take values in $[0,\infty]$.
+
+\begin{definition}
+A \emph{convex body} is a compact convex set with non-empty interior. Wikipedia (Mahler volume):
+``A convex body in Euclidean space is defined as a compact convex set with non-empty interior.''
+It is \emph{origin-symmetric} if $-x\in K$ whenever $x\in K$. (Lean:
+\texttt{IsSymmetricConvexBody}.)
+\end{definition}
+
+\begin{definition}
+The polar of $K$ is $K^\circ=\{y : x\cdot y\le 1 \text{ for all } x\in K\}$, and the Mahler product
+is $M(K)=\mathrm{vol}(K)\,\mathrm{vol}(K^\circ)$. (Lean: \texttt{polar}, \texttt{mahler}.) This is
+the definition in the Wikipedia article ``Mahler volume''.
+\end{definition}
+
+\begin{definition}
+The Hanner polytopes are generated recursively. Wikipedia (Hanner polytope) gives the rules
+``A line segment is a one-dimensional Hanner polytope.'', ``The Cartesian product of every two
+Hanner polytopes is another Hanner polytope, whose dimension is the sum of the dimensions of the
+two given polytopes.'' and ``The dual of a Hanner polytope is another Hanner polytope of the same
+dimension.'' The Lean predicate \texttt{IsHanner n K} is the inductive closure of the segment
+$[-1,1]\subset\mathbb{R}^1$ under Cartesian products (coordinates concatenated by
+\texttt{Fin.castAdd}/\texttt{Fin.natAdd}) and polar duals. It uses only the symmetric segment
+$[-1,1]$, so it describes a subclass of the Hanner polytopes. Showing that a body lies in this
+subclass therefore shows that it is a Hanner polytope.
+\end{definition}
+
+\noindent The cube is $C_n=[-1,1]^n=\{x:|x_i|\le 1\ \forall i\}$ and the cross-polytope is
+$Q_n=\{y:\sum_i|y_i|\le1\}$.
+
+\section{The proof}
+
+\begin{lemma}[\texttt{polar\_cube}]
+$C_n^\circ = Q_n$.
+\end{lemma}
+\begin{proof}
+If $y\in Q_n$ and $x\in C_n$, then $x\cdot y\le\sum_i|x_i||y_i|\le\sum_i|y_i|\le1$. Conversely, if
+$y\in C_n^\circ$, test with $x_i=1$ when $y_i\ge0$ and $x_i=-1$ otherwise. Then $x\in C_n$ and
+$x\cdot y=\sum_i|y_i|\le1$.
+\end{proof}
+
+\begin{lemma}[\texttt{volume\_cube}, \texttt{volume\_crossPolytope}]
+$\mathrm{vol}(C_n)=2^n$, and for $n\ge1$, $\mathrm{vol}(Q_n)=2^n/n!$.
+\end{lemma}
+\begin{proof}
+$C_n$ is the box $\prod_i[-1,1]$, so its volume is $2^n$ (Mathlib \texttt{Real.volume\_Icc\_pi}).
+For $Q_n$, Mathlib's \texttt{volume\_sum\_rpow\_le} with $p=1$ and $r=1$ gives
+$\mathrm{vol}\{x:\sum_i|x_i|\le1\} = (2\Gamma(2))^n/\Gamma(n+1)=2^n/n!$, using $\Gamma(2)=1$ and
+$\Gamma(n+1)=n!$.
+\end{proof}
+
+\begin{lemma}[\texttt{mahler\_cube}, \texttt{mahler\_cube\_lt}]
+For $n\ge1$, $M(C_n)=4^n/n!$. For $n\ge2$, $M(C_n)<4^n$.
+\end{lemma}
+\begin{proof}
+$M(C_n)=2^n\cdot 2^n/n!=4^n/n!$, and $n!>1$ when $n\ge2$.
+\end{proof}
+
+\begin{lemma}[\texttt{cube\_isSymmetricConvexBody}, \texttt{cube\_isHanner}]
+$C_n$ is an origin-symmetric convex body. For $n\ge1$ it is a Hanner polytope.
+\end{lemma}
+\begin{proof}
+$C_n$ is a closed box, so it is compact and convex. It is symmetric, and it contains the open
+sup-norm unit ball, so $0$ is an interior point. For the Hanner property, $C_1=[-1,1]$ is the
+segment, and $C_{m+1}$ is the Cartesian product of $C_m$ and $C_1$
+(\texttt{Fin.forall\_fin\_add}). Induction finishes the proof.
+\end{proof}
+
+\begin{theorem}[\texttt{C7785.conjecture\_7785\_symmetric\_clause\_false}]
+For every $n\ge2$: the cube $C_n$ is a Hanner polytope and an origin-symmetric convex body with
+$M(C_n)=4^n/n!<4^n$. Hence
+\begin{enumerate}[label=(\roman*)]
+\item it is false that $M(K)\ge4^n$ for every origin-symmetric convex body $K\subset\mathbb{R}^n$;
+\item it is false that every Hanner polytope in $\mathbb{R}^n$ satisfies $M(K)=4^n$.
+\end{enumerate}
+\end{theorem}
+
+Claim (ii) shows that the Hanner polytopes are not the equality cases of the bound in (a), so claim (b) fails.
+Both failures occur in every dimension $n\ge2$, so the clause ``finitely many low-dimensional
+exceptions ($n\le3$)'' cannot rescue the statement. That clause modifies only the strict-inequality
+part, and in any case the failure happens for all $n\ge 2$. In dimension $1$ the bound reads
+$M([-1,1])=4=4^1$, so there is no failure there.
+
+\begin{remark}\label{rem:const}
+The Wikipedia article ``Mahler volume'' states: ``In particular, the polar body of a cube or
+hypercube is an octahedron or cross polytope.'' It gives the Mahler volume of the hypercube as
+$4^n/\Gamma(n+1)$, which agrees with the lemma above. It also states: ``The shapes with the minimum
+known Mahler volume are hypercubes, cross polytopes, and more generally the Hanner polytopes which
+include these two types of shapes, as well as their affine transformations.'' The classical
+conjecture therefore has the constant $4^n/n!$, not the $4^n$ written in the statement. The
+conjecture under review writes $4^n$ in both languages, both in the bound and in the stability
+hypothesis $M(K)\le4^n(1+\varepsilon)$. We refute that literal statement and claim nothing about the
+corrected one, which remains open for $n\ge4$.
+\end{remark}
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture7785/Basic.lean} (namespace \texttt{C7785}, 156 lines, only
+\texttt{import Mathlib}, Lean/Mathlib v4.33.1). Main theorem:
+\begin{verbatim}
+theorem conjecture_7785_symmetric_clause_false (n : N) (hn : 2 <= n) :
+    (IsHanner n (cube n) /\ IsSymmetricConvexBody (cube n) /\
+        mahler (cube n) = ENNReal.ofReal (4 ^ n / n !) /\ mahler (cube n) < 4 ^ n) /\
+      ~ (forall K, IsSymmetricConvexBody K -> (4 : ENNReal) ^ n <= mahler K) /\
+      ~ (forall K, IsHanner n K -> mahler K = 4 ^ n)
+\end{verbatim}
+\texttt{lake build} succeeds, and \texttt{\#print axioms
+C7785.conjecture\_7785\_symmetric\_clause\_false} reports only
+\texttt{[propext, Classical.choice, Quot.sound]}. The file contains no \texttt{sorry} and no
+\texttt{native\_decide}.
+
+\end{document}
