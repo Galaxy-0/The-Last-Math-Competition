@@ -1,0 +1,152 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\cond}{\operatorname{cond}}
+
+\title{Conjecture 00000005120:\\ same spectrum, exponentially different condition numbers\\
+of the matrix inverse, separated by two Jordan structures}
+\author{Jackmeson1 (AI-assisted)}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section*{Statement}
+\emph{English.} Definition: The spectrum and the function condition number are two layers
+of sensitivity. Conjecture: There exist two matrices with the same spectrum but
+exponentially different matrix-function condition numbers, and the separation is realized
+by an explicit pair of Jordan structures.
+(The Chinese text says the same: two matrices with the same spectrum whose matrix-function
+condition numbers differ exponentially, the separation realized by an explicit pair of
+Jordan structures.)
+
+\textbf{Verdict: proved.} The statement is existential. ``Exponentially different'' needs a
+growing parameter, so we give an explicit family indexed by the dimension $n\ge2$. Everything
+below is the single Lean theorem \texttt{Conjecture5120.conjecture\_5120}, checked against
+Mathlib.
+
+\section{Definitions and reading}
+\begin{itemize}
+\item \emph{Matrices and spectrum.} Real $n\times n$ matrices. The spectrum is Mathlib's
+\texttt{spectrum R M} (the $\mu$ with $\mu I-M$ not invertible). We also prove equality of
+characteristic polynomials, so the eigenvalues agree with algebraic multiplicity (over
+$\mathbb C$ as well, since the polynomial splits).
+\item \emph{Jordan structures.} $J_n(\lambda)=\lambda I+N$, where $N$ has ones on the
+superdiagonal (\texttt{jordanBlock}), and the scalar Jordan matrix $\lambda I$ with $n$ blocks
+of size $1$ (\texttt{scalarJordan}).
+\item \emph{Matrix function.} $f(x)=1/x$, whose matrix function is $f(X)=X^{-1}$ (Mathlib
+\texttt{Ring.inverse}).
+\item \emph{Matrix norm.} $\|M\|_\infty=\max_i\sum_j|M_{ij}|$, the operator norm induced by the
+sup norm on $\R^n$ (Mathlib \texttt{Matrix.linftyOpNormedRing}; Lean type \texttt{Mat n}).
+\item \emph{Condition numbers} (the standard definitions, as in Higham, \emph{Functions of
+Matrices}, Ch.~3). The absolute condition number of $f$ at $X$ is the operator norm of the
+Fr\'echet derivative, $\cond(f,X)=\|L_f(X)\|=\max_{Z\neq0}\|L_f(X)Z\|/\|Z\|$ (Lean
+\texttt{cond}, defined as \texttt{fderiv}'s operator norm). The relative condition number is
+$\cond_{\mathrm{rel}}(f,X)=\cond(f,X)\,\|X\|/\|f(X)\|$ (Lean \texttt{condRel}). Wikipedia
+(``Condition number'') states the same: in several variables the condition number uses the
+norm of the derivative, ``$J(x)$ denotes the Jacobian matrix of partial derivatives of $f$ at
+$x$, and $\|J(x)\|$ is the induced norm on the matrix.''
+\end{itemize}
+The Fr\'echet derivative of inversion is Mathlib's \texttt{fderiv\_inverse}:
+$L_{\mathrm{inv}}(X)Z=-X^{-1}ZX^{-1}$.
+
+\section{Theorem}
+For $n\ge1$ let $A_n=\tfrac12 I_n$ ($n$ Jordan blocks of size $1$) and
+$B_n=J_n(\tfrac12)=\tfrac12 I_n+N_n$ (one Jordan block of size $n$).
+
+\begin{theorem}[\texttt{conjecture\_5120}]\label{thm}
+For every $n\ge2$:
+\begin{enumerate}
+\item $\chi_{A_n}=\chi_{B_n}=(X-\tfrac12)^n$ and $\sigma(A_n)=\sigma(B_n)=\{\tfrac12\}$;
+\item $A_n$ and $B_n$ are not similar (different Jordan structures);
+\item $\cond(\mathrm{inv},A_n)=4$ and $\cond(\mathrm{inv},B_n)\ge4^n$, so
+$\cond(\mathrm{inv},B_n)\ge4^{\,n-1}\cond(\mathrm{inv},A_n)$;
+\item $\cond_{\mathrm{rel}}(\mathrm{inv},A_n)=1$ and $\cond_{\mathrm{rel}}(\mathrm{inv},B_n)\ge2^n/4$.
+\end{enumerate}
+\end{theorem}
+
+\section{Proof}
+\textbf{(1) Same spectrum.} Both matrices are upper triangular with every diagonal entry
+$\tfrac12$ (\texttt{A\_upper}, \texttt{B\_upper}), so Mathlib's
+\texttt{charpoly\_of\_isUpperTriangular} gives $\chi=(X-\tfrac12)^n$ for both
+(\texttt{charpoly\_A}, \texttt{charpoly\_B}). For a field, $\mu\in\sigma(M)$ iff $\mu$ is a root
+of $\chi_M$ (\texttt{mem\_spectrum\_iff\_isRoot\_charpoly}); the only root of $(X-\tfrac12)^n$,
+$n\ne0$, is $\tfrac12$ (\texttt{spectrum\_of\_charpoly}).
+
+\textbf{(2) Different Jordan structures.} For $n\ge2$, $N_n\ne0$ (its $(0,1)$ entry is $1$).
+If $B_n=PA_nP^{-1}$ then, since $A_n$ is scalar, $PA_nP^{-1}=A_n$, so $N_n=B_n-A_n=0$, a
+contradiction (\texttt{not\_similar}).
+
+\textbf{(3) Absolute condition numbers.} $A_n^{-1}=2I$, so $L(A_n)Z=-4Z$ and
+$\|L(A_n)\|=4$: the bound $\|4Z\|\le4\|Z\|$ gives $\le4$, and any $Z\ne0$ gives $\ge4$
+(\texttt{cond\_A}). For $B_n$ the inverse is explicit:
+\[
+(B_n^{-1})_{ij}=c(i,j)=\begin{cases}(-1)^{j-i}\,2^{\,j-i+1}, & i\le j,\\ 0,& i>j,\end{cases}
+\]
+proved by checking $B_nC=I$ entrywise (\texttt{key}, \texttt{B\_mul\_Binv}): row $i$ of $B_nC$ is
+$\tfrac12c(i,j)+c(i+1,j)$, which is $1$ for $j=i$ and, for $j=i+e+1$,
+$\tfrac12(-1)^{e+1}2^{e+2}+(-1)^e2^{e+1}=0$. Take $Z=E_{n-1,0}$ (a single $1$ in position
+$(n-1,0)$), with $\|Z\|_\infty\le1$ (\texttt{norm\_single\_le}). Then
+$(B_n^{-1}ZB_n^{-1})_{0,n-1}=c(0,n-1)^2=(2^n)^2=4^n$ (\texttt{entry\_calc}). Since every entry is
+bounded by the $\infty$-norm (\texttt{entry\_le\_norm}),
+$4^n\le\|L(B_n)Z\|\le\|L(B_n)\|\,\|Z\|\le\|L(B_n)\|$ (\texttt{cond\_B}).
+
+\textbf{(4) Relative condition numbers.} $\|\tfrac12I\|=\tfrac12$ and $\|2I\|=2$
+(\texttt{norm\_scalar}), so $\cond_{\mathrm{rel}}(\mathrm{inv},A_n)=4\cdot\tfrac12/2=1$
+(\texttt{condRel\_A}). For $B_n$: $\|B_n\|\ge|(B_n)_{00}|=\tfrac12$ (\texttt{norm\_B\_ge}), and
+$|c(i,j)|\le2^{j+1}$ gives every row sum of $B_n^{-1}$ at most
+$\sum_{j<n}2^{j+1}=2^{n+1}-2$, so $0<\|B_n^{-1}\|\le2^{n+1}$ (\texttt{norm\_Binv\_le},
+\texttt{norm\_Binv\_pos}). Hence $\cond_{\mathrm{rel}}(\mathrm{inv},B_n)\ge
+4^n\cdot\tfrac12/2^{n+1}=2^n/4$ (\texttt{condRel\_B}).
+\qed
+
+\section{Scope and conventions}
+\begin{itemize}
+\item The matrix function is fixed as $f(x)=1/x$; the conjecture asks for some
+matrix-function condition number, and inversion is the classical one. The exponential gap is
+not claimed for every $f$. For $f=\exp$, for example, the same pair is \emph{not} separated
+exponentially (remark, not formalized): $\|e^{sN_n}\|_\infty\le e^{s}$ for $0\le s\le1$, and the
+integral formula $L_{\exp}(X)Z=\int_0^1e^{sX}Ze^{(1-s)X}\,ds$ then keeps
+$\cond(\exp,B_n)\le e^{3/2}$ for every $n$.
+\item ``Exponentially different'' is read as a ratio that grows exponentially in a parameter
+of an explicit family. Here the parameter is the dimension $n$, and the ratios are at least
+$4^{n-1}$ (absolute) and $2^{n}/4$ (relative). The eigenvalue $\tfrac12$ is fixed.
+\item The matrix norm is the $\infty$-operator norm. Other norms change the constants. The
+lower bound $\cond(\mathrm{inv},B_n)\ge4^n$ uses only one entry of $B_n^{-1}ZB_n^{-1}$ and
+$\|E_{n-1,0}\|_\infty=1$. The Lean statement is proved for the $\infty$-norm only.
+\item The spectrum is taken over $\R$; equal characteristic polynomials give equal complex
+spectra and multiplicities as well.
+\end{itemize}
+
+\section{Lean formalization and axiom audit}
+File \texttt{lean/Conjecture5120/Basic.lean} (Lean 4, Mathlib v4.33.1, only
+\texttt{import Mathlib}; 403 lines). Main theorem:
+\begin{verbatim}
+theorem conjecture_5120 (n : Nat) (hn : 2 <= n) :
+    A n = scalarJordan n (1/2) /\ B n = jordanBlock n (1/2) /\
+    (A n).charpoly = (B n).charpoly /\
+    spectrum R (A n) = {1/2} /\ spectrum R (B n) = {1/2} /\
+    (not exists P : (Matrix (Fin n) (Fin n) R)^x, B n = P * A n * P^-1) /\
+    cond n (inv n) (A n) = 4 /\ 4^n <= cond n (inv n) (B n) /\
+    4^(n-1) * cond n (inv n) (A n) <= cond n (inv n) (B n) /\
+    condRel n (inv n) (A n) = 1 /\ 2^n / 4 <= condRel n (inv n) (B n)
+\end{verbatim}
+Here \texttt{cond n f X := ||fderiv R f X||} (operator norm of the Fr\'echet derivative on
+\texttt{Mat n}, the real $n\times n$ matrices with the $\infty$-operator norm),
+\texttt{condRel n f X := cond n f X * ||X|| / ||f X||}, and \texttt{inv n := Ring.inverse}.
+\texttt{lake build} succeeds, and \texttt{\#print axioms Conjecture5120.conjecture\_5120} reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom.
+
+\end{document}
