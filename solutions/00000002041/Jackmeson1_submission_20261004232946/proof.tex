@@ -1,0 +1,157 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000002041\\[2pt]
+\large A set of density $1/4$ whose subset sums miss every $n\equiv2,3 \pmod 4$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000002041 reads (English version):
+\begin{quote}
+\emph{Definition:} A complete sequence satisfies $\Sigma_{a\in A,\,a\le n}\ \ge n$.
+\emph{Conjecture:} Every set of density $\ge 0.24$ is a complete sequence covering minimally; the threshold
+$0.24$ can be improved to an explicit $(1-1/e)$ type bound.
+\end{quote}
+The Chinese version says the same: a complete sequence is a sequence whose partial sums satisfy
+$\Sigma_{a\in A,a\le n}\ge n$; every set of density $\ge0.24$ is a minimal covering by a complete
+sequence; and the threshold $0.24$ can be improved to an explicit bound of $(1-1/e)$ type.
+
+\textbf{Result.} The set $A=\{1\}\cup\{4k:k\ge1\}$ has density $1/4\ge0.24$ under each of the
+enumerated density readings. It fails each of the enumerated readings of ``complete sequence (covering
+minimally)'', including the usual universal reading of the displayed definition. So the first clause is
+false under these readings, and with it the conjunction. Every step is a Lean~4/Mathlib theorem
+(Section~\ref{sec:lean}). One variant is excluded and is \emph{not} refuted: the eventual summand-$a$
+condition, which $A$ satisfies for all $n\ge8$ (Section~\ref{sec:lean}).
+
+\section{Reading}\label{sec:reading}
+
+The definition is garbled: the summand of $\Sigma$ is missing, ``density'' is unqualified, and
+``covering minimally'' is undefined. We therefore formalize the enumerated readings below and the usual
+universal reading of the displayed definition ((C7): for all $n\ge1$), and refute all $4\times 8$
+combinations with the single witness $A$.
+
+\emph{Density $\ge 0.24$} (list \texttt{densityReadings}):
+(D1) the natural density exists and is $\ge0.24$; (D2) the lower density is $\ge0.24$; (D3) the upper
+density is $\ge0.24$; (D4) the Schnirelmann density is $\ge0.24$.
+
+\emph{Complete sequence (covering minimally)} (list \texttt{completenessReadings}):
+(C1) complete: every $n\ge1$ is a sum of distinct elements; (C2) eventually complete: every sufficiently
+large $n$ is such a sum; (C3) minimal complete: complete, and no element can be removed; (C4)--(C6)
+contains a complete, a minimal complete, or an eventually complete subset; (C7) the stated condition with
+summand $a$: $\sum_{a\in A,a\le n}a\ge n$ for all $n\ge1$; (C8) the stated condition with summand $1$:
+$\#\{a\in A:a\le n\}\ge n$ for all $n\ge1$.
+
+The conjecture is the conjunction of the first clause with the ``$(1-1/e)$-improvement'' clause. The main
+theorem refutes the first clause conjoined with an arbitrary proposition $P$. Section~\ref{sec:supp} also
+refutes every threshold $\theta\le1$ (in particular $1-1/e$) under (D1)/(D2) with (C1).
+
+\section{Definitions and sources}
+
+$A(n)=\#(A\cap\{1,\dots,n\})$ (\texttt{count}, the same expression Mathlib's \texttt{schnirelmannDensity}
+uses). Natural density (\texttt{HasNatDensity}): $A(n)/n\to\delta$. Wikipedia (\emph{Natural density}):
+``If this probability tends to some limit as n tends to infinity, then this limit is referred to as the
+asymptotic density of A.'' The lower and upper densities (\texttt{lowerDensity}, \texttt{upperDensity})
+are $\liminf$ and $\limsup$ of $A(n)/n$. The Schnirelmann density is Mathlib's
+\texttt{schnirelmannDensity}, $\inf_{n\ge1}A(n)/n$. Wikipedia (\emph{Schnirelmann density}): ``where A(n)
+denotes the number of elements of A not exceeding n and inf is infimum.''
+
+Complete sequence (\texttt{IsCompleteSeq}; Wikipedia, \emph{Complete sequence}): ``a sequence of natural
+numbers is called a complete sequence if every positive integer can be expressed as a sum of values in
+the sequence, using each value at most once.'' Minimality (\texttt{IsMinimalComplete}; same article):
+``This sequence is minimal, since no value can be removed from it without making some natural numbers
+impossible to represent.'' Sums of distinct elements are \texttt{IsSubsetSum S n} $:=\exists$ finite
+$T\subseteq S$ with $\sum_{a\in T}a=n$.
+
+\section{The proof}
+
+\begin{lemma}[\texttt{count\_A}, \texttt{count\_A\_bounds}]
+For $n\ge1$, $A(n)=1+\lfloor n/4\rfloor$, so $\tfrac14\le A(n)/n\le\tfrac14+\tfrac1n$.
+\end{lemma}
+\begin{proof}
+$A\cap[1,n]=\{1\}\sqcup\{x\in[1,n]:4\mid x\}$, and the second set has $\lfloor n/4\rfloor$ elements
+(Mathlib \texttt{Nat.Ioc\_filter\_dvd\_card\_eq\_div}). Also $4\lfloor n/4\rfloor\le n<4\lfloor
+n/4\rfloor+4$.
+\end{proof}
+
+\begin{theorem}[\texttt{A\_hasNatDensity}, \texttt{A\_lowerDensity}, \texttt{A\_upperDensity},
+\texttt{A\_schnirelmann}, \texttt{A\_dense}]
+$A$ has natural density $1/4$, lower and upper density $1/4$, and Schnirelmann density $\ge1/4$.
+Hence (D1)--(D4) hold.
+\end{theorem}
+\begin{proof}
+Squeeze $A(n)/n$ between $1/4$ and $1/4+1/n\to1/4$. A convergent sequence has $\liminf=\limsup=$ its limit.
+The bound $A(n)/n\ge1/4$ for all $n\ge1$ is exactly \texttt{le\_schnirelmannDensity\_iff}.
+\end{proof}
+
+\begin{lemma}[\texttt{sum\_mod\_four}, \texttt{not\_subsetSum}]
+Every sum of distinct elements of $A$ is $\equiv0$ or $1\pmod4$. Hence no $n\equiv2,3\pmod 4$ is such a
+sum.
+\end{lemma}
+\begin{proof}
+For finite $T\subseteq A$, every element of $T\setminus\{1\}$ is a multiple of $4$, and $1$ occurs at most
+once. So $\sum T\equiv[1\in T]\pmod 4$.
+\end{proof}
+
+\begin{theorem}[\texttt{A\_not\_complete\_any}]
+$A$ fails (C1)--(C8).
+\end{theorem}
+\begin{proof}
+(C1): $2$ is not representable. (C2): $4N+2\ge N$ is not representable. (C3) implies (C1). (C4)--(C6):
+a subset $B\subseteq A$ has fewer subset sums, so $2$ and all $4N+2$ are not representable from $B$
+(\texttt{subset\_not\_complete}, \texttt{subset\_not\_eventuallyComplete}). (C7): the elements $\le2$
+are $\{1\}$, with sum $1<2$. (C8): their number is $1<2$.
+\end{proof}
+
+\section{Supplement: no threshold works}\label{sec:supp}
+
+$B=\mathbb{N}\setminus\{2\}$ has $B(n)=n-1$ for $n\ge2$, so its natural and lower density equal $1$. But
+$2$ is not a sum of distinct elements of $B$: any such summand is $\le2$ and $\ne2$, so it lies in
+$\{0,1\}$, and the sum is at most $1$. Hence for every $\theta\le1$, ``every set of natural (or lower)
+density $\ge\theta$ is complete'' is false (\texttt{no\_threshold}). This includes $\theta=1-1/e$.
+
+\section{Lean 4 formalization}\label{sec:lean}
+
+File \texttt{lean/Conjecture2041/Basic.lean} (namespace \texttt{C2041}, 269 lines, Lean
+\texttt{v4.33.1}, Mathlib \texttt{v4.33.1}, only \texttt{import Mathlib}). Main theorem (ASCII
+rendering):
+\begin{verbatim}
+theorem conjecture_2041_false (P : Prop) :
+  forall D in densityReadings, forall C in completenessReadings,
+    not ((forall S : Set Nat, D S -> C S) /\ P)
+\end{verbatim}
+Here \texttt{densityReadings} is the list (D1)--(D4) and \texttt{completenessReadings} is the list
+(C1)--(C8) of Section~\ref{sec:reading}, as predicates on \texttt{Set~$\mathbb{N}$}. The proof
+instantiates $S:=A$ (\texttt{A\_dense}, \texttt{A\_not\_complete\_any}). Supplement:
+\texttt{no\_threshold ($\theta$ : $\mathbb{R}$) ($h\theta$ : $\theta\le1$)}.
+
+\textbf{Axiom audit.} \texttt{lake build} succeeds, and the file also compiles with
+\texttt{-DwarningAsError=true}. \texttt{\#print axioms} for \texttt{conjecture\_2041\_false} and
+\texttt{no\_threshold} reports \texttt{[propext, Classical.choice, Quot.sound]}. There is no
+\texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+
+\textbf{Scope note (excluded variant).} The \emph{eventual} summand-$a$ condition,
+``$\sum_{a\in A,a\le n}a\ge n$ for all sufficiently large $n$'', is excluded and is not refuted: $A$
+satisfies it. For $n\in[4k,4k+3]$ the elements of $A$ up to $n$ are $1,4,\dots,4k$, with sum
+$1+2k(k+1)$, and $1+2k(k+1)\ge4k+3$ for $k\ge2$. So the condition holds for every $n\ge8$; it fails
+only at $n=2,3,6,7$. Every infinite set of positive density satisfies this variant, which would make
+the $0.24$ threshold meaningless. The refutation covers the enumerated readings (D1)--(D4) and
+(C1)--(C8), which include the usual universal reading (C7) of the displayed definition.
+
+\end{document}
