@@ -1,0 +1,191 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000003462\\[2pt]
+\large $K_6$ breaks the bound $(5v-2)/3$, and no six-doubly-critical graph attains it}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000003462 reads (English version):
+\begin{quote}
+\emph{Definition:} Doubly critical graphs: $k$-coloring edge-critical graphs where deleting any two
+vertices lowers the chromatic number, with Gallai's bound the edge upper bound of critical graphs.
+\emph{Conjecture:} The Gallai upper bound for six-doubly-critical graphs improves to $(5v-2)/3$, with the
+improved bound uniquely attained by Kostochka--Yancey extremal graphs; the classification of doubly
+critical and four-critical merges into one extremal family at girth at least five.
+\end{quote}
+The Chinese version defines the class differently: ``shuang linjie tu: $k$-ranse bian linjie tu manzu
+renyi liang dian de shanchu shi seshu jiang yi'', i.e.\ $k$-chromatic edge-critical graphs in which
+deleting any two vertices makes the chromatic number \emph{drop by one}. Its conjecture is the same:
+the bound improves to $(5v-2)/3$, and the improved bound is attained uniquely by Kostochka--Yancey type
+extremal graphs (``you Kostochka--Yancey xing ji tu weiyi qude'').
+
+\paragraph{Structure of the claim.} With $D$ the class of six-doubly-critical graphs, the conjecture is
+the conjunction of (B) every $G\in D$ with $v$ vertices has $e\le(5v-2)/3$ edges; (A) the bound is
+attained by some $G\in D$; (U) it is attained only by Kostochka--Yancey extremal graphs; (C) a
+girth-five classification clause. We refute (B)$\wedge$(A) under every reading below, so the
+conjunction fails whatever (U) and (C) mean.
+
+\paragraph{Readings of the class ($k=6$).} All graphs are finite and simple, $G-x-y$ is the induced
+subgraph on $V\setminus\{x,y\}$, and ``edge-critical'' means that deleting any edge lowers $\chi$.
+\begin{itemize}
+  \item (EN) English: $\chi(G)=6$, $G$ is edge-critical, and $\chi(G-x-y)<\chi(G)$ for all distinct $x,y$.
+  \item (ZH) Chinese, ``drops by one'' read as \emph{exactly} one: the same with $\chi(G-x-y)=\chi(G)-1$.
+        (``Drops by at least one'' is (EN).)
+  \item (EL) The standard notion (Erdos--Lovasz): $G$ is connected, $\chi(G)=6$, $G$ is edge-critical, and
+        $\chi(G-x-y)=\chi(G)-2$ for every \emph{edge} $xy$.
+\end{itemize}
+Since $\chi(G-x-y)=5<6$ under (ZH), the class (ZH) is contained in (EN). Gallai's bound is a lower bound
+in the literature, so we also treat the variant (B$'$): every $G\in D$ has $e\ge(5v-2)/3$.
+
+\paragraph{Results.} (1) $K_6$ is in (EN) and (EL) and has $15>28/3$ edges: (B) is false. (2) Every graph
+in (EN), hence in (ZH), has $e>(5v-2)/3+1$: no graph in either class attains $(5v-2)/3$, even up to
+rounding, so (A) is false. Thus (B)$\wedge$(A) and (B$'$)$\wedge$(A) fail under (EN) and (ZH), and (B)
+fails under (EL).
+
+\section{Definitions and sources}
+
+Wikipedia (\url{https://en.wikipedia.org/wiki/Critical_graph}): ``a critical graph is an undirected
+graph all of whose proper subgraphs have smaller chromatic number.'' Every critical graph is edge-critical,
+so all our statements about edge-critical graphs apply to critical ones. The same page: ``A
+double-critical graph is a connected graph in which the deletion of any pair of adjacent vertices
+decreases the chromatic number by two.'' Kostochka and Yancey (\url{https://arxiv.org/abs/1209.1050v1})
+study ``the minimum number of edges in an $n$-vertex $k$-critical graph'' and write that ``The result
+improves the classical bounds by Gallai and Dirac'', so Gallai's bound is a lower bound on $e$.
+
+\section{Proof}
+
+\begin{lemma}\label{lem:k6}
+$K_6$ has $\chi=6$; deleting any edge $ab$ gives a $5$-colourable graph; deleting any two vertices leaves
+$K_4$ with $\chi=4$. $K_6$ is connected. Hence $K_6$ belongs to (EN) and (EL) (not to (ZH)), and
+$e(K_6)=15>28/3=(5\cdot6-2)/3$.
+\end{lemma}
+\begin{proof}
+$\chi(K_n)=n$. For $K_6-ab$, colour every vertex $w\ne b$ by itself and $b$ by $a$; the colour set
+$\{w: w\ne b\}$ has $5$ elements, and the only pair that gets equal colours is $\{a,b\}$, which is no
+longer an edge.
+\end{proof}
+
+\begin{lemma}\label{lem:deg}
+If $\chi(G)=6$ and $G$ is edge-critical, every vertex $v$ with a neighbour $u$ has $\deg v\ge5$.
+\end{lemma}
+\begin{proof}
+$G-uv$ has a proper $5$-colouring $C$. If $\deg v\le4$, some colour $c$ is not used by $C$ on the
+neighbours of $v$. Recolour $v$ with $c$. Edges at $v$ are now proper, and every other edge of $G$ is an
+edge of $G-uv$, so this is a proper $5$-colouring of $G$, contradicting $\chi(G)=6$.
+\end{proof}
+
+\begin{lemma}\label{lem:iso}
+If $G$ is in (EN), $G$ has at most one isolated vertex.
+\end{lemma}
+\begin{proof}
+$G$ has an edge $zz'$ (otherwise $G$ is $1$-colourable). If $x\ne y$ were both isolated, then
+$z\notin\{x,y\}$, and $\chi(G-x-y)<6$ gives a $5$-colouring of $G-x-y$. Give $x$ and $y$ the colour of
+$z$. Since $x,y$ have no edges, this is a proper $5$-colouring of $G$, a contradiction.
+\end{proof}
+
+\begin{theorem}\label{thm:count}
+Every $G$ in (EN), and hence every $G$ in (ZH), satisfies $5v+1<3e$, i.e.\ $e>(5v-2)/3+1$.
+\end{theorem}
+\begin{proof}
+By Lemmas~\ref{lem:deg} and \ref{lem:iso}, $\sum_v(\deg v+5[\deg v=0])\ge5v$, so
+$2e=\sum_v\deg v\ge5v-5$. Also $v\ge\chi(G)=6$. Then $6e\ge15v-15>10v+2$ because $5v>17$.
+\end{proof}
+
+\begin{corollary}\label{cor:main}
+(B) fails for (EN) and (EL), by $K_6$. Under (EN) and (ZH), no graph attains $(5v-2)/3$: not exactly,
+and not within distance $<1$ (so neither $\lfloor(5v-2)/3\rfloor$ nor $\lceil(5v-2)/3\rceil$). Hence (A)
+fails, and the conjecture (B)$\wedge$(A)$\wedge$(U)$\wedge$(C) and its lower-bound variant
+(B$'$)$\wedge$(A)$\wedge$(U)$\wedge$(C) are false under (EN) and (ZH), for any (U) and (C). Under the
+lower-bound variant the inequality (B$'$) itself holds, strictly.
+\end{corollary}
+
+\section{Lean 4 formalization}
+
+The directory \texttt{lean/} is a Lean~4 project (Lean \texttt{v4.33.1}, Mathlib \texttt{v4.33.1}).
+\texttt{Conjecture3462.lean} imports \texttt{Conjecture3462/Basic.lean} (331 lines, namespace
+\texttt{C3462}). Graphs are Mathlib \texttt{SimpleGraph}s; chromatic numbers are Mathlib's
+\texttt{chromaticNumber} (values in $\mathbb{N}_\infty$); $G-x-y$ is
+\texttt{G.induce (\{x, y\}$^c$ : Set V)}; edge deletion is \texttt{G.deleteEdges \{e\}}.
+
+\paragraph{Definitions.}
+\begin{itemize}
+  \item \texttt{IsEdgeCritical G}: for all \texttt{e $\in$ G.edgeSet},
+        \texttt{(G.deleteEdges \{e\}).chromaticNumber < G.chromaticNumber}.
+  \item \texttt{IsDoublyCriticalEN k G}: \texttt{G.chromaticNumber = k}, \texttt{IsEdgeCritical G}, and for
+        all \texttt{x $\ne$ y}, \texttt{(G.induce \{x, y\}$^c$).chromaticNumber < G.chromaticNumber}.
+  \item \texttt{IsDoublyCriticalZH k G}: the same with
+        \texttt{(G.induce \{x, y\}$^c$).chromaticNumber + 1 = G.chromaticNumber}.
+  \item \texttt{IsDoublyCriticalEL k G}: \texttt{G.Connected}, \texttt{G.chromaticNumber = k},
+        \texttt{IsEdgeCritical G}, and for all \texttt{x y} with \texttt{G.Adj x y},
+        \texttt{(G.induce \{x, y\}$^c$).chromaticNumber + 2 = G.chromaticNumber}.
+  \item \texttt{GraphClass := (n : $\mathbb{N}$) $\to$ SimpleGraph (Fin n) $\to$ Prop} (every finite graph is
+        isomorphic to one on \texttt{Fin n}); \texttt{EN6}, \texttt{ZH6}, \texttt{EL6} are the three classes with $k=6$.
+  \item \texttt{ImprovedBound D}: every \texttt{G} in \texttt{D} on \texttt{Fin n} has
+        \texttt{(G.edgeSet.ncard : $\mathbb{R}$) $\le$ (5 * n - 2) / 3}. \texttt{ImprovedLowerBound D}: $\ge$.
+  \item \texttt{BoundAttained D}: some \texttt{G} in \texttt{D} has \texttt{ncard = (5 * n - 2) / 3};
+        \texttt{BoundAttainedUpToRounding D}: some \texttt{G} has \texttt{|ncard - (5 * n - 2) / 3| < 1}.
+  \item \texttt{Conjecture D KY girthClause := ImprovedBound D $\wedge$ BoundAttained D $\wedge$} (every
+        \texttt{G} in \texttt{D} attaining the bound satisfies \texttt{KY n G}) \texttt{$\wedge$ girthClause};
+        \texttt{ConjectureLower}: the same with \texttt{ImprovedLowerBound}. \texttt{KY} and
+        \texttt{girthClause} are arbitrary.
+\end{itemize}
+
+\paragraph{Theorems.}
+\begin{itemize}
+  \item \texttt{top\_chromaticNumber}, \texttt{top\_edgeCritical}, \texttt{top\_deleteTwo},
+        \texttt{top\_EN}, \texttt{top\_EL} (connectedness from Mathlib's \texttt{connected\_top}),
+        \texttt{top\_edges}: Lemma~\ref{lem:k6} for \texttt{($\top$ : SimpleGraph (Fin 6))}.
+  \item \texttt{not\_improvedBound\_of\_top} (any class containing $K_6$), \texttt{not\_improvedBound\_EN},
+        \texttt{not\_improvedBound\_EL}: (B) fails.
+  \item \texttt{ZH\_to\_EN}: (ZH) $\subseteq$ (EN).
+  \item \texttt{degree\_ge\_five}: Lemma~\ref{lem:deg}. \texttt{not\_adj\_of\_degree\_eq\_zero},
+        \texttt{mem\_compl\_pair}, \texttt{colorable\_of\_induce}: the extension step of Lemma~\ref{lem:iso}.
+  \item \texttt{edges\_gt : 5 * Fintype.card V + 1 < 3 * G.edgeSet.ncard} for \texttt{IsDoublyCriticalEN 6 G}
+        (Theorem~\ref{thm:count}); \texttt{edges\_gt\_real}.
+  \item \texttt{SubEN D}: every graph of \texttt{D} satisfies \texttt{IsDoublyCriticalEN 6};
+        \texttt{subEN\_EN}, \texttt{subEN\_ZH}. For every \texttt{D} with \texttt{SubEN D}:
+        \texttt{not\_attainedUpToRounding}, \texttt{improvedLowerBound} and \texttt{not\_conjecture}
+        ($\neg$\,\texttt{Conjecture D KY girthClause} $\wedge$ $\neg$\,\texttt{ConjectureLower D KY girthClause});
+        \texttt{attained\_of\_exact}: Corollary~\ref{cor:main}.
+  \item Main theorem \texttt{conjecture\_00000003462\_false}, the conjunction of
+  \begin{itemize}
+    \item \texttt{IsDoublyCriticalEN 6 $\top$}, \texttt{IsDoublyCriticalEL 6 $\top$},
+          \texttt{$\top$.edgeSet.ncard = 15} (on \texttt{Fin 6});
+    \item $\neg$\,\texttt{ImprovedBound EN6}, $\neg$\,\texttt{ImprovedBound EL6};
+    \item $\neg$\,\texttt{BoundAttainedUpToRounding EN6}, $\neg$\,\texttt{BoundAttainedUpToRounding ZH6};
+    \item for all \texttt{KY girthClause}: $\neg$\,\texttt{Conjecture EN6 KY girthClause},
+          $\neg$\,\texttt{Conjecture ZH6 KY girthClause}, $\neg$\,\texttt{ConjectureLower EN6 KY girthClause},
+          $\neg$\,\texttt{ConjectureLower ZH6 KY girthClause}.
+  \end{itemize}
+\end{itemize}
+
+\paragraph{Axiom audit.} There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+\texttt{\#print axioms} gives
+\begin{verbatim}
+'C3462.conjecture_00000003462_false' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+\end{verbatim}
+To check: \texttt{cd lean; lake exe cache get; lake build}.
+
+\end{document}
