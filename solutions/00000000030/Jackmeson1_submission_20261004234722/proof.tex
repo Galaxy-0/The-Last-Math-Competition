@@ -1,0 +1,201 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\dbar}{\overline{d}}
+
+\title{A disproof of Conjecture 00000000030\\[2pt]
+\large Squares of a large set $A\subseteq[N]$ need not be intersective}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000000030 reads:
+
+\begin{quote}
+Sparsification of intersective sets: there exists an absolute $c>0$ such that whenever $A\subset[N]$ with
+$|A|\ge N^{1/2-c}$, the set $\{a^2 : a\in A\}$ is intersective (it has nonempty intersection with every set
+of positive density).
+\end{quote}
+
+\noindent The quantifiers are: $\exists c>0\ \forall N\ \forall A\subseteq[N]$ with $|A|\ge N^{1/2-c}$,
+the set $S_A=\{a^2:a\in A\}$ is intersective. The statement is universal (``whenever''), and this
+universal reading is the one we refute. We show that it fails for \emph{every} $c>0$ and
+\emph{every} $N\ge 3$, under the standard notion of intersective set and under the statement's own
+parenthetical, with either convention $[N]=\{1,\dots,N\}$ or $[N]=\{0,\dots,N-1\}$. The reason is the
+classical local obstruction modulo $3$.
+
+\section{Definitions}
+
+We use the conventions of Bienvenu, Griesmer, Le and L\^e, \emph{Intersective sets for sparse sets of
+integers} (arXiv:2401.07758, \url{https://arxiv.org/html/2401.07758v1}). For $E\subseteq\N$ write
+$|E\cap[N]|$ with $[N]=\{1,\dots,N\}$.
+
+\begin{definition}
+The \emph{upper density} of $E\subseteq\N$ is $\dbar(E)=\limsup_{N\to\infty}|E\cap[N]|/N$. The set $E$ has
+\emph{natural density} $d$ if $|E\cap[N]|/N\to d$.
+\end{definition}
+
+\begin{definition}[intersective set]\label{def:int}
+A set $R\subseteq\N$ is \emph{intersective} if every $E\subseteq\N$ with $\dbar(E)>0$ contains two
+distinct elements $x\ne y$ with $x-y\in R$; equivalently $R\cap(E-E)\neq\emptyset$, the difference
+being nonzero.
+\end{definition}
+
+\noindent The paper (Definition 1.1, with $E=\N$) says: ``a subset $R\subset\N$ is said to be
+$E$-intersective if for every $A\subset E$ with $\dbar_E(A)>0$, we have $R\cap(A-A)\neq\emptyset$.
+Thus, $R$ is $E$-intersective if every $A$ satisfying $\dbar_E(A)>0$ contains two distinct elements
+differing by an element of $R$ \dots{} if $E=\N$, then $R$ is simply called intersective''. It also recalls that Sarkozy and Furstenberg proved that
+$\{n^2:n\in\N\}$ is intersective, and remarks: ``An intersective set must contain a nonzero multiple of every
+natural number.'' This remark is exactly the obstruction used below; we do not rely on it, but prove what we
+need.
+
+We refute four notions at once (in Lean: \texttt{IsIntersective}, \texttt{IsIntersectiveNat},
+\texttt{MeetsDenseSets}, \texttt{MeetsDenseSetsNat}):
+\begin{enumerate}[label=(\arabic*)]
+  \item Definition~\ref{def:int} (upper density);
+  \item the weaker requirement where only sets $E$ of positive \emph{natural} density are tested;
+  \item the literal parenthetical: $R\cap E\neq\emptyset$ for every $E$ with $\dbar(E)>0$;
+  \item the same with positive natural density.
+\end{enumerate}
+In (1) and (2) the condition is formalized as $\exists x,y\in E,\ x\ne y\ \wedge\ \exists r\in R,\
+r=x-y$ in $\Z$ (two distinct elements, so a set containing $0$ is not trivially intersective). Since one fixed test set $E=3\N$ has natural density $1/3$, it has positive density in
+every usual sense (natural, lower, upper, upper Banach), so the refutation does not depend on which density
+is meant.
+
+\section{The counterexample}
+
+\begin{lemma}\label{lem:dens}
+For $m\ge1$, $|m\N\cap[N]|=\lfloor N/m\rfloor$. Hence $m\N$ has natural density $1/m$ and upper density $1/m$.
+\end{lemma}
+
+\begin{proof}
+The count is Mathlib's \texttt{Nat.Ioc\_filter\_dvd\_card\_eq\_div}. Since
+$(N-(m-1))/m\le\lfloor N/m\rfloor\le N/m$, the ratio is squeezed between $1/m-\frac{m-1}{m}\cdot\frac1N$
+and $1/m$, so it tends to $1/m$; a convergent sequence has $\limsup$ equal to its limit.
+\end{proof}
+
+\begin{lemma}\label{lem:mod3}
+If $R\subseteq\N$ and every $r\in R$ satisfies $r\equiv1\pmod 3$, then $R$ is not intersective in any of the
+senses (1)--(4).
+\end{lemma}
+
+\begin{proof}
+Take $E=3\N$, of natural density $1/3>0$ (Lemma~\ref{lem:dens}). No $r\in R$ is a multiple of $3$, so
+$R\cap E=\emptyset$. If $x,y\in E$ then $x-y\in 3\Z$, while $r\equiv1\pmod 3$, so $r\neq x-y$; thus
+$R\cap(E-E)=\emptyset$.
+\end{proof}
+
+For $N\ge0$ let
+\[
+  A_N=\{a\in\{0,\dots,N-1\} : 3\nmid a\}.
+\]
+Then $0\notin A_N$, so $A_N\subseteq\{1,\dots,N\}$ and $A_N\subseteq\{0,\dots,N-1\}$.
+
+\begin{lemma}\label{lem:size}
+$2N\le 3|A_N|+2$ for every $N$. Consequently, for $N\ge3$ and every $c\ge0$,
+\[
+  N^{1/2-c}\le\sqrt N\le|A_N|.
+\]
+\end{lemma}
+
+\begin{proof}
+Each block $\{3t,3t+1,3t+2\}$ contributes two elements, which gives $2N\le3|A_N|+2$ by induction in steps of
+$3$ (base cases $N<3$ checked directly). For $N\ge3$ this gives $|A_N|\ge2$ and $N\le2|A_N|$, so
+$N\le 2|A_N|\le|A_N|^2$ and $\sqrt N\le|A_N|$. Finally $N\ge1$ and $1/2-c\le1/2$ give
+$N^{1/2-c}\le N^{1/2}=\sqrt N$.
+\end{proof}
+
+\begin{theorem}[main]\label{thm:main}
+For every $c\ge0$ and every $N\ge3$: $A_N\subseteq\{1,\dots,N\}$, $A_N\subseteq\{0,\dots,N-1\}$,
+$|A_N|\ge N^{1/2-c}$, $|A_N|\ge\sqrt N$, and $S_{A_N}=\{a^2:a\in A_N\}$ is not intersective in any of the
+senses (1)--(4).
+\end{theorem}
+
+\begin{proof}
+If $3\nmid a$ then $a\equiv\pm1\pmod3$ and $a^2\equiv1\pmod3$. Apply Lemmas~\ref{lem:size}
+and~\ref{lem:mod3}.
+\end{proof}
+
+\begin{corollary}
+Conjecture 00000000030 is false, for each of the notions (1)--(4) and for both conventions for $[N]$.
+Explicitly: for any $c>0$, $N=3$ and $A=\{1,2\}$ satisfy $|A|=2\ge3^{1/2-c}$, but $\{1,4\}$ misses both
+$3\N$ and $3\N-3\N$.
+\end{corollary}
+
+\section{Other readings}
+
+\begin{itemize}
+  \item \emph{Finitary reading.} If ``intersective'' is meant at scale $M$ (every $B\subseteq[M]$ with
+        $|B|\ge\delta M$ has two elements differing by some $a^2$, $a\in A$), take $B_M=3\N\cap[M]$:
+        $|B_M|=\lfloor M/3\rfloor\ge(M-2)/3$, and neither $B_M$ nor $B_M-B_M$ contains a square of an element
+        of $A_N$. This holds for every $M$ and $N$ (Lean: \texttt{finitary\_witness}), so it refutes any
+        threshold $\delta\le1/4$ for $M\ge8$.
+  \item \emph{Infinite $A$.} For $A_\infty=\{a:3\nmid a\}$ one has $|A_\infty\cap[N]|\ge N^{1/2-c}$ for all
+        $N\ge3$, and $\{a^2:a\in A_\infty\}$ is not intersective (Lean: \texttt{infinite\_version}).
+  \item \emph{Any finite $A$.} No finite set of positive integers is intersective in senses (1)--(4): test
+        it against $m\N$ with $m>\max R$ (Lean: \texttt{finite\_not\_intersective},
+        \texttt{no\_finite\_square\_set\_intersective}). This only concerns finite sets of positive
+        integers and the infinitary notions (1)--(4). It does \emph{not} refute an existential claim about
+        a well-chosen infinite square set, nor an existential finitary (quantitative) sparsification
+        statement; neither is what the conjecture says.
+\end{itemize}
+The mod-$3$ argument does not use finiteness: it rules out the universal claim even for sets $A$ of
+positive density. The reading refuted in this note is the one written, namely the universal statement
+(``whenever $A\subset[N]$ with $|A|\ge N^{1/2-c}$''), in the senses (1)--(4) and in the finitary form
+above.
+
+\section{Lean 4 formalization}
+
+The directory \texttt{lean/} is a Lean~4 project (Lean \texttt{v4.33.1}, Mathlib \texttt{v4.33.1}); the
+source is \texttt{Conjecture30/Basic.lean} (namespace \texttt{C30}). It defines
+\texttt{countIn E N} $=|E\cap\{1,\dots,N\}|$, \texttt{upperDensity E} (a \texttt{limsup} in $\mathbb R$),
+\texttt{HasNatDensity E d} (a \texttt{Tendsto} statement), the four predicates above, and
+\[
+  \texttt{Conjecture box P} :\iff \exists c>0,\ \forall N\ \forall A,\ A\subseteq \texttt{box}\,N\ \to\
+  (N:\mathbb R)^{1/2-c}\le |A|\ \to\ P(\{a^2 : a\in A\}).
+\]
+Main results:
+\begin{itemize}
+  \item \texttt{hasNatDensity\_multiples}, \texttt{upperDensity\_multiples} (Lemma~\ref{lem:dens});
+  \item \texttt{not\_intersective\_of\_mod3} (Lemma~\ref{lem:mod3}); \texttt{goodSet\_size}
+        (Lemma~\ref{lem:size}), with \texttt{goodSet N} $=A_N$;
+  \item \texttt{main\_family} (Theorem~\ref{thm:main}), for all $c\ge0$ and $N\ge3$;
+  \item \texttt{conjecture\_false}: the conjunction of
+        $\neg\,\texttt{Conjecture}\ B\ P$ for $B\in\{\texttt{Finset.Icc 1},\ \texttt{Finset.range}\}$ and
+        $P\in\{\texttt{IsIntersective},\texttt{IsIntersectiveNat},\texttt{MeetsDenseSets},
+        \texttt{MeetsDenseSetsNat}\}$;
+  \item \texttt{finitary\_witness}, \texttt{infinite\_version}, \texttt{finite\_not\_intersective},
+        \texttt{no\_finite\_square\_set\_intersective} (Section 4).
+\end{itemize}
+There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom. \texttt{\#print axioms} for
+\texttt{C30.conjecture\_false}, \texttt{C30.main\_family}, \texttt{C30.finitary\_witness},
+\texttt{C30.infinite\_version} and \texttt{C30.no\_finite\_square\_set\_intersective} reports only
+\texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. The file also compiles with
+\texttt{-DwarningAsError=true}. To check:
+\begin{verbatim}
+cd lean
+lake exe cache get
+lake build
+\end{verbatim}
+
+\end{document}
