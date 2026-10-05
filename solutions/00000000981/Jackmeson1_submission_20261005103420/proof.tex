@@ -1,0 +1,114 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000000981\\[2pt]
+\large No compact operator has point spectrum dense in the unit disk}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000000981 reads:
+
+\begin{quote}
+\emph{Conjecture:} There exists a compact operator $T$ with $\sigma_p(T)$ dense in the unit disk, yet every
+invariant subspace of $T$ contains an eigenvector (density-eigenvector tension).
+\end{quote}
+
+This is an existence claim with two conditions on $T$. We show that the first condition alone is impossible:
+\emph{no compact operator on any complex normed space (in particular any Banach or Hilbert space) has point
+spectrum dense in the open unit disk.} Hence no $T$ satisfies both conditions, however the second condition
+is read.
+
+\section{Definitions and conventions}
+
+\begin{itemize}
+  \item $E$ is a complex normed space (no completeness is needed). A linear map $T:E\to E$ is
+        \emph{compact} if it maps some neighbourhood of $0$ into a compact set (Mathlib
+        \texttt{IsCompactOperator}); such a map sends bounded sets into compact sets. The main statement is
+        given both for linear maps and for bounded operators \texttt{E ->L[C] E}.
+  \item The point spectrum is $\sigma_p(T)=\{\mu\in\mathbb C:\exists x\ne0,\ Tx=\mu x\}$
+        (Lean: \texttt{pointSpectrum}).
+  \item ``$\sigma_p(T)$ dense in the unit disk'' is read as $D\subseteq\overline{\sigma_p(T)}$ with
+        $D=\{|\mu|<1\}$. This is the weakest reading: density of $\sigma_p(T)\cap D$ in $D$, or density in the
+        closed disk, both imply it (the closed-disk version is \texttt{not\_closedBall\_subset\_closure\_pointSpectrum}).
+  \item ``Every invariant subspace contains an eigenvector'' is formalized as: every nonzero closed
+        $T$-invariant subspace contains some $x\neq0$ with $Tx=\mu x$
+        (Lean: \texttt{EveryInvariantSubspaceHasEigenvector}). The proof never uses this condition.
+\end{itemize}
+
+\section{The proof}
+
+\begin{lemma}[finitely many large eigenvalues]\label{lem:fin}
+If $T$ is compact and $\delta>0$, then $\{\mu\in\sigma_p(T):|\mu|\ge\delta\}$ is finite.
+\end{lemma}
+\begin{proof}
+Suppose not. Choose distinct $\lambda_0,\lambda_1,\dots$ in this set and $v_k\ne0$ with $Tv_k=\lambda_kv_k$.
+Eigenvectors for distinct eigenvalues are linearly independent (Mathlib
+\texttt{Module.End.eigenvectors\_linearIndependent'}). Put $M_n=\operatorname{span}(v_0,\dots,v_{n-1})$:
+finite-dimensional, hence closed; $M_n\subseteq M_{n+1}$; $v_n\in M_{n+1}\setminus M_n$;
+$T(M_n)\subseteq M_n$; and $(T-\lambda_n)(M_{n+1})\subseteq M_n$, since
+$(T-\lambda_n)v_k=(\lambda_k-\lambda_n)v_k$.
+By the Riesz lemma (Mathlib \texttt{riesz\_lemma\_of\_lt\_one}) applied in $M_{n+1}$ to its proper closed
+subspace $M_n$, there is $y_n\in M_{n+1}$ with $\|y_n\|=1$ and $\|y_n-z\|\ge1/2$ for all $z\in M_n$.
+For $m<n$ let $z=\lambda_n^{-1}\bigl(\lambda_ny_n-Ty_n+Ty_m\bigr)\in M_n$; then
+$Ty_n-Ty_m=\lambda_n(y_n-z)$, so $\|Ty_n-Ty_m\|\ge|\lambda_n|/2\ge\delta/2$.
+But the $y_n$ lie in the closed unit ball, so the $Ty_n$ lie in a compact set and have a convergent,
+hence Cauchy, subsequence, contradicting $\|Ty_{\varphi(N+1)}-Ty_{\varphi(N)}\|\ge\delta/2$.
+(Lean: \texttt{finite\_eigenvalues\_ge}.)
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+If $T$ is compact, then $D\not\subseteq\overline{\sigma_p(T)}$.
+\end{theorem}
+\begin{proof}
+Let $F=\{\mu\in\sigma_p(T):|\mu|\ge1/2\}$, finite by Lemma~\ref{lem:fin}. The real segment $(1/2,1)$ is
+infinite, so it contains some $t\notin F$. The set $U=\{|\mu|>1/2\}\setminus F$ is open and contains $t$.
+If $t\in D\subseteq\overline{\sigma_p(T)}$, then $U$ meets $\sigma_p(T)$ at some $\mu$; but then $\mu\in F$,
+a contradiction. (Lean: \texttt{not\_ball\_subset\_closure\_pointSpectrum}.)
+\end{proof}
+
+\begin{theorem}
+For every complex normed space $E$ there is no compact $T$ (linear map, or bounded operator) on $E$ with
+$D\subseteq\overline{\sigma_p(T)}$ and every nonzero closed invariant subspace containing an eigenvector.
+The conjecture is false.
+\end{theorem}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture981/Basic.lean} (namespace \texttt{C981}, Lean 4 + Mathlib, only
+\texttt{import Mathlib}). Main theorems:
+\begin{itemize}
+  \item (ASCII rendering) \texttt{conjecture\_false (E) : not (exists T : E ->l[C] E, IsCompactOperator T and
+        ball 0 1 subset closure (pointSpectrum T) and EveryInvariantSubspaceHasEigenvector T)};
+  \item \texttt{conjecture\_false\_clm}: the same for bounded operators \texttt{T : E ->L[C] E};
+  \item \texttt{finite\_eigenvalues\_ge}, \texttt{not\_ball\_subset\_closure\_pointSpectrum},
+        \texttt{not\_closedBall\_subset\_closure\_pointSpectrum}.
+\end{itemize}
+Here $E$ is any type with \texttt{NormedAddCommGroup E} and \texttt{NormedSpace C E}; Banach and Hilbert
+spaces are special cases. Axiom audit: \texttt{\#print axioms} reports only \texttt{propext},
+\texttt{Classical.choice}, \texttt{Quot.sound}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\begin{remark}
+Not covered: real scalars. Over $\mathbb R$ eigenvalues are real numbers and cannot be dense in a disk of
+$\mathbb C$. We read ``unit disk'' as the disk, not the unit circle, as both language versions say.
+\end{remark}
+
+\end{document}
