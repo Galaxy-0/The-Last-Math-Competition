@@ -1,0 +1,206 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000003963\\[2pt]
+\large The algebraic connectivity of a hypercube layer is not $\Theta(\log n/n^2)$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000003963 reads:
+
+\begin{quote}
+\emph{Definition:} A cube layer is the set of vertices of fixed weight in the hypercube.
+\emph{Conjecture:} The algebraic connectivity of the induced graph of a layer, a Johnson graph,
+attains its minimum over all layers at $l = n/2$, of order $\Theta(\log n / n^2)$.
+\end{quote}
+The Chinese version says the same: the algebraic connectivity of the induced graph (Johnson graph) of
+layer $\ell$ is smallest at $\ell = n/2$ among all layers, and its order is $\Theta(\log n/n^2)$.
+
+We identify a vertex of the hypercube $Q_n=\{0,1\}^n$ with the subset of $[n]=\{0,\dots,n-1\}$ where it
+equals $1$; its weight is the size of the subset. The layer of weight $\ell$ is the set of
+$\ell$-subsets of $[n]$.
+
+\paragraph{Definitions used.}
+\begin{itemize}[leftmargin=*]
+\item \emph{Hypercube} $Q_n$: subsets $s,t\subseteq[n]$ are adjacent iff $|s\,\triangle\,t|=1$
+  (they differ in exactly one coordinate).
+\item \emph{Johnson graph} $J(n,\ell)$: vertices are the $\ell$-subsets of $[n]$, and $A\sim B$ iff
+  $|A\cap B|=\ell-1$. Wikipedia (\url{https://en.wikipedia.org/wiki/Johnson_graph}): ``two vertices are
+  adjacent when the intersection of the two vertices (subsets) contains'' $(k-1)$ elements.
+\item \emph{Laplacian} $L=D-A$ (Mathlib's \texttt{SimpleGraph.lapMatrix}).
+\item \emph{Algebraic connectivity} $a(G)=\lambda_2(L)$. Wikipedia
+  (\url{https://en.wikipedia.org/wiki/Algebraic_connectivity}): ``The algebraic connectivity (also known
+  as Fiedler value or Fiedler eigenvalue after Miroslav Fiedler) of a graph G is the second-smallest
+  eigenvalue (counting multiple eigenvalues separately) of the Laplacian matrix of G.''
+\item \emph{Normalized Laplacian} $\mathcal L = I - D^{-1/2}AD^{-1/2}$: entry $1$ on the diagonal
+  ($0$ at an isolated vertex), $-1/\sqrt{d_id_j}$ for adjacent $i\ne j$, and $0$ otherwise.
+\end{itemize}
+
+\paragraph{Readings.} We refute three readings.
+\begin{itemize}[leftmargin=*]
+\item[(J)] The appositive ``a Johnson graph'' fixes the layer graph as $J(n,\ell)$, and $a=\lambda_2(L)$.
+\item[(N)] The same graph, with $\lambda_2$ of the normalized Laplacian $\mathcal L$.
+\item[(I)] The literal reading: the subgraph of $Q_n$ induced on the layer, with $a=\lambda_2(L)$.
+\end{itemize}
+Since $\ell=n/2$ must be an integer, the order statement is read along even $n$. $f=\Theta(g)$ means
+$cg(n)\le f(n)\le Cg(n)$ for all large even $n$, with constants $c,C>0$. Under (J) and (N) we refute
+the upper half $f=O(\log n/n^2)$, and under (I) the lower half. Either refutes the conjunction.
+
+\paragraph{Scope.} Under (J), every non-trivial layer has $\lambda_2=n$. So $\ell=n/2$ \emph{is} a
+minimiser over the layers $1\le\ell\le n-1$, though not the unique one, and we do not refute the
+location clause. The conjecture fails through its order clause. Layers $0$ and $n$ are single
+vertices, where $\lambda_2$ is undefined. In Lean, \texttt{lambda2} is set to $0$ when there are fewer
+than two eigenvalues, and these layers are excluded from the minimum ($1\le k\le n-1$).
+
+\section{From a quadratic-form bound to $\lambda_2$}
+
+In Lean, $\lambda_2$ of a real symmetric matrix $M$ indexed by $V$ with $|V|\ge2$ is
+\texttt{hM.eigenvalues\_0} at index $|V|-2$. Mathlib's list \texttt{eigenvalues\_0} is sorted in
+decreasing order (\texttt{eigenvalues\_0\_antitone}), so this is the second-smallest eigenvalue counted
+with multiplicity.
+
+\begin{lemma}[\texttt{lambda2\_ge}]\label{lem:var}
+Let $M$ be real symmetric with $M\mathbf 1=0$, let $c>0$, and suppose $c\sum_i x_i^2\le x^\top Mx$ for
+every $x$ with $\sum_i x_i=0$. If $|V|\ge 2$, then $c\le\lambda_2(M)$.
+\end{lemma}
+\begin{proof}
+Let $(v_j)$ be Mathlib's orthonormal eigenbasis, $Mv_j=\mu_jv_j$. Since $M$ is symmetric and
+$M\mathbf 1=0$, we have $\mathbf 1^\top Mx=0$ for all $x$, so $\mu_j\sum_t v_j(t)=0$. If $\mu_j\neq0$,
+then $v_j\perp\mathbf 1$ and $c=c\|v_j\|^2\le v_j^\top Mv_j=\mu_j$. So every eigenvalue is $0$ or at
+least $c$. Moreover, $\mu_j=0$ forces $\sum_t v_j(t)\ne0$: otherwise $c\le v_j^\top Mv_j=0$. Suppose
+$i\ne j$ and $\mu_i=\mu_j=0$. Put $a=\sum v_j$, $b=\sum v_i$ and $x=av_i-bv_j$. Then $\sum x=0$ and
+$Mx=0$, so $c(a^2+b^2)=c\|x\|^2\le0$, which contradicts $b\ne0$. Hence at most one index carries an
+eigenvalue below $c$. Because the list is sorted in decreasing order, the entries at indices $|V|-2$
+and $|V|-1$ come from two different indices. So the entry at $|V|-2$ is at least $c$.
+\end{proof}
+
+\section{The Johnson graph: $\lambda_2\ge n$ for all $n$}
+
+For $f$ defined on subsets of $[n]$, put
+\[(Df)(C)=\sum_{i\notin C}f(C\cup\{i\}),\qquad (Uf)(E)=\sum_{i\in E}f(E\setminus\{i\}),\qquad
+X f(A)=\sum_{j\in A}\sum_{i\notin A}f\big((A\setminus\{j\})\cup\{i\}\big).\]
+Write $\mathcal S_m$ for the family of $m$-subsets of $[n]$.
+
+\begin{lemma}\label{lem:alg}
+(a) \texttt{up\_dn}, \texttt{dn\_up}: $UDf(A)=|A|f(A)+Xf(A)$ and $DUf(A)=(n-|A|)f(A)+Xf(A)$.
+(b) \texttt{adjoint}: $\sum_{E\in\mathcal S_{m+1}}g(E)\,Uh(E)=\sum_{A\in\mathcal S_m}h(A)\,Dg(A)$.
+(c) \texttt{sum\_dn}: $\sum_{\mathcal S_m}Dg=(m+1)\sum_{\mathcal S_{m+1}}g$.
+\end{lemma}
+\begin{proof}
+(a) Expand both double sums; the diagonal term ($i=j$) gives $f(A)$ each time. (b) Both sides sum over
+pairs $(E,i)$ with $i\in E$, which correspond to pairs $(A,i)$ with $i\notin A$ via $A=E\setminus\{i\}$.
+(c) Apply (b) with $h\equiv1$.
+\end{proof}
+
+\begin{lemma}[\texttt{key}]\label{lem:key}
+If $m+1\le n$ and $\sum_{\mathcal S_{m+1}}f=0$, then
+$\sum_{\mathcal S_m}(Df)^2\le m(n-m-1)\sum_{\mathcal S_{m+1}}f^2$.
+\end{lemma}
+\begin{proof}
+We induct on $m$. For $m=0$, $\mathcal S_0=\{\emptyset\}$ and $Df(\emptyset)=\sum_{\mathcal S_1}f=0$ by
+Lemma~\ref{lem:alg}(c). For the step, let $f$ live on $\mathcal S_{m+2}$ with sum $0$, and let $z=Df$,
+which has sum $0$ by (c). Put $Z=\|z\|^2$ and $F=\|f\|^2$. By (b), $Z=\sum_{\mathcal S_{m+2}}f\,Uz$.
+By (b) twice and (a), $\|Uz\|^2=\|Dz\|^2+(n-2(m+1))Z$. The induction hypothesis then gives
+$\|Uz\|^2\le (m+1)(n-m-2)Z$. Cauchy--Schwarz gives $Z^2\le F\|Uz\|^2\le(m+1)(n-m-2)FZ$, so
+$Z\le(m+1)(n-m-2)F$ (trivially if $Z=0$).
+\end{proof}
+
+\begin{theorem}[\texttt{johnson\_quad}, \texttt{algConn\_johnson\_ge}]\label{thm:J}
+For $k=m+1\ge1$ and every $x$ on $\mathcal S_k$ with $\sum x=0$: $n\|x\|^2\le x^\top L x$, where $L$ is
+the Laplacian of $J(n,k)$. Hence $\lambda_2(L(J(n,k)))\ge n$ for all $n$ and all $1\le k\le n-1$.
+\end{theorem}
+\begin{proof}
+The neighbours of $A$ in $J(n,k)$ are exactly the sets $(A\setminus\{j\})\cup\{i\}$ with $j\in A$ and
+$i\notin A$, and this description is injective (\texttt{nbr\_sum}). Hence $\deg A=k(n-k)$
+(\texttt{degree\_johnson}) and $\sum_{B\sim A}x_B=Xx(A)$. By Lemma~\ref{lem:alg}(a),
+$(Lx)(A)=k(n-k+1)x_A-UDx(A)$, and by (b), $x^\top Lx=k(n-k+1)\|x\|^2-\|Dx\|^2$. Lemma~\ref{lem:key}
+gives $\|Dx\|^2\le m(n-m-1)\|x\|^2$, and $(m+1)(n-m)-m(n-m-1)=n$. Finally, $L\mathbf 1=0$ and
+$|\mathcal S_k|=\binom nk\ge2$, so Lemma~\ref{lem:var} applies with $c=n$.
+\end{proof}
+
+\begin{remark}
+The vector $x_A=[0\in A]-k/n$ satisfies $Lx=nx$, so in fact $\lambda_2=n$. Lean proves only the lower
+bound, which is all the disproof needs.
+\end{remark}
+
+\begin{corollary}[\texttt{normConn\_johnson\_ge}]
+For $1\le k\le n-1$, $\lambda_2(\mathcal L(J(n,k)))\ge n/(k(n-k))$; for even $n$ and $k=n/2$ this is $4/n$.
+\end{corollary}
+\begin{proof}
+$J(n,k)$ is $d$-regular with $d=k(n-k)>0$, so $\mathcal L=d^{-1}L$ (\texttt{normLap\_johnson}). Apply
+Lemma~\ref{lem:var} with $c=n/d$, using Theorem~\ref{thm:J}.
+\end{proof}
+
+\section{The literal reading}
+
+\begin{theorem}[\texttt{algConn\_inducedLayer}]
+For all $n,\ell$, the subgraph of $Q_n$ induced on the layer of weight $\ell$ has no edges. Its Laplacian
+is $0$, and its $\lambda_2$ is $0$.
+\end{theorem}
+\begin{proof}
+If $|s|=|t|=\ell$, then $|s\setminus t|=|t\setminus s|$, so $|s\triangle t|=2|s\setminus t|\ne1$
+(\texttt{inducedLayer\_no\_adj}). Every eigenvalue of the zero matrix is $0$ (\texttt{lambda2\_zero}).
+\end{proof}
+
+\section{Asymptotics and the main theorem}
+
+\begin{lemma}[\texttt{exists\_large}]
+For every $C\in\mathbb R$ and $N\in\mathbb N$, there is an even $n\ge\max(N,2)$ with $C\log n<4n$.
+\end{lemma}
+\begin{proof}
+Take $n=2(N+M+1)$ with $M\ge C^2$. Since $\log\sqrt n\le\sqrt n-1$, we get $\log n<2\sqrt n$. If
+$C\le0$, the claim is clear. Otherwise $C\le\sqrt n$, so $C\log n<2\sqrt n\sqrt n=2n<4n$.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_3963\_false}]
+All four of the following statements are false:
+\begin{enumerate}[leftmargin=*]
+\item (J, minimum over layers; \texttt{johnson\_min\_not\_bigO}) there are $C,N$ such that for every even
+  $n\ge N$ some layer $1\le k\le n-1$ has $\lambda_2(L(J(n,k)))\le C\log n/n^2$;
+\item (J, middle layer; \texttt{johnson\_not\_bigO}) there are $C,N$ with
+  $\lambda_2(L(J(n,n/2)))\le C\log n/n^2$ for all even $n\ge N$;
+\item (N, middle layer; \texttt{johnson\_norm\_not\_bigO}) the same bound for $\lambda_2(\mathcal L(J(n,n/2)))$;
+\item (I, middle layer; \texttt{induced\_not\_bigOmega}) there are $c>0$ and $N$ with
+  $c\log n/n^2\le\lambda_2$ of the induced layer graph of weight $n/2$, for all even $n\ge N$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(1)--(2): By Theorem~\ref{thm:J}, every non-trivial layer has $\lambda_2\ge n$. With $n$ from the lemma,
+$C\log n<4n\le n^3$, so $C\log n/n^2<n$. (3): For $n=2t$, $\lambda_2\ge 2t/t^2$, and
+$C\log n\cdot t^2<8t\cdot t^2$ gives $C\log n/n^2<2t/t^2$. (4): $\lambda_2=0<c\log n/n^2$ for $n\ge2$.
+\end{proof}
+
+Hence the conjectured order $\Theta(\log n/n^2)$ fails under readings (J), (N) and (I). Under (J) and
+(N) the true order is $n$ and $4/n$ respectively; under (I) the value is identically $0$.
+
+\section{Lean formalization}
+
+The file \texttt{lean/Conjecture3963/Basic.lean} (namespace \texttt{C3963}, only import
+\texttt{Mathlib}, 564 lines) defines \texttt{hypercube}, \texttt{Layer}, \texttt{johnson},
+\texttt{lambda2}, \texttt{algConn} (\texttt{lambda2} of \texttt{lapMatrix}), \texttt{normLap} and
+\texttt{inducedLayer}. It proves every statement above under the names given. The main theorem is
+\texttt{C3963.conjecture\_3963\_false}; the all-$n$ spectral bound is \texttt{C3963.algConn\_johnson\_ge}.
+\texttt{\#print axioms} for both gives exactly \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}
