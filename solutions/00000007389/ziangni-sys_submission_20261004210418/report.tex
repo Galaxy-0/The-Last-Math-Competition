@@ -1,0 +1,97 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\title{Affine covariance of Newton's method\\Conjecture 00000007389}
+\author{ziangni-sys}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\paragraph{Meaning and scope.}
+The English source asserts covariance of Newton methods and describes its algebra as a tangent-space model. The Chinese source likewise describes affine-covariant, tangent-modeled Newton methods. We prove the standard precise interpretation: the Newton method for solving a root equation is equivariant under invertible affine changes of coordinates, and the derivative and correction transform by the induced linear tangent action. The phrase about the algebra is made explicit by identity and composition laws below. No undefined additional geometric invariant is introduced.
+
+Let $E$ be a real or complex normed vector space, $f:E\to E$, and let
+\[
+ \phi(x)=Tx+b,\qquad \phi^{-1}(y)=T^{-1}(y-b),
+\]
+where $T:E\to E$ is a continuous linear isomorphism and $b\in E$.
+Transform the root equation by
+\[
+ g(y)=T f(\phi^{-1}(y)).
+\]
+Thus $g(\phi(x))=0$ if and only if $f(x)=0$. Multiplication of the residual by $T$ is an invertible change of residual coordinates.
+
+\begin{theorem}[Actual derivative and Newton step]
+Suppose $f$ has Fr\'echet derivative $D$ at $x$ and $D$ is a continuous linear isomorphism. Then $g$ has Fr\'echet derivative
+\[
+ \widetilde D=TDT^{-1}
+\]
+at $\phi(x)$, this derivative is invertible, and
+\[
+ N_g(\phi(x))=\phi(N_f(x)),\qquad
+ N_f(x)=x-D^{-1}f(x).
+\]
+\end{theorem}
+\begin{proof}
+The affine coordinate maps have derivatives $T$ and $T^{-1}$; their translations contribute zero. The Fr\'echet chain rule gives the actual derivative $TDT^{-1}$, rather than postulating its covariance. Its inverse is $TD^{-1}T^{-1}$, so the Newton correction is
+\[
+ \widetilde D^{-1}g(\phi(x))
+   =TD^{-1}T^{-1}Tf(x)=TD^{-1}f(x).
+\]
+Consequently
+\[
+ N_g(\phi(x))=Tx+b-TD^{-1}f(x)
+            =T(x-D^{-1}f(x))+b.
+\]
+All inverse identities follow from the stated linear isomorphisms.
+\end{proof}
+
+\paragraph{Residual coordinates can also be left unchanged.}
+If instead $\widehat g(y)=f(\phi^{-1}(y))$, its derivative is $DT^{-1}$ and its inverse is $TD^{-1}$. Its correction is again $TD^{-1}f(x)$, so exactly the same covariance holds. More generally an independent invertible residual change $S$ yields derivative $SDT^{-1}$ and inverse $TD^{-1}S^{-1}$. The formalized convention uses $S=T$.
+
+\newpage
+\begin{theorem}[Every defined iterate]
+Start $x_0\in E$ and $y_0=\phi(x_0)$. Whenever all Newton derivatives required for the steps under consideration exist and are invertible, their Newton iterates satisfy
+\[
+ y_n=\phi(x_n)
+\]
+for every such $n$.
+\end{theorem}
+\begin{proof}
+The assertion is true at $n=0$. If true at $n$, the preceding theorem at $x_n$ gives
+$y_{n+1}=N_g(\phi(x_n))=\phi(N_f(x_n))=\phi(x_{n+1})$.
+This proves the assertion by induction. The transformed derivative at every visited point is provided by the same chain rule. No convergence assumption is needed.
+\end{proof}
+
+\paragraph{The tangent-space algebra.}
+The tangent action of $\phi$ is $v\mapsto Tv$, independent of the base point and translation. Transport of invertible tangent endomorphisms is
+\[
+ C_T(D)=TDT^{-1}.
+\]
+It satisfies
+\[
+ C_T(I)=I,\qquad C_T(FD)=C_T(F)\,C_T(D).
+\]
+These equations follow directly by inserting $T^{-1}T=I$. Thus it is an automorphism of the composition algebra of invertible tangent endomorphisms; its inverse is $C_{T^{-1}}$. At the affine level, for $\psi(y)=Sy+c$,
+\[
+ (\psi\circ\phi)(x)=STx+(Sb+c).
+\]
+Its tangent action is the composition $ST$. These are the concrete identity and composition rules underlying the source's tangent-space model. Newton corrections are tangent vectors and transform by $T$, as the first theorem proves.
+
+\paragraph{Formal correspondence.}
+The Lean project works over any nontrivially normed field and any normed vector space, hence covers both real and complex spaces and does not require finite dimension or completeness. It defines the actual affine maps, transformed residual, continuous linear derivative isomorphism, correction, Newton step and recursive orbit.
+
+\texttt{transformed\_\allowbreak derivative} proves the analytic chain rule using \texttt{HasFDerivAt}; \texttt{actual\_\allowbreak newton\_\allowbreak step} joins this with the covariance identity. \texttt{orbit\_\allowbreak covariance} proves every recursive iterate identity. Its derivative assignment $D(x)$ is a family of continuous linear isomorphisms; \texttt{orbit\_\allowbreak derivative} requires the actual derivative hypothesis only at the visited point, so a finite valid trajectory needs no derivative hypothesis outside that trajectory. \texttt{tangent\_\allowbreak identity}, \texttt{tangent\_\allowbreak composition}, and \texttt{coordinate\_\allowbreak composition} formalize the algebra just displayed. \texttt{roots\_\allowbreak covariance} proves equivalence of the root equations.
+
+\paragraph{Conclusion and limits.}
+This proves the stated affine covariance in the conventional root-Newton interpretation, including the induced tangent algebra. It does not claim covariance of arbitrary damped, constrained, rounded, or approximate Newton variants without transforming their additional rules. Derivative invertibility is precisely the ordinary requirement for a classical Newton step to be defined, not a convergence or genericity assumption.
+
+\paragraph{Reproduction.}
+The accompanying project pins Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}\end{center}
+Run \texttt{lake update} and \texttt{lake build} inside \texttt{lean/}.
+The source prints axiom audits of its final analytic, dynamic and algebraic theorems. There are no custom axioms or omitted proofs.
+\end{document}
