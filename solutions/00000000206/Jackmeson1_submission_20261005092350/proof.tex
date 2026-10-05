@@ -1,0 +1,113 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A proof of Conjecture 00000000206\\[2pt]
+\large Every value occurs only finitely often in Recam\'an's sequence}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000000206 reads:
+
+\begin{quote}
+\emph{Definition:} The Recam\'an sequence is defined by the backtracking-doubling recurrence.
+\emph{Conjecture:} Every nonnegative integer occurs only finitely often in the sequence; and the
+finiteness is settled by interval covering.
+\end{quote}
+
+\paragraph{Reading.} The Recam\'an sequence is OEIS A005132. The phrase ``backtracking-doubling'' is
+loose wording: no doubling occurs in the standard sequence, and we use the standard definition below.
+The first clause is the mathematical claim: for every integer $m \ge 0$, the set $\{n : a_n = m\}$ is
+finite. The second clause, ``the finiteness is settled by interval covering'' (Chinese text: the core of
+the finiteness is interval covering), names no object or property. We read it as a remark on the method
+of proof, not as a mathematical statement, and we do not formalize it. The proof below is an interval
+argument: every add-step occurrence of $m$ lies at an index in $[1, m]$.
+
+\section{Definition}
+
+The retrieved Wikipedia article on Recam\'an's sequence
+(\url{https://en.wikipedia.org/wiki/Recam%C3%A1n%27s_sequence}) defines $a_0 = 0$ and, for $n \ge 1$,
+\[
+a_n = \begin{cases} a_{n-1} - n & \text{if } a_{n-1} - n > 0 \text{ and is not already in the sequence},\\
+a_{n-1} + n & \text{otherwise.}\end{cases}
+\]
+OEIS A005132 (\url{https://oeis.org/A005132}) states the same rule with ``nonnegative'' in place of
+``$> 0$''. ``Not already in the sequence'' means not among $a_0, \dots, a_{n-1}$. The two guards give the
+same sequence, because the value $0 = a_0$ is always already present.
+
+In Lean (ASCII rendering; indices shifted to $n+1$, values in $\mathbb{N}$, so the subtraction is the true difference
+under the guard):
+\begin{verbatim}
+def IsRecaman (a : Nat -> Nat) : Prop :=
+  a 0 = 0 /\ forall n, a (n + 1) =
+    if n + 1 < a n /\ forall k <= n, a k != a n - (n + 1)
+    then a n - (n + 1) else a n + (n + 1)
+\end{verbatim}
+\texttt{IsRecamanOEIS} is the same with \texttt{n + 1 <= a n}. The sequence \texttt{recaman} is built by
+list recursion (\texttt{recList n} $= [a_n, \dots, a_0]$). We prove \texttt{isRecaman\_recaman},
+\texttt{isRecamanOEIS\_recaman} (it satisfies both forms) and \texttt{isRecaman\_unique} (the recurrence
+determines the sequence). The first 27 terms are checked by \texttt{decide} against the Wikipedia list
+$0, 1, 3, 6, 2, 7, 13, 20, 12, 21, 11, 22, 10, 23, 9, 24, 8, 25, 43, 62, 42, 63, 41, 18, 42, 17, 43$;
+note $a_{20} = a_{24} = 42$, so values can repeat.
+
+\section{Proof}
+
+\begin{lemma}[\texttt{finite\_of\_step}]
+Let $a : \mathbb{N} \to \mathbb{N}$ be such that for every $n$, either $a_{n+1} = a_n + (n+1)$ or
+$a_{n+1} \ne a_k$ for all $k \le n$. Then for every $m$ the set $\{n : a_n = m\}$ is finite.
+\end{lemma}
+
+\begin{proof}
+Let $n > m$ with $a_n = m$; then $n = p + 1$. If $a_n = a_p + n$ then $m \ge n$, a contradiction. So
+$a_n \ne a_k$ for all $k < n$, i.e.\ $n$ is the first index with value $m$. Hence at most one index
+$N > m$ has $a_N = m$. If there is one, $\{n : a_n = m\} \subseteq [0, N]$; otherwise $\{n : a_n = m\}
+\subseteq [0, m]$.
+\end{proof}
+
+\begin{theorem}[\texttt{finite\_occurrences\_of\_isRecaman}, \texttt{finite\_occurrences\_of\_isRecamanOEIS},
+\texttt{recaman\_finite\_occurrences}]
+For every sequence satisfying either form of the recurrence, and in particular for \texttt{recaman}, every
+value $m \in \mathbb{N}$ occurs only finitely often.
+\end{theorem}
+
+\begin{proof}
+In the subtract branch the guard says $a_{n+1} = a_n - (n+1)$ is not among $a_0, \dots, a_n$; in the
+other branch $a_{n+1} = a_n + (n+1)$. So the lemma applies.
+\end{proof}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture206/Basic.lean} (namespace \texttt{Conjecture206}, 166 lines, only import
+\texttt{Mathlib}). Main theorem (ASCII rendering):
+\begin{verbatim}
+theorem recaman_finite_occurrences (m : Nat) : {n | recaman n = m}.Finite
+\end{verbatim}
+Supporting results: \texttt{finite\_of\_step}, \texttt{finite\_occurrences\_of\_isRecaman},
+\texttt{finite\_occurrences\_of\_isRecamanOEIS}, \texttt{recList\_succ}, \texttt{mem\_recList},
+\texttt{isRecaman\_recaman}, \texttt{isRecamanOEIS\_recaman}, \texttt{isRecaman\_unique}.
+
+\paragraph{Axiom audit.} \texttt{\#print axioms} for \texttt{recaman\_finite\_occurrences},
+\texttt{finite\_occurrences\_of\_isRecamanOEIS} and \texttt{isRecamanOEIS\_recaman} reports only
+\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound} (\texttt{isRecaman\_unique}: only
+\texttt{propext}, \texttt{Quot.sound}). There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}
