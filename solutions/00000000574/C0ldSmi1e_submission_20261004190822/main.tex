@@ -1,0 +1,104 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\rk}{\operatorname{rk}}
+\title{Positive adjacent coefficients in a thickened uniform matroid}
+\author{C0ldSmi1e\\\small Disproof of conjecture 00000000574}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Replace every element of the uniform matroid $U_{3,4}$ by a pair of parallel elements. Its ordinary matroid Kazhdan--Lusztig polynomial is $1+2t$. The two nonzero adjacent coefficients are positive, contradicting the conjecture's explicit strictly-alternating-sign assertion. We derive the polynomial from the complete ranked flat lattice and verify the defining recurrence on every interval. The Lean proof constructs an actual matroid, identifies all its actual flats and ranks, and proves existence and uniqueness of the resulting polynomial.
+\end{abstract}
+
+\section{The clause being refuted}
+Both language versions assert that the coefficients of the Kazhdan--Lusztig polynomial of a parallel-thickened uniform matroid have strictly alternating signs. The exact bilingual source accompanies this report as \texttt{conjecture.md}. It also proposes a formula involving unspecified hypergeometric terms. Refuting the explicit sign assertion suffices; no definition of those terms is needed.
+
+We use the ordinary matroid Kazhdan--Lusztig polynomial, with its usual variable $t$, as defined in \cite[Theorem 2.2]{epw}. Neither source language specifies the different polynomial obtained by substituting $-t$. Two adjacent positive nonzero coefficients violate strict alternation regardless of its starting sign or the direction in which coefficients are read.
+
+\section{An actual parallel extension and its complete flat lattice}
+Let $E=\{0,1,2,3\}\times\{0,1\}$ and let $\pi:E\to\{0,1,2,3\}$ be the first-coordinate map. Define $M$ by
+\[
+ I\text{ is independent in }M
+ \quad\Longleftrightarrow\quad
+ |\pi(I)|\le3\text{ and }\pi|_I\text{ is injective}.
+\]
+This is the pullback of the actual uniform matroid $U_{3,4}$ along $\pi$. Each original element has one added parallel copy, so $M$ is a parallel-thickened uniform matroid with eight elements and rank three. Its rank and closure are
+\[
+ \rk_M(A)=\min(3,|\pi(A)|),\qquad
+ \operatorname{cl}_M(A)=
+ \begin{cases}
+ \pi^{-1}(\pi(A)),&|\pi(A)|<3,\\
+ E,&|\pi(A)|\ge3.
+ \end{cases}
+\]
+Thus every proper flat is the union of zero, one, or two whole parallel classes. The complete list consists of the empty flat, four single classes, six pairs of classes, and $E$, with ranks $0,1,2,3$ respectively. This is a completeness statement about all flats, not a selection of twelve convenient subsets.
+
+The argument also explains the copy-count convention: the displayed matroid is one added copy per original element, two total copies per class, or four individual parallel additions. More generally, a surjective class map induces an inclusion-preserving bijection of actual flats, preserving actual rank. The formal proof includes that general matroid fact; it does not interpret thickening as a direct sum.
+
+\newpage
+\section{The standard interval recurrence}
+Write $L$ for this actual lattice of flats. For $F\le G$, let $d=\rk(G)-\rk(F)$ and define the characteristic polynomial of the interval by
+\[
+ \chi_{F,G}(t)=\sum_{F\le H\le G}\mu(F,H)t^{\rk(G)-\rk(H)},
+\]
+where $\mu$ is the ordinary incidence M\"obius function. In particular $\mu(F,F)=1$, and its sum over a nontrivial lower interval is zero. The KL family $P_{F,G}(t)\in\Z[t]$ is characterized by
+\begin{align*}
+ P_{F,F}(t)&=1,\\
+ \deg P_{F,G}&<d/2\qquad(F<G),\\
+ t^dP_{F,G}(t^{-1})
+   &=\sum_{F\le H\le G}\chi_{F,H}(t)P_{H,G}(t).
+\end{align*}
+This is the standard ranked-flat formulation of the defining recursion: the lower interval supplies the characteristic polynomial and the upper interval supplies the KL polynomial \cite[pp. 2, 5--6]{epw}. The intervals are the flat lattices of the corresponding matroid minors. Our implementation uses this lattice definition directly, rather than assuming a separate global KL library function.
+
+\section{Verification on every interval}
+All rank-one intervals have two elements and characteristic polynomial $t-1$. A rank-two interval with $m$ atoms has characteristic polynomial
+\[
+ t^2-mt+(m-1).
+\]
+Here $m=2$ for an interval from the empty flat to a pair of classes, and $m=3$ for an interval from a single class to $E$. The KL value $1$ satisfies the recurrence on all such intervals: in rank one the right side is $1+(t-1)=t$, and in rank two it is
+\[
+ 1+m(t-1)+t^2-mt+(m-1)=t^2.
+\]
+The diagonal value is $1$ as required, and the strict degree bounds hold in ranks one and two.
+
+There is exactly one interval of rank three, from $\varnothing$ to $E$. Its M\"obius values from the bottom are $1$ at the bottom, $-1$ at each of the four atoms, $1$ at each of the six rank-two flats, and $-3$ at the top. Hence
+\[
+ \chi_{\varnothing,E}(t)=t^3-4t^2+6t-3.
+\]
+The degree bound forces its KL polynomial to have the form $a+bt$. Using the already verified proper intervals, the complete recurrence becomes
+\begin{align*}
+ t^3(a+bt^{-1})
+ &= (a+bt)+4(t-1)+6(t-1)^2+(t^3-4t^2+6t-3)\\
+ &= t^3+2t^2+(b-2)t+(a-1).
+\end{align*}
+Coefficient comparison gives $a=1$ and $b=2$. Conversely, these values satisfy the entire polynomial identity, and degree one is strictly less than $3/2$. Together with the preceding cases this verifies a family on every interval.
+
+For completeness, uniqueness is not assumed. Induct on the rank of an interval and compare two families satisfying the axioms. Their upper-interval terms agree by induction, so their difference $D$ satisfies $t^dD(t^{-1})=D(t)$. All terms of $D$ have degree strictly below $d/2$, whereas all terms of its rank-$d$ reflection have degree strictly above $d/2$. Thus $D=0$. Values on incomparable pairs are irrelevant; uniqueness is asserted only on actual intervals.
+
+\begin{theorem}
+The actual parallel-thickened matroid $M$ above has KL polynomial $1+2t$. Consequently the strictly-alternating-sign clause, and hence conjecture 00000000574 as stated, is false.
+\end{theorem}
+\begin{proof}
+The full interval certificate establishes existence, and the uniqueness argument identifies the bottom-to-top polynomial. Its coefficients in degrees zero and one are $1$ and $2$, whose product is positive. They therefore cannot have opposite signs.
+\end{proof}
+
+\newpage
+\section{Formal scope and reproducibility}
+The project is pinned to Lean 4.19.0 and Mathlib v4.19.0. It constructs the uniform matroid from the independence axioms and the thickening with \texttt{Matroid.comap}. An order isomorphism identifies the finite twelve-element presentation with the entire subtype of \texttt{Matroid.IsFlat} sets, preserving actual extended-natural rank. Finite rank justifies conversion to natural numbers.
+
+Both M\"obius incidence recurrences and all characteristic and KL interval identities are proved. The KL degree condition is expressed by vanishing of every coefficient at or above half the positive interval rank. Polynomial reflection uses that interval rank, not the polynomial's degree. The characterization is transported to the actual flat subtype, including its full interval sums and actual ranks. The final polynomial is selected from proved existence and uniqueness of the actual bottom-to-top value. It is not defined by assigning the answer $1+2t$.
+
+The final negated predicate is a necessary sign condition on this actual polynomial: every adjacent pair of nonzero coefficients must have negative product. Its failure at degrees zero and one disproves the source's stronger alternation assertion. No claim about the unspecified hypergeometric formula, beyond falsity of the full conjunction, is required.
+
+The submission supplies complete source, reproduction instructions, strict execution and axiom records, independent internal semantic review, and a matching visually inspected PDF. The proof uses no auxiliary numerical program; finite checks are proved inside Lean. These local checks are distinct from official maintainer acceptance.
+
+\begin{thebibliography}{1}
+\bibitem{epw} B. Elias, N. Proudfoot and M. Wakefield, \emph{The Kazhdan--Lusztig polynomial of a matroid}, Adv. Math. 299 (2016), 36--70. Definitions in Section 2.1 and Theorem 2.2; rank-three uniform example in Example 4.7. Author-hosted manuscript: \url{https://pages.uoregon.edu/njp/kl.pdf}.
+\end{thebibliography}
+\end{document}

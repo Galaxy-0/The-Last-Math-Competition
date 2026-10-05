@@ -1,0 +1,1533 @@
+{
+  "started_utc": "2026-10-04T19:05:02.566281+00:00",
+  "source_root": "/private/tmp/tlmc574-proof",
+  "independent_root": "/private/tmp/tlmc574-independent",
+  "dependency_root": "/private/tmp/tlmc310-proof/.lake/packages",
+  "fresh_build_outputs_absent": true,
+  "copied_files": [
+    "Conjecture574/FlatDefs.lean",
+    "Conjecture574/Matroid.lean",
+    "Conjecture574/KLCore.lean",
+    "Conjecture574/Lattice.lean",
+    "Conjecture574/ActualKL.lean",
+    "Conjecture574.lean",
+    "Check.lean",
+    "lakefile.toml",
+    "lake-manifest.json",
+    "lean-toolchain"
+  ],
+  "source_sha256": {
+    "Conjecture574/FlatDefs.lean": "9d2dc2ef031b8eeb214092485beb9507175f494a6ba0d28131146a38d0385ca0",
+    "Conjecture574/Matroid.lean": "93fc9af6919663e681a9db25206d9365f2ca5240d4625d9a55bece273f5cd517",
+    "Conjecture574/KLCore.lean": "ab56918e284a2d32023868c98ca507ac9c08d18e1dfdd7992e7a4b20b79d93e6",
+    "Conjecture574/Lattice.lean": "488c172089b6603b220bf66fb87ece957e013329ad08c694a655c40193a63161",
+    "Conjecture574/ActualKL.lean": "7db26357c627c1fdee68cef5525e683c4972dc8792faefc605baf633f9d1ef06",
+    "Conjecture574.lean": "b450eced35ed49e7d7a10ab18becb74c9702981645ff2af1f087729fda6ea537",
+    "Check.lean": "9782ecd02c757fd130779259685d9c93901765a658f07ddd2c643da78fccb2ec",
+    "lakefile.toml": "a89cfbc423f97c2b5770d03b1e614678a612beaa86be6c29d6bcd708b5fff0e7",
+    "lake-manifest.json": "1625883b5dde2c85aa09bee7f923bd4f4d484f9355c3b49b331fc4d7d404ba89",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "dependencies": [
+    {
+      "name": "mathlib",
+      "expected_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "actual_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "plausible",
+      "expected_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "actual_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "expected_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "actual_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "importGraph",
+      "expected_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "actual_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "proofwidgets",
+      "expected_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "actual_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "aesop",
+      "expected_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "actual_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Qq",
+      "expected_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "actual_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "batteries",
+      "expected_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "actual_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    },
+    {
+      "name": "Cli",
+      "expected_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "actual_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "status_exit_code": 0,
+      "revision_matches": true,
+      "tracked_status": "",
+      "tracked_clean": true
+    }
+  ],
+  "strict_replay": [
+    {
+      "file": "Conjecture574/FlatDefs.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture574/FlatDefs.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.788,
+      "output": ""
+    },
+    {
+      "file": "Conjecture574/Matroid.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture574/Matroid.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.612,
+      "output": ""
+    },
+    {
+      "file": "Conjecture574/KLCore.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture574/KLCore.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.57,
+      "output": ""
+    },
+    {
+      "file": "Conjecture574/Lattice.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture574/Lattice.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 4.065,
+      "output": ""
+    },
+    {
+      "file": "Conjecture574/ActualKL.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture574/ActualKL.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.579,
+      "output": ""
+    },
+    {
+      "file": "Conjecture574.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture574.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.459,
+      "output": ""
+    },
+    {
+      "file": "Check.lean",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Check.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.954,
+      "output": "@[reducible] def Conjecture574.Flat : Type :=\n{ F // F.card < 3 \u2228 F = Finset.univ }\ndef Conjecture574.flatRank : Conjecture574.Flat \u2192 \u2115 :=\nfun F => min 3 (\u2191F).card\ndef Conjecture574.uniform.{u_1} : (\u03b1 : Type u_1) \u2192 [inst : Finite \u03b1] \u2192 \u2115 \u2192 Matroid \u03b1 :=\nfun \u03b1 [Finite \u03b1] r => (IndepMatroid.ofFinite \u22ef (fun I => I.ncard \u2264 r) \u22ef \u22ef \u22ef \u22ef).matroid\ndef Conjecture574.uniform34 : Matroid (Fin 4) :=\nConjecture574.uniform (Fin 4) 3\ndef Conjecture574.thickened34 : Matroid (Fin 4 \u00d7 Fin 2) :=\nConjecture574.uniform34.comap Prod.fst\n@[reducible] def Conjecture574.ActualFlats.{u_1} : {\u03b1 : Type u_1} \u2192 Matroid \u03b1 \u2192 Type (max 0 u_1) :=\nfun {\u03b1} M => { F // M.IsFlat F }\ndef Conjecture574.comapFlatOrderIso.{u_1, u_2} : {\u03b1 : Type u_1} \u2192\n  {\u03b2 : Type u_2} \u2192\n    (M : Matroid \u03b2) \u2192\n      (f : \u03b1 \u2192 \u03b2) \u2192 Function.Surjective f \u2192 Conjecture574.ActualFlats M \u2243o Conjecture574.ActualFlats (M.comap f) :=\nfun {\u03b1} {\u03b2} M f hf =>\n  { toFun := fun F => \u27e8f \u207b\u00b9' \u2191F, \u22ef\u27e9, invFun := fun F => \u27e8f '' \u2191F, \u22ef\u27e9, left_inv := \u22ef, right_inv := \u22ef, map_rel_iff' := \u22ef }\ndef Conjecture574.uniformFlatOrderIso : Conjecture574.Flat \u2243o Conjecture574.ActualFlats Conjecture574.uniform34 :=\n{ toFun := fun F => \u27e8\u2191\u2191F, \u22ef\u27e9, invFun := fun F => \u27e8\u22ef.toFinset, \u22ef\u27e9,\n  left_inv := Conjecture574.uniformFlatOrderIso._proof_22, right_inv := Conjecture574.uniformFlatOrderIso._proof_24,\n  map_rel_iff' := @Conjecture574.uniformFlatOrderIso._proof_25 }\ndef Conjecture574.thickenedFlatOrderIso : Conjecture574.Flat \u2243o Conjecture574.ActualFlats Conjecture574.thickened34 :=\nConjecture574.uniformFlatOrderIso.trans\n  (Conjecture574.comapFlatOrderIso Conjecture574.uniform34 Prod.fst Conjecture574.classMap_surjective)\ndef Conjecture574.interval.{u_1} : {L : Type u_1} \u2192\n  [inst : Fintype L] \u2192 [inst : PartialOrder L] \u2192 [inst : DecidableRel fun x1 x2 => x1 \u2264 x2] \u2192 L \u2192 L \u2192 Finset L :=\nfun {L} [Fintype L] [PartialOrder L] [DecidableRel fun x1 x2 => x1 \u2264 x2] a b => {c | a \u2264 c \u2227 c \u2264 b}\ndef Conjecture574.SmallDegree : \u2115 \u2192 Polynomial \u2124 \u2192 Prop :=\nfun d p => \u2200 (i : \u2115), d \u2264 2 * i \u2192 p.coeff i = 0\nstructure Conjecture574.IsKLFamily.{u_1} {L : Type u_1} [Fintype L] [PartialOrder L] [DecidableRel fun x1 x2 => x1 \u2264 x2]\n  (rank : L \u2192 \u2115) (\u03c7 P : L \u2192 L \u2192 Polynomial \u2124) : Prop\nnumber of parameters: 7\nfields:\n  Conjecture574.IsKLFamily.diagonal : \u2200 (a : L), P a a = 1\n  Conjecture574.IsKLFamily.small : \u2200 (a b : L), a < b \u2192 Conjecture574.SmallDegree (rank b - rank a) (P a b)\n  Conjecture574.IsKLFamily.recurrence : \u2200 (a b : L),\n      a \u2264 b \u2192 Polynomial.reflect (rank b - rank a) (P a b) = \u2211 c \u2208 Conjecture574.interval a b, \u03c7 a c * P c b\nconstructor:\n  Conjecture574.IsKLFamily.mk.{u_1} {L : Type u_1} [Fintype L] [PartialOrder L] [DecidableRel fun x1 x2 => x1 \u2264 x2]\n    {rank : L \u2192 \u2115} {\u03c7 P : L \u2192 L \u2192 Polynomial \u2124} (diagonal : \u2200 (a : L), P a a = 1)\n    (small : \u2200 (a b : L), a < b \u2192 Conjecture574.SmallDegree (rank b - rank a) (P a b))\n    (recurrence :\n      \u2200 (a b : L),\n        a \u2264 b \u2192 Polynomial.reflect (rank b - rank a) (P a b) = \u2211 c \u2208 Conjecture574.interval a b, \u03c7 a c * P c b) :\n    Conjecture574.IsKLFamily rank \u03c7 P\ndef Conjecture574.transportPair.{u_1, u_2, u_3} : {L : Type u_1} \u2192\n  [inst : PartialOrder L] \u2192\n    {K : Type u_2} \u2192 [inst_1 : PartialOrder K] \u2192 {V : Type u_3} \u2192 L \u2243o K \u2192 (L \u2192 L \u2192 V) \u2192 K \u2192 K \u2192 V :=\nfun {L} [PartialOrder L] {K} [PartialOrder K] {V} e f a b => f (e.symm a) (e.symm b)\ndef Conjecture574.flatBottom : Conjecture574.Flat :=\n\u27e8\u2205, Conjecture574.flatBottom._proof_1\u27e9\ndef Conjecture574.flatTop : Conjecture574.Flat :=\n\u27e8Finset.univ, Conjecture574.flatTop._proof_2\u27e9\ndef Conjecture574.mobius : Conjecture574.Flat \u2192 Conjecture574.Flat \u2192 \u2124 :=\nfun a b =>\n  if a = b then 1\n  else\n    if \u00aca \u2264 b then 0\n    else\n      if Conjecture574.flatRank b - Conjecture574.flatRank a = 1 then -1\n      else\n        if Conjecture574.flatRank b - Conjecture574.flatRank a = 2 then if Conjecture574.flatRank a = 0 then 1 else 2\n        else -3\ndef Conjecture574.characteristic : Conjecture574.Flat \u2192 Conjecture574.Flat \u2192 Polynomial \u2124 :=\nfun a b =>\n  \u2211 c \u2208 Conjecture574.interval a b,\n    Polynomial.C (Conjecture574.mobius a c) * Polynomial.X ^ (Conjecture574.flatRank b - Conjecture574.flatRank c)\ndef Conjecture574.candidateKL : Conjecture574.Flat \u2192 Conjecture574.Flat \u2192 Polynomial \u2124 :=\nfun a b => if Conjecture574.flatRank b - Conjecture574.flatRank a = 3 then 1 + 2 * Polynomial.X else 1\ndef Conjecture574.mobiusIncidence : IncidenceAlgebra \u2124 Conjecture574.Flat :=\n{ toFun := Conjecture574.mobius, eq_zero_of_not_le' := Conjecture574.mobiusIncidence._proof_4 }\n@[reducible] def Conjecture574.ActualFlat : Type :=\nConjecture574.ActualFlats Conjecture574.thickened34\ndef Conjecture574.actualRank : Conjecture574.ActualFlat \u2192 \u2115 :=\nfun F => (Conjecture574.thickened34.eRk \u2191F).toNat\ndef Conjecture574.actualBottom : Conjecture574.ActualFlat :=\nConjecture574.thickenedFlatOrderIso Conjecture574.flatBottom\ndef Conjecture574.actualTop : Conjecture574.ActualFlat :=\nConjecture574.thickenedFlatOrderIso Conjecture574.flatTop\ndef Conjecture574.actualMobius : Conjecture574.ActualFlat \u2192 Conjecture574.ActualFlat \u2192 \u2124 :=\nConjecture574.transportPair Conjecture574.thickenedFlatOrderIso Conjecture574.mobius\ndef Conjecture574.actualCharacteristic : Conjecture574.ActualFlat \u2192 Conjecture574.ActualFlat \u2192 Polynomial \u2124 :=\nfun a b =>\n  \u2211 c \u2208 Conjecture574.interval a b,\n    Polynomial.C (Conjecture574.actualMobius a c) *\n      Polynomial.X ^ (Conjecture574.actualRank b - Conjecture574.actualRank c)\ndef Conjecture574.actualCandidate : Conjecture574.ActualFlat \u2192 Conjecture574.ActualFlat \u2192 Polynomial \u2124 :=\nConjecture574.transportPair Conjecture574.thickenedFlatOrderIso Conjecture574.candidateKL\ndef Conjecture574.IsActualKLValue : Polynomial \u2124 \u2192 Prop :=\nfun p =>\n  \u2203 P,\n    Conjecture574.IsKLFamily Conjecture574.actualRank Conjecture574.actualCharacteristic P \u2227\n      P Conjecture574.actualBottom Conjecture574.actualTop = p\ndef Conjecture574.klPolynomial : Polynomial \u2124 :=\nClassical.choose Conjecture574.klPolynomial._proof_1\ndef Conjecture574.AdjacentSignsAlternate : Polynomial \u2124 \u2192 Prop :=\nfun p => \u2200 (i : \u2115), p.coeff i \u2260 0 \u2192 p.coeff (i + 1) \u2260 0 \u2192 p.coeff i * p.coeff (i + 1) < 0\ndef Conjecture574.ConjectureSignInstance : Prop :=\nConjecture574.AdjacentSignsAlternate Conjecture574.klPolynomial\nConjecture574.flatRank_strictMono : StrictMono Conjecture574.flatRank\nConjecture574.flat_card : Fintype.card Conjecture574.Flat = 12\nConjecture574.uniform_ground.{u_1} (\u03b1 : Type u_1) [Finite \u03b1] (r : \u2115) : (Conjecture574.uniform \u03b1 r).E = Set.univ\nConjecture574.uniform_indep_iff.{u_1} {\u03b1 : Type u_1} [Finite \u03b1] (r : \u2115) (I : Set \u03b1) :\n  (Conjecture574.uniform \u03b1 r).Indep I \u2194 I.ncard \u2264 r\nConjecture574.uniform_isBase_of_ncard.{u_1} {\u03b1 : Type u_1} [Finite \u03b1] (r : \u2115) (I : Set \u03b1) (hI : I.ncard = r) :\n  (Conjecture574.uniform \u03b1 r).IsBase I\nConjecture574.uniform_closure.{u_1} {\u03b1 : Type u_1} [Finite \u03b1] (r : \u2115) (X : Set \u03b1) :\n  (Conjecture574.uniform \u03b1 r).closure X = if X.ncard < r then X else Set.univ\nConjecture574.uniform_isFlat_iff.{u_1} {\u03b1 : Type u_1} [Finite \u03b1] (r : \u2115) (F : Set \u03b1) :\n  (Conjecture574.uniform \u03b1 r).IsFlat F \u2194 F.ncard < r \u2228 F = Set.univ\nConjecture574.uniform_eRk.{u_1} {\u03b1 : Type u_1} [Finite \u03b1] (r : \u2115) (X : Set \u03b1) :\n  (Conjecture574.uniform \u03b1 r).eRk X = \u2191(min r X.ncard)\nConjecture574.thickened34_ground : Conjecture574.thickened34.E = Set.univ\nConjecture574.thickened34_indep_iff (I : Set (Fin 4 \u00d7 Fin 2)) :\n  Conjecture574.thickened34.Indep I \u2194 (Prod.fst '' I).ncard \u2264 3 \u2227 Set.InjOn Prod.fst I\nConjecture574.thickened34_eRk (X : Set (Fin 4 \u00d7 Fin 2)) :\n  Conjecture574.thickened34.eRk X = \u2191(min 3 (Prod.fst '' X).ncard)\nConjecture574.thickened34_closure (X : Set (Fin 4 \u00d7 Fin 2)) :\n  Conjecture574.thickened34.closure X = if (Prod.fst '' X).ncard < 3 then Prod.fst \u207b\u00b9' (Prod.fst '' X) else Set.univ\nConjecture574.comap_preimage_isFlat.{u_1, u_2} {\u03b1 : Type u_1} {\u03b2 : Type u_2} (M : Matroid \u03b2) (f : \u03b1 \u2192 \u03b2)\n  (hf : Function.Surjective f) {F : Set \u03b2} (hF : M.IsFlat F) : (M.comap f).IsFlat (f \u207b\u00b9' F)\nConjecture574.comap_image_isFlat.{u_1, u_2} {\u03b1 : Type u_1} {\u03b2 : Type u_2} (M : Matroid \u03b2) (f : \u03b1 \u2192 \u03b2)\n  (hf : Function.Surjective f) {F : Set \u03b1} (hF : (M.comap f).IsFlat F) : M.IsFlat (f '' F)\nConjecture574.comap_preimage_image.{u_1, u_2} {\u03b1 : Type u_1} {\u03b2 : Type u_2} (M : Matroid \u03b2) (f : \u03b1 \u2192 \u03b2)\n  (hf : Function.Surjective f) {F : Set \u03b1} (hF : (M.comap f).IsFlat F) : f \u207b\u00b9' (f '' F) = F\nConjecture574.comapFlatOrderIso_eRk.{u_1, u_2} {\u03b1 : Type u_1} {\u03b2 : Type u_2} (M : Matroid \u03b2) (f : \u03b1 \u2192 \u03b2)\n  (hf : Function.Surjective f) (F : Conjecture574.ActualFlats M) :\n  (M.comap f).eRk \u2191((Conjecture574.comapFlatOrderIso M f hf) F) = M.eRk \u2191F\nConjecture574.uniformFlatOrderIso_eRk (F : Conjecture574.Flat) :\n  Conjecture574.uniform34.eRk \u2191(Conjecture574.uniformFlatOrderIso F) = \u2191(Conjecture574.flatRank F)\nConjecture574.classMap_surjective : Function.Surjective Prod.fst\nConjecture574.thickenedFlatOrderIso_val (F : Conjecture574.Flat) :\n  \u2191(Conjecture574.thickenedFlatOrderIso F) = Prod.fst \u207b\u00b9' \u2191\u2191F\nConjecture574.thickenedFlatOrderIso_eRk (F : Conjecture574.Flat) :\n  Conjecture574.thickened34.eRk \u2191(Conjecture574.thickenedFlatOrderIso F) = \u2191(Conjecture574.flatRank F)\nConjecture574.thickened34_eRank : Conjecture574.thickened34.eRank = 3\nConjecture574.thickened34_eRk_lt_top (X : Set (Fin 4 \u00d7 Fin 2)) : Conjecture574.thickened34.eRk X < \u22a4\nConjecture574.thickenedFlatOrderIso_rank (F : Conjecture574.Flat) :\n  (Conjecture574.thickened34.eRk \u2191(Conjecture574.thickenedFlatOrderIso F)).toNat = Conjecture574.flatRank F\nConjecture574.thickenedFlatOrderIso_empty : \u2191(Conjecture574.thickenedFlatOrderIso \u27e8\u2205, \u22ef\u27e9) = \u2205\nConjecture574.thickenedFlatOrderIso_univ :\n  \u2191(Conjecture574.thickenedFlatOrderIso \u27e8Finset.univ, \u22ef\u27e9) = Conjecture574.thickened34.E\nConjecture574.thickened34_loopless : Conjecture574.thickened34.Loopless\nConjecture574.thickened34_singleton_closure (x : Fin 4 \u00d7 Fin 2) :\n  Conjecture574.thickened34.closure {x} = Prod.fst \u207b\u00b9' {x.1}\nConjecture574.thickened34_class_ncard (i : Fin 4) : (Prod.fst \u207b\u00b9' {i}).ncard = 2\nConjecture574.thickened34_parallel_pair (i : Fin 4) : Conjecture574.thickened34.IsCircuit {(i, 0), (i, 1)}\nConjecture574.mem_interval.{u_1} {L : Type u_1} [Fintype L] [PartialOrder L] [DecidableRel fun x1 x2 => x1 \u2264 x2]\n  (a b c : L) : c \u2208 Conjecture574.interval a b \u2194 a \u2264 c \u2227 c \u2264 b\nConjecture574.smallDegree_natDegree_le {d : \u2115} {p : Polynomial \u2124} (hp : Conjecture574.SmallDegree d p) : p.natDegree \u2264 d\nConjecture574.small_reflection_unique {d : \u2115} {p q : Polynomial \u2124} (hp : Conjecture574.SmallDegree d p)\n  (hq : Conjecture574.SmallDegree d q) (h : Polynomial.reflect d p - p = Polynomial.reflect d q - q) : p = q\nConjecture574.klFamily_unique.{u_1} {L : Type u_1} [Fintype L] [PartialOrder L] [DecidableRel fun x1 x2 => x1 \u2264 x2]\n  [DecidableEq L] {rank : L \u2192 \u2115} {\u03c7 P Q : L \u2192 L \u2192 Polynomial \u2124} (hrank : StrictMono rank) (h\u03c7 : \u2200 (a : L), \u03c7 a a = 1)\n  (hp : Conjecture574.IsKLFamily rank \u03c7 P) (hq : Conjecture574.IsKLFamily rank \u03c7 Q) (a b : L) : a \u2264 b \u2192 P a b = Q a b\nConjecture574.klValue_existsUnique.{u_1} {L : Type u_1} [Fintype L] [PartialOrder L] [DecidableRel fun x1 x2 => x1 \u2264 x2]\n  [DecidableEq L] {rank : L \u2192 \u2115} {\u03c7 P : L \u2192 L \u2192 Polynomial \u2124} (hrank : StrictMono rank) (h\u03c7 : \u2200 (a : L), \u03c7 a a = 1)\n  (hp : Conjecture574.IsKLFamily rank \u03c7 P) (a b : L) (hab : a \u2264 b) :\n  \u2203! p, \u2203 Q, Conjecture574.IsKLFamily rank \u03c7 Q \u2227 Q a b = p\nConjecture574.interval_sum_transport.{u_1, u_2, u_3} {L : Type u_1} [Fintype L] [PartialOrder L]\n  [DecidableRel fun x1 x2 => x1 \u2264 x2] {K : Type u_2} [Fintype K] [PartialOrder K] [DecidableRel fun x1 x2 => x1 \u2264 x2]\n  {V : Type u_3} [AddCommMonoid V] (e : L \u2243o K) (a b : K) (f : L \u2192 V) :\n  \u2211 c \u2208 Conjecture574.interval a b, f (e.symm c) = \u2211 c \u2208 Conjecture574.interval (e.symm a) (e.symm b), f c\nConjecture574.IsKLFamily.transport.{u_1, u_2} {L : Type u_1} [Fintype L] [PartialOrder L]\n  [DecidableRel fun x1 x2 => x1 \u2264 x2] {K : Type u_2} [Fintype K] [PartialOrder K] [DecidableRel fun x1 x2 => x1 \u2264 x2]\n  {rank : L \u2192 \u2115} {\u03c7 P : L \u2192 L \u2192 Polynomial \u2124} (hp : Conjecture574.IsKLFamily rank \u03c7 P) (e : L \u2243o K) :\n  Conjecture574.IsKLFamily (fun a => rank (e.symm a)) (Conjecture574.transportPair e \u03c7)\n    (Conjecture574.transportPair e P)\nConjecture574.mobius_left_recurrence (a b : Conjecture574.Flat) :\n  \u2211 c \u2208 Conjecture574.interval a b, Conjecture574.mobius a c = if a = b then 1 else 0\nConjecture574.mobius_right_recurrence (a b : Conjecture574.Flat) :\n  \u2211 c \u2208 Conjecture574.interval a b, Conjecture574.mobius c b = if a = b then 1 else 0\nConjecture574.flatRank_le_three (a : Conjecture574.Flat) : Conjecture574.flatRank a \u2264 3\nConjecture574.characteristic_natDegree_le (a b : Conjecture574.Flat) : (Conjecture574.characteristic a b).natDegree \u2264 3\nConjecture574.candidateKL_natDegree_le (a b : Conjecture574.Flat) : (Conjecture574.candidateKL a b).natDegree \u2264 1\nConjecture574.candidateKL_reflect (a b : Conjecture574.Flat) :\n  Polynomial.reflect (Conjecture574.flatRank b - Conjecture574.flatRank a) (Conjecture574.candidateKL a b) =\n    if Conjecture574.flatRank b - Conjecture574.flatRank a = 3 then Polynomial.X ^ 3 + 2 * Polynomial.X ^ 2\n    else Polynomial.X ^ (Conjecture574.flatRank b - Conjecture574.flatRank a)\nConjecture574.candidateKL_reflect_natDegree_le (a b : Conjecture574.Flat) :\n  (Polynomial.reflect (Conjecture574.flatRank b - Conjecture574.flatRank a) (Conjecture574.candidateKL a b)).natDegree \u2264\n    4\nConjecture574.recurrence_rhs_natDegree_le (a b : Conjecture574.Flat) :\n  (\u2211 c \u2208 Conjecture574.interval a b, Conjecture574.characteristic a c * Conjecture574.candidateKL c b).natDegree \u2264 4\nConjecture574.characteristic_diagonal (a : Conjecture574.Flat) : Conjecture574.characteristic a a = 1\nConjecture574.candidateKL_diagonal (a : Conjecture574.Flat) : Conjecture574.candidateKL a a = 1\nConjecture574.candidateKL_small (a b : Conjecture574.Flat) (hab : a < b) :\n  Conjecture574.SmallDegree (Conjecture574.flatRank b - Conjecture574.flatRank a) (Conjecture574.candidateKL a b)\nConjecture574.polynomial_coeff_ite (p q : Polynomial \u2124) (h : Prop) [Decidable h] (i : \u2115) :\n  (if h then p else q).coeff i = if h then p.coeff i else q.coeff i\nConjecture574.candidateKL_recurrence_coeff (i : Fin 5) (a b : Conjecture574.Flat) :\n  a \u2264 b \u2192\n    (Polynomial.reflect (Conjecture574.flatRank b - Conjecture574.flatRank a) (Conjecture574.candidateKL a b)).coeff\n        \u2191i =\n      (\u2211 c \u2208 Conjecture574.interval a b, Conjecture574.characteristic a c * Conjecture574.candidateKL c b).coeff \u2191i\nConjecture574.candidateKL_recurrence (a b : Conjecture574.Flat) (hab : a \u2264 b) :\n  Polynomial.reflect (Conjecture574.flatRank b - Conjecture574.flatRank a) (Conjecture574.candidateKL a b) =\n    \u2211 c \u2208 Conjecture574.interval a b, Conjecture574.characteristic a c * Conjecture574.candidateKL c b\nConjecture574.candidateKL_isKL :\n  Conjecture574.IsKLFamily Conjecture574.flatRank Conjecture574.characteristic Conjecture574.candidateKL\nConjecture574.flatLocallyFiniteOrder : LocallyFiniteOrder Conjecture574.Flat\nConjecture574.interval_eq_Icc (a b : Conjecture574.Flat) : Conjecture574.interval a b = Finset.Icc a b\nConjecture574.mobiusIncidence_mul_zeta : Conjecture574.mobiusIncidence * IncidenceAlgebra.zeta \u2124 = 1\nConjecture574.mobius_eq_incidence_mu (a b : Conjecture574.Flat) : Conjecture574.mobius a b = (IncidenceAlgebra.mu \u2124) a b\nConjecture574.characteristic_eq_incidence_sum (a b : Conjecture574.Flat) :\n  Conjecture574.characteristic a b =\n    \u2211 c \u2208 Finset.Icc a b,\n      Polynomial.C ((IncidenceAlgebra.mu \u2124) a c) * Polynomial.X ^ (Conjecture574.flatRank b - Conjecture574.flatRank c)\nConjecture574.characteristic_bottom_top :\n  Conjecture574.characteristic Conjecture574.flatBottom Conjecture574.flatTop =\n    Polynomial.X ^ 3 - 4 * Polynomial.X ^ 2 + 6 * Polynomial.X - 3\nConjecture574.candidateKL_bottom_top :\n  Conjecture574.candidateKL Conjecture574.flatBottom Conjecture574.flatTop = 1 + 2 * Polynomial.X\nConjecture574.actualFlatFintype : Fintype Conjecture574.ActualFlat\nConjecture574.actualFlatDecidableEq : DecidableEq Conjecture574.ActualFlat\nConjecture574.actualFlatDecidableLE : DecidableRel fun x1 x2 => x1 \u2264 x2\nConjecture574.actualFlat_card : Fintype.card Conjecture574.ActualFlat = 12\nConjecture574.actualRank_eq (F : Conjecture574.ActualFlat) :\n  Conjecture574.actualRank F = Conjecture574.flatRank (Conjecture574.thickenedFlatOrderIso.symm F)\nConjecture574.actualRank_finite (F : Conjecture574.ActualFlat) : Conjecture574.thickened34.eRk \u2191F \u2260 \u22a4\nConjecture574.actualRank_strictMono : StrictMono Conjecture574.actualRank\nConjecture574.actualBottom_val : \u2191Conjecture574.actualBottom = \u2205\nConjecture574.actualTop_val : \u2191Conjecture574.actualTop = Conjecture574.thickened34.E\nConjecture574.actualBottom_le_actualTop : Conjecture574.actualBottom \u2264 Conjecture574.actualTop\nConjecture574.actualMobius_left_recurrence (a b : Conjecture574.ActualFlat) :\n  \u2211 c \u2208 Conjecture574.interval a b, Conjecture574.actualMobius a c = if a = b then 1 else 0\nConjecture574.actualMobius_right_recurrence (a b : Conjecture574.ActualFlat) :\n  \u2211 c \u2208 Conjecture574.interval a b, Conjecture574.actualMobius c b = if a = b then 1 else 0\nConjecture574.actualCharacteristic_eq (a b : Conjecture574.ActualFlat) :\n  Conjecture574.actualCharacteristic a b =\n    Conjecture574.characteristic (Conjecture574.thickenedFlatOrderIso.symm a)\n      (Conjecture574.thickenedFlatOrderIso.symm b)\nConjecture574.actualCharacteristic_diagonal (a : Conjecture574.ActualFlat) : Conjecture574.actualCharacteristic a a = 1\nConjecture574.actualCharacteristic_bottom_top :\n  Conjecture574.actualCharacteristic Conjecture574.actualBottom Conjecture574.actualTop =\n    Polynomial.X ^ 3 - 4 * Polynomial.X ^ 2 + 6 * Polynomial.X - 3\nConjecture574.actualCandidate_isKL :\n  Conjecture574.IsKLFamily Conjecture574.actualRank Conjecture574.actualCharacteristic Conjecture574.actualCandidate\nConjecture574.actualKL_existsUnique : \u2203! p, Conjecture574.IsActualKLValue p\nConjecture574.klPolynomial_spec : Conjecture574.IsActualKLValue Conjecture574.klPolynomial\nConjecture574.klPolynomial_eq : Conjecture574.klPolynomial = 1 + 2 * Polynomial.X\nConjecture574.klPolynomial_coeff_zero : Conjecture574.klPolynomial.coeff 0 = 1\nConjecture574.klPolynomial_coeff_one : Conjecture574.klPolynomial.coeff 1 = 2\nConjecture574.conjecture_false : \u00acConjecture574.ConjectureSignInstance\n'Conjecture574.flatRank_strictMono' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.flat_card' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.uniform_ground' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.uniform_indep_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.uniform_isBase_of_ncard' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.uniform_closure' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.uniform_isFlat_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.uniform_eRk' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.thickened34_ground' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.thickened34_indep_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.thickened34_eRk' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.thickened34_closure' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.comap_preimage_isFlat' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.comap_image_isFlat' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.comap_preimage_image' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.comapFlatOrderIso_eRk' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.uniformFlatOrderIso_eRk' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.classMap_surjective' depends on axioms: [propext]\n'Conjecture574.thickenedFlatOrderIso_val' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.thickenedFlatOrderIso_eRk' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.thickened34_eRank' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.thickened34_eRk_lt_top' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.thickenedFlatOrderIso_rank' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.thickenedFlatOrderIso_empty' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.thickenedFlatOrderIso_univ' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.thickened34_loopless' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.thickened34_singleton_closure' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.thickened34_class_ncard' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.thickened34_parallel_pair' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.mem_interval' depends on axioms: [propext, Quot.sound]\n'Conjecture574.smallDegree_natDegree_le' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.small_reflection_unique' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.klFamily_unique' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.klValue_existsUnique' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.interval_sum_transport' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.IsKLFamily.transport' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.mobius_left_recurrence' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.mobius_right_recurrence' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.flatRank_le_three' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.characteristic_natDegree_le' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.candidateKL_natDegree_le' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.candidateKL_reflect' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.candidateKL_reflect_natDegree_le' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.recurrence_rhs_natDegree_le' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.characteristic_diagonal' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.candidateKL_diagonal' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.candidateKL_small' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.polynomial_coeff_ite' depends on axioms: [propext, Quot.sound]\n'Conjecture574.candidateKL_recurrence_coeff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.candidateKL_recurrence' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.candidateKL_isKL' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.flatLocallyFiniteOrder' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.interval_eq_Icc' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.mobiusIncidence_mul_zeta' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.mobius_eq_incidence_mu' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.characteristic_eq_incidence_sum' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.characteristic_bottom_top' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.candidateKL_bottom_top' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualFlatFintype' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualFlatDecidableEq' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualFlatDecidableLE' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualFlat_card' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualRank_eq' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualRank_finite' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualRank_strictMono' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualBottom_val' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualTop_val' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualBottom_le_actualTop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualMobius_left_recurrence' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualMobius_right_recurrence' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualCharacteristic_eq' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualCharacteristic_diagonal' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualCharacteristic_bottom_top' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualCandidate_isKL' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.actualKL_existsUnique' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.klPolynomial_spec' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.klPolynomial_eq' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.klPolynomial_coeff_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.klPolynomial_coeff_one' depends on axioms: [propext, Classical.choice, Quot.sound]\n'Conjecture574.conjecture_false' depends on axioms: [propext, Classical.choice, Quot.sound]\n"
+    }
+  ],
+  "lean_version": {
+    "exit_code": 0,
+    "output": "Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)"
+  },
+  "lean_commit": {
+    "exit_code": 0,
+    "expected": "6caaee842e9495688c1567e78c0e68dbb96942aa",
+    "actual": "6caaee842e9495688c1567e78c0e68dbb96942aa"
+  },
+  "project_identity": {
+    "manifest_name": "tlmc574",
+    "lake_name": "tlmc574",
+    "default_targets": [
+      "Conjecture574"
+    ],
+    "toolchain_pin": "leanprover/lean4:v4.19.0",
+    "source_file_count": 7,
+    "config_file_count": 3,
+    "dependency_symlink_target": "/private/tmp/tlmc310-proof/.lake/packages"
+  },
+  "proof_bypass_scan": {
+    "pattern": "\\b(?:sorry|admit|axiom|native_decide|unsafe|run_tac|elab|implemented_by|extern|skipKernelTC)\\b|Lean\\.ofReduceBool|debug\\.skipKernelTC|trustLevel",
+    "method": "Lexical scan after masking nested block comments, line comments, and string literals; raw matches retained for inspection.",
+    "raw_matches": [
+      {
+        "file": "Conjecture574/KLCore.lean",
+        "line": 54,
+        "text": "/-- The full interval recurrence and strict degree bound admit at most one family",
+        "code_hit": false
+      }
+    ],
+    "hits": []
+  },
+  "build": {
+    "command": [
+      "lake",
+      "build"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 15.174,
+    "log": "build.txt"
+  },
+  "axiom_audit": {
+    "expected_count": 80,
+    "parsed_count": 80,
+    "expected_theorems": [
+      "Conjecture574.flatRank_strictMono",
+      "Conjecture574.flat_card",
+      "Conjecture574.uniform_ground",
+      "Conjecture574.uniform_indep_iff",
+      "Conjecture574.uniform_isBase_of_ncard",
+      "Conjecture574.uniform_closure",
+      "Conjecture574.uniform_isFlat_iff",
+      "Conjecture574.uniform_eRk",
+      "Conjecture574.thickened34_ground",
+      "Conjecture574.thickened34_indep_iff",
+      "Conjecture574.thickened34_eRk",
+      "Conjecture574.thickened34_closure",
+      "Conjecture574.comap_preimage_isFlat",
+      "Conjecture574.comap_image_isFlat",
+      "Conjecture574.comap_preimage_image",
+      "Conjecture574.comapFlatOrderIso_eRk",
+      "Conjecture574.uniformFlatOrderIso_eRk",
+      "Conjecture574.classMap_surjective",
+      "Conjecture574.thickenedFlatOrderIso_val",
+      "Conjecture574.thickenedFlatOrderIso_eRk",
+      "Conjecture574.thickened34_eRank",
+      "Conjecture574.thickened34_eRk_lt_top",
+      "Conjecture574.thickenedFlatOrderIso_rank",
+      "Conjecture574.thickenedFlatOrderIso_empty",
+      "Conjecture574.thickenedFlatOrderIso_univ",
+      "Conjecture574.thickened34_loopless",
+      "Conjecture574.thickened34_singleton_closure",
+      "Conjecture574.thickened34_class_ncard",
+      "Conjecture574.thickened34_parallel_pair",
+      "Conjecture574.mem_interval",
+      "Conjecture574.smallDegree_natDegree_le",
+      "Conjecture574.small_reflection_unique",
+      "Conjecture574.klFamily_unique",
+      "Conjecture574.klValue_existsUnique",
+      "Conjecture574.interval_sum_transport",
+      "Conjecture574.IsKLFamily.transport",
+      "Conjecture574.mobius_left_recurrence",
+      "Conjecture574.mobius_right_recurrence",
+      "Conjecture574.flatRank_le_three",
+      "Conjecture574.characteristic_natDegree_le",
+      "Conjecture574.candidateKL_natDegree_le",
+      "Conjecture574.candidateKL_reflect",
+      "Conjecture574.candidateKL_reflect_natDegree_le",
+      "Conjecture574.recurrence_rhs_natDegree_le",
+      "Conjecture574.characteristic_diagonal",
+      "Conjecture574.candidateKL_diagonal",
+      "Conjecture574.candidateKL_small",
+      "Conjecture574.polynomial_coeff_ite",
+      "Conjecture574.candidateKL_recurrence_coeff",
+      "Conjecture574.candidateKL_recurrence",
+      "Conjecture574.candidateKL_isKL",
+      "Conjecture574.flatLocallyFiniteOrder",
+      "Conjecture574.interval_eq_Icc",
+      "Conjecture574.mobiusIncidence_mul_zeta",
+      "Conjecture574.mobius_eq_incidence_mu",
+      "Conjecture574.characteristic_eq_incidence_sum",
+      "Conjecture574.characteristic_bottom_top",
+      "Conjecture574.candidateKL_bottom_top",
+      "Conjecture574.actualFlatFintype",
+      "Conjecture574.actualFlatDecidableEq",
+      "Conjecture574.actualFlatDecidableLE",
+      "Conjecture574.actualFlat_card",
+      "Conjecture574.actualRank_eq",
+      "Conjecture574.actualRank_finite",
+      "Conjecture574.actualRank_strictMono",
+      "Conjecture574.actualBottom_val",
+      "Conjecture574.actualTop_val",
+      "Conjecture574.actualBottom_le_actualTop",
+      "Conjecture574.actualMobius_left_recurrence",
+      "Conjecture574.actualMobius_right_recurrence",
+      "Conjecture574.actualCharacteristic_eq",
+      "Conjecture574.actualCharacteristic_diagonal",
+      "Conjecture574.actualCharacteristic_bottom_top",
+      "Conjecture574.actualCandidate_isKL",
+      "Conjecture574.actualKL_existsUnique",
+      "Conjecture574.klPolynomial_spec",
+      "Conjecture574.klPolynomial_eq",
+      "Conjecture574.klPolynomial_coeff_zero",
+      "Conjecture574.klPolynomial_coeff_one",
+      "Conjecture574.conjecture_false"
+    ],
+    "audits": [
+      {
+        "theorem": "Conjecture574.flatRank_strictMono",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.flat_card",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.uniform_ground",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.uniform_indep_iff",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.uniform_isBase_of_ncard",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.uniform_closure",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.uniform_isFlat_iff",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.uniform_eRk",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickened34_ground",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickened34_indep_iff",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickened34_eRk",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickened34_closure",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.comap_preimage_isFlat",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.comap_image_isFlat",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.comap_preimage_image",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.comapFlatOrderIso_eRk",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.uniformFlatOrderIso_eRk",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.classMap_surjective",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickenedFlatOrderIso_val",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickenedFlatOrderIso_eRk",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickened34_eRank",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickened34_eRk_lt_top",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickenedFlatOrderIso_rank",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickenedFlatOrderIso_empty",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickenedFlatOrderIso_univ",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickened34_loopless",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickened34_singleton_closure",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickened34_class_ncard",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.thickened34_parallel_pair",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.mem_interval",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.smallDegree_natDegree_le",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.small_reflection_unique",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.klFamily_unique",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.klValue_existsUnique",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.interval_sum_transport",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.IsKLFamily.transport",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.mobius_left_recurrence",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.mobius_right_recurrence",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.flatRank_le_three",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.characteristic_natDegree_le",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.candidateKL_natDegree_le",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.candidateKL_reflect",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.candidateKL_reflect_natDegree_le",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.recurrence_rhs_natDegree_le",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.characteristic_diagonal",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.candidateKL_diagonal",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.candidateKL_small",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.polynomial_coeff_ite",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.candidateKL_recurrence_coeff",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.candidateKL_recurrence",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.candidateKL_isKL",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.flatLocallyFiniteOrder",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.interval_eq_Icc",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.mobiusIncidence_mul_zeta",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.mobius_eq_incidence_mu",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.characteristic_eq_incidence_sum",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.characteristic_bottom_top",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.candidateKL_bottom_top",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualFlatFintype",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualFlatDecidableEq",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualFlatDecidableLE",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualFlat_card",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualRank_eq",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualRank_finite",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualRank_strictMono",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualBottom_val",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualTop_val",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualBottom_le_actualTop",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualMobius_left_recurrence",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualMobius_right_recurrence",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualCharacteristic_eq",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualCharacteristic_diagonal",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualCharacteristic_bottom_top",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualCandidate_isKL",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.actualKL_existsUnique",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.klPolynomial_spec",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.klPolynomial_eq",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.klPolynomial_coeff_zero",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.klPolynomial_coeff_one",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      {
+        "theorem": "Conjecture574.conjecture_false",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
+    ],
+    "allowed_axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "all_names_match": true,
+    "only_allowed_axioms": true,
+    "theorem_lemma_count": 75,
+    "named_instance_count": 5,
+    "zero_axiom_declarations": []
+  },
+  "independent_sha256": {
+    "Conjecture574/FlatDefs.lean": "9d2dc2ef031b8eeb214092485beb9507175f494a6ba0d28131146a38d0385ca0",
+    "Conjecture574/Matroid.lean": "93fc9af6919663e681a9db25206d9365f2ca5240d4625d9a55bece273f5cd517",
+    "Conjecture574/KLCore.lean": "ab56918e284a2d32023868c98ca507ac9c08d18e1dfdd7992e7a4b20b79d93e6",
+    "Conjecture574/Lattice.lean": "488c172089b6603b220bf66fb87ece957e013329ad08c694a655c40193a63161",
+    "Conjecture574/ActualKL.lean": "7db26357c627c1fdee68cef5525e683c4972dc8792faefc605baf633f9d1ef06",
+    "Conjecture574.lean": "b450eced35ed49e7d7a10ab18becb74c9702981645ff2af1f087729fda6ea537",
+    "Check.lean": "9782ecd02c757fd130779259685d9c93901765a658f07ddd2c643da78fccb2ec",
+    "lakefile.toml": "a89cfbc423f97c2b5770d03b1e614678a612beaa86be6c29d6bcd708b5fff0e7",
+    "lake-manifest.json": "1625883b5dde2c85aa09bee7f923bd4f4d484f9355c3b49b331fc4d7d404ba89",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "source_unchanged": true,
+  "copied_files_unchanged": true,
+  "definition_and_type_audit": {
+    "definition_names": [
+      "Conjecture574.Flat",
+      "Conjecture574.flatRank",
+      "Conjecture574.uniform",
+      "Conjecture574.uniform34",
+      "Conjecture574.thickened34",
+      "Conjecture574.ActualFlats",
+      "Conjecture574.comapFlatOrderIso",
+      "Conjecture574.uniformFlatOrderIso",
+      "Conjecture574.thickenedFlatOrderIso",
+      "Conjecture574.interval",
+      "Conjecture574.SmallDegree",
+      "Conjecture574.IsKLFamily",
+      "Conjecture574.transportPair",
+      "Conjecture574.flatBottom",
+      "Conjecture574.flatTop",
+      "Conjecture574.mobius",
+      "Conjecture574.characteristic",
+      "Conjecture574.candidateKL",
+      "Conjecture574.mobiusIncidence",
+      "Conjecture574.ActualFlat",
+      "Conjecture574.actualRank",
+      "Conjecture574.actualBottom",
+      "Conjecture574.actualTop",
+      "Conjecture574.actualMobius",
+      "Conjecture574.actualCharacteristic",
+      "Conjecture574.actualCandidate",
+      "Conjecture574.IsActualKLValue",
+      "Conjecture574.klPolynomial",
+      "Conjecture574.AdjacentSignsAlternate",
+      "Conjecture574.ConjectureSignInstance"
+    ],
+    "definition_count": 30,
+    "checked_theorem_names": [
+      "Conjecture574.flatRank_strictMono",
+      "Conjecture574.flat_card",
+      "Conjecture574.uniform_ground",
+      "Conjecture574.uniform_indep_iff",
+      "Conjecture574.uniform_isBase_of_ncard",
+      "Conjecture574.uniform_closure",
+      "Conjecture574.uniform_isFlat_iff",
+      "Conjecture574.uniform_eRk",
+      "Conjecture574.thickened34_ground",
+      "Conjecture574.thickened34_indep_iff",
+      "Conjecture574.thickened34_eRk",
+      "Conjecture574.thickened34_closure",
+      "Conjecture574.comap_preimage_isFlat",
+      "Conjecture574.comap_image_isFlat",
+      "Conjecture574.comap_preimage_image",
+      "Conjecture574.comapFlatOrderIso_eRk",
+      "Conjecture574.uniformFlatOrderIso_eRk",
+      "Conjecture574.classMap_surjective",
+      "Conjecture574.thickenedFlatOrderIso_val",
+      "Conjecture574.thickenedFlatOrderIso_eRk",
+      "Conjecture574.thickened34_eRank",
+      "Conjecture574.thickened34_eRk_lt_top",
+      "Conjecture574.thickenedFlatOrderIso_rank",
+      "Conjecture574.thickenedFlatOrderIso_empty",
+      "Conjecture574.thickenedFlatOrderIso_univ",
+      "Conjecture574.thickened34_loopless",
+      "Conjecture574.thickened34_singleton_closure",
+      "Conjecture574.thickened34_class_ncard",
+      "Conjecture574.thickened34_parallel_pair",
+      "Conjecture574.mem_interval",
+      "Conjecture574.smallDegree_natDegree_le",
+      "Conjecture574.small_reflection_unique",
+      "Conjecture574.klFamily_unique",
+      "Conjecture574.klValue_existsUnique",
+      "Conjecture574.interval_sum_transport",
+      "Conjecture574.IsKLFamily.transport",
+      "Conjecture574.mobius_left_recurrence",
+      "Conjecture574.mobius_right_recurrence",
+      "Conjecture574.flatRank_le_three",
+      "Conjecture574.characteristic_natDegree_le",
+      "Conjecture574.candidateKL_natDegree_le",
+      "Conjecture574.candidateKL_reflect",
+      "Conjecture574.candidateKL_reflect_natDegree_le",
+      "Conjecture574.recurrence_rhs_natDegree_le",
+      "Conjecture574.characteristic_diagonal",
+      "Conjecture574.candidateKL_diagonal",
+      "Conjecture574.candidateKL_small",
+      "Conjecture574.polynomial_coeff_ite",
+      "Conjecture574.candidateKL_recurrence_coeff",
+      "Conjecture574.candidateKL_recurrence",
+      "Conjecture574.candidateKL_isKL",
+      "Conjecture574.flatLocallyFiniteOrder",
+      "Conjecture574.interval_eq_Icc",
+      "Conjecture574.mobiusIncidence_mul_zeta",
+      "Conjecture574.mobius_eq_incidence_mu",
+      "Conjecture574.characteristic_eq_incidence_sum",
+      "Conjecture574.characteristic_bottom_top",
+      "Conjecture574.candidateKL_bottom_top",
+      "Conjecture574.actualFlatFintype",
+      "Conjecture574.actualFlatDecidableEq",
+      "Conjecture574.actualFlatDecidableLE",
+      "Conjecture574.actualFlat_card",
+      "Conjecture574.actualRank_eq",
+      "Conjecture574.actualRank_finite",
+      "Conjecture574.actualRank_strictMono",
+      "Conjecture574.actualBottom_val",
+      "Conjecture574.actualTop_val",
+      "Conjecture574.actualBottom_le_actualTop",
+      "Conjecture574.actualMobius_left_recurrence",
+      "Conjecture574.actualMobius_right_recurrence",
+      "Conjecture574.actualCharacteristic_eq",
+      "Conjecture574.actualCharacteristic_diagonal",
+      "Conjecture574.actualCharacteristic_bottom_top",
+      "Conjecture574.actualCandidate_isKL",
+      "Conjecture574.actualKL_existsUnique",
+      "Conjecture574.klPolynomial_spec",
+      "Conjecture574.klPolynomial_eq",
+      "Conjecture574.klPolynomial_coeff_zero",
+      "Conjecture574.klPolynomial_coeff_one",
+      "Conjecture574.conjecture_false"
+    ],
+    "checked_theorem_count": 80,
+    "checked_names_match_audits": true,
+    "printed_definition_names": [
+      "Conjecture574.Flat",
+      "Conjecture574.flatRank",
+      "Conjecture574.uniform",
+      "Conjecture574.uniform34",
+      "Conjecture574.thickened34",
+      "Conjecture574.ActualFlats",
+      "Conjecture574.comapFlatOrderIso",
+      "Conjecture574.uniformFlatOrderIso",
+      "Conjecture574.thickenedFlatOrderIso",
+      "Conjecture574.interval",
+      "Conjecture574.SmallDegree",
+      "Conjecture574.IsKLFamily",
+      "Conjecture574.transportPair",
+      "Conjecture574.flatBottom",
+      "Conjecture574.flatTop",
+      "Conjecture574.mobius",
+      "Conjecture574.characteristic",
+      "Conjecture574.candidateKL",
+      "Conjecture574.mobiusIncidence",
+      "Conjecture574.ActualFlat",
+      "Conjecture574.actualRank",
+      "Conjecture574.actualBottom",
+      "Conjecture574.actualTop",
+      "Conjecture574.actualMobius",
+      "Conjecture574.actualCharacteristic",
+      "Conjecture574.actualCandidate",
+      "Conjecture574.IsActualKLValue",
+      "Conjecture574.klPolynomial",
+      "Conjecture574.AdjacentSignsAlternate",
+      "Conjecture574.ConjectureSignInstance"
+    ],
+    "printed_definition_count": 30,
+    "printed_definition_names_match": true,
+    "printed_theorem_type_names": [
+      "Conjecture574.flatRank_strictMono",
+      "Conjecture574.flat_card",
+      "Conjecture574.uniform_ground",
+      "Conjecture574.uniform_indep_iff",
+      "Conjecture574.uniform_isBase_of_ncard",
+      "Conjecture574.uniform_closure",
+      "Conjecture574.uniform_isFlat_iff",
+      "Conjecture574.uniform_eRk",
+      "Conjecture574.thickened34_ground",
+      "Conjecture574.thickened34_indep_iff",
+      "Conjecture574.thickened34_eRk",
+      "Conjecture574.thickened34_closure",
+      "Conjecture574.comap_preimage_isFlat",
+      "Conjecture574.comap_image_isFlat",
+      "Conjecture574.comap_preimage_image",
+      "Conjecture574.comapFlatOrderIso_eRk",
+      "Conjecture574.uniformFlatOrderIso_eRk",
+      "Conjecture574.classMap_surjective",
+      "Conjecture574.thickenedFlatOrderIso_val",
+      "Conjecture574.thickenedFlatOrderIso_eRk",
+      "Conjecture574.thickened34_eRank",
+      "Conjecture574.thickened34_eRk_lt_top",
+      "Conjecture574.thickenedFlatOrderIso_rank",
+      "Conjecture574.thickenedFlatOrderIso_empty",
+      "Conjecture574.thickenedFlatOrderIso_univ",
+      "Conjecture574.thickened34_loopless",
+      "Conjecture574.thickened34_singleton_closure",
+      "Conjecture574.thickened34_class_ncard",
+      "Conjecture574.thickened34_parallel_pair",
+      "Conjecture574.mem_interval",
+      "Conjecture574.smallDegree_natDegree_le",
+      "Conjecture574.small_reflection_unique",
+      "Conjecture574.klFamily_unique",
+      "Conjecture574.klValue_existsUnique",
+      "Conjecture574.interval_sum_transport",
+      "Conjecture574.IsKLFamily.transport",
+      "Conjecture574.mobius_left_recurrence",
+      "Conjecture574.mobius_right_recurrence",
+      "Conjecture574.flatRank_le_three",
+      "Conjecture574.characteristic_natDegree_le",
+      "Conjecture574.candidateKL_natDegree_le",
+      "Conjecture574.candidateKL_reflect",
+      "Conjecture574.candidateKL_reflect_natDegree_le",
+      "Conjecture574.recurrence_rhs_natDegree_le",
+      "Conjecture574.characteristic_diagonal",
+      "Conjecture574.candidateKL_diagonal",
+      "Conjecture574.candidateKL_small",
+      "Conjecture574.polynomial_coeff_ite",
+      "Conjecture574.candidateKL_recurrence_coeff",
+      "Conjecture574.candidateKL_recurrence",
+      "Conjecture574.candidateKL_isKL",
+      "Conjecture574.flatLocallyFiniteOrder",
+      "Conjecture574.interval_eq_Icc",
+      "Conjecture574.mobiusIncidence_mul_zeta",
+      "Conjecture574.mobius_eq_incidence_mu",
+      "Conjecture574.characteristic_eq_incidence_sum",
+      "Conjecture574.characteristic_bottom_top",
+      "Conjecture574.candidateKL_bottom_top",
+      "Conjecture574.actualFlatFintype",
+      "Conjecture574.actualFlatDecidableEq",
+      "Conjecture574.actualFlatDecidableLE",
+      "Conjecture574.actualFlat_card",
+      "Conjecture574.actualRank_eq",
+      "Conjecture574.actualRank_finite",
+      "Conjecture574.actualRank_strictMono",
+      "Conjecture574.actualBottom_val",
+      "Conjecture574.actualTop_val",
+      "Conjecture574.actualBottom_le_actualTop",
+      "Conjecture574.actualMobius_left_recurrence",
+      "Conjecture574.actualMobius_right_recurrence",
+      "Conjecture574.actualCharacteristic_eq",
+      "Conjecture574.actualCharacteristic_diagonal",
+      "Conjecture574.actualCharacteristic_bottom_top",
+      "Conjecture574.actualCandidate_isKL",
+      "Conjecture574.actualKL_existsUnique",
+      "Conjecture574.klPolynomial_spec",
+      "Conjecture574.klPolynomial_eq",
+      "Conjecture574.klPolynomial_coeff_zero",
+      "Conjecture574.klPolynomial_coeff_one",
+      "Conjecture574.conjecture_false"
+    ],
+    "printed_theorem_type_count": 80,
+    "printed_theorem_type_names_match": true
+  },
+  "audit_inventory_sha256": "f611efe2de50a17d932b221af4b707d39661305169408f5d4a1aa48515648b96",
+  "execution_audit_scope": "Fresh independent build and trust/identity verification; separate from the independent semantic review.",
+  "dependencies_post_build": [
+    {
+      "name": "mathlib",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "revision_matches": true
+    },
+    {
+      "name": "plausible",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "revision_matches": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "revision_matches": true
+    },
+    {
+      "name": "importGraph",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "revision_matches": true
+    },
+    {
+      "name": "proofwidgets",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "c4919189477c3221e6a204008998b0d724f49904",
+      "revision_matches": true
+    },
+    {
+      "name": "aesop",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "revision_matches": true
+    },
+    {
+      "name": "Qq",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "revision_matches": true
+    },
+    {
+      "name": "batteries",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "revision_matches": true
+    },
+    {
+      "name": "Cli",
+      "status_command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "tracked_status": "",
+      "tracked_clean": true,
+      "head_command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "head_exit_code": 0,
+      "actual_rev": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "revision_matches": true
+    }
+  ],
+  "lean_commit_post_build": {
+    "exit_code": 0,
+    "actual": "6caaee842e9495688c1567e78c0e68dbb96942aa",
+    "unchanged": true
+  },
+  "status": "PASS",
+  "finished_utc": "2026-10-04T19:05:38.011914+00:00"
+}

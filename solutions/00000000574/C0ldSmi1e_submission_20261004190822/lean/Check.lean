@@ -1,0 +1,194 @@
+import Conjecture574
+
+#print Conjecture574.Flat
+#print Conjecture574.flatRank
+#print Conjecture574.uniform
+#print Conjecture574.uniform34
+#print Conjecture574.thickened34
+#print Conjecture574.ActualFlats
+#print Conjecture574.comapFlatOrderIso
+#print Conjecture574.uniformFlatOrderIso
+#print Conjecture574.thickenedFlatOrderIso
+#print Conjecture574.interval
+#print Conjecture574.SmallDegree
+#print Conjecture574.IsKLFamily
+#print Conjecture574.transportPair
+#print Conjecture574.flatBottom
+#print Conjecture574.flatTop
+#print Conjecture574.mobius
+#print Conjecture574.characteristic
+#print Conjecture574.candidateKL
+#print Conjecture574.mobiusIncidence
+#print Conjecture574.ActualFlat
+#print Conjecture574.actualRank
+#print Conjecture574.actualBottom
+#print Conjecture574.actualTop
+#print Conjecture574.actualMobius
+#print Conjecture574.actualCharacteristic
+#print Conjecture574.actualCandidate
+#print Conjecture574.IsActualKLValue
+#print Conjecture574.klPolynomial
+#print Conjecture574.AdjacentSignsAlternate
+#print Conjecture574.ConjectureSignInstance
+
+#check Conjecture574.flatRank_strictMono
+#check Conjecture574.flat_card
+#check Conjecture574.uniform_ground
+#check Conjecture574.uniform_indep_iff
+#check Conjecture574.uniform_isBase_of_ncard
+#check Conjecture574.uniform_closure
+#check Conjecture574.uniform_isFlat_iff
+#check Conjecture574.uniform_eRk
+#check Conjecture574.thickened34_ground
+#check Conjecture574.thickened34_indep_iff
+#check Conjecture574.thickened34_eRk
+#check Conjecture574.thickened34_closure
+#check Conjecture574.comap_preimage_isFlat
+#check Conjecture574.comap_image_isFlat
+#check Conjecture574.comap_preimage_image
+#check Conjecture574.comapFlatOrderIso_eRk
+#check Conjecture574.uniformFlatOrderIso_eRk
+#check Conjecture574.classMap_surjective
+#check Conjecture574.thickenedFlatOrderIso_val
+#check Conjecture574.thickenedFlatOrderIso_eRk
+#check Conjecture574.thickened34_eRank
+#check Conjecture574.thickened34_eRk_lt_top
+#check Conjecture574.thickenedFlatOrderIso_rank
+#check Conjecture574.thickenedFlatOrderIso_empty
+#check Conjecture574.thickenedFlatOrderIso_univ
+#check Conjecture574.thickened34_loopless
+#check Conjecture574.thickened34_singleton_closure
+#check Conjecture574.thickened34_class_ncard
+#check Conjecture574.thickened34_parallel_pair
+#check Conjecture574.mem_interval
+#check Conjecture574.smallDegree_natDegree_le
+#check Conjecture574.small_reflection_unique
+#check Conjecture574.klFamily_unique
+#check Conjecture574.klValue_existsUnique
+#check Conjecture574.interval_sum_transport
+#check Conjecture574.IsKLFamily.transport
+#check Conjecture574.mobius_left_recurrence
+#check Conjecture574.mobius_right_recurrence
+#check Conjecture574.flatRank_le_three
+#check Conjecture574.characteristic_natDegree_le
+#check Conjecture574.candidateKL_natDegree_le
+#check Conjecture574.candidateKL_reflect
+#check Conjecture574.candidateKL_reflect_natDegree_le
+#check Conjecture574.recurrence_rhs_natDegree_le
+#check Conjecture574.characteristic_diagonal
+#check Conjecture574.candidateKL_diagonal
+#check Conjecture574.candidateKL_small
+#check Conjecture574.polynomial_coeff_ite
+#check Conjecture574.candidateKL_recurrence_coeff
+#check Conjecture574.candidateKL_recurrence
+#check Conjecture574.candidateKL_isKL
+#check Conjecture574.flatLocallyFiniteOrder
+#check Conjecture574.interval_eq_Icc
+#check Conjecture574.mobiusIncidence_mul_zeta
+#check Conjecture574.mobius_eq_incidence_mu
+#check Conjecture574.characteristic_eq_incidence_sum
+#check Conjecture574.characteristic_bottom_top
+#check Conjecture574.candidateKL_bottom_top
+#check Conjecture574.actualFlatFintype
+#check Conjecture574.actualFlatDecidableEq
+#check Conjecture574.actualFlatDecidableLE
+#check Conjecture574.actualFlat_card
+#check Conjecture574.actualRank_eq
+#check Conjecture574.actualRank_finite
+#check Conjecture574.actualRank_strictMono
+#check Conjecture574.actualBottom_val
+#check Conjecture574.actualTop_val
+#check Conjecture574.actualBottom_le_actualTop
+#check Conjecture574.actualMobius_left_recurrence
+#check Conjecture574.actualMobius_right_recurrence
+#check Conjecture574.actualCharacteristic_eq
+#check Conjecture574.actualCharacteristic_diagonal
+#check Conjecture574.actualCharacteristic_bottom_top
+#check Conjecture574.actualCandidate_isKL
+#check Conjecture574.actualKL_existsUnique
+#check Conjecture574.klPolynomial_spec
+#check Conjecture574.klPolynomial_eq
+#check Conjecture574.klPolynomial_coeff_zero
+#check Conjecture574.klPolynomial_coeff_one
+#check Conjecture574.conjecture_false
+
+#print axioms Conjecture574.flatRank_strictMono
+#print axioms Conjecture574.flat_card
+#print axioms Conjecture574.uniform_ground
+#print axioms Conjecture574.uniform_indep_iff
+#print axioms Conjecture574.uniform_isBase_of_ncard
+#print axioms Conjecture574.uniform_closure
+#print axioms Conjecture574.uniform_isFlat_iff
+#print axioms Conjecture574.uniform_eRk
+#print axioms Conjecture574.thickened34_ground
+#print axioms Conjecture574.thickened34_indep_iff
+#print axioms Conjecture574.thickened34_eRk
+#print axioms Conjecture574.thickened34_closure
+#print axioms Conjecture574.comap_preimage_isFlat
+#print axioms Conjecture574.comap_image_isFlat
+#print axioms Conjecture574.comap_preimage_image
+#print axioms Conjecture574.comapFlatOrderIso_eRk
+#print axioms Conjecture574.uniformFlatOrderIso_eRk
+#print axioms Conjecture574.classMap_surjective
+#print axioms Conjecture574.thickenedFlatOrderIso_val
+#print axioms Conjecture574.thickenedFlatOrderIso_eRk
+#print axioms Conjecture574.thickened34_eRank
+#print axioms Conjecture574.thickened34_eRk_lt_top
+#print axioms Conjecture574.thickenedFlatOrderIso_rank
+#print axioms Conjecture574.thickenedFlatOrderIso_empty
+#print axioms Conjecture574.thickenedFlatOrderIso_univ
+#print axioms Conjecture574.thickened34_loopless
+#print axioms Conjecture574.thickened34_singleton_closure
+#print axioms Conjecture574.thickened34_class_ncard
+#print axioms Conjecture574.thickened34_parallel_pair
+#print axioms Conjecture574.mem_interval
+#print axioms Conjecture574.smallDegree_natDegree_le
+#print axioms Conjecture574.small_reflection_unique
+#print axioms Conjecture574.klFamily_unique
+#print axioms Conjecture574.klValue_existsUnique
+#print axioms Conjecture574.interval_sum_transport
+#print axioms Conjecture574.IsKLFamily.transport
+#print axioms Conjecture574.mobius_left_recurrence
+#print axioms Conjecture574.mobius_right_recurrence
+#print axioms Conjecture574.flatRank_le_three
+#print axioms Conjecture574.characteristic_natDegree_le
+#print axioms Conjecture574.candidateKL_natDegree_le
+#print axioms Conjecture574.candidateKL_reflect
+#print axioms Conjecture574.candidateKL_reflect_natDegree_le
+#print axioms Conjecture574.recurrence_rhs_natDegree_le
+#print axioms Conjecture574.characteristic_diagonal
+#print axioms Conjecture574.candidateKL_diagonal
+#print axioms Conjecture574.candidateKL_small
+#print axioms Conjecture574.polynomial_coeff_ite
+#print axioms Conjecture574.candidateKL_recurrence_coeff
+#print axioms Conjecture574.candidateKL_recurrence
+#print axioms Conjecture574.candidateKL_isKL
+#print axioms Conjecture574.flatLocallyFiniteOrder
+#print axioms Conjecture574.interval_eq_Icc
+#print axioms Conjecture574.mobiusIncidence_mul_zeta
+#print axioms Conjecture574.mobius_eq_incidence_mu
+#print axioms Conjecture574.characteristic_eq_incidence_sum
+#print axioms Conjecture574.characteristic_bottom_top
+#print axioms Conjecture574.candidateKL_bottom_top
+#print axioms Conjecture574.actualFlatFintype
+#print axioms Conjecture574.actualFlatDecidableEq
+#print axioms Conjecture574.actualFlatDecidableLE
+#print axioms Conjecture574.actualFlat_card
+#print axioms Conjecture574.actualRank_eq
+#print axioms Conjecture574.actualRank_finite
+#print axioms Conjecture574.actualRank_strictMono
+#print axioms Conjecture574.actualBottom_val
+#print axioms Conjecture574.actualTop_val
+#print axioms Conjecture574.actualBottom_le_actualTop
+#print axioms Conjecture574.actualMobius_left_recurrence
+#print axioms Conjecture574.actualMobius_right_recurrence
+#print axioms Conjecture574.actualCharacteristic_eq
+#print axioms Conjecture574.actualCharacteristic_diagonal
+#print axioms Conjecture574.actualCharacteristic_bottom_top
+#print axioms Conjecture574.actualCandidate_isKL
+#print axioms Conjecture574.actualKL_existsUnique
+#print axioms Conjecture574.klPolynomial_spec
+#print axioms Conjecture574.klPolynomial_eq
+#print axioms Conjecture574.klPolynomial_coeff_zero
+#print axioms Conjecture574.klPolynomial_coeff_one
+#print axioms Conjecture574.conjecture_false
