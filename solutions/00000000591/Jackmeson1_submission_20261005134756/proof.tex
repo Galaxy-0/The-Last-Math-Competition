@@ -1,0 +1,114 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\N}{\mathbb{N}}
+\title{A disproof of Conjecture 00000000591\\[2pt]
+\large The Wilf surplus of embedding-dimension-3 semigroups does not vanish relative to $F$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture and its reading}
+
+Conjecture 00000000591 reads: \emph{Definition: Wilf's conjecture. Conjecture: $e\cdot n(S)\ge g(S)+e$
+($n(S)$ the number of nongaps, $g$ the Frobenius number). New-direction conjecture: on embedding-dimension-3
+semigroups the ratio of the surplus $e\cdot n(S)-g(S)-e$ to $g$ tends to $0$, with an explicit convergence
+rate.}
+
+We read it literally: $S$ ranges over numerical semigroups of embedding dimension $e(S)=3$, $g=F(S)$ is the
+Frobenius number, $n(S)=\#\{s\in S: s<F(S)\}$ is the number of nongaps below $F(S)$, and the claim is
+\[
+  \frac{e\,n(S)-F(S)-e}{F(S)}\longrightarrow 0\qquad\text{as }F(S)\to\infty,
+\]
+i.e.\ for every $\varepsilon>0$ there is $N$ such that $|\text{ratio}|<\varepsilon$ whenever $e(S)=3$ and
+$F(S)\ge N$. A claimed explicit rate is a stronger statement, so refuting the limit refutes it as well.
+Since $g(S)$ conventionally denotes the genus (number of gaps), we also refute the variant with $g$ read
+as the genus in both places: $(e\,n(S)-g(S)-e)/g(S)\to 0$ as $g(S)\to\infty$.
+
+\section{Definitions (as in the Lean file)}
+
+A \emph{numerical semigroup} is an additive submonoid $S\subseteq\N$ with finite complement (Wikipedia:
+``0 is an element of S; N $-$ S, the complement of S in N, is finite; If x and y are in S then x + y is
+also in S''). The \emph{minimal generators} (atoms) of $S$ are the nonzero $x\in S$ that are not a sum of two
+nonzero elements of $S$; the \emph{embedding dimension} $e(S)$ is their number (Wikipedia: ``The cardinality
+of the minimal set of generators is called the embedding dimension''). The \emph{Frobenius number} $F$ is
+the largest gap; in Lean this is Mathlib's \texttt{FrobeniusNumber F S}, i.e.\
+\texttt{IsGreatest \{k | k $\notin$ closure S\} F}. The genus is the number of gaps (Wikipedia: ``The number of
+elements in the set of gaps G(S) is called the genus of S''). The surplus is $e\,n(S)-F-e\in\mathbb{Z}$.
+
+\section{The family}
+
+For $k\in\N$ let $m=6k+5$ and $S_k=\langle 6,\,2m,\,3m\rangle=\langle 6,\,12k+10,\,18k+15\rangle$, i.e.\ the
+additive closure of these three numbers.
+
+\begin{lemma}[Apery set w.r.t.\ 6]\label{lem:apery}
+For every $k$ and $x\in\N$, $x\in S_k$ if and only if
+$x\equiv 0$, or $x\equiv 4$ and $x\ge 2m$, or $x\equiv 2$ and $x\ge 4m$, or $x\equiv 3$ and $x\ge 3m$, or
+$x\equiv 1$ and $x\ge 5m$, or $x\equiv 5$ and $x\ge 7m$ (congruences mod $6$).
+\end{lemma}
+\begin{proof}
+Call the condition $P(x)$. ($\Leftarrow$) In each residue class $x=w+6t$ with $w\in\{0,2m,4m,3m,5m,7m\}$
+($5m=2m+3m$, $7m=4m+3m$), and $w,6t\in S_k$. ($\Rightarrow$) $P$ holds for $0,6,2m,3m$, and $P(x)\wedge P(y)
+\Rightarrow P(x+y)$ by a case analysis on the residues ($36$ linear cases); closure induction finishes.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+For every $k$: $S_k$ is a numerical semigroup; its minimal generators are exactly $6,\,12k+10,\,18k+15$, so
+$e(S_k)=3$; $F(S_k)=42k+29$; $n(S_k)=21k+15$; the genus is $21k+15$; the surplus is $21k+13$; and
+$\text{surplus}/F\ge 1/3$.
+\end{theorem}
+\begin{proof}
+All gaps are $<42k+30$ by Lemma~\ref{lem:apery}, and $42k+29\equiv 5$ lies below $7m=42k+35$, so it is the
+largest gap. Each of $6,2m,3m$ is not a sum of two nonzero elements (the elements below $3m$ are $\equiv 0,4$
+mod 6), and every other nonzero element $x$ has $x-g\in S_k$ for some generator $g<x$, so it is not an atom.
+Symmetry: for $0\le x\le F$, $F-x\in S_k\iff x\notin S_k$ (again residue by residue). Thus $x\mapsto F-x$ is
+a bijection between elements and gaps in $[0,F]$; since these $F+1=42k+30$ numbers split evenly, both counts
+equal $21k+15$. Hence $n(S_k)=21k+15$ (as $F\notin S_k$), the genus is $21k+15$, the surplus is
+$3(21k+15)-(42k+29)-3=21k+13$, and $3(21k+13)\ge 42k+29$.
+\end{proof}
+
+\begin{theorem}
+The conjecture is false in both readings. With $\varepsilon=1/3$ and any $N$, the semigroup $S_N$ has
+$e=3$, $F=42N+29\ge N$ and ratio $\ge 1/3$. In the genus reading, $(3(21N+15)-(21N+15)-3)/(21N+15)\ge 1$
+with genus $21N+15\ge N$, so $\varepsilon=1$ fails.
+\end{theorem}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture591/Basic.lean} (262 lines, \texttt{import Mathlib} only, namespace
+\texttt{C591}). Definitions: \texttt{IsNumericalSemigroup}, \texttt{minimalGenerators},
+\texttt{embeddingDim}, \texttt{IsFrob} (Mathlib \texttt{FrobeniusNumber}), \texttt{nongaps}, \texttt{genus},
+\texttt{surplus}, \texttt{RatioTendsToZero}, \texttt{GenusRatioTendsToZero}, and
+\texttt{S k = AddSubmonoid.closure \{6, 12*k+10, 18*k+15\}}. Main results, all for arbitrary \texttt{k}:
+\texttt{mem\_S\_iff} (Lemma~\ref{lem:apery}), \texttt{isNumericalSemigroup\_S}, \texttt{minimalGenerators\_S},
+\texttt{embeddingDim\_S}, \texttt{frob\_S}, \texttt{nongaps\_S}, \texttt{genus\_S}, \texttt{surplus\_S},
+\texttt{ratio\_ge}, and the refutations \texttt{not\_ratioTendsToZero : $\neg$ RatioTendsToZero} and
+\texttt{not\_genusRatioTendsToZero : $\neg$ GenusRatioTendsToZero}. \texttt{lake build} succeeds;
+\texttt{\#print axioms} for both refutations gives \texttt{[propext, Classical.choice, Quot.sound]}. There is
+no \texttt{sorry} and no \texttt{native\_decide}.
+
+\section{Relation to the earlier submission}
+
+PRs \#132 and \#169 (orionsheep) used the same family. \#132 proved only four instances with $g\le 603$, which
+cannot refute a limit. \#169 formalized the limit statement but, in the reviewer's words, ``frob/surplus are
+still definitions, anchored to the actual semigroups $\langle 6, 2(6k+5), 3(6k+5)\rangle$ only by exhaustive
+checks at $k = 0$ and $k = 1$''; the reviewer asked for ``a general membership/characterization proof in Lean
+(e.g.\ an Ap\'ery-set computation for the family)''. This submission gives that: \texttt{mem\_S\_iff} holds
+for every $k$, and the Frobenius number (Mathlib's notion), embedding dimension, nongap count, genus and
+surplus are all derived from it for the actual submonoids \texttt{AddSubmonoid.closure}, for every $k$.
+
+\end{document}
