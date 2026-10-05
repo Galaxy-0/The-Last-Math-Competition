@@ -1,0 +1,25 @@
+from pathlib import Path
+import json,re,hashlib
+out=Path('/private/tmp/tlmc2161-review')
+rows=[json.loads(s.removeprefix('REVIEWDECL ')) for s in (out/'full-environment-audit.log').read_text().splitlines() if s.startswith('REVIEWDECL ')]
+source=Path('/private/tmp/tlmc2161-proof/Conjecture2161.lean').read_text()
+names=['Conjecture2161.'+x for x in re.findall(r'^(?:noncomputable )?(?:structure|instance|def|theorem) ([A-Za-z0-9_.]+)',source,re.M)]
+assert len(names)==50 and set(names)<={r['name'] for r in rows}
+stubs={
+'Conjecture2161.pathRotate._elambda_1','Conjecture2161.pathReverse._elambda_1',
+'Finset.filter._at.Conjecture2161.independenceNumber._spec_1',
+'Multiset.filter._at.Conjecture2161.independenceNumber._spec_2',
+'List.filterTR.loop._at.Conjecture2161.independenceNumber._spec_3',
+'Finset.sup._at.Conjecture2161.independenceNumber._spec_4'}
+allowed={'propext','Classical.choice','Quot.sound'}
+assert {r['name'] for r in rows if r['is_axiom']}==stubs
+assert all(r['unsafe'] and not r['partial'] and r['axioms']==[r['name']] for r in rows if r['name'] in stubs)
+assert not set(names)&stubs
+runtime=[r for r in rows if r['unsafe'] and (r['name'] in stubs or re.search(r'\._cstage[12]$',r['name']))]
+logical=[r for r in rows if r not in runtime]
+assert not set(names)&{r['name'] for r in runtime}
+assert all(not r['unsafe'] and not r['partial'] and not r['is_axiom'] and not r['unsafe_closure'] and not r['partial_closure'] and not r['missing_closure'] and set(r['axioms'])<=allowed for r in logical)
+assert all(not r['partial'] for r in rows)
+summary={'status':'PASS','total_origin_declarations':len(rows),'authored_declarations':len(names),'generated_declarations':len(rows)-len(names),'safe_logical_count':len(logical),'compiler_runtime_count':len(runtime),'unsafe_axiom_stubs':sorted(stubs),'stage_artifacts':[r['name'] for r in runtime if r['name'] not in stubs],'allowed_logical_axioms':sorted(allowed),'logical_declarations_with_unsafe_partial_missing_closure':[],'authored_axioms':[],'all_authored_present':True,'harness_sha256':hashlib.sha256((out/'ReviewerAudit.lean').read_bytes()).hexdigest(),'qualification':'The initial naive standard-axiom assertion on all 207 constants failed because compiler code generation adds unsafe axiom stubs and lcProof-bearing stage definitions. They are retained, individually classified, and absent from every safe logical dependency closure. The theorem source is unchanged.'}
+(out/'environment-audit.json').write_text(json.dumps({'summary':summary,'declarations':rows},indent=2)+'\n')
+print(json.dumps(summary,indent=2))

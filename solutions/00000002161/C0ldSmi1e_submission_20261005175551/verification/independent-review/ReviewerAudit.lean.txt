@@ -1,0 +1,59 @@
+import Conjecture2161
+import Audit2161
+import Lean
+
+open Lean
+set_option maxRecDepth 20000
+set_option maxHeartbeats 0
+
+namespace ReviewerInspection
+
+def references (c : ConstantInfo) : Array Name :=
+  c.type.getUsedConstants ++ (match c with
+    | .defnInfo d => d.value.getUsedConstants
+    | .thmInfo d => d.value.getUsedConstants
+    | .opaqueInfo d => d.value.getUsedConstants
+    | .inductInfo d => d.all.toArray ++ d.ctors.toArray
+    | .recInfo d => d.all.toArray ++ d.rules.foldl
+        (fun a r => a ++ #[r.ctor] ++ r.rhs.getUsedConstants) #[]
+    | _ => #[])
+
+partial def transitive (env : Environment) (pending : List Name)
+    (visited : NameSet := {}) : NameSet :=
+  match pending with
+  | [] => visited
+  | n :: rest =>
+    if visited.contains n then transitive env rest visited
+    else
+      let next := visited.insert n
+      match env.checked.get.find? n with
+      | none => transitive env rest next
+      | some ci => transitive env ((references ci).toList ++ rest) next
+
+run_elab do
+  let env ← getEnv
+  let mut total := 0
+  for (name, ci) in env.constants.toList do
+    if let some idx := env.getModuleIdxFor? name then
+      let moduleName := env.allImportedModuleNames[idx.toNat]!
+      if moduleName == `Conjecture2161 || moduleName == `Audit2161 then
+        let all := (transitive env [name]).toList
+        let ax ← collectAxioms name
+        let ty ← Meta.ppExpr ci.type
+        let unsafeNames := all.filter (fun n => (env.checked.get.find? n).any (·.isUnsafe))
+        let partialNames := all.filter (fun n => (env.checked.get.find? n).any (·.isPartial))
+        let missingNames := all.filter (fun n => (env.checked.get.find? n).isNone)
+        IO.println ("REVIEWDECL " ++ (Json.mkObj [
+          ("name", toJson name.toString),
+          ("module", toJson moduleName.toString),
+          ("type", toJson ty.pretty),
+          ("axioms", toJson (ax.map Name.toString)),
+          ("is_axiom", toJson (match ci with | .axiomInfo _ => true | _ => false)),
+          ("unsafe", toJson ci.isUnsafe), ("partial", toJson ci.isPartial),
+          ("closure_count", toJson all.length),
+          ("unsafe_closure", toJson (unsafeNames.map Name.toString)),
+          ("partial_closure", toJson (partialNames.map Name.toString)),
+          ("missing_closure", toJson (missingNames.map Name.toString))]).compress)
+        total := total + 1
+  IO.println ("REVIEWCOUNT " ++ toString total)
+end ReviewerInspection

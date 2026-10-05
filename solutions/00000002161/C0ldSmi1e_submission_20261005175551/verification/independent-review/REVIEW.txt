@@ -1,0 +1,112 @@
+INDEPENDENT REVIEW OF CANDIDATE 00000002161
+Reviewer: independent review subagent /root/review_2161
+Review date: 2026-10-05
+Status: PASS — mathematical semantics, frozen Lean replay, auxiliary replay, final report text and all four rendered pages
+
+1. Scope, independence and exact inputs
+
+I read the exact English and Chinese conjecture and both current contribution guides from /private/tmp/tlmc2161-author-input. I did not inspect another problem's solution, review, earlier mathematical derivation, or repository history, and performed no Git operation, repository source edit or publication. The supplied author derivation, provenance, frozen candidate and separate auxiliary checker were then read in full. I inspected the root execution verifier as inspection tooling, but constructed and ran a separate source-only clean copy and independently assessed semantics. The only reused proof dependencies were the permitted Lean 4.19.0 installation and Mathlib package directory; no candidate .olean or .lake/build files were copied. Later, at the root's explicit request, I inspected the bundled compiler source and official v4.19.0 compiler source online to resolve compiler-generated unsafe runtime artifacts.
+
+Frozen project identities, checked before copying and after replay:
+Audit2161.lean       bdeb4d4067f65140ccfcb49b71540c5da2c7b0e7e9cd26282121c8d2eddf2c9e
+Conjecture2161.lean  a9bbd89d9c2a0298279e08897509f5139709e8e5d7ff070d890d2bcc2363175b
+Check.lean           b63a81f0d1a26ef055f81c0cbb6a3f74ac8db235a8f08f819068e35c7943e2af
+lakefile.toml        1ba148e0cd4c95cfb2f0c115782b33f3745754a9396e358bb2ca81b89dc80a1d
+lake-manifest.json  8beaa7b601611cf394c4642e440130b3525826f88a69fbe40ebd1e890a7c3317
+lean-toolchain      55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea
+Conjecture source   c9242d04eb746d90690e51f5daa8ee00d4ddb36ec9a2fc4c3410c9373704dbed
+
+Additional exact input identities are retained in input-hashes.json; frozen project hashes in reviewed-hashes.json. This review assesses this candidate, not whether another submission already solved the problem or whether publication is currently permitted. The repository guides require a LaTeX report, PDF, complete Lean project, auxiliary replay, and semantic conformity; final report/PDF verification is a separate outstanding step at this writing.
+
+2. What the original statement says and what is refuted
+
+Both source languages give alpha <= i_+ and assert minimum genus 1 apart from complete graphs. Neither adds minimum degree, positive genus, a cycle requirement, 2-connectedness, or a restriction to nontrivial sign patterns. Thus the all-positive signed four-vertex path is within the stated domain. Its being connected avoids any convention about genus of disconnected graphs. Its vertices 0 and 2 are distinct and nonadjacent, so the complete-graph exception does not apply.
+
+The printed purported universal inertia inequality is false in general (P3 has alpha=2 and i_+=1). This is a defect in the problem, not permission to change its equality condition. The candidate handles this correctly: it does not assume that false universal statement as an axiom and does not replace it by a conventional inertia bound. It directly verifies alpha=i_+=2 for P4. That equality makes P4 an equality-attaining graph for the literal condition even though the inequality is not universally valid.
+
+The per-graph reading entails that every eligible graph has minimum genus 1. The final Lean theorem negates that statement already on the connected subclass, using a realized genus 0 to contradict the minimum's lower-bound clause. The class-minimum reading entails that each eligible graph's minimum genus is at least 1. ClassMinimumOneLowerBound expresses that necessary clause, and the second final theorem refutes it with the same witness. The latter is not a direct formal definition of a class infimum; the report must, and does, describe it as the necessary lower-bound clause. Refuting that clause suffices. The witness also shows the class minimum is actually 0 under natural-number genus. Restricting the universal clauses to connected graphs cannot invalidate a counterexample to the unqualified full-domain claim.
+
+3. Signed graph, independence and exact inertia
+
+SignedGraph contains a genuine Mathlib SimpleGraph and a symmetric real matrix. Every edge has value +1 or -1, and every nonedge has value zero, including the diagonal because the graph is loopless. The support cannot omit an edge or add a spurious one. The actual adjacency is exactly the displayed tridiagonal P4 matrix. The source does not use a Laplacian or a matrix with an unrelated support.
+
+IsIndependent is pairwise nonadjacency on distinct set members. independenceNumber takes the supremum of cardinalities over the full finite collection of independent subsets; generic lower and upper specifications are proved. The witness {0,2} gives the lower bound, and a kernel decide proof ranges over all 16 subsets for the upper bound. There is no answer encoded in a definition of independence.
+
+Matrix.charpoly in the imported Mathlib source is det(tI-A). The candidate expands that actual determinant to X^4-3X^2+1. It then proves a polynomial identity with the product of the four real linear factors for r=(sqrt(5)+1)/2, s=(sqrt(5)-1)/2, -r, -s. The complete multiset identity follows from Polynomial.roots_multiset_prod_X_sub_C, not merely from checking four numbers satisfy an equation.
+
+I inspected Mathlib/Algebra/Polynomial/Roots.lean: roots is a multiset, and count_roots identifies an entry's count with rootMultiplicity. Thus algebraic multiplicities are preserved. I independently checked the factorization algebraically: rs=1, r^2+s^2=3, so (t^2-r^2)(t^2-s^2)=t^4-3t^2+1. Both r and s are strictly positive, as proved from sqrt(5)>1. Filtering the whole multiset leaves exactly two entries. The roots are real and account for degree four, so no lost nonreal eigenvalue or unstated reality assumption affects this witness. For a real symmetric adjacency matrix this is precisely the usual positive inertia index. A general spectral-theorem equivalence is not separately formalized, but the defining root count is the standard algebraic inertia convention and the witness's entire spectrum is established.
+
+4. Critical assessment of the embedding definition
+
+I did not accept the name HasCellularGenus as evidence of geometric meaning. I checked its prerequisites individually. The RotationSystem data encode a finite dart set and a bijection from darts to all ordered adjacent pairs. dart_injective prevents duplicate directed incidences, dart_surjective prevents omitted graph edges, and dart_adjacent prevents spurious edges. reverse is a fixed-point-free involution, and reversing twice returns the original dart. This implies that each unordered graph edge has exactly its two opposite darts. No multiplicity or endpoint identification can change the underlying simple graph.
+
+The rotation is a permutation preserving tails. vertex_cyclic places all darts with a given tail in a single orbit; tail preservation prevents any such orbit crossing to a different vertex. vertex_nonempty prevents missing vertex stars. Connectedness of the graph plus this full incidence data gives connectedness of the associated map. These are the complete standard orientable rotation-system conditions, not merely the weaker assertion that two arbitrary permutations exist.
+
+The geometric realization can also be checked directly. At each vertex take an oriented disk with attachment intervals in the specified cyclic order. Glue an untwisted band between the two intervals paired by reversal. Interior band arcs realize exactly the graph edges and cannot create extra intersections. The resulting thickening is connected and orientable. Its boundary circles follow rotation after reversal; capping those circles produces a closed orientable surface with disk faces. Every oriented cellular embedding gives such local orders in reverse. For this path, successively adjoining a new vertex disk by one band keeps the thickening a disk; capping its boundary is a sphere. Thus there is a concrete genus-zero embedding independently of a numerical Euler calculation.
+
+I independently opened Gross and Tucker's primary paper, “Enumerating Graph Embeddings and Partial-Duals by Genus and Euler Genus,” ECA 1:1 (2021), Section 2, page 2. It explicitly gives the correspondence between rotations and oriented embeddings; Proposition 2.2 uses rho lambda, with lambda applied first, for the face walks. Page 6 uses V-E+F=2-2g. Source: https://ecajournal.haifa.ac.il/Volume2021/ECA2021_S2B1.pdf ; DOI https://doi.org/10.54550/ECA2021V1S1S1 . This independently supports the stated convention.
+
+The standard correspondence is explained mathematically and cited; it is not proved as a separate theorem about Mathlib TopologicalSpace objects. I consider the finite combinatorial definition faithful and acceptable under the supplied repository requirement to match the conjecture's definitions. The requirement does not mandate one foundational geometric representation of surfaces. This is not an omitted substantive graph hypothesis or an assumption that P4 has the desired genus: the generic encoding includes the local manifold/embedding data from which the surface is constructed, and the particular surface is also identified directly as the sphere. Acceptance must retain this precise formalization boundary; it would be misleading to claim a separate kernel-checked general geometric realization theorem.
+
+For the finite counts, Face is the quotient by the actual SameCycle setoid of rotate*reverse. I inspected SameCycle: it means reachability by an integer power, so it includes every permutation orbit, even fixed points. It is not a support-only cycle count. The named faceFinite instance establishes finiteness as a quotient of Fin dartCount. Accordingly Nat.card is a finite cardinal, never an infinite-type default. The proof of path_faces_one is stronger still: it supplies a quotient inhabitant and proves every quotient element equal to it using the explicit full orbit; Nat.card_eq_one_iff_exists is exactly the needed nonempty singleton characterization.
+
+The actual permutation is (0 2 4 5 3 1). There are six darts, four vertices, three genuine Mathlib edgeFinset edges and one face. Integer Euler arithmetic gives 4-3+1=2=2-2*0. IsMinimumGenus requires both an existing valid embedding and a lower bound on every realized natural-number genus; it cannot use an empty infimum or a default value. The genus-zero certificate plus nonnegativity establishes the true minimum. Even if one worried about cellular versus arbitrary embeddings at a positive genus, an actual spherical embedding already establishes ordinary minimum genus zero. The source's use of ordinary orientable genus is standard. The report correctly disclaims a reformulation requiring a strictly nonorientable surface.
+
+5. Independent clean execution and trust audit
+
+Clean build directory: /private/tmp/tlmc2161-review-clean
+Evidence directory: /private/tmp/tlmc2161-review
+Compiler: /private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin
+Only package symlink: .lake/packages -> /private/tmp/tlmc310-proof/.lake/packages
+
+replay.py copied only the six frozen files, asserted all hashes, ran lake build, then separately ran lake env lean -DwarningAsError=true on Conjecture2161.lean, Audit2161.lean and Check.lean. All passed. Logs are clean-build.log and the three *.lean.log files. execution-records.json records commands, exit codes and elapsed times. Original and copied hashes were rechecked afterward. I did not independently inspect dependency Git state because this task prohibited Git operations; the root's separately preserved dependency-integrity audit covers that aspect. Like ordinary Lean replay, this uses the shared standard library/Mathlib dependency artifacts rather than recompiling all Mathlib from scratch.
+
+The authored sources contain no sorry/admit/native_decide, custom axiom, unsafe or partial definition, metaprogramming insertion, unsafe reduction primitive or kernel-check-disabling option. All 50 authored declarations are named and inventoried. Audit2161 prints all 50 axiom dependency sets; Check also prints definitions and theorem/instance types. All authored dependencies are confined to propext, Classical.choice and Quot.sound.
+
+I additionally wrote ReviewerAudit.lean, which inventories ALL constants originating in the proof modules, including generated names outside the Conjecture2161 prefix, and traverses types/bodies/inductive constructors/recursor rules transitively. This is external inspection tooling: its partial traversal and run_elab print metadata only, and no submitted theorem imports it or depends on it. Its transcript and complete parsed metadata are full-environment-audit.log and environment-audit.json.
+
+The total is 207 entries: 120 safe logical declarations (50 authored plus 70 generated), 81 unsafe compiler _cstage1/_cstage2 definitions, and 6 unsafe compiler axiom stubs. EVERY safe logical declaration has only the three allowed standard axioms, with no unsafe, partial or missing transitive dependency. All six stubs are absent from authored source; their precise names and types remain in the inventory. They are the two pathReverse/pathRotate _elambda_1 stubs and the four independenceNumber specializations of Finset.filter, Multiset.filter, List.filterTR.loop and Finset.sup.
+
+A naive initial audit demanding only standard axioms from every runtime entry failed; I did not discard that observation or alter the proof. The compiler provenance was then checked. Official Lean v4.19.0 eager_lambda_lifting.cpp lines 224-231 creates a meta/unsafe axiom stub for generated compiled lambdas. Bundled Lean/Compiler/Old.lean lines 14-16 constructs the _elambda_ name. Official specialize.cpp lines 430-433 constructs the _at..._spec_N names and lines 906-920 creates their meta/unsafe axiom placeholders for compiler simplification. Those placeholders are deliberately outside regular logical definitions. See:
+https://raw.githubusercontent.com/leanprover/lean4/v4.19.0/src/library/compiler/eager_lambda_lifting.cpp
+https://raw.githubusercontent.com/leanprover/lean4/v4.19.0/src/library/compiler/specialize.cpp
+
+Compiler stage bodies also contain lcProof and runtime-only _obj/_neutral/_rarg placeholders. An attempted missing-reference assertion on those runtime bodies consequently failed too. The final checker retains these data and restricts the logical trust assertions to the safe kernel declarations, while accepting only the exact six documented unsafe stubs plus generated stage definitions as runtime artifacts. This is justified by compiler provenance, fresh reproducibility from safe source, and zero reachability from every logical declaration; it is not a blanket allowance for arbitrary axioms or unsafe proof dependencies. The original proof source hashes remain unchanged. summarize-audit.py preserves the exact classification and assertions.
+
+6. Auxiliary code and report status
+
+I read the auxiliary verifier in full. It uses exact Fraction arithmetic for a full determinant expansion, squarefree-layer multiplicity handling and Sturm counts; the final constant in the P4 Sturm sequence confirms squarefreeness, and variation counts give two positive and two negative roots. It separately validates full dart incidence, orbit connectivity, polygon corner identifications and one circular link per quotient vertex, rather than assuming surface validity from Euler numbers. Its straight-line intersection checks are additional evidence, not a substitute for cellularity. The K2, P3 and K3 cases and deliberately invalid rotations/drawings address exclusion, nullity, repeated roots and malformed geometry.
+
+I reran verify.py and obtained byte-identical certificate output. I also copied verify.py, replay.py, REPORT.txt and certificate.json into a separate auxiliary-clean directory, compiled both Python source files, and ran replay.py there; it passed with no stderr and identical certificate SHA-256 f3eb8b8948075f86c1fdad48b2456a562102b48a8444a85c3a37309e8909fd27. These are auxiliary checks only; the mathematical Lean result does not invoke Python.
+
+I read the entire first report.tex draft supplied by root. Its witness, characteristic polynomial, rotation table, Euler count, two readings and explicit topology boundary match the Lean source. I requested clarification of the trust paragraph so standard-only axiom claims clearly concern logical declarations and acknowledge the separately inventoried compiler artifacts. Final report hash and rendered PDF review will be recorded in an addendum once the root supplies them.
+
+Verdict: the frozen candidate genuinely disproves the literal genus assertion under the standard orientable-genus reading, using a faithful standard combinatorial embedding definition. There is no omitted substantive graph assumption, no answer-shaped genus surrogate, no lost root multiplicity, no Nat.card infinity loophole, and no unsafe/admitted/custom-axiom logical dependency. Full submission acceptance remains subject to the final report/PDF review and the repository's own maintainer process.
+
+
+7. FINAL REPORT AND CORRECTED ROOT INSTRUMENT ADDENDUM
+
+This addendum supersedes the earlier pending final-report status.
+
+I read the complete final report.tex at:
+/Users/daniel/.codex/worktrees/conjecture-464/The-Last-Math-Competition/solutions/00000002161/C0ldSmi1e_submission_20261005175551/report.tex
+SHA-256: 8030eb873a8acbee1e7e1601441341f282519d249f9766e27cf592c166e482c7
+
+The PDF reviewed is /private/tmp/tlmc2161-report/report.pdf
+SHA-256: a6e6005663d1a163c4eb581a5472ae8e01448a59f94b811115dd36002741ca02
+
+I verified final source bytes equal the source beside that PDF, extracted text from all four pages using pypdf, independently rendered the actual PDF to four PNGs, and visually inspected every newly rendered page. The report is complete, legible, and consistent with the exact frozen Lean proof; there are no clipped equations, overprinted table entries, missing glyphs, broken references, or unreadable qualifiers. The final trust paragraph now correctly scopes standard-axiom claims to logical declarations and explicitly distinguishes compiler runtime artifacts. The topology boundary, printed-inequality defect, both minimum-genus readings, and local-versus-maintainer-review distinction are visible. Exact rendering hashes and source/PDF identities are in report-review-identities.json. Root separately performed successful native/Tectonic compilation; this reviewer checked the delivered source and PDF rather than independently invoking a TeX compiler.
+
+I also opened the inertia and Sturm primary references cited in the final report. Nakatsukasa–Noferini's introduction defines positive/zero/negative eigenvalue counts and states its algebraic-multiplicity convention. Pebay–Rojas–Thompson Theorem 1.2 counts distinct roots through sign variations, explicitly distinguishing multiplicity in its footnote; the auxiliary squarefree-layer treatment uses that correctly. These references support the report's limited terminology/method claims, without contributing a competition-specific witness.
+https://arxiv.org/html/1711.00495
+https://arxiv.org/pdf/2208.07904
+
+Corrected root verifier reviewed:
+/private/tmp/tlmc2161-independent-verify.py
+SHA-256: e6972afd517fe709bd7121095f2ce61663e2e6528ce561b93060a46ad6ac6826
+
+I inspected its entire workflow, especially the changed compiler classification and assertions. It requires exact frozen source/config identity, a new build directory, a complete local import traversal, source-declaration inventory agreement, all named-instance/type/axiom emissions, successful warning-as-error replays, and complete origin-module environment enumeration. The transitive closure traverses logical types and bodies as well as inductive and recursor dependencies. Exactly the six documented stubs must be unsafe axioms, absent from authored source, and self-only in their unsafe axiom dependencies; generated stage artifacts must be unsafe definitions outside the authored set. All remaining declarations must have no unsafe/partial/missing closure, and only standard axioms. The instrument keeps full metadata for the runtime artifacts instead of deleting their evidence. It additionally checks source, compiler and dependency identities before/after execution. These changes fix the earlier overbroad runtime-axiom test without weakening the kernel-level proof requirements. I did not run the root script myself because it invokes Git; my separate no-Git clean replay and audit produced the matching 207/120/87 counts and passed independently.
+
+Limit: the lexical source inventory is tailored to the frozen straightforward Lean source, not claimed as a complete parser for every possible Lean metaprogram. Manual inspection and compiled-origin enumeration complement it. Shared dependency .olean files are trusted as standard library/Mathlib artifacts; this is not a recompilation or independent kernel verification of all dependency binaries.
+
+FINAL VERDICT: PASS. The exact frozen Lean project and final report genuinely establish a counterexample to the original genus assertion, with the explicitly disclosed standard combinatorial embedding formalization boundary. No mathematical repair or source change is required. This is an independent local review, not a claim of maintainer acceptance, first-solve status, or publication authorization.

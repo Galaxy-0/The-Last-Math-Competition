@@ -1,0 +1,65 @@
+CONJECTURE 00000002161: INDEPENDENT AUTHOR CANDIDATE
+Source SHA-256: c9242d04eb746d90690e51f5daa8ee00d4ddb36ec9a2fc4c3410c9373704dbed
+
+RESULT
+The all-positive signed path P4 disproves both natural readings of the printed genus claim. Its independence number is 2, its positive inertia index is 2, and its minimum (orientable) genus is 0. It is connected and not complete. The Lean project is /private/tmp/tlmc2161-proof. No repository files were edited and no publication action was taken.
+
+EXACT SCOPE
+The English and Chinese descriptions both print alpha <= i_+, rather than a corrected conventional inertia inequality. This work does not substitute another bound. The witness actually satisfies alpha=i_+=2, so it attains equality in exactly the displayed condition. The argument does not rely on asserting that the displayed inequality holds universally, and makes no proposed correction to it.
+
+The complete-graph exception is honored: vertices 0 and 2 are distinct and nonadjacent. No implicit disconnected-graph convention is needed: this witness is connected and has no isolated vertex. More generally a connected noncomplete graph has at least two vertices and cannot have an isolated vertex, so the rotation-system convention covers the entire connected noncomplete domain of the necessary assertions. The ordinary unqualified graph genus is the minimum orientable genus, over closed orientable surfaces. A genus-0 cellular embedding suffices to establish minimum genus 0 because every genus is nonnegative.
+
+Reading A: every eligible noncomplete graph has minimum genus 1. The witness directly contradicts this. The Lean theorem not_per_graph_genus_one negates the necessary restriction of this universal statement to connected signed graphs.
+Reading B: the minimum across the eligible noncomplete class is 1. Such a class minimum independently entails that every eligible graph has minimum genus at least 1. The same witness contradicts that lower-bound clause; indeed the actual minimum across the class is 0. The Lean theorem not_class_minimum_one negates this necessary lower-bound clause, already on the connected subclass. The connected restriction is not a replacement conjecture: a counterexample in a subclass refutes the full lower-bound clause as well.
+The Euler-formula clause is preserved and used to compute the actual embedding's genus. Refuting the genus assertion refutes the full statement regardless of the true Euler clause.
+
+GRAPH AND ELIGIBILITY
+Use vertices {0,1,2,3}, edges {01,12,23}, all signs +1. The ordinary graph is represented by Mathlib SimpleGraph with Adj(i,j) iff i+1=j or j+1=i. The signed adjacency matrix is
+  [0 1 0 0]
+  [1 0 1 0]
+  [0 1 0 1]
+  [0 0 1 0].
+SignedGraph includes proofs of matrix symmetry, signs +/-1 on precisely the edges, and zero on every nonedge, including the diagonal. Thus no arbitrary matrix is mislabeled as a signed graph. Every vertex is reached from 0 along the displayed path. The graph is not complete since 0 and 2 are not adjacent.
+
+INDEPENDENCE
+The independent set {0,2} has size 2. The disjoint edges 01 and 23 partition the vertex set, and an independent set contains at most one endpoint from each, hence at most 2 vertices. The Lean IsIndependent predicate is exactly pairwise nonadjacency of distinct members. independenceNumber takes the finite supremum of cardinalities of all independent subsets. Its generic upper-bound specification and domination of every independent set are proved. The witness and universal bound over all 16 subsets are kernel-checked using decide, and the maximum is then deduced from these facts. The definition is an actual maximum, not an answer-shaped label.
+
+INERTIA, INCLUDING MULTIPLICITY
+The determinant det(tI-A) is t^4-3t^2+1. An elementary derivation uses the tridiagonal determinant recurrence D0=1, D1=t, Dk=t D(k-1)-D(k-2), giving D2=t^2-1, D3=t^3-2t and D4=t^4-3t^2+1. The Lean proof instead expands the actual Mathlib determinant and proves this identity by ring normalization.
+Let r=(sqrt(5)+1)/2 and s=(sqrt(5)-1)/2. Since sqrt(5)>1, both r and s are positive. Also rs=1 and r^2+s^2=3, so the polynomial is
+  (t-r)(t-s)(t+r)(t+s).
+Consequently its entire root multiset is [r,s,-r,-s]. There are exactly two positive entries, with algebraic multiplicity. In Lean, positiveInertiaIndex is the cardinality of the positive-filtered Mathlib Polynomial.roots multiset of Matrix.charpoly. Polynomial.roots records algebraic multiplicity. path_roots proves the complete multiset identity; it does not merely supply some roots or rely on numerical eigenvalue output. For a real symmetric matrix this is precisely the usual positive inertia index. The explicit factorization here independently accounts for all four roots over the reals, so no omitted reality-of-spectrum assumption is needed for the witness.
+
+GENUINE EMBEDDING SEMANTICS
+The formal RotationSystem is the standard finite combinatorial description of a connected orientable cellular embedding with nonisolated vertices. It contains:
+* a finite dart set, and a tail vertex for each dart;
+* a fixed-point-free involution reverse;
+* adjacency of the two endpoints of every dart;
+* injectivity of the dart-to-ordered-endpoint-pair map and surjectivity onto every ordered adjacent pair, so every directed edge appears exactly once and no spurious darts occur;
+* connectedness and nonempty incidence at every vertex;
+* a permutation rotate preserving each tail, with all darts at each vertex in one cycle.
+These conditions are not peculiar to P4.
+
+Here is why these data describe an actual surface embedding. Give each vertex an oriented disk with one boundary attachment interval for each incident dart, in its rotate cyclic order. Attach one untwisted rectangular band for each reverse pair, preserving the surface orientation. The cyclic order and edge pairing give a compact orientable surface with boundary, containing the graph as the disks' centers and the bands' central arcs. Edge interiors are disjoint and have precisely the asserted endpoints. Graph connectedness makes this thickening connected. Traversing the boundary first crosses to the reverse dart and then to the next dart in the local rotation. Hence boundary components are precisely the cycles of rotate*reverse. Cap every boundary component with a disk. The result is a connected closed orientable surface with a cellular embedding of the original graph; each capped boundary contributes exactly one open-disk complementary face. Conversely, a cellular oriented embedding gives these cyclic orders by reading the incident half-edges around oriented small vertex disks. Thus this is a standard equivalent combinatorial definition, rather than an unproved numerical assumption about this witness. Gross and Tucker, cited below, explicitly give this correspondence and the same face-permutation convention.
+
+For this particular path, the thickening is itself a disk: start with the vertex-0 disk, and three times attach a band to a new vertex disk. Joining two disks by such a boundary band produces a disk, as can also be realized directly by a planar polygonal region. Capping its one boundary circle gives the sphere. This provides a direct check of the witness's surface type, independently of guessing it from the Euler value.
+
+The Lean Face type is the quotient of the finite dart set by the actual SameCycle equivalence relation of rotate*reverse. The named faceFinite instance proves this quotient finite. This definition counts fixed-point cycles as faces and has no omitted-face convention.
+
+EXPLICIT ROTATION SYSTEM AND EULER COMPUTATION
+Label darts as follows:
+  0:0->1, 1:1->0, 2:1->2, 3:2->1, 4:2->3, 5:3->2.
+Then reverse=(0 1)(2 3)(4 5), and rotate=(0)(1 2)(3 4)(5).
+The face permutation is rotate*reverse=(0 2 4 5 3 1), a single cycle. Its boundary walk is 0,1,2,3,2,1,0. The Lean proofs verify every rotation-system condition and show every dart is in the orbit of dart 0; the face quotient therefore has exactly one element. Mathlib's actual edgeFinset has exactly three edges, also proved by decide.
+Thus V=4, E=3, F=1 and
+  V-E+F = 4-3+1 = 2 = 2-2*0.
+HasCellularGenus is an existential valid rotation system plus this integer Euler equality. It uses integer subtraction, not truncated natural subtraction. IsMinimumGenus explicitly requires a realized embedding and a lower bound for every realized genus. The minimum-0 theorem uses the explicit certificate and 0<=h for all natural genera. There is neither an empty-set infimum nor a default genus assignment.
+
+FORMALIZATION BOUNDARY
+The Lean kernel verifies the exact graph, signed matrix, every independence and inertia fact, every finite incidence and rotation-system property, the face quotient cardinality, the integer Euler identity, the actual existential genus certificate, the minimum argument, and both final negations. The topological disk-and-band interpretation of rotation systems is justified above and by the primary reference; the project deliberately uses that standard equivalent combinatorial definition. It does not claim to formalize a separate geometric realization theorem in Mathlib's general topology language. This boundary must be stated in the report, not hidden as if an additional geometric theorem had been kernel checked.
+
+BUILD AND AUDIT
+The project uses Lean 4.19.0, mathlib v4.19.0 at c44e0c8ee63ca166450922a373c7409c5d26b00b and the supplied exact pinned dependency manifest, changing only its project name to tlmc2161. The final build configuration is lakefile.toml, with default targets Conjecture2161 and Audit2161. The original lakefile.lean is retained only as lakefile.lean.previous in the author records, outside the proof root. The only shared reference is .lake/packages -> /private/tmp/tlmc310-proof/.lake/packages. No shared source was edited.
+All hand-written declarations/instances have names. There are no private or anonymous declarations, no sorry/admit/native_decide, no custom axioms, and no unsafe proof shortcuts. Kernel decide is used on small finite propositions. The Audit target prints axioms for all 50 hand-written declarations; every dependency set is contained in {propext, Classical.choice, Quot.sound}. Generated declarations remain available for the root's complete inventory audit. The default build completed successfully with warningAsError enabled. commands-and-builds.log retains all compiler attempts, including earlier failed drafts; its earlier automatic 'sorry' diagnostic was produced by an unknown-field elaboration error and is not in the final source.
+
+No computation auxiliary beyond Lean was used for mathematical facts. Python was used only for editing files and generating the declaration list and hash/manifest records. No final TeX/PDF has been created, as requested. Root should fresh-build/replay and independently semantically review this frozen candidate before any publication.
