@@ -1,0 +1,172 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Conjecture 00000007783: the cube has thin-shell standard deviation at least $1/\sqrt{15}$ in every dimension, so $\sigma_n$ is not $O(n^{-1/4})$}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\textbf{English.} Definition: The thin-shell constant $\sigma_n$ is the supremum over isotropic
+convex bodies of the standard deviation of $|X|$ for an isotropic uniform sample. Conjecture:
+$\sigma_n = \Theta(n^{-1/4})$, so the known upper-bound order cannot be improved; and the $\sigma$
+values of balls and simplices are $n^{-1/2}$ and $c\, n^{-1/4}$, all isotropic bodies interpolating
+between the two strictly monotonically, with interpolation law given by the volume-concentration
+exponent of a two-parameter random simplex family.
+
+\textbf{Chinese text.} The Chinese version says the same. Its definition reads (translated)
+``$\sigma_n$ is the supremum, over all isotropic convex bodies, of the standard deviation of $|X|$
+(the norm of an isotropic sample point of the uniform convex body)'', and its interpolation clause
+reads ``the thin-shell constants of all isotropic bodies lie between the two''.
+
+\section{Reading and conventions}
+
+Work in $\mathbb R^n$ with the Euclidean norm $|x|$ and Lebesgue measure $\mathrm{vol}$
+(Lean: \texttt{EuclideanSpace} $\mathbb R$ \texttt{(Fin n)} and \texttt{volume}).
+
+\begin{definition}
+A \emph{convex body} is a compact convex set $K\subseteq\mathbb R^n$ with nonempty interior. The
+\emph{uniform law} on $K$ is $\mathrm{vol}(K)^{-1}\,\mathrm{vol}|_K$ (Lean:
+\texttt{volume[|K]}, Mathlib's \texttt{ProbabilityTheory.cond}). $K$ is \emph{isotropic} if
+$X\sim\mathrm{unif}(K)$ satisfies $\mathbb E X_i=0$ and $\mathbb E X_iX_j=\delta_{ij}$ for all
+$i,j$, i.e.\ mean $0$ and covariance $I$ (the text's ``isotropic uniform sample''). The
+\emph{thin-shell quantity} is $\sigma(K)=\sqrt{\operatorname{Var}|X|}$ (Mathlib
+\texttt{variance}). The thin-shell constant is $\sigma_n=\sup_K\sigma(K)$ over isotropic convex
+bodies $K\subseteq\mathbb R^n$, taken in $[0,\infty]$.
+\end{definition}
+
+The conjecture is a conjunction. $\sigma_n=\Theta(n^{-1/4})$ contains the upper bound: there are
+$C,N$ with $\sigma_n\le C n^{-1/4}$ for all $n\ge N$. The interpolation clause says that every
+isotropic body $K\subseteq\mathbb R^n$ has $\sigma(K)$ between the ball value $n^{-1/2}$ and the
+simplex value $c\,n^{-1/4}$, so in particular $\sigma(K)\le c\,n^{-1/4}$ for one fixed $c>0$.
+\textbf{We refute exactly these two clauses:} the upper bound in $\sigma_n=\Theta(n^{-1/4})$, and
+the upper half of the interpolation clause. Here $n^{-1/4}$ is the real power
+$n^{-1/4}=\exp(-\tfrac14\log n)$ for $n\ge1$.
+
+\textbf{Not assessed.} We do not use or formalize the ball value, the simplex value, the strict
+monotonicity, or the ``volume-concentration exponent'' law. (For the record, the isotropic ball of
+radius $\sqrt{n+2}$ has $\operatorname{Var}|X|=n/(n+1)^2$, which is of order $n^{-1}$; this is not
+used.)
+
+\textbf{Volume-one convention.} Some authors call $K$ isotropic when $\mathrm{vol}(K)=1$, the
+barycenter is $0$ and the covariance is $L_K^2I$ for some $L_K>0$. We prove the same conclusion in
+that convention as well (Theorem~\ref{thm:main}(c)).
+
+\section{The cube}
+
+Fix $a>0$ and let $Q_a=[-a,a]^n$. Let $X$ be uniform on $Q_a$.
+
+\begin{lemma}\label{lem:body}
+$Q_a$ is a convex body, $\mathrm{vol}(Q_a)=(2a)^n$, and $|x|^2\le na^2$ on $Q_a$.
+\end{lemma}
+\begin{proof}
+Convexity is coordinatewise. $Q_a$ is closed and lies in the closed ball of radius
+$\sqrt{n}\,a$, so it is compact. It contains the open ball of radius $a$ about $0$, because
+$|x_i|\le|x|$. The volume is a product of interval lengths, and
+$|x|^2=\sum_i x_i^2\le na^2$.
+\end{proof}
+
+\begin{lemma}\label{lem:mom}
+Let $c_m=(2a)^{-1}\int_{-a}^a t^m\,dt$, so $c_0=1$, $c_1=0$, $c_2=a^2/3$ and $c_4=a^4/5$. For
+every exponent vector $p\in\mathbb N^n$, $\mathbb E\prod_i X_i^{p_i}=\prod_i c_{p_i}$. Hence
+$\mathbb E X_i=0$, $\mathbb E X_iX_j=\delta_{ij}a^2/3$, $\mathbb E X_i^2X_j^2=a^4/9$ for $i\ne j$
+and $\mathbb E X_i^4=a^4/5$.
+\end{lemma}
+\begin{proof}
+The map $\mathbb R^n\to\mathbb R^n$ from Euclidean space to the product space preserves Lebesgue
+measure, and $\mathrm{vol}|_{Q_a}$ becomes the product of the restrictions of Lebesgue measure to
+$[-a,a]$. Fubini's theorem for products gives
+$\int_{Q_a}\prod_i x_i^{p_i}\,dx=\prod_i\int_{-a}^a t^{p_i}dt=(2a)^n\prod_ic_{p_i}$, and we divide by
+$\mathrm{vol}(Q_a)=(2a)^n$. The values of $c_m$ follow from
+$\int_{-a}^at^m\,dt=(a^{m+1}-(-a)^{m+1})/(m+1)$.
+\end{proof}
+
+\begin{lemma}\label{lem:R}
+Let $R=|X|$. Then $\mathbb E R^2=na^2/3$ and
+$\mathbb E R^4=n^2a^4/9+n\,(a^4/5-a^4/9)$, so
+$\mathbb E R^4-(\mathbb E R^2)^2=\tfrac{4}{45}na^4$.
+\end{lemma}
+\begin{proof}
+$R^2=\sum_iX_i^2$ and $R^4=\sum_{i,j}X_i^2X_j^2$; apply Lemma~\ref{lem:mom} and linearity.
+\end{proof}
+
+\begin{theorem}\label{thm:var}
+For $n\ge1$, $\operatorname{Var}|X|\ge a^2/45$.
+\end{theorem}
+\begin{proof}
+Let $m=\mathbb E R$ and $b=\sqrt n\,a$. By Lemma~\ref{lem:body}, $0\le R\le b$ almost surely,
+so $0\le m\le b$ and $R+m\le 2b$. Pointwise,
+$(R^2-m^2)^2=(R-m)^2(R+m)^2\le4b^2(R-m)^2$, hence
+$\mathbb E(R^2-m^2)^2\le4b^2\operatorname{Var}R$. On the other hand,
+$\mathbb E(R^2-m^2)^2=\mathbb ER^4-2m^2\mathbb ER^2+m^4
+=\mathbb ER^4-(\mathbb ER^2)^2+(\mathbb ER^2-m^2)^2\ge\tfrac4{45}na^4$ by Lemma~\ref{lem:R}.
+Thus $4na^2\operatorname{Var}R\ge\tfrac4{45}na^4$, and we divide by $4na^2>0$.
+\end{proof}
+
+\begin{corollary}\label{cor:iso}
+$Q_{\sqrt3}$ is an isotropic convex body with $\sigma(Q_{\sqrt3})\ge1/\sqrt{15}$ for every
+$n\ge1$. $Q_{1/2}$ has volume $1$, barycenter $0$ and covariance $\tfrac1{12}I$, and
+$\sigma(Q_{1/2})\ge1/\sqrt{180}$ for every $n\ge1$.
+\end{corollary}
+\begin{proof}
+By Lemma~\ref{lem:mom} with $a^2/3=1$ (resp.\ $a=1/2$, $L^2=1/12$), and Theorem~\ref{thm:var}:
+$3/45=1/15$ and $(1/4)/45=1/180$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+\begin{enumerate}
+\item[(a)] There are no $C\in\mathbb R$ and $N\in\mathbb N$ such that
+$\sigma(K)\le C\,n^{-1/4}$ for all $n\ge N$ and all isotropic convex bodies $K\subseteq\mathbb R^n$.
+\item[(b)] There are no $C$, $N$ with $\sigma_n\le C\,n^{-1/4}$ for all $n\ge N$. Hence
+$\sigma_n=\Theta(n^{-1/4})$ is false, and so is the upper half of the interpolation clause.
+\item[(c)] Statement (a) also holds in the volume-one convention.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) $C\,n^{-1/4}\to0$, so for some $n\ge\max(N,1)$ we have $C\,n^{-1/4}<1/\sqrt{15}\le
+\sigma(Q_{\sqrt3})$ by Corollary~\ref{cor:iso}. (b) If $\sigma_n\le Cn^{-1/4}$, then every
+isotropic $K$ has $\sigma(K)\le\sigma_n\le\max(C,0)\,n^{-1/4}$, contradicting (a). (c) As (a), with
+$Q_{1/2}$ and $1/\sqrt{180}$.
+\end{proof}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture7783/Basic.lean} (Lean 4, Mathlib v4.33.1; its only import is
+\texttt{Mathlib}; 340 lines). Definitions: \texttt{C7783.IsConvexBody},
+\texttt{C7783.IsIsotropicConvexBody}, \texttt{C7783.IsIsotropicConvexBodyVolOne},
+\texttt{C7783.thinShell} ($\sqrt{\texttt{variance}\ \|\cdot\|\ \texttt{volume[|K]}}$),
+\texttt{C7783.sigma} (supremum in $[0,\infty]$), \texttt{C7783.cube}.
+Lemma~\ref{lem:body}: \texttt{isConvexBody\_cube}, \texttt{volume\_cube},
+\texttt{norm\_sq\_le\_of\_mem\_cube}. Lemma~\ref{lem:mom}: \texttt{setIntegral\_cube},
+\texttt{integral\_monomial}, \texttt{mean\_coord}, \texttt{cov\_coord}, \texttt{fourth\_coord}.
+Lemma~\ref{lem:R}: \texttt{moment\_two}, \texttt{moment\_four}. Theorem~\ref{thm:var}:
+\texttt{variance\_norm\_cube}. Corollary~\ref{cor:iso}: \texttt{isIsotropic\_cube},
+\texttt{isIsotropicVolOne\_cube}. Theorem~\ref{thm:main}: (a)
+\texttt{C7783.not\_thinShell\_le\_rpow}, (b) \texttt{C7783.not\_sigma\_le\_rpow}, (c)
+\texttt{C7783.not\_thinShell\_le\_rpow\_volOne}. The statement of (a) in Lean is
+\[
+\neg\,\exists C:\mathbb R,\ \exists N:\mathbb N,\ \forall n\ge N,\ \forall K\subseteq\mathbb R^n,\
+\mathtt{IsIsotropicConvexBody}\ K\to\mathtt{thinShell}\ K\le C\cdot n^{-1/4}.
+\]
+
+\textbf{Axiom audit.} \texttt{\#print axioms} for each of the three theorems of
+Theorem~\ref{thm:main} reports \texttt{[propext, Classical.choice, Quot.sound]}. There is no
+\texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}
