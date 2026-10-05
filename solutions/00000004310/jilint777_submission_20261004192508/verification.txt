@@ -1,0 +1,45 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:670:0: 'Conj4310.disc_injective' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:671:0: 'Conj4310.integral_iff' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:672:0: 'Conj4310.halfCoords_mul' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:673:0: 'Conj4310.units_classification' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:674:0: 'Conj4310.unitList_eq_pows' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:675:0: 'Conj4310.field_units_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:676:0: 'Conj4310.orderUnits_iso_of_w_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:677:0: 'Conj4310.fieldUnits_not_iso' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:678:0: 'Conj4310.conjecture_00000004310_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:679:0: 'Conj4310.conjecture_00000004310_false'' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:680:0: 'Conj4310.smallest_seven_digit_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:681:0: 'Conj4310.order_claim_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:682:0: 'Conj4310.weakened_reading_small_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+PASS disc injective on all 12160 squarefree m with -20000 < m < 0
+PASS every disc(m) is a fundamental discriminant (D=1 mod 4 squarefree, or D=4q, q=2,3 mod 4 squarefree)
+PASS every negative fundamental discriminant with |D| < 20000 (6079 of them) comes from an m (unique by injectivity)
+PASS unit counts of O_m: 4 for m=-1, 6 for m=-3, 2 otherwise (all squarefree -20000 < m < 0)
+PASS the number of units is a function of the discriminant
+PASS O_{-1}^x = {+-1, +-i}
+PASS O_{-3}^x = {+-1, +-w, +-w^2}, w = (1+sqrt-3)/2
+PASS orders: t^2 - D u^2 = 4 and N(a+b w)=1 both have w(D) solutions for all 4999 D (-10^4 < D < 0, D=0,1 mod 4)
+PASS orders: the unit group is cyclic of order w(D) (an element of order w exists)
+PASS forms: every reduced primitive form of discriminant D (-400 < D < 0) has w(D) proper automorphs (brute force, entries in [-2,2])
+PASS forms: all 143695 reduced primitive forms with -10^4 < D < 0 have exactly w(D) automorphs (t,u)
+PASS class numbers h(-3,-4,-23,-20,-47) = 1,1,3,2,5
+PASS no discriminant carries two imaginary quadratic fields with different unit groups (|m| < 20000)
+PASS in particular no seven-digit witness (the witness set is empty)
+PASS h(-3), h(-4), h(-8) = 1, 1, 1: trivial 3-parts of the class groups
+PASS weakened reading: (-3,-4) and (-4,-8) have isomorphic (trivial) 3-parts and unit groups of orders 6/4 and 4/2 -> one-digit witnesses, not seven-digit
+PASS real fields: disc injective on all 12159 squarefree 1 < m < 20000
+PASS real fields: each of the 1214 squarefree 1 < m < 2000 has a unit x + y*sqrt(m), y > 0 (infinite order); with Dirichlet, O_K^x = {+-1} x Z
+PASS mixed reading: Q(sqrt 2), Q(sqrt -2) have |D| = 8 and Minkowski bounds 1.41, 1.80 < 2 (h = 1); units Z/2 x Z vs Z/2 -> one-digit witness
+PASS Q(sqrt 2): fundamental unit 1 + sqrt 2 (norm -1)
+
+ALL CHECKS PASSED
+exit 0
