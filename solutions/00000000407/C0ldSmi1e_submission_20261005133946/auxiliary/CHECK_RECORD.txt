@@ -1,0 +1,84 @@
+Candidate 00000000407: independent auxiliary computation record
+Run date: 2026-10-05. Runtime: Python 3.14.2, standard library only.
+
+Scope and source identity
+Read only the exact bilingual conjecture, both contribution guides, manifest,
+and pinned dependency metadata supplied in /private/tmp/tlmc407-author-input.
+No other problem, submission, old scratch, or author proof/project was read.
+The manifest identifies upstream main ba46ce0997cbf232fe95e5dced37ff4d32e1eb94
+and conjecture Git blob 3439f91b71e05a0d57573e84e6c181d4c7a0ba86.
+Actual SHA-256 values verified with shasum -a 256:
+  conjecture.md: 66558e3531b8501ab00746a36df399a3b2d2d5c23d0f28c5b1b11402bc99aa31
+  README.md: baf790af419e0070f593eecea4861fd865cc7b544d2cde6ec674f8fc587b01d1
+  README.zh-CN.md: d07ac1ccd888b8ee08fed8eb2e06ae15f6aa4025dbafe98790f8e2b2fc18eba7
+Both language versions index lambda, mu, and nu as partitions of the same n.
+
+Primary definition sources (opened 2026-10-05)
+1. Christian Gutschwager, On Base Partitions and Cover Partitions of Skew
+   Characters, Electronic Journal of Combinatorics 15 (2008), N30, section 2,
+   p. 2. Direct publisher PDF:
+   https://www.combinatorics.org/ojs/index.php/eljc/article/download/v15i1n30/pdf/
+   Its c(nu; lambda, mu) is the script's c^nu_{lambda,mu}: fillings of nu/lambda,
+   content mu, weak rows, strict columns, and a lattice reverse row word.
+   The word reads right-to-left, top-to-bottom; every prefix has at least as
+   many i's as (i+1)'s. Script coordinates start at zero, labels at one.
+2. Marc A. A. van Leeuwen, Schur Functions and Alternating Sums, Electronic
+   Journal of Combinatorics 11(2) (2006), A5, equation (39), p. 24:
+   https://www.combinatorics.org/ojs/index.php/eljc/article/download/v11i2a5/pdf/
+   Used for the independent Jacobi--Trudi determinant, with h_0=1 and h_k=0
+   for k<0. Here s_lambda=det(h_(lambda_i-i+j)), with empty determinant 1.
+3. John R. Stembridge, A Concise Proof of the Littlewood-Richardson Rule,
+   Electronic Journal of Combinatorics 9 (2002), N5, bi-alternant corollary,
+   p. 3:
+   https://www.combinatorics.org/ojs/index.php/eljc/article/download/v9i1n5/pdf
+   Used for s_lambda=a_(lambda+delta)/a_delta, delta=(N-1,...,0).
+   Thus the coefficient of x^(nu+delta) in a_delta*s_lambda*s_mu is the
+   desired Schur structure constant; its decreasing exponent vector occurs
+   in no other alternant indexed by a partition.
+
+Encoding and independence
+Canonical partitions are decreasing tuples of positive integers; () is the
+empty partition. Missing containment gives coefficient zero. The LR routine
+enumerates actual cells and labels, tests row, column, and prefix inequalities,
+and requires exact used-content equality at completion. It has NO preliminary
+degree-mismatch return and never hardcodes the source-table answer.
+The algebra checker uses integer sparse polynomials, complete homogeneous
+polynomials from weak compositions, a permutation-expanded Jacobi--Trudi
+determinant, and alternant coefficient extraction. It does not call the tableau
+routine to generate Schur polynomials. N=6 variables suffice for all checked
+products, whose total degree is at most 6. A separate full-filling validator
+uses all row/column pairs and completed prefixes to isolate malformed examples.
+
+Actual final command (exit status 0, no stderr)
+  python3 /private/tmp/tlmc407-auxiliary/verify.py > /private/tmp/tlmc407-auxiliary/output.json
+Also ran python3 --version and shasum -a 256 on the input and output artifacts.
+
+Exact results
+  JSON status: all checks passed.
+  Source table: n=0,...,10, all 116947 ordered triples enumerated.
+  Partition counts: 1,1,2,3,5,7,11,15,22,30,42.
+  Entry counts: 1,1,8,27,125,343,1331,3375,10648,27000,74088.
+  Nonzero entry counts: 1,0,0,0,0,0,0,0,0,0,0.
+  Independent Schur comparison: all 139 ordered input pairs with
+    |lambda|+|mu|<=6, and every target partition with |nu|<=6: 4170 triples.
+  Degree-compatible: 1110 triples; histogram {0:816, 1:293, 2:1}.
+  Degree-mismatched: 3060 triples; every coefficient zero.
+  Disagreements with Schur multiplication, commutativity, or conjugation: 0.
+  Fourteen named coefficient checks passed, including units, Pieri positives,
+    contained size-compatible Pieri negatives, unequal input sizes with both
+    positive and zero outcomes, and content/containment failures.
+  c^((3,2,1))_((2,1),(2,1))=2; both explicit tableaux are in output.json.
+  Five isolated filling checks passed: one fully valid filling and four
+    fillings failing exactly rows, columns, lattice word, or exact content.
+
+Final artifact SHA-256
+  verify.py: 5fbe8898aeb2f63ae360a338f8e2785bfb7147b62b05e93ef276bff1d7344840
+  output.json: deaaf7ff3b6ca139ada95269548c50634f1aed7f0fb622e29a18e76e494dab1d
+The JSON embeds the hash of the exact script that produced it.
+
+Limitations
+These are finite exact experiments and implementation checks, not a proof of
+vanishing for every n or of an asymptotic assertion. They check conventional LR
+coefficients under the literal bilingual indexing, without proposing a repaired
+statement. No Lean theorem, author project, mathematical report, PDF, Git change,
+or submission is created or verified by this auxiliary task.

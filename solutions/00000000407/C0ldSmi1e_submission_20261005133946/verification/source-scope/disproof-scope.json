@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "candidate": "00000000407",
+  "gate": "source_only_disproof_scope",
+  "decision": "PASS_DISPROOF_ONLY",
+  "scope_of_decision": "Clearance only to seek and check a disproof of the explicit necessary quantitative assertion P, using its literal conventional objects and indexing. This is not a mathematical truth assessment or clearance to claim that a proof of P proves the full original assertion.",
+  "initial_gate": {
+    "path": "/private/tmp/tlmc407-meaning-gate.json",
+    "decision": "DEFER",
+    "sha256_previously_recorded": "01b6b71fead2217b3615bf552bbeba7259bf8c019e608f0e27d0ed4b6da0c379",
+    "preserved_unchanged": true,
+    "relationship": "The initial gate deferred certification of a single complete meaning for every part of the original assertion. The present assessment addresses only whether its explicit main assertion is an invariant necessary claim under the unresolved parenthetical readings."
+  },
+  "inputs": [
+    {
+      "path": "/private/tmp/tlmc407-author-input/conjecture.md",
+      "sha256": "66558e3531b8501ab00746a36df399a3b2d2d5c23d0f28c5b1b11402bc99aa31",
+      "bytes": 406,
+      "read_in_full_in_initial_gate": true
+    },
+    {
+      "path": "/private/tmp/tlmc407-author-input/README.md",
+      "sha256": "baf790af419e0070f593eecea4861fd865cc7b544d2cde6ec674f8fc587b01d1",
+      "bytes": 6933,
+      "read_in_full_in_initial_gate": true
+    },
+    {
+      "path": "/private/tmp/tlmc407-author-input/README.zh-CN.md",
+      "sha256": "d07ac1ccd888b8ee08fed8eb2e06ae15f6aa4025dbafe98790f8e2b2fc18eba7",
+      "bytes": 6367,
+      "read_in_full_in_initial_gate": true
+    },
+    {
+      "path": "/private/tmp/tlmc407-author-input/manifest.json",
+      "sha256": "0b3ef556f2fcd116856f74f5298a4ae5406179475ec03992d1c2deb193415c82",
+      "bytes": 817,
+      "read_in_full_in_initial_gate": true
+    }
+  ],
+  "source_quotes": {
+    "english_main_clause": "The number of nonzero entries of the LR coefficient table (c^ν_{λμ})_{λ,μ,ν ⊢ n} is asymptotically c·4^n/n^{5/4}",
+    "english_parenthetical": "(a density estimate for LR-realizable triples among all 4^n configurations)",
+    "chinese_main_clause": "LR 系数表 (c^ν_{λμ})_{λ,μ,ν ⊢ n} 的非零项总数渐近为 c·4^n/n^{5/4}",
+    "chinese_parenthetical": "(指数 4^n 中 LR 可实现三元组的密度估计)"
+  },
+  "necessary_assertion_P": {
+    "parameter": "n tends to positive infinity through the positive integers. The partition table may also be defined at n = 0; that finite initial index does not enter the positive-n limit expression.",
+    "partitions": "Part(n) is the set of all integer partitions of n, in the usual sense. Every one of λ, μ and ν separately belongs to Part(n).",
+    "coefficients": "LR denotes the actual Littlewood–Richardson coefficients on partition triples, conventionally the coefficients c^ν_{λμ} in the Schur-basis expansion s_λ s_μ = Σ_ν c^ν_{λμ} s_ν in symmetric functions, or an equivalent completely specified standard definition.",
+    "count": "N(n) = #{(λ, μ, ν) ∈ Part(n) × Part(n) × Part(n) : c^ν_{λμ} ≠ 0}. These are ordered table indices. Entries are counted once each, without weights or an unstated quotient.",
+    "asymptotic": "There exists a fixed finite real c > 0 such that N(n)/(c * 4^n / n^(5/4)) tends to 1 as n tends to infinity through positive integers. Equivalently, N(n) * n^(5/4) / 4^n tends to a fixed finite c > 0.",
+    "exponents": "The base of the exponential is exactly 4 and its exponent is n. The denominator is the positive real power n^(5/4), where 5/4 is the rational number, not integer division. The constant c is independent of n and distinct from the indexed coefficient notation.",
+    "conventional_meaning_versus_hypotheses": "The partition notation, the standard named coefficients, the usual nonzero-entry count, and a fixed positive leading constant under asymptotic equivalence explain the explicit source notation. They do not license extra restrictions on the displayed index set, auxiliary assumptions on the coefficients, a different notion of realizability, or a new counting model."
+  },
+  "scope_reasoning": [
+    "In both language versions the main clause directly asserts P. It is a complete quantitative assertion before the parenthesis begins.",
+    "If the parenthetical merely explains the intended normalization or motivation, the explicit necessary assertion remains P.",
+    "If the parenthetical adds a requirement Q about an ambient configuration family, realization relation, or density interpretation, the full assertion still entails P. This remains so if P and Q share quantified data: for example, an assertion that there exists c satisfying both the displayed asymptotic and further conditions entails the displayed existential assertion P.",
+    "Consequently, a checked proof of the exact logical negation of P suffices to refute every source-faithful reading in this gloss-or-additional-requirement class. It is not necessary to define or refute Q to establish that consequence.",
+    "The parenthetical has no wording that makes P conditional, supplies an exception, rebinds n, defines a different LR coefficient, or replaces the displayed index domain. Its undefined word configurations does not identify a competing formal domain.",
+    "A materially altered intended counting problem is conceivable, but selecting one would require repairing or overriding the explicit main clause. The source supplies no definite alteration to authorize. A disproof-only clearance must remain about the literal stated assertion and must not claim to settle any repaired or guessed intended conjecture."
+  ],
+  "remaining_ambiguity": {
+    "exact_words": "among all 4^n configurations; 指数 4^n 中 LR 可实现三元组的密度估计",
+    "unresolved": "No configuration universe or realization map is defined, and the parenthetical’s role as gloss versus additional requirement remains unresolved.",
+    "effect_on_disproof_only_scope": "This ambiguity does not withdraw the explicit assertion P under the ordinary grammatical readings above. It therefore does not block a disproof of P, while it continues to block a claim that proving P alone proves every possible requirement of the full original text."
+  },
+  "required_future_obligations": [
+    "Define actual integer partitions, the full finite ordered index set Part(n)^3, and the corresponding nonzero-entry count.",
+    "Give a faithful definition of the actual Littlewood–Richardson coefficients for every triple appearing in the source table. If starting from a restricted presentation, supply and justify the extension needed to interpret all displayed entries.",
+    "For a Schur-based development, provide the symmetric-function objects, Schur basis and coefficient extraction needed for that definition. For a tableau-based development, provide the actual shapes, filling/content conditions and Littlewood–Richardson conditions and connect the resulting count to the standard named coefficients.",
+    "Prove or properly import every property used about those actual objects; do not axiomatize selected convenient properties of an otherwise arbitrary surrogate function and call that a disproof of the named-coefficient statement.",
+    "Formalize and establish the negation of the complete existential positive-constant asymptotic assertion P, not merely failure at a chosen constant, a finite initial index, or a reformulated index domain.",
+    "Make the bridge between the formal theorem and the exact source-level necessary assertion explicit in the written report, including all quantifiers, real exponents and the direction of asymptotic equivalence.",
+    "State the logical scope honestly: refutation of P refutes the literal main claim and any conjunction that retains P. It makes no claim about an alternative intended problem obtained by changing the source.",
+    "Retain the initial full-meaning deferral and disclose the unresolved parenthetical when describing why a disproof can have adequate logical scope without resolving that additional language."
+  ],
+  "limitations": [
+    "This record contains no determination that P is true or false, and no evidence bearing on that question.",
+    "No witness, computation, coefficient identity, structural obstruction, or mathematical proof/disproof strategy has been derived or supplied.",
+    "The clearance does not authorize treating the parenthetical as a hypothesis under which P is asserted; that conditional is absent from the source.",
+    "The clearance does not authorize proving the whole conjecture from P alone, replacing the index set, changing coefficient conventions, dropping positivity of the leading constant, or constructing a convenient meaning for configurations.",
+    "The clearance does not establish operational eligibility, submission admissibility, availability of a faithful formal development, or completion of any proof."
+  ],
+  "access_scope": {
+    "read_paths": [
+      "/private/tmp/tlmc407-author-input/conjecture.md",
+      "/private/tmp/tlmc407-author-input/README.md",
+      "/private/tmp/tlmc407-author-input/README.zh-CN.md",
+      "/private/tmp/tlmc407-author-input/manifest.json"
+    ],
+    "written_paths": [
+      "/private/tmp/tlmc407-meaning-disproof-scope.json"
+    ],
+    "initial_gate_file_read_or_modified_in_this_followup": false,
+    "other_files_or_directories_inspected": [],
+    "network_or_external_services_accessed": false,
+    "source_files_mutated": false,
+    "git_read_or_mutated": false,
+    "prior_solution_or_external_mathematical_literature_used": false
+  },
+  "handoff": "PASS_DISPROOF_ONLY for the exact explicit necessary assertion P, subject to the obligations and limitations above. The initial DEFER for complete full-statement meaning is preserved."
+}

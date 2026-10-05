@@ -1,0 +1,618 @@
+{
+  "arithmetic": "exact Python integers; standard library only",
+  "candidate": "00000000407",
+  "finite_experiments_only": true,
+  "independent_schur_check": {
+    "commutativity_disagreements": 0,
+    "conjugation_disagreements": 0,
+    "degree_compatible_histogram": {
+      "0": 816,
+      "1": 293,
+      "2": 1
+    },
+    "degree_compatible_triples": 1110,
+    "degree_compatible_zero_coefficients": 816,
+    "degree_mismatched_triples": 3060,
+    "input_pairs": 139,
+    "max_output_size": 6,
+    "max_total_input_size": 6,
+    "positive_coefficients": 294,
+    "schur_disagreements": 0,
+    "triples_checked": 4170,
+    "variables": 6
+  },
+  "isolated_filling_cases": [
+    {
+      "accepted": true,
+      "conditions": {
+        "cells": true,
+        "columns": true,
+        "content": true,
+        "lattice": true,
+        "positive_labels": true,
+        "rows": true
+      },
+      "filling": [
+        [
+          0,
+          2,
+          1
+        ],
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          2
+        ],
+        [
+          1,
+          0,
+          1
+        ]
+      ],
+      "lambda_": [
+        1
+      ],
+      "mu": [
+        3,
+        1
+      ],
+      "name": "valid with row and column constraints",
+      "nu": [
+        3,
+        2
+      ]
+    },
+    {
+      "accepted": false,
+      "conditions": {
+        "cells": true,
+        "columns": true,
+        "content": true,
+        "lattice": true,
+        "positive_labels": true,
+        "rows": false
+      },
+      "filling": [
+        [
+          0,
+          3,
+          1
+        ],
+        [
+          0,
+          2,
+          1
+        ],
+        [
+          1,
+          2,
+          2
+        ],
+        [
+          1,
+          1,
+          3
+        ]
+      ],
+      "lambda_": [
+        2,
+        1
+      ],
+      "mu": [
+        2,
+        1,
+        1
+      ],
+      "name": "only row condition fails",
+      "nu": [
+        4,
+        3
+      ]
+    },
+    {
+      "accepted": false,
+      "conditions": {
+        "cells": true,
+        "columns": false,
+        "content": true,
+        "lattice": true,
+        "positive_labels": true,
+        "rows": true
+      },
+      "filling": [
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ]
+      ],
+      "lambda_": [
+        1
+      ],
+      "mu": [
+        3
+      ],
+      "name": "only column condition fails",
+      "nu": [
+        2,
+        2
+      ]
+    },
+    {
+      "accepted": false,
+      "conditions": {
+        "cells": true,
+        "columns": true,
+        "content": true,
+        "lattice": false,
+        "positive_labels": true,
+        "rows": true
+      },
+      "filling": [
+        [
+          0,
+          2,
+          2
+        ],
+        [
+          0,
+          1,
+          1
+        ]
+      ],
+      "lambda_": [
+        1
+      ],
+      "mu": [
+        1,
+        1
+      ],
+      "name": "only reading word condition fails",
+      "nu": [
+        3
+      ]
+    },
+    {
+      "accepted": false,
+      "conditions": {
+        "cells": true,
+        "columns": true,
+        "content": false,
+        "lattice": true,
+        "positive_labels": true,
+        "rows": true
+      },
+      "filling": [
+        [
+          0,
+          2,
+          1
+        ],
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          2
+        ],
+        [
+          1,
+          0,
+          1
+        ]
+      ],
+      "lambda_": [
+        1
+      ],
+      "mu": [
+        2,
+        2
+      ],
+      "name": "only exact content condition fails",
+      "nu": [
+        3,
+        2
+      ]
+    }
+  ],
+  "multiplicity_two_witnesses": {
+    "coordinates": "zero-based row, column, positive label; reading order",
+    "lambda_": [
+      2,
+      1
+    ],
+    "mu": [
+      2,
+      1
+    ],
+    "nu": [
+      3,
+      2,
+      1
+    ],
+    "tableaux": [
+      [
+        [
+          0,
+          2,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          2,
+          0,
+          2
+        ]
+      ],
+      [
+        [
+          0,
+          2,
+          1
+        ],
+        [
+          1,
+          1,
+          2
+        ],
+        [
+          2,
+          0,
+          1
+        ]
+      ]
+    ]
+  },
+  "named_sanity_cases": [
+    {
+      "expected": 1,
+      "lambda_": [],
+      "mu": [],
+      "name": "empty unit",
+      "nu": [],
+      "schur_coefficient": 1,
+      "tableau_count": 1
+    },
+    {
+      "expected": 1,
+      "lambda_": [],
+      "mu": [
+        2,
+        1
+      ],
+      "name": "left unit",
+      "nu": [
+        2,
+        1
+      ],
+      "schur_coefficient": 1,
+      "tableau_count": 1
+    },
+    {
+      "expected": 1,
+      "lambda_": [
+        2,
+        1
+      ],
+      "mu": [],
+      "name": "right unit",
+      "nu": [
+        2,
+        1
+      ],
+      "schur_coefficient": 1,
+      "tableau_count": 1
+    },
+    {
+      "expected": 1,
+      "lambda_": [
+        2
+      ],
+      "mu": [
+        2
+      ],
+      "name": "horizontal Pieri positive",
+      "nu": [
+        3,
+        1
+      ],
+      "schur_coefficient": 1,
+      "tableau_count": 1
+    },
+    {
+      "expected": 0,
+      "lambda_": [
+        2
+      ],
+      "mu": [
+        2
+      ],
+      "name": "horizontal Pieri column obstruction",
+      "nu": [
+        2,
+        1,
+        1
+      ],
+      "schur_coefficient": 0,
+      "tableau_count": 0
+    },
+    {
+      "expected": 1,
+      "lambda_": [
+        2
+      ],
+      "mu": [
+        1,
+        1
+      ],
+      "name": "vertical Pieri positive",
+      "nu": [
+        3,
+        1
+      ],
+      "schur_coefficient": 1,
+      "tableau_count": 1
+    },
+    {
+      "expected": 0,
+      "lambda_": [
+        2
+      ],
+      "mu": [
+        1,
+        1
+      ],
+      "name": "vertical Pieri row obstruction",
+      "nu": [
+        4
+      ],
+      "schur_coefficient": 0,
+      "tableau_count": 0
+    },
+    {
+      "expected": 1,
+      "lambda_": [
+        2,
+        1
+      ],
+      "mu": [
+        2
+      ],
+      "name": "unequal input sizes positive",
+      "nu": [
+        3,
+        1,
+        1
+      ],
+      "schur_coefficient": 1,
+      "tableau_count": 1
+    },
+    {
+      "expected": 0,
+      "lambda_": [
+        2,
+        1
+      ],
+      "mu": [
+        2
+      ],
+      "name": "unequal input sizes column obstruction",
+      "nu": [
+        2,
+        1,
+        1,
+        1
+      ],
+      "schur_coefficient": 0,
+      "tableau_count": 0
+    },
+    {
+      "expected": 2,
+      "lambda_": [
+        2,
+        1
+      ],
+      "mu": [
+        2,
+        1
+      ],
+      "name": "multiplicity two",
+      "nu": [
+        3,
+        2,
+        1
+      ],
+      "schur_coefficient": 2,
+      "tableau_count": 2
+    },
+    {
+      "expected": 0,
+      "lambda_": [
+        2
+      ],
+      "mu": [
+        1
+      ],
+      "name": "missing containment",
+      "nu": [
+        1,
+        1,
+        1
+      ],
+      "schur_coefficient": 0,
+      "tableau_count": 0
+    },
+    {
+      "expected": 0,
+      "lambda_": [
+        1
+      ],
+      "mu": [
+        2
+      ],
+      "name": "too much requested content",
+      "nu": [
+        2
+      ],
+      "schur_coefficient": 0,
+      "tableau_count": 0
+    },
+    {
+      "expected": 0,
+      "lambda_": [
+        1
+      ],
+      "mu": [
+        1
+      ],
+      "name": "too little requested content",
+      "nu": [
+        3
+      ],
+      "schur_coefficient": 0,
+      "tableau_count": 0
+    },
+    {
+      "expected": 0,
+      "lambda_": [
+        1
+      ],
+      "mu": [
+        1
+      ],
+      "name": "nonempty content in empty skew shape",
+      "nu": [
+        1
+      ],
+      "schur_coefficient": 0,
+      "tableau_count": 0
+    }
+  ],
+  "script_sha256": "5fbe8898aeb2f63ae360a338f8e2785bfb7147b62b05e93ef276bff1d7344840",
+  "source_indexing": "lambda, mu, nu are all partitions of the same n",
+  "source_table": [
+    {
+      "coefficient_histogram": {
+        "1": 1
+      },
+      "entries": 1,
+      "n": 0,
+      "nonzero_entries": 1,
+      "partitions": 1
+    },
+    {
+      "coefficient_histogram": {
+        "0": 1
+      },
+      "entries": 1,
+      "n": 1,
+      "nonzero_entries": 0,
+      "partitions": 1
+    },
+    {
+      "coefficient_histogram": {
+        "0": 8
+      },
+      "entries": 8,
+      "n": 2,
+      "nonzero_entries": 0,
+      "partitions": 2
+    },
+    {
+      "coefficient_histogram": {
+        "0": 27
+      },
+      "entries": 27,
+      "n": 3,
+      "nonzero_entries": 0,
+      "partitions": 3
+    },
+    {
+      "coefficient_histogram": {
+        "0": 125
+      },
+      "entries": 125,
+      "n": 4,
+      "nonzero_entries": 0,
+      "partitions": 5
+    },
+    {
+      "coefficient_histogram": {
+        "0": 343
+      },
+      "entries": 343,
+      "n": 5,
+      "nonzero_entries": 0,
+      "partitions": 7
+    },
+    {
+      "coefficient_histogram": {
+        "0": 1331
+      },
+      "entries": 1331,
+      "n": 6,
+      "nonzero_entries": 0,
+      "partitions": 11
+    },
+    {
+      "coefficient_histogram": {
+        "0": 3375
+      },
+      "entries": 3375,
+      "n": 7,
+      "nonzero_entries": 0,
+      "partitions": 15
+    },
+    {
+      "coefficient_histogram": {
+        "0": 10648
+      },
+      "entries": 10648,
+      "n": 8,
+      "nonzero_entries": 0,
+      "partitions": 22
+    },
+    {
+      "coefficient_histogram": {
+        "0": 27000
+      },
+      "entries": 27000,
+      "n": 9,
+      "nonzero_entries": 0,
+      "partitions": 30
+    },
+    {
+      "coefficient_histogram": {
+        "0": 74088
+      },
+      "entries": 74088,
+      "n": 10,
+      "nonzero_entries": 0,
+      "partitions": 42
+    }
+  ],
+  "status": "all checks passed",
+  "tableau_degree_shortcut": false
+}

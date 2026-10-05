@@ -1,0 +1,61 @@
+✔ [2794/2797] Built Conjecture407
+ℹ [2796/2797] Built Audit407
+info: ././././Audit407.lean:62:0: Conjecture407.Partition (n : ℕ) : Type
+info: ././././Audit407.lean:63:0: Conjecture407.SkewCell (lam nu : YoungDiagram) : Type
+info: ././././Audit407.lean:64:0: Conjecture407.ReadingLE (a b : ℕ × ℕ) : Prop
+info: ././././Audit407.lean:65:0: Conjecture407.entryCount {lam nu : YoungDiagram} (f : Conjecture407.SkewCell lam nu → ℕ) (i : ℕ) : ℕ
+info: ././././Audit407.lean:66:0: Conjecture407.prefixCount {lam nu : YoungDiagram} (f : Conjecture407.SkewCell lam nu → ℕ)
+  (b : Conjecture407.SkewCell lam nu) (i : ℕ) : ℕ
+info: ././././Audit407.lean:67:0: Conjecture407.LRTableau (lam mu nu : YoungDiagram) : Type
+info: ././././Audit407.lean:68:0: Conjecture407.lrTableauFinite (lam mu nu : YoungDiagram) : Finite (Conjecture407.LRTableau lam mu nu)
+info: ././././Audit407.lean:69:0: Conjecture407.diagram_card_eq_sum_rowLen (d : YoungDiagram) : d.card = ∑ i ∈ Finset.range (d.colLen 0), d.rowLen i
+info: ././././Audit407.lean:70:0: Conjecture407.LRTableau.size_balance {lam mu nu : YoungDiagram} (T : Conjecture407.LRTableau lam mu nu) :
+  nu.card = lam.card + mu.card
+info: ././././Audit407.lean:71:0: Conjecture407.lrCoefficient (lam mu nu : YoungDiagram) : ℕ
+info: ././././Audit407.lean:72:0: Conjecture407.partitionFinite (n : ℕ) : Finite (Conjecture407.Partition n)
+info: ././././Audit407.lean:73:0: Conjecture407.NonzeroEntry (n : ℕ) : Type
+info: ././././Audit407.lean:74:0: Conjecture407.nonzeroEntryFinite (n : ℕ) : Finite (Conjecture407.NonzeroEntry n)
+info: ././././Audit407.lean:75:0: Conjecture407.nonzeroCount (n : ℕ) : ℕ
+info: ././././Audit407.lean:76:0: Conjecture407.scale (n : ℕ) : ℝ
+info: ././././Audit407.lean:77:0: Conjecture407.RatioAsymptotic (c : ℝ) : Prop
+info: ././././Audit407.lean:78:0: Conjecture407.not_ratioAsymptotic (c : ℝ) : ¬Conjecture407.RatioAsymptotic c
+info: ././././Audit407.lean:79:0: Conjecture407.no_real_ratio_constant : ¬∃ c, Conjecture407.RatioAsymptotic c
+info: ././././Audit407.lean:80:0: Conjecture407.conjecture407_false : ¬∃ c, 0 < c ∧ Conjecture407.RatioAsymptotic c
+info: ././././Audit407.lean:82:0: 'Conjecture407.LRTableau.entry_lt' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:83:0: 'Conjecture407.lrTableauFinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:84:0: 'Conjecture407.LRTableau.size_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:85:0: 'Conjecture407.partitionFinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:86:0: 'Conjecture407.nonzeroEntryFinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:87:0: 'Conjecture407.lrCoefficient_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:88:0: 'Conjecture407.nonzeroCount_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:89:0: 'Conjecture407.normalized_tendsto_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:90:0: 'Conjecture407.not_ratioAsymptotic' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:91:0: 'Conjecture407.no_real_ratio_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:92:0: 'Conjecture407.conjecture407_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:93:0: 'Conjecture407Audit.empty_coefficient_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:94:0: 'Conjecture407Audit.table_zero_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:95:0: 'Conjecture407Audit.table_one_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:96:0: 'Conjecture407Audit.table_two_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Audit407.lean:98:0: structure Conjecture407.LRTableau (lam mu nu : YoungDiagram) : Type
+number of parameters: 3
+fields:
+  Conjecture407.LRTableau.entry : Conjecture407.SkewCell lam nu → ℕ
+  Conjecture407.LRTableau.contained : lam ≤ nu
+  Conjecture407.LRTableau.rowWeak : ∀ (a b : Conjecture407.SkewCell lam nu),
+      (↑a).1 = (↑b).1 → (↑a).2 ≤ (↑b).2 → self.entry a ≤ self.entry b
+  Conjecture407.LRTableau.colStrict : ∀ (a b : Conjecture407.SkewCell lam nu),
+      (↑a).2 = (↑b).2 → (↑a).1 < (↑b).1 → self.entry a < self.entry b
+  Conjecture407.LRTableau.content : ∀ (i : ℕ), Conjecture407.entryCount self.entry i = mu.rowLen i
+  Conjecture407.LRTableau.lattice : ∀ (b : Conjecture407.SkewCell lam nu) (i : ℕ),
+      Conjecture407.prefixCount self.entry b (i + 1) ≤ Conjecture407.prefixCount self.entry b i
+constructor:
+  Conjecture407.LRTableau.mk {lam mu nu : YoungDiagram} (entry : Conjecture407.SkewCell lam nu → ℕ)
+    (contained : lam ≤ nu)
+    (rowWeak : ∀ (a b : Conjecture407.SkewCell lam nu), (↑a).1 = (↑b).1 → (↑a).2 ≤ (↑b).2 → entry a ≤ entry b)
+    (colStrict : ∀ (a b : Conjecture407.SkewCell lam nu), (↑a).2 = (↑b).2 → (↑a).1 < (↑b).1 → entry a < entry b)
+    (content : ∀ (i : ℕ), Conjecture407.entryCount entry i = mu.rowLen i)
+    (lattice :
+      ∀ (b : Conjecture407.SkewCell lam nu) (i : ℕ),
+        Conjecture407.prefixCount entry b (i + 1) ≤ Conjecture407.prefixCount entry b i) :
+    Conjecture407.LRTableau lam mu nu
+Build completed successfully.

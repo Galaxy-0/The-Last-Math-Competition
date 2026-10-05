@@ -1,0 +1,118 @@
+def Conjecture407Audit.emptyTableau : Conjecture407.LRTableau ⊥ ⊥ ⊥ :=
+{ entry := fun x => 0, contained := Conjecture407Audit.emptyTableau._proof_1,
+  rowWeak := Conjecture407Audit.emptyTableau._proof_2, colStrict := Conjecture407Audit.emptyTableau._proof_3,
+  content := Conjecture407Audit.emptyTableau._proof_4, lattice := Conjecture407Audit.emptyTableau._proof_5 }
+def Conjecture407Audit.emptyPartition : Conjecture407.Partition 0 :=
+⟨⊥, Conjecture407Audit.emptyPartition._proof_6⟩
+def Conjecture407.Partition : ℕ → Type :=
+fun n => { d // d.card = n }
+@[reducible] def Conjecture407.SkewCell : YoungDiagram → YoungDiagram → Type :=
+fun lam nu => { x // x ∈ nu.cells \ lam.cells }
+def Conjecture407.ReadingLE : ℕ × ℕ → ℕ × ℕ → Prop :=
+fun a b => a.1 < b.1 ∨ a.1 = b.1 ∧ b.2 ≤ a.2
+def Conjecture407.entryCount : {lam nu : YoungDiagram} → (Conjecture407.SkewCell lam nu → ℕ) → ℕ → ℕ :=
+fun {lam nu} f i => {a | f a = i}.card
+def Conjecture407.prefixCount : {lam nu : YoungDiagram} →
+  (Conjecture407.SkewCell lam nu → ℕ) → Conjecture407.SkewCell lam nu → ℕ → ℕ :=
+fun {lam nu} f b i => {a | Conjecture407.ReadingLE ↑a ↑b ∧ f a = i}.card
+structure Conjecture407.LRTableau (lam mu nu : YoungDiagram) : Type
+number of parameters: 3
+fields:
+  Conjecture407.LRTableau.entry : Conjecture407.SkewCell lam nu → ℕ
+  Conjecture407.LRTableau.contained : lam ≤ nu
+  Conjecture407.LRTableau.rowWeak : ∀ (a b : Conjecture407.SkewCell lam nu),
+      (↑a).1 = (↑b).1 → (↑a).2 ≤ (↑b).2 → self.entry a ≤ self.entry b
+  Conjecture407.LRTableau.colStrict : ∀ (a b : Conjecture407.SkewCell lam nu),
+      (↑a).2 = (↑b).2 → (↑a).1 < (↑b).1 → self.entry a < self.entry b
+  Conjecture407.LRTableau.content : ∀ (i : ℕ), Conjecture407.entryCount self.entry i = mu.rowLen i
+  Conjecture407.LRTableau.lattice : ∀ (b : Conjecture407.SkewCell lam nu) (i : ℕ),
+      Conjecture407.prefixCount self.entry b (i + 1) ≤ Conjecture407.prefixCount self.entry b i
+constructor:
+  Conjecture407.LRTableau.mk {lam mu nu : YoungDiagram} (entry : Conjecture407.SkewCell lam nu → ℕ)
+    (contained : lam ≤ nu)
+    (rowWeak : ∀ (a b : Conjecture407.SkewCell lam nu), (↑a).1 = (↑b).1 → (↑a).2 ≤ (↑b).2 → entry a ≤ entry b)
+    (colStrict : ∀ (a b : Conjecture407.SkewCell lam nu), (↑a).2 = (↑b).2 → (↑a).1 < (↑b).1 → entry a < entry b)
+    (content : ∀ (i : ℕ), Conjecture407.entryCount entry i = mu.rowLen i)
+    (lattice :
+      ∀ (b : Conjecture407.SkewCell lam nu) (i : ℕ),
+        Conjecture407.prefixCount entry b (i + 1) ≤ Conjecture407.prefixCount entry b i) :
+    Conjecture407.LRTableau lam mu nu
+def Conjecture407.lrCoefficient : YoungDiagram → YoungDiagram → YoungDiagram → ℕ :=
+fun lam mu nu => Nat.card (Conjecture407.LRTableau lam mu nu)
+def Conjecture407.NonzeroEntry : ℕ → Type :=
+fun n => { t // Conjecture407.lrCoefficient ↑t.1 ↑t.2.1 ↑t.2.2 ≠ 0 }
+def Conjecture407.nonzeroCount : ℕ → ℕ :=
+fun n => Nat.card (Conjecture407.NonzeroEntry n)
+def Conjecture407.scale : ℕ → ℝ :=
+fun n => 4 ^ n / (↑n).rpow (5 / 4)
+def Conjecture407.RatioAsymptotic : ℝ → Prop :=
+fun c =>
+  ∀ (ε : ℝ), 0 < ε → ∃ N, ∀ (n : ℕ), N ≤ n → |↑(Conjecture407.nonzeroCount n) / (c * Conjecture407.scale n) - 1| < ε
+Conjecture407Audit.empty_coefficient_one : Conjecture407.lrCoefficient ⊥ ⊥ ⊥ = 1
+'Conjecture407Audit.empty_coefficient_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407Audit.partition_zero_unique (d : Conjecture407.Partition 0) : d = Conjecture407Audit.emptyPartition
+'Conjecture407Audit.partition_zero_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407Audit.table_zero_one : Conjecture407.nonzeroCount 0 = 1
+'Conjecture407Audit.table_zero_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407Audit.table_one_zero : Conjecture407.nonzeroCount 1 = 0
+'Conjecture407Audit.table_one_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407Audit.table_two_zero : Conjecture407.nonzeroCount 2 = 0
+'Conjecture407Audit.table_two_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.readingLE_refl (a : ℕ × ℕ) : Conjecture407.ReadingLE a a
+'Conjecture407.readingLE_refl' depends on axioms: [propext]
+Conjecture407.readingLE_total (a b : ℕ × ℕ) : Conjecture407.ReadingLE a b ∨ Conjecture407.ReadingLE b a
+'Conjecture407.readingLE_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.readingLE_antisymm {a b : ℕ × ℕ} (h : Conjecture407.ReadingLE a b) (h' : Conjecture407.ReadingLE b a) :
+  a = b
+'Conjecture407.readingLE_antisymm' depends on axioms: [propext, Quot.sound]
+Conjecture407.readingLE_trans {a b c : ℕ × ℕ} (h : Conjecture407.ReadingLE a b) (h' : Conjecture407.ReadingLE b c) :
+  Conjecture407.ReadingLE a c
+'Conjecture407.readingLE_trans' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.LRTableau.entry_lt {lam mu nu : YoungDiagram} (T : Conjecture407.LRTableau lam mu nu)
+  (a : Conjecture407.SkewCell lam nu) : T.entry a < mu.colLen 0
+'Conjecture407.LRTableau.entry_lt' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.LRTableau.entry_injective {lam mu nu : YoungDiagram} : Function.Injective Conjecture407.LRTableau.entry
+'Conjecture407.LRTableau.entry_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.lrTableauFinite (lam mu nu : YoungDiagram) : Finite (Conjecture407.LRTableau lam mu nu)
+'Conjecture407.lrTableauFinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.diagram_card_eq_sum_rowLen (d : YoungDiagram) : d.card = ∑ i ∈ Finset.range (d.colLen 0), d.rowLen i
+'Conjecture407.diagram_card_eq_sum_rowLen' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.LRTableau.size_balance {lam mu nu : YoungDiagram} (T : Conjecture407.LRTableau lam mu nu) :
+  nu.card = lam.card + mu.card
+'Conjecture407.LRTableau.size_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.lrCoefficient_eq_zero_of_not_contained (lam mu nu : YoungDiagram) (h : ¬lam ≤ nu) :
+  Conjecture407.lrCoefficient lam mu nu = 0
+'Conjecture407.lrCoefficient_eq_zero_of_not_contained' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.lrCoefficient_eq_zero_of_size_ne (lam mu nu : YoungDiagram) (h : nu.card ≠ lam.card + mu.card) :
+  Conjecture407.lrCoefficient lam mu nu = 0
+'Conjecture407.lrCoefficient_eq_zero_of_size_ne' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.cell_row_lt_card {d : YoungDiagram} {i j : ℕ} (h : (i, j) ∈ d) : i < d.card
+'Conjecture407.cell_row_lt_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.cell_col_lt_card {d : YoungDiagram} {i j : ℕ} (h : (i, j) ∈ d) : j < d.card
+'Conjecture407.cell_col_lt_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.partitionFinite (n : ℕ) : Finite (Conjecture407.Partition n)
+'Conjecture407.partitionFinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.nonzeroEntryFinite (n : ℕ) : Finite (Conjecture407.NonzeroEntry n)
+'Conjecture407.nonzeroEntryFinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.no_tableau_same_positive_size (n : ℕ) (hn : 0 < n) (lam mu nu : Conjecture407.Partition n) :
+  IsEmpty (Conjecture407.LRTableau ↑lam ↑mu ↑nu)
+'Conjecture407.no_tableau_same_positive_size' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.lrCoefficient_eq_zero (n : ℕ) (hn : 0 < n) (lam mu nu : Conjecture407.Partition n) :
+  Conjecture407.lrCoefficient ↑lam ↑mu ↑nu = 0
+'Conjecture407.lrCoefficient_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.nonzeroCount_eq_zero (n : ℕ) (hn : 0 < n) : Conjecture407.nonzeroCount n = 0
+'Conjecture407.nonzeroCount_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.scale_pos (n : ℕ) (hn : 0 < n) : 0 < Conjecture407.scale n
+'Conjecture407.scale_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.normalized_eventually_zero :
+  ∀ᶠ (n : ℕ) in Filter.atTop, ↑(Conjecture407.nonzeroCount n) / Conjecture407.scale n = 0
+'Conjecture407.normalized_eventually_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.normalized_tendsto_zero :
+  Filter.Tendsto (fun n => ↑(Conjecture407.nonzeroCount n) / Conjecture407.scale n) Filter.atTop (nhds 0)
+'Conjecture407.normalized_tendsto_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.not_ratioAsymptotic (c : ℝ) : ¬Conjecture407.RatioAsymptotic c
+'Conjecture407.not_ratioAsymptotic' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.no_real_ratio_constant : ¬∃ c, Conjecture407.RatioAsymptotic c
+'Conjecture407.no_real_ratio_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture407.conjecture407_false : ¬∃ c, 0 < c ∧ Conjecture407.RatioAsymptotic c
+'Conjecture407.conjecture407_false' depends on axioms: [propext, Classical.choice, Quot.sound]

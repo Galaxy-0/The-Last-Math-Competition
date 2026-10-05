@@ -1,0 +1,71 @@
+--- report-reviewed-original.tex
++++ report-reviewed-final.tex
+@@ -1,6 +1,5 @@
+ \documentclass[11pt]{article}
+ \usepackage[T1]{fontenc}
+-\usepackage[utf8]{inputenc}
+ \usepackage{lmodern,amsmath,amssymb,amsthm,booktabs,array}
+ \usepackage[margin=1in]{geometry}
+ \usepackage{microtype}
+@@ -11,7 +10,7 @@
+ \newcommand{\R}{\mathbb R}
+ \newcommand{\Part}{\operatorname{Part}}
+ \setlength{\parindent}{0pt}
+-\setlength{\parskip}{0.5em}
++\setlength{\parskip}{0.35em}
+ \title{Disproof of Conjecture 00000000407\\[0.3em]
+ \large The stated equal-size Littlewood--Richardson table is zero}
+ \author{C0ldSmi1e}
+@@ -38,9 +37,13 @@
+ \end{quote}
+ The Chinese text has the same simultaneous indexing and quantitative formula.
+ The full original bilingual file accompanies this submission as
+-\texttt{conjecture.md}. It is bound to upstream commit
+-\texttt{ba46ce0997cbf232fe95e5dced37ff4d32e1eb94} and source Git blob
+-\texttt{3439f91b71e05a0d57573e84e6c181d4c7a0ba86}.
++\texttt{conjecture.md}. Its source identities are:
++\begin{center}\small
++\begin{tabular}{@{}ll@{}}
++Upstream commit & \texttt{ba46ce0997cbf232fe95e5dced37ff4d32e1eb94}\\
++Source Git blob & \texttt{3439f91b71e05a0d57573e84e6c181d4c7a0ba86}
++\end{tabular}
++\end{center}
+ 
+ Keep the indexing as printed, and write
+ \[
+@@ -176,15 +179,15 @@
+ \toprule
+ Formal declaration & Mathematical content\\
+ \midrule
+-\texttt{LRTableau.entry\_lt}, \texttt{lrTableauFinite}
++\texttt{LRTableau.entry\_lt}\newline \texttt{lrTableauFinite}
+  & Derived letter bound and finite tableau count\\
+ \texttt{diagram\_card\_eq\_sum\_rowLen}
+  & Row-by-row diagram cardinality\\
+ \texttt{LRTableau.size\_balance}
+  & Proved identity $|\nu|=|\lambda|+|\mu|$\\
+-\texttt{partitionFinite}, \texttt{nonzeroEntryFinite}
++\texttt{partitionFinite}\newline \texttt{nonzeroEntryFinite}
+  & Finiteness of the exact index and counted-entry types\\
+-\texttt{lrCoefficient\_eq\_zero}, \texttt{nonzeroCount\_eq\_zero}
++\texttt{lrCoefficient\_eq\_zero}\newline \texttt{nonzeroCount\_eq\_zero}
+  & Every entry and its nonzero count vanish for $n>0$\\
+ \texttt{normalized\_tendsto\_zero}
+  & Actual normalized limit in Mathlib's filter formulation\\
+@@ -237,7 +240,10 @@
+ the independent review are submission evidence; maintainer acceptance is a
+ separate decision.
+ 
++\par\clearpage
++\begin{samepage}
+ \begin{thebibliography}{9}\small
++\setlength{\itemsep}{0.2em}
+ \bibitem{hahn} H. Hahn, \emph{On Classical groups detected by the triple tensor
+ product and the Littlewood--Richardson semigroup}, Research in Number Theory
+ 2, article 19 (2016), Definition 2.1.
+@@ -254,4 +260,5 @@
+ N5, Bi-Alternant Corollary.
+ \href{https://www.combinatorics.org/ojs/index.php/eljc/article/download/v9i1n5/pdf}{Publisher PDF}.
+ \end{thebibliography}
++\end{samepage}
+ \end{document}

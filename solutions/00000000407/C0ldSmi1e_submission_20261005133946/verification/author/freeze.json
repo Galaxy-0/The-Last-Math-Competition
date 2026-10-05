@@ -1,0 +1,136 @@
+{
+  "manifest_exact": true,
+  "dependency_heads": [
+    {
+      "name": "mathlib",
+      "expected": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "actual": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "exit_code": 0
+    },
+    {
+      "name": "plausible",
+      "expected": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "actual": "77e08eddc486491d7b9e470926b3dbe50319451a",
+      "exit_code": 0
+    },
+    {
+      "name": "LeanSearchClient",
+      "expected": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "actual": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+      "exit_code": 0
+    },
+    {
+      "name": "importGraph",
+      "expected": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "actual": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+      "exit_code": 0
+    },
+    {
+      "name": "proofwidgets",
+      "expected": "c4919189477c3221e6a204008998b0d724f49904",
+      "actual": "c4919189477c3221e6a204008998b0d724f49904",
+      "exit_code": 0
+    },
+    {
+      "name": "aesop",
+      "expected": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "actual": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+      "exit_code": 0
+    },
+    {
+      "name": "Qq",
+      "expected": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "actual": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+      "exit_code": 0
+    },
+    {
+      "name": "batteries",
+      "expected": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "actual": "f5d04a9c4973d401c8c92500711518f7c656f034",
+      "exit_code": 0
+    },
+    {
+      "name": "Cli",
+      "expected": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "actual": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+      "exit_code": 0
+    }
+  ],
+  "source_hashes": {
+    "Conjecture407.lean": "8ef6c684c06248dc9881c987682cb73ba178387df822f2ea66aa06cf3c052000",
+    "Audit407.lean": "42b9b1028ab2942b98e0ec2281c4de1d4c053f1e22a3323a43ac62268c6b8c16",
+    "lakefile.toml": "10772dc2f981a4e32839c864343ea0643e1321827967455b20cd482acfeb63c3",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea",
+    "lake-manifest.json": "6eceeac8c3d0eadfc0f5a5a7a8aee99611d5733a9a46e74f34e9b437a65d672a"
+  },
+  "forbidden_token_hits": [],
+  "all_declaration_axioms_within": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "declaration_count": 78,
+  "status": "READY",
+  "frozen_at_utc": "2026-10-05T13:43:57.444821+00:00",
+  "project": "/private/tmp/tlmc407-proof",
+  "report_draft": "/private/tmp/tlmc407-author/report-draft.md",
+  "checks": [
+    {
+      "command": [
+        "lake",
+        "build"
+      ],
+      "time_utc": "2026-10-05T13:43:30.524963+00:00",
+      "exit_code": 0,
+      "output_file": "final-check-1.log"
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Conjecture407.lean"
+      ],
+      "time_utc": "2026-10-05T13:38:23.935485+00:00",
+      "exit_code": 0,
+      "output_file": "final-check-2.log"
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "Audit407.lean"
+      ],
+      "time_utc": "2026-10-05T13:40:23.852715+00:00",
+      "exit_code": 0,
+      "output_file": "final-check-3.log"
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "/private/tmp/tlmc407-author/AllAxioms.lean"
+      ],
+      "time_utc": "2026-10-05T13:42:34.910755+00:00",
+      "exit_code": 0,
+      "output_file": "final-check-4.log"
+    },
+    {
+      "command": [
+        "lean",
+        "--version"
+      ],
+      "time_utc": "2026-10-05T13:43:33.413444+00:00",
+      "exit_code": 0,
+      "output_file": "final-check-5.log"
+    }
+  ],
+  "scope": "Author self-check only; independent root audits and publication not claimed.",
+  "proof_sources_frozen": true,
+  "final_fresh_build_note": "Immediately before the final lake build, this project's .lake/build was moved into author/pre-final-build; shared package builds were left untouched."
+}

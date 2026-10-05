@@ -1,0 +1,264 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm,booktabs,array}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\N}{\mathbb N}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Part}{\operatorname{Part}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+\title{Disproof of Conjecture 00000000407\\[0.3em]
+\large The stated equal-size Littlewood--Richardson table is zero}
+\author{C0ldSmi1e}
+\date{5 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Both language versions index all three partitions by the same integer $n$.
+For this exact indexing, every Littlewood--Richardson coefficient is zero
+when $n>0$. We define and count conventional Littlewood--Richardson tableaux,
+derive their size identity, and refute the complete positive-constant
+asymptotic assertion. The accompanying Lean project proves these statements
+for every $n$, including finiteness of the counted types. Independent exact
+computations provide additional finite checks of the definitions.
+\end{abstract}
+
+\section{The exact assertion}
+The official English statement is:
+\begin{quote}
+Conjecture: The number of nonzero entries of the LR coefficient table
+$(c^\nu_{\lambda\mu})_{\lambda,\mu,\nu\vdash n}$ is asymptotically
+$c\cdot4^n/n^{5/4}$ (a density estimate for LR-realizable triples among all
+$4^n$ configurations).
+\end{quote}
+The Chinese text has the same simultaneous indexing and quantitative formula.
+The full original bilingual file accompanies this submission as
+\texttt{conjecture.md}. Its source identities are:
+\begin{center}\small
+\begin{tabular}{@{}ll@{}}
+Upstream commit & \texttt{ba46ce0997cbf232fe95e5dced37ff4d32e1eb94}\\
+Source Git blob & \texttt{3439f91b71e05a0d57573e84e6c181d4c7a0ba86}
+\end{tabular}
+\end{center}
+
+Keep the indexing as printed, and write
+\[
+ A(n)=\#\{(\lambda,\mu,\nu)\in\Part(n)^3:
+                   c^\nu_{\lambda\mu}\ne0\},\qquad
+ g(n)=\frac{4^n}{n^{5/4}}\quad(n>0).
+\]
+The triples are ordered and each nonzero entry contributes one, regardless
+of its coefficient value. The conventional asymptotic claim asserts that
+some fixed real $c>0$ satisfies $A(n)/(c g(n))\to1$ as integers $n\to\infty$.
+
+The parenthetical does not define an ambient configuration family. We do
+not invent one: the explicit quantitative assertion is necessary whether
+the parenthetical is explanatory or adds a further requirement. Refuting
+that assertion therefore suffices. A source-only meaning assessment initially
+deferred a proof of the entire statement because of this phrase, then cleared
+this disproof-only scope. No claim is made about a different intended problem
+obtained by changing the displayed indexing.
+
+\section{Actual partitions and LR tableaux}
+Represent an integer partition by its finite Young diagram, a lower set in
+$\N^2$ for the coordinatewise order. Coordinates increase downward and to
+the right. Diagram cardinality is partition size. Mathlib's
+\texttt{YoungDiagram} has exactly this meaning; its row-length equivalence
+identifies it with decreasing lists of positive parts. Thus the type
+\texttt{Partition n} consists of all diagrams of cardinality $n$.
+
+For diagrams $\lambda\subseteq\nu$, put $S=\nu\setminus\lambda$.
+An LR tableau of shape $\nu/\lambda$ and content $\mu$ is a filling of $S$
+with positive integers satisfying the following conditions:
+\begin{enumerate}
+\item Rows increase weakly from left to right; columns increase strictly downward.
+\item Letter $i+1$ occurs exactly $\mu_{i+1}$ times, for every $i\in\N$,
+      including all zero parts beyond the support of $\mu$.
+\item Read rows from top to bottom, and each row from right to left.
+      In every prefix, each positive letter occurs at least as often as its successor.
+\end{enumerate}
+The coefficient $c^\nu_{\lambda\mu}$ is the number of these tableaux;
+if containment fails, that number is zero. This is the standard combinatorial
+definition in \cite[Definition 2.1]{hahn} and \cite[Section 2]{gutschwager}.
+The references identify the conventional objects; no external vanishing
+theorem is assumed in the Lean proof.
+
+The formal structure \texttt{LRTableau} records the filling, containment,
+the two monotonicity conditions, all content equations, and the prefix
+condition. Lean labels are shifted down by one: entry $i$ represents positive
+letter $i+1$. No size identity is assumed as a field.
+
+Pairwise row and column inequalities match the adjacent-cell definitions:
+every skew row and column is an interval, and transitivity connects adjacent
+comparisons. The formal reading relation is
+\[
+ (r,s)\preceq(r',s')\quad\Longleftrightarrow\quad
+ r<r'\ \text{or}\ (r=r'\ \text{and}\ s'\le s).
+\]
+Its order properties are proved. The cells preceding an ending cell form
+its inclusive reading prefix. Every nonempty prefix has a last cell; the
+empty prefix satisfies the inequalities automatically. Consequently no
+reading prefixes or labels are omitted.
+
+\section{Finiteness and the size obstruction}
+Every occurring Lean label $i$ has positive content, so
+$i<\operatorname{height}(\mu)$. This is derived from the full content
+equations. A tableau therefore injects into the finite function type
+$S\to\{0,\ldots,\operatorname{height}(\mu)-1\}$. Its filling determines it;
+the proof fields do not create extra objects. Thus the formal
+\texttt{lrCoefficient}, defined using \texttt{Nat.card}, counts a finite
+type and does not exploit the value of cardinality on infinite types.
+
+Similarly, each coordinate of a cell in a size-$n$ lower set is less than
+$n$: an occupied cell in row $i$ forces at least $i+1$ cells, and likewise
+for columns. Every such diagram belongs to the powerset of an $n$ by $n$
+grid. This proves finiteness of \texttt{Partition n}, its ordered triple
+product, and the subtype of nonzero entries counted by \texttt{nonzeroCount}.
+
+\begin{lemma}
+Every LR tableau of shape $\nu/\lambda$ and content $\mu$ satisfies
+$|\nu|=|\lambda|+|\mu|$.
+\end{lemma}
+\begin{proof}
+Counting a diagram by row-coordinate fibers gives
+$|\mu|=\sum_{i<\operatorname{height}(\mu)}\mu_{i+1}$.
+Counting the skew cells by their entry values, using the derived label bound
+and all content equations, gives
+\[
+ |\nu\setminus\lambda|
+ =\sum_{i<\operatorname{height}(\mu)}
+       \#\{a\in S:\operatorname{entry}(a)=i\}
+ =\sum_{i<\operatorname{height}(\mu)}\mu_{i+1}=|\mu|.
+\]
+Containment and finite-set subtraction give
+$|\nu\setminus\lambda|+|\lambda|=|\nu|$.
+\end{proof}
+
+\begin{theorem}
+$A(n)=0$ for every positive integer $n$. No fixed positive real constant
+$c$ satisfies $A(n)\sim c4^n/n^{5/4}$.
+\end{theorem}
+\begin{proof}
+If an entry in the stated table were nonzero, there would be an LR tableau
+with $|\lambda|=|\mu|=|\nu|=n$. The lemma would imply $n=n+n$, impossible
+for $n>0$. The nonzero-entry type is empty, proving $A(n)=0$.
+
+For completeness, the full ratio assertion is
+\[
+ \forall\varepsilon>0\ \exists N\in\N\ \forall n\ge N,
+       \left|\frac{A(n)}{c g(n)}-1\right|<\varepsilon.
+\]
+Take $\varepsilon=1/2$ and, for any proposed $N$, take $n=N+1$.
+Then $A(n)=0$ and $c g(n)>0$, making the absolute difference exactly $1$.
+This contradicts $1<1/2$.
+\end{proof}
+In fact, $A(0)=1$: the empty tableau is the unique entry in the empty-partition
+table. This finite initial value has no effect on the limit. The actual
+normalized sequence $A(n)/g(n)$ is eventually zero and converges to zero.
+
+\section{Formal statement and correspondence}
+The real scale uses \texttt{Real.rpow} with $5/4$ explicitly in Lean's real
+type, so there is no integer-division interpretation of the exponent. Its positivity for $n>0$ is proved.
+\texttt{RatioAsymptotic c} is exactly the displayed epsilon--$N$ formula.
+The final theorem is
+\[
+ \texttt{Conjecture407.conjecture407\_false}:\quad
+ \neg\exists c\in\R,\ 0<c\ \land\ \texttt{RatioAsymptotic}(c).
+\]
+The stronger theorem \texttt{no\_real\_ratio\_constant} excludes every real
+$c$ for the formal ratio predicate. Lean totalizes division at zero; that
+additional case is immaterial to the ordinary positive-leading-constant
+claim, whose denominator is positive on the tail.
+
+\begin{center}\small
+\begin{tabular}{@{}p{0.47\linewidth}p{0.46\linewidth}@{}}
+\toprule
+Formal declaration & Mathematical content\\
+\midrule
+\texttt{LRTableau.entry\_lt}\newline \texttt{lrTableauFinite}
+ & Derived letter bound and finite tableau count\\
+\texttt{diagram\_card\_eq\_sum\_rowLen}
+ & Row-by-row diagram cardinality\\
+\texttt{LRTableau.size\_balance}
+ & Proved identity $|\nu|=|\lambda|+|\mu|$\\
+\texttt{partitionFinite}\newline \texttt{nonzeroEntryFinite}
+ & Finiteness of the exact index and counted-entry types\\
+\texttt{lrCoefficient\_eq\_zero}\newline \texttt{nonzeroCount\_eq\_zero}
+ & Every entry and its nonzero count vanish for $n>0$\\
+\texttt{normalized\_tendsto\_zero}
+ & Actual normalized limit in Mathlib's filter formulation\\
+\texttt{conjecture407\_false}
+ & Negation of the full positive-constant asymptotic claim\\
+\bottomrule
+\end{tabular}
+\end{center}
+\texttt{Audit407.lean} additionally proves the unit coefficient
+$c^{\varnothing}_{\varnothing,\varnothing}=1$ and $A(0)=1$, $A(1)=A(2)=0$.
+These are kernel-checked statements. No Schur-function or representation-theory
+formalization is used or claimed; the Lean development uses the conventional
+tableau definition directly.
+
+\section{Independent finite checks and reproduction}
+The separate standard-library Python verifier implements actual LR-tableau
+enumeration with exact content checks, without a degree-mismatch shortcut.
+It examines all $116\,947$ ordered triples for $0\le n\le10$, giving nonzero
+counts $1,0,\ldots,0$. Its independently implemented sparse-polynomial
+calculation uses Jacobi--Trudi \cite[(39)]{vanleeuwen} and alternant
+coefficient extraction \cite[Bi-Alternant Corollary]{stembridge}.
+Six variables suffice for the tested total input degree at most six.
+
+All $4\,170$ tested triples agree between the two methods. Of these, $1\,110$
+have compatible degree, with coefficient frequencies $816$ zeros, $293$ ones,
+and one two; the other $3\,060$ have coefficient zero. Fourteen named
+coefficient checks include units, Pieri cases, unequal input sizes and
+$c^{(3,2,1)}_{(2,1),(2,1)}=2$. Five full-filling checks separately exercise
+validity and isolated row, column, reading-word and content failures.
+These finite experiments check the implementations; the proof for all $n$
+is the Lean argument above and does not depend on them.
+
+The project pins Lean 4.19.0 and Mathlib v4.19.0, including all nine exact
+dependency revisions in \texttt{lean/lake-manifest.json}. From the submission
+directory, reproduce the mathematical checks with:
+\begin{verbatim}
+cd lean
+lake build
+lake env lean -DwarningAsError=true Conjecture407.lean
+lake env lean -DwarningAsError=true Audit407.lean
+lake env lean -DwarningAsError=true Check.lean
+cd ..
+python3 auxiliary/verify.py > actual-output.json
+cmp actual-output.json auxiliary/expected-output.json
+\end{verbatim}
+The verification directory supplies source identities, commands and outputs,
+the full declaration/type/axiom inventory, and the independent review record.
+Inspection tooling is separate from the mathematical modules. No admitted
+proof, \texttt{native\_decide}, or custom axiom is used. Local validation and
+the independent review are submission evidence; maintainer acceptance is a
+separate decision.
+
+\par\clearpage
+\begin{samepage}
+\begin{thebibliography}{9}\small
+\setlength{\itemsep}{0.2em}
+\bibitem{hahn} H. Hahn, \emph{On Classical groups detected by the triple tensor
+product and the Littlewood--Richardson semigroup}, Research in Number Theory
+2, article 19 (2016), Definition 2.1.
+\href{https://doi.org/10.1007/s40993-016-0049-3}{doi:10.1007/s40993-016-0049-3}.
+\bibitem{gutschwager} C. Gutschwager, \emph{On Base Partitions and Cover
+Partitions of Skew Characters}, Electronic Journal of Combinatorics 15
+(2008), N30, Section 2.
+\href{https://www.combinatorics.org/ojs/index.php/eljc/article/download/v15i1n30/pdf/}{Publisher PDF}.
+\bibitem{vanleeuwen} M. A. A. van Leeuwen, \emph{Schur functions and alternating
+sums}, Electronic Journal of Combinatorics 11(2) (2006), A5, equation (39).
+\href{https://www.combinatorics.org/ojs/index.php/eljc/article/download/v11i2a5/pdf/}{Publisher PDF}.
+\bibitem{stembridge} J. R. Stembridge, \emph{A Concise Proof of the
+Littlewood--Richardson Rule}, Electronic Journal of Combinatorics 9 (2002),
+N5, Bi-Alternant Corollary.
+\href{https://www.combinatorics.org/ojs/index.php/eljc/article/download/v9i1n5/pdf}{Publisher PDF}.
+\end{thebibliography}
+\end{samepage}
+\end{document}
