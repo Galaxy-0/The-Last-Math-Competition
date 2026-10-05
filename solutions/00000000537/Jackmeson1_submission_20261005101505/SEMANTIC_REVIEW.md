@@ -1,0 +1,9 @@
+# Semantic review (independent, pre-submission)
+
+An independent model reviewer (GPT-6 Astra, reasoning effort "xhigh", separate session) received the exact conjecture text, the full LaTeX report, the full Lean source and a reviewer checklist distilled from 93 closed-unmerged pull requests of this competition. It was asked whether the Lean main theorem settles the conjecture as written, whether the reading is faithful and not a loophole, whether the Lean definitions are faithful to the standard notions, whether the mathematics is correct, and whether report and Lean match. This is an automated review prepared by the submitter, not the competition's maintainer review.
+
+**Verdict:** accept = True; severity = none; reading faithful = True.
+
+**Reviewer notes (verbatim):**
+
+> The explicit universal inequality for bipartite graphs is refuted faithfully. Neither language specifies a size restriction, and K2 is a legitimate bipartite graph (also chordal bipartite). The parenthetical does not state a precise equality characterization; this submission expressly limits its conclusion to the stated inequality. The Lean definitions use the actual edge ideal, regular sequences in the homogeneous maximal ideal, and the edge cardinalities of graph matchings, giving the standard invariants for finite graphs. The proof that no regular pair exists is sound: for regular f1, u = f1(x,0) gives a nonzero class modulo f1M annihilated by the homogeneous maximal ideal. Thus depth <= 1 and matching number = 1 suffice to contradict depth >= matching number + 1 over every field. The final theorem instantiates this counterexample over Q. The report follows the formal argument correctly; depth = 1 is an explicitly unformalized, correct remark justified by the regular element x+y, and is unnecessary for the disproof. No substantive mathematical or LaTeX/Lean mismatch was found. Compilation and the permitted axiom set are taken as supplied.
