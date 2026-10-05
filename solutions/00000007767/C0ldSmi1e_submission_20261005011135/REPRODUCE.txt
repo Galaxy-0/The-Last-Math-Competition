@@ -1,0 +1,73 @@
+CONJECTURE 00000007767 — REPRODUCTION
+
+Scope
+This submission disproves the explicit leading equivalence in the standard
+complex-polynomial setting, using positive compositional iterates. The source
+does not explicitly specify the field or index range; see main.tex for the
+disclosed conventions. The undefined trailing Ritt uniqueness clause is not
+formalized. The exact bilingual source is conjecture.md.
+
+Formal proof
+The actual complex polynomials X^2 and X^3 induce maps on P^1(C), modeled by
+Option Complex with some z = [z:1] and none = [1:0]. The Lean definitions and
+theorem statements, including the hypotheses, are printed in verification/axioms.txt.
+
+Use Lean 4.19.0, pinned by lean/lean-toolchain. From lean/:
+
+  lake exe cache get
+  lake build
+  lake env lean -DwarningAsError=true Conjecture7767.lean
+  lake env lean -DwarningAsError=true Check.lean
+  lake env lean -DwarningAsError=true ../verification/environment-inventory.lean
+
+The manifest pins all nine dependencies; Mathlib is v4.19.0, commit
+c44e0c8ee63ca166450922a373c7409c5d26b00b. Do not update the manifest for this
+reproduction. Cache retrieval requires network access and is a build accelerator;
+it does not replace replaying the submitted mathematical source.
+
+The final theorem is Conjecture7767.conjecture_false. The theorem
+Conjecture7767.counterexample bundles the degrees, commutation, infinite
+intersection, and negation of every common positive iterate. No finite Python
+calculation is used by either Lean proof.
+
+Check.lean prints all 11 authored definitions/abbreviations and all 18 theorem
+types and axiom dependencies. The environment-inventory harness prints every
+compiled constant whose origin is Conjecture7767, including generated constants;
+it is inspection code only and proves no mathematical theorem.
+
+Finite exact checks
+Python 3 with only the standard library is required. From auxiliary/:
+
+  python3 -B run_checks.py
+
+This executes check.py normally and with -O, records complete JSON output and
+stderr, requires byte-identical successful results, and regenerates run_metadata.json
+and SHA256SUMS.txt. Timings, absolute paths, Python version and the metadata hash
+will naturally differ on another machine. The mathematical JSON results should
+remain identical. No assert statements are used for mathematical checks.
+
+Coverage: exact sparse polynomial composition and iteration, independent integer
+iteration at z=2 through index 12, all 144 positive index pairs up to 12, all roots
+of unity modulo 5,25,125,625 in exact rational-angle coordinates, full doubling
+and tripling cycles and minimal positive periods, primitive roots and their
+disjointness, affine zero, and infinity. This bounded check proves neither
+infinitude nor the absence of common iterates beyond its stated bounds.
+
+PDF
+main.tex is standalone. From the submission root:
+
+  tectonic --outdir . main.tex
+
+The shipped PDF was exported with Tectonic 0.17.0, checked with pdfinfo, and all
+three pages rendered with pdftoppm and visually inspected. The same source also
+compiled with the Codex desktop LaTeX compiler. A normal LaTeX installation can
+also compile it; PDF bytes can differ across engines and font versions. The
+shipped source/PDF hashes and export log establish this submission's identity.
+
+Evidence and boundaries
+VERIFICATION.txt summarizes the completed local checks. Raw proof/audit output,
+the full auxiliary output and execution metadata, semantic review, eligibility
+records, and file hashes accompany the submission. Paths beginning /private/tmp
+in records identify the original validation environment, not required portable
+locations or additional submitted files. Local independent review is not
+maintainer acceptance. No repository metadata or leaderboard is modified.

@@ -1,0 +1,66 @@
+{
+  "status": "PASS",
+  "created_utc": "2026-10-05T01:01:13.174435+00:00",
+  "source_sha256": "e68cbfe40d725ae80fa70f53363dd0b6345667b016ecdfc422868740d20f32fa",
+  "pdf_sha256": "605dfd6aff4db88e81c19af07bbe682870fba51072c6a03a37876b272e303b27",
+  "page_count": 3,
+  "pdf_bytes": 58537,
+  "native_compiler": {
+    "kind": "success",
+    "tool": "compile_latex_document",
+    "source_sha256": "e68cbfe40d725ae80fa70f53363dd0b6345667b016ecdfc422868740d20f32fa"
+  },
+  "export": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--outdir",
+      "/private/tmp/tlmc7767-report",
+      "/private/tmp/tlmc7767-report/main.tex"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.145,
+    "warnings_or_box_diagnostics": [],
+    "raw_log_local_path": "/private/tmp/tlmc7767-report/export-raw.txt",
+    "raw_log_sha256": "0e40742a40179f53dabfa1f8c3f05981b47c671eb7d1b9d3b9bfa34d4eae64af",
+    "packaged_log": "report-export.txt",
+    "packaged_log_sha256": "0e40742a40179f53dabfa1f8c3f05981b47c671eb7d1b9d3b9bfa34d4eae64af",
+    "log_normalization": "Strip trailing whitespace on each line, preserve all line contents and order, terminate with one newline."
+  },
+  "render": {
+    "command": [
+      "/Users/daniel/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override/pdftoppm",
+      "-scale-to",
+      "1600",
+      "-png",
+      "/private/tmp/tlmc7767-report/main.pdf",
+      "/private/tmp/tlmc7767-report/page"
+    ],
+    "exit_code": 0,
+    "images": [
+      {
+        "path": "/private/tmp/tlmc7767-report/page-1.png",
+        "sha256": "a9485af4c96be6554eb05217a381cbb8344796f91dba694374422d33b07d70f8"
+      },
+      {
+        "path": "/private/tmp/tlmc7767-report/page-2.png",
+        "sha256": "d7675ed028aa0c82119cb609fe72326919a2a203b05d264d6c57ab0b709ce30f"
+      },
+      {
+        "path": "/private/tmp/tlmc7767-report/page-3.png",
+        "sha256": "0a0dffaefdbf2a8a49fe0dab91606c747513c34dbd117bebabcb766c63884ebb"
+      }
+    ]
+  },
+  "visual_review": {
+    "status": "PASS",
+    "reviewed_by": "root",
+    "reviewed_utc": "2026-10-05T01:03:03.664701+00:00",
+    "pages_reviewed": [
+      1,
+      2,
+      3
+    ],
+    "method": "All three pdftoppm page images inspected visually at 1600px; full mathematical text and table reviewed. No clipping, overlap, missing glyphs or layout defects observed."
+  },
+  "text_sha256": "4bc26623d1eb6b8663a5dcabbac530b68e443d2cbd653775572441bf3e036b64"
+}

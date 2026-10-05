@@ -1,0 +1,201 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\C}{\mathbb C}
+\newcommand{\N}{\mathbb N}
+\newcommand{\PP}{\mathbf P^1(\C)}
+\newcommand{\Per}{\operatorname{Per}}
+\title{A counterexample to conjecture 00000007767\\[3pt]
+\large Squaring and cubing have infinitely many common periodic points}
+\author{C0ldSmi1e}
+\date{October 5, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The complex polynomial maps $f(z)=z^2$ and $g(z)=z^3$ commute and have
+infinitely many common periodic points on the complex projective line, but
+have no common positive compositional iterate. They therefore refute the
+explicit leading equivalence of conjecture 00000007767 in its conventional
+complex-dynamical interpretation. The proof uses primitive roots of unity
+of orders $5,25,125,\ldots$. The source's unspecified field and iterate-index
+conventions are disclosed below; the undefined final uniqueness terminology
+is not needed for this disproof.
+\end{abstract}
+
+\section{Statement and conventions}
+Both the English and Chinese source versions concern commuting polynomials
+of degree at least two acting on $\mathbf P^1$. Their first assertion is
+\[
+ |\Per(f)\cap\Per(g)|=\infty
+ \quad\Longleftrightarrow\quad
+ \text{$f^{\circ m}=g^{\circ n}$ for some positive integers $m,n$}.
+\]
+They then add a common-iterating-map assertion and a uniqueness assertion
+about a ``symmetrized monomial part'' in a Ritt decomposition. An exact copy
+of the bilingual source is bundled as \texttt{conjecture.md}.
+
+The source does not specify a base field. This submission explicitly uses
+complex polynomials acting on $\PP=\C\cup\{\infty\}$, the usual classical
+complex-dynamical setting. This is a disclosed interpretation, not an
+assumption stated verbatim in the source. No conclusion about every possible
+arithmetic interpretation is claimed. Positive indices are the standard
+nonvacuous meaning of ``common iterate'': allowing $m=n=0$ would give the
+identity for every pair. The zeroth iterate is used only to define iteration
+recursively. The periodic set means
+\[
+ \Per(F)=\{P:\text{there exists an integer }r\geq1
+                  \text{ with }F^{\circ r}(P)=P\}.
+\]
+The two return times for a common periodic point may differ. They may also
+depend on the point. Periodicity is not replaced by eventual periodicity.
+The notation $F^{\circ m}=G^{\circ n}$ means exact equality of self-maps,
+not equality up to conjugacy.
+
+We refute the forward implication of the displayed equivalence. The full
+source assertion entails that implication, regardless of how its later
+uniqueness condition might be made precise. We neither supply a definition
+of the undefined final terminology nor claim a replacement Ritt theorem.
+
+\section{The two actual polynomial maps}
+Let $f=X^2$ and $g=X^3$ in $\C[X]$. Their projective extensions are
+\[
+ F([Z:W])=[Z^2:W^2],\qquad G([Z:W])=[Z^3:W^3].
+\]
+These expressions define maps on projective points: scaling $(Z,W)$ scales
+both coordinates by the same nonzero power, and the coordinates cannot
+simultaneously vanish. In the affine chart $[z:1]$ the maps are $z\mapsto z^2$
+and $z\mapsto z^3$, respectively; $\infty=[1:0]$ is fixed by both.
+Their polynomial degrees are two and three. At an affine point both
+$F\circ G$ and $G\circ F$ act by $z\mapsto z^6$, and both fix infinity.
+Thus the stated degree and commutation hypotheses hold.
+
+For $d\geq1$, let $H_d(z)=z^d$ on the affine chart and $H_d(\infty)=\infty$.
+Induction on $r\geq0$ gives
+\begin{equation}\label{eq:iterate}
+ H_d^{\circ r}(z)=z^{d^r}.
+\end{equation}
+The induction step is $(z^{d^r})^d=z^{d^{r+1}}$; the case $r=0$ uses
+$d^0=1$. This is compositional iteration of the actual maps.
+
+\section{Infinitely many distinct common periodic points}
+For each $k\in\N$, put
+\[
+ N_k=5^{k+1},\qquad \zeta_k=\exp(2\pi i/N_k),\qquad P_k=[\zeta_k:1].
+\]
+The complex number $\zeta_k$ has exact multiplicative order $N_k$.
+Both 2 and 3 are coprime to $N_k$. Euler's theorem gives, for
+$t_k=\varphi(N_k)>0$,
+\[
+ 2^{t_k}\equiv1\pmod {N_k},\qquad
+ 3^{t_k}\equiv1\pmod {N_k}.
+\]
+Whenever $\zeta^{N}=1$ and $a\equiv1\pmod N$, exponent reduction gives
+$\zeta^a=\zeta$. Applying this observation and \eqref{eq:iterate} yields
+\[
+ F^{\circ t_k}(P_k)=P_k,
+ \qquad G^{\circ t_k}(P_k)=P_k.
+\]
+Every $P_k$ is therefore a common periodic point with a positive return time.
+
+If $P_k=P_\ell$, equality in the affine chart implies
+$\zeta_k=\zeta_\ell$. An element has only one exact multiplicative order,
+so $5^{k+1}=5^{\ell+1}$. Since powers of 5 are injective in their natural
+exponent, $k=\ell$. Hence $k\mapsto P_k$ is an injection from $\N$ into
+$\Per(F)\cap\Per(G)$, proving that this one fixed pair of maps has infinitely
+many distinct common periodic points. The single point at infinity is not
+used to supply infinitude.
+
+\section{No common positive iterate}
+Suppose $m,n\geq1$ and $F^{\circ m}=G^{\circ n}$. Evaluating at the affine
+point $[2:1]$ and using \eqref{eq:iterate} gives
+\[
+ 2^{2^m}=2^{3^n}.
+\]
+These are natural numbers viewed in $\C$. Injectivity of the natural-number
+embedding into $\C$ transfers the equality back to $\N$. Powers of 2
+are injective in their exponent, so $2^m=3^n$. The left side is even because
+$m\geq1$, while the right side is odd. This is a contradiction.
+This argument excludes every pair of positive indices, not merely a bounded
+search or the case $m=n$.
+
+\begin{theorem}
+There exist complex polynomials of degree at least two whose projective
+extensions commute and have infinitely many common periodic points, but
+whose positive compositional iterates are never equal. Consequently the
+leading equivalence of conjecture 00000007767 is false in the explicitly
+stated complex interpretation.
+\end{theorem}
+\begin{proof}
+Take $f=X^2$ and $g=X^3$. The preceding sections verify all three hypotheses,
+the infinitude conclusion, and the failure of every common positive iterate.
+\end{proof}
+
+\section{Formalization and reproducibility}
+The accompanying Lean 4 project formalizes the complex polynomials and their
+extensions to the projective line represented by \texttt{Option Complex}:
+\texttt{some z} denotes $[z:1]$ and \texttt{none} denotes $[1:0]$.
+Every projective point has exactly one of these forms. The extension of
+polynomial evaluation is \texttt{Option.map}; thus the model includes the
+point at infinity, actual polynomial evaluation, and compositional iteration.
+
+The namespace is \texttt{Conjecture7767}. The main proof correspondence is:
+\begin{center}
+\begin{tabular}{ll}
+\textbf{Mathematical step} & \textbf{Lean declaration}\\[3pt]
+Actual polynomial degrees & \texttt{powerPolynomial\_degree}\\
+Composition formula & \texttt{powerMap\_iterate\_affine}\\
+Commuting projective maps & \texttt{powerMap\_commute}\\
+Positive root-of-unity return time & \texttt{primitiveRoot\_periodic}\\
+Distinct roots & \texttt{root\_injective}\\
+Infinite intersection & \texttt{common\_periodic\_infinite}\\
+No common positive iterate & \texttt{no\_positive\_common\_iterate}\\
+All counterexample requirements & \texttt{counterexample}\\
+Negation of the leading assertion & \texttt{conjecture\_false}
+\end{tabular}
+\end{center}
+
+The project pins Lean 4.19.0 and Mathlib v4.19.0. A fresh build, direct
+source replay, and the complete \texttt{Check.lean} audit passed with warnings
+treated as errors. All 18 authored theorems use only \texttt{propext},
+\texttt{Classical.choice}, and \texttt{Quot.sound}. The 11 definitions and
+abbreviations were printed and inspected. An exhaustive inspection of all
+40 declarations originating in the compiled proof module also passed,
+including its 11 generated declarations. There are no custom axioms,
+admitted proofs, partial declarations, or authored unsafe definitions. Four
+compiler-generated runtime wrappers are explicitly inventoried separately
+from the safe logical declarations; none introduces an additional axiom.
+Compiler and all nine dependency revisions were checked before and after
+the build. The complete logs and hashes accompany the submission.
+
+The auxiliary checker uses exact integer coefficients and rational angles.
+It independently compares sparse polynomial iteration with direct integer
+iteration, tests all 144 pairs $1\leq m,n\leq12$, and computes every cycle
+under doubling and tripling modulo $5,25,125,625$. All 780 root records and
+their two complete cycle decompositions are included. For these four orders
+the primitive-root counts and periods under either map are respectively
+$4,20,100,500$. Together with the root 1, affine zero, and infinity, the
+largest tested projective subset has 627 distinct common periodic points.
+Normal and optimized Python runs both passed 12,875 explicit checks and
+produced byte-identical output. These finite checks establish neither
+infinitude nor unbounded nonexistence of common iterates; those statements
+are proved in Lean without relying on the Python output.
+
+After installing the pinned Lean toolchain, run the following from the
+submission's \texttt{lean} directory (Mathlib cache retrieval requires
+network access):
+\begin{verbatim}
+lake exe cache get
+lake build
+lake env lean -DwarningAsError=true Conjecture7767.lean
+lake env lean -DwarningAsError=true Check.lean
+\end{verbatim}
+From the \texttt{auxiliary} directory, run \texttt{python3 -B run\_checks.py}.
+The full reproduction instructions include the compiled-environment audit
+and PDF export. Local validation and the bundled independent semantic review
+are distinct from acceptance by a competition maintainer.
+
+\end{document}
