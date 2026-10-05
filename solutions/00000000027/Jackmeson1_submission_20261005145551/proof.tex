@@ -1,0 +1,139 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A proof of Conjecture 00000000027\\[2pt]
+\large $r_3(N) = N\exp(-O(\sqrt{\log N}))$ (Behrend's bound)}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture and its reading}
+
+Conjecture 00000000027 reads: \emph{$r_3(N)$ (the maximal size of a subset of $[N]$ with no
+three-term arithmetic progression) satisfies $r_3(N) = N\cdot\exp(-O(\sqrt{\log N}))$.} The Chinese
+text states the same formula.
+
+\paragraph{Reading.} With the usual meaning of the $O$-notation inside a formula, the statement asserts
+that there is a function $g$ with $g(N) = O(\sqrt{\log N})$ as $N\to\infty$ and
+$r_3(N) = N e^{-g(N)}$ for all large $N$. Because $1 \le r_3(N) \le N$ for $N \ge 1$, this is the same as
+the existence of a constant $C$ with $N e^{-C\sqrt{\log N}} \le r_3(N)$ for all large $N$, i.e.\ Behrend's
+lower bound. We prove it with the explicit constant $C = 4$, for \emph{every} $N\ge 1$, and with
+$0 \le g(N) \le 4\sqrt{\log N}$ (so $g$ is non-negative and the $O$-bound holds with constant $4$).
+
+\paragraph{What is not claimed.} The one-sided notation $-O(\cdot)$ does not assert a matching upper
+bound, and we do \emph{not} prove one: the sharpness statement $r_3(N) \le N e^{-c\sqrt{\log N}}$ for some
+$c>0$ (a $\Theta$-version) is not claimed here. For context, the Wikipedia article on Salem--Spencer sets
+(retrieved; quoted in the attempt file) records upper bounds of the much weaker shape
+$\exp(-c(\log N)^{1/12})N$ (Kelley and Meka) with the exponent later improved to $1/9$ (Bloom and Sisask).
+
+\paragraph{Conventions.} $\log$ is the natural logarithm and $\sqrt{\cdot}$ the non-negative square
+root. $[N] = \{1,\dots,N\}$. A three-term arithmetic progression is $a, a+d, a+2d$ with common difference
+$d \ge 1$ (trivial progressions $a,a,a$ are excluded, as usual). We also show that the value of $r_3(N)$ is
+the same for the convention $[N] = \{0,\dots,N-1\}$.
+
+\section{Definitions (as in the Lean file)}
+
+\begin{definition}[\texttt{C27.HasThreeAP}, \texttt{C27.r3}]
+A finite set $A\subseteq\mathbb N$ \emph{has a three-term AP} if there are $a, d \in \mathbb N$ with
+$d \ge 1$ and $a, a+d, a+2d \in A$. Then
+\[ r_3(N) = \max\{\, |A| : A \subseteq \{1,\dots,N\},\ A \text{ has no three-term AP} \,\}, \]
+formalized as the supremum of \texttt{card} over the filtered powerset of \texttt{Icc 1 N} (the empty set
+qualifies, so this is a genuine maximum).
+\end{definition}
+
+Mathlib's \texttt{ThreeAPFree s} means: for all $a,b,c\in s$, $a + c = b + b$ implies $a = b$.
+Mathlib's \texttt{addRothNumber s} is the largest size of a \texttt{ThreeAPFree} subset of the finset $s$,
+and \texttt{rothNumberNat N = addRothNumber (range N)}, the $\{0,\dots,N-1\}$ version.
+
+\section{Proof}
+
+\begin{lemma}[\texttt{not\_hasThreeAP\_iff}]
+For a finset $A\subseteq\mathbb N$: $A$ has no three-term AP iff \texttt{ThreeAPFree A}.
+\end{lemma}
+\begin{proof}
+If $a,a+d,a+2d\in A$ with $d\ge1$, then $a + (a+2d) = (a+d)+(a+d)$ but $a \ne a+d$. Conversely, let
+$a,b,c\in A$ with $a+c = 2b$ and $a\ne b$. If $a<b$, put $d = b-a$; then $b = a+d$ and $c = a+2d$. If
+$a > b$, then $c < b$; put $d = b - c$, so $b = c+d$ and $a = c + 2d$.
+\end{proof}
+
+\begin{lemma}[\texttt{r3\_eq\_addRothNumber}, \texttt{r3\_eq\_rothNumberNat}]
+$r_3(N) = \texttt{addRothNumber}(\{1,\dots,N\}) = \texttt{rothNumberNat}(N)$.
+\end{lemma}
+\begin{proof}
+The first equality follows from the previous lemma by comparing the two maxima in both directions. For
+the second, $\{1,\dots,N\} = [1, N+1)$ and Mathlib's \texttt{addRothNumber\_Ico} gives
+$\texttt{addRothNumber}([a,b)) = \texttt{rothNumberNat}(b-a)$ (translation invariance).
+\end{proof}
+
+\begin{lemma}[\texttt{r3\_le}, \texttt{behrend\_r3}, \texttt{r3\_two\_sided}]
+For every $N$: $N e^{-4\sqrt{\log N}} \le r_3(N) \le N$.
+\end{lemma}
+\begin{proof}
+The upper bound is Mathlib's \texttt{rothNumberNat\_le}. The lower bound is Mathlib's
+\texttt{Behrend.roth\_lower\_bound : (N : R) * exp (-4 * sqrt (log N)) <= rothNumberNat N}, a formalization
+(by Y.~Dillies and B.~Mehta, file \texttt{Mathlib/Combinatorics/Additive/AP/Three/Behrend.lean}) of
+Behrend's construction [Behrend 1946], transported by the previous lemma.
+\end{proof}
+
+\begin{theorem}[\texttt{C27.conjecture\_27}]
+Let $g(N) = \log(N / r_3(N))$. Then $g = O(\sqrt{\log N})$ as $N\to\infty$; for every $N \ge 1$,
+$0 \le g(N) \le 4\sqrt{\log N}$; and for every $N\ge1$, $r_3(N) = N e^{-g(N)}$.
+\end{theorem}
+\begin{proof}
+For $N \ge 1$ the previous lemma gives $r_3(N) \ge N e^{-4\sqrt{\log N}} > 0$, so $g(N)$ is the logarithm
+of a positive number and $N e^{-g(N)} = N \cdot r_3(N)/N = r_3(N)$ (\texttt{r3\_explicit}). From
+$r_3(N)\le N$ we get $N/r_3(N) \ge 1$, so $g(N)\ge 0$; from $N \le r_3(N) e^{4\sqrt{\log N}}$ we get
+$g(N) \le 4\sqrt{\log N}$. Hence $|g(N)| \le 4\,|\sqrt{\log N}|$ for all $N \ge 1$, which is the
+\texttt{IsBigO} statement \texttt{g =O[atTop] fun N => sqrt (log N)}.
+\end{proof}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture27/Basic.lean} (137 lines, only \texttt{import Mathlib}), namespace
+\texttt{C27}. Main theorem:
+\begin{verbatim}
+theorem conjecture_27 :
+    exists g : Nat -> Real, (g =O[atTop] fun N : Nat => sqrt (log N)) /\
+      (forall N, 1 <= N -> 0 <= g N /\ g N <= 4 * sqrt (log N)) /\
+      forall N, 1 <= N -> (r3 N : Real) = N * exp (-g N)
+\end{verbatim}
+(written here in ASCII; the Lean source uses the usual Unicode symbols). Further theorems:
+\texttt{not\_hasThreeAP\_iff}, \texttt{r3\_eq\_addRothNumber}, \texttt{r3\_eq\_rothNumberNat},
+\texttt{r3\_le}, \texttt{behrend\_r3}, \texttt{r3\_pos}, \texttt{r3\_explicit}, \texttt{r3\_two\_sided}.
+
+\paragraph{Axiom audit.} \texttt{lake build} succeeds, and \texttt{\#print axioms} for
+\texttt{C27.conjecture\_27}, \texttt{C27.r3\_two\_sided} and \texttt{C27.r3\_eq\_rothNumberNat} reports
+only \texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom.
+
+\section*{Attribution and sources}
+
+The result is Behrend's theorem; the contribution here is the faithful statement of the conjecture's
+objects and its derivation from Mathlib.
+\begin{itemize}
+\item F.~A.~Behrend, \emph{On Sets of Integers Which Contain No Three Terms in Arithmetical
+Progression}, Proc.\ Natl.\ Acad.\ Sci.\ USA (1946), \url{https://doi.org/10.1073/pnas.32.12.331}
+(bibliographic record retrieved from Crossref).
+\item Wikipedia, \emph{Salem--Spencer set}, \url{https://en.wikipedia.org/wiki/Salem\%E2\%80\%93Spencer_set}:
+``The construction of Salem and Spencer was improved by Felix Behrend in 1946, who found sets of size
+$n/e^{O(\sqrt{\log n})}$.''
+\item Mathlib, \texttt{Mathlib/Combinatorics/Additive/AP/Three/Behrend.lean} (\texttt{Behrend.roth\_lower\_bound})
+and \texttt{Mathlib/Combinatorics/Additive/AP/Three/Defs.lean} (\texttt{rothNumberNat}, \texttt{addRothNumber\_Ico}).
+\end{itemize}
+
+\end{document}
