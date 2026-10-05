@@ -1,0 +1,99 @@
+@[reducible] def Conjecture989.Mat : ℕ → Type :=
+fun d => Matrix (Fin d) (Fin d) ℂ
+@[reducible] def Conjecture989.MatrixMap : ℕ → Type :=
+fun d => Conjecture989.Mat d →ₗ[ℂ] Conjecture989.Mat d
+def Conjecture989.Positive : {d : ℕ} → Conjecture989.MatrixMap d → Prop :=
+fun {d} Φ => ∀ (A : Conjecture989.Mat d), Matrix.PosSemidef A → Matrix.PosSemidef (Φ A)
+def Conjecture989.block : {k d : ℕ} → Matrix (Fin k × Fin d) (Fin k × Fin d) ℂ → Fin k → Fin k → Conjecture989.Mat d :=
+fun {k d} X a b i j => X (a, i) (b, j)
+def Conjecture989.amplification : {d : ℕ} →
+  Conjecture989.MatrixMap d →
+    (k : ℕ) → Matrix (Fin k × Fin d) (Fin k × Fin d) ℂ →ₗ[ℂ] Matrix (Fin k × Fin d) (Fin k × Fin d) ℂ :=
+fun {d} Φ k => { toFun := fun X a b => Φ (Conjecture989.block X a.1 b.1) a.2 b.2, map_add' := ⋯, map_smul' := ⋯ }
+def Conjecture989.CompletelyPositive : {d : ℕ} → Conjecture989.MatrixMap d → Prop :=
+fun {d} Φ =>
+  ∀ (k : ℕ),
+    0 < k →
+      ∀ (X : Matrix (Fin k × Fin d) (Fin k × Fin d) ℂ), X.PosSemidef → ((Conjecture989.amplification Φ k) X).PosSemidef
+def Conjecture989.transposeMap : (d : ℕ) → Conjecture989.MatrixMap d :=
+fun d => ↑(Matrix.transposeLinearEquiv (Fin d) (Fin d) ℂ ℂ)
+def Conjecture989.Decomposable : {d : ℕ} → Conjecture989.MatrixMap d → Prop :=
+fun {d} Φ =>
+  ∃ S T,
+    Conjecture989.CompletelyPositive S ∧ Conjecture989.CompletelyPositive T ∧ Φ = S + Conjecture989.transposeMap d ∘ₗ T
+def Conjecture989.Indecomposable : {d : ℕ} → Conjecture989.MatrixMap d → Prop :=
+fun {d} Φ => Conjecture989.Positive Φ ∧ ¬Conjecture989.Decomposable Φ
+def Conjecture989.matrixUnit : {d : ℕ} → Fin d → Fin d → Conjecture989.Mat d :=
+fun {d} i j => Matrix.stdBasisMatrix i j 1
+def Conjecture989.choiMatrix : {d : ℕ} → Conjecture989.MatrixMap d → Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
+fun {d} Φ a b => Φ (Conjecture989.matrixUnit a.1 b.1) a.2 b.2
+def Conjecture989.choiRank : {d : ℕ} → Conjecture989.MatrixMap d → ℕ :=
+fun {d} Φ => (Conjecture989.choiMatrix Φ).rank
+def Conjecture989.ConjecturedMember : (d : ℕ) → Conjecture989.MatrixMap d → Prop :=
+fun d Φ =>
+  0 < d ∧ Conjecture989.CompletelyPositive Φ ∧ Conjecture989.Indecomposable Φ ∧ Conjecture989.choiRank Φ = d ^ 2 - 1
+Conjecture989.posSemidef_iff_quadratic.{u_1} {n : Type u_1} [Fintype n] (A : Matrix n n ℂ) :
+  A.PosSemidef ↔ A.IsHermitian ∧ ∀ (v : n → ℂ), 0 ≤ (star v ⬝ᵥ A.mulVec v).re ∧ (star v ⬝ᵥ A.mulVec v).im = 0
+'Conjecture989.posSemidef_iff_quadratic' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.amplification_apply {d k : ℕ} (Φ : Conjecture989.MatrixMap d)
+  (X : Matrix (Fin k × Fin d) (Fin k × Fin d) ℂ) (a b : Fin k) (i j : Fin d) :
+  (Conjecture989.amplification Φ k) X (a, i) (b, j) = Φ (Conjecture989.block X a b) i j
+'Conjecture989.amplification_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.amplification_kronecker {d k : ℕ} (Φ : Conjecture989.MatrixMap d) (B : Conjecture989.Mat k)
+  (A : Conjecture989.Mat d) :
+  (Conjecture989.amplification Φ k) (Matrix.kroneckerMap (fun x1 x2 => x1 * x2) B A) =
+    Matrix.kroneckerMap (fun x1 x2 => x1 * x2) B (Φ A)
+'Conjecture989.amplification_kronecker' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.block_kronecker_expansion {d k : ℕ} (X : Matrix (Fin k × Fin d) (Fin k × Fin d) ℂ) :
+  X = ∑ a, ∑ b, Matrix.kroneckerMap (fun x1 x2 => x1 * x2) (Matrix.stdBasisMatrix a b 1) (Conjecture989.block X a b)
+'Conjecture989.block_kronecker_expansion' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.amplification_zero (d k : ℕ) : Conjecture989.amplification 0 k = 0
+'Conjecture989.amplification_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.zero_completelyPositive (d : ℕ) : Conjecture989.CompletelyPositive 0
+'Conjecture989.zero_completelyPositive' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.CompletelyPositive.positive {d : ℕ} {Φ : Conjecture989.MatrixMap d}
+  (hΦ : Conjecture989.CompletelyPositive Φ) : Conjecture989.Positive Φ
+'Conjecture989.CompletelyPositive.positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.transposeMap_apply {d : ℕ} (A : Conjecture989.Mat d) :
+  (Conjecture989.transposeMap d) A = Matrix.transpose A
+'Conjecture989.transposeMap_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.transposeMap_entry {d : ℕ} (A : Conjecture989.Mat d) (i j : Fin d) :
+  (Conjecture989.transposeMap d) A i j = A j i
+'Conjecture989.transposeMap_entry' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.decomposition_apply {d : ℕ} (S T : Conjecture989.MatrixMap d) (A : Conjecture989.Mat d) :
+  (S + Conjecture989.transposeMap d ∘ₗ T) A = S A + Matrix.transpose (T A)
+'Conjecture989.decomposition_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.CompletelyPositive.decomposable {d : ℕ} {Φ : Conjecture989.MatrixMap d}
+  (hΦ : Conjecture989.CompletelyPositive Φ) : Conjecture989.Decomposable Φ
+'Conjecture989.CompletelyPositive.decomposable' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.not_indecomposable_of_completelyPositive {d : ℕ} {Φ : Conjecture989.MatrixMap d}
+  (hΦ : Conjecture989.CompletelyPositive Φ) : ¬Conjecture989.Indecomposable Φ
+'Conjecture989.not_indecomposable_of_completelyPositive' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.matrixUnit_entry {d : ℕ} (i j a b : Fin d) :
+  Conjecture989.matrixUnit i j a b = if i = a ∧ j = b then 1 else 0
+'Conjecture989.matrixUnit_entry' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.choiMatrix_entry {d : ℕ} (Φ : Conjecture989.MatrixMap d) (i j a b : Fin d) :
+  Conjecture989.choiMatrix Φ (i, a) (j, b) = Φ (Matrix.stdBasisMatrix i j 1) a b
+'Conjecture989.choiMatrix_entry' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.choiMatrix_eq_sum {d : ℕ} (Φ : Conjecture989.MatrixMap d) :
+  Conjecture989.choiMatrix Φ =
+    ∑ i,
+      ∑ j, Matrix.kroneckerMap (fun x1 x2 => x1 * x2) (Conjecture989.matrixUnit i j) (Φ (Conjecture989.matrixUnit i j))
+'Conjecture989.choiMatrix_eq_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.choiRank_eq_finrank {d : ℕ} (Φ : Conjecture989.MatrixMap d) :
+  Conjecture989.choiRank Φ = Module.finrank ℂ ↥(LinearMap.range (Conjecture989.choiMatrix Φ).mulVecLin)
+'Conjecture989.choiRank_eq_finrank' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.choi_index_card (d : ℕ) : Fintype.card (Fin d × Fin d) = d ^ 2
+'Conjecture989.choi_index_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.choiRank_le (d : ℕ) (Φ : Conjecture989.MatrixMap d) : Conjecture989.choiRank Φ ≤ d ^ 2
+'Conjecture989.choiRank_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.rankCondition_iff_corankOne {d : ℕ} (hd : 0 < d) (Φ : Conjecture989.MatrixMap d) :
+  Conjecture989.choiRank Φ = d ^ 2 - 1 ↔ Conjecture989.choiRank Φ + 1 = d ^ 2
+'Conjecture989.rankCondition_iff_corankOne' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.no_conjectured_member (d : ℕ) (Φ : Conjecture989.MatrixMap d) : ¬Conjecture989.ConjecturedMember d Φ
+'Conjecture989.no_conjectured_member' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.no_nonempty_family.{u_1} {I : Type u_1} [Nonempty I] (d : I → ℕ)
+  (Φ : (i : I) → Conjecture989.MatrixMap (d i)) : ¬∀ (i : I), Conjecture989.ConjecturedMember (d i) (Φ i)
+'Conjecture989.no_nonempty_family' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture989.conjecture989_false : ¬∃ I, Nonempty I ∧ ∃ d Φ, ∀ (i : I), Conjecture989.ConjecturedMember (d i) (Φ i)
+'Conjecture989.conjecture989_false' depends on axioms: [propext, Classical.choice, Quot.sound]

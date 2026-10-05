@@ -1,0 +1,142 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\Mat}{\mathcal M}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\title{A disproof of conjecture 00000000989\\\large Complete positivity excludes positive-map indecomposability}
+\author{C0ldSmi1e}
+\date{October 5, 2026}
+\begin{document}
+\begin{center}
+{\LARGE A disproof of conjecture 00000000989\par}
+\vspace{5pt}
+{\large Complete positivity excludes positive-map indecomposability\par}
+\vspace{10pt}
+C0ldSmi1e \quad\textbullet\quad October 5, 2026
+\end{center}
+
+\section{Statement and mathematical conventions}
+The bilingual conjecture asks for an explicit family of indecomposable
+completely positive maps of dimension $d$ with Choi rank $d^2-1$.
+We use the standard positive-map meaning of indecomposability, stated below.
+The source does not specify the domain and codomain, dimension range, or
+family index. We take a dimension-$d$ map to be a complex-linear map
+$\Phi:\Mat_d(\mathbb C)\to\Mat_d(\mathbb C)$ for a positive integer $d$;
+$d$ is the matrix side length. A family must have at least one member.
+The obstruction applies in every positive dimension and at every Choi rank,
+so no particular lower cutoff or family indexing is needed.
+
+A matrix is positive when it is Hermitian positive semidefinite. A linear map
+is positive if it preserves such matrices, and completely positive (CP) if
+$\operatorname{id}_k\otimes\Phi$ is positive for every positive integer $k$.
+A positive map is decomposable if it can be written
+\[
+ \Phi=S+\tau\circ T,
+ \qquad S,T\text{ completely positive},
+\]
+where $\tau(X)=X^{\mathsf T}$ is ordinary matrix transpose on the output
+algebra. A positive map is indecomposable if no such representation exists.
+This is the convention in \cite[Section~1]{mh}. The summands may be zero;
+there is no requirement of trace preservation or unitality.
+
+This notion differs from an extreme ray of a cone, an extreme point of a
+normalized convex set, or indecomposability under direct sums. The source
+specifies none of those alternatives. Its parenthetical description
+``extremal Choi rank'' gives no optimization class and does not change the
+stated numerical equality.
+
+For clarity, with matrix units $E_{ij}$ we use the input-first Choi convention
+\[
+ C_\Phi=\sum_{i,j=1}^{d}E_{ij}\otimes\Phi(E_{ij}),
+ \qquad
+ (C_\Phi)_{(i,k),(j,\ell)}=\Phi(E_{ij})_{k\ell}.
+\]
+The Choi rank is the ordinary complex matrix rank of this $d^2$-by-$d^2$
+matrix, not the rank of $\Phi$ as a linear transformation. See
+\cite[Section~2]{mh} for this tensor order and \cite[Section~1]{girard}
+for the rank convention (with exchanged tensor factors).
+
+\section{Complete proof}
+\begin{lemma}
+The zero linear map between complex matrix algebras is completely positive.
+\end{lemma}
+\begin{proof}
+For each positive integer $k$, its ampliation sends every matrix to the zero
+matrix. The zero matrix is Hermitian positive semidefinite. Thus every
+ampliation preserves positive matrices, exactly as required.
+\end{proof}
+
+\newpage
+\begin{theorem}
+Every completely positive map between complex matrix algebras is
+decomposable. Hence no such map is indecomposable in the positive-map sense.
+\end{theorem}
+\begin{proof}
+Let $\Phi$ be completely positive. In the defining decomposition, choose
+$S=\Phi$ and $T=0$. Both are completely positive, and
+\[
+ S+\tau\circ T=\Phi+\tau\circ0=\Phi.
+\]
+This is a permitted decomposition, contradicting indecomposability.
+\end{proof}
+
+In particular, for every positive integer $d$ there is no map
+$\Phi:\Mat_d(\mathbb C)\to\Mat_d(\mathbb C)$ that is simultaneously
+completely positive, indecomposable, and of Choi rank $d^2-1$. The rank
+condition cannot restore existence: the first two conditions already
+contradict each other. This conclusion does not require a rank estimate
+or an unproved Choi-matrix characterization of complete positivity.
+
+Finally, suppose a proposed family has a nonempty index set $I$, positive
+dimensions $d_i$, and maps $\Phi_i$ satisfying all the stated properties.
+Choose $i\in I$. The preceding theorem contradicts the properties of
+$\Phi_i$. Thus no nonempty family exists, and in particular no explicit
+nonempty family exists. No artificial predicate for ``explicitness'' is
+needed in the argument.
+
+\section{Formalization and verification}
+The accompanying Lean project uses Lean 4.19.0 and Mathlib v4.19.0.
+Its objects are actual complex-linear maps on complex matrices. Matrix
+positivity has its Hermitian positive-semidefinite meaning; complete
+positivity concerns all positive finite ampliation levels. Map addition,
+composition, zero and transpose have their ordinary matrix meanings.
+The source retains an actual Choi matrix and its complex rank in the
+specialization to the conjecture, and explicitly addresses the nonempty
+family conclusion.
+
+The proof is symbolic. No numerical experiment or external computation is
+needed as a mathematical premise. Verification records accompany the project
+and distinguish local formal checking and independent internal review from
+maintainer acceptance.
+
+From the pinned project in \texttt{lean/}, run
+\begin{verbatim}
+lake build
+lake env lean -DwarningAsError=true Conjecture989.lean
+lake env lean -DwarningAsError=true Check.lean
+\end{verbatim}
+The default target builds the proof. The audit source prints the definitions,
+theorem types and axiom dependencies; the accompanying records also inspect
+all constants originating in the compiled proof modules, including generated
+ones. The formal correspondence and exact execution identities are detailed
+in the submission's verification records.
+
+\begin{thebibliography}{9}
+\bibitem{mh}
+A.~M\"uller-Hermes.
+\emph{Decomposable Pauli diagonal maps and Tensor Squares of Qubit Maps}.
+arXiv:2006.14543v1, 2020, Sections~1--2.
+\href{https://arxiv.org/abs/2006.14543v1}{arxiv.org/abs/2006.14543v1}.
+\bibitem{girard}
+M.~Girard et al.
+\emph{On the mixed-unitary rank of quantum channels}.
+Author manuscript, March 31, 2020, Section~1, equations~(1)--(3).
+\href{https://cs.uwaterloo.ca/~watrous/Papers/MixedUnitaryRank.pdf}{Author-hosted manuscript}.
+\end{thebibliography}
+\end{document}

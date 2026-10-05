@@ -1,0 +1,79 @@
+Verification record: conjecture 00000000989
+
+Result: local formal verification and report validation PASS.
+Independent semantic approval is recorded separately in SEMANTIC_REVIEW.md.
+Maintainer acceptance is not asserted by these records.
+
+Source identity
+Official bilingual source SHA-256: 69eb8b98adec657b4781a539de86eca88f07ceeeb172a02fc6e593437bf2961d
+Audited upstream main: d7d4bc9f6918401d3fb22c6e473df63eba5dbb78
+Lean source SHA-256: 9e6f1931a63c9b206a27162e375b9aafe24ffac320bb8a1bb5872254c6a1206c
+Exact source/config identities: verification/frozen-sources.json.
+
+Mathematical scope
+The standard positive-map decomposition is S + output-transpose composed with T,
+with both S and T completely positive and zero summands permitted. Choosing
+S = Phi and T = 0 proves that every completely positive map is decomposable.
+This forbids every proposed individual and every nonempty family independently
+of Choi rank. The final theorem nevertheless retains the genuine Choi rank
+equality, positive matrix side length and actual square-system linear maps.
+The source's omitted domain/codomain, dimension cutoff and family conventions
+are disclosed. Alternative extreme-ray, extreme-point or direct-sum questions
+are not claimed solved. The word explicit does not become an arbitrary predicate:
+absence of every nonempty family also excludes explicit ones.
+
+Semantic bridges
+Actual Matrix.PosSemidef is equivalent to Hermitian symmetry plus nonnegative
+real and zero imaginary quadratic form. Actual complex-linear ampliations act
+as id tensor Phi on Kronecker products, which span all block matrices by a
+proved finite expansion. Complete positivity implies ordinary positivity.
+Actual map addition/composition/zero and ordinary output transpose are exposed.
+The Choi matrix is the unnormalized input-first sum of E_ij tensor Phi(E_ij).
+Its rank is genuine complex image dimension; size is d squared and the usual
+rank bound is proved. At d > 0, rank = d squared minus one is equivalent to
+rank + 1 = d squared. No dimension-zero subtraction artifact is used.
+No external mathematical computation is required.
+
+Independent execution
+Fresh build directory: /private/tmp/tlmc989-independent-final
+Compiler: Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)
+Compiler commit: 6caaee842e9495688c1567e78c0e68dbb96942aa
+All nine dependency revisions match the pinned manifest and their tracked
+sources are clean before and after. Candidate build outputs were absent before
+the independent build; no candidate olean files were copied.
+lake build: exit 0.
+Complete source and Check.lean replay with warnings treated as errors: exit zero.
+Check prints all 13 definitions and all 22 theorem types and axiom lists.
+Every theorem uses only propext, Classical.choice and Quot.sound, or a subset.
+Exhaustive module-of-origin inventory: 43 constants, including
+8 generated/additional declarations. All are retained with types,
+safety flags and transitive axiom closures. There are no custom axiom declarations,
+unsafe declarations, partial declarations or compiler runtime constants.
+All dependency closures use only the standard allowed axioms. The authored-source
+bypass scan has no hits. Source/config/inventory hashes and compiler/dependency
+identity remain unchanged after all checks.
+Started: 2026-10-05T04:39:42.145687+00:00
+Finished: 2026-10-05T04:39:58.939950+00:00
+
+Report
+main.tex SHA-256: 4fcc3b0b8bd08967d48aa61deaa83153cfe06a9aaaddfbabe662bcc8b4163a1a
+main.pdf SHA-256: 9d71982a4eb875026270c3afcccbf02a6e66f80114df008021f2dd4c599cc894
+Built-in editor compilation: success for this exact source.
+Existing Tectonic export: exit zero; no warnings or box diagnostics.
+All 2 final pages rendered and visually inspected: PASS.
+Complete text extracted with pypdf; render and source/PDF hashes recorded.
+The report's elementary argument and the formal proof use the same zero-map
+decomposition. The report states its broader matrix-algebra observation; the
+Lean specialization checks the square-system convention required here.
+
+Contribution eligibility
+Initial audit: PASS; 596 all-state PRs and
+32 complete identifier/semantic searches. All five lead submissions'
+full bodies, comments and reviews were read and distinguished. Both remote
+branches, all local refs/history and Discussions checked. No prior same-ID
+submission or rejected same-ID submission found. Both current complete guides
+read. Current prepublication and immediate-publication observations are recorded
+separately in the package.
+
+Reproduction commands are in README.md. Inspection/export Python and Lean
+files are verification tooling, not proof premises or external oracles.
