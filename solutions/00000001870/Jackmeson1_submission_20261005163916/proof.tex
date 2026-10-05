@@ -1,0 +1,174 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\E}{\mathbb{E}}
+
+\title{Disproof of conjecture 00000001870:\\ the third cumulant of $\Tr U$ under Haar measure on $U(N)$ is identically $0$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the reading}
+
+\textbf{Statement (English, verbatim).} Definition: The CLT for the trace distribution of random
+unitary matrices (known). Conjecture: The third cumulant decays as $N^{-1}\cdot c_3$ with
+$c_3 = (2\pi i)/3$ (from the series expansion of the cumulant-generating function); the decay
+exponent 1 is exact. (The Chinese text states the same.)
+
+\textbf{Reading.} A ``random unitary matrix'' is a Haar-distributed element of the unitary group
+$U(N)$, i.e.\ the circular unitary ensemble. Wikipedia
+(\url{https://en.wikipedia.org/wiki/Circular_ensemble}) states: ``The distribution of the unitary
+circular ensemble CUE(n) is the Haar measure on the unitary group U(n).'' The ``trace
+distribution'' is the law of $X = \Tr U$. Its third cumulant is the $t^3/3!$ coefficient of
+$K(t)=\log\E[e^{tX}]$, namely
+\[
+  \kappa_3(N) = \E[X^3] - 3\,\E[X^2]\,\E[X] + 2\,\E[X]^3 .
+\]
+Wikipedia (\url{https://en.wikipedia.org/wiki/Cumulant}) says the cumulants ``are defined using the
+cumulant generating function (CGF) K(t), which is a generating function that is the natural
+logarithm of the moment generating function''. It gives the joint third cumulant as
+$\kappa(X,Y,Z)=\E(XYZ)-\E(XY)\E(Z)-\E(XZ)\E(Y)-\E(YZ)\E(X)+2\E(X)\E(Y)\E(Z)$; taking
+$X=Y=Z$ gives the formula above. Since $c_3$ is purely imaginary, $\kappa_3$ is the complex
+cumulant of the complex variable $\Tr U$.
+
+The claim refuted is
+\[
+  \kappa_3(N) \sim \frac{c_3}{N}\quad (N\to\infty),\qquad c_3=\frac{2\pi i}{3},
+\]
+that is, $\kappa_3(N)=c_3/N+o(1/N)$, or equivalently $N\kappa_3(N)\to c_3$. We also refute the
+version with any constant $c\ne 0$ and any real exponent $\alpha$ in place of $c_3$ and $1$. The
+proof shows $\kappa_3(N)=0$ for \emph{every} $N$. The same holds for the mixed cumulants
+$\kappa(X,X,\bar X)$ and $\kappa(X,\bar X,\bar X)$, for $\kappa_3(\operatorname{Re}X)$ and
+$\kappa_3(\operatorname{Im}X)$, and for any rescaling $aX$, since $\kappa_3(aX)=a^3\kappa_3(X)$.
+
+\textbf{Not addressed.} Third cumulants of other statistics ($|\Tr U|^2$, $\Tr U^j$ for even $j$,
+$\log\det(1-U)$) and other ensembles (COE, CSE, orthogonal groups).
+
+\section{Definitions (as formalized)}
+
+\begin{definition}
+$U(N)$ is Mathlib's \texttt{Matrix.unitaryGroup (Fin N) $\mathbb{C}$}, the set of
+$U\in M_N(\mathbb{C})$ with $U U^* = 1$, with its group structure. It carries the subspace
+topology of $M_N(\mathbb{C})\cong\mathbb{C}^{N\times N}$ (product topology) and the Borel
+$\sigma$-algebra.
+\end{definition}
+
+\begin{lemma}[\texttt{isCompact\_unitaryGroup}]
+$U(N)$ is compact.
+\end{lemma}
+\begin{proof}
+It is closed (Mathlib \texttt{isClosed\_unitary}), and every entry satisfies $|U_{ij}|\le 1$
+(Mathlib \texttt{entry\_norm\_bound\_of\_unitary}). So it is a closed subset of the compact
+product $\prod_{i,j}\{|z|\le1\}$.
+\end{proof}
+
+\begin{definition}[\texttt{haarU}]
+$\mu_N = $ \texttt{haarMeasure $\top$}, Mathlib's Haar measure normalized so that the whole
+group has mass $1$. Lean proves that it is a Haar measure (\texttt{IsHaarMeasure}, which includes
+left invariance) and a probability measure (\texttt{IsProbabilityMeasure}).
+\end{definition}
+
+\begin{definition}[\texttt{trU}, \texttt{cumulant3}, \texttt{kappa3}, \texttt{kappa3Re}]
+$\Tr U = $ \texttt{Matrix.trace}. For $\mathbb{R}$- or $\mathbb{C}$-valued $X,Y,Z$ on a measure
+space, \texttt{cumulant3} $\mu\,X\,Y\,Z$ is the joint cumulant formula above, with $\E$ the
+Bochner integral. Then $\kappa_3(N)=$ \texttt{cumulant3} $\mu_N$ \texttt{trU trU trU}, and
+\texttt{kappa3Re} is the same with $\operatorname{Re}\Tr U$. Lean proves the moment formula
+$\kappa_3(N)=\E[X^3]-3\E[X^2]\E[X]+2\E[X]^3$ (\texttt{kappa3\_eq\_moments}). Lean also proves that every
+moment $\E[X^a\bar X^b]$ is a genuine integral (\texttt{integrable\_trU\_moment}: $\Tr$ is
+continuous on a compact group and $\mu_N$ is finite).
+\end{definition}
+
+\section{Proof}
+
+\begin{lemma}[\texttt{integral\_eq\_zero\_of\_odd}]
+Let $\sigma$ be a map with $\int f\circ\sigma\,d\mu=\int f\,d\mu$ for all $f$. If $f\circ\sigma=-f$, then
+$\int f\,d\mu=0$.
+\end{lemma}
+\begin{proof}
+$\int f = \int f\circ\sigma = \int(-f) = -\int f$. This uses only linearity of the Bochner
+integral under negation, which holds without integrability.
+\end{proof}
+
+\begin{lemma}[\texttt{cumulant3\_eq\_zero\_of\_odd}]
+If moreover $X\circ\sigma=-X$, $Y\circ\sigma=-Y$ and $Z\circ\sigma=-Z$, then
+$\kappa(X,Y,Z)=0$.
+\end{lemma}
+\begin{proof}
+$XYZ$, $X$, $Y$ and $Z$ are all odd under $\sigma$, so their integrals vanish. Every term of the
+joint cumulant formula contains one of these integrals as a factor.
+\end{proof}
+
+\begin{theorem}[\texttt{cumulant3\_linear\_trace\_eq\_zero}, \texttt{\_right}]
+Let $\mu$ be a left-invariant (resp.\ right-invariant) measure on $U(N)$, $N\ge 0$, and let
+$L_1,L_2,L_3:\mathbb{C}\to\mathbb{K}$ be $\mathbb{R}$-linear, with $\mathbb{K}\in\{\mathbb{R},\mathbb{C}\}$.
+Then $\kappa(L_1\Tr U, L_2\Tr U, L_3\Tr U)=0$.
+\end{theorem}
+\begin{proof}
+The scalar matrix $-1$ lies in $U(N)$. Left invariance gives $\int f((-1)U)\,d\mu=\int f\,d\mu$
+(Mathlib \texttt{integral\_mul\_left\_eq\_self}). Right invariance gives the same with $U(-1)$,
+and $U(-1)=(-1)U$ because $-1$ is central. Next, $\Tr((-1)U)=\Tr(-U)=-\Tr U$, so
+$L_k(\Tr((-1)U))=-L_k(\Tr U)$. Apply the previous lemma with $\sigma(U)=(-1)U$.
+\end{proof}
+
+Specializing $\mu=\mu_N$ and $L_k\in\{\mathrm{id},\overline{\cdot}\,,\operatorname{Re}\}$ gives
+\texttt{kappa3\_eq\_zero}: $\kappa_3(N)=0$ for all $N$. It also gives \texttt{mixed\_cumulants\_eq\_zero}
+($\kappa(X,X,\bar X)=\kappa(X,\bar X,\bar X)=0$) and \texttt{kappa3Re\_eq\_zero}.
+
+\begin{theorem}[\texttt{kappa3\_not\_equivalent}, \texttt{conjecture\_1870\_false}]
+For every $c\in\mathbb{C}\setminus\{0\}$ and every $\alpha\in\mathbb{R}$, $\kappa_3(N)\not\sim c\,N^{-\alpha}$.
+In particular $\kappa_3(N)\not\sim c_3/N$, and $N\kappa_3(N)\not\to c_3$, for $c_3=2\pi i/3$.
+\end{theorem}
+\begin{proof}
+$\kappa_3$ is the zero sequence. If $0\sim v$, then $v\sim 0$, which forces $v_N=0$ eventually
+(Mathlib \texttt{isEquivalent\_zero\_iff\_eventually\_zero}). But $c N^{-\alpha}\ne 0$ for $N\ge 1$.
+For the limit: $N\kappa_3(N)=0\to 0\ne c_3$, and limits in $\mathbb{C}$ are unique.
+\end{proof}
+
+Here $u\sim v$ is Mathlib's \texttt{Asymptotics.IsEquivalent}, meaning $u-v=o(v)$. For $v=c/N$
+with $c\ne0$ this is exactly $\kappa_3(N)=c/N+o(1/N)$.
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture1870/Basic.lean} (202 lines, Lean 4.33.1, Mathlib v4.33.1, only
+\texttt{import Mathlib}). Main theorem, transliterated to ASCII (the source writes \texttt{Not} as
+$\neg$, \texttt{/\char`\\} as $\wedge$, \texttt{Nat} and \texttt{Complex} as $\mathbb{N}$ and
+$\mathbb{C}$, and \texttt{nhds} as the neighbourhood-filter symbol):
+\begin{verbatim}
+theorem conjecture_1870_false :
+    Not (kappa3 ~[atTop] fun N : Nat => c3 / N) /\
+    Not (Tendsto (fun N : Nat => (N : Complex) * kappa3 N) atTop (nhds c3))
+\end{verbatim}
+with \texttt{c3 = 2 * Real.pi * Complex.I / 3}. Further theorems: \texttt{kappa3\_not\_equivalent},
+\texttt{cumulant3\_linear\_trace\_eq\_zero}, \texttt{cumulant3\_linear\_trace\_eq\_zero\_right},
+\texttt{kappa3\_eq\_zero}, \texttt{kappa3\_eq\_moments}, \texttt{mixed\_cumulants\_eq\_zero},
+\texttt{kappa3Re\_eq\_zero}, \texttt{integrable\_trU\_moment} and \texttt{isCompact\_unitaryGroup}.
+\texttt{lake build} succeeds. For every theorem listed above, \texttt{\#print axioms} reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide}, and no new axiom.
+
+\section{Relation to the earlier submission}
+
+PR \#234 (orionsheep, closed) had the same, mathematically sound, rotation-symmetry argument.
+Its Lean was vacuous. In the reviewer's words: ``the capstone theorem is literally (0:Nat) = 0 :=
+rfl and the 'zero moments' are substituted numeric literals; no unitary matrix, Haar measure,
+trace, or cumulant appears in Lean, and the entire (mathematically sound) rotation-symmetry
+argument is prose-only.'' This submission puts every one of those objects in Lean. It uses the
+group $U(N)$ as Mathlib's \texttt{Matrix.unitaryGroup}, with its topology and Borel
+$\sigma$-algebra. It proves that $U(N)$ is compact, and builds the Haar probability measure
+\texttt{haarMeasure $\top$}. The trace is \texttt{Matrix.trace} and the cumulant is defined
+from Bochner integrals. The symmetry argument (invariance under $U\mapsto -U$) is a Lean proof
+for every $N$ and for every left- or right-invariant measure. The asymptotic claim is refuted in
+Lean with \texttt{Asymptotics.IsEquivalent} and \texttt{Tendsto}.
+
+\end{document}
