@@ -1,0 +1,9 @@
+# Solution Review — Conjecture 00000004289 (PR 606)
+
+**Verdict: APPROVE**
+
+Every free abelian group is flat as a `Z`-module. The official definitions use the same strict cardinal cutoff for both properties: `AlmostFree(kappa,G)` requires every subgroup below `kappa` to be free, while `FlatFree(kappa,G)` requires every subgroup below `kappa` to be flat. Therefore the first condition immediately implies the second. No group can be almost free but not flat-free, for any threshold or carrier cardinality, so the asserted separation set is empty and `aleph_omega` cannot be its least member.
+
+The Lean formalization retains the whole-group non-free hypothesis, quantifies over actual additive subgroups and genuine cardinalities, independently quantifies threshold and carrier size, and proves the universal implication. It separately proves nonexistence at `aleph_omega`, emptiness of the diagonal separation-cardinal set, absence of a least element, and the source’s true `aleph_1` implication. Negating the necessary minimum/existence component is sufficient to disprove the compound conjecture; the submission appropriately does not claim a coded formalization of ZFC independence or the Shelah black box.
+
+Independent LaTeX and Lean rebuilds succeeded, both Lean files replayed with warnings as errors, and all nine theorems used only `propext`, `Classical.choice`, and `Quot.sound`. The submitted verifier, PDF exporter, and environment inventory were independently run successfully. The source has no authored unsafe, partial, axiom, sorry/admit, native-decision, implementation-bypass, or kernel-bypass declaration. Lean generated two `_cstage` compiler runtime constants with implementation-only unsafe flags, but an independent transitive constant-reference audit of the final theorem found zero references to either; they are not proof or statement dependencies. All checksums matched.

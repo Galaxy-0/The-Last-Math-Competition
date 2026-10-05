@@ -1,0 +1,7 @@
+# Solution Review — Conjecture 00000005600 (PR 603)
+
+**Verdict: APPROVE**
+
+The submission gives explicit integer matrices and an explicit noncommutative pair in `GL_2(Z)`. For `M = [[1,-4],[0,4]]` and `N = [[2,0],[-2,2]]`, both determinants equal 4. The respective unimodular row reductions are `diag(1,4)` and `diag(2,2)`, whose row cokernels are `Z/4` and `(Z/2)^2`; these are not isomorphic as abelian groups, so no row-equivalent echelon forms can agree. The submission also realizes the separation through the noncommuting elementary transvections `U = [[1,1],[0,1]]` and `V = [[1,0],[1,1]]`: the two products applied to `diag(1,2)` have equal determinant but distinct row Hermite normal forms.
+
+The Lean statement includes the required witnesses, determinant equality, genuine unimodularity, noncommutativity, Hermite-form conditions, separation of row-equivalence classes, non-isomorphic cokernels, failure of two-sided equivalence, and the same-base-matrix two-order construction. The definitions agree with the standard integer row-Hermite/echelon interpretation and make the theorem non-vacuous. Independent PDF and Lean rebuilds, warning-as-error elaboration, axiom replay, and numerical matrix checks all succeeded; no forbidden proof escape or nonstandard axiom was found. One checksum entry for `conjecture.md` is stale, but the file is byte-identical to the official claim and the issue does not affect the proof.

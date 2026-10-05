@@ -1,0 +1,13 @@
+# Solution Review — Conjecture 00000008666 (PR 611)
+
+**Reviewer verdict: APPROVE — complete valid disproof.**
+
+I independently reviewed the official bilingual conjecture, the complete LaTeX source and PDF, the full Lean project/configuration, and the entire diff from the stated clean base. The PR adds only the submitter's permitted solution folder. Base metadata marks conjecture 00000008666 unsolved and no prior solution directory exists.
+
+I rebuilt the PDF independently with two `pdflatex` passes; it compiled as a matching four-page document with no substantive issues. I independently built Lean 4.33.1/Mathlib v4.33.1 with the designated shared-dependency command and `lake build`; all 8708 jobs succeeded. The direct warning-as-error elaboration succeeded. My extended axiom audit checked the main theorem, infinitude theorem, Rankin family theorem, and directed-law theorem; all depend only on `[propext, Classical.choice, Quot.sound]`. A syntax-sensitive scan found no `sorry`, `admit`, `native_decide`, custom axiom, `unsafe`, `implemented_by`, `extern`, or `skipKernelTC`.
+
+The formal definitions are faithful: the Cayley digraph has right-multiplication arcs, generation is `Subgroup.closure S = ⊤`, and a Hamiltonian cycle is a bijective cyclic enumeration with every successor edge including the closing edge. Rankin's injectivity argument is mathematically correct. For every odd `n≥3`, `Z/2×Z/n` has order `2n`; the generators `(1,0)` and `(0,1)` have orders `2` and `n`, and their difference has order `lcm(2,n)=2n`, so it generates the group. Rankin implies that the Cayley digraph has no directed Hamiltonian cycle. These examples have orders `6,10,14,18,…` and are unbounded, so the parenthetically defined exceptional Cayley digraphs cannot form a finite list. Refuting this independent “finite list” conjunct refutes the whole conjunction. I independently brute-forced the directed Hamiltonian-cycle count for n=3,5,7,9,11 and found zero cycles in each case, while Lean proves the general family.
+
+The main theorem correctly abstracts the other three clauses as arbitrary propositions; it is non-vacuous because the finite-list conjunct is independently disproved by explicit, genuinely generated, non-Hamiltonian digraphs. The submission appropriately does not claim to settle the separate undirected Lovász-type statement, and it also proves that the directed reading of the first clause is false. The report and Lean proof match exactly.
+
+Minor metadata note: checksum entries for `conjecture.md` and `Basic.lean` were computed from CRLF forms while those files are checked in with LF; converting LF→CRLF reproduces both hashes. This line-ending-only manifest discrepancy does not affect the independently rebuilt proof.

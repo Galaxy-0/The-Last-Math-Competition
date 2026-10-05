@@ -1,0 +1,9 @@
+# Solution Review — Conjecture 00000000989 (PR 605)
+
+**Verdict: APPROVE**
+
+Under the standard positive-map definition, a decomposable map is a sum `S + transpose ∘ T` with completely positive `S` and `T`; the completely positive cone contains the zero map, and decompositions do not require nonzero summands. Therefore every completely positive map `Phi` is decomposable by taking `S = Phi` and `T = 0`. Consequently no completely positive map is indecomposable in this standard sense, regardless of dimension or Choi rank. Since a nonempty requested family would contain such an impossible member, no explicit family exists.
+
+The Lean formalization uses actual complex-linear endomaps of `M_d(C)`, Hermitian positive-semidefinite positivity, all positive finite block ampliations for complete positivity, the ordinary output transpose, the standard unnormalized Choi matrix, and genuine complex matrix rank. It proves the zero map completely positive, proves every CP map decomposable, rules out every individual conjectured member, and then rules out every nonempty family even when dimensions vary by index. The Choi-rank condition is retained literally as `d^2 - 1`, so the obstruction is not obtained by dropping part of the claim.
+
+Independent PDF and Lean rebuilds succeeded. Both proof and audit Lean files replayed with warnings as errors; all 22 authored theorems and the complete 43-constant environment inventory used only `propext`, `Classical.choice`, and `Quot.sound`, with no unsafe, partial, or axiom declarations. The submitted independent verifier and PDF export tooling were also run successfully in a fresh area. Exact Choi-rank examples confirmed that rank `d^2-1` is independently possible for CP maps, so the contradiction genuinely comes from the indecomposability condition. No forbidden proof mechanism was found.

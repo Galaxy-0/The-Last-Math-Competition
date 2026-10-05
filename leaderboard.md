@@ -1,6 +1,6 @@
 # The Last Math Competition — Leaderboard
 
-Generated: 2026-10-04. Sources: all audited & merged submission pull requests plus the
+Generated: 2026-10-05. Sources: all audited & merged submission pull requests plus the
 local `lidangzzz` submissions (2026-09-12). Every submission passed the audit: LaTeX + PDF +
 a compiling Lean 4 project (Mathlib or self-contained core Lean), no `sorry`, no
 `native_decide`/extra axioms, a semantic review confirming the Lean theorem actually
@@ -10,7 +10,7 @@ archived under solutions/[number_ID]/review/. After the full re-audit of 2026-10
 reverted to open unless another valid submission remains); 98 PRs were closed unmerged with
 full review comments.
 
-**Total solved: 470 / 10000 conjectures** — 37 proven, 433 disproven.
+**Total solved: 492 / 10000 conjectures** — 38 proven, 454 disproven.
 
 Ranking is by **Solved** (accepted submissions), ties broken by first solves.
 
@@ -21,16 +21,17 @@ Ranking is by **Solved** (accepted submissions), ties broken by first solves.
 | 3 | [orionsheep](https://github.com/orionsheep) | 73 | 65 | 0 | 73 |
 | 4 | [earthking11](https://github.com/earthking11) | 66 | 59 | 0 | 66 |
 | 5 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 37 | 36 | 8 | 29 |
-| 6 | [jilint777](https://github.com/jilint777) | 34 | 34 | 2 | 32 |
-| 7 | [C0ldSmi1e](https://github.com/C0ldSmi1e) | 29 | 29 | 3 | 26 |
+| 6 | [C0ldSmi1e](https://github.com/C0ldSmi1e) | 35 | 35 | 3 | 32 |
+| 7 | [jilint777](https://github.com/jilint777) | 34 | 34 | 2 | 32 |
 | 8 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
-| 9 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
-| 10 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
-| 11 | [GodBlf](https://github.com/GodBlf) | 2 | 2 | 0 | 2 |
-| 12 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
-| 13 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
-| 14 | [Galaxy-0](https://github.com/Galaxy-0) | 1 | 1 | 1 | 0 |
+| 9 | [Jackmeson1](https://github.com/Jackmeson1) | 16 | 16 | 1 | 15 |
+| 10 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
+| 11 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
+| 12 | [GodBlf](https://github.com/GodBlf) | 2 | 2 | 0 | 2 |
+| 13 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
+| 14 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
 | 15 | [champagnepapihz](https://github.com/champagnepapihz) | 1 | 1 | 0 | 1 |
+| 16 | [Galaxy-0](https://github.com/Galaxy-0) | 1 | 1 | 1 | 0 |
 
 ## Solved conjectures per solver
 
@@ -102,12 +103,12 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 
 #252★ (D)
 
-### C0ldSmi1e — 29 solved (29 first)
+### C0ldSmi1e — 35 solved (35 first)
 
 #310★ (D), #464★ (D), #420★ (D), #308★ (D), #360★ (D), #747★ (D), #1259★ (D), #7790★ (D), #973★ (D)
 #141★ (D), #3794★ (D), #4107★ (D), #6480★ (P), #428★ (D), #9028★ (D), #367★ (D), #1561★ (D), #574★ (D)
 #1554★ (D), #5960★ (P), #1277★ (D), #283★ (D), #978★ (D), #2802★ (D), #7718★ (D), #6891★ (D), #1227★ (P)
-#7662★ (D), #7767★ (D)
+#7662★ (D), #7767★ (D), #1066★ (D), #7158★ (D), #331★ (D), #989★ (D), #4289★ (D), #2131★ (D)
 
 ### ziangni-sys — 124 solved (124 first)
 
@@ -144,3 +145,8 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 ### champagnepapihz — 1 solved (1 first)
 
 #36★ (D)
+
+### Jackmeson1 — 16 solved (16 first)
+
+#2307★ (D), #5400★ (D), #1273★ (D), #5600★ (P), #4042★ (D), #741★ (D), #1354★ (D), #7664★ (D), #2041★ (D)
+#8666★ (D), #2167★ (D), #8197★ (D), #30★ (D), #3462★ (D), #502★ (D), #7752★ (D)
