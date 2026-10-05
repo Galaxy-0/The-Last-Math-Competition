@@ -1,0 +1,176 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+
+\title{A disproof of Conjecture 00000007794\\[2pt]
+\large Reeve tetrahedra break log-concavity of Ehrhart coefficients}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000007794 reads (English version):
+
+\begin{quote}
+Definition: Log-concavity of Ehrhart coefficients: $L(P,k)$ are the coefficients of the Ehrhart series of
+a lattice polytope $P$. Conjecture: The log-concavification satisfies $L(P,k)^2 \ge L(P,k-1)
+L(P,k+1)(1 + c/k^2)$ for universal $c$, i.e. log-concavity with explicit stability margin; equality
+holds at the simplex; and the real-rootedness of the $h^*$-polynomial has an independent
+characterization with all roots of $h^*(P)$ in the annulus $\{z: r \le |z| \le 1\}$ for explicit lower
+bound $r$.
+\end{quote}
+
+The Chinese version writes the Ehrhart series explicitly as $\sum L(P,k)t^k$ (``ge duobaoxing P de
+Ehrhart jishu $\Sigma$ L(P,k)t\^{}k de xishu L(P,k)'': ``the coefficients $L(P,k)$ of the Ehrhart series
+$\sum L(P,k)t^k$ of the lattice polytope $P$''), and the margin as ``c pushi'' (``$c$ universal'').
+
+\textbf{Result.} The first clause is false for every constant $c > -1$, which covers every positive
+``stability margin'' and plain log-concavity ($c = 0$). The Reeve tetrahedra violate it at $k = 1$.
+Since the conjecture is a conjunction, it is false. Everything is formalized in Lean~4 with Mathlib
+(Section~\ref{sec:lean}).
+
+\section{Definitions, reading and conventions}
+
+\begin{definition}
+A \emph{lattice polytope} is the convex hull of a nonempty finite set of lattice points. For $k \in \N =
+\{0,1,2,\dots\}$, $L(P,k) = \#(kP \cap \Z^d)$; these are the coefficients of the Ehrhart series $\sum_{k
+\ge 0} L(P,k) t^k$. Source: Wikipedia, \emph{Ehrhart polynomial}
+(\url{https://en.wikipedia.org/wiki/Ehrhart_polynomial}): $L(P,t)$ is ``the number of lattice points
+contained in the polytope tP'', and the Ehrhart series is $\mathrm{Ehr}_P(z) = \sum_{t \ge 0} L(P,t)
+z^t$.
+\end{definition}
+
+\begin{definition}[Reeve tetrahedron]
+For an integer $r \ge 1$, $T_r = \mathrm{conv}\{(0,0,0), (1,0,0), (0,1,0), (1,1,r)\} \subset \R^3$.
+Source: Wikipedia, \emph{Reeve tetrahedra} (\url{https://en.wikipedia.org/wiki/Reeve_tetrahedra}):
+the vertices are as above, ``where r is a positive integer''.
+\end{definition}
+
+\textbf{Reading.} The first clause says: there is a constant $c$, independent of $P$ and $k$, such that
+for every lattice polytope $P$ and every $k \ge 1$,
+\[ L(P,k)^2 \ \ge\ L(P,k-1)\, L(P,k+1)\, (1 + c/k^2). \]
+The range $k \ge 1$ is the one where $c/k^2$ and $L(P,k-1)$ are both defined. We refute this for every
+real $c > -1$, in dimension $3$. A statement for all dimensions in particular covers $d = 3$.
+
+\textbf{Conventions.} (i) $L(P,0) = \#(0 \cdot P \cap \Z^3) = \#\{0\} = 1$; this is computed from the
+definition (Lean: \texttt{ehrhart\_zero}), and it agrees with the constant term $1$ of the Ehrhart
+series. (ii) $kP$ is the pointwise dilation $\{k x : x \in P\}$. (iii) Counting uses Mathlib's
+\texttt{Set.ncard}, which is $0$ on infinite sets. Our lower bound for $L(T_r,2)$ therefore includes a
+proof that the lattice points of $2T_r$ form a finite set. (iv) $k - 1$ is natural subtraction, which is
+exact for $k \ge 1$. (v) Full-dimensionality is not part of the definition of a lattice polytope;
+anyway $T_r$ is a genuine tetrahedron of volume $r/6$.
+
+\section{Proof}
+
+\begin{lemma}[facet inequalities]\label{lem:facets}
+For $s \ge 0$, every $x \in sT_r$ satisfies $0 \le x_3$, $x_3 \le r x_1$, $x_3 \le r x_2$ and $r(x_1 +
+x_2) \le s r + x_3$.
+\end{lemma}
+\begin{proof}
+For $s = 1$, the four vertices satisfy these inequalities. The set they define is an intersection of
+half-spaces, hence convex, so it contains the convex hull $T_r$. Multiply by $s \ge 0$.
+\end{proof}
+
+\begin{lemma}\label{lem:L1}
+$L(T_r, 1) \le 4$ for $r \ge 1$: every lattice point of $T_r$ is a vertex.
+\end{lemma}
+\begin{proof}
+Let $(x,y,z) \in \Z^3 \cap T_r$. If $z = 0$: $r x \ge 0$ and $r y \ge 0$ give $x, y \ge 0$, and $r(x+y)
+\le r$ gives $x + y \le 1$; so $(x,y) \in \{(0,0),(1,0),(0,1)\}$. If $z > 0$: $rx \ge z > 0$ gives $x \ge
+1$, and likewise $y \ge 1$. Then $2r \le r(x+y) \le r + z$ gives $z \ge r$, and $2z \le r(x+y) \le r + z$
+gives $z \le r$. So $z = r$, and $r(x+y) \le 2r$ forces $x = y = 1$.
+\end{proof}
+
+\begin{lemma}\label{lem:L2}
+$L(T_r, 2) \ge r + 1$ for $r \ge 1$.
+\end{lemma}
+\begin{proof}
+\emph{Finiteness.} By Lemma~\ref{lem:facets} with $s = 2$, a lattice point $(x,y,z)$ of $2T_r$ has $x, y
+\ge 0$, $2z \le r(x+y) \le 2r + z$ (so $z \le 2r$), and $r(x+y) \le 4r$ (so $x + y \le 4$). It therefore
+lies in the box $[0,4] \times [0,4] \times [0,2r]$.
+\emph{Points.} For $0 \le z \le r$, put $w = z/(2r) \in [0, \tfrac12]$. The convex combination with
+weights $w, \tfrac12 - w, \tfrac12 - w, w$ of the vertices $(0,0,0), (1,0,0), (0,1,0), (1,1,r)$ is
+$(\tfrac12, \tfrac12, \tfrac z2) \in T_r$. So $(1,1,z) \in 2T_r$. These are $r + 1$ distinct lattice points.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+Let $c > -1$, and let $r \ge 1$ satisfy $(r+1)(1+c) > 16$, for example $r = \lceil 16/(1+c) \rceil +
+1$. Then
+\[ L(T_r,1)^2 \ <\ L(T_r,0)\, L(T_r,2)\, (1 + c/1^2). \]
+Hence no $c > -1$ satisfies the first clause. In particular $T_{16}$ violates plain log-concavity:
+$L(T_{16},1)^2 \le 16 < 17 \le L(T_{16},0) L(T_{16},2)$.
+\end{theorem}
+\begin{proof}
+$L(T_r,1)^2 \le 16 < (r+1)(1+c) \le 1 \cdot L(T_r,2) \cdot (1+c)$, by Lemmas~\ref{lem:L1} and~\ref{lem:L2},
+$L(T_r,0) = 1$ and $1 + c > 0$.
+\end{proof}
+
+\noindent\textbf{Cross-check, not used in the proof.} Wikipedia (\emph{Reeve tetrahedra}) states:
+``The Ehrhart polynomial of the Reeve tetrahedron Tr of height r is'' $\frac r6 t^3 + t^2 + (2 - \frac r6)t
++ 1$. This gives $L = 1, 4, r+9, 4r+16, \dots$. A brute-force count confirmed these values for $r \in
+\{1,2,8,9,13\}$ and $k \le 3$. With the exact value $r + 9$, plain log-concavity already fails at $r =
+8$ ($16 < 17$).
+
+\section{Lean formalization}\label{sec:lean}
+
+File \texttt{lean/Conjecture7794/Basic.lean} (251 lines, namespace \texttt{C7794}; only import
+\texttt{Mathlib}). Definitions: \texttt{E3 = Fin 3 -> R}, \texttt{toR}, \texttt{IsLatticePolytope}
+(\texttt{convexHull} of the image of a nonempty \texttt{Finset} of integer points),
+\texttt{latticePts}, \texttt{ehrhart P k = (latticePts ((k:R) . P)).ncard}, \texttt{vZ}, \texttt{V},
+\texttt{reeve}, \texttt{H}. Lemmas: \texttt{reeve\_isLatticePolytope}, \texttt{convex\_H},
+\texttt{reeve\_subset\_H}, \texttt{smul\_reeve\_subset} (Lemma~\ref{lem:facets}); \texttt{ehrhart\_zero};
+\texttt{latticePts\_one}, \texttt{ehrhart\_one\_le} (Lemma~\ref{lem:L1}); \texttt{latticePts\_two\_finite},
+\texttt{mem\_two\_reeve}, \texttt{ehrhart\_two\_ge} (Lemma~\ref{lem:L2}); \texttt{reeve\_violates}
+(Theorem~\ref{thm:main}). Main theorem (ASCII rendering):
+
+\begin{verbatim}
+theorem conjecture_7794_false :
+    not (exists c : R, -1 < c and forall P : Set E3, IsLatticePolytope P ->
+        forall k : N, 1 <= k ->
+          (ehrhart P (k - 1) : R) * ehrhart P (k + 1) * (1 + c / (k : R) ^ 2)
+            <= (ehrhart P k : R) ^ 2) and
+    (forall c : R, -1 < c -> exists r : N, 1 <= r and
+        IsLatticePolytope (reeve r) and
+        (ehrhart (reeve r) 1 : R) ^ 2 <
+          (ehrhart (reeve r) 0 : R) * ehrhart (reeve r) 2
+            * (1 + c / ((1 : N) : R) ^ 2)) and
+    (ehrhart (reeve 16) 1) ^ 2
+      < ehrhart (reeve 16) 0 * ehrhart (reeve 16) 2
+\end{verbatim}
+
+\textbf{Axiom audit.} \texttt{\#print axioms C7794.conjecture\_7794\_false} reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no
+\texttt{native\_decide}. The file compiles under \texttt{lake build} and with
+\texttt{-DwarningAsError=true}.
+
+\section{Scope}
+
+\begin{itemize}
+\item Refuted: the first clause for every universal $c > -1$ (all positive margins and $c = 0$), with $k$
+ranging over $k \ge 1$, in dimension 3. The planar quadrilaterals suggested by an automated filter are
+\emph{not} used: by Pick's theorem, lattice polygons satisfy plain log-concavity at $k = 1$.
+\item Not refuted: $c \le -1$. Then $1 + c/k^2 \le 0$ at $k = 1$, so the inequality is not a stability
+margin at all. Also not refuted: a reading restricted to $k \ge 2$. Reeve tetrahedra satisfy plain
+log-concavity at $k = 2$ ($(r+9)^2 > 4(4r+16)$), so they say nothing about small $c > 0$ there.
+\item The clauses ``equality holds at the simplex'' and the $h^*$ annulus are not addressed. Note that
+$T_r$ is itself a lattice simplex.
+\end{itemize}
+
+\end{document}
