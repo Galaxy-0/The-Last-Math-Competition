@@ -1,0 +1,129 @@
+PAGE 1
+A counterexample to conjecture 00000007767
+Squaring and cubing have inﬁnitely many common periodic points
+C0ldSmi1e
+October 5, 2026
+Abstract
+The complex polynomial maps f (z) = z2 and g(z) = z3 commute and have inﬁnitely many
+common periodic points on the complex projective line, but have no common positive composi-
+tional iterate. They therefore refute the explicit leading equivalence of conjecture 00000007767
+in its conventional complex-dynamical interpretation. The proof uses primitive roots of unity of
+orders 5, 25, 125, . . . . The source’s unspeciﬁed ﬁeld and iterate-index conventions are disclosed
+below; the undeﬁned ﬁnal uniqueness terminology is not needed for this disproof.
+1 Statement and conventions
+Both the English and Chinese source versions concern commuting polynomials of degree at least
+two acting on P1. Their ﬁrst assertion is
+| Per(f ) ∩ Per(g)| = ∞ ⇐ ⇒ f ◦m = g◦n for some positive integers m, n.
+They then add a common-iterating-map assertion and a uniqueness assertion about a “symmetrized
+monomial part” in a Ritt decomposition. An exact copy of the bilingual source is bundled as
+conjecture.md.
+The source does not specify a base ﬁeld. This submission explicitly uses complex polynomials
+acting on P1(C) = C ∪ {∞}, the usual classical complex-dynamical setting. This is a disclosed
+interpretation, not an assumption stated verbatim in the source. No conclusion about every possible
+arithmetic interpretation is claimed. Positive indices are the standard nonvacuous meaning of
+“common iterate”: allowing m = n = 0 would give the identity for every pair. The zeroth iterate
+is used only to deﬁne iteration recursively. The periodic set means
+Per(F ) = {P : there exists an integer r ≥ 1 with F ◦r(P ) = P }.
+The two return times for a common periodic point may diﬀer. They may also depend on the point.
+Periodicity is not replaced by eventual periodicity. The notation F ◦m = G◦n means exact equality
+of self-maps, not equality up to conjugacy.
+We refute the forward implication of the displayed equivalence. The full source assertion entails
+that implication, regardless of how its later uniqueness condition might be made precise. We neither
+supply a deﬁnition of the undeﬁned ﬁnal terminology nor claim a replacement Ritt theorem.
+2 The two actual polynomial maps
+Let f = X 2 and g = X 3 in C[X]. Their projective extensions are
+F ([Z : W ]) = [ Z2 : W 2], G ([Z : W ]) = [ Z3 : W 3].
+1
+
+PAGE 2
+These expressions deﬁne maps on projective points: scaling (Z, W ) scales both coordinates by the
+same nonzero power, and the coordinates cannot simultaneously vanish. In the aﬃne chart [z : 1]
+the maps are z ↦→ z2 and z ↦→ z3, respectively; ∞ = [1 : 0] is ﬁxed by both. Their polynomial
+degrees are two and three. At an aﬃne point both F ◦ G and G ◦ F act by z ↦→ z6, and both ﬁx
+inﬁnity. Thus the stated degree and commutation hypotheses hold.
+For d ≥ 1, let Hd(z) = zd on the aﬃne chart and Hd(∞) = ∞. Induction on r ≥ 0 gives
+H ◦r
+d (z) = zdr
+. (1)
+The induction step is (zdr
+)d = zdr+1
+; the case r = 0 uses d0 = 1. This is compositional iteration of
+the actual maps.
+3 Inﬁnitely many distinct common periodic points
+For each k ∈ N, put
+Nk = 5 k+1, ζ k = exp(2πi/N k), P k = [ζk : 1].
+The complex number ζk has exact multiplicative order Nk. Both 2 and 3 are coprime to Nk. Euler’s
+theorem gives, for tk = φ(Nk) > 0,
+2tk ≡ 1 (mod Nk), 3tk ≡ 1 (mod Nk).
+Whenever ζN = 1 and a ≡ 1 (mod N ), exponent reduction gives ζa = ζ. Applying this observation
+and ( 1) yields
+F ◦tk (Pk) = Pk, G ◦tk (Pk) = Pk.
+Every Pk is therefore a common periodic point with a positive return time.
+If Pk = Pℓ, equality in the aﬃne chart implies ζk = ζℓ. An element has only one exact
+multiplicative order, so 5k+1 = 5 ℓ+1. Since powers of 5 are injective in their natural exponent,
+k = ℓ. Hence k ↦→ Pk is an injection from N into Per(F ) ∩ Per(G), proving that this one ﬁxed pair
+of maps has inﬁnitely many distinct common periodic points. The single point at inﬁnity is not
+used to supply inﬁnitude.
+4 No common positive iterate
+Suppose m, n ≥ 1 and F ◦m = G◦n. Evaluating at the aﬃne point [2 : 1] and using ( 1) gives
+22m
+= 2 3n
+.
+These are natural numbers viewed in C. Injectivity of the natural-number embedding into C
+transfers the equality back to N. Powers of 2 are injective in their exponent, so 2m = 3 n. The left
+side is even because m ≥ 1, while the right side is odd. This is a contradiction. This argument
+excludes every pair of positive indices, not merely a bounded search or the case m = n.
+Theorem 1. There exist complex polynomials of degree at least two whose projective extensions
+commute and have inﬁnitely many common periodic points, but whose positive compositional iterates
+are never equal. Consequently the leading equivalence of conjecture 00000007767 is false in the
+explicitly stated complex interpretation.
+Proof. Take f = X 2 and g = X 3. The preceding sections verify all three hypotheses, the inﬁnitude
+conclusion, and the failure of every common positive iterate.
+2
+
+PAGE 3
+5 Formalization and reproducibility
+The accompanying Lean 4 project formalizes the complex polynomials and their extensions to the
+projective line represented by Option Complex : some z denotes [z : 1] and none denotes [1 : 0] .
+Every projective point has exactly one of these forms. The extension of polynomial evaluation
+is Option.map; thus the model includes the point at inﬁnity, actual polynomial evaluation, and
+compositional iteration.
+The namespace is Conjecture7767. The main proof correspondence is:
+Mathematical step Lean declaration
+Actual polynomial degrees powerPolynomial_degree
+Composition formula powerMap_iterate_affine
+Commuting projective maps powerMap_commute
+Positive root-of-unity return time primitiveRoot_periodic
+Distinct roots root_injective
+Inﬁnite intersection common_periodic_infinite
+No common positive iterate no_positive_common_iterate
+All counterexample requirements counterexample
+Negation of the leading assertion conjecture_false
+The project pins Lean 4.19.0 and Mathlib v4.19.0. A fresh build, direct source replay, and the
+complete Check.lean audit passed with warnings treated as errors. All 18 authored theorems use
+only propext, Classical.choice, and Quot.sound. The 11 deﬁnitions and abbreviations were
+printed and inspected. An exhaustive inspection of all 40 declarations originating in the compiled
+proof module also passed, including its 11 generated declarations. There are no custom axioms,
+admitted proofs, partial declarations, or authored unsafe deﬁnitions. Four compiler-generated
+runtime wrappers are explicitly inventoried separately from the safe logical declarations; none
+introduces an additional axiom. Compiler and all nine dependency revisions were checked before
+and after the build. The complete logs and hashes accompany the submission.
+The auxiliary checker uses exact integer coeﬃcients and rational angles. It independently com-
+pares sparse polynomial iteration with direct integer iteration, tests all 144 pairs 1 ≤ m, n ≤ 12,
+and computes every cycle under doubling and tripling modulo 5, 25, 125, 625. All 780 root records
+and their two complete cycle decompositions are included. For these four orders the primitive-
+root counts and periods under either map are respectively 4, 20, 100, 500. Together with the root
+1, aﬃne zero, and inﬁnity, the largest tested projective subset has 627 distinct common periodic
+points. Normal and optimized Python runs both passed 12,875 explicit checks and produced byte-
+identical output. These ﬁnite checks establish neither inﬁnitude nor unbounded nonexistence of
+common iterates; those statements are proved in Lean without relying on the Python output.
+After installing the pinned Lean toolchain, run the following from the submission’s lean direc-
+tory (Mathlib cache retrieval requires network access):
+lake exe cache get
+lake build
+lake env lean -DwarningAsError=true Conjecture7767.lean
+lake env lean -DwarningAsError=true Check.lean
+From the auxiliary directory, run python3 -B run_checks.py . The full reproduction instruc-
+tions include the compiled-environment audit and PDF export. Local validation and the bundled
+independent semantic review are distinct from acceptance by a competition maintainer.
+3

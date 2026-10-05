@@ -1,0 +1,83 @@
+@[reducible] def Conjecture7767.ProjectiveLine : Type :=
+Option ℂ
+def Conjecture7767.affine : ℂ → Conjecture7767.ProjectiveLine :=
+fun z => some z
+def Conjecture7767.infinity : Conjecture7767.ProjectiveLine :=
+none
+def Conjecture7767.projectiveMap : Polynomial ℂ → Conjecture7767.ProjectiveLine → Conjecture7767.ProjectiveLine :=
+fun p => Option.map fun a => Polynomial.eval a p
+def Conjecture7767.Periodic : (Conjecture7767.ProjectiveLine → Conjecture7767.ProjectiveLine) →
+  Conjecture7767.ProjectiveLine → Prop :=
+fun F P => ∃ r, 0 < r ∧ F^[r] P = P
+def Conjecture7767.CommonPeriodicSet : (Conjecture7767.ProjectiveLine → Conjecture7767.ProjectiveLine) →
+  (Conjecture7767.ProjectiveLine → Conjecture7767.ProjectiveLine) → Set Conjecture7767.ProjectiveLine :=
+fun F G => {P | Conjecture7767.Periodic F P ∧ Conjecture7767.Periodic G P}
+def Conjecture7767.CommonIterate : (Conjecture7767.ProjectiveLine → Conjecture7767.ProjectiveLine) →
+  (Conjecture7767.ProjectiveLine → Conjecture7767.ProjectiveLine) → Prop :=
+fun F G => ∃ m n, 0 < m ∧ 0 < n ∧ F^[m] = G^[n]
+def Conjecture7767.powerPolynomial : ℕ → Polynomial ℂ :=
+fun d => Polynomial.X ^ d
+def Conjecture7767.powerMap : ℕ → Conjecture7767.ProjectiveLine → Conjecture7767.ProjectiveLine :=
+fun d => Conjecture7767.projectiveMap (Conjecture7767.powerPolynomial d)
+def Conjecture7767.root : ℕ → ℂ :=
+fun k => Complex.exp (2 * ↑Real.pi * Complex.I / ↑(5 ^ (k + 1)))
+def Conjecture7767.LeadingAssertion : Prop :=
+∀ (f g : Polynomial ℂ),
+  2 ≤ f.natDegree →
+    2 ≤ g.natDegree →
+      Function.Commute (Conjecture7767.projectiveMap f) (Conjecture7767.projectiveMap g) →
+        ((Conjecture7767.CommonPeriodicSet (Conjecture7767.projectiveMap f) (Conjecture7767.projectiveMap g)).Infinite ↔
+          Conjecture7767.CommonIterate (Conjecture7767.projectiveMap f) (Conjecture7767.projectiveMap g))
+Conjecture7767.affine_injective : Function.Injective Conjecture7767.affine
+'Conjecture7767.affine_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.affine_ne_infinity (z : ℂ) : Conjecture7767.affine z ≠ Conjecture7767.infinity
+'Conjecture7767.affine_ne_infinity' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.projectiveMap_affine (p : Polynomial ℂ) (z : ℂ) :
+  Conjecture7767.projectiveMap p (Conjecture7767.affine z) = Conjecture7767.affine (Polynomial.eval z p)
+'Conjecture7767.projectiveMap_affine' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.projectiveMap_infinity (p : Polynomial ℂ) :
+  Conjecture7767.projectiveMap p Conjecture7767.infinity = Conjecture7767.infinity
+'Conjecture7767.projectiveMap_infinity' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.powerPolynomial_degree (d : ℕ) : (Conjecture7767.powerPolynomial d).natDegree = d
+'Conjecture7767.powerPolynomial_degree' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.powerMap_affine (d : ℕ) (z : ℂ) :
+  Conjecture7767.powerMap d (Conjecture7767.affine z) = Conjecture7767.affine (z ^ d)
+'Conjecture7767.powerMap_affine' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.powerMap_infinity (d : ℕ) : Conjecture7767.powerMap d Conjecture7767.infinity = Conjecture7767.infinity
+'Conjecture7767.powerMap_infinity' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.powerMap_iterate_affine (d r : ℕ) (z : ℂ) :
+  (Conjecture7767.powerMap d)^[r] (Conjecture7767.affine z) = Conjecture7767.affine (z ^ d ^ r)
+'Conjecture7767.powerMap_iterate_affine' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.powerMap_commute (d e : ℕ) : Function.Commute (Conjecture7767.powerMap d) (Conjecture7767.powerMap e)
+'Conjecture7767.powerMap_commute' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.primitiveRoot_periodic {z : ℂ} {N d : ℕ} (hN : 0 < N) (hz : IsPrimitiveRoot z N) (hd : d.Coprime N) :
+  Conjecture7767.Periodic (Conjecture7767.powerMap d) (Conjecture7767.affine z)
+'Conjecture7767.primitiveRoot_periodic' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.root_primitive (k : ℕ) : IsPrimitiveRoot (Conjecture7767.root k) (5 ^ (k + 1))
+'Conjecture7767.root_primitive' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.root_injective : Function.Injective Conjecture7767.root
+'Conjecture7767.root_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.root_periodic_two (k : ℕ) :
+  Conjecture7767.Periodic (Conjecture7767.powerMap 2) (Conjecture7767.affine (Conjecture7767.root k))
+'Conjecture7767.root_periodic_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.root_periodic_three (k : ℕ) :
+  Conjecture7767.Periodic (Conjecture7767.powerMap 3) (Conjecture7767.affine (Conjecture7767.root k))
+'Conjecture7767.root_periodic_three' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.common_periodic_infinite :
+  (Conjecture7767.CommonPeriodicSet (Conjecture7767.powerMap 2) (Conjecture7767.powerMap 3)).Infinite
+'Conjecture7767.common_periodic_infinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.no_positive_common_iterate :
+  ¬Conjecture7767.CommonIterate (Conjecture7767.powerMap 2) (Conjecture7767.powerMap 3)
+'Conjecture7767.no_positive_common_iterate' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.counterexample :
+  2 ≤ (Conjecture7767.powerPolynomial 2).natDegree ∧
+    2 ≤ (Conjecture7767.powerPolynomial 3).natDegree ∧
+      Function.Commute (Conjecture7767.projectiveMap (Conjecture7767.powerPolynomial 2))
+          (Conjecture7767.projectiveMap (Conjecture7767.powerPolynomial 3)) ∧
+        (Conjecture7767.CommonPeriodicSet (Conjecture7767.projectiveMap (Conjecture7767.powerPolynomial 2))
+              (Conjecture7767.projectiveMap (Conjecture7767.powerPolynomial 3))).Infinite ∧
+          ¬Conjecture7767.CommonIterate (Conjecture7767.projectiveMap (Conjecture7767.powerPolynomial 2))
+              (Conjecture7767.projectiveMap (Conjecture7767.powerPolynomial 3))
+'Conjecture7767.counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7767.conjecture_false : ¬Conjecture7767.LeadingAssertion
+'Conjecture7767.conjecture_false' depends on axioms: [propext, Classical.choice, Quot.sound]
