@@ -1,0 +1,5 @@
+import Conjecture5400
+#print axioms Conjecture5400.conjecture5400_false
+#print axioms Conjecture5400.conjecture5400_samePair_false
+#print axioms Conjecture5400.homeomorph_conjugate_same_periods
+#print axioms Conjecture5400.measured_conjugate_same_periods

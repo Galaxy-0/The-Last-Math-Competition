@@ -1,0 +1,182 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\Fix}{\operatorname{Fix}}
+\newcommand{\per}{\operatorname{per}}
+
+\title{A disproof of Conjecture 00000005400\\[2pt]
+\large Conjugate maps cannot have different periods}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000005400 reads (English version; the Chinese version says the same, with
+``explicit conjugate pair with the same measure and different periods'' for the last clause):
+
+\begin{quote}
+\emph{Definition:} Orbit distribution and period counting are two layers.
+\emph{Conjecture:} There exist two maps with identical orbit distribution limits but different
+periodic point counts, and the separation is realized by an explicit conjugate pair with the same
+measure but different periods.
+\end{quote}
+
+It is a conjunction. Besides two maps $f,g$ with (A) identical orbit distribution limits and
+(B) different periodic point counts, it requires (C) an explicit \emph{conjugate pair} with the same
+measure and \emph{different periods}. We show that (C) can never hold, whatever (A) and ``the same
+measure'' mean. Hence the conjunction is false.
+
+\section{Reading}
+
+\begin{definition}
+Maps $f\colon X\to X$ and $g\colon Y\to Y$ are \emph{conjugate} if there is a bijection
+$h\colon X\to Y$ with $h\circ f=g\circ h$, i.e.\ $h(f(x))=g(h(x))$ for every $x\in X$. A
+\emph{topological} conjugacy is such an $h$ that is a homeomorphism; a \emph{measure-preserving}
+conjugacy is such an $h$ that is a measurable isomorphism with $h_*\mu=\nu$.
+\end{definition}
+
+This is the standard meaning of ``conjugate maps'' in dynamics (e.g.\ Katok--Hasselblatt,
+\emph{Introduction to the Modern Theory of Dynamical Systems}), and it is the reading under which the
+sibling conjecture 00000005390 (``\ldots realized by an explicit conjugate pair \ldots'') was refuted in
+an accepted submission. Every topological or measure-preserving conjugacy is in particular a bijective
+conjugacy, so refuting the bijective case refutes all of them. The conjecture names ``the same measure''
+as a separate condition on the pair; we keep it, as an arbitrary predicate on $(f,g,h)$. An isomorphism
+of measure-preserving systems defined only almost everywhere is a different notion: it ignores null
+sets and therefore says nothing about individual periodic points, whereas the conjecture asks the
+conjugate pair to differ precisely in \emph{periods}, the point-level ``period counting'' layer.
+
+\emph{Periodic data.} We use the standard notions (as in Mathlib): $x$ is $n$-periodic if
+$f^n(x)=x$; $\Fix(f^n)$ is the set of such $x$; the \emph{least (minimal) period} $\per_f(x)$ is the
+least $n\ge1$ with $f^n(x)=x$; $P_n(f)=\{x \text{ periodic}: \per_f(x)=n\}$; an $n$-cycle is the periodic
+orbit (as a cyclic list) of a point of $P_n(f)$; and the period set is $\{\per_f(x): x\text{ periodic}\}$.
+Counts are cardinalities, so infinite sets are allowed. ``Different periodic point counts / different
+periods'' is read in the broadest way: \emph{some} $|\Fix(f^n)|$, $|P_n(f)|$ or number of $n$-cycles
+differs, or the period sets differ, or (for the conjugate pair) some point $x$ has
+$\per_g(h(x))\neq\per_f(x)$. Any narrower reading is a special case. We also allow the conjugate pair
+$(f',g')$ to be different from $(f,g)$; the reading in which $(f,g)$ itself is the conjugate pair is a
+special case (Corollary~\ref{cor:same}).
+
+\section{Conjugacy preserves all periodic data}
+
+Fix a conjugacy $h\colon X\to Y$, $h\circ f=g\circ h$, with $h$ bijective.
+\emph{Convention.} $\per_f(x)$ denotes the least positive $n$ with $f^n(x)=x$ if such an $n$ exists, and
+$\per_f(x)=0$ if $x$ is not periodic; this is exactly Mathlib's \texttt{Function.minimalPeriod}. With
+this convention the equality of least periods below holds at every point, periodic or not.
+
+\begin{lemma}\label{lem:iter}
+For every $n\ge0$ and $x\in X$: $h(f^n(x))=g^n(h(x))$, hence $f^n(x)=x \iff g^n(h(x))=h(x)$.
+\end{lemma}
+\begin{proof}
+Induction on $n$ using $h\circ f=g\circ h$; the equivalence follows from injectivity of $h$, since
+$g^n(h(x))=h(x)$ means $h(f^n(x))=h(x)$.
+\end{proof}
+
+\begin{lemma}\label{lem:per}
+$x$ is periodic for $f$ iff $h(x)$ is periodic for $g$, and $\per_g(h(x))=\per_f(x)$ for every $x$.
+\end{lemma}
+\begin{proof}
+By Lemma~\ref{lem:iter} the sets $\{n: f^n(x)=x\}$ and $\{n: g^n(h(x))=h(x)\}$ coincide, so their
+least positive elements coincide (or both do not exist).
+\end{proof}
+
+\begin{lemma}\label{lem:bij}
+For every $n$, $h$ restricts to bijections $\Fix(f^n)\to\Fix(g^n)$ and $P_n(f)\to P_n(g)$; the map
+$c\mapsto h(c)$ is a bijection from the $n$-cycles of $f$ to the $n$-cycles of $g$; and the period
+sets of $f$ and $g$ are equal.
+\end{lemma}
+\begin{proof}
+The first two statements follow from Lemmas~\ref{lem:iter} and~\ref{lem:per}, since $h$ is a bijection
+of $X$ onto $Y$ mapping each set onto the other. For cycles: the orbit of $x$ is the cyclic list
+$(x,f(x),\dots,f^{p-1}(x))$ with $p=\per_f(x)$; applying $h$ termwise gives
+$(h(x),g(h(x)),\dots,g^{p-1}(h(x)))$, which is the orbit of $h(x)$ because $\per_g(h(x))=p$. So $h$ maps
+$n$-cycles to $n$-cycles. Since $h^{-1}$ conjugates $g$ to $f$, the same holds for $h^{-1}$, and the two
+maps are mutually inverse on cycles. The period sets agree by Lemma~\ref{lem:per} and surjectivity of $h$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+For every interpretation of ``identical orbit distribution limits'' and ``the same measure'',
+Conjecture 00000005400 is false.
+\end{theorem}
+\begin{proof}
+Clause (C) asks for a conjugate pair $(f',g')$, with conjugacy $h$, such that some periodic count of
+$f'$ and $g'$ differs, or the period sets differ, or $\per_{g'}(h(x))\ne\per_{f'}(x)$ for some $x$.
+Lemma~\ref{lem:bij} gives equal cardinalities (via explicit bijections) and equal period sets, and
+Lemma~\ref{lem:per} gives equal least periods at every point. So (C) fails, whatever extra condition is
+imposed on $(f',g',h)$, and so does the conjunction.
+\end{proof}
+
+\begin{corollary}\label{cor:same}
+There are no maps $f,g$ and conjugacy $h$ such that $(f,g)$ satisfies (A), (B), the same-measure
+condition, and $h\circ f=g\circ h$. The same holds when $h$ is a homeomorphism, or a measure-preserving
+measurable isomorphism ($h_*\mu=\nu$, conjugacy at every point).
+\end{corollary}
+
+Clauses (A) and (B) on their own are not disputed here: two \emph{non-conjugate} maps may well share
+orbit-distribution limits and differ in periodic counts. What fails is the conjecture's requirement
+that the separation be realized by a conjugate pair with different periods.
+
+\section{Lean 4 formalization}
+
+The file \texttt{lean/Conjecture5400/Basic.lean} (Lean 4.33.1, Mathlib v4.33.1) uses Mathlib's
+\texttt{Function.Semiconj h f g} ($h\circ f=g\circ h$ pointwise) with \texttt{h : X $\simeq$ Y},
+\texttt{Function.IsPeriodicPt}, \texttt{Function.ptsOfPeriod} ($\Fix(f^n)$),
+\texttt{Function.periodicPts}, \texttt{Function.minimalPeriod} ($\per_f$) and
+\texttt{Function.periodicOrbit} (cycles as Mathlib \texttt{Cycle}s). Counts are \texttt{Cardinal.mk}.
+
+\begin{itemize}[leftmargin=*]
+\item \texttt{isPeriodicPt\_iff}, \texttt{minimalPeriod\_eq}: Lemmas~\ref{lem:iter} and~\ref{lem:per}.
+\item \texttt{ptsOfPeriodEquiv}, \texttt{leastPeriodPtsEquiv}, \texttt{cyclesEquiv},
+\texttt{periodSet\_eq}: Lemma~\ref{lem:bij}, as explicit \texttt{Equiv}s.
+\item \texttt{not\_periodDataDiffer}: a conjugate pair has no difference in periodic data and equal
+least periods at corresponding points.
+\item \texttt{Statement SameOrbitLimits SameMeasure}: the conjecture, with the two side conditions as
+arbitrary predicates (\texttt{SameMeasure} may depend on $h$).
+\item \texttt{conjecture5400\_false}: $\neg$\texttt{Statement SameOrbitLimits SameMeasure} for all
+such predicates (Theorem~\ref{thm:main}).
+\item \texttt{conjecture5400\_samePair\_false}, \texttt{homeomorph\_conjugate\_same\_periods},
+\texttt{measured\_conjugate\_same\_periods}: Corollary~\ref{cor:same}.
+\end{itemize}
+
+There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom;
+\texttt{\#print axioms Conjecture5400.conjecture5400\_false} reports only \texttt{propext},
+\texttt{Classical.choice} and \texttt{Quot.sound}. The file also elaborates with
+\texttt{-DwarningAsError=true}. To reproduce, in \texttt{lean/}:
+\begin{verbatim}
+lake exe cache get
+lake build
+\end{verbatim}
+
+\section{Credits and prior work}
+
+The transport argument (iterates intertwined, periodic and exact-period sets in bijection, cycles
+mapped by $h$, arbitrary extra property on the conjugacy) is adapted from the accepted disproof of
+the sibling conjecture 00000005390 by ziangni-sys
+(\url{solutions/00000005390/ziangni-sys_submission_20261004205500}, The Last Math Competition,
+GPL-3.0). Our Lean file is rewritten on top of Mathlib's periodic-point API and states the conjecture
+00000005400 itself.
+
+An earlier submission for 00000005400 (PR \#25) was removed from the repository on 2026-10-01 as having
+``refuted a mechanism/reading, not the literal statement''; its Lean enumerated permutations of a
+4-point set. The present disproof is not restricted to finite sets or permutations: it covers
+all maps on all spaces, all cardinalities, every periodic count, least periods and cycles, and leaves
+the side conditions of the literal statement completely general.
+
+\end{document}
