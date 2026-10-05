@@ -1,0 +1,200 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Der}{\operatorname{Der}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\ad}{\operatorname{ad}}
+\newcommand{\HH}{\operatorname{HH}}
+\newcommand{\lean}[1]{\texttt{#1}}
+
+\title{Conjecture 00000004044 is false:\\ $\HH^1$ of the Kronecker quiver $K_3$ is not solvable}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and its reading}
+
+Conjecture 00000004044 (English text):
+\begin{quote}
+Definition: HH\^{}1 is the Lie algebra of outer derivations, the first Hochschild cohomology.
+Conjecture: The HH\^{}1 of a quiver algebra is solvable if and only if its oriented cycles are all
+broken after removing at most one vertex; the decision table is complete for $n \le 6$ and the
+formula holds for all $n$.
+\end{quote}
+The Chinese title also says ``solvability criterion for $\HH^1$'' (\emph{ke jie xing}), but the
+Chinese body uses the word \emph{ke yue} (``reducible'') in the biconditional; see
+Remark~\ref{rem:reading}.
+
+\paragraph{Reading.} For a quiver $Q$ and a field $k$, the claim is
+\[
+  \HH^1(kQ/I) \text{ is solvable} \iff \text{some set of at most one vertex meets every oriented cycle of } Q .
+\]
+We refute the direction ``$\Leftarrow$'' with a single quiver algebra, over every field $k$, with
+$n = 2$ vertices (so it lies inside the range $n \le 6$ of the claimed decision table).
+
+\paragraph{Counterexample.} The generalized Kronecker quiver $K_3$ has vertices $1,2$ and three
+parallel arrows $\alpha_0,\alpha_1,\alpha_2 : 1 \to 2$. It has no oriented cycle, so the cycle
+condition holds with zero vertices removed. Its path algebra $kK_3$ (ideal $I=0$) is a quiver
+algebra in every usual sense: it is finite dimensional, and since $K_3$ has no path of length $2$,
+$I = 0 = R_Q^2$ is an admissible ideal. We prove $\HH^1(kK_3)$ is not solvable.
+(It is known that $\HH^1(kK_3) \cong \mathfrak{pgl}_3(k)$; see the quote from [LRW] below. We do
+not use this isomorphism; we prove non-solvability directly.)
+
+\section{Definitions (as formalized)}
+
+All definitions are in the Lean file \lean{Conjecture4044/Basic.lean} (namespace \lean{C4044}).
+
+\begin{definition}[Derivations, inner derivations, $\HH^1$]
+Let $A$ be an associative unital algebra over a commutative ring $k$.
+\lean{Der k A} is the set of $k$-linear maps $D : A \to A$ with $D(xy) = D(x)y + xD(y)$, a Lie
+subalgebra of $\mathrm{End}_k(A)$ under the commutator $[D,E] = D\circ E - E \circ D$.
+For $a \in A$, $\ad a : x \mapsto ax - xa$ is a derivation (\lean{ad\_mem\_Der}).
+\lean{Inn k A} $= \{\ad a : a \in A\}$ is a Lie ideal of \lean{Der k A} (the ideal property is
+$[D, \ad a] = \ad(D a)$). Finally \lean{HH1 k A} $:= \Der(A)/\Inn(A)$ with Mathlib's quotient Lie
+algebra structure.
+Mathlib's \lean{Derivation} requires a commutative algebra, so these are defined directly.
+Solvability is Mathlib's \lean{LieAlgebra.IsSolvable}: some term of the derived series
+$L^{(0)} = L$, $L^{(m+1)} = [L^{(m)}, L^{(m)}]$ is $0$.
+\end{definition}
+
+This is the standard description of $\HH^1(A) = \HH^1(A,A)$: [LRW, Section 2] says (math symbols
+stripped by the retrieval tool) ``the elements in ( ) can be interpreted as the -derivations of
+into and the elements in ( ) can be interpreted as the inner -derivations of into . It is
+well-known that ( ) is a Lie algebra under the Lie bracket and ( ) is a Lie ideal of ( ), so that
+( ) has a Lie algebra structure.''
+
+\begin{definition}[The quiver and the cycle condition]
+\lean{V} $=\{1,2\}$ with Mathlib \lean{Quiver} structure \lean{Hom 1 2 = Fin 3} and all other hom
+types empty. A path $p$ \lean{visits} $v$ if $v$ is its source or the target of one of its arrows.
+\lean{CyclesBrokenByAtMostOneVertex W} means: there is a set $S$ of vertices with at most one
+element (\lean{S.Subsingleton}) such that every closed path of positive length visits some
+vertex of $S$; equivalently, deleting $S$ leaves no oriented cycle.
+\end{definition}
+
+\begin{definition}[The path algebra $kK_3$]
+\lean{P} is the set of paths of $K_3$: trivial paths $e_1,e_2$ and the arrows $\alpha_i$.
+\lean{paths\_bijective} proves that \lean{P.toPath} is a bijection onto all paths
+$\Sigma\, a\, b,\ \lean{Quiver.Path}\ a\ b$ of the Mathlib quiver.
+\lean{PathAlg k} $= k^{P}$ is the vector space with basis $P$, with the product given on basis
+elements by concatenation (\lean{basis\_mul\_basis}): $e_1e_1 = e_1$, $e_2e_2=e_2$,
+$e_1\alpha_i = \alpha_i = \alpha_i e_2$, and every other product of two paths is $0$ (the paths are
+not composable). Paths compose left to right, as in Mathlib's \lean{Quiver.Path.comp}.
+This is the path algebra as defined in [Wiki]: ``multiplication given by concatenation of paths.
+If two paths cannot be concatenated because the end vertex of the first is not equal to the
+starting vertex of the second, their product is defined to be zero. This defines an associative
+algebra over''. The ring and $k$-algebra axioms are proved in Lean.
+\end{definition}
+
+\section{Proof}
+
+\begin{lemma}[\lean{K3\_no\_oriented\_cycle}, \lean{K3\_cyclesBroken}]
+Every closed path in $K_3$ has length $0$. Hence $K_3$ satisfies the cycle condition with
+$S = \emptyset$.
+\end{lemma}
+\begin{proof}
+By induction on paths (\lean{path\_shape}), every path has length $0$, or goes from $1$ to $2$
+and has length $1$; there is no arrow out of vertex $2$. A closed path of length $1$ would need
+$1 = 2$.
+\end{proof}
+
+For $i \ne j$ in $\{0,1,2\}$ let $D_{ij}$ (\lean{Dlin i j}, \lean{D i j}) be the linear map with
+$D_{ij}(\alpha_j) = \alpha_i$ and $D_{ij}$ zero on $e_1, e_2$ and on the other arrows. In
+coordinates, $D_{ij}(x)$ has $\alpha_l$-coordinate $x_{\alpha_j}$ if $l = i$ and $0$ otherwise, and
+zero $e$-coordinates.
+
+\begin{lemma}[\lean{Dlin\_mem}]
+Each $D_{ij}$ is a derivation of $kK_3$.
+\end{lemma}
+\begin{proof}
+The $\alpha_l$-coordinate of $xy$ is $x_{e_1}y_{\alpha_l} + x_{\alpha_l}y_{e_2}$ and the
+$e$-coordinates of $xy$ involve only $e$-coordinates. Both sides of $D(xy) = D(x)y + xD(y)$
+then have $\alpha_l$-coordinate $[l=i](x_{e_1}y_{\alpha_j} + x_{\alpha_j}y_{e_2})$ and zero
+$e$-coordinates.
+\end{proof}
+
+\begin{lemma}[\lean{D\_bracket}]
+For distinct $i, j, m$: $[D_{im}, D_{mj}] = D_{ij}$ in $\Der(kK_3)$.
+\end{lemma}
+\begin{proof}
+$D_{im}D_{mj}$ sends $\alpha_j \mapsto \alpha_i$ and kills everything else; $D_{mj}D_{im}$ is $0$
+because $D_{im}$ has image in $k\alpha_i$ and $D_{mj}(\alpha_i) = 0$ for $i \ne j$.
+\end{proof}
+
+\begin{lemma}[\lean{D\_not\_inner}]
+For $i \ne j$, $D_{ij} \notin \Inn(kK_3)$.
+\end{lemma}
+\begin{proof}
+For any $a$, the $\alpha_i$-coordinate of $(\ad a)(\alpha_j) = a\alpha_j - \alpha_j a$ is
+$a_{e_1}\cdot 0 + a_{\alpha_i}\cdot 0 - 0\cdot a_{\alpha_i} - 0 \cdot a_{e_2} = 0$, while that of
+$D_{ij}(\alpha_j) = \alpha_i$ is $1$.
+\end{proof}
+
+\begin{theorem}[\lean{HH1\_not\_solvable}]
+For every field $k$, the Lie algebra $\HH^1(kK_3) = \Der(kK_3)/\Inn(kK_3)$ is not solvable.
+\end{theorem}
+\begin{proof}
+Let $d_{ij}$ (\lean{d i j}) be the class of $D_{ij}$. The quotient map is a Lie homomorphism, so
+$[d_{im}, d_{mj}] = d_{ij}$ for distinct $i,j,m$ (\lean{d\_bracket}). By induction on $n$, every
+$d_{ij}$ with $i\ne j$ lies in the $n$-th derived term (\lean{d\_mem\_derivedSeries}): for the
+step pick $m \notin \{i,j\}$, then $d_{ij} = [d_{im}, d_{mj}]$ with both factors in the $n$-th term.
+If the $n$-th term were $0$, then $d_{01} = 0$, i.e.\ $D_{01} \in \Inn$, contradicting
+\lean{D\_not\_inner}. No characteristic assumption is used.
+\end{proof}
+
+\begin{theorem}[\lean{conjecture\_00000004044\_false}]
+\lean{CyclesBrokenByAtMostOneVertex V $\wedge$ $\neg$ LieAlgebra.IsSolvable (HH1 k (PathAlg k))}
+for every field \lean{k}. Consequently (\lean{conjecture\_00000004044\_iff\_fails})
+\lean{$\neg$ (LieAlgebra.IsSolvable (HH1 k (PathAlg k)) $\leftrightarrow$
+CyclesBrokenByAtMostOneVertex V)}.
+\end{theorem}
+
+\begin{remark}[Scope and conventions]\label{rem:reading}
+(1) What is refuted: the ``solvable'' reading, for quiver algebras meaning either the path algebra
+$kQ$ or a bound quiver algebra $kQ/I$ with $I$ admissible (both include $kK_3$), over any fixed
+field. The ``only if'' direction is not addressed (one direction failing refutes the biconditional).
+(2) The Chinese body says \emph{ke yue} (``reducible'') where the English body and the Chinese
+title say solvable. We read solvable as the intended statement: two of the three texts say so, and
+the conjecture's own parenthetical name is ``solvability criterion''. ``Reducible Lie algebra''
+is not a standard notion; under the reading ``reducible = has a nonzero proper ideal'' the
+statement is \emph{not} refuted here ($\HH^1(kK_3) \cong \mathfrak{sl}_3$ is simple in
+characteristic $0$, but proving that needs the full $\HH^1$ computation and is not formalized).
+(3) Conventions: paths compose left to right; $\HH^1$ uses the commutator bracket on
+$\mathrm{End}_k(A)$ (Mathlib's \lean{LieRing.ofAssociativeRing}, enabled as a local instance as in
+Mathlib's own Lie theory files); ``removing at most one vertex'' allows removing none.
+\end{remark}
+
+\section{Lean audit}
+
+File \lean{lean/Conjecture4044/Basic.lean} (363 lines, only \lean{import Mathlib}), Lean
+\lean{v4.33.1}, Mathlib \lean{v4.33.1}. Main theorem \lean{C4044.conjecture\_00000004044\_false}.
+\lean{\#print axioms} for \lean{conjecture\_00000004044\_false},
+\lean{conjecture\_00000004044\_iff\_fails} and \lean{paths\_bijective} gives
+\lean{[propext, Classical.choice, Quot.sound]}; no \lean{sorry}, no \lean{native\_decide}, no
+added axioms.
+
+\section*{References}
+\begin{itemize}
+\item[{[LRW]}] Y. Liu, L. Rubio y Degrassi, C. Wen, \emph{On the first Hochschild cohomology of
+finite dimensional quiver algebras under gluing idempotents}, \url{https://arxiv.org/abs/2211.05435v3}.
+On the Kronecker quiver (math stripped by retrieval): ``if is the -Kronecker quiver (the quiver
+with parallel arrows), with the convention that -Kronecker quiver is the Dnykin quiver where is
+defined as . In other words, is the quotient by its center.''
+\item[{[Wiki]}] Quiver (mathematics), \url{https://en.wikipedia.org/wiki/Quiver_(mathematics)}.
+\end{itemize}
+
+\end{document}
