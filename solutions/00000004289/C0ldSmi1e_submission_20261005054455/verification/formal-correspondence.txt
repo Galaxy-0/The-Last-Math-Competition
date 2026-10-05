@@ -1,0 +1,89 @@
+# Author's mathematical and formalization mapping
+
+## Provenance and scope
+
+This is an independently authored disproof of conjecture 00000004289 under the standard actual-object meaning stated in both source languages. The exact bilingual source has SHA256 `c58010cd76af9ed661fa22e252ba1561223305e879cfeb20b69ea0af3f8a7359`. The author read the complete English and Chinese guides, the clean eligibility handoff, and the candidate-free semantic preassessment. No prior solution, PR proof, or any other problem's mathematical source was consulted. Only the standard pinned Mathlib source was inspected for the library definitions and theorems used here.
+
+The exact necessary component refuted is: **the smallest cardinality at which an almost free but not flat-free group exists is aleph omega**. The Chinese text makes the same existence-and-minimum assertion. In the usual diagonal reading, the exact formal negation is `Conjecture4289.conjecture4289_disproof`. The source is a conjunction of substantive assertions. Refuting this component suffices to disprove that conjunction. No unconstrained proposition variable is used to stand for the whole source.
+
+The theorem is stronger than failure at aleph omega: no such separation exists at any threshold, for any carrier cardinality. The true aleph-one implication is also explicitly proved.
+
+This author handoff is not a completed submission package. The parent will prepare and review the matching LaTeX and PDF, check all declarations independently, recheck eligibility, and handle the submission path. No report, PDF, or PR was created by this author.
+
+## Exact meanings
+
+* `G : Type u` and `[AddCommGroup G]` are an actual arbitrary additive abelian group. No multiplicative/noncommutative free-group meaning is used. The arbitrary universe `u` is retained throughout.
+* `Module.Free ℤ G` means free as a module over the ordinary integers with the canonical integer action supplied by the additive group. There is no separate `Module ℤ G` hypothesis permitting a different action. Mathlib's `Module.Free` is a proposition containing existence of a genuine basis, `Nonempty ((I : Type u) × Basis I ℤ G)`. The basis supplies finite-support integer coordinates; no finite-rank or countability restriction is imposed.
+* `Module.Flat ℤ G` is Mathlib's genuine flat-module predicate. In the pinned `Mathlib/RingTheory/Flat/Basic.lean`, the class definition requires injectivity of the induced tensor map on finitely generated submodule inclusions in finitely generated ambient modules in the ring's universe. That file proves extension to arbitrary injective linear maps, and, for commutative rings such as ℤ, `Module.Flat.iff_rTensor_exact` identifies it with exactness of tensoring in `Type (max u v)` for a ring in `Type u` and module in `Type v`. The general-universe variant `iff_rTensor_exact'` has the explicit `Small` condition on the ring. We use this standard predicate directly, so no substitute flatness predicate or unproved torsion equivalence is introduced.
+* Every subgroup in the source is represented directly by **all** `H : AddSubgroup G`. Its carrier is the ordinary subtype, with the ordinary induced additive group and canonical integer-module structure. No restriction to finite generation, purity, properness, or a selected subgroup family occurs. There is therefore no subgroup-to-submodule replacement in the submission requiring a separate bridge.
+* `Cardinal.mk H < kappa` is strict cardinal inequality for the actual subgroup carrier, and the exact same threshold occurs in the free and flat predicates. `Cardinal.mk` is the standard cardinal quotient by equivalence, not a natural-number cardinality. The carrier, subgroup carriers, and threshold cardinal are all at universe `u`, so no cross-universe coercion or lift is suppressed.
+* No positive, infinite, regular, or cofinality condition is added to the threshold. Cases where the subgroup quantifier's size condition has no witnesses are preserved.
+* `Cardinal.aleph Ordinal.omega0` is aleph omega, with `Ordinal.omega0` the first infinite ordinal. `Cardinal.aleph 1` is aleph one. In the explicit aleph-omega theorem statements the result is annotated as `Cardinal.{u}`.
+
+The standard library references are from Mathlib v4.19.0 at commit `c44e0c8ee63ca166450922a373c7409c5d26b00b`:
+
+| Meaning or theorem | Pinned library location |
+| --- | --- |
+| Canonical integer module on an additive group | `Mathlib/Algebra/Module/NatInt.lean`, `AddCommGroup.toIntModule` |
+| Genuine basis definition of free module | `Mathlib/LinearAlgebra/FreeModule/Basic.lean`, `Module.Free` |
+| Tensor definition of flatness | `Mathlib/RingTheory/Flat/Basic.lean`, `Module.Flat` |
+| Arbitrary injective maps are preserved | Same file, `Module.Flat.rTensor_preserves_injective_linearMap` |
+| Ring flatness agrees with tensor exactness | Same file, `Module.Flat.iff_rTensor_exact` and `iff_rTensor_exact'` |
+| Free modules are flat | Same file, `Module.Flat.of_free` |
+| Cardinal representation | `Mathlib/SetTheory/Cardinal/Defs.lean`, `Cardinal` and `Cardinal.mk` |
+| Aleph enumeration | `Mathlib/SetTheory/Cardinal/Aleph.lean`, `Cardinal.aleph` |
+| First infinite ordinal | `Mathlib/SetTheory/Ordinal/Basic.lean`, `Ordinal.omega0` |
+| A least element includes membership | `Mathlib/Order/Bounds/Defs.lean`, `IsLeast` |
+
+## All author declarations
+
+The proof file is `Conjecture4289.lean`. Its namespace is `Conjecture4289`; all five definitions and nine theorems below have public ASCII declaration names. There are no author-defined instances, axioms, executable computations, private declarations, anonymous examples, or local imported proof files.
+
+| Declaration | Exact source meaning / role |
+| --- | --- |
+| `AlmostFree kappa G` | `(¬ Module.Free ℤ G) ∧ ∀ H : AddSubgroup G, Cardinal.mk H < kappa → Module.Free ℤ H`. This preserves the explicit non-free requirement on the whole group. |
+| `FlatFree kappa G` | `∀ H : AddSubgroup G, Cardinal.mk H < kappa → Module.Flat ℤ H`. No non-free requirement is added. |
+| `Separation kappa G` | `AlmostFree kappa G ∧ ¬ FlatFree kappa G`. The negation applies to the complete subgroup-universal property. |
+| `SeparationExists kappa lambda` | There exist an actual carrier `G : Type u` and actual `AddCommGroup G` structure, with `Cardinal.mk G = lambda` and the stated `Separation`. The group-structure argument is explicitly threaded into the predicate. |
+| `SeparationCardinals` | `{lambda : Cardinal.{u} | SeparationExists lambda lambda}`. This states the usual diagonal convention for “at cardinal lambda.” |
+| `free_abelian_is_flat` | Every actual free abelian group is a flat integer module; invokes the standard checked theorem/instance `Module.Flat.of_free` with the given freeness evidence. |
+| `almostFree_implies_flatFree` | At every threshold and on every group, apply the preceding theorem separately to every subgroup below the threshold. The non-free whole-group conjunct is preserved in the definition but is not needed for this implication. |
+| `no_separation` | Negates `Separation kappa G` for all actual groups and all thresholds using the preceding implication. |
+| `no_separation_exists` | Negates `SeparationExists kappa lambda` for independently arbitrary threshold and carrier cardinals. It destructures actual existential witnesses and applies `no_separation`; it does not assume an impossible extra auxiliary hypothesis. |
+| `separationCardinals_empty` | The complete diagonal class is empty, as a set of cardinals. |
+| `no_least_separation_cardinal` | There is no least member of this class at any cardinal. It uses the membership conjunct included in the standard `IsLeast` definition. |
+| `no_separation_at_aleph_omega` | The particular existence requirement at aleph omega is false. |
+| `almostFree_aleph_one_implies_flatFree` | The source's aleph-one implication holds for every group at that threshold, even without assuming that the carrier cardinality is aleph one. Restricting this theorem to groups of that cardinality immediately gives the diagonal source clause. |
+| `conjecture4289_disproof` | `¬ IsLeast SeparationCardinals (Cardinal.aleph Ordinal.omega0 : Cardinal.{u})`, the exact negation of the necessary minimum assertion under the explicit diagonal convention. |
+
+The independent threshold and cardinality in `no_separation_exists` also handle the alternative reading that fixes kappa and then minimizes the carrier size: the existence family is empty for each fixed kappa. Thus the disproof does not depend on resolving the source's unstated equality between threshold and group size in one particular way.
+
+The source's phrase “any smaller cardinal” is ambiguous about finite cardinals, but no enumeration of aleph numerals or finite sample is used. Nonexistence is proved for every cardinal and hence for any of those possible ranges. This does not itself formalize the separate independence claim.
+
+## Mathematical proof
+
+A free integer module is flat. Concretely, if a free module has basis indexed by `I`, it is isomorphic to the direct sum of `I` copies of ℤ. Tensoring an injective integer-linear map with that direct sum is, under the standard tensor/direct-sum isomorphism, the direct sum of copies of the same injective map. It remains injective, so the module is flat. The formal proof invokes Mathlib's already proved `Module.Flat.of_free`; in this pinned version the instance derives flatness through projectivity and the theorem that projective modules are flat.
+
+Now fix any cardinal kappa and any almost-free abelian group G in the source's sense. For an arbitrary subgroup H with cardinality strictly below kappa, the almost-free hypothesis states that H is free. Therefore H is flat. Since H was arbitrary, G is flat-free at the same threshold. Consequently G cannot be both almost-free and not flat-free. This argument is uniform in kappa, G, the cardinality of G, and the ambient universe. In particular there is no separating group at aleph omega, and no least separation cardinal exists. The aleph-one implication follows by specialization.
+
+This is a direct structural proof, with no counterexample search, cardinal arithmetic assumption, auxiliary numerical computation, or invocation of a Shelah black box.
+
+## Logical limits
+
+The source also asserts ZFC provability of the separation, a Shelah-black-box construction, and independence of smaller-cardinal existence. It does not specify a coded ZFC sentence, formal derivability relation, consistency hypothesis, or exact black-box theorem. **None of those metamathematical/construction assertions is encoded or claimed to have been independently formalized.** In particular the author does not identify a Lean theorem with a coded ZFC derivation or a formal ZFC non-derivability result. Lean is used to establish the negation of the faithfully specified necessary mathematical component, which is sufficient for the disproof of the compound source claim. The true aleph-one conjunct is not claimed to be false.
+
+## Validation
+
+The following validations completed successfully in `/private/tmp/tlmc4289-proof`, with `/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin` prefixed to `PATH`:
+
+1. `lean --version` returned `Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)`.
+2. The shared pinned Mathlib checkout's `git rev-parse HEAD` returned `c44e0c8ee63ca166450922a373c7409c5d26b00b`. No dependency source was edited. Missing dependency build artifacts were compiled locally, with the parent informed and no concurrent cache writer.
+3. `lake build` completed with exit code 0 and `Build completed successfully.` The prepared default target is `Conjecture4289`; its library configuration supplies `moreLeanArgs = ["-DwarningAsError=true"]`. The initial build compiled the target at step 1861/1862. A second `lake build` also exited 0; its output is saved in `/private/tmp/tlmc4289-author-records/author-build.log`.
+4. `lake env lean -DwarningAsError=true Conjecture4289.lean` replayed the complete source from text, with exit code 0 and no output or warnings.
+5. `lake env lean -DwarningAsError=true AuthorChecks.lean > author-checks.log` exited 0. The inspection file contains only an import and inspection commands, no declarations. It prints all five source definitions, checks all nine theorem types, and reports the axiom closure of all fourteen authored declarations. Every closure is exactly `[propext, Classical.choice, Quot.sound]`, the ordinary foundational axioms used by Mathlib; no added axiom occurs. After this run, the inspection file and its output were moved outside the mathematical project to `/private/tmp/tlmc4289-author-records/AuthorChecks.lean` and `/private/tmp/tlmc4289-author-records/author-checks.log`, as requested by the parent. The parent's exhaustive checker will replace this author inspection in the final project.
+6. A token search for `sorry`, `admit`, `native_decide`, `axiom`, `unsafe`, and `partial` in both Lean files returned no matches. The declaration source count is five named definitions and nine named theorems; the parent will independently inventory generated declarations too.
+7. The frozen proof-file SHA256 is `a65523048324a86cfedcd245f75d317d283f4cc38a17af0cd1a0a46de5d98f6a`. The inspection-file SHA256 is `e4b435996bcfd2ef2a18a96037f0953127b54eef6d50a40b42c40bc6efa706d1`.
+
+There is no executable application or mathematical auxiliary computation. This is a theorem library; complete execution for its intended purpose is compilation and source replay, both performed above. All author-provided inspection code was also run. No numerical test is used as evidence for a quantified theorem.
+
+The parent is responsible for a fresh independent declaration inventory and kernel checks, semantic review, and report/PDF matching before submission. The author has frozen the proof source at the hash above and will not change it without an explicit review request.

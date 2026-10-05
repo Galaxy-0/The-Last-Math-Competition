@@ -1,0 +1,85 @@
+PAGE 1
+A disproof of conjecture 00000004289
+Every almost-free group in the stated sense is ﬂat-free
+C0ldSmi1e • October 5, 2026
+1 Deﬁnitions and the assertion being refuted
+Let G be an abelian group, regarded as a module over Z, and let κ be any cardinal. The bilingual
+source deﬁnes the properties
+AFκ (G) ⇐ ⇒ G is not free and every subgroup H ≤ G with |H|< κ is free ,
+FFκ (G) ⇐ ⇒ every subgroup H ≤ G with |H|< κ is ﬂat .
+Free means free as a Z-module, with an arbitrary basis and ﬁnite-support coordinates. Flat means
+that tensoring over Z preserves exact sequences, equivalently that it preserves injective module
+maps; see [ 1]. All subgroups are included, and the cardinal bound is strict in both deﬁnitions.
+The non-free requirement belongs to AFκ , as in the source.
+For clarity, keep the threshold and the group size separate:
+E(κ, λ ) ⇐ ⇒ ∃ G
+(
+|G|= λ and AFκ (G) and ¬ FFκ (G)
+)
+.
+The usual reading of “at cardinal λ” uses threshold κ = λ. On this reading the conjecture asserts
+that ℵω is the least member of S = {λ : E(λ, λ )}. In particular, it asserts E(ℵω , ℵω ). We
+disprove this necessary existence clause and the minimum claim. The argument also covers a
+ﬁxed threshold or a threshold unrelated to the group’s size.
+2 Complete proof
+Lemma 1. Every free abelian group is a ﬂat Z-module.
+Proof. If F has basis I, then F ∼=
+⊕
+i∈I Z. For every abelian group A there is a natural identiﬁ-
+cation A ⊗ Z F ∼=
+⊕
+i∈I A. For an injective homomorphism f : A → B, the induced tensor map
+becomes the coordinatewise map ⊕
+I f . If its value on a ﬁnite-support tuple is zero, injectivity
+of f makes each coordinate zero. Thus the tensor map is injective. The injectivity criterion for
+ﬂatness proves the lemma, including an empty or inﬁnite basis.
+Theorem 1. For every cardinal κ and every abelian group G, AFκ (G) implies FFκ (G). Conse-
+quently E(κ, λ ) is false for all cardinals κ, λ .
+Proof. Assume AFκ (G). Let H ≤ G satisfy |H|< κ. The deﬁnition makes H free, so the lemma
+makes H ﬂat. This proves FFκ (G) and contradicts the last condition in any proposed witness to
+E(κ, λ ).
+1
+
+PAGE 2
+3 Consequences and logical scope
+There is no separating group at ℵω , or at any other cardinality. The set S is empty, so it has no
+least member. A least element must belong to the set; a mere lower bound or an inﬁmum of an
+empty set would not express the source’s asserted minimum.
+The separate ℵ1 implication in the source is true, by the theorem with κ = ℵ1, even without
+requiring |G|= ℵ1. No regularity, coﬁnality, inﬁnitude, or positivity assumption on the threshold
+is used. If the subgroup range is empty, the same implication still holds. The proof does not
+require the non-free conjunct, but the formal deﬁnition retains it exactly.
+The source also asserts ZFC provability of the separation, a Shelah black-box construction, and
+independence over ZFC at every smaller cardinal. Refuting the necessary existence and minimum
+clauses disproves this compound assertion. This submission does not formalize a coded ZFC proof
+system, independence, or a black-box construction; a Lean theorem alone is not such a formal-
+ization. The unspeciﬁed range of “smaller cardinal” does not aﬀect the universal nonexistence
+result.
+4 Formal correspondence and veriﬁcation
+The project uses Lean 4.19.0 and Mathlib v4.19.0. The carrier has type G : Type u . Its
+AddCommGroup G structure provides the canonical integer action. Freeness is Mathlib’s basis-
+existence property, Module.Free. Flatness is its tensor-ﬂatness class, Module.Flat, with proved
+injectivity and exactness interpretations over rings. The instance Module.Flat.of_free supplies
+the lemma. Subgroups are actual elements of AddSubgroup G , with inherited group operations
+and cardinality given by Cardinal.mk.
+AlmostFree, FlatFree, Separation, and SeparationExists are exactly the predicates stated on
+page 1. SeparationCardinals is the set S. The theorem no_separation_exists quantiﬁes in-
+dependently over κ and λ in every universe. The ﬁnal theorem conjecture4289_disproof states
+¬ IsLeast(S, ℵω ). The cardinal ℵω is Cardinal.aleph Ordinal.omega0 ; ℵ1 is Cardinal.aleph
+1. Separate theorems exclude existence at ℵω , show S empty, and specialize the implication at
+ℵ1.
+The proof is symbolic and needs no external mathematical computation. From the pinned project
+in lean/, run
+lake build
+lake env lean -DwarningAsError=true Conjecture4289.lean
+lake env lean -DwarningAsError=true Check.lean
+The audit prints every authored deﬁnition, theorem type, and axiom dependency. Veriﬁcation
+records cover all compiled proof-module constants, including generated ones, dependency iden-
+tities, and the matching PDF. Local checks and independent internal review do not establish
+maintainer acceptance.
+References
+[1] The Stacks Project, Section 10.39, Flat modules and ﬂat ring maps , Deﬁnition 10.39.1 and
+Lemma 10.39.5. stacks.math.columbia.edu/tag/00H9.
+[2] Mathlib v4.19.0, Mathlib/RingTheory/Flat/Basic.lean, including Module.Flat.of_free.
+The exact dependency revision is recorded in the pinned project manifest.
+2

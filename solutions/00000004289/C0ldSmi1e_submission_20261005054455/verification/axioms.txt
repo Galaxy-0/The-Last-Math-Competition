@@ -1,0 +1,33 @@
+def Conjecture4289.AlmostFree.{u} : Cardinal.{u} → (G : Type u) → [inst : AddCommGroup G] → Prop :=
+fun kappa G [AddCommGroup G] => ¬Module.Free ℤ G ∧ ∀ (H : AddSubgroup G), Cardinal.mk ↥H < kappa → Module.Free ℤ ↥H
+def Conjecture4289.FlatFree.{u} : Cardinal.{u} → (G : Type u) → [inst : AddCommGroup G] → Prop :=
+fun kappa G [AddCommGroup G] => ∀ (H : AddSubgroup G), Cardinal.mk ↥H < kappa → Module.Flat ℤ ↥H
+def Conjecture4289.Separation.{u} : Cardinal.{u} → (G : Type u) → [inst : AddCommGroup G] → Prop :=
+fun kappa G [AddCommGroup G] => Conjecture4289.AlmostFree kappa G ∧ ¬Conjecture4289.FlatFree kappa G
+def Conjecture4289.SeparationExists.{u} : Cardinal.{u} → Cardinal.{u} → Prop :=
+fun kappa lambda => ∃ G group, Cardinal.mk G = lambda ∧ Conjecture4289.Separation kappa G
+def Conjecture4289.SeparationCardinals.{u} : Set Cardinal.{u} :=
+{lambda | Conjecture4289.SeparationExists lambda lambda}
+Conjecture4289.free_abelian_is_flat.{u} (G : Type u) [AddCommGroup G] (h : Module.Free ℤ G) : Module.Flat ℤ G
+'Conjecture4289.free_abelian_is_flat' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4289.almostFree_implies_flatFree.{u} (kappa : Cardinal.{u}) (G : Type u) [AddCommGroup G]
+  (h : Conjecture4289.AlmostFree kappa G) : Conjecture4289.FlatFree kappa G
+'Conjecture4289.almostFree_implies_flatFree' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4289.no_separation.{u} (kappa : Cardinal.{u}) (G : Type u) [AddCommGroup G] :
+  ¬Conjecture4289.Separation kappa G
+'Conjecture4289.no_separation' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4289.no_separation_exists.{u} (kappa lambda : Cardinal.{u}) : ¬Conjecture4289.SeparationExists kappa lambda
+'Conjecture4289.no_separation_exists' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4289.separationCardinals_empty.{u} : Conjecture4289.SeparationCardinals = ∅
+'Conjecture4289.separationCardinals_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4289.no_least_separation_cardinal.{u} (lambda : Cardinal.{u}) :
+  ¬IsLeast Conjecture4289.SeparationCardinals lambda
+'Conjecture4289.no_least_separation_cardinal' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4289.no_separation_at_aleph_omega.{u} :
+  ¬Conjecture4289.SeparationExists (Cardinal.aleph Ordinal.omega0) (Cardinal.aleph Ordinal.omega0)
+'Conjecture4289.no_separation_at_aleph_omega' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4289.almostFree_aleph_one_implies_flatFree.{u} (G : Type u) [AddCommGroup G]
+  (h : Conjecture4289.AlmostFree (Cardinal.aleph 1) G) : Conjecture4289.FlatFree (Cardinal.aleph 1) G
+'Conjecture4289.almostFree_aleph_one_implies_flatFree' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture4289.conjecture4289_disproof.{u} : ¬IsLeast Conjecture4289.SeparationCardinals (Cardinal.aleph Ordinal.omega0)
+'Conjecture4289.conjecture4289_disproof' depends on axioms: [propext, Classical.choice, Quot.sound]
