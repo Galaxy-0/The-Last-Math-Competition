@@ -1,0 +1,160 @@
+theorem Conjecture525.ResidueClaim._proof_4 : Nat.AtLeastTwo (HAdd.hAdd.{0, 0, 0} 3 2) :=
+instNatAtLeastTwo
+theorem Conjecture525.ResidueClaim._proof_5 : Nat.AtLeastTwo (HAdd.hAdd.{0, 0, 0} 4 2) :=
+instNatAtLeastTwo
+theorem Conjecture525.admissible_bound._proof_3 : ∀ (n e : Nat),
+  Not (LT.lt.{0} n (HMul.hMul.{0, 0, 0} 4 (HPow.hPow.{0, 0, 0} 5 e))) →
+    Not (LE.le.{0} (HMul.hMul.{0, 0, 0} 4 (HPow.hPow.{0, 0, 0} 5 e)) n) → False :=
+fun n e hn a =>
+  Lean.Omega.Constraint.not_sat'_of_isImpossible (of_decide_eq_true (id.{0} (Eq.refl.{1} true)))
+    (Lean.Omega.Constraint.combine_sat'
+      (Lean.Omega.tidy_sat
+        (Lean.Omega.Constraint.addInequality_sat
+          (le_of_le_of_eq.{0}
+            (Int.sub_nonneg_of_le (Int.add_one_le_of_lt (Lean.Omega.Int.ofNat_lt_of_lt (Nat.lt_of_not_le a))))
+            (Eq.trans.{1}
+              (Lean.Omega.Int.sub_congr
+                (Eq.trans.{1} (Int.ofNat_mul 4 (HPow.hPow.{0, 0, 0} 5 e))
+                  (Eq.trans.{1}
+                    (Lean.Omega.Int.mul_congr (id.{0} (Eq.refl.{1} ↑4))
+                      (Eq.trans.{1} (Lean.Omega.Int.ofNat_pow 5 e)
+                        (Eq.symm.{1} Lean.Omega.LinearCombo.coordinate_eval_1)))
+                    (Eq.symm.{1}
+                      (Lean.Omega.LinearCombo.mul_eval { const := 4 }
+                        { coeffs := List.cons.{0} 0 (List.cons.{0} 1 List.nil.{0}) }
+                        (Lean.Omega.Coeffs.ofList
+                          (List.cons.{0} (↑n) (List.cons.{0} (HPow.hPow.{0, 0, 0} (↑5) e) List.nil.{0})))
+                        (of_decide_eq_true (id.{0} (Eq.refl.{1} true)))))))
+                (Eq.trans.{1}
+                  (Lean.Omega.Int.add_congr (Eq.symm.{1} Lean.Omega.LinearCombo.coordinate_eval_0)
+                    (id.{0} (Eq.refl.{1} 1)))
+                  (Eq.symm.{1}
+                    (Lean.Omega.LinearCombo.add_eval { coeffs := List.cons.{0} 1 List.nil.{0} } { const := 1 }
+                      (Lean.Omega.Coeffs.ofList
+                        (List.cons.{0} (↑n) (List.cons.{0} (HPow.hPow.{0, 0, 0} (↑5) e) List.nil.{0})))))))
+              (Eq.symm.{1}
+                (Lean.Omega.LinearCombo.sub_eval { coeffs := List.cons.{0} 0 (List.cons.{0} 4 List.nil.{0}) }
+                  { const := 1, coeffs := List.cons.{0} 1 List.nil.{0} }
+                  (Lean.Omega.Coeffs.ofList
+                    (List.cons.{0} (↑n) (List.cons.{0} (HPow.hPow.{0, 0, 0} (↑5) e) List.nil.{0})))))))))
+      (Lean.Omega.Constraint.addInequality_sat
+        (le_of_le_of_eq.{0} (Int.sub_nonneg_of_le (Lean.Omega.Int.ofNat_le_of_le (Nat.le_of_not_lt hn)))
+          (Eq.trans.{1}
+            (Lean.Omega.Int.sub_congr (Eq.symm.{1} Lean.Omega.LinearCombo.coordinate_eval_0)
+              (Eq.trans.{1} (Int.ofNat_mul 4 (HPow.hPow.{0, 0, 0} 5 e))
+                (Eq.trans.{1}
+                  (Lean.Omega.Int.mul_congr (id.{0} (Eq.refl.{1} ↑4))
+                    (Eq.trans.{1} (Lean.Omega.Int.ofNat_pow 5 e)
+                      (Eq.symm.{1} Lean.Omega.LinearCombo.coordinate_eval_1)))
+                  (Eq.symm.{1}
+                    (Lean.Omega.LinearCombo.mul_eval { const := 4 }
+                      { coeffs := List.cons.{0} 0 (List.cons.{0} 1 List.nil.{0}) }
+                      (Lean.Omega.Coeffs.ofList
+                        (List.cons.{0} (↑n) (List.cons.{0} (HPow.hPow.{0, 0, 0} (↑5) e) List.nil.{0})))
+                      (of_decide_eq_true (id.{0} (Eq.refl.{1} true))))))))
+            (Eq.symm.{1}
+              (Lean.Omega.LinearCombo.sub_eval { coeffs := List.cons.{0} 1 List.nil.{0} }
+                { coeffs := List.cons.{0} 0 (List.cons.{0} 4 List.nil.{0}) }
+                (Lean.Omega.Coeffs.ofList
+                  (List.cons.{0} (↑n) (List.cons.{0} (HPow.hPow.{0, 0, 0} (↑5) e) List.nil.{0})))))))))
+theorem Conjecture525.allLevels_eq_positive._proof_3 : ∀ (e : Nat),
+  Not (LT.lt.{0} 0 (HAdd.hAdd.{0, 0, 0} e 1)) → False :=
+fun e a =>
+  Lean.Omega.Constraint.not_sat'_of_isImpossible (of_decide_eq_true (id.{0} (Eq.refl.{1} true)))
+    (Lean.Omega.Constraint.combine_sat'
+      (Lean.Omega.Constraint.addInequality_sat
+        (le_of_le_of_eq.{0} (Int.ofNat_nonneg e) (Eq.symm.{1} Lean.Omega.LinearCombo.coordinate_eval_0)))
+      (Lean.Omega.tidy_sat
+        (Lean.Omega.Constraint.addInequality_sat
+          (le_of_le_of_eq.{0} (Int.sub_nonneg_of_le (Lean.Omega.Int.ofNat_le_of_le (Nat.le_of_not_lt a)))
+            (Eq.trans.{1}
+              (Lean.Omega.Int.sub_congr (id.{0} (Eq.refl.{1} ↑0))
+                (Eq.trans.{1} (Int.ofNat_add e 1)
+                  (Eq.trans.{1}
+                    (Lean.Omega.Int.add_congr (Eq.symm.{1} Lean.Omega.LinearCombo.coordinate_eval_0)
+                      (id.{0} (Eq.refl.{1} ↑1)))
+                    (Eq.symm.{1}
+                      (Lean.Omega.LinearCombo.add_eval { coeffs := List.cons.{0} 1 List.nil.{0} } { const := 1 }
+                        (Lean.Omega.Coeffs.ofList (List.cons.{0} (↑e) List.nil.{0})))))))
+              (Eq.symm.{1}
+                (Lean.Omega.LinearCombo.sub_eval { } { const := 1, coeffs := List.cons.{0} 1 List.nil.{0} }
+                  (Lean.Omega.Coeffs.ofList (List.cons.{0} (↑e) List.nil.{0})))))))))
+theorem Conjecture525.bracketPower.eq_1.{u_1} : ∀ (K : Type u_1) [inst : Field.{u_1} K]
+  (I : Ideal.{u_1} (Conjecture525.Plane.{u_1} K)) (q : Nat),
+  Eq.{u_1 + 1} (Conjecture525.bracketPower.{u_1} K I q)
+    (Ideal.span.{u_1} (Set.image.{u_1, u_1} (fun g => HPow.hPow.{u_1, 0, u_1} g q) ↑I)) :=
+fun K [Field.{u_1} K] I q => Eq.refl.{u_1 + 1} (Conjecture525.bracketPower.{u_1} K I q)
+theorem Conjecture525.cusp.eq_1.{u_1} : ∀ (K : Type u_1) [inst : Field.{u_1} K],
+  Eq.{u_1 + 1} (Conjecture525.cusp.{u_1} K)
+    (HAdd.hAdd.{u_1, u_1, u_1} (HPow.hPow.{u_1, 0, u_1} (Conjecture525.x.{u_1} K) 2)
+      (HPow.hPow.{u_1, 0, u_1} (Conjecture525.y.{u_1} K) 3)) :=
+fun K [Field.{u_1} K] => Eq.refl.{u_1 + 1} (Conjecture525.cusp.{u_1} K)
+theorem Conjecture525.cusp_mem_originIdeal._proof_3.{u, v, u_1} : ∀ {R : Type u} {S : Type v} {F : Type u_1}
+  [inst : Semiring.{u} R] [inst_1 : Semiring.{v} S] [inst_2 : FunLike.{u_1 + 1, u + 1, v + 1} F R S]
+  [rcf : RingHomClass.{u_1, u, v} F R S] {f : F} {r : R},
+  Eq.{1} (Membership.mem.{u, u} (RingHom.ker.{u, v, u_1} f) r) (Eq.{v + 1} (f r) 0) :=
+fun {R} {S} {F} [Semiring.{u} R] [Semiring.{v} S] [FunLike.{u_1 + 1, u + 1, v + 1} F R S]
+    [RingHomClass.{u_1, u, v} F R S] {f} {r} =>
+  propext RingHom.mem_ker.{u, v, u_1}
+theorem Conjecture525.localPrimeThreshold._proof_3 : ∀ (p : Conjecture525.PrimeCharacteristic), Fact (Nat.Prime ↑p) :=
+fun p => { out := Subtype.property.{1} p }
+theorem Conjecture525.originIdeal._proof_2.{u_1} : ∀ (K : Type u_1) [inst : Field.{u_1} K],
+  RingHomClass.{u_1, u_1, u_1} (RingHom.{u_1, u_1} (MvPolynomial.{0, u_1} (Fin 2) K) K)
+    (MvPolynomial.{0, u_1} (Fin 2) K) K :=
+fun K [Field.{u_1} K] => RingHom.instRingHomClass.{u_1, u_1}
+theorem Conjecture525.originIdeal.eq_1.{u_1} : ∀ (K : Type u_1) [inst : Field.{u_1} K],
+  Eq.{u_1 + 1} (Conjecture525.originIdeal.{u_1} K) (RingHom.ker.{u_1, u_1, u_1} MvPolynomial.constantCoeff.{u_1, 0}) :=
+fun K [Field.{u_1} K] => Eq.refl.{u_1 + 1} (Conjecture525.originIdeal.{u_1} K)
+theorem Conjecture525.originPower_le_bracket._proof_3.{u, v, u_1} : ∀ {R : Type u} {S : Type v} {F : Type u_1}
+  [inst : Semiring.{u} R] [inst_1 : Semiring.{v} S] [inst_2 : FunLike.{u_1 + 1, u + 1, v + 1} F R S]
+  [rcf : RingHomClass.{u_1, u, v} F R S] {f : F} {r : R},
+  Eq.{1} (Membership.mem.{u, u} (RingHom.ker.{u, v, u_1} f) r) (Eq.{v + 1} (f r) 0) :=
+fun {R} {S} {F} [Semiring.{u} R] [Semiring.{v} S] [FunLike.{u_1 + 1, u + 1, v + 1} F R S]
+    [RingHomClass.{u_1, u, v} F R S] {f} {r} =>
+  propext RingHom.mem_ker.{u, v, u_1}
+theorem Conjecture525.thresholdAt_admissible_le_one._proof_3 : ∀ (p e n : Nat),
+  Not (LT.lt.{0} n (HPow.hPow.{0, 0, 0} p e)) → Not (LE.le.{0} (HPow.hPow.{0, 0, 0} p e) n) → False :=
+fun p e n hn a =>
+  Lean.Omega.Constraint.not_sat'_of_isImpossible (of_decide_eq_true (id.{0} (Eq.refl.{1} true)))
+    (Lean.Omega.Constraint.combine_sat'
+      (Lean.Omega.tidy_sat
+        (Lean.Omega.Constraint.addInequality_sat
+          (le_of_le_of_eq.{0}
+            (Int.sub_nonneg_of_le (Int.add_one_le_of_lt (Lean.Omega.Int.ofNat_lt_of_lt (Nat.lt_of_not_le a))))
+            (Eq.trans.{1}
+              (Lean.Omega.Int.sub_congr (Eq.symm.{1} Lean.Omega.LinearCombo.coordinate_eval_2)
+                (Eq.trans.{1}
+                  (Lean.Omega.Int.add_congr (Eq.symm.{1} Lean.Omega.LinearCombo.coordinate_eval_1)
+                    (id.{0} (Eq.refl.{1} 1)))
+                  (Eq.symm.{1}
+                    (Lean.Omega.LinearCombo.add_eval { coeffs := List.cons.{0} 0 (List.cons.{0} 1 List.nil.{0}) }
+                      { const := 1 }
+                      (Lean.Omega.Coeffs.ofList
+                        (List.cons.{0} (↑p)
+                          (List.cons.{0} (↑n) (List.cons.{0} (↑(HPow.hPow.{0, 0, 0} p e)) List.nil.{0}))))))))
+              (Eq.symm.{1}
+                (Lean.Omega.LinearCombo.sub_eval
+                  { coeffs := List.cons.{0} 0 (List.cons.{0} 0 (List.cons.{0} 1 List.nil.{0})) }
+                  { const := 1, coeffs := List.cons.{0} 0 (List.cons.{0} 1 List.nil.{0}) }
+                  (Lean.Omega.Coeffs.ofList
+                    (List.cons.{0} (↑p)
+                      (List.cons.{0} (↑n) (List.cons.{0} (↑(HPow.hPow.{0, 0, 0} p e)) List.nil.{0}))))))))))
+      (Lean.Omega.Constraint.addInequality_sat
+        (le_of_le_of_eq.{0} (Int.sub_nonneg_of_le (Lean.Omega.Int.ofNat_le_of_le (Nat.le_of_not_lt hn)))
+          (Eq.trans.{1}
+            (Lean.Omega.Int.sub_congr (Eq.symm.{1} Lean.Omega.LinearCombo.coordinate_eval_1)
+              (Eq.symm.{1} Lean.Omega.LinearCombo.coordinate_eval_2))
+            (Eq.symm.{1}
+              (Lean.Omega.LinearCombo.sub_eval { coeffs := List.cons.{0} 0 (List.cons.{0} 1 List.nil.{0}) }
+                { coeffs := List.cons.{0} 0 (List.cons.{0} 0 (List.cons.{0} 1 List.nil.{0})) }
+                (Lean.Omega.Coeffs.ofList
+                  (List.cons.{0} (↑p)
+                    (List.cons.{0} (↑n) (List.cons.{0} (↑(HPow.hPow.{0, 0, 0} p e)) List.nil.{0}))))))))))
+theorem Conjecture525.x._proof_1 : NeZero.{0} (HAdd.hAdd.{0, 0, 0} 1 1) :=
+Nat.instNeZeroSucc
+theorem Conjecture525.x.eq_1.{u_1} : ∀ (K : Type u_1) [inst : Field.{u_1} K],
+  Eq.{u_1 + 1} (Conjecture525.x.{u_1} K) (MvPolynomial.X.{u_1, 0} 0) :=
+fun K [Field.{u_1} K] => Eq.refl.{u_1 + 1} (Conjecture525.x.{u_1} K)
+theorem Conjecture525.y.eq_1.{u_1} : ∀ (K : Type u_1) [inst : Field.{u_1} K],
+  Eq.{u_1 + 1} (Conjecture525.y.{u_1} K) (MvPolynomial.X.{u_1, 0} 1) :=
+fun K [Field.{u_1} K] => Eq.refl.{u_1 + 1} (Conjecture525.y.{u_1} K)

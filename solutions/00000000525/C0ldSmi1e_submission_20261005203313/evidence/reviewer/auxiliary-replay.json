@@ -1,0 +1,31 @@
+{
+  "adaptation": "Only absolute proof/evidence paths changed to isolated reviewer copies. No mathematical code changed.",
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "/private/tmp/tlmc525-review/tool-replay-scripts/run_checked.py",
+        "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lean",
+        "--version"
+      ],
+      "exit_code": 0,
+      "output": "Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)\nRECORDED EXIT CODE: 0\n"
+    },
+    {
+      "argv": [
+        "python3",
+        "/private/tmp/tlmc525-review/tool-replay-scripts/check_dependencies.py"
+      ],
+      "exit_code": 0,
+      "output": "PASS: exact nine pins, all tracked dependency states clean, original conjecture hash matched.\n"
+    },
+    {
+      "argv": [
+        "python3",
+        "/private/tmp/tlmc525-review/tool-replay-scripts/freeze.py"
+      ],
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"frozen-ready\",\n  \"frozen_utc\": \"2026-10-05T20:29:57.681138+00:00\",\n  \"proof_directory\": \"/private/tmp/tlmc525-review/tool-replay-project\",\n  \"lean_version\": \"4.19.0\",\n  \"authored_declaration_count\": 63,\n  \"allowed_axioms\": [\n    \"propext\",\n    \"Classical.choice\",\n    \"Quot.sound\"\n  ],\n  \"files\": [\n    {\n      \"path\": \"Conjecture525.lean\",\n      \"sha256\": \"88d7c4fe93f181f15880b62309d8a00b841dffbd0beda07aa120a72d767b4eae\",\n      \"bytes\": 13251\n    },\n    {\n      \"path\": \"Audit.lean\",\n      \"sha256\": \"8d3615520738269b1a8a27e22f9e2789de5e16579fa1ee7a7c634eaab54f480d\",\n      \"bytes\": 931\n    },\n    {\n      \"path\": \"lakefile.toml\",\n      \"sha256\": \"744eab38cae398a9952cfe1f8bb8ba7cc67448d6818e25c43450a7413d13f7c1\",\n      \"bytes\": 276\n    },\n    {\n      \"path\": \"lean-toolchain\",\n      \"sha256\": \"55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea\",\n      \"bytes\": 25\n    },\n    {\n      \"path\": \"lake-manifest.json\",\n      \"sha256\": \"a0d6cae0053cf0447dee37b2f8512f90828a82df9cb5fca7fe1c10a535175836\",\n      \"bytes\": 3175\n    }\n  ],\n  \"semantics_sha256\": \"ee3a43dcbef4d1360a7ea407e7b46cdf537d28b488a139e920f42801bd221165\",\n  \"commands\": \"/private/tmp/tlmc525-review/tool-replay-evidence/commands.jsonl\",\n  \"dependency_verification\": \"/private/tmp/tlmc525-review/tool-replay-evidence/dependency-verification.json\",\n  \"provenance\": \"/private/tmp/tlmc525-review/tool-replay-evidence/provenance.txt\"\n}\n"
+    }
+  ]
+}

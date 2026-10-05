@@ -1,0 +1,8 @@
+Nat.Primes : Type
+Filter.comap.{u_1, u_2} {α : Type u_1} {β : Type u_2} (m : α → β) (f : Filter β) : Filter α
+Filter.atTop.{u_3} {α : Type u_3} [Preorder α] : Filter α
+Nat.Prime.pos {p : ℕ} (pp : Nat.Prime p) : 0 < p
+Ideal.pow_mem_of_pow_mem.{u} {α : Type u} [Semiring α] (I : Ideal α) {a : α} {m n : ℕ} (ha : a ^ m ∈ I) (h : m ≤ n) :
+  a ^ n ∈ I
+Real.sSup_nonneg {s : Set ℝ} (hs : ∀ x ∈ s, 0 ≤ x) : 0 ≤ sSup s
+Nat.Prime (p : ℕ) : Prop

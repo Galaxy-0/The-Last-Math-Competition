@@ -1,0 +1,10 @@
+import Mathlib.Topology.Instances.Real.Lemmas
+import Mathlib.Data.Nat.Prime.Defs
+import Mathlib.RingTheory.Ideal.Span
+#check Nat.Primes
+#check Filter.comap
+#check Filter.atTop
+#check Nat.Prime.pos
+#check Ideal.pow_mem_of_pow_mem
+#check Real.sSup_nonneg
+#check Nat.Prime
