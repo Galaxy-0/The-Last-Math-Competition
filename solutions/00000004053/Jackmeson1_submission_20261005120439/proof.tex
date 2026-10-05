@@ -1,0 +1,220 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A disproof of Conjecture 00000004053\\[2pt]
+\large The trivial $\mathbb{F}_3[C_3]$-module has syzygy period $2$, and $2$ divides no prime factor of the order of any subgroup of $C_3$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000004053 reads (English):
+\begin{quote}
+\emph{Definition:} A periodic module is one with $\Omega^n M$ isomorphic to $M$.
+\emph{Conjecture:} The prime factors of the minimal period of a periodic module always divide
+prime factors of the order of the defect group, and every power of every admissible prime is
+realized in some explicit block. (period-defect group prime factor correspondence)
+\end{quote}
+The Chinese text says the same: the prime factors of the minimal period of a periodic module
+always divide prime factors of the order of the defect group, and every power of every admissible
+prime is realized in some explicit block.
+
+\textbf{Reading.} The setting is modular representation theory: a finite group $G$, a field $k$ of
+characteristic $p$, a block of $kG$ with its defect group $D$, and a periodic module $M$ in that
+block, i.e.\ a finitely generated module with $\Omega^n M\cong M$ for some $n\ge 1$, where
+$\Omega M$ is the kernel of a projective cover of $M$ (the Heller operator). The \emph{minimal
+period} is the least such $n$. Clause 1 says: every prime factor $q$ of the minimal period divides
+some prime factor $r$ of $|D|$. Since $q$ and $r$ are primes, this is the same as $q=r$, and the
+same as $q\mid |D|$; we refute both formulations. Clause 2 (``admissible prime'', ``explicit
+block'') is not defined in the text and is not used: the conjecture is a conjunction, and we
+refute Clause 1.
+
+\textbf{Counterexample.} $p=3$, $k=\mathbb{F}_3$, $G=C_3$, $M=k$ the trivial module. Its minimal
+period is $2$, while every subgroup of $C_3$ (in particular every possible defect group) has order
+$1$ or $3$; $2$ divides neither $3$ nor any prime factor of $1$ or $3$.
+
+\section{Definitions (as in the Lean file)}
+
+All modules are left modules over a ring $R$; in Lean, modules are objects of
+\texttt{ModuleCat.\{0\} R}.
+\begin{itemize}[leftmargin=1.5em]
+\item A submodule $K\le P$ is \emph{superfluous} if $K+L=P$ implies $L=P$ (\texttt{IsSuperfluous}).
+\item $\pi:P\to M$ is a \emph{projective cover} if $P$ is projective, $\pi$ is onto, and
+$\ker\pi$ is superfluous (\texttt{IsProjectiveCover}). This is the definition retrieved from
+Wikipedia (\emph{Projective cover}): an epimorphism $p:P\to M$ ``such that the kernel of p is a
+superfluous submodule of P.''
+\item $N$ is a \emph{syzygy} of $M$ (\texttt{IsSyzygy R M N}) if $N\cong\ker\pi$ for some projective
+cover $\pi:P\to M$. \texttt{IterSyz R n M N} means $N\cong\Omega^n M$: there is a chain
+$M=M_0,M_1,\dots,M_n$ with $M_{i+1}$ a syzygy of $M_i$ and $M_n\cong N$.
+\item \texttt{HasPeriod R M n}: $n\ge1$, $\Omega^n M\cong M$, and $\Omega^m M\not\cong M$ for
+$0<m<n$ (for every chain). So $n$ is the minimal period.
+\item $M$ is \emph{indecomposable} (\texttt{IsIndecomposable}) if $M\ne0$ and whenever
+$M=S\oplus T$ for submodules $S,T$ (\texttt{IsCompl S T}), $S=0$ or $T=0$.
+\item Defect group. Wikipedia (\emph{Modular representation theory}): ``To each block B of the group
+algebra K[G], Brauer associated a certain p-subgroup, known as its defect group (where p is the
+characteristic of K).'' We use only that a defect group is a subgroup of $G$. (Wikipedia also states
+that ``the Sylow p-subgroup of the finite group G is a defect group for the principal block of
+K[G]''; for $G=C_3$, $p=3$ this is $C_3$, but we do not need it.)
+\end{itemize}
+
+\textbf{The group algebra.} $G=C_3$ is Mathlib's \texttt{Multiplicative (ZMod 3)} with generator
+$g$; $A=\mathbb{F}_3[C_3]$ is Mathlib's group algebra \texttt{MonoidAlgebra (ZMod 3) G}. Let
+$t=g-1\in A$ and let $\varepsilon:A\to\mathbb{F}_3$ be the augmentation ($\varepsilon(h)=1$ for
+$h\in G$, Mathlib's \texttt{MonoidAlgebra.lift} of the trivial character). The trivial module is
+$k=\mathbb{F}_3$ with $a\cdot x=\varepsilon(a)x$ (\texttt{Triv}); every $h\in G$ acts as the identity
+(\texttt{triv\_group\_acts\_trivially}).
+
+\section{Proof}
+
+\begin{lemma}[\texttt{t\_cube}, \texttt{t\_sq\_ne\_zero}, \texttt{exists\_t\_mul}]
+$t^3=0$, $t^2\ne0$, and every $a\in A$ is $a=\varepsilon(a)+td$ for some $d\in A$; so
+$\ker\varepsilon=tA$.
+\end{lemma}
+\begin{proof}
+$(g-1)^3=g^3-1-3(g^2-g)=0$ since $g^3=1$ and $3=0$ in $A$. Also $t^2=g^2-2g+1=g^2+g+1$, whose
+coefficient at $1\in G$ is $1$. For the decomposition it suffices (by linearity) to treat $a=h\in G$:
+$h=g^m$ and $g^m-1=(g-1)(1+g+\dots+g^{m-1})$.
+\end{proof}
+
+\begin{remark}
+Hence $1,t,t^2$ span $A$, and since $\dim A=3$ they form a basis; with $t^3=0$ this gives
+$A\cong\mathbb{F}_3[t]/(t^3)$ via $t=g-1$. The Lean proof does not use this isomorphism; it works in
+the group algebra itself, using only the three facts of Lemma 1.
+\end{remark}
+
+\begin{lemma}\label{lem:alg}
+(a) $t^2c=\varepsilon(c)t^2$ for all $c$ (\texttt{t\_sq\_mul}); hence $t^2c=0\Rightarrow\varepsilon(c)=0$.
+(b) If $a\ne0$ then $t^2\in Aa$ (\texttt{t\_sq\_mem}).
+(c) Every submodule of $A$ inside $\ker\varepsilon$ is superfluous (\texttt{superfluous\_of\_le\_ker}).
+(d) If $P$ is projective and $t^2p=0$ then $p\in tP$ (\texttt{mem\_t\_of\_t\_sq\_smul}).
+\end{lemma}
+\begin{proof}
+(a) $c=\varepsilon(c)+td$ and $t^3=0$. (b) If $\varepsilon(a)\ne0$, $t^2=\varepsilon(a)^{-1}t^2a$.
+Otherwise $a=td$; if $\varepsilon(d)\ne0$ then $ta=\varepsilon(d)t^2$; otherwise $a=t^2d'=\varepsilon(d')t^2$
+with $\varepsilon(d')\ne0$. (c) If $K+L=A$ then $1=x+l$ with $\varepsilon(l)=1$, $l=1+td$, and
+$(1-td+t^2d^2)l=1$, so $L=A$. (d) $P$ is a direct summand of a free module
+(\texttt{Module.projective\_def'}); the coordinates $c_i$ of $p$ satisfy $t^2c_i=0$, so
+$c_i\in tA$ by (a) and Lemma 1, and $p\in tP$.
+\end{proof}
+
+\begin{lemma}[cyclic modules]\label{lem:cyc}
+Let $M=Am_0$ with $m_0\notin tM$ (\texttt{CyclicGen}). Then
+(i) $A\to M$, $a\mapsto am_0$, is a projective cover (\texttt{toSpan\_isCover});
+(ii) for \emph{every} projective cover $\pi:P\to M$, $\ker\pi\cong\operatorname{ann}(m_0)$
+(\texttt{ker\_cover\_equiv}).
+\end{lemma}
+\begin{proof}
+(i) If $am_0=0$ and $\varepsilon(a)\ne0$, writing $a=\varepsilon(a)+td$ gives
+$m_0=t\cdot(-\varepsilon(a)^{-1}d\,m_0)\in tM$; so the kernel lies in $\ker\varepsilon$ and is
+superfluous by Lemma \ref{lem:alg}(c). (ii) Pick $p_0$ with $\pi(p_0)=m_0$ and let
+$\varphi(a)=ap_0$. Then $\operatorname{im}\varphi+\ker\pi=P$, so $\varphi$ is onto
+(superfluous kernel). If $ap_0=0$ with $a\ne0$, then $t^2p_0=0$ by Lemma \ref{lem:alg}(b), so
+$p_0=tq$ by (d) and $m_0=t\pi(q)$, a contradiction; so $\varphi$ is injective. Thus $\varphi:A\cong P$,
+$\pi\circ\varphi$ is $a\mapsto am_0$, and $\varphi$ maps $\operatorname{ann}(m_0)$ onto $\ker\pi$.
+\end{proof}
+
+\begin{theorem}[\texttt{period\_K}, \texttt{iterSyz\_two\_any}]
+The trivial module $k$ is finitely generated, simple (hence indecomposable) and not projective; its
+minimal syzygy period is $2$; and every second syzygy of $k$, for every choice of projective covers,
+is isomorphic to $k$.
+\end{theorem}
+\begin{proof}
+$k=A\cdot1$ and $1\notin tk=0$. By Lemma \ref{lem:cyc}, $\Omega k\cong N_1=\operatorname{ann}(1)=\ker\varepsilon$
+for every cover. $N_1=A\cdot t$ and $t\notin tN_1$ (else $t=t^2d$ and $t^2=t^3d=0$), so every
+syzygy of $N_1$ (or of any module isomorphic to it, \texttt{CyclicGen.map}) is isomorphic to
+$N_2=\operatorname{ann}(t)=\{a: at=0\}$. The map $x\mapsto xt^2$ is an $A$-isomorphism $k\to N_2$
+(\texttt{trivEquivN2}): it is $A$-linear by Lemma \ref{lem:alg}(a), injective since $t^2\ne0$, and onto
+since $at=0$ forces $a=t^2d'=\varepsilon(d')t^2$. Finally $N_1\not\cong k$ since $t\cdot t=t^2\ne0$ in
+$N_1$ while $t$ kills $k$ (\texttt{N1\_not\_equiv\_triv}); so no first syzygy of $k$ is isomorphic to
+$k$ (\texttt{not\_iterSyz\_one}). Simplicity: any nonzero $x\in k$ generates $k$ (\texttt{triv\_simple}).
+Non-projectivity: $t^2\cdot1=0$ but $1\notin tk$, contradicting Lemma \ref{lem:alg}(d)
+(\texttt{triv\_not\_projective}).
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_4053\_false}, \texttt{conjecture\_4053\_false'}]
+Let \texttt{Clause1 p H} say: for every finitely generated, indecomposable, non-projective
+$\mathbb{F}_p[H]$-module $M$ with minimal period $n$ there is a subgroup $D\le H$ such that every prime
+factor $q$ of $n$ divides some prime factor $r$ of $|D|$ (\texttt{Clause1'}: $q\mid|D|$). Then
+\texttt{Clause1 3 C\_3} and \texttt{Clause1' 3 C\_3} are false.
+\end{theorem}
+\begin{proof}
+Take $M=k$, $n=2$, $q=2$. By Lagrange (\texttt{Subgroup.card\_subgroup\_dvd\_card}), $|D|\mid 3$ for every
+$D\le C_3$, so $2\nmid|D|$ and $2$ divides no prime factor of $|D|$ (\texttt{not\_two\_dvd\_card}).
+\end{proof}
+
+Since the defect group of any block of $\mathbb{F}_3[C_3]$ is a subgroup of $C_3$, Clause 1 of the
+conjecture implies \texttt{Clause1 3 C\_3}; hence the conjecture is false
+(\texttt{conjecture\_4053\_conj\_false}: $\neg(\texttt{Clause1 3 C\_3}\wedge Q)$ for every $Q$).
+
+\section{Relation to the earlier PR \#291}
+
+PR \#291 used the same counterexample ($\mathbb{F}_3[C_3]$, trivial module, period $2$, defect
+group of order $3$) and was closed without merging because its Lean file was vacuous: its main
+theorem was the arithmetic statement $1=1\wedge 2=1+1\wedge 3=3\wedge 3\bmod 2=1\wedge 4=2\cdot2$, and
+the review noted that no module, group algebra, $\Omega$-operator or defect group existed in Lean.
+The present formalization contains the actual objects: Mathlib's group algebra
+$\mathbb{F}_3[C_3]$, the trivial module with the group acting trivially, projective covers with
+superfluous kernels, syzygies as kernels of projective covers (for arbitrary projective modules, not a
+fixed choice), the computation $\Omega k\cong\ker\varepsilon$, $\Omega^2k\cong k$, $\Omega k\not\cong k$,
+the minimal-period predicate, and the quantifier over all subgroups of $C_3$.
+
+\section{Scope}
+
+Refuted: Clause 1 (in both formulations above) for $p=3$, $G=C_3$, $k=\mathbb{F}_3$, with the
+defect group replaced by an arbitrary subgroup of $C_3$, and with periodic modules restricted to
+finitely generated indecomposable non-projective modules; hence the conjunction. Conventions:
+syzygies are a relation ($N\cong\ker\pi$ for some projective cover $\pi$); we prove that the period
+does not depend on the choice of covers. Modules in Lean live in \texttt{Type} (universe 0); the
+projective cover $P$ in a syzygy may be any projective module, not only a finitely generated one.
+Not formalized: blocks and defect groups themselves (only the fact that a defect group is a
+subgroup of $G$ is used), Clause 2, and the reading in which $\Omega^nM\cong M$ is taken in the stable
+module category. The same argument works for every odd prime $p$ with $G=C_p$ (not formalized).
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture4053/Basic.lean} (namespace \texttt{C4053}), only import \texttt{Mathlib},
+Lean toolchain and Mathlib as in \texttt{lean-toolchain}/\texttt{lake-manifest.json}. Main statements:
+\begin{itemize}[leftmargin=1.5em]
+\item \texttt{conjecture\_4053\_false : \textasciitilde Clause1 3 G} and
+\texttt{conjecture\_4053\_false' : \textasciitilde Clause1' 3 G};
+\item \texttt{trivial\_module\_counterexample}: \texttt{Module.Finite A Triv},
+\texttt{IsIndecomposable A Triv}, \texttt{\textasciitilde Module.Projective A Triv},
+\texttt{HasPeriod A K 2}, every \texttt{IterSyz A 2 K N} has \texttt{N} isomorphic to \texttt{Triv}, and
+for every \texttt{D : Subgroup G} and every prime factor \texttt{r} of \texttt{Nat.card D},
+\texttt{\textasciitilde 2 | r};
+\item \texttt{conjecture\_4053\_conj\_false (Clause2 : Prop) : \textasciitilde(Clause1 3 G /\textbackslash{} Clause2)}.
+\end{itemize}
+Axiom audit (\texttt{\#print axioms} for all four): \texttt{[propext, Classical.choice, Quot.sound]}.
+No \texttt{sorry}, no \texttt{native\_decide}, no added axioms. Built with \texttt{lake build}.
+
+\section*{Sources}
+\begin{itemize}[leftmargin=1.5em]
+\item Wikipedia, \emph{Projective cover}, \url{https://en.wikipedia.org/wiki/Projective_cover}:
+``such that the kernel of p is a superfluous submodule of P.''
+\item Wikipedia, \emph{Modular representation theory},
+\url{https://en.wikipedia.org/wiki/Modular_representation_theory}: ``To each block B of the group
+algebra K[G], Brauer associated a certain p-subgroup, known as its defect group (where p is the
+characteristic of K).''; ``the Sylow p-subgroup of the finite group G is a defect group for the
+principal block of K[G].''
+\item GitHub PR \#291 (closed), review comment:
+\url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/pull/291}.
+\end{itemize}
+
+\end{document}
