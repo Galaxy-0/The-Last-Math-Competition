@@ -1,0 +1,391 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\F}{\mathbb{F}_3}
+\newcommand{\wt}{\operatorname{wt}}
+
+\title{Disproof of Conjecture 00000001090:\\
+there is no MDS code of type $[12,6]$ over $\mathrm{GF}(3)$}
+\author{jilint777}
+\date{2026-10-04}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+Conjecture 00000001090 asserts that the maximal order of the automorphism group
+of an MDS code over $\mathrm{GF}(3)$ of type $[12,6]$ is $660$, attained by an
+$M_{11}$ embedding, and that the orders for all other equivalence classes divide
+$132$. We prove that \emph{no} ternary MDS code of type $[12,6]$ exists. More
+generally, if a $k\times n$ matrix over $\F$ with $k\ge2$ has all nonzero
+combinations of its rows of weight at least $n-k+1$, then $n\le k+2$. Hence
+no code attains the order $660$, and the conjecture is false whatever notion of
+automorphism group is used. The likely intended object, the ternary Golay code
+$[12,6,6]$, does not rescue the claim either. The conjecture's group is the
+stabilizer of the \emph{permutation} equivalence class, i.e.\ the permutation
+automorphism group $\mathrm{PAut}$. The monomial class of the Golay code splits
+into five permutation classes, with $|\mathrm{PAut}|=108,120,432,660,7920$. So the
+maximum is $7920=|M_{11}|$, not $660$, and $108,120,432$ do not divide $132$. If
+``MDS'' is dropped altogether, the $[12,6]$ code of repeated pairs has
+$46080>660$ permutation automorphisms. The main results are formalized in
+Lean~4 (core library only).
+\end{abstract}
+
+\section{The conjecture and how we read it}
+\begin{quote}
+\emph{Definition:} The automorphism group of an MDS code over $\mathrm{GF}(3)$
+of type $[12,6]$ is the stabilizer of its permutation equivalence class.
+\emph{Conjecture:} The maximal order of this automorphism group is $660$
+(attained by an $M_{11}$ embedding); the group orders of all other equivalence
+classes divide $132$.
+\end{quote}
+The Chinese version says the same.
+
+A ternary linear code of type $[n,k]$ is a $k$-dimensional subspace
+$C\subseteq\F^n$. Its minimum distance $d$ is the least Hamming weight of a
+nonzero codeword. The Singleton bound gives $d\le n-k+1$, and $C$ is
+\emph{MDS} (maximum distance separable) if $d=n-k+1$. So an MDS code of type
+$[12,6]$ is a ternary $[12,6,7]$ code.
+
+The conjecture is a conjunction. Its first clause says that the maximum of
+$|\mathrm{Aut}(C)|$ over MDS $[12,6]$ ternary codes $C$ \emph{is} $660$, and that
+this value is \emph{attained}. In particular it asserts that there is an MDS
+$[12,6]$ ternary code whose automorphism group has order $660$. We refute this
+clause, which refutes the conjecture. The remaining clauses are about all MDS
+$[12,6]$ ternary codes. Since there are none, they are vacuously true, and we
+make no claim about them.
+
+The definition of the automorphism group is worded unusually. The usual
+meaning is the stabilizer of $C$ in the group acting on codes: permutations of
+coordinates (the permutation group $\mathrm{PAut}(C)$), or monomial maps
+(permutations combined with nonzero scalars, giving $\mathrm{MAut}(C)$). Over
+$\mathrm{GF}(3)$ there are no nontrivial field automorphisms, so $\mathrm{MAut}$
+is also the full automorphism group. Our main result is that the set of MDS
+$[12,6]$ ternary codes is empty, so the refutation does not depend on which
+notion is meant (Section~\ref{sec:readings}).
+
+\section{Notation}
+Write $\F=\{0,1,2\}$ with arithmetic mod $3$. Every nonzero $x\in\F$ satisfies
+$x^2=1$. For $w\in\F^n$, $\wt(w)$ is the number of nonzero coordinates. A
+$k\times n$ matrix $G$ with rows $g_0,\dots,g_{k-1}$ sends a message
+$m\in\F^k$ to the codeword $mG=\sum_i m_ig_i$. The rows are linearly
+independent if $mG\ne0$ for all $m\ne0$. In that case $C=\{mG\}$ is an
+$[n,k]$ code. Every $[n,k]$ code arises this way (take a basis as the rows).
+
+\section{The main theorem}
+\begin{lemma}[linear dependence]\label{lem:dep}
+Let $r<k$ and let $v_0,\dots,v_{k-1}\in\F^r$. There is a nonzero
+$c\in\F^k$ with $\sum_i c_iv_i=0$.
+\end{lemma}
+\begin{proof}
+Induction on $r$. For $r=0$ take $c=(1,0,\dots,0)$. Let $r\ge1$ and look at the
+last vector $w=v_{k-1}$. If $w=0$, take $c=(0,\dots,0,1)$. Otherwise choose a
+coordinate $j_0$ with $p=w_{j_0}\ne0$, and put
+$v_i'=v_i-(v_{i,j_0}p)\,w$ for $i<k-1$. Since $p^2=1$, every $v_i'$ vanishes at
+$j_0$. Deleting coordinate $j_0$ gives $k-1>r-1$ vectors of $\F^{r-1}$. By
+induction there is a nonzero $c'\in\F^{k-1}$ with $\sum_ic'_iv'_i=0$. Then
+$c=(c'_0,\dots,c'_{k-2},\,-\sum_ic'_iv_{i,j_0}p)$ is nonzero and
+$\sum_ic_iv_i=\sum_ic'_iv'_i=0$.
+\end{proof}
+
+\begin{lemma}[counting]\label{lem:count}
+For $x,y\in\F$ let $N(x,y)$ be the number of the eight pairs
+$(a,b)\in\F^2\setminus\{(0,0)\}$ with $ax+by\ne0$. Then $N(0,0)=0$ and
+$N(x,y)=6$ otherwise.
+\end{lemma}
+\begin{proof}
+If $(x,y)\ne(0,0)$, the map $(a,b)\mapsto ax+by$ is a nonzero linear form on
+$\F^2$. Its kernel has $3$ elements, one of which is $(0,0)$. So $9-3=6$ of the
+eight nonzero pairs give a nonzero value.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+Let $k\ge2$ and let $G$ be a $k\times n$ matrix over $\F$ such that every
+nonzero message $m$ gives $\wt(mG)\ge n-k+1$. Then $n\le k+2$.
+\end{theorem}
+\begin{proof}
+Suppose $n\ge k+3$.
+
+\emph{Step 1.} Apply Lemma~\ref{lem:dep} to the restrictions of the rows
+$g_0,\dots,g_{k-1}$ to the first $k-2$ coordinates. This gives a nonzero
+message $m^{(1)}$ such that $u=m^{(1)}G$ vanishes on coordinates
+$0,\dots,k-3$. Fix $i_0$ with $m^{(1)}_{i_0}\ne0$.
+
+\emph{Step 2.} Apply Lemma~\ref{lem:dep} with $r=k-1$ to the vectors
+$(g_{i,0},\dots,g_{i,k-3},\,[i=i_0])\in\F^{k-1}$. Here the last entry is $1$ for
+$i=i_0$ and $0$ otherwise. This gives a nonzero message $m^{(2)}$ such that
+$v=m^{(2)}G$ vanishes on coordinates $0,\dots,k-3$, and $m^{(2)}_{i_0}=0$.
+
+\emph{Step 3.} Let $(a,b)\ne(0,0)$. The message $m=am^{(1)}+bm^{(2)}$ is
+nonzero: if $a\ne0$ then $m_{i_0}=am^{(1)}_{i_0}\ne0$; if $a=0$ then $b\ne0$
+and $m=bm^{(2)}\ne0$. Hence $\wt(au+bv)=\wt(mG)\ge n-k+1$. Summing over the
+eight nonzero pairs and exchanging the sums,
+\[
+8(n-k+1)\le\sum_{(a,b)\ne(0,0)}\wt(au+bv)=\sum_{j=0}^{n-1}N(u_j,v_j)
+\le 6\,(n-k+2),
+\]
+by Lemma~\ref{lem:count}, because $u_j=v_j=0$ for the first $k-2$ coordinates.
+So $2(n-k)\le4$, that is $n\le k+2$, a contradiction.
+\end{proof}
+
+Theorem~\ref{thm:main} is the case $q=3$ of the classical bound $n\le q+k-1$
+for MDS codes with $k\ge2$ \cite{ms}. In coding-theoretic language, Steps 1--2
+shorten the code $k-2$ times, producing a two-dimensional code of length
+$n-k+2$ with minimum distance at least $n-k+1$. The counting of Step~3 is
+the Plotkin argument for that two-dimensional code. The bound is sharp: the
+tetracode generated by $(1,0,1,1)$ and $(0,1,1,2)$ is a $[4,2,3]$ MDS code.
+
+\begin{corollary}\label{cor:main}
+There is no ternary $[12,6,7]$ code. More strongly, no $6\times12$ matrix over
+$\F$ has all nonzero combinations of its rows of weight $\ge7$. Likewise, there
+is no ternary $[12,7,6]$ code.
+\end{corollary}
+\begin{proof}
+Take $(n,k)=(12,6)$, respectively $(12,7)$, in Theorem~\ref{thm:main}:
+$12>k+2$.
+\end{proof}
+
+Concretely, for $[12,6]$: there are $9$ codewords vanishing on the first four
+coordinates, forming a $2$-dimensional space. Restricted to the last $8$
+coordinates, the $8$ nonzero ones would all need weight $\ge7$, total $\ge56$. But
+each of the $8$ coordinates contributes at most $6$, so the total is at most $48$.
+The Griesmer bound gives another proof: a ternary $[n,6,7]$ code needs
+$n\ge\sum_{i=0}^{5}\lceil7/3^i\rceil=14$.
+
+\section{Consequences for the conjecture}\label{sec:readings}
+\begin{theorem}
+Conjecture 00000001090 is false.
+\end{theorem}
+\begin{proof}
+By Corollary~\ref{cor:main} there is no MDS code over $\mathrm{GF}(3)$ of type
+$[12,6]$. So no such code has an automorphism group of order $660$, and the
+first clause (``the maximal order is $660$, attained'') fails.
+\end{proof}
+
+This argument covers every reasonable reading:
+\begin{itemize}
+\item \emph{Notion of automorphism group.} Permutation group, monomial group,
+full automorphism group, or literally ``the stabilizer of the permutation
+equivalence class'': none of them matter, because there is no code. In Lean we
+state the conjecture for $\mathrm{PAut}$ and for $\mathrm{MAut}$. We also prove
+that no MDS $[12,6]$ ternary code has \emph{any} property $P$.
+\item \emph{Definition of MDS.} We only use $d\ge n-k+1=7$, so the strict
+($d=7$) and non-strict readings are both covered.
+\item \emph{Type $[12,6]$ as $[n,d]$.} If $[12,6]$ meant length $12$ and minimum
+distance $6$, an MDS code would be $[12,7,6]$, which does not exist either
+(Corollary~\ref{cor:main}).
+\item \emph{Golay reading.} The author may have meant the ternary Golay code
+$[12,6,6]$. This reading is treated in Section~\ref{sec:golay}, and the claim is
+false there as well.
+\item \emph{``MDS'' dropped.} Suppose the claim is read for all ternary
+$[12,6]$ codes. It is still false. The code of repeated pairs
+\[
+P=\{(x_0,x_0,x_1,x_1,\dots,x_5,x_5)\}
+\]
+is a $[12,6,2]$ code. Its weight-$2$ words have exactly the supports
+$\{2i,2i+1\}$, so every automorphism permutes these six pairs. Conversely,
+every permutation preserving the pair partition is an automorphism. So
+$|\mathrm{PAut}(P)|=2^6\cdot6!=46080>660$. Lean exhibits $768$ distinct
+permutation automorphisms of $P$. For the monomial group the order is even larger,
+since $\mathrm{PAut}\subseteq\mathrm{MAut}$.
+\end{itemize}
+
+\section{The Golay reading}\label{sec:golay}
+Up to monomial equivalence, the extended ternary Golay code $\mathcal G$ is the
+unique ternary $[12,6,6]$ code \cite{pless,dg}. Its monomial automorphism group is
+$2.M_{12}$, of order $190080$ \cite{cs}. The conjecture, however, defines the
+group as the stabilizer of the \emph{permutation} equivalence class, i.e.\ the
+permutation automorphism group $\mathrm{PAut}$. Monomially equivalent codes can
+have different $\mathrm{PAut}$. So the relevant data are the orders of
+$\mathrm{PAut}$ on the permutation classes inside the monomial class of
+$\mathcal G$.
+
+\begin{proposition}\label{prop:golay}
+The monomial class of $\mathcal G$ consists of exactly five permutation
+equivalence classes, with $|\mathrm{PAut}|=108$, $120$, $432$, $660$ and $7920$.
+Let \texttt{golay} be the generator matrix $[I_6\mid A]$ of Section~\ref{sec:readings}. Then
+\texttt{golay} has $|\mathrm{PAut}|=660$. Multiplying its column $6$
+(0-indexed) by $2$ gives \texttt{golay'}, with $|\mathrm{PAut}|=7920=|M_{11}|$.
+\end{proposition}
+Since $\mathrm{PAut}(\texttt{golay'})$ lies in the hexad-stabilizer $H\cong M_{12}$
+(see the proof), a subgroup of order $7920$ has index $12$ in $M_{12}$. Every
+subgroup of index $12$ in $M_{12}$ is isomorphic to $M_{11}$ (Conway et al., ATLAS
+of Finite Groups, 1985). So $\mathrm{PAut}(\texttt{golay'})\cong M_{11}$. Only the
+order is verified by computer; the isomorphism type follows from this standard fact.
+\begin{proof}[Proof (computer-assisted, \texttt{verify.py})]
+\emph{Setup.} Every code in the class is permutation equivalent to some
+$C_d=\mathcal G\cdot\mathrm{diag}(d)$ with $d\in\{1,2\}^{12}$. Here $d$ is taken
+modulo $\pm1$, giving $2^{11}$ twists. A permutation $\sigma$ maps $C_d$ to
+$C_{d'}$ only if it preserves the $132$ supports of weight-$6$ words. These
+supports are the same for all $C_d$. The $95040$ permutations preserving them
+form $H\cong M_{12}$.
+
+\emph{Signs.} The script computes $H$. For each $\sigma\in H$, it finds exactly
+two sign vectors $\pm s(\sigma)$ making $c\mapsto s(\sigma)\cdot(c\circ\sigma)$ an
+automorphism of $\mathcal G$. It also checks that the only diagonal automorphisms
+are $\pm1$.
+
+\emph{Action.} It follows that $C_d\circ\sigma=C_{s(\sigma)(d\circ\sigma)}$.
+So $H$ acts on the $2^{11}$ twists. Two twists give permutation-equivalent
+codes if and only if they lie in the same orbit, and
+$\mathrm{PAut}(C_d)$ is the stabilizer of $d$.
+
+\emph{Orbits.} The script exhibits twists whose stabilizers have orders $108$,
+$120$, $432$, $660$ and $7920$. Conjugate stabilizers have equal order, so these
+five twists lie in different orbits. The orbit sizes are
+$95040/108=880$, $95040/120=792$, $95040/432=220$, $95040/660=144$ and
+$95040/7920=12$. They sum to $2048=2^{11}$, so these are all the orbits.
+\end{proof}
+
+\begin{theorem}\label{thm:golay}
+Under the Golay reading, the conjecture is false.
+\begin{itemize}
+\item The maximal order is $7920$, not $660$. It is attained by \texttt{golay'}.
+\item The orders $108$, $120$ and $432$ of three other classes do not divide $132$.
+\end{itemize}
+\end{theorem}
+\begin{proof}
+This follows from Proposition~\ref{prop:golay}. Lean proves the first item
+independently of the Python enumeration, in the following form. \texttt{golay'}
+generates a $[12,6]$ code of minimum distance exactly $6$. Lean exhibits
+$720>660$ distinct permutation automorphisms of it.
+\end{proof}
+
+\begin{remark}
+The order $660=|\mathrm{PSL}(2,11)|$ is attained, by \texttt{golay}. But
+$M_{11}$ (order $7920$) cannot embed in a group of order $660$. In fact $M_{11}$
+itself occurs as a full $\mathrm{PAut}$, namely of \texttt{golay'}. So the
+claimed maximum $660$ is wrong, and the parenthetical ``attained by an $M_{11}$
+embedding'' points to the actual maximum $7920$.
+\end{remark}
+
+\paragraph{The 720 automorphisms in Lean.} The automorphisms of \texttt{golay'}
+exhibited in Lean are the products $h\circ k$ with $h\in H_1$ and $k\in H_2$:
+\begin{itemize}
+\item $H_1$ consists of $30$ automorphisms with pairwise different images of
+the points $(0,1)$.
+\item $H_2$ consists of $24$ automorphisms fixing $0$ and $1$.
+\end{itemize}
+Each of these $54$ permutations is checked to be an automorphism: every permuted
+generator row is the codeword of its own first six entries (\texttt{RowsOK},
+\texttt{paut\_of\_rows}). Products of automorphisms are automorphisms
+(\texttt{autCore\_comp}). Products with different $h$ differ at $0$ or $1$, and
+for a fixed $h$ the $24$ products are checked to be distinct.
+
+\begin{remark}[non-vacuity]
+The obstruction is exactly the distance $7$. Ternary $[12,6]$ codes exist, for
+example the extended ternary Golay code with generator matrix $[I_6\mid A]$, where
+the rows of $A$ are $011111$, $101221$, $110122$, $121012$, $122101$, $112210$. Its
+weight distribution is $1,264,440,24$ in weights $0,6,9,12$, so its minimum
+distance is $6=n-k$, one less than MDS. MDS codes themselves exist in the
+admissible range $n\le k+2$ (the tetracode). Lean proves both facts.
+\end{remark}
+
+\section{Lean formalization}
+The directory \texttt{lean4/} is a self-contained Lean~4.19.0 project (core
+library only, no Mathlib). $\F$ is \texttt{Fin 3}.
+\begin{itemize}
+\item \texttt{comb k c G j} $=\sum_{i<k}c_iG_{ij}$, \texttt{codeword k G m},
+\texttt{wt n w} (Hamming weight on coordinates $<n$), \texttt{Nonzero k m}.
+\texttt{IsGenMatrix n k G}: the rows are linearly independent (an $[n,k]$ code).
+\texttt{InCode}, \texttt{MinDistGe}, \texttt{HasMinDist}, and
+\texttt{IsMDS n k G} $:=$ \texttt{IsGenMatrix} $\wedge$ minimum distance
+exactly $n-k+1$.
+\item \texttt{dep} is Lemma~\ref{lem:dep}, proved by the elimination of its
+proof (\texttt{elimV}, \texttt{skipCoord}). \texttt{cnt}, \texttt{pairWt\_eq}
+and \texttt{sumTo\_bound} give Lemma~\ref{lem:count} and the exchange of sums.
+\texttt{no\_mds\_ternary}: for $2\le k$, $k+3\le n$ and every $G$,
+$\neg$\texttt{MinDistGe n k G (n-k+1)}. This is Theorem~\ref{thm:main}, proved
+for all $n,k$ symbolically, not by enumeration.
+\item \texttt{IsPAut}, \texttt{IsMAut}: permutations (lists of images) and
+monomial maps sending every codeword to a codeword. \texttt{PAutOrder n k G N}
+and \texttt{MAutOrder n k G N} say that a duplicate-free list of length $N$
+consists of exactly the automorphisms.
+\item \texttt{Conjecture1090} (and \texttt{Conjecture1090Mon}) is the conjunction
+(attained $660$) $\wedge$ (all orders $\le660$) $\wedge$ (other orders divide
+$132$). \texttt{conjecture\_00000001090\_false : $\neg$Conjecture1090} and
+\texttt{conjecture\_00000001090\_monomial\_false} refute them through
+\texttt{attained\_false}. \texttt{no\_mds\_12\_6}, \texttt{no\_dist7\_12\_6},
+\texttt{no\_mds\_12\_6\_with} (any property $P$) and \texttt{no\_mds\_12\_7}
+cover the readings above.
+\item Non-vacuity: \texttt{tetra\_mds : IsMDS 4 2 tetra} and
+\texttt{golay\_12\_6\_6} (the Golay code is a $[12,6]$ code with minimum distance
+exactly $6$; checked over all $729$ messages by \texttt{decide +kernel}).
+\item Golay reading: \texttt{golay'} (column $6$ of \texttt{golay} doubled) and
+\texttt{golay'\_12\_6\_6} (a $[12,6]$ code with minimum distance exactly $6$).
+\texttt{golayAuts\_aut} and \texttt{golayAuts\_nodup} show that the $720$
+products $h\circ k$ are distinct permutation automorphisms.
+\texttt{golay\_reading\_witness} gives a $[12,6,6]$ code with more than $660$
+distinct permutation automorphisms, and \texttt{golay\_reading\_false} gives
+$\neg$\texttt{GolayMax660} (``no $[12,6,6]$ ternary code has more than $660$
+permutation automorphisms''). \texttt{golay'\_order\_ge} shows that any
+\texttt{PAutOrder} of \texttt{golay'} is at least $720$. The exact orders
+$660$ and $7920$ and the five-class spectrum are computed in \texttt{verify.py}
+only.
+\item ``MDS'' dropped: \texttt{pair\_gen}, \texttt{pair\_aut},
+\texttt{pairAuts\_nodup}, \texttt{atMost660\_false} (some $[12,6]$ code has
+more than $660$ distinct permutation automorphisms), and
+\texttt{pair\_order\_ge} (if \texttt{PAutOrder 12 6 pairG N} then
+$N\ge768$). The exact value $46080$ is checked in \texttt{verify.py}
+only.
+\end{itemize}
+\texttt{lake build} succeeds with no errors or warnings. There is no
+\texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+\texttt{\#print axioms} shows only \texttt{propext} and \texttt{Quot.sound} for
+all results about MDS codes and for \texttt{golay'\_12\_6\_6}. The results
+built on the automorphism lists (\texttt{atMost660\_false},
+\texttt{pair\_order\_ge}, \texttt{golay\_reading\_witness},
+\texttt{golay\_reading\_false}, \texttt{golay'\_order\_ge}) may also use the
+standard axiom \texttt{Classical.choice}, through core list lemmas.
+
+\section{Independent check}
+\texttt{verify.py} (Python~3 standard library) uses different methods:
+\begin{itemize}
+\item It searches all $1280^2$ pairs of words of weight $\ge7$ in $\F^8$ and finds
+none spanning a code with all nonzero weights $\ge7$, so no $[8,2,7]$ code
+exists. The best ternary $[8,2]$ code has $d=6$.
+\item It checks that no systematic $[5,2,4]$ or $[6,3,4]$ ternary code exists.
+An MDS code is always systematic on its first $k$ coordinates.
+\item It evaluates the Griesmer bound ($n\ge14$ for $[n,6,7]_3$).
+\item On $300$ random $[12,6]$ ternary codes, it runs the construction of
+Theorem~\ref{thm:main} and computes the exact minimum distance (always
+$\le6$).
+\item It computes the weight distributions of the tetracode and the Golay code.
+\item It enumerates all $46080$ pair-preserving permutations, confirms that they
+are automorphisms of $P$, confirms that the weight-$2$ supports are the six pairs,
+and re-checks the $768$ permutations used in Lean.
+\item It carries out the proof of Proposition~\ref{prop:golay}. It computes the
+$95040$ hexad-preserving permutations, the signs $s(\sigma)$, and the
+stabilizer orders $108,120,432,660,7920$ with orbit sizes summing to
+$2^{11}$. It confirms $|\mathrm{PAut}(\texttt{golay})|=660$ and
+$|\mathrm{PAut}(\texttt{golay'})|=7920$, and re-checks the $720$ products
+$h\circ k$ read from \texttt{Main.lean}.
+\end{itemize}
+
+\section{Reproduction}
+\begin{verbatim}
+cd lean4 && lake build     # Lean 4.19.0, core only
+cd .. && python3 verify.py
+pdflatex report.tex && pdflatex report.tex
+\end{verbatim}
+
+\begin{thebibliography}{9}
+\bibitem{ms} F.~J.~MacWilliams and N.~J.~A.~Sloane, \emph{The Theory of
+Error-Correcting Codes}, North-Holland, 1977, Ch.~11 (MDS codes; $n\le q+k-1$
+for $k\ge2$).
+\bibitem{cs} J.~H.~Conway and N.~J.~A.~Sloane, \emph{Sphere Packings, Lattices
+and Groups}, 3rd ed., Springer, 1999 (the ternary Golay code and $2.M_{12}$).
+\bibitem{pless} V.~Pless, On the uniqueness of the Golay codes, \emph{J.
+Combin. Theory} 5 (1968), 215--228.
+\bibitem{dg} P.~Delsarte and J.-M.~Goethals, Unrestricted codes with the Golay
+parameters are unique, \emph{Discrete Math.} 12 (1975), 211--224.
+\end{thebibliography}
+\end{document}
