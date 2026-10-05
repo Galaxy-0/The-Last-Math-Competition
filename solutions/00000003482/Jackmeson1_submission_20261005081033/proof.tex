@@ -1,0 +1,172 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Conjecture 00000003482: the maximal gap $\chi-\chi_f$ is at least $n/10$ for $n=5t$, so it is not of order $n/(\log n)^2$}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\textbf{English.} Definition: The chromatic scale deviation is the extremal behavior of the gap
+between the chromatic and fractional chromatic numbers. Conjecture: There exist graph families
+where the difference between the chromatic and fractional chromatic numbers exceeds $n^{1/3}$,
+attained by compositions of Kneser graphs with Mycielski constructions; the maximal order of
+deviation is $n$ over the logarithm squared, with extremal structure pseudorandom graphs.
+
+\textbf{Chinese text.} The Chinese version says the same; its last clause reads (translated) ``the
+maximal order of the deviation is $n$ divided by the logarithm squared, and the extremal structure is
+pseudorandom graphs''. The deviation is the gap (difference) between the chromatic number and the
+fractional chromatic number.
+
+\section{Reading}
+
+The conjecture is a conjunction. We refute its \emph{order clause}. For a finite graph $G$ let the
+deviation be $\chi(G)-\chi_f(G)$ (the text calls it the ``gap'' and the ``difference'' between the two
+numbers), and let
+\[
+  M(n) \;=\; \max_{G \text{ a graph on } \{0,\dots,n-1\}} \bigl(\chi(G)-\chi_f(G)\bigr).
+\]
+``The maximal order of deviation is $n/(\log n)^2$'' is read as a growth statement about $M(n)$ as
+$n\to\infty$. We refute each of the following readings:
+\begin{itemize}
+  \item[(O)] $M(n)=O\bigl(n/(\log n)^2\bigr)$;
+  \item[($\Theta$)] $M(n)=\Theta\bigl(n/(\log n)^2\bigr)$;
+  \item[($\sim$)] $M(n)\sim n/(\log n)^2$.
+\end{itemize}
+More generally we show that $M$ is not $O(f)$ for any $f=o(n)$, so the base of the logarithm, or
+reading the expression as $n/\log(n^2)$, does not matter.
+
+\emph{Readings not refuted.} A purely lower-bound reading $M(n)=\Omega(n/(\log n)^2)$ is true (by the
+same family) and is not refuted. A reading in which the ``deviation'' is the ratio
+$\chi/\chi_f$ rather than the difference is not addressed. The existence clause (a family with gap
+exceeding $n^{1/3}$) is not needed and is in fact satisfied by our family.
+
+\emph{Conventions.} $\log$ is the natural logarithm (\texttt{Real.log}); at $n\le 1$ Lean has
+$\log n=0$ and $x/0=0$, which is irrelevant for statements along \texttt{atTop}. $O$, $\Theta$ and
+$\sim$ are Mathlib's \texttt{IsBigO}, \texttt{IsTheta} and \texttt{IsEquivalent} along
+\texttt{atTop} on $\mathbb{N}$. $\chi(G)$ is Mathlib's \texttt{SimpleGraph.chromaticNumber} (a value
+in $\mathbb{N}\cup\{\infty\}$), converted to $\mathbb{N}$ by \texttt{ENat.toNat}; this is harmless
+because $\chi(G)\le |V|<\infty$ for finite graphs, which we prove where used.
+
+\section{Definitions}
+
+\begin{definition}[Fractional chromatic number]
+Let $G$ be a finite simple graph on $V$. A \emph{fractional colouring} is a function
+$w:2^V\to\mathbb{R}$ with $w(S)\ge 0$ for all $S$, $w(S)=0$ unless $S$ is independent, and
+$\sum_{S\ni v} w(S)\ge 1$ for every vertex $v$. The fractional chromatic number is
+$\chi_f(G)=\inf\{\sum_S w(S): w \text{ a fractional colouring}\}$.
+\end{definition}
+
+This is the standard linear-programming definition. Wikipedia, \emph{Fractional coloring}
+(\url{https://en.wikipedia.org/wiki/Fractional_coloring}): ``Fractional graph coloring can be viewed
+as the linear programming relaxation of traditional graph coloring.''; $\chi_f(G)$ ``can be obtained
+as a solution to a linear program''; ``For each independent set I, define a nonnegative real variable
+xI.'' (the objective is $\sum_I x_I$ subject to $\sum_{I\ni x}x_I\ge 1$ for each vertex $x$).
+Allowing $w$ on all subsets but forcing $w=0$ off independent sets is the same LP. In Lean:
+\texttt{IsFracColoring} and \texttt{fracChromaticNumber} (an \texttt{sInf} in $\mathbb{R}$). The set
+of fractional colourings is nonempty (weight $1$ on singletons; \texttt{fracColoring\_nonempty}), so
+the infimum is not a junk value.
+
+The deviation is \texttt{gap G} $=\chi(G)-\chi_f(G)$, and \texttt{maxGap n} $=\sup_{G}$
+\texttt{gap G} over all \texttt{G : SimpleGraph (Fin n)} (a finite supremum, i.e.\ $M(n)$).
+
+\section{The witness family}
+
+Let $G_t$ be the join of $t$ copies of the 5-cycle $C_5$: vertex set $\{0,\dots,t-1\}\times\mathbb{Z}_5$,
+with $(i,a)\sim(j,b)$ iff $i\ne j$, or $i=j$ and $a-b=\pm1$. It has $n=5t$ vertices. In Lean,
+\texttt{joinC5 t} on \texttt{Fin t $\times$ Fin 5} (using Mathlib's \texttt{cycleGraph 5}) is
+transported to \texttt{witness t : SimpleGraph (Fin (t * 5))} along \texttt{finProdFinEquiv}.
+
+\begin{lemma}[\texttt{three\_colors}]
+Every proper colouring of $C_5$ uses at least three colours.
+\end{lemma}
+\begin{proof}
+Let $c_0,\dots,c_4$ be the colours, consecutive ones distinct. If $c_0\ne c_2$ then $c_0,c_1,c_2$ are
+distinct. Otherwise $c_2=c_0$; if $c_3\ne c_1$ then $c_0,c_1,c_3$ are distinct ($c_3\ne c_2=c_0$);
+otherwise $c_3=c_1$ and $c_0,c_1,c_4$ are distinct ($c_4\ne c_0$, $c_4\ne c_3=c_1$).
+\end{proof}
+
+\begin{lemma}[\texttt{three\_mul\_le\_of\_coloring}, \texttt{chromaticNumber\_witness}]
+$\chi(G_t)\ge 3t$.
+\end{lemma}
+\begin{proof}
+Given a proper colouring with $k$ colours, let $S_i$ be the set of colours used on copy $i$. By the
+previous lemma $|S_i|\ge 3$. Vertices of different copies are adjacent, so the $S_i$ are pairwise
+disjoint. Hence $3t\le\sum_i|S_i|=|\bigcup_i S_i|\le k$.
+\end{proof}
+
+\begin{lemma}[\texttt{wt\_isFracColoring}, \texttt{fracChromaticNumber\_witness}]
+$\chi_f(G_t)\le 5t/2$.
+\end{lemma}
+\begin{proof}
+Put weight $1/2$ on each set $\{(i,a),(i,a+2)\}$ ($i<t$, $a\in\mathbb{Z}_5$) and $0$ elsewhere. Each
+such set is independent, since $a$ and $a+2$ are not adjacent in $C_5$. A vertex $(i,a)$ lies in the
+two distinct sets coming from $a$ and from $a+3$ (as $a+3+2=a$), so it receives weight at least $1$.
+There are at most $5t$ such sets, so the total weight is at most $5t/2$.
+\end{proof}
+
+\begin{theorem}[\texttt{gap\_witness}, \texttt{maxGap\_ge}]
+$\chi(G_t)-\chi_f(G_t)\ge t/2$, hence $M(5t)\ge t/2=n/10$.
+\end{theorem}
+
+\section{Asymptotic conclusion}
+
+\begin{theorem}[\texttt{not\_isBigO\_of\_isLittleO}]
+If $f:\mathbb{N}\to\mathbb{R}$ satisfies $f=o(n)$, then $M$ is not $O(f)$.
+\end{theorem}
+\begin{proof}
+If $M=O(f)$ then $M=o(n)$. Composing with $t\mapsto 5t$ (which tends to infinity), eventually
+$|M(5t)|\le\frac1{20}\cdot 5t=t/4$. For $t\ge1$ this contradicts $M(5t)\ge t/2$.
+\end{proof}
+
+\begin{lemma}[\texttt{div\_log\_sq\_isLittleO}]
+$n/(\log n)^2=o(n)$.
+\end{lemma}
+\begin{proof}
+$n/(\log n)^2=n\cdot(\log n)^{-2}$ and $(\log n)^{-2}\to0$ because $(\log n)^2\to\infty$.
+\end{proof}
+
+\begin{corollary}[Main theorem]
+\leavevmode
+\begin{itemize}
+  \item \texttt{maxGap\_not\_isBigO}: $\neg\,(M=O(n/(\log n)^2))$;
+  \item \texttt{maxGap\_not\_isTheta}: $\neg\,(M=\Theta(n/(\log n)^2))$;
+  \item \texttt{maxGap\_not\_isEquivalent}: $\neg\,(M\sim n/(\log n)^2)$.
+\end{itemize}
+Hence the order clause of Conjecture 00000003482 is false under readings (O), ($\Theta$) and
+($\sim$), and so the conjunction is false.
+\end{corollary}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture3482/Basic.lean} (namespace \texttt{C3482}, only import
+\texttt{Mathlib}, 262 lines). The main statement is (Unicode symbols spelled out in ASCII here)
+\begin{verbatim}
+theorem maxGap_not_isBigO :
+    NOT maxGap =O[atTop] (fun n : Nat => (n : Real) / Real.log n ^ 2)
+\end{verbatim}
+where \texttt{maxGap n := iSup (fun G : SimpleGraph (Fin n) => gap G)} and
+\texttt{gap G := (G.chromaticNumber.toNat : Real) - fracChromaticNumber G}. The file builds with
+\texttt{lake build}. Axiom audit (\texttt{\#print axioms}) for \texttt{maxGap\_not\_isBigO},
+\texttt{maxGap\_not\_isTheta}, \texttt{maxGap\_not\_isEquivalent} and
+\texttt{not\_isBigO\_of\_isLittleO}: \texttt{[propext, Classical.choice, Quot.sound]}. There is no
+\texttt{sorry} and no \texttt{native\_decide}; \texttt{decide} is used only on statements about
+\texttt{Fin 5}.
+
+\end{document}
