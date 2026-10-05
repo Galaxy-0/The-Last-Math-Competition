@@ -1,0 +1,83 @@
+Conjecture 00000000989 — independent author explanation
+
+Result and scope
+
+The conjecture is false under the standard positive-map meaning of indecomposable. Every completely positive map is decomposable. This is independent of its Choi rank, and therefore also excludes the specified Choi rank d² − 1. The proof concerns actual complex-linear maps M_d(C) -> M_d(C), with d a positive integer denoting matrix side length. It forbids every nonempty family, so in particular forbids explicit nonempty families.
+
+The exact bilingual source was read in full, as were both complete competition guides and the clean handoff. No earlier mathematical solution, other problem, submission, operational PR history or prior mathematical notes were consulted. The candidate-free preassessment supplied the terminology and semantic obligations, but no proposed proof. The author independently derived the obstruction below.
+
+Original statement
+
+English: “Conjecture: There exists an explicit family of indecomposable completely positive maps of dimension d with Choi rank d² − 1 (extremal Choi rank).”
+Chinese: “猜想：存在维数为 d 的完全正映射其不可分解,而其 Choi 秩为 d² − 1 的显式家族(Choi 秩极值)。”
+
+Disclosed conventions and omissions
+
+1. The source does not specify the domain and codomain independently. The square-system convention M_d(C) -> M_d(C) is used. Here d is the Hilbert-space dimension, i.e. matrix side length, and M_d(C) has complex vector-space dimension d². This convention is compatible with the stated d²-sized Choi rank expression; it is an interpretation, not text supplied by the source.
+2. The source does not specify a lower cutoff. Members are required to have d > 0. The central obstruction is uniform in all natural d, and hence rules out every possible positive lower cutoff or infinite positive parameter subset. Dimension zero and truncated subtraction there are not used to disprove the claim.
+3. A positive map preserves Hermitian positive-semidefinite complex matrices. Complete positivity means that id_k tensor Phi is positive for every positive integer k.
+4. Decomposable has its standard positive-map meaning: Phi = S + transpose composed with T, with S and T completely positive maps of the same source and target. Zero summands are permitted. Indecomposable means positive and not decomposable. No trace-preserving, unital, nonzero-summand, irreducibility or positivity-improvement condition is imposed.
+5. The transpose is ordinary matrix transpose in the fixed coordinate basis, applied on the output, not conjugate transpose. This directly uses the convention cited in the preassessment, so no input/output convention conversion is needed.
+6. Choi matrix means the unnormalized matrix C_Phi = sum_ij E_ij tensor Phi(E_ij). Its complex matrix rank is the Choi rank. The phrase “extremal Choi rank” gives no optimization class or extra predicate; the formalization retains the explicit equality rank(C_Phi) = d² − 1. An extreme ray, a convex extreme point, and direct-sum indecomposability are different notions and are not substituted for positive-map indecomposability. The result is not a claim about these unspecified alternative questions.
+7. A family must have a nonempty index set. The theorem actually forbids every nonempty family, including ones whose dimensions vary with the index. “Explicit” is not represented by an arbitrary Boolean or predicate. No family exists even after dropping any possible additional explicitness requirement.
+
+Complete mathematical argument
+
+For each d and k, let Z : M_d(C) -> M_d(C) be the zero complex-linear map. Its block ampliation sends every matrix in M_k(M_d(C)) to the zero matrix. The zero matrix is Hermitian and its quadratic form v*0v equals zero for every complex vector v, so it is positive semidefinite. Thus Z is completely positive.
+
+Let Phi be any completely positive map. Set S = Phi and T = Z. Both are completely positive. Ordinary transpose is complex-linear and takes the zero matrix to zero. Therefore for every A in M_d(C),
+
+  (S + transpose composed with T)(A)
+    = Phi(A) + transpose(0)
+    = Phi(A).
+
+This is a valid decomposition in the stated cone, proving that Phi is decomposable. Consequently Phi cannot be indecomposable. No rank property has entered this proof.
+
+In particular there cannot exist a positive-dimensional map simultaneously satisfying complete positivity, indecomposability and rank(C_Phi) = d² − 1. If a purported family had a nonempty index set I, choose an index i. Its member would satisfy this impossible conjunction, a contradiction. Thus no nonempty family exists, and an explicit nonempty family cannot exist.
+
+Formal correspondence and the semantic obligations
+
+All declarations are in namespace Conjecture989, in the single root source Conjecture989.lean.
+
+A. Actual matrix objects and linear maps
+
+Mat d abbreviates Matrix (Fin d) (Fin d) Complex. MatrixMap d abbreviates Mat d ->_Complex Mat d using Mathlib's LinearMap type. Thus map linearity is a verified structure field; CP, indecomposability and rank are predicates or operations on the actual maps, not unrelated stored tags.
+
+B. Genuine positive-semidefinite semantics
+
+The proof uses Mathlib's Matrix.PosSemidef. The theorem posSemidef_iff_quadratic exposes it as Hermitian symmetry together with, for every complex vector v, nonnegative real part and zero imaginary part of dotProduct(star v, A mulVec v). This is exactly v* A v >= 0. The complex partial order here is the nonnegative-real cone, not an entrywise matrix order. The zero PSD certificate is Mathlib's verified Matrix.PosSemidef.zero.
+
+C. Genuine ampliations and tensor ordering
+
+The complex-linear amplification Phi k acts on actual matrices indexed by Fin k times Fin d. The first coordinate is the block/tensor-first index. Its entry formula is
+
+  amplification Phi k X [(a,i),(b,j)]
+    = Phi(block X a b)[i,j],
+
+where block X a b [i,j] = X[(a,i),(b,j)]. Complex linearity is proved in the LinearMap constructor. amplification_apply exposes the entry formula. amplification_kronecker proves on the library's genuine matrix Kronecker product that
+
+  amplification Phi k (B tensor A) = B tensor Phi(A).
+
+block_kronecker_expansion proves that every block matrix X is the finite sum over a,b of E_ab tensor block X a b. Therefore the formula acts as id_k tensor Phi on every matrix, not just on a special input set. CompletelyPositive quantifies over all k > 0 and all PSD matrices of this actual size. CompletelyPositive.positive recovers ordinary positivity by embedding A into the k=1 indexed matrix and restricting its PSD amplified output back to the original indices.
+
+D. Actual map operations and the output transpose
+
+transposeMap d is the library Matrix.transposeLinearEquiv restricted to a linear map. transposeMap_apply identifies its output with A.transpose, and transposeMap_entry gives A[j,i] with no complex conjugation. Decomposable quantifies over two actual MatrixMap d objects and uses the library map addition and LinearMap.comp. decomposition_apply exposes the formula S(A) + transpose(T(A)). The zero map is the actual zero in the library linear-map module, not a special label. amplification_zero and zero_completelyPositive prove that this zero summand meets the CP predicate. CompletelyPositive.decomposable supplies Phi and zero as its witnesses.
+
+E. Genuine Choi matrix and rank
+
+matrixUnit is the library standard matrix unit; matrixUnit_entry verifies its entries. choiMatrix is indexed by Fin d times Fin d with input index first and output index second. choiMatrix_entry gives exactly Phi(E_ij)[a,b] at indices ((i,a),(j,b)). choiMatrix_eq_sum establishes the standard unnormalized Kronecker sum formula. No Choi positivity theorem or Kraus theorem is needed because the obstruction excludes all CP indecomposable maps before testing rank.
+
+choiRank is Matrix.rank of this very Choi matrix. choiRank_eq_finrank identifies it with the complex vector-space dimension of the range of the Choi matrix's mulVecLin map. It is not the rank of Phi as a linear transformation on matrix space. choi_index_card proves the d² by d² size and choiRank_le proves the usual rank upper bound. rankCondition_iff_corankOne proves for d > 0 that choiRank Phi = d² − 1 is equivalent to choiRank Phi + 1 = d², so natural subtraction has its intended corank-one meaning.
+
+F. Final negation and nonempty families
+
+ConjecturedMember d Phi is exactly the conjunction d > 0, CompletelyPositive Phi, Indecomposable Phi and choiRank Phi = d² − 1. no_conjectured_member rejects this conjunction at every d and actual map. no_nonempty_family is universe-polymorphic in its nonempty index type and allows a separate dimension and map for every member. conjecture989_false packages the standard existential family claim as a negated existential over an index type, its nonemptiness, its dimension function and its dependent family of actual maps. Its conclusion therefore visibly negates the chosen positive-dimensional square-system reading. The absence of all such families implies the absence of explicitly specified ones without introducing an uninterpreted explicitness predicate.
+
+Author verification
+
+The exact final source and all three project configuration files were normalized to have no trailing whitespace and exactly one final newline. All real/complex data definitions are explicitly noncomputable; type abbreviations and proposition-valued definitions require no such annotation. The only imported modules are Matrix.PosDef, Matrix.Rank, Matrix.Kronecker and Matrix.Basis, at pinned Mathlib v4.19.0 and Lean 4.19.0.
+
+The author ran lake build successfully with warningAsError=true in the library configuration, then replayed the entire sole local Lean source with an explicit -DwarningAsError=true. All 35 named public declarations were individually audited with #print axioms. The only axiom roots across them are the standard Lean/Mathlib roots propext, Classical.choice and Quot.sound. There are no custom axioms, sorry/admit, native_decide, unsafe/partial definitions, compiler bypass annotations or numerical proof-generation mechanisms in the source. The audit/integrity script performs verification only and is not part of the mathematical proof.
+
+Logs and hashes are recorded in author-checks.json, toolchain.log, author-build.log, strict-source-replay.log and all-public-axioms.log. No LaTeX report, PDF, repository contribution or external write has been made at this stage. Independent review remains a distinct next step.

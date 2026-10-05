@@ -1,0 +1,599 @@
+{
+  "method": "Enumerate imported environment constants by actual originating module; emit full type, declaration kind, safety flags and transitive collectAxioms result for every constant. No name-prefix filter or silent exclusion.",
+  "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "IndependentEnvironmentInventory.lean"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 7.428,
+  "module_names": [
+    "Conjecture989"
+  ],
+  "harness_sha256": "232d8cf80c1d95c007fbfdcb55912650bef34a48bb046aa6368bd86e2c7912e2",
+  "log": "environment-inventory.txt",
+  "parsed_count": 43,
+  "emitted_count_markers": [
+    43
+  ],
+  "authored_count": 35,
+  "all_authored_names_present": true,
+  "generated_or_additional_names": [
+    "Conjecture989.Decomposable._proof_3",
+    "Conjecture989.amplification._proof_1",
+    "Conjecture989.amplification._proof_2",
+    "Conjecture989.block.eq_1",
+    "Conjecture989.choiMatrix.eq_1",
+    "Conjecture989.choiRank.eq_1",
+    "Conjecture989.matrixUnit.eq_1",
+    "Matrix.kroneckerMap.eq_1"
+  ],
+  "generated_or_additional_count": 8,
+  "compiler_runtime_generated_names": [],
+  "compiler_runtime_note": "All runtime constants remain included and axiom-audited; _cstage1/_cstage2 compiler outputs are distinguished from safe kernel-level authored declarations.",
+  "unexpected_unsafe": [],
+  "partial_declarations": [],
+  "axiom_declarations": [],
+  "only_allowed_axioms": true,
+  "declarations": [
+    {
+      "unsafe": false,
+      "type": "{d : Nat} \u2192 Conjecture989.MatrixMap d \u2192 Prop",
+      "partial": false,
+      "name": "Conjecture989.CompletelyPositive",
+      "module": "Conjecture989",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} {\u03a6 : Conjecture989.MatrixMap d}, Conjecture989.CompletelyPositive \u03a6 \u2192 Conjecture989.Decomposable \u03a6",
+      "partial": false,
+      "name": "Conjecture989.CompletelyPositive.decomposable",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} {\u03a6 : Conjecture989.MatrixMap d}, Conjecture989.CompletelyPositive \u03a6 \u2192 Conjecture989.Positive \u03a6",
+      "partial": false,
+      "name": "Conjecture989.CompletelyPositive.positive",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "(d : Nat) \u2192 Conjecture989.MatrixMap d \u2192 Prop",
+      "partial": false,
+      "name": "Conjecture989.ConjecturedMember",
+      "module": "Conjecture989",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "{d : Nat} \u2192 Conjecture989.MatrixMap d \u2192 Prop",
+      "partial": false,
+      "name": "Conjecture989.Decomposable",
+      "module": "Conjecture989",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "RingHomCompTriple.{0, 0, 0} (RingHom.id.{0} Complex) (RingHom.id.{0} Complex) (RingHom.id.{0} Complex)",
+      "partial": false,
+      "name": "Conjecture989.Decomposable._proof_3",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "{d : Nat} \u2192 Conjecture989.MatrixMap d \u2192 Prop",
+      "partial": false,
+      "name": "Conjecture989.Indecomposable",
+      "module": "Conjecture989",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Nat \u2192 Type",
+      "partial": false,
+      "name": "Conjecture989.Mat",
+      "module": "Conjecture989",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Nat \u2192 Type",
+      "partial": false,
+      "name": "Conjecture989.MatrixMap",
+      "module": "Conjecture989",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "{d : Nat} \u2192 Conjecture989.MatrixMap d \u2192 Prop",
+      "partial": false,
+      "name": "Conjecture989.Positive",
+      "module": "Conjecture989",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "{d : Nat} \u2192\n  Conjecture989.MatrixMap d \u2192\n    (k : Nat) \u2192\n      LinearMap.{0, 0, 0, 0} (RingHom.id.{0} Complex)\n        (Matrix.{0, 0, 0} (Prod.{0, 0} (Fin k) (Fin d)) (Prod.{0, 0} (Fin k) (Fin d)) Complex)\n        (Matrix.{0, 0, 0} (Prod.{0, 0} (Fin k) (Fin d)) (Prod.{0, 0} (Fin k) (Fin d)) Complex)",
+      "partial": false,
+      "name": "Conjecture989.amplification",
+      "module": "Conjecture989",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} (\u03a6 : Conjecture989.MatrixMap d) (k : Nat)\n  (X Y : Matrix.{0, 0, 0} (Prod.{0, 0} (Fin k) (Fin d)) (Prod.{0, 0} (Fin k) (Fin d)) Complex),\n  Eq.{1} (fun a b => \u03a6 (Conjecture989.block (HAdd.hAdd.{0, 0, 0} X Y) a.1 b.1) a.2 b.2)\n    (HAdd.hAdd.{0, 0, 0} (fun a b => \u03a6 (Conjecture989.block X a.1 b.1) a.2 b.2) fun a b =>\n      \u03a6 (Conjecture989.block Y a.1 b.1) a.2 b.2)",
+      "partial": false,
+      "name": "Conjecture989.amplification._proof_1",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} (\u03a6 : Conjecture989.MatrixMap d) (k : Nat) (c : Complex)\n  (X : Matrix.{0, 0, 0} (Prod.{0, 0} (Fin k) (Fin d)) (Prod.{0, 0} (Fin k) (Fin d)) Complex),\n  Eq.{1} (fun a b => \u03a6 (Conjecture989.block (HSMul.hSMul.{0, 0, 0} c X) a.1 b.1) a.2 b.2)\n    (HSMul.hSMul.{0, 0, 0} ((RingHom.id.{0} Complex) c) fun a b => \u03a6 (Conjecture989.block X a.1 b.1) a.2 b.2)",
+      "partial": false,
+      "name": "Conjecture989.amplification._proof_2",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d k : Nat} (\u03a6 : Conjecture989.MatrixMap d)\n  (X : Matrix.{0, 0, 0} (Prod.{0, 0} (Fin k) (Fin d)) (Prod.{0, 0} (Fin k) (Fin d)) Complex) (a b : Fin k)\n  (i j : Fin d),\n  Eq.{1} ((Conjecture989.amplification \u03a6 k) X (Prod.mk.{0, 0} a i) (Prod.mk.{0, 0} b j))\n    (\u03a6 (Conjecture989.block X a b) i j)",
+      "partial": false,
+      "name": "Conjecture989.amplification_apply",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d k : Nat} (\u03a6 : Conjecture989.MatrixMap d) (B : Conjecture989.Mat k) (A : Conjecture989.Mat d),\n  Eq.{1}\n    ((Conjecture989.amplification \u03a6 k)\n      (Matrix.kroneckerMap.{0, 0, 0, 0, 0, 0, 0} (fun x1 x2 => HMul.hMul.{0, 0, 0} x1 x2) B A))\n    (Matrix.kroneckerMap.{0, 0, 0, 0, 0, 0, 0} (fun x1 x2 => HMul.hMul.{0, 0, 0} x1 x2) B (\u03a6 A))",
+      "partial": false,
+      "name": "Conjecture989.amplification_kronecker",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (d k : Nat), Eq.{1} (Conjecture989.amplification 0 k) 0",
+      "partial": false,
+      "name": "Conjecture989.amplification_zero",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "{k d : Nat} \u2192\n  Matrix.{0, 0, 0} (Prod.{0, 0} (Fin k) (Fin d)) (Prod.{0, 0} (Fin k) (Fin d)) Complex \u2192\n    Fin k \u2192 Fin k \u2192 Conjecture989.Mat d",
+      "partial": false,
+      "name": "Conjecture989.block",
+      "module": "Conjecture989",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {k d : Nat} (X : Matrix.{0, 0, 0} (Prod.{0, 0} (Fin k) (Fin d)) (Prod.{0, 0} (Fin k) (Fin d)) Complex) (a b : Fin k)\n  (i j : Fin d), Eq.{1} (Conjecture989.block X a b i j) (X (Prod.mk.{0, 0} a i) (Prod.mk.{0, 0} b j))",
+      "partial": false,
+      "name": "Conjecture989.block.eq_1",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d k : Nat} (X : Matrix.{0, 0, 0} (Prod.{0, 0} (Fin k) (Fin d)) (Prod.{0, 0} (Fin k) (Fin d)) Complex),\n  Eq.{1} X\n    (\u2211 a,\n      \u2211 b,\n        Matrix.kroneckerMap.{0, 0, 0, 0, 0, 0, 0} (fun x1 x2 => HMul.hMul.{0, 0, 0} x1 x2)\n          (Matrix.stdBasisMatrix.{0, 0, 0} a b 1) (Conjecture989.block X a b))",
+      "partial": false,
+      "name": "Conjecture989.block_kronecker_expansion",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "{d : Nat} \u2192\n  Conjecture989.MatrixMap d \u2192 Matrix.{0, 0, 0} (Prod.{0, 0} (Fin d) (Fin d)) (Prod.{0, 0} (Fin d) (Fin d)) Complex",
+      "partial": false,
+      "name": "Conjecture989.choiMatrix",
+      "module": "Conjecture989",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} (\u03a6 : Conjecture989.MatrixMap d) (a b : Prod.{0, 0} (Fin d) (Fin d)),\n  Eq.{1} (Conjecture989.choiMatrix \u03a6 a b) (\u03a6 (Conjecture989.matrixUnit a.1 b.1) a.2 b.2)",
+      "partial": false,
+      "name": "Conjecture989.choiMatrix.eq_1",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} (\u03a6 : Conjecture989.MatrixMap d) (i j a b : Fin d),\n  Eq.{1} (Conjecture989.choiMatrix \u03a6 (Prod.mk.{0, 0} i a) (Prod.mk.{0, 0} j b))\n    (\u03a6 (Matrix.stdBasisMatrix.{0, 0, 0} i j 1) a b)",
+      "partial": false,
+      "name": "Conjecture989.choiMatrix_entry",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} (\u03a6 : Conjecture989.MatrixMap d),\n  Eq.{1} (Conjecture989.choiMatrix \u03a6)\n    (\u2211 i,\n      \u2211 j,\n        Matrix.kroneckerMap.{0, 0, 0, 0, 0, 0, 0} (fun x1 x2 => HMul.hMul.{0, 0, 0} x1 x2)\n          (Conjecture989.matrixUnit i j) (\u03a6 (Conjecture989.matrixUnit i j)))",
+      "partial": false,
+      "name": "Conjecture989.choiMatrix_eq_sum",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "{d : Nat} \u2192 Conjecture989.MatrixMap d \u2192 Nat",
+      "partial": false,
+      "name": "Conjecture989.choiRank",
+      "module": "Conjecture989",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} (\u03a6 : Conjecture989.MatrixMap d),\n  Eq.{1} (Conjecture989.choiRank \u03a6) (Matrix.rank.{0, 0, 0} (Conjecture989.choiMatrix \u03a6))",
+      "partial": false,
+      "name": "Conjecture989.choiRank.eq_1",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} (\u03a6 : Conjecture989.MatrixMap d),\n  Eq.{1} (Conjecture989.choiRank \u03a6)\n    (Module.finrank.{0, 0} Complex\n      \u21a5(LinearMap.range.{0, 0, 0, 0, 0} (Matrix.mulVecLin.{0, 0, 0} (Conjecture989.choiMatrix \u03a6))))",
+      "partial": false,
+      "name": "Conjecture989.choiRank_eq_finrank",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (d : Nat) (\u03a6 : Conjecture989.MatrixMap d), LE.le.{0} (Conjecture989.choiRank \u03a6) (HPow.hPow.{0, 0, 0} d 2)",
+      "partial": false,
+      "name": "Conjecture989.choiRank_le",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (d : Nat), Eq.{1} (Fintype.card.{0} (Prod.{0, 0} (Fin d) (Fin d))) (HPow.hPow.{0, 0, 0} d 2)",
+      "partial": false,
+      "name": "Conjecture989.choi_index_card",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "Not (\u2203 I, And (Nonempty.{1} I) (\u2203 d \u03a6, \u2200 (i : I), Conjecture989.ConjecturedMember (d i) (\u03a6 i)))",
+      "partial": false,
+      "name": "Conjecture989.conjecture989_false",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} (S T : Conjecture989.MatrixMap d) (A : Conjecture989.Mat d),\n  Eq.{1} ((HAdd.hAdd.{0, 0, 0} S (Conjecture989.transposeMap d \u2218\u2097 T)) A)\n    (HAdd.hAdd.{0, 0, 0} (S A) (Matrix.transpose.{0, 0, 0} (T A)))",
+      "partial": false,
+      "name": "Conjecture989.decomposition_apply",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "{d : Nat} \u2192 Fin d \u2192 Fin d \u2192 Conjecture989.Mat d",
+      "partial": false,
+      "name": "Conjecture989.matrixUnit",
+      "module": "Conjecture989",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} (i j : Fin d), Eq.{1} (Conjecture989.matrixUnit i j) (Matrix.stdBasisMatrix.{0, 0, 0} i j 1)",
+      "partial": false,
+      "name": "Conjecture989.matrixUnit.eq_1",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} (i j a b : Fin d), Eq.{1} (Conjecture989.matrixUnit i j a b) (ite.{1} (And (Eq.{1} i a) (Eq.{1} j b)) 1 0)",
+      "partial": false,
+      "name": "Conjecture989.matrixUnit_entry",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (d : Nat) (\u03a6 : Conjecture989.MatrixMap d), Not (Conjecture989.ConjecturedMember d \u03a6)",
+      "partial": false,
+      "name": "Conjecture989.no_conjectured_member",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {I : Type u_1} [inst : Nonempty.{u_1 + 1} I] (d : I \u2192 Nat) (\u03a6 : (i : I) \u2192 Conjecture989.MatrixMap (d i)),\n  Not (\u2200 (i : I), Conjecture989.ConjecturedMember (d i) (\u03a6 i))",
+      "partial": false,
+      "name": "Conjecture989.no_nonempty_family",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} {\u03a6 : Conjecture989.MatrixMap d}, Conjecture989.CompletelyPositive \u03a6 \u2192 Not (Conjecture989.Indecomposable \u03a6)",
+      "partial": false,
+      "name": "Conjecture989.not_indecomposable_of_completelyPositive",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {n : Type u_1} [inst : Fintype.{u_1} n] (A : Matrix.{u_1, u_1, 0} n n Complex),\n  Iff (Matrix.PosSemidef.{u_1, 0} A)\n    (And (Matrix.IsHermitian.{0, u_1} A)\n      (\u2200 (v : n \u2192 Complex),\n        And (LE.le.{0} 0 (Complex.re (dotProduct.{0, u_1} (Star.star.{u_1} v) (Matrix.mulVec.{0, u_1, u_1} A v))))\n          (Eq.{1} (Complex.im (dotProduct.{0, u_1} (Star.star.{u_1} v) (Matrix.mulVec.{0, u_1, u_1} A v))) 0)))",
+      "partial": false,
+      "name": "Conjecture989.posSemidef_iff_quadratic",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat},\n  LT.lt.{0} 0 d \u2192\n    \u2200 (\u03a6 : Conjecture989.MatrixMap d),\n      Iff (Eq.{1} (Conjecture989.choiRank \u03a6) (HSub.hSub.{0, 0, 0} (HPow.hPow.{0, 0, 0} d 2) 1))\n        (Eq.{1} (HAdd.hAdd.{0, 0, 0} (Conjecture989.choiRank \u03a6) 1) (HPow.hPow.{0, 0, 0} d 2))",
+      "partial": false,
+      "name": "Conjecture989.rankCondition_iff_corankOne",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "(d : Nat) \u2192 Conjecture989.MatrixMap d",
+      "partial": false,
+      "name": "Conjecture989.transposeMap",
+      "module": "Conjecture989",
+      "kind": "definition",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} (A : Conjecture989.Mat d), Eq.{1} ((Conjecture989.transposeMap d) A) (Matrix.transpose.{0, 0, 0} A)",
+      "partial": false,
+      "name": "Conjecture989.transposeMap_apply",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {d : Nat} (A : Conjecture989.Mat d) (i j : Fin d), Eq.{1} ((Conjecture989.transposeMap d) A i j) (A j i)",
+      "partial": false,
+      "name": "Conjecture989.transposeMap_entry",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 (d : Nat), Conjecture989.CompletelyPositive 0",
+      "partial": false,
+      "name": "Conjecture989.zero_completelyPositive",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    {
+      "unsafe": false,
+      "type": "\u2200 {\u03b1 : Type u_2} {\u03b2 : Type u_4} {\u03b3 : Type u_6} {l : Type u_8} {m : Type u_9} {n : Type u_10} {p : Type u_11}\n  (f : \u03b1 \u2192 \u03b2 \u2192 \u03b3) (A : Matrix.{u_8, u_9, u_2} l m \u03b1) (B : Matrix.{u_10, u_11, u_4} n p \u03b2),\n  Eq.{(max (max u_10 u_8) (max u_11 u_9) u_6) + 1} (Matrix.kroneckerMap.{u_2, u_4, u_6, u_8, u_9, u_10, u_11} f A B)\n    (Matrix.of.{u_6, max u_10 u_8, max u_11 u_9} fun i j => f (A i.1 j.1) (B i.2 j.2))",
+      "partial": false,
+      "name": "Matrix.kroneckerMap.eq_1",
+      "module": "Conjecture989",
+      "kind": "theorem",
+      "axioms": [
+        "Quot.sound"
+      ]
+    }
+  ]
+}
