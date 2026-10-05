@@ -1,0 +1,61 @@
+import Conjecture637
+import Audit
+
+#print Conjecture637.artinRelator
+#print Conjecture637.braidRelations
+#print Conjecture637.BraidThree
+#print Conjecture637.sigmaOne
+#print Conjecture637.sigmaTwo
+#print Conjecture637.permutationGenerator
+#print Conjecture637.strandPermutation
+#print Conjecture637.pureBraidSubgroup
+#print Conjecture637.PureBraidThree
+#print Conjecture637.halfTwist
+#print Conjecture637.fullTwist
+#print Conjecture637.pureFullTwist
+#print Conjecture637.exponentGenerator
+#print Conjecture637.exponentSum
+#print Conjecture637.RequiredConjunctionAtThree
+
+#check Conjecture637.artin_relation
+#print axioms Conjecture637.artin_relation
+#check Conjecture637.permutation_respects_relation
+#print axioms Conjecture637.permutation_respects_relation
+#check Conjecture637.strandPermutation_sigmaOne
+#print axioms Conjecture637.strandPermutation_sigmaOne
+#check Conjecture637.strandPermutation_sigmaTwo
+#print axioms Conjecture637.strandPermutation_sigmaTwo
+#check Conjecture637.fullTwist_eq_halfTwist_sq
+#print axioms Conjecture637.fullTwist_eq_halfTwist_sq
+#check Conjecture637.halfTwist_mul_sigmaOne
+#print axioms Conjecture637.halfTwist_mul_sigmaOne
+#check Conjecture637.halfTwist_mul_sigmaTwo
+#print axioms Conjecture637.halfTwist_mul_sigmaTwo
+#check Conjecture637.fullTwist_commutes_sigmaOne
+#print axioms Conjecture637.fullTwist_commutes_sigmaOne
+#check Conjecture637.fullTwist_commutes_sigmaTwo
+#print axioms Conjecture637.fullTwist_commutes_sigmaTwo
+#check Conjecture637.fullTwist_mem_center
+#print axioms Conjecture637.fullTwist_mem_center
+#check Conjecture637.fullTwist_is_pure
+#print axioms Conjecture637.fullTwist_is_pure
+#check Conjecture637.pureFullTwist_mem_center
+#print axioms Conjecture637.pureFullTwist_mem_center
+#check Conjecture637.exponent_respects_relation
+#print axioms Conjecture637.exponent_respects_relation
+#check Conjecture637.exponentSum_sigmaOne
+#print axioms Conjecture637.exponentSum_sigmaOne
+#check Conjecture637.exponentSum_sigmaTwo
+#print axioms Conjecture637.exponentSum_sigmaTwo
+#check Conjecture637.exponentSum_fullTwist
+#print axioms Conjecture637.exponentSum_fullTwist
+#check Conjecture637.fullTwist_not_zpower_square
+#print axioms Conjecture637.fullTwist_not_zpower_square
+#check Conjecture637.pureFullTwist_not_mem_square_zpowers
+#print axioms Conjecture637.pureFullTwist_not_mem_square_zpowers
+#check Conjecture637.center_not_generated_by_square_of_fullTwist
+#print axioms Conjecture637.center_not_generated_by_square_of_fullTwist
+#check Conjecture637.three_is_in_source_range
+#print axioms Conjecture637.three_is_in_source_range
+#check Conjecture637.required_conjunction_at_three_false
+#print axioms Conjecture637.required_conjunction_at_three_false

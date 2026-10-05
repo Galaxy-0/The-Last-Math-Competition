@@ -1,0 +1,50 @@
+AUTHOR STATUS: formal disproof complete; frozen candidate awaits fresh review.
+
+The literal full-twist-square center assertion fails at n=3. In the standard
+Artin definition B3=<a,b | aba=bab>, the full twist T=(ab)^3=(aba)^2 is pure
+and central (all facts proved). The constructed exponent homomorphism sends T
+to 6, while a kth integer power of T^2 maps to 12k. Hence T is a central pure
+braid outside <T^2>, disproving the center equality. The final generic-Q
+theorem proves not(center equality and Q), explicitly retaining the source's
+second clause. This refutes the universal conjunction, whose n=3 instance is
+necessary. It is not an scl result or a disproof of a corrected half-twist claim.
+
+Source/model/scope details: preflight.txt and definition-sources.txt.
+Project: /private/tmp/tlmc637-proof.
+Source: Conjecture637.lean; complete 36-declaration inventory: declarations.json.
+Every named definition/abbreviation/theorem is covered by Audit.lean.
+No handwritten instances or extra declarations exist.
+
+Validation passed:
+- Whole-project lake build, including Conjecture637 and Audit.
+- Strict replay of BOTH Lean files with -DwarningAsError=true.
+- All 36 declarations' axiom sets contained only propext, Classical.choice,
+  Quot.sound; the n=3 range fact uses no axioms.
+- Exact revisions of all nine dependencies checked against pinned manifest;
+  all nine tracked dependency trees were clean.
+- Banned incomplete/unsafe proof constructs scan passed.
+- Python replay script executed fully: 22 subprocesses, all true exit code 0.
+  Its original outputs and actual statuses are in verification-logs/*.json;
+  its aggregate result is verification.json.
+- No mathematical auxiliary computation exists outside Lean: finite
+  permutation checks use kernel-checked decide, group/arithmetic proofs use
+  tactics whose proof terms passed the axiom audit.
+
+Successful and failed exploratory/build commands are retained in
+/private/tmp/tlmc637-author/commands/*.json. Pre-runner preflight commands and
+true exit codes are listed in preflight.txt. One unlogged initial package-pin
+read used Python subprocess git rev-parse for all nine packages, printed every
+individual exit code 0 and matching hash, and itself exited 0; the same check
+was later repeated by both setup.py and the final complete replay.
+Initial compile observations:
+- import Mathlib failed because Mathlib.olean was absent; the initial direct
+  hash config also emitted an out-of-date manifest inputRev warning.
+- Explicit narrow imports and original v4.19.0 inputRev with pinned manifest
+  resolved those issues; the missing standard PresentedGroup module was built.
+- The first mathematical draft had four proof/API errors (natural-power
+  unfolding, exponent-relator normalization, and global type-tag lemma names),
+  all corrected before strict successful replay. None was suppressed.
+
+No repository or Git state was changed; no report/PDF/publication was created.
+No shared dependency tracked source was modified. The single shared dependency
+build added only the missing PresentedGroup compiled/cache products.

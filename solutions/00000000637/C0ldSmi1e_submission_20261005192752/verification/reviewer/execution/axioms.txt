@@ -1,0 +1,88 @@
+def Conjecture637.artinRelator : FreeGroup Bool :=
+FreeGroup.of false * FreeGroup.of true * FreeGroup.of false *
+  (FreeGroup.of true * FreeGroup.of false * FreeGroup.of true)⁻¹
+def Conjecture637.braidRelations : Set (FreeGroup Bool) :=
+{Conjecture637.artinRelator}
+@[reducible] def Conjecture637.BraidThree : Type :=
+PresentedGroup Conjecture637.braidRelations
+def Conjecture637.sigmaOne : Conjecture637.BraidThree :=
+PresentedGroup.of false
+def Conjecture637.sigmaTwo : Conjecture637.BraidThree :=
+PresentedGroup.of true
+def Conjecture637.permutationGenerator : Bool → Equiv.Perm (Fin 3) :=
+fun x =>
+  match x with
+  | false => Equiv.swap 0 1
+  | true => Equiv.swap 1 2
+def Conjecture637.strandPermutation : Conjecture637.BraidThree →* Equiv.Perm (Fin 3) :=
+PresentedGroup.toGroup Conjecture637.permutation_respects_relation
+def Conjecture637.pureBraidSubgroup : Subgroup Conjecture637.BraidThree :=
+Conjecture637.strandPermutation.ker
+@[reducible] def Conjecture637.PureBraidThree : Subgroup Conjecture637.BraidThree :=
+Conjecture637.pureBraidSubgroup
+def Conjecture637.halfTwist : Conjecture637.BraidThree :=
+Conjecture637.sigmaOne * Conjecture637.sigmaTwo * Conjecture637.sigmaOne
+def Conjecture637.fullTwist : Conjecture637.BraidThree :=
+(Conjecture637.sigmaOne * Conjecture637.sigmaTwo) ^ 3
+def Conjecture637.pureFullTwist : ↥Conjecture637.PureBraidThree :=
+⟨Conjecture637.fullTwist, Conjecture637.fullTwist_is_pure⟩
+def Conjecture637.exponentGenerator : Bool → Multiplicative ℤ :=
+fun x => Multiplicative.ofAdd 1
+def Conjecture637.exponentSum : Conjecture637.BraidThree →* Multiplicative ℤ :=
+PresentedGroup.toGroup Conjecture637.exponent_respects_relation
+def Conjecture637.RequiredConjunctionAtThree : Prop → Prop :=
+fun secondConjunct =>
+  Subgroup.center ↥Conjecture637.PureBraidThree = Subgroup.zpowers (Conjecture637.pureFullTwist ^ 2) ∧ secondConjunct
+Conjecture637.artin_relation :
+  Conjecture637.sigmaOne * Conjecture637.sigmaTwo * Conjecture637.sigmaOne =
+    Conjecture637.sigmaTwo * Conjecture637.sigmaOne * Conjecture637.sigmaTwo
+'Conjecture637.artin_relation' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.permutation_respects_relation (r : FreeGroup Bool) :
+  r ∈ Conjecture637.braidRelations → (FreeGroup.lift Conjecture637.permutationGenerator) r = 1
+'Conjecture637.permutation_respects_relation' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.strandPermutation_sigmaOne : Conjecture637.strandPermutation Conjecture637.sigmaOne = Equiv.swap 0 1
+'Conjecture637.strandPermutation_sigmaOne' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.strandPermutation_sigmaTwo : Conjecture637.strandPermutation Conjecture637.sigmaTwo = Equiv.swap 1 2
+'Conjecture637.strandPermutation_sigmaTwo' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.fullTwist_eq_halfTwist_sq : Conjecture637.fullTwist = Conjecture637.halfTwist ^ 2
+'Conjecture637.fullTwist_eq_halfTwist_sq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.halfTwist_mul_sigmaOne :
+  Conjecture637.halfTwist * Conjecture637.sigmaOne = Conjecture637.sigmaTwo * Conjecture637.halfTwist
+'Conjecture637.halfTwist_mul_sigmaOne' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.halfTwist_mul_sigmaTwo :
+  Conjecture637.halfTwist * Conjecture637.sigmaTwo = Conjecture637.sigmaOne * Conjecture637.halfTwist
+'Conjecture637.halfTwist_mul_sigmaTwo' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.fullTwist_commutes_sigmaOne :
+  Conjecture637.sigmaOne * Conjecture637.fullTwist = Conjecture637.fullTwist * Conjecture637.sigmaOne
+'Conjecture637.fullTwist_commutes_sigmaOne' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.fullTwist_commutes_sigmaTwo :
+  Conjecture637.sigmaTwo * Conjecture637.fullTwist = Conjecture637.fullTwist * Conjecture637.sigmaTwo
+'Conjecture637.fullTwist_commutes_sigmaTwo' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.fullTwist_mem_center : Conjecture637.fullTwist ∈ Subgroup.center Conjecture637.BraidThree
+'Conjecture637.fullTwist_mem_center' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.fullTwist_is_pure : Conjecture637.fullTwist ∈ Conjecture637.pureBraidSubgroup
+'Conjecture637.fullTwist_is_pure' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.pureFullTwist_mem_center : Conjecture637.pureFullTwist ∈ Subgroup.center ↥Conjecture637.PureBraidThree
+'Conjecture637.pureFullTwist_mem_center' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.exponent_respects_relation (r : FreeGroup Bool) :
+  r ∈ Conjecture637.braidRelations → (FreeGroup.lift Conjecture637.exponentGenerator) r = 1
+'Conjecture637.exponent_respects_relation' depends on axioms: [propext, Quot.sound]
+Conjecture637.exponentSum_sigmaOne : Conjecture637.exponentSum Conjecture637.sigmaOne = Multiplicative.ofAdd 1
+'Conjecture637.exponentSum_sigmaOne' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.exponentSum_sigmaTwo : Conjecture637.exponentSum Conjecture637.sigmaTwo = Multiplicative.ofAdd 1
+'Conjecture637.exponentSum_sigmaTwo' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.exponentSum_fullTwist : Conjecture637.exponentSum Conjecture637.fullTwist = Multiplicative.ofAdd 6
+'Conjecture637.exponentSum_fullTwist' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.fullTwist_not_zpower_square (k : ℤ) : (Conjecture637.fullTwist ^ 2) ^ k ≠ Conjecture637.fullTwist
+'Conjecture637.fullTwist_not_zpower_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.pureFullTwist_not_mem_square_zpowers :
+  Conjecture637.pureFullTwist ∉ Subgroup.zpowers (Conjecture637.pureFullTwist ^ 2)
+'Conjecture637.pureFullTwist_not_mem_square_zpowers' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.center_not_generated_by_square_of_fullTwist :
+  Subgroup.center ↥Conjecture637.PureBraidThree ≠ Subgroup.zpowers (Conjecture637.pureFullTwist ^ 2)
+'Conjecture637.center_not_generated_by_square_of_fullTwist' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture637.three_is_in_source_range : 3 ≤ 3
+'Conjecture637.three_is_in_source_range' does not depend on any axioms
+Conjecture637.required_conjunction_at_three_false (secondConjunct : Prop) :
+  ¬Conjecture637.RequiredConjunctionAtThree secondConjunct
+'Conjecture637.required_conjunction_at_three_false' depends on axioms: [propext, Classical.choice, Quot.sound]
