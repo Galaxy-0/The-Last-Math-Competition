@@ -1,0 +1,7 @@
+reviewer_arbitrary_labels_no_claimed_limit (V : ℕ → Type) [(k : ℕ) → Fintype (V k)]
+  [∀ (k : ℕ), Nonempty (RegularGraph (V k) 3)] (a b : ℕ → ℝ) :
+  ¬∃ ν, Tendsto (fun k => quadraticLaw (V k) 3 (a k) (b k)) atTop (nhds ν) ∧ lawVariance ν = claimedVariance 3
+'reviewer_arbitrary_labels_no_claimed_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+reviewer_size_subsequence (laws : ℕ → ProbabilityMeasure ℝ) (ν : ProbabilityMeasure ℝ)
+  (hlim : Tendsto laws atTop (nhds ν)) : Tendsto (fun k => laws (Fintype.card (BlockVertices 3 k))) atTop (nhds ν)
+'reviewer_size_subsequence' depends on axioms: [propext, Classical.choice, Quot.sound]

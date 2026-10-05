@@ -1,0 +1,14 @@
+/private/tmp/tlmc7744-proof/Conjecture7744.lean:117:4: warning: aesop: failed to prove the goal. Some goals were not explored because the maximum rule application depth (30) was reached. Set option 'maxRuleApplicationDepth' to increase the limit.
+/private/tmp/tlmc7744-proof/Conjecture7744.lean:113:67: error: unsolved goals
+case h.mp.right
+d k : ℕ
+v w : BlockVertices d k
+left : v.1 = w.1
+right : ¬v.2 = w.2
+⊢ ∃ a, { toFun := Prod.mk w.1, inj' := ⋯ } a = w
+
+case h.mpr.right.h
+d k : ℕ
+v : BlockVertices d k
+left : ¬{ toFun := Prod.mk v.1, inj' := ⋯ } v.2 = v
+⊢ False

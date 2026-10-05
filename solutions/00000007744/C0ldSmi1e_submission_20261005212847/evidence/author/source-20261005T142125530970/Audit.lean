@@ -1,0 +1,53 @@
+import Conjecture7744
+
+/-! Every explicitly authored declaration is inspected for axioms below. -/
+
+#print axioms Conjecture7744.RegularGraph
+#print axioms Conjecture7744.regularGraphFintype
+#print axioms Conjecture7744.regularGraphMeasurableSpace
+#print axioms Conjecture7744.quadraticTrace
+#print axioms Conjecture7744.quadraticTrace_eq
+#print axioms Conjecture7744.uniformGraphs
+#print axioms Conjecture7744.uniformGraphs_mass
+#print axioms Conjecture7744.quadraticExpectation
+#print axioms Conjecture7744.quadraticExpectation_eq
+#print axioms Conjecture7744.quadraticFluctuation
+#print axioms Conjecture7744.quadraticFluctuation_zero
+#print axioms Conjecture7744.finite_quadratic_variance_zero
+#print axioms Conjecture7744.quadraticLaw
+#print axioms Conjecture7744.zeroLaw
+#print axioms Conjecture7744.quadraticLaw_is_pushforward
+#print axioms Conjecture7744.quadraticLaw_eq_zeroLaw
+#print axioms Conjecture7744.polynomialTrace
+#print axioms Conjecture7744.polynomialTrace_square
+#print axioms Conjecture7744.polynomialTrace_integrable
+#print axioms Conjecture7744.polynomialExpectation
+#print axioms Conjecture7744.polynomialFluctuation
+#print axioms Conjecture7744.polynomialFluctuation_square
+#print axioms Conjecture7744.polynomialLaw
+#print axioms Conjecture7744.polynomialLaw_is_pushforward
+#print axioms Conjecture7744.polynomialLaw_square
+#print axioms Conjecture7744.jointFluctuation
+#print axioms Conjecture7744.jointLaw
+#print axioms Conjecture7744.jointLaw_is_pushforward
+#print axioms Conjecture7744.coordinateLaw
+#print axioms Conjecture7744.jointLaw_coordinate
+#print axioms Conjecture7744.coordinateLaw_tendsto
+#print axioms Conjecture7744.BlockVertices
+#print axioms Conjecture7744.blockVerticesFintype
+#print axioms Conjecture7744.blockGraph
+#print axioms Conjecture7744.blockGraph_regular
+#print axioms Conjecture7744.blockRegularGraphsNonempty
+#print axioms Conjecture7744.blockVertices_card
+#print axioms Conjecture7744.blockVertices_card_pos
+#print axioms Conjecture7744.blockVertices_card_tendsto
+#print axioms Conjecture7744.lawVariance
+#print axioms Conjecture7744.zeroLaw_variance
+#print axioms Conjecture7744.quadraticLaws_tendsto_zero
+#print axioms Conjecture7744.quadratic_weak_limit_variance
+#print axioms Conjecture7744.claimedVariance
+#print axioms Conjecture7744.claimedVariance_three
+#print axioms Conjecture7744.no_claimed_quadratic_limit
+#print axioms Conjecture7744.RequiredSecondOrderLimit
+#print axioms Conjecture7744.no_required_second_order_limit
+#print axioms Conjecture7744.conjecture7744_false
