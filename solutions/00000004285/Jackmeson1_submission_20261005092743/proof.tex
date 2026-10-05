@@ -1,0 +1,117 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Conjecture 00000004285 is false:\\ a countable 2-free, not 3-free abelian group}
+\author{Jackmeson1}
+\date{}
+\begin{document}
+\maketitle
+
+\section{The conjecture and the reading}
+\textbf{Statement (English text of the repository).} ``Definition: n-free means every subset of
+size at most n is contained in a free pure subgroup. Conjecture: The smallest cardinality of a group
+that is n-free but not n+1-free is aleph with subscript n-1, the cardinal spectrum is strictly
+increasing, and the bound is optimal.'' The Chinese text says the same.
+
+\textbf{Reading.} The text defines $n$-free with ``subset of size at most $n$'', so $n$ is a natural
+number and the subsets are finite. Groups are abelian, since purity is a notion of abelian group
+theory. ``Free'' means free abelian, i.e.\ a free $\mathbb Z$-module (Wikipedia, \emph{Free abelian
+group}: ``a free abelian group is an abelian group with a basis''). ``Pure'' is the standard notion
+(Wikipedia, \emph{Pure subgroup}: ``In mathematics, especially in the area of algebra studying the
+theory of abelian groups, a pure subgroup is a generalization of direct summand''):
+
+\begin{definition}
+A subgroup $H\le A$ is \emph{pure} if $mA\cap H\subseteq mH$ for every $m\in\mathbb Z$ (the reverse
+inclusion always holds). $A$ is \emph{$n$-free} if every finite $S\subseteq A$ with $|S|\le n$ lies
+in a pure subgroup $H$ that is a free abelian group.
+\end{definition}
+
+The conjecture is a conjunction. Its first part (\textbf{MinCardClaim}) says: for every $n\ge1$,
+$\aleph_{n-1}$ is the least cardinality of an abelian group that is $n$-free but not $(n+1)$-free.
+We refute this part at $n=2$, so the conjunction is false. We work with groups in Lean's universe
+\texttt{Type}. Our counterexample lies there, so the refutation also applies to any universe-lifted
+version of the claim.
+
+\section{The counterexample}
+Let $p_k$ be the $k^3$-th prime, counting from $0$ (Lean: \texttt{Nat.nth Nat.Prime (k\^{}3)}). The
+$p_k$ are distinct primes with $p_k\ge k^3$. Put $w_k=(1,k,k^2)/p_k\in\mathbb Q^3$ and
+\[ G=\mathbb Z^3+\textstyle\sum_{k\ge0}\mathbb Z\,w_k\ \subseteq\ \mathbb Q^3 . \]
+$G$ is countable. For $a\in\mathbb Z^3$ write $q_a(k)=a_0+a_1k+a_2k^2$.
+
+\begin{lemma}[\texttt{bad\_finite}]
+If $a\ne0$, then $\{k: p_k\mid q_a(k)\}$ is finite.
+\end{lemma}
+\begin{proof}
+Let $A=|a_0|+|a_1|+|a_2|$. If $k\ge A+2$, $p_k\mid q_a(k)$ and $q_a(k)\ne0$, then
+$k^3\le p_k\le|q_a(k)|\le Ak^2<k^3$, which is impossible. The nonzero polynomial $q_a$ has finitely many
+roots.
+\end{proof}
+
+\begin{theorem}[\texttt{G\_not\_three\_free}]
+$G$ is not $3$-free.
+\end{theorem}
+\begin{proof}
+Let $H$ be a pure subgroup containing $e_0,e_1,e_2$. Since $p_kw_k=e_0+ke_1+k^2e_2\in H$, purity and
+torsion-freeness give $w_k\in H$ for all $k$. Suppose $H$ were free. Take a basis $b$ of $H$. Since
+$e_0\ne0$, some coordinate functional $f=b^*_i\colon H\to\mathbb Z$ has $f(e_0)\ne0$. With
+$a_j=f(e_j)$ we get $q_a(k)=f(p_kw_k)=p_kf(w_k)$, so $p_k\mid q_a(k)$ for every $k$. By the lemma,
+$a=0$. This contradicts $f(e_0)\ne0$.
+\end{proof}
+
+\begin{theorem}[\texttt{G\_two\_free}]
+$G$ is $2$-free.
+\end{theorem}
+\begin{proof}
+Let $S\subseteq G$ with $|S|\le2$. The $\mathbb Q$-linear map $\mathbb Q^3\to\mathbb Q^S$,
+$x\mapsto(x\cdot s)_s$, has a nonzero kernel. Clearing denominators gives $N\in\mathbb Z^3\setminus0$
+with $N\cdot s=0$ for $s\in S$ (\texttt{normal\_vector}). Let $H=\{g\in G:N\cdot g=0\}$. Then $S\subseteq
+H$. $H$ is pure: if $m\ne0$ and $N\cdot(mg)=0$, then $g\in H$ (\texttt{pure\_ker}).
+
+\emph{Bounded denominators} (\texttt{key\_dvd}, \texttt{bounded\_den}). Let $B$ be the finite set of
+$k$ with $p_k\mid q_N(k)$, and put $M=\prod_{k\in B}p_k$. Write $g=z+\sum_{k\in F}c_kw_k$ with
+$z\in\mathbb Z^3$ and $N\cdot g=0$, that is, $N\cdot z+\sum_{k\in F}c_kq_N(k)/p_k=0$. Multiplying by
+$\prod_{k\in F}p_k$ and reducing modulo $p_j$ shows that $p_j\mid c_jq_N(j)\prod_{k\in F\setminus j}p_k$.
+The primes are distinct, so for $j\notin B$ we get $p_j\mid c_j$. Hence $Mg\in\mathbb Z^3$.
+
+So $g\mapsto Mg$ embeds $H$ into $\mathbb Z^3$. Therefore $H$ is finitely generated (it is a submodule
+of a Noetherian module). It is torsion-free, so it is free (Mathlib
+\texttt{Module.free\_of\_finite\_type\_torsion\_free'}) (\texttt{free\_ker}).
+\end{proof}
+
+\begin{theorem}[\texttt{not\_minCardClaim}]
+MinCardClaim is false: $G$ is a $2$-free, not $3$-free group with $|G|\le\aleph_0<\aleph_1=\aleph_{2-1}$.
+\end{theorem}
+
+\textbf{Remarks.} (1) For $n=1$ the claimed value $\aleph_0$ is not contradicted. Our result concerns
+$n=2$. (2) Readings that are \emph{not} refuted here: (a) a cardinal-indexed
+reading (``$\kappa$-free'': subsets of size $<\aleph_n$). Under it, a group of size $\aleph_{n-1}$ that
+is $\aleph_n$-free lies in a free pure subgroup, so it is free and hence $(n+1)$-free; the claim would
+fail, but this is not formalized. (b) Readings with non-abelian groups or ``free'' meaning free
+(non-abelian) group.
+
+\section{Lean formalization}
+File \texttt{Conjecture4285/Basic.lean} (namespace \texttt{C4285}, about 400 lines, only
+\texttt{import Mathlib}). Definitions: \texttt{IsPureSubgroup}, \texttt{NFree}, \texttt{p},
+\texttt{q}, \texttt{w}, \texttt{G}, \texttt{MinCardClaim}. Main results:
+\begin{itemize}
+\item \texttt{G\_two\_free : NFree 2 GT}, \texttt{G\_not\_three\_free : \textasciitilde NFree 3 GT};
+\item \texttt{exists\_countable\_two\_free\_not\_three\_free}: there is \texttt{A : Type} with an
+\texttt{AddCommGroup} structure, \texttt{\#A <= aleph0}, \texttt{NFree 2 A} and \texttt{\textasciitilde
+NFree 3 A};
+\item \texttt{not\_minCardClaim : \textasciitilde MinCardClaim}, where \texttt{MinCardClaim} is
+\texttt{forall n, 1 <= n -> IsLeast \{k | exists (A : Type) (\_ : AddCommGroup A), \#A = k /\textbackslash{}
+NFree n A /\textbackslash{} \textasciitilde NFree (n+1) A\} (aleph ((n-1 : Nat) : Ordinal))}.
+\end{itemize}
+\textbf{Axiom audit.} \texttt{\#print axioms} for \texttt{C4285.not\_minCardClaim} and
+\texttt{C4285.exists\_countable\_two\_free\_not\_three\_free} gives \texttt{[propext,
+Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no \texttt{native\_decide}. Lean
+toolchain v4.33.1, Mathlib v4.33.1.
+
+\end{document}

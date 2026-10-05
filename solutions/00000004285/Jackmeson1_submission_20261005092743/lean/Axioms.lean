@@ -1,0 +1,3 @@
+import Conjecture4285
+#print axioms C4285.not_minCardClaim
+#print axioms C4285.exists_countable_two_free_not_three_free
