@@ -1,0 +1,124 @@
+{
+  "status": "PASS",
+  "scope": "PDF source compilation, export, source identity, and page layout only. Lean execution and independent semantic review are recorded separately.",
+  "source_sha256": "cbfed52fe4bf1719ba2105ed64bf0b5307619be77ccf09e9450431c72e452d9c",
+  "pdf_sha256": "f6eecf9e2028ff32cf25c308267da5d2dcb13dee9e6995506c939d9c74ba49ee",
+  "pdf_bytes": 68517,
+  "pages": 3,
+  "artifact_marker": {
+    "operation_kind": "create",
+    "expected_output_count": 1,
+    "output_format": "pdf",
+    "successful_invocations": 1,
+    "exit_code": 0,
+    "timing": "Immediately before the first authoring command for this new report."
+  },
+  "native_compilation": {
+    "tool": "compile_latex_document",
+    "status": "success",
+    "source": "/private/tmp/tlmc283-package/main.tex",
+    "source_sha256": "cbfed52fe4bf1719ba2105ed64bf0b5307619be77ccf09e9450431c72e452d9c",
+    "message": "The final source compiled successfully with the desktop editor compiler; the source was opened in its LaTeX editor."
+  },
+  "export": {
+    "command": [
+      "/private/tmp/tlmc310-pdf/tectonic",
+      "--keep-logs",
+      "main.tex"
+    ],
+    "working_directory": "/private/tmp/tlmc283-package",
+    "exit_code": 0,
+    "compiler": "Tectonic 0.17.0",
+    "compiler_version_exit_code": 0,
+    "log": "report.txt",
+    "log_sha256": "020f6bde6012a074f0e73b6323bc05d5e4c9eaee079e21bb6b84828319ff74b2",
+    "stdout_stderr": "report-export.txt",
+    "stdout_stderr_sha256": "08ae79df2a94b19012117ac5406ad6d425639c940a4923011d80c91b3baa8c08",
+    "warnings_or_box_diagnostics": []
+  },
+  "prior_export_repair": {
+    "initial_exit_code": 1,
+    "reason": "A text-mode negation symbol requested an uncached TS1 typewriter font. The same negation was written with standard math notation, after which native compilation and Tectonic export succeeded.",
+    "initial_diagnostic_log": "report-export-initial.txt",
+    "initial_diagnostic_sha256": "62f6972062800007837b9437fe8032c0716bbaaee33eecee2230c30ffde75dfd",
+    "subsequent_layout_adjustment": "Title and paragraph spacing were tightened to retain the bibliography on page3. The final source was compiled, exported, rendered, and visually rechecked after this adjustment."
+  },
+  "log_normalization": "Trailing whitespace was removed from compiler-log lines when saving report.txt; all diagnostic text was retained. The raw main.log is retained outside the submission evidence.",
+  "pdf_inspection": {
+    "command": [
+      "pdfinfo",
+      "/private/tmp/tlmc283-package/main.pdf"
+    ],
+    "exit_code": 0,
+    "page_size": "612 x 792 pts (letter)",
+    "pdf_version": "1.5",
+    "encrypted": false
+  },
+  "visual_review": {
+    "reviewer": "auxiliary_code report-author agent",
+    "scope": "All three complete final rendered pages were personally inspected at the output resolution, including mathematical notation, page boundaries, margins, headings, and references. This is author visual QA, not an independent semantic review.",
+    "render_command": [
+      "pdftoppm",
+      "-png",
+      "-scale-to",
+      "1500",
+      "/private/tmp/tlmc283-package/main.pdf",
+      "/private/tmp/tlmc283-verification/page"
+    ],
+    "render_exit_code": 0,
+    "rendered_pages": [
+      {
+        "path": "page-1.png",
+        "sha256": "34b93223c87b52d93386442121b7535132c89584b6ee0dd345320cad5cb0a95d"
+      },
+      {
+        "path": "page-2.png",
+        "sha256": "46b13bd4e209596eeec688ff928584571cb7ee17b16685729a1da74f3d5c1954"
+      },
+      {
+        "path": "page-3.png",
+        "sha256": "dc3da9f82a156f1f695266f215d434c9d28830127b94fa4f429d590b62b8f2aa"
+      }
+    ],
+    "status": "PASS",
+    "findings": "No clipping, overlap, broken mathematical glyphs, orphaned reference page, or layout defects were observed."
+  },
+  "source_whitespace_check": {
+    "command": [
+      "git",
+      "diff",
+      "--no-index",
+      "--check",
+      "/dev/null",
+      "/private/tmp/tlmc283-package/main.tex"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "",
+    "trailing_whitespace_lines": 0,
+    "interpretation": "The nonzero no-index comparison status reflects comparison against /dev/null. It emitted no whitespace diagnostics; a direct scan also found no trailing whitespace."
+  },
+  "verified_utc": "2026-10-04T20:45:19.344743+00:00",
+  "second_visual_review": {
+    "reviewer": "root agent",
+    "source_sha256": "cbfed52fe4bf1719ba2105ed64bf0b5307619be77ccf09e9450431c72e452d9c",
+    "pdf_sha256": "f6eecf9e2028ff32cf25c308267da5d2dcb13dee9e6995506c939d9c74ba49ee",
+    "rendered_pages": [
+      {
+        "path": "page-1.png",
+        "sha256": "34b93223c87b52d93386442121b7535132c89584b6ee0dd345320cad5cb0a95d"
+      },
+      {
+        "path": "page-2.png",
+        "sha256": "46b13bd4e209596eeec688ff928584571cb7ee17b16685729a1da74f3d5c1954"
+      },
+      {
+        "path": "page-3.png",
+        "sha256": "dc3da9f82a156f1f695266f215d434c9d28830127b94fa4f429d590b62b8f2aa"
+      }
+    ],
+    "status": "PASS",
+    "findings": "Personally read the complete final source and viewed all three complete final rendered pages. No clipping, overlapping text, missing mathematical glyphs, or problematic page breaks were observed; equations and references match the source. This is additional source and visual scrutiny, separate from the independent semantic review.",
+    "verified_utc": "2026-10-04T20:46:02.109375+00:00"
+  }
+}

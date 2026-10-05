@@ -1,0 +1,157 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\title{The Kepler--Bouwkamp partial products\\do not have cubic convergence}
+\author{C0ldSmi1e\\\small Disproof of conjecture 00000000283}
+\date{4 October 2026}
+\begin{document}
+\begin{center}
+{\LARGE The Kepler--Bouwkamp partial products\\[3pt]do not have cubic convergence\par}
+\vspace{10pt}
+C0ldSmi1e\\[2pt]
+{\small Disproof of conjecture 00000000283\\4 October 2026}
+\end{center}
+\vspace{3pt}
+\begin{abstract}
+For the ordinary partial products $S_N=\prod_{k=3}^N\cos(\pi/k)$ and their strictly positive infinite-product limit $K$, we prove
+\[
+S_N-K\ \ge\ \frac{2K}{(N+1)^2}\qquad(N\ge3).
+\]
+Consequently, for every real constant $C$ and every cutoff $N_0$, some $N\ge\max(N_0,3)$ satisfies $|S_N-K|>C/N^3$. In particular, the error is not $O(N^{-3})$. This refutes the convergence-rate conjunct of the stated conjecture. The argument does not decide the transcendence or Gamma-value claims and does not assert a sharp asymptotic rate.
+\end{abstract}
+
+\section{The exact statement and the actual products}
+Both language versions of conjecture 00000000283 define the Kepler--Bouwkamp constant by the real cosine product
+\[
+K_B=\prod_{k\ge3}\cos\left(\frac{\pi}{k}\right)
+\]
+and assert that its partial products converge at rate $n^{-3}$, alongside transcendence and a proposed Gamma-function reduction. We refute the rate assertion for these ordinary, uncorrected partial products. Its usual upper-bound interpretation requires constants $C\ge0$ and $N_0\in\N$ such that
+\begin{equation}\label{eq:cubicclaim}
+|S_N-K_B|\le \frac{C}{N^3}\qquad\text{for every }N\ge\max(N_0,3).
+\end{equation}
+The source does not introduce an accelerated product or a subtracted asymptotic correction. A stronger interpretation such as an exact cubic order would also entail \eqref{eq:cubicclaim}.
+
+For a natural-number indexing starting at zero, put
+\begin{equation}\label{eq:objects}
+a_j=\cos\left(\frac{\pi}{j+3}\right),\qquad
+P_n=\prod_{j=0}^{n-1}a_j,\qquad
+K=\prod_{j=0}^{\infty}a_j.
+\end{equation}
+The last expression is the actual infinite product, whose convergence and positivity will be proved below. The conventions give $P_0=1$ and $P_1=\cos(\pi/3)$. Define the source-indexed product using the integer interval,
+\[
+S_N=\prod_{k\in\{3,\ldots,N\}}\cos\left(\frac{\pi}{k}\right).
+\]
+Empty intervals have product $1$. The exact reindexing is
+\begin{equation}\label{eq:shift}
+S_{n+2}=P_n\quad(n\in\N),\qquad
+S_N=P_{N-2}\quad(N\ge3).
+\end{equation}
+Thus the proof concerns exactly the truncations appearing in the conjecture. The Lean project proves the first identity by induction, using the actual product over \texttt{Finset.Icc 3 N}; its error theorem then applies it with $N=n+2$.
+
+\section{A positive, convergent infinite product}
+\begin{lemma}\label{lem:factors}
+For every $j\in\N$, $1/2\le a_j\le1$ and
+\begin{equation}\label{eq:factorbounds}
+\frac{2}{(j+3)^2}\ \le\ 1-a_j\ \le\ \frac{\pi^2}{2(j+3)^2}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Set $x=\pi/(j+3)$. Then $0<x\le\pi/3$, so monotonicity of cosine on $[0,\pi]$ gives $a_j\ge\cos(\pi/3)=1/2$, and $a_j\le1$. For $y=x/2\in[0,\pi/2]$, the sine bounds
+\[
+\frac{2y}{\pi}\le\sin y\le y
+\]
+follow respectively from concavity of sine and its tangent bound. Using $1-\cos x=2\sin^2(x/2)$, we obtain
+\[
+\frac{2x^2}{\pi^2}\le1-\cos x\le\frac{x^2}{2}.
+\]
+Substitution of $x=\pi/(j+3)$ proves \eqref{eq:factorbounds}.
+\end{proof}
+
+The upper bound and the convergent reciprocal-square series give
+\[
+\sum_{j=0}^{\infty}|a_j-1|<\infty.
+\]
+For completeness, logarithm summability follows quantitatively: if $1/2\le a\le1$, then
+\[
+0\le-\log a=\int_a^1\frac{dt}{t}\le2(1-a).
+\]
+Consequently,
+\[
+\sum_{j=0}^{\infty}|\log a_j|
+\le\sum_{j=0}^{\infty}\frac{\pi^2}{(j+3)^2}<\infty.
+\]
+Write $L=\sum_{j=0}^{\infty}\log a_j$. Each factor is positive, so finite-product logarithms and continuity of the exponential imply
+\begin{equation}\label{eq:positive}
+P_n=\exp\left(\sum_{j=0}^{n-1}\log a_j\right)
+\longrightarrow \exp(L)=K>0.
+\end{equation}
+Absolute summability also certifies the infinite product itself: exponentiating finite logarithm sums over arbitrary finite sets gives the same product limit. In Lean, \texttt{constant} is defined by \texttt{tprod}; the separate theorem \texttt{hasProd\_factor} establishes convergence to it, and \texttt{constant\_eq\_exp\_logSum} establishes \eqref{eq:positive}. Thus a totalized product definition is not being used as a substitute for convergence. By \eqref{eq:shift}, $S_N\to K$, and this $K$ is the source's $K_B$.
+
+\section{The first omitted factor forces an error}
+The finite products satisfy
+\[
+P_{n+1}=P_n a_n,\qquad P_n>0,\qquad P_{n+1}\le P_n.
+\]
+Their limit therefore obeys $K\le P_n$ for every $n$. In particular,
+\begin{align}
+P_n-K
+&\ge P_n-P_{n+1}=P_n(1-a_n)\notag\\
+&\ge K(1-a_n)\ge\frac{2K}{(n+3)^2}.\label{eq:prefixlower}
+\end{align}
+The second inequality uses both $P_n\ge K$ and $1-a_n\ge0$. For $N\ge3$, substitute $n=N-2$ in \eqref{eq:prefixlower} and use \eqref{eq:shift} to obtain the claimed source-indexed bound:
+\begin{equation}\label{eq:errorlower}
+\boxed{\quad 0<\frac{2K}{(N+1)^2}\le S_N-K=|S_N-K|\quad(N\ge3).\quad}
+\end{equation}
+Only the first omitted factor was needed. This lower bound suffices for the disproof; it is not a matching upper bound or a claim that the true error has exact order $N^{-2}$.
+
+\section{Every proposed cubic bound fails}
+\begin{theorem}\label{thm:failure}
+For every $C\in\R$ and every $N_0\in\N$, there exists a natural number $N\ge\max(N_0,3)$ such that
+\[
+\frac{C}{N^3}<|S_N-K|.
+\]
+Equivalently, the sequence $N^3|S_N-K|$ is unbounded on every tail. In particular,
+\[
+(S_N-K)_{N\in\N}\text{ is not }O(N^{-3})\qquad(N\to\infty).
+\]
+\end{theorem}
+\begin{proof}
+For $N\ge3$, we have $N+1\le2N$. Multiplying \eqref{eq:errorlower} by $N^3>0$ therefore yields
+\begin{equation}\label{eq:scaled}
+N^3|S_N-K|\ge\frac{2K N^3}{(N+1)^2}\ge\frac K2N.
+\end{equation}
+Because $K>0$, choose an integer $N\ge\max(N_0,3)$ with $N>2C/K$. Then \eqref{eq:scaled} gives $N^3|S_N-K|>C$. Division by the positive number $N^3$ gives the desired violation. Since $C$ and $N_0$ were arbitrary, no eventual cubic upper bound can hold.
+\end{proof}
+
+This argument rules out the rate conjunct and hence the conjunction asserted by conjecture 00000000283. It leaves the transcendence of $K_B$ and the suggested reduction to algebraic independence of Gamma values undecided. It uses neither numerical approximations to $K_B$ nor a special-function representation of it.
+
+\section{Formalization and scope}
+The accompanying project uses Lean 4.19.0 and its pinned Mathlib dependencies. Its objects are real cosine factors, ordinary finite products, and the genuine infinite product. \texttt{Factors.lean} proves the factor estimates, logarithm summability, a \texttt{HasProd} certificate, positivity, and convergence of finite prefixes. \texttt{Prefixes.lean} proves monotonicity, the exact interval-product bridge, convergence of the source-indexed products, and \eqref{eq:errorlower}.
+
+In \texttt{Rate.lean}, \texttt{cubic\_bound\_counterexample} has the unrestricted quantifiers of Theorem~\ref{thm:failure}. The definition \texttt{CubicConvergence} is Mathlib's actual \texttt{Asymptotics.IsBigO} at \texttt{atTop}, applied to
+\[
+N\longmapsto S_N-K,\qquad N\longmapsto ((N:\R)^3)^{-1}.
+\]
+Its norm-based definition gives the ordinary eventual absolute-error inequality. The cutoff in the quantitative theorem is at least $3$, so no division-by-zero convention at $N=0$ enters the contradiction. The final theorem \texttt{conjecture\_283} proves $\neg\,\texttt{CubicConvergence}$. It formalizes the false rate conjunct rather than introducing a substitute for the unspecified Gamma-value reduction.
+
+Build, strict replay, axiom inspection, source-identity checks, and independent semantic review are documented separately in the submission's verification materials. Those local records do not claim acceptance by the competition's maintainers.
+
+\begin{thebibliography}{9}
+\bibitem{CS}
+M. Chamberland and A. Straub,
+\emph{On gamma quotients and infinite products},
+arXiv:1309.3455 (2013), Section~4.1.
+\href{https://arxiv.org/abs/1309.3455}{arxiv.org/abs/1309.3455}.
+This section provides background on the Kepler--Bouwkamp product and its numerical evaluation. No theorem or numerical result from it is assumed in the proof above.
+\end{thebibliography}
+\end{document}
