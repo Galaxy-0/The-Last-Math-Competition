@@ -1,0 +1,170 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\newcommand{\N}{\mathbb{N}}
+
+\title{A disproof of Conjecture 00000008185\\[2pt]
+\large $G(k) \ne k$ for every $k \ge 2$, so ``$G(k)=k$'' has no threshold}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000008185 reads (English version):
+
+\begin{quote}
+Definition: The minimal bases of power-sum representations of integers: the computational threshold
+waring\_c(k) of $g(k)$ and $G(k)$ of Waring's problem. Conjecture: The optimal upper bound $G(k) \le
+k(\log k + \log\log k + C)$ holds with $C = 4$ an explicit tightening of the Vaughan-type constant and a
+remainder $O(k/\log k)$ (a logarithmic remainder law); the exceptional set of the complete formula for
+$g(k)$ (the 157 exceptions at $k = 4$) is finite (a finite exception law), the last element being 79 (a
+seventy-nine last-exception rigidity); and the high-dimensional generalization of the known rigidity
+$G(4) = 16$ -- namely $G(k) = k$ -- first holds at threshold $k$ at least 7 (a seventh-power asymptotic
+threshold).
+\end{quote}
+
+The Chinese version of the last clause reads, in transliteration, ``G(4)=16 de shiliu gangxing
+(yizhi) de gaowei tuiguang G(k)=k de zuixiao k wei k $\ge$ 7 de jianjin chengli yu (qici jianjin
+yu)'': ``the minimal $k$ for the higher-dimensional generalization $G(k)=k$ of the (known) rigidity
+$G(4)=16$ is the asymptotic threshold $k \ge 7$''.
+
+The conjecture is a conjunction of three laws. \textbf{Result.} The third law (the seventh-power
+threshold) is false under each reading listed in Section~\ref{sec:reading}, so the conjunction is false.
+The reason is the classical lower bound $G(k) \ge k+1$ for $k \ge 2$, which we reprove from scratch by
+counting; in particular $G(k) = k$ holds for no $k \ge 2$. Everything is formalized in Lean~4 with
+Mathlib (Section~\ref{sec:lean}).
+
+\section{Definitions, readings and conventions}\label{sec:reading}
+
+\begin{definition}[Hardy--Littlewood $G(k)$]
+$G(k)$ is the least positive integer $s$ such that every sufficiently large integer is a sum of at most
+$s$ positive $k$-th powers. Source: Wikipedia, \emph{Waring's problem}
+(\url{https://en.wikipedia.org/wiki/Waring%27s_problem}): ``G(k) is defined to be the least positive
+integer s such that every sufficiently large integer (i.e. every integer greater than some constant) can
+be represented as a sum of at most s positive integers to the power of k.''
+\end{definition}
+
+In Lean: \texttt{IsSumAtMost k s n} says $n = a_1^k + \dots + a_m^k$ with $m \le s$ and all $a_i \ge 1$
+(a list of positive integers); \texttt{Suffices k s} says $\exists N\ \forall n \ge N$,
+\texttt{IsSumAtMost k s n}; and \texttt{waringG k} is \texttt{sInf \{s | Suffices k s\}} over $\N =
+\{0,1,2,\dots\}$.
+
+\textbf{Conventions.} (i) $s = 0$ never suffices (large $n$ is not an empty sum), so the infimum is
+over positive $s$, as in the definition. (ii) Hilbert's theorem that some $s$ suffices is not in
+Mathlib. If no $s$ sufficed, Lean's \texttt{sInf} of the empty set would be $0$; the results below do not
+depend on this junk value: $G(k) \ne k$ holds either way, and $G(k) \ge k+1$ is stated under the
+hypothesis that some $s$ suffices. (iii) Sums of at most $s$ positive $k$-th powers are the same as sums
+of exactly $s$ nonnegative $k$-th powers (pad with zeros); the proof uses the latter for counting.
+
+\textbf{Readings of the last clause refuted.}
+\begin{enumerate}[label=(R\arabic*)]
+\item $G(7) = 7$, or $G(k) = k$ for all $k \ge 7$.
+\item There is a threshold $K \ge 7$ with $G(k) = k$ for all $k \ge K$ (``asymptotic threshold'').
+\item The least $k \ge 2$ with $G(k) = k$ exists and is at least $7$.
+\item The least $k \ge 1$ with $G(k) = k$ is at least $7$ (false since $G(1) = 1$; Wikipedia:
+``Clearly, G(1) = 1.'').
+\end{enumerate}
+
+\section{Proof}
+
+\begin{lemma}[padding and counting]\label{lem:count}
+Let $k \ge 1$ and $t \ge 0$. If $n \le t^k$ is a sum of at most $k$ positive $k$-th powers, then
+$n = \sum_{b \in m} b^k$ for a multiset $m$ of exactly $k$ elements of $\{0, 1, \dots, t\}$. There are
+$\binom{t+k}{k}$ such multisets, so at most $\binom{t+k}{k}$ integers $n \le t^k$ are such sums.
+\end{lemma}
+\begin{proof}
+Each base $a$ satisfies $a^k \le n \le t^k$, so $a \le t$. Pad the list of bases with zeros to length
+$k$; since $0^k = 0$ the sum is unchanged. The number of $k$-multisets from a set of $t+1$ elements is
+$\binom{t+1+k-1}{k} = \binom{t+k}{k}$ (Mathlib: \texttt{Sym.card\_sym\_eq\_choose}).
+\end{proof}
+
+\begin{lemma}\label{lem:ineq}
+For $k \ge 2$ and every $M \ge 0$, with $t = 3k + 4^k M$ and $C = \binom{t+k}{k}$, we have $C + M \le
+t^k$.
+\end{lemma}
+\begin{proof}
+(a) $k!\, C = (t+k)(t+k-1)\cdots(t+1) \le (t+k)^k$. (b) $3(t+k) \le 4t$ since $t \ge 3k$, so
+$3^k (t+k)^k \le 4^k t^k$. (c) $4^k + 1 \le 3^k\, k!$ for $k \ge 2$: for $k = 2$, $17 \le 18$; and
+$4^{k+1} + 1 \le 4(4^k+1) \le 4 \cdot 3^k k! \le 3^{k+1}(k+1)!$ since $4 \le 3(k+1)$. (d) $C =
+\binom{t+k}{t} \ge \binom{t+1}{t} = t+1 > 4^k M$. From (a)--(c), $(4^k+1) C \le 3^k k!\, C \le 3^k
+(t+k)^k \le 4^k t^k$. With (d), $4^k (C + M) \le 4^k C + C \le 4^k t^k$; divide by $4^k$.
+\end{proof}
+
+\begin{theorem}\label{thm:key}
+For every $k \ge 2$ and every $M$, some $n \ge M$ is not a sum of at most $k$ positive $k$-th powers.
+Hence no $s \le k$ suffices for all sufficiently large integers.
+\end{theorem}
+\begin{proof}
+Take $t$ as in Lemma~\ref{lem:ineq}. The interval $[M, t^k]$ contains $t^k + 1 - M > C$ integers, and by
+Lemma~\ref{lem:count} at most $C$ of them are sums of at most $k$ positive $k$-th powers. A sum of at
+most $s \le k$ powers is also a sum of at most $k$ powers.
+\end{proof}
+
+\begin{corollary}\label{cor:main}
+For every $k \ge 2$: $G(k) \ne k$; and $G(k) \ge k+1$ whenever some $s$ suffices. Also $G(1) = 1$.
+Consequently (R1)--(R4) are all false.
+\end{corollary}
+\begin{proof}
+If $G(k) = k \ge 2$, then the set $\{s : \text{$s$ suffices}\}$ is nonempty (otherwise its infimum would
+be $0$), so its infimum $k$ belongs to it, contradicting Theorem~\ref{thm:key}. If the set is nonempty,
+its least element is not $\le k$, so it is $\ge k+1$. For $k = 1$: $n = n^1$ shows $s = 1$ suffices, and
+$s = 0$ does not. (R1) fails at $k = 7$; (R2) fails at $k = K$; (R3) fails because no $k \ge 2$ has $G(k) =
+k$; (R4) fails because $G(1) = 1$ forces the least such $k$ to be $1 < 7$.
+\end{proof}
+
+\section{Lean formalization}\label{sec:lean}
+
+File \texttt{lean/Conjecture8185/Basic.lean} (179 lines, namespace \texttt{C8185}; only import
+\texttt{Mathlib}). Definitions: \texttt{IsSumAtMost}, \texttt{Suffices}, \texttt{waringG},
+\texttt{toFin}, \texttt{powSum} (sum of $k$-th powers over a \texttt{Sym (Fin (t+1)) k}). Lemmas:
+\texttt{mem\_image\_powSum} (Lemma~\ref{lem:count}); \texttt{four\_pow\_lt}, \texttt{choose\_add\_le}
+(Lemma~\ref{lem:ineq}); \texttt{exists\_not\_sum}, \texttt{not\_suffices} (Theorem~\ref{thm:key});
+\texttt{waringG\_ne}, \texttt{waringG\_ge}, \texttt{waringG\_one} (Corollary~\ref{cor:main}). Main theorem
+(ASCII rendering):
+
+\begin{verbatim}
+theorem conjecture_8185_false :
+    (forall k, 2 <= k -> forall N, exists n >= N, not IsSumAtMost k k n) and
+    (forall k, 2 <= k -> waringG k != k) and waringG 1 = 1 and
+    waringG 7 != 7 and
+    not (forall k, 7 <= k -> waringG k = k) and
+    not (exists K, 7 <= K and forall k, K <= k -> waringG k = k) and
+    not (exists k, 2 <= k and waringG k = k) and
+    not (exists k0, 7 <= k0 and waringG k0 = k0 and
+           forall k, 1 <= k -> waringG k = k -> k0 <= k)
+\end{verbatim}
+
+\textbf{Axiom audit.} \texttt{\#print axioms C8185.conjecture\_8185\_false} reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no
+\texttt{native\_decide}. The file compiles under \texttt{lake build} and with
+\texttt{-DwarningAsError=true}.
+
+\section{Scope}
+
+\begin{itemize}
+\item The clause is refuted literally, with $G(k) = k$ as written in both languages. If ``$G(k) = k$''
+were a garbling of another generalization of $G(4) = 16$ (for instance $G(k) = 4k$, $k^2$, $2^k$ or
+$k+1$), nothing here refutes it.
+\item The first law ($G(k) \le k(\log k + \log\log k + 4)$ with a remainder) is of Wooley type and is
+not addressed. The second law (``157 exceptions at $k=4$'', ``last element 79'') is not addressed
+either. Wikipedia notes that ``79 requires 19 fourth powers''.
+\item The witness exponents are not degenerate: the failure holds for every $k \ge 2$, including the
+stated threshold $k = 7$. Only reading (R4) also uses $k = 1$.
+\end{itemize}
+
+\end{document}
