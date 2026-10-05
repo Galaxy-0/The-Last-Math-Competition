@@ -1,0 +1,127 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\R}{\mathbb R}
+\newcommand{\supp}{\operatorname{supp}}
+\title{An entropy maximizer with branching transition support}
+\author{C0ldSmi1e\\\small Disproof of conjecture 00000001277}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+On three states, forbid a state from following itself and give each of the other two successors probability $1/2$. With the uniform initial law, the actual block entropy is $\log3+n\log2$ for a block of $n+1$ states, so the entropy rate is $\log2$. We prove that this rate is maximal over all initial laws and all admissible transition kernels. The maximizing support has two entries in every row and column. More strongly, every kernel with partial-permutation support has entropy rate zero for every initial law, so no such kernel can maximize this constrained problem.
+\end{abstract}
+
+\section{The clause being refuted}
+Both language versions of conjecture 00000001277 claim that an entropy-maximizing Markov chain has partial-permutation transition support. We take order $k=1$, state space $S=\{0,1,2\}$, and the admissibility matrix
+\[
+ A_{ij}=\begin{cases}0,&i=j,\\1,&i\ne j.\end{cases}
+\]
+An admissible kernel $T=(T_{ij})$ has nonnegative entries, row sums one, and $T_{ii}=0$. Its support is the zero-one matrix with an entry one exactly when $T_{ij}>0$. A partial permutation support has at most one such entry in each row and each column. Thus the condition concerns positive transitions, not their numerical sizes.
+
+We refute this explicit support clause, which suffices to refute the stated conjunction. The additional unspecified permutation-block formula is not separately assigned a definition or claimed false. The exact bilingual source accompanies the submission as \texttt{conjecture.md}.
+
+\section{Actual block laws and the entropy-rate definition}
+Let $\rho$ be any initial probability law on $S$, and let $T$ be any stochastic kernel. Define probability laws $q_n$ on histories of $n+1$ states recursively by
+\[
+ q_0(x_0)=\rho(x_0),\qquad
+ q_{n+1}(x_0,\ldots,x_n,y)=q_n(x_0,\ldots,x_n)T_{x_ny}.
+\]
+Row normalization proves that each $q_n$ has total mass one. Summing over $y$ returns $q_n$, so these laws are prefix-consistent. Whenever a history has positive probability, its conditional next-state probabilities are exactly $T_{x_ny}$. Iterating the recursion gives the usual path probability
+\[
+ q_n(x_0,\ldots,x_n)=\rho(x_0)\prod_{r=0}^{n-1}T_{x_rx_{r+1}}.
+\]
+These are the generated finite-dimensional Markov laws used throughout the argument.
+
+For a finite probability law $p$, define its Shannon entropy by
+\[
+ H(p)=-\sum_xp(x)\log p(x),\qquad 0\log0:=0.
+\]
+All logarithms are natural. The entropy rate is the limit of actual block entropies per state:
+\begin{equation}\label{eq:rate}
+ h(\rho,T)=\lim_{n\to\infty}\frac{H(q_n)}{n+1},
+\end{equation}
+whenever this limit exists. This is the normalized joint-block entropy convention of \cite[equation (1)]{han}, with indexing starting at zero. No theorem from that reference is assumed in the proof.
+
+\begin{lemma}[Finite entropy recursion]\label{lem:chain}
+For the block laws just defined,
+\begin{equation}\label{eq:recursion}
+ H(q_{n+1})=H(q_n)+\sum_{x_0,\ldots,x_n}q_n(x_0,\ldots,x_n)H(T_{x_n}),
+\end{equation}
+where $T_i$ denotes the probability law in row $i$.
+\end{lemma}
+\begin{proof}
+Set $\phi(a)=-a\log a$, with $\phi(0)=0$. For nonnegative probabilities $a,b$, the identity
+$\phi(ab)=b\phi(a)+a\phi(b)$ follows from the logarithm product rule when both are positive; if either vanishes, both sides are zero. Apply it to each actual joint mass $q_n(x)T_{x_ny}$ and sum over $x,y$. The row sums are one, giving \eqref{eq:recursion}.
+\end{proof}
+
+\section{A maximum over all admissible kernels and initial laws}
+An admissible row has its diagonal coordinate equal to zero; its other two probabilities are $p$ and $1-p$ for some $p\in[0,1]$. Its entropy is therefore
+\[
+ b(p)=-p\log p-(1-p)\log(1-p)\le\log2.
+\]
+For completeness, on $(0,1)$ the derivative is $b'(p)=\log((1-p)/p)$, which is positive before $1/2$ and negative after $1/2$. The continuous endpoint values are zero, and $b(1/2)=\log2$. This proves the bound, including deterministic rows.
+
+Each weighting distribution in \eqref{eq:recursion} has total mass one. It follows by induction, without assuming $\rho T=\rho$, that
+\begin{equation}\label{eq:upper}
+ H(q_n)\le H(\rho)+n\log2\qquad(n\ge0).
+\end{equation}
+Since $(H(\rho)+n\log2)/(n+1)\to\log2$, every entropy-rate limit in \eqref{eq:rate} is at most $\log2$. In particular, the optimization domain here includes every initial probability law and every time-homogeneous admissible kernel, not merely stationary initial laws or a chosen parametric subfamily. The block bound holds even without first assuming existence of the comparator's limit.
+
+\section{A stationary witness attaining the bound}
+Choose
+\[
+ \pi=(1/3,1/3,1/3),\qquad
+ P=\begin{pmatrix}
+ 0&1/2&1/2\\1/2&0&1/2\\1/2&1/2&0
+ \end{pmatrix}.
+\]
+This kernel is admissible. Every column also sums to one, and
+$\sum_i\pi_iP_{ij}=2(1/3)(1/2)=1/3=\pi_j$, so $\pi P=\pi$. The terminal marginal of every generated block is therefore $\pi$, by induction on the number of transitions. In particular, all states have positive marginal mass.
+
+Each row of $P$ has entropy $\log2$, while $H(\pi)=\log3$. Equation~\eqref{eq:recursion} now increases the block entropy by exactly $\log2$ at every append, giving
+\begin{equation}\label{eq:witness}
+ H(q_n)=\log3+n\log2,\qquad
+ \frac{H(q_n)}{n+1}=\log2+\frac{\log3-\log2}{n+1}\longrightarrow\log2.
+\end{equation}
+The limit exists and attains the upper bound \eqref{eq:upper}, proving global maximality for the stated constraint.
+
+This witness has actual first-order dependence. The joint probability of two consecutive zeros is $\pi_0P_{00}=0$, whereas independent draws from the uniform marginal would give $\pi_0^2=1/9$. Thus the example is not an order-zero independent sequence, even if the conjecture's order is interpreted as minimal order.
+
+\section{Why no partial-permutation kernel can maximize}
+The support of $P$ is precisely $A$. In particular, $P_{01}>0$ and $P_{02}>0$ are distinct occupied entries in one row. Hence the support of this entropy maximizer is not a partial permutation matrix.
+
+There is also no different partial-permutation maximizer hidden among the admissible kernels. Indeed, suppose any row-stochastic kernel $T$ has partial-permutation support. Its row-uniqueness condition gives at most one positive entry per row. Since the row sum is one, there is exactly one, and its value is one. Every row law is therefore a point mass with entropy zero. Applying \eqref{eq:recursion} for an arbitrary initial law $\rho$ gives
+\[
+ H(q_n)=H(\rho)\quad\hbox{for every }n,\qquad
+ h(\rho,T)=\lim_{n\to\infty}\frac{H(\rho)}{n+1}=0.
+\]
+Because $\log2>0$, no kernel with this support property can attain the feasible maximum $\log2$.
+
+\begin{theorem}
+For the three-state no-self-transition constraint, the maximal entropy rate is $\log2$. It is attained by $(\pi,P)$ above, whose support is not a partial permutation. Every partial-permutation-support kernel has rate zero for every initial law, and therefore cannot be an entropy maximizer for this constraint.
+\end{theorem}
+\begin{proof}
+The unrestricted upper bound is \eqref{eq:upper}; attainment and existence of the witness rate follow from \eqref{eq:witness}. The support calculation and deterministic-row argument give the remaining assertions.
+\end{proof}
+This disproves the explicit support clause in both language versions, including the weaker reading that some entropy maximizer should have partial-permutation support.
+
+\section{Formalization and verification scope}
+The Lean project uses Lean 4.19.0 and Mathlib v4.19.0 with pinned dependencies. Its chain representation consists of an initial probability mass function, transition probability mass functions, and recursively generated probability mass functions on nonempty finite histories. Successive-append histories are related by an explicit equivalence to ordinary time-indexed tuples. Prefix coherence, actual positive-history conditional probabilities, and preservation of entropy under that equivalence link this representation to the block laws above. Shannon entropy is computed from their actual masses, and entropy rate is a proved limit of normalized block entropies.
+
+The formal stationarity certificate is the invariant initial-law equation and the resulting terminal marginals. No separately constructed probability measure on infinite paths or separately proved shift-stationarity theorem is claimed. The maximum compares arbitrary initial laws and admissible kernels; it does not add stationarity to the comparator hypotheses.
+
+Exact source identities, reproduction commands, declaration and axiom inspection, execution results, and independent semantic scrutiny are supplied in the accompanying verification materials. This report does not itself certify a Lean build result or maintainer acceptance. The proof requires no numerical simulation or external entropy-rate theorem.
+
+\begin{thebibliography}{1}
+\bibitem{han}
+Y.~Han, J.~Jiao, C.-Z.~Lee, T.~Weissman, Y.~Wu, and T.~Yu,
+\emph{Entropy Rate Estimation for Markov Chains with Large State Space},
+NeurIPS 2018, \href{https://arxiv.org/abs/1802.07889}{arXiv:1802.07889}, equation~(1).
+\end{thebibliography}
+\end{document}

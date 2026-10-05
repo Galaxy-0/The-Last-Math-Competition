@@ -1,0 +1,133 @@
+import Conjecture1277
+
+#print Conjecture1277.entropy
+#print Conjecture1277.joint
+#print Conjecture1277.Word
+#print Conjecture1277.lastState
+#print Conjecture1277.wordEquiv
+#print Conjecture1277.blockLaw
+#print Conjecture1277.Stationary
+#print Conjecture1277.meanRowEntropy
+#print Conjecture1277.HasEntropyRate
+#print Conjecture1277.tupleLaw
+#print Conjecture1277.initial
+#print Conjecture1277.transition
+#print Conjecture1277.PartialPermutationSupport
+#print Conjecture1277.Admissible
+#print Conjecture1277.MaximizesEntropyRate
+#print Conjecture1277.SupportConjecture
+
+#check Conjecture1277.sum_prob
+#print axioms Conjecture1277.sum_prob
+#check Conjecture1277.joint_apply
+#print axioms Conjecture1277.joint_apply
+#check Conjecture1277.joint_map_fst
+#print axioms Conjecture1277.joint_map_fst
+#check Conjecture1277.joint_map_snd
+#print axioms Conjecture1277.joint_map_snd
+#check Conjecture1277.entropy_joint
+#print axioms Conjecture1277.entropy_joint
+#check Conjecture1277.expectation_map
+#print axioms Conjecture1277.expectation_map
+#check Conjecture1277.entropy_map_equiv
+#print axioms Conjecture1277.entropy_map_equiv
+#check Conjecture1277.instFintypeWord
+#print axioms Conjecture1277.instFintypeWord
+#check Conjecture1277.wordEquiv_zero
+#print axioms Conjecture1277.wordEquiv_zero
+#check Conjecture1277.wordEquiv_succ
+#print axioms Conjecture1277.wordEquiv_succ
+#check Conjecture1277.wordEquiv_last
+#print axioms Conjecture1277.wordEquiv_last
+#check Conjecture1277.blockLaw_append
+#print axioms Conjecture1277.blockLaw_append
+#check Conjecture1277.blockLaw_consistent
+#print axioms Conjecture1277.blockLaw_consistent
+#check Conjecture1277.blockLaw_markov
+#print axioms Conjecture1277.blockLaw_markov
+#check Conjecture1277.blockLaw_last
+#print axioms Conjecture1277.blockLaw_last
+#check Conjecture1277.block_entropy
+#print axioms Conjecture1277.block_entropy
+#check Conjecture1277.normalized_block_entropy
+#print axioms Conjecture1277.normalized_block_entropy
+#check Conjecture1277.stationary_hasEntropyRate
+#print axioms Conjecture1277.stationary_hasEntropyRate
+#check Conjecture1277.entropyRate_unique
+#print axioms Conjecture1277.entropyRate_unique
+#check Conjecture1277.block_entropy_le
+#print axioms Conjecture1277.block_entropy_le
+#check Conjecture1277.block_entropy_of_constant_rows
+#print axioms Conjecture1277.block_entropy_of_constant_rows
+#check Conjecture1277.affine_div_tendsto
+#print axioms Conjecture1277.affine_div_tendsto
+#check Conjecture1277.hasEntropyRate_of_constant_rows
+#print axioms Conjecture1277.hasEntropyRate_of_constant_rows
+#check Conjecture1277.entropyRate_le
+#print axioms Conjecture1277.entropyRate_le
+#check Conjecture1277.tupleLaw_entropy
+#print axioms Conjecture1277.tupleLaw_entropy
+#check Conjecture1277.tupleLaw_entropy_rate
+#print axioms Conjecture1277.tupleLaw_entropy_rate
+#check Conjecture1277.initial_apply
+#print axioms Conjecture1277.initial_apply
+#check Conjecture1277.transition_apply
+#print axioms Conjecture1277.transition_apply
+#check Conjecture1277.transition_self
+#print axioms Conjecture1277.transition_self
+#check Conjecture1277.transition_of_ne
+#print axioms Conjecture1277.transition_of_ne
+#check Conjecture1277.transition_pos_of_ne
+#print axioms Conjecture1277.transition_pos_of_ne
+#check Conjecture1277.initial_stationary
+#print axioms Conjecture1277.initial_stationary
+#check Conjecture1277.transition_not_partialPermutation
+#print axioms Conjecture1277.transition_not_partialPermutation
+#check Conjecture1277.transition_zero_ne_one
+#print axioms Conjecture1277.transition_zero_ne_one
+#check Conjecture1277.transition_not_constant
+#print axioms Conjecture1277.transition_not_constant
+#check Conjecture1277.entropy_pure
+#print axioms Conjecture1277.entropy_pure
+#check Conjecture1277.entropy_fin_three
+#print axioms Conjecture1277.entropy_fin_three
+#check Conjecture1277.sum_prob_fin_three
+#print axioms Conjecture1277.sum_prob_fin_three
+#check Conjecture1277.transition_entropy
+#print axioms Conjecture1277.transition_entropy
+#check Conjecture1277.entropy_le_log_two_of_zero
+#print axioms Conjecture1277.entropy_le_log_two_of_zero
+#check Conjecture1277.weighted_entropy_le_log_two
+#print axioms Conjecture1277.weighted_entropy_le_log_two
+#check Conjecture1277.initial_transition_entropy
+#print axioms Conjecture1277.initial_transition_entropy
+#check Conjecture1277.eq_pure_of_unique_successor
+#print axioms Conjecture1277.eq_pure_of_unique_successor
+#check Conjecture1277.partialPermutation_row_entropy_zero
+#print axioms Conjecture1277.partialPermutation_row_entropy_zero
+#check Conjecture1277.partialPermutation_weighted_entropy_zero
+#print axioms Conjecture1277.partialPermutation_weighted_entropy_zero
+#check Conjecture1277.stationary_pair_not_independent
+#print axioms Conjecture1277.stationary_pair_not_independent
+#check Conjecture1277.admissible_block_entropy_bound
+#print axioms Conjecture1277.admissible_block_entropy_bound
+#check Conjecture1277.admissible_entropyRate_bound
+#print axioms Conjecture1277.admissible_entropyRate_bound
+#check Conjecture1277.initial_entropy
+#print axioms Conjecture1277.initial_entropy
+#check Conjecture1277.witness_block_entropy
+#print axioms Conjecture1277.witness_block_entropy
+#check Conjecture1277.witness_entropyRate
+#print axioms Conjecture1277.witness_entropyRate
+#check Conjecture1277.witness_maximizes
+#print axioms Conjecture1277.witness_maximizes
+#check Conjecture1277.partialPermutation_block_entropy
+#print axioms Conjecture1277.partialPermutation_block_entropy
+#check Conjecture1277.partialPermutation_entropyRate
+#print axioms Conjecture1277.partialPermutation_entropyRate
+#check Conjecture1277.no_partialPermutation_maximizer
+#print axioms Conjecture1277.no_partialPermutation_maximizer
+#check Conjecture1277.explicit_counterexample
+#print axioms Conjecture1277.explicit_counterexample
+#check Conjecture1277.conjecture_1277
+#print axioms Conjecture1277.conjecture_1277
