@@ -1,0 +1,94 @@
+== lake build (fresh, Lean 4.19.0)
+ℹ [2/3] Built Main
+info: ././././Main.lean:665:0: 'Trellis1022.ex10_represents' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:666:0: 'Trellis1022.ex10_minProfile' does not depend on any axioms
+info: ././././Main.lean:667:0: 'Trellis1022.clause_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:668:0: 'Trellis1022.conjecture_00000001022_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:669:0: 'Trellis1022.clauseMin_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:670:0: 'Trellis1022.conjecture_00000001022_false_min' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:671:0: 'Trellis1022.clausePerm_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:672:0: 'Trellis1022.clauseMinPerm_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:673:0: 'Trellis1022.ex4' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:674:0: 'Trellis1022.family_isGen' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:675:0: 'Trellis1022.family_wf' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:676:0: 'Trellis1022.family_represents' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:677:0: 'Trellis1022.family_gap_states' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:678:0: 'Trellis1022.family_gap_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:679:0: 'Trellis1022.clause_false_family' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:680:0: 'Trellis1022.clause_false_family_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././Main.lean:681:0: 'Trellis1022.family_minProfile_small' does not depend on any axioms
+info: ././././Main.lean:682:0: 'Trellis1022.worstOrder_false' depends on axioms: [propext, Quot.sound]
+info: ././././Main.lean:683:0: 'Trellis1022.inter4_meets_bound' does not depend on any axioms
+info: ././././Main.lean:684:0: 'Trellis1022.rep2_clause_holds' depends on axioms: [propext, Quot.sound]
+Build completed successfully.
+exit 0
+
+== forbidden-token scan
+none
+
+== python3 verify.py
+== 1. The [10,5] counterexample C = {00,11}^5
+PASS C is a binary [10,5] code (32 codewords, rank 5)
+PASS claimed bound min(k,n-k)*ceil(log2 q) = 5
+PASS explicit trellis is well formed, layer sizes [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1]
+PASS explicit trellis: set of path labels == C (layer-by-layer expansion)
+PASS max states = 2, log2 = 1.000 < 5
+PASS max edges/section = 2, log2 = 1.000 < 5
+PASS total vertices = 16, log2 = 4.000 < 5
+PASS total edges = 20, log2 = 4.322 < 5
+PASS Viterbi ops 2|E|-|V|+1 = 25, log2 = 4.644 < 5
+PASS measures are 2, 2, 16, 20, 25
+PASS BCJR profile from ranks s_i = rk G_past + rk G_future - k: [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+PASS BCJR profile by counting |C|/(|P_i||F_i|) agrees
+PASS syndrome (BCJR) trellis built from H: layer sizes [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1], edges/section [2, 2, 2, 2, 2, 2, 2, 2, 2, 2], labels == C
+PASS minimal trellis: s_max = 1 < 5 (edge complexity log2 max|E_i| = 1 < 5)
+
+== 2. The smallest instance [4,2]: {0000,1100,0011,1111}
+PASS codewords
+PASS profile 0,1,0,1,0: s_max = 1 < 2 = min(2,2)
+PASS non-vacuity: interleaved order {0000,1010,0101,1111} has profile 0,1,2,1,0 (attains the bound)
+PASS over all 24 coordinate orders of this code: min s_max = 1, max s_max = 2
+
+== 3. The family {00,11}^m, [2m, m]_2, bound m
+PASS m=1: trellis represents C, s_max=1, bound 1; measures below 2^m: none
+PASS m=2: trellis represents C, s_max=1, bound 2; measures below 2^m: max states, max edges/section
+PASS m=3: trellis represents C, s_max=1, bound 3; measures below 2^m: max states, max edges/section
+PASS m=4: trellis represents C, s_max=1, bound 4; measures below 2^m: max states, max edges/section, total vertices
+PASS m=5: trellis represents C, s_max=1, bound 5; measures below 2^m: max states, max edges/section, total vertices, total edges, Viterbi ops 2|E|-|V|+1
+PASS m=6: trellis represents C, s_max=1, bound 6; measures below 2^m: max states, max edges/section, total vertices, total edges, Viterbi ops 2|E|-|V|+1
+PASS m=7: trellis represents C, s_max=1, bound 7; measures below 2^m: max states, max edges/section, total vertices, total edges, Viterbi ops 2|E|-|V|+1
+PASS m=8: trellis represents C, s_max=1, bound 8; measures below 2^m: max states, max edges/section, total vertices, total edges, Viterbi ops 2|E|-|V|+1
+PASS 5m < 2^m for 5 <= m < 200 (all measures fail for m >= 5)
+
+== 4. q-ary analogues: {aa : a in GF(q)}^m, bound m*ceil(log2 q)
+PASS q=3 m=1: [2,1]_3, s_max = log2 3 = 1.585 bits, bound 2 (violated)
+PASS q=3 m=2: [4,2]_3, s_max = log2 3 = 1.585 bits, bound 4 (violated)
+PASS q=3 m=3: [6,3]_3, s_max = log2 3 = 1.585 bits, bound 6 (violated)
+PASS q=5 m=1: [2,1]_5, s_max = log2 5 = 2.322 bits, bound 3 (violated)
+PASS q=5 m=2: [4,2]_5, s_max = log2 5 = 2.322 bits, bound 6 (violated)
+
+== 5. Worst coordinate order: [4,2] code generated by 1000, 0111
+PASS every one of the 24 orders gives s_max = 1 < 2 = min(2,2)
+
+== 6. Exhaustive: all binary linear codes of length n <= 6
+PASS n=1: 2 distinct subspaces of F_2^n (incl. degenerate codes with zero coordinates and k in {0,n}); Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 0 violate the claimed LOWER bound
+PASS n=2: 5 distinct subspaces of F_2^n (incl. degenerate codes with zero coordinates and k in {0,n}); Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 2 violate the claimed LOWER bound
+PASS n=3: 16 distinct subspaces of F_2^n (incl. degenerate codes with zero coordinates and k in {0,n}); Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 6 violate the claimed LOWER bound
+PASS n=4: 67 distinct subspaces of F_2^n (incl. degenerate codes with zero coordinates and k in {0,n}); Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 37 violate the claimed LOWER bound
+PASS n=5: 374 distinct subspaces of F_2^n (incl. degenerate codes with zero coordinates and k in {0,n}); Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 200 violate the claimed LOWER bound
+PASS n=6: 2825 distinct subspaces of F_2^n (incl. degenerate codes with zero coordinates and k in {0,n}); Wolf's UPPER bound s_max <= min(k,n-k) holds for all; 1785 violate the claimed LOWER bound
+
+== 7. Non-vacuity: {00,11} needs 2 states in every trellis
+PASS no trellis with one middle state represents {00,11}; so the bound (2 states) holds
+
+== 8. Unitless raw totals (report Section 'Unitless total counts')
+PASS q=5: [4,2]_q code F_q^2 + 0^2: every s_i = 0, raw |V| = 5 < 6 = bound (degenerate code: zero coordinates)
+PASS q=7: [4,2]_q code F_q^2 + 0^2: every s_i = 0, raw |V| = 5 < 6 = bound (degenerate code: zero coordinates)
+PASS q=8: [4,2]_q code F_q^2 + 0^2: every s_i = 0, raw |V| = 5 < 6 = bound (degenerate code: zero coordinates)
+PASS q=9: [2,1]_q code F_q^1 + 0^1: every s_i = 0, raw |V| = 3 < 4 = bound (degenerate code: zero coordinates)
+PASS q=16: [2,1]_q code F_q^1 + 0^1: every s_i = 0, raw |V| = 3 < 4 = bound (degenerate code: zero coordinates)
+PASS q <= 4: n+1 > min(k,n-k)*ceil(log2 q) (raw |V| reading true there)
+PASS raw |E| = 20 and raw Viterbi 2|E|-|V|+1 = 25 are >= 5 (not refuted; trivially true)
+
+ALL CHECKS PASSED
+exit 0
