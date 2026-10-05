@@ -1,0 +1,7 @@
+import Conjecture2307
+#print axioms Conjecture2307.conjecture_00000002307_false
+#print axioms Conjecture2307.not_linearBound
+#print axioms Conjecture2307.not_tightAtDerivedLengthTwo
+#print axioms Conjecture2307.fittingLength_le_derivedLength
+#print axioms Conjecture2307.linearBound_of_nontrivial
+#print axioms Conjecture2307.derivedLength_le_one_of_tight
