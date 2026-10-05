@@ -1,0 +1,80 @@
+Verification record: conjecture 00000004289
+
+Result: local formal verification and report validation PASS.
+Independent semantic approval is recorded separately in SEMANTIC_REVIEW.md.
+Maintainer acceptance is not asserted by these records.
+
+Source identity
+Official bilingual source SHA-256: c58010cd76af9ed661fa22e252ba1561223305e879cfeb20b69ea0af3f8a7359
+Audited upstream main: d7d4bc9f6918401d3fb22c6e473df63eba5dbb78
+Lean source SHA-256: a65523048324a86cfedcd245f75d317d283f4cc38a17af0cd1a0a46de5d98f6a
+Exact source/config identities: verification/frozen-sources.json.
+
+Mathematical scope
+Actual additive abelian groups carry their canonical integer action. Module.Free
+is basis freeness and Module.Flat is the standard tensor-flatness predicate.
+Every additive subgroup is quantified, and the actual subgroup cardinal is
+compared strictly with the same threshold in both definitions. The whole-group
+non-free condition is retained. Free modules are flat by the checked library
+instance Module.Flat.of_free, so almost-free implies flat-free at every threshold.
+Actual existential group witnesses are impossible for every pair of threshold
+and carrier cardinals, independently. The diagonal class of separation cardinals
+is empty, hence has no least member; in particular it cannot have minimum aleph
+omega. The aleph-one implication is separately proved. The correct ordinal-index
+aleph definitions and universe-polymorphic cardinalities are used.
+
+The report's finite-support tensor argument explains the same standard free-flat
+implication. The library proof used by Lean goes through projectivity. No extra
+mathematical assumption, numerical experiment, or external computation is needed.
+The existence/minimum component of the compound source is refuted. Coded ZFC
+provability/independence and the construction-method assertions are not formalized
+or silently represented by arbitrary predicates. Both source ambiguities about
+threshold versus size and the smaller-cardinal range are explicitly discussed.
+
+Independent execution
+Fresh build directory: /private/tmp/tlmc4289-independent-final
+Compiler: Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)
+Compiler commit: 6caaee842e9495688c1567e78c0e68dbb96942aa
+All nine dependency revisions match the pinned manifest; tracked dependency
+sources are clean before and after. Candidate build outputs were absent before
+the independent build; no candidate olean files were copied.
+lake build: exit 0.
+Full source and Check.lean replay with warnings treated as errors: exit zero.
+Check prints five definitions and nine theorem types and axiom lists.
+All nine theorem closures contain only propext, Classical.choice and Quot.sound.
+Exhaustive originating-module inventory: 16 constants, comprising all 14 authored
+declarations and two compiler-generated runtime constants. Every constant is
+retained with full type, safety flags and transitive axiom closure. All authored
+declarations are safe and nonpartial. There are no custom axiom declarations.
+The generated SeparationCardinals._cstage1 and ._cstage2 carry the compiler's
+unsafe flag; neither is an authored unsafe declaration or a proof premise.
+Their axiom closures were checked too: respectively the standard three axioms
+and no axioms. No constant or closure is excluded from the audit. There are no
+partial declarations, unexpected unsafe declarations, or additional axioms.
+The authored-source bypass scan has no hits. Source/config/inventory hashes and
+compiler/dependency identities remain unchanged after all checks.
+Started: 2026-10-05T05:30:15.775387+00:00
+Finished: 2026-10-05T05:30:25.740511+00:00
+
+Report
+main.tex SHA-256: b0283b2920ffdbc9d1f415ebc53e6466aa2353c48caa6beeae4daeecd6f9f720
+main.pdf SHA-256: 08474fba659570bafcc91b9ce2db280ffdad88dcbeaa6b6975c2aa589c880ee4
+Built-in editor compilation: success for this exact source.
+Existing Tectonic export: exit zero; no warnings or box diagnostics.
+Both final pages rendered and directly visually inspected: PASS.
+Complete text extracted with pypdf and read; render/source/PDF hashes recorded.
+
+Contribution eligibility
+Initial audit: PASS; 601 all-state PRs and
+32 complete identifier/topic searches. The three possible leads'
+complete bodies and discussions were read and distinguished. Both remote branches,
+all local refs/history and Discussions were checked. No prior same-ID submission
+or invalid same-ID submission was found. Both complete current guides were read.
+Current prepublication and immediate-publication observations are packaged
+separately. Public indexed and accessible history limits are disclosed in the
+eligibility records, including an unrelated issue's unpublished broader list.
+
+The reproduction commands are in README.md. The inspection Python and Lean code
+collects evidence and proves no submitted theorem. The report exporter is also
+auxiliary tooling, not a mathematical oracle. All required mathematical computation
+is symbolic in the proof, with no auxiliary numerical program required.

@@ -1,0 +1,70 @@
+CANDIDATE-FREE SEMANTIC PREASSESSMENT — conjecture00000004289
+
+Decision: GO for an independent proof/disproof attempt under the standard actual-object interpretation specified below. This is an interpretation and obligations decision only. It does not evaluate the truth of the conjecture, supply a candidate, suggest a proof/disproof, or endorse a submission.
+
+Scope and provenance
+--------------------
+Read the complete bilingual source at /private/tmp/tlmc4289-eligibility/conjecture.md and both complete current guides README.md and README.zh-CN.md in the same directory. The source SHA256 was independently verified as c58010cd76af9ed661fa22e252ba1561223305e879cfeb20b69ea0af3f8a7359. Upstream-main identifier supplied by the parent is d7d4bc9f6918401d3fb22c6e473df63eba5dbb78; the parent reports eligibility PASS and no prior candidate submission. This review does not repeat the eligibility investigation.
+
+No candidate solution, candidate proof, prior solution, earlier mathematical discussion, or author notes for this conjecture were consulted. No mathematical solution or project was authored. Inspected only the source/guides, standard pinned-library definitions and their definitional bridges, version metadata, and a primary reference defining tensor flatness. The source's English and Chinese substantive mathematical statements agree for the purposes below.
+
+Runtime verified: Lean 4.19.0, commit 6caaee842e94, arm64-apple-darwin23.6.0. Mathlib verified: exact tag v4.19.0, commit c44e0c8ee63ca166450922a373c7409c5d26b00b. Library root in references below: /private/tmp/tlmc310-proof/.lake/packages/mathlib/Mathlib. No Lean compilation was necessary or performed for this definition-only assessment.
+
+1. Actual-object semantic specification
+---------------------------------------
+Use an arbitrary carrier G : Type u with AddCommGroup G. This is an actual abelian group, written additively. The scalar ring is the ordinary integers, with the canonical Module ℤ G supplied by AddCommGroup.toIntModule (Algebra/Module/NatInt.lean:55). Do not allow an unrelated scalar ring or substitute a free noncommutative group interpretation.
+
+“Free” means Module.Free ℤ G, with the same interpretation for each subgroup carrier. This class contains the existence of an actual basis, not a Boolean label or a prescribed numerical property (LinearAlgebra/FreeModule/Basic.lean:37). A Basis I ℤ G is represented by an actual linear equivalence G ≃ₗ[ℤ] (I →₀ ℤ), so its coordinates have finite support (LinearAlgebra/Basis/Defs.lean:88). Thus it expresses free abelian group structure. No finite-rank or countability restriction is implicit. A replacement predicate is acceptable only with a proved equivalence to this standard notion.
+
+“Flat” means Module.Flat ℤ G. The definition tests injectivity after tensoring actual finitely generated submodule inclusions, with the stated ambient finiteness/universe conditions (RingTheory/Flat/Basic.lean:111). The same file supplies the semantic bridge to preservation of injective linear maps at lines 266 and 277, and to exactness of tensoring at lines 393, 407, 415, and 429. The file's warning about mono-flat versus genuine flat for general semirings does not leave an ambiguity here: ℤ is a commutative ring and the ring-specific exactness equivalences apply. If a submission defines flatness directly by tensor exactness/injectivity, establish or cite the exact pinned equivalence and carry the universe conditions. Do not replace flatness with an arbitrary numerical, rank, cardinal, or torsion predicate without proving the required standard equivalence.
+
+Primary reference for this terminology: The Stacks Project, Remark 10.12.13, https://stacks.math.columbia.edu/tag/00DJ. It defines flatness by exactness of tensoring. This reference was consulted only to confirm the meaning of flatness.
+
+“Subgroup” means every H : AddSubgroup G, and “cardinality of H” means Cardinal.mk of its carrier subtype. Alternatively, every H : Submodule ℤ G is faithful because AddSubgroup.toIntSubmodule is an order equivalence with inverse Submodule.toAddSubgroup and identical underlying carrier sets (Algebra/Module/Submodule/Lattice.lean:411–436). The report must explain this bridge if it uses submodules. The usual subtype group/module structures must be used. Do not restrict to proper, finitely generated, pure, direct-summand, or selected subgroups unless the source explicitly supplies such a restriction; it does not.
+
+The size test is strict cardinal inequality, #H < κ, for the exact same κ in the almost-free and flat-free clauses. “Below” in the flat-free sentence inherits cardinality and strictness from the preceding definition. Preserve the empty range of the quantifier when applicable; do not silently add κ > 0, κ infinite, regularity, cofinality, or a lower bound unless restricting to an explicitly stated secondary theorem.
+
+With the standard structures understood, the definitions to preserve are:
+  AF(κ,G) := (not Free_Z(G)) AND (for every subgroup H ≤ G,
+                                   |H| < κ implies Free_Z(H)).
+  FF(κ,G) := for every subgroup H ≤ G,
+               |H| < κ implies Flat_Z(H).
+  Sep(κ,G) := AF(κ,G) AND NOT FF(κ,G).
+
+These are specifications of source meanings, not newly invented substitutes. In particular: AF includes the explicit non-free condition on the whole group; FF has no additional non-free condition; the negation in Sep applies to the whole subgroup-universal FF predicate. Each Lean predicate must visibly elaborate to these standard objects. A final theorem about unconstrained symbols named Free, Flat, AlmostFree, or Group would not suffice.
+
+2. Parameter, universe, and aleph conventions
+-------------------------------------------
+The source names κ in its definitions but does not explicitly quantify it or state κ = |G|. Therefore keep the threshold κ and the carrier size λ conceptually separate. A clean general family is:
+  E(κ,λ) := there exists an actual abelian group G with |G| = λ
+              and Sep(κ,G).
+
+The usual reading of “at cardinal λ” for this source is the diagonal family E(λ,λ), i.e. the threshold is the cardinal at issue and the group has that cardinality. State that convention explicitly. If a submission instead fixes κ and minimizes λ, it must state the fixed parameter and explain why that reading addresses the source. If it claims independence of this ambiguity, it must establish the needed quantified result rather than merely say that the distinction is irrelevant. A theorem proved under an undeclared extra relation between κ and |G| does not settle all readings.
+
+Cardinal.{u} consists of cardinalities of Type u objects, via a quotient by actual equivalences; Cardinal.mk is that quotient map (SetTheory/Cardinal/Defs.lean:83,89). It is not a natural-number cardinality and should not be replaced by Nat.card or Fintype.card for infinite objects. G and each subgroup subtype naturally lie in the same universe; κ can then be Cardinal.{u}. A quantification over all such carriers lives in a higher sort but can produce a Prop. The theorem should be universe-polymorphic unless the author explicitly supplies a faithful reduction to the chosen universe.
+
+If groups, thresholds, or indexing objects are put in different universes, use Cardinal.lift with explicit compatible levels and prove the transport required by comparisons and equalities. Cardinal.lift is defined via ULift (SetTheory/Cardinal/Defs.lean:151). Do not compare incompatible cardinal universes by accidental coercion or use a type universe itself as a group cardinal.
+
+The cardinal ℵ_ω is Cardinal.aleph Ordinal.omega0 in the relevant universe; ℵ_1 is Cardinal.aleph 1. Cardinal.aleph enumerates infinite cardinals by ordinal indices (SetTheory/Cardinal/Aleph.lean:348); Ordinal.omega0 is the first infinite ordinal (SetTheory/Ordinal/Basic.lean:734). Do not confuse ℵ_ω with ℵ_0, the cardinality of the ordinal ω, Ordinal.omega ω, or a finite numeral index. Lift compatibility is provided by Cardinal.lift_aleph (Aleph.lean:388) and Ordinal.lift_omega0 (Ordinal/Basic.lean:750).
+
+3. Exact claim and logical coverage obligations
+----------------------------------------------
+Under the diagonal convention set S = {λ : Cardinal | E(λ,λ)}. The minimum assertion is IsLeast S ℵ_ω. In Mathlib, IsLeast includes membership as well as the lower-bound condition (Order/Bounds/Defs.lean:42). Equivalently it requires BOTH E(ℵ_ω,ℵ_ω) and the absence of a member of S below ℵ_ω. A mere lower bound, a theorem only about smaller cardinals, a conditional statement assuming existence, or an infimum of a possibly empty set is not the asserted minimum. A putative existence theorem must bind an actual carrier, its actual abelian-group structure, its cardinality equation, and both source predicates. Avoid uninhabited or inconsistent auxiliary hypotheses that make a claimed existence result conditional or vacuous.
+
+The separate ℵ_1 clause says that, at the indicated threshold (and on the diagonal reading for groups of that size), every almost-free group is flat-free. Preserve its universal quantification; one example or one selected family cannot stand for every abelian group. State whether carrier size |G| = ℵ_1 is included. If the author uses a more general theorem, show its specialization to the stated clause.
+
+For a family claim over smaller cardinals, quantify over all cardinals in the declared range, not only finitely many cardinal numerals, selected examples, or a finite computational sample. The source says “any smaller cardinal” without specifying whether finite cardinals are excluded. Document that ambiguity. Quantification over ℵ_n for natural n should not silently replace all λ < ℵ_ω without an explicit domain restriction and the appropriate exhaustive bridge. The definitions, universe conventions, and threshold-size convention must stay constant across the family.
+
+The whole source is a compound assertion: (i) a minimum/existence claim, (ii) ZFC provability of the separation, (iii) the ℵ_1 implication, (iv) a construction-method assertion referring to a Shelah black box, and (v) independence over ZFC for existence at every smaller cardinal in the intended range. The source does not identify a precise black-box theorem or specify formal coding for its metamathematical clauses. Do not silently delete, reinterpret, or use those phrases as replacement definitions of AF/FF. A proof claiming the whole conjecture must handle each substantive component with an explicit interpretation and adequate evidence.
+
+ZFC provability is a metamathematical claim about a specified formal sentence and deductive theory. Independence ordinarily means that neither that sentence nor its negation is derivable from the theory, with any consistency/relative-consistency qualifications made explicit. A theorem in Lean's ambient type theory, even with only Lean's ordinary foundational axioms, is not by itself a formal proof of “ZFC proves ...” or “independent of ZFC.” Mathlib's ZFSet is a model construction in underlying type theory (SetTheory/ZFC/Basic.lean:14–43), not an automatic bridge from arbitrary Lean theorems to a coded derivation or non-derivability statement in ZFC. Do not encode independence or “constructed via Shelah black box” as unconstrained Prop variables and present that as a faithful complete formalization.
+
+For a disproof of the compound assertion, ordinary conjunction logic permits refuting a faithfully specified necessary component. The submission must identify the precise component and explain why it is required by both language versions; the Lean result must establish its actual negation on the standard objects. It need not separately negate every other conjunct. It must not claim that unaddressed metamathematical clauses were formalized, or pass an arbitrary Boolean/Prop encoding off as the whole source. If the result depends on resolving a source ambiguity, say exactly which reading is covered and why that is sufficient. No direction of proof or disproof is supplied by this review.
+
+4. Required final review gates
+-----------------------------
+The eventual frozen solution must include the required LaTeX source, matching PDF, and fully compiling Lean 4 project under the exact authorized submission path. Both guides require matching the conjecture's definitions and requirements, complete report review, complete build/run, and full coverage of any auxiliary computation. Their current audit descriptions exclude sorry, native_decide, and extra axioms. Inspect all reachable definitions, hypotheses, imported local files, axiom reports, and exported final theorem statements rather than relying on theorem names or successful compilation alone.
+
+The report should state the standard module meaning of free/flat, show the subgroup bridge if needed, record threshold and cardinality conventions, identify the exact compound component(s) formally covered, and match the Lean result without stronger prose claims. A finite search cannot establish a quantified cardinal-family theorem. Any auxiliary scripts must actually run and produce the reported outputs. The source/guides/metadata/leaderboard must remain outside the author's submission changes, consistent with both solver guides. Eligibility must still be current before any PR is opened.
+
+This nonauthor reviewer remains available to review the frozen complete independently authored solution. No approval of mathematical validity is issued at this stage.

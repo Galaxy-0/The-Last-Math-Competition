@@ -1,0 +1,26 @@
+import Conjecture4289
+
+#print Conjecture4289.AlmostFree
+#print Conjecture4289.FlatFree
+#print Conjecture4289.Separation
+#print Conjecture4289.SeparationExists
+#print Conjecture4289.SeparationCardinals
+
+#check Conjecture4289.free_abelian_is_flat
+#print axioms Conjecture4289.free_abelian_is_flat
+#check Conjecture4289.almostFree_implies_flatFree
+#print axioms Conjecture4289.almostFree_implies_flatFree
+#check Conjecture4289.no_separation
+#print axioms Conjecture4289.no_separation
+#check Conjecture4289.no_separation_exists
+#print axioms Conjecture4289.no_separation_exists
+#check Conjecture4289.separationCardinals_empty
+#print axioms Conjecture4289.separationCardinals_empty
+#check Conjecture4289.no_least_separation_cardinal
+#print axioms Conjecture4289.no_least_separation_cardinal
+#check Conjecture4289.no_separation_at_aleph_omega
+#print axioms Conjecture4289.no_separation_at_aleph_omega
+#check Conjecture4289.almostFree_aleph_one_implies_flatFree
+#print axioms Conjecture4289.almostFree_aleph_one_implies_flatFree
+#check Conjecture4289.conjecture4289_disproof
+#print axioms Conjecture4289.conjecture4289_disproof
