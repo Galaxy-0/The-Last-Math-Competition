@@ -1,0 +1,139 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\Cl}{\operatorname{Cl}}
+\newcommand{\Idem}{\operatorname{Idem}}
+\newcommand{\ZD}{\operatorname{ZD}}
+
+\title{A proof of Conjecture 00000007630\\[2pt]
+\large Clifford algebras of signatures $(0,1,0)$ and $(0,0,1)$: same idempotents, different zero divisors}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000007630 reads (English version; the Chinese version agrees, and it says
+``explicit signature pair'' for the last clause):
+
+\begin{quote}
+\emph{Definition:} Idempotent spectra and zero-divisor spectra are two layers.
+\emph{Conjecture:} There exist two Clifford algebras with the same idempotent spectrum but different
+zero-divisor spectra, and the separation is realized by an explicit signature pair with the same
+idempotents but different zero divisors.
+\end{quote}
+
+This is an existence claim. We exhibit an explicit pair of real quadratic forms with signatures
+$(0,1,0)$ and $(0,0,1)$. We prove that their Clifford algebras have the same idempotents and
+different zero divisors.
+
+\section{Reading and definitions}
+
+\begin{definition}
+For a real quadratic form $Q$ on $V$, the Clifford algebra $\Cl(Q)$ is the quotient of the tensor
+algebra $T(V)$ by the relations $v\otimes v=Q(v)\cdot 1$. In Lean this is Mathlib's
+\texttt{CliffordAlgebra Q}, with generator map $\iota\colon V\to\Cl(Q)$. Degenerate forms are
+allowed, as in Mathlib; the Clifford algebra of the zero form is the exterior algebra. The
+\emph{signature} of $Q$ is its Sylvester signature $(p,q,r)$: the numbers of positive, negative
+and null directions.
+\end{definition}
+
+\begin{definition}
+For an algebra $A$, the idempotent spectrum is $\Idem(A)=\{x: x^2=x\}$. The zero-divisor spectrum
+is $\ZD(A)=\{x:\exists y\neq0,\ xy=0 \text{ or } yx=0\}$. With this convention $0\in\ZD(A)$; nonzero
+zero divisors are reported separately.
+\end{definition}
+
+\paragraph{The explicit signature pair.} On $V=\mathbb{R}$:
+\begin{itemize}
+\item $Q_1(t)=-t^2$ (Mathlib's \texttt{CliffordAlgebraComplex.Q}). It is negative definite, so its
+signature is $(0,1,0)$. Mathlib's \texttt{CliffordAlgebraComplex.equiv} gives
+$\Cl(Q_1)\cong\mathbb{C}$.
+\item $Q_0(t)=0$. It is totally null, so its signature is $(0,0,1)$. Mathlib's
+\texttt{CliffordAlgebraDualNumber.equiv} gives $\Cl(Q_0)\cong\mathbb{R}[\varepsilon]$ (the dual
+numbers, with $\varepsilon^2=0$).
+\end{itemize}
+
+\section{The proof}
+
+\begin{lemma}\label{lem:dual}
+In the dual numbers $\mathbb{R}[\varepsilon]$, the only idempotents are $0$ and $1$.
+\end{lemma}
+\begin{proof}
+Write $z=a+b\varepsilon$. Then $z^2=a^2+2ab\,\varepsilon$, so $z^2=z$ gives $a^2=a$ and $2ab=b$.
+If $a=0$ then $b=0$; if $a=1$ then $2b=b$, so $b=0$.
+\end{proof}
+
+\begin{theorem}[same idempotents]\label{thm:idem}
+$\Idem(\Cl(Q_1))=\{0,1\}$ and $\Idem(\Cl(Q_0))=\{0,1\}$. In each algebra $0\neq1$, so each has
+exactly two idempotents.
+\end{theorem}
+\begin{proof}
+$\Cl(Q_1)\cong\mathbb{C}$ has no zero divisors, and in such a ring $x^2=x$ forces $x\in\{0,1\}$.
+For $\Cl(Q_0)$, transport Lemma~\ref{lem:dual} along the algebra isomorphism.
+\end{proof}
+
+\begin{theorem}[different zero divisors]\label{thm:zd}
+$\ZD(\Cl(Q_1))=\{0\}$. In contrast, $\ZD(\Cl(Q_0))=\iota(\mathbb{R})=\{\iota(r):r\in\mathbb{R}\}$,
+and $e=\iota(1)$ satisfies $e\neq0$ and $e^2=0$. Consequently $\Cl(Q_1)\not\cong\Cl(Q_0)$ as
+$\mathbb{R}$-algebras.
+\end{theorem}
+\begin{proof}
+The first claim holds because $\mathbb{C}$ has no zero divisors. In $\Cl(Q_0)$ we have
+$\iota(r)\iota(s)=rs\,\iota(1)^2=rs\,Q_0(1)=0$, and $\iota(1)\mapsto\varepsilon\neq0$. Conversely, if
+the image $a+b\varepsilon$ of $x$ has $a\neq0$, then it is a unit, so $x$ is not a zero divisor.
+If $a=0$, then $x=\iota(b)$. An algebra isomorphism would carry the nonzero zero divisor $e$ to a
+nonzero zero divisor of $\Cl(Q_1)$, which does not exist.
+\end{proof}
+
+Theorems~\ref{thm:idem} and~\ref{thm:zd} give the conjecture. \qed
+
+\begin{remark}[scope and conventions]
+(1) ``The same idempotent spectrum'' is proved in three senses: equal idempotent sets $\{0,1\}$,
+equal cardinality ($2$), and, implicitly, the obvious bijection $0\mapsto0$, $1\mapsto1$. (2)
+``Different zero-divisor spectra'' holds whether or not $0$ counts as a zero divisor: $\Cl(Q_1)$
+has no nonzero zero divisor, while $\Cl(Q_0)$ has a whole line of them. (3) The second form is
+degenerate. Among \emph{nondegenerate} real Clifford algebras, ``only the trivial idempotents''
+already forces a division algebra ($\mathbb{R},\mathbb{C},\mathbb{H}$), since such algebras are
+semisimple (Wedderburn theory). This standard fact is context only and is not used in the proof. So
+under the reading ``idempotent set $=\{0,1\}$'', a separating pair must involve a degenerate
+signature. This is why the null direction $r=1$ appears.
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture7630/Basic.lean} (Lean 4.33.1, Mathlib \texttt{v4.33.1}). It defines
+\texttt{idempotents}, \texttt{zeroDivisors}, \texttt{Q1} $:=$ \texttt{CliffordAlgebraComplex.Q},
+\texttt{Q0} $:= 0$, \texttt{Cl1}, \texttt{Cl0}, and \texttt{gen} $:=\iota(1)$. The theorems are:
+\begin{itemize}
+\item \texttt{Q1\_negDef}, \texttt{Q0\_null}: the signatures.
+\item \texttt{dual\_idem}, \texttt{idempotents\_Cl1}, \texttt{idempotents\_Cl0}: Lemma~\ref{lem:dual}
+and Theorem~\ref{thm:idem}.
+\item \texttt{zeroDivisors\_Cl1}, \texttt{zeroDivisors\_Cl0}, \texttt{gen\_ne\_zero},
+\texttt{gen\_mul\_gen}, \texttt{not\_isomorphic}: Theorem~\ref{thm:zd}.
+\item \texttt{separation}: the main theorem. It bundles both signatures, both idempotent sets
+$=\{0,1\}$ with \texttt{ncard} $2$, both zero-divisor sets, the nonzero square-zero element, and
+non-isomorphism.
+\end{itemize}
+\texttt{lake build} succeeds. \texttt{\#print axioms} for \texttt{separation},
+\texttt{not\_isomorphic} and \texttt{zeroDivisors\_Cl0} reports only
+\texttt{[propext, Classical.choice, Quot.sound]}. The code contains no \texttt{sorry} and no
+\texttt{native\_decide}.
+
+\end{document}
