@@ -1,0 +1,183 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\reg}{\operatorname{reg}}
+
+\title{A disproof of Conjecture 00000000502\\[2pt]
+\large The regularity of powers of the edge ideal of $K_2$ has slope $2$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000000502 reads:
+
+\begin{quote}
+\emph{Definition:} For the edge ideal $I(G)$ of a graph $G$, the regularity of powers $\reg I(G)^t$ is
+eventually linear in $t$, with slope denoted $a(G)$. \emph{Conjecture:} For every bipartite graph $G$,
+$a(G) = \max\{\nu(G)-1, \lceil (m(G)+1)/3\rceil\}$, where $\nu(G)$ is the matching number and $m(G)$ the
+induced matching number; moreover, for chordal bipartite graphs the formula simplifies to
+$a(G)=\nu(G)-1$.
+\end{quote}
+
+\paragraph{Reading.} $G$ is a finite simple graph on a vertex set $V$, $S = k[x_v : v \in V]$ is the
+standard graded polynomial ring over a field $k$, $I(G) = (x_ix_j : ij \in E(G))$, and $\reg$ is the
+Castelnuovo--Mumford regularity of the graded $S$-module $I(G)^t$. By definition $a(G)$ is the
+\emph{slope} of the eventually linear function $t \mapsto \reg I(G)^t$, i.e.\ the number $a$ with
+$\reg I(G)^t = a t + b$ for all large $t$. The conjecture has two parts:
+(1) for every bipartite $G$ (with $I(G) \neq 0$), $a(G) = \max\{\nu(G)-1, \lceil (m(G)+1)/3\rceil\}$;
+(2) for every chordal bipartite $G$ (with $I(G)\ne 0$), $a(G) = \nu(G)-1$.
+Restricting to $I(G) \neq 0$ only weakens the statement. We refute (1) and (2) separately, over every
+field $k$, with the single graph $G = K_2$.
+
+\section{Definitions and sources}
+
+\begin{definition}[Regularity]\label{def:reg}
+Let $M$ be a finitely generated graded $S$-module with minimal graded free resolution
+$\cdots \to F_i \to \cdots \to F_0 \to M \to 0$, $F_i = \bigoplus_b S(-a_{i,b})$. Then
+$\reg M = \max_{i,b} (a_{i,b} - i)$ $= \max\{j - i : \beta_{i,j}(M) \neq 0\}$. Wikipedia
+(\url{https://en.wikipedia.org/wiki/Castelnuovo\%E2\%80\%93Mumford_regularity}): ``$R$ is a polynomial ring
+over a field $k$ and $M$ is a finitely generated graded $R$-module. Suppose $M$ has a minimal graded free
+resolution [\dots] let $b_j$ be the maximum of the degrees of the generators of $F_j$. If $r$ is an integer
+such that $b_j - j \le r$ for all $j$, then $M$ is said to be $r$-regular. The regularity of $M$ is the
+smallest such $r$.''
+\end{definition}
+
+For context only (not used): Bruns--Conca--Varbaro (arXiv:2107.14734) recall ``a classical result due to
+Cutkosky, Herzog and Trung and, independently, to Kodiyalam asserting that the regularity of powers of an
+homogeneous ideal $I$ of $R$ is eventually a linear function''. For $K_2$ we compute $\reg I^t$ exactly,
+so this theorem is not needed.
+
+\begin{definition}[Matchings]
+A \emph{matching} of $G$ is a set of pairwise vertex-disjoint edges; $\nu(G)$ is the largest size of a
+matching. An \emph{induced matching} is a matching $M$ such that the subgraph of $G$ induced on the
+vertices of $M$ has edge set exactly $M$; $m(G)$ is the largest size of an induced matching.
+A graph is \emph{chordal bipartite} if it is bipartite and every cycle of length at least $6$ has a chord.
+\end{definition}
+
+\section{The counterexample}
+
+Let $G = K_2$: vertices $0,1$ and the single edge $\{0,1\}$. Then $S = k[x_0,x_1]$ and $I(K_2) = (x_0x_1)$.
+
+\begin{lemma}\label{lem:graph}
+$K_2$ is bipartite and chordal bipartite, $I(K_2) \ne 0$, and $\nu(K_2) = m(K_2) = 1$.
+\end{lemma}
+\begin{proof}
+The colouring $0 \mapsto 0$, $1 \mapsto 1$ is proper. A cycle has at least $3$ distinct vertices, and
+$K_2$ has only $2$, so $K_2$ has no cycles and the chord condition is vacuous. The whole graph is a
+matching, and it is induced, with one edge; no set of edges has more than one element since $K_2$ has
+one edge.
+\end{proof}
+
+\begin{lemma}\label{lem:reg}
+For every $t \ge 0$, $\reg I(K_2)^t = 2t$.
+\end{lemma}
+\begin{proof}
+$I(K_2)^t = (g)$ with $g = (x_0x_1)^t \ne 0$ homogeneous of degree $2t$.
+\emph{Upper bound.} $0 \to S(-2t) \to (g) \to 0$, $1 \mapsto g$, is exact because $S$ is a domain; it
+has no differentials, so it is minimal, and its only shift gives $a_{0,1} - 0 = 2t$.
+\emph{Lower bound.} Let $F$ be any graded free resolution of $(g)$, with $F_0 \to (g)$ sending the basis
+vector $e_b$ (of degree $a_{0,b}$) to a homogeneous $g_b \in (g)$ of degree $a_{0,b}$. If $g_b \ne 0$,
+then $g \mid g_b$, so $2t = \deg g \le \deg g_b = a_{0,b}$. If every $a_{0,b} < 2t$, all $g_b = 0$ and
+$(g) = (g_b)_b = 0$, a contradiction. So some $a_{0,b} \ge 2t$ and $\max(a_{i,b} - i) \ge 2t$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+Over every field $k$: $a(K_2) = 2$, whereas $\max\{\nu(K_2)-1, \lceil (m(K_2)+1)/3\rceil\} = \max\{0, 1\} = 1$
+and $\nu(K_2) - 1 = 0$. Hence both parts (1) and (2) of Conjecture 00000000502 are false.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:reg}, $\reg I(K_2)^t = 2t$ for all $t$, so it is eventually linear with slope $2$.
+The slope is unique: if $2t = at + b$ for all $t \ge N$, then comparing $t = N$ and $t = N+1$ gives
+$a = 2$. By Lemma~\ref{lem:graph}, $\nu = m = 1$, so $\lceil 2/3 \rceil = 1$ and the two formulas give
+$1$ and $0$, neither equal to $2$. Since $K_2$ is bipartite and chordal bipartite with $I(K_2) \ne 0$,
+it violates both parts.
+\end{proof}
+
+\begin{remark}[Other readings]
+(a) If $a(G)$ were misread as the constant term $b$ in $\reg I(G)^t = 2t + b$, part (1) still fails:
+$b(K_2) = 0 \ne 1$ (Lean: \texttt{constant\_term\_reading\_false}). Under that misreading part (2) would
+hold for $K_2$ ($0 = \nu - 1$), so for (2) only the literal reading is refuted.
+(b) Using $\reg(S/I^t) = \reg(I^t) - 1$ instead of $\reg I^t$ does not change the slope.
+(c) $K_2$ is the smallest example. Under the literal reading every graph with an edge has slope $2$,
+because $I(G)$ is generated in degree $2$, so the formula fails whenever its value is not $2$. Only the
+$K_2$ case is used here.
+\end{remark}
+
+\section{Lean 4 formalization}\label{sec:lean}
+
+The directory \texttt{lean/} contains a Lean~4 project (Lean \texttt{v4.33.1}, Mathlib \texttt{v4.33.1}).
+\texttt{Conjecture502.lean} imports the single source file \texttt{Conjecture502/Basic.lean}
+(344 lines, namespace \texttt{C502}).
+
+\paragraph{Definitions.}
+\begin{itemize}[leftmargin=*]
+  \item \texttt{edgeIdeal k G := Ideal.span \{p | exists i j, G.Adj i j and p = X i * X j\}} in
+        \texttt{MvPolynomial V k}.
+  \item \texttt{HomogDeg p d}: $p = 0$ or $p$ is homogeneous (\texttt{IsHomogeneous}) of degree
+        $n \in \mathbb{N}$ with $n = d$.
+  \item \texttt{GradedFreeRes J}: ranks \texttt{rank i}, shifts \texttt{shift i b : Int}, the images
+        \texttt{gen b} of the basis of $F_0$, matrices \texttt{d i} of $F_{i+1} \to F_i$ with entries
+        homogeneous of degree \texttt{shift (i+1) b - shift i a}; \texttt{span\_gen}: the \texttt{gen b}
+        generate $J$; \texttt{exact\_zero}, \texttt{exact\_succ}: exactness at $F_0$ (kernel of
+        $F_0 \to J$ = image of $d_0$) and at every $F_{i+1}$; \texttt{finite\_length}.
+        \texttt{IsMinimal}: every matrix entry has constant coefficient $0$, i.e.\ lies in $(x_v)$.
+  \item \texttt{reg J := sInf \{r | exists F : GradedFreeRes J, F.IsMinimal and forall i b,
+        F.shift i b - i <= r\}}: the smallest $r$ with $b_j - j \le r$ for all $j$ in a minimal graded
+        free resolution, exactly as in Definition~\ref{def:reg}. All minimal resolutions have the same shifts,
+        and taking the infimum means no particular one has to be chosen.
+  \item \texttt{matchingNumber G}, \texttt{inducedMatchingNumber G}: \texttt{sSup} of
+        \texttt{M.edgeSet.ncard} over Mathlib subgraphs \texttt{M} with \texttt{M.IsMatching} (and
+        \texttt{M.IsInduced}).
+  \item Bipartite is Mathlib's \texttt{SimpleGraph.IsBipartite}. \texttt{IsChordalBipartite G}: bipartite and every
+        \texttt{c : G.Walk u u} with \texttt{c.IsCycle} and \texttt{6 <= c.length} has vertices
+        $x,y$ in its support with \texttt{G.Adj x y} and \texttt{s(x,y)} not an edge of \texttt{c}.
+  \item \texttt{HasEventualSlope f a := exists b : Real, eventually (atTop) f t = a * t + b}.
+  \item \texttt{GeneralFormula k}: for all \texttt{V : Type}, \texttt{[Fintype V]}, \texttt{G}, if
+        \texttt{G.IsBipartite} and \texttt{edgeIdeal k G != bot}, then
+        \texttt{HasEventualSlope (fun t => reg (edgeIdeal k G \^{} t))
+        (max (nu G - 1) (ceil ((m G + 1)/3)))}. \texttt{ChordalFormula k}: the same for
+        \texttt{IsChordalBipartite G} with slope \texttt{nu G - 1}.
+        \texttt{Conjecture k := GeneralFormula k and ChordalFormula k}.
+\end{itemize}
+
+\paragraph{Theorems.}
+\texttt{reg\_K2\_pow : reg (edgeIdeal k K2 \^{} t) = 2 * t} (Lemma~\ref{lem:reg}; resolution \texttt{res},
+lower bound \texttt{shift\_lower\_bound});
+\texttt{matchingNumber\_K2}, \texttt{inducedMatchingNumber\_K2}, \texttt{K2\_isBipartite},
+\texttt{K2\_isChordalBipartite}, \texttt{edgeIdeal\_K2\_ne\_bot} (Lemma~\ref{lem:graph});
+\texttt{slope\_K2 : HasEventualSlope (...) a <-> a = 2}; \texttt{generalFormula\_false},
+\texttt{chordalFormula\_false}; \texttt{constant\_term\_reading\_false}; and the main theorem
+\begin{quote}
+\texttt{conjecture\_00000000502\_false (k : Type) [Field k] :}\
+$\neg\,$\texttt{GeneralFormula k} $\wedge$ $\neg\,$\texttt{ChordalFormula k} $\wedge$
+$\neg\,$\texttt{Conjecture k}.
+\end{quote}
+
+\paragraph{Axiom audit.} There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+The file compiles with no warnings.
+\begin{verbatim}
+'C502.conjecture_00000000502_false' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+'C502.constant_term_reading_false' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+\end{verbatim}
+To check: \texttt{cd lean; lake exe cache get; lake build}.
+
+\end{document}
