@@ -1,0 +1,224 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\Cay}{\operatorname{Cay}}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\title{A disproof of Conjecture 00000008666\\[2pt]
+\large The non-Hamiltonian Cayley digraphs do not form a finite list}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000008666 reads (English version):
+
+\begin{quote}
+\emph{Definition:} Hamiltonian cycles of Cayley graphs: the Hamiltonicity of Cayley graphs of finite
+groups. \emph{Conjecture:} Cayley graphs of every finite group (for every generating set) are
+Hamiltonian (a Hamiltonian law); the known exceptions (Cayley digraphs without Hamiltonicity) form a
+finite list (a finite list law); the smallest unresolved group outside the list is PSL(2,p) (a PSL
+unresolved law); and the canonical structure of generating cycles is lexicographic type (a lexico law).
+\end{quote}
+
+The Chinese version (in \texttt{conjectures/00000008666.md}) gives the second clause as, in
+transliteration, ``yizhi liwai (wu Hamilton de Cayley \emph{youxiangtu}) de liebiao youxian
+(youxian liebiao lv)'': ``the list of known exceptions (Cayley \emph{digraphs} without Hamilton
+[cycles]) is finite (finite list law)''. Both versions identify the exceptions explicitly as Cayley
+digraphs without a Hamiltonian cycle.
+
+The conjecture is the conjunction of four clauses: (1) the Hamiltonian law, (2) the finite list law,
+(3) the PSL unresolved law, (4) the lexico law.
+
+\textbf{Result.} Clause (2) is false. For every odd $n \ge 3$ the Cayley digraph of the cyclic group
+$\Z/2 \times \Z/n \cong \Z/2n$ with generators $(1,0)$ and $(0,1)$ has no directed Hamiltonian cycle
+(Rankin's coset argument). These exceptions have unbounded order, so they do not form a finite list.
+Hence the conjunction (1)$\wedge$(2)$\wedge$(3)$\wedge$(4) is false whatever clauses (1), (3) and (4)
+mean. Everything is formalized in Lean~4 with Mathlib (Section~\ref{sec:lean}).
+
+\section{Reading}\label{sec:reading}
+
+\begin{enumerate}[label=(\alph*)]
+\item \textbf{The exceptions are Cayley digraphs.} The parenthesis in both languages is the only
+  definition the text gives of ``exceptions'', and it names a classical object: Cayley digraphs of
+  finite groups without a Hamiltonian cycle. The standard reference records that these exist and are
+  plentiful (Section~\ref{sec:sources}). We refute the clause for exactly this object.
+\item \textbf{``Finite list.''} If the exceptions formed a finite list $(G_1,S_1),\dots,(G_k,S_k)$
+  (up to isomorphism, or as a list of groups), their orders would be bounded by $\max_i |G_i|$. We
+  refute this weakest consequence: the set of orders $|G|$ of exceptions is infinite. We even restrict
+  to generating sets that do not contain the identity.
+\item \textbf{``Known.''} Under the non-epistemic reading (``the exceptions form a finite list'') the
+  Lean theorem refutes the clause directly. Under the epistemic reading (``the exceptions known today
+  form a finite list'') the clause is also false. Rankin's family is classical (1948/1966), the
+  standard reference states that every cyclic group whose order is not a prime power has a
+  non-Hamiltonian directed Cayley graph (Section~\ref{sec:sources}), and the Lean proof below
+  establishes infinitely many exceptions as one explicit family, proved uniformly in $n$.
+\item \textbf{Clause (1).} If ``Cayley graphs'' in clause (1) includes digraphs, clause (1) is false as
+  well; the Lean file proves this (\texttt{directedHamiltonianLaw\_false}). The undirected reading of
+  clause (1) is the open Lovasz-type conjecture for Cayley graphs; we make no claim about it, and none is
+  needed.
+\end{enumerate}
+
+\section{Definitions and sources}\label{sec:sources}
+
+\begin{definition}[Cayley digraph]
+For a group $G$ and $S \subseteq G$, the Cayley digraph $\Cay(G,S)$ has vertex set $G$ and an arc
+$g \to gs$ for every $g\in G$, $s\in S$. Mathlib's Cayley graph \texttt{SimpleGraph.mulCayley S} uses the
+same convention ($u \sim v$ iff $u\neq v$ and $ug=v$ or $vg=u$ for some $g\in S$); the Lean file proves that
+the underlying simple graph of our digraph is exactly \texttt{mulCayley S}.
+\end{definition}
+
+\begin{definition}[Directed Hamiltonian cycle]
+A directed Hamiltonian cycle of a finite digraph on $m$ vertices is an enumeration
+$v_0, v_1, \dots, v_{m-1}$ of all vertices, each exactly once, with arcs $v_i \to v_{i+1}$ for
+$i < m-1$ and $v_{m-1} \to v_0$. The digraph is Hamiltonian if it has one.
+\end{definition}
+
+Sources (quotations verbatim):
+\begin{itemize}
+\item Wikipedia, \emph{Lovasz conjecture},
+  \url{https://en.wikipedia.org/wiki/Lov%C3%A1sz_conjecture}: ``Every directed Cayley graph of an
+  abelian group has a Hamiltonian path; however, every cyclic group whose order is not a prime power has
+  a directed Cayley graph that does not have a Hamiltonian cycle.'' Also: ``Various counterexamples were
+  obtained by Robert Alexander Rankin.'' Also: ``None of the 5 vertex-transitive graphs with no
+  Hamiltonian cycles is a Cayley graph.''
+\item R.~A. Rankin, \emph{A campanological problem in group theory}, Math.\ Proc.\ Cambridge Philos.\
+  Soc.\ (1948), \url{https://doi.org/10.1017/s030500410002394x}; part II (1966),
+  \url{https://doi.org/10.1017/s0305004100039451}.
+\item D.~Witte and J.~A. Gallian, \emph{A survey: Hamiltonian cycles in Cayley graphs}, Discrete Math.\
+  (1984), \url{https://doi.org/10.1016/0012-365x(84)90010-4}.
+\end{itemize}
+The argument below does not rely on these sources: it is proved in full, in Lean.
+
+\section{The proof}
+
+\begin{lemma}[Rankin]\label{lem:rankin}
+Let $G$ be a finite abelian group and $a \neq b$ elements of $G$ such that $ab^{-1}$ generates $G$ and
+$\ord(a) < |G|$, $\ord(b) < |G|$. Then $\Cay(G,\{a,b\})$ has no directed Hamiltonian cycle.
+\end{lemma}
+
+\begin{proof}
+Let $m = |G|$ and suppose $v_0 \to v_1 \to \dots \to v_{m-1} \to v_0$ is a directed Hamiltonian cycle.
+Define $\sigma(v_i) = v_{i+1 \bmod m}$. This is a bijection of $G$, and for every $x$ we have
+$\sigma(x) = xa$ or $\sigma(x) = xb$.
+
+\emph{Key step.} If $\sigma(x) = xa$, then $\sigma(x ab^{-1}) = xab^{-1}a$. Otherwise
+$\sigma(xab^{-1}) = xab^{-1}b = xa = \sigma(x)$, so $xab^{-1} = x$ by injectivity, i.e.\ $a = b$, a
+contradiction.
+
+By induction, $\sigma(x(ab^{-1})^k) = x(ab^{-1})^k a$ for all $k \ge 0$. Since $G$ is finite and
+$ab^{-1}$ generates it, every $y\in G$ equals $x(ab^{-1})^k$ for some $k\ge 0$, so $\sigma(y) = ya$ for
+all $y$. The same argument with $a, b$ exchanged (note that $ba^{-1} = (ab^{-1})^{-1}$ also generates
+$G$) shows: if one step is $b$, then every step is $b$.
+
+So all steps equal one $c \in \{a,b\}$, and by induction $v_k = v_0 c^k$ for $k < m$. Since
+$0 < \ord(c) < m$, we get $v_{\ord(c)} = v_0$, contradicting injectivity of the enumeration.
+\end{proof}
+
+\begin{theorem}[Rankin's family]\label{thm:family}
+For every odd $n \ge 3$, let $G_n = \Z/2 \times \Z/n$, $a = (1,0)$, $b = (0,1)$. Then $\{a,b\}$ generates
+$G_n$, $0 \notin \{a,b\}$, and $\Cay(G_n,\{a,b\})$ has no directed Hamiltonian cycle.
+\end{theorem}
+
+\begin{proof}
+$|G_n| = 2n$, $\ord(a) = \operatorname{lcm}(2,1) = 2 < 2n$ and $\ord(b) = \operatorname{lcm}(1,n) = n < 2n$;
+in particular $a \neq b$ and $a,b \neq 0$. The element $a - b = (1,-1)$ has order
+$\operatorname{lcm}(2,n) = 2n$ because $n$ is odd, so it generates $G_n$, and hence so does $\{a,b\}$.
+Lemma~\ref{lem:rankin} applies.
+\end{proof}
+
+\begin{corollary}\label{cor:main}
+The orders of finite groups $G$ having a generating set $S \not\ni 1$ with $\Cay(G,S)$ non-Hamiltonian
+include every $2n$ with $n\ge 3$ odd, so they form an infinite set. Hence the exceptions do not form a
+finite list: clause (2) is false, and so is the conjecture.
+\end{corollary}
+
+\begin{proof}
+Given $B$, take $n = 2B+3$; then $2n > B$ is the order of an exception by Theorem~\ref{thm:family}.
+\end{proof}
+
+\section{Lean 4 formalization}\label{sec:lean}
+
+The directory \texttt{lean/} contains a Lean~4 project (Lean \texttt{v4.33.1}, Mathlib \texttt{v4.33.1}).
+\texttt{Conjecture8666.lean} imports the single source file \texttt{Conjecture8666/Basic.lean}
+(297 lines, namespace \texttt{Conjecture8666}, only import \texttt{Mathlib}).
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \texttt{cayleyDigraph G S : Digraph G} with \texttt{Adj g h := $\exists$ s $\in$ S, g * s = h}
+  (Mathlib's \texttt{Digraph}).
+\item \texttt{IsHamiltonianCycle D v} for \texttt{v : Fin (Fintype.card V) $\to$ V}:
+  \texttt{Bijective v $\wedge$ $\forall$ i, D.Adj (v i) (v (finRotate \_ i))}; \texttt{IsHamiltonian D :=
+  $\exists$ v, IsHamiltonianCycle D v}. The theorem \texttt{finRotate\_val} proves
+  \texttt{(finRotate m i).val = (i.val + 1) \% m}, so this is exactly the textbook definition above.
+\item \texttt{Gn n := Multiplicative (ZMod 2 $\times$ ZMod n)}, \texttt{genA n := ofAdd (1, 0)},
+  \texttt{genB n := ofAdd (0, 1)}.
+\item \texttt{exceptionOrders : Set $\mathbb{N}$}: the set of \texttt{m} such that there are
+  \texttt{G : Type} with \texttt{[Group G] [Fintype G]} and \texttt{S : Set G} with
+  \texttt{Subgroup.closure S = $\top$}, \texttt{(1 : G) $\notin$ S},
+  \texttt{$\neg$ IsHamiltonian (cayleyDigraph G S)} and \texttt{Fintype.card G = m}.
+\item \texttt{FiniteListLaw := exceptionOrders.Finite} (clause (2), reading (b)).
+\item \texttt{DirectedHamiltonianLaw}: for all \texttt{G : Type}, \texttt{[Group G] [Fintype G]},
+  \texttt{S : Set G}, \texttt{Subgroup.closure S = $\top$ $\to$ IsHamiltonian (cayleyDigraph G S)}.
+\end{itemize}
+
+\paragraph{Theorems.}
+\begin{itemize}
+\item \texttt{mulCayley\_adj\_iff}: \texttt{(SimpleGraph.mulCayley S).Adj u v $\leftrightarrow$ u $\ne$ v
+  $\wedge$ ((cayleyDigraph G S).Adj u v $\vee$ (cayleyDigraph G S).Adj v u)}.
+\item \texttt{step\_propagates}, \texttt{step\_const}, \texttt{card\_le\_orderOf\_of\_const}: the three
+  steps of the proof of Lemma~\ref{lem:rankin}.
+\item \texttt{rankin}: Lemma~\ref{lem:rankin} for \texttt{[CommGroup G] [Fintype G]}, with hypotheses
+  \texttt{a $\ne$ b}, \texttt{$\forall$ g, g $\in$ Subgroup.zpowers (a * b$^{-1}$)},
+  \texttt{orderOf a < Fintype.card G}, \texttt{orderOf b < Fintype.card G}, and conclusion
+  \texttt{$\neg$ IsHamiltonian (cayleyDigraph G \{a, b\})}.
+\item \texttt{card\_Gn}, \texttt{orderOf\_genA}, \texttt{orderOf\_genB}, \texttt{orderOf\_genA\_div\_genB},
+  \texttt{zpowers\_eq\_top}, \texttt{closure\_gens}, \texttt{one\_notMem\_gens}, and
+  \texttt{rankin\_family (hn : Odd n) (h3 : 3 $\le$ n) : $\neg$ IsHamiltonian (cayleyDigraph (Gn n)
+  \{genA n, genB n\})} (Theorem~\ref{thm:family}).
+\item \texttt{two\_mul\_mem\_exceptionOrders}, \texttt{exceptionOrders\_infinite :
+  exceptionOrders.Infinite}, \texttt{finiteListLaw\_false : $\neg$ FiniteListLaw}
+  (Corollary~\ref{cor:main}).
+\item \texttt{directedHamiltonianLaw\_false : $\neg$ DirectedHamiltonianLaw} (reading (d)).
+\item The main theorem, in which \texttt{H}, \texttt{P}, \texttt{L} stand for clauses (1), (3), (4) in any
+  reading:
+\[
+  \texttt{conjecture8666\_false (H P L : Prop)} :\ \neg\,(\texttt{H} \wedge \texttt{FiniteListLaw}
+  \wedge \texttt{P} \wedge \texttt{L}).
+\]
+\end{itemize}
+
+\paragraph{Axiom audit.} There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+\texttt{\#print axioms} reports
+\begin{verbatim}
+'Conjecture8666.conjecture8666_false' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+\end{verbatim}
+and the same for \texttt{exceptionOrders\_infinite}, \texttt{rankin\_family} and
+\texttt{directedHamiltonianLaw\_false}. The file also elaborates with \texttt{-DwarningAsError=true}.
+To check:
+\begin{verbatim}
+cd lean
+lake exe cache get
+lake build
+\end{verbatim}
+
+\end{document}
