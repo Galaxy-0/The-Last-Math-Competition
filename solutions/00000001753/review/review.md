@@ -1,0 +1,26 @@
+# Solution Review — Conjecture 00000001753 (PR 583)
+
+**Submission:** jilint777 — `jilint777_submission_20261004191001`
+**Reviewer:** independent competition reviewer
+**Date:** 2026-10-04
+
+## Checklist results
+- Official bilingual conjecture read (`conjectures/00000001753.md`): the claim is that spin character values of `2·S_n` on alternating (even) classes satisfy `|⟨χ,g⟩| ≤ 2^{⌊n/4⌋−1}`, allegedly improving the order-n bound `2^{(n/2)−1}` by the decay factor `2^{⌊n/4⌋}`.
+- LaTeX report independently rebuilt with `latexmk -pdf`: clean; text identical to the shipped `report.pdf` after bullet-glyph normalization.
+- Lean: fresh `lake build` on `leanprover/lean4:v4.19.0`, zero errors/warnings; build log identical to `verification.txt`.
+- `#print axioms` (Main.lean lines 345–354): every decisive theorem (`conjecture_00000001753_false`, `spinRep`, `spans`, `normSq_t1t2`, etc.) depends on **no axioms at all**. No `sorry`/`native_decide`/`axiom`/`unsafe`/`implemented_by`/`extern`/`admit`.
+- `verify.py` rerun: 57 `ok` checks, 0 failures; output identical to `verification.txt` except the trailing wrapper `exit 0` line. It parses the Lean matrices, checks both covers' relations exactly over `ℤ[ζ₈]`, enumerates the image group (240 elements, kernel `{±I}`), computes `⟨χ,χ⟩ = 1`, and checks Schur's formula for n = 4..7.
+- Independent verification (reviewer's own sympy computation of the Clifford model `ξ_a` = Pauli-based anticommuting involutions, `T_i = (ξ_i − ξ_{i+1})/√2`): relations of both covers hold with `z ↦ −I`; `χ(t₁t₂) = −2` exactly; the 16 increasing words have rank 16, so the representation is irreducible and spans `M₄`; the image group has order 240 with kernel `{±I}` surjecting onto all 120 permutations (a genuine non-split double cover of `S₅`); character values on even elements are `±4` (2 elements), `±2` (40 elements, the 3-cycle lifts), `±1` (48), `0` (30), giving `⟨χ,χ⟩ = 1`.
+
+## Semantic audit
+The conjectured inequality at `n = 5` reads `|χ(g)| ≤ 2^{⌊5/4⌋−1} = 1` for every spin character `χ` of `2·S₅` and every `g` over an even permutation. The counterexample is the basic spin character: degree `2^{⌊(5−1)/2⌋} = 4`, irreducible, with `χ(z) = −4`, and `χ(t₁t₂) = −2` (resp. `+2` in the other cover), where `t₁t₂` lies over the 3-cycle `(1 2 3)`, an even permutation. `|−2| = 2 > 1` refutes the claim for both double covers. This is consistent with Schur's classical formula (value `±2^{⌊(ℓ(π)−1)/2⌋}` on lifts of cycle type `π` with all parts odd; for a 3-cycle `ℓ(π) = n−2`, giving `±2^{⌊(n−3)/2⌋} > 2^{⌊n/4⌋−1}` for all `n ≥ 5`), which verify.py confirms computationally for `n = 4..7`. I reproduced the decisive facts with a completely independent computation.
+
+The formalization is faithful in the logically sound direction: `Claim c n` restricts the conjecture to irreducible spin representations realized over `ℤ[ζ₈]` with `|χ(g)|²` a rational integer, so `Claim` is *implied by* the conjecture; refuting `Claim` therefore refutes the conjecture, and the exhibited instance (the basic spin character, the word `[0,1]` over the even permutation `[1,2,0,3,4]`, `normSq = 4 > 1 = boundSq 5`) directly violates the conjectured inequality itself. `IsSpinRep` correctly encodes Schur's presentation (von Dyck), `SpansMatrices` correctly certifies irreducibility (each `5·E_ab` is a `ℤ[ζ₈]`-combination of word matrices, hence the generated algebra is all of `M₄(ℂ)`), and the two covers `Ŝ₅`/`S̃₅` are both handled. The reading of `⟨χ,g⟩` as the value `χ(g)` is justified: the comparison scale `2^{(n/2)−1}` (the degree of the basic spin character for even `n`) and the arithmetic `2^{n/2−1}/2^{⌊n/4⌋} = 2^{⌊n/4⌋−1}` (for `4 | n`) only make sense for absolute values, and the Chinese text speaks of 自旋特征标值 (spin character *values*). Alternative readings are honestly analyzed: as a class-indicator inner product or a normalized value the statement would be trivially true (or trivially false for `n ≤ 3`), and the submission rightly declines to claim those.
+
+The one cited (not formalized) input is Schur's theorem that the presented groups have order exactly `2·n!`; the submission correctly observes the counterexample does not depend on it — the image group of the representation has order 240, kernel `{±I}`, and is non-split (a split cover would be `S₅ × C₂`, whose degree-4 characters take values `±4` or `±1` on 3-cycle lifts, never `±2`), so the image is a bona fide `2·S₅`. My independent enumeration confirms order 240, kernel size 2, and 120 distinct permutations.
+
+## Issues found
+None blocking. The `ℤ[ζ₈]`-lattice model `T5` is opaque data, but its meaning is fixed by the machine-checked relations (`spinRep`), the irreducibility certificate (`spans`), and the traced value (`chi_t1t2_*`), and verify.py re-derives the same facts from an independent Clifford-model construction, as did I.
+
+## Verdict
+APPROVED. The counterexample is mathematically correct and confirmed by three independent computations (Lean, the submission's verify.py, and the reviewer's own sympy model); the Lean theorem refutes a weakening of the conjecture in the logically valid direction, for both double covers, with zero axioms; and all artifacts reproduce exactly.

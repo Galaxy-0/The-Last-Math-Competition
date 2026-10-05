@@ -1,0 +1,26 @@
+# Solution Review — Conjecture 00000001554 (PR 552)
+
+**Submission:** C0ldSmi1e — `C0ldSmi1e_submission_20261004192805`
+**Reviewer:** independent competition reviewer
+**Date:** 2026-10-04
+
+## Checklist results
+- Official bilingual conjecture `conjectures/00000001554.md` read in full (English + Chinese); the submission's `conjecture.md` is byte-identical to it (`diff` clean).
+- LaTeX: `main.tex` read in full; rebuilt independently with `latexmk -pdf` — build succeeded; extracted text matches the shipped `main.pdf` up to glyph-extraction artifacts only (ff/fi/fl ligatures across 13 hunks). Content identical.
+- Lean: fresh `lake build` on toolchain `leanprover/lean4:v4.19.0` with the pinned Mathlib — **Build completed successfully**, zero errors, no warnings.
+- Axioms: re-ran the bundled `Check.lean` in my fresh environment; every audited theorem, including `unit_triangle_ramsey_false`, `stripeColor_has_no_monochromatic_unit_triangle`, `triangle_not_monochromatic`, depends only on `[propext, Classical.choice, Quot.sound]` (verified the full multi-line output). Grep for `sorry`/`native_decide`/`axiom`/`unsafe`/`@[implemented_by`/`extern`/`admit`: no hits.
+- Auxiliary code: none in the submission; I wrote my own numerical stress test (200,000 random orientations/positions): the height identity a²+ab+b² = 3/4 and the bounds a ≤ h, b ≤ h, h ≤ a+b hold in every case, and the stripe coloring produces zero monochromatic unit equilateral triangles.
+- Metadata: README/VERIFICATION.md/SEMANTIC_REVIEW.md present the construction as classical (citing Jelínek–Kynčl–Stolař–Valla, Combinatorica 29 (2009), Section 1) and supply a self-contained proof; no external result is assumed.
+
+## Semantic audit
+The official conjecture asserts, in both languages, that **every** red-blue coloring of the plane contains a monochromatic **unit** equilateral triangle, and additionally proposes a derivation of the unit version from Gallai-type similarity images plus rational-affine closure. The submission refutes the first conjunct directly, which suffices for the conjunction. The Lean target `UnitTriangleRamsey : ∀ c : Plane → Bool, HasMonochromaticUnitTriangle c` is exactly the official universal statement — an arbitrary (no regularity) two-coloring of the Euclidean plane `EuclideanSpace ℝ (Fin 2)`, and `HasMonochromaticUnitTriangle c` asks for three points whose three actual `dist` values are all 1 (a genuine unit equilateral triangle, necessarily nondegenerate) with all three colors equal. `unit_triangle_ramsey_false` negates it by exhibiting one coloring. The quantifier structure matches the official text precisely; this is the correct direction (the official claim is universal, the refutation is a concrete counterexample witness).
+
+The mathematics is the classical stripe construction, executed carefully. With h = √3/2 (the altitude of a unit equilateral triangle) and color given by the parity of ⌊y/h⌋, the plane is partitioned into half-open strips [kh,(k+1)h). The key geometric lemma is orientation-free: translating the lowest vertex to the origin and writing the other displacement vectors as (X,Y), (Z,T) with Y = a, T = a+b, the three unit-distance equations X²+Y² = Z²+T² = 1 and XZ+YT = 1/2 (from |u−v| = 1) imply (1−Y²)(1−T²) = (1/2−YT)², which expands and cancels to Y²−YT+T² = 3/4, i.e. a²+ab+b² = 3/4 — I re-derived this by hand and confirmed it numerically over 200k random orientations. Since a,b ≥ 0: a² ≤ 3/4 and b² ≤ 3/4 give a,b ≤ h, while (a+b)² = 3/4+ab ≥ 3/4 gives a+b ≥ h. The combinatorial lemma: two heights of the same color with gap ≤ h must have the same strip index (floor is monotone, gap ≤ h forces indices to differ by at most 1, equal parity forces equality), and a common strip index forces the gap to be **strictly** less than h — the half-open convention is exactly what handles the boundary case of a horizontal-sided triangle whose vertical span equals h. So a monochromatic triangle would need its three heights in one strip (span < h) while geometry forces span ≥ h: contradiction. The Lean proof handles all six weak orderings of the three heights by permutation (`triangle_not_monochromatic`), covers negative heights and boundary points by construction of `Int.floor`, and even proves the coloring surjective onto both colors (a genuine two-coloring, foreclosing a vacuous single-color degenerate reading).
+
+The report is honest about scope: it refutes only the unit-length assertion, does not dispute monochromatic triangles at other scales (indeed the literature's positive results concern other configurations/scales), and does not need to analyze the Gallai/rational-affine clause since the conjunction already fails at the first conjunct. This matches the known literature: the striped coloring of Jelínek–Kynčl–Stolař–Valla shows the unit equilateral triangle is not two-Ramsey in the plane.
+
+## Issues found
+None blocking.
+
+## Verdict
+APPROVED. All mechanical checks pass (byte-identical source text, matching independent PDF rebuild, clean Lean build on the pinned toolchain/Mathlib, only the three standard axioms, no proof-bypass constructs), and the semantic audit confirms the Lean theorem is the exact negation of the official universal claim, with the counterexample coloring and its supporting geometry independently reverified by hand and by numerical stress testing.

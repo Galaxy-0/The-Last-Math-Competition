@@ -1,0 +1,25 @@
+# Solution Review — Conjecture 00000006380 (PR 558)
+
+**Submission:** ziangni-sys — `ziangni-sys_submission_20261004201500`
+**Reviewer:** independent competition reviewer
+**Date:** 2026-10-04
+
+## Checklist results
+- Official bilingual conjecture read in full from `conjectures/00000006380.md`. It is an existential claim: two mixed schemes with the same stability constant but different pressure modes, realized by an explicit enrichment pair with the same stability but different pressure spaces (存在…显式富化对). No SOURCE.md shipped.
+- LaTeX `report.tex` read in full; independently rebuilt with `latexmk -pdf` (pdflatex): compiles cleanly into two pages. Raw pypdf extraction of the shipped (Tectonic) PDF differs from the rebuild in exactly 24 single-symbol hunks, all of which are ToUnicode glyph-mapping artifacts (the shipped PDF's extraction returns ASCII lookalikes for `{ } ∈ ⟨ ⟩ ∥ × − →`); both PDFs were rendered with ghostscript at 150 dpi and the displayed formulas were visually compared and confirmed identical (e.g. both render "Q₁ = {(q,0) : q ∈ ℝ}, Q₂ = ℝ²" correctly). Content matches.
+- Fresh `lake build` on Lean v4.19.0, Mathlib pinned at c44e0c8e: **Build completed successfully**, 2072 targets, zero errors; four cosmetic lint warnings (simp-style suggestions, an unreachable trailing `ring`).
+- Axiom audit: 10 `#print axioms` lines (enrichment, dimensions, bilinearity, coercivity, supremum, infimum, stability, both well-posedness theorems, `separation`) — all `[propext, Classical.choice, Quot.sound]` only.
+- Grep for `sorry`, `native_decide`, `axiom` declarations, `unsafe`, `@[implemented_by]`, `extern`, `admit`: no hits in submission sources (the single `extern` hit is inside a generated `.lake/build/ir/Main.c` artifact created by the build itself, not submission code).
+- Auxiliary code: none; the mathematics was instead re-verified numerically in python (sampled inf-sup suprema equal 1 for random pressures in both spaces; mixed-solution residuals exactly zero).
+- `metadata.csv` on main marks 00000006380 neither proven nor disproven (unsolved).
+
+## Semantic audit
+The conjecture asks for two mixed schemes with equal stability constants but different pressure modes, with the separation realized by an explicit enrichment pair. The submission proves exactly this. The velocity space is V = ℝ²; the pressure spaces are Q₁ = {(q,0)} (the kernel of the second-coordinate projection — the first-axis modes) and Q₂ = ℝ² (the full space), a strict enrichment with dimensions 1 and 2; both carry the inherited Euclidean norm and share the forms a(u,v) = ⟨u,v⟩ (coercive with constant one since a(v,v) = ‖v‖²) and b(v,q) = ⟨v,q⟩ (continuity one by Cauchy–Schwarz). The genuine inf–sup constant is β = inf_{q ∈ Q, q ≠ 0} sup_{v ≠ 0} ⟨v,q⟩/(‖v‖‖q‖): for every nonzero q the inner supremum is exactly 1 (Cauchy–Schwarz bounds every quotient by 1, and the choice v = q attains it), so the outer infimum over the singleton {1} is 1 — for both pressure spaces. The constants are therefore equal without being merely assigned: both are computed from the full two-quantifier definition. The pressure spaces genuinely differ: (0,1) ∈ Q₂∖Q₁ and finrank ℚ₁ = 1 ≠ 2 = finrank ℚ₂. Both mixed weak systems (a(u,v) + b(v,p) = a(f,v) for all v; b(u,q) = b(g,q) for all q ∈ Qᵢ) are proved to have unique solutions for every data pair: for Q₁, u = (g₁, f₂), p = (f₁−g₁, 0); for Q₂, u = g, p = f − g. I re-verified these solutions and the inf–sup values numerically in python; all residuals vanish and sampled suprema equal 1.
+
+The formalization is faithful throughout. `E` is Mathlib's actual `EuclideanSpace ℝ (Fin 2)`; `Q1` is a genuine `LinearMap.ker` submodule and `Q2` is `⊤`; strictness `Q1 < Q2` is proved; the dimension claim uses a constructed linear equivalence ℝ ≃ₗ Q₁. The stability development forms the actual set of normalized velocity quotients, proves it bounded above and containing 1, and concludes `sSup = 1` (Mathlib real `sSup` with nonemptiness from a witness pressure), then takes the actual `sInf` over the image of all nonzero pressures and proves that image is the singleton {1} — the full inf–sup definition with both quantifiers, not a surrogate. The mixed systems carry all velocity and pressure test quantifiers, and `separation` packages strict enrichment, equal stability, different dimensions, and both well-posedness theorems. The quantifier structure (existence of an explicit pair) matches the official bilingual text; nothing is weakened and no easier substitute statement is proved.
+
+## Issues found
+None blocking. (Cross-engine ToUnicode extraction artifact resolved by visual render comparison; four cosmetic lint warnings.)
+
+## Verdict
+APPROVED. The submission proves the conjecture's existential claim with an explicit, fully formalized enrichment pair: genuinely computed equal inf–sup constants (both exactly 1), strictly different pressure spaces with different modes and dimensions, and well-posed mixed systems for both schemes. All mechanical checks pass and the mathematics was independently re-verified.

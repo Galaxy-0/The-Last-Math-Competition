@@ -1,0 +1,27 @@
+# Solution Review — Conjecture 00000006340 (PR 564)
+
+**Submission:** ziangni-sys — `ziangni-sys_submission_20261004203247`
+**Reviewer:** independent competition reviewer
+**Date:** 2026-10-04
+
+## Checklist results
+- Official bilingual conjecture read in full (`conjectures/00000006340.md`, English + Chinese): an EXISTENCE claim — there exist two matrices with the same rigidity function but different spectral rigidity, with the separation realized by an explicit orthogonal pair having the same rank changes but different eigenvalues. No SOURCE.md shipped (`source_md: absent`). Metadata marks the conjecture unsolved (proven=false, disproven=false).
+- LaTeX: read the entire `report.tex`; rebuilt independently with `latexmk -pdf -interaction=nonstopmode` (exit 0, two pages). pypdf text of shipped vs rebuilt PDFs matches after systematic glyph-extraction normalization (Tectonic vs pdflatex font encodings for math delimiters, minus/setminus/∈/≠/≤/×/∑/→ glyphs and fi/ff ligatures); residual difference is a single character (the setminus glyph of ℂ²∖{0}), similarity ratio 0.9999 — content identical.
+- Lean build: fresh `lake build` (Lean 4.19.0; lakefile pins Mathlib at c44e0c8ee63ca166450922a373c7409c5d26b00b): 1578 targets, completed successfully, zero errors, zero warnings.
+- Axioms: `Main.lean` ends with `#print axioms` for all twelve decisive theorems (`actual_orthogonality`, `frobenius_orthogonal`, `rotation_rank`, `rotation_changes`, `identical_attainable_costs`, `genuine_minimum`, `full_rigidity_equality`, `eigen_A_iff`, `eigen_J_iff`, `actual_spectra`, `different_spectra`, `separation`); every list is exactly [propext, Classical.choice, Quot.sound].
+- Forbidden content: grep over the whole submission for `sorry`, `native_decide`, `axiom ` declarations, `unsafe`, `@[implemented_by`, `extern`, `admit`: no hits.
+- Auxiliary code: none shipped. Reviewer's independent exact-arithmetic check (Fractions, all 2×2 matrices with entries in [-3,3], 7⁴ = 2401 candidates per rank level): R_A(r) = R_J(r) = 2, 1, 0 for r = 0, 1, 2; eigenvalues of A are {1,1}, of J are {i,−i}; ⟨A,J⟩_F = 0.
+- Metadata marks conjecture unsolved (proven=false, disproven=false in metadata.csv).
+
+## Semantic audit
+The conjecture asserts the existence of a separating pair and specifies concretely what realizes the separation: an explicit orthogonal pair with the same rank changes (the rigidity-function layer) but different eigenvalues (the spectral layer — the source assigns no separate formula to "spectral rigidity", and the submission discloses this, implementing the spectral layer as the spectrum, exactly as the conjecture's own realization clause does). The submission takes A = I₂ and J = [[0,−1],[1,0]], the ninety-degree rotation.
+
+Rigidity equality is proved structurally, not by computing one value: left multiplication by J is a signed row permutation, so c(JM, JN) = c(M, N) for the changed-entry count, and rank(JN) = rank N because det J = 1 ≠ 0 (via Mathlib's `rank_mul_eq_right_of_isUnit_det`); since JA = J, the map N ↦ JN is a cost-and-rank-preserving injection from rank-≤r perturbations of A to those of J, and its inverse N ↦ KN (K = Jᵀ, also det 1) runs the argument backwards. Hence the attainable-cost sets are equal for every r and `rigidity A = rigidity J` as functions — full equality, not agreement at one rank or a common bound. `genuine_minimum` separately proves the sInf is an attained minimum bounded by every feasible cost, matching the "fewest entries one must change" reading. The eigenvalue analysis is complete in both directions: for A, every eigenvalue is 1 (nonzero eigenvector forced coordinatewise since z ≠ 1); for J, the eigenvector equations force v₁ ≠ 0 and (λ²+1)v₁ = 0, giving λ = ±i, with explicit eigenvectors (1,−i) and (1,i); so σ(A) = {1} ≠ {i,−i} = σ(J), and 1 witnesses the difference. Orthogonality holds in both possible senses — each matrix satisfies MᵀM = MMᵀ = I, and ⟨A,J⟩_F = 0 — so "explicit orthogonal pair" is satisfied under either reading.
+
+The final theorem `separation : rigidity A = rigidity J ∧ spectrum A ≠ spectrum J ∧ A.transpose*A = 1 ∧ J.transpose*J = 1 ∧ (∑ i, ∑ j, A i j * J i j) = 0` packages exactly the conjecture's demands: two matrices, identical full rigidity functions, different spectra, explicit orthogonal pair. My brute-force verification with exact rational arithmetic independently confirms the rigidity values (2, 1, 0 at r = 0, 1, 2 for both matrices — e.g. R(0) = 2 for both since each has exactly two nonzero entries) and the spectral separation. The complexification in the Lean (`M.map Complex.ofReal` with genuine nonzero complex eigenvectors) is the standard eigenvalue notion for real matrices.
+
+## Issues found
+None blocking. (Observation: "spectral rigidity" is not separately defined in the official text; the submission interprets the spectral layer as the eigenvalues, which is precisely the reading dictated by the conjecture's own realization clause "same rank changes but different eigenvalues / 同秩变更异特征值". This interpretation is openly stated in the report's scope paragraph.)
+
+## Verdict
+APPROVED. Fresh warning-free build pinned to the exact Mathlib revision, all twelve audited theorems using only the three standard axioms, independent PDF rebuild with identical content, no forbidden constructs, and a complete, structurally-proved separation pair that satisfies every component of the existence claim as stated in both language versions, with all values independently re-verified by exact-arithmetic brute force.

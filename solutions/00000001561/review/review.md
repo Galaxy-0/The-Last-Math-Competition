@@ -1,0 +1,26 @@
+# Solution Review — Conjecture 00000001561 (PR 550)
+
+**Submission:** C0ldSmi1e — `C0ldSmi1e_submission_20261004183534`
+**Reviewer:** independent competition reviewer
+**Date:** 2026-10-04
+
+## Checklist results
+- Official bilingual conjecture `conjectures/00000001561.md` read in full (English + Chinese); the submission's `conjecture.md` is byte-identical to it (`diff` clean).
+- LaTeX: `main.tex` read in full; rebuilt independently with `latexmk -pdf` — build succeeded; extracted text matches the shipped `main.pdf` up to ligature glyph-extraction artifacts only (fi/ff/ﬀ as in "deﬁne", "Hausdorﬀ"). Content identical.
+- Lean: fresh `lake build` on toolchain `leanprover/lean4:v4.19.0` with the competition's pinned Mathlib (`c44e0c8e…`, resolved via the manifest) — **Build completed successfully**, zero errors, no warnings.
+- Axioms: re-ran the bundled `Check.lean` in my fresh environment; all 21 audited theorems, including `conjecture_false`, `no_hemisphere_extremizer`, `closedHemisphere_not_admissible`, depend only on `[propext, Classical.choice, Quot.sound]`. Grep for `sorry`/`native_decide`/`axiom`/`unsafe`/`@[implemented_by`/`extern`/`admit`: no hits.
+- Auxiliary code: none (no numerical programs; every claimed identity is kernel-checked and independently reverified by hand).
+- Metadata: README/VERIFICATION.md/SEMANTIC_REVIEW.md present the result honestly as a feasibility refutation and explicitly do not claim to identify the true optimum or second extremizer.
+
+## Semantic audit
+The official conjecture, in both languages, first defines the problem — the maximal measure of a subset of S² with **pairwise spherical distances at most π/2** — and then asserts that the extremal set is a **closed hemisphere**, followed by a second-extremizer claim with measure ratio 3/4. The submission observes that these two halves are incompatible: for any unit pole v, the equator of H_v = {x ∈ S² : ⟨v,x⟩ ≥ 0} contains a unit vector w orthogonal to v together with its antipode −w, and the spherical (great-circle) distance between w and −w is arccos(−1) = π > π/2. Hence no closed hemisphere is admissible for the very problem the conjecture names, and since an extremal set of a constrained maximization must lie in the feasible class, no closed hemisphere can be the extremal set. The submission adds a strengthening: even the open hemisphere fails, since the points (3/5)v ± (4/5)w lie strictly inside (⟨v,x⟩ = 3/5 > 0, norm 1) while their mutual inner product is 9/25 − 16/25 = −7/25 < 0, giving distance arccos(−7/25) ≈ 1.85 > π/2 — so the infeasibility is not a boundary artifact removable by deleting the equator.
+
+The formalization is faithful and — importantly — attacks the weakest form of the official claim. `ConjectureFirstClause` is `∃ v ∈ sphereS2, IsAreaMaximizer sphericalArea (closedHemisphere v)`, the existential (existence) reading of "the extremal set is a closed hemisphere"; `conjecture_false` is its negation. `IsAreaMaximizer μ A` requires `Admissible A` (A ⊆ S² with all pairwise spherical distances ≤ π/2, exactly the source's constraint) and μ-domination of every admissible competitor. Because the official first clause implies the existential form, negating the existential form refutes the official clause and therefore the whole conjunctive conjecture; no stronger or twisted reading is smuggled in. The refutation is measure-independent (`no_hemisphere_extremizer` holds for every measure; it is then specialized to Mathlib's 2-dimensional Hausdorff measure), so no surface-area normalization convention matters. Spherical distance is Mathlib's `InnerProductGeometry.angle`, proved equal to `arccos ⟨x,y⟩` on the unit sphere — the standard great-circle distance in radians. Restricting the pole to the sphere loses nothing (hemispheres are unchanged by positive scaling of the pole). All witness hypotheses are discharged: the pole v is an arbitrary unit vector, and w is constructed via an orthonormal basis of v's orthogonal complement.
+
+The mathematics is elementary and airtight: ‖(3/5)v ± (4/5)w‖² = 9/25 + 16/25 = 1 by orthogonality; ⟨(3/5)v+(4/5)w, (3/5)v−(4/5)w⟩ = 9/25 − 16/25 = −7/25; arccos(−7/25) > π/2 since −7/25 < 0. Every step is proved in Lean, and I reverified each identity by hand. The report honestly states that the second-extremizer clause is not analyzed and does not need to be, since the conjecture is a conjunction whose first conjunct fails.
+
+## Issues found
+None blocking. (Observation, not a defect: the underlying reason the disproof is this short is that the official statement is internally inconsistent — a closed hemisphere has diameter π, not ≤ π/2. The submission attacks the statement as officially written, which is the ground truth for this review; it neither redefines the constraint nor weakens the claim.)
+
+## Verdict
+APPROVED. All mechanical checks pass (byte-identical source text, matching independent PDF rebuild, clean Lean build on the pinned toolchain/Mathlib, only the three standard axioms, no proof-bypass constructs), and the semantic audit confirms the Lean theorem negates the existential form of the official first clause under faithful definitions of sphere, spherical distance, admissibility and constrained maximizer, with all mathematics independently reverified.

@@ -10,27 +10,27 @@ archived under solutions/[number_ID]/review/. After the full re-audit of 2026-10
 reverted to open unless another valid submission remains); 98 PRs were closed unmerged with
 full review comments.
 
-**Total solved: 419 / 10000 conjectures** — 30 proven, 389 disproven.
+**Total solved: 470 / 10000 conjectures** — 37 proven, 433 disproven.
 
 Ranking is by **Solved** (accepted submissions), ties broken by first solves.
 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
-| 1 | [ziangni-sys](https://github.com/ziangni-sys) | 102 | 102 | 7 | 95 |
-| 2 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 81 | 81 | 6 | 75 |
+| 1 | [ziangni-sys](https://github.com/ziangni-sys) | 124 | 124 | 11 | 113 |
+| 2 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 82 | 82 | 6 | 76 |
 | 3 | [orionsheep](https://github.com/orionsheep) | 73 | 65 | 0 | 73 |
 | 4 | [earthking11](https://github.com/earthking11) | 66 | 59 | 0 | 66 |
 | 5 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 37 | 36 | 8 | 29 |
-| 6 | [jilint777](https://github.com/jilint777) | 20 | 20 | 1 | 19 |
-| 7 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
-| 8 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
-| 9 | [C0ldSmi1e](https://github.com/C0ldSmi1e) | 15 | 15 | 1 | 14 |
+| 6 | [jilint777](https://github.com/jilint777) | 34 | 34 | 2 | 32 |
+| 7 | [C0ldSmi1e](https://github.com/C0ldSmi1e) | 29 | 29 | 3 | 26 |
+| 8 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
+| 9 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
 | 10 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
 | 11 | [GodBlf](https://github.com/GodBlf) | 2 | 2 | 0 | 2 |
 | 12 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
 | 13 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
-| 14 | [champagnepapihz](https://github.com/champagnepapihz) | 1 | 1 | 0 | 1 |
-| 15 | [Galaxy-0](https://github.com/Galaxy-0) | 1 | 1 | 1 | 0 |
+| 14 | [Galaxy-0](https://github.com/Galaxy-0) | 1 | 1 | 1 | 0 |
+| 15 | [champagnepapihz](https://github.com/champagnepapihz) | 1 | 1 | 0 | 1 |
 
 ## Solved conjectures per solver
 
@@ -67,7 +67,7 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 #7965★ (D), #7976★ (D), #7990★ (D), #8176★ (D), #8256★ (D), #8869★ (D), #4280★ (D), #3631★ (D), #4163★ (D)
 #2060★ (D)
 
-### gaochengzhecpu — 81 solved (81 first)
+### gaochengzhecpu — 82 solved (82 first)
 
 #996★ (D), #126★ (D), #388★ (D), #425★ (D), #459★ (D), #1665★ (D), #2304★ (D), #2617★ (D), #2618★ (D)
 #3483★ (D), #3486★ (D), #3490★ (D), #4274★ (D), #4287★ (D), #4294★ (D), #6334★ (D), #6402★ (D), #7292★ (D)
@@ -78,6 +78,7 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 #9650★ (D), #4410★ (D), #7860★ (D), #3474★ (D), #4408★ (D), #9978★ (D), #3522★ (P), #38★ (D), #3556★ (D)
 #9761★ (D), #40★ (D), #95★ (D), #3961★ (D), #3380★ (D), #8586★ (D), #107★ (D), #3315★ (D), #2305★ (D)
 #2226★ (P), #3964★ (D), #2604★ (D), #3476★ (D), #1854★ (D), #2311★ (D), #3842★ (D), #3841★ (P), #4413★ (D)
+#9611★ (D)
 
 ### SucRunBug — 18 solved (18 first)
 
@@ -101,12 +102,14 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 
 #252★ (D)
 
-### C0ldSmi1e — 15 solved (15 first)
+### C0ldSmi1e — 29 solved (29 first)
 
 #310★ (D), #464★ (D), #420★ (D), #308★ (D), #360★ (D), #747★ (D), #1259★ (D), #7790★ (D), #973★ (D)
-#141★ (D), #3794★ (D), #4107★ (D), #6480★ (P), #428★ (D), #9028★ (D)
+#141★ (D), #3794★ (D), #4107★ (D), #6480★ (P), #428★ (D), #9028★ (D), #367★ (D), #1561★ (D), #574★ (D)
+#1554★ (D), #5960★ (P), #1277★ (D), #283★ (D), #978★ (D), #2802★ (D), #7718★ (D), #6891★ (D), #1227★ (P)
+#7662★ (D), #7767★ (D)
 
-### ziangni-sys — 102 solved (102 first)
+### ziangni-sys — 124 solved (124 first)
 
 #7683★ (D), #3327★ (D), #1101★ (D), #1000★ (D), #2153★ (D), #3943★ (D), #5508★ (D), #5781★ (D), #6406★ (P)
 #6672★ (D), #7167★ (D), #7400★ (D), #8178★ (D), #8230★ (D), #8557★ (D), #8843★ (D), #8855★ (D), #8844★ (P)
@@ -119,17 +122,20 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 #8034★ (D), #8471★ (D), #8487★ (D), #7164★ (D), #8582★ (D), #7162★ (D), #8476★ (D), #7174★ (D), #6069★ (D)
 #7136★ (D), #6080★ (P), #8834★ (D), #8236★ (D), #8800★ (D), #8819★ (D), #8244★ (D), #8835★ (D), #8845★ (D)
 #8776★ (D), #6073★ (D), #8829★ (D), #8818★ (D), #8838★ (D), #7801★ (D), #8837★ (D), #7805★ (D), #6826★ (D)
-#8905★ (D), #9114★ (D), #7809★ (D)
+#8905★ (D), #9114★ (D), #7809★ (D), #6076★ (D), #7129★ (D), #8836★ (D), #8376★ (D), #6430★ (P), #2260★ (D)
+#6380★ (P), #2233★ (D), #8561★ (D), #8570★ (D), #7807★ (D), #6340★ (P), #7857★ (D), #8975★ (D), #2391★ (D)
+#8840★ (D), #8859★ (D), #7843★ (D), #5390★ (D), #8853★ (D), #995★ (D), #7389★ (P)
 
 ### Galaxy-0 — 1 solved (1 first)
 
 #205★ (P)
 
-### jilint777 — 20 solved (20 first)
+### jilint777 — 34 solved (34 first)
 
 #603★ (D), #7672★ (D), #2141★ (D), #35★ (P), #7709★ (D), #7145★ (D), #1289★ (D), #1102★ (D), #1685★ (D)
 #1196★ (D), #438★ (D), #3824★ (D), #3952★ (D), #1028★ (D), #1007★ (D), #1230★ (D), #297★ (D), #1564★ (D)
-#8556★ (D), #7130★ (D)
+#8556★ (D), #7130★ (D), #9898★ (D), #8579★ (D), #1022★ (D), #1141★ (D), #7739★ (D), #7608★ (D), #1753★ (D)
+#4310★ (D), #3831★ (D), #3481★ (D), #1091★ (P), #9617★ (D), #1090★ (D), #7964★ (D)
 
 ### GodBlf — 2 solved (2 first)
 

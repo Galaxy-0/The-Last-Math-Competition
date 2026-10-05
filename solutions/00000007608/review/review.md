@@ -1,0 +1,26 @@
+# Solution Review — Conjecture 00000007608 (PR 582)
+
+**Submission:** jilint777 — `jilint777_submission_20261004191318`
+**Reviewer:** independent competition reviewer
+**Date:** 2026-10-04
+
+## Checklist results
+- Official bilingual conjecture read (`conjectures/00000007608.md`): "The composition of two reflections is a rotation and the decomposition is unique; the exception of uniqueness is parallel reflections; and the exception of parallel reflections is translation composition" (两反射的合成为旋转且分解唯一；唯一性的例外为平行反射；平行反射的例外为平移复合).
+- LaTeX report independently rebuilt with `latexmk -pdf`: clean build; extracted text identical to the shipped `report.pdf` after bullet-glyph normalization (same length, no content differences).
+- Lean: fresh `lake build` on `leanprover/lean4:v4.19.0`, zero errors/warnings; build log identical to `verification.txt`.
+- `#print axioms` (Main.lean lines 694–708): only `propext` and `Quot.sound`. No `sorry`/`native_decide`/`axiom`/`unsafe`/`implemented_by`/`extern`/`admit`.
+- `verify.py` rerun: 34 PASS, 0 FAIL; output identical to `verification.txt` except the trailing wrapper `exit 0`.
+- Independent mathematical check (reviewer's own computation): `R2·R1 = [[0,−1],[1,0]] = R4·R3` (both equal the 90° rotation) and `R3·R1 = −I` confirmed by exact integer matrix multiplication; mirrors x-axis, y=x, y-axis, y=−x are four distinct lines.
+
+## Semantic audit
+The conjecture is a conjunction; the submission correctly identifies the uniqueness clause as the false part. (C1) — the composition of two (linear) reflections is a rotation — is true and even proved in Lean (`refl_mul_refl`); (C4) — parallel distinct mirrors give a translation — is true and proved (`parallel_gives_translation`: the mirrors x=0 and x=1 compose to translation by (2,0), fixed-point-free). The uniqueness clause is refuted in its weakest literal form: `UniqueFor ρ` says any two decompositions of `ρ` into two reflections with non-parallel mirrors must have the same *unordered* pair of mirrors. This is genuinely the weakest reading of "the decomposition is unique, the exception being parallel reflections" (for linear mirrors, parallel = equal, since mirrors pass through the origin — the formalization notes and uses this). The refutation is the elementary, classical fact of plane geometry: ρ_θ = R_β R_α whenever β − α ≡ θ/2 (mod π), so the first mirror can be chosen freely. Concretely, the integer matrices R2·R1 = R4·R3 = rot90° with four pairwise distinct mirrors give two decompositions of the same rotation with non-parallel mirrors and different unordered mirror pairs — verified in Lean by `decide` and by my own multiplication.
+
+The formalization quality is high. Rational 2×2 matrices are modeled as `m/q` with denominators cleared in every predicate; normal forms (`isRefl_iff`, `rot_form`, `refl_of_form`) are proved from scratch (including the sum-of-two-squares step); `decomp_classification` proves the complete classification (any decomposition of ρ is `(A, ρA)`, so non-uniqueness is fully explained, not just exhibited); `nonparallel` proves that for ρ ≠ id the two mirrors of `(A_t, ρA_t)` are never equal; `infinitely_many_decompositions` and `not_uniqueFor` establish failure for *every* nontrivial rational rotation via the Pythagorean family `A_t` (mirrors of distinct slopes t are distinct, and no three decompositions share an unordered mirror pair). Non-vacuity of the refuted predicate is shown by `uniqueFor_id` (for the identity rotation every decomposition has equal mirrors, so `UniqueFor Id2` holds). The quantifier structure matches: the conjecture asserts uniqueness universally, and a single rotation with two non-parallel decompositions falsifies it. Alternative readings are handled honestly: the ordered (matrix-level) reading is refuted because it implies the unordered one (`ordered_implies_unordered`); higher dimension (ℝ³ block embedding with plane mirrors through the axis) and affine reflections (90° rotation about (1,1) with two decompositions through four distinct lines) are covered by concrete verified examples; and the two charitable readings under which the statement would be true ("unique up to rotating both mirrors" and "given one mirror the other is unique") are explicitly identified, correctly proved in the report, and correctly *not* claimed to be refuted — with the valid observation that under the relative-uniqueness reading the conjecture's own "parallel exception" clause would be vacuous, so that cannot be the intended meaning.
+
+The Lean development works over ℚ rather than ℝ (core Lean has no reals); this loses nothing since the counterexamples are rational/integer, and the real statement (uncountably many decompositions, ρ_θ = R_{α+θ/2}R_α for all α) is proved in the report by direct trigonometric computation, which I checked.
+
+## Issues found
+None blocking.
+
+## Verdict
+APPROVED. The mathematics is elementary and correct, the Lean formalization faithfully captures the uniqueness clause in its weakest literal form and refutes it with a fully verified explicit counterexample plus a complete classification and an infinite family, the non-vacuity of the refuted predicate is demonstrated, and all artifacts (verify.py, verification.txt, PDF, build logs) reproduce exactly. Only standard axioms are used.
