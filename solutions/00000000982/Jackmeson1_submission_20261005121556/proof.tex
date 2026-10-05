@@ -1,0 +1,178 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\C}{\mathbb{C}}
+\title{A disproof of Conjecture 00000000982\\[2pt]
+\large Fixed points of the Berezin transform on Fock space are neither radial nor at most two}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture and its reading}
+
+Conjecture 00000000982 reads: \emph{Definition: The Berezin transform. Conjecture: Fixed points of the
+Berezin transform on Fock space are radial functions, and the cardinality of the fixed-point set is at
+most 2 (fixed-point rigidity).}
+
+It is a conjunction of two clauses: (A) every fixed point is radial, i.e.\ depends only on $|z|$;
+(B) the fixed-point set has cardinality at most $2$. We use the classical Fock space of one complex
+variable. The phrase ``on Fock space'' leaves the class of admissible symbols open, so we treat two classes:
+\begin{itemize}
+\item[(R1)] symbols in the Fock space $F^2$ itself;
+\item[(R2)] bounded symbols, the standard domain of the Berezin transform of a function.
+\end{itemize}
+We show that (A) and (B) both fail under (R1), and (B) fails under (R2). Under (R2), clause (A) is true,
+because bounded fixed points are constant (see Section~\ref{sec:lit}). The conjunction therefore still
+fails under (R2).
+
+\section{Definitions}
+
+\begin{definition}[Fock space]
+Let $dA$ be Lebesgue area measure on $\C$ and $d\lambda(w)=\pi^{-1}e^{-|w|^2}\,dA(w)$. The Fock space
+$F^2$ is the space of entire functions $f$ with $\int_\C |f|^2\,d\lambda<\infty$. Its reproducing kernel
+is $K(w,z)=e^{w\bar z}$, with $K(z,z)=e^{|z|^2}$. The normalized kernel is
+$k_z(w)=K(w,z)/\sqrt{K(z,z)}=e^{w\bar z-|z|^2/2}$.
+\end{definition}
+
+This agrees with the Segal--Bargmann space as described on Wikipedia, where $F^2$ is ``the space of
+holomorphic functions F in n complex variables satisfying the square-integrability condition''
+$\pi^{-n}\int|F(z)|^2\exp(-|z|^2)\,dz<\infty$. There the kernel functions are $F_a(z)=\exp(\bar a\cdot z)$,
+with $\|F_a\|^2=\exp(|a|^2)$, so $k_z=F_z/\|F_z\|$.
+
+\begin{definition}[Berezin transform]
+For a symbol $f:\C\to\C$, $(Bf)(z)=\int_\C f(w)\,|k_z(w)|^2\,d\lambda(w)$. For bounded $f$ this equals
+$\langle T_f k_z,k_z\rangle$, where $T_f$ is the Toeplitz operator. This is the same pattern as the
+Bergman-disk formula $(Bf)(z)=\int_D \frac{(1-|z|^2)^2}{|1-z\bar w|^4}f(w)\,dA(w)$ quoted on Wikipedia.
+\end{definition}
+
+A function $f$ is \emph{radial} if $|z|=|w|$ implies $f(z)=f(w)$. In Lean, the integral is Mathlib's
+Bochner integral with respect to the Lebesgue measure \texttt{volume} on $\C$. A non-integrable integrand
+has integral $0$ there. This convention does not create spurious fixed points in the classes we use.
+Integrability of $w\mapsto f(w)|k_z(w)|^2$ depends on $z$, and for the classes in the statement it
+holds at every $z$. For $f$ in the Fock space, Cauchy--Schwarz bounds $\int|f||k_z|^2\,d\lambda$ by
+$\|f\|\,\| |k_z|^2\|$, which is finite. For a bounded symbol, $|f||k_z|^2\le\|f\|_\infty|k_z|^2$ and
+$|k_z|^2\,d\lambda$ is a probability measure. A bounded fixed point $f=Bf$ is automatically
+continuous, hence measurable, because $Bf$ is a Gaussian convolution. In any case, the disproof only
+uses the constants and the monomials $z^k$, and for these every integral is shown to be integrable.
+
+\section{The proof}
+
+\begin{lemma}[Gaussian convolution form]\label{lem:conv}
+$|k_z(w)|^2e^{-|w|^2}=e^{-|w-z|^2}$. Consequently $(Bf)(z)=\int_\C f(z+u)\,G(u)\,dA(u)$, where
+$G(u)=\pi^{-1}e^{-|u|^2}$.
+\end{lemma}
+\begin{proof}
+We have $|k_z(w)|^2=e^{2\,\mathrm{Re}(w\bar z)-|z|^2}$ and $|w-z|^2=|w|^2+|z|^2-2\,\mathrm{Re}(w\bar z)$.
+Then substitute $w=z+u$; Lebesgue measure is translation invariant.
+\end{proof}
+
+\begin{lemma}[Gaussian moments]\label{lem:mom}
+(i) $\int_\C G\,dA=1$.\\
+(ii) $u\mapsto |u|^k e^{-|u|^2}$ is integrable for every $k\ge0$.\\
+(iii) $\int_\C u^jG(u)\,dA(u)=0$ for every $j\ge1$.
+\end{lemma}
+\begin{proof}
+(i) Mathlib's $\int_V e^{-b\|v\|^2}=(\pi/b)^{\dim V/2}$ with $V=\C$ gives $\int_\C e^{-|u|^2}\,dA=\pi$.
+
+(ii) We have $x^k\le k!\,e^{x}$ and $x-x^2\le \tfrac12-\tfrac12x^2$. Hence
+$|u|^ke^{-|u|^2}\le k!\,e^{1/2}e^{-|u|^2/2}$, and the right side is integrable.
+
+(iii) Let $\omega=e^{i\pi/j}$. Rotation $u\mapsto\omega u$ is a linear isometry of $\C=\mathbb R^2$, so it
+preserves Lebesgue measure, and $G(\omega u)=G(u)$. Hence $I=\int u^jG=\int(\omega u)^jG(\omega u)=\omega^jI=-I$,
+so $I=0$.
+\end{proof}
+
+\begin{theorem}\label{thm:fixed}
+(a) $B$ fixes every constant: $B(c)=c$.\\
+(b) $B$ fixes every monomial: $B(w^k)=w^k$ for all $k\ge0$.\\
+(c) Every constant and every monomial $w^k$ lies in $F^2$.\\
+(d) $w\mapsto w$ is not radial.\\
+(e) The monomials are linearly independent.
+\end{theorem}
+\begin{proof}
+(a) Use Lemma~\ref{lem:conv} and Lemma~\ref{lem:mom}(i).
+
+(b) By the binomial theorem, $(z+u)^k=\sum_m\binom km z^m u^{k-m}$. Each term is integrable against $G$
+by Lemma~\ref{lem:mom}(ii). By Lemma~\ref{lem:mom}(iii), every term with $k-m\ge1$ integrates to $0$.
+The term $m=k$ integrates to $z^k$.
+
+(c) Constants and monomials are entire. Moreover $|w^k|^2\pi^{-1}e^{-|w|^2}=\pi^{-1}|w|^{2k}e^{-|w|^2}$ is
+integrable by Lemma~\ref{lem:mom}(ii).
+
+(d) $|1|=|i|$, but $1\ne i$.
+
+(e) The map $p\mapsto(z\mapsto p(z))$ is injective on $\C[X]$, because a polynomial vanishing on $\C$ is
+$0$. It sends the monomial basis to the functions $w\mapsto w^k$.
+\end{proof}
+
+\begin{theorem}[Main theorem]
+The conjecture is false.
+\begin{itemize}
+\item Under (R1), $w\mapsto w$ is a non-radial fixed point in $F^2$, so (A) fails. The fixed-point set
+contains every constant, so it is infinite and (B) fails. It also contains infinitely many linearly
+independent functions $w^k$, so (B) fails even if ``cardinality'' is read as ``dimension''.
+\item Under (R2), the fixed-point set contains every constant, so it is infinite and (B) fails.
+\end{itemize}
+\end{theorem}
+
+\section{Literature check}\label{sec:lit}
+The result is consistent with the literature. Casseli (arXiv:1903.05364) states: ``We show that an
+$L^p$ function, $p\in[1,+\infty]$, with respect to the Lebesgue measure is
+invariant under this transformation if and only if it is harmonic. From this we deduce that the only
+bounded fixed points of the Berezin transform of polyanalytic Fock spaces are constant functions.'' The
+same paper notes: ``For the classical Fock space , a Lipschitz estimate for the Berezin transform of a
+bounded function, together with a semigroup property, shows that a bounded fixed point of the Berezin
+transform must be constant''. Asghari, Cuckovic and Sahutoglu (arXiv:2508.13115) state: ``It is known
+that the Berezin transform is well-defined on the polynomials in $z$ and $\overline{z}$.'' On the polynomial domain, $w\mapsto w$ is again a non-radial fixed point. The proof
+above does not depend on these papers.
+
+\section{Relation to the earlier submission}
+An earlier submission by earthking11 was merged and then removed in the re-audit (commit 541cf4fb). The
+re-audit's reason was: ``no Berezin/Fock objects; load-bearing theorem prose-only''. Its Lean used only
+\texttt{import Std}. It modelled $z$ on the integer lattice and proved only that $(1,0)\ne(0,1)$ and that
+$1,z,z^2$ are distinct. The identity $B=e^{\Delta/4}$ and the fixed-point property appeared only in prose.
+The present submission defines in Lean the Fock space, its normalized kernel and the Berezin transform as
+an actual Lebesgue integral over $\C$. It proves the Gaussian convolution form, $B(c)=c$ and
+$B(w^k)=w^k$ from Mathlib's Gaussian integral, as well as $F^2$ membership, non-radiality and the
+infinitude of the fixed-point set.
+
+\section{Lean formalization}
+The file is \texttt{lean/Conjecture982/Basic.lean} (namespace \texttt{C982}), and it imports only Mathlib.
+
+\begin{itemize}
+\item Definitions: \texttt{gaussDensity}, \texttt{InFock}, \texttt{fockKernel}, \texttt{normKernel},
+\texttt{berezin}, \texttt{IsRadial}, \texttt{fockFixed}, \texttt{boundedFixed}.
+\item Lemmas:
+  \begin{itemize}
+  \item \texttt{normKernel\_eq} states $k_z=K(\cdot,z)e^{-|z|^2/2}$;
+  \item \texttt{kernel\_weight} and \texttt{berezin\_eq\_conv} give Lemma~\ref{lem:conv};
+  \item \texttt{integral\_G}, \texttt{integrable\_moment} and \texttt{moment\_zero} give
+    Lemma~\ref{lem:mom};
+  \item \texttt{berezin\_const}, \texttt{berezin\_pow}, \texttt{const\_inFock}, \texttt{pow\_inFock},
+    \texttt{id\_not\_radial}, \texttt{monomials\_linearIndependent} and \texttt{fixed\_infinite} give
+    Theorem~\ref{thm:fixed} and the infinitude of the fixed-point set.
+  \end{itemize}
+\item Main theorem \texttt{conjecture\_982\_false}. It states that $(w\mapsto w)\in$ \texttt{fockFixed} and
+is not radial, and that every $w^k\in$ \texttt{fockFixed}. It also states that the monomials are linearly
+independent, that \texttt{fockFixed} and \texttt{boundedFixed} are infinite, and that
+$\neg((\forall f\in\texttt{fockFixed},\ \mathrm{radial}\ f)\wedge |\texttt{fockFixed}|\le2)$ and
+$\neg(|\texttt{boundedFixed}|\le 2)$, with cardinalities measured by \texttt{Set.encard}.
+\item Axiom audit: \texttt{\#print axioms C982.conjecture\_982\_false} reports \texttt{[propext,
+Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+\end{itemize}
+
+\end{document}
