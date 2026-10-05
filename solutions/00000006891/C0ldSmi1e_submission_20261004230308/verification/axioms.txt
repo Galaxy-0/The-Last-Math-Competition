@@ -1,0 +1,281 @@
+def Conjecture6891.secantIndex : Conjecture6891.ProjectiveTensor → ℕ :=
+fun x => Nat.find ⋯
+def Conjecture6891.RankSecantHierarchyClaim : Prop :=
+∀ (t : Conjecture6891.Tensor) (ht : t ≠ 0),
+  Conjecture6891.tensorRank t = Conjecture6891.secantIndex (Projectivization.mk ℂ t ht)
+def Conjecture6891.U : Conjecture6891.Tensor :=
+Conjecture6891.pure Conjecture6891.e0 Conjecture6891.e1 Conjecture6891.e1 +
+    Conjecture6891.pure Conjecture6891.e1 Conjecture6891.e0 Conjecture6891.e1 +
+  Conjecture6891.pure Conjecture6891.e1 Conjecture6891.e1 Conjecture6891.e0
+def Conjecture6891.arc : ℂ → Conjecture6891.Tensor :=
+fun t =>
+  Conjecture6891.W + t • Conjecture6891.U +
+    t ^ 2 • Conjecture6891.pure Conjecture6891.e1 Conjecture6891.e1 Conjecture6891.e1
+def Conjecture6891.segreCurve : ℂ → Conjecture6891.Tensor :=
+fun t =>
+  Conjecture6891.pure (Conjecture6891.e0 + t • Conjecture6891.e1) (Conjecture6891.e0 + t • Conjecture6891.e1)
+    (Conjecture6891.e0 + t • Conjecture6891.e1)
+def Conjecture6891.baseTensor : Conjecture6891.Tensor :=
+Conjecture6891.pure Conjecture6891.e0 Conjecture6891.e0 Conjecture6891.e0
+def Conjecture6891.projectiveArc : ℂ → Projectivization ℂ Conjecture6891.Tensor :=
+fun t => Projectivization.mk ℂ (Conjecture6891.arc t) ⋯
+def Conjecture6891.projectiveCurve : ℂ → Projectivization ℂ Conjecture6891.Tensor :=
+fun t => Projectivization.mk ℂ (Conjecture6891.segreCurve t) ⋯
+def Conjecture6891.projectiveBase : Projectivization ℂ Conjecture6891.Tensor :=
+Projectivization.mk ℂ Conjecture6891.baseTensor Conjecture6891.baseTensor_ne_zero
+def Conjecture6891.projectiveW : Projectivization ℂ Conjecture6891.Tensor :=
+Projectivization.mk ℂ Conjecture6891.W Conjecture6891.W_ne_zero
+def Conjecture6891.sliceMinor : MvPolynomial Conjecture6891.Coordinate ℂ :=
+MvPolynomial.X (0, 0, 0) * MvPolynomial.X (0, 1, 1) - MvPolynomial.X (0, 0, 1) * MvPolynomial.X (0, 1, 0)
+@[reducible] def Conjecture6891.Vector : Type :=
+Fin 2 → ℂ
+@[reducible] def Conjecture6891.Tensor : Type :=
+TensorProduct ℂ Conjecture6891.Vector (TensorProduct ℂ Conjecture6891.Vector Conjecture6891.Vector)
+@[reducible] def Conjecture6891.Coordinate : Type :=
+Fin 2 × Fin 2 × Fin 2
+def Conjecture6891.pure : Conjecture6891.Vector →
+  Conjecture6891.Vector → Conjecture6891.Vector → Conjecture6891.Tensor :=
+fun a b c => a ⊗ₜ[ℂ] b ⊗ₜ[ℂ] c
+def Conjecture6891.tensorBasis : Basis Conjecture6891.Coordinate ℂ Conjecture6891.Tensor :=
+(Pi.basisFun ℂ (Fin 2)).tensorProduct ((Pi.basisFun ℂ (Fin 2)).tensorProduct (Pi.basisFun ℂ (Fin 2)))
+def Conjecture6891.coords : Conjecture6891.Tensor ≃ₗ[ℂ] Conjecture6891.Coordinate → ℂ :=
+Conjecture6891.tensorBasis.equivFun
+def Conjecture6891.e0 : Conjecture6891.Vector :=
+![1, 0]
+def Conjecture6891.e1 : Conjecture6891.Vector :=
+![0, 1]
+def Conjecture6891.W : Conjecture6891.Tensor :=
+Conjecture6891.pure Conjecture6891.e1 Conjecture6891.e0 Conjecture6891.e0 +
+    Conjecture6891.pure Conjecture6891.e0 Conjecture6891.e1 Conjecture6891.e0 +
+  Conjecture6891.pure Conjecture6891.e0 Conjecture6891.e0 Conjecture6891.e1
+@[reducible] def Conjecture6891.ProjectiveTensor : Type :=
+Projectivization ℂ Conjecture6891.Tensor
+def Conjecture6891.ProjectiveVanishes : MvPolynomial Conjecture6891.Coordinate ℂ →
+  Conjecture6891.ProjectiveTensor → Prop :=
+fun p x =>
+  ∀ (v : Conjecture6891.Tensor) (hv : v ≠ 0),
+    Projectivization.mk ℂ v hv = x → (MvPolynomial.eval (Conjecture6891.coords v)) p = 0
+def Conjecture6891.projectiveZeroLocus : Set (MvPolynomial Conjecture6891.Coordinate ℂ) →
+  Set Conjecture6891.ProjectiveTensor :=
+fun P => {x | ∀ p ∈ P, Conjecture6891.ProjectiveVanishes p x}
+def Conjecture6891.IsProjectiveAlgebraic : Set Conjecture6891.ProjectiveTensor → Prop :=
+fun Z => ∃ P, (∀ p ∈ P, ∃ d, p.IsHomogeneous d) ∧ Z = Conjecture6891.projectiveZeroLocus P
+def Conjecture6891.projectiveZariskiClosure : Set Conjecture6891.ProjectiveTensor →
+  Set Conjecture6891.ProjectiveTensor :=
+fun S =>
+  {x |
+    ∀ (d : ℕ) (p : MvPolynomial Conjecture6891.Coordinate ℂ),
+      p.IsHomogeneous d → (∀ y ∈ S, Conjecture6891.ProjectiveVanishes p y) → Conjecture6891.ProjectiveVanishes p x}
+def Conjecture6891.segre : Set Conjecture6891.ProjectiveTensor :=
+{x | ∃ a b c, ∃ (h : Conjecture6891.pure a b c ≠ 0), Projectivization.mk ℂ (Conjecture6891.pure a b c) h = x}
+def Conjecture6891.secantSpanLocus : ℕ → Set Conjecture6891.ProjectiveTensor :=
+fun r => {x | ∃ q, (∀ (i : Fin r), q i ∈ Conjecture6891.segre) ∧ x ∈ Projectivization.Subspace.span (Set.range q)}
+def Conjecture6891.secantVariety : ℕ → Set Conjecture6891.ProjectiveTensor :=
+fun r => Conjecture6891.projectiveZariskiClosure (Conjecture6891.secantSpanLocus r)
+def Conjecture6891.pointSubspace : Conjecture6891.ProjectiveTensor →
+  Projectivization.Subspace ℂ Conjecture6891.Tensor :=
+fun x => { carrier := {x}, mem_add' := ⋯ }
+def Conjecture6891.projectivizeSubmodule : Submodule ℂ Conjecture6891.Tensor →
+  Projectivization.Subspace ℂ Conjecture6891.Tensor :=
+fun L => { carrier := {x | x.submodule ≤ L}, mem_add' := ⋯ }
+def Conjecture6891.vectorSubmodule : Projectivization.Subspace ℂ Conjecture6891.Tensor →
+  Submodule ℂ Conjecture6891.Tensor :=
+fun P =>
+  { carrier := {v | ∀ (hv : v ≠ 0), Projectivization.mk ℂ v hv ∈ P}, add_mem' := ⋯, zero_mem' := ⋯, smul_mem' := ⋯ }
+def Conjecture6891.RankLE : ℕ → Conjecture6891.Tensor → Prop :=
+fun r t => ∃ a b c, t = ∑ i, Conjecture6891.pure (a i) (b i) (c i)
+def Conjecture6891.tensorRank : Conjecture6891.Tensor → ℕ :=
+fun t => Nat.find ⋯
+Conjecture6891.secantSpanLocus_mono {r s : ℕ} (h : r ≤ s) :
+  Conjecture6891.secantSpanLocus r ⊆ Conjecture6891.secantSpanLocus s
+'Conjecture6891.secantSpanLocus_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.secantVariety_mono {r s : ℕ} (h : r ≤ s) :
+  Conjecture6891.secantVariety r ⊆ Conjecture6891.secantVariety s
+'Conjecture6891.secantVariety_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.exists_secantVariety (x : Conjecture6891.ProjectiveTensor) : ∃ r, x ∈ Conjecture6891.secantVariety r
+'Conjecture6891.exists_secantVariety' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.mem_secantVariety_index (x : Conjecture6891.ProjectiveTensor) :
+  x ∈ Conjecture6891.secantVariety (Conjecture6891.secantIndex x)
+'Conjecture6891.mem_secantVariety_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.secantIndex_le_of_mem {x : Conjecture6891.ProjectiveTensor} {r : ℕ}
+  (h : x ∈ Conjecture6891.secantVariety r) : Conjecture6891.secantIndex x ≤ r
+'Conjecture6891.secantIndex_le_of_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.secantIndex_pos (x : Conjecture6891.ProjectiveTensor) : 0 < Conjecture6891.secantIndex x
+'Conjecture6891.secantIndex_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.secantIndex_projectiveW : Conjecture6891.secantIndex Conjecture6891.projectiveW = 2
+'Conjecture6891.secantIndex_projectiveW' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.rank_and_secant_index_counterexample :
+  Conjecture6891.W ≠ 0 ∧
+    Conjecture6891.tensorRank Conjecture6891.W = 3 ∧ Conjecture6891.secantIndex Conjecture6891.projectiveW = 2
+'Conjecture6891.rank_and_secant_index_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.conjecture_00000006891_false : ¬Conjecture6891.RankSecantHierarchyClaim
+'Conjecture6891.conjecture_00000006891_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.coords_U (i j k : Fin 2) :
+  Conjecture6891.coords Conjecture6891.U (i, j, k) =
+    Conjecture6891.e0 i * Conjecture6891.e1 j * Conjecture6891.e1 k +
+        Conjecture6891.e1 i * Conjecture6891.e0 j * Conjecture6891.e1 k +
+      Conjecture6891.e1 i * Conjecture6891.e1 j * Conjecture6891.e0 k
+'Conjecture6891.coords_U' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.coords_arc (t : ℂ) (i j k : Fin 2) :
+  Conjecture6891.coords (Conjecture6891.arc t) (i, j, k) =
+    Conjecture6891.coords Conjecture6891.W (i, j, k) + t * Conjecture6891.coords Conjecture6891.U (i, j, k) +
+      t ^ 2 * (Conjecture6891.e1 i * Conjecture6891.e1 j * Conjecture6891.e1 k)
+'Conjecture6891.coords_arc' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.arc_zero : Conjecture6891.arc 0 = Conjecture6891.W
+'Conjecture6891.arc_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.arc_ne_zero (t : ℂ) : Conjecture6891.arc t ≠ 0
+'Conjecture6891.arc_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.segreCurve_ne_zero (t : ℂ) : Conjecture6891.segreCurve t ≠ 0
+'Conjecture6891.segreCurve_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.baseTensor_ne_zero : Conjecture6891.baseTensor ≠ 0
+'Conjecture6891.baseTensor_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.smul_arc (t : ℂ) : t • Conjecture6891.arc t = Conjecture6891.segreCurve t - Conjecture6891.baseTensor
+'Conjecture6891.smul_arc' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.continuous_coords_arc : Continuous fun t => Conjecture6891.coords (Conjecture6891.arc t)
+'Conjecture6891.continuous_coords_arc' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveArc_zero : Conjecture6891.projectiveArc 0 = Conjecture6891.projectiveW
+'Conjecture6891.projectiveArc_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveCurve_ne_base (t : ℂ) (ht : t ≠ 0) :
+  Conjecture6891.projectiveCurve t ≠ Conjecture6891.projectiveBase
+'Conjecture6891.projectiveCurve_ne_base' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveArc_mem_span (t : ℂ) (ht : t ≠ 0) :
+  Conjecture6891.projectiveArc t ∈
+    Projectivization.Subspace.span (Set.range ![Conjecture6891.projectiveCurve t, Conjecture6891.projectiveBase])
+'Conjecture6891.projectiveArc_mem_span' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.sliceMinor_homogeneous : Conjecture6891.sliceMinor.IsHomogeneous 2
+'Conjecture6891.sliceMinor_homogeneous' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.sliceMinor_pure (a b c : Conjecture6891.Vector) :
+  (MvPolynomial.eval (Conjecture6891.coords (Conjecture6891.pure a b c))) Conjecture6891.sliceMinor = 0
+'Conjecture6891.sliceMinor_pure' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.sliceMinor_W :
+  (MvPolynomial.eval (Conjecture6891.coords Conjecture6891.W)) Conjecture6891.sliceMinor = -1
+'Conjecture6891.sliceMinor_W' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveCurve_mem_segre (t : ℂ) : Conjecture6891.projectiveCurve t ∈ Conjecture6891.segre
+'Conjecture6891.projectiveCurve_mem_segre' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveBase_mem_segre : Conjecture6891.projectiveBase ∈ Conjecture6891.segre
+'Conjecture6891.projectiveBase_mem_segre' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveArc_mem_secantSpanLocus_two (t : ℂ) (ht : t ≠ 0) :
+  Conjecture6891.projectiveArc t ∈ Conjecture6891.secantSpanLocus 2
+'Conjecture6891.projectiveArc_mem_secantSpanLocus_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveW_mem_secantVariety_two : Conjecture6891.projectiveW ∈ Conjecture6891.secantVariety 2
+'Conjecture6891.projectiveW_mem_secantVariety_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.sliceMinor_vanishes_on_segre (x : Conjecture6891.ProjectiveTensor) (hx : x ∈ Conjecture6891.segre) :
+  Conjecture6891.ProjectiveVanishes Conjecture6891.sliceMinor x
+'Conjecture6891.sliceMinor_vanishes_on_segre' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveW_not_mem_secantVariety_one : Conjecture6891.projectiveW ∉ Conjecture6891.secantVariety 1
+'Conjecture6891.projectiveW_not_mem_secantVariety_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveW_in_second_layer :
+  Conjecture6891.projectiveW ∈ Conjecture6891.secantVariety 2 ∧
+    Conjecture6891.projectiveW ∉ Conjecture6891.secantVariety 1
+'Conjecture6891.projectiveW_in_second_layer' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.coords_pure (a b c : Conjecture6891.Vector) (i j k : Fin 2) :
+  Conjecture6891.coords (Conjecture6891.pure a b c) (i, j, k) = a i * b j * c k
+'Conjecture6891.coords_pure' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.tensor_ext {u v : Conjecture6891.Tensor}
+  (h : ∀ (i j k : Fin 2), Conjecture6891.coords u (i, j, k) = Conjecture6891.coords v (i, j, k)) : u = v
+'Conjecture6891.tensor_ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.coords_W (i j k : Fin 2) :
+  Conjecture6891.coords Conjecture6891.W (i, j, k) =
+    Conjecture6891.e1 i * Conjecture6891.e0 j * Conjecture6891.e0 k +
+        Conjecture6891.e0 i * Conjecture6891.e1 j * Conjecture6891.e0 k +
+      Conjecture6891.e0 i * Conjecture6891.e0 j * Conjecture6891.e1 k
+'Conjecture6891.coords_W' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.W_ne_zero : Conjecture6891.W ≠ 0
+'Conjecture6891.W_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.pure_zero_left (b c : Conjecture6891.Vector) : Conjecture6891.pure 0 b c = 0
+'Conjecture6891.pure_zero_left' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.pure_smul_left (s : ℂ) (a b c : Conjecture6891.Vector) :
+  Conjecture6891.pure (s • a) b c = s • Conjecture6891.pure a b c
+'Conjecture6891.pure_smul_left' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.homogeneous_eval_smul {p : MvPolynomial Conjecture6891.Coordinate ℂ} {d : ℕ} (hp : p.IsHomogeneous d)
+  (c : ℂ) (z : Conjecture6891.Coordinate → ℂ) : (MvPolynomial.eval (c • z)) p = c ^ d * (MvPolynomial.eval z) p
+'Conjecture6891.homogeneous_eval_smul' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveVanishes_mk_iff {p : MvPolynomial Conjecture6891.Coordinate ℂ} {d : ℕ} (hp : p.IsHomogeneous d)
+  (v : Conjecture6891.Tensor) (hv : v ≠ 0) :
+  Conjecture6891.ProjectiveVanishes p (Projectivization.mk ℂ v hv) ↔ (MvPolynomial.eval (Conjecture6891.coords v)) p = 0
+'Conjecture6891.projectiveVanishes_mk_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.subset_projectiveZariskiClosure (S : Set Conjecture6891.ProjectiveTensor) :
+  S ⊆ Conjecture6891.projectiveZariskiClosure S
+'Conjecture6891.subset_projectiveZariskiClosure' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveZariskiClosure_mono {S T : Set Conjecture6891.ProjectiveTensor} (h : S ⊆ T) :
+  Conjecture6891.projectiveZariskiClosure S ⊆ Conjecture6891.projectiveZariskiClosure T
+'Conjecture6891.projectiveZariskiClosure_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveZariskiClosure_algebraic (S : Set Conjecture6891.ProjectiveTensor) :
+  Conjecture6891.IsProjectiveAlgebraic (Conjecture6891.projectiveZariskiClosure S)
+'Conjecture6891.projectiveZariskiClosure_algebraic' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveZariskiClosure_least {S Z : Set Conjecture6891.ProjectiveTensor}
+  (hZ : Conjecture6891.IsProjectiveAlgebraic Z) (hSZ : S ⊆ Z) : Conjecture6891.projectiveZariskiClosure S ⊆ Z
+'Conjecture6891.projectiveZariskiClosure_least' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveZariskiClosure_idem (S : Set Conjecture6891.ProjectiveTensor) :
+  Conjecture6891.projectiveZariskiClosure (Conjecture6891.projectiveZariskiClosure S) =
+    Conjecture6891.projectiveZariskiClosure S
+'Conjecture6891.projectiveZariskiClosure_idem' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.mem_pointSubspace (x y : Conjecture6891.ProjectiveTensor) : y ∈ Conjecture6891.pointSubspace x ↔ y = x
+'Conjecture6891.mem_pointSubspace' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projective_span_singleton (x : Conjecture6891.ProjectiveTensor) :
+  Projectivization.Subspace.span {x} = Conjecture6891.pointSubspace x
+'Conjecture6891.projective_span_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.secantSpanLocus_one : Conjecture6891.secantSpanLocus 1 = Conjecture6891.segre
+'Conjecture6891.secantSpanLocus_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.mk_mem_projectivizeSubmodule (L : Submodule ℂ Conjecture6891.Tensor) (v : Conjecture6891.Tensor)
+  (hv : v ≠ 0) : Projectivization.mk ℂ v hv ∈ Conjecture6891.projectivizeSubmodule L ↔ v ∈ L
+'Conjecture6891.mk_mem_projectivizeSubmodule' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.mem_vectorSubmodule (P : Projectivization.Subspace ℂ Conjecture6891.Tensor) (v : Conjecture6891.Tensor)
+  (hv : v ≠ 0) : v ∈ Conjecture6891.vectorSubmodule P ↔ Projectivization.mk ℂ v hv ∈ P
+'Conjecture6891.mem_vectorSubmodule' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projective_span_mk_iff.{u_1} {ι : Type u_1} (v : ι → Conjecture6891.Tensor) (hv : ∀ (i : ι), v i ≠ 0)
+  (x : Conjecture6891.Tensor) (hx : x ≠ 0) :
+  Projectivization.mk ℂ x hx ∈ Projectivization.Subspace.span (Set.range fun i => Projectivization.mk ℂ (v i) ⋯) ↔
+    x ∈ Submodule.span ℂ (Set.range v)
+'Conjecture6891.projective_span_mk_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectivize_bot_empty : ↑(Conjecture6891.projectivizeSubmodule ⊥) = ∅
+'Conjecture6891.projectivize_bot_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.secantSpanLocus_zero : Conjecture6891.secantSpanLocus 0 = ∅
+'Conjecture6891.secantSpanLocus_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.projectiveZariskiClosure_empty : Conjecture6891.projectiveZariskiClosure ∅ = ∅
+'Conjecture6891.projectiveZariskiClosure_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.secantVariety_zero : Conjecture6891.secantVariety 0 = ∅
+'Conjecture6891.secantVariety_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.pure_e0_ne_zero : Conjecture6891.pure Conjecture6891.e0 Conjecture6891.e0 Conjecture6891.e0 ≠ 0
+'Conjecture6891.pure_e0_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.mk_mem_secantSpanLocus_iff_rankLE (r : ℕ) (t : Conjecture6891.Tensor) (ht : t ≠ 0) :
+  Projectivization.mk ℂ t ht ∈ Conjecture6891.secantSpanLocus r ↔ Conjecture6891.RankLE r t
+'Conjecture6891.mk_mem_secantSpanLocus_iff_rankLE' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.mk_mem_secantSpanLocus_iff_tensorRank_le (r : ℕ) (t : Conjecture6891.Tensor) (ht : t ≠ 0) :
+  Projectivization.mk ℂ t ht ∈ Conjecture6891.secantSpanLocus r ↔ Conjecture6891.tensorRank t ≤ r
+'Conjecture6891.mk_mem_secantSpanLocus_iff_tensorRank_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.exists_rankLE (t : Conjecture6891.Tensor) : ∃ r, Conjecture6891.RankLE r t
+'Conjecture6891.exists_rankLE' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.tensorRank_has_decomposition (t : Conjecture6891.Tensor) :
+  Conjecture6891.RankLE (Conjecture6891.tensorRank t) t
+'Conjecture6891.tensorRank_has_decomposition' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.tensorRank_le_of_rankLE {r : ℕ} {t : Conjecture6891.Tensor} (h : Conjecture6891.RankLE r t) :
+  Conjecture6891.tensorRank t ≤ r
+'Conjecture6891.tensorRank_le_of_rankLE' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.rankLE_succ {r : ℕ} {t : Conjecture6891.Tensor} (h : Conjecture6891.RankLE r t) :
+  Conjecture6891.RankLE (r + 1) t
+'Conjecture6891.rankLE_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.rankLE_mono {r s : ℕ} {t : Conjecture6891.Tensor} (hrs : r ≤ s) (h : Conjecture6891.RankLE r t) :
+  Conjecture6891.RankLE s t
+'Conjecture6891.rankLE_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.tensorRank_le_iff (t : Conjecture6891.Tensor) (r : ℕ) :
+  Conjecture6891.tensorRank t ≤ r ↔ Conjecture6891.RankLE r t
+'Conjecture6891.tensorRank_le_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.rankLE_smul {r : ℕ} {t : Conjecture6891.Tensor} (h : Conjecture6891.RankLE r t) (s : ℂ) :
+  Conjecture6891.RankLE r (s • t)
+'Conjecture6891.rankLE_smul' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.tensorRank_smul (s : ℂ) (hs : s ≠ 0) (t : Conjecture6891.Tensor) :
+  Conjecture6891.tensorRank (s • t) = Conjecture6891.tensorRank t
+'Conjecture6891.tensorRank_smul' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.rankLE_three_W : Conjecture6891.RankLE 3 Conjecture6891.W
+'Conjecture6891.rankLE_three_W' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.second_factor_coordinate_zero (a b c d e f : Conjecture6891.Vector)
+  (h : Conjecture6891.W = Conjecture6891.pure a b c + Conjecture6891.pure d e f) : d 1 = 0
+'Conjecture6891.second_factor_coordinate_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.W_ne_sum_two_pure (a b c d e f : Conjecture6891.Vector) :
+  Conjecture6891.W ≠ Conjecture6891.pure a b c + Conjecture6891.pure d e f
+'Conjecture6891.W_ne_sum_two_pure' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.not_rankLE_two_W : ¬Conjecture6891.RankLE 2 Conjecture6891.W
+'Conjecture6891.not_rankLE_two_W' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture6891.tensorRank_W : Conjecture6891.tensorRank Conjecture6891.W = 3
+'Conjecture6891.tensorRank_W' depends on axioms: [propext, Classical.choice, Quot.sound]
