@@ -1,0 +1,207 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\title{Disproof of conjecture 00000009682:\\ two algebraically independent U-numbers exist}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clause refuted}
+
+\textbf{Statement (English, verbatim).} Definition: Mahler's classification: transcendental
+numbers by approximation type into classes A, S, T, U; the measure and cardinality structure of
+the classes. Conjecture: Lebesgue-almost every transcendental number is an S number, and the
+U-number set has measure zero but continuum cardinality; the dimension of algebraically
+independent subsets of U numbers is exactly 1, with no two-dimensional U families. (Mahler class
+measure structure)
+
+The Chinese text states the same; its last clause says literally that the algebraically
+independent subsets of the U-numbers have dimension exactly 1 and that there is no
+two-dimensional U family.
+
+\textbf{Reading.} The conjecture is a conjunction of
+(C1) almost every transcendental number is an S-number;
+(C2) the set of U-numbers is Lebesgue-null and has cardinality $\mathfrak c$; and
+(C3) ``the dimension of algebraically independent subsets of U numbers is exactly 1, with no
+two-dimensional U families''. We read (C3) as the conjunction of
+\begin{itemize}
+\item[(C3a)] the supremum of $|s|$ over the subsets $s$ of the U-numbers that are
+  algebraically independent over $\mathbb Q$ equals $1$ (dimension = transcendence degree), and
+\item[(C3b)] there is no two-element subset of the U-numbers that is algebraically independent
+  over $\mathbb Q$.
+\end{itemize}
+We refute (C3a) and (C3b) separately, for real numbers and for complex numbers
+(Lebesgue measure on $\mathbb R$, resp.\ $\mathbb C$). This refutes the conjunction in both
+settings. We do not use (C1) or (C2).
+
+\textbf{Readings not covered.} (i) A reading of ``dimension'' as Hausdorff dimension of a set
+is not treated; the text attaches ``dimension'' to algebraically independent subsets, so we use
+the algebraic (transcendence-degree) reading. (ii) Our two witnesses are U-numbers of degree $1$
+(both have $\omega(\cdot,1)=\infty$). A reading restricted to U-numbers of one fixed degree
+$n\ge 2$ is not refuted here. (iii) The class ``A'' in the Definition line plays no role; we
+only use the U- and S-classes.
+
+\section{Definitions (Wikipedia, ``Transcendental number theory'', section ``Mahler's
+classification'')}
+
+Source: \url{https://en.wikipedia.org/wiki/Transcendental_number_theory}. Quoted:
+``Next consider the values of polynomials at a complex number x, when these polynomials have
+integer coefficients, degree at most n, and height at most H, with n, H being positive
+integers.'' $m(x,n,H)$ is ``the minimum non-zero absolute value such polynomials take at'' $x$;
+$\omega(x,n,H)=-\log m(x,n,H)/(n\log H)$ and $\omega(x,n)=\limsup_{H\to\infty}\omega(x,n,H)$.
+``Suppose this is infinite for some minimum positive integer n. A complex number x in this case
+is called a U number of degree n.'' ``If the $\omega$(x, n) are bounded, then $\omega$(x) is
+finite, and x is called an S number.'' The same article: ``Kurt Mahler in 1932 partitioned the
+transcendental numbers into 3 classes, called S, T, and U.''
+
+\begin{definition}[Lean: \texttt{values}, \texttt{mahlerM}, \texttt{mahlerOmegaH},
+\texttt{mahlerOmega}]
+For $x\in\mathbb C$ and $n,H\in\mathbb N$, let $V(x,n,H)$ be the set of non-zero values
+$|P(x)|$ with $P\in\mathbb Z[X]$, $\deg P\le n$ and height $\le H$, i.e.\ $|a_i|\le H$ for
+every coefficient $a_i$ of $P$. Put $m(x,n,H)=\inf V(x,n,H)$,
+$\omega(x,n,H)=-\log m(x,n,H)/(n\log H)$, and
+$\omega(x,n)=\limsup_{H\to\infty}\omega(x,n,H)$ in the extended reals
+$[-\infty,\infty]$, where $H$ runs through $\mathbb N$.
+\end{definition}
+
+\begin{definition}[Lean: \texttt{IsUNumber}, \texttt{IsSNumber}]
+$x\in\mathbb C$ is a \emph{U-number} if $x$ is transcendental over $\mathbb Q$ and
+$\omega(x,n)=+\infty$ for some integer $n\ge1$. It is an \emph{S-number} if it is
+transcendental and there is a real $C$ with $\omega(x,n)\le C$ for all $n\ge1$. A real number
+is a U-number (S-number) when it is one as a complex number; the polynomial values are the same.
+\end{definition}
+
+\textbf{Conventions.} $\deg P\le n$ is \texttt{P.natDegree <= n}. Mathlib's $\mathbb N$
+contains $0$, so $n\ge1$ is required explicitly. In Lean, $\log 0=0$, $\log 1=0$ and $t/0=0$;
+these conventions affect $\omega(x,n,H)$ only for $H\le1$, which the $\limsup$ ignores. Since
+$V(x,n,H)$ is finite (Lemma~\ref{lem:fin}), $\inf$ is the minimum whenever $V\ne\emptyset$.
+\emph{Algebraic independence} over $\mathbb Q$ is Mathlib's \texttt{AlgebraicIndependent}: the
+evaluation map from the multivariate polynomial ring is injective. The same Wikipedia article:
+``A set of numbers \{$\alpha_1$, $\alpha_2$, \ldots, $\alpha_n$\} is called algebraically
+independent over a field K if there is no non-zero polynomial P in n variables with coefficients
+in K such that P($\alpha_1$, $\alpha_2$, \ldots, $\alpha_n$) = 0.'' A \emph{Liouville number}
+is Mathlib's \texttt{Liouville x}: for every $n$ there are integers $a$, $b>1$ with
+$0<|x-a/b|<b^{-n}$.
+
+\textbf{The formal conjecture} (Lean: \texttt{ConjectureComplex}; \texttt{ConjectureReal} is the
+same over $\mathbb R$):
+(C1) $\forall^{\text{a.e.}}x$, transcendental $\Rightarrow$ S-number;
+(C2) the U-set has volume $0$ and $\#\{x : \text{U-number}\}=\mathfrak c$;
+(C3a) $\sup\{\,|s| : s\subseteq\mathrm U,\ s \text{ alg.\ indep.\ over }\mathbb Q\,\}=1$
+(\texttt{Set.encard}, in $\mathbb N\cup\{\infty\}$); and
+(C3b) no such $s$ has $|s|=2$.
+
+\section{Proof}
+
+\begin{lemma}[\texttt{finite\_polys}, \texttt{values\_finite}, \texttt{mahlerM\_spec}]
+\label{lem:fin}
+The integer polynomials of degree $\le n$ and height $\le H$ form a finite set. Hence if such a
+$P$ has $P(x)\ne0$, then $0<m(x,n,H)\le|P(x)|$.
+\end{lemma}
+\begin{proof}
+$P\mapsto(a_0,\dots,a_n)$ is injective on this set, with values in the finite box
+$[-H,H]^{n+1}$. So $V(x,n,H)$ is finite and non-empty, and its infimum is one of its elements,
+which are positive. The infimum is at most $|P(x)|\in V(x,n,H)$.
+\end{proof}
+
+\begin{theorem}[\texttt{liouville\_mahlerOmega\_one}, \texttt{liouville\_isUNumber}]
+If $x\in\mathbb R$ is a Liouville number, then $\omega(x,1)=+\infty$, and $x$ is a U-number.
+\end{theorem}
+\begin{proof}
+Fix $w\in\mathbb R$ and $N$. Let $k=\lceil 2w\rceil_+ +1$, so $k-1\ge 2w$ and $k-1\ge0$.
+By Mathlib's \texttt{Liouville.frequently\_exists\_num}, there are $b\ge\max(N,2,\lceil|x|\rceil+1)$
+and $a\in\mathbb Z$ with $0<|x-a/b|<b^{-k}$. Let $P=bX-a$ and $H=\max(b,|a|)\ge N$. Then
+$\deg P\le1$, $P$ has height $\le H$, and $0<|P(x)|=b|x-a/b|<b^{1-k}$. By
+Lemma~\ref{lem:fin}, $0<m(x,1,H)\le|P(x)|$, so $-\log m(x,1,H)>(k-1)\log b$. Also
+$|a|\le b|x|+|bx-a|\le b(|x|+1)$, so $H\le b(|x|+1)\le b^2$ (as $|x|+1\le b$). Hence
+$0<\log H\le2\log b$, and
+\[
+\omega(x,1,H)=\frac{-\log m(x,1,H)}{\log H}\ \ge\ \frac{(k-1)\log b}{2\log b}\ \ge\ w
+\]
+(the case $w\le0$ is immediate). So $\omega(x,1,H)\ge w$ for arbitrarily large $H$, and
+$\omega(x,1)\ge w$ for every real $w$; thus $\omega(x,1)=+\infty$. Liouville numbers are
+transcendental (Mathlib \texttt{Liouville.transcendental}, over $\mathbb Z$, hence over
+$\mathbb Q$), so $x$ is a U-number. This matches the source: ``Clearly the Liouville numbers are
+a subset of the U numbers.''
+\end{proof}
+
+\begin{lemma}[\texttt{eventually\_transcendental\_adjoin}]
+Let $A$ be $\mathbb R$ or $\mathbb C$ (in Lean: any field extension of $\mathbb R$) and
+$x\in\mathbb R$. Then residually many $y\in\mathbb R$ (all $y$ outside a meagre set) are
+transcendental over the $\mathbb Q$-algebra $K=\mathbb Q[x]\subseteq A$.
+\end{lemma}
+\begin{proof}
+$K$ is countable, since $\#\mathbb Q[x]\le\#\mathbb Q+\#\{x\}+\aleph_0$
+(\texttt{Algebra.cardinalMk\_adjoin\_le}). The elements of $A$ algebraic over a countable domain
+form a countable set (\texttt{Algebraic.countable}). Its preimage in $\mathbb R$ is countable,
+and the complement of each point is open and dense, so the complement of the preimage is
+residual (countable intersection).
+\end{proof}
+
+\begin{lemma}[\texttt{indep\_pair}]
+If $x\in\mathbb R$ is transcendental over $\mathbb Q$ and $y$ is transcendental over
+$\mathbb Q[x]$ (in $A$), then $x\ne y$ and $\{x,y\}\subseteq A$ is algebraically independent over
+$\mathbb Q$.
+\end{lemma}
+\begin{proof}
+$\{x\}$ is independent because $x$ is transcendental (\texttt{algebraicIndependent\_unique\_type\_iff}).
+Adding an element transcendental over the algebra generated by the set keeps independence
+(\texttt{AlgebraicIndepOn.insert}). And $y\ne x$ since $x\in\mathbb Q[x]$ is algebraic over it.
+\end{proof}
+
+\begin{theorem}[\texttt{exists\_two\_indep\_U}]
+Let $x=\sum_{i\ge0}10^{-i!}$ (Mathlib \texttt{liouvilleNumber 10}; the sum starts at $i=0$, so
+$x$ is $1/10$ plus Liouville's constant $\sum_{k\ge1}10^{-k!}$; Liouville by
+\texttt{liouville\_liouvilleNumber}). There is a real $y\ne x$ such that $x,y$ are U-numbers and
+$\{x,y\}$ is algebraically independent over $\mathbb Q$, both in $\mathbb R$ and in $\mathbb C$.
+\end{theorem}
+\begin{proof}
+The Liouville numbers form a residual set (Mathlib \texttt{eventually\_residual\_liouville}).
+Intersect it with the two residual sets of the previous lemma ($A=\mathbb R$ and
+$A=\mathbb C$). The intersection is residual, hence dense by the Baire category theorem
+(\texttt{dense\_of\_mem\_residual}) and non-empty; pick $y$ in it. Then $y$ is Liouville, hence a
+U-number, and the previous lemma gives independence.
+\end{proof}
+
+\begin{theorem}[\texttt{not\_conjectureReal}, \texttt{not\_conjectureComplex},
+\texttt{two\_le\_iSup\_real}, \texttt{two\_le\_iSup\_complex}]
+The set $s=\{x,y\}$ is a two-element algebraically independent set of U-numbers, in $\mathbb R$
+and in $\mathbb C$ (\texttt{two\_dim\_U\_family\_real}, \texttt{two\_dim\_U\_family\_complex}).
+So (C3b) fails, the supremum in (C3a) is $\ge2$, and \texttt{ConjectureReal} and
+\texttt{ConjectureComplex} are false.
+\end{theorem}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture9682/Basic.lean} (300 lines; only \texttt{import Mathlib}, Lean
+v4.33.1 with Mathlib v4.33.1). Main theorems:
+(Unicode symbols transliterated to ASCII.)
+\begin{verbatim}
+theorem not_conjectureComplex : Not ConjectureComplex
+theorem not_conjectureReal : Not ConjectureReal
+theorem two_le_iSup_complex : 2 <= iSup (fun s : {s : Set Complex //
+    s subset {x | IsUNumber x} and
+    AlgebraicIndependent Rat (Subtype.val : s -> Complex)} => s.1.encard)
+theorem exists_two_indep_U : exists x y : Real, x != y and
+    IsUNumber (x : Complex) and IsUNumber (y : Complex) and
+    AlgebraicIndependent Rat (Subtype.val : ({x, y} : Set Real) -> Real) and
+    AlgebraicIndependent Rat
+      (Subtype.val : ({(x : Complex), (y : Complex)} : Set Complex) -> Complex)
+\end{verbatim}
+Axiom audit (\texttt{\#print axioms}) for \texttt{not\_conjectureComplex},
+\texttt{not\_conjectureReal}, \texttt{two\_le\_iSup\_complex}, \texttt{two\_le\_iSup\_real} and
+\texttt{liouville\_isUNumber}: \texttt{[propext, Classical.choice, Quot.sound]}. There is no
+\texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}
