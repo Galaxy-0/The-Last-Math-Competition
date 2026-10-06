@@ -1,0 +1,116 @@
+SOURCE SEMANTIC PREASSESSMENT — 00000002531
+Date: 2026-10-05
+Verdict: GO SUBJECT TO CONCRETE, FAITHFULLY JUSTIFIED CONVENTIONS, for a complete disproof of a necessary density clause. This is not an unconditional GO for a proof of the whole compound conjecture.
+
+SCOPE AND INDEPENDENCE
+This assessment was performed from the complete bilingual source, both complete current guides, and the clean eligibility handoff, before receiving or constructing any candidate argument. It contains no witness, candidate proof, counterexample, construction, or recommended mathematical strategy. No previous submission, other problem source or solution, previous chat, agent inventory, or unrelated scratch mathematics was consulted. No Lean proof was authored and no worktree file was modified. Reference inspection was confined to the authorized Mathlib dependency tree and a primary author's mathematical text for definitions/conventions.
+
+IDENTITIES CHECKED
+Upstream main commit, as bound by the clean handoff: ba46ce0997cbf232fe95e5dced37ff4d32e1eb94.
+Eligibility: PASS; no remaining eligibility work, according to the supplied clean handoff. This assessment did not redo the administrative eligibility search.
+
+/private/tmp/tlmc2531-eligibility/conjecture.md
+  SHA256: 25031258d307ecfb18f81ee107ba8633b8e188ac7c5400f589498d589e1a0075
+  Source blob, handoff: 1cf401151cce186576f3fd7034cc715912513e3b
+/private/tmp/tlmc2531-eligibility/README.md
+  SHA256: baf790af419e0070f593eecea4861fd865cc7b544d2cde6ec674f8fc587b01d1
+  Source blob, handoff: acff89b93456c3c5760b0f27df386da31424d29a
+/private/tmp/tlmc2531-eligibility/README.zh-CN.md
+  SHA256: d07ac1ccd888b8ee08fed8eb2e06ae15f6aa4025dbafe98790f8e2b2fc18eba7
+  Source blob, handoff: ca488392e962e5752c5817ef7c6e4dcc8b76acac
+/private/tmp/tlmc2531-eligibility/clean-math-handoff.json
+  SHA256: 8cb68ee632921edbbb285528c71efed7e59a285f887a1f7f144c0544b9e86abb
+  Referenced eligibility-record SHA256: 80e0a0af1e3a53f2ec12e4aea14e8c5dc93785ef0d18d6761dee6a9501c4fb02
+The four SHA256 values above were independently recomputed from the supplied files. Blob and upstream identities are provenance supplied by the clean handoff.
+
+The guides require correspondence between the conjecture, report, and Lean result; complete proof/disproof materials; and no changes to conjecture descriptions or guide files. They also acknowledge that some conjectures are insufficiently defined. Thus disclosure of conventions is necessary; a theorem obtained by silently repairing the conjecture is not acceptable.
+
+WHAT THE SOURCE ACTUALLY SAYS
+Both languages give the same displayed density:
+  theta_E(x) = lim as r -> 0 of H^k(E intersect B_r) / r^k.
+They then assert, for every H^k-measurable set, that the density limit exists outside an H^k-null exception and has value zero or one. They add that the set where the limit does not exist has dimension strictly below k and that the exceptional upper bound k-1 is tight. Neither language supplies an ambient space, an explicit metric, a range for k, a normalization of H^k, a ball-center notation, a dimension definition, or a formal sharpness quantifier. The Chinese text does not resolve any of those omissions.
+
+1. AMBIENT SPACE, METRIC, AND THE PARAMETER k
+Hausdorff measure and metric balls require a specified metric space. The source cannot literally denote a single complete formal proposition until that context is stated. An ordinary Euclidean interpretation is standard and faithful: finite-dimensional real Euclidean space with its usual distance, and the positive integer dimensions 1 <= k <= n as included parameter values. This is a declared conventional elaboration, not an assertion that the source explicitly says R^n. A broader reading covering metric spaces includes these Euclidean cases. A reading allowing positive real k also includes those positive integers.
+
+The necessary clause below only requires that these ordinary Euclidean cases belong to the intended domain; it does not claim the source excludes other spaces or noninteger dimensions. Do not manufacture a special ambient metric, use an unspecified metric instance, or impose geometric hypotheses on E. In particular, a finite product of real lines in Lean does not by its notation alone certify the Euclidean l2 metric. Its actual distance must match the stated report convention. A proof for a single chosen ambient context establishes only that specialization unless the source-to-specialization implication is used in a genuine disproof of the universal claim.
+
+Unresolved: whether the full intended ambient class is all metric spaces, Euclidean spaces, or a fixed Euclidean space; and whether k ranges over positive integers, nonnegative integers, or real dimensions. Those uncertainties must remain disclosed. They need not obstruct a necessary-clause disproof within the shared ordinary Euclidean, positive-integer subdomain. They do obstruct claiming an exhaustive formalization or proof of every part of the source without further clarification. No conclusion relying specifically on k=0, negative k, or a nonstandard convention for k-1 is authorized by this assessment.
+
+2. HAUSDORFF NORMALIZATION AND THE UNCHANGED DENOMINATOR
+A concrete acceptable default is the conventional normalized Hausdorff outer measure: the diameter-cover construction with coefficient omega_k/2^k, where omega_k is the Euclidean unit k-ball volume. Leon Simon's text, Chapter 1, section 2, definitions 2.1-2.2, uses this normalization. Its section 3, definition 3.1, separately uses omega_k r^k in its density denominator. The conjecture here explicitly uses r^k. That difference must be retained, not corrected by importing the reference's density definition.
+
+Pinned Mathlib's MeasureTheory.Measure.hausdorffMeasure uses the gauge diameter^k without that coefficient. Its own documentation explicitly warns that Hausdorff conventions differ by multiplicative constants. Using Mathlib's symbol is not, by itself, a demonstration that the report's H^k normalization is represented. An author must either implement/identify the disclosed normalized measure, or explicitly disclose the raw diameter convention and account for the result's dependence on that convention. If raw and normalized measures are identified in a particular specialization, that identification must be established rather than assumed. The present default is normalized H^k; a different convention is a visible semantic change requiring justification and review.
+
+Multiplicative renormalization does not leave the numerical requirement “value in {0,1}” invariant. Therefore the omitted normalizing constant is material, unlike a harmless choice of notation. One may not absorb it into the numerator, the meaning of radius, or the displayed denominator without saying so. The word “spherical” describes the ball-based density formula and does not license replacing H^k by spherical Hausdorff measure constructed using ball-only covers. No separate spherical-measure definition is present in the source.
+
+3. BALL CENTER AND POSITIVE-RADIUS LIMIT
+At the point x, read B_r as B(x,r), with center x. This supplies the omitted center according to the ordinary meaning of density at x; it does not redefine radius. A ball with a fixed unrelated center would lose the stated dependence on x. Use B(x,r) = {y : d(y,x) < r} as an explicitly declared open-ball convention. Closed balls are another common convention; they must be named consistently if used. Do not infer zero measure of spheres or equality of open- and closed-ball measures merely from measurability of E. Any transfer between their limit formulations needs the appropriate justification.
+
+Read r -> 0 as r decreasing to zero through positive real radii. A radius is positive in this quotient, so this is the standard omitted directional convention. A two-sided real limit, a limit evaluated at r=0, or only a selected radius sequence is not the source assertion. In Lean the relevant source filter is the right-neighborhood filter at zero (the neighborhood filter within the positive reals), with full real-radius convergence.
+
+4. MEASURABILITY AND THE ABSENCE OF SIZE/REGULARITY HYPOTHESES
+“H^k-measurable” naturally means Caratheodory measurable for the specified Hausdorff outer measure: for every set A, H^k(A) = H^k(A intersect E) + H^k(A minus E). It is not a synonym for “Borel” without explanation. Borel sets are included, so universal claims over all H^k-measurable E necessarily apply to Borel E. A disproof of such a necessary Borel specialization is logically sufficient; a proof only for Borel E is not automatically a proof of the full quantifier.
+
+Pinned Mathlib distinguishes its ambient Borel measurable space, NullMeasurableSet, and completion. An author using its Borel measure must make the correspondence precise if claiming to cover every Caratheodory-measurable E. Simply assuming MeasurableSet E in the default Borel space is a narrower formal quantifier. For the necessary Borel clause below, this narrowing is explicitly one-way and harmless to the source implication.
+
+The source does not assume H^k(E) is finite or positive, local finiteness, sigma-finiteness, rectifiability, finite perimeter, a smooth boundary, compactness, or any other regularity. None may be inserted as a hidden premise of the conjecture. Proving a result under such additional conditions does not settle the universal source. The definition of the quotient itself must also allow the measure of E intersect B(x,r) to be infinite.
+
+5. ALMOST-EVERYWHERE SCOPE AND THE QUANTIFIER ORDER
+The text omits “x in E” or “x in the ambient space.” Two natural readings are the assertion for H^k-almost every ambient x, and the assertion for H^k-almost every x in E. Both imply the following shared necessary reading: for every admissible E there is an H^k-null set N (allowed to depend on E) such that the density exists and is zero or one for every x in E minus N.
+
+The common necessary assertion is equivalently almost everywhere for H^k restricted to E. This is a deliberate weakening used to isolate an obligation of either reading, not a claim that the source expressly fixes its a.e. domain to E. Ambient-a.e. convergence implies this restriction. The source does not demand a single null set working simultaneously for every E, nor does it mean only almost every radius. A failure merely at an unspecified point, without the correct null-set quantifier, would not negate this clause.
+
+6. VALUES, INFINITY, AND WHAT “EXISTS” MUST MEAN
+For positive r the quotient is naturally valued in [0,infinity], since H^k can be infinite. Use that extended nonnegative codomain to define it without adding local finiteness. The first clause requires convergence to a finite member of {0,1}; one can formulate it directly as existence of such a target. This avoids an arbitrary default for theta_E(x) at points where the limit does not exist.
+
+At the finite targets 0 and 1, stating extended-nonnegative convergence is the faithful mathematical content of the displayed finite-value claim. A real-valued formalization is also possible only after proving the needed finiteness and preserving the limit. In particular, applying ENNReal.toReal blindly can send infinity to a default finite value and would change the statement.
+
+For the later exceptional set, “limit fails to exist” remains ambiguous between failure of any extended-valued limit and failure of a finite limit. An infinite limit fails the first dichotomy's value requirement either way, but membership in the nonexistence exceptional set depends on that choice. Do not collapse “fails to exist” and “exists with a value outside {0,1}” into one exceptional set without acknowledging that the source distinguishes existence from the binary value assertion.
+
+7. A PRECISE NECESSARY CLAUSE AND THE LOGICAL BRIDGE
+Under the disclosed Euclidean/normalized-Hausdorff convention, the following is a precise necessary clause. For every admitted pair of positive integers k <= n and every Borel set E in R^n, let, for each positive real radius r,
+  D_E(x,r) = H^k(E intersect B(x,r)) / r^k,
+with values in [0,infinity]. There exists a set N with H^k(N)=0 such that, for every x in E minus N, there exists l in {0,1} for which D_E(x,r) converges to l as r decreases to zero.
+
+The source-to-clause requirement is solely logical: Borel sets are among the source's H^k-measurable sets; the chosen Euclidean positive-integer contexts are included under the disclosed conventional reading; either natural a.e. scope implies the restricted-to-E assertion; and finite targets 0 or 1 are exactly the stated dichotomy. Hence the compound conjecture implies this clause. Establishing its negation would negate the compound conjecture under these conventions. Establishing the clause alone would prove neither the full first clause under every broader context nor the later dimension and tightness assertions.
+
+This is not a declaration that the necessary clause is true or false. No instance, family, measure computation, proof mechanism, or candidate reduction has been supplied. The independent author remains responsible for any subsequent mathematical argument and for the explicit source-to-formal-statement bridge.
+
+8. LATER EXCEPTIONAL-DIMENSION CLAIMS
+The semicolon joins further assertions to the initial universal density assertion. Their role is conjunctive. They neither redefine the displayed density nor add unstated premises that restrict E. A valid disproof of a necessary earlier clause need not also disprove the exceptional-dimension or sharpness assertions. Conversely, a proof of the entire conjecture must address all of them.
+
+Given a fixed existence convention and x-domain, define the nonexistence exceptional set accordingly. “Dimension” in this Hausdorff setting most naturally means Hausdorff dimension; that is a disclosed standard interpretation, not an explicit definition supplied by the source. A full proof would have to make the universal bound dim_H(F_E) <= k-1 precise in addition to dim_H(F_E) < k. Saying the upper bound is tight normally states optimality over the admissible class, but the source does not specify whether the supremum equals k-1 or whether equality must actually be attained, nor which parameters are fixed while the class varies. Those are distinct quantifier commitments. Empty-set dimension conventions and the treatment of k=0 also remain unsettled.
+
+Pinned Mathlib dimH takes values in [0,infinity] and uses a nonnegative dimension convention. One cannot silently import a negative empty-set dimension or interpret natural-number subtraction as real subtraction to resolve the k-1 clause. These unresolved details are reasons to DEFER an attempted proof of the whole compound conjecture pending explicit clarification. They do not invalidate the common necessary density clause above.
+
+GUARDRAILS FOR ANY FRESH AUTHOR
+- State the ambient metric, allowed parameter values, H^k normalization, ball convention, positive-radius filter, codomain, and a.e. measure in the report and match them in the formal statement.
+- Preserve the denominator r^k exactly. Do not replace it with ball measure, omega_k r^k, or (2r)^k.
+- Treat all restrictions to Borel sets, points in E, or ordinary Euclidean parameter cases as disclosed necessary specializations for a disproof, never as silently equivalent replacements of the whole conjecture.
+- Add no finiteness, regularity, or geometric premise to the source. A property established about any eventual particular object is different from a premise imposed on the conjecture.
+- Preserve the null-set quantifiers and finite binary limit targets. Do not use a default-valued “limit” or erase infinity by conversion.
+- If the author needs a conclusion whose validity depends on any unresolved ambient, normalization, scope, or sharpness choice beyond the conventions above, return for semantic review instead of inventing a missing definition.
+- No candidate success is endorsed by this preassessment. A future reviewer must check an actual source-to-theorem correspondence and the complete formal argument.
+
+REFERENCES ACTUALLY CHECKED
+A. Leon Simon, Introduction to Geometric Measure Theory, author-hosted Stanford text, copyright 2017/2018:
+https://math.stanford.edu/~lms/ntu-gmt-text.pdf
+Checked Chapter 1 section 2, definitions 2.1-2.2, and section 3, definition 3.1 and the open/closed-ball convention discussion in Remark 3.2. Used only for conventional definitions and normalization, not for a candidate argument or an exceptional-set theorem. The web parser exposed neighboring text; none is used as a proposed solution. The author's normalized H^k and normalized density denominator are distinct conventions, as recorded above.
+
+B. Authorized Mathlib tree:
+/private/tmp/tlmc310-proof/.lake/packages/mathlib
+Observed HEAD: c44e0c8ee63ca166450922a373c7409c5d26b00b
+Observed lean-toolchain: leanprover/lean4:v4.19.0
+Files/definitions actually inspected (line numbers in this checkout):
+- Mathlib/MeasureTheory/Measure/Hausdorff.lean: introductory normalization discussion, lines 15-24 and 57-63; implementation notes 95-98; OuterMeasure.mkMetric' and mkMetric, 243-255; Measure.mkMetric' and mkMetric, 415-422; hausdorffMeasure, 534-535; hausdorffMeasure_apply, 544-551.
+- Mathlib/Topology/MetricSpace/HausdorffDimension.lean: dimH, 92-93.
+- Mathlib/Topology/MetricSpace/Pseudo/Defs.lean: Metric.ball, 342-343; Metric.closedBall, 394-395.
+- Mathlib/MeasureTheory/OuterMeasure/AE.lean: ae and a.e. notation, 43-52.
+- Mathlib/MeasureTheory/OuterMeasure/Caratheodory.lean: IsCaratheodory, 51-52.
+- Mathlib/MeasureTheory/Measure/NullMeasurable.lean: NullMeasurableSet, 88-90; Measure.completion, 434-440.
+- Mathlib/MeasureTheory/Measure/Restrict.lean: Measure.restrict, 44-45; the a.e. restriction correspondence, 568-575.
+No compiler was required. This is a source-semantics gate, not a Lean certificate.
+
+FINAL GATE
+GO subject to the explicit conventional interpretation and one-way necessary-clause discipline above. The text supplies enough content for an independently authored, faithfully scoped formal disproof of its necessary density assertion to be assessable. DEFER any claim to have uniquely formalized or proved the entire compound conjecture until the unresolved full-scope and exceptional-set quantifiers have been fixed. Do not silently repair the source.

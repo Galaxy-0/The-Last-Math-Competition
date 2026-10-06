@@ -1,0 +1,67 @@
+import Conjecture2531
+
+set_option pp.proofs false
+
+#print Conjecture2531.unitBallVolume
+#print Conjecture2531.unitBallVolume_eq_two
+#print Conjecture2531.hausdorffNormalization
+#print Conjecture2531.hausdorffNormalization_eq_one
+#print Conjecture2531.normalizedHausdorff1
+#print Conjecture2531.normalizedHausdorff1_eq_raw
+#print Conjecture2531.normalizedHausdorff1_eq_volume
+#print Conjecture2531.real_distance
+#print Conjecture2531.normalizedHausdorff1_ball
+#print Conjecture2531.normalizedHausdorff1_ball_ne_top
+#print Conjecture2531.normalizedHausdorff1_univ
+#print Conjecture2531.densityQuotient
+#print Conjecture2531.HasBinaryDensity
+#print Conjecture2531.NullExceptionalBinaryDensity
+#print Conjecture2531.ambient_ae_implies_nullExceptionalBinaryDensity
+#print Conjecture2531.BorelDensityClause
+#print Conjecture2531.HausdorffMeasurable
+#print Conjecture2531.borel_is_HausdorffMeasurable
+#print Conjecture2531.CaratheodoryDensityClause
+#print Conjecture2531.caratheodoryDensityClause_implies_borelDensityClause
+#print Conjecture2531.nullExceptionalBinaryDensity_iff_ae
+#print Conjecture2531.densityQuotient_univ
+#print Conjecture2531.positiveRadii_neBot
+#print Conjecture2531.densityQuotient_univ_tendsto_two
+#print Conjecture2531.univ_has_no_binary_density
+#print Conjecture2531.univ_not_nullExceptionalBinaryDensity
+#print Conjecture2531.not_borelDensityClause
+#print Conjecture2531.not_caratheodoryDensityClause
+#print Conjecture2531.not_statement_implying_borelDensityClause
+#print Conjecture2531.not_borelDensityClause_and
+#print Conjecture2531.counterexample
+
+#print axioms Conjecture2531.unitBallVolume
+#print axioms Conjecture2531.unitBallVolume_eq_two
+#print axioms Conjecture2531.hausdorffNormalization
+#print axioms Conjecture2531.hausdorffNormalization_eq_one
+#print axioms Conjecture2531.normalizedHausdorff1
+#print axioms Conjecture2531.normalizedHausdorff1_eq_raw
+#print axioms Conjecture2531.normalizedHausdorff1_eq_volume
+#print axioms Conjecture2531.real_distance
+#print axioms Conjecture2531.normalizedHausdorff1_ball
+#print axioms Conjecture2531.normalizedHausdorff1_ball_ne_top
+#print axioms Conjecture2531.normalizedHausdorff1_univ
+#print axioms Conjecture2531.densityQuotient
+#print axioms Conjecture2531.HasBinaryDensity
+#print axioms Conjecture2531.NullExceptionalBinaryDensity
+#print axioms Conjecture2531.ambient_ae_implies_nullExceptionalBinaryDensity
+#print axioms Conjecture2531.BorelDensityClause
+#print axioms Conjecture2531.HausdorffMeasurable
+#print axioms Conjecture2531.borel_is_HausdorffMeasurable
+#print axioms Conjecture2531.CaratheodoryDensityClause
+#print axioms Conjecture2531.caratheodoryDensityClause_implies_borelDensityClause
+#print axioms Conjecture2531.nullExceptionalBinaryDensity_iff_ae
+#print axioms Conjecture2531.densityQuotient_univ
+#print axioms Conjecture2531.positiveRadii_neBot
+#print axioms Conjecture2531.densityQuotient_univ_tendsto_two
+#print axioms Conjecture2531.univ_has_no_binary_density
+#print axioms Conjecture2531.univ_not_nullExceptionalBinaryDensity
+#print axioms Conjecture2531.not_borelDensityClause
+#print axioms Conjecture2531.not_caratheodoryDensityClause
+#print axioms Conjecture2531.not_statement_implying_borelDensityClause
+#print axioms Conjecture2531.not_borelDensityClause_and
+#print axioms Conjecture2531.counterexample
