@@ -1,0 +1,9 @@
+# Semantic review (independent, pre-submission)
+
+An independent model reviewer (GPT-6 Astra, reasoning effort "xhigh", separate session) received the exact conjecture text, the full LaTeX report, the full Lean source and a reviewer checklist distilled from 93 closed-unmerged pull requests of this competition. It was asked whether the Lean main theorem settles the conjecture as written, whether the reading is faithful and not a loophole, whether the Lean definitions are faithful to the standard notions, whether the mathematics is correct, and whether report and Lean match. This is an automated review prepared by the submitter, not the competition's maintainer review.
+
+**Verdict:** accept = True; severity = none; reading faithful = True.
+
+**Reviewer notes (verbatim):**
+
+> The standard reading of the partition lattice as set partitions ordered by refinement is faithful. Interpreting 'without repeated parts' through the integer partition of block sizes is reasonable and explicitly disclosed. Lean uses Mathlib's actual Finpartition lattice and IncidenceAlgebra.mu, with a faithful repeated-block-size predicate. The arbitrary-partition interval lemmas establish that [bottom, sigma) consists exactly of bottom, p1, and p2, giving mu(bottom, sigma) = -(1 - 1 - 1) = 1 for sigma = {01|23}, whose two distinct blocks both have size 2. This n = 4 counterexample suffices to refute the universal vanishing clause. The dual computation mu(sigma, top) = -1 is also correct and formalized. The LaTeX arguments, interval descriptions, and general partition-lattice formula are correct and agree with Lean. Refuting the explicit vanishing clause suffices to disprove the stated conjunction, so the unformalized closure clause is not a gap. No formal disproof for a different integer-partition poset is needed for this standard reading. Compilation and the allowed axiom dependencies are taken as given in the review instructions.
