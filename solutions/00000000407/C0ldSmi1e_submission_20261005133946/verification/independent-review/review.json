@@ -1,0 +1,315 @@
+{
+  "candidate": "00000000407",
+  "status": "PASS",
+  "reviewer_role": "Independent nonauthor semantic reviewer",
+  "completed_utc": "2026-10-05T13:55:00.491349+00:00",
+  "corrections_required": [],
+  "conclusion": "The actual compiled final theorem faithfully negates the explicit equal-size LR-table asymptotic assertion in both language versions. No unsupported surrogate theorem, added degree assumption, infinite-cardinality artifact, or proof bypass was found.",
+  "independence": {
+    "authored_or_modified_proof": false,
+    "began_from_exact_bilingual_source_and_both_guides": true,
+    "other_conjectures_or_submissions_inspected": false,
+    "old_thread_or_agent_histories_inspected": false,
+    "source_boundaries": "Only assigned 407 files and permitted pinned dependency files. The review is independent of authorship; the execution verifier itself was supplied by root and fully inspected before execution."
+  },
+  "scope": {
+    "entire_tex_read": true,
+    "all_three_lean_files_read": true,
+    "all_configs_read": true,
+    "every_compiled_declaration_type_and_axioms_inspected": true,
+    "logical_dependency_closure_reviewed": true,
+    "entire_auxiliary_code_and_results_read": true,
+    "primary_sources_independently_opened": true,
+    "pdf_visual_review": "Not performed by this reviewer; separately assigned to root.",
+    "publication_and_eligibility_review": false,
+    "maintainer_acceptance_claimed": false
+  },
+  "semantic_checks": {
+    "bilingual_indexing": "Both versions explicitly index all three partitions by n. The formal product is ordered and complete; nonzero entries are counted once.",
+    "partitions": "Pinned YoungDiagram is a finite product-order lower set; equivListRowLens identifies precisely finite decreasing lists of positive parts. Card is cells.card, so the size subtype is exact.",
+    "shapes": "Finite set difference nu.cells minus lam.cells, with independent containment proof field. Noncontainment yields no tableau.",
+    "labels_and_content": "All natural labels, shifted by one to conventional positive letters; content equality is quantified over every natural i, including zero parts beyond the content support.",
+    "rows_and_columns": "Weakly increasing rows left to right and strictly increasing columns downward. Pairwise constraints are equivalent to adjacent constraints because skew rows and columns are intervals.",
+    "reading_prefixes": "Top-to-bottom rows, right-to-left columns. ReadingLE is total, reflexive, transitive and antisymmetric. Every nonempty prefix has an ending cell; empty prefix is automatic; lattice quantifies all labels.",
+    "finite_tableaux": "Entry bounds are derived from occurrence positivity and full content. Injection into functions from finite skew cells to Fin content-height is proved; proof fields do not duplicate tableaux.",
+    "finite_index_and_count": "Cell-coordinate bounds prove partitions inject into the powerset of an n by n grid. Products/subtypes are finite; Nat.card does not exploit infinite types.",
+    "derived_size_identity": "Proved from two fiberwise finite sums, exact content, derived label bounds, and containment/cardinal subtraction. It is not a definition or an assumption.",
+    "universal_vanishing": "Every positive n and every ordered triple of size n are covered. Size identity n=n+n gives empty tableaux and then empty nonzero-entry subtype.",
+    "zero_boundary": "Kernel proofs establish empty coefficient one and nonzeroCount 0=1, preventing an identically-zero dummy definition.",
+    "scale": "4 to the natural n divided by Real.rpow of the real cast n to real 5/4; positivity is proved for positive n.",
+    "full_asymptotic_negation": "RatioAsymptotic is complete epsilon-N convergence of A(n)/(c*g(n)) to 1. Epsilon 1/2 and n=N+1 refute every c; final theorem excludes every positive real c. Division totalization at c=0 is immaterial to the original conventional assertion.",
+    "parenthetical_scope": "The undefined configuration phrase is not given an invented meaning. The explicit count/asymptotic assertion is a necessary claim whether the phrase is explanatory or adds a conjunct; its falsity suffices. No repaired indexing is addressed.",
+    "report_correspondence": "Every mathematical statement in the entire TeX corresponds to checked source or honestly labeled finite computations. The direct conventional tableau definition is the semantic bridge; no separate formal Schur-library equivalence is claimed."
+  },
+  "fresh_execution": {
+    "command": [
+      "python3",
+      "/private/tmp/tlmc407-independent-verify.py",
+      "--ready",
+      "--source",
+      "/private/tmp/tlmc407-proof",
+      "--build-dir",
+      "/private/tmp/tlmc407-review-build",
+      "--evidence-dir",
+      "/private/tmp/tlmc407-review-execution",
+      "--audit-names",
+      "/private/tmp/tlmc407-audit-names.json",
+      "--frozen-sources",
+      "/private/tmp/tlmc407-frozen-sources.json",
+      "--packages",
+      "/private/tmp/tlmc310-proof/.lake/packages",
+      "--lean-bin",
+      "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin"
+    ],
+    "exit_code": 0,
+    "status": "PASS",
+    "build": {
+      "command": [
+        "lake",
+        "build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.474,
+      "log": "build.txt"
+    },
+    "strict_replay_results": [
+      {
+        "file": "Conjecture407.lean",
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DwarningAsError=true",
+          "Conjecture407.lean"
+        ],
+        "exit_code": 0
+      },
+      {
+        "file": "Audit407.lean",
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DwarningAsError=true",
+          "Audit407.lean"
+        ],
+        "exit_code": 0
+      },
+      {
+        "file": "Check.lean",
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DwarningAsError=true",
+          "Check.lean"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "lean_version": {
+      "exit_code": 0,
+      "output": "Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)"
+    },
+    "lean_commit": {
+      "exit_code": 0,
+      "expected": "6caaee842e9495688c1567e78c0e68dbb96942aa",
+      "actual": "6caaee842e9495688c1567e78c0e68dbb96942aa"
+    },
+    "fresh_project_build_outputs_absent_initially": true,
+    "all_nine_dependency_revisions_and_clean_tracked_sources_verified_before_and_after": true,
+    "all_sources_and_configs_unchanged_and_equal_to_frozen_and_packaged_sources": true,
+    "full_command_records": "/private/tmp/tlmc407-review-execution/execution-records.json"
+  },
+  "trust_audit": {
+    "authored_declarations": 42,
+    "definitions_abbreviations_structures": 13,
+    "named_theorems": 26,
+    "named_instances": 3,
+    "compiled_declarations": 78,
+    "generated_declarations": 36,
+    "all_compiled_types_and_axioms_reviewed": true,
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "custom_axioms": [],
+    "source_proof_bypass_hits": [],
+    "unsafe_declarations": [],
+    "partial_declarations": [],
+    "axiom_declarations": [],
+    "logical_closure_issues": [],
+    "compiler_runtime_generated_names": [],
+    "closure_method": "Transitive compiled type/body traversal; mutual inductive constructors and recursor rules included. The harness is inspection tooling, not a proof module.",
+    "root_and_reviewer_all_78_environment_records_identical": true
+  },
+  "auxiliary_execution": {
+    "command": [
+      "python3",
+      "/private/tmp/tlmc407-auxiliary/verify.py"
+    ],
+    "stdout": "/private/tmp/tlmc407-review-auxiliary-output.json",
+    "exit_code": 0,
+    "byte_identical_to_both_prior_results_and_packaged_expected_output": true,
+    "source_table_triples": 116947,
+    "source_table_max_n": 10,
+    "source_table_nonzero_counts": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "schur_comparison": {
+      "commutativity_disagreements": 0,
+      "conjugation_disagreements": 0,
+      "degree_compatible_histogram": {
+        "0": 816,
+        "1": 293,
+        "2": 1
+      },
+      "degree_compatible_triples": 1110,
+      "degree_compatible_zero_coefficients": 816,
+      "degree_mismatched_triples": 3060,
+      "input_pairs": 139,
+      "max_output_size": 6,
+      "max_total_input_size": 6,
+      "positive_coefficients": 294,
+      "schur_disagreements": 0,
+      "triples_checked": 4170,
+      "variables": 6
+    },
+    "named_coefficient_sanity_cases": 14,
+    "isolated_full_filling_cases": 5,
+    "implementation_assessment": "Exact Python integers; canonical complete partition generation; actual tableaux without degree shortcut; separately generated sparse Schur polynomials via complete homogeneous functions, signed Jacobi–Trudi, and alternant extraction. Six variables cover degree at most six. Positive and isolated negative tests pass, including multiplicity two.",
+    "independence_assessment": "Algebra and tableau paths are structurally independent in code. The supplied CHECK_RECORD and task provenance state clean independent auxiliary authorship; runtime output alone cannot establish author history.",
+    "finite_scope_only": true
+  },
+  "primary_references_independently_verified": [
+    {
+      "url": "https://link.springer.com/article/10.1007/s40993-016-0049-3",
+      "section": "2.1 and 2.2, Definition 2.1",
+      "checked": "Partitions, matrix-oriented tableaux, exact content, row/column and complete prefix lattice definitions"
+    },
+    {
+      "url": "https://www.combinatorics.org/ojs/index.php/eljc/article/download/v15i1n30/pdf/",
+      "section": "2, printed page 2",
+      "checked": "Conventional LR coefficient as number of semistandard skew tableaux with lattice reverse row word"
+    },
+    {
+      "url": "https://www.combinatorics.org/ojs/index.php/eljc/article/download/v11i2a5/pdf/",
+      "section": "Equation (39), printed page 24",
+      "checked": "Jacobi–Trudi determinant with h of negative index zero"
+    },
+    {
+      "url": "https://www.combinatorics.org/ojs/index.php/eljc/article/download/v9i1n5/pdf",
+      "section": "Bi-Alternant Corollary, printed page 3",
+      "checked": "Alternant formula underlying independent coefficient extraction"
+    }
+  ],
+  "inspected_file_sha256": {
+    "/private/tmp/tlmc407-author-input/README.md": "baf790af419e0070f593eecea4861fd865cc7b544d2cde6ec674f8fc587b01d1",
+    "/private/tmp/tlmc407-author-input/README.zh-CN.md": "d07ac1ccd888b8ee08fed8eb2e06ae15f6aa4025dbafe98790f8e2b2fc18eba7",
+    "/private/tmp/tlmc407-author-input/conjecture.md": "66558e3531b8501ab00746a36df399a3b2d2d5c23d0f28c5b1b11402bc99aa31",
+    "/private/tmp/tlmc407-author-input/manifest.json": "0b3ef556f2fcd116856f74f5298a4ae5406179475ec03992d1c2deb193415c82",
+    "/private/tmp/tlmc407-author-input/pinned-dependencies.json": "9c5467f035979f37bb4f896800ecce2f06bd653a791c850ef4d8edafcc6fb963",
+    "/private/tmp/tlmc407-proof/Audit407.lean": "42b9b1028ab2942b98e0ec2281c4de1d4c053f1e22a3323a43ac62268c6b8c16",
+    "/private/tmp/tlmc407-proof/Conjecture407.lean": "8ef6c684c06248dc9881c987682cb73ba178387df822f2ea66aa06cf3c052000",
+    "/private/tmp/tlmc407-proof/Check.lean": "f09440e5d239969b92bde53d282cdb2d31dc19d4fb01dc2809776fd3af1b3713",
+    "/private/tmp/tlmc407-proof/lakefile.toml": "10772dc2f981a4e32839c864343ea0643e1321827967455b20cd482acfeb63c3",
+    "/private/tmp/tlmc407-proof/lake-manifest.json": "6eceeac8c3d0eadfc0f5a5a7a8aee99611d5733a9a46e74f34e9b437a65d672a",
+    "/private/tmp/tlmc407-proof/lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea",
+    "/Users/daniel/.codex/worktrees/conjecture-420/The-Last-Math-Competition/solutions/00000000407/C0ldSmi1e_submission_20261005133946/report.tex": "b60ef7e23abd019fe4a389ecdcfc0f170d8198c43827cd1a8b556d031bf6e573",
+    "/private/tmp/tlmc407-auxiliary/verify.py": "5fbe8898aeb2f63ae360a338f8e2785bfb7147b62b05e93ef276bff1d7344840",
+    "/private/tmp/tlmc407-auxiliary/output.json": "deaaf7ff3b6ca139ada95269548c50634f1aed7f0fb622e29a18e76e494dab1d",
+    "/private/tmp/tlmc407-auxiliary/CHECK_RECORD.txt": "65f05941150d76ddf5db333addab7662dad9583900721f482f8e6762f86fa0bc",
+    "/private/tmp/tlmc407-primary-reference-check.json": "c1a252db577105710d837bb9a428afa0d0b86de9719c1984d5b667cd4e3bd985",
+    "/private/tmp/tlmc407-independent-verify.py": "8a86f74adb9bc7593c396fc322bd275930bccc352b4051417c3a0f6c0573b442",
+    "/private/tmp/tlmc407-frozen-sources.json": "6cbeba77bac8f7034b4a95a4b05f8f033119df92d0988073b74a7e9a0a2afa08",
+    "/private/tmp/tlmc407-audit-names.json": "a9b55f865d45f46fbf6e5c500174c46a6058bd9c3679bf23298bddee2b81e8ca",
+    "/private/tmp/tlmc310-proof/.lake/packages/mathlib/Mathlib/Combinatorics/Young/YoungDiagram.lean": "84d9040daffe9f269a9b1f2b7f0a93dfeb0ecaa3a6f47f545cfbab6d0e709f79",
+    "/private/tmp/tlmc407-auxiliary-independent/execution-record.json": "820d19ca63e77bb2b6ab1d35e8fdbb7a9c8990cd727db93a4cb7e7745396cd72",
+    "/private/tmp/tlmc407-review-auxiliary-output.json": "deaaf7ff3b6ca139ada95269548c50634f1aed7f0fb622e29a18e76e494dab1d"
+  },
+  "packaged_reviewed_file_sha256": {
+    "auxiliary/CHECK_RECORD.txt": "65f05941150d76ddf5db333addab7662dad9583900721f482f8e6762f86fa0bc",
+    "auxiliary/expected-output.json": "deaaf7ff3b6ca139ada95269548c50634f1aed7f0fb622e29a18e76e494dab1d",
+    "auxiliary/verify.py": "5fbe8898aeb2f63ae360a338f8e2785bfb7147b62b05e93ef276bff1d7344840",
+    "conjecture.md": "66558e3531b8501ab00746a36df399a3b2d2d5c23d0f28c5b1b11402bc99aa31",
+    "lean/Audit407.lean": "42b9b1028ab2942b98e0ec2281c4de1d4c053f1e22a3323a43ac62268c6b8c16",
+    "lean/Check.lean": "f09440e5d239969b92bde53d282cdb2d31dc19d4fb01dc2809776fd3af1b3713",
+    "lean/Conjecture407.lean": "8ef6c684c06248dc9881c987682cb73ba178387df822f2ea66aa06cf3c052000",
+    "lean/lake-manifest.json": "6eceeac8c3d0eadfc0f5a5a7a8aee99611d5733a9a46e74f34e9b437a65d672a",
+    "lean/lakefile.toml": "10772dc2f981a4e32839c864343ea0643e1321827967455b20cd482acfeb63c3",
+    "lean/lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea",
+    "report.tex": "b60ef7e23abd019fe4a389ecdcfc0f170d8198c43827cd1a8b556d031bf6e573"
+  },
+  "execution_evidence_sha256": {
+    "/private/tmp/tlmc407-review-execution/axioms.txt": "f743caec7e862e26044cb9c84a703ceea804892ffc2a101416b70f75a9c399e6",
+    "/private/tmp/tlmc407-review-execution/build.txt": "a75d8a7ff73b1bbdf8764098378163fe996c6c27a6bd9af2fe2d573098818542",
+    "/private/tmp/tlmc407-review-execution/commands/0001.log": "7c5e5dfacfc0943447dba5f5bd28c520d15249702af49b30e242982ee4fa03fb",
+    "/private/tmp/tlmc407-review-execution/commands/0002.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0003.log": "8c225aad5e3d382454f4b320bf788030dd981c0ed087f232f4eeda4b80b2211f",
+    "/private/tmp/tlmc407-review-execution/commands/0004.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0005.log": "fe5e2b291ee7c0ee2862e8c87ec70fc29e8599b3ff16a9b39cfe76f27fd30207",
+    "/private/tmp/tlmc407-review-execution/commands/0006.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0007.log": "830441e9e75ac681a70b9f4ec6fbae725f97714ac30e20544b916b6ac5096a9c",
+    "/private/tmp/tlmc407-review-execution/commands/0008.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0009.log": "a693832492e2787ecb1b1e1f9235c0945c3c17cd270cbf4dbabddce2c2334c71",
+    "/private/tmp/tlmc407-review-execution/commands/0010.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0011.log": "43887a17947e75ebec56372cb5b25c10ae389c69ac88c2627ffecfc0adfd8e08",
+    "/private/tmp/tlmc407-review-execution/commands/0012.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0013.log": "3a113a4fee8a9c52c075c546887de0b28e78a8b8f8c69d4b8d6986bdc0e20545",
+    "/private/tmp/tlmc407-review-execution/commands/0014.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0015.log": "d1dd9e03465309b43b034589c936326b14f616e7fb2f3f52c17f8b9094426f47",
+    "/private/tmp/tlmc407-review-execution/commands/0016.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0017.log": "83775c0c37df4892edd11712ba9c0fc5657534af1f399ea6da534ec4b489df2e",
+    "/private/tmp/tlmc407-review-execution/commands/0018.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0019.log": "adae83ba7663543abb21a1527013239eb469a7dbff15bea8c52d90901b42cc65",
+    "/private/tmp/tlmc407-review-execution/commands/0020.log": "4402afd860f233a20da602a3020feb7bf662fe0406ffbeacf7de66716f6521f3",
+    "/private/tmp/tlmc407-review-execution/commands/0021.log": "a75d8a7ff73b1bbdf8764098378163fe996c6c27a6bd9af2fe2d573098818542",
+    "/private/tmp/tlmc407-review-execution/commands/0022.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0023.log": "46590fbf3d882c9a22e538413cc7487fffbba29d324f16f7c450f2bf26ac1e5e",
+    "/private/tmp/tlmc407-review-execution/commands/0024.log": "f743caec7e862e26044cb9c84a703ceea804892ffc2a101416b70f75a9c399e6",
+    "/private/tmp/tlmc407-review-execution/commands/0025.log": "a2d441a39db5a8855c6356d4ed738c7c28cfb0d11ba801dbd31f8d8d041a2ff7",
+    "/private/tmp/tlmc407-review-execution/commands/0026.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0027.log": "7c5e5dfacfc0943447dba5f5bd28c520d15249702af49b30e242982ee4fa03fb",
+    "/private/tmp/tlmc407-review-execution/commands/0028.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0029.log": "8c225aad5e3d382454f4b320bf788030dd981c0ed087f232f4eeda4b80b2211f",
+    "/private/tmp/tlmc407-review-execution/commands/0030.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0031.log": "fe5e2b291ee7c0ee2862e8c87ec70fc29e8599b3ff16a9b39cfe76f27fd30207",
+    "/private/tmp/tlmc407-review-execution/commands/0032.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0033.log": "830441e9e75ac681a70b9f4ec6fbae725f97714ac30e20544b916b6ac5096a9c",
+    "/private/tmp/tlmc407-review-execution/commands/0034.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0035.log": "a693832492e2787ecb1b1e1f9235c0945c3c17cd270cbf4dbabddce2c2334c71",
+    "/private/tmp/tlmc407-review-execution/commands/0036.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0037.log": "43887a17947e75ebec56372cb5b25c10ae389c69ac88c2627ffecfc0adfd8e08",
+    "/private/tmp/tlmc407-review-execution/commands/0038.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0039.log": "3a113a4fee8a9c52c075c546887de0b28e78a8b8f8c69d4b8d6986bdc0e20545",
+    "/private/tmp/tlmc407-review-execution/commands/0040.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0041.log": "d1dd9e03465309b43b034589c936326b14f616e7fb2f3f52c17f8b9094426f47",
+    "/private/tmp/tlmc407-review-execution/commands/0042.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/tlmc407-review-execution/commands/0043.log": "83775c0c37df4892edd11712ba9c0fc5657534af1f399ea6da534ec4b489df2e",
+    "/private/tmp/tlmc407-review-execution/commands/0044.log": "4402afd860f233a20da602a3020feb7bf662fe0406ffbeacf7de66716f6521f3",
+    "/private/tmp/tlmc407-review-execution/commands/0045.log": "adae83ba7663543abb21a1527013239eb469a7dbff15bea8c52d90901b42cc65",
+    "/private/tmp/tlmc407-review-execution/environment-inventory.json": "67b9b425c81a4e89e5e037e5adade507572152dd7f32c4f1986848d8a58fb1c5",
+    "/private/tmp/tlmc407-review-execution/environment-inventory.lean": "e368dce9d3e5f8f3cabbf6c680bd8ca138473b8c0ec8e37f9a918bb871ff2228",
+    "/private/tmp/tlmc407-review-execution/environment-inventory.txt": "a2d441a39db5a8855c6356d4ed738c7c28cfb0d11ba801dbd31f8d8d041a2ff7",
+    "/private/tmp/tlmc407-review-execution/execution-records.json": "35b4c9264f75512d112c5dc63ac739a776e62a5068bd1b20eec09f8c23fa2e8a",
+    "/private/tmp/tlmc407-review-execution/strict-replay.json": "bc87f72ec56e24d161d2dc06de102382b92856f97a93b0888608684f96bbe07d"
+  },
+  "review_markdown_sha256": "63c60064fe0f502e2be94dca7bf68708719811a963818cbcab8937f21d86d0c2",
+  "limitations": [
+    "Standard Lean kernel, toolchain and pinned dependency artifacts are trusted; all dependencies and Lean were not rebuilt from source.",
+    "The conventional tableau definition is semantically checked against primary references; no formal connection to an independent Schur-function library is asserted.",
+    "Finite auxiliary tests support implementation fidelity and do not establish the universal theorem.",
+    "Review applies to recorded exact hashes. PDF visual inspection, final packaging, eligibility, publishing and maintainer acceptance remain separate."
+  ]
+}

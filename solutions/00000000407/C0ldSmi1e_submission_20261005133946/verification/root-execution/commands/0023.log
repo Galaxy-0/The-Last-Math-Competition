@@ -1,0 +1,58 @@
+Conjecture407.Partition (n : ℕ) : Type
+Conjecture407.SkewCell (lam nu : YoungDiagram) : Type
+Conjecture407.ReadingLE (a b : ℕ × ℕ) : Prop
+Conjecture407.entryCount {lam nu : YoungDiagram} (f : Conjecture407.SkewCell lam nu → ℕ) (i : ℕ) : ℕ
+Conjecture407.prefixCount {lam nu : YoungDiagram} (f : Conjecture407.SkewCell lam nu → ℕ)
+  (b : Conjecture407.SkewCell lam nu) (i : ℕ) : ℕ
+Conjecture407.LRTableau (lam mu nu : YoungDiagram) : Type
+Conjecture407.lrTableauFinite (lam mu nu : YoungDiagram) : Finite (Conjecture407.LRTableau lam mu nu)
+Conjecture407.diagram_card_eq_sum_rowLen (d : YoungDiagram) : d.card = ∑ i ∈ Finset.range (d.colLen 0), d.rowLen i
+Conjecture407.LRTableau.size_balance {lam mu nu : YoungDiagram} (T : Conjecture407.LRTableau lam mu nu) :
+  nu.card = lam.card + mu.card
+Conjecture407.lrCoefficient (lam mu nu : YoungDiagram) : ℕ
+Conjecture407.partitionFinite (n : ℕ) : Finite (Conjecture407.Partition n)
+Conjecture407.NonzeroEntry (n : ℕ) : Type
+Conjecture407.nonzeroEntryFinite (n : ℕ) : Finite (Conjecture407.NonzeroEntry n)
+Conjecture407.nonzeroCount (n : ℕ) : ℕ
+Conjecture407.scale (n : ℕ) : ℝ
+Conjecture407.RatioAsymptotic (c : ℝ) : Prop
+Conjecture407.not_ratioAsymptotic (c : ℝ) : ¬Conjecture407.RatioAsymptotic c
+Conjecture407.no_real_ratio_constant : ¬∃ c, Conjecture407.RatioAsymptotic c
+Conjecture407.conjecture407_false : ¬∃ c, 0 < c ∧ Conjecture407.RatioAsymptotic c
+'Conjecture407.LRTableau.entry_lt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture407.lrTableauFinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture407.LRTableau.size_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture407.partitionFinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture407.nonzeroEntryFinite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture407.lrCoefficient_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture407.nonzeroCount_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture407.normalized_tendsto_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture407.not_ratioAsymptotic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture407.no_real_ratio_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture407.conjecture407_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture407Audit.empty_coefficient_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture407Audit.table_zero_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture407Audit.table_one_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture407Audit.table_two_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure Conjecture407.LRTableau (lam mu nu : YoungDiagram) : Type
+number of parameters: 3
+fields:
+  Conjecture407.LRTableau.entry : Conjecture407.SkewCell lam nu → ℕ
+  Conjecture407.LRTableau.contained : lam ≤ nu
+  Conjecture407.LRTableau.rowWeak : ∀ (a b : Conjecture407.SkewCell lam nu),
+      (↑a).1 = (↑b).1 → (↑a).2 ≤ (↑b).2 → self.entry a ≤ self.entry b
+  Conjecture407.LRTableau.colStrict : ∀ (a b : Conjecture407.SkewCell lam nu),
+      (↑a).2 = (↑b).2 → (↑a).1 < (↑b).1 → self.entry a < self.entry b
+  Conjecture407.LRTableau.content : ∀ (i : ℕ), Conjecture407.entryCount self.entry i = mu.rowLen i
+  Conjecture407.LRTableau.lattice : ∀ (b : Conjecture407.SkewCell lam nu) (i : ℕ),
+      Conjecture407.prefixCount self.entry b (i + 1) ≤ Conjecture407.prefixCount self.entry b i
+constructor:
+  Conjecture407.LRTableau.mk {lam mu nu : YoungDiagram} (entry : Conjecture407.SkewCell lam nu → ℕ)
+    (contained : lam ≤ nu)
+    (rowWeak : ∀ (a b : Conjecture407.SkewCell lam nu), (↑a).1 = (↑b).1 → (↑a).2 ≤ (↑b).2 → entry a ≤ entry b)
+    (colStrict : ∀ (a b : Conjecture407.SkewCell lam nu), (↑a).2 = (↑b).2 → (↑a).1 < (↑b).1 → entry a < entry b)
+    (content : ∀ (i : ℕ), Conjecture407.entryCount entry i = mu.rowLen i)
+    (lattice :
+      ∀ (b : Conjecture407.SkewCell lam nu) (i : ℕ),
+        Conjecture407.prefixCount entry b (i + 1) ≤ Conjecture407.prefixCount entry b i) :
+    Conjecture407.LRTableau lam mu nu

@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "candidate": "00000000407",
+  "gate": "fresh_source_only_meaning",
+  "decision": "DEFER",
+  "scope_of_decision": "Semantic completeness of the entire original bilingual assertion only; no mathematical truth value is assessed.",
+  "independence": {
+    "source_only": true,
+    "selector_interpretation_used": false,
+    "prior_conversation_or_solution_used": false,
+    "proof_or_disproof_attempted": false,
+    "witness_calculated": false,
+    "mathematical_strategy_developed": false,
+    "operational_eligibility_assessed": false
+  },
+  "inputs": [
+    {
+      "path": "/private/tmp/tlmc407-author-input/conjecture.md",
+      "sha256": "66558e3531b8501ab00746a36df399a3b2d2d5c23d0f28c5b1b11402bc99aa31",
+      "bytes": 406,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/tlmc407-author-input/README.md",
+      "sha256": "baf790af419e0070f593eecea4861fd865cc7b544d2cde6ec674f8fc587b01d1",
+      "bytes": 6933,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/tlmc407-author-input/README.zh-CN.md",
+      "sha256": "d07ac1ccd888b8ee08fed8eb2e06ae15f6aa4025dbafe98790f8e2b2fc18eba7",
+      "bytes": 6367,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/tlmc407-author-input/manifest.json",
+      "sha256": "0b3ef556f2fcd116856f74f5298a4ae5406179475ec03992d1c2deb193415c82",
+      "bytes": 817,
+      "read_in_full": true
+    }
+  ],
+  "manifest_binding": {
+    "upstream_main_as_reported": "ba46ce0997cbf232fe95e5dced37ff4d32e1eb94",
+    "source_git_blob_as_reported": "3439f91b71e05a0d57573e84e6c181d4c7a0ba86",
+    "provenance_independently_verified": false,
+    "note": "The hashes above bind the bytes actually read. The manifest is source-supplied provenance; no upstream tree was inspected. The pinned-dependencies.json entry was not accessed."
+  },
+  "source_quotes": {
+    "english": "Conjecture: The number of nonzero entries of the LR coefficient table (c^ν_{λμ})_{λ,μ,ν ⊢ n} is asymptotically c·4^n/n^{5/4} (a density estimate for LR-realizable triples among all 4^n configurations).",
+    "chinese": "猜想：LR 系数表 (c^ν_{λμ})_{λ,μ,ν ⊢ n} 的非零项总数渐近为 c·4^n/n^{5/4}(指数 4^n 中 LR 可实现三元组的密度估计)。"
+  },
+  "resolved_semantics": {
+    "index_parameter": "n ranges through the nonnegative integers and tends to positive infinity. Restricting the limit expression to n >= 1 merely makes its denominator defined and does not alter an asymptotic assertion.",
+    "complete_index_domain": "The literal conventional reading of λ,μ,ν ⊢ n is that each of λ, μ and ν separately is an integer partition of the same n. The table ranges over every ordered triple in Part(n) × Part(n) × Part(n). A partition can faithfully be represented by a finite nonincreasing list of positive integers with sum n, with the empty partition at n = 0, or an equivalent conventional representation.",
+    "forbidden_index_repairs": "Do not replace the displayed domain by a combined-size condition, partitions of different displayed integers, a bounded-size domain, a shape inside an unstated box, or a quotient that identifies the two lower indices. Such replacements change the source rather than explain its notation.",
+    "named_coefficients": "LR conventionally means Littlewood–Richardson coefficients. A standard precise definition on arbitrary partition triples is the coefficient of the Schur function s_ν in the Schur-basis expansion of s_λ s_μ in the ring of symmetric functions. An equivalent fully specified Littlewood–Richardson tableau definition is also faithful. The named coefficients are not arbitrary numerical data chosen to satisfy convenient properties.",
+    "coefficient_definition_obligations": "A future author must define actual integer partitions and actual Littlewood–Richardson coefficients for every triple used in the displayed table. A Schur-based development must supply the relevant symmetric-function objects, Schur basis and coefficient extraction. A tableau-based development must supply the shapes, fillings/content and Littlewood–Richardson conditions, including behavior for every displayed triple. If an implementation uses a convention first stated only for a restricted domain, it must supply and justify its extension to the source domain using the standard objects. Any alternative representation must be connected to the conventional coefficients; a surrogate function with merely assumed properties is insufficient.",
+    "nonzero_count": "For each n, N(n) is the finite cardinality of {(λ,μ,ν) in Part(n)^3 : c^ν_{λμ} ≠ 0}. Each indexed entry contributes one, regardless of coefficient magnitude. No unmentioned identification of entries or weighting is permitted.",
+    "asymptotic_relation": "The main clause conventionally asserts the existence of a finite positive real constant c, independent of n, such that N(n)/(c * 4^n / n^(5/4)) tends to 1 as positive integers n tend to infinity. Equivalently, N(n) * n^(5/4) / 4^n tends to c with c > 0. This is asymptotic equivalence, not only an upper bound, an order-of-growth bound or an unspecified density comparison.",
+    "leading_constant": "The unnamed c is an existential positive leading constant, not a Littlewood–Richardson coefficient and not a parameter allowed to depend on n. Positivity and nonzero size are part of the conventional leading-term reading of this nonnegative counting asymptotic; admitting c = 0 or allowing c(n) would change the assertion.",
+    "exponents": "4^n is the exponential with fixed base 4 and integer exponent n. n^{5/4} is the positive real power with rational exponent 5/4 in the denominator, equivalently a factor n^(-5/4). It must not be parsed as integer division in the exponent or as n^5 divided by 4. The 4^n inside the parenthetical denotes the same displayed exponential scale; it supplies no definition of a configuration."
+  },
+  "unresolved_full_statement": {
+    "exact_english_words": "(a density estimate for LR-realizable triples among all 4^n configurations)",
+    "exact_chinese_words": "(指数 4^n 中 LR 可实现三元组的密度估计)",
+    "material_ambiguity": "The English parenthetical refers to a universe of configurations with the phrase “among all 4^n configurations”, but neither the assertion nor either guide defines a configuration, identifies such a universe, or describes how the indexed triples are realized in it. The Chinese parenthetical also supplies no such definition and does not settle the English phrase’s status.",
+    "parenthetical_status": "It may be an informal gloss describing normalization by the exponential scale 4^n, or it may assert an additional combinatorial interpretation of the count as a density in an ambient family of 4^n configurations. Parentheses do not themselves decide that question. On the first reading the main clause already fixes the quantitative claim; on the second reading the additional objects and realization relation remain unspecified.",
+    "reason_for_defer": "A source-only gate for the complete assertion cannot certify that omitting the ambient-family language preserves every intended requirement, and it cannot construct an unstated family or realization relation. The main asymptotic clause is conventionally precise; this decision does not treat the standard name LR or the displayed index domain as undefined.",
+    "clarification_required": "Clarify whether the parenthetical is only explanatory language for the explicitly indexed count and its displayed normalization, or whether it imposes an additional requirement. If it imposes a requirement, identify the configurations and the precise relation between them and the indexed LR-realizable triples. This clarification must come from the statement’s source/maintainer, not from a solver’s convenience.",
+    "no_repair_authorized": true
+  },
+  "future_semantic_obligations_if_released": [
+    "Retain the full original index domain and every exponent without modifying the conjecture to another counting problem.",
+    "State the conventional actual Littlewood–Richardson objects and show that any formal encoding represents them; do not substitute an arbitrary model satisfying selected coefficient properties.",
+    "Establish all properties used about those actual objects within the checked development or its accepted foundations, rather than making conjecture-specific assumptions.",
+    "Express the precise existential positive-constant asymptotic assertion, or its logical negation if that is the submitted conclusion, for the cardinality of exactly the source-indexed nonzero entries.",
+    "Resolve and honor the parenthetical’s clarified semantic status before authoring a claim that purports to cover the entire original assertion."
+  ],
+  "guide_observations": [
+    "Both guides require the work to match the conjecture’s definitions and requirements and restrict solver submissions to their own solution directory.",
+    "Both guides call for complete and clear conjecture definitions with all necessary conditions. Neither guide defines the parenthetical configurations or supplies a rule for replacing the displayed index domain.",
+    "Both complete guides were read, including their leaderboard text. No linked leaderboard, solver profile, other conjecture, submission or review was opened; the guide standings were not used to assess this candidate’s eligibility or truth."
+  ],
+  "access_scope": {
+    "read_paths": [
+      "/private/tmp/tlmc407-author-input/conjecture.md",
+      "/private/tmp/tlmc407-author-input/README.md",
+      "/private/tmp/tlmc407-author-input/README.zh-CN.md",
+      "/private/tmp/tlmc407-author-input/manifest.json"
+    ],
+    "written_paths": [
+      "/private/tmp/tlmc407-meaning-gate.json"
+    ],
+    "other_files_or_directories_inspected": [],
+    "network_or_external_services_accessed": false,
+    "source_files_mutated": false,
+    "git_read_or_mutated": false
+  },
+  "handoff": "DEFER on source meaning only. No authoring clearance, mathematical truth value, witness, proof idea or operational eligibility conclusion is supplied."
+}
