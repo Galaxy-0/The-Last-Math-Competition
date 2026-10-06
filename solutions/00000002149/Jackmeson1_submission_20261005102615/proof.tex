@@ -1,0 +1,136 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A disproof of Conjecture 00000002149\\[2pt]
+\large The Colin de Verdi\`ere bound $\mu(\overline G)\le |V|-\omega(G)-1$ fails}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\emph{Definition:} The Colin de Verdi\`ere parameter $\mu(G)$ is the spectral-rigidity invariant of a
+graph. \emph{Conjecture:} $\mu(\overline G)\le |V|-\omega(G)-1$ (an upper bound for the complement); the
+bound is tight (attained by the complete graph with empty complement).
+\end{quote}
+
+\paragraph{Reading.} For every finite simple graph $G=(V,E)$, $\mu(\overline G)\le|V|-\omega(G)-1$, where
+$\omega$ is the clique number; moreover equality holds for complete graphs. We refute the inequality
+(and with it the tightness clause) on two infinite families: the complete graphs $K_n$, $n\ge1$ (the
+case the conjecture itself names), and the edgeless graphs $\overline{K_n}$, $n\ge2$. Among complete graphs, the only one
+on which the claimed tightness holds is the order-zero graph $K_0$ (with the convention $\mu(K_0)=-1$),
+which is excluded here ($n\ge1$).
+
+\section{Definitions (as in the Lean file)}
+
+\begin{definition}[Colin de Verdi\`ere parameter]
+For a graph $G$ on a finite vertex set $V$, a real matrix $M\in\mathbb{R}^{V\times V}$ is
+\emph{admissible} (\texttt{IsCdVMatrix}) if
+\begin{itemize}
+\item $M$ is symmetric;
+\item (M1) for $i\ne j$: $M_{ij}<0$ if $ij\in E$, and $M_{ij}=0$ if $ij\notin E$ (no condition on the
+  diagonal);
+\item (M2) $M$ has exactly one negative eigenvalue, counted with multiplicity: the number of indices
+  $i$ with $\lambda_i<0$ is $1$, where $(\lambda_i)$ is Mathlib's eigenvalue family
+  \texttt{IsHermitian.eigenvalues} (listed with multiplicity);
+\item (M3) Strong Arnold Hypothesis: every symmetric $X$ with $X_{ii}=0$ for all $i$, $X_{ij}=0$ for
+  $ij\in E$, and $MX=0$ is the zero matrix.
+\end{itemize}
+The corank is $|V|-\operatorname{rank}M$ (\texttt{corank}), and $\mu(G)$ is the largest corank of an
+admissible matrix (\texttt{cdvMu}, a supremum in $\mathbb{N}$; the set of coranks is bounded by $|V|$,
+so every admissible $M$ gives $\operatorname{corank}M\le\mu(G)$, lemma \texttt{le\_cdvMu}). In (M3),
+the source's condition ``$X_{ij}=0$ if $i=j$ or $M_{ij}\ne0$'' is the same as ours, because by (M1)
+$M_{ij}\ne0$ for $i\ne j$ exactly when $ij\in E$. The clique number is Mathlib's
+\texttt{SimpleGraph.cliqueNum}.
+\end{definition}
+
+\paragraph{Convention.} $\mu$ is $\mathbb{N}$-valued in Lean, so the inequality
+$\mu(\overline{K_n})\ge0>-1$ alone would hold for type reasons. For that reason the main theorem also
+exhibits an explicit admissible matrix in each case, and it states a nontrivial lower bound
+($\mu(\overline{K_n})\ge1$ for $n\ge2$; $\mu(K_n)\ge n-1$ for $n\ge 2$).
+
+\section{Proof}
+
+\begin{lemma}[\texttt{card\_neg\_eig\_diagonal}]
+The number of negative eigenvalues of a diagonal matrix $\operatorname{diag}(d)$ equals the number of
+negative entries $d_i$.
+\end{lemma}
+\begin{proof}
+The roots of the characteristic polynomial $\prod_i(X-d_i)$ are the multiset $\{d_i\}$, and they are
+the eigenvalues listed with multiplicity (Mathlib's \texttt{roots\_charpoly\_eq\_eigenvalues}).
+\end{proof}
+
+\begin{theorem}[Family (a): $G=K_n$]
+Let $n\ge1$. Then $\omega(K_n)=n$ (\texttt{cliqueNum\_top}), so the claimed bound is $-1$. The matrix
+$M=\operatorname{diag}(-1,0,1,\dots,1)$ is admissible for the edgeless graph
+$\overline{K_n}$ (\texttt{isCdV\_empty}), and for $n\ge2$ its corank is $1$
+(\texttt{corank\_empty}). Hence $\mu(\overline{K_n})\ge1>-1$ for $n\ge2$; for $n=1$, $M=(-1)$ is
+admissible, so the defining set is nonempty and $\mu(\overline{K_1})\ge0>-1$.
+\end{theorem}
+\begin{proof}
+(M1): off-diagonal entries are $0$ and there are no edges. (M2): exactly one entry is negative. (M3):
+$(MX)_{ij}=d_iX_{ij}$, so $X_{ij}=0$ whenever $d_i\ne0$, i.e.\ whenever $i\ne 1$ (index $1$ carries the
+$0$). For $i=1$ and $j\ne1$, $X_{1j}=X_{j1}=0$, and $X_{11}=0$ by hypothesis. The rank is the number of
+nonzero diagonal entries, namely $n-1$.
+\end{proof}
+
+\begin{theorem}[Family (b): $G=\overline{K_n}$]
+Let $n\ge2$. Then $\omega(\overline{K_n})=1$ (\texttt{cliqueNum\_bot}), so the claimed bound is $n-2$.
+The all-$(-1)$ matrix $M=-J$ is admissible for $K_n$ (\texttt{isCdV\_complete}) and has corank $n-1$
+(\texttt{corank\_negJ}). Hence $\mu(K_n)\ge n-1>n-2$.
+\end{theorem}
+\begin{proof}
+(M1) holds since all off-diagonal entries are $-1$ and all pairs are adjacent. (M3) is immediate: $X$
+vanishes on the diagonal and on every edge, hence everywhere. For (M2) and the rank: $M^2=-nM$, so each
+eigenvalue $\lambda$ (with a nonzero eigenvector $v$) satisfies $(\lambda^2+n\lambda)v=0$, i.e.\
+$\lambda\in\{0,-n\}$ (\texttt{negJ\_eig}). The eigenvalues sum to $\operatorname{tr}M=-n$, so exactly
+one of them equals $-n$ (\texttt{negJ\_card}). Thus there is exactly one negative eigenvalue and exactly
+one nonzero eigenvalue, so $\operatorname{rank}M=1$ (Mathlib's \texttt{rank\_eq\_card\_non\_zero\_eigs}).
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_2149\_false}]
+(a) For every $n\ge1$ there is an admissible matrix $M$ for $\overline{K_n}$ with
+$n-\omega(K_n)-1<\operatorname{corank}M$; if $n\ge2$ then $\operatorname{corank}M=1$ and
+$\mu(\overline{K_n})\ge1$; and $\mu(\overline{K_n})\not\le n-\omega(K_n)-1$.
+(b) For every $n\ge2$ there is an admissible matrix $M$ for $K_n=\overline{\overline{K_n}}$ with
+$\operatorname{corank}M=n-1$, $\omega(\overline{K_n})=1$, and
+$\mu(K_n)\not\le n-\omega(\overline{K_n})-1$.
+\end{theorem}
+
+So the inequality fails for every complete graph with $n\ge1$ vertices, which is exactly where the
+conjecture claims tightness, and also for every edgeless graph with $n\ge2$ vertices, where the bound
+$n-2$ is nonnegative and the excess has nothing to do with the sign convention.
+
+\section{Lean formalisation and axiom audit}
+
+File \texttt{lean/Conjecture2149/Basic.lean} (Lean 4 v4.33.1, Mathlib v4.33.1, only
+\texttt{import Mathlib}). Main theorem: \texttt{C2149.conjecture\_2149\_false}. The output of
+\texttt{\#print axioms C2149.conjecture\_2149\_false} is \texttt{[propext, Classical.choice,
+Quot.sound]}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\section{Source}
+Wikipedia, \emph{Colin de Verdi\`ere graph invariant},
+\url{https://en.wikipedia.org/wiki/Colin_de_Verdi%C3%A8re_graph_invariant}: ``$\mu(G)$ is the largest
+corank of any symmetric matrix $M=(M_{i,j})\in\mathbb{R}^{(n)}$ such that: (M1) for all $i,j$ with
+$i\neq j$: $M_{i,j}<0$ if $\{i,j\}\in E$, and $M_{i,j}=0$ if $\{i,j\}\notin E$; (M2) $M$ has exactly one
+negative eigenvalue, of multiplicity 1; (M3) there is no nonzero matrix $X=(X_{i,j})\in\mathbb{R}^{(n)}$
+such that $MX=0$ and such that $X_{i,j}=0$ if either $i=j$ or $M_{i,j}\neq0$ hold.'' The same page
+states ``$\mu=-1$ if and only if $G$ is the order-zero graph, $K_0$; $\mu\le0$ if and only if $G$ has no
+more than one vertex''. Here $\mathbb{R}^{(n)}$ is read as the space of symmetric real $n	imes n$ matrices (the page uses
+it for the symmetric matrix $M$), so $X$ ranges over symmetric matrices, as in our (M3).
+\end{document}
