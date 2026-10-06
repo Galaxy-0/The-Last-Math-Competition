@@ -1,0 +1,190 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of conjecture 00000009779:\\ a $C^k$ kernel on $[0,1]^d$ whose eigenvalues satisfy
+$\lambda_n\ge\tfrac12 n^{-k-5/4}$, so they do not decay like $n^{-k-1-d/2}$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clause refuted}
+
+\textbf{Statement (English, verbatim).} Definition: Regularity of integral kernels versus eigenvalue
+decay: power laws for eigenvalues of Sobolev-class kernels. Conjecture: $C^k$ regular kernels satisfy
+$|\lambda_n|\le C n^{-k-1-d/2}$ with optimal $C$ the spherical average of derivative norms of the
+kernel; for radial kernels the constant is exactly computable and given by the first maximum of the
+Fourier transform. (kernel regularity-decay optimal constant)
+
+The Chinese text states the same claim with the same exponent $n^{-k-1-d/2}$.
+
+\textbf{Reading.} The conjecture is a conjunction. Its first clause is
+\begin{align*}
+  \text{(A)}\quad &\text{for every } d\ge 1,\ k\ge 0 \text{ and every } C^k \text{ kernel } K
+  \text{ on a } d\text{-dimensional domain } \Omega:\\
+  &\exists C\ \forall n\ge 1:\ |\lambda_n|\le C\,n^{-k-1-d/2},
+\end{align*}
+where $\lambda_1,\lambda_2,\dots$ are the eigenvalues of the integral operator
+$(T_K\varphi)(x)=\int_\Omega K(x,y)\varphi(y)\,dy$ on $L^2(\Omega)$, listed with multiplicity in
+order of nonincreasing $|\lambda_n|$. The other two clauses (the optimal $C$ is a spherical average
+of derivative norms; for radial kernels $C$ is given by the first maximum of the Fourier transform)
+describe the constant in (A), so they presuppose that such a $C$ exists. We refute (A) for
+\emph{every} dimension $d\ge 1$ and \emph{every} $k\ge 0$, with $\Omega=[0,1]^d$ and Lebesgue
+measure. This refutes the conjunction. The counterexample kernels are also real, symmetric and
+positive semidefinite. For $d=1$ the kernel is radial ($K(x,y)=f(|x-y|)$), so the radial clause
+fails as well: no constant exists to be computed.
+
+\textbf{Conventions.} $k$ ranges over $\mathbb N=\{0,1,2,\dots\}$. ``$C^k$ kernel'' is taken in the
+strongest sense: $K$ is $C^k$ jointly in $(x,y)$ on all of $\mathbb R^d\times\mathbb R^d$. Functions
+in $L^2$ are complex valued. $\int_0^1$ is the interval integral, which equals the integral over
+$[0,1]$. The Lean file writes the dimension as $D=d+1$ with $d\in\mathbb N$, so that $D\ge 1$ and
+the coordinate $x_0$ exists.
+
+\section{Definitions (as formalized)}
+
+All names are in namespace \texttt{C9779}.
+\begin{itemize}
+\item \texttt{cube D} $=[0,1]^D\subset\mathbb R^D$ (as \texttt{Set.univ.pi fun \_ => Icc 0 1}).
+\item \texttt{intOp K phi x} $=\int_{[0,1]^D}K(x,y)\,\varphi(y)\,dy$ (the integral operator $T_K$).
+\item \texttt{IsOrthonormalEigenfamily K phi mu}: the functions $\varphi_0,\dots,\varphi_{n-1}$ are
+  continuous, satisfy $\int_{[0,1]^D}\overline{\varphi_i}\,\varphi_j=\delta_{ij}$, and satisfy
+  $T_K\varphi_i(x)=\mu_i\varphi_i(x)$ at every $x\in[0,1]^D$.
+\item \texttt{EigenBound K k C}: for every $n\ge1$ and every such family of $n$ functions there is
+  an $i$ with $|\mu_i|\le C\,n^{-(k+1+D/2)}$.
+\item \texttt{PosSemidefKernel K}: $\sum_{a,b}c_ac_bK(x_a,x_b)\ge0$ for all finite families of points
+  $x_a$ and real coefficients $c_a$.
+\item $\texttt{coef s j}=(j+1)^{-s}$, $\ \texttt{fser s t}=f_s(t)=\sum_{m\ge1}m^{-s}\cos(2\pi mt)$,
+  $\ \texttt{Kd d s x y}=f_s(x_0-y_0)$, $\ \texttt{phi d j x}=e^{2\pi i(j+1)x_0}$.
+\end{itemize}
+
+\begin{lemma}[from the ordered eigenvalues to \texttt{EigenBound}]\label{bridge}
+Let $T$ be a linear operator on a complex inner product space, and let $\lambda_1,\lambda_2,\dots$ be
+its eigenvalues, listed with multiplicity in order of nonincreasing absolute value. Let $c\ge0$. If
+$v_1,\dots,v_n$ are orthonormal and $Tv_i=\mu_iv_i$ with $|\mu_i|>c$ for every $i$, then
+$|\lambda_n|>c$. Consequently, if $|\lambda_n|\le C n^{-(k+1+D/2)}$ for all $n\ge1$, then
+\texttt{EigenBound K k C} holds.
+\end{lemma}
+\begin{proof}
+Let $\nu_1,\dots,\nu_r$ be the distinct values among the $\mu_i$. Each $\nu_j\ne0$. The $v_i$ with
+$\mu_i=\nu_j$ are orthonormal, hence linearly independent, vectors of $\ker(T-\nu_j)$. So the
+multiplicity of $\nu_j$ is at least $\#\{i:\mu_i=\nu_j\}$. Summing over $j$, at least $n$ entries of
+the list have absolute value $>c$. Since the list is ordered by nonincreasing absolute value, the
+first $n$ entries have absolute value $>c$, and in particular $|\lambda_n|>c$.
+
+For the consequence, put $B=Cn^{-(k+1+D/2)}$ and take a family as in \texttt{EigenBound}. Continuous
+functions on the compact cube lie in $L^2$, and the integral and pointwise identities say that they
+are orthonormal eigenvectors of $T_K$ on $L^2([0,1]^D)$. Since $|\lambda_n|\le B$, we have $B\ge0$.
+If every $|\mu_i|>B$, the first part gives $|\lambda_n|>B$, a contradiction.
+\end{proof}
+
+So refuting \texttt{EigenBound K k C} for every $C$ refutes (A) for $K$. Lean proves the negation of
+\texttt{EigenBound}. Lemma~\ref{bridge} is the elementary step from that negation to the ordered
+eigenvalues, and it is not formalized.
+
+\section{Proof}
+
+Fix $k\ge0$ and $D\ge1$, and put $s=k+\tfrac54$. Then $s>k+1$ and $k+1+\tfrac D2-s=\tfrac D2-\tfrac14\ge\tfrac14$.
+
+\begin{lemma}[smoothness; \texttt{contDiff\_fser}, \texttt{contDiff\_Kd}]
+If $s>k+1$ then $f_s\in C^k(\mathbb R)$, and $K(x,y)=f_s(x_0-y_0)$ is $C^k$ on
+$\mathbb R^D\times\mathbb R^D$.
+\end{lemma}
+\begin{proof}
+The $i$-th derivative of $t\mapsto (j+1)^{-s}\cos(2\pi(j+1)t)$ is bounded by
+$(2\pi)^i(j+1)^{i-s}$, which is summable in $j$ for every $i\le k$, because $s-i>1$. Termwise
+differentiation (Mathlib \texttt{contDiff\_tsum}) gives $f_s\in C^k$. Compose with the linear map
+$(x,y)\mapsto x_0-y_0$.
+\end{proof}
+
+\begin{lemma}[eigen-equation; \texttt{eigen\_1d}, \texttt{eigen\_d}]
+For $s>1$, every $m\ge1$ and every $x\in\mathbb R$:
+$\int_0^1 f_s(x-y)\,e^{2\pi imy}\,dy=\tfrac12 m^{-s}e^{2\pi imx}$. Hence
+$T_K\varphi_m=\tfrac12m^{-s}\varphi_m$ on $[0,1]^D$ for $\varphi_m(x)=e^{2\pi imx_0}$.
+\end{lemma}
+\begin{proof}
+Write $\cos\theta=\tfrac12(e^{i\theta}+e^{-i\theta})$. The $j$-th term of the integrand is
+\[
+  \tfrac{(j+1)^{-s}}2\Big(e^{2\pi i(j+1)x}e^{2\pi i(m-j-1)y}+e^{-2\pi i(j+1)x}e^{2\pi i(m+j+1)y}\Big).
+\]
+Since $\int_0^1e^{2\pi ipy}dy=\delta_{p0}$ for $p\in\mathbb Z$ (Mathlib
+\texttt{integral\_exp\_mul\_complex}), the $j$-th integral equals $\tfrac12m^{-s}e^{2\pi imx}$ if
+$j+1=m$, and $0$ otherwise. The terms are bounded by $(j+1)^{-s}$, which is summable, so dominated
+convergence (\texttt{intervalIntegral.hasSum\_integral\_of\_dominated\_convergence}) lets us
+integrate termwise. On the cube, $\int_{[0,1]^D}g(y_0)\,dy=\int_0^1g$ for continuous $g$
+(\texttt{integral\_cube\_eval}): the cube measure is the product of the measures on $[0,1]$, which
+are probability measures, so evaluation at coordinate $0$ is measure preserving.
+\end{proof}
+
+\begin{lemma}[orthonormality; \texttt{integral\_conj\_efun\_mul}, \texttt{orthonormal\_d}]
+$\int_{[0,1]^D}\overline{\varphi_a}\,\varphi_b=\int_0^1e^{2\pi i(b-a)t}dt=\delta_{ab}$.
+\end{lemma}
+
+\begin{lemma}[symmetry and positivity; \texttt{Kd\_symm}, \texttt{posSemidef\_Kd}]
+$K(x,y)=K(y,x)$, and for real $c_a$ and points $x_a$,
+\[
+  \sum_{a,b}c_ac_bK(x_a,x_b)=\sum_{j\ge0}(j+1)^{-s}\Big[\Big(\sum_ac_a\cos\omega_jx_{a,0}\Big)^2
+  +\Big(\sum_ac_a\sin\omega_jx_{a,0}\Big)^2\Big]\ge0,
+\]
+where $\omega_j=2\pi(j+1)$.
+\end{lemma}
+\begin{proof}
+$f_s$ is even. Exchange the finite sums with the convergent series and use
+$\cos(u-v)=\cos u\cos v+\sin u\sin v$.
+\end{proof}
+
+\begin{lemma}[growth; \texttt{growth}]
+For every $C\in\mathbb R$ there is $n\ge1$ with $C\,n^{-(k+1+D/2)}<\tfrac12(i+1)^{-s}$ for all $i<n$.
+\end{lemma}
+\begin{proof}
+Choose $n\ge1$ with $n^{1/4}>2C$. Put $u=n^{D/2-1/4}\ge n^{1/4}>2C$. Then
+$n^{-(k+1+D/2)}=n^{-s}/u$, and $Cn^{-s}/u<\tfrac12n^{-s}\le\tfrac12(i+1)^{-s}$ for $i+1\le n$.
+\end{proof}
+
+\begin{theorem}[\texttt{not\_eigenBound}, \texttt{main}, \texttt{main\_radial}]
+For every $D\ge1$ and $k\ge0$, the kernel $K(x,y)=f_{k+5/4}(x_0-y_0)$ on $[0,1]^D$ is real,
+symmetric, positive semidefinite and $C^k$ on $\mathbb R^D\times\mathbb R^D$, and
+\texttt{EigenBound K k C} fails for every $C$. For $D=1$, $K(x,y)=f_{k+5/4}(|x-y|)$ is radial.
+\end{theorem}
+\begin{proof}
+Given $C$, take $n$ from the growth lemma and the family $\varphi_1,\dots,\varphi_n$ with eigenvalues
+$\mu_m=\tfrac12m^{-s}$. It is an orthonormal eigenfamily, and every $|\mu_m|>Cn^{-(k+1+D/2)}$, so
+\texttt{EigenBound} fails at $n$. For $D=1$, $f_s(x_0-y_0)=f_s(|x_0-y_0|)$ because $f_s$ is even.
+\end{proof}
+
+By Lemma~\ref{bridge}, $|\lambda_n|\le Cn^{-k-1-D/2}$ fails for every $C$; in fact
+$|\lambda_n|\ge\tfrac12n^{-k-5/4}$ for all $n\ge 1$.
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture9779/Basic.lean} (384 lines, \texttt{import Mathlib} only). Main
+statement:
+\begin{verbatim}
+theorem main (d k : N) :
+    exists K : (Fin (d + 1) -> R) -> (Fin (d + 1) -> R) -> R,
+      ContDiff R k (Function.uncurry K) /\ (forall x y, K x y = K y x) /\
+      PosSemidefKernel K /\ not (exists C : R, EigenBound K k C)
+\end{verbatim}
+(with $\mathbb N$, $\mathbb R$ written as \texttt{N}, \texttt{R}). \texttt{main\_radial k} gives the
+same for $D=1$ with the kernel written as $f(|x_0-y_0|)$ and $f\in C^k(\mathbb R)$. Supporting
+theorems: \texttt{contDiff\_fser}, \texttt{contDiff\_Kd}, \texttt{eigen\_1d}, \texttt{eigen\_d},
+\texttt{integral\_exp\_int}, \texttt{integral\_conj\_efun\_mul}, \texttt{orthonormal\_d},
+\texttt{integral\_cube\_eval}, \texttt{posSemidef\_Kd}, \texttt{Kd\_symm}, \texttt{growth},
+\texttt{not\_eigenBound}.
+
+\textbf{Axiom audit.} \texttt{\#print axioms} for \texttt{C9779.main} and \texttt{C9779.main\_radial}
+reports \texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide}, and no added axiom.
+
+\end{document}
