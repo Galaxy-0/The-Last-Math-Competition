@@ -1,0 +1,147 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Comp}{\mathrm{Comp}}
+
+\title{Disproof of conjecture 00000004124:\\ the least size of a ccc, non-Knaster poset is never $\aleph_2$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clause refuted}
+
+\textbf{Statement (English, verbatim).} Definition: ccc, precaliber, and the Knaster property form
+the hierarchy of strengthening chain conditions of forcing. Conjecture: The least cardinality of a
+poset separating ccc from the Knaster property is aleph\_2, and the smallest counterexample can be
+constructed by refining a Suslin tree. (The Chinese text states the same: the least poset
+cardinality at which ccc and the Knaster property separate is $\aleph_2$, and the smallest
+counterexample is given by a refinement of a Suslin tree.)
+
+\textbf{Reading.} The Knaster property implies ccc (Lemma~\ref{lem:hier}), so a poset
+``separating ccc from the Knaster property'' is a poset that is ccc but not Knaster. Let
+$S$ be the class of cardinalities $|P|$ of such posets. The conjecture is a conjunction; its
+first conjunct says that the least element of $S$ is $\aleph_2$. We refute that conjunct, which
+refutes the conjunction. We read ``least cardinality is $\aleph_2$'' in two ways and refute both:
+\begin{itemize}
+\item[(L1)] $\aleph_2$ is the least element of $S$: some ccc non-Knaster poset has size $\aleph_2$
+  and every such poset has size at least $\aleph_2$;
+\item[(L2)] $\inf S = \aleph_2$ (in Lean, \texttt{sInf}; the infimum of the empty set of cardinals
+  is $0$).
+\end{itemize}
+Each is refuted for three notions of ``poset'': partial orders, preorders, and partial orders with a
+greatest element (the usual shape of a forcing notion). The second conjunct (a Suslin tree
+refinement) is not needed; see Section~\ref{sec:suslin}.
+
+\section{Definitions}
+
+Only the relation $\le$ is used. For $p,q\in P$:
+\begin{definition}
+$p,q$ are \emph{compatible}, $\Comp(p,q)$, if there is $r$ with $r\le p$ and $r\le q$.
+An \emph{antichain} is a set $A$ such that any two distinct members of $A$ are incompatible.
+A set $B$ is \emph{linked} if any two distinct members of $B$ are compatible.
+$P$ is \emph{ccc} if every antichain in $P$ is countable.
+$P$ has the \emph{Knaster property} (property K) if every uncountable $A\subseteq P$ has an
+uncountable linked subset $B\subseteq A$.
+\end{definition}
+Sources (retrieved this session). Wikipedia, \emph{Countable chain condition}: ``a partially
+ordered set X is said to satisfy the countable chain condition, or to be ccc, if every strong
+antichain in X is countable.'' Wikipedia, \emph{Martin's axiom}: ``an antichain is a subset A of P
+such that any two distinct members of A are incompatible (two elements are said to be compatible
+if there exists a common element below both of them in the partial order).'' Y.~Peng,
+\emph{Fragments of Martin's axiom}, arXiv:2510.21496: ``a poset has property K n (K for Knaster) if
+every uncountable subset of has an uncountable subset that is -linked where a subset is -linked if
+every -element subset of has a common lower bound'' (math symbols lost in extraction; the
+Knaster property is the case $n=2$, ``Knaster's original property K 2''). Peng also gives the
+equivalent form of ccc ``every uncountable subset of contains two elements with a common lower
+bound''; Lean proves this equivalence (\texttt{ccc\_iff}).
+
+In Lean (\texttt{Conjecture4124}): \texttt{Compat}, \texttt{IsAntichainC}, \texttt{IsLinked},
+\texttt{CCC}, \texttt{Knaster}, stated for any type with \texttt{LE}; antichains and linked sets
+use Mathlib's \texttt{Set.Pairwise}, which only constrains distinct elements. Cardinalities are
+\texttt{Cardinal.mk}; $\aleph_1=$ \texttt{aleph 1}, $\aleph_2=$ \texttt{aleph 2}.
+
+\section{Proof}
+
+\begin{lemma}\label{lem:hier}
+Knaster implies ccc. Every countable poset is Knaster. Hence every ccc, non-Knaster poset has
+$|P|\ge\aleph_1$.
+\end{lemma}
+\begin{proof}
+If $A$ were an uncountable antichain, Knaster gives an uncountable linked $B\subseteq A$; $B$ has two
+distinct elements, which are both compatible and incompatible. A countable $P$ has no uncountable
+subsets, so it is Knaster vacuously. (Lean: \texttt{ccc\_of\_knaster}, \texttt{knaster\_of\_countable},
+\texttt{aleph\_one\_le\_of\_not\_knaster}.)
+\end{proof}
+
+\begin{lemma}[Key lemma, \texttt{exists\_aleph\_one}]\label{lem:key}
+Let $P$ be ccc and not Knaster, and $X\subseteq P$ with $|X|\le\aleph_1$. There is $Q$ with
+$X\subseteq Q\subseteq P$ and $|Q|=\aleph_1$ such that $Q$, with the order induced from $P$, is
+ccc and not Knaster.
+\end{lemma}
+\begin{proof}
+Since $P$ is not Knaster, there is an uncountable $A\subseteq P$ with no uncountable linked subset.
+As $|A|\ge\aleph_1$, choose $W\subseteq A$ with $|W|=\aleph_1$; $W$ is uncountable and also has no
+uncountable linked subset. Choose $f(p,q)$, a common lower bound of $p,q$ whenever they are
+compatible (\texttt{lb}, \texttt{lb\_spec}). Let $S_0=W\cup X$, $S_{n+1}=S_n\cup f[S_n\times S_n]$
+and $Q=\bigcup_n S_n$ (\texttt{stage}, \texttt{lbClosure}). By induction $|S_n|\le\aleph_1$
+(since $\aleph_1+\aleph_1\cdot\aleph_1=\aleph_1$), so $|Q|\le\aleph_0\cdot\aleph_1=\aleph_1$, and
+$|Q|\ge|W|=\aleph_1$ (\texttt{mk\_stage\_le}, \texttt{mk\_lbClosure\_le}). $Q$ is closed under $f$
+(\texttt{lb\_mem}), so for $p,q\in Q$: $p,q$ are compatible in $Q$ iff they are compatible in $P$
+(\texttt{compat\_lbClosure\_iff}). Hence an antichain of $Q$ is an antichain of $P$, so it is
+countable: $Q$ is ccc (\texttt{ccc\_lbClosure}). And $W\subseteq Q$ is uncountable; an uncountable
+$Q$-linked subset of $W$ would be $P$-linked, which is impossible, so $Q$ is not Knaster
+(\texttt{not\_knaster\_of\_subset}).
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture4124\_false}]
+Fix a universe $u$, and let \texttt{sepCards}, \texttt{sepCardsPre}, \texttt{sepCardsTop} be the
+sets of cardinalities of ccc, non-Knaster partial orders, preorders, and partial orders with a
+greatest element (\texttt{OrderTop}) in \texttt{Type u}. For each of these sets $S$:
+$\neg\,\mathrm{IsLeast}(S,\aleph_2)$ and $\inf S\neq\aleph_2$. Moreover, if $S\neq\emptyset$ then
+$\mathrm{IsLeast}(S,\aleph_1)$.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:hier}, every element of $S$ is $\ge\aleph_1$. If $S\ne\emptyset$, apply
+Lemma~\ref{lem:key} with $X=\emptyset$ (or $X=\{\top\}$ for the third class, so that $Q$ keeps
+the greatest element; Mathlib's \texttt{Subtype.orderTop}); the induced order on $Q$ is again a
+partial order or preorder, so $\aleph_1\in S$ (\texttt{sepCards\_spec} and its two variants).
+Then (\texttt{not\_aleph\_two}): if $\aleph_2$ were least, $\aleph_2\le\aleph_1$, false since
+$\aleph_1<\aleph_2$; and $\inf S$ is $\aleph_1$ if $S\ne\emptyset$ and $0$ if $S=\emptyset$, never
+$\aleph_2$.
+\end{proof}
+
+So in every model of ZFC the least size of a ccc, non-Knaster poset is $\aleph_1$ if such a poset
+exists, and there is no least size otherwise. The conjecture's value $\aleph_2$ never occurs. In
+particular the independence of the existence of such posets cannot rescue the claim.
+
+\section{The Suslin-tree clause}\label{sec:suslin}
+The second conjunct is not needed, since the first is false. For context only (not formalized):
+Wikipedia, \emph{Suslin tree}: ``a Suslin tree is a tree of height $\omega_1$ such that every
+branch and every antichain is countable'' and ``Martin's axiom MA($\aleph_1$) implies that there
+are no Suslin trees''. The standard argument (not formalized) is as follows. Order a Suslin tree $T$
+upside down, so that stronger conditions are higher nodes. Two nodes have a common extension iff they
+are comparable. So antichains in the forcing sense are tree antichains, which are countable, and
+$T$ is ccc. Each level is an antichain, so $|T|=\aleph_1$. A linked set is a chain, and an
+uncountable chain would give an uncountable branch, so the uncountable set $T$ has no
+uncountable linked subset and $T$ is not Knaster. Thus the Suslin-tree example agrees with our
+result: it has size $\aleph_1$, not $\aleph_2$.
+
+\section{Lean formalization and axiom audit}
+File \texttt{lean/Conjecture4124/Basic.lean} (only import: \texttt{Mathlib}; 278 lines), Lean
+4.33.1, Mathlib v4.33.1. Main theorem \texttt{Conjecture4124.conjecture4124\_false}, with
+\texttt{exists\_aleph\_one}, \texttt{not\_aleph\_two}, \texttt{ccc\_of\_knaster}, \texttt{ccc\_iff}.
+\texttt{lake build} succeeds, and \texttt{\#print axioms} on \texttt{conjecture4124\_false} and
+\texttt{exists\_aleph\_one} reports only \texttt{propext}, \texttt{Classical.choice},
+\texttt{Quot.sound}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}
