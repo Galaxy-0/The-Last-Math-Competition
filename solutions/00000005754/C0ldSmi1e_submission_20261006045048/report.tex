@@ -1,0 +1,252 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\val}{\operatorname{val}}
+\title{A continuous valuation with rational value group\\
+\large Disproof of Conjecture 00000005754}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The Hahn-series field with rational coefficients and rational exponents carries a continuous
+valuation whose intrinsic value group is the additive group $\Q$. This group is not isomorphic
+to $\Z^I$ for any index set $I$, even without requiring preservation of order. Consequently no
+choice of rank can make the conjecture's asserted integer-power description hold. The Lean
+formalization constructs the valuation, proves continuity for two explicit codomain topologies,
+identifies the group of values actually attained, and proves the obstruction for every index type.
+\end{abstract}
+
+\section{Claim being disproved and conventions}
+
+The final clause of the supplied English statement says that ``the value group of a continuous
+valuation is a power of Z, with exponent the rank.'' The Chinese statement makes the same
+assertion. This is a universal assertion about continuous valuations, and it is a conjunct of the
+conjecture. One continuous valuation whose value group is no integer power therefore suffices
+to disprove the conjecture as written.
+
+The statement gives neither a topology nor a discreteness hypothesis. We use the standard
+valuation topology on the domain field. We prove continuity both for the usual order topology
+on the extended value group and for the finer topology that isolates finite additive values and
+has tails as neighborhoods of infinity. Thus the counterexample does not rely on assigning the
+domain an arbitrary discrete topology. A field is, in particular, a ring of the kind mentioned in
+the statement.
+
+We use additive valuation notation. An additive valuation on a field $K$ is a function
+\[
+ w:K\longrightarrow \Gamma\cup\{\infty\}
+\]
+into a linearly ordered abelian group with a largest element adjoined, satisfying
+\[
+ w(0)=\infty,\qquad w(1)=0,\qquad
+ w(fg)=w(f)+w(g),\qquad w(f+g)\geq\min\{w(f),w(g)\}.
+\]
+Here $\infty+\gamma=\infty$. Its intrinsic additive value group is the image of $K^\times$
+under $w$, with the induced addition and order. In particular, an unnecessarily large target
+group does not enlarge this intrinsic group.
+
+No interpretation of the unspecified conversion formula or of the asserted rank jumps is
+needed. We will prove the stronger statement that the intrinsic group is not $\Z^I$ for
+\emph{any} index set $I$. In particular, it cannot be $\Z^{r}$ when $r$ is whatever rank is
+intended in the statement. When $r\in\N$, the corresponding Lean type is
+\texttt{Fin r $\to$ $\Z$}.
+
+\section{The field and its valuation}
+
+Let $K$ be the Hahn-series field
+\[
+ K=\Q((t^{\Q})).
+\]
+Its elements are formal sums
+\[
+ f=\sum_{q\in\Q}a_qt^q,\qquad a_q\in\Q,
+\]
+whose support $\{q:a_q\ne0\}$ is well ordered. Addition is coefficientwise and multiplication
+is convolution. The standard Hahn-series construction makes this a field. In particular,
+monomials $t^q$ are nonzero, satisfy $t^qt^r=t^{q+r}$, and have inverse $t^{-q}$.
+The field structure, including the general inversion construction, is provided and proved by
+Mathlib's \texttt{HahnSeries.instField} in
+\texttt{Mathlib/RingTheory/HahnSeries/Summable.lean}.
+
+Define
+\[
+ w(0)=\infty,\qquad
+ w(f)=\min\operatorname{supp}(f)\quad(f\ne0).
+\]
+The minimum exists by well ordering. In a product of two nonzero series, the coefficient at
+$w(f)+w(g)$ is the product of the two leading coefficients. It is nonzero, and no smaller
+exponent occurs. Therefore $w(fg)=w(f)+w(g)$. Addition cannot create an exponent below both
+leading exponents, so $w(f+g)\geq\min\{w(f),w(g)\}$. Also $w(1)=0$.
+This is the additive valuation \texttt{HahnSeries.addVal $\Q$ $\Q$} in the formalization.
+
+For every $q\in\Q$,
+\begin{equation}\label{eq:monomial}
+ t^q\ne0,\qquad w(t^q)=q.
+\end{equation}
+Thus every rational value is actually attained on a nonzero field element.
+
+\section{Topology and continuity}
+
+The valuation topology on $K$ has the following neighborhood basis at $a\in K$:
+\[
+ B_\gamma(a)=\{f\in K:w(f-a)>\gamma\},\qquad \gamma\in\Q.
+\]
+This is the canonical Hausdorff topological-field structure associated with the valuation.
+The Lean instance is built with \texttt{Valued.mk'}; its topological division-ring and
+Hausdorff instances are also checked in \texttt{Inspect.lean}.
+
+First give $\Q\cup\{\infty\}$ the topology that isolates every rational value and has
+$\{q:q>\gamma\}\cup\{\infty\}$ as a neighborhood basis at $\infty$.
+
+\begin{lemma}
+The valuation $w$ is continuous for this topology on its codomain.
+\end{lemma}
+\begin{proof}
+At zero, the inverse image of the indicated tail is exactly $B_\gamma(0)$.
+For $f\ne0$, put $r=w(f)$. If $g\in B_r(f)$, then $w(g-f)>r$.
+The valuation inequality gives $w(g)\geq r$. If $w(g)>r$, applying the same inequality to
+$f=g-(g-f)$ would give $w(f)>r$, a contradiction. Therefore $w(g)=r$ throughout
+$B_r(f)$. The valuation is locally constant at every nonzero point, and hence continuous there.
+\end{proof}
+
+The ordinary order topology on $\Q\cup\{\infty\}$ is coarser than this topology.
+Indeed, finite points are isolated in the finer topology, and order neighborhoods of infinity
+contain tails. Hence $w$ is continuous also for the ordinary order topology.
+
+Mathlib's multiplicative notation reverses the additive order: in Lean the extended target is
+\[
+ \texttt{ExtendedValue = Multiplicative (WithTop $\Q$)$^{\mathrm{od}}$}.
+\]
+Its multiplicative zero denotes additive infinity, and multiplication denotes addition of
+exponents. The definition \texttt{valuation} is exactly
+\texttt{additiveValuation.toValuation}; it does not alter the underlying values.
+The finer codomain topology is \texttt{WithZeroTopology}. The formal theorem
+\texttt{valuation\_continuous} uses this topology, while
+\texttt{valuation\_continuous\_orderTopology} explicitly uses
+\texttt{Preorder.topology ExtendedValue}. Reversing a linear order interchanges the two kinds
+of open rays, and therefore leaves the ordinary order topology unchanged. These theorems thus
+establish the two continuity statements above in the multiplicative encoding.
+
+\section{The intrinsic value group}
+
+The formalization defines an additive-group homomorphism
+\[
+ \texttt{valueHom}:\operatorname{Additive}(K^\times)\longrightarrow\Q,
+ \qquad u\longmapsto \min\operatorname{supp}(u).
+\]
+The additive wrapper means that multiplication of units is regarded as addition. The identity
+$w(uv)=w(u)+w(v)$ is exactly the homomorphism law. The intrinsic group is defined as
+\[
+ G=\operatorname{range}(\texttt{valueHom})\leq(\Q,+),
+\]
+called \texttt{valueGroup} in Lean.
+
+The theorem \texttt{valueHom\_agrees} identifies this homomorphism with the finite part
+of the valuation on units. The theorem \texttt{mem\_valueGroup\_iff} gives the following
+connection to nonzero field elements:
+\[
+ q\in G\quad\Longleftrightarrow\quad
+ \exists f\in K,\ f\ne0\ \text{and}\ w(f)=q.
+\]
+Equation~\eqref{eq:monomial} proves $G=\Q$, formally
+\texttt{valueGroup\_eq\_top}. The resulting additive isomorphism is
+\texttt{valueGroupEquiv}. Thus the subsequent group obstruction concerns the actual image
+group of the constructed valuation.
+
+\section{No integer power is possible}
+
+For an index set $I$, write $\Z^I$ for the group of functions from $I$ to $\Z$ with pointwise
+addition.
+
+\begin{proposition}\label{prop:obstruction}
+For every index set $I$, there is no additive-group isomorphism $\Q\cong\Z^I$.
+\end{proposition}
+\begin{proof}
+Suppose $e:\Q\to\Z^I$ were such an isomorphism.
+If $I$ is empty, $\Z^I$ is the trivial group, whereas $0\ne1$ in $\Q$, contradicting
+injectivity.
+
+If $I$ is nonempty, fix $i\in I$ and let $\mathbf{1}$ denote the function that is identically
+one. Set $x=e^{-1}(\mathbf{1})$ and $y=x/2$. Since $y+y=x$, additivity gives
+\[
+ e(y)+e(y)=\mathbf{1}.
+\]
+Evaluating at $i$ yields $2e(y)(i)=1$ in $\Z$, which is impossible. This contradiction
+proves the assertion.
+\end{proof}
+
+The formal theorem \texttt{rationals\_not\_integer\_power} proves
+Proposition~\ref{prop:obstruction} for an arbitrary Lean index type. Composing a proposed
+isomorphism $G\cong\Z^I$ with \texttt{valueGroupEquiv} then proves
+\texttt{valueGroup\_not\_integer\_power}. This rules out even abstract additive isomorphisms,
+so it also rules out ordered-group isomorphisms.
+
+\begin{theorem}
+There is a continuous valuation on a Hausdorff topological field whose intrinsic value group
+is not a power of $\Z$. Consequently Conjecture 00000005754 is false as stated.
+\end{theorem}
+\begin{proof}
+Take the field and valuation constructed above. Continuity holds for both explicit codomain
+topologies. Its intrinsic value group is $G\cong\Q$, and
+Proposition~\ref{prop:obstruction} rules out $G\cong\Z^I$ for every $I$.
+In particular, for no natural number $r$ does $G\cong\Z^r$ hold. The final universal clause
+of the conjecture therefore fails for this example, independently of the other clauses.
+\end{proof}
+
+\section{Formalization and verification scope}
+
+The mathematical source is \texttt{Counterexample.lean}, using Lean 4.19.0 and Mathlib
+v4.19.0 pinned to commit
+\begin{center}
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+\end{center}
+The theorem \texttt{continuous\_valuation\_counterexample} combines continuity for both
+topologies, attainment of every rational value by a nonzero series, the obstruction for every
+index type, and the explicit negation
+\[
+ \neg\exists r\in\N,\ G\cong(\operatorname{Fin}(r)\to\Z).
+\]
+The exact definition of $G$ and its relation to $w$ are proved in the preceding named theorems.
+No unproved rank assignment is assumed.
+
+An independent fresh project build with \texttt{lake build}, direct replay of the mathematical
+source with warnings treated as errors, and a compiled-declaration audit have passed.
+The audit in \texttt{lean/Audit.lean} enumerates every declaration owned by the mathematical
+module, including compiler-generated declarations: 24 in total. It checks each declaration's
+transitive axiom dependencies, type, and direct constants. Only the standard foundational
+axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound} occur.
+\texttt{lean/Inspect.lean} displays the exact theorem types, including topology arguments,
+and checks the field, Hausdorff, and topological division-ring instances.
+There are no custom axioms, proof placeholders, or untrusted native decision proofs.
+No auxiliary numerical or symbolic computation is required by the argument.
+
+The supplied \texttt{verify.py} rebuilds the authored project in a new directory, replays its
+sources with warnings treated as errors, compares the complete compiled inventory with the
+frozen reviewed inventory, and checks the nine dependency revisions and source cleanliness
+before and after execution. It records actual commands, exit codes, and output. The companion
+\texttt{test\_verify.py} contains verifier controls, including compiled examples that must be
+rejected for an added axiom, an unsafe definition, or an admitted proof. Reproduction commands
+and the validation records are listed in \texttt{README.md} and \texttt{VERIFICATION.md}.
+These are local checks and an independent local semantic review; maintainer acceptance is a
+separate repository decision.
+
+The supplied original statement was verified against its SHA-256 identity:
+\begin{center}\small
+\texttt{e9168d9270246842f8d39c8e5f8dae0ff58c}\newline
+\texttt{4723f9957975245e4ab785b720f6}.
+\end{center}
+The access-provenance and verification logs record the isolated inputs, consulted standard
+library sources, dependency identities, actual build commands, and their results.
+
+\end{document}
