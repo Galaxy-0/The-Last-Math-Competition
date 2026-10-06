@@ -1,0 +1,163 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000000172\\[2pt]
+\large Under the stated definition, $\sigma = \lim \sigma_n^{1/n} = 1$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture and its reading}
+
+Conjecture 00000000172 reads: \emph{Definition: Somos's constant $\sigma = \lim \sigma_n^{1/n}$, where
+$\sigma_n = \sigma_{n-1} + \sigma_{\lfloor n/2\rfloor}$, $\sigma_1 = 1$. Conjecture: The density of 1's in the
+binary expansion of $\sigma$ diverges, with counting function growing as $\Theta(\log\log n)$; this
+yields an explicit proof path for the irrationality of $\sigma$.} The Chinese text gives the same
+definition ($\sigma=\lim \sigma_n^{1/n}$, $\sigma_n=\sigma_{n-1}+\sigma_{\lfloor n/2\rfloor}$, $\sigma_1=1$) and the
+same three claims.
+
+\paragraph{Which $\sigma$.} We use the definition written in the conjecture (identical in both
+languages). The recurrence is OEIS A033485, ``$a(n) = a(n-1) + a(\lfloor n/2\rfloor)$, $a(1) = 1$''
+(retrieved), with terms $1,2,3,5,7,10,13,18,\dots$; it is defined for $n\ge1$, the recurrence applying
+for $n \ge 2$. We note openly that the name ``Somos' constant'' usually denotes a different number,
+Somos' quadratic recurrence constant $\sqrt{1\sqrt{2\sqrt{3\cdots}}} \approx 1.661687949633594$
+(Wikipedia, retrieved); nothing below concerns that number.
+
+\paragraph{The claims refuted.} Writing $C(n)$ for the number of 1's among the first $n$ binary digits of
+$\sigma$:
+(i) $C(n) = \Theta(\log\log n)$;
+(ii) the density $C(n)/n$ diverges (we refute both meanings: ``has no limit'' and ``tends to $+\infty$'');
+(iii) $\sigma$ is irrational (the claim that the above ``yields a proof'' of irrationality).
+We show $\sigma = 1$; then (iii) fails, and (i), (ii) fail for every binary expansion of $1$.
+
+\paragraph{Conventions.} $\log$ is the natural logarithm; $\sigma_n^{1/n}$ is the real power of the
+positive number $\sigma_n$. A binary expansion of $x$ is a pair $(m,d)$ with $m\in\mathbb Z$, digits
+$d_k \in\{0,1\}$ ($k\ge0$) and $x = m + \sum_{k\ge0} d_k 2^{-(k+1)}$. We set
+$C_d(n) = \#\{k<n : d_k = 1\}$ (fractional digits). To cover any convention for counting the digits of
+the integer part, every statement is proved for $c + C_d(n)$ with an arbitrary real offset $c$.
+$\Theta$ is Mathlib's \texttt{IsTheta} (both $f = O(g)$ and $g = O(f)$ along \texttt{atTop}).
+
+\section{Proof that $\sigma = 1$}
+
+Let $a:\mathbb N\to\mathbb R$ be \emph{any} sequence with $a_1 = 1$ and $a_n = a_{n-1} + a_{\lfloor n/2\rfloor}$
+for $n\ge 2$ (\texttt{IsSomosSeq}; $a_0$ is unconstrained and never used). Such a sequence exists
+(\texttt{A}, \texttt{isSomosSeq\_A}).
+
+\begin{lemma}\label{l:basic}
+(\texttt{one\_le}) $a_n \ge 1$ for $n\ge1$. (\texttt{mono}) $a_m \le a_n$ for $1\le m\le n$.
+(\texttt{le\_mul\_half}) $a_n \le n\,a_{\lfloor n/2\rfloor}$ for $n\ge 2$.
+(\texttt{le\_pow}) $a_n \le n^{\lfloor \log_2 n\rfloor + 1}$ for $n \ge 1$.
+\end{lemma}
+\begin{proof}
+The first two are inductions using $a_{\lfloor n/2\rfloor} \ge 1$. For the third, $a_2 = 2 = 2a_1$, and if
+$a_n \le n a_{\lfloor n/2\rfloor}$ then
+$a_{n+1} = a_n + a_{\lfloor (n+1)/2\rfloor} \le n a_{\lfloor (n+1)/2\rfloor} + a_{\lfloor (n+1)/2\rfloor}$ by
+monotonicity. For the fourth, by strong induction, using
+$\lfloor\log_2\lfloor n/2\rfloor\rfloor + 1 = \lfloor \log_2 n\rfloor$ for $n\ge 2$ (Mathlib
+\texttt{Nat.log\_div\_base}): $a_n \le n\cdot \lfloor n/2\rfloor^{\lfloor\log_2 n\rfloor}\le n^{\lfloor\log_2 n\rfloor+1}$.
+\end{proof}
+
+\begin{theorem}[\texttt{tendsto\_root}, \texttt{sigma\_eq\_one}]
+$a_n^{1/n} \to 1$. Hence the conjecture's $\sigma$ exists and equals $1$.
+\end{theorem}
+\begin{proof}
+Since $2^{\lfloor\log_2 n\rfloor}\le n$, $\lfloor\log_2 n\rfloor \le \log n/\log 2$, so by Lemma~\ref{l:basic}
+(\texttt{log\_le}) $0 \le \log a_n \le (\log n/\log 2 + 1)\log n$. Thus
+$0 \le \frac{\log a_n}{n} \le \frac{(\log n)^2}{(\log 2)\, n} + \frac{\log n}{n} \to 0$ (Mathlib
+\texttt{Real.tendsto\_pow\_log\_div\_mul\_add\_atTop}), and $a_n^{1/n} = \exp(\log a_n / n) \to e^0 = 1$.
+\end{proof}
+
+\section{Failure of the claims}
+
+\begin{lemma}[\texttt{expansion\_of\_one}]
+If $(m,d)$ is a binary expansion of $1$, then either $d_k = 0$ for all $k$, or $d_k = 1$ for all $k$.
+\end{lemma}
+\begin{proof}
+Let $S = \sum_k d_k 2^{-(k+1)}$; the terms are non-negative and bounded by $2^{-(k+1)}$, so
+$0 \le S\le 1$ and $m = 1 - S \in [0,1]\cap\mathbb Z$. If $m = 1$ then $S = 0$, and a digit $d_k = 1$
+would give $S \ge 2^{-(k+1)} > 0$. If $m = 0$ then $S = 1$, so
+$\sum_k (2^{-(k+1)} - d_k 2^{-(k+1)}) = 1 - 1 = 0$ with non-negative terms, and a digit $d_k = 0$ would
+make this sum $\ge 2^{-(k+1)} > 0$.
+\end{proof}
+
+So $C_d(n) = 0$ for all $n$, or $C_d(n) = n$ for all $n$.
+
+\begin{lemma}[\texttt{refute}]
+Let $c\in\mathbb R$ and $F(n) = c$ for all $n$, or $F(n) = c+n$ for all $n$. Then $F$ is not
+$\Theta(\log\log n)$, and $F(n)/n$ converges.
+\end{lemma}
+\begin{proof}
+If $F \equiv c$ and $\log\log n = O(c)$, then $\log\log n$ would be eventually bounded, but
+$\log\log n\to\infty$. If $F(n) = c+n$ and $c + n = O(\log\log n)$, then, as
+$\log\log n = o(\log n)$ and $\log n = o(n)$ (Mathlib \texttt{Real.isLittleO\_log\_id\_atTop}),
+$c + n = o(n)$, so eventually $|c+n|\le n/2$, false for $n > 2|c|$. Finally $c/n\to0$ and
+$(c+n)/n = 1 + c/n\to 1$.
+\end{proof}
+
+\begin{theorem}[\texttt{C172.conjecture\_172\_false}]
+Let $a$ satisfy the definition and let $a_n^{1/n}\to\sigma$. Then $\sigma = 1$; $\sigma$ is not irrational;
+and for every binary expansion $(m,d)$ of $\sigma$ and every $c \in \mathbb R$: $c + C_d(n)$ is not
+$\Theta(\log\log n)$; $(c + C_d(n))/n$ converges to a finite limit; and $(c + C_d(n))/n\not\to+\infty$.
+\end{theorem}
+\begin{proof}
+Uniqueness of limits and the theorem above give $\sigma=1$; $1$ is rational (Mathlib
+\texttt{not\_irrational\_one}); the two lemmas give the rest.
+\end{proof}
+
+\begin{remark}[Scope]
+All three claims (i)--(iii) are refuted for every binary expansion of $\sigma$. A reading of ``the density
+diverges'' as ``the number of 1's tends to infinity'' (rather than the density) is not refuted on its own
+for the expansion $0.111\ldots$; it is refuted together with clause (i), which fails for every expansion.
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture172/Basic.lean} (256 lines, only \texttt{import Mathlib}), namespace
+\texttt{C172}. Main theorem (ASCII rendering of the Unicode source):
+\begin{verbatim}
+theorem conjecture_172_false (a : Nat -> Real) (ha : IsSomosSeq a)
+    (s : Real)
+    (hs : Tendsto (fun n : Nat => a n ^ ((1 : Real) / n)) atTop (nhds s)) :
+    s = 1 /\ not (Irrational s) /\
+    forall (m : Int) (d : Nat -> Nat), IsBinaryExpansion s m d ->
+    forall c : Real,
+      not ((fun n : Nat => c + (onesCount d n : Real)) =Theta[atTop]
+            fun n : Nat => log (log (n : Real))) /\
+      (exists L, Tendsto (fun n : Nat => (c + (onesCount d n : Real)) / n)
+                   atTop (nhds L)) /\
+      not (Tendsto (fun n : Nat => (c + (onesCount d n : Real)) / n)
+                   atTop atTop)
+\end{verbatim}
+Other theorems: \texttt{isSomosSeq\_A}, \texttt{one\_le}, \texttt{mono}, \texttt{le\_mul\_half},
+\texttt{le\_pow}, \texttt{log\_le}, \texttt{tendsto\_root}, \texttt{expansion\_of\_one},
+\texttt{tendsto\_loglog}, \texttt{loglog\_isLittleO}, \texttt{refute}, \texttt{sigma\_eq\_one}.
+
+\paragraph{Axiom audit.} \texttt{lake build} succeeds, and \texttt{\#print axioms} for
+\texttt{C172.conjecture\_172\_false}, \texttt{C172.sigma\_eq\_one} and \texttt{C172.isSomosSeq\_A}
+reports only \texttt{[propext, Classical.choice, Quot.sound]}. No \texttt{sorry}, no
+\texttt{native\_decide}, no added axiom.
+
+\section*{Sources}
+\begin{itemize}
+\item OEIS A033485, \url{https://oeis.org/A033485}: ``A033485: a(n) = a(n-1) + a(floor(n/2)), a(1) = 1.''
+\item Wikipedia, \emph{Somos' quadratic recurrence constant},
+\url{https://en.wikipedia.org/wiki/Somos\%27_quadratic_recurrence_constant}: ``which gives a numerical value
+of approximately'' $\sigma = 1.661687949633594121295\dots$
+\end{itemize}
+
+\end{document}
