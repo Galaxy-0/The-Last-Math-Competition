@@ -1,0 +1,133 @@
+{
+  "candidate_id": "00000000545",
+  "phase": "independent_portable_verification_driver_and_saved_execution_audit",
+  "verdict": "PASS",
+  "material_false_pass_found": false,
+  "blocking_findings": [],
+  "summary": "The actual packaged execution supports the driver's PASS: complete build, five strict source replays, 93 exact compiled declaration/axiom records, all nine pinned revisions and clean tracked trees before and after, and frozen source/configuration binding. The multiline parser correction is effective and rejects incomplete axiom inventories.",
+  "bindings": {
+    "package": "/Users/daniel/.codex/worktrees/graph-markov/The-Last-Math-Competition/solutions/00000000545/C0ldSmi1e_submission_20261005234748",
+    "driver_sha256": "0c4087e3f448cd4ae567a03d9bea3f32736419c1e5fc259233a5a56cb179881b",
+    "saved_replay_driver_matches_package": true,
+    "package_location_sha256": "a034d2e2ec7fa8a86c4412d164e83456545172d4b0449424c100e2a3d4906bdb",
+    "package_result_sha256": "ecb71c1c39a93f5736dc21ddb3da08dcc3847d8ee20ec6ecadc665ac551ee15c",
+    "package_strict_audit_stdout_sha256": "3a404752330f48f71398ca9eac0b05a761ee61cda7259cf0947dfef54e457da9",
+    "root_compiled_declarations_sha256": "bf59d73f90e0b26622a006fc4ff8682b3a92312324230ab26319cb6b729de8f4",
+    "root_inventory_parse_validation_sha256": "ddbc41e7e7556858114feefc1eff8e87559c7ef963f702de67977c4d05d574ea",
+    "original_source_sha256": "e960ffafdb92929a3b0a8ef81e196511847a3ab8bafe92b2b965a6845e35d37e"
+  },
+  "actual_execution_checks": {
+    "successful_command_records": 43,
+    "command_json_stdout_stderr_records_checked": 43,
+    "all_exit_codes_zero": true,
+    "all_recorded_cwds_are_actual_package_lean_directory": true,
+    "lean_version": "4.19.0",
+    "full_build": {
+      "status": "PASS",
+      "command_ends_in": "lake build",
+      "output_observation": "Output explicitly reports Built IdealBridge, Connectivity, Conjecture545, Check, Audit and Build completed successfully."
+    },
+    "strict_replays": {
+      "status": "PASS",
+      "option": "-DwarningAsError=true",
+      "modules": ["Connectivity", "IdealBridge", "Conjecture545", "Check", "Audit"],
+      "all_stderr_empty": true,
+      "non_audit_stdout_empty": true
+    },
+    "pins": {
+      "packages": 9,
+      "revision_and_tracked_tree_checks_per_stage": 18,
+      "stages": ["before", "after"],
+      "all_recorded_revisions_equal_pins": true,
+      "all_recorded_tracked_tree_status_output_empty": true
+    },
+    "binding": {
+      "frozen_input_files": 9,
+      "scope": "Five Lean modules and lean-toolchain, lakefile.toml, lake-manifest.json, pinned-dependencies.json",
+      "all_current_package_hashes_equal_result_and_author_freeze": true,
+      "all_command_input_hash_maps_equal_final_result_map": true,
+      "original_md_hash_matches_frozen_original_source": true,
+      "before_after_source_hash_guard_present": true
+    }
+  },
+  "declaration_inventory_checks": {
+    "independent_parser": "A separate line-accumulating state machine, rather than the driver's regular expression, parsed the complete raw package Audit output and collected each bracketed axiom list through its closing bracket.",
+    "raw_declarations": 93,
+    "unique_declaration_names": 93,
+    "module_counts": {"Conjecture545": 28, "Connectivity": 47, "IdealBridge": 18},
+    "complete_names_modules_axiom_sets_equal_across": [
+      "Raw package strict-Audit/stdout.txt parsed independently",
+      "Package result.json compiled_declarations",
+      "Root compiled-declarations.json",
+      "Author declaration-inventory.txt"
+    ],
+    "axiom_union": ["Classical.choice", "Quot.sound", "propext"],
+    "package_run_wrapped_lists": 0,
+    "wrapping_coverage": "The saved package run itself emitted one-line DECL lists. Wrapping support was additionally checked by executing the exact AST-extracted inventory-validation segment of the packaged driver against rewrapped copies of that raw output.",
+    "root_correction": "The corrected root compiled map matches every complete axiom set independently parsed from the package run. The previous line-based omission is therefore resolved in the corrected inventory, not hidden by comparing only names or the union of all axioms.",
+    "root_raw_output_limit": "This review did not reopen the original root raw audit stream; root reports reading that stream fully. The corrected root JSON was compared declaration by declaration to the separate complete package execution."
+  },
+  "exact_driver_validation_segment_tests": {
+    "method": "Parsed verify.py using Python ast and executed only its original entries/inventory-validation statements. No build commands were executed and no package file was modified.",
+    "unchanged_complete_output": "accepted",
+    "complete_lists_wrapped_across_three_lines": "accepted",
+    "unexpected_axiom_on_continuation_line": "rejected",
+    "shortened_list_containing_only_allowed_axioms": "rejected",
+    "missing_declaration": "rejected",
+    "duplicate_replacing_a_declaration": "rejected",
+    "wrong_module": "rejected",
+    "wrong_declared_total": "rejected",
+    "truncated_final_axiom_bracket": "rejected",
+    "all_expected_outcomes_observed": true
+  },
+  "control_flow_assessment": [
+    "A nonzero subprocess exit is recorded and raises before the final PASS result is written.",
+    "A caller-supplied output directory must be new, preventing an old result.json from being mistaken for a successful current run after a failure.",
+    "Proof/configuration hashes are checked against the author freeze before execution and checked unchanged after execution.",
+    "Unexpected or missing top-level authored Lean modules are rejected.",
+    "Both pinned manifests must give the same package names and revisions; actual checkout revisions and tracked-tree status are checked at both ends.",
+    "The complete raw axiom lists must contain only allowed axioms and must match the author list for every compiled name/module; matching the aggregate axiom union alone is insufficient and is not the driver's criterion.",
+    "Exact 93-declaration and name-set comparisons prevent empty, truncated, or duplicated diagnostic output from producing a PASS.",
+    "The result explicitly declines to claim maintainer acceptance."
+  ],
+  "portability_and_scope_notes": [
+    {
+      "severity": "informational",
+      "item": "Prerequisites",
+      "finding": "The driver is location-independent: it resolves package paths relative to its own file, uses Python's standard library, accepts a Lake executable, and records outputs separately. It requires Python 3, Git, the Lean/Lake 4.19.0 toolchain, and the nine dependency Git checkouts to exist by the first pin check. It is a verifier, not a dependency installer; setup instructions should provide those prerequisites. Missing checkouts fail rather than yielding a false PASS."
+    },
+    {
+      "severity": "informational",
+      "item": "Build cleanliness",
+      "finding": "The portable driver runs ordinary lake build and does not delete existing build artifacts. Thus it should not alone be described as an unconditional clean rebuild. The actual saved package output does show all five authored modules built, and the root separately performed the stronger clean replay."
+    },
+    {
+      "severity": "informational",
+      "item": "Dependency cleanliness scope",
+      "finding": "The checks certify pinned HEAD revisions and clean tracked files. They deliberately ignore untracked files and do not certify the origin of cached dependency build artifacts. The summary accurately calls these tracked-tree checks."
+    },
+    {
+      "severity": "low_nonblocking",
+      "item": "Chained comparison clarity",
+      "finding": "The expression len(entries)!=len(inventory)!=93 is a Python chained comparison and is less clear than explicit disjunctions. It does not create a false PASS here because the following exact-93, name-set, and per-entry checks close the possible gaps. Parser mutation tests confirm rejection of the relevant malformed inventories. An explicit count comparison would improve readability but is not a correctness blocker."
+    }
+  ],
+  "access_provenance": {
+    "read": [
+      "/private/tmp/tlmc545-package-location.json",
+      "The package verify.py and its saved replay copy",
+      "The package author freeze, author declaration inventory, nine frozen Lean/configuration inputs and ORIGINAL.md for hash comparison",
+      "/private/tmp/tlmc545-package-replay/result.json",
+      "All 43 saved command.json records and associated required outputs, including complete full-build and strict-Audit stdout",
+      "/private/tmp/tlmc545-root-validation/compiled-declarations.json",
+      "/private/tmp/tlmc545-root-validation/inventory-parse-validation.json"
+    ],
+    "new_build_performed": false,
+    "proof_changes": false,
+    "repository_edits": false,
+    "other_problem_or_prior_submission_access": false,
+    "eligibility_evidence_access": false,
+    "external_lookups": false
+  },
+  "remaining_scope": "LaTeX/PDF semantic and layout review is still pending. This tooling review does not authorize publication or claim maintainer acceptance."
+}

@@ -1,0 +1,159 @@
+{
+  "candidate_id": "00000000545",
+  "phase": "independent_final_latex_and_pdf_review",
+  "verdict": "PASS",
+  "mathematical_correspondence": "PASS",
+  "visual_layout": "PASS",
+  "verification_claims": "PASS",
+  "blocking_findings": [],
+  "requested_changes": [],
+  "summary": "The complete five-page report gives a faithful, complete prose proof of the frozen Lean result and accurately describes the independently reviewed verification evidence. All five rendered pages were inspected visually; no clipping, overlap, missing glyph, unreadable expression, incomplete proof, or substantive mathematical discrepancy was found.",
+  "artifact_identity": {
+    "package": "/Users/daniel/.codex/worktrees/graph-markov/The-Last-Math-Competition/solutions/00000000545/C0ldSmi1e_submission_20261005234748",
+    "latex_source": "report.tex",
+    "latex_sha256": "2f5828f2ca5bd72b8506ddd415648df58a6aef25cdf7e26dc1a1f66c0141c4bb",
+    "pdf": "report.pdf",
+    "pdf_sha256": "9adc84bdf7d1dbfc39b650800aff51fbdb73520136fc7f258de807206b228ce9",
+    "provided_hashes_independently_verified": true,
+    "pdf_pages": 5,
+    "page_dimensions_points": [612, 792],
+    "pdf_encrypted": false,
+    "original_source_sha256": "e960ffafdb92929a3b0a8ef81e196511847a3ab8bafe92b2b965a6845e35d37e",
+    "proof_modules_rechecked_unchanged_against_author_freeze": [
+      "Connectivity.lean",
+      "IdealBridge.lean",
+      "Conjecture545.lean",
+      "Check.lean",
+      "Audit.lean"
+    ]
+  },
+  "page_visual_review": [
+    {
+      "page": 1,
+      "image": "/private/tmp/tlmc545-document/render/report-1.png",
+      "image_sha256": "e491b517d176d1b40d4dcfdb104d2123f018ce2e99c6952d08f2d43bfa7de190",
+      "viewed_independently": true,
+      "status": "PASS",
+      "content": "Title, author/date, abstract, original conjecture, standard graph-ring definitions, arbitrary edge multiplicities and labeled vertex degrees",
+      "visual_findings": "Readable hierarchy and mathematical notation; displayed parametrization and endpoint-count formulas fit within margins; no clipped text or missing glyphs."
+    },
+    {
+      "page": 2,
+      "image": "/private/tmp/tlmc545-document/render/report-2.png",
+      "image_sha256": "53676199caa3ce7c9cfa1078c89d868abd86e3adaa840f9a206a8f6f21e48105",
+      "viewed_independently": true,
+      "status": "PASS",
+      "content": "Insertion lemma and its complete proof, including shared-neighbor counting, avoiding-edge extraction, two switches, and degenerate cases",
+      "visual_findings": "All inequalities and switch formulas are legible and complete; proof ends with its marker on the same page; footer and text do not overlap."
+    },
+    {
+      "page": 3,
+      "image": "/private/tmp/tlmc545-document/render/report-3.png",
+      "image_sha256": "6935cc3f8ee7643c5d8176afc0aa9d7a5660a12af9da5ecbc1d0dfc897bf67d6",
+      "viewed_independently": true,
+      "status": "PASS",
+      "content": "All-fiber induction, finite nonzero quadratic set, and arbitrary-degree binomial ideal membership",
+      "visual_findings": "The basis definition, monomial-context product, and telescoping sum render clearly; theorem/proof boundaries and page number are intact."
+    },
+    {
+      "page": 4,
+      "image": "/private/tmp/tlmc545-document/render/report-4.png",
+      "image_sha256": "19fcd5b21bd816fa698cf46ccb704723c3300dbcce5f63dd36977d449a16cf3b",
+      "viewed_independently": true,
+      "status": "PASS",
+      "content": "General monomial-map kernel lemma, grouped coefficients in the quotient, exact ideal equality, and finite quadratic-basis theorem",
+      "visual_findings": "Nested sums and multiline quotient calculation are readable; final theorem/proof and minimality explanation fit without overlap or clipping."
+    },
+    {
+      "page": 5,
+      "image": "/private/tmp/tlmc545-document/render/report-5.png",
+      "image_sha256": "54a876cbf7b6cf172ee864453567444ee9c4dffaea85a6ab67ca1cd1aa6ebd96",
+      "viewed_independently": true,
+      "status": "PASS",
+      "content": "K6 counterexample, positive-integer domain, Lean correspondence, pinned version, and verification claims",
+      "visual_findings": "Long declaration names wrap readably rather than running beyond the margins. Commit hash, final theorem names, subscripted eval2Hom identifier, verification paragraph, and footer are complete."
+    }
+  ],
+  "complete_source_mathematical_review": [
+    {
+      "claim": "Source interpretation and exact target",
+      "status": "PASS",
+      "reason": "The source is quoted faithfully modulo typesetting, bilingual agreement is correctly stated, and the report explicitly chooses the established edge-ring interpretation already approved in source preassessment. The counterexample refutes the necessity direction of the exact cutoff and satisfies n>0."
+    },
+    {
+      "claim": "Standard objects and unrestricted multiplicities",
+      "status": "PASS",
+      "reason": "The edge set includes every unordered pair of distinct vertices. The map is coefficient-preserving and sends each edge variable to the product of its endpoints. The kernel is the stated toric ideal. Multisets are arbitrary natural exponent vectors and degree equality is at each labeled vertex."
+    },
+    {
+      "claim": "Insertion lemma",
+      "status": "PASS",
+      "reason": "Occurrence removals correctly account for multiplicities. In the common-neighbor case the equations 2+s_c=q_c and |Q|=|S|+1 imply s_c<|S|; this forces an avoiding edge in the residual multiset. Orientation x different from a suffices for all newly created edges. Both replacements preserve endpoint counts, and reflexive cases are explicitly harmless. This matches insert_edge."
+    },
+    {
+      "claim": "Every degree fiber",
+      "status": "PASS",
+      "reason": "Induction on target edge count with arbitrary source inserts one edge, cancels its endpoint multiset, applies the smaller-target induction, and lifts by a common edge. The proof covers all degrees and all multiplicities, matching connected_of_degree_eq."
+    },
+    {
+      "claim": "Finite nonzero quadrics and binomial membership",
+      "status": "PASS",
+      "reason": "The common set of all distinct equal-degree two-edge differences is finite for finite E. Distinct monomials with coefficient one yield nonzero homogeneous quadrics over every nontrivial commutative ring. Common contexts multiply generators and finite paths telescope, exactly matching the Lean ideal-membership induction."
+    },
+    {
+      "claim": "Full polynomial kernel",
+      "status": "PASS",
+      "reason": "The quotient argument groups arbitrary finite polynomial coefficients by image exponent, uses equal-fiber binomial membership to identify quotient classes, and obtains zero quotient class from coefficientwise vanishing. This remains valid with zero divisors and matches the generic IdealBridge proof. The reverse inclusion is also included, giving actual ideal equality."
+    },
+    {
+      "claim": "Final theorem and theorem correspondence",
+      "status": "PASS",
+      "reason": "The report establishes the stronger arbitrary-finite-complete-graph result over nontrivial commutative rings, specializes to all fields and K6, and identifies the actual positive-domain Lean negation. It uses the corrected CompleteGraph.connected_of_degree_eq name. The displayed eval2Hom identity uses a typeset subscript 2 corresponding to the Lean Unicode subscript."
+    },
+    {
+      "claim": "Meaning of Markov basis",
+      "status": "PASS",
+      "reason": "The report gives both finite binomial generation and all-fiber connectivity. Redundancy and both signs are permitted under the standard generating-set definition. If inclusion-minimal terminology is preferred, taking a minimal subset of this finite generating set preserves degree two; no new source assumption is needed."
+    }
+  ],
+  "verification_claims_review": {
+    "supporting_independent_record": "/private/tmp/tlmc545-review/verification-tooling-review.json",
+    "full_build_and_all_five_strict_replays": "Confirmed by complete successful saved command records and output",
+    "compiled_declarations": "93 unique compiled names, with complete module and axiom-set equality across raw output, package result, corrected root inventory, and author inventory",
+    "axiom_scope": "Exactly the union propext, Quot.sound, Classical.choice; no additional axiom or placeholder found",
+    "all_nine_pinned_dependency_revisions_and_tracked_trees": "Confirmed before and after the package execution",
+    "auxiliary_numeric_computation": "The report correctly states that none is used",
+    "overstatement_found": false
+  },
+  "pdf_content_checks": {
+    "parser": "Bundled pypdf",
+    "page_count_confirmed": 5,
+    "all_pages_have_extractable_text": true,
+    "page_text_character_counts": [2171, 2266, 1974, 2306, 2802],
+    "replacement_character_detected": false,
+    "expected_version_commit_final_theorem_and_verification_counts_present": true,
+    "visual_source_agreement": "All five inspected rendered pages present the source's complete five sections, proofs, definitions, and verification claims in the expected order."
+  },
+  "native_compilation_record": {
+    "path": "/private/tmp/tlmc545-document/native-compile-final.json",
+    "sha256": "c22592dcd33ae12650b8be666c15f5375ca365f0338959d7f38608f3e0c96929",
+    "recorded_kind": "success",
+    "recorded_isError": false,
+    "recorded_source_path_matches_package": true,
+    "independent_recompile_in_this_review": false,
+    "export_run_reported_by_parent": "20261005T235413.083538Z",
+    "export_warning_log_independently_read": false
+  },
+  "access_provenance": {
+    "skill_read": "/Users/daniel/.codex/plugins/cache/openai-primary-runtime/pdf/26.915.20218/skills/pdf/SKILL.md",
+    "full_latex_read": true,
+    "pdf_read_via_all_rendered_pages_and_pypdf": true,
+    "all_five_page_images_viewed_with_image_tool": true,
+    "source_and_pdf_not_modified": true,
+    "proof_not_modified": true,
+    "repository_not_modified": true,
+    "prior_submission_or_other_problem_access": false,
+    "new_external_mathematical_lookup": false
+  },
+  "scope_limit": "This is a definitive passing document semantic/layout review for the stated hashes. It does not assert maintainer acceptance or independently decide publication eligibility."
+}
