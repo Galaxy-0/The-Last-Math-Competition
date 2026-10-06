@@ -1,0 +1,174 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A proof of Conjecture 00000000037\\[2pt]
+\large Sidon sets of primes of size $(N/\log N)^{1/2-o(1)}$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture and the reading}
+
+Conjecture 00000000037 reads (the Chinese text says the same):
+\begin{quote}
+\emph{Conjecture: Among the primes there exists a Sidon set of size $(N/\log N)^{1/2-o(1)}$.}
+\end{quote}
+
+\begin{definition}
+A finite set $A\subseteq\mathbb{N}$ is a \emph{Sidon set} if all pairwise sums $a+b$ ($a,b\in A$, $a\le b$)
+are different; equivalently, $a+b=c+d$ with $a,b,c,d\in A$ forces $\{a,b\}=\{c,d\}$ as multisets
+(so $a=b$ is allowed). This is the definition on the Wikipedia page \emph{Sidon sequence} (quoted in the
+attempt record). In Lean: \texttt{C37.IsSidon}.
+\end{definition}
+
+\paragraph{Reading.} The text names $N$ without defining it; the factor $N/\log N\sim\pi(N)$ indicates that
+$N$ bounds the primes. We read the conjecture as follows: \emph{there are Sidon sets $A_N$, every element
+of which is a prime $\le N$, and a function $\delta(N)\to 0$, with $|A_N| = (N/\log N)^{1/2-\delta(N)}$ for
+all large $N$.} Equivalently, for every real $\varepsilon>0$ and every sufficiently large $N$,
+\[
+  (N/\log N)^{1/2-\varepsilon}\ \le\ |A_N|\ \le\ (N/\log N)^{1/2+\varepsilon}. \tag{$\ast$}
+\]
+We prove both forms. The upper half of $(\ast)$ holds for \emph{every} Sidon set of naturals $\le N$, so the
+exponent $1/2$ cannot be improved. The one-sided reading (``for every $\varepsilon>0$ and all large $N$ there
+is a Sidon set of primes $\le N$ of size $\ge (N/\log N)^{1/2-\varepsilon}$'') follows from $(\ast)$. So does
+the reading ``among the first $N$ primes'' (lower bound), since a prime $\le N$ is one of the first $N$
+primes.
+
+\paragraph{Conventions.} $\log$ is the natural logarithm and $x^y$ the real power; $\pi(n)$ is the number of
+primes $\le n$; $\lfloor N/2\rfloor$ is written $N/2$. Statements are ``for all large $N$''. For small $N$
+the sets $A_N$ may be empty; this does not matter for an eventual statement.
+
+\paragraph{Not covered.} We do not treat a reading in which one \emph{infinite} Sidon set $A$ of primes is
+required, with counting function $|A\cap[1,N]|\ge (N/\log N)^{1/2-o(1)}$ for all $N$. The text says ``of
+size'', which refers to a finite set depending on $N$. The infinite reading would give an infinite Sidon set
+of integers with $A(x)>x^{1/2-o(1)}$. Wikipedia (\emph{Sidon sequence}) records that statement as a
+conjecture of Erd\H{o}s.
+
+\section{Proof}
+
+\begin{lemma}[Lean: \texttt{et\_sidon}, \texttt{T\_sidon}, \texttt{T\_card}]\label{lem:et}
+Let $p$ be an odd prime and $e(k)=2pk+(k^2 \bmod p)$ for $0\le k<p$. If $e(k_1)+e(k_2)=e(k_3)+e(k_4)$, then
+$\{k_1,k_2\}=\{k_3,k_4\}$. Hence for every shift $b$ the set
+$T_{p,b}=\{e(k)+b : k<p,\ e(k)+b \text{ prime}\}$ is a Sidon set of primes, and $k\mapsto e(k)+b$ is
+injective. Moreover $e(k)<2p^2$.
+\end{lemma}
+\begin{proof}
+Write $r_i=k_i^2\bmod p\in[0,p)$. Then $e(k_1)+e(k_2)=(r_1+r_2)+2p(k_1+k_2)$ with $0\le r_1+r_2<2p$, and the same
+for $k_3,k_4$. Dividing by $2p$ gives $k_1+k_2=k_3+k_4$, hence $r_1+r_2=r_3+r_4$. In $\mathbb{Z}/p$ this gives
+$k_1+k_2=k_3+k_4$ and $k_1^2+k_2^2=k_3^2+k_4^2$. Substituting $k_2=k_3+k_4-k_1$ gives $2(k_1-k_3)(k_1-k_4)=0$.
+Since $p$ is odd, $k_1\equiv k_3$ or $k_1\equiv k_4 \pmod p$. All $k_i<p$, so $k_1=k_3$ or $k_1=k_4$, and the
+other equality follows. A sum identity for $T_{p,b}$ reduces to one for $e$ after cancelling $2b$. Finally
+$e(k)\le 2p(p-1)+p-1<2p^2$.
+\end{proof}
+
+\begin{lemma}[Lean: \texttt{exists\_shift}]\label{lem:avg}
+Let $p\ge1$ and $L\ge0$. Some $b\le L$ satisfies
+$p\,(\pi(L)-2p^2)\le (L+1)\cdot\#\{k<p : e(k)+b\text{ prime}\}$ (truncated subtraction).
+\end{lemma}
+\begin{proof}
+Put $K=2p^2$. For each $k<p$ we have $e(k)<K$, and $q\mapsto q-e(k)$ maps the primes $q\in[K,L]$
+injectively to shifts $b\le L$ with $e(k)+b$ prime. Their number is at least $\pi(L)-K$. Summing over $k$ and
+exchanging the sums gives $\sum_{b\le L}\#\{k<p : e(k)+b \text{ prime}\}\ge p(\pi(L)-K)$. There are $L+1$
+shifts, so one of them gets at least the average.
+\end{proof}
+
+\begin{lemma}[Lean: \texttt{construct}]\label{lem:construct}
+If $x:=\pi(N/2)\ge 64$, there is a Sidon set $A$ of primes $\le N$ with $x^3<64N^2|A|^2$.
+\end{lemma}
+\begin{proof}
+Let $L=N/2$ and $m=\lfloor\sqrt{\lfloor x/16\rfloor}\rfloor\ge 2$. Bertrand's postulate (Mathlib
+\texttt{Nat.exists\_prime\_lt\_and\_le\_two\_mul}) gives a prime $p$ with $m<p\le 2m$. So $p\ge3$ is odd,
+$4p^2\le 16m^2\le x$, and $16p^2\ge16(m+1)^2>x$. Take $b$ from Lemma~\ref{lem:avg} and $A=T_{p,b}$. Its
+elements are primes $<2p^2+L\le (L+1)/2+L\le N+1$ (using $x\le L+1$). With $c=|A|$, Lemma~\ref{lem:avg} and
+$x-2p^2\ge x/2$ give $p\,x\le 2(L+1)c\le 2Nc$. Hence $x^3<16p^2x^2=16(px)^2\le 64N^2c^2$.
+\end{proof}
+
+\begin{lemma}[Lean: \texttt{pi\_lower}]\label{lem:cheb}
+For $0<\eta\le1$ and all large $N$: $4N^{1-\eta}\le\pi(N/2)$.
+\end{lemma}
+\begin{proof}
+Mathlib's \texttt{Chebyshev.pi\_ge} states $\pi(n)\ge (n\log2-\log(n+1))/\log n$. Since $\log x=o(x^{\eta})$
+and $\log x=o(x)$ (Mathlib \texttt{isLittleO\_log\_rpow\_atTop}, \texttt{isLittleO\_log\_id\_atTop}), for large real
+$x$ we have $12x^{1-\eta}\log x+\log(x+1)\le x\log2$. With $n=N/2$ this gives $\pi(n)\ge12n^{1-\eta}$. Also
+$N\le 3n$, so $N^{1-\eta}\le 3^{1-\eta}n^{1-\eta}\le 3n^{1-\eta}$.
+\end{proof}
+
+\begin{lemma}[Lean: \texttt{sidon\_card\_sq}, \texttt{sidon\_upper}]\label{lem:upper}
+If $A\subseteq\{0,\dots,N\}$ is Sidon, then $|A|^2-|A|\le 2N$. Hence for every $\varepsilon>0$ and all large
+$N$, every Sidon set of naturals $\le N$ has $|A|\le (N/\log N)^{1/2+\varepsilon}$.
+\end{lemma}
+\begin{proof}
+The map $(a,b)\mapsto a-b$ on ordered pairs with $a\ne b$ is injective into $[-N,N]\setminus\{0\}$: if
+$a-b=c-d$ then $a+d=c+b$, so $(a,d)=(c,b)$ or $a=b$, and $a=b$ is excluded. This gives $|A|^2-|A|\le 2N$.
+With $|A|\le N+1$ we get $|A|^2\le4N$ for $N\ge3$. Since $(\log x)^{1+2\varepsilon}=o(x^{2\varepsilon})$
+(Mathlib \texttt{isLittleO\_log\_rpow\_rpow\_atTop}), eventually
+$4N\le N^{1+2\varepsilon}/(\log N)^{1+2\varepsilon}=(N/\log N)^{1+2\varepsilon}$.
+\end{proof}
+
+\begin{theorem}[Lean: \texttt{C37.conjecture\_37}]\label{thm:main}
+There are Sidon sets $A_N$ of primes $\le N$ such that $(\ast)$ holds for every real $\varepsilon>0$ and all
+large $N$.
+\end{theorem}
+\begin{proof}
+Let $A_N$ be the set of Lemma~\ref{lem:construct} when $\pi(N/2)\ge64$, and $\emptyset$ otherwise. Since
+$\pi(n)\to\infty$, the first case holds for all large $N$. The upper half of $(\ast)$ is
+Lemma~\ref{lem:upper}. For the lower half, replace $\varepsilon$ by $\varepsilon'=\min(\varepsilon,1/2)$; this
+is allowed because $N/\log N\ge1$. Apply Lemma~\ref{lem:cheb} with $\eta=2\varepsilon'/3$, so
+$x=\pi(N/2)\ge 4N^{1-\eta}$. Then $64N^{3-3\eta}\le x^3<64N^2|A_N|^2$, so
+$|A_N|^2>N^{1-2\varepsilon'}$ and $|A_N|>N^{1/2-\varepsilon'}\ge (N/\log N)^{1/2-\varepsilon'}$ (since
+$\log N\ge1$ for $N\ge3$ and $1/2-\varepsilon'\ge0$).
+\end{proof}
+
+\begin{corollary}[Lean: \texttt{C37.conjecture\_37\_littleO}]
+For the same sets, $\delta(N)=\tfrac12-\log|A_N|/\log(N/\log N)$ tends to $0$, and
+$|A_N|=(N/\log N)^{1/2-\delta(N)}$ for all large $N$.
+\end{corollary}
+\begin{proof}
+For large $N$ we have $N/\log N>1$ and $|A_N|>0$. Taking logarithms in $(\ast)$ with $\varepsilon/2$ gives
+$|\delta(N)|\le\varepsilon/2$. The identity is $B^{\log c/\log B}=c$ for $B>1$, $c>0$.
+\end{proof}
+
+\begin{corollary}[Lean: \texttt{C37.conjecture\_37\_firstPrimes}]
+Each $A_N$ consists of primes $p_k$ (the $k$-th prime, Mathlib \texttt{Nat.nth Nat.Prime k}) with $k<N$, and
+$|A_N|\ge (N/\log N)^{1/2-\varepsilon}$ for all large $N$.
+\end{corollary}
+\begin{proof}
+A prime $a\le N$ equals $p_k$ with $k=\#\{\text{primes}<a\}\le a-1<N$ (Mathlib \texttt{Nat.nth\_count}).
+\end{proof}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture37/Basic.lean} (418 lines, only \texttt{import Mathlib}, Lean
+v4.33.1 / Mathlib v4.33.1). Main statement:
+\begin{verbatim}
+theorem conjecture_37 :
+    exists A : Nat -> Finset Nat,
+      (forall N, (forall a in A N, a.Prime /\ a <= N) /\ IsSidon (A N)) /\
+      forall eps : Real, 0 < eps -> forall^f N : Nat in atTop,
+        ((N : Real) / log N) ^ (1/2 - eps) <= (A N).card /\
+        ((A N).card : Real) <= ((N : Real) / log N) ^ (1/2 + eps)
+\end{verbatim}
+(ASCII transcription of the Lean source). Besides it, \texttt{conjecture\_37\_littleO} gives the literal
+$\delta(N)\to0$ form, \texttt{conjecture\_37\_firstPrimes} the first-$N$-primes form, and
+\texttt{sidon\_upper} the universal upper bound. \texttt{lake build} succeeds, and \texttt{\#print axioms}
+reports only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound} for all four. There is no
+\texttt{sorry}, \texttt{native\_decide} or added axiom.
+
+\end{document}
