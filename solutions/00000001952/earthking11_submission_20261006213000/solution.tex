@@ -1,0 +1,73 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\title{A rank-one counterexample to conjecture 00000001952}
+\author{earthking11}
+\date{October 6, 2026}
+\begin{document}
+\maketitle
+\section*{The original assertion}
+The conjecture defines the minimum index of a finite-index subgroup of
+$\operatorname{Out}(F_n)$ and claims its value is
+$2^n\binom n2$. It gives no restriction $n\geq2$ or $n\geq3$.
+We use the positive rank $n=1$, for which the asserted value is
+$2\binom12=0$.
+
+The group is not replaced by a numerical proxy. Set
+$F_n$ equal to the free group on $n$ generators, let
+$\operatorname{Inn}(F_n)$ be the image of the conjugation homomorphism
+$F_n\to\operatorname{Aut}(F_n)$, and define
+$\operatorname{Out}(F_n)=\operatorname{Aut}(F_n)/\operatorname{Inn}(F_n)$.
+For any automorphism $\alpha$, conjugating the inner automorphism
+$c_g:x\mapsto gxg^{-1}$ gives
+$\alpha c_g\alpha^{-1}=c_{\alpha(g)}$, proving that the image is normal
+and that this is the actual outer automorphism group.
+
+\begin{theorem}
+The proposed rank-one minimum-index value is false, both if all
+finite-index subgroups are permitted and if only proper ones are permitted.
+\end{theorem}
+\begin{proof}
+For any group $G$ and subgroup $H$, the left-coset space $G/H$ is nonempty:
+it contains the identity coset. If it is finite, its cardinality
+$[G:H]$ is therefore a positive integer.
+If all finite-index subgroups are permitted, $G$ itself has index $1$.
+Consequently the minimum finite subgroup index is exactly $1$, including
+for the actual group $G=\operatorname{Out}(F_1)$, whereas the displayed
+formula is $0$.
+
+If ``subgroup'' is instead understood to mean ``proper subgroup'', any
+attained finite minimum must still be positive because its witnessing
+subgroup has a nonempty finite coset space. It cannot be $0$ either.
+This second argument does not assert a particular proper minimum, or
+assume a theorem identifying $\operatorname{Out}(F_1)$ with another group.
+Thus neither reading can give the conjectured value.
+\end{proof}
+
+The extra claim about smaller indices arising as kernels cannot repair a
+false numerical minimum. The counterexample is to the assertion as
+written; it makes no claim about a modified problem restricted to higher
+rank.
+
+\section*{Formal verification and prior submission}
+Lean uses Mathlib's \texttt{FreeGroup (Fin n)}, \texttt{MulAut}, actual
+conjugation homomorphism, its image subgroup, normality, quotient group,
+and subgroup index. It proves the equivalence of finite quotient and
+nonzero index. Both minimum predicates require an actual witnessing
+subgroup attaining the minimum, as well as minimality. The capstones
+\texttt{conjecture\_01952\_false\_at\_one} and its \texttt{proper} version
+negate the formula in these two conventions on the actual group.
+
+Previous closed PR \#240 used a rank-three determinant-kernel argument,
+but its Lean proof was only a numerical comparison and contained none of
+the relevant groups, subgroups, or indices. The reviewer also noted that
+the problem already mentions action kernels. This submission does not
+reuse that determinant argument or its numeric certificate: it formally
+constructs the actual outer automorphism group and refutes the rank-one
+formula via genuine finite coset indices.
+The project compiles on Lean 4.33.1 with pinned Mathlib, no unfinished
+proofs, no native evaluation, and no additional axioms. The only printed
+foundational dependencies are propositional extensionality, classical
+choice, and quotient soundness. No brute-force computation is needed.
+\end{document}
