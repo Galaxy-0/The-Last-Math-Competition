@@ -1,0 +1,204 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of conjecture 00000000810:\\ no metric star minimises the first Kirchhoff eigenvalue}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the readings refuted}
+
+\textbf{Statement (English, verbatim).} Definition: Kirchhoff eigenvalues of quantum graphs are the
+spectra of metric graphs with Kirchhoff conditions. Conjecture: Among graphs of fixed total length and
+vertex count, the minimum of the first eigenvalue is attained by the star graph; and the extremizer is
+strictly unique for more than three vertices. (The Chinese text states the same.)
+
+\textbf{Reading.} The conjecture is a conjunction; we refute its first conjunct (``the minimum is
+attained by the star graph'') for every vertex count $n\ge 4$ and every total length $L>0$, which
+refutes the conjunction. For $n\le 3$ the star $K_{1,n-1}$ is itself a path, so nothing is claimed
+there. ``First eigenvalue'' is read as the smallest \emph{positive} Kirchhoff eigenvalue $\lambda_1$
+(the eigenvalue $0$, with constant eigenfunctions, is shared by every graph). ``The star graph'' is
+read as the metric star $K_{1,n-1}$ with \emph{any} positive edge lengths summing to $L$ (the
+equilateral star included). We refute two versions:
+\begin{itemize}
+\item[(R1)] the competitors are all metric graphs with $n$ vertices and total length $L$;
+\item[(R2)] the competitors are only the stars $K_{1,n-1}$ of total length $L$. This covers any
+reading that excludes vertices of degree two (the path used in (R1) has such vertices).
+\end{itemize}
+Our competitor in (R1) is the path $P_n$, a simple connected tree, so (R1) is refuted for every
+competitor class that contains it (connected graphs, trees, simple graphs, or graphs with loops and
+multiple edges). \emph{Not formalized:} the reading in which ``first eigenvalue'' means the bottom
+eigenvalue $0$. Under it the minimum value $0$ is attained by every graph, so uniqueness fails; this
+needs the non-negativity of the Kirchhoff Laplacian, which we do not formalize.
+
+\textbf{How the formal statement implies the refutation.} If $\lambda_1(S)\le\lambda_1(G)$ for every
+competitor $G$, then $\lambda_1(S)\le\lambda$ for every positive eigenvalue $\lambda$ of every
+competitor, because $\lambda_1(G)$ is at most each positive eigenvalue of $G$. The Lean theorems
+refute this consequence, so they refute the conjecture. No discreteness of the spectrum is used.
+
+\section{Definitions (as formalized)}
+
+\begin{definition}[metric graph]
+A metric graph on the vertex set $\{0,\dots,n-1\}$ (\texttt{MetricGraph n}) consists of finitely
+many edges $e$, each with a tail vertex, a head vertex and a length $\ell_e>0$. Edge $e$ is the
+interval $[0,\ell_e]$; its endpoint $0$ is glued to the tail and $\ell_e$ to the head. Loops and
+multiple edges are allowed. The total length is $\sum_e\ell_e$ (\texttt{totalLength}).
+\end{definition}
+
+\begin{definition}[Kirchhoff eigenvalue]
+$\lambda\in\mathbb{R}$ is a Kirchhoff eigenvalue (\texttt{IsEigenvalue}) if there are functions $f_e$
+with derivatives $f_e'$ such that: (i) $f_e$ has derivative $f_e'(x)$ and $f_e'$ has derivative
+$-\lambda f_e(x)$ at every $x\in[0,\ell_e]$, within $[0,\ell_e]$ (one-sided at the endpoints), i.e.\
+$-f_e''=\lambda f_e$; (ii) continuity: there are vertex values $F(v)$ with $f_e(0)=F(\mathrm{tail}\,e)$
+and $f_e(\ell_e)=F(\mathrm{head}\,e)$; (iii) Kirchhoff: at every vertex $v$,
+$\sum_{\mathrm{tail}\,e=v}f_e'(0)-\sum_{\mathrm{head}\,e=v}f_e'(\ell_e)=0$ (the sum of the outgoing
+derivatives vanishes; a loop contributes at both ends; at a degree-one vertex this is the Neumann
+condition); (iv) $f_e(x)\ne 0$ for some edge $e$ and some $x\in[0,\ell_e]$. \texttt{posEig G} is the
+set of positive Kirchhoff eigenvalues.
+\end{definition}
+
+\begin{definition}[star and path]
+\texttt{star k l}: vertices $0,\dots,k$; edge $e\in\{0,\dots,k-1\}$ joins the centre $0$ to the leaf
+$e+1$ and has length $\ell_e$. \texttt{path k L}: vertices $0,\dots,k$; edge $e$ joins $e$ to $e+1$ and
+has length $L/k$. Relabelling vertices and edges, or reversing an edge ($x\mapsto\ell_e-x$, which
+changes the sign of $f_e'$ and swaps its two ends in (iii)), maps eigenfunctions to eigenfunctions, so
+every metric star with $k$ edges has the same Kirchhoff eigenvalues as some \texttt{star k l}.
+\end{definition}
+
+\section{Proof}
+
+Throughout, $k=n-1\ge 3$ is the number of edges.
+
+\begin{lemma}[\texttt{ode\_cos}]\label{ode}
+Let $s,l>0$. If $f''=-s^2f$ on $[0,l]$ (one-sided derivatives at the ends) and $f'(l)=0$, then
+$f(x)=f(l)\cos(s(l-x))$ and $f'(x)=f(l)\,s\sin(s(l-x))$ on $[0,l]$.
+\end{lemma}
+\begin{proof}
+$g=f-f(l)\cos(s(l-\cdot))$ satisfies $g''=-s^2g$ and $g(l)=g'(l)=0$. The energy
+$E=g'^2+s^2g^2$ has derivative $2g'(g''+s^2g)=0$, so it is constant on $[0,l]$ (Mathlib
+\texttt{constant\_of\_has\_deriv\_right\_zero}), hence $E\equiv E(l)=0$, so $g=g'=0$.
+\end{proof}
+
+\begin{lemma}[\texttt{tan\_add\_identity}, \texttt{tan\_sum\_le}, \texttt{tan\_sum\_lt}]\label{tan}
+For $x,y\ge 0$ with $x+y<\pi/2$: $\tan x+\tan y+\tan x\tan y\tan(x+y)=\tan(x+y)$. Hence, for
+non-negative angles with sum $<\pi/2$, $\sum\tan\theta_i\le\tan\sum\theta_i$; if the angles are
+positive and there are at least two of them, the inequality is strict.
+\end{lemma}
+\begin{proof}
+The identity is $\tan(x+y)(1-\tan x\tan y)=\tan x+\tan y$ after clearing the positive cosines. The
+inequalities follow by induction on the number of angles, since the product term is $\ge 0$ ($>0$ for
+positive angles).
+\end{proof}
+
+\begin{lemma}[\texttt{star\_trig}]\label{trig}
+Let $k\ge 3$, $\theta_1,\dots,\theta_k>0$ with $\sum\theta_e\le\pi$, and $a_e,c\in\mathbb{R}$ with
+$a_e\cos\theta_e=c$ for all $e$ and $\sum_e a_e\sin\theta_e=0$. Then all $a_e=0$.
+\end{lemma}
+\begin{proof}
+Let $\theta_0$ be a largest angle and $R=\sum_{e\ne 0}\theta_e\le\pi-\theta_0$, a sum of at least
+two positive terms. For $e\ne 0$, $\theta_e<R\le\pi-\theta_0\le\pi-\theta_e$, so
+$\theta_e<\pi/2$, $\cos\theta_e>0$ and $a_e\sin\theta_e=c\tan\theta_e$. Also $\theta_0<\pi$, so
+$\sin\theta_0>0$. With $T=\sum_{e\ne 0}\tan\theta_e>0$ the Kirchhoff equation becomes
+$a_0\sin\theta_0+cT=0$, and $c=a_0\cos\theta_0$ gives $a_0(\sin\theta_0+T\cos\theta_0)=0$. We show
+$P=\sin\theta_0+T\cos\theta_0>0$. If $\cos\theta_0\ge 0$ this is clear. Otherwise
+$\theta_0>\pi/2$, and $0<R\le\pi-\theta_0<\pi/2$, so by Lemma~\ref{tan} and the monotonicity of
+$\tan$, $T<\tan R\le\tan(\pi-\theta_0)=-\sin\theta_0/\cos\theta_0$. Multiplying by
+$\cos\theta_0<0$ gives $T\cos\theta_0>-\sin\theta_0$. So $a_0=0$, then $c=0$, then $a_e=0$ for
+$e\ne 0$ since $\cos\theta_e>0$.
+\end{proof}
+
+\begin{theorem}[\texttt{star\_no\_eigenvalue\_le}]\label{star}
+Let $k\ge 3$ and $\ell_e>0$ with $L=\sum\ell_e$. The star has no Kirchhoff eigenvalue $\lambda$ with
+$0<\lambda\le\pi^2/L^2$.
+\end{theorem}
+\begin{proof}
+Let $s=\sqrt\lambda$, so $0<sL\le\pi$. At the leaf $e+1$ only edge $e$ arrives (as its head), so
+Kirchhoff gives $f_e'(\ell_e)=0$, and Lemma~\ref{ode} gives $f_e=a_e\cos(s(\ell_e-x))$ with
+$a_e=f_e(\ell_e)$. Continuity at the centre gives $a_e\cos(s\ell_e)=F(0)$; Kirchhoff at the centre
+gives $\sum_e f_e'(0)=s\sum_e a_e\sin(s\ell_e)=0$. Lemma~\ref{trig} with $\theta_e=s\ell_e$ gives
+$a_e=0$ for all $e$, so $f\equiv 0$, contradicting (iv).
+\end{proof}
+
+\begin{theorem}[\texttt{path\_eigenvalue}]
+The path with $k$ edges of length $L/k$ has total length $L$ and the eigenvalue $\pi^2/L^2$.
+\end{theorem}
+\begin{proof}
+Take $f_e(x)=\cos\big(\tfrac{\pi}{L}(eL/k+x)\big)$, i.e.\ $\cos(\pi t/L)$ in the arclength $t$, with
+$F(v)=\cos(\pi v/k)$. The equation holds on each edge. At a vertex $v$ the outgoing derivative of
+the edge leaving $v$ is $G(v)=-\tfrac{\pi}{L}\sin(\pi v/k)$, and the derivative of the edge arriving at
+$v$ is $G(v)$ too, so the Kirchhoff sum is $G(v)-G(v)=0$ at interior vertices; at the ends only one
+term is present and $G(0)=G(k)=0$. Finally $f_0(0)=1\ne 0$.
+\end{proof}
+
+\begin{theorem}[\texttt{twoLong\_eigenvalue}, \texttt{star\_beaten}]
+For $k=j+2\ge 3$ and lengths $a,a,\varepsilon,\dots,\varepsilon$ ($a,\varepsilon>0$), the star has the
+eigenvalue $(\pi/2a)^2$. Consequently, if $\mu>\pi^2/L^2$, some star with $k$ edges and total
+length $L$ has a positive eigenvalue $<\mu$.
+\end{theorem}
+\begin{proof}
+With $s=\pi/(2a)$, take $f=\pm\cos(s(a-x))$ on the two long edges and $f=0$ elsewhere. Then
+$f=0$ at the centre (since $\cos(sa)=0$), Neumann holds at the leaves, and the outgoing derivatives
+at the centre are $s$ and $-s$. For the second claim let $r=\pi/\sqrt\mu<L$, $t=(L+r)/2$, $a=t/2$
+and $\varepsilon=(L-t)/j$: then $2a+j\varepsilon=L$ and $(\pi/t)^2<(\pi/r)^2=\mu$.
+\end{proof}
+
+\begin{corollary}[\texttt{star\_not\_minimal}, \texttt{not\_star\_minimizer},
+\texttt{not\_star\_minimizer\_among\_stars}]
+Let $k\ge 3$ and $L>0$. For every star $S$ with $k$ edges and total length $L$, and every
+$\mu\in$ \texttt{posEig} $S$: $\pi^2/L^2<\mu$; the path with $k+1$ vertices and length $L$ has
+the eigenvalue $\pi^2/L^2$; and another star with $k$ edges and length $L$ has a positive eigenvalue
+$<\mu$. Hence there is no star $S$ (any lengths summing to $L$) whose least positive eigenvalue
+$\mu$ (\texttt{IsLeast (posEig S) mu}) satisfies $\mu\le\lambda$ for all positive eigenvalues $\lambda$
+of all metric graphs with $k+1$ vertices and length $L$ (R1), nor for all positive eigenvalues of all
+such stars (R2).
+\end{corollary}
+
+\begin{remark}
+For context: Friedlander (Ann.\ Inst.\ Fourier 55 (2005) 199--211,
+\url{https://doi.org/10.5802/aif.2095}) states in the abstract: ``We establish the sharp lower bound
+for eigenvalues of a metric graph.'' Our proof does not use that paper; all steps above are proved in
+Lean.
+\end{remark}
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture810/Basic.lean} (430 lines, namespace \texttt{C810}, only
+\texttt{import Mathlib}; Lean 4.33.1, Mathlib v4.33.1). Main theorems:
+\begin{verbatim}
+theorem not_star_minimizer (k : N) (hk : 3 <= k) (L : R) (hL : 0 < L) :
+    not exists (l : Fin k -> R) (hl : forall e, 0 < l e), sum e, l e = L /\
+      exists mu, IsLeast (posEig (star k l hl)) mu /\
+        forall G : MetricGraph (k + 1), G.totalLength = L ->
+          forall lam in posEig G, mu <= lam
+
+theorem not_star_minimizer_among_stars (k : N) (hk : 3 <= k) (L : R)
+    (hL : 0 < L) :
+    not exists (l : Fin k -> R) (hl : forall e, 0 < l e), sum e, l e = L /\
+      exists mu, IsLeast (posEig (star k l hl)) mu /\
+        forall (l' : Fin k -> R) (hl' : forall e, 0 < l' e),
+          sum e, l' e = L ->
+          forall nu in posEig (star k l' hl'), mu <= nu
+\end{verbatim}
+Supporting theorems: \texttt{star\_no\_eigenvalue\_le}, \texttt{path\_eigenvalue},
+\texttt{twoLong\_eigenvalue}, \texttt{star\_beaten}, \texttt{star\_not\_minimal}, \texttt{star\_trig},
+\texttt{ode\_cos}, \texttt{tan\_sum\_lt}.
+\texttt{\#print axioms} for \texttt{not\_star\_minimizer}, \texttt{not\_star\_minimizer\_among\_stars},
+\texttt{star\_not\_minimal}, \texttt{star\_no\_eigenvalue\_le} and \texttt{path\_eigenvalue}:
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom.
+
+\end{document}
