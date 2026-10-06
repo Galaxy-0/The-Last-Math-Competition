@@ -1,0 +1,47 @@
+Command: ['/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake', 'env', 'lean', '-DwarningAsError=true', '/private/tmp/tlmc9700-auxiliary/Inspect.lean']
+Working directory: /private/tmp/tlmc9700-proof
+Exit status: 0
+
+def Conjecture9700.HausdorffClause : Prop :=
+∀ (S : Set ℝ), AlgebraicIndependent ℚ Subtype.val → (∀ x ∈ S, Transcendental ℚ x) → dimH S = 1
+Conjecture9700.exists_transcendental_real : ∃ x, Transcendental ℚ x
+Conjecture9700.singleton_independent_iff (x : ℝ) : AlgebraicIndependent ℚ Subtype.val ↔ Transcendental ℚ x
+Conjecture9700.singleton_members_transcendental (x : ℝ) (hx : Transcendental ℚ x) (y : ℝ) : y ∈ {x} → Transcendental ℚ y
+Conjecture9700.singleton_dimension_zero (x : ℝ) : dimH {x} = 0
+Conjecture9700.exists_nonempty_counterexample :
+  ∃ S, S.Nonempty ∧ AlgebraicIndependent ℚ Subtype.val ∧ (∀ x ∈ S, Transcendental ℚ x) ∧ dimH S = 0 ∧ dimH S ≠ 1
+Conjecture9700.hausdorff_clause_false : ¬Conjecture9700.HausdorffClause
+Conjecture9700.conjunction_implies_hausdorff_clause (P : Set ℝ → Prop)
+  (h : ∀ (S : Set ℝ), AlgebraicIndependent ℚ Subtype.val → (∀ x ∈ S, Transcendental ℚ x) → dimH S = 1 ∧ P S) :
+  Conjecture9700.HausdorffClause
+Conjecture9700.universal_conjunction_false (P : Set ℝ → Prop) :
+  ¬∀ (S : Set ℝ), AlgebraicIndependent ℚ Subtype.val → (∀ x ∈ S, Transcendental ℚ x) → dimH S = 1 ∧ P S
+Conjecture9700.not_statement_implying_hausdorff_clause (P : Prop) (h : P → Conjecture9700.HausdorffClause) : ¬P
+'Conjecture9700.HausdorffClause' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture9700.exists_transcendental_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture9700.singleton_independent_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture9700.singleton_members_transcendental' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture9700.singleton_dimension_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture9700.exists_nonempty_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture9700.hausdorff_clause_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture9700.conjunction_implies_hausdorff_clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture9700.universal_conjunction_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture9700.not_statement_implying_hausdorff_clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AlgebraicIndependent.{u_1, u_3, u_5} : {ι : Type u_1} →
+  (R : Type u_3) →
+    {A : Type u_5} → (ι → A) → [inst : CommRing R] → [inst_1 : CommRing A] → [inst : Algebra R A] → Prop :=
+fun {ι} R {A} x [CommRing R] [CommRing A] [Algebra R A] => Function.Injective ⇑(MvPolynomial.aeval x)
+def Transcendental.{u, v} : (R : Type u) →
+  {A : Type v} → [inst : CommRing R] → [inst_1 : Ring A] → [inst : Algebra R A] → A → Prop :=
+fun R {A} [CommRing R] [Ring A] [Algebra R A] x => ¬IsAlgebraic R x
+def IsAlgebraic.{u, v} : (R : Type u) →
+  {A : Type v} → [inst : CommRing R] → [inst_1 : Ring A] → [inst : Algebra R A] → A → Prop :=
+fun R {A} [CommRing R] [Ring A] [Algebra R A] x => ∃ p, p ≠ 0 ∧ (Polynomial.aeval x) p = 0
+@[irreducible] def dimH.{u_2} : {X : Type u_2} → [inst : EMetricSpace X] → Set X → ENNReal :=
+fun {X} [EMetricSpace X] s => ⨆ d, ⨆ (_ : (MeasureTheory.Measure.hausdorffMeasure ↑d) s = ⊤), ↑d
+Algebraic.countable.{u, v} (R : Type u) (A : Type v) [CommRing R] [CommRing A] [IsDomain A] [Algebra R A]
+  [NoZeroSMulDivisors R A] [Countable R] : {x | IsAlgebraic R x}.Countable
+Cardinal.not_countable_real : ¬Set.univ.Countable
+algebraicIndependent_singleton_iff.{v, u_1, u_3} {ι : Type u_1} {R : Type u_3} {A : Type v} {x : ι → A} [CommRing R]
+  [CommRing A] [Algebra R A] [Subsingleton ι] (i : ι) : AlgebraicIndependent R x ↔ Transcendental R (x i)
+dimH_singleton.{u_2} {X : Type u_2} [EMetricSpace X] (x : X) : dimH {x} = 0

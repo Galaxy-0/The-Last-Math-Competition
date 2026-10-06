@@ -1,0 +1,22 @@
+import Conjecture9700
+
+#print Conjecture9700.HausdorffClause
+
+#check Conjecture9700.exists_transcendental_real
+#print axioms Conjecture9700.exists_transcendental_real
+#check Conjecture9700.singleton_independent_iff
+#print axioms Conjecture9700.singleton_independent_iff
+#check Conjecture9700.singleton_members_transcendental
+#print axioms Conjecture9700.singleton_members_transcendental
+#check Conjecture9700.singleton_dimension_zero
+#print axioms Conjecture9700.singleton_dimension_zero
+#check Conjecture9700.exists_nonempty_counterexample
+#print axioms Conjecture9700.exists_nonempty_counterexample
+#check Conjecture9700.hausdorff_clause_false
+#print axioms Conjecture9700.hausdorff_clause_false
+#check Conjecture9700.conjunction_implies_hausdorff_clause
+#print axioms Conjecture9700.conjunction_implies_hausdorff_clause
+#check Conjecture9700.universal_conjunction_false
+#print axioms Conjecture9700.universal_conjunction_false
+#check Conjecture9700.not_statement_implying_hausdorff_clause
+#print axioms Conjecture9700.not_statement_implying_hausdorff_clause
