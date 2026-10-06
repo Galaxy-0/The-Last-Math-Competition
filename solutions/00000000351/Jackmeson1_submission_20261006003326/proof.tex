@@ -1,0 +1,186 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\covol}{\operatorname{covol}}
+\newcommand{\vol}{\operatorname{vol}}
+\newcommand{\bcc}{\mathrm{bcc}}
+
+\title{Disproof of conjecture 00000000351:\\ $D_3$ is not covering-optimal in dimension 3}
+\author{Jackmeson1}
+\date{2026-10-06}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clause refuted}
+
+\textbf{Statement (English, verbatim).} Definition: The covering radius of the D\_n lattice is
+determined by its coordination structure. Conjecture: For dimensions up to eight, the D\_n lattices
+are covering-optimal, with the first non-D exception in dimension nine; and the exceptional lattice
+configuration is given by an E8 extension. (Dn lattice covering optimal through dimension eight)
+(The Chinese text states the same.)
+
+\textbf{Reading.} The conjecture is a conjunction of (A) for every dimension $n\le 8$ the lattice
+$D_n$ is covering-optimal, (B) dimension nine is the first exception, and (C) the exceptional lattice
+comes from an $E_8$ extension. We refute (A), which refutes the conjunction. The named family is
+$D_n=\{x\in\Z^n: x_1+\dots+x_n \text{ even}\}$ itself (not its dual $D_n^*$). We read
+``covering-optimal'' as ``gives the thinnest lattice covering'', i.e.\ minimizes the covering density
+$\Theta$ over all lattices of $\R^n$ (the lattice covering problem of Sch\"urmann and Vallentin,
+Section~2), and ``$D_n$ is'' as ``some similar copy $c\,\varphi(D_n)$ is'' ($c\ne 0$ real,
+$\varphi$ a linear isometry). The dimension used is $n=3$, which lies in ``up to eight'' when the family
+is read as the even-sum lattices $D_n=\{x\in\mathbb Z^n:\sum x_i\text{ even}\}$, which are well
+defined and non-degenerate for every $n\ge 2$ ($D_3$ is the fcc lattice). Under the
+root-system classification convention that reserves type $D_n$ for $n\ge4$, dimension 3 would be
+excluded; this package does not supply a counterexample in the range $4\le n\le 8$. We refute:
+\begin{itemize}
+\item[(R1)] some similar copy of $D_3$ has covering density at most that of every lattice in $\R^3$
+  (\texttt{not\_DCoveringOptimal\_three}); hence the claim fails for every range of dimensions
+  containing $3$, in particular $3\le n\le 8$ (\texttt{conjecture\_351\_false});
+\item[(R2)] (stronger) one explicit lattice, the body-centred cubic lattice, has \emph{strictly}
+  smaller covering density than \emph{every} similar copy of $D_3$
+  (\texttt{coveringDensity\_bcc\_lt\_similar\_D3}); in particular $\Theta(\bcc)<\Theta(D_3)$
+  (\texttt{coveringDensity\_bcc\_lt\_D3}).
+\end{itemize}
+\textbf{Not addressed.} Clauses (B) and (C) are not used. The Definition line (``determined by its
+coordination structure'') is descriptive and imposes nothing formal; we use the standard covering
+radius. The reading ``optimal among all (also non-lattice) sphere coverings'' implies the lattice
+reading (the bcc lattice covering is itself a covering), but the density of a general covering is not
+formalized. The packing-covering ratio $\mu/\lambda$ and the dual family $D_n^*$ are not treated.
+
+\section{Definitions (as in the Lean file)}
+
+We work in $\R^n$ = \texttt{EuclideanSpace R (Fin n)} with Lebesgue measure $\vol$ (Mathlib's
+\texttt{volume}) and Euclidean distance.
+
+\begin{definition}[lattice; \texttt{Lattice n}]
+A $\Z$-submodule $\Lambda\subset\R^n$ that is discrete and spans $\R^n$ over $\R$ (Mathlib's
+\texttt{DiscreteTopology} and \texttt{IsZLattice R}). Its covolume $\covol\Lambda$ is Mathlib's
+\texttt{ZLattice.covolume}, the volume of a fundamental domain. Wikipedia (Lattice (group)): ``The
+n-dimensional volume of this fundamental domain is sometimes called the covolume of the lattice: it is
+invariant for any basis, and may be computed as $d(\Lambda)=|\det(M)|$''.
+\end{definition}
+
+\begin{definition}[covering radius; \texttt{coveringRadius}]
+For $S\subseteq\R^n$, $\mu(S)=\inf\{r\ge 0 : \forall x\in\R^n\ \exists l\in S,\ \|x-l\|\le r\}$.
+Wikipedia (Delone set): ``The covering radius, R, of X is the smallest distance such that every point
+of M is within distance R of at least one point in X; that is, R is the smallest radius such that
+closed balls of that radius centered at the points of X have all of M as their union.''
+Sch\"urmann--Vallentin: ``the covering radius $\mu(L)$ by
+$\mu(L)=\min\{\mu: L+\mu B^{d} \text{ is a lattice covering}\}$''.
+Convention: in Lean $\inf\emptyset=0$; every use below is for a set for which a covering radius
+$R<\infty$ is proved first, so the value is the genuine infimum.
+\end{definition}
+
+\begin{definition}[covering density; \texttt{coveringDensity}]
+$\Theta(\Lambda)=\vol\bigl(\overline B(0,\mu(\Lambda))\bigr)/\covol\Lambda$. Sch\"urmann--Vallentin:
+``the covering density $\Theta(L)=\frac{\mu(L)^{d}}{\det(L)}\cdot\kappa_{d}$, $\kappa_{d}=\mathrm{vol}\,B^{d}$,
+is invariant with respect to scaling of $L$'' and ``Problem 2.1. (Lattice covering problem) For a
+given $d$, determine $\Theta_{d}=\min_{L}\Theta(L)$, where $L$ runs over all $d$-dimensional
+lattices.'' The two formulas agree: Mathlib's \texttt{EuclideanSpace.volume\_closedBall\_fin\_three}
+gives $\vol\overline B(0,r)=r^3\cdot 4\pi/3$ (lemma \texttt{vol\_closedBall}).
+\end{definition}
+
+\begin{definition}[$D_n$, similar copies, optimality]
+\texttt{Dlat n} $=\{x\in\Z^n:\sum x_i\text{ even}\}$. Wikipedia (Root system): ``The Dn root lattice
+-- that is, the lattice generated by the Dn roots -- consists of all integer vectors whose components
+sum to an even integer.'' \texttt{IsSimilarCopy M Q}: $Q=\{c\,\varphi(x):x\in M\}$ as sets, for some
+real $c\neq 0$ and linear isometry $\varphi$. \texttt{DCoveringOptimal n}: there is a $\Z$-submodule
+$Q$ that is a similar copy of $D_n$ with $\Theta(Q)\le\Theta(L)$ for every lattice $L$ of $\R^n$.
+\end{definition}
+
+The body-centred cubic lattice \texttt{bcc} is the $\Z$-span of $e_1,e_2,h=(\tfrac12,\tfrac12,\tfrac12)$;
+Lean proves $\bcc=\{z+\tfrac e2(1,1,1): z\in\Z^3, e\in\Z\}=\Z^3\cup(\Z^3+h)$ (\texttt{mem\_bcc\_iff}).
+
+\section{Proof}
+
+\begin{lemma}[\texttt{D3\_covers}, \texttt{D3\_deep\_hole}, \texttt{similar\_D3\_bounds}]\label{lem:D3}
+(a) Every $y\in\R^3$ is within distance $2$ of $D_3$. (b) $\|(1,0,0)-m\|\ge 1$ for all $m\in D_3$.
+(c) If $Q=c\,\varphi(D_3)$ then $\mu(Q)\ge|c|$ and $\covol Q=2|c|^3$.
+\end{lemma}
+\begin{proof}
+(a) Take $m_i=2\,\mathrm{round}(y_i/2)$; then $\sum m_i$ is even and $|y_i-m_i|\le 1$, so
+$\|y-m\|^2\le 3\le 4$. (b) Write $m=z\in\Z^3$ with $z_1+z_2+z_3$ even. If $z_2\ne0$ or $z_3\ne0$ then
+$\|(1,0,0)-z\|^2\ge 1$; otherwise $z_1$ is even, so $z_1\ne 1$ and $(1-z_1)^2\ge1$.
+(c) Distances scale: $\|c\varphi a-c\varphi b\|=|c|\,\|a-b\|$. By (a), balls of radius $2|c|$ around
+$Q$ cover $\R^3$ (apply (a) to $\varphi^{-1}(c^{-1}x)$), so $\mu(Q)$ is a genuine infimum; by (b) the
+point $c\varphi(1,0,0)$ has distance $\ge|c|$ from every point of $Q$, so every admissible radius is
+$\ge|c|$. For the covolume, $D_3$ is the $\Z$-span of the rows of
+$\left(\begin{smallmatrix}1&0&1\\0&1&1\\0&0&2\end{smallmatrix}\right)$ (\texttt{Dlat\_eq\_span}), of
+determinant $2$; $Q$ is the $\Z$-span of their images, of determinant $c^3\det\varphi\cdot 2$ with
+$|\det\varphi|=1$ (\texttt{abs\_det\_isometry}), and $\covol(\Z\text{-span of a basis }b)=|\det b|$
+(\texttt{covolume\_span}, from \texttt{ZLattice.covolume\_eq\_det\_mul\_measureReal}).
+\end{proof}
+
+\begin{lemma}[\texttt{round\_pair}, \texttt{bcc\_covers}, \texttt{covolume\_bcc}]\label{lem:bcc}
+Every $x\in\R^3$ is within distance $5/8$ of \texttt{bcc}, and $\covol(\bcc)=\tfrac12$.
+\end{lemma}
+\begin{proof}
+For $y\in\R$ let $u=y-\lfloor y\rfloor\in[0,1)$. If $u\le\frac12$ take $a=b=\lfloor y\rfloor$: then
+$(y-a)^2+(y-b-\frac12)^2=2u^2-u+\frac14\le\frac14$. Otherwise take $a=\lfloor y\rfloor+1$,
+$b=\lfloor y\rfloor$: the sum is $2u^2-3u+\frac54\le\frac14$ since $(u-\frac12)(1-u)\ge0$. Apply this to
+each coordinate of $x$ to get $A=(a_i)\in\Z^3$ and $B=(b_i+\frac12)\in\Z^3+h$, both in \texttt{bcc}
+(\texttt{mem\_bcc}), with $\|x-A\|^2+\|x-B\|^2\le\frac34$. Hence one of them is at squared distance
+$\le\frac38\le\frac{25}{64}$. The basis matrix with rows $e_1,e_2,h$ has determinant $\frac12$.
+\end{proof}
+
+\begin{theorem}[\texttt{coveringDensity\_bcc\_le}, \texttt{coveringDensity\_similar\_D3\_ge},
+\texttt{coveringDensity\_bcc\_lt\_similar\_D3}]
+$\Theta(\bcc)\le\frac{125\pi}{192}<\frac{128\pi}{192}=\frac{2\pi}{3}\le\Theta(Q)$ for every similar
+copy $Q$ of $D_3$.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:bcc}, $0\le\mu(\bcc)\le\frac58$, so $\Theta(\bcc)\le\frac{(5/8)^3\cdot 4\pi/3}{1/2}=\frac{125\pi}{192}$.
+By Lemma~\ref{lem:D3}(c), $\Theta(Q)=\frac{\mu(Q)^3\cdot 4\pi/3}{2|c|^3}\ge\frac{|c|^3\cdot4\pi/3}{2|c|^3}=\frac{2\pi}{3}$.
+\end{proof}
+
+Taking $c=1$, $\varphi=\mathrm{id}$ gives $\Theta(\bcc)<\Theta(D_3)$. If some similar copy $Q$ of
+$D_3$ satisfied $\Theta(Q)\le\Theta(L)$ for every lattice $L$, then $L=\bcc$ would contradict the
+theorem. So $D_3$ is not covering-optimal, and (A) fails. This is consistent with the literature:
+Sch\"urmann--Vallentin write ``The optimality of the body centered cubic lattice [\dots] was first
+proven by Bambah [Bam54b]''. That result is not used; the argument above is self-contained.
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture351/Basic.lean} (354 lines, \texttt{import Mathlib} only, namespace
+\texttt{C351}). Main statements:
+\begin{verbatim}
+theorem coveringDensity_bcc_lt_similar_D3 (Q : Submodule Z (Rn 3))
+    (hQ : IsSimilarCopy (Dlat 3) Q) :
+    coveringDensity bcc.L < coveringDensity Q
+theorem coveringDensity_bcc_lt_D3 :
+    coveringDensity bcc.L < coveringDensity (Dlat 3)
+theorem not_DCoveringOptimal_three : not DCoveringOptimal 3
+theorem conjecture_351_false :
+    not (forall n in Finset.Icc 3 8, DCoveringOptimal n)
+\end{verbatim}
+(ASCII transcription; \texttt{bcc.L} is the field \texttt{bcc.$\Lambda$}.)
+\texttt{\#print axioms} for each of these, and for \texttt{mem\_bcc\_iff}, reports only
+\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom.
+
+\textbf{Credit.} \texttt{Dlat}, \texttt{IsSimilarCopy}, \texttt{covolume\_span},
+\texttt{basisOfDet} and \texttt{abs\_det\_isometry} are adapted (dimension 7 to 3) from the accepted
+package for conjecture 00000000238 (GPL-3.0).
+
+\section*{Sources}
+\begin{itemize}
+\item A.~Sch\"urmann, F.~Vallentin, Computational approaches to lattice packing and covering
+  problems, arXiv:math/0403272, Section 2 and Section 3. \url{https://arxiv.org/abs/math/0403272}
+\item Wikipedia, Delone set. \url{https://en.wikipedia.org/wiki/Delone_set}
+\item Wikipedia, Root system. \url{https://en.wikipedia.org/wiki/Root_system}
+\item Wikipedia, Lattice (group). \url{https://en.wikipedia.org/wiki/Lattice_(group)}
+\end{itemize}
+
+\end{document}
