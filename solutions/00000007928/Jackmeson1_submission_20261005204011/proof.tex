@@ -1,0 +1,204 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\OO}{\mathcal{O}}
+
+\title{Conjecture 00000007928 is false:\\ the formula $|K_2(\OO_F)| = |\zeta_F(-1)|\,D_F\,2^{[F:\Q]}$ fails for $F=\Q$}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+The English statement reads:
+
+\begin{quote}\small
+Definition: The spectralization of the tame kernel: a Brauer-type explicit formula for the tame
+kernel order $w_2(F) = |K_2(\OO_F)|$. Conjecture: The correction to the 2-adic explicit formula
+$w_2(F) = \prod_p p^{\sum e(f_p)}$ is the adjustment of Dirichlet units:
+$w_2(F) = |\zeta_F(-1)|\, D_F\, 2^{[F:\Q]}$ (an integralization of a rational identity), and the
+$p$-part of the formula is given by the valuation sum of the local dilogarithm values of the tame
+symbol on units, with the unit contribution obeying a logarithmic law linear in the unit rank of
+$F$. (tame kernel Brauer explicit formula)
+\end{quote}
+
+The Chinese statement has the same content. It also gives the displayed formula
+$w_2(F)=|K_2(\OO_F)|$ and $w_2(F)=|\zeta_F(-1)|\cdot D_F\cdot 2^{[F:\Q]}$, with the same
+parenthetical (``integralization of a rational identity'').
+
+\section{Reading}
+
+The Definition line fixes $w_2(F) := |K_2(\OO_F)|$, the order of the group $K_2$ of the ring of
+integers $\OO_F$ of a number field $F$. The main clause asserts the equality
+\[
+  (\ast)\qquad |K_2(\OO_F)| \;=\; |\zeta_F(-1)| \cdot D_F \cdot 2^{[F:\Q]},
+\]
+for number fields $F$ (the quantifier is implicit; the formula is stated for a general $F$). The
+conjecture is a conjunction of $(\ast)$ with further clauses (the $p$-part given by local
+dilogarithm values, and a logarithmic law for the unit contribution). We refute $(\ast)$, which
+refutes the conjunction. We do not address the other clauses. Our witness is $F=\Q$, a totally
+real field whose unit rank is $0$. A reading that restricts $(\ast)$ to fields of positive unit rank
+is not refuted here.
+
+\paragraph{Conventions.}
+\begin{itemize}
+\item $\zeta_F$ is the Dedekind zeta function. It is the Dirichlet series
+  $\sum_{n\ge 1} a_n n^{-s}$, where $a_n$ is the number of ideals of $\OO_F$ of absolute norm $n$.
+  This series converges for $\operatorname{Re} s>1$. It has a meromorphic continuation to $\C$
+  whose only pole is a simple pole at $s=1$ (Wikipedia, ``Dedekind zeta function'', quoted in the
+  attempt record). $\zeta_F(-1)$ means the value of this continuation.
+\item $D_F$ is the discriminant of $F$, taken in absolute value $|d_F|$. For $F=\Q$ we have
+  $d_\Q = 1$, so the choice of sign convention does not matter.
+\item $[F:\Q]$ is the degree $\dim_\Q F$; it equals $1$ for $F=\Q$.
+\item $|G|$ is the number of elements of the group $G$. In Lean we use \texttt{Nat.card G}, which is
+  $0$ for infinite $G$. An infinite group has no finite order, so in particular it does not have
+  order $1/6$.
+\end{itemize}
+
+\paragraph{The parenthetical ``an integralization of a rational identity''.}
+The main clause displays an equality between $w_2(F)$, the order of a group, and the number
+$|\zeta_F(-1)|D_F2^{[F:\Q]}$. The parenthetical describes this equality as an integral form of a
+rational identity. It does not replace the displayed equality by a different formula, and it names
+no integralization procedure. We refute the displayed equality, which is the clause's assertion.
+For $F=\Q$ the right-hand side is the non-integer $1/6$ (Theorem~\ref{thm:main}). So $(\ast)$ is not
+an integral identity at $F=\Q$, and no integral identity is obtained by asserting it there. A
+different reading, in which the left side equals the right side only after some unspecified
+operation (for example a numerator or a rounding), is a different formula. It is not refuted here.
+
+\paragraph{Why $K_2$ itself is not built.}
+The refutation does not use any property of $K_2(\Z)$. The order of any group is a natural number,
+or else the group is infinite. The right-hand side of $(\ast)$ at $F=\Q$ is $1/6$, which is neither.
+The Lean theorem therefore quantifies over \emph{every} type $G$ and states that \texttt{Nat.card G}
+is not the right-hand side. This covers $G=K_2(\Z)$ whatever its construction. The same argument
+covers $w_2$ read in its other usual sense (a positive integer defined through roots of unity), since
+that is a natural number too.
+
+\paragraph{Context (not used in the proof).}
+The formula $(\ast)$ is not a rewriting of the Birch--Tate conjecture. Wikipedia's Birch--Tate
+article, retrieved for this report, says that $K_2$ of a number field ``is also known as the tame
+kernel'' and that the conjecture ``relates the order of this group (its number of elements) to the
+value of the Dedekind zeta function''. To be precise, the finite group meant here is
+$K_2(\OO_F)$, the tame kernel, i.e.\ the kernel of the tame-symbol map from $K_2(F)$ to
+$\bigoplus_{\mathfrak p}k(\mathfrak p)^\times$ over the finite primes; it is not $K_2(F)$ itself. The
+formula given there, for totally real $F$, is $\#K_2(\OO_F) = |N\cdot\zeta_F(-1)|$. Here $N$ is a
+positive integer defined through roots of unity. The formula $(\ast)$ has the factor
+$D_F\,2^{[F:\Q]}$ in place of $N$.
+
+\section{Proof}
+
+Write $\OO_\Q$ for the ring of integers of $\Q$, which is identified with $\Z$ by Mathlib's
+\texttt{Rat.ringOfIntegersEquiv}.
+
+\begin{lemma}[\texttt{ideal\_eq\_span\_absNorm}, \texttt{absNorm\_span\_nat}, \texttt{card\_ideals\_of\_norm}]
+Every ideal $I$ of $\OO_\Q$ equals $(N(I))$, the ideal generated by the natural number $N(I)$, its
+absolute norm. For each $m\in\mathbb N$ the ideal $(m)$ has norm $m$. Hence for every $n$ there is
+exactly one ideal of norm $n$, so $a_n = 1$.
+\end{lemma}
+
+\begin{proof}
+$\OO_\Q\cong\Z$ is a principal ideal ring, so $I=(k)$ for an integer $k$. The norm of $(k)$ is
+$|N_{\OO_\Q/\Z}(k)| = |k|^{[\Q:\Q]} = |k|$, and $(k) = (|k|)$ since $k=\pm|k|$. The same norm
+computation gives $N((m)) = m$. Two ideals of norm $n$ both equal $(n)$.
+\end{proof}
+
+\begin{lemma}[\texttt{dedekindZeta\_rat}, \texttt{continuation\_value}, \texttt{riemannZeta\_is\_continuation}]
+For $\operatorname{Re}s>1$ the Dirichlet series of $\zeta_\Q$ equals the Riemann zeta function
+$\zeta(s)$. Every function $Z$ that is holomorphic on $\C\setminus\{1\}$ and agrees with this series
+on $\operatorname{Re}s>1$ satisfies $Z(-1)=\zeta(-1)=-1/12$. The Riemann zeta function itself is such
+a $Z$.
+\end{lemma}
+
+\begin{proof}
+Since $a_n=1$, the series is $\sum_{n\ge1}n^{-s}=\zeta(s)$ (Mathlib's
+\texttt{LSeries\_one\_eq\_riemannZeta}). Both $Z$ and $\zeta$ are analytic on the connected open set
+$\C\setminus\{1\}$, and they agree on the open half-plane $\operatorname{Re}s>1$. By the identity
+theorem they agree on $\C\setminus\{1\}$, which contains $-1$. Finally, Mathlib's
+\texttt{riemannZeta\_neg\_nat\_eq\_bernoulli} with $k=1$ gives
+$\zeta(-1) = (-1)^1 B_2/2$, and $B_2 = 1/6$ (\texttt{bernoulli\_two}). So $\zeta(-1) = -1/12$
+(\texttt{riemannZeta\_neg\_one}).
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_7928\_false}]\label{thm:main}
+Let $Z$ be as in the previous lemma, so $Z(-1)=\zeta_\Q(-1)$. Then
+\[
+  |Z(-1)|\cdot|d_\Q|\cdot 2^{[\Q:\Q]} = \tfrac{1}{12}\cdot 1\cdot 2 = \tfrac16,
+\]
+and for every type $G$, $\texttt{Nat.card}\,G \ne 1/6$. In particular $(\ast)$ fails for $F=\Q$,
+whatever the group $K_2(\Z)$ is.
+\end{theorem}
+
+\begin{proof}
+$d_\Q = 1$ (Mathlib's \texttt{Rat.numberField\_discr}) and $[\Q:\Q]=1$
+(\texttt{Module.finrank\_self}), so the right-hand side is $1/6$ (\texttt{rhsQ\_riemannZeta}). A
+natural number $n$ is either $0$ or at least $1$, so $n\ne 1/6$ (\texttt{nat\_ne\_rhsQ}).
+\end{proof}
+
+\section{Lean formalization}
+
+The package \texttt{lean/} (Lean 4, Mathlib \texttt{v4.33.1}) contains
+\texttt{Conjecture7928/Basic.lean} (141 lines, namespace \texttt{C7928}). Its only import is
+\texttt{import Mathlib}.
+
+\paragraph{Faithfulness of $\zeta_\Q$.} Mathlib's \texttt{NumberField.dedekindZeta K s} is defined
+as the raw L-series \texttt{LSeries (fun n => Nat.card \{I : Ideal (O K) // absNorm I = n\}) s}. At
+$s=-1$ this series diverges, so its Lean value there is a junk value and not $\zeta_\Q(-1)$. We
+therefore do not evaluate it at $-1$. We prove that it equals \texttt{riemannZeta} on
+$\operatorname{Re}s>1$. The main theorem then takes \emph{any} function $Z$ holomorphic on
+$\C\setminus\{1\}$ that agrees with \texttt{dedekindZeta} $\Q$ on $\operatorname{Re}s>1$, that is, the
+continuation, and evaluates $Z(-1)$. The hypotheses are not vacuous: \texttt{riemannZeta} satisfies
+them (\texttt{riemannZeta\_is\_continuation}).
+
+\paragraph{Main statements.}
+{\small
+\begin{verbatim}
+theorem conjecture_7928_false (Z : C -> C) (hZ : DifferentiableOn C Z {1}^c)
+    (hZeq : forall s : C, 1 < s.re -> Z s = dedekindZeta Q s) (G : Type*) :
+    (Nat.card G : R) !=
+      ||Z (-1)|| * |((NumberField.discr Q : Z) : R)| * 2 ^ Module.finrank Q Q
+
+theorem conjecture_7928_false_riemannZeta (G : Type*) :
+    (Nat.card G : R) !=
+      ||riemannZeta (-1)|| * |((NumberField.discr Q : Z) : R)|
+        * 2 ^ Module.finrank Q Q
+
+theorem conjecture_7928_false_finite_group (G : Type*) [Group G] [Fintype G] :
+    (Fintype.card G : R) != (same right-hand side)
+\end{verbatim}
+}
+(ASCII rendering: \texttt{C}, \texttt{R}, \texttt{Q}, \texttt{Z} stand for $\C,\mathbb R,\Q,\Z$;
+\texttt{!=} is $\ne$; \texttt{||.||} is the complex norm.) Supporting lemmas:
+\texttt{riemannZeta\_neg\_one}, \texttt{rhsQ\_riemannZeta}, \texttt{ideal\_eq\_span\_absNorm},
+\texttt{absNorm\_span\_nat}, \texttt{card\_ideals\_of\_norm}, \texttt{dedekindZeta\_rat},
+\texttt{continuation\_value}, \texttt{riemannZeta\_is\_continuation}, \texttt{nat\_ne\_rhsQ}. The
+identity-theorem step follows the pattern of Mathlib's own proof in
+\texttt{Mathlib/NumberTheory/Harmonic/ZetaAsymp.lean}.
+
+\paragraph{Axiom audit.} \texttt{lake build} succeeds. \texttt{\#print axioms} for each of
+\texttt{conjecture\_7928\_false}, \texttt{conjecture\_7928\_false\_riemannZeta},
+\texttt{conjecture\_7928\_false\_finite\_group} and \texttt{riemannZeta\_is\_continuation} reports
+only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. There is no \texttt{sorry},
+no \texttt{native\_decide} and no added axiom.
+
+\section*{Sources}
+\begin{itemize}
+\item Wikipedia, ``Dedekind zeta function'',
+  \url{https://en.wikipedia.org/wiki/Dedekind_zeta_function} (Dirichlet series and meromorphic
+  continuation with only a simple pole at $s=1$).
+\item Wikipedia, ``Birch--Tate conjecture'',
+  \url{https://en.wikipedia.org/wiki/Birch%E2%80%93Tate_conjecture} (context only).
+\end{itemize}
+
+\end{document}
