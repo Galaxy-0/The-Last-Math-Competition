@@ -1,0 +1,176 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\title{Disproof of conjecture 00000002718:\\ the boundary of the tetrahedron is shellable but not 2-collapsible}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clause refuted}
+
+\textbf{Statement (English, verbatim).} Definition: d-collapsible complexes: reduced by matched
+contractions of d-faces. Conjecture: The separation degree of d-collapsibility from shellability:
+shellable implies d-collapsible but not conversely; the minimal separating complex is a special
+2-complex, and the separation spectrum is a finite layer in dimension two. (d-collapsible separation
+spectrum)
+
+The Chinese text gives the same definition (reduction by matched contractions of $d$-faces) and the
+same claims.
+
+\textbf{Reading.} The conjecture is a conjunction. Its first conjunct is
+\[
+  \text{(S)}\qquad \text{every shellable } d\text{-dimensional (finite) simplicial complex is } d\text{-collapsible.}
+\]
+Here $d$ is the dimension of the complex, as the phrase ``$d$-faces'' indicates. We refute (S) for
+$d=2$, even for pure complexes, which refutes the conjunction. We do not address the other
+conjuncts (``not conversely'', the ``minimal separating complex'' and the ``separation spectrum'').
+
+\textbf{Convention on $d$.} Every finite complex of dimension less than $d$ is $d$-collapsible,
+since each maximal face $\tau$ has $\dim\tau\le d-1$ and can be removed by itself (a remark, not
+formalized). So an existential reading that lets $d$ be chosen large would be trivial; the
+universal claim (S), however, is not, and our counterexample needs no global restriction on $d$:
+it takes $d=2=\dim T$, and we also show the witness is not $d$-collapsible for $d=0,1$.
+
+\section{Definitions}
+
+All complexes are finite abstract simplicial complexes: a finite family $K$ of finite sets closed
+under taking subsets. The dimension of a face $\sigma$ is $|\sigma|-1$. A face is \emph{maximal} if
+no other face contains it. $K$ is \emph{pure of dimension $d$} if it is nonempty, every face has
+dimension at most $d$, and every maximal face has dimension exactly $d$.
+
+\begin{definition}[$d$-collapsibility, Wegner]
+The notion was introduced by G.~Wegner, \emph{d-Collapsing and nerves of families of convex sets},
+Arch.\ Math.\ 26 (1975) 317--321 (\url{https://doi.org/10.1007/bf01229745}). We use the precise form
+stated by M.~Tancer, \emph{d-collapsibility is NP-complete for d greater or equal to 4}
+(arXiv:0808.1991). Verbatim: ``A face $\sigma$ of a simplicial complex $\mathsf{K}$ is collapsible if
+there is a unique maximal face of $\mathsf{K}$ containing $\sigma$ \ldots\ we denote this maximal
+face by $\tau(\sigma)$. (We allow $\tau(\sigma)=\sigma$.) Moreover, if $\dim\sigma\leq d-1$, then
+$\sigma$ is $d$-collapsible. By $[\sigma,\tau(\sigma)]$ we denote the set
+$\{\eta\in\mathsf{K} \mid \sigma\subseteq\eta\subseteq\tau(\sigma)\}$ \ldots\ the complex
+$\mathsf{K}'=\mathsf{K}\setminus[\sigma,\tau(\sigma)]$ arises from $\mathsf{K}$ by an elementary
+$d$-collapse. \ldots\ a complex $\mathsf{K}$ is $d$-collapsible if
+$\mathsf{K}\twoheadrightarrow\emptyset$.'' Here $\twoheadrightarrow$ is a finite sequence of
+elementary $d$-collapses. In Lean: \texttt{ElemDCollapse}, \texttt{DCollapsesTo} (reflexive
+transitive closure), \texttt{DCollapsible}.
+\end{definition}
+
+\begin{definition}[Shelling]
+From Wikipedia, \emph{Shelling (topology)}
+(\url{https://en.wikipedia.org/wiki/Shelling_(topology)}): ``An ordering $C_1,C_2,\ldots$ of the
+maximal simplices of $\Delta$ is a shelling if, for all $k=2,3,\ldots$, the complex
+$B_k:=(\bigcup_{i=1}^{k-1}C_i)\cap C_k$ is pure and of dimension one smaller than $\dim C_k$.''
+Here $C_i$ stands for the complex of all subsets of $C_i$. In Lean, \texttt{IsShelling K L} says
+that the list $L$ has no duplicates, lists exactly the maximal faces of $K$, and, for every
+0-based index $k\ge 1$, the family \texttt{shellBoundary L k C\_k} $=\{\eta\subseteq C_k \mid
+\exists i<k,\ \eta\subseteq C_i\}$ is nonempty and all its maximal faces have $|C_k|-1$ elements.
+\texttt{Shellable K} means that some shelling exists.
+\end{definition}
+
+\begin{definition}[Collapse-type moves, for robustness]
+The gloss ``matched contractions of $d$-faces'' is not a standard definition. To show the result
+does not depend on it, we also use Whitehead's collapses as stated in Wikipedia, \emph{Collapse
+(topology)} (\url{https://en.wikipedia.org/wiki/Collapse_(topology)}). If $\tau\subsetneq\sigma$,
+$\sigma$ is a maximal face and no other maximal face contains $\tau$, then ``$\tau$ is called a free
+face. A simplicial collapse of $K$ is the removal of all simplices $\gamma$ such that
+$\tau\subseteq\gamma\subseteq\sigma$, where $\tau$ is a free face. If additionally we have
+$\dim\tau=\dim\sigma-1$, then this is called an elementary collapse. A simplicial complex that has a
+sequence of collapses leading to a point is called collapsible.'' In Lean these are
+\texttt{IsFreeFace}, \texttt{SimplicialCollapse}, \texttt{ElementaryCollapse} and
+\texttt{Collapsible} (collapse to $\{\emptyset,\{v\}\}$). These auxiliary Lean definitions use an
+augmented convention: they also allow the empty face as a free face (so, e.g., $\{\emptyset,\{v\}\}$
+may collapse to the void complex), which ordinary homotopy-preserving Whitehead collapses exclude.
+This only makes the moves more permissive; the obstruction below holds even under it, since $T$ has
+no free face of any dimension.
+\end{definition}
+
+\section{The witness and the proof}
+
+Let $T$ be the boundary of the tetrahedron: all proper subsets of $\{0,1,2,3\}$ (15 faces, including
+$\emptyset$). In Lean, \texttt{tetraBoundary := (univ : Finset (Fin 4)).powerset.erase univ}.
+Its maximal faces are the four triangles $\{0,1,2\},\{0,1,3\},\{0,2,3\},\{1,2,3\}$, so $T$ is a
+simplicial complex, pure of dimension 2.
+
+\begin{lemma}[Shelling]
+$C_1=\{0,1,2\}$, $C_2=\{0,1,3\}$, $C_3=\{0,2,3\}$, $C_4=\{1,2,3\}$ is a shelling of $T$.
+\end{lemma}
+\begin{proof}
+$B_2$ is generated by the edge $\{0,1\}$; $B_3$ by the edges $\{0,2\},\{0,3\}$; $B_4$ by the edges
+$\{1,2\},\{1,3\},\{2,3\}$. Each is pure of dimension $1=\dim C_k-1$. (Lean:
+\texttt{tetraBoundary\_shelling}, checked by \texttt{decide} on the finite encoding.)
+\end{proof}
+
+\begin{lemma}[No free face]
+Every face of $T$ that is not maximal lies in at least two maximal faces. So $T$ has no free face.
+\end{lemma}
+\begin{proof}
+An edge lies in 2 triangles, a vertex in 3, and $\emptyset$ in all 4 (Lean:
+\texttt{two\_facets\_above}, by \texttt{decide}). A non-maximal face $\sigma$ properly contained in a
+triangle has $|\sigma|\le 2$, so it lies in two distinct triangles, and no triangle is the unique
+maximal face containing it (Lean: \texttt{tetraBoundary\_no\_free\_face}).
+\end{proof}
+
+\begin{lemma}[Stuck complexes]
+Let $R$ be any move relation on complexes such that every $R$-move out of $K$ uses a free face of
+$K$. If $K$ has no free face, then every complex reachable from $K$ by finitely many $R$-moves equals
+$K$. (Lean: \texttt{stuck\_of\_no\_free\_face}.)
+\end{lemma}
+
+Simplicial and elementary collapses use a free face by definition
+(\texttt{simplicialCollapse\_needs\_free}, \texttt{elementaryCollapse\_needs\_free}). An elementary
+$d$-collapse uses a face $\sigma$ with $|\sigma|\le d$ and a unique maximal face $\tau(\sigma)$.
+If every maximal face has more than $d$ vertices, then $\sigma\ne\tau(\sigma)$, so $\sigma$ is free
+(\texttt{elemDCollapse\_needs\_free}). In $T$ every maximal face has 3 vertices, so this applies for
+every $d\le 2$.
+
+\begin{theorem}
+For every $d\le 2$, $T$ is not $d$-collapsible. Also, $T$ admits no simplicial or elementary
+collapse, and $T$ is not collapsible.
+\end{theorem}
+\begin{proof}
+By the two lemmas, any $d$-collapsing of $T$ ($d\le 2$) ends at $T$ itself
+(\texttt{dCollapsesTo\_eq}). But $T\ne\emptyset$, so $T\not\twoheadrightarrow\emptyset$
+(\texttt{tetraBoundary\_not\_dCollapsible}). In the same way, every sequence of simplicial or
+elementary collapses ends at $T$ (\texttt{tetraBoundary\_simplicialCollapse\_stuck},
+\texttt{tetraBoundary\_elementaryCollapse\_stuck}). $T$ has 15 faces and a point has 2, so $T$ is not
+collapsible (\texttt{tetraBoundary\_not\_collapsible}).
+\end{proof}
+
+\begin{theorem}[Main]
+Statement (S) is false for $d=2$. In Lean:
+\[
+  \begin{aligned}
+  \neg\,\forall\,(n\ d:\mathbb{N})\,(K:\texttt{Finset (Finset (Fin }n\texttt{))}),\quad
+  &\texttt{IsComplex }K\to\texttt{IsPureOfDim }K\ d\\
+  &\to\texttt{Shellable }K\to\texttt{DCollapsible }d\ K
+  \end{aligned}
+\]
+(theorem \texttt{C2718.conjecture2718\_false})
+together with \texttt{counterexample}: \texttt{IsComplex tetraBoundary},
+\texttt{IsPureOfDim tetraBoundary 2}, \texttt{Shellable tetraBoundary} and
+$\neg$\,\texttt{DCollapsible 2 tetraBoundary}.
+\end{theorem}
+
+\section{Lean formalization and axiom audit}
+
+The file \texttt{lean/Conjecture2718/Basic.lean} (237 lines, \texttt{import Mathlib} only, Lean
+4.33.1, Mathlib v4.33.1) contains all definitions above for an arbitrary vertex type with decidable
+equality. The finite facts about $T$ are checked by the kernel with \texttt{decide} on the faithful
+encoding \texttt{Finset (Finset (Fin 4))}. The output of \texttt{\#print axioms} for
+\texttt{C2718.conjecture2718\_false}, \texttt{C2718.counterexample},
+\texttt{C2718.tetraBoundary\_not\_collapsible} and
+\texttt{C2718.tetraBoundary\_elementaryCollapse\_stuck} is
+\texttt{[propext, Classical.choice, Quot.sound]} in each case. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom.
+
+\end{document}
