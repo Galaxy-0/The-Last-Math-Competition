@@ -1,0 +1,193 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Ext}{\operatorname{Ext}}
+\newcommand{\depth}{\operatorname{depth}}
+
+\title{Proof of conjecture 00000003200:\\ maximal regular sequences have length equal to the Ext-depth (Rees)}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the reading}
+
+\textbf{Statement (English, verbatim).} Definition: Dimension theory: Krull dimension and Noether
+normalization. Conjecture: The linear-algebraic computation of dimension: the maximal length of
+regular sequences equals the depth of the homogeneous ideal, with the evaluation of depth the Ext
+vanishing layer. (Noether normalization Ext evaluation)
+
+The Chinese text says the same thing: the maximal length of regular sequences equals the depth of the
+homogeneous ideal, and depth is evaluated as the Ext vanishing layer.
+
+\textbf{Reading.} The claim is Rees's theorem: the maximal length of a regular sequence equals the
+depth, where the depth is the first degree in which Ext does not vanish. We prove it in the general
+form below and then specialize it to a standard graded polynomial ring and a homogeneous ideal. The
+phrases ``Krull dimension'', ``Noether normalization'' and ``linear-algebraic computation'' in the
+Definition line play no role in the claim. We do not claim $\depth=\dim$ (the Cohen--Macaulay
+property), since the text does not state it.
+
+\textbf{Setting and conventions.} $R$ is a commutative Noetherian ring, $J\subseteq R$ an ideal and
+$M$ a finitely generated $R$-module with $JM\neq M$ (in Lean, $J\cdot\top<\top$ in the submodule
+lattice of $M$; $M$ is an object of \texttt{ModuleCat} in the universe of $R$).
+\begin{itemize}
+\item A sequence $x_1,\dots,x_n\in R$ is \emph{$M$-regular} if each $x_i$ is a nonzerodivisor on
+  $M/(x_1,\dots,x_{i-1})M$ and $M\neq(x_1,\dots,x_n)M$ (Mathlib's
+  \texttt{RingTheory.Sequence.IsRegular}). The empty sequence is $M$-regular iff $M\neq0$.
+\item It is a regular sequence \emph{in $J$} if all $x_i\in J$ (\texttt{IsRegIn}). It is
+  \emph{maximal} if no $r\in J$ makes $x_1,\dots,x_n,r$ an $M$-regular sequence
+  (\texttt{IsMaximalRegIn}).
+\item $\Ext^i_R(R/J,M)$ is Mathlib's \texttt{CategoryTheory.Abelian.Ext} in \texttt{ModuleCat R};
+  ``$\neq0$'' means not \texttt{Subsingleton}.
+\item $\texttt{extDepth}\,J\,M=\min\{i\in\mathbb N:\Ext^i_R(R/J,M)\neq0\}\in\mathbb N\cup\{\infty\}$
+  (infimum in $\mathbb N_\infty$, $=\infty$ if the set is empty). This is the $J$-depth
+  $\depth_J(M)$.
+\item $\texttt{regDepth}\,J\,M=\sup\{\text{length of an $M$-regular sequence in $J$}\}\in
+  \mathbb N\cup\{\infty\}$; $\texttt{regLengths}\,J\,M\subseteq\mathbb N$ is the set of these lengths.
+\end{itemize}
+
+\textbf{Sources.} Wikipedia, \emph{Depth (ring theory)}: ``By a theorem of David Rees, the depth can
+also be characterized using the notion of a regular sequence.'' The decisive equivalence is proved in
+Mathlib, file \url{Mathlib/RingTheory/Depth/Rees.lean} (by Nailin Guan): ``In this file we prove the
+Rees theorem for depth, which relates the vanishing of certain `Ext` groups and the length of a
+maximal regular sequence in a certain ideal.''
+
+\section{The general theorem}
+
+\begin{lemma}[Rees, in Mathlib; \texttt{C3200.rees\_iff}]\label{lem:rees}
+For every $n\in\mathbb N$: $\Ext^i_R(R/J,M)=0$ for all $i<n$ iff $J$ contains an $M$-regular
+sequence of length $n$.
+\end{lemma}
+\begin{proof}
+This is Mathlib's \texttt{ModuleCat.exists\_isRegular\_of\_exists\_subsingleton\_ext} and
+\texttt{ModuleCat.subsingleton\_ext\_of\_exists\_isRegular} applied with $N=R/J$, whose support is
+$V(J)$ since $\operatorname{Ann}(R/J)=J$ (\texttt{support\_quot}).
+\end{proof}
+
+\begin{lemma}[\texttt{C3200.length\_le\_extDepth}]\label{lem:le}
+If $x_1,\dots,x_n$ is $M$-regular in $J$, then $n\le\texttt{extDepth}\,J\,M$.
+\end{lemma}
+\begin{proof}
+By Lemma~\ref{lem:rees}, $\Ext^i(R/J,M)=0$ for $i<n$, so every nonvanishing degree is $\ge n$.
+\end{proof}
+
+\begin{lemma}[Extension; \texttt{C3200.exists\_extend}]\label{lem:ext}
+If $\mathbf x=x_1,\dots,x_n$ is $M$-regular in $J$ and $\Ext^i_R(R/J,M)=0$ for all $i\le n$, then
+there is $r\in J$ such that $x_1,\dots,x_n,r$ is $M$-regular.
+\end{lemma}
+\begin{proof}
+Induction on $n$, for all $M$ at once. For $n=0$, Lemma~\ref{lem:rees} with $n=1$ gives a regular
+sequence $[r]$ in $J$. For $n\ge1$, put $a=x_1$ and $M'=M/aM$. Then $x_2,\dots,x_n$ is $M'$-regular,
+and $JM'\neq M'$ (a lemma copied from a private lemma of Mathlib's \texttt{Rees.lean},
+\texttt{smul\_top\_quot\_ne\_top}). The short exact sequence $0\to M\xrightarrow{a}M\to M'\to0$
+gives an exact segment
+$\Ext^i(R/J,M)\to\Ext^i(R/J,M')\to\Ext^{i+1}(R/J,M)$ (Mathlib's
+\texttt{Ext.covariant\_sequence\_exact}$_3$\texttt{'}). For $i\le n-1$ both ends vanish, so
+$\Ext^i(R/J,M')=0$. The induction hypothesis extends $x_2,\dots,x_n$ by some $r\in J$ on $M'$, and
+then $a,x_2,\dots,x_n,r$ is $M$-regular.
+\end{proof}
+
+\begin{theorem}[\texttt{C3200.length\_eq\_extDepth\_of\_maximal}]\label{thm:max}
+Every maximal $M$-regular sequence in $J$ has length $\texttt{extDepth}\,J\,M$.
+\end{theorem}
+\begin{proof}
+Let $\mathbf x$ be maximal of length $n$. Lemma~\ref{lem:le} gives $n\le\texttt{extDepth}$. If
+$\Ext^n(R/J,M)=0$, then together with Lemma~\ref{lem:rees} (degrees $<n$) Lemma~\ref{lem:ext}
+extends $\mathbf x$, a contradiction. So $\Ext^n\neq0$ and $\texttt{extDepth}\le n$.
+\end{proof}
+
+\begin{lemma}[\texttt{C3200.exists\_maximal}]\label{lem:exists}
+A maximal $M$-regular sequence in $J$ exists.
+\end{lemma}
+\begin{proof}
+$M\neq0$, so the empty sequence is regular. Since $R$ is Noetherian
+(\texttt{set\_has\_maximal\_iff\_noetherian}), choose a regular sequence $\mathbf x$ in $J$ whose ideal
+$(\mathbf x)$ is maximal among the ideals of such sequences. If $\mathbf x,r$ were regular with
+$r\in J$, then $(\mathbf x)=(\mathbf x,r)$, so $r\in(\mathbf x)$ acts as $0$ on
+$\overline M=M/(\mathbf x)M$, while it is a nonzerodivisor on $\overline M$. Hence $\overline M=0$,
+contradicting $M\neq(\mathbf x)M$.
+\end{proof}
+
+\begin{theorem}[Rees; \texttt{C3200.rees\_depth}]\label{thm:main}
+There is $n\in\mathbb N$ with
+(a) $\texttt{extDepth}\,J\,M=n$;
+(b) $\texttt{regDepth}\,J\,M=n$;
+(c) $n$ is the greatest element of $\texttt{regLengths}\,J\,M$ (\texttt{IsGreatest});
+(d) every maximal $M$-regular sequence in $J$ has length $n$.
+\end{theorem}
+\begin{proof}
+Take $\mathbf x$ from Lemma~\ref{lem:exists} and $n$ its length. Then (a) and (d) are
+Theorem~\ref{thm:max}. Lemma~\ref{lem:le} bounds every length by $n$, and $\mathbf x$ attains $n$,
+which gives (b) and (c).
+\end{proof}
+
+\section{The graded readings}
+
+Let $k$ be a field and $S=k[x_1,\dots,x_m]$ (\texttt{MvPolynomial (Fin m) k}) with the standard
+grading by total degree (Mathlib's \texttt{MvPolynomial.gradedAlgebra} on
+\texttt{homogeneousSubmodule}). ``Homogeneous'' is Mathlib's \texttt{Ideal.IsHomogeneous} for this
+grading. The irrelevant ideal $\mathfrak m=\texttt{irr}\,k\,m$ is Mathlib's
+\texttt{HomogeneousIdeal.irrelevant}. We prove $f\in\mathfrak m\iff$ the constant coefficient of $f$
+is $0$ (\texttt{mem\_irr\_iff}), so $\mathfrak m=(x_1,\dots,x_m)$ is the kernel of $S\to k$
+(\texttt{irr\_eq\_ker}). It is maximal (\texttt{irr\_isMaximal}), and $S/\mathfrak m=k$ is the
+residue field.
+
+\begin{lemma}[\texttt{C3200.le\_irr}]
+A proper homogeneous ideal $I$ of $S$ is contained in $\mathfrak m$.
+\end{lemma}
+\begin{proof}
+If $f\in I$, its degree-$0$ component, the constant $c$, lies in $I$. If $c\neq0$ it is a unit, so
+$I=S$.
+\end{proof}
+
+\begin{corollary}[Reading R1, grade; \texttt{C3200.grade\_reading}]
+For a proper ideal $I$ of $S$ (in particular a proper homogeneous one), Theorem~\ref{thm:main} holds
+with $J=I$ and $M=S$. So the maximal length of an $S$-regular sequence in $I$ equals
+$\min\{i:\Ext^i_S(S/I,S)\neq0\}=\operatorname{grade}I$, and every maximal one has this length.
+\end{corollary}
+
+\begin{corollary}[Reading R2, depth of $S/I$; \texttt{C3200.quotient\_reading}]
+For a proper homogeneous ideal $I$ of $S$, Theorem~\ref{thm:main} holds with $J=\mathfrak m$ and
+$M=S/I$. So the maximal length of an $S/I$-regular sequence in $\mathfrak m$ equals
+$\min\{i:\Ext^i_S(k,S/I)\neq0\}$, which is Ext from the residue field $k=S/\mathfrak m$.
+\end{corollary}
+\begin{proof}
+$\mathfrak m(S/I)=S/I$ would give $\mathfrak m+I=S$. But $\mathfrak m+I=\mathfrak m\neq S$ by the
+lemma.
+\end{proof}
+
+\textbf{Scope.} The regular sequences are arbitrary elements of $J$. Homogeneous regular sequences are
+not treated separately, and we do not instantiate the depth of $I$ viewed as a module (the general
+Theorem~\ref{thm:main} applies to any finitely generated $M$ with $JM\neq M$, but we did not verify
+that hypothesis for $M=I$).
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture3200/Basic.lean} (257 lines, \texttt{import Mathlib} only, namespace
+\texttt{C3200}). Main theorems: \texttt{rees\_depth}, \texttt{grade\_reading},
+\texttt{quotient\_reading}, \texttt{irr\_isMaximal}. The main statement reads:
+\begin{verbatim}
+theorem rees_depth (J : Ideal R) (M : ModuleCat.{u} R) [Module.Finite R M]
+    (hJ : J * (top : Submodule R M) < top) :
+    exists n : Nat, extDepth J M = n /\ regDepth J M = n /\
+      IsGreatest (regLengths J M) n /\
+      forall rs, IsMaximalRegIn J M rs -> rs.length = n
+\end{verbatim}
+(ASCII rendering. In Lean, \texttt{*} is the scalar action $\bullet$ and \texttt{top} is $\top$, with
+\texttt{[CommRing R] [IsNoetherianRing R]}.) \texttt{lake build} succeeds, and
+\texttt{\#print axioms} reports only \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound} for all four theorems. There is no \texttt{sorry} and no \texttt{native\_decide}.
+The key equivalence and the private lemma \texttt{smul\_top\_quot\_ne\_top} are reused from Mathlib's
+\texttt{Rees.lean} with credit.
+
+\end{document}
