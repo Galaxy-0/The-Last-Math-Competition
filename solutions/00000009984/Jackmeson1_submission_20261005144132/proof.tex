@@ -1,0 +1,137 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Disproof of conjecture 00000009984:\\ squared irreducible dimensions need not divide $\dim H$}
+\author{Jackmeson1}
+\date{}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+\emph{English.} Definition: Semisimple Hopf algebras: finite-dimensional semisimple coalgebra
+structures. Conjecture: The sum of squared dimensions of irreducible modules of a semisimple Hopf
+algebra factors as the unique factorization of the dimension, and each squared factor divides the
+dimension; the strengthened uniqueness of the factorization excludes alternating-type exceptions,
+and the exception list is empty. (Hopf module dimension square factorization)
+
+\emph{Chinese text} (as in the repository): the sum of the squares of the dimensions of the
+irreducible modules decomposes as the unique decomposition of the dimension, and \emph{each square
+factor divides the dimension}; the exception list is empty.
+
+\section{Reading}
+The conjecture is a conjunction. We refute one conjunct, the \emph{divisibility clause}:
+\begin{quote}
+(D) For every finite-dimensional semisimple Hopf algebra $A$ over $\mathbb{C}$ and every
+irreducible (simple) left $A$-module $M$, the square $(\dim_{\mathbb{C}} M)^2$ divides
+$\dim_{\mathbb{C}} A$.
+\end{quote}
+Here ``squared factor'' is read as the square $d_i^2$ of an irreducible dimension $d_i$, i.e.\ a
+summand of the ``sum of squared dimensions'' $\sum_i d_i^2$. ``The exception list is empty'' means
+(D) is asserted for every such $A$, with no exceptions. Since the conjunction contains (D), a
+counterexample to (D) refutes the conjecture as read. The first conjunct ($\sum_i d_i^2=\dim A$)
+is not used.
+
+\emph{Not refuted:} the different reading ``each irreducible dimension $d_i$ (unsquared) divides
+$\dim A$''. Our example satisfies that reading ($d_i\in\{1,2\}$, $\dim A=6$), and this submission
+makes no claim about it.
+
+\section{Definitions}
+\begin{itemize}
+\item A \emph{Hopf algebra} over $\mathbb{C}$ is a bialgebra $(A,m,u,\Delta,\varepsilon)$ with an
+antipode $S$ satisfying $m(S\otimes\mathrm{id})\Delta=u\varepsilon=m(\mathrm{id}\otimes S)\Delta$.
+In Lean this is Mathlib's class \texttt{HopfAlgebra} \texttt{\char`\\C} \texttt{A}.
+\item $A$ is \emph{semisimple} if it is semisimple as an algebra, i.e.\ every left $A$-module is a
+direct sum of simple modules (Lean: \texttt{IsSemisimpleRing A}).
+\item An \emph{irreducible} module is a simple left $A$-module: nonzero with no submodules other
+than $0$ and itself (Lean: \texttt{IsSimpleModule A M}). Its $\mathbb{C}$-structure is the
+restriction of the $A$-structure (Lean: \texttt{IsScalarTower \char`\\C A M}); we also require it
+to be finite-dimensional, which only weakens (D) and so strengthens the refutation.
+\end{itemize}
+
+\section{The counterexample $A=\mathbb{C}[S_3]$}
+Let $S_3$ be the symmetric group on $\{0,1,2\}$ and $A=\mathbb{C}[S_3]$ its group algebra, with
+the standard Hopf structure $\Delta(g)=g\otimes g$, $\varepsilon(g)=1$, $S(g)=g^{-1}$ (Mathlib's
+instance on \texttt{MonoidAlgebra}). Then:
+\begin{enumerate}
+\item $\dim_{\mathbb{C}} A=|S_3|=6$ (Lean: \texttt{finrank\_H}).
+\item $A$ is semisimple by Maschke's theorem, since $6\neq 0$ in $\mathbb{C}$ (Lean:
+\texttt{H\_semisimple}, from Mathlib's Maschke instance).
+\item Every $g\in S_3$ is group-like: $\Delta(g)=g\otimes g$, $\varepsilon(g)=1$, $S(g)=g^{-1}$
+(Lean: \texttt{grouplike}). Hence the coalgebra $A$ is the direct sum of the one-dimensional
+subcoalgebras $\mathbb{C}g$, so $A$ also has a semisimple coalgebra structure, as in the
+conjecture's definition line.
+\end{enumerate}
+$S_3$ is a symmetric group, so $A$ is not of ``alternating type'' under any meaning of that phrase;
+in any case the conjecture says the exception list is empty.
+
+\begin{lemma}[\texttt{sq\_dvd\_six}]
+If $d\in\mathbb{N}$ and $d^2\mid 6$ then $d=1$.
+\end{lemma}
+\begin{proof}
+$d^2\le 6$ gives $d\le 2$; $d=0$ fails since $0\nmid 6$, and $d=2$ fails since $4\nmid 6$.
+\end{proof}
+
+\begin{lemma}[\texttt{comm\_on\_simple}]
+Let $N\subseteq A$ be a simple left ideal with $\dim_{\mathbb{C}}N=1$. Then
+$(ab-ba)n=0$ for all $a,b\in A$ and $n\in N$.
+\end{lemma}
+\begin{proof}
+Pick $0\neq v\in N$; then $N=\mathbb{C}v$, so $av=\alpha v$ and $bv=\beta v$ for scalars
+$\alpha,\beta$. Since scalars are central in $A$, $abv=\alpha\beta v=bav$, so $(ab-ba)v=0$, and
+hence $(ab-ba)(cv)=c(ab-ba)v=0$.
+\end{proof}
+
+\begin{theorem}[\texttt{H\_not\_squaredDimsDivide}]
+$A=\mathbb{C}[S_3]$ violates (D).
+\end{theorem}
+\begin{proof}
+Assume (D) for $A$. Every simple left ideal $N$ of $A$ is a simple $A$-module, so
+$(\dim N)^2\mid 6$ and $\dim N=1$ by the first lemma. By the second lemma, every commutator
+$c=ab-ba$ annihilates every simple left ideal. Since $A$ is a semisimple module over itself, it is
+the supremum of its simple submodules (Mathlib: \texttt{IsSemisimpleModule.sSup\_simples\_eq\_top}),
+and the annihilator of a supremum is the intersection of the annihilators
+(\texttt{Submodule.annihilator\_iSup}). So $c$ annihilates $A$, and $c=c\cdot 1=0$. Thus $A$ is
+commutative. But for the transpositions $\sigma=(0\,1)$, $\tau=(1\,2)$ we have
+$\sigma\tau\neq\tau\sigma$, and distinct group elements are distinct basis vectors of $A$, so
+$\sigma\tau\neq\tau\sigma$ in $A$ (Lean: \texttt{H\_not\_comm}). Contradiction.
+\end{proof}
+(Concretely, the offending simple module is the $2$-dimensional standard representation; the Lean
+proof does not need to construct it.)
+
+\begin{theorem}[\texttt{disproof}]
+It is not true that every finite-dimensional semisimple Hopf algebra $A$ over $\mathbb{C}$
+satisfies (D).
+\end{theorem}
+
+\section{Lean formalization}
+File \texttt{lean/Conjecture9984/Basic.lean} (Lean 4, Mathlib v4.33.1, 127 lines). Definition:
+\begin{verbatim}
+def SquaredDimsDivide (A : Type) [Ring A] [HopfAlgebra C A] : Prop :=
+  forall (M : Type) [AddCommGroup M] [Module A M] [Module C M]
+    [IsScalarTower C A M] [IsSimpleModule A M] [FiniteDimensional C M],
+    (finrank C M) ^ 2 | finrank C A
+\end{verbatim}
+Main theorem:
+\begin{verbatim}
+theorem disproof :
+    not (forall (A : Type) [Ring A] [HopfAlgebra C A] [IsSemisimpleRing A]
+      [FiniteDimensional C A], SquaredDimsDivide A)
+\end{verbatim}
+(here \texttt{C} is $\mathbb{C}$). Supporting theorems: \texttt{finrank\_H}, \texttt{H\_semisimple},
+\texttt{grouplike}, \texttt{H\_not\_comm}, \texttt{sq\_dvd\_six}, \texttt{comm\_on\_simple},
+\texttt{H\_not\_squaredDimsDivide}.
+
+\emph{Axiom audit.} \texttt{\#print axioms C9984.disproof} (likewise \texttt{grouplike},
+\texttt{finrank\_H}) reports only \texttt{propext}, \texttt{Classical.choice},
+\texttt{Quot.sound}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+\texttt{lake build} succeeds.
+
+\end{document}
