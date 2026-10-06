@@ -1,0 +1,157 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\title{Disproof of conjecture 00000008433:\\ no threshold in $t$ alone makes the divisibility conditions sufficient for $t$-designs}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the reading}
+
+\textbf{Statement (English, verbatim).} Definition: The Wilson asymptotics of t-designs: their
+existence for large v. Conjecture: Once v is at least exp(exp(t)), existence is decided solely by
+the divisibility conditions; and the bound can be improved to v at least t\^{}\{ct\} with c an
+absolute constant. (improvement of the Wilson existence bound)
+
+The Chinese version says the same: after $v\ge \exp(\exp(t))$ existence is determined only by the
+divisibility conditions, and the bound can be improved to $v\ge t^{ct}$ with $c$ an absolute
+constant.
+
+\textbf{Reading.} Both thresholds, $\exp(\exp(t))$ and $t^{ct}$, are functions of $t$ alone, and
+$c$ is called \emph{absolute}. We therefore read each clause as: for all parameters
+$t,v,k,\lambda$ (non-degenerate, see Definition~\ref{def:adm}) with $v$ at least the threshold, a
+$t$-$(v,k,\lambda)$ design exists if and only if the divisibility conditions hold. The second clause
+is read as ``there is a real constant $c$ such that \dots''. We refute both clauses, for every real
+$c$, and more generally every threshold $T(t)$ that depends on $t$ only.
+
+\textbf{Not refuted.} The reading in which the threshold may also depend on $k$ and $\lambda$
+(a bound $v\ge v_0(t,k,\lambda)$) is not refuted here. That reading replaces the stated
+$\exp(\exp(t))$ and $t^{ct}$ by different functions, and our family has $k\to\infty$.
+
+\section{Definitions (as in the Lean file)}
+
+Following the standard definition (quoted from Wikipedia, \emph{Block design}, retrieved
+2026-10-05): ``Given any positive integer t, a t-design B is a class of k-element subsets of X,
+called blocks, such that every point x in X appears in exactly r blocks, and every t-element subset
+T appears in exactly lambda blocks.'' The same page says ``Block designs may or may not have
+repeated blocks. Designs without repeated blocks are called simple''.
+
+\begin{definition}[\texttt{IsDesign}, \texttt{HasDesign}, \texttt{HasSimpleDesign}]
+Let $\alpha$ be a finite point set and $\iota$ a finite index set. A family
+$\mathrm{blk}:\iota\to\mathrm{Finset}\,\alpha$ is a $t$-$(v,k,\lambda)$ design ($v=|\alpha|$) if
+$|\mathrm{blk}(i)|=k$ for every $i$, and every $t$-subset $T\subseteq\alpha$ satisfies
+$\#\{i : T\subseteq \mathrm{blk}(i)\}=\lambda$. Blocks are counted by index, so repeated blocks are
+allowed. \texttt{HasDesign t v k lam} means that such a family exists on $\mathrm{Fin}\,v$ for some
+number $b$ of blocks. \texttt{HasSimpleDesign} asks for a set $D$ of $k$-subsets with each
+$t$-subset in exactly $\lambda$ members of $D$. The condition ``every point is in exactly $r$
+blocks'' is not imposed. Omitting it only enlarges the class of designs, so non-existence proved
+without it also covers definitions that include it.
+\end{definition}
+
+\begin{definition}[\texttt{DivCond}]
+The divisibility conditions: $\binom{k-i}{t-i}$ divides $\lambda\binom{v-i}{t-i}$ for
+$i=0,1,\dots,t$. (The case $i=t$ is trivial, so this is equivalent to the version with $i<t$.)
+\end{definition}
+
+\begin{definition}[\texttt{Admissible}]\label{def:adm}
+$2\le t<k$, $k+t<v$, and $1\le\lambda\le\binom{v-t}{k-t}$. These conditions exclude trivial and
+degenerate parameter sets.
+\end{definition}
+
+\texttt{Clause1}: for all $t,v,k,\lambda$ with \texttt{Admissible} and $\exp(\exp t)\le v$,
+\texttt{HasDesign} $\iff$ \texttt{DivCond}. \texttt{Clause2}: there is $c\in\mathbb R$ such that
+for all admissible $t,v,k,\lambda$ with $t^{ct}\le v$ (real power), \texttt{HasDesign} $\iff$
+\texttt{DivCond}.
+
+\section{The counterexample family}
+
+For $m\ge 3$ put $t=2$, $\lambda=1$, $v=(m-1)^2(m+1)$ and $k=m(m-1)$ (Lean: \texttt{vF},
+\texttt{kF}). Then $v-1=m(m^2-m-1)=m(k-1)$, so $r=(v-1)/(k-1)=m$, and
+$v(v-1)/(k(k-1))=(m-1)(m+1)=m^2-1$. For example, $m=13$ gives $2$-$(2016,156,1)$, and
+$2016>e^{e^2}\approx 1618.18$ (this numerical remark is not used in the proof).
+
+\begin{lemma}[\texttt{family\_admissible}, \texttt{family\_divCond}]
+For $m\ge3$ the parameters are admissible and satisfy all divisibility conditions:
+$i=0$: $\binom{k}{2}(m^2-1)=\binom{v}{2}$; $i=1$: $(k-1)m=v-1$; $i=2$: trivial.
+\end{lemma}
+\begin{proof}
+Write $m=p+3$. Then $v=(p+2)^2(p+4)$, $k=(p+3)(p+2)$, $k-1=p^2+5p+5$ and
+$v-1=(p+3)(p^2+5p+5)$. The identities follow by ring arithmetic, using
+$2\binom n2=n(n-1)$. Admissibility: $k\ge 6>2$, $k+2<v$, and
+$\binom{v-2}{k-2}\ge1$ because $k\le v$.
+\end{proof}
+
+\begin{lemma}[\texttt{fisher\_bound}]
+Let $\mathrm{blk}:\iota\to\mathrm{Finset}\,\alpha$ be a $2$-$(v,k,1)$ design with $2\le k<v=|\alpha|$.
+Then $k(k-1)\le v-1$.
+\end{lemma}
+\begin{proof}
+This is the $\lambda=1$ case of Fisher's inequality $b\ge v$ (Wikipedia, \emph{Block design}:
+``Fisher's inequality, named after the statistician Ronald Fisher, is that b $\ge$ v in any
+2-design''). We prove it directly by two double counts.
+Since $v\ge2$, some pair lies in a block $B_0=\mathrm{blk}(i_0)$, and since $|B_0|=k<v$ there is a
+point $x\notin B_0$. Let $S=\{i: x\in\mathrm{blk}(i)\}$.
+(a) $k\le|S|$: each $y\in B_0$ lies in some block of $S$, namely the block through the pair $\{x,y\}$.
+A block $i\in S$ contains at most one point of $B_0$. Otherwise two points $y\ne z$ of $B_0$ would
+lie in both $\mathrm{blk}(i)$ and $B_0$, and $i\ne i_0$ because $x\notin B_0$. This contradicts
+$\lambda=1$. Double counting the incidences $(y,i)$ with $y\in B_0$, $i\in S$ and
+$y\in\mathrm{blk}(i)$ gives $k\cdot1\le|S|\cdot1$.
+(b) $|S|(k-1)\le v-1$: each $i\in S$ contains $k-1$ points other than $x$. Each $y\ne x$ lies in at
+most one block of $S$, since such blocks contain $\{x,y\}$. Double counting gives the bound.
+Hence $k(k-1)\le|S|(k-1)\le v-1$. Both counts use Mathlib's
+\texttt{Finset.card\_mul\_le\_card\_mul}.
+\end{proof}
+
+\begin{theorem}[\texttt{family\_no\_design}, \texttt{family\_no\_simple\_design}]
+For $m\ge3$ there is no $2$-$((m-1)^2(m+1),\,m(m-1),\,1)$ design, simple or with repeated blocks.
+\end{theorem}
+\begin{proof}
+By the lemma, $k(k-1)\le v-1=m(k-1)$, and $k-1>0$, so $k\le m$. But $k=m(m-1)\ge2m>m$. A simple
+design $D$ is the indexed family $D\to\mathrm{Finset}\,(\mathrm{Fin}\,v)$, $B\mapsto B$, with the
+same incidence counts, so it is excluded as well.
+\end{proof}
+
+\begin{theorem}[\texttt{exists\_counterexample}, \texttt{threshold\_fails}]
+For every $T:\mathbb N\to\mathbb R$ there are admissible $t,v,k,\lambda$ with $T(t)<v$, the
+divisibility conditions satisfied, and no design (indexed or simple). Hence
+``$\forall\,t,v,k,\lambda$ admissible with $T(t)\le v$: \texttt{DivCond} $\Rightarrow$
+\texttt{HasDesign}'' is false.
+\end{theorem}
+\begin{proof}
+Choose $N\in\mathbb N$ with $N>T(2)$ and take $m=N+3$. Then $v=(N+2)^2(N+4)\ge N$.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture8433\_false}]
+$\neg\texttt{Clause1}\wedge\neg\texttt{Clause2}$. The first part is \texttt{threshold\_fails} with
+$T(t)=\exp(\exp t)$. The second applies \texttt{threshold\_fails} with $T(t)=t^{ct}$ to each real $c$.
+\end{theorem}
+
+\texttt{witness\_13} records the instance $m=13$: \texttt{vF 13 = 2016}, \texttt{kF 13 = 156},
+\texttt{DivCond 2 2016 156 1} and $\neg$\texttt{HasDesign 2 2016 156 1}.
+
+\section{Lean formalization and axiom audit}
+
+The file \texttt{lean/Conjecture8433/Basic.lean} (254 lines, only \texttt{import Mathlib}, Lean
+v4.33.1, Mathlib v4.33.1) is built with \texttt{lake build}. The theorems named above are in the
+namespace \texttt{Conjecture8433}. The output of \texttt{\#print axioms} for
+\texttt{conjecture8433\_false}, \texttt{exists\_counterexample}, \texttt{threshold\_fails},
+\texttt{witness\_13} and \texttt{fisher\_bound} is
+\texttt{[propext, Classical.choice, Quot.sound]} in each case. The file uses no \texttt{sorry}, no
+\texttt{native\_decide} and adds no axioms.
+
+\section*{Source}
+Wikipedia, \emph{Block design}, \url{https://en.wikipedia.org/wiki/Block_design} (retrieved
+2026-10-05), quoted above.
+
+\end{document}
