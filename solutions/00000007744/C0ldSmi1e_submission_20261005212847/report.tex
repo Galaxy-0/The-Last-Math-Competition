@@ -1,0 +1,231 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage[UTF8,fontset=fandol,scheme=plain]{ctex}
+\usepackage{amsmath,amssymb,amsthm,booktabs,array}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\usepackage{xurl}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Law}{\operatorname{Law}}
+\newcommand{\E}{\mathbb E}
+\newcommand{\lean}[1]{\nolinkurl{#1}}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newtheorem{proposition}{Proposition}
+\renewcommand{\refname}{References}
+\setlength{\emergencystretch}{2em}
+\title{The quadratic trace is deterministic:\\a disproof of Conjecture 00000007744}
+\author{C0ldSmi1e}
+\date{5 October 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+In the uniform simple $d$-regular graph model, the squared adjacency matrix has
+trace $nd$ for every graph on $n$ vertices. Thus its centered quadratic trace,
+with any deterministic matrix and trace normalization and with the stated
+$\sqrt n$ factor, is identically zero. Its law is exactly $\delta_0$ at every
+admissible size, and every weak limit has variance zero. For $d=3$, the
+conjecture instead prescribes variance $8/9$. We formalize the actual uniform
+model, polynomial traces, finite-dimensional laws, and the weak-limit
+contradiction in Lean 4.19.0 with Mathlib v4.19.0.
+\end{abstract}
+
+\section{The original claim and the clause refuted}
+The supplied English statement reads:
+\begin{quote}\small
+Definition: The spectral empirical measure of random d-regular graphs (uniform
+model) converges to the Kesten-McKay law $KM_d$; the second-order limit is the
+joint limit process of normalized trace polynomials times $\sqrt n$.
+Conjecture: The limit is Gaussian with covariance $\Sigma(p,q)$ given by
+$(d+1)$-regular constrained counts of noncrossing return path pairings of $p$
+and $q$; for $p=q=x^2$ one has $\Var=4-12/d+8/d^2$, degenerating to the Wigner
+value $4$ of GUE fluctuations as $d$ grows.
+(Kesten-McKay second-order fluctuations)
+\end{quote}
+The Chinese version makes the centering explicit:
+\begin{quote}\small
+定义：随机 $d$-正则图（一致模型）的谱经验测度收敛到 Kesten--McKay 律
+$KM_d$；其二阶极限分布指规范化迹多项式
+$(\operatorname{tr}p(A)-\E)\cdot\sqrt n$ 的联合极限过程。
+猜想：该极限为高斯族，协方差函数 $\Sigma(p,q)$ 由 $p,q$ 的非交叉返回路径配对的
+$(d+1)$-正则约束计数给出；特别对 $p=q=x^2$，
+$\Var=4-12/d+8/d^2$，且当 $d\to\infty$ 时退化为 GUE 波动的 Wigner 值 $4$。
+\end{quote}
+Both versions require the displayed quadratic-coordinate variance. We disprove
+that explicit requirement at fixed degree $3$. We do not dispute the
+first-order Kesten--McKay convergence or claim that every other coordinate
+vanishes. No interpretation of the unspecified general pairing rule is needed.
+The exact original Markdown file is included as \lean{original_conjecture.md}.
+
+\section{The whole uniform model and its quadratic trace}
+We use the conventional uniform model of finite labelled \emph{simple},
+undirected $d$-regular graphs. Thus loops and parallel edges are absent; we do
+not assert a result about an unconditioned multigraph configuration model.
+The source states no connectedness requirement. On any finite label set $V$
+of size $n$, let
+\[
+ \mathcal G_{V,d}=\{G:\ G\text{ is a simple graph on }V,
+                   \ \deg_G(v)=d\text{ for every }v\in V\}.
+\]
+When this set is nonempty, give \emph{every} graph mass
+$1/|\mathcal G_{V,d}|$. The Lean definitions use the subtype of
+\code{SimpleGraph V} satisfying \code{IsRegularOfDegree d}, and
+\lean{PMF.uniformOfFintype} on that entire subtype. An explicit theorem verifies
+the equal masses. The measurable space consists of all subsets.
+
+Write $A_G$ for the $0$--$1$ adjacency matrix. Let $a,b\in\mathbb R$ be
+deterministic scalars and put
+\[
+ T_{a,b}(G)=b\Tr\bigl((aA_G)^2\bigr),\qquad
+ Y_{a,b}(G)=\bigl(T_{a,b}(G)-\E T_{a,b}\bigr)\sqrt n.
+\]
+Ordinary adjacency and empirical normalized trace correspond to $a=1$ and
+$b=1/n$. Allowing arbitrary $a,b$ also covers ordinary unnormalized trace and
+deterministic rescalings of the adjacency matrix.
+
+\begin{proposition}\label{prop:zero}
+For every graph in $\mathcal G_{V,d}$,
+\[
+ T_{a,b}(G)=ba^2nd,\qquad \E T_{a,b}=ba^2nd,\qquad Y_{a,b}(G)=0.
+\]
+Consequently $\Law(Y_{a,b})=\delta_0$.
+\end{proposition}
+\begin{proof}
+For each $v\in V$, symmetry and $0$--$1$ adjacency entries give
+\[
+ (A_G^2)_{vv}=\sum_{w\in V}(A_G)_{vw}(A_G)_{wv}
+             =\sum_{w\in V}(A_G)_{vw}=\deg_G(v)=d.
+\]
+Summing the diagonal yields $\Tr(A_G^2)=nd$, and scalar multiplication gives
+the asserted formula for $T_{a,b}$. It is a constant on the \emph{whole}
+sample space, so its integral against the uniform probability measure is the
+same constant. Subtracting that expectation gives zero pointwise. Pushing the
+probability measure forward by this constant map gives $\delta_0$.
+\end{proof}
+
+\section{Nonempty large models and the actual weak limit}
+For each $k\geq0$ take
+\[
+ V_{d,k}=\{0,\ldots,k\}\times\{0,\ldots,d\},\qquad
+ n_{d,k}=(k+1)(d+1).
+\]
+The graph with $(i,u)$ adjacent to $(j,v)$ exactly when $i=j$ and $u\ne v$
+is a disjoint union of $k+1$ copies of $K_{d+1}$, hence is $d$-regular.
+This proves nonemptiness of the sample space at every such size. The random
+graph is still drawn uniformly from \emph{all} regular graphs on $V_{d,k}$;
+the block graph is only an existence witness. Lean proves the stated
+cardinality, its positivity, and $n_{d,k}\to\infty$.
+
+Let $a_k,b_k$ be any deterministic real sequences and let $\mu_k$ be the
+actual law of $Y_{a_k,b_k}$ on this model. Proposition~\ref{prop:zero} gives
+$\mu_k=\delta_0$ for every $k$, so $\mu_k\Rightarrow\delta_0$. If also
+$\mu_k\Rightarrow\nu$, uniqueness of weak limits gives $\nu=\delta_0$, and
+therefore
+\[
+ \Var_{\nu}(\operatorname{id})=0.
+\]
+This argument identifies the entire limiting law. It does not interchange
+variance and weak limits. Lean uses the usual weak topology on
+\lean{ProbabilityMeasure}\,$\mathbb R$, its Hausdorff property, and the
+ordinary measure-theoretic variance.
+
+For $d=3$ this is an unbounded sequence of admissible sizes $4(k+1)$. A limit
+asserted over all admissible sizes must also hold along this sequence.
+The finite trace identity holds on every finite label set; the product labels
+impose no additional restriction on the sampled graphs.
+
+\section{From the joint polynomial process to the contradiction}
+For an arbitrary real polynomial $p$, the formal project defines
+\[
+ T_p(G)=b\Tr\bigl(p(aA_G)\bigr),\qquad
+ Z_p(G)=\bigl(T_p(G)-\E T_p\bigr)\sqrt n
+\]
+using \lean{Polynomial.aeval}, the actual matrix trace and the actual uniform
+integral. These observables are integrable on the finite sample space.
+It proves that $p=x^2$ specializes to the preceding quadratic observable.
+For any finite list $p_1,\ldots,p_m$, it constructs the genuine joint law of
+$(Z_{p_1},\ldots,Z_{p_m})$ and identifies each coordinate marginal.
+Continuous coordinate projection sends a weakly convergent sequence of these
+joint laws to a weakly convergent sequence of their marginals.
+
+The predicate \lean{RequiredSecondOrderLimit} states a \emph{necessary part}
+of the original claim: these finite-dimensional laws have weak limits and
+the one-coordinate list $p=x^2$ has the prescribed limiting variance.
+Gaussianity and the other covariance prescriptions are further requirements
+of the original claim. They are not silently redefined in this predicate.
+The formal disproof of this necessary part is sufficient to refute the
+original conjunction.
+
+At $d=3$ the required variance is
+\[
+ 4-\frac{12}{3}+\frac{8}{3^2}=\frac89\ne0.
+\]
+It is incompatible with the uniquely forced law $\delta_0$. Thus no proposed
+Gaussian family with the source's covariance can be the joint limit.
+A degenerate Gaussian coordinate would be consistent with zero fluctuations;
+the contradiction is the explicitly positive variance.
+
+The general formal conclusion is
+\[
+ \forall a,b:\mathbb N\to\mathbb R,\quad
+ \neg\,\mathrm{RequiredSecondOrderLimit}(3,a,b),
+\]
+proved by \lean{no_required_second_order_limit}. The final theorem
+\lean{conjecture7744_false} specializes to $a_k=1$ and $b_k=1/n_{3,k}$.
+No unproved first-order spectral limit or central limit theorem is used.
+
+\section{Formal and computational verification}
+The project pins Lean 4.19.0 and Mathlib v4.19.0 (Mathlib commit
+\lean{c44e0c8ee63ca166450922a373c7409c5d26b00b}), with all nine dependency
+revisions recorded in \lean{lake-manifest.json}. The project build treats
+warnings as errors. The author, coordinator and independent reviewer performed fresh builds.
+The coordinator and reviewer also replayed every final module with
+\code{-DwarningAsError=true}.
+
+There are 49 explicitly authored declarations: 19 definitions, 26 theorems,
+and four named instances. The full compiled inventory contains 83 declarations:
+75 logical declarations and eight compiler-generated runtime wrappers.
+Every logical declaration has only the standard Lean axioms
+\lean{propext}, \lean{Classical.choice}, and \lean{Quot.sound}, or none.
+There are no axiom declarations, admissions, \lean{native_decide}, partial
+logical declarations, or unsafe/missing logical dependencies. The runtime
+wrappers are retained in the inventory and are absent from logical dependency
+closures. The author source has no unsafe proof mechanism.
+
+The supplied exact-arithmetic Python check enumerates every labelled simple
+cubic graph on four and six vertices, computes the full matrix square, and
+then computes uniform expectations and centered variances:
+\begin{center}
+\begin{tabular}{rrrrr}
+\toprule
+$n$ & Graph count & $\Tr(A^2)/n$ & Centered variance & Claimed limit variance\\
+\midrule
+4 & 1 & 3 & 0 & $8/9$\\
+6 & 70 & 3 & 0 & $8/9$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The reviewer independently replayed that script and an alternative complete
+edge-mask enumeration, with matching results. These finite calculations are
+supporting checks only; the asymptotic disproof is the general Lean argument.
+
+The accompanying README gives reproduction commands and the evidence map.
+\code{Audit.lean} prints axiom dependencies for every authored declaration;
+\code{Check.lean} also prints definitions and theorem/instance types.
+The independent verifier inventories all compiled declarations and their
+transitive dependencies. Reports, logs, source identities and auxiliary code
+are included. Early failed author attempts retain their commands, exit codes
+and diagnostics, but their overwritten source versions were not preserved;
+contemporaneous source snapshots begin at final verification. Final-source
+replays are fully bound to their hashes. Local validation is distinct from
+maintainer acceptance.
+
+\begin{thebibliography}{9}
+\bibitem{source} The Last Math Competition, Conjecture 00000007744,
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/ba46ce0997cbf232fe95e5dced37ff4d32e1eb94/conjectures/00000007744.md}{exact source at the submission base}.
+\bibitem{mathlib} Mathlib v4.19.0,
+\lean{SimpleGraph.AdjMatrix}, \lean{Probability.Distributions.Uniform},
+\lean{Probability.Variance}, and \lean{MeasureTheory.Measure.ProbabilityMeasure}.
+Exact pinned-source definition extracts are retained in the coordinator evidence.
+\end{thebibliography}
+\end{document}

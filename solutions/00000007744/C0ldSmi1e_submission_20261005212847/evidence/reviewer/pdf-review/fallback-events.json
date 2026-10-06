@@ -1,0 +1,23 @@
+{
+  "provenance": "Transcribed from actual independent review tool results; original PDF unchanged",
+  "events": [
+    {
+      "operation": "Bundled Poppler rendering",
+      "exit_code": 0,
+      "warnings_file": "2.stderr.txt",
+      "limitation": "Missing Adobe-GB1 mapping omitted Chinese; render not accepted"
+    },
+    {
+      "operation": "Attempt to import fitz in bundled Python",
+      "exit_code": 1,
+      "stderr": "ModuleNotFoundError: No module named fitz",
+      "consequence": "No render produced; no installation attempted"
+    },
+    {
+      "operation": "Bundled pypdfium2 rendering of delivered and independently recompiled PDFs",
+      "exit_code": 0,
+      "receipt": "pdfium-render-execution.json",
+      "consequence": "All four pages rendered; all four pairs of image hashes identical"
+    }
+  ]
+}

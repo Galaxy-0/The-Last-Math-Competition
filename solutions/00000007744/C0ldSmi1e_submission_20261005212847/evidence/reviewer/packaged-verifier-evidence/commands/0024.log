@@ -1,0 +1,186 @@
+def Conjecture7744.RegularGraph : (V : Type) → [inst : Fintype V] → ℕ → Type :=
+fun V [Fintype V] d => { G // G.IsRegularOfDegree d }
+def Conjecture7744.quadraticTrace : (V : Type) →
+  [inst : Fintype V] → (d : ℕ) → ℝ → ℝ → Conjecture7744.RegularGraph V d → ℝ :=
+fun V [Fintype V] d a b G => b * ((a • SimpleGraph.adjMatrix ℝ ↑G) ^ 2).trace
+def Conjecture7744.uniformGraphs : (V : Type) →
+  [inst : Fintype V] →
+    (d : ℕ) → [inst_1 : Nonempty (Conjecture7744.RegularGraph V d)] → PMF (Conjecture7744.RegularGraph V d) :=
+fun V [Fintype V] d [Nonempty (Conjecture7744.RegularGraph V d)] =>
+  PMF.uniformOfFintype (Conjecture7744.RegularGraph V d)
+def Conjecture7744.quadraticExpectation : (V : Type) →
+  [inst : Fintype V] → (d : ℕ) → [inst : Nonempty (Conjecture7744.RegularGraph V d)] → ℝ → ℝ → ℝ :=
+fun V [Fintype V] d [Nonempty (Conjecture7744.RegularGraph V d)] a b =>
+  ∫ (G : Conjecture7744.RegularGraph V d),
+    Conjecture7744.quadraticTrace V d a b G ∂(Conjecture7744.uniformGraphs V d).toMeasure
+def Conjecture7744.quadraticFluctuation : (V : Type) →
+  [inst : Fintype V] →
+    (d : ℕ) → [inst_1 : Nonempty (Conjecture7744.RegularGraph V d)] → ℝ → ℝ → Conjecture7744.RegularGraph V d → ℝ :=
+fun V [Fintype V] d [Nonempty (Conjecture7744.RegularGraph V d)] a b G =>
+  (Conjecture7744.quadraticTrace V d a b G - Conjecture7744.quadraticExpectation V d a b) * √↑(Fintype.card V)
+def Conjecture7744.quadraticLaw : (V : Type) →
+  [inst : Fintype V] →
+    (d : ℕ) → [inst : Nonempty (Conjecture7744.RegularGraph V d)] → ℝ → ℝ → MeasureTheory.ProbabilityMeasure ℝ :=
+fun V [Fintype V] d [Nonempty (Conjecture7744.RegularGraph V d)] a b =>
+  ⟨(PMF.map (Conjecture7744.quadraticFluctuation V d a b) (Conjecture7744.uniformGraphs V d)).toMeasure, ⋯⟩
+def Conjecture7744.zeroLaw : MeasureTheory.ProbabilityMeasure ℝ :=
+⟨MeasureTheory.Measure.dirac 0, Conjecture7744.zeroLaw._proof_3⟩
+def Conjecture7744.polynomialTrace : (V : Type) →
+  [inst : Fintype V] → (d : ℕ) → ℝ → ℝ → Polynomial ℝ → Conjecture7744.RegularGraph V d → ℝ :=
+fun V [Fintype V] d a b p G => b * ((Polynomial.aeval (a • SimpleGraph.adjMatrix ℝ ↑G)) p).trace
+def Conjecture7744.polynomialExpectation : (V : Type) →
+  [inst : Fintype V] → (d : ℕ) → [inst : Nonempty (Conjecture7744.RegularGraph V d)] → ℝ → ℝ → Polynomial ℝ → ℝ :=
+fun V [Fintype V] d [Nonempty (Conjecture7744.RegularGraph V d)] a b p =>
+  ∫ (G : Conjecture7744.RegularGraph V d),
+    Conjecture7744.polynomialTrace V d a b p G ∂(Conjecture7744.uniformGraphs V d).toMeasure
+def Conjecture7744.polynomialFluctuation : (V : Type) →
+  [inst : Fintype V] →
+    (d : ℕ) →
+      [inst_1 : Nonempty (Conjecture7744.RegularGraph V d)] →
+        ℝ → ℝ → Polynomial ℝ → Conjecture7744.RegularGraph V d → ℝ :=
+fun V [Fintype V] d [Nonempty (Conjecture7744.RegularGraph V d)] a b p G =>
+  (Conjecture7744.polynomialTrace V d a b p G - Conjecture7744.polynomialExpectation V d a b p) * √↑(Fintype.card V)
+def Conjecture7744.polynomialLaw : (V : Type) →
+  [inst : Fintype V] →
+    (d : ℕ) →
+      [inst : Nonempty (Conjecture7744.RegularGraph V d)] → ℝ → ℝ → Polynomial ℝ → MeasureTheory.ProbabilityMeasure ℝ :=
+fun V [Fintype V] d [Nonempty (Conjecture7744.RegularGraph V d)] a b p =>
+  ⟨(PMF.map (Conjecture7744.polynomialFluctuation V d a b p) (Conjecture7744.uniformGraphs V d)).toMeasure, ⋯⟩
+def Conjecture7744.jointFluctuation : (V : Type) →
+  [inst : Fintype V] →
+    (d : ℕ) →
+      [inst_1 : Nonempty (Conjecture7744.RegularGraph V d)] →
+        ℝ → ℝ → {m : ℕ} → (Fin m → Polynomial ℝ) → Conjecture7744.RegularGraph V d → Fin m → ℝ :=
+fun V [Fintype V] d [Nonempty (Conjecture7744.RegularGraph V d)] a b {m} p G i =>
+  Conjecture7744.polynomialFluctuation V d a b (p i) G
+def Conjecture7744.jointLaw : (V : Type) →
+  [inst : Fintype V] →
+    (d : ℕ) →
+      [inst : Nonempty (Conjecture7744.RegularGraph V d)] →
+        ℝ → ℝ → {m : ℕ} → (Fin m → Polynomial ℝ) → MeasureTheory.ProbabilityMeasure (Fin m → ℝ) :=
+fun V [Fintype V] d [Nonempty (Conjecture7744.RegularGraph V d)] a b {m} p =>
+  ⟨(PMF.map (Conjecture7744.jointFluctuation V d a b p) (Conjecture7744.uniformGraphs V d)).toMeasure, ⋯⟩
+def Conjecture7744.coordinateLaw : {m : ℕ} →
+  MeasureTheory.ProbabilityMeasure (Fin m → ℝ) → Fin m → MeasureTheory.ProbabilityMeasure ℝ :=
+fun {m} ν i => ν.map ⋯
+def Conjecture7744.BlockVertices : ℕ → ℕ → Type :=
+fun d k => Fin (k + 1) × Fin (d + 1)
+def Conjecture7744.blockGraph : (d k : ℕ) → SimpleGraph (Conjecture7744.BlockVertices d k) :=
+fun d k => { Adj := fun v w => v.1 = w.1 ∧ v.2 ≠ w.2, symm := ⋯, loopless := ⋯ }
+def Conjecture7744.lawVariance : MeasureTheory.ProbabilityMeasure ℝ → ℝ :=
+fun ν => ProbabilityTheory.variance id ↑ν
+def Conjecture7744.claimedVariance : ℕ → ℝ :=
+fun d => 4 - 12 / ↑d + 8 / ↑d ^ 2
+def Conjecture7744.RequiredSecondOrderLimit : ℕ → (ℕ → ℝ) → (ℕ → ℝ) → Prop :=
+fun d a b =>
+  ∃ limits,
+    (∀ (m : ℕ) (p : Fin m → Polynomial ℝ),
+        Filter.Tendsto (fun k => Conjecture7744.jointLaw (Conjecture7744.BlockVertices d k) d (a k) (b k) p)
+          Filter.atTop (nhds (limits m p))) ∧
+      Conjecture7744.lawVariance (Conjecture7744.coordinateLaw (limits 1 fun x => Polynomial.X ^ 2) 0) =
+        Conjecture7744.claimedVariance d
+Conjecture7744.regularGraphFintype (V : Type) [Fintype V] (d : ℕ) : Fintype (Conjecture7744.RegularGraph V d)
+'Conjecture7744.regularGraphFintype' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.regularGraphMeasurableSpace (V : Type) [Fintype V] (d : ℕ) :
+  MeasurableSpace (Conjecture7744.RegularGraph V d)
+'Conjecture7744.regularGraphMeasurableSpace' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.quadraticTrace_eq (V : Type) [Fintype V] (d : ℕ) (a b : ℝ) (G : Conjecture7744.RegularGraph V d) :
+  Conjecture7744.quadraticTrace V d a b G = b * a ^ 2 * ↑(Fintype.card V) * ↑d
+'Conjecture7744.quadraticTrace_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.uniformGraphs_mass (V : Type) [Fintype V] (d : ℕ) [Nonempty (Conjecture7744.RegularGraph V d)]
+  (G : Conjecture7744.RegularGraph V d) :
+  (Conjecture7744.uniformGraphs V d) G = (↑(Fintype.card (Conjecture7744.RegularGraph V d)))⁻¹
+'Conjecture7744.uniformGraphs_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.quadraticExpectation_eq (V : Type) [Fintype V] (d : ℕ) [Nonempty (Conjecture7744.RegularGraph V d)]
+  (a b : ℝ) : Conjecture7744.quadraticExpectation V d a b = b * a ^ 2 * ↑(Fintype.card V) * ↑d
+'Conjecture7744.quadraticExpectation_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.quadraticFluctuation_zero (V : Type) [Fintype V] (d : ℕ) [Nonempty (Conjecture7744.RegularGraph V d)]
+  (a b : ℝ) (G : Conjecture7744.RegularGraph V d) : Conjecture7744.quadraticFluctuation V d a b G = 0
+'Conjecture7744.quadraticFluctuation_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.finite_quadratic_variance_zero (V : Type) [Fintype V] (d : ℕ)
+  [Nonempty (Conjecture7744.RegularGraph V d)] (a b : ℝ) :
+  ProbabilityTheory.variance (Conjecture7744.quadraticFluctuation V d a b)
+      (Conjecture7744.uniformGraphs V d).toMeasure =
+    0
+'Conjecture7744.finite_quadratic_variance_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.quadraticLaw_is_pushforward (V : Type) [Fintype V] (d : ℕ) [Nonempty (Conjecture7744.RegularGraph V d)]
+  (a b : ℝ) :
+  ↑(Conjecture7744.quadraticLaw V d a b) =
+    MeasureTheory.Measure.map (Conjecture7744.quadraticFluctuation V d a b) (Conjecture7744.uniformGraphs V d).toMeasure
+'Conjecture7744.quadraticLaw_is_pushforward' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.quadraticLaw_eq_zeroLaw (V : Type) [Fintype V] (d : ℕ) [Nonempty (Conjecture7744.RegularGraph V d)]
+  (a b : ℝ) : Conjecture7744.quadraticLaw V d a b = Conjecture7744.zeroLaw
+'Conjecture7744.quadraticLaw_eq_zeroLaw' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.polynomialTrace_square (V : Type) [Fintype V] (d : ℕ) (a b : ℝ) (G : Conjecture7744.RegularGraph V d) :
+  Conjecture7744.polynomialTrace V d a b (Polynomial.X ^ 2) G = Conjecture7744.quadraticTrace V d a b G
+'Conjecture7744.polynomialTrace_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.polynomialTrace_integrable (V : Type) [Fintype V] (d : ℕ) [Nonempty (Conjecture7744.RegularGraph V d)]
+  (a b : ℝ) (p : Polynomial ℝ) :
+  MeasureTheory.Integrable (Conjecture7744.polynomialTrace V d a b p) (Conjecture7744.uniformGraphs V d).toMeasure
+'Conjecture7744.polynomialTrace_integrable' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.polynomialFluctuation_square (V : Type) [Fintype V] (d : ℕ) [Nonempty (Conjecture7744.RegularGraph V d)]
+  (a b : ℝ) (G : Conjecture7744.RegularGraph V d) :
+  Conjecture7744.polynomialFluctuation V d a b (Polynomial.X ^ 2) G = Conjecture7744.quadraticFluctuation V d a b G
+'Conjecture7744.polynomialFluctuation_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.polynomialLaw_is_pushforward (V : Type) [Fintype V] (d : ℕ) [Nonempty (Conjecture7744.RegularGraph V d)]
+  (a b : ℝ) (p : Polynomial ℝ) :
+  ↑(Conjecture7744.polynomialLaw V d a b p) =
+    MeasureTheory.Measure.map (Conjecture7744.polynomialFluctuation V d a b p)
+      (Conjecture7744.uniformGraphs V d).toMeasure
+'Conjecture7744.polynomialLaw_is_pushforward' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.polynomialLaw_square (V : Type) [Fintype V] (d : ℕ) [Nonempty (Conjecture7744.RegularGraph V d)]
+  (a b : ℝ) : Conjecture7744.polynomialLaw V d a b (Polynomial.X ^ 2) = Conjecture7744.quadraticLaw V d a b
+'Conjecture7744.polynomialLaw_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.jointLaw_is_pushforward (V : Type) [Fintype V] (d : ℕ) [Nonempty (Conjecture7744.RegularGraph V d)]
+  (a b : ℝ) {m : ℕ} (p : Fin m → Polynomial ℝ) :
+  ↑(Conjecture7744.jointLaw V d a b p) =
+    MeasureTheory.Measure.map (Conjecture7744.jointFluctuation V d a b p) (Conjecture7744.uniformGraphs V d).toMeasure
+'Conjecture7744.jointLaw_is_pushforward' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.jointLaw_coordinate (V : Type) [Fintype V] (d : ℕ) [Nonempty (Conjecture7744.RegularGraph V d)] (a b : ℝ)
+  {m : ℕ} (p : Fin m → Polynomial ℝ) (i : Fin m) :
+  Conjecture7744.coordinateLaw (Conjecture7744.jointLaw V d a b p) i = Conjecture7744.polynomialLaw V d a b (p i)
+'Conjecture7744.jointLaw_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.coordinateLaw_tendsto {m : ℕ} (νs : ℕ → MeasureTheory.ProbabilityMeasure (Fin m → ℝ))
+  (ν : MeasureTheory.ProbabilityMeasure (Fin m → ℝ)) (i : Fin m) (h : Filter.Tendsto νs Filter.atTop (nhds ν)) :
+  Filter.Tendsto (fun k => Conjecture7744.coordinateLaw (νs k) i) Filter.atTop (nhds (Conjecture7744.coordinateLaw ν i))
+'Conjecture7744.coordinateLaw_tendsto' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.blockVerticesFintype (d k : ℕ) : Fintype (Conjecture7744.BlockVertices d k)
+'Conjecture7744.blockVerticesFintype' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.blockGraph_regular (d k : ℕ) : (Conjecture7744.blockGraph d k).IsRegularOfDegree d
+'Conjecture7744.blockGraph_regular' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.blockRegularGraphsNonempty (d k : ℕ) :
+  Nonempty (Conjecture7744.RegularGraph (Conjecture7744.BlockVertices d k) d)
+'Conjecture7744.blockRegularGraphsNonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.blockVertices_card (d k : ℕ) : Fintype.card (Conjecture7744.BlockVertices d k) = (k + 1) * (d + 1)
+'Conjecture7744.blockVertices_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.blockVertices_card_pos (d k : ℕ) : 0 < Fintype.card (Conjecture7744.BlockVertices d k)
+'Conjecture7744.blockVertices_card_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.blockVertices_card_tendsto (d : ℕ) :
+  Filter.Tendsto (fun k => Fintype.card (Conjecture7744.BlockVertices d k)) Filter.atTop Filter.atTop
+'Conjecture7744.blockVertices_card_tendsto' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.zeroLaw_variance : Conjecture7744.lawVariance Conjecture7744.zeroLaw = 0
+'Conjecture7744.zeroLaw_variance' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.quadraticLaws_tendsto_zero (d : ℕ) (a b : ℕ → ℝ) :
+  Filter.Tendsto (fun k => Conjecture7744.quadraticLaw (Conjecture7744.BlockVertices d k) d (a k) (b k)) Filter.atTop
+    (nhds Conjecture7744.zeroLaw)
+'Conjecture7744.quadraticLaws_tendsto_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.quadratic_weak_limit_variance (d : ℕ) (a b : ℕ → ℝ) (ν : MeasureTheory.ProbabilityMeasure ℝ)
+  (h :
+    Filter.Tendsto (fun k => Conjecture7744.quadraticLaw (Conjecture7744.BlockVertices d k) d (a k) (b k)) Filter.atTop
+      (nhds ν)) :
+  Conjecture7744.lawVariance ν = 0
+'Conjecture7744.quadratic_weak_limit_variance' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.claimedVariance_three : Conjecture7744.claimedVariance 3 = 8 / 9
+'Conjecture7744.claimedVariance_three' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.no_claimed_quadratic_limit (a b : ℕ → ℝ) :
+  ¬∃ ν,
+      Filter.Tendsto (fun k => Conjecture7744.quadraticLaw (Conjecture7744.BlockVertices 3 k) 3 (a k) (b k))
+          Filter.atTop (nhds ν) ∧
+        Conjecture7744.lawVariance ν = Conjecture7744.claimedVariance 3
+'Conjecture7744.no_claimed_quadratic_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.no_required_second_order_limit (a b : ℕ → ℝ) : ¬Conjecture7744.RequiredSecondOrderLimit 3 a b
+'Conjecture7744.no_required_second_order_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture7744.conjecture7744_false :
+  ¬Conjecture7744.RequiredSecondOrderLimit 3 (fun x => 1) fun k =>
+      1 / ↑(Fintype.card (Conjecture7744.BlockVertices 3 k))
+'Conjecture7744.conjecture7744_false' depends on axioms: [propext, Classical.choice, Quot.sound]

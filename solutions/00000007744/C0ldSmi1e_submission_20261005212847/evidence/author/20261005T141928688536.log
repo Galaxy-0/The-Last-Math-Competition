@@ -1,0 +1,20 @@
+/private/tmp/tlmc7744-proof/Conjecture7744.lean:155:26: error: application type mismatch
+  PMF.toMeasure_map ?m.10537 (measurable_pi_apply i)
+argument
+  measurable_pi_apply i
+has type
+  Measurable fun f => f i : Prop
+but is expected to have type
+  PMF ?m.10535 : Type ?u.10534
+/private/tmp/tlmc7744-proof/Conjecture7744.lean:151:74: error: unsolved goals
+case a
+V : Type
+inst✝¹ : Fintype V
+d : ℕ
+inst✝ : Nonempty (RegularGraph V d)
+a b : ℝ
+m : ℕ
+p : Fin m → Polynomial ℝ
+i : Fin m
+⊢ Measure.map (fun x => x i) (PMF.map (jointFluctuation V d a b p) (uniformGraphs V d)).toMeasure =
+    ↑(polynomialLaw V d a b (p i))

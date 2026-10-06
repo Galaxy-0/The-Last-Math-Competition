@@ -1,0 +1,104 @@
+{
+  "scope": "Exact standard library definitions consulted for semantic verification, no external mathematical solution lookup",
+  "recorded_utc": "2026-10-05T21:27:19.096234+00:00",
+  "files": [
+    {
+      "path": "/private/tmp/tlmc637-proof/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/ProbabilityMeasure.lean",
+      "mathlib_revision": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "sha256": "e6fa2981a3fd0bbf3e0b16bdaaf9046b016f361159fc2ccffb0ce475ec715403",
+      "extracts": [
+        {
+          "first_line": 249,
+          "last_line": 320,
+          "source": "variable [TopologicalSpace \u03a9] [OpensMeasurableSpace \u03a9]\n\ntheorem testAgainstNN_lipschitz (\u03bc : ProbabilityMeasure \u03a9) :\n    LipschitzWith 1 fun f : \u03a9 \u2192\u1d47 \u211d\u22650 \u21a6 \u03bc.toFiniteMeasure.testAgainstNN f :=\n  \u03bc.mass_toFiniteMeasure \u25b8 \u03bc.toFiniteMeasure.testAgainstNN_lipschitz\n\n/-- The topology of weak convergence on `MeasureTheory.ProbabilityMeasure \u03a9`. This is inherited\n(induced) from the topology of weak convergence of finite measures via the inclusion\n`MeasureTheory.ProbabilityMeasure.toFiniteMeasure`. -/\ninstance : TopologicalSpace (ProbabilityMeasure \u03a9) :=\n  TopologicalSpace.induced toFiniteMeasure inferInstance\n\ntheorem toFiniteMeasure_continuous :\n    Continuous (toFiniteMeasure : ProbabilityMeasure \u03a9 \u2192 FiniteMeasure \u03a9) :=\n  continuous_induced_dom\n\n/-- Probability measures yield elements of the `WeakDual` of bounded continuous nonnegative\nfunctions via `MeasureTheory.FiniteMeasure.testAgainstNN`, i.e., integration. -/\ndef toWeakDualBCNN : ProbabilityMeasure \u03a9 \u2192 WeakDual \u211d\u22650 (\u03a9 \u2192\u1d47 \u211d\u22650) :=\n  FiniteMeasure.toWeakDualBCNN \u2218 toFiniteMeasure\n\n@[simp]\ntheorem coe_toWeakDualBCNN (\u03bc : ProbabilityMeasure \u03a9) :\n    \u21d1\u03bc.toWeakDualBCNN = \u03bc.toFiniteMeasure.testAgainstNN := rfl\n\n@[simp]\ntheorem toWeakDualBCNN_apply (\u03bc : ProbabilityMeasure \u03a9) (f : \u03a9 \u2192\u1d47 \u211d\u22650) :\n    \u03bc.toWeakDualBCNN f = (\u222b\u207b \u03c9, f \u03c9 \u2202(\u03bc : Measure \u03a9)).toNNReal := rfl\n\ntheorem toWeakDualBCNN_continuous : Continuous fun \u03bc : ProbabilityMeasure \u03a9 \u21a6 \u03bc.toWeakDualBCNN :=\n  FiniteMeasure.toWeakDualBCNN_continuous.comp toFiniteMeasure_continuous\n\n/- Integration of (nonnegative bounded continuous) test functions against Borel probability\nmeasures depends continuously on the measure. -/\ntheorem continuous_testAgainstNN_eval (f : \u03a9 \u2192\u1d47 \u211d\u22650) :\n    Continuous fun \u03bc : ProbabilityMeasure \u03a9 \u21a6 \u03bc.toFiniteMeasure.testAgainstNN f :=\n  (FiniteMeasure.continuous_testAgainstNN_eval f).comp toFiniteMeasure_continuous\n\n-- The canonical mapping from probability measures to finite measures is an embedding.\ntheorem toFiniteMeasure_isEmbedding (\u03a9 : Type*) [MeasurableSpace \u03a9] [TopologicalSpace \u03a9]\n    [OpensMeasurableSpace \u03a9] :\n    IsEmbedding (toFiniteMeasure : ProbabilityMeasure \u03a9 \u2192 FiniteMeasure \u03a9) where\n  eq_induced := rfl\n  injective _\u03bc _\u03bd h := Subtype.eq <| congr_arg FiniteMeasure.toMeasure h\n\n@[deprecated (since := \"2024-10-26\")]\nalias toFiniteMeasure_embedding := toFiniteMeasure_isEmbedding\n\ntheorem tendsto_nhds_iff_toFiniteMeasure_tendsto_nhds {\u03b4 : Type*} (F : Filter \u03b4)\n    {\u03bcs : \u03b4 \u2192 ProbabilityMeasure \u03a9} {\u03bc\u2080 : ProbabilityMeasure \u03a9} :\n    Tendsto \u03bcs F (\ud835\udcdd \u03bc\u2080) \u2194 Tendsto (toFiniteMeasure \u2218 \u03bcs) F (\ud835\udcdd \u03bc\u2080.toFiniteMeasure) :=\n  (toFiniteMeasure_isEmbedding \u03a9).tendsto_nhds_iff\n\n/-- A characterization of weak convergence of probability measures by the condition that the\nintegrals of every continuous bounded nonnegative function converge to the integral of the function\nagainst the limit measure. -/\ntheorem tendsto_iff_forall_lintegral_tendsto {\u03b3 : Type*} {F : Filter \u03b3}\n    {\u03bcs : \u03b3 \u2192 ProbabilityMeasure \u03a9} {\u03bc : ProbabilityMeasure \u03a9} :\n    Tendsto \u03bcs F (\ud835\udcdd \u03bc) \u2194\n      \u2200 f : \u03a9 \u2192\u1d47 \u211d\u22650,\n        Tendsto (fun i \u21a6 \u222b\u207b \u03c9, f \u03c9 \u2202(\u03bcs i : Measure \u03a9)) F (\ud835\udcdd (\u222b\u207b \u03c9, f \u03c9 \u2202(\u03bc : Measure \u03a9))) := by\n  rw [tendsto_nhds_iff_toFiniteMeasure_tendsto_nhds]\n  exact FiniteMeasure.tendsto_iff_forall_lintegral_tendsto\n\n/-- The characterization of weak convergence of probability measures by the usual (defining)\ncondition that the integrals of every continuous bounded function converge to the integral of the\nfunction against the limit measure. -/\ntheorem tendsto_iff_forall_integral_tendsto {\u03b3 : Type*} {F : Filter \u03b3}\n    {\u03bcs : \u03b3 \u2192 ProbabilityMeasure \u03a9} {\u03bc : ProbabilityMeasure \u03a9} :\n    Tendsto \u03bcs F (\ud835\udcdd \u03bc) \u2194\n      \u2200 f : \u03a9 \u2192\u1d47 \u211d,\n        Tendsto (fun i \u21a6 \u222b \u03c9, f \u03c9 \u2202(\u03bcs i : Measure \u03a9)) F (\ud835\udcdd (\u222b \u03c9, f \u03c9 \u2202(\u03bc : Measure \u03a9))) := by"
+        },
+        {
+          "first_line": 344,
+          "last_line": 351,
+          "source": "variable [TopologicalSpace \u03a9] [HasOuterApproxClosed \u03a9] [BorelSpace \u03a9]\nvariable (\u03a9)\n\n/-- On topological spaces where indicators of closed sets have decreasing approximating sequences of\ncontinuous functions (`HasOuterApproxClosed`), the topology of convergence in distribution of Borel\nprobability measures is Hausdorff (`T2Space`). -/\ninstance t2Space : T2Space (ProbabilityMeasure \u03a9) := (toFiniteMeasure_isEmbedding \u03a9).t2Space\n"
+        },
+        {
+          "first_line": 563,
+          "last_line": 583,
+          "source": "variable [TopologicalSpace \u03a9] [OpensMeasurableSpace \u03a9]\nvariable [TopologicalSpace \u03a9'] [BorelSpace \u03a9']\n\n/-- If `f : X \u2192 Y` is continuous and `Y` is equipped with the Borel sigma algebra, then\nconvergence (in distribution) of `ProbabilityMeasure`s on `X` implies convergence (in\ndistribution) of the push-forwards of these measures by `f`. -/\nlemma tendsto_map_of_tendsto_of_continuous {\u03b9 : Type*} {L : Filter \u03b9}\n    (\u03bds : \u03b9 \u2192 ProbabilityMeasure \u03a9) (\u03bd : ProbabilityMeasure \u03a9) (lim : Tendsto \u03bds L (\ud835\udcdd \u03bd))\n    {f : \u03a9 \u2192 \u03a9'} (f_cont : Continuous f) :\n    Tendsto (fun i \u21a6 (\u03bds i).map f_cont.measurable.aemeasurable) L\n      (\ud835\udcdd (\u03bd.map f_cont.measurable.aemeasurable)) := by\n  rw [ProbabilityMeasure.tendsto_iff_forall_lintegral_tendsto] at lim \u22a2\n  intro g\n  convert lim (g.compContinuous \u27e8f, f_cont\u27e9) <;>\n  \u00b7 simp only [map, compContinuous_apply, ContinuousMap.coe_mk]\n    refine lintegral_map ?_ f_cont.measurable\n    exact (ENNReal.continuous_coe.comp g.continuous).measurable\n\n/-- If `f : X \u2192 Y` is continuous and `Y` is equipped with the Borel sigma algebra, then\nthe push-forward of probability measures `f* : ProbabilityMeasure X \u2192 ProbabilityMeasure Y`\nis continuous (in the topologies of convergence in distribution). -/"
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/tlmc637-proof/.lake/packages/mathlib/Mathlib/Probability/Distributions/Uniform.lean",
+      "mathlib_revision": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "sha256": "f9feec9d4a7e3977f5e06ece93b49385ecf1ab426f055ad80b3413f1d5e4a7c6",
+      "extracts": [
+        {
+          "first_line": 280,
+          "last_line": 314,
+          "source": "end UniformOfFinset\n\nsection UniformOfFintype\n\n/-- The uniform pmf taking the same uniform value on all of the fintype `\u03b1` -/\ndef uniformOfFintype (\u03b1 : Type*) [Fintype \u03b1] [Nonempty \u03b1] : PMF \u03b1 :=\n  uniformOfFinset Finset.univ Finset.univ_nonempty\n\nvariable [Fintype \u03b1] [Nonempty \u03b1]\n\n@[simp]\ntheorem uniformOfFintype_apply (a : \u03b1) : uniformOfFintype \u03b1 a = (Fintype.card \u03b1 : \u211d\u22650\u221e)\u207b\u00b9 := by\n  simp [uniformOfFintype, Finset.mem_univ, if_true, uniformOfFinset_apply]\n\n@[simp]\ntheorem support_uniformOfFintype (\u03b1 : Type*) [Fintype \u03b1] [Nonempty \u03b1] :\n    (uniformOfFintype \u03b1).support = \u22a4 :=\n  Set.ext fun x => by simp [mem_support_iff]\n\ntheorem mem_support_uniformOfFintype (a : \u03b1) : a \u2208 (uniformOfFintype \u03b1).support := by simp\n\nsection Measure\n\nvariable (s : Set \u03b1)\n\ntheorem toOuterMeasure_uniformOfFintype_apply [Fintype s] :\n    (uniformOfFintype \u03b1).toOuterMeasure s = Fintype.card s / Fintype.card \u03b1 := by\n  classical\n  rw [uniformOfFintype, toOuterMeasure_uniformOfFinset_apply, Fintype.card_subtype,\n    Finset.card_univ]\n\ntheorem toMeasure_uniformOfFintype_apply [MeasurableSpace \u03b1] (hs : MeasurableSet s) [Fintype s] :\n    (uniformOfFintype \u03b1).toMeasure s = Fintype.card s / Fintype.card \u03b1 := by\n  classical\n  simp [uniformOfFintype, Fintype.card_subtype, hs]"
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/tlmc637-proof/.lake/packages/mathlib/Mathlib/Combinatorics/SimpleGraph/AdjMatrix.lean",
+      "mathlib_revision": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "sha256": "6f177f30ba97eda590fb6838b7e2210b9412a73ab04ba6be27d69042e57d3779",
+      "extracts": [
+        {
+          "first_line": 135,
+          "last_line": 147,
+          "source": "\nvariable (G : SimpleGraph V) [DecidableRel G.Adj]\n\nvariable (\u03b1) in\n/-- `adjMatrix G \u03b1` is the matrix `A` such that `A i j = (1 : \u03b1)` if `i` and `j` are\n  adjacent in the simple graph `G`, and otherwise `A i j = 0`. -/\ndef adjMatrix [Zero \u03b1] [One \u03b1] : Matrix V V \u03b1 :=\n  of fun i j => if G.Adj i j then (1 : \u03b1) else 0\n\n-- TODO: set as an equation lemma for `adjMatrix`, see https://github.com/leanprover-community/mathlib4/pull/3024\n@[simp]\ntheorem adjMatrix_apply (v w : V) [Zero \u03b1] [One \u03b1] :\n    G.adjMatrix \u03b1 v w = if G.Adj v w then 1 else 0 :="
+        },
+        {
+          "first_line": 217,
+          "last_line": 236,
+          "source": "  simp [mul_apply, neighborFinset_eq_filter, sum_filter, adj_comm]\n\nvariable (\u03b1) in\n@[simp]\ntheorem trace_adjMatrix [AddCommMonoid \u03b1] [One \u03b1] : Matrix.trace (G.adjMatrix \u03b1) = 0 := by\n  simp [Matrix.trace]\n\ntheorem adjMatrix_mul_self_apply_self [NonAssocSemiring \u03b1] (i : V) :\n    (G.adjMatrix \u03b1 * G.adjMatrix \u03b1) i i = degree G i := by simp [filter_true_of_mem]\n\nvariable {G}\n\ntheorem adjMatrix_mulVec_const_apply [NonAssocSemiring \u03b1] {a : \u03b1} {v : V} :\n    (G.adjMatrix \u03b1 *\u1d65 Function.const _ a) v = G.degree v * a := by simp\n\ntheorem adjMatrix_mulVec_const_apply_of_regular [NonAssocSemiring \u03b1] {d : \u2115} {a : \u03b1}\n    (hd : G.IsRegularOfDegree d) {v : V} : (G.adjMatrix \u03b1 *\u1d65 Function.const _ a) v = d * a := by\n  simp [hd v]\n\ntheorem adjMatrix_pow_apply_eq_card_walk [DecidableEq V] [Semiring \u03b1] (n : \u2115) (u v : V) :"
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/tlmc637-proof/.lake/packages/mathlib/Mathlib/Probability/Variance.lean",
+      "mathlib_revision": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "sha256": "bf80cfc64c9524a05a6b1dd78a621b91df6e7b3fb985feec8e70f46f4198ea1d",
+      "extracts": [
+        {
+          "first_line": 45,
+          "last_line": 65,
+          "source": "namespace ProbabilityTheory\nvariable {\u03a9 : Type*} {m\u03a9 : MeasurableSpace \u03a9} {X : \u03a9 \u2192 \u211d} {\u03bc : Measure \u03a9}\n\nvariable (X \u03bc) in\n-- Porting note: Consider if `evariance` or `eVariance` is better. Also,\n-- consider `eVariationOn` in `Mathlib.Analysis.BoundedVariation`.\n/-- The `\u211d\u22650\u221e`-valued variance of a real-valued random variable defined as the Lebesgue integral of\n`\u2016X - \ud835\udd3c[X]\u2016^2`. -/\ndef evariance : \u211d\u22650\u221e := \u222b\u207b \u03c9, \u2016X \u03c9 - \u03bc[X]\u2016\u2091 ^ 2 \u2202\u03bc\n\nvariable (X \u03bc) in\n/-- The `\u211d`-valued variance of a real-valued random variable defined by applying `ENNReal.toReal`\nto `evariance`. -/\ndef variance : \u211d := (evariance X \u03bc).toReal\n\n/-- The `\u211d\u22650\u221e`-valued variance of the real-valued random variable `X` according to the measure `\u03bc`.\n\nThis is defined as the Lebesgue integral of `(X - \ud835\udd3c[X])^2`. -/\nscoped notation \"eVar[\" X \"; \" \u03bc \"]\" => ProbabilityTheory.evariance X \u03bc\n\n/-- The `\u211d\u22650\u221e`-valued variance of the real-valued random variable `X` according to the volume"
+        },
+        {
+          "first_line": 150,
+          "last_line": 170,
+          "source": "alias _root_.MeasureTheory.Mem\u2112p.variance_eq_of_integral_eq_zero := variance_of_integral_eq_zero\n\n@[simp]\ntheorem evariance_zero : evariance 0 \u03bc = 0 := by simp [evariance]\n\ntheorem evariance_eq_zero_iff (hX : AEMeasurable X \u03bc) :\n    evariance X \u03bc = 0 \u2194 X =\u1d50[\u03bc] fun _ => \u03bc[X] := by\n  simp [evariance, lintegral_eq_zero_iff' ((hX.sub_const _).enorm.pow_const _), EventuallyEq,\n    sub_eq_zero]\n\ntheorem evariance_mul (c : \u211d) (X : \u03a9 \u2192 \u211d) (\u03bc : Measure \u03a9) :\n    evariance (fun \u03c9 => c * X \u03c9) \u03bc = ENNReal.ofReal (c ^ 2) * evariance X \u03bc := by\n  rw [evariance, evariance, \u2190 lintegral_const_mul' _ _ ENNReal.ofReal_lt_top.ne]\n  congr with \u03c9\n  rw [integral_const_mul, \u2190 mul_sub, enorm_mul, mul_pow, \u2190 enorm_pow,\n    Real.enorm_of_nonneg (sq_nonneg _)]\n\n@[simp]\ntheorem variance_zero (\u03bc : Measure \u03a9) : variance 0 \u03bc = 0 := by\n  simp only [variance, evariance_zero, ENNReal.toReal_zero]\n"
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/tlmc637-proof/.lake/packages/mathlib/Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+      "mathlib_revision": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "sha256": "f00e05312075b511b6dcba58852e6a42f9267fb81e7f40a4dd31a0e8c203e0b1",
+      "extracts": [
+        {
+          "first_line": 78,
+          "last_line": 96,
+          "source": "\nuniverse u v w\n\n/-- A simple graph is an irreflexive symmetric relation `Adj` on a vertex type `V`.\nThe relation describes which pairs of vertices are adjacent.\nThere is exactly one edge for every pair of adjacent vertices;\nsee `SimpleGraph.edgeSet` for the corresponding edge set.\n-/\n@[ext, aesop safe constructors (rule_sets := [SimpleGraph])]\nstructure SimpleGraph (V : Type u) where\n  /-- The adjacency relation of a simple graph. -/\n  Adj : V \u2192 V \u2192 Prop\n  symm : Symmetric Adj := by aesop_graph\n  loopless : Irreflexive Adj := by aesop_graph\n\ninitialize_simps_projections SimpleGraph (Adj \u2192 adj)\n\n/-- Constructor for simple graphs using a symmetric irreflexive boolean function. -/\n@[simps]"
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/tlmc637-proof/.lake/packages/mathlib/Mathlib/Combinatorics/SimpleGraph/Finite.lean",
+      "mathlib_revision": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+      "sha256": "3f73107558cd9fc4d211c05d21345babf5668186813651b42f4d8ea17d5257bc",
+      "extracts": [
+        {
+          "first_line": 160,
+          "last_line": 170,
+          "source": "  Finset.disjoint_singleton_right.mpr <| not_mem_neighborFinset_self _ _\n\ntheorem singleton_disjoint_neighborFinset : Disjoint {v} (G.neighborFinset v) :=\n  Finset.disjoint_singleton_left.mpr <| not_mem_neighborFinset_self _ _\n\n/-- `G.degree v` is the number of vertices adjacent to `v`. -/\ndef degree : \u2115 := #(G.neighborFinset v)\n\n@[simp]\ntheorem card_neighborFinset_eq_degree : #(G.neighborFinset v) = G.degree v := rfl\n"
+        },
+        {
+          "first_line": 230,
+          "last_line": 244,
+          "source": "\n/-- A graph is locally finite if every vertex has a finite neighbor set. -/\nabbrev LocallyFinite :=\n  \u2200 v : V, Fintype (G.neighborSet v)\n\nvariable [LocallyFinite G]\n\n/-- A locally finite simple graph is regular of degree `d` if every vertex has degree `d`. -/\ndef IsRegularOfDegree (d : \u2115) : Prop :=\n  \u2200 v : V, G.degree v = d\n\nvariable {G}\n\ntheorem IsRegularOfDegree.degree_eq {d : \u2115} (h : G.IsRegularOfDegree d) (v : V) : G.degree v = d :=\n  h v"
+        }
+      ]
+    }
+  ],
+  "read_only_lookup_note": "One rg invocation also requested nonexistent SimpleGraph/Defs.lean and returned exit code 2 while finding Basic.lean and Finite.lean; the actual definitions were then read from those existing files."
+}

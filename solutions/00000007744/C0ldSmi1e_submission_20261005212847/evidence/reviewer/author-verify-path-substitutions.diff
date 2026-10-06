@@ -1,0 +1,17 @@
+--- verify.py original
++++ verify.py isolated path substitutions
+@@ -1,6 +1,6 @@
+ from pathlib import Path
+ import subprocess, json, hashlib, re
+-root=Path('/private/tmp/tlmc7744-proof')
++root=Path('/private/tmp/tlmc7744-review/author-verifier-five-file-input')
+ manifest=json.loads((root/'lake-manifest.json').read_text())
+ expected=json.loads(Path('/private/tmp/tlmc-pinned-dependencies.json').read_text())
+ assert manifest['packages']==expected['packages']
+@@ -40,5 +40,5 @@
+ assert audit.count('#print axioms')==len(names)
+ for name in names: assert '#print axioms Conjecture7744.'+name+'\n' in audit
+ output={'dependencies':results,'inputs':inputs,'proof_files':files,'named_declarations':names,'authored_count':len(names),'source_policy_scan':'PASS','whitespace':'PASS'}
+-Path('/private/tmp/tlmc7744-author/verification.json').write_text(json.dumps(output,indent=2)+'\n')
++Path('/private/tmp/tlmc7744-review/author-verifier-isolated-result.json').write_text(json.dumps(output,indent=2)+'\n')
+ print(json.dumps(output,indent=2))
