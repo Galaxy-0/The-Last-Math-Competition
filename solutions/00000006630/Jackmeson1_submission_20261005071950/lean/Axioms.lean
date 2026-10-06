@@ -1,0 +1,2 @@
+import Conjecture6630
+#print axioms Submission00000006630.conjecture6630
