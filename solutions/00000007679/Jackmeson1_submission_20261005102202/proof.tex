@@ -1,0 +1,154 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\qbin}[3]{\begin{bmatrix}#1\\#2\end{bmatrix}_{#3}}
+
+\title{A disproof of Conjecture 00000007679\\[2pt]
+\large The zeros of the finite $q$-binomial sums are real}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+\begin{quote}
+\emph{Definition:} For the Euler product $(z;q)_\infty=\prod_{k\ge0}(1-zq^k)$, the partial sums are
+$S_N(z)=\sum_{n=0}^{N}(-1)^n q^{n(n-1)/2}\qbin{N}{n}{q} z^n$.
+\emph{Conjecture:} For each $0<q<1$, the zero set of $S_N(z)$ converges as $N$ grows to a quasicircle
+Jordan curve whose shape-parameter envelope is controlled by the two points $z=-q^{-N}$ and
+$z=q^{-N}$, and the conformal scaling constant of the quasicircle equals $1+2q$.
+\end{quote}
+
+\paragraph{Reading.} The conjecture asserts, for each $q\in(0,1)$, the existence of a quasicircle
+$\Gamma\subset\mathbb{C}$ such that $Z_N:=\{z\in\mathbb{C}: S_N(z)=0\}$ converges to $\Gamma$; the
+remaining clauses describe this $\Gamma$. A quasicircle is in particular a Jordan curve (see
+Section~\ref{sec:sources}), so it suffices to show that no Jordan curve is such a limit. We refute
+the following readings of ``$Z_N$ converges to $\Gamma$'':
+\begin{enumerate}
+\item[(H)] Hausdorff convergence: $d_H(Z_N,\Gamma)\to0$ (we use the extended Hausdorff distance,
+  so no finiteness convention is involved);
+\item[(W)] the weakest requirement shared by all usual notions of set convergence in $\mathbb{C}$
+  (Hausdorff, Kuratowski lower or upper limit, local convergence on compacta): every point of $\Gamma$
+  is a limit, or a cluster point, of zeros, i.e.\ $\Gamma\subseteq\overline{\bigcup_N Z_N}$.
+\end{enumerate}
+Both are refuted for every $q\in(0,1)$, and also after any real affine normalisation
+$Z_N\mapsto a_NZ_N+b_N$ ($a_N,b_N\in\mathbb{R}$; this includes the rescaling $z\mapsto q^Nz$ suggested by
+the points $\pm q^{-N}$). Not formalised: convergence on the Riemann sphere; there the closure of
+$\bigcup_N Z_N$ is the countable set $\{q^{-k}:k\ge0\}\cup\{\infty\}$, which also contains no Jordan
+curve (a Jordan curve is uncountable), but this is argued only in prose here. Normalisations by
+non-real complex factors are not treated.
+
+\section{Definitions (as in the Lean file)}
+
+\begin{definition}
+$(q;q)_n=\prod_{i=0}^{n-1}(1-q^{i+1})$ (\texttt{qPoch}). The Gaussian binomial coefficient is
+$\qbin{N}{k}{q}=(q;q)_N/((q;q)_k(q;q)_{N-k})$ for $k\le N$ and $0$ for $k>N$ (\texttt{gaussBinom}).
+This is the textbook formula
+$\frac{(1-q^N)\cdots(1-q^{N-k+1})}{(1-q)\cdots(1-q^k)}$ after cancelling $(q;q)_{N-k}$.
+$S_N(z)$ is defined literally as in the conjecture, with the exponent $n(n-1)/2$ in $\mathbb{N}$
+(\texttt{S}); $Z_N$ is \texttt{zeroSet q N}.
+A Jordan curve is the image of a continuous injective map from the unit circle into $\mathbb{C}$
+(\texttt{IsJordanCurve}, using Mathlib's \texttt{Circle}).
+\end{definition}
+
+\section{Proof}
+
+\begin{lemma}[$q$-Pascal rule, \texttt{gaussBinom\_pascal}]
+For $0<q<1$ and all $N,k\ge0$:
+$\qbin{N+1}{k+1}{q}=\qbin{N}{k+1}{q}+q^{N-k}\qbin{N}{k}{q}$.
+\end{lemma}
+\begin{proof}
+For $k>N$ all three terms vanish; for $k=N$ both sides equal $1$. For $k<N$ write $N=k+1+m$; after
+clearing the (nonzero) denominators the identity becomes
+$1-q^{N+1}=(1-q^{m+1})+q^{m+1}(1-q^{k+1})$, which holds since $N+1=k+m+2$.
+\end{proof}
+
+\begin{lemma}[finite $q$-binomial theorem, \texttt{S\_succ}, \texttt{S\_eq\_prod}]
+$S_{N+1}(z)=(1-zq^N)S_N(z)$, hence $S_N(z)=\prod_{k=0}^{N-1}(1-zq^k)$.
+\end{lemma}
+\begin{proof}
+Let $t_N(n)=(-1)^nq^{n(n-1)/2}\qbin{N}{n}{q}z^n$, which vanishes for $n>N$. By the $q$-Pascal rule and
+$(m+1)m/2+(N-m)=N+m(m-1)/2$ for $m\le N$, we get $t_{N+1}(m+1)=t_N(m+1)-zq^Nt_N(m)$ for all $m$.
+Summing over $m$ and using $t_N(0)=t_{N+1}(0)=1$ gives the recursion; induction from $S_0=1$ gives
+the product. (This is the Cauchy binomial theorem with $t=-z$.)
+\end{proof}
+
+Hence $Z_N=\{q^{-k}:0\le k<N\}\subset\mathbb{R}$ (\texttt{zeroSet\_eq}).
+
+\begin{lemma}[\texttt{jordan\_not\_subset\_real}]
+No Jordan curve is contained in the real line.
+\end{lemma}
+\begin{proof}
+Let $\gamma$ be continuous and injective on the circle with image in $\mathbb{R}$, and
+$f(t)=\operatorname{Re}\gamma(e^{it})$. Then $f$ is continuous, $f(2\pi)=f(0)$, and $f$ is injective on
+$[0,2\pi)$ (because $\gamma$ is injective, its values are real, and $t\mapsto e^{it}$ is injective on
+$[0,2\pi)$). So $f(0)\ne f(\pi)$; let $c=(f(0)+f(\pi))/2$. The intermediate value theorem on $[0,\pi]$
+and on $[\pi,2\pi]$ gives $s\in(0,\pi)$ and $t\in(\pi,2\pi)$ with $f(s)=f(t)=c$, contradicting
+injectivity.
+\end{proof}
+
+\begin{lemma}[\texttt{subset\_closure\_of\_tendsto}]
+If $d_H(Y_N,\Gamma)\to0$ then $\Gamma\subseteq\overline{\bigcup_NY_N}$.
+\end{lemma}
+\begin{proof}
+For $x\in\Gamma$, $\operatorname{dist}(x,\bigcup_NY_N)\le\operatorname{dist}(x,Y_N)\le d_H(Y_N,\Gamma)$
+for every $N$.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_7679\_false}]
+For every $q\in(0,1)$: (1) $S_N(z)=\prod_{k<N}(1-zq^k)$ for all $N,z$; (2)
+$Z_N=\{q^{-k}:k<N\}$; (3) for all real sequences $a_N,b_N$, no Jordan curve $\Gamma$ satisfies
+$\Gamma\subseteq\overline{\bigcup_N(a_NZ_N+b_N)}$; (4) for all real sequences $a_N,b_N$, there is no
+Jordan curve $\Gamma$ with $d_H(a_NZ_N+b_N,\Gamma)\to0$.
+\end{theorem}
+\begin{proof}
+All sets $a_NZ_N+b_N$ lie in the closed set $\{\operatorname{Im}z=0\}$, hence so does the closure of
+their union; apply the two preceding lemmas.
+\end{proof}
+
+With $a_N=1$, $b_N=0$ this refutes readings (H) and (W), so the zero sets do not converge to any
+Jordan curve, and in particular not to a quasicircle. The clauses about the envelope and the scaling
+constant $1+2q$ concern a curve that does not exist.
+
+\section{Lean formalisation and axiom audit}
+
+File \texttt{lean/Conjecture7679/Basic.lean} (Lean 4 v4.33.1, Mathlib v4.33.1, only
+\texttt{import Mathlib}). Main theorem: \texttt{C7679.conjecture\_7679\_false}. Supporting results:
+\texttt{gaussBinom\_pascal}, \texttt{term\_succ}, \texttt{S\_succ}, \texttt{S\_eq\_prod},
+\texttt{zeroSet\_eq}, \texttt{zeroSet\_real}, \texttt{jordan\_not\_subset\_real},
+\texttt{subset\_closure\_of\_tendsto}. Hausdorff distance is Mathlib's
+\texttt{Metric.hausdorffEDist}. The output of \texttt{\#print axioms C7679.conjecture\_7679\_false} is
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no
+\texttt{native\_decide}.
+
+\section{Sources}\label{sec:sources}
+\begin{itemize}
+\item Wikipedia, \emph{Quasicircle}, \url{https://en.wikipedia.org/wiki/Quasicircle}: ``a quasicircle is
+a Jordan curve in the complex plane that is the image of a circle under a quasiconformal mapping of
+the plane onto itself.''
+\item Wikipedia, \emph{Jordan curve theorem}, \url{https://en.wikipedia.org/wiki/Jordan_curve_theorem}:
+``A Jordan curve or a simple closed curve in the plane is the image of an injective continuous map
+of a circle into the plane.''
+\item Wikipedia, \emph{Gaussian binomial coefficient},
+\url{https://en.wikipedia.org/wiki/Gaussian_binomial_coefficient}: the definition
+$\binom{m}{r}_q=\frac{(1-q^m)(1-q^{m-1})\cdots(1-q^{m-r+1})}{(1-q)(1-q^2)\cdots(1-q^r)}$, ``If $r > m$,
+this evaluates to 0'', and the Cauchy binomial theorem
+$\prod_{k=0}^{n-1}(1+q^kt)=\sum_{k=0}^{n}q^{k(k-1)/2}\binom{n}{k}_q t^k$. The identity is reproved in
+Lean; the source is only for the definitions.
+\end{itemize}
+
+\end{document}
