@@ -1,0 +1,139 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000007661\\[2pt]
+\large Q-geometric ratios of q-hypergeometric integer series}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000007661 reads:
+
+\begin{quote}
+\emph{Definition:} Let $0<|q|<1$; a power series $F(z)=\sum a_n z^n$ is of \emph{q-hypergeometric type}
+if there are rational functions $R(z),S(z)$ with $F(qz)=R(z)F(z)+S(z)$; the coefficient ratios
+$a_{n+1}/a_n$ are the \emph{Q-geometric ratios}. \emph{Conjecture:} $F(z)\in\mathbb Z[[z]]$ is of
+q-hypergeometric type with convergence radius 1 if and only if its Q-geometric ratio sequence converges to
+1 at rate $O(q^n)$, and this rate cannot be improved to $o(q^n)$ unless $F$ is a polynomial.
+\end{quote}
+
+Fix $q\in\mathbb C$ with $0<|q|<1$ (the Lean proof works for every such $q$, so it refutes both the
+reading ``for every such $q$'' and the reading ``for some such $q$''). Write
+$\mathrm{L}(F)$ for ``$F$ is of q-hypergeometric type and has radius of convergence $1$'',
+$\mathrm{O}(F)$ for ``$a_{n+1}/a_n\to1$ and $a_{n+1}/a_n-1=O(q^n)$'', and
+$\mathrm{o}(F)$ for ``$a_{n+1}/a_n-1=o(q^n)$''. We refute the following three readings:
+\begin{enumerate}[label=(\Alph*)]
+  \item the equivalence $\mathrm{L}(F)\iff\mathrm{O}(F)$ for all $F\in\mathbb Z[[z]]$;
+  \item the sharpness clause $\mathrm{o}(F)\Rightarrow F$ is a polynomial, even restricted to $F$ with
+        $\mathrm{L}(F)$;
+  \item the equivalence $\mathrm{L}(F)\iff\bigl(\mathrm{O}(F)\wedge(\mathrm{o}(F)\Rightarrow F\text{ is a
+        polynomial})\bigr)$, in which the sharpness clause is part of the right-hand side.
+\end{enumerate}
+The statement read as (A) and (B) together is false because (A) is false (and also because (B) is false).
+
+\section{Definitions and conventions}
+
+\begin{itemize}
+  \item $F=\sum a_nz^n\in\mathbb Z[[z]]$ is evaluated as the complex sum $F(z)=\sum_{n\ge0}a_nz^n$
+        (Lean: \texttt{toFun}, a \texttt{tsum}); the radius of convergence is the radius of the complex
+        power series $\sum a_nz^n$ (Lean: \texttt{radius}, the radius of
+        \texttt{FormalMultilinearSeries.ofScalars}).
+  \item A rational function is $A/B$ with $A,B\in\mathbb C[z]$, $B\ne0$. Analytic reading
+        (\texttt{QHypergeometricType}): there are $A,B,C,D\in\mathbb C[z]$ with $B,D\ne0$ such that
+        $F(qz)=\frac{A(z)}{B(z)}F(z)+\frac{C(z)}{D(z)}$ for every $|z|<1$ with $B(z)\ne0\ne D(z)$.
+        Formal reading (\texttt{QHypergeometricTypeFormal}): $BD\cdot F(qz)=AD\cdot F+BC$ in
+        $\mathbb C[[z]]$, where $F(qz)$ is the series $\sum q^na_nz^n$ (Mathlib \texttt{rescale q}).
+  \item The Q-geometric ratio is $a_{n+1}/a_n$, computed in $\mathbb R$ (Lean: \texttt{ratio}). Both
+        examples below have all $a_n\neq0$, so no convention for division by zero is used.
+  \item $O(q^n)$ and $o(q^n)$ are Mathlib's \texttt{IsBigO} and \texttt{IsLittleO} along
+        $n\to\infty$; they compare $|a_{n+1}/a_n-1|$ with $|q|^n$.
+  \item ``$F$ is a polynomial'' means $F$ is the image of some $p\in\mathbb Z[z]$ (\texttt{IsPoly}).
+\end{itemize}
+
+\section{The counterexamples}
+
+Let $F_1=\sum_{n\ge0}z^n=1/(1-z)$ and $F_2=\sum_{n\ge0}(n+1)z^n=1/(1-z)^2$, both in $\mathbb Z[[z]]$.
+
+\begin{lemma}\label{lem:qhyp}
+For $|z|<1$, $F_1(z)=(1-z)^{-1}$ and $F_2(z)=(1-z)^{-2}$. Hence
+$F_1(qz)=\frac{1-z}{1-qz}F_1(z)$ and $F_2(qz)=\frac{(1-z)^2}{(1-qz)^2}F_2(z)$ on the unit disk, and
+both are of q-hypergeometric type ($S=0$) in the analytic and the formal sense.
+\end{lemma}
+\begin{proof}
+The geometric series gives $F_1$; $\sum nz^n=z/(1-z)^2$ (Mathlib
+\texttt{hasSum\_coe\_mul\_geometric\_of\_norm\_lt\_one}) plus $\sum z^n$ gives $F_2$. Since $|qz|<1$,
+the same formulas hold at $qz$, and $1-z\ne0$. Formally, $(1-z)F_1=1$ and $(1-z)^2F_2=1$ in
+$\mathbb C[[z]]$ (Mathlib \texttt{mk\_one\_mul\_one\_sub\_eq\_one},
+\texttt{mk\_add\_choose\_mul\_one\_sub\_pow\_eq\_one}); applying the ring homomorphism
+$z\mapsto qz$ gives $(1-qz)F_1(qz)=1$ and $(1-qz)^2F_2(qz)=1$, so both sides of the cleared identities equal
+$1$. (Lean: \texttt{qHyp\_F1}, \texttt{qHyp\_F2}, \texttt{qHypFormal\_F1}, \texttt{qHypFormal\_F2}.)
+\end{proof}
+
+\begin{lemma}
+Both $F_1$ and $F_2$ have radius of convergence $1$.
+\end{lemma}
+\begin{proof}
+$|a_{n+1}|/|a_n|$ equals $1$ for $F_1$ and $(n+2)/(n+1)=1+1/(n+1)\to1$ for $F_2$; by the ratio test
+(Mathlib \texttt{ofScalars\_radius\_eq\_inv\_of\_tendsto}) the radius is $1$.
+(Lean: \texttt{radius\_F1}, \texttt{radius\_F2}.)
+\end{proof}
+
+\begin{lemma}
+(i) For $F_2$, $a_{n+1}/a_n-1=1/(n+1)$, which is not $O(q^n)$.
+(ii) For $F_1$, $a_{n+1}/a_n=1$, so $\mathrm{O}(F_1)$ and $\mathrm{o}(F_1)$ hold; $F_1$ is not a polynomial.
+\end{lemma}
+\begin{proof}
+(i) If $1/(n+1)\le c|q|^n$ for all large $n$, then $1\le c(n+1)|q|^n$, but $(n+1)|q|^n\to0$ (Mathlib
+\texttt{tendsto\_self\_mul\_const\_pow\_of\_lt\_one}). (ii) The zero sequence is $o$ of anything. If
+$F_1=p$ for a polynomial $p$, the coefficient of $z^{\deg p+1}$ would be both $1$ and $0$.
+(Lean: \texttt{not\_rateBigO\_F2}, \texttt{rateBigO\_F1}, \texttt{rateLittleO\_F1}, \texttt{not\_isPoly\_F1}.)
+\end{proof}
+
+\begin{theorem}
+For every $q\in\mathbb C$ with $0<|q|<1$, readings (A), (B), (C) are all false, with either reading of
+``q-hypergeometric type''.
+\end{theorem}
+\begin{proof}
+(A): $\mathrm{L}(F_2)$ holds but $\mathrm{O}(F_2)$ fails. (B): $\mathrm{L}(F_1)$ and $\mathrm{o}(F_1)$ hold
+but $F_1$ is not a polynomial. (C): $\mathrm{L}(F_1)$ holds but the right-hand side fails at $F_1$, since
+$\mathrm{o}(F_1)$ holds and $F_1$ is not a polynomial.
+\end{proof}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture7661/Basic.lean} (namespace \texttt{C7661}, Lean 4 + Mathlib, only
+\texttt{import Mathlib}). Main theorems:
+\begin{itemize}
+  \item \texttt{conjecture\_false (q : C) (\_hq0 : 0 < norm q) (hq1 : norm q < 1)} (ASCII rendering): the facts about $F_2$ and
+        $F_1$ above, and the negations of (A), (B) (restricted to $\mathrm{L}$) and (C), with the analytic
+        definition \texttt{QHypergeometricType}.
+  \item \texttt{conjecture\_false\_formal}: the negations of (A), (B), (C) with the formal definition
+        \texttt{QHypergeometricTypeFormal}.
+\end{itemize}
+Axiom audit: \texttt{\#print axioms} for both theorems reports only \texttt{propext},
+\texttt{Classical.choice}, \texttt{Quot.sound}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\begin{remark}
+We do not refute any reading in which the right-hand side does not imply $a_{n+1}/a_n-1=O(|q|^n)$ and the
+sharpness clause is dropped; we know of no such reading of the text.
+\end{remark}
+
+\end{document}
