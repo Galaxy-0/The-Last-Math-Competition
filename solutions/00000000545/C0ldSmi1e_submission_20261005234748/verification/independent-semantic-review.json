@@ -1,0 +1,190 @@
+{
+  "candidate_id": "00000000545",
+  "review_phase": "independent_final_frozen_lean_semantics",
+  "verdict": "PASS",
+  "verdict_scope": "The frozen Lean definitions and theorems faithfully disprove the exact original bilingual source under its standard edge-ring interpretation. No mathematical or semantic gap identified. This verdict is separate from executable replay and the still-pending LaTeX/PDF artifact review.",
+  "blocking_semantic_gaps": [],
+  "requested_mathematical_changes": [],
+  "source_binding": {
+    "path": "/private/tmp/tlmc545-source-input/SOURCE.md",
+    "sha256": "e960ffafdb92929a3b0a8ef81e196511847a3ab8bafe92b2b965a6845e35d37e",
+    "git_blob_sha": "260fa3ba6e6e6197db72a064fbcee3ef65342842",
+    "both_identifiers_independently_reverified": true,
+    "english_and_chinese_reread_in_full": true,
+    "rules_reread_in_full": [
+      "/private/tmp/tlmc545-source-input/README.md",
+      "/private/tmp/tlmc545-source-input/README.zh-CN.md"
+    ],
+    "source_semantic_criteria": "/private/tmp/tlmc545-review/criteria.json"
+  },
+  "frozen_artifact_binding": {
+    "manifest_path": "/private/tmp/tlmc545-proof/author-freeze.json",
+    "manifest_sha256": "0130ea33f7a2827c9e1dda03972a5cc0c82a25fd2042ce827eab6a8e2211765f",
+    "manifest_hash_independently_verified": true,
+    "every_listed_hash_independently_verified": true,
+    "source_sha256": {
+      "Connectivity.lean": "e4a1b6d270eb4d0c067f4ee2647d21a24ecd3fb10258b97145a97b936e9023f5",
+      "IdealBridge.lean": "0d1392dc2965a2b438c64eccaf1d71f699f80ef8ff83c6f6507c1d83655d3bec",
+      "Conjecture545.lean": "66334a3c27ceabb50c555d078e11cf522a964b10488a35741a0791206a6a7251",
+      "Audit.lean": "0b1b39a6f01f2521bfbc349b2080c78d30ebccfbc6185d0985f4f054885272b0",
+      "Check.lean": "3d0ec7c65403c886ac41bdd7df3680a37399be1d5cb1f58477a2130430d342e8",
+      "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea",
+      "lakefile.toml": "a512d05828b5ceb175d6dde72e6b2ed0db139928ff7e09b0ab9aed46488c04bf",
+      "lake-manifest.json": "992c33d7040c0ffcaa9b68bb0d28e391ac4f8ac69ea35de1dad7df8885807f5b",
+      "pinned-dependencies.json": "9c5467f035979f37bb4f896800ecce2f06bd653a791c850ef4d8edafcc6fb963",
+      "semantic-report.txt": "6a6858e904cd80d8eb4d80fe054b12dd848312a8d2d593a96382c38c211f7506",
+      "declaration-inventory.txt": "02af37422ac41def7027e255e09dffce5585a3c0dbd9e1e0dd4f1b14f16f7861",
+      "verification.txt": "0ec3ab1fd6b49167e67aad6056583babf1eb53dd4bc34090dd39e1f1b7613aa2"
+    }
+  },
+  "final_theorem": {
+    "name": "CompleteGraph.conjecture545_false_positive",
+    "coefficient_hypotheses": "k : Type*, CommRing k, Nontrivial k",
+    "exact_propositional_content": "not (for every natural n, 0 < n implies (HasQuadraticMarkovBasis (Fin n) k iff n <= 5))",
+    "witness": "n = 6",
+    "witness_theorem": "CompleteGraph.counterexample_six",
+    "source_clause_refuted": "The necessity direction: existence of an entirely quadratic Markov basis implies n <= 5",
+    "positive_integer_domain_matched": true,
+    "all_fields_covered": true,
+    "depends_on_zero_vertex_convention": false,
+    "stronger_result": "Every finite complete graph has such a basis over every nontrivial commutative coefficient ring."
+  },
+  "semantic_correspondence": [
+    {
+      "object": "Complete graph K_n",
+      "status": "PASS",
+      "evidence": "CompleteGraph.Edge V is exactly the subtype of all Finset V of cardinality 2; thus all unordered loopless pairs are present. edge_rep proves every edge has the pair representation. Fin n supplies n labeled vertices."
+    },
+    {
+      "object": "Standard graph ring and toric ideal",
+      "status": "PASS",
+      "evidence": "graphRingMap is the coefficient-preserving monomial map. graphRingMap_edge proves X_{a,b} maps to X_a*X_b. toricMap_C preserves every coefficient. graphRing is its range and toricIdeal is literally its RingHom.ker in the standard MvPolynomial ring. This is the conventional edge subring and its defining toric ideal."
+    },
+    {
+      "object": "All exponent vectors and fibers",
+      "status": "PASS",
+      "evidence": "Multiset edges have arbitrary finite multiplicities. Mathlib toFinsupp and toMultiset identify them with every finitely supported natural exponent vector. degree binds endpoint labels and therefore records counts at each labeled vertex. exponentMap_toFinsupp proves the equality with the actual image exponent. No fiber-degree bound or squarefree restriction occurs."
+    },
+    {
+      "object": "Entirely quadratic finite Markov basis",
+      "status": "PASS",
+      "evidence": "HasQuadraticMarkovBasis explicitly requires a Finset of polynomials whose ideal span equals the actual toric ideal. Every member has totalDegree=2 and is a difference of coefficient-one monomials with distinct exponent vectors, each summing to 2. This is the standard finite binomial-generating-set formulation; no separate assumption of generation is hidden. An inclusion-minimal-basis convention would be obtained by a finite generating subset and would preserve quadraticity."
+    },
+    {
+      "object": "Nonzero generators and degree grading",
+      "status": "PASS",
+      "evidence": "quadraticBinomials excludes A=B. edgeMonomial_injective uses Nontrivial k to show their monomials differ. quadraticBinomials_totalDegree combines nonvanishing with homogeneity to give exact total degree 2 in edge variables, including in characteristic 2 and rings with zero divisors."
+    },
+    {
+      "object": "Coefficient field scope",
+      "status": "PASS",
+      "evidence": "IdealBridge is now generic over CommRing k. No rational specialization remains in its statements; the unused Rat import imposes no coefficient restriction. The final existence and disproof theorems additionally require Nontrivial k. Check.lean explicitly instantiates the claims for arbitrary fields."
+    }
+  ],
+  "mathematical_bridge_audit": [
+    {
+      "bridge": "Endpoint cardinality and vertex-count bounds",
+      "status": "PASS",
+      "declarations": ["card_ends", "card_degree", "count_degree_le_card", "exists_avoiding"],
+      "analysis": "Each edge contributes exactly two distinct endpoint occurrences. Hence degree cardinality is twice edge count and any vertex count is at most edge count. A strict inequality yields an edge avoiding the vertex, with actual multiset membership."
+    },
+    {
+      "bridge": "Incident-edge extraction and multiplicity accounting",
+      "status": "PASS",
+      "declarations": ["incident", "extract_incident", "edge_rep_first_ne", "insert_edge"],
+      "analysis": "Membership yields an explicit decomposition with one edge occurrence removed. After removing ac with c different from b, b is not among its endpoints, so an incident edge bd remains. Subsequent extractions remove one real occurrence, and common contexts retain all other multiplicities."
+    },
+    {
+      "bridge": "Shared-neighbor insertion",
+      "status": "PASS",
+      "declarations": ["insert_edge", "switch"],
+      "analysis": "With residual S after removing ac and bc, endpoint equality gives 2+count_c(S)=count_c(Q), while cardinality equality gives |Q|=|S|+1. The count bound on Q forces count_c(S)<|S|, so the avoiding edge is extracted directly from S. Its orientation x different from a makes ax loopless; avoiding c makes cx and cy loopless. The two displayed switches are valid and carry explicit contexts."
+    },
+    {
+      "bridge": "Degenerate switches",
+      "status": "PASS",
+      "declarations": ["SwitchEquiv.quad", "SwitchEquiv.binomial_mem"],
+      "analysis": "The final insertion code does not assume ab was globally absent, so it permits more reflexive cases than the early outline. This is harmless: the auxiliary relation permits equality, and binomial_mem explicitly splits A=B, proving zero ideal membership by simplification. Only A different from B enters quadraticBinomials. No zero polynomial is included in the chosen final basis."
+    },
+    {
+      "bridge": "All-fiber connectivity induction",
+      "status": "PASS",
+      "declarations": ["SwitchEquiv.degree_eq", "SwitchEquiv.cons", "connected_of_degree_eq"],
+      "analysis": "The proof inducts on the arbitrary target multiset N while generalizing the source M. Empty target forces empty source via endpoint cardinality. The inductive step inserts one target edge, cancels its common endpoint multiset from degree equality, applies induction to the remaining target, lifts by that fixed edge, and composes. It covers every nonnegative integer fiber. The inductive relation has only finite derivations from valid two-edge replacements, reflexivity, transitivity, and common contexts."
+    },
+    {
+      "bridge": "Switches imply ideal membership",
+      "status": "PASS",
+      "declarations": ["edgeMonomial_add", "SwitchEquiv.binomial_mem"],
+      "analysis": "Reflexivity gives zero; transitivity adds the two binomial differences; common multiset context multiplies by its monomial; a nontrivial quadratic replacement is a generator. The argument supplies actual membership in Ideal.span quadraticBinomials without assuming the desired kernel equality."
+    },
+    {
+      "bridge": "Arbitrary exponent fibers specialize to the graph",
+      "status": "PASS",
+      "declarations": ["exponentMap_toFinsupp", "toricIdeal_eq_span_quadraticBinomials"],
+      "analysis": "For arbitrary Finsupp exponents a,b with equal image, conversion to multisets and injectivity of toFinsupp give equal labeled degrees. Connectivity and binomial_mem then prove their binomial lies in the quadratic ideal. Conversion back includes all exponents, not only previously represented test cases."
+    },
+    {
+      "bridge": "Full polynomial kernel",
+      "status": "PASS",
+      "declarations": ["IdealBridge.ker_monomialMap_le_of_fiber_binomials", "IdealBridge.ker_le_of_fiber_binomials"],
+      "analysis": "The bridge proves that containing every equal-image monomial difference forces an ideal to contain any polynomial in the kernel. In the quotient it identifies equal-fiber monomial classes, groups coefficients by image exponent using mapDomain, and uses vanishing image coefficients to show the arbitrary polynomial's quotient class vanishes. It requires no field division and holds over CommRing k. There is no unproved citation or surrogate equality replacing the full kernel."
+    },
+    {
+      "bridge": "Reverse ideal inclusion",
+      "status": "PASS",
+      "declarations": ["graphRingMap_edgeMonomial", "toricIdeal_eq_span_quadraticBinomials"],
+      "analysis": "Each selected generator has equal endpoint degrees and therefore equal image monomials; its difference maps to zero. Ideal.span_le extends this to the full generated ideal, completing exact kernel equality."
+    },
+    {
+      "bridge": "Uniform finite basis",
+      "status": "PASS",
+      "declarations": ["quadraticBinomials_finite", "hasQuadraticMarkovBasis"],
+      "analysis": "For finite V, the complete edge type is finite. Pairs of cardinality-two edge multisets are represented by Sym (Edge V) 2 times itself, a finite type. quadraticBinomials is contained in its finite polynomial-image range. Converting this set to a Finset gives one basis for the entire ideal, independent of the fiber or its degree."
+    },
+    {
+      "bridge": "Exact logical negation",
+      "status": "PASS",
+      "declarations": ["counterexample_six", "conjecture545_false", "conjecture545_false_positive"],
+      "analysis": "The complete finite-graph theorem yields a quadratic Markov basis for Fin 6. The assumed cutoff's forward implication would yield 6<=5, contradicted in Lean. The positive-domain variant supplies 0<6 explicitly and exactly matches the usual graph-vertex domain. No stronger conjecture is substituted for the source."
+    }
+  ],
+  "semantic_report_review": {
+    "read_in_full": true,
+    "mathematical_content_matches_frozen_modules": true,
+    "all_multiplicities_and_labeled_degrees_explained": true,
+    "full_kernel_and_field_scope_explained": true,
+    "nonblocking_editorial_note": "The correspondence list labels the connectivity item as Connectivity.connected_of_degree_eq followed by namespace CompleteGraph; its actual declaration name is CompleteGraph.connected_of_degree_eq in module Connectivity. This is readily understandable and does not affect any mathematical claim. Use the exact declaration name in the eventual report.",
+    "provenance_claims": "Author-only assertions about earlier execution archives were not independently audited in this semantic review. They are not mathematical premises."
+  },
+  "verification_scope": {
+    "all_five_authored_lean_modules_read_in_full": true,
+    "configurations_and_all_manifest_listed_artifacts_read": true,
+    "independent_source_hash_check": "PASS",
+    "independent_prohibited_token_scan": "PASS for sorry, admit, native_decide, axiom in all five authored Lean modules",
+    "independent_compilation_in_this_review": false,
+    "independent_dependency_checkout_verification_in_this_review": false,
+    "independent_runtime_axiom_inventory_in_this_review": false,
+    "author_inventory_read": "Claims 93 declarations and only propext, Quot.sound, Classical.choice; treated as author evidence pending root replay",
+    "runtime_responsibility": "Root is performing clean complete build, dependency, inventory, and axiom checks independently",
+    "auxiliary_mathematical_computation": "None relied upon; the proof is symbolic and all fiber sizes are covered by induction"
+  },
+  "access_provenance": {
+    "inherited_context": "Original source-only semantic preassessment and the candidate-specific early outline audit",
+    "current_inputs": "Only the exact original source/rules and author-freeze.json plus every file listed in that manifest",
+    "new_web_access": false,
+    "standard_library_source_access": false,
+    "prior_submission_or_solution_access": false,
+    "other_problem_mathematical_access": false,
+    "selector_or_eligibility_access": false,
+    "proof_or_repository_edits": false,
+    "review_output": "/private/tmp/tlmc545-review/final-semantic-review.json"
+  },
+  "remaining_external_gates": [
+    "Root's independent clean compilation and declaration/axiom/dependency verification",
+    "Full final LaTeX report review and theorem-to-prose correspondence",
+    "Compiled PDF completeness, layout, and content agreement review",
+    "Publication eligibility and repository-submission requirements, outside this mathematical review"
+  ],
+  "publication_clearance": false
+}

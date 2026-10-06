@@ -1,0 +1,16 @@
+# Verification of the final submission
+
+The final mathematical and document checks pass. These are contributor-side checks, separate from maintainer review and acceptance.
+
+- **Exact statement:** `ORIGINAL.md` matches the official bilingual conjecture. The final theorem negates the original cutoff equivalence for positive integers, with `n = 6` as witness.
+- **Complete formalization:** the actual graph-ring map and its entire kernel are used. Arbitrary edge multiplicities, all degree fibers, finite generation, nonzero generators, and exact quadratic degree are proved. The coefficient scope includes every field.
+- **Independent execution:** a separate directory with no authored build artifacts successfully built all modules from the frozen sources. All five modules also passed individual warnings-as-errors replay.
+- **Declaration audit:** the compiled environment contains 93 authored and generated mathematical declarations. Every complete axiom list is a subset of `propext`, `Quot.sound`, and `Classical.choice`. The independent compiled name, module, and axiom maps agree exactly with the author inventory.
+- **Actual submission replay:** `verify.py` ran successfully from this submission directory. All 43 recorded commands passed, including full build, five strict replays, and all nine pinned revision/tracked-tree checks before and after. The build output confirms all five authored modules were built. The portable script ordinarily uses incremental Lake builds; the separate clean-directory replay provides the clean-build evidence.
+- **Verifier scrutiny:** an independent reviewer checked the complete saved run and exercised the driver's actual inventory-validation code against wrapped lists, an unexpected axiom on a continuation line, missing or duplicate names, wrong modules/counts, shortened axiom lists, and truncated output. Every malformed case was rejected. No material false pass was found.
+- **Semantic review:** a reviewer who did not author the proof read the exact conjecture and every final Lean module, checked all mathematical bridges, and found no semantic gap.
+- **Report:** the complete five-page LaTeX report matches the proof. The native editor compiled the final source successfully; the exported PDF also compiled without warnings. The author, primary agent, and independent reviewer each inspected all five rendered pages. The source and PDF identities are recorded in the document checks.
+- **Auxiliary computations:** none are mathematical premises. The verification and document tooling was actually executed; its outputs and source identities are retained.
+- **Eligibility:** the public submission/rule check passed through the observation time recorded in `verification/eligibility.json`, with a final bounded freshness check before publication. It found no previous complete submission for this conjecture in the inspected public scope.
+
+The portable entry point and setup instructions are in `README.md`. Detailed evidence is in `verification/author/`, `verification/root/`, `verification/package-replay/`, `verification/document/`, and the independent semantic, tooling, and document review JSON files. Earlier checkpoint records preserve their original scope and pending-gate wording; they are not claims of maintainer acceptance.

@@ -1,0 +1,86 @@
+{
+  "candidate_id": "00000000545",
+  "review_phase": "independent_source_only_semantic_preassessment",
+  "conclusion": "ready",
+  "conclusion_scope": "Standard edge-ring interpretation of the graph ring of the finite simple complete graph; no mathematical truth verdict or solution strategy.",
+  "source_identity": {
+    "path": "/private/tmp/tlmc545-source-input/SOURCE.md",
+    "sha256": "e960ffafdb92929a3b0a8ef81e196511847a3ab8bafe92b2b965a6845e35d37e",
+    "git_blob_sha": "260fa3ba6e6e6197db72a064fbcee3ef65342842",
+    "sha256_independently_verified": true,
+    "git_blob_independently_verified": true,
+    "both_languages_read_in_full": true,
+    "bilingual_conflict": false
+  },
+  "access_provenance": {
+    "local_files_read": [
+      {"path": "/private/tmp/tlmc545-source-input/source-handoff.json", "sha256": "8caed6eb95f2b1df3c3096d1da48e061d1035927226ae76e0a1014d1582ab729"},
+      {"path": "/private/tmp/tlmc545-source-input/SOURCE.md", "sha256": "e960ffafdb92929a3b0a8ef81e196511847a3ab8bafe92b2b965a6845e35d37e"},
+      {"path": "/private/tmp/tlmc545-source-input/README.md", "sha256": "baf790af419e0070f593eecea4861fd865cc7b544d2cde6ec674f8fc587b01d1"},
+      {"path": "/private/tmp/tlmc545-source-input/README.zh-CN.md", "sha256": "d07ac1ccd888b8ee08fed8eb2e06ae15f6aa4025dbafe98790f8e2b2fc18eba7"}
+    ],
+    "external_queries": ["toric ideal graph edge ring definition k[x_i x_j] Markov basis definition"],
+    "external_sources_used_only_for_terminology": [
+      {"url": "https://vila.math.cinvestav.mx/sites/default/files/upload/ringraphrev.pdf", "access": "search-result excerpt of section 3", "purpose": "conventional edge ring and its presentation kernel"},
+      {"url": "https://www.macaulay2.com/doc/Macaulay2-1.25.05/share/doc/Macaulay2/AllMarkovBases/html/index.html", "access": "opened full documentation page", "purpose": "toric ideal and Markov generating-set terminology"}
+    ],
+    "incidental_exposure": ["Required README general leaderboards and disclaimer", "Search-result snippets for unrelated mathematical papers", "Macaulay2 documentation examples; not used"],
+    "other_conjectures_read": false,
+    "previous_submissions_or_solutions_read": false,
+    "selector_rationale_read": false,
+    "eligibility_catalogs_read": false,
+    "parent_mathematical_project_read": false,
+    "unrelated_scratch_read": false,
+    "pinned_libraries_read": false,
+    "repository_edits": false
+  },
+  "objects": {
+    "graph": "Undirected loopless complete simple graph K_n",
+    "domain": "Positive integer n; natural-number formalization may state and handle the optional n=0 extension",
+    "coefficient_field": "Arbitrary field, or field-independent standard fiber formulation",
+    "graph_ring": "k[x_i*x_j : 1 <= i < j <= n]",
+    "toric_ideal": "Kernel of k[y_ij : i<j] -> k[x_i], y_ij maps to x_i*x_j",
+    "quadratic_degree": "Total degree 2 in edge variables y_ij",
+    "markov_basis": "Finite binomial generating set; equivalently finite moves connecting every nonnegative integer incidence fiber",
+    "empty_basis_allowed": true,
+    "minimality": "Not required; existence is equivalent under the inclusion-minimal convention"
+  },
+  "target": {
+    "predicate": "Q(n) means there exists a finite entirely quadratic Markov basis of the stated toric ideal",
+    "assertion": "For every positive integer n, Q(n) iff n <= 5",
+    "clauses": ["For every n <= 5 in the domain, Q(n)", "For every n in the domain, Q(n) implies n <= 5"],
+    "disproof": ["Some n > 5 with Q(n)", "Some positive n <= 5 with not Q(n)"],
+    "source_parentheticals": "Repeated quadratic label adds no stated independent property; Hosten-Sullivant remark gives context rather than an extra predicate"
+  },
+  "acceptable_formalization": {
+    "edge_index": "Unordered distinct vertex pairs, equivalently ordered pairs i<j",
+    "exponents": "All N-valued edge multiplicity vectors",
+    "incidence": "A(u)(v) is the sum of edge multiplicities incident at v",
+    "move": "Distinct exponent pairs (a,b) with equal incidence and both total degrees 2",
+    "connectivity": "For every u,v with A(u)=A(v), finite path using either orientation of a move plus a common nonnegative context",
+    "nonnegative_intermediates": true,
+    "zero_length_paths_allowed": true,
+    "algebraic_bridge": "Report must explicitly connect the exact standard fiber definition to the toric-kernel formulation; custom weaker predicates are unacceptable"
+  },
+  "reject_substitutes": [
+    "Different graph-associated ring without source clarification",
+    "Degree 2 measured only in vertex variables",
+    "Existence of a quadratic relation without full generation",
+    "Integer lattice span without all-fiber connectivity",
+    "Only simple graphs or squarefree exponent vectors",
+    "Only bounded fibers without a proved exhaustive reduction",
+    "Failure of one candidate basis used as nonexistence of every basis",
+    "Failure of a stronger Groebner-basis property used as failure of Markov-basis existence",
+    "Truth or falsity of only an incorrect implication"
+  ],
+  "later_review_requirements": [
+    "Full LaTeX report and matching PDF",
+    "Complete compiling Lean 4 project",
+    "No sorry, native_decide, extra axioms, or unproved bridge carrying the result",
+    "All relied-upon auxiliary computations reproducible and exhaustive for their claims",
+    "Exact theorem-source agreement",
+    "Personal submission scope and required path conventions"
+  ],
+  "unresolved_blocking_ambiguities": [],
+  "strategy_derived_or_forwarded": false
+}

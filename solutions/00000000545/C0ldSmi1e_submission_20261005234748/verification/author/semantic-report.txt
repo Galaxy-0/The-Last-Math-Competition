@@ -1,0 +1,141 @@
+Conjecture 00000000545: author semantic report
+
+Exact source
+English: Definition: Markov bases (quadratic-quadratic). Conjecture: The toric
+ideal of the graph ring of K_n has an entirely quadratic Markov basis if and
+only if n <= 5 (a criterion beyond Hosten-Sullivant).
+The supplied Chinese text states the same equivalence. The source SHA256 is
+e960ffafdb92929a3b0a8ef81e196511847a3ab8bafe92b2b965a6845e35d37e.
+
+Result and scope
+The conjecture is false under the standard edge-ring meaning of graph ring.
+For EVERY finite complete graph, and EVERY nontrivial commutative coefficient
+ring (in particular every field), its toric ideal has a finite generating
+set of nonzero pure binomials whose two monomials both have degree exactly 2.
+Taking n=6 contradicts the asserted necessity n<=5. The counterexample does
+not depend on a boundary convention at n=0 or n=1.
+
+Original objects and their exact Lean realizations
+1. K_n: vertices are Fin n. CompleteGraph.Edge V is the subtype of Finset V
+   with cardinality 2. It therefore represents ALL unordered pairs of
+   distinct vertices, without loops, orientations, or missing edges.
+   CompleteGraph.edge constructs {a,b}, and edge_rep proves that every edge
+   has this form. No custom restricted graph has replaced K_n.
+2. Graph ring: CompleteGraph.graphRing V k is the range of graphRingMap V k,
+   from the standard mathlib MvPolynomial (Edge V) k into MvPolynomial V k.
+   graphRingMap_edge proves X_{a,b} maps to X_a * X_b. The bridge's
+   toricMap_eq_eval2Hom (spelled eval₂Hom in Lean) also identifies this map
+   with standard polynomial substitution. Thus the range is exactly the
+   usual subring generated over k by x_a x_b, a distinct from b.
+3. Toric ideal: CompleteGraph.toricIdeal V k is literally RingHom.ker of
+   that standard graphRingMap. It is not a relation, numerical surrogate,
+   tested finite collection, or separately assumed abstract ideal.
+4. Monomials: edgeMonomial V k M is MvPolynomial.monomial M.toFinsupp 1.
+   Multiset.toFinsupp is mathlib's additive equivalence between arbitrary
+   multisets and arbitrary natural exponent vectors. Arbitrarily large
+   edge multiplicities and monomial degrees are included.
+5. Degree fiber: degree V M is the multiset of labeled endpoints, obtained
+   by joining the two endpoint labels of every edge occurrence. Equality
+   means equal degrees AT EACH LABELED VERTEX, not just the same unordered
+   multiset of numerical degrees. exponentMap_toFinsupp and
+   graphRingMap_edgeMonomial identify this with the actual image exponent.
+6. Markov basis: HasQuadraticMarkovBasis V k expands to existence of a finite
+   subset of the standard polynomial ring whose ideal span equals the
+   actual toric ideal, all members being nonzero pure binomials with
+   distinct exponent vectors, each monomial of degree 2, and polynomial
+   totalDegree exactly 2. This is the algebraic definition of a quadratic
+   Markov basis. The additional arbitrary-fiber connectivity theorem
+   connected_of_degree_eq supplies the combinatorial Markov interpretation.
+7. The basis used: quadraticBinomials is the set of ALL differences of
+   distinct two-edge multisets having equal labeled endpoint multisets.
+   Reversed signs or redundant generators are allowed, as in the standard
+   notion of a Markov basis; no minimality is asserted or needed.
+
+Complete mathematical proof
+Let d(M) be the multiset of endpoint labels of an edge multiset M. Its
+cardinality is twice the number of edges. For every vertex v, its count in
+d(M) is at most the number of edges, since each edge is loopless.
+
+We first show that whenever d(M)=d({a,b}+Q), with a different from b,
+quadratic switches transform M to {a,b}+R for some R.
+Since a appears in d(M), remove one occurrence of an edge {a,c}. If c=b,
+the desired edge is already present. Otherwise b is not on that removed
+edge, so an edge {b,d} remains and can also be removed, leaving S.
+If c differs from d, replace {a,c},{b,d} by {a,b},{c,d}. All four edges
+are loopless and the labeled endpoint multiset is unchanged.
+
+If c=d, denote the common vertex by c. Then c differs from both a and b.
+The count of c in d(M) is 2 plus its count in d(S), whereas the count of c
+in d({a,b}+Q) is its count in d(Q). Equal total endpoint cardinalities give
+|Q|=|S|+1. Since the c-count in d(Q) is at most |Q|, the c-count in d(S)
+is strictly less than |S|. Therefore S contains an edge {x,y} avoiding c.
+Orient its two labels so x differs from a; at least one endpoint does.
+Remove that occurrence from S, leaving T. Perform
+  {a,c},{x,y} -> {a,x},{c,y},
+  {a,x},{b,c} -> {a,b},{x,c}.
+Each displayed edge is loopless, the rest of the multiset is carried along,
+and both steps preserve labeled endpoint counts. If a step is degenerate
+it is a reflexive relation and contributes the zero polynomial, not a
+zero element in the final basis. All occurrence removals and contexts are
+explicit in Multiset.exists_cons_of_mem and SwitchEquiv.add.
+
+Now induct on the number of edges of a target multiset N. Insert one edge
+of N into M by the preceding argument, cancel its two endpoint labels from
+the degree equality, and apply induction to the remainders. This proves
+connected_of_degree_eq for ALL M,N with d(M)=d(N), without any bound on
+the number of edges or their multiplicities. SwitchEquiv is the inductive
+congruence generated by the actual degree-preserving two-edge replacements;
+it has only reflexivity, transitivity, addition of a common multiset, and
+those replacements as constructors.
+
+Let J be the ideal spanned by the nonzero quadratic differences. A single
+replacement is in J by definition, a reflexive step gives zero, composing
+steps adds their binomials, and adding a common edge multiset multiplies
+their binomial by the corresponding monomial. The formal lemma
+SwitchEquiv.binomial_mem establishes these identities. Hence every
+equal-image monomial difference, in every degree, belongs to J.
+
+For completeness the full arbitrary-polynomial kernel step is proved in
+IdealBridge, not assumed from a citation. In the quotient by J, any two
+monomials with the same image exponent have equal classes. Choose one
+class for each realized image exponent. For an arbitrary finite polynomial,
+its quotient class is the sum of its coefficients times these classes,
+grouped by image exponent. A polynomial in the monomial-map kernel has
+every grouped coefficient sum zero, and consequently its quotient class
+is zero. Thus the full kernel is contained in J. Conversely every chosen
+quadratic generator maps to zero. This proves exact ideal equality.
+
+The set of two-edge multisets is finite for finite V (it is Sym (Edge V) 2),
+so the set of their differences is finite. Distinct exponent vectors give
+distinct coefficient-one monomials over every nontrivial commutative ring.
+Each selected difference is nonzero and homogeneous of degree 2; mathlib's
+IsHomogeneous.totalDegree gives total degree exactly 2. These facts give
+hasQuadraticMarkovBasis for every finite V and every such k. Finally
+counterexample_six combines the n=6 instance with the checked fact 6>5,
+and conjecture545_false negates the original universal equivalence.
+
+Formal theorem correspondence
+- Connectivity.connected_of_degree_eq (namespace CompleteGraph): all fibers.
+- IdealBridge.ker_monomialMap_le_of_fiber_binomials: all kernel polynomials.
+- CompleteGraph.toricIdeal_eq_span_quadraticBinomials: actual ideal equality.
+- CompleteGraph.quadraticBinomials_finite: finite set, not a bounded test.
+- CompleteGraph.quadraticBinomials_totalDegree: every generator degree 2.
+- CompleteGraph.hasQuadraticMarkovBasis: full claimed existence, all finite V.
+- CompleteGraph.counterexample_six: actual K6 witness to failure of cutoff.
+- CompleteGraph.conjecture545_false: negation of the source equivalence.
+- CompleteGraph.conjecture545_false_positive: the same negation with the
+  explicit ordinary domain n>0 for complete graphs.
+
+Dependencies, computation, and remaining scope
+Only pinned standard Lean/mathlib packages were consulted. No prior
+solutions, contestant strategies, other problem mathematics, finite-fiber
+experiments, or external mathematical searches were used. There is no
+relied-upon numerical computation or auxiliary mathematical program. All
+proof steps are kernel-checked Lean proofs. Tooling for recording executions
+and auditing declarations is not a mathematical assumption.
+The author has identified no remaining mathematical or formal proof gap.
+Independent semantic review and the separate publication eligibility gate
+are still required; this report itself does not authorize a submission.
+All failed and successful execution records and recursive before/after
+authored-source/configuration snapshots are preserved under
+/private/tmp/tlmc545-author/runs. No repository files were edited.
