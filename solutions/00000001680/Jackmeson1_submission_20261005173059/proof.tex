@@ -1,0 +1,190 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\tw}{\operatorname{tw}}
+
+\title{Disproof of conjecture 00000001680:\\ at the connectivity threshold the treewidth of a random geometric graph is at least $c\log n$, so it is not $O(\sqrt{\log n/\log\log n})$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clause refuted}
+
+\textbf{Statement (English, verbatim).} Conjecture: The treewidth of random geometric graphs
+(unit disk, radius $r_n$ at the connectivity threshold) is
+$\Theta(\sqrt{\log n / \log\log n})$ (random geometric treewidth). The Chinese line says the
+same: the treewidth of random geometric graphs (unit disk, radius $r_n$ at the connectivity
+threshold) is $\Theta(\sqrt{\log n/\log\log n})$.
+
+\textbf{Reading.} $\Theta(f)$ is the conjunction of a lower bound $\Omega(f)$ and an upper bound
+$O(f)$, with $f(n)=\sqrt{\log n/\log\log n}$. We refute the upper bound:
+\[
+  \text{(U)}\qquad \exists\, C\ \text{such that}\ \tw(G_n)\le C\, f(n)\ \text{for large } n
+\]
+in each of the usual probabilistic senses (with probability tending to one, almost surely, or
+for the expectation). This refutes the conjunction. We do \emph{not} address the lower bound
+$\Omega(f)$ (it is true, and much weaker than what we prove). We prove more than needed: for
+every constant $C$ and all large $n$, the bound $\tw(G_n)\le C f(n)$ fails for \emph{every}
+placement of the points, so the event in (U) is empty and has probability $0$ under every
+distribution of the points.
+
+\textbf{Reading choices covered.}
+\begin{itemize}
+\item \emph{Region.} Any box $[-L,L]^2$, $L>0$. This contains the unit square $[0,1]^2$, the
+  unit disk, and every bounded region. The model on $[0,\sqrt n]^2$ with radius $\rho$ is the
+  model on $[0,1]^2$ with radius $\rho/\sqrt n$ (scale the points by $1/\sqrt n$; the graph is
+  unchanged), and $n(\rho/\sqrt n)^2=\rho^2$, so it is covered too.
+\item \emph{Radius regime.} Any $r>0$ with $n r^2\ge c_0\log n$, for any fixed $c_0>0$. The
+  connectivity threshold $\pi n r_n^2=\log n + c$ (or $+c_n$ with $c_n\ge -\tfrac12\log n$), and
+  $\pi n r_n^2\sim\log n$, all satisfy this for large $n$ with $c_0=1/(2\pi)$.
+\item \emph{Point model.} The theorem is for $m$ points with $m\ge n/2$ and the radius condition
+  stated in terms of $n$. So it covers the binomial model ($m=n$) and the Poisson model of
+  intensity $n$ on the event $\{N\ge n/2\}$. On a region of area $a$ the Poisson count has mean
+  $an$, so this event has probability tending to one when $a>1/2$, which holds for the unit
+  square and the unit disk. For a smaller region, normalize $n$ to the expected point count
+  (or lower the count threshold and adjust the constants); the deterministic theorem is unchanged.
+\item \emph{Metric.} Euclidean distance (as in the conjecture's ``unit disk''). The Lean theorem
+  holds for every supergraph of the Euclidean unit-disk graph on the same points; for example,
+  on $[0,1)^2$ the flat-torus distance is at most the Euclidean distance, so the toroidal graph
+  is such a supergraph.
+\end{itemize}
+
+\section{Definitions (as formalized)}
+
+\begin{definition}[Unit-disk graph]
+For points $p_1,\dots,p_m\in\mathbb{R}^2$ (Mathlib \texttt{EuclideanSpace $\mathbb{R}$ (Fin 2)},
+Euclidean distance) and $r>0$, $G(p,r)$ has vertex set $\{1,\dots,m\}$, and distinct $i,j$ are
+adjacent iff $|p_i-p_j|\le r$ (\texttt{unitDiskGraph}).
+\end{definition}
+
+\begin{definition}[Tree decomposition, treewidth]
+A tree decomposition of a graph $G=(V,E)$ is a finite tree $T$ with a bag $B_t\subseteq V$ at
+each node $t$ such that (T1) every vertex lies in some bag; (T2) for every edge $uv$ some bag
+contains both $u$ and $v$; (T3) for every vertex $v$, the nodes $t$ with $v\in B_t$ induce a
+connected subgraph of $T$. Its width is $\max_t |B_t|-1$. The treewidth $\tw(G)$ is the minimum
+width over all tree decompositions (\texttt{TreeDecomposition}, \texttt{width},
+\texttt{treewidth}; the tree is a Mathlib \texttt{SimpleGraph.IsTree} on a finite node type, and
+(T3) uses Mathlib's \texttt{induce} and \texttt{Connected}).
+\end{definition}
+
+\section{Proof}
+
+\begin{lemma}[Helly property of subtrees; \texttt{helly\_three}, \texttt{helly}]
+In a tree, any finite family of node sets that each induce a connected subgraph and that
+pairwise intersect has a common node.
+\end{lemma}
+
+\begin{proof}
+Call $S$ convex if any two nodes of $S$ are joined by a walk inside $S$; (T3) gives this. In an
+acyclic graph the path between two nodes is unique, so it lies in every convex set containing
+both ends (\texttt{path\_subset}), and the intersection of two convex sets is convex
+(\texttt{wconn\_inter}).
+
+Three sets $X,Y,Z$: take $a\in X\cap Y$, $b\in Y\cap Z$, $c\in Z\cap X$. The path $P$ from $b$ to
+$a$ lies in $Y$, and also in $Z\cup X$ (it is the bypass of the walk $b\to c\to a$ through $Z$
+then $X$). Walking along $P$ from $b\in Z$ to $a\in X$, there are nodes $x\in Z$, $z\in X$ of
+$P$ with $x=z$ or $xz$ an edge (\texttt{transition}). If $x=z$ it is a common node. Otherwise,
+for the paths from $c$ to $x$ (inside $Z$) and from $c$ to $z$ (inside $X$): either the first
+passes through $z$ or the second passes through $x$ (if $z$ is not on the first, appending the
+edge $xz$ gives a path, which is the second by uniqueness; \texttt{edge\_side}). So $z\in Z$ or
+$x\in X$, and that node lies in $X\cap Y\cap Z$.
+
+Finite families: induction on the family, carrying a convex set $R$ that meets every pairwise
+intersection; adding a set $S_a$ replaces $R$ by $S_a\cap R$, and the three-set case shows the
+pairwise intersections still meet it.
+\end{proof}
+
+\begin{lemma}[\texttt{clique\_subset\_bag}, \texttt{card\_clique\_le\_treewidth\_add\_one}]
+If $K$ is a clique of $G$, every tree decomposition has a bag containing $K$. Hence
+$|K|\le \tw(G)+1$.
+\end{lemma}
+
+\begin{proof}
+Apply the Helly lemma to the sets $\{t: v\in B_t\}$, $v\in K$: they are connected by (T3) and
+pairwise intersect by (T1) and (T2). The minimum in $\tw$ is attained (the one-bag
+decomposition shows the set of widths is nonempty).
+\end{proof}
+
+\begin{theorem}[Grid pigeonhole; \texttt{points\_le\_treewidth}, \texttt{log\_le\_treewidth}]
+Let $p_1,\dots,p_m\in[-L,L]^2$, $r>0$, and $G\supseteq G(p,r)$. Then
+$m\le(\tw(G)+1)(32L^2/r^2+2)$. If moreover $n\ge1$, $n\le 2m$ and $c_0\log n\le nr^2$, then
+$\log n\le A(\tw(G)+1)$ with $A=64L^2/c_0+4$.
+\end{theorem}
+
+\begin{proof}
+Put $s=r/2$, $M=\lfloor 2L/s\rfloor$, and send $p_i$ to the cell
+$(\lfloor (x_i+L)/s\rfloor,\lfloor (y_i+L)/s\rfloor)\in\{0,\dots,M\}^2$. By pigeonhole some cell
+holds a set $K$ of at least $m/(M+1)^2$ points. Two points in one cell differ by less than $s$
+in each coordinate, so their distance is less than $\sqrt2\,s<r$: $K$ is a clique, and
+$|K|\le\tw(G)+1$. Since $M\le 4L/r$, $(M+1)^2\le 2((4L/r)^2+1)=32L^2/r^2+2$. For the second
+claim use $\log n/r^2\le n/c_0$ and $\log n\le n$:
+$n\log n\le 2m\log n\le 2(\tw+1)(32L^2\log n/r^2+2\log n)\le n\,A(\tw+1)$.
+\end{proof}
+
+\begin{theorem}[Main; \texttt{treewidth\_not\_upper\_bound\_supergraph},
+\texttt{treewidth\_not\_upper\_bound}]
+For all $L>0$, $c_0>0$ and every real $C$ there is $N$ such that for all $n\ge N$, all
+$m\ge n/2$, all $p_1,\dots,p_m\in[-L,L]^2$, all $r>0$ with $c_0\log n\le nr^2$, and every
+supergraph $G$ of $G(p,r)$ (in particular $G=G(p,r)$):
+\[
+  C\sqrt{\log n/\log\log n}\;<\;\tw(G).
+\]
+\end{theorem}
+
+\begin{proof}
+Let $X=A|C|+A+1$ and take $N\ge e^{\max(X^2,e)}$. For $n\ge N$, $\ell=\log n\ge\max(X^2,e)$, so
+$\log\ell\ge1$ and $x=\sqrt\ell\ge X\ge1$. Then $C\sqrt{\ell/\log\ell}\le|C|\,x$ and
+$x^2\ge Xx=A|C|x+(A+1)x>A|C|x+A$, so $|C|x<\ell/A-1\le\tw(G)$.
+\end{proof}
+
+\begin{corollary}[\texttt{prob\_upper\_bound\_eq\_zero}]
+For $n\ge N$ and $r$ as above, every measure $\mu$ on placements $(\mathbb{R}^2)^n$ with
+$\mu(\text{some point outside }[-L,L]^2)=0$ gives
+$\mu\{\tw(G(p,r))\le C\sqrt{\log n/\log\log n}\}=0$. In particular this holds for $n$ i.i.d.\
+uniform points in the unit square or unit disk, for every $C$; so (U) fails with probability
+one, and also fails for $\mathbb{E}\,\tw$ (since $\tw\ge \log n/A-1$ pointwise).
+\end{corollary}
+
+\begin{remark}[Literature context]
+Mitsche and Perarnau, \emph{On the treewidth and related parameters of random geometric graphs}
+(STACS 2012), abstract at
+\url{https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.STACS.2012.408}: ``We give
+asymptotically exact values for the treewidth tw(G) of a random geometric graph G(n,r) in
+[0,sqrt(n)]\^{}2. More precisely, we show that there exists some c\_1 > 0, such that for any
+constant 0 < r < c\_1, tw(G)=Theta(log(n)/loglog(n)), and also, there exists some c\_2 > c\_1,
+such that for any r=r(n)> c\_2, tw(G)=Theta(r sqrt(n)).'' Since $\mathrm{tw}\le n-1$, the
+second formula can only hold in the unsaturated range (e.g.\ $r=O(\sqrt n)$; in general the
+expression saturates at $\min(n, r\sqrt n)$). At the connectivity threshold
+$r\asymp\sqrt{\log n}$ in $[0,\sqrt n]^2$, which lies in that range, it gives
+$\Theta(\sqrt{n\log n})$. Our proof does not use this result.
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture1680/Basic.lean} (Lean 4, Mathlib v4.33.1, only \texttt{import
+Mathlib}), namespace \texttt{C1680}. Main theorems: \texttt{treewidth\_not\_upper\_bound},
+\texttt{treewidth\_not\_upper\_bound\_supergraph}, \texttt{prob\_upper\_bound\_eq\_zero}; key
+lemmas: \texttt{helly}, \texttt{clique\_subset\_bag},
+\texttt{card\_clique\_le\_treewidth\_add\_one}, \texttt{points\_le\_treewidth},
+\texttt{log\_le\_treewidth}. \texttt{lake build} succeeds, and \texttt{\#print axioms} for each
+main theorem gives exactly \texttt{[propext, Classical.choice, Quot.sound]}. There is no
+\texttt{sorry}, no \texttt{native\_decide}, and no added axiom.
+
+Conventions: \texttt{Real.log} is the natural logarithm with $\log 0=0$, and $\sqrt{\cdot}$ is
+\texttt{Real.sqrt} (0 on negatives); neither convention matters for $n\ge N$, where $\log n\ge e$
+and $\log\log n\ge1$. Treewidth is a natural number; for the empty graph the one-bag
+decomposition has width $0$ (truncated subtraction), which does not arise here since $m\ge1$.
+\end{document}
