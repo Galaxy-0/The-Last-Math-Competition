@@ -1,0 +1,3 @@
+import Conjecture7792
+#print axioms Conjecture7792.conjecture_7792_false
+#print axioms Conjecture7792.admissible_abs_ge_four
