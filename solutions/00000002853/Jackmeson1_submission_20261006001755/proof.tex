@@ -1,0 +1,191 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\title{Disproof of conjecture 00000002853:\\ cactus rank already falls below Waring rank in degree 3}
+\author{Jackmeson1}
+\date{2026-10-06}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the reading}
+
+\textbf{Statement (English, verbatim).} Definition: Cactus rank and algebraic statistics: the
+statistical translation of apolarity theory. Conjecture: The stratification rigidity of cactus
+rank: the minimal degree where cactus rank falls below rank is 5, and the algebraic mechanism of
+the separation is the multi-point splitting constraint of apolar ideals. (cactus separation
+minimal degree)
+
+The Chinese version makes the same claim: the minimal degree at which the cactus rank is lower
+than the rank is 5, and the mechanism of the separation is a multi-point splitting constraint of
+apolar ideals.
+
+\textbf{Reading.} ``Rank'' is the Waring rank (the rank notion of apolarity theory). The first
+conjunct says: if a nonzero complex form $F$ of degree $d$ has cactus rank strictly smaller than its
+Waring rank, then $d\ge 5$, and degree 5 occurs. We refute this conjunct, which refutes the
+conjunction. The second conjunct (``the mechanism is the multi-point splitting constraint'') has
+no precise meaning and is not addressed. We work over $\mathbb C$, in any finite number of
+variables; the counterexample is a binary cubic.
+
+\section{Definitions (as formalized)}
+
+Let $S=K[x_0,\dots,x_{n-1}]$ (forms) and let $T=K[y_0,\dots,y_{n-1}]$ be the dual ring. In Lean both
+are \texttt{MvPolynomial (Fin n) K}.
+
+\begin{definition}[Apolarity]
+$T$ acts on $S$ by differentiation: $y^m\circ F=\partial_0^{m_0}\cdots\partial_{n-1}^{m_{n-1}}F$
+with $\partial_i=\partial/\partial x_i$, extended linearly: $g\circ F=\sum_m g_m\,\partial^mF$
+(\texttt{partialPow}, \texttt{diffAct}). The apolar set is $F^\perp=\{g\in T: g\circ F=0\}$
+(\texttt{annDiff}). As a second convention we also use contraction, $y^m\lrcorner x^a=x^{a-m}$ if
+$m\le a$ and $0$ otherwise (\texttt{contractAct}, \texttt{annContract}).
+\end{definition}
+
+Bernardi and Ranestad [BR] use contraction and remark: ``Differentiation may be used instead of
+contraction, if care is made with coefficients.'' For our monomial $F$ both conventions give the
+same result, and the Lean file proves the result for both.
+
+\begin{definition}[Zero-dimensional subscheme of length $r$]
+An ideal $I\subseteq T$ is \emph{homogeneous} if it contains every homogeneous component of each of
+its elements (\texttt{IsHomogeneousIdeal}). With $\mathfrak m=(y_0,\dots,y_{n-1})$
+(\texttt{irrelevant}), $I$ is \emph{saturated} if $(I:\mathfrak m^\infty)=\bigcup_k(I:\mathfrak
+m^k)\subseteq I$, i.e.\ $h g\in I$ for all $h\in\mathfrak m^k$ implies $g\in I$
+(\texttt{IsSaturated}). The Hilbert function is $t\mapsto\dim_K(T/I)_t$ (\texttt{hilbertFunction}).
+$I$ is the ideal of a zero-dimensional subscheme of length $r$ (\texttt{IsZeroDimLength I r}) if it
+is homogeneous, saturated, and its Hilbert function equals $r$ for all large $t$.
+\end{definition}
+
+This encodes the standard dictionary: closed subschemes of $\mathbb P^{n-1}=\mathrm{Proj}\,T$
+correspond bijectively to saturated homogeneous ideals (Wikipedia, \emph{Projective variety}:
+``correspond bijectively to the homogeneous ideals''), and the dimension and degree are read off
+the Hilbert polynomial (ibid.: ``Basic invariants of X such as the degree and the dimension can be
+read off the Hilbert polynomial of this graded ring.''). A subscheme is zero-dimensional of length
+$r$ exactly when its Hilbert polynomial is the constant $r$, that is, when the Hilbert function of
+$T/I_Z$ equals $r$ in all large degrees. Saturation is the ideal quotient of Wikipedia, \emph{Ideal
+quotient} (``the saturation of an ideal corresponding to a projective scheme'').
+
+\begin{definition}[Cactus rank and Waring rank]
+A subscheme with ideal $I$ is \emph{apolar} to $F$ if $I\subseteq F^\perp$ ([BR], Definition 1:
+``A subscheme is apolar to if its homogeneous ideal is contained in''). The \emph{cactus rank}
+$\mathrm{cr}(F)\in\mathbb N\cup\{\infty\}$ is the least $r$ such that some $I$ with
+\texttt{IsZeroDimLength I r} satisfies $I\subseteq F^\perp$ (\texttt{cactusRank};
+\texttt{cactusRankContract} for contraction). [BR]: ``The cactus rank is the minimal length of an
+apolar subscheme to''; [BT]: ``The cactus rank of a homogeneous polynomial is known to be the
+minimal length of an apolar zero-dimensional scheme to''. The \emph{Waring rank} $\mathrm r(F)$ of
+a form of degree $d$ is the least $r$ with $F=\sum_{i=1}^r L_i^d$, where $L_i=\sum_j a_{ij}x_j$ are
+linear forms (\texttt{waringRank d F}); Wikipedia, \emph{Comon's conjecture}: ``the minimal number
+of d-th powers of linear forms needed to express it''. Both infima are taken in
+$\mathbb N\cup\{\infty\}$ (\texttt{ENat}), with value $\infty$ if no witness exists.
+\end{definition}
+
+The set of separating degrees is
+$\mathcal D=\{d>0:\exists n,\ \exists F\in\mathbb C[x_0,\dots,x_{n-1}]\setminus\{0\}$ homogeneous of
+degree $d$ with $\mathrm{cr}(F)<\mathrm r(F)\}$ (\texttt{separatingDegrees}). Degrees are required to
+be positive, because the coefficient-free Waring-rank definition $F=\sum L_i^d$ is standard only
+for $d>0$; at $d=0$ it would give a nonzero constant $c$ the meaningless value $\mathrm r(c)=c$.
+The conjecture's first conjunct says that $5$ is the least element of $\mathcal D$.
+
+\section{The counterexample $F=x_0^2x_1$}
+
+\begin{lemma}[The double point]
+$I_0=(y_1^2)\subseteq\mathbb C[y_0,y_1]$ is homogeneous and saturated, and $\dim(T/I_0)_t=2$ for
+every $t\ge1$. So $I_0$ is the ideal of a zero-dimensional scheme of length 2 (the double point at
+$[1:0]$).
+\end{lemma}
+\begin{proof}
+$I_0$ is the monomial ideal generated by $y_1^2$, so $g\in I_0$ iff every monomial $y^m$ of $g$ has
+$m_1\ge 2$. Homogeneous components keep a subset of the monomials, so $I_0$ is homogeneous. If
+$hg\in I_0$ for all $h\in\mathfrak m^k$, take $h=y_0^k$. The monomials of $y_0^kg$ are
+$y_0^ky^m$ for $y^m$ in $g$, and these have the same $y_1$-exponent, so $g\in I_0$. By the
+standard-monomial count (dimension of $(T/I)_t$ = number of degree-$t$ monomials not divisible by
+any generator), $(T/I_0)_t$ has basis $y_0^t,\ y_0^{t-1}y_1$ for $t\ge1$.
+\end{proof}
+
+\begin{lemma}[Apolarity]
+$I_0\subseteq F^\perp$ for $F=x_0^2x_1$, for differentiation and for contraction.
+\end{lemma}
+\begin{proof}
+Each monomial $y^m$ of $g\in I_0$ has $m_1\ge2$. Then $\partial^mF=\partial_0^{m_0}
+\partial_1^{m_1-2}(\partial_1^2F)=0$ because $\partial_1^2(x_0^2x_1)=0$. For contraction, $m\le
+(2,1)$ fails because $m_1\ge2>1$.
+\end{proof}
+
+Hence $\mathrm{cr}(F)\le 2$ (\texttt{cactusRank\_F0\_le}, \texttt{cactusRankContract\_F0\_le}).
+
+\begin{lemma}[Waring rank]
+$\mathrm r(x_0^2x_1)=3$.
+\end{lemma}
+\begin{proof}
+Upper bound: $6x^2y=(x+y)^3-(x-y)^3-2y^3$. With real $c=6^{-1/3}$ and $e=2^{1/3}$ this gives
+$x^2y=(cx+cy)^3+(-cx+cy)^3+(-ecy)^3$. Lower bound: suppose $x^2y=\sum_{i\le r}(\alpha_ix+\beta_iy)^3$
+with $r\le2$. Pad with zero forms to $r=2$ and put $x=1$, $y=t$, so that
+$t=f(t):=(\alpha_1+\beta_1t)^3+(\alpha_2+\beta_2t)^3$ for all $t$. Evaluating at
+$t=0,1,-1,2$ and solving the linear system gives $\beta_1^3+\beta_2^3=0$,
+$\alpha_1\beta_1^2+\alpha_2\beta_2^2=0$ and $3(\alpha_1^2\beta_1+\alpha_2^2\beta_2)=1$. The identity
+\[
+\beta_1^3=-\beta_1^3\bigl(3(\alpha_1^2\beta_1+\alpha_2^2\beta_2)-1\bigr)
++3(\alpha_1\beta_1^2-\alpha_2\beta_2^2)(\alpha_1\beta_1^2+\alpha_2\beta_2^2)
++3\alpha_2^2\beta_2(\beta_1^3+\beta_2^3)
+\]
+gives $\beta_1^3=0$, so $\beta_1=0$, then $\beta_2=0$, and $3(\alpha_1^2\beta_1+\alpha_2^2\beta_2)=0\ne1$.
+\end{proof}
+
+\begin{theorem}
+$\mathrm{cr}(x_0^2x_1)\le2<3=\mathrm r(x_0^2x_1)$, so $3\in\mathcal D$. Hence $5$ is not the least
+element of $\mathcal D$, and $\min\mathcal D\le3$. The first conjunct of the conjecture, and with
+it the conjecture, is false.
+\end{theorem}
+
+\textbf{Remarks (not formalized).} Degrees 1 and 2 do not separate: for quadrics the Waring rank,
+the cactus rank and the matrix rank all coincide. So the true minimal degree is 3. Other readings
+also point to degree 3. [BR] shows ``there are cubic forms with minimal cactus rank (equal to the
+Hankel rank) whose border rank is strictly higher'', and its abstract states that, for a general
+cubic form in sufficiently many variables, the smallest length of an apolar zero-dimensional scheme
+is bounded ``and therefore smaller than the rank of the form''. These are cited only as context,
+and the Lean proof does not use them.
+
+\section{Lean formalization}
+
+File \texttt{Conjecture2853/Basic.lean} (namespace \texttt{C2853}), \texttt{import Mathlib} only.
+The monomial-ideal Hilbert-function machinery (\texttt{monomialIdeal}, \texttt{gradedPiece},
+\texttt{hilbertFunction}, \texttt{standard}, \texttt{hilbertFunction\_monomialIdeal}) is copied,
+with credit, from the accepted solution of conjecture 00000000539. Main results:
+\begin{itemize}
+\item \texttt{I0\_zeroDim : IsZeroDimLength (I0 K) 2}; \texttt{I0\_apolar},
+\texttt{I0\_apolar\_contract};
+\item \texttt{waringRank\_F0}: \texttt{waringRank 3 (F0} $\mathbb C$\texttt{) = 3} (from
+\texttt{not\_two\_cubes});
+\item \texttt{F0\_separates}: \texttt{cactusRank (F0} $\mathbb C$\texttt{)} $<$
+\texttt{waringRank 3 (F0} $\mathbb C$\texttt{)} and \texttt{cactusRankContract (F0} $\mathbb
+C$\texttt{)} $<$ \texttt{waringRank 3 (F0} $\mathbb C$\texttt{)};
+\item \texttt{three\_mem\_separatingDegrees}: $3\in$ \texttt{separatingDegrees};
+\item \texttt{conjecture\_false}: $3\in$ \texttt{separatingDegrees} $\wedge$
+$\neg$\,\texttt{IsLeast separatingDegrees 5} $\wedge$ \texttt{sInf separatingDegrees} $\le 3$,
+where \texttt{separatingDegrees} contains only positive degrees ($0<d$ is part of its
+definition).
+\end{itemize}
+\texttt{lake build} succeeds. \texttt{\#print axioms} for \texttt{conjecture\_false},
+\texttt{F0\_separates} and \texttt{waringRank\_F0} reports only \texttt{propext},
+\texttt{Classical.choice} and \texttt{Quot.sound}. There is no \texttt{sorry} and no
+\texttt{native\_decide}.
+
+\section*{References}
+\begin{itemize}
+\item[{[BR]}] A. Bernardi, K. Ranestad, \emph{On the cactus rank of cubic forms},
+\url{https://arxiv.org/abs/1110.2197}.
+\item[{[BT]}] A. Bernardi, D. Taufer, \emph{Waring, tangential and cactus decompositions},
+\url{https://arxiv.org/abs/1812.02612}.
+\item Wikipedia: \url{https://en.wikipedia.org/wiki/Projective_variety},
+\url{https://en.wikipedia.org/wiki/Ideal_quotient},
+\url{https://en.wikipedia.org/wiki/Comon%27s_conjecture}.
+\end{itemize}
+
+\end{document}
