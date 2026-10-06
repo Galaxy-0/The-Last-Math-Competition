@@ -1,0 +1,171 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+
+\title{Disproof of conjecture 00000002684:\\ orbit--subvariety hit counts can grow like $n/2$, beating every polynomial in $\log n$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the readings refuted}
+
+\textbf{Statement (English, verbatim).} Definition: Dynamical Mordell--Lang: finiteness of
+intersections of orbits with subvarieties (the Ghioca--Tucker theorem). Conjecture: A quantitative
+upper bound on intersection density: the count of intersection points of an orbit with a
+codimension-$r$ subvariety is a degree-$r$ polynomial in $\log n$ along the iterates, with
+coefficients explicit in the degree vector of the subvariety. (DML intersection count polynomial law)
+
+For a self-map $f$, a point $x_0$, a subvariety $V$ and $N\ge 0$ write
+\begin{align*}
+  c(N)&=\#\bigl(\{f^n(x_0):0\le n\le N\}\cap V\bigr) && \text{(intersection points)},\\
+  t(N)&=\#\{n\le N: f^n(x_0)\in V\} && \text{(hitting times)}.
+\end{align*}
+In all our examples the orbit is injective, so $c(N)=t(N)$ (and Lean proves both statements).
+We refute the following readings.
+\begin{itemize}
+\item[(R1)] \emph{Upper-bound reading.} For every $r\ge1$ there are $f,x_0$ and a codimension-$r$
+  subvariety $V$ such that for \emph{every} real polynomial $P$ (any degree, any coefficients) it is
+  false that $c(N)\le P(\log N)$ for all sufficiently large $N$. Hence no choice of coefficients,
+  explicit in the degree vector or not, gives the claimed upper bound, either eventually or for all
+  $N\ge1$.
+\item[(R2)] \emph{Equality reading.} ``$c(N)=P(\log N)$ with $\deg P=r$'' fails for the same
+  example (equality implies the upper bound). It also fails for orbits whose intersection with $V$
+  is \emph{finite}: there $c$ is eventually constant, and if $c(N)=P(\log N)$ for all large $N$ then
+  $P$ is a constant, so $\deg P=0\neq r$.
+\item[(R3)] \emph{Finite intersections, coefficients depending only on $V$.} For every $r\ge1$ there is
+  one codimension-$r$ subvariety $W$ (degree vector $(1,\dots,1)$) and maps $g_K$ ($K\ge1$) such
+  that the orbit of $0$ under $g_K$ meets $W$ in exactly $K$ points, and no single real polynomial $P$
+  satisfies $c_{g_K}(N)\le P(\log N)$ for all $K\ge1$ and all $N\ge1$.
+\end{itemize}
+
+\textbf{Readings not refuted.} (a) If the claim is restricted to orbits meeting $V$ in finitely
+many points and the coefficients may depend on $f$ and $x_0$ (not only on $V$), the upper bound is
+trivially true: $c(N)$ is bounded by the total number of intersection points, so a large constant
+(or any polynomial with positive leading coefficient, for large $N$) bounds it. This case is
+consistent with the claim and we do not refute it. (b) Our family in (R3) has maps $g_K$ of degree
+$\max(1,K-1)$ (the first coordinate has degree $K-1$ in $z$, the last coordinate is $z+1$); since
+this grows with $K$, if the coefficients may also depend on $\deg f$, (R3) does not apply. (c) The formula
+for the coefficients in terms of the degree vector is not specified in the statement; (R1) beats
+every polynomial, so the formula does not matter there.
+
+\textbf{About the Definition line.} The Definition names the Dynamical Mordell--Lang setting. In
+Witness~1 the set of return times is the even numbers, a single arithmetic progression, and $V$ is
+invariant under $f^2$ (which is translation by $2$ in $z$). So Witness~1 is an orbit that meets $V$
+infinitely often; it is not excluded by the statement's wording (``intersection density'', ``count
+\dots along the iterates'', ``upper bound''). Readers who restrict the claim to finite intersections
+should look at (R2)--(R3) and at the unrefuted case (a).
+
+\section{Conventions and definitions}
+
+\begin{itemize}
+\item Affine space $\A^{r+1}_\Q$ is $\Q^{\mathrm{Fin}(r+1)}$; coordinate $0$ is $x_1$, coordinates
+  $1,\dots,r-1$ are $x_2,\dots,x_r$, and the last coordinate is $z$. We take $r\ge1$.
+\item A polynomial self-map is $p\mapsto (F_i(p))_i$ for a tuple $F$ of polynomials in
+  $\Q[x_1,\dots,x_r,z]$ (Lean: \texttt{polyMap}). Iterates start at $f^0=\mathrm{id}$, and $n\in\N$
+  includes $0$.
+\item $\log$ is the natural logarithm \texttt{Real.log}; we only use it at $N\ge1$ (or for large
+  $N$). Mathlib's junk value $\log 0=0$ plays no role.
+\item The line $L_c=\{p: p_i=c_i \text{ for all } i\neq z\}$ through $c$ is the zero locus
+  (\texttt{MvPolynomial.zeroLocus}) of the ideal generated by the $r$ polynomials $x_i-c_i$, each of
+  total degree $1$; so its degree vector is $(1,\dots,1)$.
+\item \emph{Subvariety and codimension.} Lean proves that the vanishing ideal $I(L_c)$ is prime (so
+  $L_c$ is an irreducible Zariski-closed subset), that the coordinate ring
+  $\Q[x_1,\dots,x_r,z]/I(L_c)$ has Krull dimension $1$, and that $\Q[x_1,\dots,x_r,z]$ has Krull
+  dimension $r+1$. Hence $L_c$ has codimension $r$. The proof restricts polynomials to the line:
+  $\rho_c:\Q[x,z]\to\Q[z]$, $x_i\mapsto c_i$, $z\mapsto z$, is surjective with kernel $I(L_c)$
+  (since a polynomial over the infinite field $\Q$ vanishing on $\Q$ is zero), so the coordinate
+  ring is isomorphic to $\Q[z]$.
+\end{itemize}
+
+\section{The proofs}
+
+\begin{lemma}[\texttt{eventually\_eval\_log\_le}]
+For every $P\in\R[X]$, $P(\log N)\le N/4$ for all sufficiently large $N\in\N$.
+\end{lemma}
+\begin{proof}
+$P(\log x)=\sum_{k\le\deg P}a_k(\log x)^k$ and each $(\log x)^k=o(x)$ as $x\to\infty$
+(Mathlib \texttt{Real.isLittleO\_pow\_log\_id\_atTop}); a finite sum of $o(x)$ terms is $o(x)$.
+Restrict along $\N\to\R$.
+\end{proof}
+
+\textbf{Witness 1.} $f(x_1,x_2,\dots,x_r,z)=(-x_1,x_2,\dots,x_r,z+1)$, $x_0=(1,0,\dots,0;0)$,
+$V=L_{x_0}=\{x_1=1,\ x_2=\dots=x_r=0\}$.
+
+\begin{theorem}[\texttt{conjecture2684\_false}, \texttt{conjecture2684\_disproof}]
+For $r\ge1$: $f^n(x_0)=((-1)^n,0,\dots,0;n)$; $f^n(x_0)\in V$ iff $n$ is even; the orbit is
+injective; $x_0\in V$ but $f(x_0)\notin V$. Hence $c(N)=t(N)\ge\lfloor N/2\rfloor+1\ge N/2$ (equality holds in the first inequality; Lean
+proves only the lower bound), and for
+every $P\in\R[X]$ it is false that $c(N)\le P(\log N)$ for all large $N$ (and likewise for $t$).
+\end{theorem}
+\begin{proof}
+The orbit formula is an induction. In $\Q$, $(-1)^n=1$ iff $n$ is even. The $z$-coordinate is $n$,
+so the orbit is injective. The even numbers $2k$, $k\le\lfloor N/2\rfloor$, are hitting times, so
+$t(N)\ge\lfloor N/2\rfloor+1\ge N/2$. If also $t(N)\le P(\log N)\le N/4$ for large $N$, then
+$N/2\le N/4$, which is false for $N\ge1$.
+\end{proof}
+The corollary \texttt{conjecture2684\_false\_degree} states the degree-$r$ readings: there is no
+$P$ of degree $r$ with $c(N)\le P(\log N)$ for all $N\ge1$, and none with $c(N)=P(\log N)$ for all
+$N\ge1$.
+
+\textbf{Witness 2 (finite intersections).} For $K\ge1$ let
+$g_K(x_1,\dots,x_r,z)=\bigl(\prod_{j=0}^{K-2}(z-j),\,x_2,\dots,x_r,\,z+1\bigr)$, start at $0$, and
+let $W=L_0=\{x_1=\dots=x_r=0\}$ (the $z$-axis, fixed, independent of $K$).
+
+\begin{theorem}[\texttt{g\_returns}, \texttt{finite\_eq\_reading}, \texttt{finite\_uniform\_bound\_false}]
+For $r,K\ge1$: $g_K^n(0)\in W$ iff $n<K$, so the orbit meets $W$ in exactly $K$ points and
+$c(N)=K$ for $N\ge K-1$. If $c(N)=P(\log N)$ for all large $N$ then $P=K$ is constant, so
+$\deg P\neq r$. And no $P\in\R[X]$ satisfies $c_{g_K}(N)\le P(\log N)$ for all $K\ge1$, $N\ge1$.
+\end{theorem}
+\begin{proof}
+$z$ increases by $1$, the coordinates $x_2,\dots,x_r$ stay $0$, and the $x_1$-coordinate of
+$g_K^{m+1}(0)$ is $\prod_{j<K-1}(m-j)$, which vanishes iff $m<K-1$. If $P(\log N)=K$ for all
+$N\ge N_0$, then $P-K$ has infinitely many roots ($\log$ is injective on $(0,\infty)$), so $P=K$
+(Mathlib \texttt{Polynomial.eq\_of\_infinite\_eval\_eq}). For the last claim pick $N\ge1$ with
+$P(\log N)\le N/4$ and take $K=N+1$: then $c_{g_K}(N)=N+1>N/4$.
+\end{proof}
+
+\begin{remark}
+Lean works over $\Q$. The same polynomials give the same orbits over any field of characteristic
+$0$ (this remark is not formalized).
+\end{remark}
+
+\section{Lean formalization and axiom audit}
+
+The file \texttt{lean/Conjecture2684/Basic.lean} (461 lines, only \texttt{import Mathlib}) contains:
+\begin{itemize}
+\item objects: \texttt{polyMap}, \texttt{hitTimes}, \texttt{hitPoints}, \texttt{line}, \texttt{eqns},
+  \texttt{V}, \texttt{W}, \texttt{F}, \texttt{f}, \texttt{x}$_0$ (\texttt{x} with subscript 0), \texttt{G}, \texttt{g};
+\item variety certificates: \texttt{zeroLocus\_eqns}, \texttt{eqns\_totalDegree},
+  \texttt{line\_isPrime}, \texttt{line\_dim}, \texttt{ambient\_dim};
+\item Witness 1: \texttt{mem\_V\_iff\_even}, \texttt{orbit\_injective}, \texttt{nondegenerate},
+  \texttt{conjecture2684\_false}, \texttt{conjecture2684\_false\_degree}, and the headline
+  \texttt{conjecture2684\_disproof}: for $r\ge1$ there are $F$, $x$ and $r$ equations $E$ of total
+  degree $1$ whose zero locus $V$ has prime vanishing ideal and coordinate ring of Krull dimension
+  $1$ (ambient dimension $r+1$), the return set is infinite, and for every real polynomial $P$ the
+  count of intersection points is not eventually $\le P(\log N)$;
+\item Witness 2: \texttt{g\_returns}, \texttt{g\_orbit\_injective}, \texttt{finite\_eq\_reading},
+  \texttt{finite\_uniform\_bound\_false}.
+\end{itemize}
+\texttt{lake build} succeeds. \texttt{\#print axioms} for \texttt{conjecture2684\_disproof},
+\texttt{conjecture2684\_false}, \texttt{conjecture2684\_false\_degree}, \texttt{finite\_eq\_reading},
+\texttt{finite\_uniform\_bound\_false}, \texttt{g\_returns} and \texttt{nondegenerate} reports only
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no
+\texttt{native\_decide}.
+
+\end{document}
