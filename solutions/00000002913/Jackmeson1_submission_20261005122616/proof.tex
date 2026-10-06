@@ -1,0 +1,172 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\F}{\mathbb{F}}
+
+\title{A disproof of Conjecture 00000002913\\[2pt]
+\large For every $d\ge2$ and every $q=2^k>d^2$, the Keller map $(x^2-x+y^d,\,y)$ of degree $d$ is not injective on $\F_q^2$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000002913 reads (English, verbatim):
+\begin{quote}
+Definition: finite field this of injection polynomial map: jacobian conjecture of finite field
+plane. Conjecture: injection spectrum: d -fold polynomial map in F\_q on injection when q greater
+than d$^2$ and inverse in q of injection does not exceed of d by Chebyshev lattice gives.
+\end{quote}
+The Chinese text is clearer. It defines the objects as injective polynomial maps of the
+finite-field plane (``the finite-field version of the Jacobian conjecture'') and conjectures:
+``a degree-$d$ polynomial map is injective on $\F_q$ when $q>d^2$, \emph{and} the failure of
+the converse of injectivity for $q\le d$ is given by Chebyshev--Lagrange inversion.''
+
+\paragraph{Which clause we refute.} The conjecture is a conjunction. We refute its first
+conjunct, the \emph{threshold clause}: for all $d$ and $q$ with $q>d^2$, every degree-$d$
+polynomial map over $\F_q$ is injective. We refute it under each of the following readings of
+``polynomial map'':
+\begin{itemize}
+\item[(R1)] any polynomial map $\F_q^2\to\F_q^2$ of degree $d$ (no Jacobian hypothesis);
+\item[(R2)] a \emph{Keller map} of the plane: a polynomial map $\F_q^2\to\F_q^2$ of degree $d$
+whose Jacobian determinant is a nonzero constant (the hypothesis of the Jacobian conjecture, which
+the definition names);
+\item[(R3)] a one-variable polynomial map $\F_q\to\F_q$ of degree $d$.
+\end{itemize}
+Since (R2) is a special case of (R1), one family refutes both. The second conjunct (the ``$q\le d$''
+clause) is not given a meaning and is not needed: a conjunction with a false conjunct is false.
+
+\section{Definitions}
+
+A polynomial map of the plane over a field $K$ is a pair $f=(f_0,f_1)$ of polynomials in
+$K[x_0,x_1]$ (Lean: \texttt{PlaneMap K := Fin 2 -> MvPolynomial (Fin 2) K}). Its map on points is
+$x\mapsto(f_0(x),f_1(x))$ (\texttt{PlaneMap.toFun}, evaluation by \texttt{MvPolynomial.eval}); its
+degree is $\max(\deg f_0,\deg f_1)$ with $\deg$ the total degree (\texttt{PlaneMap.degree},
+\texttt{MvPolynomial.totalDegree}); its Jacobian determinant is
+$\det(\partial f_i/\partial x_j)$ with Mathlib's formal partial derivative
+\texttt{MvPolynomial.pderiv} (\texttt{PlaneMap.jacobian}). Injectivity is
+\texttt{Function.Injective}. $\F_q$ for $q=p^k$ is Mathlib's \texttt{GaloisField p k}, whose
+cardinality is $p^k$ for $k\ne0$ (\texttt{GaloisField.card}).
+
+\section{Proof}
+
+For a prime $p$ and $m\ge1$ let
+\[
+  f_{p,m}(x,y) = (x^p - x + y^m,\; y)
+\]
+(Lean: \texttt{asMap p m}).
+
+\begin{lemma}[\texttt{asMap\_not\_injective}]
+Over every field, $f_{p,m}(0,0)=(0,0)=f_{p,m}(1,0)$; hence $f_{p,m}$ is not injective.
+\end{lemma}
+\begin{proof}
+$0^p-0+0^m=0$ and $1^p-1+0^m=0$ since $p,m\ge1$.
+\end{proof}
+
+\begin{lemma}[\texttt{asMap\_jacobian}]
+Over a field of characteristic $p$, the Jacobian determinant of $f_{p,m}$ is the constant $-1$.
+\end{lemma}
+\begin{proof}
+$\partial_x(x^p-x+y^m)=p\,x^{p-1}-1=-1$, $\partial_y(y)=1$, $\partial_x(y)=0$, so the
+determinant is $(-1)\cdot1-\partial_y(x^p-x+y^m)\cdot 0=-1$.
+\end{proof}
+
+\begin{lemma}[\texttt{totalDegree\_first}, \texttt{asMap\_degree}]
+For $p\ge2$ and $m\ge1$, $\deg f_{p,m}=\max(p,m)$.
+\end{lemma}
+\begin{proof}
+The upper bound follows from $\deg(a\pm b)\le\max(\deg a,\deg b)$. The monomials $x^p$ and $y^m$
+both have coefficient $1$ (they differ from each other and from $x$), so the total degree is at
+least $p$ and at least $m$. The second component $y$ has degree $1$.
+\end{proof}
+
+\begin{theorem}[(R1); \texttt{plain\_counterexample}]
+For every field $K$ and every $d\ge2$, the map $(x^2-x+y^d,\,y)$ has degree exactly $d$ and is not
+injective on $K^2$. In particular the threshold clause under (R1) fails for every $d\ge2$ and every
+finite field $\F_q$ with $q>d^2$, prime fields included.
+\end{theorem}
+
+\begin{theorem}[(R2); \texttt{keller\_counterexample}]
+Over every field of prime characteristic $p$ and for every $m\ge1$, $f_{p,m}$ has degree
+$\max(p,m)$, Jacobian determinant $-1$, and is not injective.
+\end{theorem}
+
+\begin{theorem}[\texttt{conjecture\_00000002913\_false}]
+Let $p$ be prime, $m\ge1$, and $k$ with $p^k>\max(p,m)^2$. Over $\F_q=$ \texttt{GaloisField p k}
+one has $q=p^k$, $d:=\deg f_{p,m}=\max(p,m)$, $d^2<q$, Jacobian determinant $-1$, and $f_{p,m}$ is
+not injective on $\F_q^2$.
+\end{theorem}
+
+\begin{corollary}[\texttt{keller\_counterexample\_every\_degree}, \texttt{sq\_lt\_two\_pow\_two\_mul}]
+For every $d\ge2$ and every $k$ with $2^k>d^2$ (for example $k=2d$), the map $(x^2-x+y^d,\,y)$
+over $\F_{2^k}$ has degree exactly $d$, Jacobian determinant $-1$, and is not injective. So for
+every $d\ge2$ the threshold clause fails at infinitely many $q>d^2$, under (R1) and (R2), and also
+for odd $d$ (where the characteristic does not divide the degree).
+\end{corollary}
+
+\begin{theorem}[(R3); \texttt{univariate\_counterexample}, \texttt{univariate\_derivative}]
+For every field $K$ and $d\ge2$, $x^d-x\in K[x]$ has degree $d$ and $x\mapsto x^d-x$ is not
+injective on $K$ ($0$ and $1$ are roots). If $\operatorname{char}K=p$ then $(x^p-x)'=-1$.
+\end{theorem}
+
+\begin{remark}[Context]
+That $x\mapsto x-x^p$ defeats the naive Jacobian conjecture in characteristic $p$ is classical. The
+Wikipedia article ``Jacobian conjecture'' states: ``For fields of positive characteristic, the
+usual Jacobian conjecture is false in one dimension'' and, after giving the polynomial $x-x^p$,
+``There are a few ways to modify the Jacobian conjecture to get around this issue.'' The
+additional term $y^m$ only serves to realize every degree $d\ge2$ in the plane.
+\end{remark}
+
+\section{Scope and unrefuted readings}
+
+Refuted: the threshold clause under (R1) and (R3) for every $d\ge2$ and every finite field with
+$q>d^2$; under (R2) for every $d\ge2$ over $\F_{2^k}$ with $2^k>d^2$, and for every prime $p$ over
+$\F_{p^k}$ with $p^k>\max(p,m)^2$. Not refuted:
+(a) the \emph{existential} reading ``for $q>d^2$ some degree-$d$ map is injective'', which is true
+(for instance the triangular automorphism $(x+y^d,y)$);
+(b) reading (R2) restricted to \emph{prime} fields $\F_p$ (our Keller family needs $q=p^k$ with
+$k\ge3$; under (R1) prime fields are covered by \texttt{plain\_counterexample});
+(c) a reading that adds Adjamagbo's separability hypothesis ($p$ does not divide
+$[K(x,y):K(f)]$), under which $f_{p,m}$ is excluded;
+(d) $d=1$, where Keller maps are affine bijections and the clause is true;
+(e) the second conjunct (the ``$q\le d$'' / Chebyshev--Lagrange inversion clause), which we do not
+interpret.
+
+\section{Relation to the earlier submission}
+
+PR \#278 (orionsheep) used the reading (R3) with $x\mapsto x^2$ on $\F_5$ ($5>4$, $1^2=4^2$). It
+was merged and then removed in the re-audit of commit 541cf4fb with the reason ``residue
+numerals; no field/map/injectivity objects'': its Lean theorem was a conjunction of statements
+about natural numbers such as $(4\cdot4)\bmod 5=(1\cdot1)\bmod5$. The present file uses Mathlib's
+finite fields \texttt{GaloisField p k} with their cardinality, polynomial maps as
+\texttt{MvPolynomial}/\texttt{Polynomial} evaluation, \texttt{Function.Injective}, total degree
+and the formal Jacobian determinant. It refutes the clause for every degree $d\ge2$ and also under
+the Jacobian (Keller) hypothesis that the definition names, which the earlier example could not
+satisfy (the derivative of $x^2$ is not constant).
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture2913/Basic.lean} (Lean 4.33.1, Mathlib), namespace
+\texttt{Tlmc2913}. Main theorems: \texttt{conjecture\_00000002913\_false},
+\texttt{keller\_counterexample\_every\_degree}, \texttt{keller\_counterexample},
+\texttt{plain\_counterexample}, \texttt{univariate\_counterexample},
+\texttt{univariate\_derivative}. \texttt{lake build} succeeds; \texttt{\#print axioms} of each gives
+\texttt{[propext, Classical.choice, Quot.sound]}. No \texttt{sorry}, no \texttt{native\_decide}, no
+added axioms.
+
+\end{document}
