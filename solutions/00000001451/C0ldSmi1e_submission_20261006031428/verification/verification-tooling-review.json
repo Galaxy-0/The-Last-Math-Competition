@@ -1,0 +1,52 @@
+{
+  "result": "PASS",
+  "reviewer": "independent non-author agent /root/review_1451",
+  "completed_utc": "2026-10-06T03:06:08.457570+00:00",
+  "reviewed_hashes": {
+    "/private/tmp/tlmc1451-package-stage/verify.py": "2a3bd45f20f428ffc9e99066362416a1f7f52ac0f802e8303b880f954c1ddcbd",
+    "/private/tmp/tlmc1451-package-stage/test_verify.py": "d2f3de75602e8a6a5b3882b304a7f08e0932589bc63bcc0aed63d1f53c98d1b4",
+    "/private/tmp/tlmc1451-package-stage/verification/source-manifest.json": "b3c4194bf58248062898669ce4e1653874130d2d1e1305c88bde8cfdaa607227",
+    "/private/tmp/tlmc1451-package-stage/verification/pinned-dependencies.json": "9c5467f035979f37bb4f896800ecce2f06bd653a791c850ef4d8edafcc6fb963",
+    "/private/tmp/tlmc1451-package-stage/verification/compiled-inventory.json": "b04f6c95cd7348eba4a4a65b022e92548327537e75063055f268c640f215c146",
+    "/private/tmp/tlmc1451-package-stage/verification/validator-negative-controls.json": "f58ec17de3838e72f6b5d0737f31e4e0c6994d4fe0621e97a84ed92c910f339a",
+    "/private/tmp/tlmc1451-package-replay/result.json": "8a8296fb3b87aa4a0df152010732a5fce92f29468b6739348a7493e031c13876",
+    "/private/tmp/tlmc1451-proof/evidence/frozen-artifacts.json": "b9dfb0467cce5a0692a7d96d740eb39593e6136aefd8cdb57aaa9dfe3579451d"
+  },
+  "source_review": "Read full verify.py and test_verify.py. The verifier validates frozen input identities and exact Lean file set, copies only the seven frozen Lean/configuration inputs into a new project without authored build artifacts, and links installed standard dependencies. It clears Lean path overrides, checks the Lean 4.19.0 executable version, verifies all nine pinned dependency revisions and tracked cleanliness before and after, runs the default full build and strict replay of Geometry/Vanishing/Solution/Audit, validates the newly emitted complete compiled declaration inventory against the frozen inventory, and preserves per-command execution records.",
+  "inventory_review": "normalized_inventory validates exact module coverage, declaration count, uniqueness of names, permitted modules, non-axiom declaration kind, allowed transitive axiom dependencies, and nonempty type strings. The exact normalized dictionary comparison also enforces declaration names, modules, types, kinds, and axiom sets against the frozen expected result. Compiled Audit.lean additionally rejects unsafe declarations.",
+  "runtime_evidence": {
+    "result": "PASS",
+    "record_count": 42,
+    "all_exit_codes_zero": true,
+    "strict_modules": [
+      "Geometry",
+      "Vanishing",
+      "Solution",
+      "Audit"
+    ],
+    "compiled_declaration_count": 39,
+    "pin_count": 9,
+    "pins_clean_before_and_after": true,
+    "compiled_inventory_equals_independent_root_and_frozen_inventory": true,
+    "source_hashes_match_reviewed_candidate": true
+  },
+  "independent_validator_test_replay": {
+    "path": "/private/tmp/tlmc1451-review/reviewer-validator-tests.json",
+    "sha256": "30db08fc24b79c7d9583c534e2b409f9fb0c53536a55290574a2814a7073d148",
+    "result": "PASS",
+    "tests": 8,
+    "negative_rejection_controls": 7,
+    "positive_acceptance_controls": 1
+  },
+  "test_coverage": "Seven rejection tests cover forbidden dependency sorryAx, authored axiom kind, a missing declaration with adjusted count, a duplicate declaration with adjusted count, an unexpected module, a changed theorem type, and a missing authored module. One positive test confirms declaration order and axiom order do not affect acceptance.",
+  "author_freeze": {
+    "sha256": "b9dfb0467cce5a0692a7d96d740eb39593e6136aefd8cdb57aaa9dfe3579451d",
+    "artifact_count": 23,
+    "all_artifact_hashes_verified": true,
+    "seven_core_inputs_unchanged": true
+  },
+  "limits": "This checks the actual frozen verifier and successful supplied execution. It assumes the installed standard dependency build cache and Lean toolchain are trusted, as does normal Mathlib verification; tracked source revisions are checked. The verifier is reproduction tooling, not an adversarial isolation/security sandbox. The reviewer reran the validator tests and parsed all 42 execution records but did not rerun the full Lean build a third time.",
+  "reporting_note": "There are 8 tests total: 7 negative/rejection controls and 1 positive acceptance control. Calling all eight negative controls would be inaccurate.",
+  "blocking_findings": [],
+  "requested_code_changes": []
+}
