@@ -1,0 +1,122 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A disproof of Conjecture 00000003730\\[2pt]
+\large Complete bipartite graphs do not maximize energy, and paths do not minimize it among trees}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture and its reading}
+
+Conjecture 00000003730 reads: \emph{The extremum of graph spectral energy: energy is the sum of absolute
+eigenvalues, with the maximum complete bipartite graphs and the minimal trees paths.}
+
+The energy of a finite simple graph $G$ is $E(G)=\sum_i|\lambda_i|$, the $\lambda_i$ being the eigenvalues of
+its adjacency matrix (Wikipedia, ``Graph energy'': ``the energy of a graph is the sum of the absolute values of
+the eigenvalues of the adjacency matrix of the graph''). The statement is a conjunction:
+\begin{itemize}
+\item[(i)] for each $n$, the maximum energy is attained by a complete bipartite graph $K_{a,b}$, $a+b=n$. We
+refute this over (i-a) all graphs on $n$ vertices and (i-b) bipartite graphs on $n$ vertices;
+\item[(ii)] for each $n$, among trees on $n$ vertices the minimum energy is attained by the path $P_n$.
+\end{itemize}
+We do not treat other comparison classes for (i), for example graphs with a fixed number of edges.
+
+\section{Definitions (as in the Lean file)}
+
+For $G$ a \texttt{SimpleGraph V} on a finite type, $A=$ \texttt{G.adjMatrix $\mathbb{R}$} is Hermitian
+(\texttt{isHermitian\_adjMatrix}), and $E(G)=\sum_i|\lambda_i|$, where $\lambda_i$ are Mathlib's
+\texttt{IsHermitian.eigenvalues}, the eigenvalues with multiplicity given by the spectral theorem. $K_n$ is
+$\top$ on \texttt{Fin n}. $K_{a,b}$ is \texttt{completeBipartiteGraph (Fin a) (Fin b)}. $P_n$ is Mathlib's
+\texttt{pathGraph n}. The star $K_{1,3}$ is the graph on \texttt{Fin 4} whose edges are the pairs
+$\{0,j\}$, $j\neq 0$. ``Bipartite'' is Mathlib's \texttt{IsBipartite} (2-colourable), and ``tree'' is
+\texttt{IsTree}.
+
+\section{Spectral lemmas}
+
+Let $Av=\lambda v$ with $v\neq 0$ (Mathlib's eigenvector basis). Then $\sum_i\lambda_i=\operatorname{tr}A=0$,
+and, by the spectral theorem $A=UDU^*$, $\sum_i\lambda_i^2=\operatorname{tr}(A^2)=\sum_v\deg v=2|E|$.
+
+\begin{lemma}[$K_n$]
+Every eigenvalue of $K_n$ is $n-1$ or $-1$; hence $E(K_n)=2(n-1)$ for $n\ge1$.
+\end{lemma}
+\begin{proof}
+$(Av)_u=s-v_u$ with $s=\sum_w v_w$, so $(\lambda+1)v_u=s$ for all $u$. Summing gives $(\lambda+1)s=ns$. If
+$s\neq0$ then $\lambda=n-1$. If $s=0$ then $\lambda=-1$, since $v\neq0$. On $\{n-1,-1\}$ we have
+$|\lambda|=((n-2)\lambda+2(n-1))/n$, so $E=((n-2)\operatorname{tr}A+2n(n-1))/n=2(n-1)$.
+\end{proof}
+
+\begin{lemma}[$K_{a,b}$]
+Every eigenvalue of $K_{a,b}$ satisfies $\lambda=0$ or $\lambda^2=ab$; hence $E(K_{a,b})=2\sqrt{ab}\le a+b$.
+\end{lemma}
+\begin{proof}
+With $S=\sum_l v_{(l)}$ and $T=\sum_r v_{(r)}$ (left and right parts), $\lambda v_{(l)}=T$ and
+$\lambda v_{(r)}=S$, so $\lambda S=aT$ and $\lambda T=bS$, hence $(\lambda^2-ab)S=(\lambda^2-ab)T=0$. If
+$\lambda\neq0$ and $\lambda^2\neq ab$, then $S=T=0$ and $v=0$. If $ab=0$, all eigenvalues are $0$. Otherwise
+$|\lambda|=\lambda^2/\sqrt{ab}$ on $\{0,\pm\sqrt{ab}\}$, so $E=\operatorname{tr}(A^2)/\sqrt{ab}=2ab/\sqrt{ab}=
+2\sqrt{ab}$. Finally $2\sqrt{ab}\le a+b$ by AM--GM.
+\end{proof}
+
+\begin{lemma}[$K_{1,3}$ and $P_4$]
+Both are trees on 4 vertices. The eigenvalues of the star satisfy $\lambda=0$ or $\lambda^2=3$, so
+$E(K_{1,3})=6/\sqrt3=2\sqrt3$. The eigenvalues of $P_4$ satisfy $\lambda^4-3\lambda^2+1=0$, so
+$|\lambda|=(\lambda^2+1)/\sqrt5$ and $E(P_4)=(6+4)/\sqrt5=2\sqrt5$.
+\end{lemma}
+\begin{proof}
+Each graph is connected and has $3=4-1$ edges (Mathlib \texttt{isTree\_iff\_connected\_and\_card}). For
+$P_4$: $v_1=\lambda v_0$, $v_0+v_2=\lambda v_1$, $v_1+v_3=\lambda v_2$, $v_2=\lambda v_3$. A linear combination
+gives $(\lambda^4-3\lambda^2+1)v_0=0$, and $v_0=0$ forces $v=0$. Then $(|\lambda|\sqrt5)^2=5\lambda^2=
+(\lambda^2+1)^2$, because $\lambda^4=3\lambda^2-1$. The star is analogous, and $\operatorname{tr}(A^2)=6$ for
+both.
+\end{proof}
+
+\section{Refutation}
+
+\begin{theorem}
+(i-a) For every $n\ge3$ and $a+b=n$: $E(K_{a,b})\le n<2(n-1)=E(K_n)$. So no complete bipartite graph has
+maximum energy on $n\ge3$ vertices.
+(i-b) $P_4$ is bipartite with $E(P_4)=2\sqrt5>4\ge E(K_{a,b})$ for all $a+b=4$.
+(ii) $K_{1,3}$ is a tree on 4 vertices with $E=2\sqrt3<2\sqrt5=E(P_4)$.
+\end{theorem}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture3730/Basic.lean} (386 lines, \texttt{import Mathlib} only, namespace
+\texttt{C3730}). Key results: \texttt{sum\_eig\_sq}, \texttt{trace\_sq\_adj}, \texttt{eig\_top},
+\texttt{energy\_top} ($E(K_n)=2(n-1)$ for all $n\ge1$), \texttt{eig\_cb}, \texttt{energy\_cb}
+($E(K_{a,b})=2\sqrt{ab}$ for all $a,b$), \texttt{energy\_cb\_le}, \texttt{star4\_isTree},
+\texttt{pathGraph4\_isTree}, \texttt{energy\_star4}, \texttt{energy\_P4},
+\texttt{completeGraph\_beats\_completeBipartite} (all $n\ge3$), and
+\texttt{main : $\neg$ MaxIsCompleteBipartite $\wedge$ $\neg$ MaxBipartiteIsCompleteBipartite $\wedge$
+$\neg$ MinTreeIsPath}. Here \texttt{MaxIsCompleteBipartite} says
+$\forall n\,\exists a\,b,\ a+b=n\wedge\forall G$ on \texttt{Fin n}, $E(G)\le E(K_{a,b})$;
+\texttt{MaxBipartiteIsCompleteBipartite} adds the hypothesis \texttt{G.IsBipartite}; and
+\texttt{MinTreeIsPath} says $\forall n\,\forall T$ on \texttt{Fin n}, \texttt{T.IsTree} $\to E(P_n)\le E(T)$.
+\texttt{lake build} succeeds; \texttt{\#print axioms main} gives
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no
+\texttt{native\_decide}.
+
+\section{Relation to the earlier submission}
+
+PR \#226 (orionsheep) argued that $K_5$ (energy 8) beats every complete bipartite graph on 5 vertices
+(at most $2\sqrt6$). The reviewer rejected it because ``the Lean proves 4*5 = 5*4, `True := trivial', 8 = 4+4,
+64 > 24; adjacency matrices, eigenvalues, energy, and complete bipartite graphs appear nowhere in Lean.''
+This submission defines energy from Mathlib's adjacency matrix and Hermitian eigenvalues. It proves the
+energies of $K_n$ and $K_{a,b}$ for all parameters, and of $K_{1,3}$ and $P_4$. Part (i) is refuted for every
+$n\ge3$, and part (ii), which \#226 did not formalize, is refuted with Mathlib trees.
+
+\end{document}
