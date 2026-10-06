@@ -1,0 +1,67 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Two genuine rotors for one preserving basis change\\Conjecture 00000007629}
+\author{earthking11}
+\date{October 6, 2026}
+\begin{document}
+\maketitle
+\section*{Statement and precise scope}
+The conjecture states that rotor realizations of orthogonal basis changes
+are unique, with orientation reversal as an exception. We disprove literal
+uniqueness using a change that preserves orientation. No identification of
+opposite rotors appears in the source; a uniqueness statement in the quotient
+by the central sign is a different assertion and is not refuted here.
+
+\begin{theorem}
+For the Euclidean plane $V=\mathbb R^2$, $Q(v)=v_0^2+v_1^2$, the actual
+spin group in its Clifford algebra contains two distinct elements $1$ and
+$-1$, both realizing the identity orthonormal-basis change. The change has
+determinant $1$, so orientation reversal does not account for this failure
+of uniqueness.
+\end{theorem}
+\begin{proof}
+Let $A=\mathrm{Cl}(V,Q)$ and write $\iota:V\to A$ for the vector inclusion.
+The Clifford relation is $\iota(v)^2=Q(v)1$. The standard basis vectors
+$e_0,e_1$ have $Q(e_i)=1$ and zero polar pairing when their indices differ.
+Thus this is an actual orthonormal basis for the specified form.
+
+Both $\iota(e_0)$ and $\iota(-e_0)$ are units, each its own inverse. They
+belong to the vector-unit generators of the Lipschitz group, and
+\[
+  \iota(e_0)\iota(-e_0)=-\iota(e_0)^2=-1.
+\]
+Thus $-1$ belongs to the Lipschitz group and is even. Its Clifford
+conjugate is itself, so its product with that conjugate is $1$. This proves
+pin unitarity, and hence membership in the actual spin group. The unit $1$
+also belongs to this group. The real scalar map into $A$ is injective;
+since $2\neq0$ in $\mathbb R$, these two elements are distinct.
+
+A rotor $r$ realizes a map $T$ here precisely when
+$r\iota(v)\operatorname{star}(r)=\iota(Tv)$ for every vector $v$.
+Direct calculation gives
+\[
+  1\iota(v)\operatorname{star}(1)=\iota(v),\qquad
+  (-1)\iota(v)\operatorname{star}(-1)=\iota(v).
+\]
+Both rotors therefore realize $T=\mathrm{id}_V$. This map fixes every
+standard basis vector, preserves $Q$, and has determinant $1$. Since the
+two realizations are distinct, there cannot be a unique realizing rotor.
+\end{proof}
+
+\section*{Formal verification}
+The Lean project uses Mathlib's actual \texttt{CliffordAlgebra} and
+\texttt{spinGroup}, not a substitute group. It proves the membership of
+$-1$ through generating vector units, pin unitarity and the even subalgebra.
+It verifies the squared-norm formula, basis orthonormality, all-vector
+conjugation identities, and determinant. The capstone includes these
+facts and $\neg\exists!r\in\mathrm{Spin}(Q)$ realizing the identity.
+
+The independently checked project builds with Lean 4.33.1 and Mathlib at
+the fixed commit recorded in the manifest. Its printed axiom audits use
+only propositional extensionality, classical choice and quotient soundness;
+there are no unfinished proofs, native evaluation or additional axioms.
+No numerical search or long brute-force computation is used.
+\end{document}
