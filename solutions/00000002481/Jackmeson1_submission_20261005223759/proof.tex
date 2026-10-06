@@ -1,0 +1,189 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Rt}{\mathrm{R}}
+\newcommand{\Lw}{\mathrm{L}}
+
+\title{Conjecture 00000002481: the Durfee square decomposition,\\ its generating function and its conjugation symmetry}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the reading}
+
+\textbf{Statement (English, verbatim).} Definition: The Durfee square: geometry of partitions.
+Conjecture: The geometric decomposition of a partition by its Durfee square yields a symmetric
+splicing: the generating function factorizes into corner pieces, and the splicing is symmetric
+under conjugation. (The Chinese text repeats the same key words: Durfee square, geometric
+decomposition of partitions, symmetric splicing.)
+
+\textbf{Reading.} ``Symmetric splicing'' is not a standard term. We read the statement as the
+conjunction of three claims, which together are the classical Durfee decomposition:
+\begin{enumerate}
+\item[(1)] \emph{Decomposition.} If $\lambda$ has Durfee square of side $d$, its cells split
+  into the $d\times d$ square, a piece $\alpha$ to the right of the square (a partition with at
+  most $d$ parts) and a piece $\beta$ below it (a partition with parts $\le d$); this is a
+  bijection $\lambda\leftrightarrow(\alpha,\beta)$ with $|\lambda|=d^2+|\alpha|+|\beta|$.
+\item[(2)] \emph{Factorization of the generating function into corner pieces.}
+  $\sum_{\lambda:\ \mathrm{durfee}(\lambda)=d} q^{|\lambda|}
+  = q^{d^2}\cdot C_d(q)\cdot C'_d(q)$, where $C_d$, $C'_d$ are the generating functions of the two
+  corner pieces; $C_d=C'_d=1/(q;q)_d$ with $(q;q)_d=\prod_{i=1}^d(1-q^i)$; and summing over $d$,
+  $\sum_\lambda q^{|\lambda|}=\sum_{d\ge 0} q^{d^2}/(q;q)_d^2$.
+\item[(3)] \emph{Symmetry under conjugation.} Conjugation preserves the Durfee side and exchanges
+  the two pieces, each conjugated; the splice of (square, $\alpha$, $\beta$) conjugates to the
+  splice of (square, $\beta'$, $\alpha'$).
+\end{enumerate}
+A reviewer may hold a different reading of ``symmetric splicing''; we prove exactly (1)--(3).
+This is a known classical result, not a new one. The retrieved Wikipedia article ``Durfee square''
+(\url{https://en.wikipedia.org/wiki/Durfee_square}) states the definition (``the largest square
+that is contained within a partition's Ferrers diagram''), the generating function
+$P(x)=\sum_{k\ge 0} x^{k^2}/\prod_{i=1}^k(1-x^i)^2$, where the squared factor ``represents the two
+sections to the right and below a Durfee square of size $k$ (being two partitions into parts of
+size at most $k$, equivalently partitions with at most $k$ parts)'', and that ``the Durfee square
+of a partition and its conjugate partition have the same size''. Our contribution is a complete
+Lean~4/Mathlib formalization.
+
+\textbf{Conventions.} Partitions are Mathlib \texttt{YoungDiagram}s (Ferrers diagrams): finite
+sets of cells $(i,j)\in\mathbb{N}\times\mathbb{N}$ (row $i$, column $j$, both from $0$) closed
+under moving up or left. The size $|\lambda|$ is the number of cells
+(\texttt{YoungDiagram.card}); the conjugate is \texttt{YoungDiagram.transpose},
+$(i,j)\in\lambda'\iff(j,i)\in\lambda$; the parts are the nonzero row lengths. The empty partition
+is included ($d=0$). ``At most $d$ parts'' means every cell is in a row $<d$
+(\texttt{RowsLt d}); we prove this is $\mathrm{colLen}_0\le d$, i.e.\ the number of rows
+\texttt{rowLens.length} is $\le d$. ``Parts $\le d$'' means every cell is in a column $<d$
+(\texttt{ColsLt d}); we prove this is $\mathrm{rowLen}_0\le d$. Generating functions are formal
+power series in $\mathbb{Z}[[q]]$. ``$F=1/(q;q)_d$'' is stated as $F\cdot(q;q)_d=1$, which
+determines $F$ because $(q;q)_d$ has constant term $1$; $(q;q)_0=1$. The infinite sum over $d$ is a
+\texttt{HasSum} in the coefficientwise (product) topology of Mathlib
+(\texttt{PowerSeries.WithPiTopology}).
+
+\section{Definitions (as formalized)}
+
+\begin{definition}[Durfee side]
+$\mathrm{durfee}(\lambda)$ is the least $i$ with $(i,i)\notin\lambda$ (\texttt{durfee}). We prove
+$(i,i)\in\lambda\iff i<\mathrm{durfee}(\lambda)$ and the two textbook characterizations:
+$\mathrm{durfee}(\lambda)$ is the largest $d$ such that the $d\times d$ square lies in $\lambda$
+(\texttt{isGreatest\_durfee}), and the largest $s$ with $s=0$ or $\lambda_{s}\ge s$, i.e.\ at
+least $s$ parts are $\ge s$ (\texttt{isGreatest\_durfee\_rowLen}, with
+$\lambda_s=\mathrm{rowLen}(s-1)$).
+\end{definition}
+
+\begin{definition}[Cutting and splicing]
+$\Rt_k(\lambda)=\{(i,j):(i,j+k)\in\lambda\}$ removes the first $k$ columns (\texttt{dropCols});
+$\Lw_k(\lambda)=\{(i,j):(i+k,j)\in\lambda\}$ removes the first $k$ rows (\texttt{dropRows}). For
+$r,s\in\mathbb{N}$ and diagrams $\alpha,\beta$, the splice \texttt{glue r s} $\alpha$ $\beta$ is
+\[
+ [0,r)\times[0,s)\ \cup\ \{(i,j+s):(i,j)\in\alpha,\ i<r\}\ \cup\ \{(i+r,j):(i,j)\in\beta,\ j<s\},
+\]
+which is again a Young diagram (\texttt{glue}, membership \texttt{mem\_glue}).
+\end{definition}
+
+\section{Proofs}
+
+\begin{lemma}[\texttt{glue\_drop}, \texttt{dropCols\_glue}, \texttt{dropRows\_glue},
+\texttt{card\_glue}]
+(a) If $[0,r)\times[0,s)\subseteq\lambda$ and $(r,s)\notin\lambda$, then
+$\lambda=\mathrm{glue}_{r,s}(\Rt_s\lambda,\Lw_r\lambda)$.
+(b) If all cells of $\alpha$ are in rows $<r$ and all cells of $\beta$ in columns $<s$, then
+$\Rt_s(\mathrm{glue}_{r,s}(\alpha,\beta))=\alpha$, $\Lw_r(\mathrm{glue}_{r,s}(\alpha,\beta))=\beta$
+and $|\mathrm{glue}_{r,s}(\alpha,\beta)|=rs+|\alpha|+|\beta|$.
+\end{lemma}
+\begin{proof}
+(a) A cell $(i,j)\in\lambda$ with $i<r,j<s$ is in the rectangle; with $i<r$ and $j\ge s$ it is $(i,(j-s)+s)$ with $(i,j-s)\in\Rt_s\lambda$; with $i\ge r$ we must have $j<s$
+(otherwise $(r,s)\le(i,j)$ gives $(r,s)\in\lambda$), so it is $((i-r)+r,j)$ with
+$(i-r,j)\in\Lw_r\lambda$. Conversely each of the three pieces lies in $\lambda$. (b) The three
+pieces are pairwise disjoint (column $\ge s$ versus $<s$; row $\ge r$ versus $<r$), the shifts are
+injective, and the filters $i<r$, $j<s$ keep all cells under the hypotheses.
+\end{proof}
+
+\begin{theorem}[(1): \texttt{durfeeEquiv}, \texttt{durfee\_decomposition}]
+For every $d$, $\lambda\mapsto(\Rt_d\lambda,\Lw_d\lambda)$ is a bijection from the diagrams with
+Durfee side $d$ onto the pairs $(\alpha,\beta)$ with $\alpha$ in rows $<d$ and $\beta$ in columns
+$<d$; its inverse is $(\alpha,\beta)\mapsto\mathrm{glue}_{d,d}(\alpha,\beta)$. Moreover
+$(i,j)\in\lambda$ iff ($i<d$ and $j<d$) or ($i<d$, $j\ge d$, $(i,j-d)\in\alpha$) or ($i\ge d$,
+$j<d$, $(i-d,j)\in\beta$), and $|\lambda|=d^2+|\alpha|+|\beta|$.
+\end{theorem}
+\begin{proof}
+If $\mathrm{durfee}(\lambda)=d$ then $[0,d)^2\subseteq\lambda$ and $(d,d)\notin\lambda$, so the
+Lemma (a) applies. A cell $(i,j)\in\Rt_d\lambda$ has $i<d$, since otherwise
+$(d,d)\le(i,j+d)\in\lambda$; similarly $\Lw_d\lambda$ lies in columns $<d$. Conversely
+$\mathrm{glue}_{d,d}(\alpha,\beta)$ contains $[0,d)^2$ and not $(d,d)$, so its Durfee side is $d$
+(\texttt{durfee\_glue}); the Lemma (b) gives the other inverse identity and the size.
+\end{proof}
+
+\begin{theorem}[(3): \texttt{durfee\_transpose}, \texttt{durfeeEquiv\_transpose},
+\texttt{glue\_transpose}]
+$\mathrm{durfee}(\lambda')=\mathrm{durfee}(\lambda)$; $\Rt_d(\lambda')=(\Lw_d\lambda)'$ and
+$\Lw_d(\lambda')=(\Rt_d\lambda)'$, so the pieces of $\lambda'$ are the conjugated, exchanged
+pieces of $\lambda$; and $(\mathrm{glue}_{r,s}(\alpha,\beta))'=\mathrm{glue}_{s,r}(\beta',\alpha')$.
+\end{theorem}
+\begin{proof}
+$(i,j)\mapsto(j,i)$ fixes the diagonal and the square, and maps the right piece to the lower piece;
+each identity is checked cell by cell from the membership formulas.
+\end{proof}
+
+\begin{theorem}[(2): \texttt{cnt\_durfee}, \texttt{gf\_durfee}, \texttt{cnt\_colsLt},
+\texttt{gf\_rowsLt\_mul\_prod}, \texttt{gf\_durfee\_mul}, \texttt{hasSum\_gf\_durfee}]
+Let $c_P(n)$ be the number of partitions of $n$ with property $P$ (\texttt{cnt}; the set of Young
+diagrams with $n$ cells is finite, \texttt{finite\_card}) and $G_P=\sum_n c_P(n)q^n$
+(\texttt{gf}). Then
+\begin{align*}
+c_{\mathrm{durfee}=d}(n)&=\textstyle\sum_{a+b=n-d^2} c_{\mathrm{RowsLt}\,d}(a)\,c_{\mathrm{ColsLt}\,d}(b)
+ \quad(d^2\le n),\qquad 0\ (d^2>n),\\
+G_{\mathrm{durfee}=d}&=q^{d^2}\,G_{\mathrm{RowsLt}\,d}\,G_{\mathrm{ColsLt}\,d},\qquad
+G_{\mathrm{ColsLt}\,d}=G_{\mathrm{RowsLt}\,d},\qquad G_{\mathrm{RowsLt}\,d}\cdot(q;q)_d=1,\\
+G_{\mathrm{durfee}=d}\cdot(q;q)_d^2&=q^{d^2},\qquad
+\textstyle\sum_{d\ge0}G_{\mathrm{durfee}=d}=\sum_{d\ge 0}q^{d^2}G_{\mathrm{RowsLt}\,d}^2=\sum_\lambda q^{|\lambda|}.
+\end{align*}
+\end{theorem}
+\begin{proof}
+The counting identity is the decomposition bijection of claim (1) (\texttt{durfeeEquiv}) restricted
+to size $n$, which is a bijection onto
+$\bigsqcup_{a+b=n-d^2}\{\alpha\vdash a : \alpha \text{ in rows } <d\}\times\{\beta\vdash b : \beta \text{ in columns } <d\}$
+by the size formula; the
+power series form is the coefficient formula for products and for $q^{d^2}\cdot F$. Conjugation is
+a size-preserving bijection between ``columns $<d$'' and ``rows $<d$''. For the corner series
+$C_d=G_{\mathrm{RowsLt}\,d}$: $C_0=1$ (only the empty diagram has no rows), and a diagram in rows
+$<d+1$ either lies in rows $<d$, or has exactly $d+1$ rows, in which case removing its first column
+($\Rt_1$, with inverse $\mathrm{glue}_{d+1,1}(\cdot,\emptyset)$, \texttt{peel}) is a bijection
+onto diagrams in rows $<d+1$ with $d+1$ fewer cells (\texttt{cnt\_rowsLt\_succ}). Hence
+$C_{d+1}=C_d+q^{d+1}C_{d+1}$, i.e.\ $C_{d+1}(1-q^{d+1})=C_d$, and induction gives
+$C_d(q;q)_d=1$. Then $G_{\mathrm{durfee}=d}(q;q)_d^2=q^{d^2}(C_d(q;q)_d)^2=q^{d^2}$. Finally, a
+partition of $n$ has $\mathrm{durfee}^2\le n$, so the $q^n$-coefficients of $G_{\mathrm{durfee}=d}$
+vanish for $d>n$ and sum over $d\le n$ to $c_{\mathrm{True}}(n)$ (fiberwise counting).
+\end{proof}
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture2481/Basic.lean} (namespace \texttt{C2481}, only \texttt{import Mathlib},
+541 lines). Main declarations, with their statements as in the file:
+\begin{itemize}
+\item \texttt{durfeeEquiv d}, an equivalence $\{\mu\mid\mathrm{durfee}\,\mu=d\}\simeq\{\alpha\mid\texttt{RowsLt d}\,\alpha\}\times\{\beta\mid\texttt{ColsLt d}\,\beta\}$, and
+ \texttt{durfee\_decomposition}: the cell-level splitting and $|\mu|=d^2+|\alpha|+|\beta|$.
+\item \texttt{isGreatest\_durfee}, \texttt{isGreatest\_durfee\_rowLen}, \texttt{rowsLt\_iff},
+ \texttt{colsLt\_iff}: the definitions agree with the textbook notions.
+\item \texttt{durfee\_transpose}, \texttt{durfeeEquiv\_transpose}, \texttt{glue\_transpose}: (3).
+\item \texttt{cnt\_durfee}, \texttt{gf\_durfee}, \texttt{cnt\_colsLt}, \texttt{gf\_rowsLt\_mul\_prod},
+ \texttt{gf\_durfee\_mul}, \texttt{hasSum\_gf\_durfee}: (2).
+\end{itemize}
+\texttt{\#print axioms} for each of these declarations (checked on the Lean v4.33.1 / Mathlib
+v4.33.1 toolchain of the package) reports only \texttt{[propext, Classical.choice, Quot.sound]}.
+There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+
+\section*{Source}
+Wikipedia, ``Durfee square'', \url{https://en.wikipedia.org/wiki/Durfee_square} (retrieved
+2026-10-05): ``An equivalent, but more visual, definition is that the Durfee square is the largest
+square that is contained within a partition's Ferrers diagram.''; ``It is clear from the visual
+definition that the Durfee square of a partition and its conjugate partition have the same size.''
+
+\end{document}
