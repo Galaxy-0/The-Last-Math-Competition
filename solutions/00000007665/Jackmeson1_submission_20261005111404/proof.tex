@@ -1,0 +1,139 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000007665\\[2pt]
+\large The series $A_q(z)$ has no zeros on the negative half-axis}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000007665 reads:
+
+\begin{quote}
+\emph{Definition:} The q-Airy function $A_q(z)=\sum (-1)^n q^{n(n-1)/2} z^n/(q;q)_n$ satisfies
+$A_q(qz)=1-z A_q(z)$. \emph{Conjecture:} When $q$ in $(0,1)$ is algebraic, all zeros of $A_q(z)$ are real
+and simple, and the $k$-th zero on the negative half-axis satisfies $z_k = -q^{-k}(1+O(q^{k/2}))$;
+furthermore the normalized limit of the adjacent spacing sequence follows an explicit density related to
+the tau function of the degenerate q-Painleve equation.
+\end{quote}
+The Chinese version gives the same series with the summation range $n\ge 0$, and the same three clauses.
+
+\paragraph{Reading.} $A_q$ is the function defined by the displayed series, with
+$(q;q)_n=\prod_{k=1}^{n}(1-q^k)$ (so $(q;q)_0=1$). The conjecture is the conjunction, for every algebraic
+$q\in(0,1)$, of
+\begin{enumerate}[label=(\roman*)]
+  \item all zeros of $A_q$ are real and simple;
+  \item the zeros $z_k$ of $A_q$ on the negative half-axis satisfy $z_k=-q^{-k}(1+O(q^{k/2}))$, i.e.\
+        there are $C$ and $K$ with $|z_k+q^{-k}|\le C\,q^{-k}q^{k/2}$ for all $k\ge K$;
+  \item a spacing law for the $z_k$ (not specified precisely).
+\end{enumerate}
+Clause (ii) presupposes that the $k$-th negative zero exists (for all large $k$); this is the reading we
+refute. Clause (iii) is not needed: the conjunction fails as soon as (ii) fails, and the Lean theorem is
+stated for an arbitrary proposition standing for (iii).
+
+\paragraph{Remark on the ``Definition'' line.} The functional equation stated there is not satisfied by
+the series: comparing coefficients of $z^2$ at $q=1/2$ gives $q^2a_2=1/3$ on the left and $-a_1=2$ on the
+right, where $a_n$ is the $n$-th coefficient. No power series with constant term $1$ and positive radius of convergence satisfies
+$A(qz)=1-zA(z)$ for $q\in(0,1)$: the formal solution has coefficients $(-1)^nq^{-n(n+1)/2}$ and radius of
+convergence $0$. So the series is the only meaningful definition, and we use it. This remark is not used
+below.
+
+\section{The result}
+
+\begin{theorem}\label{thm:key}
+Let $0<q<1$ and $x\le 0$ be real. Then the series $A_q(x)$ converges and $A_q(x)\ge 1$. In particular
+$A_q$ has no zero on the closed negative half-axis.
+\end{theorem}
+
+\begin{proof}
+Put $y=-x\ge 0$ and $t_n=q^{\binom n2}y^n/(q;q)_n$. Since $(-1)^nx^n=y^n$ and $n(n-1)/2=\binom n2$, the
+$n$-th term of $A_q(x)$ equals $t_n$. Each factor $1-q^k$ ($k\ge 1$) lies in $(0,1]$, so $(q;q)_n>0$ and
+$t_n\ge 0$. From $(q;q)_{n+1}=(q;q)_n(1-q^{n+1})$ and $\binom{n+1}{2}=n+\binom n2$,
+\[ t_{n+1}=t_n\cdot\frac{q^n y}{1-q^{n+1}} . \]
+Because $q^ny\to 0$ and $1-q^{n+1}\ge 1-q>0$, eventually $q^ny/(1-q^{n+1})\le 1/2$, so
+$t_{n+1}\le t_n/2$ for all large $n$ and $\sum t_n$ converges (ratio test). All terms are nonnegative and
+$t_0=1$, hence $A_q(x)=\sum_n t_n\ge t_0=1>0$.
+\end{proof}
+
+\begin{corollary}\label{cor:main}
+For every $q\in(0,1)$ clause (ii) fails: there is no sequence $(z_k)_{k\ge K}$ of zeros of $A_q$ on the
+negative half-axis, whatever bound they are asked to satisfy. Moreover, clause (i) together with
+clause (ii) read for arbitrary complex zeros (dropping the words ``on the negative half-axis'') is also
+false. In particular the conjecture fails for the algebraic number $q=1/2$.
+\end{corollary}
+
+\begin{proof}
+The first statement is immediate from Theorem~\ref{thm:key}. For the second, suppose all zeros are real
+and $z_k$ are zeros with $|z_k+q^{-k}|\le Cq^{-k}(\sqrt q)^k$ for $k\ge K$. Since $C(\sqrt q)^k\to 0$,
+pick $k\ge K$ with $C(\sqrt q)^k<1$. Then $z_k=a$ is real and
+$a+q^{-k}\le |a+q^{-k}|\le q^{-k}\cdot C(\sqrt q)^k<q^{-k}$, so $a<0$, contradicting
+Theorem~\ref{thm:key}. The number $1/2$ is rational, hence algebraic.
+\end{proof}
+
+\begin{remark}[where the zeros are; not used in the proof]
+By Euler's identity, quoted in the Wikipedia article ``q-Pochhammer symbol''
+(\url{https://en.wikipedia.org/wiki/Q-Pochhammer_symbol}) as
+$(x;q)_\infty=\sum_{n=0}^{\infty}\frac{(-1)^nq^{n(n-1)/2}}{(q;q)_n}x^n$ with
+$(a;q)_\infty=\prod_{k=0}^{\infty}(1-aq^k)$, the series is $A_q(z)=\prod_{k\ge0}(1-zq^k)$. Its zeros are
+$z=q^{-k}$ ($k\ge 0$): all real, simple and \emph{positive}. So clause (i) is true, while clause (ii)
+fails because every zero lies on the positive half-axis. Only Theorem~\ref{thm:key}, which is proved
+directly from the series, is used and formalized.
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture7665/Basic.lean} (Lean 4, Mathlib \texttt{v4.33.1}, only \texttt{import Mathlib})
+contains, in namespace \texttt{C7665}:
+\begin{itemize}[leftmargin=*]
+  \item \texttt{qPoch q n} $=\prod_{k<n}(1-q^{k+1})$, and \texttt{qAiry q z}
+        $=\sum'_n (-1)^n q^{n(n-1)/2} z^n/\texttt{qPoch q n}$ (complex \texttt{tsum}; $n(n-1)/2$ is natural
+        division, which is exact). Convergence is proved, not assumed, where it is used.
+  \item \texttt{AllZerosRealSimple q}: every zero $z$ has $\mathrm{Im}\,z=0$ and
+        \texttt{deriv (qAiry q) z} $\ne 0$.
+  \item \texttt{NegZerosAsymptotic q}: there are $z:\mathbb N\to\mathbb R$, $C$, $K$ with, for $k\ge K$,
+        $z_k<0$, \texttt{qAiry q} $z_k=0$ and $|z_k+(q^k)^{-1}|\le C\,(q^k)^{-1}(\sqrt q)^k$.
+        \texttt{ZerosAsymptotic q} is the same with $z:\mathbb N\to\mathbb C$ and without $z_k<0$.
+  \item \texttt{term\_summable} (ratio test), \texttt{one\_le\_tsum\_term}, \texttt{qAiry\_ofReal\_of\_nonpos},
+        and \texttt{qAiry\_ne\_zero\_of\_nonpos}: Theorem~\ref{thm:key}.
+  \item \texttt{not\_negZerosAsymptotic} and \texttt{not\_allZerosReal\_and\_zerosAsymptotic}:
+        Corollary~\ref{cor:main} for every $q\in(0,1)$.
+\end{itemize}
+Main theorems:
+\begin{verbatim}
+theorem conjecture_7665_false (Spacing : R -> Prop) :
+    not (forall q : R, IsAlgebraic Q q -> 0 < q -> q < 1 ->
+      AllZerosRealSimple q /\ NegZerosAsymptotic q /\ Spacing q)
+theorem conjecture_7665_false' (Spacing : R -> Prop) :
+    not (forall q : R, IsAlgebraic Q q -> 0 < q -> q < 1 ->
+      AllZerosRealSimple q /\ ZerosAsymptotic q /\ Spacing q)
+\end{verbatim}
+(written here in ASCII; $R=\mathbb R$, $Q=\mathbb Q$). \texttt{lake build} succeeds and
+\texttt{\#print axioms} reports, for both theorems, only \texttt{propext}, \texttt{Classical.choice},
+\texttt{Quot.sound}; there is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\paragraph{What is not refuted.} A vacuous reading of clause (ii) (``for each $k$ for which a $k$-th
+negative zero exists, \dots'') is true, since there are none; under that reading clause (iii) concerns an
+empty sequence. Clause (i) is true (by the remark above). We refute the reading in which clause (ii)
+asserts negative zeros $z_k$ for all large $k$, and the reading without ``negative half-axis'' combined
+with clause (i).
+
+\end{document}
