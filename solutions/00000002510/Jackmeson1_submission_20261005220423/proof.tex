@@ -1,0 +1,163 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\R}{\mathbb{R}}
+
+\title{Conjecture 00000002510: tensors of bounded rank do not form a closed set,\\ and best rank-2 approximation fails by diverging components}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Statement}
+\emph{Definition: Best low-rank approximation of tensors. Conjecture: The existence of best
+low-rank approximations is governed by closure defects: unlike matrices, the set of
+bounded-rank tensors is not closed, and the approximation fails via limiting divergence.}
+
+This is a known theorem of de Silva and Lim. The arXiv abstract of
+\url{https://arxiv.org/abs/math/0607647} says: ``we argue that the naive approach to this
+problem is doomed to failure because, unlike matrices, tensors of order 3 or higher can fail
+to have best rank-r approximations''. We give a self-contained, machine-checked proof of the
+statement in the smallest case, real $2\times2\times2$ tensors and rank $2$, together with the
+matrix contrast and the general closedness criterion.
+
+\section*{Reading}
+We prove the following four claims. Each one is a conjunct of the Lean theorem
+\texttt{C2510.conjecture\_2510}.
+\begin{enumerate}
+\item[(R1)] \emph{Unlike matrices.} For all $m,n,r$, the set of real $m\times n$ matrices of
+  rank $\le r$ is closed. Hence every real matrix has a best rank-$\le r$ approximation.
+\item[(R2)] \emph{Governed by closure.} For every $r$: every tensor has a best rank-$\le r$
+  approximation if and only if the set of tensors of rank $\le r$ is closed.
+\item[(R3)] \emph{Bounded-rank tensors are not closed.} The set of $2\times2\times2$ tensors
+  of rank $\le 2$ is not closed. The tensor $W$ below has rank $3$ and lies in the closure.
+  Its distance to the rank-$\le2$ set is $0$, but no rank-$\le2$ tensor attains it, so $W$
+  has no best rank-$\le 2$ approximation.
+\item[(R4)] \emph{Limiting divergence.} Take any sequence of decompositions
+  $S_n = x_n\otimes y_n\otimes z_n + x_n'\otimes y_n'\otimes z_n'$ with $S_n\to W$. Then the
+  norms of \emph{both} summands tend to $+\infty$.
+\end{enumerate}
+We read ``the set of bounded-rank tensors is not closed'' as: for some tensor space and some
+rank bound $r$, the set of rank-$\le r$ tensors is not closed. We do not claim this for every
+$r$; for instance, rank $\le 0$ gives the closed set $\{0\}$. Only the four claims above are
+proved.
+
+\section*{Conventions and definitions}
+\begin{itemize}
+\item Tensors are $T:\{0,1\}^3\to\R$ (Lean: \texttt{Fin 2 -> Fin 2 -> Fin 2 -> R}). The norm
+  is Mathlib's default sup norm $\|T\|=\max_{i,j,k}|T_{ijk}|$, with $\mathrm{dist}(S,T)=\|S-T\|$.
+  Closedness, closure and the divergence statement do not depend on the norm, since all norms
+  are equivalent in finite dimension. ``Best approximation'' and the infimum are taken for
+  this sup norm.
+\item $e_1=(1,0)$ and $e_2=(0,1)$ (indices $0,1$). The outer product is
+  $(a\otimes b\otimes c)_{ijk}=a_ib_jc_k$.
+\item $T$ has rank $\le r$ (\texttt{HasRankLE T r}) if $T=\sum_{s<r}a_s\otimes b_s\otimes c_s$
+  for some vectors $a_s,b_s,c_s\in\R^2$. Also $\mathrm{rankLE}\,r$ is the set of such $T$, and
+  $\mathrm{tensorRank}\,T$ is the least such $r$ (an \texttt{sInf} of natural numbers).
+\item Matrix rank is Mathlib's \texttt{Matrix.rank}, the dimension of the column space.
+\item $y$ is a best approximation of $x$ from $A$ (\texttt{IsBestApprox A x y}) if $y\in A$
+  and $\mathrm{dist}(x,y)\le \mathrm{dist}(x,z)$ for every $z\in A$.
+\item $W=e_1\otimes e_1\otimes e_2+e_1\otimes e_2\otimes e_1+e_2\otimes e_1\otimes e_1$, so
+  $W_{001}=W_{010}=W_{100}=1$ and all other entries are $0$.
+\end{itemize}
+
+\section*{Proofs}
+\begin{lemma}[\texttt{bestApprox\_forall\_iff\_isClosed}]
+Let $A$ be a nonempty subset of a proper metric space $X$. Then every $x\in X$ has a best
+approximation from $A$ if and only if $A$ is closed.
+\end{lemma}
+\begin{proof}
+If $A$ is closed, then Mathlib's \texttt{IsClosed.exists\_infDist\_eq\_dist} gives $y\in A$
+with $\mathrm{dist}(x,y)=\inf_{z\in A}\mathrm{dist}(x,z)$. Conversely, let $x\in\overline A$
+and let $y$ be a best approximation. For each $\varepsilon>0$ there is $z\in A$ with
+$\mathrm{dist}(x,z)<\varepsilon$. Hence $\mathrm{dist}(x,y)<\varepsilon$, so $x=y\in A$.
+\end{proof}
+(R2) follows, because $\R^{2\times2\times2}$ is proper and $0\in\mathrm{rankLE}\,r$.
+
+\begin{theorem}[(R1), \texttt{matrix\_rankLE\_isClosed}, \texttt{matrix\_bestApprox\_exists}]
+$\{M\in\R^{m\times n}:\operatorname{rank}M\le r\}$ is closed.
+\end{theorem}
+\begin{proof}
+The map $M\mapsto (v\mapsto Mv)$ from matrices to continuous linear maps is linear on a
+finite-dimensional space, hence continuous. The rank of $M$ equals the rank of this linear
+map. Mathlib's \texttt{isOpen\_setOfPred\_nat\_le\_rank} says that
+$\{f: r+1\le\operatorname{rank}f\}$ is open. Our set is the complement of its preimage. The
+existence of best approximations then follows from the Lemma.
+\end{proof}
+
+\begin{lemma}[\texttt{W\_eqns\_inconsistent}, \texttt{W\_not\_rankLE\_two}]
+$W$ is not a sum of two rank-one tensors.
+\end{lemma}
+\begin{proof}
+Suppose $W=a\otimes b\otimes c+p\otimes q\otimes r$. This gives eight equations
+$a_ib_jc_k+p_iq_jr_k=W_{ijk}$. Put $D=a_0p_1-a_1p_0$. Take $p_1$ times the $(0,j,k)$
+equation minus $p_0$ times the $(1,j,k)$ equation (Cramer's rule on the first-mode slices).
+This gives $Db_jc_k=p_1W_{0jk}-p_0W_{1jk}$, that is,
+$Db_0c_0=-p_0$, $Db_0c_1=Db_1c_0=p_1$ and $Db_1c_1=0$. Since
+$(Db_0c_1)(Db_1c_0)-(Db_0c_0)(Db_1c_1)=0$ identically, we get $p_1^2=0$. In the same way,
+$a_0$ times the $(1,j,k)$ equation minus $a_1$ times the $(0,j,k)$ equation gives
+$Dq_0r_0=a_0$, $Dq_0r_1=Dq_1r_0=-a_1$ and $Dq_1r_1=0$, so $a_1^2=0$. Then the $(1,0,0)$
+equation $a_1b_0c_0+p_1q_0r_0=1$ reads $0=1$. Every step is a \texttt{linear\_combination}
+in Lean.
+\end{proof}
+Hence $W$ is not of rank $\le 0,1,2$, using the padding lemma \texttt{HasRankLE.mono}. The
+three-term definition of $W$ is a rank-$3$ decomposition (\texttt{W\_hasRankLE\_three}), so
+$\mathrm{tensorRank}\,W=3$ (\texttt{tensorRank\_W}).
+
+\begin{theorem}[(R3), \texttt{Tseq\_mem}, \texttt{Tseq\_tendsto}, \texttt{W\_mem\_closure},
+\texttt{rankLE\_two\_not\_isClosed}, \texttt{infDist\_W}, \texttt{W\_no\_best\_approx}]
+Let $t_n=1/(n+1)$ and $u_n=e_1+t_ne_2$. Then
+$T_n=(n+1)\,u_n\otimes u_n\otimes u_n-(n+1)\,e_1\otimes e_1\otimes e_1$ has rank $\le2$ and
+$T_n\to W$. Consequently $\mathrm{rankLE}\,2$ is not closed,
+$\inf_{S\in\mathrm{rankLE}\,2}\|W-S\|=0$, and $W$ has no best rank-$\le2$ approximation.
+\end{theorem}
+\begin{proof}
+An entry-by-entry check (\texttt{Tseq\_eq}) gives $T_n=W+t_nP+t_n^2Q$, where
+$P=e_1\otimes e_2\otimes e_2+e_2\otimes e_1\otimes e_2+e_2\otimes e_2\otimes e_1$ and
+$Q=e_2\otimes e_2\otimes e_2$. Since $t_n\to0$, we get $T_n\to W$, so $W$ lies in the closure.
+But $W\notin\mathrm{rankLE}\,2$ by the Lemma, so the set is not closed. The infimum is $0$
+by \texttt{Metric.mem\_closure\_iff\_infDist\_zero}. A best approximation $S$ would satisfy
+$\|W-S\|\le\|W-T_n\|\to0$, so $W=S\in\mathrm{rankLE}\,2$, which is impossible.
+\end{proof}
+
+\begin{theorem}[(R4), \texttt{max\_summand\_tendsto}, \texttt{summand\_tendsto}]
+Let $x_n,y_n,z_n$ (summand $0$) and $x'_n,y'_n,z'_n$ (summand $1$) be vectors in $\R^2$
+with $S_n=x_n\otimes y_n\otimes z_n+x'_n\otimes y'_n\otimes z'_n\to W$. Then
+$\|x_n\otimes y_n\otimes z_n\|\to\infty$ and $\|x'_n\otimes y'_n\otimes z'_n\|\to\infty$.
+\end{theorem}
+\begin{proof}
+First, $\max(\|\text{summand }0\|,\|\text{summand }1\|)\to\infty$. Otherwise there are $C$
+and a subsequence $\varphi$ on which both summand norms are $<C$. In the sup norm,
+$\|a\|\|b\|\|c\|\le\|a\otimes b\otimes c\|$ (\texttt{norm\_mul\_le\_norm\_outer3}). So each
+summand can be rewritten with factors $(\|b\|\|c\|)a$, $b/\|b\|$, $c/\|c\|$ (or $0,0,0$ if
+$b=0$ or $c=0$), all of norm $\le\max(C,1)$ (\texttt{rebalance}). By Bolzano--Weierstrass
+(Mathlib's \texttt{tendsto\_subseq\_of\_bounded}), a further subsequence of these factor
+pairs converges. By continuity of $(a,b,c)\mapsto a\otimes b\otimes c$, the limit is a
+two-term decomposition of $\lim S_{\varphi(\psi(n))}=W$. This contradicts the Lemma.
+Second, the triangle inequality gives
+$\|\text{summand }s\|\ge\max(\cdot,\cdot)-\|S_n\|$, and eventually $\|S_n\|<\|W\|+1$.
+\end{proof}
+The Wikipedia article \url{https://en.wikipedia.org/wiki/Tensor_rank_decomposition} describes
+this phenomenon (the summand norms tending to infinity) and says: ``It is sometimes called
+the problem of diverging components.''
+
+\section*{Lean}
+The file \texttt{lean/Conjecture2510/Basic.lean} (namespace \texttt{C2510}, only
+\texttt{import Mathlib}) proves the main theorem \texttt{C2510.conjecture\_2510}. It is the
+conjunction of (R1) for all $m,n,r$, (R2) for all $r$, non-closedness of
+$\mathrm{rankLE}\,2$, $W\in\overline{\mathrm{rankLE}\,2}$, $\mathrm{tensorRank}\,W=3$,
+$\mathrm{infDist}(W,\mathrm{rankLE}\,2)=0$, the absence of a best approximation, and (R4)
+for both summands. \texttt{lake build} succeeds, and \texttt{\#print axioms
+C2510.conjecture\_2510} reports only \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}
