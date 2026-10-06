@@ -1,0 +1,172 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\title{A disproof of Conjecture 00000005640\\[2pt]
+\large An intersection-preserving redrawing cannot change the intersection graph}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000005640 reads (English version; the Chinese version says the same, with
+``the separation is realized by an explicit redrawing pair with intersections preserved'' for the
+last clause):
+
+\begin{quote}
+\emph{Definition:} The intersection spectrum and the intersection graph are two layers.
+\emph{Conjecture:} There exist two convex-set families with the same intersection spectrum but
+non-isomorphic intersection graphs, and the separation is realized by an explicit redrawing pair
+preserving intersections.
+\end{quote}
+
+The claim is a conjunction: two convex families with (A) the same intersection spectrum and (B)
+non-isomorphic intersection graphs, where (C) this separation is realized by an explicit
+\emph{redrawing pair preserving intersections}. We show that (C) and (B) are incompatible, whatever
+(A) means. Hence the conjecture is false.
+
+\section{Reading and definitions}
+
+\begin{definition}[Intersection graph]
+For an indexed family $F=(F_i)_{i\in I}$ of sets, the intersection graph $\Gamma(F)$ has vertex set
+$I$, and distinct $i\neq j$ are adjacent iff $F_i\cap F_j\neq\emptyset$. This is the standard
+notion (see e.g.\ \url{https://en.wikipedia.org/wiki/Intersection_graph}).
+\end{definition}
+
+\begin{definition}[Redrawing pair preserving intersections]
+Two families $F=(F_i)_{i\in I}$ and $G=(G_k)_{k\in K}$ form a \emph{redrawing pair preserving
+intersections} if there is a bijection $\sigma\colon I\to K$ (each member $F_i$ is redrawn as
+$G_{\sigma(i)}$) such that for all $i\neq j$:
+\[ F_i\cap F_j\neq\emptyset \iff G_{\sigma(i)}\cap G_{\sigma(j)}\neq\emptyset. \]
+\end{definition}
+
+A convex family in the conjecture is a family of convex subsets of $\mathbb{R}^d$; the two families
+may live in different dimensions $d,d'$, and the index sets may be finite or infinite. The term
+``intersection spectrum'' is not defined in the source. We leave it as an \emph{arbitrary}
+relation between families, so the disproof does not depend on its meaning.
+
+We also treat two other readings of ``preserving intersections'':
+\begin{itemize}
+\item \emph{Nerve reading:} for every finite $S\subseteq I$, $\bigcap_{i\in S}F_i\neq\emptyset$ iff
+$\bigcap_{i\in S}G_{\sigma(i)}\neq\emptyset$. Taking $S=\{i,j\}$ gives the pairwise reading.
+\item \emph{One-sided reading:} for $i\neq j$, $F_i\cap F_j\neq\emptyset$ implies
+$G_{\sigma(i)}\cap G_{\sigma(j)}\neq\emptyset$ (new intersections may appear). We treat it for finite
+families whose intersection graphs have the same number of edges, i.e.\ when the ``intersection
+spectrum'' determines the number of intersecting pairs.
+\end{itemize}
+
+\section{The disproof}
+
+\begin{lemma}\label{lem:iso}
+If $(F,G,\sigma)$ is a redrawing pair preserving intersections, then $\sigma$ is a graph isomorphism
+$\Gamma(F)\cong\Gamma(G)$.
+\end{lemma}
+\begin{proof}
+$\sigma$ is a bijection on vertices. For $i,j\in I$: $i\neq j$ iff $\sigma(i)\neq\sigma(j)$ since
+$\sigma$ is injective, and for $i\neq j$ the intersection condition is preserved by hypothesis. So
+$i\sim j$ in $\Gamma(F)$ iff $\sigma(i)\sim\sigma(j)$ in $\Gamma(G)$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+For every relation ``same intersection spectrum'', there are no convex families $F$ in
+$\mathbb{R}^d$ and $G$ in $\mathbb{R}^{d'}$ that have the same intersection spectrum, have
+non-isomorphic intersection graphs, and form a redrawing pair preserving intersections. Also, no
+redrawing pair preserving intersections has non-isomorphic intersection graphs, so the conjecture
+fails even if the separating pair and the redrawing pair are allowed to be different pairs.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:iso} the graphs of any redrawing pair preserving intersections are isomorphic,
+which contradicts (B).
+\end{proof}
+
+\begin{corollary}[nerve reading]
+A redrawing that preserves the nerve also gives isomorphic intersection graphs.
+\end{corollary}
+
+\begin{theorem}[one-sided reading]
+Let $I,K$ be finite and let $\sigma\colon I\to K$ be a bijection that keeps every intersection of
+distinct members. If $\Gamma(F)$ and $\Gamma(G)$ have the same number of edges, then $\sigma$
+preserves intersections, so $\Gamma(F)\cong\Gamma(G)$.
+\end{theorem}
+\begin{proof}
+Let $H$ be the pull-back of $\Gamma(G)$ along $\sigma$. Then $H \cong \Gamma(G)$, and
+$\Gamma(F)\le H$ by hypothesis. Both have the same finite number of edges, so $\Gamma(F)=H$. Hence
+$G_{\sigma(i)}\cap G_{\sigma(j)}\neq\emptyset$ implies $F_i\cap F_j\neq\emptyset$ for $i\neq j$.
+\end{proof}
+
+\begin{corollary}[one-sided reading, adjacency spectrum]\label{cor:adj}
+Suppose ``same intersection spectrum'' means that the adjacency matrices $A_F$, $A_G$ of the
+intersection graphs have the same characteristic polynomial. Then a one-sided redrawing of finite
+families gives isomorphic intersection graphs.
+\end{corollary}
+\begin{proof}
+$A_F$ is real symmetric. By the spectral theorem $A_F=UDU^{*}$ with $U$ unitary and $D$ the
+diagonal of eigenvalues, so $\operatorname{tr}(A_F^2)=\operatorname{tr}(D^2)=\sum\lambda_i^2$. Here
+the $\lambda_i$ are the roots of the characteristic polynomial, with multiplicity. Also
+$\operatorname{tr}(A_F^2)=\sum_v\deg v=2|E(\Gamma(F))|$. So equal characteristic polynomials give
+equal edge counts, and the previous theorem applies.
+\end{proof}
+
+\begin{remark}[non-vacuity]
+The objects exist. For instance, two copies of $\mathbb{R}^1$ form a convex family, and the identity
+redrawing of it preserves intersections; its intersection graph is an edge.
+\end{remark}
+
+\begin{remark}[scope]
+The refuted readings are exactly these: the pairwise reading and the nerve reading, for any
+meaning of ``spectrum''; and the one-sided reading for finite families whenever the spectrum
+determines the number of intersecting pairs, in particular for the adjacency spectrum
+(Corollary~\ref{cor:adj}). \emph{Not} refuted: the one-sided reading combined with a ``spectrum''
+that does not determine the number of intersecting pairs, or with infinite families. In that case
+the final clause on its own can hold (for example, two disjoint members can be moved until they
+meet). The disproof uses only the bijection $\sigma$ and never uses
+convexity, so it holds for arbitrary set families.
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture5640/Basic.lean} (Lean 4.33.1, Mathlib \texttt{v4.33.1}). The main
+definitions are \texttt{interGraph} (the intersection graph, a Mathlib \texttt{SimpleGraph}),
+\texttt{PreservesInter}, \texttt{PreservesNerve}, \texttt{KeepsInter}, \texttt{ConvexFamily} (an
+index type together with convex subsets of \texttt{EuclideanSpace} $\mathbb{R}$ \texttt{(Fin d)}),
+\texttt{IsRedrawingPair}, and \texttt{Statement} / \texttt{StatementSeparate}, both parametrized
+by an arbitrary \texttt{SameSpectrum} relation. The theorems are:
+\begin{itemize}
+\item \texttt{isoOfPreserves}: Lemma~\ref{lem:iso}, as an explicit isomorphism
+$\texttt{interGraph F}\simeq_g\texttt{interGraph G}$.
+\item \texttt{redrawing\_iso}, \texttt{conjecture5640\_false},
+\texttt{conjecture5640\_separate\_false}: Theorem~\ref{thm:main}.
+\item \texttt{nerve\_redrawing\_iso}, \texttt{oneSided\_redrawing\_iso}: the other two readings.
+\item \texttt{trace\_mul\_self\_eq\_roots}, \texttt{trace\_adj\_sq},
+\texttt{card\_edges\_eq\_of\_charpoly}, \texttt{oneSided\_adjSpectrum\_iso}:
+Corollary~\ref{cor:adj}.
+\item \texttt{sample\_redrawing}, \texttt{sample\_adj}: non-vacuity.
+\end{itemize}
+\texttt{lake build} succeeds. \texttt{\#print axioms} reports only \texttt{[propext,
+Classical.choice, Quot.sound]} for each of \texttt{conjecture5640\_false},
+\texttt{conjecture5640\_separate\_false}, \texttt{redrawing\_iso}, \texttt{nerve\_redrawing\_iso},
+\texttt{oneSided\_redrawing\_iso} and \texttt{oneSided\_adjSpectrum\_iso}. The code contains no
+\texttt{sorry} and no
+\texttt{native\_decide}.
+
+The transport idea follows the accepted disproof of the sibling conjecture 00000005400 (The Last
+Math Competition, GPL-3.0).
+
+\end{document}
