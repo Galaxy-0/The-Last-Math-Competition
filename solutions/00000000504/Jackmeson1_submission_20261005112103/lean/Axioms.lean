@@ -1,0 +1,3 @@
+import Conjecture504
+#print axioms Conjecture504.conjecture504_upper_bound_false
+#print axioms Conjecture504.conjecture504_unbounded
