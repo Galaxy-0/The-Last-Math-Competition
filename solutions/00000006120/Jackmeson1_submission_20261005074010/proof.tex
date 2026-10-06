@@ -1,0 +1,197 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newcommand{\Stab}{\operatorname{Stab}}
+
+\title{A disproof of Conjecture 00000006120\\[2pt]
+\large Identical noise stability forces identical degree weights}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000006120 reads (English version):
+
+\begin{quote}
+\emph{Definition:} Noise stability and the spectrum are two layers.
+\emph{Conjecture:} There exist two Boolean functions with identical noise stability but different
+spectral distributions, and the separation is realized by an explicit perturbation with the same
+stability but different low-degree weights.
+\end{quote}
+
+The Chinese version says that \emph{all} noise stabilities of the two functions coincide
+(``yiqie zaosheng wendingxing xiangtong''), and that the separation is realized by an explicit
+perturbation with the same stability but different low-degree weights.
+
+The claim is a conjunction: (A) two Boolean functions with identical noise stability, (B) with
+different spectral distributions, and (C) an explicit pair (``perturbation'') with the same
+stability but different low-degree weights. We show that (C) can never hold. The reason is that
+the function $\rho\mapsto\Stab_\rho[f]$ is a polynomial whose coefficients are exactly the Fourier
+weights $W^k[f]$ at each degree $k$. So identical noise stability determines every degree weight,
+and hence every low-degree weight. (A) and (B) on their own are satisfiable (Section~\ref{sec:nv}).
+
+\section{Definitions}
+
+All notions are the standard ones of O'Donnell's \emph{Analysis of Boolean Functions}
+(Cambridge University Press, 2014; arXiv:2105.10386), which we quote from
+\url{https://ar5iv.labs.arxiv.org/html/2105.10386} (mathematical symbols are stripped in that
+rendering):
+``Definition 1.19 . For and , the (Fourier) weight of at degree is'';
+``the spectral sample for , denoted , is the probability distribution on subsets of in which the set
+has probability .'';
+``Definition 2.40 . Let . For fixed we write to denote that the random string is drawn as follows:
+for each independently,'';
+``Definition 2.42 . For and , the noise stability of at is''.
+
+We encode the cube $\{-1,1\}^n$ as $\mathrm{Bool}^n$, with $\mathrm{sgn}(\mathrm{false})=1$ and
+$\mathrm{sgn}(\mathrm{true})=-1$. All functions $f\colon\{-1,1\}^n\to\mathbb{R}$ are allowed. A
+\emph{Boolean function} takes only the values $\pm1$ (\texttt{IsBoolean}).
+
+\begin{definition}
+For $S\subseteq[n]$ let $\chi_S(x)=\prod_{i\in S}x_i$ (\texttt{chi}). The Fourier coefficient is
+$\hat f(S)=2^{-n}\sum_x f(x)\chi_S(x)$ (\texttt{fourier}). The \emph{spectral distribution}
+(spectral sample) gives the set $S$ the weight $\hat f(S)^2$ (\texttt{spectralDist}). These
+weights sum to $\mathbf E[f^2]$, so they form a probability distribution exactly when
+$\mathbf E[f^2]=1$, in particular for every Boolean ($\pm1$-valued) $f$; for a general real-valued
+$f$ we call this family the (unnormalized) spectral measure. The
+\emph{Fourier weight at degree $k$} is $W^k[f]=\sum_{|S|=k}\hat f(S)^2$ (\texttt{weight}), and the
+\emph{low-degree weight up to degree $k$} is $W^{\le k}[f]=\sum_{|S|\le k}\hat f(S)^2$
+(\texttt{lowWeight}).
+\end{definition}
+
+\begin{definition}
+Let $\rho\in[-1,1]$. The noise kernel is
+$K_\rho(x,y)=\prod_{i=1}^n\bigl[\tfrac{1+\rho}{2}\text{ if }y_i=x_i,\ \tfrac{1-\rho}{2}\text{ if }
+y_i\ne x_i\bigr]$ (\texttt{noiseKernel}). This is the law of $y\sim N_\rho(x)$: independently in
+each coordinate, $y_i=x_i$ with probability $\frac{1+\rho}{2}$ and $y_i=-x_i$ otherwise. The
+\emph{noise stability} is
+$\Stab_\rho[f]=\sum_x\sum_y 2^{-n}K_\rho(x,y)f(x)f(y)=\mathbf{E}[f(x)f(y)]$, where $x$ is uniform
+and $y\sim N_\rho(x)$ (\texttt{stab}).
+The Lean definitions accept every real $\rho$; outside $[-1,1]$ the same formulas are only an
+algebraic extension (a kernel entry can be negative, e.g.\ $\frac{1-\rho}{2}=-\frac12$ at $\rho=2$),
+not a probability law or an expectation. The disproof only uses $\rho\in[0,1]$.
+\end{definition}
+
+As sanity checks, $K_\rho(x,\cdot)$ sums to $1$ for every $\rho$ (\texttt{noiseKernel\_sum}) and is
+nonnegative for $\rho\in[-1,1]$ (\texttt{noiseKernel\_nonneg}).
+
+\section{The disproof}
+
+\begin{lemma}[Fourier formula for noise stability]\label{lem:fourier}
+For every $f\colon\{-1,1\}^n\to\mathbb{R}$ and every real $\rho$,
+$\Stab_\rho[f]=\sum_{S\subseteq[n]}\rho^{|S|}\hat f(S)^2=\sum_{k=0}^{n}W^k[f]\,\rho^k.$
+\end{lemma}
+
+This is the standard formula. Wikipedia
+(\url{https://en.wikipedia.org/wiki/Analysis_of_Boolean_functions}) says that the noise stability
+``can be defined in two equivalent ways'', namely
+$\Stab_\rho[f]=\mathbf{E}_{x;\,y\sim N_\rho(x)}[f(x)f(y)]=\sum_{S\subseteq[n]}\rho^{|S|}\hat f(S)^2$.
+O'Donnell's text has ``Thus the noise stability of at is equal to the sum of its Fourier weights,
+attenuated by a factor which decreases exponentially with degree.'' We prove the formula in Lean
+from the probabilistic definition above.
+
+\begin{proof}
+A case check gives
+$[\tfrac{1+\rho}{2}\text{ if }y_i=x_i\text{ else }\tfrac{1-\rho}{2}]=\tfrac12(1+\rho x_iy_i)$
+(\texttt{factor\_eq}). Expanding the product over subsets gives
+$K_\rho(x,y)=2^{-n}\prod_i(1+\rho x_iy_i)=2^{-n}\sum_S\rho^{|S|}\chi_S(x)\chi_S(y)$
+(\texttt{noiseKernel\_expand}). Substituting and exchanging the finite sums gives
+$\Stab_\rho[f]=\sum_S\rho^{|S|}\bigl(2^{-n}\sum_xf(x)\chi_S(x)\bigr)^2$
+(\texttt{stab\_eq\_fourier}). Grouping the sets by size gives the second form
+(\texttt{stab\_eq\_weights}). In Lean this is phrased with the polynomial
+$P_f=\sum_S\hat f(S)^2X^{|S|}\in\mathbb{R}[X]$: we have $P_f(\rho)=\Stab_\rho[f]$
+(\texttt{eval\_stabPoly}), and the $k$-th coefficient of $P_f$ is $W^k[f]$
+(\texttt{coeff\_stabPoly}).
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+Let $f\colon\{-1,1\}^n\to\mathbb{R}$ and $g\colon\{-1,1\}^m\to\mathbb{R}$ (with $n$ and $m$
+possibly different). Let $s\subseteq\mathbb{R}$ be infinite with $\Stab_\rho[f]=\Stab_\rho[g]$ for all
+$\rho\in s$. Then $W^k[f]=W^k[g]$ and $W^{\le k}[f]=W^{\le k}[g]$ for every $k\ge0$.
+\end{theorem}
+
+\begin{proof}
+The polynomials $P_f$ and $P_g$ agree at infinitely many points, so $P_f=P_g$ (Mathlib's
+\texttt{Polynomial.eq\_of\_infinite\_eval\_eq}). Comparing coefficients gives $W^k[f]=W^k[g]$
+(\texttt{weight\_eq\_of\_stab\_eq}). Since $W^{\le k}=\sum_{j\le k}W^j$
+(\texttt{lowWeight\_eq\_sum}), the low-degree weights agree too
+(\texttt{lowWeight\_eq\_of\_stab\_eq}).
+\end{proof}
+
+\begin{definition}[Realizing pair]
+A pair $(f,g)$ \emph{realizes the clause} (\texttt{RealizingPair}) if $\Stab_\rho[f]=\Stab_\rho[g]$
+for every $\rho\in[0,1]$, and either $W^k[f]\ne W^k[g]$ for some $k$, or
+$W^{\le k}[f]\ne W^{\le k}[g]$ for some $k$.
+\end{definition}
+
+Requiring equality only on $[0,1]$ is weaker than equality on all of $[-1,1]$. So refuting this
+version also refutes the $[-1,1]$ version.
+
+\begin{corollary}\label{cor:false}
+No pair of real-valued functions on Boolean cubes realizes the clause (\texttt{no\_realizing\_pair}).
+Hence the conjecture is false (\texttt{conjecture6120\_false}). Precisely, there are no $n$ and no
+Boolean $f,g$ on $\{-1,1\}^n$ with $\Stab_\rho[f]=\Stab_\rho[g]$ for all $\rho\in[-1,1]$ and
+$\hat f^2\ne\hat g^2$ that come with Boolean $f',g'$ (of any arities, possibly $f'=f$ and $g'=g$)
+forming a realizing pair (\texttt{Statement}).
+\end{corollary}
+
+\begin{proof}
+$[0,1]$ is infinite, so Theorem~\ref{thm:main} applies to any candidate realizing pair.
+\end{proof}
+
+\section{Non-vacuity}\label{sec:nv}
+
+The first two clauses on their own are satisfiable, so the definitions are not degenerate. Noise
+stability is invariant under relabelling the variables (\texttt{stab\_relabel}). The two dictators
+$x\mapsto x_0$ and $x\mapsto x_1$ on $\{-1,1\}^2$ are Boolean, have
+$\Stab_\rho[x_0]=\Stab_\rho[x_1]$ for every real $\rho$, and have different spectral distributions,
+since $\hat{x_0}(\{0\})^2=1\ne0=\hat{x_1}(\{0\})^2$ (\texttt{first\_clauses\_satisfiable}). By
+Theorem~\ref{thm:main} they have the same $W^k$ for every $k$, so they do not realize the clause.
+
+\section{Scope and readings}
+
+\begin{itemize}
+\item \textbf{Refuted.} ``Same stability'' read as equality of $\Stab_\rho$ for all
+$\rho\in[-1,1]$, for all $\rho\in[0,1]$, or for any infinite set of $\rho$ (Theorem~\ref{thm:main}).
+``Different low-degree weights'' read as $W^k[f]\ne W^k[g]$ for some degree $k$, or as
+$W^{\le k}[f]\ne W^{\le k}[g]$ for some $k$. The realizing pair may be the separating pair itself
+or a different pair, and the two functions may have different numbers of variables. Booleanity is
+never used, so the result also holds verbatim for $\{0,1\}$-valued functions. ``Perturbation''
+puts no further constraint on the pair, and adding one only makes the clause harder to satisfy.
+\item \textbf{Not refuted.} (i) Reading ``low-degree weights'' as the individual weights
+$\hat f(S)^2$ of single low-degree sets $S$. Under this reading the clause holds, for example for
+the dictators of Section~\ref{sec:nv}. (ii) Reading ``same stability'' as equality at a single
+$\rho$ (or at finitely many). At $\rho=1$, every Boolean function has $\Stab_1=1$. This reading
+contradicts ``identical noise stability'' (all noise stabilities, in the Chinese text).
+\end{itemize}
+
+\section{Lean formalization}
+
+The file \texttt{lean/Conjecture6120/Basic.lean} (namespace \texttt{Conjecture6120}, Lean 4.33.1,
+Mathlib v4.33.1) contains every definition and result named above. Its main theorems are
+\texttt{conjecture6120\_false}~:~$\neg$\,\texttt{Statement},
+\texttt{no\_realizing\_pair}, \texttt{weight\_eq\_of\_stab\_eq},
+\texttt{lowWeight\_eq\_of\_stab\_eq}, \texttt{stab\_eq\_fourier} and
+\texttt{first\_clauses\_satisfiable}. \texttt{\#print axioms} reports only \texttt{propext},
+\texttt{Classical.choice} and \texttt{Quot.sound} for each of them, and also for
+\texttt{noiseKernel\_sum}. The file contains no \texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}
