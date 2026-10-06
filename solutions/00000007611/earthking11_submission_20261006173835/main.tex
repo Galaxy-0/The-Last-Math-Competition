@@ -1,0 +1,19 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{A Counterexample to Conjecture 00000007611}
+\author{earthking11}
+\date{October 6, 2026}
+\begin{document}\maketitle
+\section*{Claim and interpretation}
+We use the standard Euclidean Clifford interpretation: a gamma system in dimension $n$ is a family of $n$ real matrices satisfying $gamma_i^2=I$ and $gamma_i\gamma_j+\gamma_j\gamma_i=0$ for $i\ne j$. The conjecture does not specify a coefficient field or the meaning of ``dimension''; here the proposed lower bound is read as a lower bound on matrix size.
+\section*{Counterexample}
+Take $n=2$ and
+\[
+\gamma_1=\begin{pmatrix}1&0\\0&-1\end{pmatrix},\qquad
+\gamma_2=\begin{pmatrix}0&1\\1&0\end{pmatrix}.
+\]
+Direct multiplication gives $\gamma_1^2=\gamma_2^2=I_2$ and $\gamma_1\gamma_2+\gamma_2\gamma_1=0$. Hence these are a two-generator gamma system on a 2-dimensional vector space. The claimed lower bound would require matrix size at least $2n=4$, contradicted by this example. The source also mentions tightness, a trace identity, and dimension counting without defining them; this counterexample addresses the explicit lower-bound clause only.
+\section*{Formal check}
+The accompanying Lean 4 project verifies the displayed integer-entry matrix products and the numerical inequality $2<4$ without extra axioms. The integer entries are viewed as real entries in the mathematical example.
+\end{document}
