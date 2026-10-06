@@ -1,0 +1,126 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\DeclareMathOperator{\asdim}{asdim}
+\title{Conjecture 00000004116 is false:\\ $\asdim \mathrm{Conf}_1(\mathbb R)=1\neq 0=dn-1$}
+\author{Jackmeson1}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+Conjecture 00000004116 (English text, verbatim): ``Definition: The asymptotic dimension is the
+large-scale geometric dimension invariant. Conjecture: The asymptotic dimension of
+$\mathrm{Conf}_n(\mathbb R^d)$ is exactly $dn - 1$, coinciding with the coarse dimension, and the
+fractal correction term is always zero.'' The Chinese text says the same.
+
+\paragraph{Reading.} $\mathrm{Conf}_n(\mathbb R^d)$ is the ordered configuration space
+$\{(x_1,\dots,x_n)\in(\mathbb R^d)^n : x_i\ne x_j \text{ for } i\ne j\}$ with the metric induced from
+$(\mathbb R^d)^n=\mathbb R^{dn}$ (Euclidean). The formula is asserted for all $n,d\ge1$. We refute
+its first clause, $\asdim\mathrm{Conf}_n(\mathbb R^d)=dn-1$, at $n=d=1$, so the conjunction fails.
+For $n=1$ the ordered and unordered configuration spaces coincide, so the refutation does not depend
+on that choice either. The terms ``coarse dimension'' and ``fractal correction term'' are not
+defined in the text, and we do not address them.
+
+\emph{Not refuted in Lean:} the formula restricted to $n\ge2$ or to $d\ge2$. (The remark at the end
+of Section~3 explains, in prose only, why it fails there too.) If the intended range is $n\ge 2$,
+our formal refutation does not apply.
+
+\section{Definitions}
+\begin{definition}[Wikipedia, ``Asymptotic dimension'', formal definition]
+Let $X$ be a metric space and $n\ge0$ an integer. $\asdim X\le n$ if for every $R\ge1$ there is a
+uniformly bounded cover $\mathcal U$ of $X$ (that is, $\sup_{U\in\mathcal U}\operatorname{diam}U<\infty$)
+such that every closed $R$-ball of $X$ meets at most $n+1$ members of $\mathcal U$. Then $\asdim X$ is
+the least such $n$, and $\asdim X=\infty$ if there is none.
+\end{definition}
+In Lean (\texttt{AsdimLE}, \texttt{asdim}), ``uniformly bounded'' is
+$\exists D,\ \forall U\in\mathcal U,\ \forall x,y\in U,\ d(x,y)\le D$. ``Meets at most $n+1$
+members'' is $\#\{U\in\mathcal U : U\cap \bar B(x,R)\ne\emptyset\}\le n+1$, where $\#$ is the
+cardinality in $\mathbb N\cup\{\infty\}$ (\texttt{Set.encard}). \texttt{asdim} $X$ is the infimum in
+$\mathbb N\cup\{\infty\}$ of all such $n$, which is $\infty$ when there are none. $\mathrm{Conf}_n(\mathbb R^d)$
+is \texttt{Conf n d}, the subtype of injective elements of
+\texttt{PiLp 2 (fun \_ : Fin n => EuclideanSpace R (Fin d))}, with the subspace metric.
+
+\section{Proof}
+\begin{lemma}[\texttt{not\_asdimLE\_zero\_of\_chain}, chain argument]\label{lem:chain}
+Suppose that $f:\mathbb N\to X$ satisfies $d(f_k,f_{k+1})\le1$ for all $k$, and that
+$d(f_0,f_k)$ is unbounded. Then $\asdim X\le 0$ fails.
+\end{lemma}
+\begin{proof}
+Take the cover $\mathcal U$ given for $R=1$, with diameter bound $D$, and let $U\ni f_0$. By
+induction, $f_k\in U$ for every $k$. Indeed, if $f_k\in U$ and $f_{k+1}\in V\in\mathcal U$, then
+$\bar B(f_k,1)$ meets both $U$ and $V$, so $U=V$ by multiplicity $\le1$. Hence
+$d(f_0,f_k)\le D$ for all $k$, which is a contradiction.
+\end{proof}
+
+\begin{lemma}[\texttt{asdimLE\_one\_of\_isometry\_real}]\label{lem:up}
+If $\varphi:X\to\mathbb R$ satisfies $d(x,y)=|\varphi x-\varphi y|$, then $\asdim X\le1$.
+\end{lemma}
+\begin{proof}
+For $R\ge1$ let $L=3R$ and $U_j=\{x: jL\le\varphi x<(j+1)L\}$ for $j\in\mathbb Z$. These sets cover $X$
+and have diameter $\le L$. Let $m=\lfloor(\varphi x-R)/L\rfloor$. If $U_j$ meets $\bar B(x,R)$, then
+$m<j+1$ and $jL\le\varphi x+R<(m+1)L+2R<(m+2)L$, so $j\in\{m,m+1\}$.
+\end{proof}
+
+\begin{theorem}[\texttt{not\_asdimLE\_zero\_conf}, \texttt{one\_le\_asdim\_conf}]
+For all $n,d\ge1$: $\asdim\mathrm{Conf}_n(\mathbb R^d)\ge1$.
+\end{theorem}
+\begin{proof}
+Let $e=e_1\in\mathbb R^d$ and $c=(0\cdot e,1\cdot e,\dots,(n-1)e)$, which is injective. Let
+$w=(e,\dots,e)\ne0$. Then $f_k=c+(k/\|w\|)\,w$ is an injective configuration and
+$d(f_a,f_b)=|a-b|$. Apply Lemma~\ref{lem:chain}.
+\end{proof}
+
+\begin{theorem}[\texttt{asdim\_conf\_one\_one}]
+$\asdim\mathrm{Conf}_1(\mathbb R)=1$.
+\end{theorem}
+\begin{proof}
+The unique coordinate $x\mapsto x_1\in\mathbb R$ is an isometry (\texttt{conf\_one\_one\_dist}), so
+Lemma~\ref{lem:up} gives $\le1$. The previous theorem gives $\ge1$.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_4116\_false}]
+It is not true that $\asdim\mathrm{Conf}_n(\mathbb R^d)=dn-1$ for all $n,d\ge1$: at $n=d=1$ the
+value is $1$, whereas $dn-1=0$.
+\end{theorem}
+
+\paragraph{Remark (prose only, not formalized).} Wikipedia lists $\asdim(\mathbb R^n)=n$ and states
+that coarsely equivalent spaces have equal asymptotic dimension. $\mathrm{Conf}_n(\mathbb R^d)$ is
+dense in $\mathbb R^{dn}$, so the inclusion is a coarse equivalence, and therefore
+$\asdim\mathrm{Conf}_n(\mathbb R^d)=dn\ne dn-1$ for every $n,d\ge1$. The Lean proof covers only the
+instance $n=d=1$ and the bound $\asdim\ge1$ for all $n,d\ge1$.
+
+\section{Lean formalization}
+File \texttt{lean/Conjecture4116/Basic.lean} (208 lines, \texttt{import Mathlib} only; Lean
+\texttt{v4.33.1}, Mathlib \texttt{v4.33.1}). Main theorems: \texttt{C4116.conjecture\_4116\_false},
+\texttt{C4116.asdim\_conf\_one\_one}, \texttt{C4116.one\_le\_asdim\_conf}; supporting:
+\texttt{not\_asdimLE\_zero\_of\_chain}, \texttt{asdimLE\_one\_of\_isometry\_real},
+\texttt{not\_asdimLE\_zero\_conf}, \texttt{conf\_one\_one\_dist}. \texttt{lake build} succeeds, and
+\texttt{\#print axioms} reports exactly \texttt{[propext, Classical.choice, Quot.sound]} for all three
+main theorems. There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+
+\section{Relation to the earlier submission}
+PR \#294 (by orionsheep) made the same off-by-one observation ($\mathrm{Conf}_1(\mathbb R)=\mathbb R$
+has $\asdim 1$). It was not merged because its main theorem was the numeral statement
+$(1\cdot1-1=0\wedge1\ne0)\wedge\dots$, with ``no $\mathrm{Conf}_n(\mathbb R^d)$, no asymptotic or coarse
+dimension''. The off-by-one refutation was ``asserted only in prose''. This submission defines
+$\mathrm{Conf}_n(\mathbb R^d)$ with its metric and Gromov's asymptotic dimension in Lean. It proves
+$\asdim\mathrm{Conf}_1(\mathbb R)=1$ (both bounds) and $\asdim\ge1$ for all $n,d\ge1$, and it derives
+the refutation from these theorems.
+
+\section*{Sources}
+\begin{itemize}
+\item Wikipedia, ``Asymptotic dimension'', \url{https://en.wikipedia.org/wiki/Asymptotic_dimension}
+(formal definition; examples ``$\asdim(\mathbb R^n)=n$''; property ``If $X$ and $Y$ are coarsely
+equivalent metric spaces (e.g. quasi-isometric metric spaces), then $\asdim X=\asdim Y$'').
+\item PR \#294: \url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/pull/294}.
+\end{itemize}
+\end{document}
