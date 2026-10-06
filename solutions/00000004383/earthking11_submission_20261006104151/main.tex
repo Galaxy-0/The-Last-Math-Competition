@@ -1,0 +1,23 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\title{An Internal Contradiction in Conjecture 00000004383}
+\author{earthking11}
+\date{October 6, 2026}
+\begin{document}
+\maketitle
+
+\section*{The two assertions}
+The conjecture states that the first five nonzero low-degree homotopy groups of the topological Hochschild homology of the sphere spectrum are direct sums of copies of $\mathbb F_p$. It also states that the first nonzero group is cyclic of order four. The first nonzero group is one of the first five, so both descriptions apply to the same group.
+
+\section*{Why they cannot both hold}
+The additive group of a field of characteristic $p$ is annihilated by multiplication by $p$. The same is true coordinatewise for any direct sum of copies of that additive group. A cyclic group of order four has a generator $g$ whose order is four, so $p g=0$ implies $4\mid p$.
+
+This contradicts primality. Indeed, write $p=4k=2(2k)$. If $p$ is prime, its factorization property implies either $2=1$ or $2k=1$. The first is false, and the second is impossible because $2k$ is even. Equivalently, no prime is divisible by four. Thus the two descriptions in the conjecture cannot refer to the same group.
+
+\section*{Formalization scope}
+The accompanying Lean development proves the direct-sum annihilation bridge, formalizes a cyclic order-four generator by its annihilator criterion, and proves the elementary prime-divisibility contradiction without assuming it. It establishes an internal inconsistency in the stated properties; it does not compute the actual homotopy groups or decide their degrees.
+
+\end{document}
