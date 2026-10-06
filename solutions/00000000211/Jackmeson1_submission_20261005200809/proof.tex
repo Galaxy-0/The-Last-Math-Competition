@@ -1,0 +1,151 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\title{Disproof of conjecture 00000000211:\\ the lucky primes contain no twin pair}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clause refuted}
+
+\textbf{Statement (English, verbatim).} Definition: The lucky numbers are obtained from the
+positive integers by the lucky sieve (at each round deleting the $s_k$-th position, where $s_k$
+is the $k$-th surviving number). Conjecture: The density of the intersection of lucky numbers and
+primes is asymptotically an explicit Euler-type constant, and the intersection contains infinitely
+many twin pairs; the constant is given by the first-order correction to independence of the two
+sieves. (lucky-prime intersection density) (The Chinese text states the same.)
+
+\textbf{Reading.} The conjecture is a conjunction of (D) a density clause and
+\[
+  \text{(T)}\qquad \text{the set } \mathcal{L}\cap\mathcal{P} \text{ of lucky primes contains
+  infinitely many twin pairs,}
+\]
+where $\mathcal{L}$ is the set of lucky numbers and $\mathcal{P}$ the set of primes. A
+\emph{twin pair} in $\mathcal{L}\cap\mathcal{P}$ is a pair $(p,p+2)$ with both members in
+$\mathcal{L}\cap\mathcal{P}$; this is the usual gap-two meaning (``a twin prime is a prime that has
+a prime gap of two'', Wikipedia, \emph{Twin prime}). We prove that $\mathcal{L}\cap\mathcal{P}$
+contains \emph{no} twin pair, so (T) is false, and hence so is the conjunction (D) and (T),
+whatever (D) means. We do not formalize or address (D); in Lean it is an arbitrary proposition.
+Only the gap-two meaning of ``twin'' is refuted; pairs with other gaps (4, 6, \dots) are not
+considered.
+
+\section{The lucky sieve}
+
+OEIS A000959 (``Lucky numbers'') describes the sieve as follows: ``Start with the natural numbers.
+Delete every 2nd number, leaving 1 3 5 7 ...; the 2nd number remaining is 3, so delete every 3rd
+number, leaving 1 3 7 9 13 15 ...; now delete every 7th number, leaving 1 3 7 9 13 ...; now delete
+every 9th number; etc.'' Its data begin $1,3,7,9,13,15,21,25,31,33,\dots$. Deletion is by
+\emph{position} in the current list: the 1-indexed positions $m,2m,3m,\dots$ are deleted.
+
+\begin{definition}[Lean: \texttt{deleteEvery}, \texttt{stage}, \texttt{sievingNumber},
+\texttt{IsLucky}]
+Represent a list of survivors by its increasing enumeration $L:\mathbb{N}\to\mathbb{N}$
+(0-indexed). For $m\ge 2$ put $(\mathrm{del}_m L)(j)=L\bigl(j+\lfloor j/(m-1)\rfloor\bigr)$. Let
+$S_0(i)=i+1$ (the positive integers), $m_k=S_k(\max(1,k))$ and $S_{k+1}=\mathrm{del}_{m_k}S_k$.
+A positive integer $n$ is \emph{lucky} if $n$ lies in the range of $S_k$ for every $k$, i.e. it
+is never deleted.
+\end{definition}
+
+\begin{lemma}[faithfulness]\label{lem:faith}
+(a) (\texttt{range\_deleteEvery}, \texttt{range\_stage\_succ}) For $m\ge 2$ and any $L$, the range
+of $\mathrm{del}_m L$ is $\{L(i) : (i+1)\not\equiv 0 \pmod m\}$; so round $k+1$ deletes exactly
+the entries of $S_k$ at 1-indexed positions divisible by $m_k$, and $m_k\ge 2$
+(\texttt{two\_le\_sievingNumber}). Every $S_k$ is strictly increasing (\texttt{stage\_strictMono}).
+(b) (\texttt{sievingNumber\_first\_five}) $m_0,\dots,m_4 = 2,3,7,9,13$.
+(c) (\texttt{sievingNumber\_eq\_lucky}) For $k\ge 1$, $m_k=\ell_k$, where $\ell_j=S_{j+1}(j)$.
+(d) (\texttt{isLucky\_iff}, \texttt{lucky\_strictMono}) $n$ is lucky iff $n=\ell_j$ for some $j$,
+and $\ell$ is strictly increasing; so $\ell_j$ is the $(j+1)$-th lucky number.
+(e) (\texttt{lucky\_first\_ten}) $\ell_0,\dots,\ell_9 = 1,3,7,9,13,15,21,25,31,33$, the first ten
+terms of A000959; there are infinitely many lucky numbers (\texttt{isLucky\_infinite}).
+\end{lemma}
+
+\noindent\emph{Proof sketch.} (a) Write $m=d+1$. The map $j\mapsto j+\lfloor j/d\rfloor$ sends
+$j=dq+r$ ($0\le r<d$) to $mq+r$, which is a bijection onto $\{i : i\bmod m\ne m-1\}$. (c),(d)
+use $S_k(i)\ge i+1$, $S_{k+1}(i)\ge 2i+1$ and the stability $S_{k+1}(j)=S_k(j)$ for $j<k$
+(\texttt{stage\_succ\_of\_lt}, \texttt{stage\_stable}). (b),(e) are kernel \texttt{decide}
+computations. \qed
+
+\textbf{Convention on indexing.} The statement says the round deletes every $s_k$-th survivor,
+$s_k$ the $k$-th surviving number. Read literally with $s_1=1$ this deletes everything, so we use
+the standard sieve of A000959: the first round uses $2$ (the 2nd positive integer), and by
+Lemma~\ref{lem:faith}(c) round $k\ge 2$ uses the $k$-th lucky number $s_k=\ell_{k-1}$
+($3,7,9,13,\dots$), exactly as the statement describes. The argument below uses only the first two
+rounds ($m_0=2$, $m_1=3$).
+
+\section{The proof}
+
+\begin{lemma}[\texttt{stage\_one}, \texttt{stage\_two}, \texttt{stage\_two\_mod\_six}]
+$S_1(j)=2j+1$ and $S_2(j)=2(j+\lfloor j/2\rfloor)+1$. Hence every value of $S_2$ is $\equiv 1$ or
+$3 \pmod 6$.
+\end{lemma}
+\begin{proof}
+$m_0=S_0(1)=2$, so $S_1(j)=S_0(2j)=2j+1$. Then $m_1=S_1(1)=3$, so
+$S_2(j)=S_1(j+\lfloor j/2\rfloor)$. For $j=2q+r$, $r\in\{0,1\}$, this is $6q+2r+1$.
+\end{proof}
+
+\begin{lemma}[\texttt{range\_stage\_anti}, \texttt{IsLucky.mod\_six}]
+The ranges of $S_k$ decrease in $k$. Every lucky number is $\equiv 1$ or $3\pmod 6$. In particular
+$5$ is not lucky (\texttt{not\_isLucky\_five}).
+\end{lemma}
+\begin{proof}
+$S_{k+1}(j)=S_k(\cdot)$, so $\mathrm{range}\,S_{k+1}\subseteq\mathrm{range}\,S_k$. A lucky number
+lies in $\mathrm{range}\,S_2$.
+\end{proof}
+
+\begin{theorem}[\texttt{eq\_three\_of\_luckyPrime\_of\_prime\_add\_two},
+\texttt{luckyPrimes\_no\_gap\_two}, \texttt{twinPairs\_eq\_empty}]
+If $p$ is a lucky prime and $p+2$ is prime, then $p=3$. No two lucky primes differ by $2$, so
+the set of twin pairs in $\mathcal{L}\cap\mathcal{P}$ is empty.
+\end{theorem}
+\begin{proof}
+If $p\equiv 1\pmod 6$ then $3\mid p+2$, so the prime $p+2$ equals $3$ and $p=1$, which is not
+prime. If $p\equiv 3\pmod 6$ then $3\mid p$, so $p=3$. If $p$ and $p+2$ are both lucky primes,
+then $p=3$, but $p+2=5$ is not lucky.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture211\_false}]
+For every proposition $D$: $\neg\,(D \wedge \text{the set of twin pairs in } \mathcal{L}\cap
+\mathcal{P}\text{ is infinite})$.
+\end{theorem}
+
+Also proved: \texttt{twin\_lucky\_primes\_not\_infinite} (the set of $p$ with $p,p+2$ both lucky
+primes is not infinite; it is empty) and \texttt{weak\_twin\_finite} (even requiring only the smaller
+member to be a lucky prime and the larger to be prime gives only $p=3$).
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture211/Basic.lean} (278 lines, namespace \texttt{Conjecture211}, only
+import \texttt{Mathlib}). Main statement:
+\begin{verbatim}
+def twinPairs : Set (N x N) :=
+  {pq | pq.1 in luckyPrimes /\ pq.2 in luckyPrimes /\ pq.2 = pq.1 + 2}
+theorem conjecture211_false (DensityClaim : Prop) :
+    not (DensityClaim /\ twinPairs.Infinite)
+\end{verbatim}
+(ASCII rendering; \texttt{luckyPrimes = \{p | IsLucky p /\textbackslash{} p.Prime\}}.)
+\texttt{lake build} succeeds. \texttt{\#print axioms conjecture211\_false} gives
+\texttt{[propext, Classical.choice, Quot.sound]}; \texttt{lucky\_first\_ten} depends on no axioms.
+There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\section*{Sources}
+\begin{itemize}
+\item OEIS A000959, Lucky numbers, \url{https://oeis.org/A000959} (definition and data quoted
+above).
+\item Wikipedia, \emph{Twin prime}, \url{https://en.wikipedia.org/wiki/Twin_prime}: ``a twin prime
+is a prime that has a prime gap of two.''
+\item OEIS A031157, Numbers that are both lucky and prime, \url{https://oeis.org/A031157}, which
+remarks that ``lucky numbers cannot be congruent to 2 (mod 3).'' (Not used in the proof.)
+\end{itemize}
+
+\end{document}
