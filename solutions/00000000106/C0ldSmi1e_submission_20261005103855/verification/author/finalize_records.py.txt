@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+"""Validate saved final evidence and write a reproducibility inventory."""
+import hashlib, json, pathlib, re
+base=pathlib.Path('/private/tmp/tlmc106-auxiliary')
+project=pathlib.Path('/private/tmp/tlmc106-proof')
+source=project/'Conjecture106.lean'
+inspect=base/'Inspect.lean'
+pre=pathlib.Path('/private/tmp/tlmc106-semantic/preassessment.txt')
+sha=lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+before=json.loads((base/'environment-before-first-build.json').read_text())
+after=json.loads((base/'environment-after-final-checks.json').read_text())
+extended=json.loads((base/'environment-after-final-checks-full-compiler.json').read_text())
+assert before['all_nine_pinned_clean'] and after['all_nine_pinned_clean']
+assert before['config_sha256']==after['config_sha256']
+assert before['lean']==after['lean']
+assert extended['all_nine_pinned_clean']
+assert extended['config_sha256']==before['config_sha256']
+assert extended['lean']==before['lean']
+assert extended['lean_githash']['returncode']==0
+assert extended['lean_githash']['output'].strip()=='6caaee842e9495688c1567e78c0e68dbb96942aa'
+assert 'lean_githash' not in before
+assert sha(pre)=='bc395bbcd2d12045557e32fb57e612d040e53eed54bde5dcb425402bad49e819'
+assert not list((project/'Conjecture106').glob('**/*.lean'))
+for p in [source,inspect]:
+    assert not re.search(r'\b(sorry|admit|native_decide|unsafe|partial|axiom)\b',p.read_text()),p
+names=re.findall(r'^(?:noncomputable )?(?:def|theorem) (\w+)',source.read_text(),re.M)
+assert len(names)==9
+log=(base/'final-inspect-replay-06.log').read_text()
+entries=re.findall(r'^AXIOMS (\S+) : \[(.*?)\]',log,re.M|re.S)
+assert len(entries)==26
+allowed={'propext','Classical.choice','Quot.sound'}
+for name, axioms in entries:
+    assert {s.strip() for s in axioms.split(',') if s.strip()} <= allowed,(name,axioms)
+assert 'Lean.DefinitionSafety.unsafe' not in log
+assert log.count('Lean.DefinitionSafety.safe')==3
+for label in ['final-build-02','final-main-replay-02','final-inspect-replay-06','final-environment-audit']:
+    assert json.loads((base/(label+'.json')).read_text())['returncode']==0,label
+records=[]
+for p in sorted(base.glob('*.json')):
+    r=json.loads(p.read_text())
+    if 'argv' in r and 'returncode' in r:
+        records.append(r)
+result={'status':'PASS','source_sha256':sha(source),'inspection_source_sha256':sha(inspect),
+ 'preassessment_sha256':sha(pre),'explicit_declaration_count':len(names),
+ 'explicit_declarations':['Conjecture106.'+n for n in names],
+ 'compiled_namespace_declaration_count':len(entries),
+ 'compiled_namespace_declarations':sorted(name for name,_ in entries),
+ 'all_authored_namespace_axioms_within_standard_three':True,
+ 'all_authored_definitions_safe':True,'before_after_config_hashes_equal':True,
+ 'before_after_runtime_equal':True,'all_nine_dependencies_pinned_and_tracked_clean_before_and_after':True,
+ 'full_compiler_githash_after_only':extended['lean_githash']['output'].strip(),
+ 'pre_first_build_full_compiler_hash_not_recorded':True,
+ 'execution_records':records,
+ 'sha256':{str(p):sha(p) for p in [source,inspect,pre,
+   project/'lakefile.toml',project/'lake-manifest.json',project/'lean-toolchain',
+   base/'environment-before-first-build.json',base/'environment-after-final-checks.json',
+   base/'environment-after-final-checks-full-compiler.json',
+   base/'environment_audit.py',base/'run_logged.py',base/'finalize_records.py']}}
+out=base/'final-evidence.json'
+out.write_text(json.dumps(result,indent=2)+'\n')
+print('PASS; nine explicit declarations, 26 compiled namespace declarations; evidence:',out)

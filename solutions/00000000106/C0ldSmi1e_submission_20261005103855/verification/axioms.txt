@@ -1,0 +1,23 @@
+def Conjecture106.largestPrimeFactor : ℕ → ℕ :=
+fun m => m.primeFactors.sup id
+def Conjecture106.Good : ℕ → ℝ → ℕ → Prop :=
+fun k c n => 2 ≤ n ∧ ∀ (i : ℕ), 1 ≤ i → i ≤ k → ↑n ^ c < ↑(Conjecture106.largestPrimeFactor (n + i))
+def Conjecture106.Statement : Prop :=
+∀ (k : ℕ), 2 ≤ k → ∃ c, 0 < c ∧ {n | Conjecture106.Good k c n}.Infinite
+Conjecture106.largestPrimeFactor_spec {m : ℕ} (hm : 2 ≤ m) :
+  Nat.Prime (Conjecture106.largestPrimeFactor m) ∧
+    Conjecture106.largestPrimeFactor m ∣ m ∧ ∀ (q : ℕ), Nat.Prime q → q ∣ m → q ≤ Conjecture106.largestPrimeFactor m
+'Conjecture106.largestPrimeFactor_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture106.threshold_iff_prime_divisor {m : ℕ} (hm : 2 ≤ m) (t : ℝ) :
+  t < ↑(Conjecture106.largestPrimeFactor m) ↔ ∃ p, Nat.Prime p ∧ p ∣ m ∧ t < ↑p
+'Conjecture106.threshold_iff_prime_divisor' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture106.dyadic_primes {t : ℕ} (ht : 0 < t) :
+  ∃ p, StrictMono p ∧ ∀ (i : ℕ), Nat.Prime (p i) ∧ 2 ^ i * t < p i ∧ p i ≤ 2 ^ (i + 1) * t
+'Conjecture106.dyadic_primes' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture106.bounded_representative {k t : ℕ} (hk : 0 < k) (ht : k < t) (htpow : 2 ^ k ≤ t) :
+  ∃ n, t ≤ n ∧ n < t ^ (2 * k) ∧ ∀ i < k, ∃ p, Nat.Prime p ∧ p ∣ n + (i + 1) ∧ t < p
+'Conjecture106.bounded_representative' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture106.unbounded_good (k : ℕ) (hk : 2 ≤ k) (N : ℕ) : ∃ n, N < n ∧ Conjecture106.Good k (↑(2 * k))⁻¹ n
+'Conjecture106.unbounded_good' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture106.conjecture : Conjecture106.Statement
+'Conjecture106.conjecture' depends on axioms: [propext, Classical.choice, Quot.sound]

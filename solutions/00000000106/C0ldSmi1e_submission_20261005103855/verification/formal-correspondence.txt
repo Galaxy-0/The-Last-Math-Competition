@@ -1,0 +1,365 @@
+CONJECTURE 00000000106 — MATHEMATICAL AUTHOR HANDOFF
+Status: AUTHOR READY for the coordinator's fresh build and a separate nonauthor review.
+Result authored: proof of the full original largest-prime-factor assertion.
+Explicit valid exponent: c_k = 1/(2k), for every natural k >= 2.
+
+A. ROLE, INDEPENDENCE, AND INPUT PROVENANCE
+
+This agent first performed the candidate-106-only source-semantic assessment,
+without mathematical authorship, then received an explicit coordinator task to
+continue as author because a fresh author agent could not be spawned. The
+historical preassessment was preserved byte-for-byte. The preassessment and this
+authorship are NOT independent of one another. The final semantic review must be
+performed by a separate nonauthor, and this document does not claim that review
+has occurred.
+
+At the start of authorship the mathematical context consisted only of this
+candidate's exact bilingual source, both complete current guides, the clean
+handoff, and the completed meaning assessment. No proof direction, strategy,
+witness, counterexample, or prior mathematical contribution was supplied by the
+coordinator. I independently selected the proof direction and derived the
+argument below. I did not read audit_leads, prior submissions/attempts, any other
+problem's mathematical files, another agent's mathematical notes, or solution
+literature. The shared directory named tlmc310 was accessed ONLY for its supplied
+Lean runtime and pinned dependency packages. No prior mathematical file from that
+project was copied or consulted. This is an independent derivation claim within
+the stated work session, not a claim of historical originality of the argument.
+
+Inputs (all SHA-256):
+conjecture.md: 85bba37dc67988490c08421b91158d072c14cb3dc59e7972e6b0dd4fb884802a
+README.md: baf790af419e0070f593eecea4861fd865cc7b544d2cde6ec674f8fc587b01d1
+README.zh-CN.md: d07ac1ccd888b8ee08fed8eb2e06ae15f6aa4025dbafe98790f8e2b2fc18eba7
+clean-math-handoff.json: 3fe74968e838bd12c85cc582c82ea42d19b766212f6291bc7daf09c35921a43a
+All four inputs are under /private/tmp/tlmc106-eligibility/.
+The eligibility PASS record hash was supplied as
+2400842563c3ac57106a3d32a8750eb602431d9ac5f9c1c60b71969919abf9e0;
+that record and its underlying lead records were not read by this author.
+
+Historical source-semantic report:
+/private/tmp/tlmc106-semantic/preassessment.txt
+SHA-256 bc395bbcd2d12045557e32fb57e612d040e53eed54bde5dcb425402bad49e819
+
+Final mathematical source:
+/private/tmp/tlmc106-proof/Conjecture106.lean
+SHA-256 64d01c4f3290e4c588c7d1ffbcec551093f8b4725573b5cbc021b2448c799a66
+
+B. COMPLETE MATHEMATICAL ARGUMENT
+
+Let k be any natural number with k >= 2. Set c_k = 1/(2k), a positive real number.
+To produce a qualifying integer beyond an arbitrary natural bound N, set
+
+    t = max(2^k, N+k+3).
+
+Thus t>k, t>N, t>=2, and t>=2^k. For each nonnegative integer j, Bertrand's
+postulate supplies a prime p_j such that
+
+    2^j t < p_j <= 2^(j+1) t.
+
+These primes are strictly increasing: if i<j, then i+1<=j, so
+p_i <= 2^(i+1)t <= 2^j t < p_j. In particular p_0,...,p_(k-1) are distinct
+primes and hence pairwise coprime. Every p_j exceeds t, so for j<k it also exceeds
+j+1. The natural subtraction p_j-(j+1) is therefore the intended residue.
+
+By the finite Chinese remainder theorem, there is a representative n with
+
+    0 <= n < product_(j=0)^(k-1) p_j
+    n congruent to p_j-(j+1) modulo p_j  for every j<k.
+
+Adding j+1 gives p_j | n+(j+1). For j=0, p_0 | n+1 and n+1>0, whence
+p_0 <= n+1. Since p_0>t, the natural-number inequalities imply n>=t. Thus n>N
+and n>=2; the bounded CRT representative cannot stay small as t grows.
+
+For j<k, its size satisfies
+
+    p_j <= 2^(j+1)t <= 2^k t <= t^2.
+
+Consequently
+
+    n < product_(j=0)^(k-1) p_j <= (t^2)^k = t^(2k).
+
+Since 2k>0 and n,t are nonnegative, monotonicity of positive real powers gives
+
+    n^(1/(2k)) < t < p_j     for every j<k.
+
+For the original offset i in {1,...,k}, take j=i-1. Then p_j is a prime divisor
+of n+i. Its actual largest prime divisor P(n+i) is at least p_j, so
+
+    n^c_k < p_j <= P(n+i).
+
+Every offset holds for the SAME n and SAME c_k. Since N was arbitrary, the set
+of these n is unbounded in the naturals and therefore infinite. This proves the
+full source assertion for every k>=2, with no hypothesis on k beyond that in the
+source and no change to the strict real inequality.
+
+The largest-prime-factor meaning is proved separately in Lean. For m>=2,
+Nat.primeFactors m is nonempty, every member is prime and divides m, and its
+finite supremum is a member dominating every other prime divisor. Hence it is
+the actual largest prime factor. The exact threshold equivalence with the
+existence of some prime divisor above the same real threshold is also proved.
+No numerical search, finite experiment, heuristic estimate, or unproved
+asymptotic statement enters this argument.
+
+C. SEMANTIC MAPPING TO THE SOURCE AND PREASSESSMENT GATES
+
+G1: Statement quantifies over every k : Nat with 2 <= k. The final theorem has
+no remaining hypotheses or restricted family of k.
+
+G2: Statement existentially quantifies c : Real before the infinite set of n.
+The proof chooses the single positive real ((2*k : Nat) : Real)^(-1), depending
+only on k. It is independent of N, n, and i. The natural multiplication is cast
+to Real BEFORE inversion, so there is no natural-number division or truncation.
+
+G3: Good k c n quantifies all offsets inside its predicate for one fixed n and
+c. The CRT construction establishes all divisibilities simultaneously; no
+intersection of separately infinite sets is assumed.
+
+G4: Good uses 1 <= i and i <= k. The CRT uses j in range k and shift j+1;
+unbounded_good explicitly proves i-1+1=i when returning to the original index.
+The input to the factor function is n+i, with both endpoints n+1 and n+k.
+
+G5: largestPrimeFactor m is Nat.primeFactors m |>.sup id with the standard Nat
+lattice and bottom. largestPrimeFactor_spec proves primality, divisibility, and
+maximality for every m>=2. threshold_iff_prime_divisor proves the exact
+existential-prime-factor bridge, which unbounded_good uses. This is the actual
+largest prime factor, not a least prime factor or a surrogate divisor.
+
+G6: Good uses strict Real LT on (n : Real)^c and (largestPrimeFactor (n+i) : Real).
+The printed fully explicit body shows Real.instPow, whose body is Real.rpow.
+The base is n for every offset, not n+i. Real.rpow_inv_lt_iff_of_pos and
+Real.rpow_natCast connect the checked natural bound n<t^(2*k) to this strict
+real-power bound. Positivity/nonnegativity side conditions are discharged.
+
+G7: Statement uses the standard Set.Infinite on a subset of Nat. unbounded_good
+proves a qualifying n>N for every N. conjecture applies the standard
+Set.infinite_iff_exists_gt. No infinite indexing set with repeated outputs is
+used as a substitute for infinitude of n.
+
+Boundary conventions: Good requires n>=2, so every n+i in question is >=3.
+The finite-supremum implementation assigns zero at 0 and 1. The historical
+preassessment displayed an illustrative totalization with value one there and
+explicitly allowed other fixed boundary values (B2/B3). The implementation
+agrees with the same actual function on every input used by Good. Excluding
+n=0,1 cannot change an infinitude assertion; moreover this PROOF directly
+provides infinitely many valid positive n, so no undefined boundary value is
+used in either its hypotheses or its conclusion.
+
+B3 is realized by largestPrimeFactor_spec. B4 is the formally proved
+threshold_iff_prime_divisor. B5 is the exact Mathlib infinitude/unboundedness
+lemma used in the final theorem. The label "rough numbers" does not alter the
+explicit bilingual assertion about largest prime factors.
+
+D. DECLARATIONS AND TRUST/NOTATION INSPECTION
+
+There is one mathematical Lean source file. No mathematical source occurs in
+the initially empty Conjecture106/ directory. Nine explicit declarations are
+authored: three definitions and six theorems.
+
+Definitions:
+1. Conjecture106.largestPrimeFactor : Nat -> Nat
+2. Conjecture106.Good : Nat -> Real -> Nat -> Prop
+3. Conjecture106.Statement : Prop
+
+Theorems:
+4. Conjecture106.largestPrimeFactor_spec
+5. Conjecture106.threshold_iff_prime_divisor
+6. Conjecture106.dyadic_primes
+7. Conjecture106.bounded_representative
+8. Conjecture106.unbounded_good
+9. Conjecture106.conjecture : Conjecture106.Statement
+
+The final compiled namespace contains 26 declarations: those nine plus these
+17 elaborator-generated equations/proof helpers:
+Conjecture106.largestPrimeFactor.eq_1
+Conjecture106.largestPrimeFactor_spec._proof_1
+Conjecture106.largestPrimeFactor_spec._proof_2
+Conjecture106.dyadic_primes._proof_1
+Conjecture106.bounded_representative._proof_1
+Conjecture106.bounded_representative._proof_2
+Conjecture106.bounded_representative._proof_3
+Conjecture106.bounded_representative._proof_4
+Conjecture106.bounded_representative._proof_5
+Conjecture106.bounded_representative._proof_6
+Conjecture106.unbounded_good._proof_1
+Conjecture106.unbounded_good._proof_2
+Conjecture106.unbounded_good._proof_3
+Conjecture106.unbounded_good._proof_4
+Conjecture106.unbounded_good._proof_5
+Conjecture106.unbounded_good._proof_6
+Conjecture106.unbounded_good._proof_7
+
+/private/tmp/tlmc106-auxiliary/Inspect.lean enumerates the compiled namespace,
+prints EVERY one of those declaration types and axiom dependencies, prints
+every definition's safety and body, and additionally prints the three explicit
+definitions with pp.all=true. It has been compiled and replayed with warnings
+as errors. Its final SHA-256 is
+48e6b121aed32e0c4be07d6b256af4391ce7997dae8621c935d4b09d93b1bda8.
+
+I inspected the final output in final-inspect-replay-06.log in full. All 26
+declarations have axiom dependencies contained in the standard three:
+propext, Classical.choice, Quot.sound. The final theorem has exactly those three.
+All three namespace definitions have DefinitionSafety.safe. There is no custom
+axiom, sorry, admit, native_decide, unsafe source declaration, partial definition,
+or kernel bypass. A saved validation script also checks the source tokens and
+these final audit records, while the declaration inspection—not the token scan—
+provides the semantic and axiom evidence.
+
+The final function definition is marked noncomputable to suppress unnecessary
+runtime compilation of the finite supremum. An earlier ordinary computable def
+caused Lean to emit three automatic unsafe compiler-stage artifacts, including
+a compiler-specialization placeholder, though the mathematical theorem already
+depended only on the standard axioms. I changed only the noncomputable annotation,
+rebuilt and replayed everything, and verified those runtime artifacts are absent
+from the final 26-declaration namespace. This is a trust-artifact cleanup, not a
+change to the mathematical value or statement. The historical earlier audit
+outputs are retained and must not be mistaken for the final artifact audit.
+
+The inspected notation instances are Real.instPow (body: pow := Real.rpow),
+Nat's standard monoid natural power, Real.instLT, instLENat, Nat.instDvd,
+Real.instNatCast, and Nat.instOrderBot (bottom zero). Nat.instDvd is ordinary
+natural divisibility; Nat.prime_def identifies Nat.Prime with the conventional
+prime predicate. Set.Infinite is the negation of standard Set.Finite. No new
+instance, notation, or local replacement for any of these was authored.
+
+E. PINNED ENVIRONMENT BEFORE FIRST BUILD AND AFTER FINAL LEAN CHECKS
+
+Runtime path:
+/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin
+Version in BOTH snapshots: Lean 4.19.0, arm64-apple-darwin23.6.0,
+commit 6caaee842e94, Release.
+The initial before-first-build snapshot recorded --version, including this
+12-character commit prefix, but did NOT record --githash. This is a provenance
+limitation; there is no contemporaneous full-hash-before-first-build evidence
+from this author, and none has been reconstructed or backdated. At the
+coordinator's request, environment_audit.py was extended and separately run at
+2026-10-05T10:15:20 UTC with label after-final-checks-full-compiler. Its actual
+--githash output is 6caaee842e9495688c1567e78c0e68dbb96942aa. The new timestamped
+snapshot also rechecks all nine pinned/clean dependencies and unchanged configs.
+Both earlier snapshots remain intact. The coordinator's fresh verification will
+record the full compiler hash before and after its own run.
+Auxiliary Python: Python 3.14.2, Clang 17.0.0; all scripts use standard library only.
+
+Both snapshots record actual git rev-parse HEAD and git status --porcelain
+--untracked-files=no for all nine dependencies, with exit status and raw output.
+Every HEAD matches the supplied manifest; every tracked status is empty BEFORE
+the first build and AFTER the final Lean checks:
+
+mathlib          c44e0c8ee63ca166450922a373c7409c5d26b00b
+plausible        77e08eddc486491d7b9e470926b3dbe50319451a
+LeanSearchClient 25078369972d295301f5a1e53c3e5850cf6d9d4c
+importGraph      e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b
+proofwidgets     c4919189477c3221e6a204008998b0d724f49904
+aesop            5d50b08dedd7d69b3d9b3176e0d58a23af228884
+Qq               fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02
+batteries        f5d04a9c4973d401c8c92500711518f7c656f034
+Cli              02dbd02bc00ec4916e99b04b2245b30200e200d0
+
+Configurations were not edited; before/after SHA-256 values are identical:
+lakefile.toml: a65e09ccec0d5c7aa4b0d6f6322fdd07e321f3d1947eecc48fe77d96134784c1
+lake-manifest.json: b0386a153fa1ecb98c8039dabbaa3ae1de9b651cb161013c0ce3c7ae5c8bc5c3
+lean-toolchain: 55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea
+
+No dependency source or pin was edited. The only dependency writes were ordinary
+build outputs for previously uncached modules. No installation, network fetch,
+Git/worktree mutation, external comment, or publication was performed by this
+author. Git commands were read-only dependency identity/status checks.
+
+F. AUXILIARY PROGRAMS, ACTUAL EXECUTIONS, AND FAILURES
+
+All auxiliary files and raw build/audit logs are in
+/private/tmp/tlmc106-auxiliary/.
+
+Programs, all actually run:
+- environment_audit.py: records Lean version, all nine pinned HEADs and tracked
+  status, and config hashes. Run before-first-build directly, then run with
+  after-final-checks through run_logged.py. Both passed. Subsequently extended
+  to capture --githash and run as after-final-checks-full-compiler; that run also
+  passed. The earlier records correctly lack the added field.
+- run_logged.py: invokes the exact argument vector in cwd /private/tmp/tlmc106-proof
+  with the pinned runtime prepended to PATH; saves combined output, return code,
+  UTC start, duration, argument vector, and cwd for each invocation below.
+- Inspect.lean: compiled namespace/type/body/axiom/instance inspection described
+  above; final run succeeded and wrote Inspect.olean. It adds no mathematical
+  theorem or hypothesis to the proof.
+- finalize_records.py: validates the recorded final successes, all 26 standard
+  axiom closures, safe definitions, unchanged preassessment/configuration/runtime,
+  dependency snapshots, and forbidden-token absence. It writes final-evidence.json
+  with declaration inventories, hashes, and the prior exact execution records.
+  Its own executions are separately recorded in final-evidence-check.json/.log
+  and final-evidence-check-02.json/.log. The latter also validates the added
+  full-compiler snapshot and explicitly records the missing initial full hash.
+
+Each label below has a .json exact execution record and .log raw output. No failed
+run was overwritten or removed:
+
+1. development-01: lake env lean -DwarningAsError=true Conjecture106.lean.
+   Exit 1: pinned Bertrand.olean was not cached yet.
+2. dependency-build-01: lake build +Mathlib.NumberTheory.Bertrand
+   +Mathlib.Data.Nat.ChineseRemainder +Mathlib.Data.Nat.PrimeFin
+   +Mathlib.Analysis.SpecialFunctions.Pow.Real
+   +Mathlib.Order.Interval.Finset.Basic +Mathlib.Tactic.
+   Exit 0; built missing pinned dependency artifacts from their existing sources.
+3. development-02: main direct replay. Exit 1: Finset.le_sup needed explicit
+   f:=id; infix 'on' was not open, replaced with an explicit relation.
+4. development-03: main direct replay. Exit 1: Finset.prod_le_prod first required
+   the nonnegativity premise, supplied as Nat.zero_le.
+5. development-04: main direct replay. Exit 0; full mathematical proof checked.
+6. final-build: lake build. Exit 0.
+7. final-main-replay: direct main replay with -DwarningAsError=true. Exit 0.
+8. final-inspect-replay: inspection command with -o outside project root.
+   Exit 1: needed the explicit -R auxiliary source root.
+9. final-inspect-replay-02: inspection with corrected -R. Exit 1: unsupported
+   '#print prefix' syntax, replaced by environment enumeration.
+10. final-inspect-replay-03: inspection. Exit 1: quoted namespace Name required
+    parentheses before .isPrefixOf; corrected.
+11. final-inspect-replay-04: inspection. Exit 0; discovered total namespace count.
+12. final-inspect-replay-05: expanded all-declaration inspection. Exit 0;
+    identified automatic runtime compiler-stage artifacts, then marked the factor
+    definition noncomputable as explained above.
+13. final-build-02: lake build. Exit 0; FINAL mathematical source build.
+14. final-main-replay-02: lake env lean -DwarningAsError=true Conjecture106.lean.
+    Exit 0; FINAL main source direct replay.
+15. final-inspect-replay-06: lake env lean -R /private/tmp/tlmc106-auxiliary
+    -DwarningAsError=true -o /private/tmp/tlmc106-auxiliary/Inspect.olean
+    /private/tmp/tlmc106-auxiliary/Inspect.lean.
+    Exit 0; FINAL inspection source build/direct replay, full 26-declaration audit.
+16. final-environment-audit: python3 environment_audit.py after-final-checks.
+    Exit 0; all nine pinned and tracked clean, unchanged config and runtime.
+17. final-evidence-check: python3 finalize_records.py.
+    Exit 0; PASS. This script's own command and output are separately recorded
+    because final-evidence.json is produced before its wrapping invocation exits.
+18. final-full-compiler-audit: python3 environment_audit.py
+    after-final-checks-full-compiler. Exit 0; actual --version and --githash,
+    all nine dependencies pinned/clean, and unchanged configuration.
+19. final-evidence-check-02: python3 finalize_records.py. Exit 0; FINAL evidence
+    validation after including the full compiler hash and its timing limitation.
+
+The initial before-first-build command was
+python3 /private/tmp/tlmc106-auxiliary/environment_audit.py before-first-build.
+It ran before development-01 and wrote environment-before-first-build.json,
+including timestamps, all 19 actual subprocess calls, exit codes, and raw output.
+The after snapshot is environment-after-final-checks.json.
+
+Read-only discovery used local source searches for Bertrand, CRT, finite suprema,
+prime factors, and real powers. Two incidental path guesses returned missing-file
+messages: lakefile.lean (the supplied project uses lakefile.toml), and an optional
+runtime Init/Data/Nat/Prime.lean lookup (Nat's relevant Mathlib prime definitions
+were found and inspected). Neither was used as evidence of a successful build.
+All substantive build/replay/programmatic audit commands have the exact saved
+records described above. There were no numerical auxiliary programs or external
+services supporting the mathematics.
+
+G. LIMITS AND HANDOFF STATE
+
+All authored mathematical and inspection Lean sources have a successful FINAL
+warning-as-error replay. The project library build succeeds. The compiled main
+module and inspection module exist; logs and both dependency snapshots are fixed.
+The original preassessment remains unchanged. All commands launched by this
+author have completed; there is no live build, interpreter, or background author
+process being left running.
+
+This is the author's checked result, not the separate final semantic review.
+The coordinator still needs to perform its promised fresh build, independent
+compiled-constant/closure audit, matching LaTeX/PDF preparation, and nonauthor
+review before deciding whether to publish. The coordinator should use the FINAL
+source hash and final-inspect-replay-06 output, not earlier retained development
+outputs. The present handoff makes no claim of first publication or priority.

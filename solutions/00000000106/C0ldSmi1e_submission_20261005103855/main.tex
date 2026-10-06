@@ -1,0 +1,168 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,array}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\N}{\mathbb N}
+\newcommand{\R}{\mathbb R}
+\title{A proof of conjecture 00000000106}
+\author{C0ldSmi1e}
+\date{October 5, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+For each integer $k\ge2$, the exponent $c_k=1/(2k)$ works: there are
+infinitely many natural numbers $n$ for which every one of
+$n+1,\ldots,n+k$ has a prime factor larger than $n^{c_k}$.
+We prove this using Bertrand's postulate and a bounded Chinese remainder
+representative. The accompanying Lean project proves the assertion for the
+actual largest prime factor, with a single exponent fixed for each $k$.
+\end{abstract}
+
+\section{Statement and interpretation}
+The English source states:
+\begin{quote}
+Conjecture: (Family of consecutive rough numbers) For every $k\ge2$ there
+exists $c_k>0$ such that infinitely many $n$ satisfy: the largest prime factor
+of each of $n+1,\ldots,n+k$ exceeds $n^{c_k}$.
+\end{quote}
+The Chinese source gives the same quantifiers and largest-prime-factor
+condition. Let $P(m)$ denote the greatest prime divisor of $m\ge2$.
+The explicit condition concerns the \emph{largest} prime factor; the word
+``rough'' in the title introduces no additional condition on smaller factors.
+All powers in the statement are real powers.
+
+We prove a stronger, explicit formulation with $n\ge2$:
+\begin{theorem}\label{thm:main}
+For every $k\in\N$ with $k\ge2$ and every $N\in\N$, there is an integer
+$n>N$, with $n\ge2$, such that
+\[
+  n^{1/(2k)}<P(n+i)\qquad(1\le i\le k).
+\]
+Consequently the conjecture holds with $c_k=1/(2k)>0$.
+\end{theorem}
+Restricting to $n\ge2$ suffices for the original infinitude claim, and ensures
+that every argument of $P$ is at least two. The exponent depends only on $k$;
+neither the bound $N$ nor the offset $i$ changes it.
+
+\section{Proof}
+Fix $k\ge2$ and $N\in\N$, and put
+\[
+ t=\max\{2^k,N+k+3\}.
+\]
+Then $t>k$, $t>N$, $t\ge2$, and $2^k\le t$.
+By Bertrand's postulate, for each $j=0,\ldots,k-1$ choose a prime $p_j$ with
+\begin{equation}\label{eq:primes}
+  2^j t<p_j\le 2^{j+1}t.
+\end{equation}
+These primes are strictly increasing: if $j<\ell$, then
+$p_j\le2^{j+1}t\le2^\ell t<p_\ell$. Hence they are pairwise coprime.
+Also $p_j>t>k\ge j+1$, so $p_j-(j+1)$ is a natural number.
+
+The Chinese remainder theorem supplies the representative $n$ satisfying
+\begin{equation}\label{eq:crt}
+  0\le n<\prod_{j=0}^{k-1}p_j,
+  \qquad n\equiv p_j-(j+1)\pmod{p_j}
+  \quad(0\le j<k).
+\end{equation}
+It follows that $p_j\mid n+(j+1)$ for every $j$.
+In particular, $p_0\mid n+1$. Because $n+1$ is positive,
+$p_0\le n+1$. The strict integer inequality $t<p_0$ then implies
+$t\le n$. This lower bound is essential: the bounded CRT representative
+grows beyond every prescribed $N$, since $n\ge t>N$.
+
+For every $j<k$, \eqref{eq:primes} and $2^k\le t$ give
+\[
+  p_j\le2^{j+1}t\le2^kt\le t^2.
+\]
+Combining this with the strict bound in \eqref{eq:crt} yields
+\[
+  n<\prod_{j=0}^{k-1}p_j\le(t^2)^k=t^{2k}.
+\]
+Since $n,t$ are positive and $2k>0$, monotonicity of positive real powers gives
+\[
+  n^{1/(2k)}<t<p_j\le P(n+j+1)
+  \qquad(0\le j<k).
+\]
+Substituting $i=j+1$ proves the simultaneous inequalities in
+Theorem~\ref{thm:main}. The construction works for every $N$, so the set of
+qualifying natural numbers is unbounded and therefore infinite.
+\hfill$\square$
+
+\section{Formalization and verification}
+The project uses Lean 4.19.0 and Mathlib v4.19.0. Its main file is
+\texttt{Conjecture106.lean}, in namespace \texttt{Conjecture106}.
+For $m\ge2$, its definition reads
+\[
+  \texttt{largestPrimeFactor}(m)
+    =\sup\{p\in\N:p\text{ is a prime divisor of }m\}
+\]
+using the finite set \texttt{Nat.primeFactors}. At zero and one this
+finite-set convention returns zero. Those inputs are never used in the
+conjecture. The theorem \texttt{largestPrimeFactor\_spec} proves, for every
+$m\ge2$, that the defined value is prime, divides $m$, and is at least every
+prime divisor of $m$. The theorem \texttt{threshold\_iff\_prime\_divisor}
+proves the exact equivalence
+\[
+  x<P(m)\quad\Longleftrightarrow\quad
+  \exists p\in\N\ (p\text{ prime},\ p\mid m,\ x<p)
+  \qquad(m\ge2, x\in\R).
+\]
+Thus the chosen prime divisors establish precisely the asserted condition
+on the greatest prime divisor.
+
+\noindent The remaining declarations follow the mathematical proof:
+\begin{center}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.37\linewidth}
+                    >{\raggedright\arraybackslash}p{0.57\linewidth}@{}}
+\toprule
+Declaration & Meaning \\
+\midrule
+\texttt{Good}, \texttt{Statement} & The simultaneous strict inequalities
+and the full quantifier order of the conjecture. \\
+\texttt{dyadic\_primes} & Strictly increasing primes in successive intervals
+$(2^j t,2^{j+1}t]$. \\
+\texttt{bounded\_representative} & A CRT representative with
+$t\le n<t^{2k}$ and the required prime divisors. \\
+\texttt{unbounded\_good} & A qualifying $n>N$ for every bound $N$,
+with the fixed exponent $1/(2k)$. \\
+\texttt{conjecture} & The full statement, including ordinary set infinitude. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The project pins all dependencies in \texttt{lake-manifest.json}.
+The included verification records distinguish compilation and local semantic
+review from any subsequent maintainer decision. They record a fresh build
+of the submitted sources against the pinned dependency cache, replay with
+warnings treated as errors, declaration types and axiom dependencies, and
+inspection of all constants originating in the submitted proof module.
+There are no admitted proofs, custom axioms, or \texttt{native\_decide} calls.
+The accepted axiom dependencies are only Lean's standard
+\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+The mathematical argument requires no external numerical computation.
+Auxiliary inspection programs and their execution records are supplied for
+reproducibility; they are not imported by the proof.
+
+\paragraph{Main verification commands.}
+From the included Lean project, after installing its pinned dependencies:
+\begin{verbatim}
+lake build
+lake env lean -DwarningAsError=true Conjecture106.lean
+lake env lean -DwarningAsError=true Check.lean
+\end{verbatim}
+The submission's verification instructions explain how to rerun the full
+auxiliary audit and locate its recorded results.
+
+\paragraph{Library results.}
+The construction uses Mathlib's
+\texttt{Nat.exists\_prime\_lt\_and\_le\_two\_mul},
+\texttt{Nat.chineseRemainderOfFinset}, and
+\texttt{Nat.chineseRemainderOfFinset\_lt\_prod}.
+The conversion to the real exponent uses
+\texttt{Real.rpow\_inv\_lt\_iff\_of\_pos} and
+\texttt{Real.rpow\_natCast}; infinitude uses
+\texttt{Set.infinite\_iff\_exists\_gt} on the natural numbers.
+\end{document}

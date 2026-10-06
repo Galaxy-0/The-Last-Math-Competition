@@ -1,0 +1,104 @@
+PAGE 1
+A proof of conjecture 00000000106
+C0ldSmi1e
+October 5, 2026
+Abstract
+For each integer k ≥ 2, the exponent ck = 1/(2k) works: there are inﬁnitely many natural
+numbers n for which every one of n + 1, . . . , n+ k has a prime factor larger than nck . We
+prove this using Bertrand’s postulate and a bounded Chinese remainder representative. The
+accompanying Lean project proves the assertion for the actual largest prime factor, with a
+single exponent ﬁxed for each k.
+1 Statement and interpretation
+The English source states:
+Conjecture: (Family of consecutive rough numbers) For every k ≥ 2 there exists
+ck > 0 such that inﬁnitely many n satisfy: the largest prime factor of each of
+n + 1, . . . , n+ k exceeds nck .
+The Chinese source gives the same quantiﬁers and largest-prime-factor condition. Let P (m)
+denote the greatest prime divisor of m ≥ 2. The explicit condition concerns the largest prime
+factor; the word “rough” in the title introduces no additional condition on smaller factors. All
+powers in the statement are real powers.
+We prove a stronger, explicit formulation with n ≥ 2:
+Theorem 1. For every k ∈ N with k ≥ 2 and every N ∈ N, there is an integer n > N , with
+n ≥ 2, such that
+n1/(2k) < P (n + i) (1 ≤ i ≤ k).
+Consequently the conjecture holds with ck = 1/(2k) > 0.
+Restricting to n ≥ 2 suﬃces for the original inﬁnitude claim, and ensures that every argument
+of P is at least two. The exponent depends only on k; neither the bound N nor the oﬀset i
+changes it.
+2 Proof
+Fix k ≥ 2 and N ∈ N, and put
+t = max{2k, N+ k + 3}.
+Then t > k , t > N , t ≥ 2, and 2k ≤ t. By Bertrand’s postulate, for each j = 0, . . . , k− 1 choose
+a prime pj with
+2jt < p j ≤ 2j+1t. (1)
+These primes are strictly increasing: if j < ℓ , then pj ≤ 2j+1t ≤ 2ℓt < p ℓ. Hence they are
+pairwise coprime. Also pj > t > k ≥ j + 1, so pj − (j + 1) is a natural number.
+1
+
+PAGE 2
+The Chinese remainder theorem supplies the representative n satisfying
+0 ≤ n <
+k−1∏
+j=0
+pj, n ≡ pj − (j + 1) (mod pj) (0 ≤ j < k ). (2)
+It follows that pj |n + (j + 1) for every j. In particular, p0 |n + 1. Because n + 1 is positive,
+p0 ≤ n + 1. The strict integer inequality t < p 0 then implies t ≤ n. This lower bound is essential:
+the bounded CRT representative grows beyond every prescribed N , since n ≥ t > N .
+For every j < k , ( 1) and 2k ≤ t give
+pj ≤ 2j+1t ≤ 2kt ≤ t2.
+Combining this with the strict bound in ( 2) yields
+n <
+k−1∏
+j=0
+pj ≤ (t2)k = t2k.
+Since n, tare positive and 2k > 0, monotonicity of positive real powers gives
+n1/(2k) < t < p j ≤ P (n + j + 1) (0 ≤ j < k ).
+Substituting i = j + 1 proves the simultaneous inequalities in Theorem 1. The construction
+works for every N , so the set of qualifying natural numbers is unbounded and therefore inﬁnite.
+□
+3 Formalization and veriﬁcation
+The project uses Lean 4.19.0 and Mathlib v4.19.0. Its main ﬁle is Conjecture106.lean, in
+namespace Conjecture106. For m ≥ 2, its deﬁnition reads
+largestPrimeFactor(m) = sup {p ∈ N : p is a prime divisor of m}
+using the ﬁnite set Nat.primeFactors. At zero and one this ﬁnite-set convention returns zero.
+Those inputs are never used in the conjecture. The theorem largestPrimeFactor_spec proves,
+for every m ≥ 2, that the deﬁned value is prime, divides m, and is at least every prime divisor
+of m. The theorem threshold_iff_prime_divisor proves the exact equivalence
+x < P (m) ⇐ ⇒ ∃ p ∈ N (p prime, p |m, x < p ) ( m ≥ 2, x∈ R).
+Thus the chosen prime divisors establish precisely the asserted condition on the greatest prime
+divisor.
+The remaining declarations follow the mathematical proof:
+Declaration Meaning
+Good, Statement The simultaneous strict inequalities and the full
+quantiﬁer order of the conjecture.
+dyadic_primes Strictly increasing primes in successive intervals
+(2jt,2j+1t].
+bounded_representative A CRT representative with t ≤ n < t 2k and the
+required prime divisors.
+unbounded_good A qualifying n > N for every bound N , with the ﬁxed
+exponent 1/(2k).
+conjecture The full statement, including ordinary set inﬁnitude.
+2
+
+PAGE 3
+The project pins all dependencies in lake-manifest.json. The included veriﬁcation records
+distinguish compilation and local semantic review from any subsequent maintainer decision.
+They record a fresh build of the submitted sources against the pinned dependency cache, replay
+with warnings treated as errors, declaration types and axiom dependencies, and inspection
+of all constants originating in the submitted proof module. There are no admitted proofs,
+custom axioms, or native_decide calls. The accepted axiom dependencies are only Lean’s
+standard propext, Classical.choice, and Quot.sound. The mathematical argument requires
+no external numerical computation. Auxiliary inspection programs and their execution records
+are supplied for reproducibility; they are not imported by the proof.
+Main veriﬁcation commands. From the included Lean project, after installing its pinned
+dependencies:
+lake build
+lake env lean -DwarningAsError=true Conjecture106.lean
+lake env lean -DwarningAsError=true Check.lean
+The submission’s veriﬁcation instructions explain how to rerun the full auxiliary audit and locate
+its recorded results.
+Library results. The construction uses Mathlib’s Nat.exists_prime_lt_and_le_two_mul,
+Nat.chineseRemainderOfFinset, and Nat.chineseRemainderOfFinset_lt_prod. The con-
+version to the real exponent uses Real.rpow_inv_lt_iff_of_pos and Real.rpow_natCast;
+inﬁnitude uses Set.infinite_iff_exists_gt on the natural numbers.
+3

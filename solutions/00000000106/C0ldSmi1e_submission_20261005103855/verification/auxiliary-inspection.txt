@@ -1,0 +1,186 @@
+Conjecture106 namespace declaration count: 26
+Conjecture106 namespace declarations: [Conjecture106.threshold_iff_prime_divisor,
+ Conjecture106.unbounded_good._proof_7,
+ Conjecture106.dyadic_primes,
+ Conjecture106.bounded_representative,
+ Conjecture106.largestPrimeFactor_spec._proof_2,
+ Conjecture106.unbounded_good._proof_2,
+ Conjecture106.dyadic_primes._proof_1,
+ Conjecture106.unbounded_good,
+ Conjecture106.largestPrimeFactor,
+ Conjecture106.conjecture,
+ Conjecture106.bounded_representative._proof_2,
+ Conjecture106.unbounded_good._proof_4,
+ Conjecture106.Good,
+ Conjecture106.largestPrimeFactor.eq_1,
+ Conjecture106.unbounded_good._proof_1,
+ Conjecture106.largestPrimeFactor_spec._proof_1,
+ Conjecture106.bounded_representative._proof_4,
+ Conjecture106.bounded_representative._proof_5,
+ Conjecture106.unbounded_good._proof_3,
+ Conjecture106.bounded_representative._proof_3,
+ Conjecture106.largestPrimeFactor_spec,
+ Conjecture106.unbounded_good._proof_6,
+ Conjecture106.bounded_representative._proof_1,
+ Conjecture106.bounded_representative._proof_6,
+ Conjecture106.Statement,
+ Conjecture106.unbounded_good._proof_5]
+DECLARATION Conjecture106.threshold_iff_prime_divisor : ∀ {m : ℕ},
+  2 ≤ m → ∀ (t : ℝ), t < ↑(Conjecture106.largestPrimeFactor m) ↔ ∃ p, Nat.Prime p ∧ p ∣ m ∧ t < ↑p
+AXIOMS Conjecture106.threshold_iff_prime_divisor : [propext, Quot.sound, Classical.choice]
+DECLARATION Conjecture106.unbounded_good._proof_7 : ∀ (k N : ℕ),
+  k < max (2 ^ k) (N + k + 3) →
+    ∀ (n : ℕ), max (2 ^ k) (N + k + 3) ≤ n → ∀ (i : ℕ), 1 ≤ i → i ≤ k → ℕ → i - 1 + 1 = i → ¬2 ≤ n + i → False
+AXIOMS Conjecture106.unbounded_good._proof_7 : [propext, Quot.sound]
+DECLARATION Conjecture106.dyadic_primes : ∀ {t : ℕ},
+  0 < t → ∃ p, StrictMono p ∧ ∀ (i : ℕ), Nat.Prime (p i) ∧ 2 ^ i * t < p i ∧ p i ≤ 2 ^ (i + 1) * t
+AXIOMS Conjecture106.dyadic_primes : [propext, Classical.choice, Quot.sound]
+DECLARATION Conjecture106.bounded_representative : ∀ {k t : ℕ},
+  0 < k → k < t → 2 ^ k ≤ t → ∃ n, t ≤ n ∧ n < t ^ (2 * k) ∧ ∀ i < k, ∃ p, Nat.Prime p ∧ p ∣ n + (i + 1) ∧ t < p
+AXIOMS Conjecture106.bounded_representative : [propext, Classical.choice, Quot.sound]
+DECLARATION Conjecture106.largestPrimeFactor_spec._proof_2 : ∀ {m : ℕ}, 2 ≤ m → ℕ → m = 0 → False
+AXIOMS Conjecture106.largestPrimeFactor_spec._proof_2 : [propext, Quot.sound, Classical.choice]
+DECLARATION Conjecture106.unbounded_good._proof_2 : ∀ (k : ℕ), 2 ≤ k → ∀ (N : ℕ), ¬N < N + k + 3 → False
+AXIOMS Conjecture106.unbounded_good._proof_2 : [propext, Quot.sound]
+DECLARATION Conjecture106.dyadic_primes._proof_1 : ∀ {t : ℕ} ⦃i j : ℕ⦄, i < j → ¬i + 1 ≤ j → False
+AXIOMS Conjecture106.dyadic_primes._proof_1 : [propext, Quot.sound]
+DECLARATION Conjecture106.unbounded_good : ∀ (k : ℕ),
+  2 ≤ k → ∀ (N : ℕ), ∃ n, N < n ∧ Conjecture106.Good k (↑(2 * k))⁻¹ n
+AXIOMS Conjecture106.unbounded_good : [propext, Quot.sound, Classical.choice]
+DECLARATION Conjecture106.largestPrimeFactor : ℕ → ℕ
+AXIOMS Conjecture106.largestPrimeFactor : [propext, Quot.sound, Classical.choice]
+DEFINITION SAFETY Conjecture106.largestPrimeFactor : Lean.DefinitionSafety.safe
+DEFINITION VALUE Conjecture106.largestPrimeFactor : fun m => m.primeFactors.sup id
+DECLARATION Conjecture106.conjecture : Conjecture106.Statement
+AXIOMS Conjecture106.conjecture : [propext, Quot.sound, Classical.choice]
+DECLARATION Conjecture106.bounded_representative._proof_2 : ∀ {k t : ℕ},
+  k < t → ∀ (p : ℕ → ℕ), ∀ i < k, t < p i → ¬i + 1 ≤ p i → False
+AXIOMS Conjecture106.bounded_representative._proof_2 : [propext, Quot.sound]
+DECLARATION Conjecture106.unbounded_good._proof_4 : ∀ (k : ℕ), 2 ≤ k → ℕ → ¬0 < k → False
+AXIOMS Conjecture106.unbounded_good._proof_4 : [propext, Quot.sound]
+DECLARATION Conjecture106.Good : ℕ → ℝ → ℕ → Prop
+AXIOMS Conjecture106.Good : [propext, Quot.sound, Classical.choice]
+DEFINITION SAFETY Conjecture106.Good : Lean.DefinitionSafety.safe
+DEFINITION VALUE Conjecture106.Good : fun k c n =>
+  2 ≤ n ∧ ∀ (i : ℕ), 1 ≤ i → i ≤ k → ↑n ^ c < ↑(Conjecture106.largestPrimeFactor (n + i))
+DECLARATION Conjecture106.largestPrimeFactor.eq_1 : ∀ (m : ℕ),
+  Conjecture106.largestPrimeFactor m = m.primeFactors.sup id
+AXIOMS Conjecture106.largestPrimeFactor.eq_1 : [propext, Quot.sound, Classical.choice]
+DECLARATION Conjecture106.unbounded_good._proof_1 : ∀ (k N : ℕ), ¬k < N + k + 3 → False
+AXIOMS Conjecture106.unbounded_good._proof_1 : [propext, Quot.sound]
+DECLARATION Conjecture106.largestPrimeFactor_spec._proof_1 : ∀ {m : ℕ}, 2 ≤ m → m = 0 ∨ m = 1 → False
+AXIOMS Conjecture106.largestPrimeFactor_spec._proof_1 : [propext, Quot.sound]
+DECLARATION Conjecture106.bounded_representative._proof_4 : ∀ {k t : ℕ} (p : ℕ → ℕ)
+  (hpos : ∀ i ∈ Finset.range k, p i ≠ 0) (hcop : (↑(Finset.range k)).Pairwise fun i j => (p i).Coprime (p j)),
+  p 0 ≤ ↑(Nat.chineseRemainderOfFinset (fun i => p i - (i + 1)) p (Finset.range k) hpos hcop) + (0 + 1) →
+    t < p 0 → ¬t ≤ ↑(Nat.chineseRemainderOfFinset (fun i => p i - (i + 1)) p (Finset.range k) hpos hcop) → False
+AXIOMS Conjecture106.bounded_representative._proof_4 : [propext, Quot.sound, Classical.choice]
+DECLARATION Conjecture106.bounded_representative._proof_5 : ∀ {k : ℕ} {t : ℕ} (p : ℕ → ℕ),
+  (∀ i ∈ Finset.range k, p i ≠ 0) →
+    ((↑(Finset.range k)).Pairwise fun i j => (p i).Coprime (p j)) → ∀ i < k, ¬i + 1 ≤ k → False
+AXIOMS Conjecture106.bounded_representative._proof_5 : [propext, Quot.sound, Classical.choice]
+DECLARATION Conjecture106.unbounded_good._proof_3 : ∀ (k : ℕ), 2 ≤ k → ∀ (N : ℕ), ¬2 ≤ N + k + 3 → False
+AXIOMS Conjecture106.unbounded_good._proof_3 : [propext, Quot.sound]
+DECLARATION Conjecture106.bounded_representative._proof_3 : ∀ {k : ℕ} {t : ℕ} (p : ℕ → ℕ)
+  (hpos : ∀ i ∈ Finset.range k, p i ≠ 0) (hcop : (↑(Finset.range k)).Pairwise fun i j => (p i).Coprime (p j)),
+  ¬0 < ↑(Nat.chineseRemainderOfFinset (fun i => p i - (i + 1)) p (Finset.range k) hpos hcop) + (0 + 1) → False
+AXIOMS Conjecture106.bounded_representative._proof_3 : [propext, Quot.sound, Classical.choice]
+DECLARATION Conjecture106.largestPrimeFactor_spec : ∀ {m : ℕ},
+  2 ≤ m →
+    Nat.Prime (Conjecture106.largestPrimeFactor m) ∧
+      Conjecture106.largestPrimeFactor m ∣ m ∧ ∀ (q : ℕ), Nat.Prime q → q ∣ m → q ≤ Conjecture106.largestPrimeFactor m
+AXIOMS Conjecture106.largestPrimeFactor_spec : [propext, Quot.sound, Classical.choice]
+DECLARATION Conjecture106.unbounded_good._proof_6 : ℕ → ℕ → ℕ → ∀ (i : ℕ), 1 ≤ i → ℕ → ¬i - 1 + 1 = i → False
+AXIOMS Conjecture106.unbounded_good._proof_6 : [propext, Quot.sound]
+DECLARATION Conjecture106.bounded_representative._proof_1 : ∀ {k t : ℕ}, 0 < k → k < t → ¬0 < t → False
+AXIOMS Conjecture106.bounded_representative._proof_1 : [propext, Quot.sound]
+DECLARATION Conjecture106.bounded_representative._proof_6 : ∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ),
+  (a ^ m) ^ n = a ^ (m * n)
+AXIOMS Conjecture106.bounded_representative._proof_6 : []
+DECLARATION Conjecture106.Statement : Prop
+AXIOMS Conjecture106.Statement : [propext, Quot.sound, Classical.choice]
+DEFINITION SAFETY Conjecture106.Statement : Lean.DefinitionSafety.safe
+DEFINITION VALUE Conjecture106.Statement : ∀ (k : ℕ), 2 ≤ k → ∃ c, 0 < c ∧ {n | Conjecture106.Good k c n}.Infinite
+DECLARATION Conjecture106.unbounded_good._proof_5 : ∀ (k : ℕ), ℕ → ℕ → ∀ (i : ℕ), 1 ≤ i → i ≤ k → ¬i - 1 < k → False
+AXIOMS Conjecture106.unbounded_good._proof_5 : [propext, Quot.sound]
+Conjecture106.largestPrimeFactor : ℕ → ℕ
+@Conjecture106.largestPrimeFactor_spec : ∀ {m : ℕ},
+  2 ≤ m →
+    Nat.Prime (Conjecture106.largestPrimeFactor m) ∧
+      Conjecture106.largestPrimeFactor m ∣ m ∧ ∀ (q : ℕ), Nat.Prime q → q ∣ m → q ≤ Conjecture106.largestPrimeFactor m
+@Conjecture106.threshold_iff_prime_divisor : ∀ {m : ℕ},
+  2 ≤ m → ∀ (t : ℝ), t < ↑(Conjecture106.largestPrimeFactor m) ↔ ∃ p, Nat.Prime p ∧ p ∣ m ∧ t < ↑p
+Conjecture106.Good : ℕ → ℝ → ℕ → Prop
+Conjecture106.Statement : Prop
+@Conjecture106.dyadic_primes : ∀ {t : ℕ},
+  0 < t → ∃ p, StrictMono p ∧ ∀ (i : ℕ), Nat.Prime (p i) ∧ 2 ^ i * t < p i ∧ p i ≤ 2 ^ (i + 1) * t
+@Conjecture106.bounded_representative : ∀ {k t : ℕ},
+  0 < k → k < t → 2 ^ k ≤ t → ∃ n, t ≤ n ∧ n < t ^ (2 * k) ∧ ∀ i < k, ∃ p, Nat.Prime p ∧ p ∣ n + (i + 1) ∧ t < p
+Conjecture106.unbounded_good : ∀ (k : ℕ), 2 ≤ k → ∀ (N : ℕ), ∃ n, N < n ∧ Conjecture106.Good k (↑(2 * k))⁻¹ n
+Conjecture106.conjecture : Conjecture106.Statement
+def Conjecture106.largestPrimeFactor : Nat → Nat :=
+fun (m : Nat) =>
+  @Finset.sup.{0, 0} Nat Nat (@Lattice.toSemilatticeSup.{0} Nat Nat.instLattice) Nat.instOrderBot (Nat.primeFactors m)
+    (@id.{1} Nat)
+def Conjecture106.Good : Nat → Real → Nat → Prop :=
+fun (k : Nat) (c : Real) (n : Nat) =>
+  And (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) n)
+    (∀ (i : Nat),
+      @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) i →
+        @LE.le.{0} Nat instLENat i k →
+          @LT.lt.{0} Real Real.instLT
+            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+              (@Nat.cast.{0} Real Real.instNatCast n) c)
+            (@Nat.cast.{0} Real Real.instNatCast
+              (Conjecture106.largestPrimeFactor (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n i))))
+def Conjecture106.Statement : Prop :=
+∀ (k : Nat),
+  @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) k →
+    @Exists.{1} Real fun (c : Real) =>
+      And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) c)
+        (@Set.Infinite.{0} Nat (@setOf.{0} Nat fun (n : Nat) => Conjecture106.Good k c n))
+'Conjecture106.largestPrimeFactor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture106.largestPrimeFactor_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture106.threshold_iff_prime_divisor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture106.Good' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture106.Statement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture106.dyadic_primes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture106.bounded_representative' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture106.unbounded_good' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture106.conjecture' depends on axioms: [propext, Classical.choice, Quot.sound]
+Real.instPow
+@Monoid.toNatPow.{0} Nat Nat.instMonoid
+Real.instLT
+instLENat
+Nat.instDvd
+Real.instNatCast
+def Real.rpow : ℝ → ℝ → ℝ :=
+fun x y => (↑x ^ ↑y).re
+def Real.instPow : Pow ℝ ℝ :=
+{ pow := Real.rpow }
+def Nat.instDvd : Dvd ℕ :=
+{ dvd := fun a b => ∃ c, b = a * c }
+def Nat.instOrderBot : OrderBot ℕ :=
+{ bot := 0, bot_le := Nat.zero_le }
+protected def Set.Infinite.{u} : {α : Type u} → Set α → Prop :=
+fun {α} s => ¬s.Finite
+def Nat.Prime : ℕ → Prop :=
+fun p => Irreducible p
+@Nat.prime_def : ∀ {p : ℕ}, Nat.Prime p ↔ 2 ≤ p ∧ ∀ (m : ℕ), m ∣ p → m = 1 ∨ m = p
+@Nat.mem_primeFactors : ∀ {n p : ℕ}, p ∈ n.primeFactors ↔ Nat.Prime p ∧ p ∣ n ∧ n ≠ 0
+@Nat.primeFactors_eq_empty : ∀ {n : ℕ}, n.primeFactors = ∅ ↔ n = 0 ∨ n = 1
+@Finset.le_sup : ∀ {α : Type u_1} {β : Type u_2} [inst : SemilatticeSup α] [inst_1 : OrderBot α] {s : Finset β}
+  {f : β → α} {b : β}, b ∈ s → f b ≤ s.sup f
+@Finset.sup_mem_of_nonempty : ∀ {α : Type u_1} {ι : Type u_2} [inst : LinearOrder α] [inst_1 : OrderBot α]
+  {s : Finset ι} {f : ι → α}, s.Nonempty → s.sup f ∈ f '' ↑s
+@Set.infinite_iff_exists_gt : ∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : LocallyFiniteOrderBot α] {s : Set α}
+  [inst_2 : Nonempty α], s.Infinite ↔ ∀ (a : α), ∃ b ∈ s, a < b
+@Real.rpow_inv_lt_iff_of_pos : ∀ {x y z : ℝ}, 0 ≤ x → 0 ≤ y → 0 < z → (x ^ z⁻¹ < y ↔ x < y ^ z)
+Real.rpow_natCast : ∀ (x : ℝ) (n : ℕ), x ^ ↑n = x ^ n
+Nat.exists_prime_lt_and_le_two_mul : ∀ (n : ℕ), n ≠ 0 → ∃ p, Nat.Prime p ∧ n < p ∧ p ≤ 2 * n
+@Nat.chineseRemainderOfFinset : {ι : Type u_1} →
+  (a s : ι → ℕ) →
+    (t : Finset ι) →
+      (∀ i ∈ t, s i ≠ 0) → (↑t).Pairwise (Function.onFun Nat.Coprime s) → { k // ∀ i ∈ t, k ≡ a i [MOD s i] }
+@Nat.chineseRemainderOfFinset_lt_prod : ∀ {ι : Type u_1} (a s : ι → ℕ) {t : Finset ι} (hs : ∀ i ∈ t, s i ≠ 0)
+  (pp : (↑t).Pairwise (Function.onFun Nat.Coprime s)), ↑(Nat.chineseRemainderOfFinset a s t hs pp) < ∏ i ∈ t, s i

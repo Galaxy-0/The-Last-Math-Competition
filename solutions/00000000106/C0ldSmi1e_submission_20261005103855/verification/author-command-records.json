@@ -1,0 +1,296 @@
+[
+  {
+    "label": "dependency-build-01",
+    "utc_start": "2026-10-05T10:04:52.835786+00:00",
+    "seconds": 7.290066166780889,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "build",
+      "+Mathlib.NumberTheory.Bertrand",
+      "+Mathlib.Data.Nat.ChineseRemainder",
+      "+Mathlib.Data.Nat.PrimeFin",
+      "+Mathlib.Analysis.SpecialFunctions.Pow.Real",
+      "+Mathlib.Order.Interval.Finset.Basic",
+      "+Mathlib.Tactic"
+    ],
+    "returncode": 0,
+    "output_file": "/private/tmp/tlmc106-auxiliary/dependency-build-01.log"
+  },
+  {
+    "label": "development-01",
+    "utc_start": "2026-10-05T10:04:26.800953+00:00",
+    "seconds": 1.5524014169350266,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "env",
+      "lean",
+      "-DwarningAsError=true",
+      "Conjecture106.lean"
+    ],
+    "returncode": 1,
+    "output_file": "/private/tmp/tlmc106-auxiliary/development-01.log"
+  },
+  {
+    "label": "development-02",
+    "utc_start": "2026-10-05T10:05:08.653743+00:00",
+    "seconds": 3.1460067913867533,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "env",
+      "lean",
+      "-DwarningAsError=true",
+      "Conjecture106.lean"
+    ],
+    "returncode": 1,
+    "output_file": "/private/tmp/tlmc106-auxiliary/development-02.log"
+  },
+  {
+    "label": "development-03",
+    "utc_start": "2026-10-05T10:05:50.334511+00:00",
+    "seconds": 1.6782101672142744,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "env",
+      "lean",
+      "-DwarningAsError=true",
+      "Conjecture106.lean"
+    ],
+    "returncode": 1,
+    "output_file": "/private/tmp/tlmc106-auxiliary/development-03.log"
+  },
+  {
+    "label": "development-04",
+    "utc_start": "2026-10-05T10:06:08.911254+00:00",
+    "seconds": 1.6456092917360365,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "env",
+      "lean",
+      "-DwarningAsError=true",
+      "Conjecture106.lean"
+    ],
+    "returncode": 0,
+    "output_file": "/private/tmp/tlmc106-auxiliary/development-04.log"
+  },
+  {
+    "label": "final-build-02",
+    "utc_start": "2026-10-05T10:10:07.215448+00:00",
+    "seconds": 2.1952300840057433,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "build"
+    ],
+    "returncode": 0,
+    "output_file": "/private/tmp/tlmc106-auxiliary/final-build-02.log"
+  },
+  {
+    "label": "final-build",
+    "utc_start": "2026-10-05T10:07:27.696591+00:00",
+    "seconds": 3.5106410421431065,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "build"
+    ],
+    "returncode": 0,
+    "output_file": "/private/tmp/tlmc106-auxiliary/final-build.log"
+  },
+  {
+    "label": "final-environment-audit",
+    "utc_start": "2026-10-05T10:11:04.578482+00:00",
+    "seconds": 0.22472241567447782,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "python3",
+      "/private/tmp/tlmc106-auxiliary/environment_audit.py",
+      "after-final-checks"
+    ],
+    "returncode": 0,
+    "output_file": "/private/tmp/tlmc106-auxiliary/final-environment-audit.log"
+  },
+  {
+    "label": "final-evidence-check-02",
+    "utc_start": "2026-10-05T10:16:02.181425+00:00",
+    "seconds": 0.02916712500154972,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "python3",
+      "/private/tmp/tlmc106-auxiliary/finalize_records.py"
+    ],
+    "returncode": 0,
+    "output_file": "/private/tmp/tlmc106-auxiliary/final-evidence-check-02.log"
+  },
+  {
+    "label": "final-evidence-check",
+    "utc_start": "2026-10-05T10:11:51.709537+00:00",
+    "seconds": 0.026265665888786316,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "python3",
+      "/private/tmp/tlmc106-auxiliary/finalize_records.py"
+    ],
+    "returncode": 0,
+    "output_file": "/private/tmp/tlmc106-auxiliary/final-evidence-check.log"
+  },
+  {
+    "label": "final-full-compiler-audit",
+    "utc_start": "2026-10-05T10:15:20.827347+00:00",
+    "seconds": 0.2262558750808239,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "python3",
+      "/private/tmp/tlmc106-auxiliary/environment_audit.py",
+      "after-final-checks-full-compiler"
+    ],
+    "returncode": 0,
+    "output_file": "/private/tmp/tlmc106-auxiliary/final-full-compiler-audit.log"
+  },
+  {
+    "label": "final-inspect-replay-02",
+    "utc_start": "2026-10-05T10:07:48.412503+00:00",
+    "seconds": 4.278188125230372,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "env",
+      "lean",
+      "-R",
+      "/private/tmp/tlmc106-auxiliary",
+      "-DwarningAsError=true",
+      "-o",
+      "/private/tmp/tlmc106-auxiliary/Inspect.olean",
+      "/private/tmp/tlmc106-auxiliary/Inspect.lean"
+    ],
+    "returncode": 1,
+    "output_file": "/private/tmp/tlmc106-auxiliary/final-inspect-replay-02.log"
+  },
+  {
+    "label": "final-inspect-replay-03",
+    "utc_start": "2026-10-05T10:08:26.042941+00:00",
+    "seconds": 4.1151427500881255,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "env",
+      "lean",
+      "-R",
+      "/private/tmp/tlmc106-auxiliary",
+      "-DwarningAsError=true",
+      "-o",
+      "/private/tmp/tlmc106-auxiliary/Inspect.olean",
+      "/private/tmp/tlmc106-auxiliary/Inspect.lean"
+    ],
+    "returncode": 1,
+    "output_file": "/private/tmp/tlmc106-auxiliary/final-inspect-replay-03.log"
+  },
+  {
+    "label": "final-inspect-replay-04",
+    "utc_start": "2026-10-05T10:08:45.667359+00:00",
+    "seconds": 4.816493124701083,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "env",
+      "lean",
+      "-R",
+      "/private/tmp/tlmc106-auxiliary",
+      "-DwarningAsError=true",
+      "-o",
+      "/private/tmp/tlmc106-auxiliary/Inspect.olean",
+      "/private/tmp/tlmc106-auxiliary/Inspect.lean"
+    ],
+    "returncode": 0,
+    "output_file": "/private/tmp/tlmc106-auxiliary/final-inspect-replay-04.log"
+  },
+  {
+    "label": "final-inspect-replay-05",
+    "utc_start": "2026-10-05T10:09:44.143331+00:00",
+    "seconds": 7.654697583056986,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "env",
+      "lean",
+      "-R",
+      "/private/tmp/tlmc106-auxiliary",
+      "-DwarningAsError=true",
+      "-o",
+      "/private/tmp/tlmc106-auxiliary/Inspect.olean",
+      "/private/tmp/tlmc106-auxiliary/Inspect.lean"
+    ],
+    "returncode": 0,
+    "output_file": "/private/tmp/tlmc106-auxiliary/final-inspect-replay-05.log"
+  },
+  {
+    "label": "final-inspect-replay-06",
+    "utc_start": "2026-10-05T10:10:28.407092+00:00",
+    "seconds": 7.810568791814148,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "env",
+      "lean",
+      "-R",
+      "/private/tmp/tlmc106-auxiliary",
+      "-DwarningAsError=true",
+      "-o",
+      "/private/tmp/tlmc106-auxiliary/Inspect.olean",
+      "/private/tmp/tlmc106-auxiliary/Inspect.lean"
+    ],
+    "returncode": 0,
+    "output_file": "/private/tmp/tlmc106-auxiliary/final-inspect-replay-06.log"
+  },
+  {
+    "label": "final-inspect-replay",
+    "utc_start": "2026-10-05T10:07:39.040081+00:00",
+    "seconds": 0.39203066611662507,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "env",
+      "lean",
+      "-DwarningAsError=true",
+      "-o",
+      "/private/tmp/tlmc106-auxiliary/Inspect.olean",
+      "/private/tmp/tlmc106-auxiliary/Inspect.lean"
+    ],
+    "returncode": 1,
+    "output_file": "/private/tmp/tlmc106-auxiliary/final-inspect-replay.log"
+  },
+  {
+    "label": "final-main-replay-02",
+    "utc_start": "2026-10-05T10:10:28.407114+00:00",
+    "seconds": 1.896878583356738,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "env",
+      "lean",
+      "-DwarningAsError=true",
+      "Conjecture106.lean"
+    ],
+    "returncode": 0,
+    "output_file": "/private/tmp/tlmc106-auxiliary/final-main-replay-02.log"
+  },
+  {
+    "label": "final-main-replay",
+    "utc_start": "2026-10-05T10:07:39.035607+00:00",
+    "seconds": 1.7084198747761548,
+    "cwd": "/private/tmp/tlmc106-proof",
+    "argv": [
+      "lake",
+      "env",
+      "lean",
+      "-DwarningAsError=true",
+      "Conjecture106.lean"
+    ],
+    "returncode": 0,
+    "output_file": "/private/tmp/tlmc106-auxiliary/final-main-replay.log"
+  }
+]
