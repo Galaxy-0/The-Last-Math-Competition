@@ -1,0 +1,9 @@
+# Semantic review (independent, pre-submission)
+
+An independent model reviewer (GPT-6 Astra, reasoning effort "xhigh", separate session) received the exact conjecture text, the full LaTeX report, the full Lean source and a reviewer checklist distilled from 93 closed-unmerged pull requests of this competition. It was asked whether the Lean main theorem settles the conjecture as written, whether the reading is faithful and not a loophole, whether the Lean definitions are faithful to the standard notions, whether the mathematics is correct, and whether report and Lean match. This is an automated review prepared by the submitter, not the competition's maintainer review.
+
+**Verdict:** accept = True; severity = none; reading faithful = True.
+
+**Reviewer notes (verbatim):**
+
+> Accept. The atom-based definition of embedding dimension is standard and faithful: for numerical semigroups the nonzero indecomposable elements form the unique minimal generating system. A separate general Lean equivalence theorem is not needed for this definition, and minimalGenerators_S proves the exact three atoms of the actual additive closure for every k. The membership characterization establishes finite complement, the genuine Mathlib Frobenius number F = 42k + 29, and the symmetry used to derive nongaps = genus = 21k + 15. The integer surplus is therefore 21k + 13. RatioTendsToZero faithfully states the claimed limit over all embedding-dimension-3 numerical semigroups as F grows; selecting S_N for each threshold N and using ratio_ge contradicts it at epsilon = 1/3. This is an infinite-family disproof, not finite evidence or hardcoded invariants. The additional genus-reading refutation is also correct. The LaTeX argument and Lean definitions and results agree, and the compressed residue checks in the report are valid. Refuting convergence already refutes convergence with an explicit rate; mixed genus/conductor variants are not required by the stated conjecture.
