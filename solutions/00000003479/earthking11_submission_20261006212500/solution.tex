@@ -1,0 +1,76 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\title{A deterministic boundary counterexample to conjecture 00000003479}
+\author{earthking11}
+\date{October 6, 2026}
+\begin{document}
+\maketitle
+\section*{Statement and interpretation}
+The conjecture defines a harmonious coloring to be a proper coloring in
+which sums of endpoint color labels distinguish all unordered edges. It
+claims that the harmonious chromatic number $h(G(n,p))$ concentrates at
+$(1+o(1))\sqrt{np}$, uniformly for $p\geq \log n/n$. We use precisely the
+sum definition, not the different standard definition based on unordered
+color pairs. Colors in a $k$-coloring have natural labels $0,\ldots,k-1$.
+The argument uses only properness, so any additional sum restriction
+cannot rescue the claimed upper concentration.
+
+\begin{lemma}
+Every harmonious $k$-coloring of $K_n$ has $k\geq n$.
+\end{lemma}
+\begin{proof}
+Every two distinct vertices of $K_n$ are adjacent. Properness therefore
+makes the color map injective. An injection from $n$ vertices into $k$
+colors implies $n\leq k$.
+\end{proof}
+
+\begin{theorem}
+For every integer $n>4$, the probability that $G(n,1)$ admits a harmonious
+$k$-coloring with $k\leq 2\sqrt n$ is zero. Consequently, the stated
+constant-one concentration law is false.
+\end{theorem}
+\begin{proof}
+At $p=1$, every edge is present with probability one and $G(n,1)=K_n$
+almost surely. This parameter is admissible for every $n\geq1$, because
+$\log n\leq n-1\leq n$.
+By the lemma, a coloring in the asserted event would give
+$n\leq k\leq2\sqrt n$. Squaring implies $n^2\leq4n$, which contradicts
+$n>4$. Thus the upper event has probability exactly zero for all $n>4$.
+
+In particular, if $h$ is the minimum number of colors, the relative
+concentration event
+\[
+ \left|\frac{h(G(n,1))}{\sqrt n}-1\right|<1
+\]
+is contained in that impossible upper event. Its probability is eventually
+zero and tends to zero, not one. The conjectured relative concentration
+would require convergence to one for every positive tolerance, including
+this tolerance. Failure at the admissible deterministic boundary refutes
+the claimed uniform law. No finite-size numerical anchor is used.
+\end{proof}
+
+\section*{Formal verification and scope}
+The Lean project uses Mathlib's actual \texttt{SimpleGraph}, graph
+\texttt{Coloring}, and probability mass functions. It defines harmonious
+colorings with the endpoint-sum condition. For every finite graph it
+constructs a coloring with labels $(2n^2+1)i+i^2$: a label-pair sum determines
+the index sum and square sum, hence its unordered endpoint pair. Thus a
+minimum exists. Lean defines the minimum by natural-number well-ordering,
+proves its attainment and minimality, and identifies its relative-error
+event with the formally defined concentration event.
+The definition \texttt{GnpOneLaw} specifies that each distinct edge has
+probability one; Lean proves every graph in its support is $K_n$.
+The explicit point mass at $K_n$ satisfies this law. Thus the proof does
+not assume a counting bound or a random-graph tail estimate.
+The capstone \texttt{conjecture\_boundary\_is\_false} proves the negation
+of constant-one relative concentration at $p=1$. All statements compile
+on Lean 4.33.1 with pinned Mathlib, without unfinished proofs, native
+evaluation, or additional axioms. The only reported foundational axioms
+are propositional extensionality, classical choice, and quotient soundness.
+We do not claim a corrected concentration law for $0<p<1$, nor need the
+conjecture's additional low-probability clause.
+\end{document}
