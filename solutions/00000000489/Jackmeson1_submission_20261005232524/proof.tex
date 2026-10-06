@@ -1,0 +1,140 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\tr}{\operatorname{tr}}
+
+\title{Disproof of conjecture 00000000489:\\ $S_3(n)=\sum_{\lambda\vdash n} f_\lambda^3/n!$ is at most $\sqrt{n!}$,\\ so it is not $\Theta(\sqrt{n!}\,n^{1/4})$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the reading}
+
+\textbf{Statement (English, verbatim).} Definition: The third-order character sum
+$S_3(n)=\sum_\lambda f_\lambda^3/n!$. Conjecture: $S_3(n)=\Theta(\sqrt{n!}\cdot n^{1/4})$, and the
+growth of $S_3(n)/\sqrt{n!}$ is given by the main term of the 3-thread counting of the limit shape,
+with main-term constant $2^{1/4}\pi^{-1/2}$.
+
+The Chinese text gives the same definition and, after a garbled prefix
+(``$S_3(n)\sim c\cdot n^{1/4}\cdot(27/4)^{n^2/4\cdot 0+\dots}$''), says ``precisely
+$S_3(n)=\Theta(\sqrt{n!}\cdot n^{1/4})$'' with the same main-term constant $2^{1/4}\pi^{-1/2}$.
+
+\textbf{Objects.} $\lambda$ runs over the partitions of $n$, and $f_\lambda$ is the dimension of
+the irreducible complex representation of the symmetric group $S_n$ labelled by $\lambda$. The
+irreducible complex representations of $S_n$ are, up to isomorphism, in bijection with the
+partitions of $n$ (Section~\ref{sec:sources}). Write $\sqrt{n!}=(n!)^{1/2}$, as in the
+statement's own ``$S_3(n)/\sqrt{(n!)}$'', and let $n^{1/4}$ be the real positive fourth root.
+
+\textbf{Claims refuted.} With $g(n)=\sqrt{n!}\,n^{1/4}$ and $C=2^{1/4}/\sqrt{\pi}$:
+\begin{enumerate}
+\item[(T)] $S_3(n)=\Theta(g(n))$ as $n\to\infty$, i.e.\ $S_3=O(g)$ and $g=O(S_3)$;
+\item[(L)] $S_3(n)/g(n)\to C$;
+\item[(E)] $S_3(n)/\sqrt{n!}\sim C\,n^{1/4}$.
+\end{enumerate}
+(L) and (E) are our readings of ``the growth of $S_3(n)/\sqrt{n!}$ \dots{} with main-term
+constant $2^{1/4}\pi^{-1/2}$''. We do not give a meaning to ``3-thread counting of the limit
+shape'' and we do not address the garbled Chinese prefix beyond its explicit $\Theta$ claim.
+We prove $S_3(n)\le\sqrt{n!}$ for every $n$, hence $S_3(n)/g(n)\le n^{-1/4}\to 0$, which refutes
+the lower half of (T), and (L) and (E).
+
+\section{The mathematical proof}
+
+Let $G$ be a finite group and $V_1,\dots,V_k$ pairwise non-isomorphic irreducible
+finite-dimensional complex representations with characters $\chi_i$ and dimensions $d_i$.
+
+\begin{lemma}[$\chi(g^{-1})=\overline{\chi(g)}$]\label{lem:conj}
+Let $A:G\to M_d(\mathbb C)$ satisfy $A(gh)=A(g)A(h)$ and $A(1)=I$. Then
+$\tr A(g^{-1})=\overline{\tr A(g)}$.
+\end{lemma}
+\begin{proof}
+Put $P=\sum_{h\in G}A(h)^*A(h)$. Then $P=I+\sum_{h\ne1}A(h)^*A(h)$ is positive definite, hence
+invertible. Reindexing $h\mapsto hg$ gives $A(g)^*PA(g)=P$. Since $A(g)A(g^{-1})=I$, this gives
+$A(g)^*P=PA(g^{-1})$, so $A(g)^*=PA(g^{-1})P^{-1}$ and
+$\overline{\tr A(g)}=\tr A(g)^*=\tr A(g^{-1})$.
+\end{proof}
+Applying the lemma to the matrices of $V$ in a basis gives $\chi_V(g^{-1})=\overline{\chi_V(g)}$.
+
+\begin{lemma}\label{lem:bessel}
+$\sum_i d_i^2\le|G|$.
+\end{lemma}
+\begin{proof}
+By orthogonality of characters,
+$\sum_{g}\chi_i(g)\chi_j(g^{-1})=|G|\,[i=j]$, because $V_i\cong V_j$ iff $i=j$. Let
+$\Phi=\sum_i d_i\chi_i$ and $D=\sum_i d_i^2$. Then $\sum_g\Phi(g)\Phi(g^{-1})=|G|D$. By
+Lemma~\ref{lem:conj}, $\Phi(g^{-1})=\overline{\Phi(g)}$, so
+$|G|D=\sum_g|\Phi(g)|^2\ge|\Phi(1)|^2=D^2$, using $\chi_i(1)=d_i$. Hence $D\le|G|$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+$\sum_i d_i^3\le\sqrt{|G|}\,|G|$. For $G=S_n$ and $d_i=f_\lambda$ this is $S_3(n)\le\sqrt{n!}$.
+\end{theorem}
+\begin{proof}
+Each $d_i^2\le D\le|G|$, so $d_i\le\sqrt{|G|}$ and $\sum_i d_i^3\le\sqrt{|G|}\sum_i d_i^2\le
+\sqrt{|G|}\,|G|$. Divide by $|G|=n!$.
+\end{proof}
+
+Hence $0\le S_3(n)/g(n)\le n^{-1/4}\to0$, so $S_3=o(g)$. If $g=O(S_3)$ held, then $g=o(g)$, which
+is impossible since $g(n)\ne0$ for $n\ge1$. So (T) fails. (L) fails because the limit is
+$0\ne C$. For (E): $\bigl(S_3(n)/\sqrt{n!}\bigr)/\bigl(C n^{1/4}\bigr)=\bigl(S_3(n)/g(n)\bigr)/C\to
+0\ne1$.
+
+\section{Lean formalization}
+
+The file \texttt{lean/Conjecture489/Basic.lean} (264 lines, \texttt{import Mathlib} only, Lean
+v4.33.1, Mathlib v4.33.1) proves the following in namespace \texttt{C489}.
+\begin{itemize}
+\item \texttt{trace\_inv\_eq\_star} and \texttt{char\_inv}: Lemma~\ref{lem:conj} and
+  $\chi_V(g^{-1})=\overline{\chi_V(g)}$ for every \texttt{V : FDRep $\mathbb C$ G}.
+\item \texttt{sum\_sq\_finrank\_le}: for a finite type $\iota$ and
+  \texttt{V : $\iota$ $\to$ FDRep $\mathbb C$ G} with every \texttt{V i} \texttt{Simple} and
+  \texttt{Nonempty (V i $\cong$ V j) $\to$ i = j}, $\sum_i(\dim V_i)^2\le|G|$. It uses Mathlib's
+  \texttt{FDRep.char\_orthonormal} and \texttt{FDRep.char\_one}.
+\item \texttt{sum\_cube\_le}: $\sum_i(\dim V_i)^3\le\sqrt{|G|}\,|G|$.
+\item \texttt{IrrepFamily n}: a map \texttt{V : Nat.Partition n $\to$ FDRep $\mathbb C$
+  (Equiv.Perm (Fin n))}, with each $V_\lambda$ simple and distinct labels non-isomorphic.
+  \texttt{IrrepFamily.f} is $f_\lambda=\dim_{\mathbb C}V_\lambda$ (\texttt{finrank}), and
+  \texttt{IrrepFamily.S3} is $\bigl(\sum_\lambda f_\lambda^3\bigr)/n!$.
+\item \texttt{S3\_le\_sqrt}: $S_3(n)\le\sqrt{n!}$ for every \texttt{IrrepFamily n}.
+\item \texttt{conjecture489\_false}: for every \texttt{F : $\forall$ n, IrrepFamily n},
+  (i) $S_3(n)\le\sqrt{n!}$ for all $n$; (ii) $S_3(n)/(\sqrt{n!}\,n^{1/4})\to0$;
+  (iii) $S_3=o(g)$ (\texttt{=o[atTop]});
+  (iv) $\neg\,S_3=\Theta(g)$ (\texttt{=$\Theta$[atTop]}); (v) the ratio does not tend to
+  $2^{1/4}/\sqrt\pi$; (vi) $\neg\,\bigl(S_3(n)/\sqrt{n!}\bigr)\sim C n^{1/4}$
+  (\texttt{\textasciitilde[atTop]}).
+\end{itemize}
+The theorem holds for every labelled family of pairwise non-isomorphic irreducibles. It does not
+assume that the family is complete, and it does not construct Specht modules. The family that
+defines the conjecture's $f_\lambda$ (one irreducible for each partition, pairwise
+non-isomorphic) is one such family, so the conjecture's $S_3(n)$ is covered. Here
+$n^{1/4}$ is \texttt{Real.rpow}, and $0^{1/4}=0$, so $g(0)=0$; only $n\ge1$ matters for the
+asymptotic claims.
+
+\textbf{Axiom audit.} \texttt{lake build} succeeds, and \texttt{\#print axioms} for
+\texttt{C489.conjecture489\_false}, \texttt{C489.sum\_sq\_finrank\_le} and
+\texttt{C489.char\_inv} prints \texttt{[propext, Classical.choice, Quot.sound]}. The file contains no
+\texttt{sorry}, no \texttt{native\_decide} and no added axioms.
+
+\section{Sources}\label{sec:sources}
+Wikipedia, ``Representation theory of the symmetric group''
+(\url{https://en.wikipedia.org/wiki/Representation_theory_of_the_symmetric_group}), retrieved
+2026-10-05:
+``Therefore according to the representation theory of a finite group, the number of inequivalent
+irreducible representations, over the complex numbers, is equal to the number of partitions of n.
+Unlike the general situation for finite groups, there is in fact a natural way to parametrize
+irreducible representations by the same set that parametrizes conjugacy classes, namely by
+partitions of n or equivalently Young diagrams of size n.''
+The same article writes $d_\lambda$ for ``the dimension \dots{} of the representation that
+corresponds to the Young diagram $\lambda$''. No other source is used. All other steps are proved
+above and in Lean.
+
+\end{document}
