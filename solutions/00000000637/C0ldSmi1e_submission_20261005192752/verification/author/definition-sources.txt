@@ -1,0 +1,58 @@
+Definitions-only source lookup was delegated to definition_sources with a clean
+context (no problem, competition files, or prior proof). Its returned citations:
+
+1. Imre Tuba and Hans Wenzl, Representations of the braid group B_3 and of
+   SL(2,Z), Pacific Journal of Mathematics 197 (2001), section 1.1, printed
+   page 492, PDF page 3.
+   https://msp.org/pjm/2001/197-2/pjm-v197-n2-p11-s.pdf
+   Defines B_3 with generators sigma_1,sigma_2 and the Artin relation
+   sigma_1 sigma_2 sigma_1 = sigma_2 sigma_1 sigma_2.
+
+2. Juan Gonzalez-Meneses, Basic results on braid groups, Annales mathematiques
+   Blaise Pascal 18 (2011), section 2.1, printed page 26, PDF page 13, exact
+   sequence (2.1).
+   https://ambp.centre-mersenne.org/item/10.5802/ambp.293.pdf
+   Canonical eta:B_n->Sigma_n sends sigma_i to (i i+1); kernel is PB_n.
+
+3. Joan S. Birman, Volker Gebhardt, and Juan Gonzalez-Meneses, Conjugacy in
+   Garside groups III: Periodic braids, Journal of Algebra 316 (2007), section
+   2, printed page 748, PDF page 3.
+   https://www.math.columbia.edu/~jb/bggm-III.pdf
+   Half twist Delta=sigma_1(sigma_2 sigma_1)...(sigma_(n-1)...sigma_1).
+   Full twist Delta^2=(sigma_1...sigma_(n-1))^n.
+
+4. An unused duplicate for the kernel definition was returned:
+   Christopher Severs and Jacob White, k-Parabolic Subspace Arrangements,
+   DMTCS Proceedings AK (2009), section 1, printed page 770, PDF page 2.
+   https://dmtcs.episciences.org/2711/pdf
+
+These establish conventions/standard algebraic definitions only. The author
+independently constructed all mathematical proofs. No proof of the target
+conjecture was requested from the source helper. A complete ledger of its
+search queries and opened URLs was not returned; the helper transcript retains
+the actual lookups. A followup request was rejected by collaboration capacity.
+Therefore this list is a used-and-returned-source list, not a claim that no
+incidental mathematical claims or other sources appeared during its searches.
+No mathematical auxiliary computations were delegated.
+
+Exact modeling correspondence in the final Lean source:
+- Bool labels the two Artin generators (false=sigma_1, true=sigma_2).
+- PresentedGroup quotients the free group by the normal closure of the
+  singleton relator (sigma_1 sigma_2 sigma_1)(sigma_2 sigma_1 sigma_2)^(-1).
+  This is the cited standard algebraic definition itself, not a claimed
+  isomorphism to an unrelated group.
+- Fin 3 labels strands by 0,1,2 instead of 1,2,3. The permutation map sends
+  the generators to swap 0 1 and swap 1 2. Its well-definedness and the two
+  generator images are proved. PureBraidThree is exactly its kernel.
+- halfTwist is sigma_1 sigma_2 sigma_1. fullTwist is (sigma_1 sigma_2)^3.
+  Their equality fullTwist=halfTwist^2 is proved from the Artin relation.
+- Purity and centrality of the full twist are proved, rather than assumed.
+- The exponent homomorphism is built through the presented-group universal
+  property with its relator verification proved. Its value 6 on the full
+  twist and the obstruction 12*k=6 to being a power of its square are proved.
+- No identification P_3 = Z x F_2 or other unproved structural bridge is used.
+- The necessary center assertion is disproved at the allowed value n=3.
+  The final theorem keeps a second proposition Q arbitrary and proves
+  not(center equality and Q), so it applies to the source's bounded-scl
+  clause without asserting or assuming any scl facts. This does not purport
+  to refute a corrected half-twist version of the source.
