@@ -1,0 +1,3 @@
+import Conjecture3524
+#print axioms C3524.conjecture3524_false
+#print axioms C3524.exists_disjoint_stationary_omega_one

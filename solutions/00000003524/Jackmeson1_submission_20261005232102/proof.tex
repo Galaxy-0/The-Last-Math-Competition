@@ -1,0 +1,193 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of conjecture 00000003524:\\ $\omega_1$ has two disjoint stationary subsets}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clause refuted}
+
+\textbf{Statement (English, verbatim).} Definition: Subsets of $\omega_1$: the combinatorics of
+uncountable ordinals. Conjecture: Club sets and stationary sets: the intersection of stationary
+sets is stationary, with the reflection of stationarity bounded below closure. (stationary
+intersection reflection lower bound closure)
+
+\textbf{Statement (Chinese).} The Chinese text says, word for word: ``Definition: subsets of
+$\omega_1$: the combinatorics of uncountable ordinals. Conjecture: club sets and stationary sets:
+the intersection of stationary sets is stationary (\emph{pingwen ji de jiaoji wei pingwen}) and
+(\emph{qie}) the reflection of stationarity is the lower-bound closure.''
+
+\textbf{Reading.} Both languages literally assert
+\[
+  \text{(A)}\qquad S, T \subseteq \omega_1 \text{ stationary} \implies S\cap T \text{ stationary},
+\]
+joined to a second clause (B), ``the reflection of stationarity bounded below closure''. The
+Chinese text joins (A) and (B) with ``and'' (\emph{qie}), so the conjecture is the conjunction
+(A) $\wedge$ (B). Clause (B) does not state a definite proposition: stationary reflection is a
+standard notion, but ``bounded below closure'' (``is the lower-bound closure'') has no standard
+meaning. We do not interpret (B). We refute (A), and we prove in Lean that (A) $\wedge$ $Q$ is
+false for \emph{every} proposition $Q$, so the conjunction fails however (B) is read.
+
+We refute (A) in three forms: for two sets, for every nonempty family of stationary sets, and
+for the family of all stationary sets. We do \emph{not} refute the different statement ``a
+stationary set intersected with a club set is stationary''. That statement is true, and we
+prove it in Lean as a remark (Remark~\ref{rem:club}). The text says ``the intersection of
+stationary sets'', not ``of a stationary set and a club set''.
+
+\section{Definitions (as formalized)}
+
+We use Mathlib's own definitions from
+\texttt{Mathlib/SetTheory/Cardinal/Cofinality/Club.lean}, unchanged.
+
+\begin{definition}
+$\omega_1$ is Mathlib's \texttt{Ordinal.omega 1}, the first uncountable ordinal. Subsets of
+$\omega_1$ are subsets of the type \texttt{($\omega_1$).ToType}, the well-order of order type
+$\omega_1$ whose elements correspond to the countable ordinals.
+\end{definition}
+
+\begin{definition}[club]
+In a linear order $\alpha$, a set $C$ is a \emph{club} (\texttt{IsClub C}) if
+(i) it is closed: whenever $d\subseteq C$ is nonempty and $a$ is a least upper bound of $d$,
+then $a\in C$; and (ii) it is unbounded (cofinal): for every $x$ there is $y\in C$ with
+$x\le y$. Mathlib states (i) as \texttt{DirSupClosed C}, which also asks that $d$ be directed.
+Every subset of a linear order is directed, so this is the same condition. The Lean theorem
+\texttt{isClub\_iff\_closed\_unbounded} proves the equivalence of Mathlib's \texttt{IsClub} with
+(i) $\wedge$ (ii). In $\omega_1$ a set with a least upper bound is bounded, so (i) says that $C$
+contains the supremum of each of its nonempty bounded subsets. This is the usual notion of a
+closed subset of $\omega_1$.
+\end{definition}
+
+\begin{definition}[stationary]
+$S\subseteq\alpha$ is \emph{stationary} (\texttt{IsStationary S}) if $S\cap C\ne\emptyset$ for
+every club $C$. The Lean theorem \texttt{isStationary\_iff\_meets\_every\_club} states this
+unfolding. In particular $\emptyset$ is not stationary (Mathlib's
+\texttt{not\_isStationary\_empty}), because $\alpha$ itself is a club.
+\end{definition}
+
+\section{Proof}
+
+Let $\alpha$ be an uncountable linear order with a well-founded $<$, in which every initial
+segment $\{x : x < a\}$ is countable and whose cofinality \texttt{Order.cof} $\alpha$ is not
+$\aleph_0$. All three hypotheses hold for $\alpha = \omega_1$:
+$|\omega_1| = \aleph_1 > \aleph_0$; each initial segment has cardinality $<\aleph_1$, hence is
+countable (Mathlib's \texttt{mk\_Iio\_lt}); and $\operatorname{cof}\omega_1 = \aleph_1$ (Mathlib's
+\texttt{Ordinal.cof\_toType}, \texttt{Cardinal.cof\_omega\_one}).
+
+\begin{lemma}[\texttt{isStationary\_Ioi}]\label{lem:tail}
+For every $b\in\alpha$ the final segment $(b,\to) = \{a : b < a\}$ is stationary.
+\end{lemma}
+\begin{proof}
+If its complement $\{x : x\le b\}$ were cofinal, every $x$ would satisfy $x\le b$, so
+$\alpha = \{x : x<b\}\cup\{b\}$ would be countable. Hence the complement is not cofinal, and a
+set whose complement is not cofinal is stationary (Mathlib's
+\texttt{IsStationary.of\_not\_isCofinal\_compl}).
+\end{proof}
+
+\begin{theorem}[Ulam matrix; \texttt{exists\_disjoint\_stationary}]\label{thm:ulam}
+$\alpha$ contains stationary sets $S$, $T$ with $S\cap T=\emptyset$.
+\end{theorem}
+\begin{proof}
+For each $a\in\alpha$ the initial segment below $a$ is countable, so we can choose
+$f_a:\alpha\to\mathbb{N}$ injective on $\{x : x<a\}$. For $n\in\mathbb{N}$ and $b\in\alpha$ put
+\[
+  A(n,b) = \{a\in\alpha : b<a \ \text{and}\ f_a(b)=n\}.
+\]
+For fixed $b$, $\bigcup_{n\in\mathbb{N}} A(n,b) = (b,\to)$, which is stationary by
+Lemma~\ref{lem:tail}. Since $\operatorname{cof}\alpha\neq\aleph_0$, a countable union of sets
+is stationary if and only if one of the sets is (Mathlib's
+\texttt{isStationary\_iUnion\_iff\_of\_countable}). So there is $N(b)\in\mathbb{N}$ with
+$A(N(b),b)$ stationary. The map $N:\alpha\to\mathbb{N}$ is not injective, because $\alpha$ is
+uncountable. So there are $b\ne b'$ with $N(b)=N(b')=n$. Put $S=A(n,b)$ and $T=A(n,b')$. If
+$a\in S\cap T$, then $b,b'<a$ and $f_a(b)=n=f_a(b')$. Since $f_a$ is injective on
+$\{x : x<a\}$, this gives $b=b'$, a contradiction. Hence $S\cap T=\emptyset$.
+\end{proof}
+
+\begin{theorem}[\texttt{stationaryInterClaim\_false}, \texttt{sInter\_claim\_false},
+\texttt{not\_isStationary\_sInter\_all}, \texttt{conjecture3524\_false}]
+In $\omega_1$:
+(1) there are stationary $S$, $T$ with $S\cap T$ not stationary, so (A) is false;
+(2) it is false that every nonempty family of stationary sets has a stationary intersection;
+(3) the intersection of all stationary subsets of $\omega_1$ is not stationary;
+(4) for every proposition $Q$, $\neg(\text{(A)}\wedge Q)$.
+\end{theorem}
+\begin{proof}
+Take $S$, $T$ from Theorem~\ref{thm:ulam} with $\alpha=\omega_1$. Then $S\cap T=\emptyset$, and
+$\emptyset$ is not stationary. This gives (1). For (2) apply the hypothesis to the family
+$\{S,T\}$, and for (3) note that the intersection of all stationary sets lies inside $S\cap T$,
+so it is empty. (4) follows from (1).
+\end{proof}
+
+\begin{remark}[\texttt{isStationary\_inter\_isClub}; not part of the refutation]\label{rem:club}
+If $S\subseteq\omega_1$ is stationary and $C\subseteq\omega_1$ is a club, then $S\cap C$ is
+stationary: for any club $D$, $C\cap D$ is a club (Mathlib's \texttt{IsClub.inter}), so
+$(S\cap C)\cap D = S\cap(C\cap D)\ne\emptyset$. This is a different statement from (A).
+\end{remark}
+
+\section{Lean formalization and axiom audit}
+
+The file \texttt{lean/Conjecture3524/Basic.lean} (175 lines, \texttt{import Mathlib} only,
+namespace \texttt{C3524}, Lean v4.33.1, Mathlib v4.33.1) contains:
+\begin{itemize}
+\item \texttt{isClub\_iff\_closed\_unbounded}, \texttt{isStationary\_iff\_meets\_every\_club}:
+  the unfoldings of Mathlib's definitions given in Section 2.
+\item \texttt{isStationary\_Ioi}, \texttt{exists\_disjoint\_stationary}: Lemma~\ref{lem:tail} and
+  Theorem~\ref{thm:ulam} for a general linear order $\alpha$.
+\item \texttt{countable\_Iio\_omega\_one}, \texttt{cof\_omega\_one\_toType},
+  \texttt{uncountable\_omega\_one\_toType}: the hypotheses for $\omega_1$.
+\item \texttt{exists\_disjoint\_stationary\_omega\_one}:
+  \texttt{$\exists$ S T : Set ($\omega_1$).ToType, IsStationary S $\wedge$ IsStationary T
+  $\wedge$ Disjoint S T}.
+\item \texttt{StationaryInterClaim} (the literal clause (A)):
+  \texttt{$\forall$ S T : Set ($\omega_1$).ToType, IsStationary S $\to$ IsStationary T $\to$
+  IsStationary (S $\cap$ T)}, and \texttt{stationaryInterClaim\_false :
+  $\neg$ StationaryInterClaim}.
+\item \texttt{sInter\_claim\_false}, \texttt{not\_isStationary\_sInter\_all}: forms (2) and (3).
+\item \texttt{conjecture3524\_false (Q : Prop) : $\neg$ (StationaryInterClaim $\wedge$ Q)}:
+  the main theorem.
+\item \texttt{isStationary\_inter\_isClub}: Remark~\ref{rem:club}.
+\end{itemize}
+
+\textbf{Conventions.} The statements are universe-polymorphic: $\omega_1$ is taken in
+\texttt{Ordinal.\{u\}} for an arbitrary universe \texttt{u}. Choice is used (via
+\texttt{Classical.choice}) to pick the injections $f_a$ and the indices $N(b)$.
+
+\textbf{Axiom audit.} \texttt{\#print axioms} for \texttt{conjecture3524\_false},
+\texttt{stationaryInterClaim\_false}, \texttt{sInter\_claim\_false},
+\texttt{not\_isStationary\_sInter\_all}, \texttt{exists\_disjoint\_stationary\_omega\_one} and
+\texttt{isStationary\_inter\_isClub} reports \texttt{[propext, Classical.choice, Quot.sound]}.
+The file elaborates with no errors and no warnings. It contains no \texttt{sorry}, no
+\texttt{native\_decide} and no added axioms.
+
+\section*{Sources}
+\begin{itemize}
+\item Wikipedia, ``Stationary set'',
+  \url{https://en.wikipedia.org/wiki/Stationary_set}: ``a stationary set is a set that is not too
+  small in the sense that it intersects all club sets''; for $\kappa$ of countable cofinality
+  ``any two stationary subsets of $\kappa$ have stationary intersection. This is no longer the
+  case if the cofinality of $\kappa$ is uncountable.'' A stationary subset of a regular $\kappa$
+  ``can be partitioned into $\kappa$ many disjoint stationary sets. This result is due to
+  Solovay. If $\kappa$ is a successor cardinal, this result is due to Ulam and is easily shown
+  by means of what is called an Ulam matrix.''
+\item Wikipedia, ``Club set'', \url{https://en.wikipedia.org/wiki/Club_set}: ``If a set is both
+  closed and unbounded, then it is a club set''.
+\item Mathlib, \texttt{Mathlib/SetTheory/Cardinal/Cofinality/Club.lean} (definitions
+  \texttt{IsClub}, \texttt{IsStationary}; lemmas \texttt{IsClub.inter},
+  \texttt{IsStationary.of\_not\_isCofinal\_compl},
+  \texttt{isStationary\_iUnion\_iff\_of\_countable}, \texttt{not\_isStationary\_empty}).
+\end{itemize}
+
+\end{document}
