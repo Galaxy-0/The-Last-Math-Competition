@@ -1,0 +1,128 @@
+@[reducible] def Conjecture525.Plane.{u_1} : (K : Type u_1) → [inst : Field K] → Type (max 0 u_1) :=
+fun K [Field K] => MvPolynomial (Fin 2) K
+def Conjecture525.x.{u_1} : (K : Type u_1) → [inst : Field K] → Conjecture525.Plane K :=
+fun K [Field K] => MvPolynomial.X 0
+def Conjecture525.y.{u_1} : (K : Type u_1) → [inst : Field K] → Conjecture525.Plane K :=
+fun K [Field K] => MvPolynomial.X 1
+def Conjecture525.cusp.{u_1} : (K : Type u_1) → [inst : Field K] → Conjecture525.Plane K :=
+fun K [Field K] => Conjecture525.x K ^ 2 + Conjecture525.y K ^ 3
+def Conjecture525.originPower.{u_1} : (K : Type u_1) → [inst : Field K] → ℕ → Ideal (Conjecture525.Plane K) :=
+fun K [Field K] q => Ideal.span {Conjecture525.x K ^ q, Conjecture525.y K ^ q}
+def Conjecture525.fpt.{u_1} : (K : Type u_1) → [inst : Field K] → ℕ → Conjecture525.Plane K → ℝ :=
+fun K [Field K] p f => sSup {t | ∃ e n, f ^ n ∉ Conjecture525.originPower K (p ^ e) ∧ t = ↑n / ↑p ^ e}
+def Conjecture525.bracketPower.{u_1} : (K : Type u_1) →
+  [inst : Field K] → Ideal (Conjecture525.Plane K) → ℕ → Ideal (Conjecture525.Plane K) :=
+fun K [Field K] I q => Ideal.span ((fun g => g ^ q) '' ↑I)
+def Conjecture525.thresholdAt.{u_1} : (K : Type u_1) →
+  [inst : Field K] → ℕ → Conjecture525.Plane K → Ideal (Conjecture525.Plane K) → ℝ :=
+fun K [Field K] p f I => sSup {t | ∃ e n, f ^ n ∉ Conjecture525.bracketPower K I (p ^ e) ∧ t = ↑n / ↑p ^ e}
+def Conjecture525.globalFpt.{u_1} : (K : Type u_1) → [inst : Field K] → ℕ → Conjecture525.Plane K → ℝ :=
+fun K [Field K] p f => sInf {t | ∃ I, I.IsMaximal ∧ f ∈ I ∧ t = Conjecture525.thresholdAt K p f I}
+def Conjecture525.originIdeal.{u_1} : (K : Type u_1) → [inst : Field K] → Ideal (Conjecture525.Plane K) :=
+fun K [Field K] => RingHom.ker MvPolynomial.constantCoeff
+@[reducible] def Conjecture525.PrimeCharacteristic : Type :=
+{ p // Nat.Prime p }
+def Conjecture525.localPrimeThreshold : Conjecture525.PrimeCharacteristic → ℝ :=
+fun p => Conjecture525.fpt (ZMod ↑p) (↑p) (Conjecture525.cusp (ZMod ↑p))
+def Conjecture525.globalPrimeThreshold : Conjecture525.PrimeCharacteristic → ℝ :=
+fun p => Conjecture525.globalFpt (ZMod ↑p) (↑p) (Conjecture525.cusp (ZMod ↑p))
+def Conjecture525.ResidueClaim : (Conjecture525.PrimeCharacteristic → ℝ) → Prop :=
+fun T => ∀ (p : Conjecture525.PrimeCharacteristic), ↑p % 3 = 2 → T p = 5 / 6
+def Conjecture525.ConjectureAt : (Conjecture525.PrimeCharacteristic → ℝ) → ℝ → Prop :=
+fun T L => Filter.Tendsto T (Filter.comap Subtype.val Filter.atTop) (nhds L) ∧ Conjecture525.ResidueClaim T
+Conjecture525.x_pow_mem.{u_1} (K : Type u_1) [Field K] (q : ℕ) : Conjecture525.x K ^ q ∈ Conjecture525.originPower K q
+'Conjecture525.x_pow_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.y_pow_mem.{u_1} (K : Type u_1) [Field K] (q : ℕ) : Conjecture525.y K ^ q ∈ Conjecture525.originPower K q
+'Conjecture525.y_pow_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.cusp_four_mem.{u_1} (K : Type u_1) [Field K] : Conjecture525.cusp K ^ 4 ∈ Conjecture525.originPower K 5
+'Conjecture525.cusp_four_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.one_not_mem.{u_1} (K : Type u_1) [Field K] (q : ℕ) (hq : 0 < q) : 1 ∉ Conjecture525.originPower K q
+'Conjecture525.one_not_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.pow_mem_of_mem.{u_1} (K : Type u_1) [Field K] {f : Conjecture525.Plane K} {q n m : ℕ}
+  (h : f ^ n ∈ Conjecture525.originPower K q) (hnm : n ≤ m) : f ^ m ∈ Conjecture525.originPower K q
+'Conjecture525.pow_mem_of_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.cusp_mem_origin.{u_1} (K : Type u_1) [Field K] : Conjecture525.cusp K ∈ Conjecture525.originPower K 1
+'Conjecture525.cusp_mem_origin' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.origin_isMaximal.{u_1} (K : Type u_1) [Field K] : (Conjecture525.originIdeal K).IsMaximal
+'Conjecture525.origin_isMaximal' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.cusp_mem_originIdeal.{u_1} (K : Type u_1) [Field K] : Conjecture525.cusp K ∈ Conjecture525.originIdeal K
+'Conjecture525.cusp_mem_originIdeal' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.originPower_le_bracket.{u_1} (K : Type u_1) [Field K] (q : ℕ) :
+  Conjecture525.originPower K q ≤ Conjecture525.bracketPower K (Conjecture525.originIdeal K) q
+'Conjecture525.originPower_le_bracket' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.bracketPower_le.{u_1} (K : Type u_1) [Field K] (I : Ideal (Conjecture525.Plane K)) (q : ℕ) (hq : 0 < q) :
+  Conjecture525.bracketPower K I q ≤ I
+'Conjecture525.bracketPower_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.thresholdAt_set_nonempty.{u_1} (K : Type u_1) [Field K] (p : ℕ) (f : Conjecture525.Plane K)
+  (I : Ideal (Conjecture525.Plane K)) (hI : I.IsMaximal) :
+  {t | ∃ e n, f ^ n ∉ Conjecture525.bracketPower K I (p ^ e) ∧ t = ↑n / ↑p ^ e}.Nonempty
+'Conjecture525.thresholdAt_set_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.thresholdAt_admissible_le_one.{u_1} (K : Type u_1) [Field K] (p : ℕ) (hp : 0 < p)
+  (f : Conjecture525.Plane K) (I : Ideal (Conjecture525.Plane K)) (hf : f ∈ I) (e n : ℕ)
+  (h : f ^ n ∉ Conjecture525.bracketPower K I (p ^ e)) : ↑n / ↑p ^ e ≤ 1
+'Conjecture525.thresholdAt_admissible_le_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.thresholdAt_le_one.{u_1} (K : Type u_1) [Field K] (p : ℕ) (hp : 0 < p) (f : Conjecture525.Plane K)
+  (I : Ideal (Conjecture525.Plane K)) (hI : I.IsMaximal) (hf : f ∈ I) : Conjecture525.thresholdAt K p f I ≤ 1
+'Conjecture525.thresholdAt_le_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.thresholdAt_nonneg.{u_1} (K : Type u_1) [Field K] (p : ℕ) (f : Conjecture525.Plane K)
+  (I : Ideal (Conjecture525.Plane K)) : 0 ≤ Conjecture525.thresholdAt K p f I
+'Conjecture525.thresholdAt_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.globalFpt_le_thresholdAt.{u_1} (K : Type u_1) [Field K] (p : ℕ) (f : Conjecture525.Plane K)
+  (I : Ideal (Conjecture525.Plane K)) (hI : I.IsMaximal) (hf : f ∈ I) :
+  Conjecture525.globalFpt K p f ≤ Conjecture525.thresholdAt K p f I
+'Conjecture525.globalFpt_le_thresholdAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.bracketPower_one.{u_1} (K : Type u_1) [Field K] (I : Ideal (Conjecture525.Plane K)) :
+  Conjecture525.bracketPower K I 1 = I
+'Conjecture525.bracketPower_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.allLevels_eq_positive.{u_1} (K : Type u_1) [Field K] (p : ℕ) (f : Conjecture525.Plane K)
+  (J : ℕ → Ideal (Conjecture525.Plane K)) (hf : f ∈ J 1) (hproper : ∀ (e : ℕ), 1 ∉ J (p ^ e)) :
+  {t | ∃ e n, f ^ n ∉ J (p ^ e) ∧ t = ↑n / ↑p ^ e} = {t | ∃ e n, 0 < e ∧ f ^ n ∉ J (p ^ e) ∧ t = ↑n / ↑p ^ e}
+'Conjecture525.allLevels_eq_positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.fpt_eq_positive_levels.{u_1} (K : Type u_1) [Field K] (p : ℕ) (hp : 0 < p) :
+  Conjecture525.fpt K p (Conjecture525.cusp K) =
+    sSup {t | ∃ e n, 0 < e ∧ Conjecture525.cusp K ^ n ∉ Conjecture525.originPower K (p ^ e) ∧ t = ↑n / ↑p ^ e}
+'Conjecture525.fpt_eq_positive_levels' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.thresholdAt_eq_positive_levels.{u_1} (K : Type u_1) [Field K] (p : ℕ) (hp : 0 < p)
+  (f : Conjecture525.Plane K) (I : Ideal (Conjecture525.Plane K)) (hI : I.IsMaximal) (hf : f ∈ I) :
+  Conjecture525.thresholdAt K p f I =
+    sSup {t | ∃ e n, 0 < e ∧ f ^ n ∉ Conjecture525.bracketPower K I (p ^ e) ∧ t = ↑n / ↑p ^ e}
+'Conjecture525.thresholdAt_eq_positive_levels' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.frobenius_mem.{u_1} (K : Type u_1) [Field K] [CharP K 5] {f : Conjecture525.Plane K} {q : ℕ}
+  (h : f ∈ Conjecture525.originPower K q) (e : ℕ) : f ^ 5 ^ e ∈ Conjecture525.originPower K (q * 5 ^ e)
+'Conjecture525.frobenius_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.cusp_all_levels.{u_1} (K : Type u_1) [Field K] [CharP K 5] (e : ℕ) :
+  Conjecture525.cusp K ^ (4 * 5 ^ e) ∈ Conjecture525.originPower K (5 ^ (e + 1))
+'Conjecture525.cusp_all_levels' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.admissible_bound.{u_1} (K : Type u_1) [Field K] [CharP K 5] (e n : ℕ)
+  (h : Conjecture525.cusp K ^ n ∉ Conjecture525.originPower K (5 ^ e)) : ↑n / 5 ^ e ≤ 4 / 5
+'Conjecture525.admissible_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.fpt_le_four_fifths.{u_1} (K : Type u_1) [Field K] [CharP K 5] :
+  Conjecture525.fpt K 5 (Conjecture525.cusp K) ≤ 4 / 5
+'Conjecture525.fpt_le_four_fifths' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.fpt_ne_five_sixths.{u_1} (K : Type u_1) [Field K] [CharP K 5] :
+  Conjecture525.fpt K 5 (Conjecture525.cusp K) ≠ 5 / 6
+'Conjecture525.fpt_ne_five_sixths' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.origin_values_bddAbove.{u_1} (K : Type u_1) [Field K] [CharP K 5] :
+  BddAbove {t | ∃ e n, Conjecture525.cusp K ^ n ∉ Conjecture525.originPower K (5 ^ e) ∧ t = ↑n / 5 ^ e}
+'Conjecture525.origin_values_bddAbove' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.thresholdAt_origin_le_fpt.{u_1} (K : Type u_1) [Field K] [CharP K 5] :
+  Conjecture525.thresholdAt K 5 (Conjecture525.cusp K) (Conjecture525.originIdeal K) ≤
+    Conjecture525.fpt K 5 (Conjecture525.cusp K)
+'Conjecture525.thresholdAt_origin_le_fpt' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.globalFpt_le_origin_fpt.{u_1} (K : Type u_1) [Field K] [CharP K 5] :
+  Conjecture525.globalFpt K 5 (Conjecture525.cusp K) ≤ Conjecture525.fpt K 5 (Conjecture525.cusp K)
+'Conjecture525.globalFpt_le_origin_fpt' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.globalFpt_le_four_fifths.{u_1} (K : Type u_1) [Field K] [CharP K 5] :
+  Conjecture525.globalFpt K 5 (Conjecture525.cusp K) ≤ 4 / 5
+'Conjecture525.globalFpt_le_four_fifths' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.globalFpt_ne_five_sixths.{u_1} (K : Type u_1) [Field K] [CharP K 5] :
+  Conjecture525.globalFpt K 5 (Conjecture525.cusp K) ≠ 5 / 6
+'Conjecture525.globalFpt_ne_five_sixths' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.local_residue_claim_false : ¬Conjecture525.ResidueClaim Conjecture525.localPrimeThreshold
+'Conjecture525.local_residue_claim_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.global_residue_claim_false : ¬Conjecture525.ResidueClaim Conjecture525.globalPrimeThreshold
+'Conjecture525.global_residue_claim_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.local_conjecture_false (L : ℝ) : ¬Conjecture525.ConjectureAt Conjecture525.localPrimeThreshold L
+'Conjecture525.local_conjecture_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture525.global_conjecture_false (L : ℝ) : ¬Conjecture525.ConjectureAt Conjecture525.globalPrimeThreshold L
+'Conjecture525.global_conjecture_false' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,220 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=24mm]{geometry}
+\usepackage[UTF8,fontset=fandol,scheme=plain]{ctex}
+\usepackage{amsmath,amssymb,amsthm,booktabs,array}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
+\usepackage{xurl}
+\newcommand{\lean}[1]{\nolinkurl{#1}}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\F}{\mathbb F}
+\newcommand{\fpt}{\operatorname{fpt}}
+\newcommand{\origin}{\mathfrak m_0}
+\renewcommand{\refname}{References}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\title{Disproof of conjecture 00000000525\\[5pt]
+\large An all-level Frobenius bound in characteristic five}
+\author{C0ldSmi1e}
+\date{5 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+For $f=x^2+y^3$ over $\F_5$, we prove
+$\fpt_0(f)\le 4/5<5/6$ and the same upper bound for the global threshold.
+Since $5$ is prime and $5\equiv2\pmod3$, this disproves the exact-value
+assertion, and hence the conjunction in the conjecture. We do not assert
+an exact threshold or decide its separate limiting assertion.
+\end{abstract}
+
+\section{Original statement and interpretation}
+\textbf{English.} Definition: The F-pure threshold $\fpt(f)$ (the
+characteristic-$p$ logarithmic threshold). Conjecture: The limit of
+$\fpt(x^2+y^3)$ as $p\to\infty$ equals its characteristic-zero log
+threshold, and for $p\equiv2\pmod3$, $\fpt=5/6$ (an explicit interpolation
+formula).
+
+\textbf{中文。} 定义：F-纯阈值 $\fpt(f)$（特征 $p$ 的 log 阈值）。
+猜想：$\fpt(x^2+y^3)$ 的极限（$p\to\infty$）等于其特征零 log 阈值，
+且对 $p\equiv2\pmod3$ 有 $\fpt=5/6$（显式插值公式）。
+
+Neither version excludes small primes or replaces the exact-value assertion
+by an eventual assertion. The witness $p=5$ also exceeds both exponents
+in the polynomial. Both the threshold at the origin and the ordinary
+global interpretation are addressed below.
+
+For a field $K$ of characteristic $p$, put $R=K[x,y]$ and
+$\origin=(x,y)$. We use the standard all-level definition\,\cite{sv}
+\[
+ \fpt_0(f)=\sup\left\{\frac{n}{p^e}: e\ge1,\ n\in\mathbb N,
+ f^n\notin(x^{p^e},y^{p^e})\right\}.
+\]
+The denominator and supremum are in $\mathbb R$. The ideal here is the
+Frobenius power $\origin^{[p^e]}$, not the ordinary ideal power.
+Lean uses the actual type \lean{MvPolynomial (Fin 2) K} and
+\lean{Ideal.span}; no numerical surrogate for either object is used.
+
+\newpage
+\section{A bound at every Frobenius level}
+The following polynomial identity holds over every field:
+\begin{align*}
+ (x^2+y^3)^4
+ &=x^5(x^3+4xy^3)\\
+ &\quad+y^5(6x^4y+4x^2y^4+y^7).
+\end{align*}
+Consequently $f^4\in(x^5,y^5)$. This is checked as a polynomial identity
+by Lean's kernel-verified ring normalization, followed by ordinary ideal
+membership operations.
+
+Now suppose $\operatorname{char}K=5$. For every $r\in\mathbb N$, the
+$5^r$th power map is a ring homomorphism. Taking that power of an ideal
+membership expression gives
+\[
+ f^{4\cdot5^r}\in
+ (x^{5^{r+1}},y^{5^{r+1}}).
+ \tag{1}
+\]
+More generally, the checked lemma \lean{frobenius_mem} sends membership
+in $(x^q,y^q)$ to membership of the $5^r$th power in
+$(x^{q5^r},y^{q5^r})$. Thus (1) holds for every level, with no finite
+cutoff or experimental extrapolation.
+
+An ideal containing $f^a$ contains $f^n$ whenever $n\ge a$.
+Therefore, for any positive level $e=r+1$, nonmembership of $f^n$
+forces $n<4\cdot5^r$. Every defining ratio then satisfies
+\[
+ \frac{n}{5^{r+1}}\le\frac{4\cdot5^r}{5^{r+1}}=\frac45.
+\]
+The defining set is nonempty: $n=0$ contributes zero, since $1$ is
+outside $(x^{5^e},y^{5^e})$. Evaluating at the origin proves this
+properness. The bound above proves boundedness. Conditional completeness
+of $\mathbb R$ therefore yields the genuine supremum bound
+\[
+ \boxed{\fpt_0(x^2+y^3)\le\frac45<\frac56.}
+ \tag{2}
+\]
+
+\paragraph{Indexing in the Lean definition.}
+The implementation permits $e=0$. At that level the ideal is $(x,y)$,
+and $f\in(x,y)$, so the only admissible exponent is $n=0$. Its ratio
+zero is already present at level one. The theorem
+\lean{allLevels_eq_positive} proves equality of the two defining sets;
+\lean{fpt_eq_positive_levels} specializes it to this polynomial.
+Thus the added zeroth level changes neither the set nor its supremum.
+No empty-set or unbounded-set default of the real supremum is used.
+
+\newpage
+\section{The global interpretation}
+For an ideal $I\subset R$ and a positive integer $q$, write
+\[
+ I^{[q]}=(g^q:g\in I).
+\]
+For every maximal ideal $I$ containing $f$, define
+\[
+ c^I(f)=\sup\left\{\frac{n}{p^e}: e\ge1,\ n\in\mathbb N,
+ f^n\notin I^{[p^e]}\right\}.
+\]
+Over an F-finite regular ring, the standard global characterization is
+$\fpt(f)=\inf_{I\supset(f),\ I\text{ maximal}}c^I(f)$;
+the local interpretation and minimum characterization are given in
+\cite[\S3, Proposition 3.2(iii--iv)]{bms}.
+These hypotheses hold for the prime-field polynomial rings $\F_p[x,y]$
+used in the final statement. Ideals are not restricted to rational points.
+The equivalence with the test-ideal definition is cited; this project
+formalizes the displayed characterization directly.
+
+Lean formalizes the displayed bracket ideal, each supremum, and this
+infimum directly. For $f\in I$ and $p>0$, one has
+$f^{p^e}\in I^{[p^e]}$. Hence every admissible exponent satisfies
+$n<p^e$, so each defining set is bounded above by one. It contains zero
+because $I^{[p^e]}\subseteq I\ne R$. All its ratios are nonnegative.
+The corresponding facts and the positive-level indexing bridge are
+checked in \lean{thresholdAt_admissible_le_one},
+\lean{thresholdAt_set_nonempty}, and
+\lean{thresholdAt_eq_positive_levels}.
+
+Let $\origin$ now be the kernel of constant-coefficient evaluation
+$R\to K$. This map is surjective, so its kernel is maximal, and $f$
+belongs to it. For every $q$,
+\[
+ (x^q,y^q)\subseteq\origin^{[q]}.
+\]
+Thus the nonmembership ratios for $\origin^{[5^e]}$ form a subset of
+those defining $\fpt_0(f)$. Their suprema satisfy
+$c^{\origin}(f)\le\fpt_0(f)$. The set defining the global infimum is
+nonempty (it includes the origin term) and bounded below by zero.
+Consequently Lean proves the exact chain needed:
+\[
+ \fpt(f)\le c^{\origin}(f)\le\fpt_0(f)\le\frac45<\frac56.
+ \tag{3}
+\]
+The middle comparison uses the established nonemptiness and boundedness,
+not a formal default value of an extremum. The combined theorem is
+\lean{globalFpt_le_origin_fpt}. Equality of local and global thresholds
+is neither asserted nor required.
+
+The algebraic inequalities are proved for the displayed expressions over
+every characteristic-five field. The cited identification as a global
+F-pure threshold is used here for $\F_p[x,y]$, within the F-finite
+regular setting; no assertion about arbitrary non-F-finite fields is
+deduced from that reference.
+
+\newpage
+\section{Faithfulness and verification}
+\lean{PrimeCharacteristic} is the subtype of all prime natural numbers.
+\lean{localPrimeThreshold} and \lean{globalPrimeThreshold} use
+$\mathbb Z/p\mathbb Z$, with its field instance obtained from primality.
+\lean{ResidueClaim} states the equality $T(p)=5/6$ for every prime
+$p$ with $p\bmod3=2$. Applying it at $5$ contradicts (2) or (3).
+
+\lean{ConjectureAt T L} is the conjunction of that residue assertion
+and convergence of $T(p)$ to $L$ through all primes tending to infinity.
+The formal limit uses the pullback of the natural-number at-top filter
+along the prime subtype's value map. The final theorems are
+\begin{center}
+\lean{Conjecture525.local_conjecture_false}\\[3pt]
+\lean{Conjecture525.global_conjecture_false}.
+\end{center}
+Each proves the negation for \emph{every} real $L$. In particular, it
+applies to the actual characteristic-zero log canonical threshold,
+whatever its value. $L$ is not a redefinition of that invariant, and the
+proof makes no assumption that the separate limit assertion fails.
+
+\paragraph{Reproducibility.}
+The project pins Lean 4.19.0 and Mathlib v4.19.0, including all eight
+transitive dependency revisions in \code{lake-manifest.json}.
+Run \code{lake build} in \code{lean/}; then replay
+\code{Conjecture525.lean}, \code{Audit.lean}, and \code{Check.lean}
+with \code{lake env lean -DwarningAsError=true}.
+The accompanying README gives complete commands and artifact locations.
+
+The author and a separate coordinator build both completed successfully.
+The coordinator used a fresh project output directory and recorded 45
+commands, including dependency identities before and after execution.
+All three modules passed strict replay. Independent source and compiled
+environment inventories cover 48 named authored declarations (15
+definitions/abbreviations and 33 lemmas/theorems) and all 15 additional
+generated declarations: 63 in total. Every compiled declaration is safe,
+with no partial or missing dependency, and no axiom declaration. The only
+axiom dependencies are the standard foundations \code{propext},
+\code{Classical.choice}, and \code{Quot.sound}. No admission,
+\code{native_decide}, extra axiom, or compiler-artifact exemption is used.
+
+\code{Audit.lean} and \code{Check.lean} inspect existing declarations;
+they do not generate a mathematical theorem. All mathematical
+calculations are in Lean. There is no auxiliary numerical computation
+whose output is assumed as a proof. Evidence preserves actual successful
+and failed development commands and clearly separates local verification
+from any later maintainer decision.
+
+\begin{thebibliography}{9}
+\bibitem{sv} K. E. Smith and A. Vraciu, \emph{Values of the F-pure
+threshold for homogeneous polynomials}, J. London Math. Soc. 108 (2023),
+1004--1035, Definition 2.1.
+\href{https://doi.org/10.1112/jlms.12774}{doi:10.1112/jlms.12774}.
+Only the general definition is used, not homogeneous-polynomial formulas.
+\bibitem{bms} M. Blickle, M. Musta\c{t}\u{a}, and K. E. Smith,
+\emph{F-thresholds of hypersurfaces}, \S3 and Proposition 3.2,
+\href{https://arxiv.org/abs/0705.1210}{arXiv:0705.1210v3} (2008).
+\end{thebibliography}
+\end{document}

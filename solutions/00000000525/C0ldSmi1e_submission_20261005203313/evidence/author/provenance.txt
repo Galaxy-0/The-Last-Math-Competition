@@ -1,0 +1,20 @@
+Problem read from author-only input copy; stated original SHA256 fc349594dc530f505b3470bc698707d1ab5a9fc676a9869c2c161ed6b861a702.
+No competition solutions, history, pull requests, other authored proof roots or reviewer criteria read.
+Independent witness derived before external reference lookup: p=5; (x²+y³)^4 lies in (x^5,y^5) by expansion; iterate Frobenius.
+External search actually performed: "F pure threshold definition nu f p e supremum polynomial maximal ideal Frobenius powers lecture notes".
+Opened https://londmathsoc.onlinelibrary.wiley.com/doi/abs/10.1112/jlms.12774, then followed its full-text link (id 14) to https://londmathsoc.onlinelibrary.wiley.com/doi/full/10.1112/jlms.12774.
+Relevant general definition: Smith–Vraciu (2023), Definition 2.1, article lines 133–139: threshold at homogeneous maximal ideal is supremum N/p^e over f^N outside (x_i^{p^e}). No example, witness, cusp formula or competition solution search performed.
+Initial verification attempts before command logger creation:
+1. lake env lean Conjecture525.lean, exit 1: root Mathlib.olean unavailable; warning manifest inputRev mismatch.
+2. lake env lean Conjecture525.lean, exit 1: three computability errors in x, y, cusp; two unnecessarySeqFocus warnings.
+All subsequent Lean/build/audit attempts recorded verbatim with exit codes in commands.jsonl.
+The Python command runner is operational logging only, inspected before execution. No auxiliary mathematical programs have been used.
+Further actual general-definition searches:
+- "F pure threshold global infimum local maximal ideals definition polynomial ring"
+- "\"global F-pure threshold\" \"local\""
+- "\"F-pure threshold\" \"inf\" \"maximal\" \"localization\""
+The second batch incidentally returned a ResearchGate thesis snippet containing a formula for the cusp. This was AFTER the independently derived p=5 all-level proof had compiled successfully. It was not requested, opened, or used; its incidental display is recorded to avoid overstating isolation.
+- "Blickle Mustata Smith F thresholds hypersurfaces arxiv proposition 3.2"
+Opened https://arxiv.org/pdf/0705.1210 and used a find for "Proposition 3.2". Relevant definition/interpretation provenance: BMS §3 and Proposition 3.2(iii–iv); primary-source assumptions are F-finite regular rings, satisfied by F_p[x,y]. No problem-specific formula or example was used from this source.
+Audit development: an initial compiled-environment audit (failure preserved in commands.jsonl) detected compiler-generated specialization axioms such as RingHom.ker._at.Conjecture525.originIdeal._spec_3. They were eliminated by making each data definition explicitly noncomputable, not exempted. Final Audit checks every declaration whose module is Conjecture525, including generated proof/eq declarations, against precisely propext, Classical.choice, Quot.sound.
+The requested TOML configuration replaces lakefile.lean; the prior configuration is preserved as lakefile-original.lean in this author-evidence directory.
