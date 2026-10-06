@@ -1,0 +1,156 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Conjecture 00000004082 is false:\\ the Kuramoto critical coupling is not a multiple of the mean absolute frequency deviation}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\emph{Definition: Kuramoto synchronization is the phase locking of coupled oscillators, and the
+critical coupling $K_c$ is the onset threshold of synchronization. Conjecture: For $n$ all-to-all
+coupled oscillators, $K_c$ depends only on the dispersion spectrum of the intrinsic frequencies,
+with formula $K_c = c_1 \cdot (\sum_i |\omega_i - \bar\omega|)/n$ for a universal constant $c_1$.}
+
+The statement is a conjunction. We refute its formula clause,
+$K_c = c_1 \sum_i|\omega_i-\bar\omega|/n$, and in fact show that $K_c$ is not \emph{any}
+function of $\sum_i|\omega_i-\bar\omega|/n$. We do not use the undefined phrase
+``dispersion spectrum''.
+
+\section{Definitions (as in the Lean file)}
+
+Let $n\ge 1$, $\omega\in\mathbb R^n$ (intrinsic frequencies) and $K\in\mathbb R$. The all-to-all
+Kuramoto model is
+\[
+  \dot\theta_i = \omega_i + \frac{K}{n}\sum_{j=1}^n \sin(\theta_j-\theta_i),\qquad i=1,\dots,n .
+\]
+\begin{definition}
+$\omega$ is \emph{locked at $K$} (\texttt{Locked}) if there are $\Omega\in\mathbb R$ and
+$\theta\in\mathbb R^n$ with $\omega_i + \frac Kn\sum_j\sin(\theta_j-\theta_i)=\Omega$ for all $i$.
+A trajectory $\theta:\mathbb R\to\mathbb R^n$ is a solution (\texttt{IsKuramotoSolution}) if
+it has the derivative above at every time, and it is \emph{phase locked}
+(\texttt{IsPhaseLocked}) if every difference $\theta_i(t)-\theta_j(t)$ is constant in $t$.
+The critical coupling is
+$K_c(\omega)=\inf\{K\ge 0 : \omega \text{ is locked at } K\}$ (\texttt{Kc}, a real
+\texttt{sInf}). We write $\bar\omega=\frac1n\sum_i\omega_i$ (\texttt{mean}) and
+$D(\omega)=\frac1n\sum_i|\omega_i-\bar\omega|$ (\texttt{meanAbsDev}).
+\end{definition}
+
+\begin{lemma}[\texttt{locked\_iff\_phaseLockedSolution}]
+$\omega$ is locked at $K$ if and only if the Kuramoto ODE has a phase-locked solution.
+\end{lemma}
+\begin{proof}
+If the equations hold, $\theta_i(t)=\theta_i+\Omega t$ is a solution, since the phase
+differences, and hence the right-hand side, do not depend on $t$. Conversely, if the
+differences are constant, then the derivatives at $t=0$ of $\theta_i-\theta_j$ vanish, so all
+right-hand sides at $t=0$ are equal to one number $\Omega$.
+\end{proof}
+
+\section{Proof}
+
+\begin{lemma}[\texttt{abs\_sub\_mean\_le\_of\_locked}]
+If $n\ge1$, $K\ge0$ and $\omega$ is locked at $K$, then $|\omega_i-\bar\omega|\le K$ for every $i$.
+\end{lemma}
+\begin{proof}
+The double sum $\sum_i\sum_j\sin(\theta_j-\theta_i)$ is zero, because exchanging $i$ and $j$
+changes its sign (\texttt{double\_sum\_sin\_eq\_zero}). Summing the $n$ equations gives
+$\sum_i\omega_i=n\Omega$, so $\Omega=\bar\omega$. Then
+$|\omega_i-\bar\omega| = \frac Kn|\sum_j\sin(\theta_j-\theta_i)|\le \frac Kn\cdot n=K$.
+\end{proof}
+
+\paragraph{Two-cluster vectors.} For $0<a<n$ let $c^{(a)}\in\mathbb R^n$ have its first $a$
+entries equal to $p=\frac{n}{2a}$ and the other $n-a$ entries equal to $-q$, $q=\frac{n}{2(n-a)}$
+(\texttt{clusterFreq n a}). Then $\bar c^{(a)}=(ap-(n-a)q)/n=0$ and
+$D(c^{(a)})=(ap+(n-a)q)/n=1$ (\texttt{mean\_clusterFreq}, \texttt{meanAbsDev\_clusterFreq}).
+For $n=6$: $c^{(3)}=(1,1,1,-1,-1,-1)$ and $c^{(1)}=(3,-\tfrac35,-\tfrac35,-\tfrac35,-\tfrac35,-\tfrac35)$.
+
+\begin{lemma}[\texttt{clusterPhase\_locked}, \texttt{clusterPhase\_cohesive}]
+Let $s_a=\frac{n^2}{2a(n-a)}$ (\texttt{clusterThr}). For every $K\ge s_a$, put
+$\delta=\arcsin(s_a/K)\in[0,\pi/2]$ and $\theta_j=\delta$ for $j\le a$, $\theta_j=0$ otherwise.
+Then $c^{(a)}_i+\frac Kn\sum_j\sin(\theta_j-\theta_i)=0$ for all $i$, so $c^{(a)}$ is locked at
+$K$. If $K>s_a$, then also $|\theta_i-\theta_j|<\pi/2$ for all $i,j$.
+\end{lemma}
+\begin{proof}
+$\sin\delta=s_a/K$. For $i$ in the first cluster the sum is $-(n-a)s_a/K$ and
+$p-(n-a)s_a/n = \frac n{2a}-\frac n{2a}=0$. For $i$ in the second cluster the sum is $a s_a/K$
+and $-q+a s_a/n=-\frac n{2(n-a)}+\frac{n}{2(n-a)}=0$. If $K>s_a$ then $s_a/K<1$ and $\delta<\pi/2$.
+\end{proof}
+
+\begin{theorem}[\texttt{Kc\_lt}, via \texttt{threshold\_separation}]
+For every $n\ge 6$: $K_c(c^{(3)}) < K_c(c^{(1)})$.
+\end{theorem}
+\begin{proof}
+$s_3=\frac{n^2}{6(n-3)}<\frac n2$ because $n^2<3n(n-3)$ for $n\ge 5$
+(\texttt{clusterThr\_three\_lt}). Let $m=(s_3+n/2)/2$. By the lemma $c^{(3)}$ is locked at $m$,
+so $K_c(c^{(3)})\le m<n/2$. The locking set of $c^{(1)}$ is nonempty (it contains $s_1+1$) and,
+by the necessary condition at $i=1$ with $|c^{(1)}_1-0|=n/2$, every element is $\ge n/2$; hence
+$K_c(c^{(1)})\ge n/2$.
+\end{proof}
+
+\begin{corollary}
+For every $n\ge 6$ there is no $F:\mathbb R\to\mathbb R$ with $K_c(\omega)=F(D(\omega))$ for all
+$\omega\in\mathbb R^n$ (\texttt{Kc\_not\_function\_of\_meanAbsDev}). In particular there is no
+$c_1$ (even one allowed to depend on $n$) with
+$K_c(\omega)=c_1\sum_i|\omega_i-\bar\omega|/n$ for all $\omega\in\mathbb R^n$
+(\texttt{conjecture4082\_false}), and no universal $c_1$ for all $n$
+(\texttt{conjecture4082\_false\_universal}).
+\end{corollary}
+\begin{proof}
+$D(c^{(3)})=D(c^{(1)})=1$ would force $K_c(c^{(3)})=K_c(c^{(1)})$.
+\end{proof}
+
+\paragraph{Variant readings.} \texttt{threshold\_separation} is proved for any locking notion
+$P$ that implies locking at coupling $\lambda K$ ($\lambda>0$) and holds for $c^{(a)}$ when
+$\lambda K>s_a$. This gives the same conclusion (no function of $D$) for:
+(i) the unnormalised coupling $\omega_i+K\sum_j\sin(\theta_j-\theta_i)=\Omega$
+(\texttt{conjecture4082\_false\_unnormalised}, $\lambda=n$);
+(ii) phase-cohesive locking, where the locked state must also satisfy
+$|\theta_i-\theta_j|<\pi/2$ (\texttt{conjecture4082\_false\_cohesive});
+(iii) the threshold $\inf\{K\ge0:\omega \text{ is locked at every } K'\ge K\}$
+(\texttt{conjecture4082\_false\_eventual}).
+Because the family covers every $n\ge 6$, a reading for large $n$ only is refuted as well.
+
+\paragraph{Context.} Dorfler and Bullo, \emph{On the Critical Coupling for Kuramoto Oscillators},
+arXiv:1011.3878, write: ``we present the first explicit necessary and sufficient condition on the
+critical coupling to achieve synchronization in the finite-dimensional Kuramoto model for an
+arbitrary distribution of the natural frequencies.'' Bronski, Carty and DeVille,
+arXiv:2007.04343, show ``that the set of such frequencies can be expressed by a seminorm which we
+call the Kuramoto norm.'' The proof above does not rely on either paper.
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{Conjecture4082/Basic.lean} (namespace \texttt{C4082}, Lean 4.33.1, Mathlib v4.33.1,
+346 lines, only \texttt{import Mathlib}). Main theorem:
+\begin{verbatim}
+theorem conjecture4082_false {n : Nat} (hn : 6 <= n) :
+    Not (exists c1 : Real, forall omega : Fin n -> Real,
+      Kc omega = c1 * ((sum i, |omega i - mean omega|) / n))
+\end{verbatim}
+\texttt{lake build} succeeds. \texttt{\#print axioms} for \texttt{conjecture4082\_false},
+\texttt{conjecture4082\_false\_universal}, \texttt{Kc\_not\_function\_of\_meanAbsDev},
+\texttt{conjecture4082\_false\_unnormalised}, \texttt{conjecture4082\_false\_cohesive},
+\texttt{conjecture4082\_false\_eventual} and \texttt{locked\_iff\_phaseLockedSolution} reports
+only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. There is no
+\texttt{sorry} and no \texttt{native\_decide}.
+
+\paragraph{Conventions.} $K_c$ is a real infimum over $K\ge0$ (the locking sets used are nonempty
+and bounded below, so no junk value occurs). Phases are real numbers and the cohesive condition
+$|\theta_i-\theta_j|<\pi/2$ is imposed on the real representatives. Natural-number indices are
+cast to $\mathbb R$.
+
+\end{document}
