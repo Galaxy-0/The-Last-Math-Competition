@@ -1,0 +1,153 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\title{Proof of conjecture 00000002450:\\ a nondiscrete Polish group all of whose Borel actions are smooth}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and its reading}
+
+\textbf{Statement (English, verbatim).} Conjecture: There exists a Polish group $G$ all of whose
+Borel-action orbit equivalence relations are smooth, while $G$ is nondiscrete (an all-smooth group).
+
+\textbf{Reading.} This is a plain existential statement. We read every term in its standard sense.
+\begin{itemize}
+\item A \emph{Polish group} is a topological group whose topology is Polish (separable and
+  completely metrizable). Lean: \texttt{Group G}, \texttt{TopologicalSpace G},
+  \texttt{IsTopologicalGroup G}, \texttt{PolishSpace G}. Its measurable structure is the Borel
+  $\sigma$-algebra (\texttt{MeasurableSpace G} together with \texttt{BorelSpace G}).
+\item A \emph{Borel action} of $G$ is a group action $G\times X\to X$ on a standard Borel space $X$
+  (\texttt{StandardBorelSpace X}) such that the action map $(g,x)\mapsto g\cdot x$ is Borel for the
+  product $\sigma$-algebra. Lean: \texttt{MulAction G X} together with
+  \texttt{Measurable (fun p : G $\times$ X => p.1 $\bullet$ p.2)}.
+\item The \emph{orbit equivalence relation} is $x\,E_G\,y \iff \exists g\in G,\ g\cdot x=y$
+  (Lean: \texttt{orbitEquivRel}).
+\item An equivalence relation $E$ on $X$ is \emph{smooth} if there are a Polish space $Y$ and a Borel
+  map $f:X\to Y$ with $x\,E\,y\iff f(x)=f(y)$ for all $x,y$ (Lean: \texttt{IsSmooth}; $Y$ ranges over
+  Polish spaces in \texttt{Type}, with their Borel $\sigma$-algebra).
+\item $G$ is \emph{all-smooth} if for every standard Borel space $X$ and every Borel action of $G$ on
+  $X$, $E_G$ is smooth (Lean: \texttt{AllSmooth}). The Lean definition quantifies over all
+  $X$ in an arbitrary universe \texttt{u}, and the main theorem is universe-polymorphic in \texttt{u}.
+\item \emph{Nondiscrete} means that the topology of $G$ is not discrete (Lean:
+  \texttt{$\neg$ DiscreteTopology G}).
+\end{itemize}
+Actions are not assumed continuous: every action whose action map is Borel is covered.
+
+\textbf{Witness.} The Cantor group $C=(\mathbb Z/2\mathbb Z)^{\mathbb N}$ with the product topology,
+written multiplicatively (Lean: \texttt{Cantor := Multiplicative ($\mathbb N$ -> ZMod 2)}). It is a
+compact metrizable infinite group, hence Polish and nondiscrete. The witness is not degenerate:
+it is an uncountable, nondiscrete group, and the property ``all-smooth'' is not vacuous for it, since
+it has Borel actions with uncountably many orbits (for instance on $C	imes C$ by translation of
+the first factor), so the smoothness assertion has content. The content of the proof is the general fact that every compact Polish group is
+all-smooth, which we prove in full (Theorem~\ref{thm:compact}).
+
+\section{Proof}
+
+\begin{theorem}[\texttt{C2450.allSmooth\_of\_compact}]\label{thm:compact}
+Every compact Polish group $G$ is all-smooth.
+\end{theorem}
+
+\begin{proof}
+Let $G$ act on a standard Borel space $X$ with Borel action map. Let $\mu$ be a (left) Haar measure
+on $G$ (Mathlib \texttt{Measure.haar}). Since $G$ is compact, $\mu$ is finite, and $\mu(G)>0$
+because a Haar measure is positive on nonempty open sets. Let $e:X\to\mathbb R$ be a Borel embedding
+(Mathlib \texttt{embeddingReal}, a measurable embedding of any standard Borel space into
+$\mathbb R$). For $x\in X$ let $a_x(g)=e(g^{-1}\cdot x)$, a Borel map $G\to\mathbb R$, and define
+\[
+  f:X\to\mathbb R^{\mathbb Q},\qquad f(x)_q=\mu\bigl(a_x^{-1}(-\infty,q)\bigr)\quad(q\in\mathbb Q).
+\]
+The space $Y=\mathbb R^{\mathbb Q}$ is Polish (a countable product of Polish spaces).
+
+\emph{$f$ is Borel.} For fixed $q$, the set $S_q=\{(x,g)\in X\times G: e(g^{-1}\cdot x)<q\}$ is
+Borel, and $f(x)_q=\mu(\{g:(x,g)\in S_q\})$ is a Borel function of $x$ by the measurability part of
+Fubini's theorem (Mathlib \texttt{measurable\_measure\_prodMk\_left}).
+
+\emph{$f$ is invariant.} For $h\in G$, $g^{-1}\cdot(h\cdot x)=(h^{-1}g)^{-1}\cdot x$, so
+$a_{h\cdot x}^{-1}(B)$ is the preimage of $a_x^{-1}(B)$ under left multiplication by $h^{-1}$.
+Left invariance of $\mu$ gives $f(h\cdot x)=f(x)$. Hence $x\,E_G\,y$ implies $f(x)=f(y)$.
+
+\emph{$f$ separates orbits.} Suppose $f(x)=f(y)$ but $x$ and $y$ lie in different orbits. Then the
+orbits $Gx$ and $Gy$ are disjoint. Fix a Polish topology on $X$ whose Borel sets are the given
+measurable sets (it exists since $X$ is standard Borel). Each orbit $Gx=\{g\cdot x\}$ is the image of
+the Polish space $G$ under a Borel map, hence analytic (Mathlib
+\texttt{MeasurableSet.analyticSet\_image}). By the Lusin separation theorem for disjoint analytic
+sets (Mathlib \texttt{AnalyticSet.measurablySeparable}) there is a Borel set $A\subseteq X$ with
+$Gx\subseteq A$ and $Gy\cap A=\emptyset$.
+
+Let $\nu_x=(a_x)_*\mu$ and $\nu_y=(a_y)_*\mu$, finite Borel measures on $\mathbb R$. The hypothesis
+$f(x)=f(y)$ says $\nu_x(-\infty,q)=\nu_y(-\infty,q)$ for all rational $q$ (values are finite, so
+equality of real parts gives equality in $[0,\infty]$), and $\nu_x(\mathbb R)=\mu(G)=\nu_y(\mathbb R)$.
+The rational half-lines form a $\pi$-system generating the Borel sets of $\mathbb R$ (Mathlib
+\texttt{Real.isPiSystem\_Iio\_rat}, \texttt{Real.borel\_eq\_generateFrom\_Iio\_rat}), so
+$\nu_x=\nu_y$ (Mathlib \texttt{ext\_of\_generate\_finite}). The set $e(A)$ is Borel since $e$ is a
+measurable embedding. Every $g^{-1}\cdot x$ lies in $Gx\subseteq A$, so $\nu_x(e(A))=\mu(G)$. If
+$e(g^{-1}\cdot y)\in e(A)$, injectivity of $e$ gives $g^{-1}\cdot y\in A\cap Gy=\emptyset$; so
+$\nu_y(e(A))=0$. Hence $\mu(G)=0$, a contradiction. So $f(x)=f(y)$ implies $x\,E_G\,y$, and $f$ is a
+Borel reduction of $E_G$ to equality on the Polish space $\mathbb R^{\mathbb Q}$.
+\end{proof}
+
+\begin{lemma}[\texttt{C2450.cantor\_not\_discrete}]
+The Cantor group $C$ is not discrete.
+\end{lemma}
+
+\begin{proof}
+$C$ is compact (a product of finite discrete spaces). A compact discrete space is finite (Mathlib
+\texttt{finite\_of\_compact\_of\_discrete}), but $C=(\mathbb Z/2)^{\mathbb N}$ is infinite.
+\end{proof}
+
+\begin{theorem}[\texttt{C2450.exists\_nondiscrete\_allSmooth\_polishGroup}]
+There exist a Polish group $G$ (with its Borel $\sigma$-algebra) that is not discrete and is
+all-smooth. Witness: $G=C$.
+\end{theorem}
+
+\begin{proof}
+$C$ is a compact topological group; it is Polish as a countable product of the finite discrete
+(hence Polish) spaces $\mathbb Z/2$, and its product $\sigma$-algebra is its Borel $\sigma$-algebra.
+Apply Theorem~\ref{thm:compact} and the lemma.
+\end{proof}
+
+\textbf{Remark on the literature.} That compact Polish groups have smooth orbit equivalence relations
+is a classical fact of invariant descriptive set theory. We did not retrieve a source stating it in
+this session, so we cite none and give the self-contained proof above.
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture2450/Basic.lean} (152 lines, only \texttt{import Mathlib}, Lean
+v4.33.1 / Mathlib v4.33.1). Definitions: \texttt{C2450.IsSmooth}, \texttt{C2450.orbitEquivRel},
+\texttt{C2450.AllSmooth}, \texttt{C2450.Cantor}. Theorems: \texttt{C2450.allSmooth\_of\_compact},
+\texttt{C2450.cantor\_not\_discrete}, and the main theorem
+\begin{verbatim}
+theorem C2450.exists_nondiscrete_allSmooth_polishGroup :
+    exists (G : Type) (_ : Group G) (_ : TopologicalSpace G)
+      (_ : IsTopologicalGroup G) (_ : PolishSpace G)
+      (_ : MeasurableSpace G) (_ : BorelSpace G),
+      Not (DiscreteTopology G) /\ AllSmooth.{u} G
+\end{verbatim}
+where
+\begin{verbatim}
+def AllSmooth.{u} (G : Type) [Group G] [MeasurableSpace G] : Prop :=
+  forall (X : Type u) [MeasurableSpace X] [StandardBorelSpace X]
+    [MulAction G X], Measurable (fun p : G x X => p.1 . p.2) ->
+      IsSmooth (orbitEquivRel G X)
+\end{verbatim}
+(ASCII rendering of the Lean source.)
+
+\textbf{Axiom audit.} \texttt{\#print axioms} for both
+\texttt{C2450.exists\_nondiscrete\_allSmooth\_polishGroup} and
+\texttt{C2450.allSmooth\_of\_compact} reports exactly
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide}, and no added axiom. The package builds with \texttt{lake build}.
+
+\end{document}
