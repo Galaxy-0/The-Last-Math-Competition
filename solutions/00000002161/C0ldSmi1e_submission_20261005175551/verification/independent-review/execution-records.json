@@ -1,0 +1,71 @@
+[
+  {
+    "command": [
+      "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lean",
+      "--version"
+    ],
+    "cwd": "/private/tmp/tlmc2161-review-clean",
+    "returncode": 0,
+    "elapsed_seconds": 0.0174710750579834,
+    "log": "lean-version.log"
+  },
+  {
+    "command": [
+      "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+      "build"
+    ],
+    "cwd": "/private/tmp/tlmc2161-review-clean",
+    "returncode": 0,
+    "elapsed_seconds": 8.010447025299072,
+    "log": "clean-build.log"
+  },
+  {
+    "command": [
+      "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+      "env",
+      "lean",
+      "-DwarningAsError=true",
+      "Conjecture2161.lean"
+    ],
+    "cwd": "/private/tmp/tlmc2161-review-clean",
+    "returncode": 0,
+    "elapsed_seconds": 2.7569987773895264,
+    "log": "Conjecture2161.lean.log"
+  },
+  {
+    "command": [
+      "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+      "env",
+      "lean",
+      "-DwarningAsError=true",
+      "Audit2161.lean"
+    ],
+    "cwd": "/private/tmp/tlmc2161-review-clean",
+    "returncode": 0,
+    "elapsed_seconds": 4.776822805404663,
+    "log": "Audit2161.lean.log"
+  },
+  {
+    "command": [
+      "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+      "env",
+      "lean",
+      "-DwarningAsError=true",
+      "Check.lean"
+    ],
+    "cwd": "/private/tmp/tlmc2161-review-clean",
+    "returncode": 0,
+    "elapsed_seconds": 3.8826851844787598,
+    "log": "Check.lean.log"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "/private/tmp/tlmc2161-auxiliary/verify.py"
+    ],
+    "cwd": "/private/tmp/tlmc2161-review",
+    "returncode": 0,
+    "elapsed_seconds": 0.05070805549621582,
+    "log": "auxiliary-replay.json"
+  }
+]

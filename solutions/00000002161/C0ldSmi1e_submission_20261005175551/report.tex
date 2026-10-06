@@ -1,0 +1,259 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,array}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
+\usepackage{fancyhdr}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{Conjecture 00000002161}
+\fancyhead[R]{C0ldSmi1e}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\newcommand{\lean}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\ip}{i_{+}}
+\newtheorem*{result}{Counterexample}
+\title{A planar tight signed graph\\\large Disproof of conjecture 00000002161}
+\author{C0ldSmi1e}
+\date{5 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The all-positive four-vertex path has independence number $2$, positive
+inertia index $2$, and minimum orientable genus $0$. It is connected and
+noncomplete. It therefore contradicts the asserted minimum genus $1$,
+whether the minimum is taken separately for every eligible graph or across
+the eligible class. A Lean 4 project verifies the counterexample using the
+standard rotation-system definition of orientable cellular embeddings.
+\end{abstract}
+
+\section{Statement and scope}
+The exact bilingual source is supplied as \lean{conjecture.md}. Its English
+text is:
+\begin{quote}\small
+Definition: The inertia bound of signed graphs states the independence number
+is at most the positive inertia index. Conjecture: The minimal genus of graphs
+attaining the tight bound equals 1 (apart from complete graphs); the genus is
+computed explicitly via the Euler formula of 2-cell embeddings.
+\end{quote}
+We retain the printed equality condition $\alpha(G)=\ip(A)$, where $A$ is the
+signed adjacency matrix. We neither replace the printed inequality by a
+conventional inertia bound nor assume it holds for every signed graph.
+The witness satisfies the printed equality itself. Genus has its usual
+orientable meaning; a two-cell embedding has open disks as complementary
+faces. This submission makes no claim about a reformulation requiring a
+strictly nonorientable surface.
+
+\section{A tight, connected, noncomplete witness}
+Take the path $0-1-2-3$, with all three edge signs $+1$. The vertices $0,2$
+are nonadjacent, so the graph is not complete. The path is connected.
+The set $\{0,2\}$ is independent, while the disjoint edges $01$ and $23$
+cover all vertices and each contributes at most one member to an independent
+set. Thus $\alpha(P_4)=2$.
+
+The adjacency matrix and its characteristic polynomial are
+\[
+ A=\begin{pmatrix}0&1&0&0\\1&0&1&0\\0&1&0&1\\0&0&1&0\end{pmatrix},
+ \qquad p(t)=\det(tI-A)=t^4-3t^2+1.
+\]
+Put $r=(\sqrt5+1)/2$ and $s=(\sqrt5-1)/2$. Both are positive,
+$rs=1$, and $r^2+s^2=3$. Hence
+\[
+ p(t)=(t-r)(t-s)(t+r)(t+s).
+\]
+Its complete root multiset is $[r,s,-r,-s]$. Counting positive eigenvalues
+with algebraic multiplicity gives $\ip(A)=2$; no numerical approximation is
+used. This is the ordinary inertia convention for real symmetric matrices
+\cite{inertia}.
+
+\newpage
+\section{An actual cellular embedding and its genus}
+\subsection{Rotation systems and their meaning}
+For a connected finite graph with no isolated vertex, use one dart for each
+ordered adjacent pair. Let $\lambda$ reverse darts and let $\rho$ cyclically
+order the darts with each fixed tail. The formal data require that reversal
+is a fixed-point-free involution, that the dart-to-ordered-edge map is
+bijective, and that the rotation preserves tails and has one orbit in each
+vertex star. These conditions describe the original graph, not a different
+multigraph or an arbitrary pair of permutations.
+
+This is the standard combinatorial encoding of an orientable cellular
+embedding \cite[Section 2, Proposition 2.2]{rotation}. Its geometric meaning
+can be seen by taking oriented vertex disks, joining their marked boundary
+intervals with untwisted edge bands, and capping the resulting boundary
+circles with disks. The boundary components correspond to cycles of
+$\rho\lambda$, with $\lambda$ applied first. Conversely, an oriented
+cellular embedding gives the local cyclic orders.
+
+For this path specifically, begin with the vertex-$0$ disk and attach each
+successive band and new vertex disk. Each step joins two disks along a band
+and produces a disk. The thickening is therefore a disk; capping its one
+boundary circle gives the sphere. The central edge arcs have the prescribed
+endpoints and disjoint interiors. Thus a genuine genus-zero cellular
+embedding exists, independently of merely guessing a genus from numbers.
+
+\subsection{The complete finite certificate}
+The following table fixes all dart data; entries in the last two rows are
+dart labels.
+\begin{center}
+\begin{tabular}{c*{6}{c}}
+\toprule
+Dart $d$ & 0 & 1 & 2 & 3 & 4 & 5\\
+\midrule
+Directed edge & $01$ & $10$ & $12$ & $21$ & $23$ & $32$\\
+$\lambda(d)$ & 1 & 0 & 3 & 2 & 5 & 4\\
+$\rho(d)$ & 0 & 2 & 1 & 4 & 3 & 5\\
+\bottomrule
+\end{tabular}
+\end{center}
+Thus $\lambda=(0\ 1)(2\ 3)(4\ 5)$,
+$\rho=(0)(1\ 2)(3\ 4)(5)$, and
+\[
+ \rho\lambda=(0\ 2\ 4\ 5\ 3\ 1).
+\]
+There is one face, with boundary walk $0,1,2,3,2,1,0$. Repeated edges in this
+boundary are allowed: each bridge borders the same face on both sides.
+The vertex, edge, and face counts are $V=4$, $E=3$, $F=1$. Euler's formula
+for this orientable cellular embedding gives
+\[
+ 2-2g=V-E+F=4-3+1=2,\qquad g=0.
+\]
+The minimum genus is also $0$: it is attained here and every orientable
+genus is a nonnegative integer.
+
+\begin{result}
+The signed path $P_4$ is connected and noncomplete, attains
+$\alpha(P_4)=\ip(A)=2$, and has minimum genus $0$.
+\end{result}
+If the conjecture asserts minimum genus $1$ for every tight noncomplete
+graph, this witness contradicts it directly. If it asserts a class minimum
+of $1$, it necessarily asserts a lower bound $1$ for each eligible graph's
+minimum genus; the same witness contradicts that clause. Restricting the
+formal universal clauses to connected graphs is sufficient, since a
+counterexample in that subclass is a counterexample in the full class.
+
+\newpage
+\section{Formal specification and coverage}
+The project uses Lean 4.19.0 and Mathlib v4.19.0, with the exact dependency
+revisions recorded in \lean{lean/lake-manifest.json}. All statements below
+are in namespace \lean{Conjecture2161}.
+
+\begin{center}\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{.42\textwidth}>{\raggedright\arraybackslash}p{.53\textwidth}@{}}
+\toprule
+Definition or theorem & What is represented or proved\\
+\midrule
+\lean{SignedGraph} & An actual simple graph, symmetric real matrix, edge
+entries $\pm1$, and zero entries on every nonedge.\\[3pt]
+\lean{independenceNumber} & The maximum cardinality over all finite independent
+subsets, with its generic upper and lower specifications proved.\\[3pt]
+\lean{path_independence_number} & The witness set and upper bound over all
+16 subsets establish the exact value $2$.\\[3pt]
+\lean{path_roots},\newline \lean{path_positive_inertia} & The actual matrix
+characteristic polynomial has the complete root multiset above; its positive
+part has cardinality $2$.\\[3pt]
+\lean{RotationSystem} & Every incidence, reversal, graph-connectedness,
+nonempty-star and cyclic-order condition described on page 2.\\[3pt]
+\lean{RotationSystem.Face} & The quotient of darts by the actual face-permutation
+orbit relation. A named instance proves this type finite.\\[3pt]
+\lean{HasCellularGenus} & Existence of a valid rotation system satisfying
+$V-E+F=2-2g$ with integer arithmetic.\\[3pt]
+\lean{IsMinimumGenus} & A realized genus and a lower bound for every other
+realized genus; no empty infimum or default genus value.\\[3pt]
+\lean{counterexample_certificate} & Connectedness, noncompleteness, exact
+printed equality, and minimum genus $0$.\\[3pt]
+\lean{not_per_graph_genus_one},\newline \lean{not_class_minimum_one} & Negations
+of the necessary clauses for the two readings of the conjecture.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Formalization boundary.}
+Lean checks the entire finite rotation-system certificate, actual face
+quotient cardinality, integer Euler equality, existential genus certificate,
+minimum argument, and final negations. The project uses the standard
+combinatorial definition of orientable cellular embedding, with the
+geometric correspondence explained above and cited. It does not additionally
+formalize the disk-and-band realization theorem in Mathlib's general
+topology language. No geometric-realization axiom is inserted into Lean.
+The restriction to connected noncomplete graphs avoids the isolated-vertex
+degeneracy of a dart-only representation.
+
+\paragraph{Trust and execution.}
+The 50 handwritten declarations comprise 20 definitions/structures,
+27 theorems, and 3 named instances. \lean{Audit2161.lean} prints the axiom
+dependencies of all 50; \lean{Check.lean} also displays the definitions and
+theorem types. The project contains no admitted proof, \lean{native_decide},
+or custom axiom. Small finite checks use ordinary kernel-checked
+\lean{decide}. Builds and source replays treat warnings as errors.
+An additional inspection inventories generated declarations and checks
+transitive logical dependencies. Every logical declaration depends only on
+\lean{propext}, \lean{Classical.choice}, and \lean{Quot.sound}. Compiler
+runtime artifacts are inventoried separately and are absent from all
+logical dependency closures.
+
+\paragraph{The printed inequality.}
+The purported universal inequality $\alpha\leq\ip$ is not used as an axiom:
+for example, $P_3$ has $\alpha=2$ and $\ip=1$. That observation is only a
+scope check. The disproof above rests on $P_4$, which attains the equality
+exactly as printed, together with its genus-zero embedding.
+
+\newpage
+\section{Independent computations and reproduction}
+\subsection{Exact auxiliary checks}
+The separate Python checker in \lean{auxiliary/} uses exact rational
+arithmetic and only the standard library. It enumerates all 16 vertex
+subsets and expands the determinant by all 24 permutations. For $p(t)=t^4-3t^2+1$, its exact Sturm sequence is
+\[
+ p(t),\quad 4t^3-6t,\quad \tfrac32t^2-1,\quad \tfrac{10}{3}t,\quad 1.
+\]
+The sign-variation counts at $-\infty,0,+\infty$ are $4,2,0$, giving two
+negative and two positive roots and no zero root. The checker handles
+multiplicity through square-free layers; a repeated-root test is included.
+The Sturm convention is documented in \cite{sturm}.
+
+The same checker independently verifies every dart, vertex rotation and
+face orbit. It realizes the face as an oriented six-sided polygon with
+paired sides, reconstructs the quotient vertices, and verifies each vertex
+link is a circle. It also checks the straight-line drawing with vertices
+$(0,0),(1,0),(2,0),(3,0)$ for edge crossings and nonincident vertices in
+edges. Boundary tests include $K_2$, $P_3$, $K_3$, and deliberately invalid
+certificates/drawings. The supplied certificate records all intermediate
+values, including $(V,E,F)=(4,3,1)$ and $g=0$.
+
+\subsection{Commands}
+From the submission folder, with Python 3 and the pinned Lean toolchain:
+\begin{verbatim}
+cd lean
+lake exe cache get
+lake build
+lake env lean -DwarningAsError=true Conjecture2161.lean
+lake env lean -DwarningAsError=true Audit2161.lean
+lake env lean -DwarningAsError=true Check.lean
+cd ..
+python3 auxiliary/replay.py
+\end{verbatim}
+The pinned manifest must be preserved. Initial dependency/cache retrieval
+requires network access. The replay runs the exact checker afresh and
+requires byte-for-byte agreement with the supplied certificate.
+\lean{README.md} and \lean{verification/} document the independent clean-build
+procedure, dependency identities, source hashes, trust audit, and local
+semantic review. These are local verification records, not maintainer
+acceptance or a replacement for the repository's review process.
+
+\begin{thebibliography}{9}\small\raggedright
+\bibitem{rotation} J. L. Gross and T. W. Tucker,
+\emph{Enumerating Graph Embeddings and Partial-Duals by Genus and Euler Genus},
+Enumerative Combinatorics and Applications 1:1 (2021), Article S2S1.
+\href{https://doi.org/10.54550/ECA2021V1S1S1}{doi:10.54550/ECA2021V1S1S1}.
+\bibitem{inertia} Y. Nakatsukasa and V. Noferini,
+\emph{Inertia laws and localization of real eigenvalues for generalized
+indefinite eigenvalue problems}.
+\href{https://arxiv.org/abs/1711.00495}{arXiv:1711.00495}.
+\bibitem{sturm} P. P\'ebay, J. M. Rojas, and D. C. Thompson,
+\emph{Sturm's Theorem with Endpoints}.
+\href{https://arxiv.org/abs/2208.07904}{arXiv:2208.07904}.
+\end{thebibliography}
+\end{document}

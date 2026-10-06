@@ -1,0 +1,84 @@
+import Conjecture2161
+import Audit2161
+
+#print Conjecture2161.SignedGraph
+#print Conjecture2161.positiveInertiaIndex
+#print Conjecture2161.pathGraph
+#print Conjecture2161.pathAdjacency
+#print Conjecture2161.signedPath
+#print Conjecture2161.IsIndependent
+#print Conjecture2161.independenceNumber
+#print Conjecture2161.positiveRootLarge
+#print Conjecture2161.positiveRootSmall
+#print Conjecture2161.pathEigenvalues
+#print Conjecture2161.RotationSystem
+#print Conjecture2161.RotationSystem.Face
+#print Conjecture2161.RotationSystem.faceCount
+#print Conjecture2161.HasCellularGenus
+#print Conjecture2161.IsMinimumGenus
+#print Conjecture2161.pathTail
+#print Conjecture2161.pathReverse
+#print Conjecture2161.pathRotate
+#print Conjecture2161.pathRotationSystem
+#print Conjecture2161.ClassMinimumOneLowerBound
+
+#check Conjecture2161.pathAdjDecidable
+#print axioms Conjecture2161.pathAdjDecidable
+#check Conjecture2161.pathAdjacency_symmetric
+#print axioms Conjecture2161.pathAdjacency_symmetric
+#check Conjecture2161.pathAdjacency_edge_sign
+#print axioms Conjecture2161.pathAdjacency_edge_sign
+#check Conjecture2161.pathAdjacency_nonedge_zero
+#print axioms Conjecture2161.pathAdjacency_nonedge_zero
+#check Conjecture2161.path_not_complete
+#print axioms Conjecture2161.path_not_complete
+#check Conjecture2161.independentDecidable
+#print axioms Conjecture2161.independentDecidable
+#check Conjecture2161.independent_card_le_independenceNumber
+#print axioms Conjecture2161.independent_card_le_independenceNumber
+#check Conjecture2161.independenceNumber_le_iff
+#print axioms Conjecture2161.independenceNumber_le_iff
+#check Conjecture2161.path_independent_witness
+#print axioms Conjecture2161.path_independent_witness
+#check Conjecture2161.path_independent_upper
+#print axioms Conjecture2161.path_independent_upper
+#check Conjecture2161.path_independence_number
+#print axioms Conjecture2161.path_independence_number
+#check Conjecture2161.path_characteristic_polynomial
+#print axioms Conjecture2161.path_characteristic_polynomial
+#check Conjecture2161.sqrt_five_gt_one
+#print axioms Conjecture2161.sqrt_five_gt_one
+#check Conjecture2161.positiveRootLarge_pos
+#print axioms Conjecture2161.positiveRootLarge_pos
+#check Conjecture2161.positiveRootSmall_pos
+#print axioms Conjecture2161.positiveRootSmall_pos
+#check Conjecture2161.path_charpoly_factorization
+#print axioms Conjecture2161.path_charpoly_factorization
+#check Conjecture2161.path_roots
+#print axioms Conjecture2161.path_roots
+#check Conjecture2161.path_positive_inertia
+#print axioms Conjecture2161.path_positive_inertia
+#check Conjecture2161.path_connected
+#print axioms Conjecture2161.path_connected
+#check Conjecture2161.RotationSystem.faceFinite
+#print axioms Conjecture2161.RotationSystem.faceFinite
+#check Conjecture2161.path_vertex_cyclic
+#print axioms Conjecture2161.path_vertex_cyclic
+#check Conjecture2161.path_face_transitive
+#print axioms Conjecture2161.path_face_transitive
+#check Conjecture2161.path_faces_one
+#print axioms Conjecture2161.path_faces_one
+#check Conjecture2161.path_edges_three
+#print axioms Conjecture2161.path_edges_three
+#check Conjecture2161.path_genus_zero
+#print axioms Conjecture2161.path_genus_zero
+#check Conjecture2161.path_minimum_genus_zero
+#print axioms Conjecture2161.path_minimum_genus_zero
+#check Conjecture2161.path_attains_printed_bound
+#print axioms Conjecture2161.path_attains_printed_bound
+#check Conjecture2161.counterexample_certificate
+#print axioms Conjecture2161.counterexample_certificate
+#check Conjecture2161.not_per_graph_genus_one
+#print axioms Conjecture2161.not_per_graph_genus_one
+#check Conjecture2161.not_class_minimum_one
+#print axioms Conjecture2161.not_class_minimum_one

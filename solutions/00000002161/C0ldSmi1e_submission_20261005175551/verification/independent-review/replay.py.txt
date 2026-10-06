@@ -1,0 +1,23 @@
+from pathlib import Path
+import datetime,hashlib,json,os,subprocess,time
+src=Path('/private/tmp/tlmc2161-proof'); dst=Path('/private/tmp/tlmc2161-review-clean'); out=Path('/private/tmp/tlmc2161-review'); bins=Path('/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin')
+env=os.environ.copy(); env['PATH']=str(bins)+':'+env.get('PATH',''); env.pop('LEAN_PATH',None); env.pop('LEAN_SRC_PATH',None)
+records=[]
+def run(args,name,cwd=dst):
+ t=time.time(); p=subprocess.run(args,cwd=cwd,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
+ (out/name).write_text(p.stdout)
+ records.append(dict(command=args,cwd=str(cwd),returncode=p.returncode,elapsed_seconds=time.time()-t,log=name))
+ (out/'execution-records.json').write_text(json.dumps(records,indent=2)+'\n')
+ print(name,p.returncode,round(time.time()-t,2),flush=True)
+ assert p.returncode==0,p.stdout
+ return p.stdout
+run([str(bins/'lean'),'--version'],'lean-version.log')
+run([str(bins/'lake'),'build'],'clean-build.log')
+for name in ['Conjecture2161.lean','Audit2161.lean','Check.lean']:
+ run([str(bins/'lake'),'env','lean','-DwarningAsError=true',name],name+'.log')
+expected=json.loads(Path('/private/tmp/tlmc2161-frozen-sources.json').read_text())
+assert all(hashlib.sha256((root/name).read_bytes()).hexdigest()==digest for root in [src,dst] for name,digest in expected.items())
+aux=Path('/private/tmp/tlmc2161-auxiliary')
+output=run(['/usr/bin/python3',str(aux/'verify.py')],'auxiliary-replay.json',cwd=out)
+assert output.encode()==(aux/'certificate.json').read_bytes()
+print('PASS: fresh build, strict replay of all files, identities unchanged, auxiliary replay byte-identical.',flush=True)

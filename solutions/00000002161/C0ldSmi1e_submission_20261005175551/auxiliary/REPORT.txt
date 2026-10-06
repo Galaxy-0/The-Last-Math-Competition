@@ -1,0 +1,201 @@
+INDEPENDENT AUXILIARY VERIFICATION — CONJECTURE 00000002161
+
+Conclusion
+==========
+For the all-positive signed path 0—1—2—3, the exact certificates establish
+independence number 2, positive inertia index 2, connectedness, noncompleteness,
+and a genuine orientable cellular embedding of genus 0. Since orientable
+genus is nonnegative, its minimum orientable genus is exactly 0, not 1.
+This is an auxiliary mathematical/computational finding, not an assessment
+of any Lean project or a claim of submission acceptance.
+
+Scope and provenance
+====================
+The only local problem/context files read before the computation were
+/private/tmp/tlmc2161-author-input/00000002161.md and the repository README.md
+and README.zh-CN.md. No submission, candidate history, author source, author's
+Lean project, or other agent's proof/notes was inspected. The witness P4 was
+communicated by the coordinating agent; its numerical/topological claims
+were not assumed. All work was performed in /private/tmp/tlmc2161-auxiliary/.
+The code uses Python's standard library, exact integers, and Fraction only.
+No floating-point approximation or external algebra package is used.
+
+Definitions and assumptions
+==========================
+A signed graph here is a finite simple undirected graph with a sign +1 or
+−1 on each edge. Its adjacency matrix has that sign in both off-diagonal
+entries corresponding to an edge and zero elsewhere, including the diagonal.
+The independence number is the maximum cardinality of a vertex subset with
+no underlying graph edge. Positive inertia index means the number of strictly
+positive real eigenvalues of this real symmetric adjacency matrix, counted
+with algebraic multiplicity. Negative inertia and nullity use negative and
+zero eigenvalues with the same convention. This is the adjacency convention,
+not a Laplacian convention and not a minimum over arbitrary matrices sharing
+a support. See Liu and Duan [1] for signed adjacency inertia terminology.
+
+Genus is the standard minimum orientable genus over closed connected
+orientable surfaces admitting a graph embedding. A cellular embedding has
+every complementary component homeomorphic to an open disk. The code builds
+one such surface by gluing oriented polygons, checks its topology locally,
+and only then applies V−E+F=2−2g. It also reports the Euler genus 2g, which is
+zero here. No additional girth, minimum-degree, or 2-connectedness hypothesis
+appears in the supplied conjecture. Graph edge signs do not introduce twists
+into this standard orientable rotation-system construction.
+
+Exact graph and independence checks
+===================================
+Vertices: {0,1,2,3}.
+Signed edges: (0,1,+1), (1,2,+1), (2,3,+1).
+Adjacency matrix:
+    0 1 0 0
+    1 0 1 0
+    0 1 0 1
+    0 0 1 0
+The checker verifies simplicity, symmetry, zero diagonal, the full edge/sign
+list, and reachability of all four vertices from 0. Missing edges are
+{0,2}, {0,3}, {1,3}, so the underlying graph is not complete.
+
+All 16 vertex subsets are enumerated, each with its contained edges. Exactly
+eight subsets are independent:
+    empty; {0}; {1}; {2}; {3}; {0,2}; {0,3}; {1,3}.
+The last three are precisely the maximum independent sets, of size 2.
+The output retains every rejected subset and an explicit contained edge.
+
+Exact characteristic polynomial and inertia
+===========================================
+The determinant of xI−A is computed directly by the 24-term Leibniz formula.
+Only five terms survive: x^4, −x^2, −x^2, −x^2, 1. Thus
+    det(xI−A) = x^4−3x^2+1.
+The exact Sturm sequence obtained by negative polynomial remainders is
+    x^4−3x^2+1,
+    4x^3−6x,
+    (3/2)x^2−1,
+    (10/3)x,
+    1.
+Its final nonzero constant proves the polynomial is squarefree. Its sign
+sequences at negative infinity, 0, positive infinity are respectively
+    (+,−,+,−,+), (+,0,−,0,+), (+,+,+,+,+).
+Ignoring zeros, these have respectively 4, 2, 0 sign variations. By Sturm's
+theorem [2], there are exactly two negative and two positive roots. The
+constant term is 1, so zero is not a root. Therefore the inertia is (2,2,0).
+Here every root is simple, so the distinct-root count is also the count with
+multiplicity. More generally the code removes zero factors and recursively
+uses p/gcd(p,p') and gcd(p,p') to count multiplicities in separate squarefree
+layers. Its K3 boundary case explicitly verifies the repeated eigenvalue −1
+is counted twice. Symmetry also places these eigenvalues in the usual real
+symmetric spectral-theorem setting; the Sturm count already exhausts all
+four roots of the characteristic polynomial.
+
+Genuine orientable cellular embedding certificate
+================================================
+Write uv for the directed dart (u,v). The six darts are
+    01, 10, 12, 21, 23, 32.
+The edge-reversal involution and vertex rotation are
+    alpha = (01 10)(12 21)(23 32),
+    sigma = (01)(10 12)(21 23)(32).
+Every alpha orbit has length two and gives exactly one prescribed edge.
+Every sigma orbit is exactly the star of one prescribed vertex, with no
+missing or repeated dart. The action generated by alpha and sigma is
+transitive. The face successor is phi = sigma composed with alpha, namely
+    phi = (01 12 23 32 21 10).
+Every consecutive pair of face darts has the requisite matching endpoint.
+There is one face, using each dart exactly once. Our vertex rotations have
+order at most two, so sigma^−1=sigma; either of the common inverse conventions
+for face tracing produces this same face cycle.
+
+Construct one oriented closed hexagon whose successive boundary sides are
+01,12,23,32,21,10. Glue side 0 to side 5, side 1 to side 4, and side 2 to
+side 3, reversing their boundary orientations and preserving graph labels.
+Its corner labels in cyclic order are 0,1,2,3,2,1. The checker computes all
+corner identifications using union-find, obtaining exactly these classes:
+    {corner 0}, {corners 1,5}, {corners 2,4}, {corner 3}.
+Thus there are exactly the intended four graph vertices, with no unintended
+identification; edge-interior identifications give precisely three graph
+edges, with no boundary sides left unpaired.
+
+For each corner, an incoming/outgoing pair of link flags is joined by a
+corner arc. The side identifications join these flags across paired edges.
+The checker records all 12 link edges with their endpoints. Every link flag
+has degree two, and the connected components form exactly one cycle at each
+quotient vertex: the flag counts are 2,4,4,2 for vertices 0,1,2,3. A 2-flag
+link has two parallel arcs and is still a circle. There are no other link
+components. Thus each quotient vertex has a disk neighborhood; paired edge
+interiors have disk neighborhoods, and face interior points do as well.
+The quotient is a compact connected surface without boundary. Opposite
+boundary orientations in each side gluing give a consistent orientation.
+The graph complement is the unchanged interior of the hexagon, an open disk.
+This is a cellular embedding, not merely an Euler expression assigned to a
+graph. The standard polygon realization of combinatorial maps is described
+in Bottinelli–Ciobanu–Kolpakov [3, Section 2.1].
+
+The verified cell counts are (V,E,F)=(4,3,1). Therefore chi=4−3+1=2 and
+g=(2−chi)/2=0. The nonnegative minimum genus cannot be smaller than 0, so
+the exhibited embedding proves the minimum is 0.
+
+Independent exact geometric check
+=================================
+For the elementary straight-line representation use v_i=(i,0). All four
+vertices are distinct. All six nonincident vertex/edge pairs are checked
+with integer orientation and interval predicates; none intersect. All three
+edge pairs are checked by exact rational segment intersection:
+    edge 01 meets edge 12 only at (1,0);
+    edge 01 is disjoint from edge 23;
+    edge 12 meets edge 23 only at (2,0).
+This certifies that drawing has no crossing or unintended incidence. The
+cellularity argument is the separate polygon surface construction above;
+the planar drawing alone is not presented as proof its unbounded planar
+complement is an open disk.
+
+Purposeful boundary and rejection checks
+========================================
+K2 has (alpha,positive,negative,zero)=(1,1,1,0) but is complete, testing the
+exception. P3 has (2,1,1,1), testing a zero eigenvalue and showing the supplied
+description's purported universal inequality alpha<=i_+ is false without
+further hypotheses. K3 has (1,1,2,0), testing eigenvalue multiplicity.
+A rotation missing a dart is rejected. A drawing of a square with crossing
+diagonally placed nonincident edges is rejected. A drawing with a nonincident
+vertex in an edge interior is also rejected. These tests target semantic
+failure modes: missing incidence, crossings, vertex/edge collisions, nullity,
+the complete-graph exception, and repeated eigenvalues.
+
+Semantic concerns and limits
+============================
+The literal problem says that equality in alpha<=i_+ forces minimum genus 1
+apart from complete graphs. P4 meets equality and is noncomplete, but has
+minimum genus 0. This disproof of the genus assertion does not require the
+stated inequality to hold for every signed graph; the P3 check warns that it
+does not. No unmentioned restriction to graphs with cycles or to graphs of
+positive genus should be silently inserted. Under a different definition
+requiring the ambient surface itself to be nonorientable, rather than the
+usual orientable graph genus or Euler genus, a reformulated problem would
+need separate interpretation. The standard orientable reading is explicitly
+settled here. All trusted mathematics bridging the finite computation to
+topology and eigenvalues is stated above; this Python run is not a formal
+Lean proof, and does not validate any author's formalization.
+
+Reproduction and retained files
+===============================
+From /private/tmp/tlmc2161-auxiliary/ run:
+    python3 verify.py > certificate.json
+    python3 replay.py
+The actual interpreter used was
+    /Users/daniel/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3
+verify.py contains the complete checker and all explicit witness data.
+certificate.json is the full first-run output. replay.py reruns verify.py
+in a fresh process and checks its output byte-for-byte against certificate.json.
+certificate.replay.json and replay.log retain the second output and log.
+SHA256SUMS records hashes of these outputs and all auxiliary source/report
+files; the log also records the interpreter version and exit status.
+
+Primary sources for standard correspondences
+=============================================
+[1] Beiyan Liu and Fang Duan, Connected signed graphs with given inertia
+    indices and given girth (2025), definition in abstract/introduction.
+    https://arxiv.org/abs/2505.08539
+[2] Philippe Pebay, J. Maurice Rojas, David C. Thompson, Sturm's Theorem with
+    Endpoints (2022), Theorem 1.2 and its distinct-root footnote.
+    https://arxiv.org/abs/2208.07904
+[3] Remi Bottinelli, Laura Ciobanu, Alexander Kolpakov, Three-dimensional
+    maps and subgroup growth, manuscripta mathematica 168 (2022), 549–570,
+    Section 2.1: polygon realization and orientable cellular-map correspondence.
+    https://doi.org/10.1007/s00229-021-01321-7
