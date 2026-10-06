@@ -1,0 +1,179 @@
+A counterexample to the equality clause
+of conjecture 00000000240
+C0ldSmi1e
+October 5, 2026
+Abstract
+The product of a segment and a three-dimensional cross-polytope is a four-dimensional
+origin-symmetric convex body with Mahler volume 32/3 = 4 4/4!. It has twelve extreme points,
+whereas a four-dimensional cube and cross-polytope have sixteen and eight. Thus it attains
+the stated bound without belonging to either claimed equality class. The accompanying Lean
+project proves the actual body, polar, Lebesgue volumes and obstruction to every linear image.
+The conclusion concerns the equality classiﬁcation in the repository’s statement; it makes no
+claim to resolve the general Mahler lower-bound problem.
+1 Statement and scope
+For a positive integer n and an origin-symmetric convex body S ⊂ Rn, let
+S◦ = {y ∈ Rn : ⟨x, y⟩ ≤ 1 for every x ∈ S}, M (S) = vol n(S) voln(S◦).
+A convex body here is compact, convex, and has nonempty interior in the ambient space. Volume
+is ordinary Lebesgue volume, with unit coordinate boxes having volume one. Put
+Cn = [− 1,1]n, B n
+1 =
+{
+x ∈ Rn :
+n∑
+i=1
+|xi| ≤ 1
+}
+= conv{±e1, . . . ,± en}.
+The source asserts M (S) ≥ 4n/n! and gives only linear images of Cn or Bn
+1 as equality cases.
+The English text asserts the necessary direction of this classiﬁcation; the Chinese text states it as
+an if-and-only-if. We refute their common necessary direction. A false four-dimensional instance
+refutes either universal assertion, including its conjunction with the lower bound. The source’s
+parenthetical reference to dimensions at most three does not restrict its general claim.
+2 The body and its polar
+Use coordinates (s, x1, x2, x3) and deﬁne
+K = [− 1,1] × B3
+1 = {(s, x) : |s| ≤ 1, |x1|+ |x2|+ |x3| ≤ 1}.
+Both factors are compact, convex and symmetric about zero. The open set
+{(s, x) : |s|< 1, |x1|+ |x2|+ |x3|< 1}
+1
+
+contains zero and lies in K. Consequently K is a genuine four-dimensional origin-symmetric convex
+body.
+Proposition 1. The actual polar of K is
+P = {(t, y) : |t|+ |yi| ≤ 1 for i = 1,2,3} = {(t, y) : |t|+ max
+i
+|yi| ≤ 1}.
+Proof. If (t, y) ∈ K◦, test its deﬁning inequality against (sgn(t),sgn(yi)ei) ∈ K, choosing either
+sign when a coordinate is zero. This gives |t|+ |yi| ≤ 1 for every i.
+Conversely, suppose these inequalities hold. In particular |t| ≤ 1. For (s, x) ∈ K,
+st +
+∑
+i
+xiyi ≤ |s||t|+
+∑
+i
+|xi||yi|
+≤ |t|+ (1 − |t|)
+∑
+i
+|xi| ≤ 1.
+Thus (t, y) ∈ K◦.
+3 Exact Lebesgue volumes
+The three-dimensional cross-polytope consists of eight orthant simplices, each of volume
+∫1
+0
+∫1− u
+0
+∫1− u− v
+0
+dw dv du = 1
+6 .
+Intersections along coordinate planes have zero three-dimensional measure. Hence vol3(B3
+1) = 4 /3
+and the product formula gives
+vol4(K) = 2 ·4
+3 = 8
+3 .
+The Lean proof obtains the same actual cross-polytope volume from Mathlib’s proved formula for
+the volume of ℓp balls, at p = 1 and dimension three, with the Gamma factors evaluated exactly.
+At a ﬁxed t with |t| ≤ 1, the section of P is the coordinate cube
+[− (1 − |t|),1 − |t|]3,
+of volume 8(1 − |t|)3. If |t|> 1, that section is empty. The set P is closed and therefore measurable.
+The product-measure formula, followed by an ordinary integral on a compact interval, yields
+vol4(P ) =
+∫1
+− 1
+8(1 − |t|)3 dt = 16
+∫1
+0
+(1 − t)3 dt = 4.
+In particular both volume factors are ﬁnite and positive. Since P = K◦,
+M (K) = 8
+3 ·4 = 32
+3 = 44
+4! .
+2
+
+4 Excluding both classes of linear images
+The extreme points of Bn
+1 are exactly the 2n signed coordinate vectors. Here is a direct justiﬁcation.
+The inequality deﬁning Bn
+1 is convex. Every x ∈ Bn
+1 is the convex combination
+x =
+∑
+i
+|xi|
+(
+sgn(xi)ei
+)
++
+(
+1 −
+∑
+i
+|xi|
+)
+0,
+and zero itself is the midpoint of any opposite pair of coordinate vectors. Thus Bn
+1 is their convex
+hull. Each signed coordinate vector is extreme: a convex combination attaining its coordinate value
+1 or − 1 forces that value in both summands, and the ℓ1 bound forces their remaining coordinates
+to vanish. A ﬁnite convex hull has no other extreme points.
+The interval [− 1,1] has precisely the extreme points − 1 and 1. Extreme points of a Cartesian
+product are the products of extreme points. Consequently
+|ext K|= 2 ·6 = 12 , |ext C4|= 2 4 = 16, |ext B4
+1|= 2 ·4 = 8 .
+For the cube, the product rule equivalently says that every coordinate of an extreme point must
+be an endpoint of its interval.
+Every invertible linear map carries extreme points bijectively onto the extreme points of the image.
+Thus K is neither an invertible linear image of C4 nor of B4
+1. Allowing arbitrary linear maps does
+not enlarge the possible image class here: if T (S) = K, then the linear subspace range T contains a
+set with nonempty interior. It must be all of R4. A surjective endomorphism of a ﬁnite-dimensional
+space is invertible. This also rules out every singular map.
+The equality and the two non-image conclusions contradict the necessary equality condition asserted
+in both language versions. Therefore conjecture 00000000240, with its stated equality classiﬁcation,
+is false.
+5 Formalization and reproducible checks
+The Lean project uses Lean 4.19.0 and Mathlib v4.19.0, with the exact dependency revisions
+recorded in its manifest. Its ambient space is E = R × (Fin 3 → R), with ordinary product
+Lebesgue measure. The four coordinates are indexed by Option (Fin 3) : the distinguished coor-
+dinate is the ﬁrst factor, and the other three are the second factor. The code proves the ambient
+dimension, expands the coordinate map and Euclidean dot product, and identiﬁes the transported
+cube and cross-polytope with the inequalities used above. The coordinate equivalence is also proved
+to preserve volume.
+3
+
+Module Mathematical content
+Geometry240 Convex-hull characterization, all extreme points, and exact cardi-
+nalities for cubes and cross-polytopes.
+Objects240 Concrete body and polar, compactness, convexity, interior and
+symmetry, dimension, coordinates, and exclusion of all linear im-
+ages.
+Volume240 Actual Lebesgue volumes of the cross-polytope, body and polar,
+including the measurable sections and evaluated integral.
+Conjecture240 The explicit counterexample and negations of the four-dimensional
+English and Chinese assertions.
+The principal theorem Mahler240.counterexample includes the body’s admissibility, dimen-
+sion, both real volumes, equality with 44/4!, and both non-image conclusions. The theo-
+rems conjecture_00000000240_english_false and conjecture_00000000240_chinese_false
+negate the respective dimension-four conjunctions. This specialization suﬃces to refute the univer-
+sal conjecture. The ﬁnite volume identities justify the real-valued measure conversions; numerical
+constants do not stand in for geometric objects or their measures.
+The independent script reproduce.py uses rational arithmetic to enumerate supporting facets, ver-
+ify primal-polar vertex duality, construct the complete face lattices, and sum determinant volumes
+of barycentric simplices. Its separate section calculations agree with these volumes. Reference cube
+and cross-polytope volumes, and a nonsingular rational shear, check the normalization. The script
+reports
+vertices facets volume
+K 12 10 8/3
+K◦ 10 12 4
+These computations corroborate the formal proof. The Lean theorem does not assume their output.
+Reproduction instructions and exact veriﬁcation records accompany the submission. The required
+validation covers a fresh project build, warnings-as-errors replay of every source module, the full
+types and axiom dependencies of authored and generated declarations, execution of all auxiliary
+checks, and inspection of every page of the matching PDF. Independent local veriﬁcation is distinct
+from acceptance by repository maintainers.
+4

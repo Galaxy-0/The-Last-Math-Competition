@@ -1,0 +1,73 @@
+# Author notes for conjecture 00000000240
+
+## Scope and source fidelity
+
+The sole mathematical source was the exact supplied bilingual conjecture, SHA256 58cc03f91596abe3f9a23b8d713f2c2f7cb3cc501d5700d91c959ae05c9d7ef7. Both complete supplied README language versions were read. The English assertion includes the lower bound and the necessity of being a linear image of a cube or cross-polytope at equality; the Chinese assertion states this as an if-and-only-if. The counterexample refutes the shared necessary equality condition in dimension four. It does not disprove the classical Mahler lower-bound inequality, and it does not contradict the parenthetical dimension-at-most-three statement.
+
+No other conjecture, prior submission, solution, eligibility catalog, source-only meaning-gate record, old project-root mathematics, or solution literature was consulted. The supplied manifest and dependency pins were read for provenance/infrastructure. Existing pinned Mathlib sources were consulted for library definitions and APIs. The root agent supplied library pointers and independent consistency observations; no supplied numerical observation is an assumption of any theorem.
+
+## The actual body and coordinate bridges
+
+Use E = R × (Fin 3 -> R). Write a point as (t,x). Define
+
+K = { (t,x) : |t| <= 1 and sum_i |x_i| <= 1 }.
+
+Thus K is the direct product of the interval [-1,1] and the ordinary three-dimensional cross-polytope. The theorem ambient_dimension proves finrank_R E = 4.
+
+Four = Option (Fin 3) is only a four-coordinate indexing type. The linear equivalence coords identifies a vector v with (v none, i -> v (some i)). The proved theorem coords_apply records that map exactly; dot_coords proves that the bilinear pairing dot on E is the standard sum of the four coordinate products. The theorem coords_measurePreserving proves preservation of coordinate Lebesgue measure, including the product-order swap needed by the pinned measurable-equivalence API. Consequently this is an ordinary coordinate model of four-dimensional real Euclidean geometry, with the standard polar pairing and Lebesgue volume. The finite-product norm used for topology does not redefine the pairing or the volume.
+
+Cube and Cross are the images under coords of the actual standard coordinate cube and l1 unit ball. The proved mem_Cube and mem_Cross give their explicit inequalities:
+- Cube: |t| <= 1 and |x_i| <= 1 for every i;
+- Cross: |t| + sum_i |x_i| <= 1.
+
+No combinatorial code, numerical certificate, or abstract custom volume substitutes for these sets.
+
+SymmetricConvexBody is the transparent conjunction of IsCompact, Convex R, nonempty interior, and invariance under negation. K_body proves all four clauses. Compactness follows from a closed l1 sublevel contained in the compact coordinate box. Convexity is the triangle inequality for absolute values. The open set |t| < 1 and sum_i |x_i| < 1 contains zero and lies inside K; therefore the interior is nonempty. Negation preserves the inequalities.
+
+## Polar
+
+The definition polar S is exactly {y : for every x in S, dot x y <= 1}. For y=(s,y'), the proved polar_K identifies it with
+
+P = { (s,y') : |s| + |y'_i| <= 1 for every i }.
+
+For the forward implication, choose t with sign s, and choose x equal to a signed coordinate axis matching y'_i. These points lie in K and give |s|+|y'_i| <= 1. For the reverse implication, bound every coordinate product by the product of absolute values, then use |t| <= 1, sum_i |x_i| <= 1, and |y'_i| <= 1-|s|. This is a proved support-function calculation, with no unproved polar identity.
+
+## Actual Lebesgue volumes
+
+volume_cross3 applies the pinned theorem MeasureTheory.volume_sum_rpow_le at p=1, radius1 and three coordinates. Its Gamma factors evaluate at 2 and4 to 1 and6, giving volume of the l1 ball = 2^3 / 3! = 4/3. Product measure and Real.volume_Icc give volume_K = ofReal(8/3).
+
+For P, slice_P proves that the section at s is the three-coordinate box with endpoints -(1-|s|) and 1-|s|. Therefore volume_slice_P gives the actual section volume as ofReal(2(1-|s|))^3, automatically zero outside [-1,1]. P is proved measurable. Measure.prod_apply expresses its actual four-dimensional measure as the nonnegative integral of these section measures. The integral is restricted to [-1,1], converted to the ordinary real integral with proved integrability and nonnegativity, and explicitly evaluated:
+
+integral from -1 to1 of (2(1-|s|))^3 ds
+= 16 integral from0 to1 of (1-s)^3 ds
+= 4.
+
+All integral transformations and the final cubic evaluation are kernel-checked. Thus volume_P = 4 and volume.real(polar K) = 4. The Mahler volume is exactly (8/3)*4 = 32/3 = 4^4/4!. The real-valued volume uses Mathlib's volume.real, and the two concrete measures are proved finite numerical values before their real conversion is used.
+
+## Excluding both classes of linear images
+
+Geometry240 proves a generic l1 unit ball is the convex hull of its signed coordinate axes. For any point x in that ball, weights |x_i| are assigned to signed axes, with remaining weight 1-sum_i|x_i| assigned to zero; zero itself is a convex combination of opposite axes. Every signed axis is extreme: saturation of a coordinate at +1 or -1 forces all other coordinates to vanish. Mathlib's extremePoints_convexHull_subset gives the converse. The signed-axis map from Bool × iota is proved injective, hence there are exactly 2*card(iota) extreme points.
+
+The one-dimensional interval has exactly the two endpoints as extreme points. The product theorem for extreme points gives K exactly 2*6 = 12 extreme points. The cube's extreme points are proved to be all sign vectors, hence Cube has16; Cross has8.
+
+The image exclusions quantify over every real linear map E -> E, without assuming it invertible. The theorem bijective_of_image_K first proves that a linear map whose image of any set is K has range with nonempty interior. A proper linear subspace cannot have nonempty interior, so its range is all E. In finite dimension, surjectivity implies injectivity. It therefore induces a linear equivalence, under which the set of extreme points is transported bijectively. The counts12 versus16 and8 give contradictions. There is no hidden nonsingularity assumption.
+
+## Final statements and proof files
+
+- Geometry240.lean: signed-axis convex-hull equality; extreme points and their counts for l1 balls, intervals and cubes.
+- Objects240.lean: concrete bodies/polar/dot; dimension; convex-body hypotheses; exact polar; both linear-image exclusions; coordinate set/pairing bridges.
+- Volume240.lean: coordinate measure bridge; actual body and polar volumes.
+- Conjecture240.lean: mahlerVolume_K, equality_K, the explicit counterexample, the false necessary equality classification, and the negations of both exact language versions' dimension-four instances.
+- Audit240.lean: #print axioms for every one of the62 authored declarations.
+
+The theorem counterexample explicitly lists dimension, compactness, convexity, nonempty interior, symmetry, both volume values, equality with the dimensional bound, and both linear-image exclusions. Theorems conjecture_00000000240_english_false and conjecture_00000000240_chinese_false negate the respective dimension-four instances. A universally quantified all-dimension assertion implies its dimension-four instance; these are consequently counterexamples to the original all-dimension assertion, not replacements for it.
+
+## Verification and trust boundaries
+
+The project has passed a complete default Lake build. Each of Geometry240, Objects240, Volume240, Conjecture240 and Audit240 has been re-elaborated with warningAsError=true, in dependency order. All62 axiom outputs contain only propext, Classical.choice and Quot.sound (Four uses none). No sorry, admit, native_decide, custom axiom or unsafe declaration occurs in the proof sources. All nine dependency HEADs match the supplied pins and tracked statuses remain clean. Lean reports version4.19.0, commit6caaee842e94, arm64-apple-darwin23.6.0.
+
+Proof checking relies on the pinned Lean kernel and the stated standard logical axioms, together with faithfully matching the definitions to the source. The earlier cache hydration was authorized by the root and changed only ignored build artifacts in the pinned package directories. No tracked dependency source was changed. The final build, strict replay and axiom audit logs are preserved under /private/tmp/tlmc240-author-log, with structured records and source hashes.
+
+Logging limitations are stated explicitly: the initial directory listing and logger bootstrap occurred before the logger existed; one shell quoting parse failure also occurred before its wrapper ran. Their surviving tool-transcript outputs and exit statuses are reconstructed separately, with wall-clock timestamps marked unavailable rather than invented. All substantive mathematical elaboration attempts, including failures, subsequent source writes, builds, strict replays and axiom checks are in the structured logger. The exploratory Check.lean and MeasureBridge.lean live only under the log directory and are not project modules.
+
+No commit, push, PR publication, external message, or standalone LaTeX artifact has been created by this author agent. The parent must conduct the promised independent rebuild/audit, fresh mathematical review, and final submission packaging before publication.

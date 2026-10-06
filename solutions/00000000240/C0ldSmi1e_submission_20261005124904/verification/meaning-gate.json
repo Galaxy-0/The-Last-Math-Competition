@@ -1,0 +1,111 @@
+{
+  "candidate_id": "00000000240",
+  "status": "PASS",
+  "gate_scope": "Meaning only; this is not an eligibility check, mathematical solution, truth assessment, or Lean feasibility assessment.",
+  "rationale": "The two language versions determine a conventional full-dimensional real convex-geometry claim, including an explicit equality classification. The ordinary conventions needed to make the brief statement precise can be stated without altering its substance. No ambiguity must be exploited or silently repaired.",
+  "inputs": [
+    {
+      "path": "/private/tmp/tlmc-next-clean-snapshot-20261005T114421Z/conjectures/00000000240.md",
+      "sha256": "58cc03f91596abe3f9a23b8d713f2c2f7cb3cc501d5700d91c959ae05c9d7ef7",
+      "bytes": 525,
+      "read_in_full": true,
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/private/tmp/tlmc-next-clean-snapshot-20261005T114421Z/README.md",
+      "sha256": "baf790af419e0070f593eecea4861fd865cc7b544d2cde6ec674f8fc587b01d1",
+      "bytes": 6933,
+      "read_in_full": true
+    },
+    {
+      "path": "/private/tmp/tlmc-next-clean-snapshot-20261005T114421Z/README.zh-CN.md",
+      "sha256": "d07ac1ccd888b8ee08fed8eb2e06ae15f6aa4025dbafe98790f8e2b2fc18eba7",
+      "bytes": 6367,
+      "read_in_full": true
+    }
+  ],
+  "access_disclosure": {
+    "source_files_read": "Exactly the three input files listed above; complete byte contents were read and SHA-256 hashes computed in one local Python invocation.",
+    "other_problem_files_read": false,
+    "solutions_or_old_mathematical_files_read": false,
+    "proof_notes_or_pull_requests_read": false,
+    "external_literature_or_web_accessed": false,
+    "other_repository_files_read": false,
+    "mathematical_work_performed": "Interpretation and formalization-obligation analysis only; no witness construction, proof development, formalization, or computational mathematical experiment.",
+    "background_used": "Ordinary mathematical meanings of convex body, origin symmetry, polar, Euclidean volume, cube, cross-polytope, and invertible linear image; no externally retrieved solution material.",
+    "output_written": "/private/tmp/tlmc240-meaning-gate.json"
+  },
+  "canonical_objects": {
+    "dimension": "A finite positive integer n, with K contained in R^n. The source does not state an explicit lower bound on n; n >= 1 is the conventional nondegenerate reading. Do not use n = 0 as a semantic loophole.",
+    "body": "A compact convex subset K of R^n with nonempty interior in R^n, hence full dimensional. Merely nonempty, lower-dimensional convex sets are not convex bodies in this reading.",
+    "symmetry": "Origin symmetry K = -K. In the standard symmetric Mahler setting the center is the origin, consistent with the unshifted polar notation. Do not exploit arbitrary translations or a different symmetry notion.",
+    "polar": "K° = {y in R^n : for every x in K, the usual Euclidean inner product <x,y> <= 1}. For an origin-symmetric body the absolute-value formulation is equivalent but that equivalence must be justified if used.",
+    "volume": "Ordinary n-dimensional Lebesgue volume with the usual normalization. The two factors are actual volumes of K and its actual polar in the same dimension.",
+    "cube": "The centered unit cube [-1,1]^n, or an explicitly proved linearly equivalent centered normalization.",
+    "cross_polytope": "The centered cross-polytope conv{+e_i,-e_i : i=1,...,n}, equivalently the l1 unit ball after proving or using a valid equivalence.",
+    "linear_images": "Images under invertible real linear maps R^n -> R^n, separately allowing a cube image or a cross-polytope image. If arbitrary linear maps are used syntactically, full dimensionality of K must force invertibility. These are not translated affine images."
+  },
+  "bilingual_scope": {
+    "english": "For every origin-symmetric convex body K in every dimension n, the Mahler product is at least 4^n/n!, and equality implies that K is a linear image of the cube or cross-polytope.",
+    "chinese": "The same universal lower bound, and equality holds if and only if K is a linear image of the cube or cross-polytope. The words 当且仅当 explicitly give both directions.",
+    "reconciliation": "Retain the Chinese biconditional when stating the complete bilingual conjecture. At an absolute minimum the necessary equality-classification direction is asserted in both languages and cannot be dropped. A disproof of that common necessary direction refutes both readings.",
+    "logical_form": "For every positive n and admissible K: M(K) >= 4^n/n! AND (M(K) = 4^n/n! IFF (CubeImage(K) OR CrossPolytopeImage(K))).",
+    "equality_is_substantive": true,
+    "parenthetical": "The phrase known for n <= 3 is an unverified background annotation in the source, not a restriction of the conjecture to n <= 3. Do not infer a global proof or an allowed axiom from it, or treat the historical annotation as the principal mathematical claim.",
+    "name": "The label Mahler does not authorize substituting a different remembered formulation for this file. The file explicitly includes its own equality classification."
+  },
+  "ambiguities_and_resolutions": [
+    {
+      "issue": "Symmetric is not explicitly expanded into an equation.",
+      "resolution": "Use the conventional origin-symmetric Mahler setting, K = -K; make this explicit. A purported counterexample should satisfy this stronger unambiguous condition."
+    },
+    {
+      "issue": "The ambient space and volume normalization are implicit.",
+      "resolution": "Use real Euclidean n-space and standard Lebesgue volume. Any alternative presentation must be connected to these objects by a proved equivalence."
+    },
+    {
+      "issue": "The dimension range is implicit.",
+      "resolution": "Use n >= 1; do not obtain a result by a zero-dimensional or singular interpretation."
+    },
+    {
+      "issue": "English says only while Chinese says if and only if.",
+      "resolution": "For a full proof, establish the biconditional. For a disproof, falsifying the necessary equality condition common to both is enough."
+    },
+    {
+      "issue": "The slash between cube and cross-polytope is informal.",
+      "resolution": "It denotes the union of the two classes, not one chosen class, not their intersection, and not a larger recursively generated class."
+    },
+    {
+      "issue": "Linear images are not explicitly required to be nonsingular.",
+      "resolution": "Use invertible linear maps; for a full-dimensional target this agrees with ordinary linear images of these n-dimensional bodies."
+    }
+  ],
+  "minimum_lean_semantic_obligations": [
+    "State the conjecture or its negation over genuine finite-dimensional real convex bodies, with explicit compactness, convexity, nonempty interior and origin symmetry hypotheses or equivalent library predicates.",
+    "Define the polar through the universal inner-product inequality and prove any concrete description used is extensionally equal to that polar.",
+    "Use actual n-dimensional Lebesgue volumes. If calculations use polytope decompositions, integrals, determinants, sums, or a custom volume function, prove their connection to the actual volumes of the actual sets.",
+    "Handle volume finiteness and positivity, and any ENNReal-to-real conversion, with proved hypotheses rather than silent coercions or a numerical stand-in.",
+    "Represent 4^n/n! with the intended real arithmetic and correct natural-factorial coercion. Discharge positive-denominator obligations where relevant.",
+    "Preserve the full equality classification as the disjunction of invertible linear images of the cube and of the cross-polytope; do not weaken the target to the lower bound alone or broaden the equality class.",
+    "For a proof, establish the universal lower bound and the equality biconditional for the same objects and dimensions.",
+    "For a disproof by a lower-bound failure, exhibit an admissible n and K with its true Mahler product strictly below the stated bound.",
+    "For a disproof by equality-classification failure, exhibit an admissible n and K, prove its true Mahler product equals the stated bound, and prove it is neither any invertible linear image of the cube nor any invertible linear image of the cross-polytope. Checking only literal inequality of coordinate sets, one transformation, orthogonal maps, or axis-aligned images does not establish this.",
+    "Any combinatorial or geometric invariant used to exclude either image class must be proved for the genuine body and shown invariant under every allowed invertible linear transformation.",
+    "State and prove a final theorem that logically negates the original universal conjunction (or a common asserted conjunct), rather than a surrogate assertion. The LaTeX exposition and Lean theorem must agree on definitions, hypotheses, dimension and conclusion.",
+    "Compile the complete Lean project with no sorry, native_decide, extra axioms, or another mechanism leaving the mathematical result incomplete; audit any auxiliary computation and its coverage as required by both READMEs."
+  ],
+  "submission_obligations_from_readmes": [
+    "A complete personal submission must be confined to solutions/00000000240/[GitHub_ID]_submission_[timestamp] and include LaTeX source, PDF, Lean 4 project and every auxiliary source/material relied on.",
+    "Eligibility must be checked before opening a PR; a solved conjecture must not be resubmitted unless the earlier submission is wrong and the new PR completely explains the error and correct solution. This assessor has not inspected eligibility evidence.",
+    "Do not modify conjecture descriptions, README, leaderboard, metadata or other files outside the personal submission in a solver PR.",
+    "Review requires complete LaTeX reading, complete Lean compilation, semantic alignment to the conjecture and complete execution/verification of auxiliary computational material."
+  ],
+  "unproved_and_unchecked": {
+    "truth": "UNPROVED and not assessed.",
+    "disproof": "UNPROVED and not attempted.",
+    "formalization_feasibility": "UNPROVED and not assessed; no Lean library or environment inspected.",
+    "eligibility": "UNCHECKED by this assessor; reserved to the root independent check.",
+    "historical_parenthetical": "UNVERIFIED; no external source consulted."
+  },
+  "next_action": "Wait for further root authorization before mathematical authorship or any additional file access."
+}
