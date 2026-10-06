@@ -1,0 +1,193 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\title{Conjecture 00000000702 is false:\\ an algebraic $p$-adic number with periodic Browkin expansion}
+\author{Jackmeson1}
+\date{}
+\begin{document}
+\maketitle
+
+\section{The conjecture and its reading}
+
+\textbf{Statement (English).} \emph{Definition: The Browkin expansion is a continued-fraction-like
+expansion in the p-adics. Conjecture: The Browkin expansion of an algebraic number is never
+eventually periodic; and the evidence for non-periodicity is the unboundedness of its partial
+quotients. (p-adic algebraic non-periodicity)} The Chinese text says the same.
+
+\textbf{Reading.}
+\begin{itemize}
+\item $p$ is an odd prime. Browkin's $s$-function (below) is defined for $p>2$; Capuano--Murru--Terracini
+  [CMT] write ``we will fix a prime $p>2$''. We refute the conjecture for \emph{every} odd prime $p$.
+\item An \emph{algebraic number} is an element $\alpha\in\Q_p$ that is algebraic over $\Q$. We restrict the
+  claim to irrational $\alpha$ (for rational $\alpha$ the expansion is finite). This restricted claim is
+  weaker, so refuting it refutes the original.
+\item Clause 1: the sequence of partial quotients is not eventually periodic.
+  Clause 2: the partial quotients are unbounded. Browkin partial quotients always have real absolute value
+  $<p/2$, so ``unbounded'' must refer to $|\cdot|_p$. We prove more: the partial quotients take only
+  finitely many values, so they are bounded in every sense.
+\item ``The Browkin expansion'' is Browkin's (first) algorithm as stated in [CMT]. Because the Definition line
+  is loose, we also treat Browkin's second algorithm, as stated in [MRS]. Each clause is refuted separately,
+  for each algorithm.
+\end{itemize}
+
+\textbf{Readings not refuted.}
+(a) If ``algebraic number'' is meant to have degree $\ge 3$, then clause 1 becomes a known fact. [CMT] state:
+``It is easy to show that, if $\alpha\in\Q_p$ has periodic BCF expansion, then it is quadratic
+irrational''. Our quadratic example does not address clause 2 under that reading.
+(b) If clause 2 is read as the implication ``non-periodic $\Rightarrow$ unbounded'', our periodic example is no
+counterexample to it. The conjunction is still false, because clause 1 fails.
+
+\section{Definitions}
+
+Let $p$ be an odd prime. Let $\Z[1/p]=\{m/p^k : k\in\mathbb{N},\ m\in\Z\}\subset\Q$.
+
+\begin{definition}[{[CMT, Sec.~2]}]\label{def:s}
+Let $J_p=\Z[1/p]\cap(-p/2,p/2)$. [CMT] write: ``given $\alpha\in\Q_p$ there exists a unique
+$s(\alpha)\in\mathcal{Y}$ such that $0\le|\alpha-s(\alpha)|_p<1$'' (their $\mathcal Y$ is our $J_p$). The
+\emph{Browkin expansion} (algorithm (1) of [CMT]) is
+$\alpha_0=\alpha$, $a_n=s(\alpha_n)$, $\alpha_{n+1}=1/(\alpha_n-a_n)$ if $\alpha_n-a_n\ne0$.
+\end{definition}
+
+\begin{definition}[{[MRS, Sec.~1--2]}]\label{def:t}
+Write $\alpha=\sum_{n\ge -r}a_np^n$ with digits $a_n\in\{-\frac{p-1}2,\dots,\frac{p-1}2\}$. Then
+$s(\alpha)=\sum_{n=-r}^{0}a_np^n$ and $t(\alpha)=\sum_{n=-r}^{-1}a_np^n$. Browkin's second algorithm
+(Browkin~II, eq.~(2) of [MRS]) is
+\[
+b_n=\begin{cases} s(\alpha_n) & n\text{ even},\\
+t(\alpha_n) & n\text{ odd and } v_p(\alpha_n-t(\alpha_n))=0,\\
+t(\alpha_n)-\operatorname{sign}(t(\alpha_n)) & n\text{ odd and } v_p(\alpha_n-t(\alpha_n))\ne0,
+\end{cases}
+\qquad \alpha_{n+1}=\frac1{\alpha_n-b_n}.
+\]
+\end{definition}
+
+\textbf{Characterisation of $t$.} Let $K_p=\Z[1/p]\cap(-1/2,1/2)$; this is the set $K_p$ of [MRS].
+By Lemma 2 of [MRS], $|t(\alpha)|<1/2$. Also $\alpha-t(\alpha)=\sum_{n\ge0}a_np^n\in\Z_p$. So $t(\alpha)$ is an
+element $y\in K_p$ with $|\alpha-y|_p\le1$. Such a $y$ is unique: if $y,y'$ are two of them, then
+$y-y'\in\Z[1/p]\cap\Z_p=\Z$ and $|y-y'|<1$. In the same way, $s(\alpha)$ is the unique $y\in J_p$ with
+$|\alpha-y|_p<1$, in agreement with [CMT].
+
+\textbf{Lean encoding.} \texttt{ZInvP p}, \texttt{browkinJ p} and \texttt{browkinK p} are the sets above.
+\texttt{browkinS x} is \texttt{Classical.epsilon} of the property ``$y\in J_p$ and $|x-y|_p<1$'', and
+\texttt{browkinT x} is the same with $K_p$ and $|x-y|_p\le1$. We prove uniqueness (\texttt{s\_unique},
+\texttt{t\_unique}, valid for every prime). For odd $p$ we prove existence for every $x\in\Q_p$
+(\texttt{browkinS\_spec}, \texttt{browkinT\_spec}), using a balanced representative
+(\texttt{ZMod.valMinAbs}) of \texttt{PadicInt.appr}. So the Lean functions are exactly Browkin's $s$ and $t$.
+\begin{itemize}
+\item \texttt{bcfCQ}/\texttt{bcfPQ} are the complete and partial quotients of Definition~\ref{def:s}.
+  \texttt{bcf2CQ}/\texttt{bcf2PQ} (with \texttt{browkin2Digit}) are those of Definition~\ref{def:t}.
+\item Conventions. The condition $v_p(x-t(x))=0$ is encoded as $|x-t(x)|_p=1$. These are equivalent: for
+  $x\ne t(x)$ this is the definition of $v_p$, and for $x=t(x)$ the valuation is $+\infty\ne0$ while the norm is
+  $0\ne1$. ``sign'' is Mathlib's \texttt{SignType.sign} ($\pm1$, and $0$ at $0$). Lean's convention
+  $0^{-1}=0$ never applies: we prove $\alpha_n\ne a_n$ (and $\alpha_n\ne b_n$) for all $n$, so both expansions
+  of our $\alpha$ are infinite and the recursion is the one of the papers.
+\item \texttt{EventuallyPeriodic b} means $\exists N,k$ with $k>0$ and $b(n+k)=b(n)$ for all $n\ge N$.
+  \texttt{PadicBounded p b} means $\exists C\ \forall n,\ |b_n|_p\le C$.
+\end{itemize}
+
+\section{The counterexample}
+
+\begin{lemma}[\texttt{exists\_beta}]
+There is $\beta\in\Q_p$ with $p\beta^2+\beta-p=0$ and $|\beta|_p<1$.
+\end{lemma}
+\begin{proof}
+Apply Hensel's lemma (Mathlib \texttt{hensels\_lemma}) to $F=pX^2+X-p\in\Z[X]$ at $a=0$. We have
+$|F(0)|_p=|p|_p=1/p<1=|F'(0)|_p^2$, since $F'(0)=1$. This gives a root $z\in\Z_p$ with $|z-0|_p<1$.
+\end{proof}
+
+Note $\beta\ne0$, since $F(0)=-p\ne0$. Put $\alpha=\beta^{-1}$. Dividing $p\beta^2+\beta-p=0$ by $p\beta$ gives
+\begin{equation}\label{eq:key}
+\alpha-\tfrac1p=\beta,\qquad p\alpha^2-\alpha-p=0 \qquad(\texttt{alpha\_sub},\ \texttt{alpha\_eq}).
+\end{equation}
+
+\begin{lemma}[\texttt{alpha\_algebraic}, \texttt{alpha\_irrational}]
+$\alpha$ is algebraic over $\Q$, and $\alpha\notin\Q$.
+\end{lemma}
+\begin{proof}
+$\alpha$ is a root of the nonzero polynomial $pX^2-X-p\in\Q[X]$. Suppose $\alpha=r\in\Q$. Then
+$pr^2-r-p=0$, so $(2pr-1)^2=4p^2+1$, and $4p^2+1$ is the square of a rational number. By
+\texttt{Rat.isSquare\_natCast\_iff} it is then the square of a natural number $m$. But
+$(2p)^2<4p^2+1<(2p+1)^2$, a contradiction.
+\end{proof}
+
+\begin{theorem}[Browkin I; \texttt{bcfCQ\_alpha}, \texttt{bcfPQ\_alpha}]
+For all $n$: $\alpha_n=\alpha$ and $a_n=1/p$. So the Browkin expansion is $[1/p;1/p,1/p,\dots]$.
+\end{theorem}
+\begin{proof}
+$1/p\in J_p$ because $p\ge3$. Also $|\alpha-1/p|_p=|\beta|_p<1$ by \eqref{eq:key}. By uniqueness,
+$s(\alpha)=1/p$, and then $\alpha_1=(\alpha-1/p)^{-1}=\beta^{-1}=\alpha$. Now induct on $n$. Finally,
+$\alpha_n-a_n=\beta\ne0$, so the algorithm never stops.
+\end{proof}
+
+\begin{theorem}[Browkin II; \texttt{bcf2\_first\_steps}, \texttt{bcf2CQ\_periodic}]
+Let $w=(1+\beta)^{-1}$. The complete quotients of Browkin II are
+$\alpha,\ \alpha,\ w,\ -\alpha-1,\ -w,\ \alpha+1,\ w,\dots$, with $\alpha_{n+4}=\alpha_n$ for all $n\ge2$. The partial
+quotients are $1/p,\ 1/p-1,\ \overline{1,\ -1/p,\ -1,\ 1/p}$.
+\end{theorem}
+\begin{proof}
+We have $|1+\beta|_p=1$ (ultrametric inequality) and $w-1=-\beta w$, so $|w-1|_p<1$. Each step is certified
+by the uniqueness of $s$ or $t$.
+\begin{itemize}
+\item $n=0$ (even): $s(\alpha)=1/p$, so $\alpha_1=\alpha$.
+\item $n=1$ (odd): $t(\alpha)=1/p$, since $1/p\in K_p$ and $|\alpha-1/p|_p=|\beta|_p\le1$. Since
+  $|\alpha-t(\alpha)|_p=|\beta|_p<1$, we get $v_p\ne0$, so $b_1=1/p-1$ and $\alpha_2=(1+\beta)^{-1}=w$.
+\item $n=2$: $s(w)=1$, so $\alpha_3=(w-1)^{-1}=-\alpha-1$.
+\item $n=3$: $-\alpha-1+1/p=-(1+\beta)$ has norm $1$. So $t=-1/p$, $b_3=-1/p$ and $\alpha_4=-w$.
+\item $n=4$: $s(-w)=-1$, so $\alpha_5=(1-w)^{-1}=\alpha+1$.
+\item $n=5$: $\alpha+1-1/p=1+\beta$ has norm $1$. So $b_5=t=1/p$ and $\alpha_6=w=\alpha_2$.
+\end{itemize}
+The rule for step $n$ depends only on the parity of $n$ (\texttt{browkin2Digit\_add\_four}). So
+$\alpha_6=\alpha_2$ propagates to $\alpha_{n+4}=\alpha_n$ for all $n\ge2$, and the same holds for $b_n$. All
+complete quotients are nonzero (\texttt{bcf2CQ\_ne\_zero}), so $\alpha_n\ne b_n$ and the algorithm never
+stops.
+\end{proof}
+
+An eventually periodic sequence has finite range (\texttt{EventuallyPeriodic.finite\_range}), and a sequence
+of rationals with finite range is $p$-adically bounded (\texttt{padicBounded\_of\_finite}). Here the bound is
+$|b_n|_p\le p$.
+
+\begin{theorem}[\texttt{conjecture702\_false}]
+For every odd prime $p$, none of the following four statements holds.
+\begin{itemize}
+\item \texttt{ClauseNonPeriodicI p}: every irrational algebraic $\alpha\in\Q_p$ has a Browkin~I expansion
+  that is not eventually periodic.
+\item \texttt{ClauseUnboundedI p}: every irrational algebraic $\alpha\in\Q_p$ has Browkin~I partial
+  quotients that are not $p$-adically bounded.
+\item \texttt{ClauseNonPeriodicII p} and \texttt{ClauseUnboundedII p}: the same two statements for Browkin~II.
+\end{itemize}
+\end{theorem}
+\noindent The witness is $\alpha$ above. All the facts about it are collected in
+\texttt{browkin\_counterexample}.
+
+\section{Lean formalization and axiom audit}
+The file is \texttt{lean/Conjecture702/Basic.lean} (565 lines; only \texttt{import Mathlib}). Its main
+results are:
+\begin{itemize}
+\item \texttt{theorem C702.conjecture702\_false (hp2 : p $\ne$ 2) : $\neg$ ClauseNonPeriodicI p $\wedge$
+  $\neg$ ClauseUnboundedI p $\wedge$ $\neg$ ClauseNonPeriodicII p $\wedge$ $\neg$ ClauseUnboundedII p};
+\item \texttt{C702.browkin\_counterexample}. It gives an $\alpha$ with $p\alpha^2-\alpha-p=0$, algebraic,
+  irrational, both expansions non-terminating, Browkin~I constant equal to $1/p$, and Browkin~II
+  periodic from index 2 with period 4. Both are eventually periodic, with finite range and
+  $p$-adically bounded;
+\item \texttt{C702.browkinS\_spec}, \texttt{C702.browkinT\_spec}: $s$ and $t$ exist for odd $p$.
+\end{itemize}
+\texttt{lake build} succeeds. \verb|#print axioms| reports \texttt{[propext, Classical.choice, Quot.sound]}
+for each of these theorems. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\begin{thebibliography}{9}
+\bibitem[CMT]{CMT} L.~Capuano, N.~Murru, L.~Terracini, \emph{On periodicity of $p$-adic Browkin continued
+  fractions}, arXiv:2010.07364, \url{https://arxiv.org/abs/2010.07364}.
+\bibitem[MRS]{MRS} N.~Murru, G.~Romeo, G.~Santilli, \emph{On the periodicity of an algorithm for $p$-adic
+  continued fractions}, arXiv:2201.12019, \url{https://arxiv.org/abs/2201.12019}.
+\end{thebibliography}
+\end{document}
