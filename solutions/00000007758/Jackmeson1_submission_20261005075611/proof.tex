@@ -1,0 +1,186 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+
+\title{A disproof of Conjecture 00000007758\\[2pt]
+\large Every integer orbit of $x^2+1$ is infinite}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000007758 reads (English version):
+
+\begin{quote}
+Definition: Boundedness of integer orbits: the sequence $a_0 \in \Z$, $a_{n+1}=f(a_n)$ for $f \in \Z[x]$
+of degree at least 2. Conjecture: If $f$ has no real fixed point with attracting interval (the real
+Julia set is totally disconnected), then the integer orbit is finite, and the union $O_f$ of all integer
+orbits satisfies the count $\#\{O_f \cap [-H,H]\} = O(H^{1/2+\epsilon})$; in particular the orbit values
+of $x^2+1$ have density $O(H^{-1/2}\log H)$ in $[1,H]$.
+\end{quote}
+
+The Chinese version says the same; its conclusion reads, in transliteration, ``ze zhengdian guidao
+wei youxian ji'': ``then the integer(-point) orbit is a finite set''.
+
+\textbf{Result.} The first conclusion is false. The polynomial $f = x^2+1$, which the conjecture itself
+names, has degree 2, has no real fixed point at all, and has an empty real Julia set. Yet every one of
+its integer orbits is strictly increasing, hence infinite and unbounded. Since the conjecture is a
+conjunction of conclusions under one hypothesis, it is false. Everything below is formalized in
+Lean~4 with Mathlib (Section~\ref{sec:lean}).
+
+\section{Reading and conventions}\label{sec:reading}
+
+\begin{enumerate}[label=(\alph*)]
+\item \textbf{Orbit.} The integer orbit of $a_0$ is $\{a_n : n \in \N\}$ with $a_{n+1} = f(a_n)$ and
+$\N = \{0,1,2,\dots\}$, so it contains $a_0$ (Lean: \texttt{intOrbit f a}, the range of
+$n \mapsto f^{[n]}(a)$).
+\item \textbf{Conclusion refuted.} ``The integer orbit is finite'' for every $a_0 \in \Z$. We also refute
+the existential reading (some integer orbit is finite) and the bounded reading (every integer orbit is
+bounded): for the witness, \emph{every} integer orbit is infinite and not bounded above.
+\item \textbf{Hypothesis, first form.} ``No real fixed point with attracting interval.'' The text does not
+define ``attracting''. The Lean statement takes an \emph{arbitrary} predicate
+\texttt{Attracting} on (map, point) pairs, e.g.\ $|f'(p)|<1$ or ``$p$ has an attracting interval''. This
+is possible because the witness has no real fixed point at all, so the hypothesis holds whatever
+``attracting'' means.
+\item \textbf{Hypothesis, second form.} ``The real Julia set is totally disconnected.'' For a polynomial
+the Julia set is the boundary of the filled Julia set $K(f) = \{z \in \C : \text{the orbit of } z \text{ is
+bounded}\}$, and the real Julia set is $J(f) \cap \R$. We also treat the one-dimensional variant: the
+frontier in $\R$ of the real filled Julia set $\{x \in \R : \text{the real orbit of } x \text{ is
+bounded}\}$. Both are empty for the witness, and the empty set is totally disconnected. The Lean
+theorem assumes \emph{both} forms of the hypothesis at once, which only weakens the conjectured
+implication and so strengthens its refutation.
+\item \textbf{Degree.} ``Degree at least 2'' is Mathlib's \texttt{natDegree}; the witness has
+\texttt{natDegree} exactly 2.
+\item \textbf{Bounded} means bounded in absolute value (\texttt{Bornology.IsBounded} in $\C$ or $\R$).
+\end{enumerate}
+
+\noindent\textbf{Sources for the definitions.} Wikipedia, \emph{Julia set}
+(\url{https://en.wikipedia.org/wiki/Julia_set}): for a polynomial, $J(f)$ ``is the boundary of the
+filled Julia set; that is, those points whose orbits under iterations of f remain bounded.''
+Wikipedia, \emph{Filled Julia set} (\url{https://en.wikipedia.org/wiki/Filled_Julia_set}): the
+filled Julia set is the set of points that ``have bounded orbit with respect to'' $f$.
+
+\section{Proof}
+
+Let $f(x) = x^2 + 1 \in \Z[x]$.
+
+\begin{lemma}[no real fixed point]\label{lem:fix}
+$f(x) \ne x$ for every $x \in \R$.
+\end{lemma}
+\begin{proof}
+$f(x) - x = (x - \tfrac12)^2 + \tfrac34 > 0$.
+\end{proof}
+
+\begin{lemma}[integer orbits]\label{lem:orbit}
+For every $a \in \Z$ and $n \in \N$, $f^{[n]}(a) \ge a + n$, and $n \mapsto f^{[n]}(a)$ is strictly
+increasing. Hence every integer orbit is infinite and not bounded above.
+\end{lemma}
+\begin{proof}
+For an integer $y$, $f(y) - y - 1 = y^2 - y = y(y-1) \ge 0$, so $f(y) \ge y + 1$. Induct on $n$.
+A strictly increasing sequence is injective, so its range is infinite; if $B$ bounded the orbit above,
+then $n = \max(B - a, 0) + 1$ would give $f^{[n]}(a) \ge a + n > B$.
+\end{proof}
+
+For example, the orbit of $0$ is $0, 1, 2, 5, 26, 677, \dots$.
+
+\begin{lemma}[escape]\label{lem:escape}
+If $z \in \C$ and $|z| \ge 2$, then $|f(z)| \ge |z| + 1$; hence $|f^{[n]}(z)| \ge |z| + n$ and $z \notin K(f)$.
+\end{lemma}
+\begin{proof}
+$|z^2 + 1| \ge |z|^2 - 1 \ge |z| + 1$, because $|z|^2 - |z| - 2 = (|z|-2)(|z|+1) \ge 0$. Induct.
+\end{proof}
+
+\begin{lemma}[the real Julia set is empty]\label{lem:julia}
+No real number lies in the closure of $K(f)$. Consequently $J(f) \cap \R = \emptyset$.
+\end{lemma}
+\begin{proof}
+For real $x$: $f(x) \ge 1$, $f^{[2]}(x) \ge 2$ and $f^{[3]}(x) = ((x^2+1)^2+1)^2+1 \ge 5$. The map
+$f^{[3]} : \C \to \C$ is continuous, so $U = \{z : |f^{[3]}(z)| > 2\}$ is open and contains $x$. For
+$z \in U$, Lemma~\ref{lem:escape} applied to $f^{[3]}(z)$ shows that $|f^{[n+3]}(z)| \ge 2 + n$, so $z
+\notin K(f)$. Thus $U \cap K(f) = \emptyset$, $x \notin \overline{K(f)}$, and since $\partial K(f)
+\subseteq \overline{K(f)}$, $x \notin J(f)$.
+\end{proof}
+
+\begin{lemma}[the real filled Julia set is empty]\label{lem:realfilled}
+For real $x$, $f^{[n]}(x) \ge x + \tfrac34 n$; so no real orbit is bounded, the real filled Julia set
+is empty, and so is its frontier in $\R$.
+\end{lemma}
+\begin{proof}
+$f(y) - y \ge \tfrac34$ (Lemma~\ref{lem:fix}). Induct.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+Let \textup{Attracting} be any notion of attracting fixed point. The statement ``for every $f \in
+\Z[x]$ with $\deg f \ge 2$ that has no real fixed point $p$ with \textup{Attracting}$(f,p)$ and whose real
+Julia set is totally disconnected, every integer orbit of $f$ is finite'' is false.
+\end{theorem}
+\begin{proof}
+Apply it to $f = x^2+1$: $\deg f = 2$; there is no real fixed point (Lemma~\ref{lem:fix}); the real
+Julia set is empty (Lemma~\ref{lem:julia}), hence totally disconnected. It would give a finite orbit of
+$0$, contradicting Lemma~\ref{lem:orbit}.
+\end{proof}
+
+\section{Lean formalization}\label{sec:lean}
+
+File \texttt{lean/Conjecture7758/Basic.lean} (197 lines, namespace \texttt{C7758}; only import
+\texttt{Mathlib}). Definitions: \texttt{orbit}, \texttt{intOrbit}, \texttt{evalR}, \texttt{evalC},
+\texttt{filledJulia} (points with \texttt{Bornology.IsBounded} orbit), \texttt{juliaSet}
+(\texttt{frontier} of \texttt{filledJulia}), \texttt{realJulia}, \texttt{realFilledJulia},
+\texttt{f0 = X\^{}2 + C 1}. Lemmas: \texttt{natDegree\_f0}, \texttt{no\_real\_fixed}
+(Lemma~\ref{lem:fix}); \texttt{int\_iter\_ge}, \texttt{int\_strictMono}, \texttt{intOrbit\_infinite},
+\texttt{intOrbit\_not\_bddAbove} (Lemma~\ref{lem:orbit}); \texttt{escape\_step}, \texttt{escape\_iter},
+\texttt{not\_mem\_filled} (Lemma~\ref{lem:escape}); \texttt{real\_not\_mem\_closure},
+\texttt{realJulia\_f0} (Lemma~\ref{lem:julia}); \texttt{realFilledJulia\_f0}
+(Lemma~\ref{lem:realfilled}). Main theorem:
+
+\begin{verbatim}
+theorem conjecture_7758_false (Attracting : (R -> R) -> R -> Prop) :
+    not (forall f : Z[X], 2 <= f.natDegree ->
+        (not exists x : R, IsFixedPt (evalR f) x and Attracting (evalR f) x) ->
+        IsTotallyDisconnected (realJulia f) ->
+        forall a : Z, (intOrbit f a).Finite) and
+    (f0.natDegree = 2 and (forall x : R, not IsFixedPt (evalR f0) x) and
+      realJulia f0 = {} and realFilledJulia f0 = {} and
+      frontier (realFilledJulia f0) = {} and
+      forall a : Z, (intOrbit f0 a).Infinite and not BddAbove (intOrbit f0 a))
+\end{verbatim}
+(ASCII rendering of the Lean statement: R, Z are $\R$, $\Z$; \texttt{\{\}} is $\emptyset$.)
+
+\textbf{Axiom audit.} \texttt{\#print axioms C7758.conjecture\_7758\_false} reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no
+\texttt{native\_decide}. The file compiles under \texttt{lake build} and with
+\texttt{-DwarningAsError=true}.
+
+\section{Scope}
+
+\begin{itemize}
+\item The witness is not degenerate: it is the conjecture's own example $x^2+1$, and all of its integer
+orbits are infinite.
+\item The counting clauses (the bound on $\#(O_f \cap [-H,H])$ and the density claim for $x^2+1$) are
+not used; the first conclusion already fails.
+\item One less literal reading is \emph{not} refuted: ``the set of integers whose orbit is finite
+(the integer preperiodic points) is finite''. That Northcott-type statement is true, and for $x^2+1$
+that set is empty.
+\end{itemize}
+
+\end{document}
