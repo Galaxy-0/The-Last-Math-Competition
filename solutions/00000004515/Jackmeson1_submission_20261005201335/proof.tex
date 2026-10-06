@@ -1,0 +1,157 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\title{Disproof of conjecture 00000004515:\\ the planar random Euclidean MST has no $(\log n)^{1/4}$ factor}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the readings refuted}
+
+\textbf{Statement (English, verbatim).} Definition: The random Euclidean MST is the minimum
+spanning tree on iid points of the unit region. Conjecture: In dimension two the expected total
+weight is a constant times sqrt(n) times the 1/4 power of log n, the exponent 1/4 is exact and
+determined by the long-edge density formula. (log-power exponent 1/4 of the planar MST)
+(The Chinese text states the same.)
+
+\textbf{Objects.} Let $\mu$ be a probability law on $\mathbb{R}^2$ (the law of each point) and
+let $X_1,\dots,X_n$ be iid with law $\mu$, i.e.\ $(X_1,\dots,X_n)$ has law $\mu^{\otimes n}$.
+$W_n$ is the total Euclidean length of the minimum spanning tree of the complete graph on the
+points, and $E_n = \mathbb{E}[W_n]$. Write $f(n)=\sqrt{n}\,(\log n)^{1/4}$ ($\log$ is the
+natural logarithm; another base only changes the constant).
+
+\textbf{Readings.} We refute each of the following, for \emph{every} law $\mu$ concentrated on
+a bounded planar set (in particular the uniform law on the unit square or the unit disk):
+\begin{itemize}
+\item[(1)] $E_n \sim c\,f(n)$, i.e.\ $E_n/(c f(n)) \to 1$, for any real $c$;
+\item[(2)] $E_n = c\,f(n)$ for all large $n$, for any $c>0$;
+\item[(3)] $E_n = \Theta(f(n))$ (``the exponent $1/4$ is exact''): $c_1 f(n)\le E_n\le c_2 f(n)$
+  eventually, with $c_1,c_2>0$;
+\item[(4)] $E_n \ge c\,f(n)$ for infinitely many $n$, for any $c>0$.
+\end{itemize}
+Reading (4) is the weakest; (1) with $c>0$, (2) and (3) each imply it. The clause ``determined
+by the long-edge density formula'' only explains where the exponent comes from; it falls with
+the exponent. \emph{Not covered:} unbounded regions of unit area, power-weighted edge lengths
+$|e|^\alpha$ with $\alpha\ne 1$, and $c=0$ in (2) (for a Dirac law $W_n=0$; the text's ``exponent
+$1/4$ is exact'' excludes $c=0$).
+
+\section{Definitions (as in the Lean file)}
+
+\begin{definition}
+For $p,q\in\mathbb{R}\times\mathbb{R}$, $d(p,q)=\sqrt{(p_1-q_1)^2+(p_2-q_2)^2}$ (\texttt{edist2};
+Mathlib's \texttt{dist} on $\mathbb{R}\times\mathbb{R}$ is the sup metric, so the Euclidean formula
+is written out). For $x:\mathrm{Fin}\,n\to\mathbb{R}^2$ and a simple graph $G$ on $\mathrm{Fin}\,n$,
+$\mathrm{len}_x(G)=\sum_{\{i,j\}\in E(G)} d(x_i,x_j)$ (\texttt{graphLen}). The MST length is
+\[ W(x)=\min_{T \text{ a tree on } \mathrm{Fin}\,n} \mathrm{len}_x(T) \]
+(\texttt{mstLen}, an infimum over the finite set of trees; \texttt{mstLen\_attained} shows it is
+attained for $n\ge1$). Every tree on the vertex set $\mathrm{Fin}\,n$ is a spanning tree of the
+complete graph. The expectation is $E_n(\mu)=\int W\,d\mu^{\otimes n}$ (\texttt{expMST}, with
+\texttt{Measure.pi}); \texttt{measurable\_mstLen} and \texttt{integrable\_mstLen} show that it is
+a genuine finite expectation. The uniform law on the unit square is
+$\mathrm{Leb}|_{[0,1]^2}$ (\texttt{uniformSq}, a probability measure).
+\end{definition}
+
+The four readings are the Lean predicates \texttt{AsympReading}, \texttt{EqReading},
+\texttt{ThetaReading} and \texttt{LowerIOReading}, with $f$ = \texttt{prof}.
+
+\section{The strip bound}
+
+\begin{lemma}[\texttt{exists\_connected\_short}, \texttt{mstLen\_le\_unitSq}]
+For $n\ge1$ points $x_1,\dots,x_n\in[0,1]^2$ there is a connected graph $G$ on them with
+$\mathrm{len}_x(G)\le 3\sqrt n+2$. Hence $W(x)\le 3\sqrt n+2$.
+\end{lemma}
+
+\begin{proof}
+Let $k=\lfloor\sqrt n\rfloor+1$, so $\sqrt n\le k\le\sqrt n+1$. The strip index of a height
+$y\in[0,1]$ is $s(y)=\min(\lfloor ky\rfloor,k-1)$, so $s\le ky\le s+1$ and $0\le s\le k-1$.
+Sort the points by the key $s(y)+x/2$ (\texttt{Tuple.sort}); since $x/2\in[0,1/2]$, this is the
+lexicographic order (strip, then abscissa). Let $q_0,\dots,q_{n-1}$ be the sorted points and $G$
+the path $q_0q_1\cdots q_{n-1}$ (the image of \texttt{pathGraph} under the sorting permutation, so
+connected). For consecutive $p=q_j$, $q=q_{j+1}$ with strips $s\le t$:
+if $s=t$ then $q_1\ge p_1$, so $|q_1-p_1|=q_1-p_1$; if $s<t$ then $|q_1-p_1|\le q_1-p_1+2\le
+q_1-p_1+2(t-s)$. Also $|q_2-p_2|\le(t-s+1)/k$. Since $d\le|\Delta_1|+|\Delta_2|$,
+\[ d(q_j,q_{j+1})\le F(j+1)-F(j),\qquad F(j)=(q_j)_1+(2+1/k)\,s(q_j)+j/k \]
+(\texttt{step\_le}). Every edge of $G$ is such a pair, so telescoping gives
+\[ \mathrm{len}(G)\le F(n-1)-F(0)\le 1+(2+1/k)(k-1)+(n-1)/k \le 3\sqrt n+2 \]
+(\texttt{strip\_arith}: multiply by $k$ and use $k\le\sqrt n+1$, $n\le k\sqrt n$). A connected
+graph contains a spanning tree $T\le G$ (Mathlib \texttt{Connected.exists\_isTree\_le}) and
+$\mathrm{len}(T)\le\mathrm{len}(G)$ since lengths are nonnegative, so $W\le\mathrm{len}(G)$
+(\texttt{mstLen\_le\_of\_connected}).
+\end{proof}
+
+\begin{lemma}[\texttt{mstLen\_le\_bounded}]
+If $S\subset\mathbb{R}^2$ is bounded, there is $C\ge0$ with $W(x)\le C(3\sqrt n+2)$ for all
+$n\ge1$ and all $x\in S^n$.
+\end{lemma}
+
+\begin{proof}
+$S\subseteq[-R,R]^2$ for some $R>0$. The map $\phi(p)=((p_1+R)/2R,(p_2+R)/2R)$ sends $S$ into
+$[0,1]^2$ and $d(p,q)=2R\,d(\phi p,\phi q)$ (\texttt{edist2\_sc}). Apply the previous lemma to
+$\phi(x_i)$ and take $C=2R$.
+\end{proof}
+
+\section{The disproof}
+
+\begin{theorem}[\texttt{ratio\_tendsto\_zero}, \texttt{not\_frequently\_lower}]
+Let $\mu$ be a probability law such that $\mu$-almost every point lies in a bounded set $S$. Then $0\le E_n\le C(3\sqrt n+2)$ for $n\ge1$, and for every real $c$ and
+every $\beta>0$,
+\[ \frac{E_n}{c\,\sqrt n\,(\log n)^\beta}\longrightarrow 0 .\]
+Consequently, for $c>0$, $E_n\ge c\sqrt n(\log n)^\beta$ holds for only finitely many $n$.
+\end{theorem}
+
+\begin{proof}
+Almost surely all $X_i\in S$, so $0\le W\le C(3\sqrt n+2)$ a.s.\ and the bound integrates
+(\texttt{expMST\_le}). For $c=0$ the quotient is $0$ by the convention $a/0=0$. For $c\ne0$ and
+$n\ge3$, $|E_n/(c\sqrt n(\log n)^\beta)|\le 5C/(|c|(\log n)^\beta)\to0$ because
+$(\log n)^\beta\to\infty$. If $E_n\ge c\sqrt n(\log n)^\beta$ for infinitely many $n$ with
+$c>0$, the quotient would be $\ge1$ infinitely often, a contradiction.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_4515\_false}, \texttt{conjecture\_4515\_false\_uniform}]
+For every such $\mu$, and in particular for the uniform law on $[0,1]^2$: (1) fails for every
+real $c$; (2) fails for every $c>0$; (3) fails; (4) fails for every $c>0$.
+\end{theorem}
+
+\begin{proof}
+(1): the quotient tends to $0\ne1$. (4): previous theorem with $\beta=1/4$. (2) and (3) each
+give $E_n\ge c f(n)$ for all large $n$, hence for infinitely many $n$, contradicting (4).
+\end{proof}
+
+\textbf{Context.} The retrieved Wikipedia article ``Euclidean minimum spanning tree''
+(\url{https://en.wikipedia.org/wiki/Euclidean_minimum_spanning_tree}) states: ``The total length
+of the edges, for points in a unit square, is at most proportional to the square root of the
+number of points.'' The proof above does not use it.
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture4515/Basic.lean} (namespace \texttt{C4515}, only
+\texttt{import Mathlib}, Mathlib v4.33.1). Main statements:
+\begin{verbatim}
+theorem conjecture_4515_false (mu : Measure (R x R)) [IsProbabilityMeasure mu]
+    {S : Set (R x R)} (hS : Bornology.IsBounded S) (hmu : forall^ae p d mu, p in S) :
+    (forall c : R, not AsympReading mu c) /\ (forall c > 0, not EqReading mu c) /\
+      not ThetaReading mu /\ (forall c > 0, not LowerIOReading mu c)
+theorem conjecture_4515_false_uniform :
+    (forall c : R, not AsympReading uniformSq c) /\ (forall c > 0, not EqReading uniformSq c) /\
+      not ThetaReading uniformSq /\ (forall c > 0, not LowerIOReading uniformSq c)
+\end{verbatim}
+(ASCII transcription of the Lean statements.) Supporting theorems: \texttt{mstLen\_le\_unitSq},
+\texttt{mstLen\_le\_bounded}, \texttt{integrable\_mstLen}, \texttt{expMST\_le},
+\texttt{ratio\_tendsto\_zero}, \texttt{not\_frequently\_lower}.
+
+\textbf{Axiom audit.} \texttt{\#print axioms} for both main theorems reports only
+\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}. No \texttt{sorry}, no
+\texttt{native\_decide}, no added axioms. Built with \texttt{lake build}.
+
+\end{document}
