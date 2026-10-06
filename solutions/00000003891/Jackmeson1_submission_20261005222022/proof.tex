@@ -1,0 +1,162 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Zp}{\mathbb{Z}_p}
+\newcommand{\Qp}{\mathbb{Q}_p}
+\newcommand{\lean}[1]{\texttt{#1}}
+
+\title{Conjecture 00000003891 is false:\\ the ghost inverse problem is not well posed}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\emph{Definition: The ghost components $w_n$ of Witt vectors are the weighted power sums
+$\sum x_i^{p^i}$. Conjecture: The recursion recovering Witt components from a ghost sequence always has
+a unique solution, and ghost sequences making component $p$-adic valuations unbounded form a
+measure-zero closed set in the compact topology.}
+
+The claim is a conjunction: (I) for every ghost sequence the recursion has exactly one solution,
+and (II) the set $S$ of ghost sequences whose recovered components have unbounded $p$-adic
+valuations is closed \emph{and} has measure zero. We refute it for every prime $p$ under each of
+the readings below. All statements are proved in Lean 4 / Mathlib (file \lean{Conjecture3891/Basic.lean},
+namespace \lean{C3891}).
+
+\section{Definitions and conventions}
+
+\begin{definition}[Ghost components]
+For a commutative ring $R$ and a $p$-typical Witt vector $x=(x_0,x_1,\dots)$ over $R$ (Mathlib's
+\lean{WittVector p R}, components \lean{x.coeff i}), the $n$-th ghost component is
+\[ w_n(x)=\sum_{i=0}^{n} p^i\,x_i^{p^{\,n-i}} . \]
+This is Mathlib's \lean{WittVector.ghostComponent n x}; the displayed formula is
+\lean{ghost\_formula}, proved from \lean{WittVector.ghostComponent\_apply} and
+\lean{aeval\_wittPolynomial}. The ghost map is \lean{WittVector.ghostMap}. The recursion of the
+conjecture is $p^n x_n = w_n-\sum_{i<n}p^i x_i^{p^{n-i}}$.
+\end{definition}
+
+The printed formula $\sum x_i^{p^i}$ has no weights, although the text calls the ghost components
+``weighted power sums''; we take the named object (ghost components of Witt vectors) as primary and
+treat the literal formula separately in Section~6.
+
+\paragraph{Ambient space.} Ghost sequences range over $\Zp^{\mathbb N}=$ \lean{$\mathbb N$ -> $\mathbb Z$\_[p]}
+with the product topology, which is compact (the ``compact topology''). Mathlib has no
+\lean{MeasurableSpace} instance on $\Zp$; we prove the measure statement for \emph{every}
+$\sigma$-algebra on $\Zp^{\mathbb N}$ and every measure that is positive on nonempty open sets. In particular it
+applies to every additive Haar measure for the Borel $\sigma$-algebra, e.g.\ the Haar probability measure
+\lean{haarP p} $=$ \lean{Measure.addHaarMeasure $\top$} (\lean{haar\_ne\_zero}).
+
+\paragraph{Valuations.} $v=$ \lean{Padic.valuation} on $\Qp$, with $\|y\|=p^{-v(y)}$ for $y\ne0$.
+Mathlib sets \lean{valuation 0 = 0}; our sets never use this value: they either exclude zero
+components or count them explicitly as $+\infty$. With $x=x(w)$ the recovered components:
+\begin{itemize}
+\item \lean{UnbddBelow p}: for every $M\in\mathbb Z$ some $n$ has $x_n\neq0$, $v(x_n)<M$;
+\item \lean{Unbdd p}: for every $M$ some $n$ has $x_n\ne0$, $M<|v(x_n)|$;
+\item \lean{UnbddAbove p}: for every $M$ some $n$ has $x_n\ne0$, $M<v(x_n)$;
+\item \lean{UnbddAboveTop p}: for every $M$ some $n$ has $x_n=0$ or $M<v(x_n)$ (zero counts as $+\infty$).
+\end{itemize}
+Here, for $w\in\Zp^{\mathbb N}$, $x(w)=$ \lean{comps p w} is the coefficient sequence of the unique Witt
+vector over $\Qp$ with ghost sequence $w$: \lean{cvec p w} $=$
+\lean{(WittVector.ghostEquiv p $\mathbb Q$\_[p]).symm w} (ghost map bijective since $p$ is invertible in
+$\Qp$); uniqueness is \lean{cvec\_unique}. For $w$ in the ghost image of $W(\Zp)$ these are its integral
+components (\lean{comps\_ghost}).
+
+\section{Reading A: components in $\Zp$}
+
+\begin{lemma}[\lean{e1\_not\_ghost}]
+The ghost sequence $e=(0,1,0,0,\dots)$ is not $\mathrm{ghostMap}(x)$ for any $x\in W(\Zp)$.
+\end{lemma}
+\begin{proof}
+$w_0=x_0=0$, so $w_1=x_0^p+p x_1=p x_1=1$; but $\|p x_1\|\le p^{-1}<1=\|1\|$.
+\end{proof}
+Hence clause (I) fails over $\Zp$: \lean{$\neg\,\forall$ w, $\exists!$ x : WittVector p $\mathbb Z$\_[p], ghostMap x = w}.
+
+\section{Reading B: components in $\Qp$}
+
+Over $\Qp$ clause (I) holds (part of \lean{main\_theorem}). Let $a_n=1+p+\dots+p^{n-1}=(p^n-1)/(p-1)$
+(\lean{aexp}: $a_0=0$, $a_{n+1}=p a_n+1$).
+
+\begin{lemma}[\lean{key}, \lean{aexp\_ge}]
+For all $i,m$: $a_i p^{m+2}+m+1<a_{i+m+1}\,p$; and $n\le a_n$.
+\end{lemma}
+\begin{proof}
+Induction on $m$: for $m=0$, $(pa_i+1)p=p^2a_i+p>p^2a_i+1$. Step: multiply the hypothesis by $p$ and use
+$m+2\le(m+1)p$ and $a_{i+m+2}p=p^2a_{i+m+1}+p$.
+\end{proof}
+
+\begin{theorem}[\lean{norm\_comps}, \lean{comps\_ne\_zero\_val}]
+If $w\in\Zp^{\mathbb N}$ and $\|w_1-w_0^p\|=1$, then for all $n\ge1$: $\|x_n\|=p^{a_n}$, so $x_n\ne0$ and
+$v(x_n)=-(p^n-1)/(p-1)$.
+\end{theorem}
+\begin{proof}
+Strong induction. $n=1$: $p x_1=w_1-w_0^p$ gives $\|x_1\|=p$. For $n+2$: write
+$p^{n+2}x_{n+2}=(w_{n+2}-S)-D$ with $D=p^{n+1}x_{n+1}^p$, $\|D\|=p^{a_{n+1}p-(n+1)}$, and
+$S=\sum_{i\le n}p^i x_i^{p^{n+2-i}}$. By induction $\|x_i\|\le p^{a_i}$ for $i\le n+1$ (for $i=0$, $x_0=w_0$), so
+each term of $S$ has norm $\le p^{a_ip^{n+2-i}-i}<\|D\|$ by \lean{key} with $m=n-i$; by the ultrametric
+inequality $\|S\|<\|D\|$, and $\|w_{n+2}\|\le1<\|D\|$ since $a_{n+1}p>n+1$. Hence
+$\|p^{n+2}x_{n+2}\|=\|D\|$ and $\|x_{n+2}\|=p^{a_{n+1}p+1}=p^{a_{n+2}}$.
+\end{proof}
+
+Let $U=\{w:\|w_1-w_0^p\|=1\}$. It is open (preimage of the sphere of radius $1$, open in an ultrametric
+space: \lean{isOpen\_U}) and nonempty ($e\in U$). The theorem gives $U\subseteq$ \lean{UnbddBelow p}
+(\lean{U\_subset}), and \lean{UnbddBelow p} $\subseteq$ \lean{Unbdd p}.
+
+\begin{theorem}[\lean{measure\_ne\_zero}, \lean{haar\_ne\_zero}]
+For every $\sigma$-algebra on $\Zp^{\mathbb N}$, every measure $\mu$ positive on nonempty open sets, and every
+$T\supseteq$ \lean{UnbddBelow p}: $\mu(T)\neq0$. In particular for every additive Haar measure.
+\end{theorem}
+So the unbounded-valuation set (unbounded below, or unbounded in absolute value) is not of measure zero,
+and clause (II) fails.
+
+\section{Reading C: ``unbounded'' means unbounded above}
+
+Let $x^{(k)}_n=1$ for $n<k$ and $x^{(k)}_n=p^n$ for $n\ge k$ (\lean{xk}), $w^{(k)}=\mathrm{ghost}(x^{(k)})$,
+$w^*=\mathrm{ghost}(1,1,1,\dots)$. Since $w_n$ depends only on $x_0,\dots,x_n$, $w^{(k)}_n=w^*_n$ for $k>n$,
+so $w^{(k)}\to w^*$ in the product topology (\lean{tendsto\_wk}). By uniqueness the recovered components of
+$w^{(k)}$ are $x^{(k)}$, with $v(p^n)=n$, so $w^{(k)}\in$ \lean{UnbddAbove p} (\lean{wk\_mem}); those of $w^*$
+are all $1$, valuation $0$, so $w^*\notin$ \lean{UnbddAboveTop p} (\lean{wstar\_not\_mem}).
+
+\begin{theorem}[\lean{not\_closed}, \lean{not\_closed\_in}]
+Every $T$ with \lean{UnbddAbove p} $\subseteq T\subseteq$ \lean{UnbddAboveTop p} is not closed in $\Zp^{\mathbb N}$,
+and $T\cap A$ is not relatively closed in any $A\supseteq\mathrm{ghost}(W(\Zp))$, in particular in the ghost image
+itself (where clause (I) holds with integral components, \lean{ghost\_injective\_Zp}).
+\end{theorem}
+
+\section{The literal printed formula}
+
+If $w_n=\sum_{i\le n}x_i^{p^i}$ (\lean{litGhost}), the ghost sequence $(0,p,0,\dots)$ forces $x_0=0$ and
+$x_1^p=p$, i.e.\ $p\,v(x_1)=1$, impossible (\lean{lit\_no\_solution}); so clause (I) fails over $\Qp$. (Since $\Zp\subset\Qp$, there is
+then no integral solution either; this last remark is not separately stated in Lean.)
+
+\section{Lean summary and axiom audit}
+
+\lean{C3891.main\_theorem} (for every prime $p$, \lean{[Fact p.Prime]}) is the conjunction of:
+(A) \lean{$\neg\,\forall$ w : $\mathbb N$ -> $\mathbb Z$\_[p], $\exists!$ x : WittVector p $\mathbb Z$\_[p], ghostMap x = w};
+(B) unique solvability over $\Qp$, and $\mu(T)\ne0$ for every open-positive $\mu$ on any $\sigma$-algebra and
+every $T\supseteq$ \lean{UnbddBelow p}, together with \lean{UnbddBelow p} $\subseteq$ \lean{Unbdd p};
+(C) for every $T$ between \lean{UnbddAbove p} and \lean{UnbddAboveTop p}, \lean{$\neg$ IsClosed T} and
+\lean{$\neg$ IsClosed (Subtype.val$^{-1}$ T)} in \lean{ghostImage p};
+(L) the literal formula is not always solvable over $\Qp$.
+The file is $411$ lines and imports only \lean{Mathlib}. \lean{lake build} succeeds and
+\begin{verbatim}
+'C3891.main_theorem' depends on axioms: [propext, Classical.choice, Quot.sound]
+'C3891.haar_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+\end{verbatim}
+No \lean{sorry}, no \lean{native\_decide}, no added axioms.
+
+\paragraph{Readings not covered.} Ghost sequences ranging over the non-compact space $\Qp^{\mathbb N}$ are not
+treated (the text specifies a compact topology). Under the integral reading restricted to the ghost image with
+``unbounded'' meaning unbounded \emph{below}, the set is empty (integral components have $v\ge0$); this
+degenerate reading is not refuted.
+
+\end{document}
