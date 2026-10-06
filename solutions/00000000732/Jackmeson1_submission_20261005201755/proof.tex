@@ -1,0 +1,155 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\OK}{\mathcal{O}_K}
+
+\title{Disproof of conjecture 00000000732:\\ every unit of $\Q(\zeta_m)$, $m\ge 3$, has norm $+1$, so $\varepsilon(m)=1$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+\textbf{Statement (English, verbatim).} Definition: The unit index $\varepsilon(m)$ of the
+cyclotomic field $\Q(\zeta_m)$ is the index of its unit group over the norm-one units.
+Conjecture: As the conductor $m\to\infty$, the supremum of $\varepsilon(m)$ grows like
+$\varphi(m)/2^{\omega(m)}\cdot(1+O(2^{-\omega(m)}))$, with exact equality when $m$ is an odd
+prime power. (The Chinese text says the same.)
+
+\textbf{Reading.} Let $K=\Q(\zeta_m)$, $E=\OK^\times$ its unit group and
+$E_1=\{u\in E : N_{K/\Q}(u)=1\}$ the norm-one units. Then $\varepsilon(m)=[E:E_1]$. Here
+$N_{K/\Q}$ is the absolute norm, $\varphi$ is Euler's totient, and $\omega(m)$ is the number of
+distinct prime divisors of $m$. The conjecture is a conjunction: (A) an asymptotic statement, and
+(B) the exact equality $\varepsilon(m)=\varphi(m)/2^{\omega(m)}$ for every odd prime power $m$.
+For $m=7$, (B) predicts $\varphi(7)/2^{1}=3$.
+
+\section{Definitions in Lean}
+
+All objects are built from Mathlib (Lean file \texttt{Conjecture732/Basic.lean}, namespace
+\texttt{C732}).
+\begin{itemize}
+\item $K=\Q(\zeta_m)$ is Mathlib's \texttt{CyclotomicField m Q} and $E$ is \texttt{(O K)\^{}x}, the
+units of the ring of integers.
+\item \texttt{unitNorm K}: $E\to\Q^\times$, $u\mapsto N_{K/\Q}(u)$, built from Mathlib's
+\texttt{Algebra.norm Q}. Then \texttt{normOneUnits K} is its kernel $E_1$.
+\item \texttt{unitIndex m} $=\varepsilon(m)=$ \texttt{(normOneUnits (CyclotomicField m Q)).index}.
+Mathlib's \texttt{Subgroup.index} is $0$ for an infinite index. That case does not arise for
+$\varepsilon$, which we show is at most $2$.
+\item \texttt{omega m} $=$ \texttt{m.primeFactors.card}, and
+\texttt{claimed m} $=\varphi(m)/2^{\omega(m)}$, computed in $\Q$ so that no rounding occurs.
+\end{itemize}
+
+\section{The key lemma: norms in a totally complex field are nonnegative}
+
+\begin{lemma}[\texttt{norm\_nonneg\_of\_isTotallyComplex}]
+Let $K$ be a number field with no real embeddings. Then $N_{K/\Q}(x)\ge 0$ for every $x\in K$.
+\end{lemma}
+\begin{proof}
+We have $N_{K/\Q}(x)=\prod_{\sigma}\sigma(x)$, the product over all embeddings
+$\sigma:K\to\C$ (Mathlib: \texttt{Algebra.norm\_eq\_prod\_embeddings}). Group the embeddings by
+the infinite place $w$ they define. The embeddings above $w$ are exactly $\varphi_w$ and
+$\overline{\varphi_w}$ (Mathlib: \texttt{mk\_eq\_iff}). These two are distinct because $\varphi_w$ is
+not real (\texttt{IsTotallyComplex.complexEmbedding\_not\_isReal}). So the product over the fibre
+of $w$ is $\varphi_w(x)\overline{\varphi_w(x)}=|\varphi_w(x)|^2$, and
+$N_{K/\Q}(x)=\prod_w|\varphi_w(x)|^2\ge 0$.
+\end{proof}
+
+\begin{theorem}[\texttt{unitIndex\_eq\_one}]
+For every $m>2$, $\varepsilon(m)=1$.
+\end{theorem}
+\begin{proof}
+For $m>2$, $\Q(\zeta_m)$ is totally complex (Mathlib:
+\texttt{IsCyclotomicExtension.Rat.isTotallyComplex}). A unit $u$ has $|N(u)|=1$ (Mathlib:
+\texttt{NumberField.isUnit\_iff\_norm}), and $N(u)\ge 0$ by the lemma, so $N(u)=1$. Hence
+$E_1=E$ (\texttt{normOneUnits\_eq\_top}), and the index is $1$.
+\end{proof}
+
+For every $m$ (including $m\le 2$), $\varepsilon(m)\le 2$ (\texttt{unitIndex\_le\_two}). The reason
+is that $u\mapsto N(u)$ maps $E$ into $\{\pm1\}$, and the index of a kernel equals the size of the
+image (\texttt{Subgroup.index\_ker}).
+
+\section{Refutation of (B), the exact-equality clause}
+
+For an odd prime power $q=p^a$ we have $\omega(q)=1$ and $\varphi(q)=p^{a-1}(p-1)$, so the claimed
+value is $p^{a-1}(p-1)/2$ (\texttt{claimed\_prime\_pow}).
+\begin{itemize}
+\item \texttt{witness\_seven}: $\varepsilon(7)=1$ and $\texttt{claimed}(7)=3$.
+\item \texttt{three\_le\_claimed}: every odd prime power $q=p^a\ge7$ has claimed value at least
+$3$. (If $a=1$ then $p-1\ge6$. If $a\ge2$ then $p^{a-1}\ge3$ and $p-1\ge2$.)
+\item \texttt{exact\_equality\_fails}: $\varepsilon(q)\ne\varphi(q)/2^{\omega(q)}$ for every odd
+prime power $q\ge7$, an infinite family. (The equality also fails at $q=5$, where the claimed value
+is $2$, and holds at $q=3$, where it is $1$. Neither small case is needed or formalized.)
+\end{itemize}
+
+\textbf{Other readings of ``the supremum of $\varepsilon(m)$''.} A supremum of $\varepsilon$-values
+over any set $T$ of conductors (for example $m'\le m$, $m'\ge m$, or $\{m\}$) is at most $2$
+(\texttt{sSup\_unitIndex\_le\_two}). So the exact equality fails at every odd prime power $q\ge7$
+for any function bounded by $2$ (\texttt{exact\_equality\_fails\_of\_le\_two}).
+
+\textbf{Other readings of ``unit index'', refuted at $m=7$ and at every odd prime power $q\ge 7$.}
+\begin{itemize}
+\item \emph{Hasse's unit index} $Q=[E:WE^+]$, where $W$ is the group of roots of unity and $E^+$
+the group of units of the maximal real subfield $K^+$. This is Mathlib's
+\texttt{IsCMField.indexRealUnits}, and Mathlib proves it is $1$ or $2$
+(\texttt{indexRealUnits\_eq\_one\_or\_two}). We use the CM structure of $\Q(\zeta_m)$ for $m>2$
+(\texttt{IsCyclotomicExtension.Rat.isCMField}). Since $1,2\ne3$, \texttt{hasse\_index\_ne\_claimed}
+follows.
+\item \emph{Relative norm} to $K^+$, that is $E_1'=\{u: N_{K/K^+}(u)=1\}$
+(\texttt{relNormOneUnits}). If $[E:E_1']=n$ were finite and nonzero, then $u^n\in E_1'$ for every
+$u$. Take $u=\eta$, a fundamental unit of $K^+$ (Mathlib's \texttt{Units.fundSystem}). Then
+$N_{K/K^+}(\eta^n)=\eta^{2n}$ (\texttt{Algebra.norm\_algebraMap}, $[K:K^+]=2$), so
+$\eta^{2n}=1$. This contradicts the fact that $\eta$ is not torsion (its log-embedding is a
+basis vector). The unit rank is positive because $\Q(\zeta_q)$ has $\varphi(q)/2\ge3$ complex
+places (\texttt{nrComplexPlaces\_eq\_totient\_div\_two}). Hence the index is infinite, which is
+Mathlib's value $0$ (\texttt{relNormOneUnits\_index\_eq\_zero}, \texttt{rel\_index\_ne\_claimed}).
+\end{itemize}
+
+\section{Refutation of (A), the asymptotic clause}
+
+Write $f(m)=\varphi(m)/2^{\omega(m)}$ (in $\mathbb{R}$). We formalize two readings for a function
+$S$:
+\begin{itemize}
+\item \texttt{BigOClaim S}: there are $C$ and $N$ with
+$|S(m)-f(m)|\le C\,f(m)\,2^{-\omega(m)}$ for all $m\ge N$. This is the statement
+$S=f\cdot(1+O(2^{-\omega}))$.
+\item \texttt{EquivClaim S}: $S(m)/f(m)\to1$.
+\end{itemize}
+\texttt{asymptotic\_fails}: if $S\le2$, both readings fail. Proof: take $m=p_1\cdots p_k$, a
+product of $k$ distinct primes $\ge\max(N,11)$ (\texttt{family}, using the infinitude of primes).
+Then $\omega(m)=k$, $\varphi(m)=\prod(p_i-1)$, and $f(m)\ge5^k$. Choose $k$ large enough that
+$C2^{-k}<1/2$. Then $|S(m)-f(m)|\ge f(m)-2>f(m)/2>C f(m)2^{-\omega(m)}$, and $S(m)/f(m)\le 2/5$.
+This applies to $S=\varepsilon$ and to every family of suprema $m\mapsto\sup\varepsilon(T_m)$.
+
+\section{Main theorem and axiom audit}
+
+\texttt{C732.conjecture732\_false} proves, as a single conjunction:
+(i) $\neg$\texttt{Conjecture732}, where \texttt{Conjecture732} is
+\texttt{BigOClaim} $\varepsilon$ $\wedge$ $\forall p\,a$, $p$ prime, $p\ne2$, $a\ge1$
+$\Rightarrow \varepsilon(p^a)=\texttt{claimed}(p^a)$;
+(ii) $\varepsilon(7)=1$ and $\texttt{claimed}(7)=3$;
+(iii) for every $T\subseteq\mathbb{N}$, $\sup\varepsilon(T)\ne3$;
+(iv) Hasse's index of $\Q(\zeta_7)$ is not $3$;
+(v) the relative-norm index of $\Q(\zeta_7)$ is $0$ (infinite);
+(vi) for every $T:\mathbb{N}\to\mathcal{P}(\mathbb{N})$, both \texttt{BigOClaim} and
+\texttt{EquivClaim} fail for $m\mapsto\sup\varepsilon(T_m)$.
+
+\texttt{\#print axioms C732.conjecture732\_false} reports only \texttt{propext},
+\texttt{Classical.choice} and \texttt{Quot.sound}. The file contains no \texttt{sorry} and no
+\texttt{native\_decide}. It was built with Lean v4.33.1 and Mathlib v4.33.1.
+
+\textbf{Remark.} Under the literal Definition, $\varepsilon(m)=1$ for every $m\ge3$, so the
+conjectured formula does not match the defined object at any odd prime power other than $3$.
+
+\end{document}
