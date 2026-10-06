@@ -1,0 +1,181 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Ext}{\mathrel{\prec}}
+\title{Conjecture 00000003526: well-founded trees, their rank, and ordinal height}
+\author{Jackmeson1}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Statement}
+\emph{Definition: Combinatorial principles of large ordinals: trees and partitions. Conjecture: The
+ordinal version of the tree lemma: the vanishing of descending chains of ordinal trees is
+well-foundedness, with the rank of well-foundedness the ordinal height.}
+
+\paragraph{Verdict.} PROVED, for the two standard notions of tree named below. The claim is classical.
+We do not take it from a library theorem about trees. We write out the definitions of tree, branch,
+descending chain, rank and height, and we prove every equivalence from them. All of it is checked in
+Lean 4 with Mathlib.
+
+\section{Readings and definitions}
+\textbf{Reading A (trees of finite sequences).} We use the trees of descriptive set theory. Wikipedia,
+``Tree (descriptive set theory)'', says that a tree on $X$ is a set of finite sequences ``such that
+every prefix of a sequence in the collection also belongs to the collection''. It says that ``a tree
+is a nonempty subset'' of $X^{<\omega}$ with this closure property, and that it ``shows that the
+empty sequence belongs to every tree''. A branch is an infinite sequence ``each of whose finite
+prefixes belongs to'' $T$, and ``A tree that has no branches is called wellfounded; a tree with at
+least one branch is illfounded.'' An \emph{ordinal tree} is a tree on a set of ordinals. All our
+results hold for trees on an arbitrary set $A$, so they hold in particular for $A=\mathrm{Ord}$.
+
+\textbf{Reading B (set-theoretic trees).} Wikipedia, ``Tree (set theory)'', says that ``a tree is a
+partially ordered set'' $(T,<)$ such that for each $t$ the set $\{s:s<t\}$ ``is well-ordered by the
+relation'' $<$. The order type of that set ``is called the height, rank, or level of'' $t$, and the
+height of $T$ ``itself is the least ordinal greater than the height of each element of'' $T$.
+
+\begin{definition}[Lean names in brackets]
+Let $T\subseteq A^{<\omega}$.
+\begin{itemize}
+\item $T$ is a \emph{tree} [\texttt{IsTree}] if $T\neq\emptyset$ and $t\in T$, $m<|t|$ imply
+  $t{\restriction}m\in T$.
+\item For $f:\mathbb N\to A$, $f{\restriction}n=\langle f(0),\dots,f(n-1)\rangle$ [\texttt{initSeg}].
+  The sequence $f$ is a \emph{branch} [\texttt{IsBranch}] if $f{\restriction}n\in T$ for all $n$. The
+  tree $T$ is \emph{well-founded} [\texttt{TreeWF}] if it has no branch.
+\item \emph{Strict extension} [\texttt{Ext}]: for nodes $s,t\in T$, $t\Ext s$ iff $s$ is a proper
+  prefix of $t$. A \emph{descending chain} is a sequence of nodes with $c_{n+1}\Ext c_n$ for all $n$,
+  that is, $c_0\subsetneq c_1\subsetneq\cdots$ [\texttt{HasDescChain}]. This is the orientation in which
+  ``descending'' means going away from the root.
+\item If $\Ext$ is well-founded, the \emph{rank} [\texttt{nodeRank}] is
+  $\rho_T(s)=\sup\{\rho_T(t)+1:t\in T,\ t\Ext s\}$, with $\sup\emptyset=0$. This is Mathlib's
+  well-founded rank \texttt{Acc.rank}. The \emph{rank of the tree} [\texttt{treeRank}] is
+  $\rho(T)=\sup\{\rho_T(s)+1:s\in T\}$.
+\item A \emph{ranking} [\texttt{IsRanking}] is a map $\varphi:T\to\mathrm{Ord}$ with
+  $t\Ext s\Rightarrow\varphi(t)<\varphi(s)$. The \emph{ordinal height} [\texttt{ordHeight}] is
+  $\mathrm{ht}(T)=\min\{\alpha:\exists\varphi\text{ a ranking with }\varphi(s)<\alpha\ \forall s\}$.
+  This definition does not mention $\rho$.
+\end{itemize}
+\end{definition}
+For the name ``ordinal height'': Huschenbett, Kartzow, Liu and Lohrey, \emph{Tree-Automatic
+Well-Founded Trees} (arXiv:1201.5495), Section 2.2, write ``Let us recall the (ordinal) rank of a
+well-founded partial order.'' They define the rank of an element by recursion and then ``the rank
+of'' the order ``(also called the ordinal height of'' it) as $\sup\{\mathrm{rank}(p)+1\}$. This is
+exactly $\rho(T)$. Our $\mathrm{ht}(T)$ is a second, independent notion of height, and Theorem 3 shows
+that the two agree.
+
+\paragraph{Conventions.} Ordinals live in Lean's universe-polymorphic \texttt{Ordinal.\{u\}}. For a
+tree on $A$ with $A$ in \texttt{Type u}, ranks lie in \texttt{Ordinal.\{u\}}. For a tree on
+\texttt{Ordinal.\{u\}} itself, ranks lie in \texttt{Ordinal.\{u+1\}}, and $\alpha$ appears as
+$\mathrm{lift}(\alpha)$. In Lean, \texttt{nodeRank} is $0$ on ill-founded trees and \texttt{ordHeight}
+is $\inf\emptyset=0$ when no ranking exists. These junk values never enter a theorem, because every
+rank statement assumes well-foundedness. The step from ``no descending chain'' to ``well-founded'' uses
+dependent choice, which Lean's \texttt{Classical.choice} provides. As Wikipedia, ``Well-founded
+relation'', puts it: ``Equivalently, assuming the axiom of dependent choice, a relation is
+well-founded when it contains no infinite descending chains, meaning there is no infinite sequence
+x0, x1, x2, ... of elements of X such that xn+1 R xn for every natural number n.''
+
+\section{Reading A}
+\begin{theorem}[\texttt{treeWF\_iff\_no\_descChain}, \texttt{no\_descChain\_iff\_wf}]
+For a tree $T$, the following are equivalent: $T$ has no branch; $T$ has no descending chain;
+$\Ext$ is well-founded on $T$.
+\end{theorem}
+\begin{proof}
+Let $f$ be a branch. Then $c_n=f{\restriction}n$ is a descending chain, because
+$f{\restriction}(n+1)=f{\restriction}n\frown f(n)$. Conversely, let $(c_n)$ be a descending chain. By
+induction, $c_m\subseteq c_n$ for $m\le n$. Since a proper prefix is strictly shorter,
+$|c_n|\ge n$. Put $f(k)=c_{k+1}(k)$. For $i<n$ we have $c_{i+1}\subseteq c_n$, so
+$f(i)=c_n(i)$. Hence $f{\restriction}n=c_n{\restriction}n$, which is a prefix of $c_n\in T$. By
+prefix closure (\texttt{IsTree.prefix\_mem}) it lies in $T$, so $f$ is a branch. The second
+equivalence is the descending-chain criterion
+(\texttt{wellFounded\_iff\_isEmpty\_descending\_chain}).
+\end{proof}
+
+\begin{theorem}[\texttt{nodeRank\_eq\_iSup\_child}, \texttt{nodeRank\_unique}, \texttt{nodeRank\_le\_of\_ranking}, \texttt{wf\_iff\_exists\_ranking}]
+Let $T$ be a tree. $\Ext$ is well-founded if and only if $T$ has a ranking. If $T$ is well-founded,
+then:
+(a) $\rho_T(s)=\sup\{\rho_T(s\frown a)+1: s\frown a\in T\}$, the supremum over one-step extensions;
+(b) $\rho_T$ is the only function satisfying the recursion (a);
+(c) $\rho_T(s)\le\varphi(s)$ for every ranking $\varphi$, and $\rho_T$ is itself a ranking.
+\end{theorem}
+\begin{proof}
+Suppose $\varphi$ is a ranking. Then $\Ext$ is a subrelation of the inverse image of $<$ on the
+ordinals under $\varphi$, so it is well-founded. Conversely, $\rho_T$ is a ranking because
+$t\Ext s$ implies $\rho_T(t)<\rho_T(s)$.
+
+(a) Every one-step extension $s\frown a\in T$ satisfies $s\frown a\Ext s$, which gives $\ge$. For
+$\le$, take $t\Ext s$. Then $t=s\frown a\frown w$, so $s\frown a$ is a prefix of $t$ and lies in $T$.
+Hence $\rho_T(t)\le\rho_T(s\frown a)$, with equality if $t=s\frown a$.
+
+(b) Let $\varphi$ satisfy the recursion. Well-founded induction along $\Ext$, using (a), shows
+$\varphi(s)=\rho_T(s)$.
+
+(c) By well-founded induction: if $\rho_T(t)\le\varphi(t)<\varphi(s)$ for all $t\Ext s$, then
+$\rho_T(s)=\sup_{t\Ext s}(\rho_T(t)+1)\le\varphi(s)$.
+\end{proof}
+
+\begin{theorem}[\texttt{ordHeight\_eq\_treeRank}, \texttt{treeRank\_eq\_succ\_root}]
+If the tree $T$ is well-founded, then $\mathrm{ht}(T)=\rho(T)=\rho_T(\emptyset)+1$.
+\end{theorem}
+\begin{proof}
+$\rho_T$ is a ranking with values below $\rho(T)$, so $\mathrm{ht}(T)\le\rho(T)$. Let $\varphi$ be a
+ranking bounded by $\alpha$. By Theorem 2(c), $\rho_T(s)+1\le\varphi(s)+1\le\alpha$ for every $s$, so
+$\rho(T)\le\alpha$. Every $s$ extends $\emptyset$, so $\rho_T(s)\le\rho_T(\emptyset)$, and therefore
+$\rho(T)=\rho_T(\emptyset)+1$.
+\end{proof}
+The Lean statement \texttt{tree\_wf\_rank\_height} bundles Theorems 1--3 except the uniqueness of the one-step recursion (Theorem~2(b)), which is proved separately as \texttt{nodeRank\_unique}.
+
+\begin{theorem}[\texttt{nodeRank\_decTree}, \texttt{ordinal\_tree\_realization}]
+For every ordinal $\alpha$, let $D_\alpha=\{s:\alpha>s_0>s_1>\cdots>s_k\}$ be the tree on the ordinals
+of strictly decreasing sequences below $\alpha$ (\texttt{decTree}). Then $D_\alpha$ is a
+well-founded tree, $\rho_{D_\alpha}(s)$ is the last entry of $\alpha\frown s$, so
+$\rho_{D_\alpha}(\emptyset)=\alpha$, and $\mathrm{ht}(D_\alpha)=\alpha+1$.
+\end{theorem}
+\begin{proof}
+Let $b(s)$ be the last entry of $\alpha\frown s$. We have $s\frown a\in D_\alpha$ iff $s\in D_\alpha$
+and $a<b(s)$. Along a proper extension, $b$ strictly decreases, so $b$ is a ranking and $D_\alpha$ is
+well-founded. Moreover $\sup\{a+1:a<b(s)\}=b(s)$, so $b$ satisfies recursion (a), and Theorem 2(b)
+gives $\rho=b$. The rest follows from Theorem 3.
+\end{proof}
+So every ordinal, and in particular every countable ordinal, is the root rank of a well-founded
+ordinal tree. Every successor ordinal is the height $\mathrm{ht}=\rho(T)$ of such a tree. Under this
+convention the height of a nonempty tree is always a successor ordinal (Theorem 3).
+
+\section{Reading B}
+\begin{theorem}[\texttt{setTree\_wf\_rank\_height}]
+Let $(P,<)$ be a set-theoretic tree [\texttt{IsSetTree}]. Then $<$ is well-founded, so descending
+chains vanish. The well-founded rank of each $t$ [\texttt{setRank}] equals its height, the order type
+of $\{s:s<t\}$ [\texttt{ht}]. The height of $P$, the least ordinal above all heights
+[\texttt{setTreeHeight}], equals $\sup_t(\mathrm{rank}(t)+1)$.
+\end{theorem}
+\begin{proof}
+Suppose $f(n+1)<f(n)$ for all $n$. Then $(f(n+1))_n$ is a descending sequence in the well-order
+$\{s:s<f(0)\}$, which is impossible. For $s<t$, the map $z\mapsto z$ is an order isomorphism from
+$\{z:z<s\}$ onto the initial segment of $\{z:z<t\}$ below $s$, so $\mathrm{ht}(s)=\mathrm{typein}(s)$.
+By induction,
+$\mathrm{rank}(t)=\sup_{s<t}(\mathrm{typein}(s)+1)$. Every typein is below $\mathrm{type}\{z:z<t\}$,
+and every smaller ordinal is a typein, so this supremum equals $\mathrm{ht}(t)$. The statement about
+the height of $P$ follows.
+\end{proof}
+
+\section*{Lean formalization and axiom audit}
+The file is \texttt{lean/Conjecture3526/Basic.lean} (383 lines, \texttt{import Mathlib} only). Its main
+theorems are \texttt{C3526.tree\_wf\_rank\_height}, \texttt{C3526.ordinal\_tree\_realization} and
+\texttt{C3526.setTree\_wf\_rank\_height}. The command \texttt{\#print axioms} reports only
+\texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound} for each of them. The file contains
+no \texttt{sorry} and no \texttt{native\_decide}.
+
+\section*{Sources}
+\begin{itemize}
+\item Wikipedia, Tree (descriptive set theory), \url{https://en.wikipedia.org/wiki/Tree_(descriptive_set_theory)}.
+\item Wikipedia, Tree (set theory), \url{https://en.wikipedia.org/wiki/Tree_(set_theory)}.
+\item Wikipedia, Well-founded relation, \url{https://en.wikipedia.org/wiki/Well-founded_relation}.
+\item M. Huschenbett, A. Kartzow, J. Liu, M. Lohrey, Tree-Automatic Well-Founded Trees, \url{https://arxiv.org/abs/1201.5495}.
+\end{itemize}
+\end{document}
