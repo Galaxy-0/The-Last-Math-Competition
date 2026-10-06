@@ -1,0 +1,140 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Conjecture 00000000537 is false:\\ $K_2$ has $\operatorname{depth} R/I(K_2) = 1 < 2 = \nu(K_2)+1$}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+The statement (English text of \texttt{conjectures/00000000537.md}):
+\begin{quote}
+Definition: The depth of $R/I(G)$ versus the matching number $\nu(G)$. Conjecture: For bipartite graphs, depth is
+at least $\nu + 1$ (partially known; the complete statement is the residual direction, here taken as a new
+strictly-inequality class: the chordal bipartite equality characterization).
+\end{quote}
+The Chinese text has the same main clause: for bipartite graphs, $\operatorname{depth} \ge \nu + 1$.
+
+\paragraph{Reading.} We read the main clause literally: for every finite bipartite graph $G$ and every field $k$,
+$\operatorname{depth} R/I(G) \ge \nu(G)+1$, where $R = k[x_v : v \in V(G)]$ and $I(G)$ is the edge ideal. We refute
+this clause; the parenthetical remark does not weaken it, and we make no claim about the parenthetical
+``equality characterization'' (which the text does not state precisely). The counterexample $K_2$ works over
+every field, so no choice of the field rescues the clause.
+
+\section{Definitions (as formalized)}
+
+Let $k$ be a field, $V$ a type of vertices and $G$ a simple graph on $V$. Let $R = k[x_v : v\in V]$.
+\begin{definition}
+The \emph{edge ideal} is $I(G) = (x_u x_v : uv \in E(G)) \subseteq R$ (Lean: \texttt{C537.edgeIdeal}).
+The \emph{homogeneous maximal ideal} is $\mathfrak m = (x_v : v \in V)$ (Lean: \texttt{C537.irrelevantIdeal}).
+\end{definition}
+\begin{definition}
+A list $r_1,\dots,r_n \in R$ is an \emph{$M$-regular sequence} (Mathlib: \texttt{RingTheory.Sequence.IsRegular})
+if each $r_i$ is a nonzerodivisor on $M/(r_1,\dots,r_{i-1})M$ and $M \ne (r_1,\dots,r_n)M$.
+The \emph{depth} of $R/I(G)$ is
+\[
+\operatorname{depth} R/I(G) = \sup\{\, n : \text{some } R/I(G)\text{-regular } r_1,\dots,r_n
+\text{ has all } r_i \in \mathfrak m \,\}
+\]
+(Lean: \texttt{C537.depth}), i.e. the depth with respect to the homogeneous maximal ideal.
+\end{definition}
+\begin{definition}
+A \emph{matching} of $G$ is a subgraph in which every vertex of the subgraph lies on exactly one of its edges
+(Mathlib: \texttt{SimpleGraph.Subgraph.IsMatching}). The \emph{matching number} $\nu(G)$ is the supremum, in
+$\mathbb N\cup\{\infty\}$, of the number of edges of a matching (Lean: \texttt{C537.matchingNumber}).
+A graph is \emph{bipartite} if it is $2$-colourable (Mathlib: \texttt{SimpleGraph.IsBipartite}).
+\end{definition}
+
+The graph $K_2$ is the complete graph on two vertices $\{0,1\}$ (one edge). It is bipartite, and
+$I(K_2) = (xy) \subseteq k[x,y]$ with $x = x_0$, $y = x_1$.
+
+\section{The proof}
+
+\begin{lemma}[\texttt{matchingNumber\_K2}]
+$\nu(K_2) = 1$.
+\end{lemma}
+\begin{proof}
+The single edge is a matching. Every edge of a subgraph of $K_2$ is the edge $\{0,1\}$, so a matching has at most
+one edge.
+\end{proof}
+
+Let $\varphi, \psi : R \to R$ be the $k$-algebra maps with $\varphi(x)=x$, $\varphi(y)=0$ and $\psi(x)=0$,
+$\psi(y)=y$ (Lean: \texttt{phiY}, \texttt{psiX}). For every $f\in R$ we have $f-\varphi(f) \in (y)$ and
+$f - \psi(f) \in (x)$ (\texttt{sub\_phiY\_mem}, \texttt{sub\_psiX\_mem}, both from the general \texttt{sub\_mem\_of\_gen}),
+$\varphi\circ\varphi = \varphi$, $\psi\circ\varphi=\varphi\circ\psi$, and $\psi(\varphi(f)) = 0$ for $f\in\mathfrak m$.
+Also $x \notin (xy)$ and $y\notin(xy)$ (evaluate at $(1,0)$, resp.\ $(0,1)$).
+
+\begin{lemma}[\texttt{no\_regular\_pair}]
+Let $M = k[x,y]/(xy)$. There are no $f_1,f_2\in\mathfrak m$ such that $f_1$ is a nonzerodivisor on $M$ and $f_2$ is
+a nonzerodivisor on $M/f_1M$. Hence no $M$-regular sequence in $\mathfrak m$ has length $\ge 2$.
+\end{lemma}
+\begin{proof}
+Put $u = \varphi(f_1) = f_1(x,0)$.
+
+\emph{$u\neq 0$ and $\psi(f_1)\ne 0$.} If $u=0$ then $f_1 = f_1-\varphi(f_1) \in (y)$, so $f_1 x \in (xy)$, i.e.\
+$f_1\cdot \bar x = 0$ in $M$ with $\bar x \neq 0$, contradicting regularity. Symmetrically $\psi(f_1) \ne 0$.
+
+\emph{$\mathfrak m\, \bar u \subseteq f_1 M$.} Write $f_1 - u = yc$. Then $xu = x f_1 - xyc \equiv f_1\cdot x$
+modulo $(xy)$. Also $u = u - \psi(u) \in (x)$ since $\psi(u) = \psi(\varphi(f_1)) = 0$, so $yu \in (xy)$. Thus
+$x\bar u, y\bar u \in f_1 M$, and hence $r\bar u\in f_1M$ for all $r \in \mathfrak m$.
+
+\emph{$\bar u \notin f_1M$.} Suppose $u - f_1 g = xyh$. Applying $\varphi$ gives $u = u\,\varphi(g)$, so
+$\varphi(g)=1$ as $R$ is a domain and $u \ne 0$. Applying $\psi$ gives $0 = \psi(f_1)\psi(g)$, so $\psi(g) = 0$.
+Then $1 = \psi(\varphi(g)) = \varphi(\psi(g)) = 0$, a contradiction.
+
+Finally $f_2\in\mathfrak m$ gives $f_2 \bar u \in f_1M$, so $f_2$ kills the nonzero class of $\bar u$ in
+$M/f_1M$, contradicting that $f_2$ is a nonzerodivisor there.
+\end{proof}
+
+\begin{theorem}[\texttt{depth\_K2\_le}, \texttt{K2\_counterexample}]
+For every field $k$: $K_2$ is bipartite, $\nu(K_2) = 1$, and $\operatorname{depth} R/I(K_2) \le 1 < 2 = \nu(K_2)+1$.
+\end{theorem}
+\begin{proof}
+$I(K_2) = (xy)$ (\texttt{edgeIdeal\_K2}); an $R/I(K_2)$-regular sequence in $\mathfrak m$ of length at least $2$
+would contradict the previous lemma.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_537\_false}]
+It is not the case that every finite bipartite graph $G$ satisfies $\operatorname{depth} R/I(G) \ge \nu(G)+1$ over
+every field.
+\end{theorem}
+
+\begin{remark}
+In fact $\operatorname{depth} k[x,y]/(xy) = 1$ (the element $x+y$ is regular), but only the upper bound is needed
+and only the upper bound is formalized.
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture537/Basic.lean} (Lean 4, Mathlib \texttt{v4.33.1}, only \texttt{import Mathlib}).
+Main statement (ASCII transliteration of the Lean source, which writes the Unicode symbols for
+\texttt{Not}, \texttt{forall}, \texttt{->}, \texttt{<=} and \texttt{/\textbackslash}):
+\begin{verbatim}
+theorem conjecture_537_false :
+    Not (forall (V : Type) [Fintype V] (G : SimpleGraph V), G.IsBipartite ->
+        forall (k : Type) [Field k], matchingNumber G + 1 <= depth k G)
+\end{verbatim}
+and, for every field \texttt{k},
+\begin{verbatim}
+theorem K2_counterexample (k : Type*) [Field k] :
+    K2.IsBipartite /\ matchingNumber K2 = 1 /\ depth k K2 <= 1 /\
+      depth k K2 < matchingNumber K2 + 1
+\end{verbatim}
+Here \texttt{matchingNumber} and \texttt{depth} are \texttt{C537.matchingNumber} and \texttt{C537.depth}, valued in
+$\mathbb N\cup\{\infty\}$ (\texttt{ENat}).
+\texttt{\#print axioms} for both theorems: \texttt{[propext, Classical.choice, Quot.sound]}. No \texttt{sorry}, no
+\texttt{native\_decide}, no added axioms.
+
+\end{document}
