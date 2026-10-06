@@ -1,0 +1,195 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\fr}{\operatorname{fract}}
+
+\title{Proof of conjecture 00000002410:\\ the middle-half Cantor measure is not Rajchman}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and its reading}
+
+\textbf{Statement (English, verbatim).} Conjecture: There exists a measure on a 1/2-dimensional
+homogeneous Cantor set whose Fourier transform does not decay to zero (a fractal version of Rajchman
+counterexamples); the construction uses x4-invariant (not x2) blocking. (The Chinese text says the
+same.)
+
+\textbf{Reading.} The claim is existential, and we prove it with an explicit witness. This is a
+classical example; we prove every part of it here. We read the terms as follows.
+\begin{itemize}
+\item \emph{Measure on $K$}: a Borel probability measure $\mu$ on $\mathbb{R}$ with $\mu(K)=1$.
+\item \emph{1/2-dimensional}: Hausdorff dimension $\dim_H K = 1/2$ (Mathlib's \texttt{dimH}, for the
+  usual metric on $\mathbb{R}$).
+\item \emph{Homogeneous Cantor set}: $K$ is a Cantor space, meaning it is homeomorphic to
+  $\{0,1\}^{\mathbb{N}}$ with the product of discrete topologies [W2]. It is also compact and
+  self-similar for similarities that all have the same ratio. Here $K = (K/4)\cup(K/4+3/4)$, with
+  common ratio $1/4$.
+\item \emph{Fourier transform does not decay to zero}: $\hat\mu(\xi)=\int e^{-2\pi i\xi x}\,d\mu(x)$
+  does not tend to $0$ as $|\xi|\to\infty$. So $\mu$ is not a Rajchman measure, which is a measure
+  ``whose Fourier transform vanishes at infinity'' [W1]. We also prove the circle version: the
+  Fourier coefficients $\hat\mu(m)$, $m\in\mathbb{Z}$, do not tend to $0$ as $m\to\infty$. We also
+  prove the explicit bound $\operatorname{Re}\hat\mu(4^n)\ge 1/8$ for every $n\in\mathbb{N}$.
+\item \emph{x4-invariant (not x2) blocking}: the word ``blocking'' has no formal meaning. We
+  formalize the invariance it refers to. $\mu$ is invariant under $T_4(x)=\fr(4x)$, that is
+  $(T_4)_*\mu=\mu$. It is not invariant under $T_2(x)=\fr(2x)$, that is $(T_2)_*\mu\ne\mu$. Here
+  $\fr(y)=y-\lfloor y\rfloor$. The witness is built from base-4 digits, i.e. from digit blocks of
+  size one in base 4.
+\end{itemize}
+\textbf{Conventions.} $\mathbb{N}=\{0,1,2,\dots\}$. Digits are indexed from $0$:
+$0.d_0d_1d_2\ldots$ in base 4 means $\sum_{i\ge0}d_i4^{-(i+1)}$. Any other sign or $2\pi$
+normalisation of $\hat\mu$ only rescales or reflects $\xi$ and conjugates the value, so it does not
+change the conclusion ``$\hat\mu\not\to0$ as $|\xi|\to\infty$''. The Lean statement uses the
+convention displayed above.
+
+\section{Definitions (as formalized)}
+
+\begin{definition}
+$\mathrm{dig}:\{0,1\}\to\{0,\dots,3\}$ sends $0\mapsto 0$ and $1\mapsto 3$. For
+$a\in\{0,1\}^{\mathbb{N}}$ let $\mathrm{code}(a)=\sum_i \mathrm{dig}(a_i)\,4^{-(i+1)}$. In Lean this
+is \texttt{Real.ofDigits} in base 4, applied to the digit sequence $\mathrm{dig}\circ a$.
+\end{definition}
+
+\begin{definition}
+$K=\{0.d_0d_1d_2\ldots \text{ (base 4)} : d_i\in\{0,3\}\ \forall i\}$, the image under
+\texttt{Real.ofDigits} of the base-4 digit sequences with values in $\{0,3\}$ (\texttt{cantor}).
+Lemma \texttt{cantor\_eq\_range} shows that $K=\mathrm{code}(\{0,1\}^{\mathbb{N}})$.
+\end{definition}
+
+\begin{definition}
+\texttt{coin} is the uniform probability measure on $\{0,1\}$ (\texttt{PMF.uniformOfFintype}).
+$\mathbb{P}$ (\texttt{bern}) is the product measure \texttt{Measure.infinitePi} of countably many
+copies of \texttt{coin}, i.e. the law of i.i.d.\ fair digits. The Cantor measure is
+$\mu=\mathrm{code}_*\mathbb{P}$ (\texttt{cantorMeasure}). It is the law of
+$\sum_i d_i4^{-(i+1)}$ with $d_i\in\{0,3\}$ i.i.d.\ and uniform.
+\end{definition}
+
+\begin{definition}
+$\hat\mu(\xi)=\int\exp(-2\pi i\xi x)\,d\mu(x)$ (\texttt{fourierTransform}), $T_4(x)=\fr(4x)$,
+$T_2(x)=\fr(2x)$, and $\sigma$ is the left shift, $(\sigma a)_i=a_{i+1}$.
+\end{definition}
+
+\section{Proof}
+
+\begin{lemma}[splitting, gap, separation]\label{l:split}
+(a) For every $n$, $\mathrm{code}(a)=\sum_{i<n}\mathrm{dig}(a_i)4^{-(i+1)}+4^{-n}\mathrm{code}(\sigma^n a)$,
+and $0\le\mathrm{code}\le1$.
+(b) If $a_0=0$ then $\mathrm{code}(a)\le 1/4$; if $a_0=1$ then $\mathrm{code}(a)\ge3/4$. Hence
+$K\cap(1/4,3/4)=\emptyset$.
+(c) If $a,a'$ first differ at index $n$, then $|\mathrm{code}(a)-\mathrm{code}(a')|\ge 4^{-n}/2$. In
+particular, $\mathrm{code}$ is injective.
+\end{lemma}
+\begin{proof}
+(a) is Mathlib's \texttt{Real.ofDigits\_eq\_sum\_add\_ofDigits}, together with
+\texttt{ofDigits\_nonneg} and \texttt{ofDigits\_le\_one}. (b) Take $n=1$ in (a):
+$\mathrm{code}(a)=\tfrac34[a_0=1]+\tfrac14\mathrm{code}(\sigma a)$. (c) By (a) the two partial sums
+agree, so the difference is $4^{-n}(\mathrm{code}(\sigma^n a)-\mathrm{code}(\sigma^n a'))$. The two
+shifted sequences differ at index $0$, so by (b) the bracket has absolute value $\ge1/2$.
+\end{proof}
+
+\textbf{Topology} (\texttt{cantor\_homeomorph}, \texttt{isCompact\_cantor},
+\texttt{cantor\_selfSimilar}). $\mathrm{code}$ is continuous (\texttt{Real.continuous\_ofDigits}) and
+injective on the compact space $\{0,1\}^{\mathbb{N}}$. So it is a closed embedding, and $K$ is
+homeomorphic to $\{0,1\}^{\mathbb{N}}$ and compact. By Lemma~\ref{l:split}(b), $\mathrm{code}(a)$ is
+$\mathrm{code}(\sigma a)/4$ or $\mathrm{code}(\sigma a)/4+3/4$. Prepending a digit $0$ or $1$ gives
+the reverse inclusion, so $K=(K/4)\cup(K/4+3/4)$.
+
+\textbf{Dimension} (\texttt{dimH\_cantor}: $\dim_H K=1/2$).
+\emph{Upper bound.} For each $n$, $K$ is covered by $2^n$ intervals
+$[\,s_w,\,s_w+4^{-n}]$, one for each prefix $w\in\{0,1\}^n$ (\texttt{cell}), by
+Lemma~\ref{l:split}(a). Then $\sum_w(\operatorname{diam})^{1/2}=2^n\cdot2^{-n}=1$, and
+\texttt{hausdorffMeasure\_le\_liminf\_sum} gives $\mathcal H^{1/2}(K)\le1<\infty$. So
+$\dim_H K\le1/2$ (\texttt{dimH\_le\_of\_hausdorffMeasure\_ne\_top}).
+\emph{Lower bound.} Let $\varphi(\mathrm{code}(a))=0.a_0a_1a_2\ldots$ in base 2 (\texttt{toBinary}).
+Let $a,a'$ first differ at $n$. Then $|\varphi(\mathrm{code}\,a)-\varphi(\mathrm{code}\,a')|\le2^{-n}$
+by \texttt{abs\_ofDigits\_sub\_ofDigits\_le}, while
+$|\mathrm{code}\,a-\mathrm{code}\,a'|\ge4^{-n}/2\ge(2^{-n}/2)^2$ by Lemma~\ref{l:split}(c). Hence
+$\varphi$ is $1/2$-H\"older on $K$ with constant $2$. Its image contains $[0,1]$
+(\texttt{Real.ofDigits\_SurjOn}), and $\dim_H[0,1]=1$. So
+\texttt{HolderOnWith.dimH\_image\_le} gives $1\le\dim_H K/(1/2)$.
+
+\textbf{Measure.} $\mu$ is a probability measure, and $\mu(K)=\mathbb{P}(\mathrm{code}^{-1}K)=1$
+(\texttt{cantorMeasure\_cantor}).
+
+\begin{theorem}[\texttt{re\_fourier\_ge}]
+$\operatorname{Re}\hat\mu(4^n)\ge1/8$ for all $n\in\mathbb{N}$.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{l:split}(a), $4^n\mathrm{code}(a)=N+\mathrm{code}(\sigma^na)$, where
+$N=\sum_{i<n}\mathrm{dig}(a_i)4^{n-i-1}\in\mathbb{N}$ (\texttt{four\_pow\_mul\_code}). So
+$\operatorname{Re}\hat\mu(4^n)=\int\cos(2\pi\,\mathrm{code}(\sigma^na))\,d\mathbb{P}(a)$. For
+$y\in K$ we have $y\in[0,1/4]\cup[3/4,1]$, hence $\cos2\pi y\ge0$. If moreover the first two digits of
+$y$ are $0$, then $y\le1/16$ and $\cos2\pi y\ge\cos(\pi/3)=1/2$. The event
+$E_n=\{a_n=a_{n+1}=0\}$ has $\mathbb{P}(E_n)=1/4$, by \texttt{Measure.infinitePi\_pi}. So the integral
+is $\ge\tfrac12\cdot\tfrac14$.
+\end{proof}
+
+\textbf{Non-decay.} Since $4^n\to\infty$, the theorem gives $\hat\mu(\xi)\not\to0$ as
+$\xi\to+\infty$ (\texttt{not\_tendsto\_atTop}). Hence $\hat\mu(\xi)\not\to0$ as $|\xi|\to\infty$
+(\texttt{not\_rajchman}, filter \texttt{cocompact}), and $\hat\mu(m)\not\to0$ as $m\to\infty$ in
+$\mathbb{Z}$ (\texttt{not\_tendsto\_int}).
+
+\textbf{x4-invariance} (\texttt{cantorMeasure\_T4}). The shift preserves $\mathbb{P}$
+(\texttt{bern\_shift}): its pushforward agrees with $\mathbb{P}$ on boxes, by
+\texttt{Measure.eq\_infinitePi}. Next, $4\,\mathrm{code}(a)=k+\mathrm{code}(\sigma a)$ with
+$k\in\{0,3\}$. So $T_4(\mathrm{code}\,a)=\mathrm{code}(\sigma a)$ unless $\mathrm{code}(\sigma a)=1$,
+i.e.\ unless $\sigma a=(1,1,\dots)$. That event has probability $0$, because singletons are
+$\mathbb{P}$-null ($\mathbb{P}\{b\}\le2^{-n}$ for all $n$). Hence
+$(T_4)_*\mu=\mathrm{code}_*\sigma_*\mathbb{P}=\mu$.
+
+\textbf{Not x2-invariant} (\texttt{cantorMeasure\_T2\_ne}). $\mu(1/4,3/4)=0$ by the gap. If
+$a_0=1$ and $a_1=0$, then $\mathrm{code}(a)\in[3/4,13/16]$, so
+$T_2(\mathrm{code}\,a)=2\,\mathrm{code}(a)-1\in[1/2,5/8]\subset(1/4,3/4)$. Hence
+$(T_2)_*\mu(1/4,3/4)\ge\mathbb{P}\{a_0=1,a_1=0\}=1/4>0$.
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture2410/Basic.lean} (477 lines, only \texttt{import Mathlib}, Lean and Mathlib
+v4.33.1), namespace \texttt{C2410}. The main theorem is:
+\begin{verbatim}
+theorem main :
+    exists (K : Set R) (mu : Measure R), IsProbabilityMeasure mu /\ mu K = 1 /\
+      Nonempty (K homeo (N -> Fin 2)) /\ IsCompact K /\
+      K = (fun x => x / 4) '' K U (fun x => x / 4 + 3 / 4) '' K /\
+      dimH K = 1 / 2 /\
+      (forall n : N, 1 / 8 <= (fourierTransform mu ((4:R) ^ n)).re) /\
+      not Tendsto (fourierTransform mu) (cocompact R) (nhds 0) /\
+      not Tendsto (fun m : Z => fourierTransform mu m) atTop (nhds 0) /\
+      mu.map T4 = mu /\ mu.map T2 != mu
+\end{verbatim}
+(The verbatim block above is an ASCII transcription. In the file, R, N and Z are the blackboard-bold
+letters and \texttt{homeo} is the homeomorphism type.) The witnesses are \texttt{cantor} and
+\texttt{cantorMeasure}. Each conjunct is also a named theorem:
+\texttt{cantorMeasure\_cantor}, \texttt{cantor\_homeomorph}, \texttt{isCompact\_cantor},
+\texttt{cantor\_selfSimilar}, \texttt{dimH\_cantor}, \texttt{re\_fourier\_ge},
+\texttt{not\_rajchman}, \texttt{not\_tendsto\_int}, \texttt{cantorMeasure\_T4} and
+\texttt{cantorMeasure\_T2\_ne}. We use Mathlib's positional-notation library
+\texttt{Mathlib/Analysis/Real/OfDigits.lean} (\texttt{Real.ofDigits}, \texttt{Real.digits}).
+
+\textbf{Axiom audit.} \texttt{\#print axioms C2410.main} reports
+\texttt{[propext, Classical.choice, Quot.sound]}. The same holds for \texttt{dimH\_cantor},
+\texttt{re\_fourier\_ge}, \texttt{not\_rajchman} and \texttt{cantorMeasure\_T4}. There is no
+\texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+
+\section*{Sources}
+\begin{itemize}
+\item[{[W1]}] Wikipedia, ``Rajchman measure'', \url{https://en.wikipedia.org/wiki/Rajchman_measure}:
+``a Rajchman measure, studied by Rajchman (1928), is a regular Borel measure on a locally compact
+group such as the circle, whose Fourier transform vanishes at infinity.''
+\item[{[W2]}] Wikipedia, ``Cantor space'', \url{https://en.wikipedia.org/wiki/Cantor_space}:
+``a topological space is a Cantor space if it is homeomorphic to the Cantor set.'' and ``the
+canonical example of a Cantor space is the countably infinite topological product of the discrete
+2-point space \{0, 1\}.''
+\end{itemize}
+
+\end{document}
