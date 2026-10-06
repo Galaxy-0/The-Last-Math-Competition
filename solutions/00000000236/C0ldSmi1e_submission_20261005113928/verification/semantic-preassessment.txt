@@ -1,0 +1,65 @@
+SOURCE-SEMANTIC PREASSESSMENT — conjecture 00000000236
+Outcome: GO
+Scope: source semantics only; no witness, proof search, disproof search, solution literature, or mathematical solution strategy considered.
+
+1. Source and rules identity
+Source file: /private/tmp/tlmc236-eligibility/conjecture.md
+Source SHA-256: f4eea1fdfa6a87766874091decf064e18eebca0455ea5a945b94c25f8c86169c
+Source blob SHA: 62af0f01bf78cff9b9656eb649629e902f468e63
+Clean handoff: /private/tmp/tlmc236-eligibility/clean-math-handoff.json
+Eligibility outcome supplied by that handoff: PASS; no remaining eligibility work. This assessment does not redo or rely on the substantive contents of eligibility investigations.
+Both complete supplied guides were read:
+  /private/tmp/tlmc236-eligibility/README.md
+  /private/tmp/tlmc236-eligibility/README.zh-CN.md
+The handoff records their respective SHA-256 values as:
+  baf790af419e0070f593eecea4861fd865cc7b544d2cde6ec674f8fc587b01d1
+  d07ac1ccd888b8ee08fed8eb2e06ae15f6aa4025dbafe98790f8e2b2fc18eba7
+The conjecture source hash was independently recomputed and matched.
+
+2. Complete original claim
+English: Definition: D(n) is the maximum absolute value of the determinant of an n-th order ±1 matrix. Conjecture: (i) Hadamard matrices exist for every 4 | n (the Hadamard conjecture); (ii) D(n)/n^{n/2} → 1.
+Chinese: 定义：D(n) = n 阶 ±1 方阵行列式的最大绝对值。猜想：(i) Hadamard 矩阵对一切 4 | n 存在(Hadamard 猜想);(ii) D(n)/n^{n/2} → 1。
+The two versions express the same definition and clauses. Neither supplies an extra hypothesis or a restriction of the limit to multiples of four.
+
+3. Domain and determinant definition
+The order n is a positive integer under the ordinary convention for matrix-order conjectures of this form. For every such n, the matrix class consists of all square n-by-n matrices whose entries individually belong to {−1, +1}. It is not restricted to symmetric, normalized, invertible, orthogonal, circulant, or any other subclass.
+D(n) is the largest value of |det A| over that entire class. It is a maximum, not merely an upper bound or a candidate value. The class is finite and nonempty, so the stated maximum has an ordinary unambiguous meaning. Determinants may be represented over the integers and then coerced to the reals, or calculated over the reals with integer-valued entries; the report and formalization must establish any bridge their chosen representation needs. Taking an absolute value is essential. A reformulation through a restricted matrix class or a supremum needs a verified equivalence to this exact maximum.
+
+4. Meaning and quantifiers of clause (i)
+A Hadamard matrix here means a real square matrix H with entries in {−1, +1} whose distinct rows are orthogonal, equivalently H times its transpose equals n times the identity matrix. Equivalent standard column-orthogonality or dot-product formulations are acceptable if the correspondence is justified where needed. Complex Hadamard matrices with arbitrary unit-modulus entries would change the assertion.
+Clause (i), denoted P, is:
+  For every positive integer n, if 4 divides n, there exists an n-by-n Hadamard matrix.
+The existential matrix is allowed to depend on n. There is no uniform fixed matrix and no upper bound on n. The explicit reference to the Hadamard conjecture reinforces this ordinary positive-order interpretation. No assertion that only multiples of four can have Hadamard matrices is part of P.
+
+5. Meaning and quantifiers of clause (ii)
+Clause (ii), denoted Q, is the ordinary real sequence limit:
+  As n tends to infinity through ALL positive integers,
+  D(n) / ((n as a real number) raised to ((n as a real number)/2)) tends to 1.
+Equivalently, for every real epsilon > 0 there exists a positive integer N such that for every positive integer n >= N, the absolute difference between that ratio and 1 is less than epsilon.
+The bound 4 | n appears only in clause (i). It is not a global assumption, a condition on the definition of D, or a restriction of the sequence in clause (ii). Replacing Q by convergence along n = 4k, another subsequence, infinitely many orders, a limsup assertion, or a root-transformed limit would not faithfully state the source without a separately established equivalence to Q.
+The exponent n/2 is real (or rational embedded into the real numbers) division. For odd n it is a half-integer, not natural-number division rounded down. Standard positive-real exponentiation gives the meaning of n^{n/2}; the denominator is positive on the stated positive-integer domain. An equivalent expression or square-root representation must retain this exact exponent and be justified if used formally.
+
+6. Full assertion and its negation
+The original conjecture is the conjunction C := P AND Q. Both components must occur in the definition of the target proposition and in the source-to-formalization account. A proof must establish that conjunction. A disproof must establish NOT C, not merely the failure of a substituted or strengthened auxiliary assertion.
+At the level of classical logic, NOT C is equivalent to (NOT P) OR (NOT Q); it is not the conjunction of both negations. This is a statement of the target's logical structure only, not a proposed solution route. Formalizing the full C before asserting its negation prevents either clause from disappearing from the claimed target.
+For exact semantic reference, NOT P means that there exists a positive integer n divisible by four for which no ±1 orthogonal matrix of that order exists. NOT Q means the negation of the full epsilon-N condition in section 5. Any alternative formal presentation of either negation must preserve those quantifiers and their domains.
+
+7. Boundaries and convention checks
+Positive orders 1, 2, and 3 lie in the domain of D and of the sequence. Clause (i) imposes its existence requirement only on positive orders divisible by four. These finite initial orders cannot be removed as an unspoken change in D, although a convergence formalization may use a proved or standard finite-prefix invariance.
+Order zero is not required by the source's ordinary positive-order Hadamard-conjecture reading. A Lean implementation that indexes the sequence by all natural numbers may specify a harmless value at zero or prove the equivalence to the positive-index limit. It must not exploit a zero-order convention, 0^0, totalized division, or natural-number coercion to manufacture a disproof. If zero-order matrices are included as a formal convenience, their conventional empty-matrix treatment and the equivalence to P and Q above must be accounted for.
+Negative and nonintegral matrix orders have no role. Infinity is a limiting direction, not an allowed matrix size. Nothing in the source refers to a continuous real-variable interpolation of D.
+None of these points makes the source genuinely undefined. The unstated index direction in the displayed arrow, the positive-integer order domain, the conventional meaning of Hadamard matrix, and real half-integer exponents are ordinary standard conventions with a coherent common interpretation. There is no substantive bilingual discrepancy or semantic block.
+
+8. Full faithfulness requirements for any later authorized work
+(a) Preserve the exact bilingual source and its recorded hash as the statement being addressed.
+(b) State the entire conjecture as P AND Q with the precise domains and quantifiers above; then prove it or its actual negation.
+(c) Define the complete ±1 matrix class, determinant absolute value, and actual maximum D. Any computational surrogate, normalization, finite encoding, or alternative scalar representation must be linked by verified mathematics to that definition.
+(d) Use the standard real Hadamard condition and permit all positive orders divisible by four.
+(e) Keep the limit over all positive integers, with ordinary real convergence to 1, exact n/2 exponent, and positive-real normalization.
+(f) Handle formal boundary and coercion choices explicitly enough that no zero, floor-division, finite-prefix, or totalized-division artifact changes the claim.
+(g) Ensure the Lean theorem and the complete LaTeX report establish the same source claim or negation, with all required mathematical and computational bridges checked.
+(h) Follow the guides' complete-submission requirements: LaTeX source, PDF, and a compiling/running Lean 4 project, plus all auxiliary source and required computational coverage. No sorry, native_decide, extra axioms, or other incomplete proof mechanisms. Match both the definitions and the requirements of the source, not just a weaker related result.
+(i) Keep any eventual repository changes solely within the solver's correctly named personal submission under solutions/00000000236/<GitHub_ID>_submission_<timestamp>; do not alter the conjecture, guides, leaderboard, metadata, or other files. The eligibility gate must remain satisfied before a pull request, and any applicable prior-submission-error reporting rule belongs to the separate eligibility process.
+
+9. Isolation and stop record
+The only file contents read for this preassessment were the clean handoff, exact conjecture source, and both complete supplied guides. An initial filename inventory exposed names of other eligibility artifacts but none of their contents was opened or used. No prior submissions, PR/issue discussions, other candidate mathematics, existing scratch proofs, or solution literature were read. No mathematical witness or proof strategy was developed. No repository file was edited. This preassessment ends here; mathematical work requires the parent's explicit follow-up authorization.

@@ -1,0 +1,164 @@
+PAGE 1
+Disproof of Conjecture 00000000236
+A uniform gap for normalized determinants at odd orders
+C0ldSmi1e
+October 5, 2026
+Abstract
+Let D(n) be the maximum of |det A|over all n × n matrices with entries in {−1, 1}. For
+every odd n ≥ 3, we prove D(n)2/n n ≤ exp(−1/ 18) < 1. Consequently D(n)/n n/2 cannot tend
+to 1 as n tends to inﬁnity through all positive integers. This disproves the second clause, and
+hence the conjunction, in the original conjecture.
+1 The original assertion and the result
+Both language versions of conjecture 00000000236 deﬁne the same maximum D(n) and assert the
+conjunction of the following statements:
+1. For every positive integer n divisible by 4, there is a real Hadamard matrix of order n.
+2. The real sequence D(n)/n n/2 tends to 1 as n → ∞ .
+A real Hadamard matrix has entries in {−1, 1}and satisﬁes HH T = nIn. The divisibility condition
+in the ﬁrst clause does not restrict the sequence in the second clause. The exponent n/ 2 is real
+division, including at odd orders. The class deﬁning D(n) is ﬁnite and nonempty, so its maximum
+exists and is attained.
+Theorem 1. For every odd integer n ≥ 3 and every real n × n matrix A with entries in {−1, 1},
+(det A)2
+nn ≤ e−1/18.
+In particular,
+0 ≤ D(n)
+nn/2 ≤ e−1/36 < 1 ( n ≥ 3 odd).
+Thus the second clause is false. This argument makes no claim that the Hadamard existence asser-
+tion in the ﬁrst clause is false.
+The proof below uses only parity of integer scalar products, the spectral theorem for a real
+symmetric matrix, and an elementary product estimate. Its constant is suﬃcient to separate the
+sequence from 1 along inﬁnitely many orders; no optimal determinant formula is required.
+1
+
+PAGE 2
+2 An elementary product estimate
+Lemma 1. Suppose x1, . . . , x n are nonnegative real numbers satisfying
+n∑
+i=1
+xi = n,
+n∑
+i=1
+(xi − 1)2 ≥ 1
+2 .
+Then ∏n
+i=1 xi ≤ e−1/18.
+Proof. Put S = ∑
+i(√ xi − 1)2. We ﬁrst show that S ≥ 1/ 18. If S < 1/ 18, every summand is at
+most S, and therefore 0 ≤ √ xi < 2. It follows that
+(xi − 1)2 = (√ xi − 1)2(√ xi + 1)2 ≤ 9(√ xi − 1)2.
+Summation would give 1/ 2 ≤ 9S < 1/ 2, a contradiction.
+The inequality 1 + u ≤ eu, applied to u = √ xi − 1, gives √ xi ≤ e
+√xi−1. Both sides are
+nonnegative, so
+xi ≤ e2(√xi−1).
+Moreover, using ∑
+i xi = n,
+∑
+i
+2(√ xi − 1) =
+∑
+i
+(
+xi − 1 − (√ xi − 1)2)
+= −S.
+Multiplying the pointwise bounds yields
+∏
+i
+xi ≤ e−S ≤ e−1/18.
+This argument also covers zero values among the xi.
+3 Parity forces the spectral gap
+Let n ≥ 3 be odd and let A be a sign matrix of order n. Its Gram matrix G = AAT is real
+symmetric and positive semideﬁnite. Every diagonal entry is n. Every entry Gij is an integer sum
+of n signs, hence is odd and nonzero. Thus G2
+ij ≥ 1 for all i, j , while G2
+ii = n2. Consequently,
+tr G = n2, (1)
+tr(G2) =
+∑
+i,j
+G2
+ij ≥ n3 + n(n − 1). (2)
+The equality in ( 2) uses the symmetry of G.
+Write λ1, . . . , λ n ≥ 0 for the real eigenvalues of G, counted with multiplicity, and set xi = λi/n .
+The spectral theorem gives
+∑
+i
+λi = tr G,
+∑
+i
+λ2
+i = tr(G2),
+∏
+i
+λi = det G = (det A)2.
+In particular ∑
+i xi = n by ( 1), and
+∑
+i
+(xi − 1)2 = tr(G2)
+n2 − n
+≥ 1 − 1
+n ≥ 1
+2 .
+2
+
+PAGE 3
+Lemma 1 now implies
+(det A)2
+nn =
+∏
+i
+xi ≤ e−1/18,
+proving the matrix estimate in Theorem 1. Choosing a matrix attaining D(n) gives the same
+estimate for D(n)2. Since n > 0 and (nn/2)2 = nn, taking nonnegative square roots gives the
+stated bound on D(n)/n n/2.
+4 Failure of the original limit
+For completeness, put c = e−1/36 < 1 and ε = (1 − c)/ 2 > 0. If D(n)/n n/2 → 1 through all positive
+integers, there is a threshold N beyond which
+D(n)
+nn/2 > 1 − ε = 1 + c
+2 > c.
+There is an odd integer n ≥ max(N, 3), contradicting Theorem 1. Therefore the asserted limit is
+false, and so is the original conjunction. This is an inﬁnite-order obstruction, with a ﬁxed positive
+gap, rather than evidence from a ﬁnite sample of matrices.
+5 Formal correspondence and veriﬁcation
+The Lean project uses Lean 4.19.0 and Mathlib v4.19.0. Its namespace is Conjecture236. The
+source-to-formalization correspondence is as follows:
+• SignMatrix n is the ﬁnite type of Boolean matrices. integerMatrix sends its entries to the
+integers 1 and −1, and realMatrix casts those entries to R. sign_encoding_complete
+proves that every arbitrary real sign matrix occurs in this encoding.
+• D is the ﬁnite maximum of absolute determinants over the whole encoded class. The
+theorem D_isMaximum proves both attainment by a real sign matrix and domination of
+every real sign matrix’s absolute determinant. Thus the ﬁnite representation preserves the
+source’s maximum.
+• IsHadamard uses real sign entries and the actual matrix equation HH T = nIn.
+isHadamard_iff_rows identiﬁes that equation with the usual row scalar products.
+HadamardConjecture quantiﬁes over all positive natural orders divisible by four.
+• normalizedMaximum uses real exponentiation with exponent (n : R)/ 2. normalization_pos
+and normalization_square verify the positive denominator and its exact square for
+positive orders.
+• AllOrdersLimit is ordinary ﬁlter convergence of this sequence to 1. The theorem
+allOrdersLimit_iff_positive_epsilon proves its equivalence to the positive-index ε–N
+formulation. A natural-number index at zero is merely a ﬁnite extension and is never used
+to refute the limit.
+The spectral and parity estimates culminate in sign_determinant_gap; the corresponding
+estimate for the true maximum is normalizedMaximum_odd_gap. not_AllOrdersLimit contradicts
+convergence by choosing the odd order 2N + 3 beyond an arbitrary eventual threshold N . The
+deﬁnition OriginalConjecture is the conjunction of HadamardConjecture and AllOrdersLimit.
+The ﬁnal theorem conjecture236_false proves ¬ OriginalConjecture.
+3
+
+PAGE 4
+V eriﬁcation. The frozen project was rebuilt in fresh directories and its Lean sources were replayed
+with warnings treated as errors, both by the coordinator and by a separate nonauthor reviewer. The
+complete compiled-module audit covers all 33 written declarations (11 deﬁnitions and 22 theorems)
+and all 17 generated declarations. Their actual types, axiom dependencies, and transitive logical
+dependencies were checked. Only Lean’s standard propext, Classical.choice, and Quot.sound
+occur; there are no admitted proofs, additional axioms, or unsafe or partial logical dependencies.
+The formalization uses no native_decide and assumes no external numerical computation.
+The exact compiler and all nine dependency revisions were checked. Cached library build
+artifacts were reused; the checks rebuild this submission, not the entire compiler and Mathlib
+from source. The source, pinned project, complete execution records, independent review, and
+reproduction instructions accompany this report. These are local veriﬁcation results, distinct from
+acceptance by the repository’s maintainers.
+4

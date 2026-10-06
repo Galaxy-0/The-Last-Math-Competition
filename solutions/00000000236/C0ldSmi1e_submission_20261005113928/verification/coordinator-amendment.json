@@ -1,0 +1,21 @@
+{
+  "amendments": [
+    {
+      "change": "Mark gram noncomputable to suppress unnecessary compiler-generated executable specializations. Definition body and all theorem statements/proofs unchanged.",
+      "before_sha256": "b159312a5ff44597b1005591400c5dc93a12c56fbee777c5c93da2e70ffed13f",
+      "time_utc": "2026-10-05T11:26:39.287639+00:00",
+      "reason": "Fresh exhaustive gate found three unsafe compiler specialization axioms outside all logical theorem closures; preserve gate and suppress these artifacts.",
+      "prior_execution_status": "Lake build and strict replays passed; exhaustive environment gate FAILED, not verification PASS.",
+      "after_sha256": "1319774575f1ce64fa20e23bee7bc8decfe0ac8f0a2f98b7a82c0eb31e4d1456"
+    },
+    {
+      "change": "Also mark integerMatrix and realMatrix noncomputable to suppress unnecessary executable conversion code. All definition bodies, theorem statements and proofs unchanged.",
+      "before_sha256": "1319774575f1ce64fa20e23bee7bc8decfe0ac8f0a2f98b7a82c0eb31e4d1456",
+      "time_utc": "2026-10-05T11:27:52.585879+00:00",
+      "reason": "No local axiom declarations and no logical-closure issues remained, but realMatrix compiler runtime artifact depended on an imported unsafe specialization axiom. Suppress unnecessary code generation rather than weaken the audit.",
+      "prior_execution_status": "Second fresh build and strict replays passed; exhaustive environment gate FAILED on runtime-only imported axiom.",
+      "after_sha256": "3f92cd7332f94f86d3e31efb9653bdd7c30201dba43e1d3110066c907ac8e781"
+    }
+  ],
+  "scope": "Only three noncomputable annotations; all mathematical bodies and statements unchanged."
+}

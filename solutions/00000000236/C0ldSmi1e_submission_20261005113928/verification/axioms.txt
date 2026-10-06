@@ -1,0 +1,83 @@
+@[reducible] def Conjecture236.SignMatrix : ℕ → Type :=
+fun n => Matrix (Fin n) (Fin n) Bool
+def Conjecture236.integerMatrix : {n : ℕ} → Conjecture236.SignMatrix n → Matrix (Fin n) (Fin n) ℤ :=
+fun {n} A i j => if A i j = true then 1 else -1
+def Conjecture236.realMatrix : {n : ℕ} → Conjecture236.SignMatrix n → Matrix (Fin n) (Fin n) ℝ :=
+fun {n} A i j => ↑(Conjecture236.integerMatrix A i j)
+def Conjecture236.gram : {n : ℕ} → Conjecture236.SignMatrix n → Matrix (Fin n) (Fin n) ℝ :=
+fun {n} A => Conjecture236.realMatrix A * (Conjecture236.realMatrix A).transpose
+def Conjecture236.IsSignMatrix : {n : ℕ} → Matrix (Fin n) (Fin n) ℝ → Prop :=
+fun {n} A => ∀ (i j : Fin n), A i j = 1 ∨ A i j = -1
+def Conjecture236.D : ℕ → ℝ :=
+fun n => Finset.univ.sup' ⋯ fun A => |(Conjecture236.realMatrix A).det|
+def Conjecture236.IsHadamard : {n : ℕ} → Matrix (Fin n) (Fin n) ℝ → Prop :=
+fun {n} H => Conjecture236.IsSignMatrix H ∧ H * H.transpose = ↑n • 1
+def Conjecture236.HadamardConjecture : Prop :=
+∀ (n : ℕ), 0 < n → 4 ∣ n → ∃ H, Conjecture236.IsHadamard H
+def Conjecture236.normalizedMaximum : ℕ → ℝ :=
+fun n => Conjecture236.D n / ↑n ^ (↑n / 2)
+def Conjecture236.AllOrdersLimit : Prop :=
+Filter.Tendsto Conjecture236.normalizedMaximum Filter.atTop (nhds 1)
+def Conjecture236.OriginalConjecture : Prop :=
+Conjecture236.HadamardConjecture ∧ Conjecture236.AllOrdersLimit
+Conjecture236.product_gap {n : ℕ} (x : Fin n → ℝ) (hx : ∀ (i : Fin n), 0 ≤ x i) (hsum : ∑ i, x i = ↑n)
+  (hvar : 1 / 2 ≤ ∑ i, (x i - 1) ^ 2) : ∏ i, x i ≤ Real.exp (-(1 / 18))
+'Conjecture236.product_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.spectral_moments {n : ℕ} (G : Matrix (Fin n) (Fin n) ℝ) (hG : G.IsHermitian) :
+  ∑ i, hG.eigenvalues i = G.trace ∧ ∑ i, hG.eigenvalues i ^ 2 = (G * G).trace
+'Conjecture236.spectral_moments' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.gram_psd {n : ℕ} (A : Conjecture236.SignMatrix n) : (Conjecture236.gram A).PosSemidef
+'Conjecture236.gram_psd' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.gram_diag {n : ℕ} (A : Conjecture236.SignMatrix n) (i : Fin n) : Conjecture236.gram A i i = ↑n
+'Conjecture236.gram_diag' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.gram_symmetric {n : ℕ} (A : Conjecture236.SignMatrix n) (i j : Fin n) :
+  Conjecture236.gram A i j = Conjecture236.gram A j i
+'Conjecture236.gram_symmetric' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.gram_odd_integer {n : ℕ} (A : Conjecture236.SignMatrix n) (hn : Odd n) (i j : Fin n) :
+  ∃ z, Odd z ∧ Conjecture236.gram A i j = ↑z
+'Conjecture236.gram_odd_integer' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.gram_entry_sq_lower {n : ℕ} (A : Conjecture236.SignMatrix n) (hn : Odd n) (i j : Fin n) :
+  1 ≤ Conjecture236.gram A i j ^ 2
+'Conjecture236.gram_entry_sq_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.gram_trace {n : ℕ} (A : Conjecture236.SignMatrix n) : (Conjecture236.gram A).trace = ↑n ^ 2
+'Conjecture236.gram_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.gram_square_trace_lower {n : ℕ} (A : Conjecture236.SignMatrix n) (hn : Odd n) :
+  ↑n * (↑n ^ 2 + ↑n - 1) ≤ (Conjecture236.gram A * Conjecture236.gram A).trace
+'Conjecture236.gram_square_trace_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.sign_determinant_gap {n : ℕ} (A : Conjecture236.SignMatrix n) (hn : Odd n) (hn2 : 2 ≤ n) :
+  (Conjecture236.realMatrix A).det ^ 2 / ↑n ^ n ≤ Real.exp (-(1 / 18))
+'Conjecture236.sign_determinant_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.realMatrix_isSignMatrix {n : ℕ} (A : Conjecture236.SignMatrix n) :
+  Conjecture236.IsSignMatrix (Conjecture236.realMatrix A)
+'Conjecture236.realMatrix_isSignMatrix' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.sign_encoding_complete {n : ℕ} (B : Matrix (Fin n) (Fin n) ℝ) (hB : Conjecture236.IsSignMatrix B) :
+  ∃ A, Conjecture236.realMatrix A = B
+'Conjecture236.sign_encoding_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.D_attained (n : ℕ) : ∃ A, Conjecture236.D n = |(Conjecture236.realMatrix A).det|
+'Conjecture236.D_attained' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.determinant_le_D {n : ℕ} (B : Matrix (Fin n) (Fin n) ℝ) (hB : Conjecture236.IsSignMatrix B) :
+  |B.det| ≤ Conjecture236.D n
+'Conjecture236.determinant_le_D' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.D_isMaximum (n : ℕ) :
+  (∃ B, Conjecture236.IsSignMatrix B ∧ |B.det| = Conjecture236.D n) ∧
+    ∀ (B : Matrix (Fin n) (Fin n) ℝ), Conjecture236.IsSignMatrix B → |B.det| ≤ Conjecture236.D n
+'Conjecture236.D_isMaximum' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.isHadamard_iff_rows {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ) :
+  Conjecture236.IsHadamard H ↔
+    Conjecture236.IsSignMatrix H ∧ ∀ (i j : Fin n), ∑ k, H i k * H j k = if i = j then ↑n else 0
+'Conjecture236.isHadamard_iff_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.allOrdersLimit_iff_positive_epsilon :
+  Conjecture236.AllOrdersLimit ↔
+    ∀ (ε : ℝ), 0 < ε → ∃ N, 0 < N ∧ ∀ (n : ℕ), N ≤ n → |Conjecture236.normalizedMaximum n - 1| < ε
+'Conjecture236.allOrdersLimit_iff_positive_epsilon' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.normalization_pos {n : ℕ} (hn : 0 < n) : 0 < ↑n ^ (↑n / 2)
+'Conjecture236.normalization_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.normalization_square {n : ℕ} (hn : 0 < n) : (↑n ^ (↑n / 2)) ^ 2 = ↑n ^ n
+'Conjecture236.normalization_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.normalizedMaximum_odd_gap {n : ℕ} (hn : Odd n) (hn2 : 2 ≤ n) :
+  Conjecture236.normalizedMaximum n ≤ Real.exp (-(1 / 36))
+'Conjecture236.normalizedMaximum_odd_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.not_AllOrdersLimit : ¬Conjecture236.AllOrdersLimit
+'Conjecture236.not_AllOrdersLimit' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture236.conjecture236_false : ¬Conjecture236.OriginalConjecture
+'Conjecture236.conjecture236_false' depends on axioms: [propext, Classical.choice, Quot.sound]

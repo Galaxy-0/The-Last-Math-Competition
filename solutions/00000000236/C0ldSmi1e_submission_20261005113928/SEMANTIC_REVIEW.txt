@@ -1,0 +1,69 @@
+INDEPENDENT NONAUTHOR REVIEW — CONJECTURE 00000000236
+Decision: PASS for the exact frozen mathematical, formal, report, and current auxiliary inputs identified below.
+Review completed: 2026-10-05T11:38:25.514140+00:00
+
+INDEPENDENCE AND SCOPE
+I first read the exact English and Chinese source statement and both complete repository contribution guides. I then read the original frozen Lean source and its configuration, developed and recorded my own mathematical/semantic assessment, and only afterward read candidate-only author notes and auxiliary material. I did not read another candidate, prior submission, PR body, or solution literature. Candidate-only author notes were read only after my independent assessment. I am a separate nonauthor reviewer and did not edit the mathematical proof or report. I used only the authorized shared compiler and pinned dependency cache as infrastructure. This is a local review, not a claim of repository maintainer acceptance or a fresh public-history eligibility audit.
+
+FROZEN INPUT IDENTITY
+The complete 45-input review manifest is tlmc236-review-inputs.json, SHA-256:
+dd7b1ca4a73ba995f7fb2fe09c15bf7c58d284d2cc06266dd5469d95dc945c4a
+Every listed file was hashed independently and matched before and after the final checks. The structured companion review includes the entire exact manifest and the actual independent execution records. Key hashes:
+- Original bilingual conjecture: f4eea1fdfa6a87766874091decf064e18eebca0455ea5a945b94c25f8c86169c
+- English guide: baf790af419e0070f593eecea4861fd865cc7b544d2cde6ec674f8fc587b01d1
+- Chinese guide: d07ac1ccd888b8ee08fed8eb2e06ae15f6aa4025dbafe98790f8e2b2fc18eba7
+- Conjecture236.lean: 3f92cd7332f94f86d3e31efb9653bdd7c30201dba43e1d3110066c907ac8e781
+- Check.lean: 29bcdb8c295c348ca1389307e2938da947e9ef3d116dbe32aaf0eac16aa6a310
+- lakefile.toml: c1a9ce617f618362d5cec25e52a5b907c088572d2bb86581419402880b00186b
+- lake-manifest.json: 8ac0056859cb138a79a4f16bf78f17ad950992b9f89473e13066518ad6a8dd8d
+- lean-toolchain: 55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea
+- main.tex: 70dde0c45c7c0101bbfb76b31e46efa2acafb22348d0e2c7902e0a09a5c6b64c
+- main.pdf: 4667148a1326015172343af04305d7eb926f1efc5ef7db30a2ceef60545d918a
+
+SEMANTIC AND MATHEMATICAL REVIEW
+Independent semantic assessment made from the bilingual source, full contribution rules, and frozen Lean sources only, before reading author notes or report.
+
+The source consists of the conjunction (i) the Hadamard existence conjecture for orders divisible by four and (ii) convergence D(n)/n^(n/2) to one as n runs through all integer orders. Refuting clause (ii) suffices to negate this conjunction, without determining clause (i).
+
+A sign matrix is encoded by all Boolean-valued Fin n by Fin n functions. The real entries are exactly +/-1, and sign_encoding_complete proves surjectivity onto arbitrary real matrices with that ordinary entrywise condition. D is the finite nonempty maximum of absolute real determinants, with both attainment and upper-bound characterization in D_isMaximum. No matrix class is omitted. Matrix indexing is Fin n, and n/2 is real division under Real.rpow, including half-integer odd n; normalization_square proves the intended identity. The optional value at n=0 cannot affect the atTop limit, and allOrdersLimit_iff_positive_epsilon identifies the conventional positive-index epsilon-N definition.
+
+Independent derivation: for odd n, every row dot product is an odd integer, hence has square at least 1; diagonal Gram entries are n. Thus tr(G)=n^2 and tr(G^2)>=n^3+n(n-1). Nonnegative normalized eigenvalues x_i=lambda_i/n sum to n, and sum(x_i-1)^2>=1-1/n>=1/2 for n>=2. Set S=sum(sqrt(x_i)-1)^2. If S<1/18 then each sqrt(x_i)<2 and (x_i-1)^2=(sqrt(x_i)-1)^2(sqrt(x_i)+1)^2<=9(sqrt(x_i)-1)^2, contradicting the variance lower bound. Hence S>=1/18. The inequality sqrt(x)<=exp(sqrt(x)-1) gives x<=exp(2(sqrt(x)-1)); summing the exponent yields -S since sum x_i=n. Therefore prod x_i<=exp(-1/18). Since det(G)=det(A)^2, |det(A)|/n^(n/2)<=exp(-1/36)<1 for every odd n>=3. This bound passes to D by attainment. Every tail contains the odd order 2N+3, so a limit of one is impossible.
+
+The Lean theorem statements and proof steps implement this argument. IsHadamard is the usual sign-entry condition plus H H^T=n I, supported by explicit row-dot-product equivalence. HadamardConjecture includes positive orders; the original conventional order domain is positive. Even if the textual divisibility statement were taken to include zero, falsity of clause (ii) still establishes falsity of the full source conjunction. OriginalConjecture is an actual conjunction, not a redefinition of its negation. No additional hypotheses restrict the final theorem. No authored instances or global notation overloads alter the arithmetic, filters, order, matrices, or determinant. Standard classical finite maxima and real spectral theory are mathematically appropriate. Initial semantic assessment: valid full disproof via clause (ii), pending actual compiler/environment verification and final report correspondence.
+
+The final source differs from the originally reviewed author source b159312a5ff44597b1005591400c5dc93a12c56fbee777c5c93da2e70ffed13f only by adding noncomputable to integerMatrix, realMatrix and gram. I verified this by exact textual comparison. All definition bodies, theorem statements and proof terms in source are unchanged. These modifiers suppress executable compiler specializations and have no effect on the mathematical meaning or kernel proofs. My initial source-only assessment therefore applies unchanged to the final frozen source.
+
+The mathematical result is a complete disproof of the full original conjunction because clause (ii) is false. It is neither a proof nor a disproof of the separate Hadamard existence assertion in clause (i). It is not a weaker substitute involving only multiples of four, an altered matrix class, a finite numerical experiment, a floor-divided exponent, or an artificial definition of D. The full final theorem has no extra hypothesis. I found no mathematical gap, false equivalence, hidden domain change, tautological predicate, or missing case.
+
+ACTUAL INDEPENDENT FORMAL CHECKS
+I reviewed independent-verify.py before executing it. The final verification started from a new /private/tmp/tlmc236-review-proof directory with no local build outputs, copied the two exact Lean files and three configuration files, and reused only the authorized dependency cache. Actual lake build exited 0. Both Conjecture236.lean and Check.lean replayed with -DwarningAsError=true and exited 0. The final verifier command itself exited 0. Full stdout/stderr, commands, timings, input identities and exit codes are retained in the companion JSON and the evidence directory.
+
+Before execution I independently checked the full Lean compiler commit 6caaee842e9495688c1567e78c0e68dbb96942aa and binary SHA-256 5c1fe58db7d10b1cd0ddff1a1cbc49db2396fff9c6c983cc3b49f1c5c1ae241b. The binary hash was checked again after the final fresh inspection. Version was Lean 4.19.0, arm64-apple-darwin23.6.0, Release. Lake binary SHA-256 was 8b4ff4094a842500f9987336926c5fb2e20b4df8cd92d4e6ba70052a9c246574. Every actual dependency HEAD matched the following manifest pin and all tracked sources/indexes were clean before and after the final build:
+- mathlib: c44e0c8ee63ca166450922a373c7409c5d26b00b
+- plausible: 77e08eddc486491d7b9e470926b3dbe50319451a
+- LeanSearchClient: 25078369972d295301f5a1e53c3e5850cf6d9d4c
+- importGraph: e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b
+- proofwidgets: c4919189477c3221e6a204008998b0d724f49904
+- aesop: 5d50b08dedd7d69b3d9b3176e0d58a23af228884
+- Qq: fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02
+- batteries: f5d04a9c4973d401c8c92500711518f7c656f034
+- Cli: 02dbd02bc00ec4916e99b04b2245b30200e200d0
+
+All 33 written declarations were covered: 11 definitions/abbreviations and 22 theorems; there are no authored instances. I inspected the actual definition bodies and theorem types. The independent module-origin environment enumeration also covered every one of the 17 generated equation/proof declarations, for 50 compiled declarations in total, without relying on a namespace-prefix filter. I read their actual emitted types. The audit traversed transitive types, definition/theorem/opaque bodies, inductive families/constructors and recursor rules. All 50 axiom sets were subsets of propext, Classical.choice and Quot.sound. There were no local axiom declarations, compiler runtime constants, partial declarations, unsafe logical dependencies, missing logical dependencies, or proof-bypass token findings. There is no sorry, admit, native_decide, Lean.ofReduceBool, skipped kernel checking, or custom proof-generating source command in the mathematical project.
+
+I additionally executed the complete explicit Inspect.lean printer and then the submitted replay-author-inspection.py against my own final build. Inspect.lean and Audit.lean each exited 0 with warnings as errors. All 33 authored axiom inspections were present; no printer ellipses were present. The printed definitions and resolved instances show ordinary real order, field operations, absolute value, topology and metric; ordinary matrix multiplication, transpose and determinant; the standard finite Boolean matrix space; and Real.rpow with an actual real exponent n/2. The ComplexOrder scope supplies the standard real RCLike star-order instance and does not replace the real order. The inspection metaprograms are outside the proof's imports and establish no submitted mathematical theorem.
+
+The reviewer independently produced byte-identical build, theorem/axiom, complete environment, explicit inspection, and author safety-audit outputs to the corresponding packaged outputs; their exact matching SHA-256 values are in the companion JSON. The proof and package source inputs were unchanged after all checks.
+
+REPORT AND PDF REVIEW
+I read the complete final main.tex and all four pages of the frozen main.pdf, extracted and read all PDF text, and independently rendered all pages with Poppler. Every lemma, theorem, equation and conclusion matches the verified argument. The report explicitly keeps the original conjunction and correctly avoids claiming that Hadamard existence is false. The variance lower bound, exponential product estimate, nonnegative square-root step, and infinite odd-order contradiction are complete. The reported finite maximum and normalization match the actual formal definitions and bridges. No clipped text, missing glyph, overlap, unreadable equation, missing reference, or omitted page was found.
+
+I reviewed and independently executed the submitted export-pdf.py against a separate scratch copy of the frozen TeX, preserving the submitted PDF. Export exited 0 with no warnings or box diagnostics and rendered four pages. Every rendered page was byte-identical to the corresponding frozen report-page image. The regenerated PDF differs in creation metadata, so its binary hash is not used as the identity of the submitted PDF. The script correctly marks its own output as awaiting visual review; my visual approval is for the exact submitted PDF identified above. The separately recorded successful native compilation binds the same frozen TeX; I did not claim a second native compile in this review.
+
+AUXILIARY MATERIAL AND HISTORY
+All current executable tools were inspected and actually run: independent-verify.py, replay-author-inspection.py (which runs Inspect.lean and Audit.lean), export-pdf.py, and the complete generated environment-inspection harness. Their results cover all computational checks on which the submission depends. There is no auxiliary numerical computation supporting any mathematical conclusion.
+
+The package README and VERIFICATION instructions accurately distinguish current reproduction commands from historical data. I verified all 101 archived author-history text/source/log hashes and all 30 completed execution-record output hashes. The original interrupted build's unrecovered child stdout/timestamps and failed process-launch diagnostic are disclosed and are not counted as successful validation. The original author source/notes remain historical. Both intermediate coordinator trust-audit failures remain recorded; my own independent run reproduced the second failure before the final amendment. That failed reviewer attempt is preserved separately and is not characterized as a pass. The final unchanged conservative verifier passed after all three noncomputable modifiers, on the exact final source hash above. Cached library artifacts were reused; this review does not claim to rebuild the compiler or all dependencies from source.
+
+FINAL FINDINGS
+No actionable mathematical, semantic, formal, report, PDF, or current auxiliary-code defect remains in the 45 frozen inputs. I approve those inputs as a complete disproof of conjecture 00000000236 as stated. The final operational eligibility delta, placement under the authorized personal-submission path, this review itself, and the final package checksum manifest are later packaging/publication steps outside the frozen 45-input set; they must preserve the reviewed bytes. This review does not authorize edits to conjectures, leaderboards, metadata or repository guides, and is not maintainer acceptance.

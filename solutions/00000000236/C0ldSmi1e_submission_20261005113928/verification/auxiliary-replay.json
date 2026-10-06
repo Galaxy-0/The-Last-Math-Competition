@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "input_sha256": {
+    "/private/tmp/tlmc236-independent-final/Conjecture236.lean": "3f92cd7332f94f86d3e31efb9653bdd7c30201dba43e1d3110066c907ac8e781",
+    "/private/tmp/tlmc236-independent-final/Check.lean": "29bcdb8c295c348ca1389307e2938da947e9ef3d116dbe32aaf0eac16aa6a310",
+    "/private/tmp/tlmc236-independent-final/lakefile.toml": "c1a9ce617f618362d5cec25e52a5b907c088572d2bb86581419402880b00186b",
+    "/private/tmp/tlmc236-independent-final/lake-manifest.json": "8ac0056859cb138a79a4f16bf78f17ad950992b9f89473e13066518ad6a8dd8d",
+    "/private/tmp/tlmc236-independent-final/lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea",
+    "/private/tmp/tlmc236-auxiliary/Inspect.lean": "cc23b732405847dcb02a46b323c241f09221a305b6a7f40b9d4c888ac6c673c5",
+    "/private/tmp/tlmc236-auxiliary/Audit.lean": "ecf731c0916cc628953bd2af334bd9ff2ebb38a517013c57e163073cc08562a6",
+    "/private/tmp/tlmc236-replay-author-inspection.py": "65e7f2cecb26fdc79b87d8261d788e07b5d22c5c70c2e629d169511b0d7fb6fd"
+  },
+  "executions": [
+    {
+      "file": "Inspect.lean",
+      "command": [
+        "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+        "env",
+        "lean",
+        "-R",
+        "/private/tmp/tlmc236-auxiliary-replay",
+        "-DwarningAsError=true",
+        "/private/tmp/tlmc236-auxiliary-replay/Inspect.lean"
+      ],
+      "cwd": "/private/tmp/tlmc236-independent-final",
+      "started_utc": "2026-10-05T11:29:08.011258+00:00",
+      "finished_utc": "2026-10-05T11:29:16.442279+00:00",
+      "exit_code": 0,
+      "output": "Inspect.lean.txt",
+      "output_sha256": "b05646e8f6bb56c108c52855409cc487865fffa92c61402d96ee8cac76500419"
+    },
+    {
+      "file": "Audit.lean",
+      "command": [
+        "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+        "env",
+        "lean",
+        "-R",
+        "/private/tmp/tlmc236-auxiliary-replay",
+        "-DwarningAsError=true",
+        "/private/tmp/tlmc236-auxiliary-replay/Audit.lean"
+      ],
+      "cwd": "/private/tmp/tlmc236-independent-final",
+      "started_utc": "2026-10-05T11:29:16.442789+00:00",
+      "finished_utc": "2026-10-05T11:29:25.779666+00:00",
+      "exit_code": 0,
+      "output": "Audit.lean.txt",
+      "output_sha256": "7896989540953be344f39850f480a4ca8a34e4a7f5c430a3c45d4c322c949a4f"
+    }
+  ],
+  "checks": {
+    "all_33_authored_axiom_audits": true,
+    "only_standard_axioms": true,
+    "no_print_ellipses": true,
+    "all_roots_in_safety_audit": true,
+    "safe_logical_closure": true,
+    "no_unnecessary_runtime_artifacts": true,
+    "inputs_unchanged": true,
+    "inspection_sources_copied_exactly": true
+  },
+  "scope": "Read-only explicit declaration/definition/instance inspection and author safety-audit replay. Separate from complete module-origin audit and fresh proof build."
+}

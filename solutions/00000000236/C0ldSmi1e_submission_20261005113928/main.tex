@@ -1,0 +1,218 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{lmodern,microtype}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs,array}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\N}{\mathbb N}
+\DeclareMathOperator{\tr}{tr}
+\title{Disproof of Conjecture 00000000236\\[3pt]
+\large A uniform gap for normalized determinants at odd orders}
+\author{C0ldSmi1e}
+\date{October 5, 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $D(n)$ be the maximum of $|\det A|$ over all $n\times n$ matrices
+with entries in $\{-1,1\}$. For every odd $n\geq 3$, we prove
+$D(n)^2/n^n\leq \exp(-1/18)<1$.
+Consequently $D(n)/n^{n/2}$ cannot tend to $1$ as $n$ tends to infinity
+through all positive integers. This disproves the second clause, and hence
+the conjunction, in the original conjecture.
+\end{abstract}
+
+\section{The original assertion and the result}
+
+Both language versions of conjecture 00000000236 define the same maximum
+$D(n)$ and assert the conjunction of the following statements:
+\begin{enumerate}
+\item For every positive integer $n$ divisible by $4$, there is a real
+Hadamard matrix of order $n$.
+\item The real sequence $D(n)/n^{n/2}$ tends to $1$ as $n\to\infty$.
+\end{enumerate}
+A real Hadamard matrix has entries in $\{-1,1\}$ and satisfies
+$HH^{\mathsf T}=nI_n$. The divisibility condition in the first clause
+does not restrict the sequence in the second clause. The exponent $n/2$
+is real division, including at odd orders. The class defining $D(n)$ is
+finite and nonempty, so its maximum exists and is attained.
+
+\begin{theorem}\label{thm:gap}
+For every odd integer $n\geq 3$ and every real $n\times n$ matrix $A$
+with entries in $\{-1,1\}$,
+\[
+ \frac{(\det A)^2}{n^n}\leq e^{-1/18}.
+\]
+In particular,
+\[
+ 0\leq \frac{D(n)}{n^{n/2}}\leq e^{-1/36}<1
+ \qquad(n\geq3\text{ odd}).
+\]
+Thus the second clause is false. This argument makes no claim that the
+Hadamard existence assertion in the first clause is false.
+\end{theorem}
+
+The proof below uses only parity of integer scalar products, the spectral
+theorem for a real symmetric matrix, and an elementary product estimate.
+Its constant is sufficient to separate the sequence from $1$ along
+infinitely many orders; no optimal determinant formula is required.
+
+\section{An elementary product estimate}
+
+\begin{lemma}\label{lem:product}
+Suppose $x_1,\ldots,x_n$ are nonnegative real numbers satisfying
+\[
+ \sum_{i=1}^n x_i=n,
+ \qquad \sum_{i=1}^n(x_i-1)^2\geq\frac12.
+\]
+Then $\prod_{i=1}^n x_i\leq e^{-1/18}$.
+\end{lemma}
+
+\begin{proof}
+Put $S=\sum_i(\sqrt{x_i}-1)^2$. We first show that $S\geq1/18$.
+If $S<1/18$, every summand is at most $S$, and therefore
+$0\leq\sqrt{x_i}<2$. It follows that
+\[
+ (x_i-1)^2=(\sqrt{x_i}-1)^2(\sqrt{x_i}+1)^2
+ \leq9(\sqrt{x_i}-1)^2.
+\]
+Summation would give $1/2\leq9S<1/2$, a contradiction.
+
+The inequality $1+u\leq e^u$, applied to $u=\sqrt{x_i}-1$, gives
+$\sqrt{x_i}\leq e^{\sqrt{x_i}-1}$. Both sides are nonnegative, so
+\[
+ x_i\leq e^{2(\sqrt{x_i}-1)}.
+\]
+Moreover, using $\sum_i x_i=n$,
+\[
+ \sum_i2(\sqrt{x_i}-1)
+ =\sum_i\bigl(x_i-1-(\sqrt{x_i}-1)^2\bigr)=-S.
+\]
+Multiplying the pointwise bounds yields
+\[
+ \prod_i x_i\leq e^{-S}\leq e^{-1/18}.
+\]
+This argument also covers zero values among the $x_i$.
+\end{proof}
+
+\section{Parity forces the spectral gap}
+
+Let $n\geq3$ be odd and let $A$ be a sign matrix of order $n$.
+Its Gram matrix $G=AA^{\mathsf T}$ is real symmetric and positive
+semidefinite. Every diagonal entry is $n$. Every entry $G_{ij}$ is an
+integer sum of $n$ signs, hence is odd and nonzero. Thus
+$G_{ij}^2\geq1$ for all $i,j$, while $G_{ii}^2=n^2$.
+Consequently,
+\begin{align}
+ \tr G&=n^2,\label{eq:trace}\\
+ \tr(G^2)&=\sum_{i,j}G_{ij}^2
+ \geq n^3+n(n-1).\label{eq:square}
+\end{align}
+The equality in \eqref{eq:square} uses the symmetry of $G$.
+
+Write $\lambda_1,\ldots,\lambda_n\geq0$ for the real eigenvalues
+of $G$, counted with multiplicity, and set $x_i=\lambda_i/n$.
+The spectral theorem gives
+\[
+ \sum_i\lambda_i=\tr G,\qquad
+ \sum_i\lambda_i^2=\tr(G^2),\qquad
+ \prod_i\lambda_i=\det G=(\det A)^2.
+\]
+In particular $\sum_i x_i=n$ by \eqref{eq:trace}, and
+\begin{align*}
+ \sum_i(x_i-1)^2
+ &=\frac{\tr(G^2)}{n^2}-n\\
+ &\geq 1-\frac1n\geq\frac12.
+\end{align*}
+Lemma~\ref{lem:product} now implies
+\[
+ \frac{(\det A)^2}{n^n}
+ =\prod_i x_i\leq e^{-1/18},
+\]
+proving the matrix estimate in Theorem~\ref{thm:gap}.
+Choosing a matrix attaining $D(n)$ gives the same estimate for $D(n)^2$.
+Since $n>0$ and $(n^{n/2})^2=n^n$, taking nonnegative square roots
+gives the stated bound on $D(n)/n^{n/2}$.
+
+\section{Failure of the original limit}
+
+For completeness, put $c=e^{-1/36}<1$ and
+$\varepsilon=(1-c)/2>0$. If $D(n)/n^{n/2}\to1$ through all positive
+integers, there is a threshold $N$ beyond which
+\[
+ \frac{D(n)}{n^{n/2}}>1-\varepsilon
+ =\frac{1+c}{2}>c.
+\]
+There is an odd integer $n\geq\max(N,3)$, contradicting
+Theorem~\ref{thm:gap}. Therefore the asserted limit is false, and so is
+the original conjunction. This is an infinite-order obstruction, with a
+fixed positive gap, rather than evidence from a finite sample of matrices.
+
+\section{Formal correspondence and verification}
+
+The Lean project uses Lean 4.19.0 and Mathlib v4.19.0. Its namespace is
+\texttt{Conjecture236}. The source-to-formalization correspondence is as
+follows:
+\begin{itemize}\raggedright
+\item \texttt{SignMatrix n} is the finite type of Boolean matrices.
+\texttt{integerMatrix} sends its entries to the integers $1$ and $-1$,
+and \texttt{realMatrix} casts those entries to $\R$.
+\texttt{sign\_encoding\_complete} proves that every arbitrary real sign
+matrix occurs in this encoding.
+\item \texttt{D} is the finite maximum of absolute determinants over the
+whole encoded class. The theorem \texttt{D\_isMaximum} proves both
+attainment by a real sign matrix and domination of every real sign
+matrix's absolute determinant. Thus the finite representation preserves
+the source's maximum.
+\item \texttt{IsHadamard} uses real sign entries and the actual matrix
+equation $HH^{\mathsf T}=nI_n$.
+\texttt{isHadamard\_iff\_rows} identifies that equation with the usual
+row scalar products. \texttt{HadamardConjecture} quantifies over all
+positive natural orders divisible by four.
+\item \texttt{normalizedMaximum} uses real exponentiation with exponent
+$(n:\R)/2$. \texttt{normalization\_pos} and
+\texttt{normalization\_square} verify the positive denominator and its
+exact square for positive orders.
+\item \texttt{AllOrdersLimit} is ordinary filter convergence of this
+sequence to $1$. The theorem
+\path{allOrdersLimit_iff_positive_epsilon} proves its equivalence
+to the positive-index $\varepsilon$--$N$ formulation. A natural-number
+index at zero is merely a finite extension and is never used to refute
+the limit.
+\end{itemize}
+
+The spectral and parity estimates culminate in
+\texttt{sign\_determinant\_gap}; the corresponding estimate for the true
+maximum is \texttt{normalizedMaximum\_odd\_gap}.
+\texttt{not\_AllOrdersLimit} contradicts convergence by choosing the odd
+order $2N+3$ beyond an arbitrary eventual threshold $N$.
+The definition \texttt{OriginalConjecture} is the conjunction of
+\texttt{HadamardConjecture} and \texttt{AllOrdersLimit}. The final theorem
+\texttt{conjecture236\_false} proves $\neg\,\texttt{OriginalConjecture}$.
+
+\paragraph{Verification.}
+The frozen project was rebuilt in fresh directories and its Lean sources
+were replayed with warnings treated as errors, both by the coordinator
+and by a separate nonauthor reviewer. The complete compiled-module audit
+covers all 33 written declarations (11 definitions and 22 theorems) and
+all 17 generated declarations. Their actual types, axiom dependencies,
+and transitive logical dependencies were checked. Only Lean's standard
+\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}
+occur; there are no admitted proofs, additional axioms, or unsafe or
+partial logical dependencies. The formalization uses no
+\texttt{native\_decide} and assumes no external numerical computation.
+
+The exact compiler and all nine dependency revisions were checked.
+Cached library build artifacts were reused; the checks rebuild this
+submission, not the entire compiler and Mathlib from source.
+The source, pinned project, complete execution records, independent
+review, and reproduction instructions accompany this report. These are
+local verification results, distinct from acceptance by the repository's
+maintainers.
+
+\end{document}
