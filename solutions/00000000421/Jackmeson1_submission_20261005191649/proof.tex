@@ -1,0 +1,196 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of conjecture 00000000421:\\ the expected number of addable cells is at least $7/3$ at every prime size}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the reading}
+
+\textbf{Statement (English, verbatim).} Definition: The growth-tree statistic $a(T)$ is the number
+of outer-corner cells that can be added to the tableau $T$. Conjecture: The expectation of $a(T)$
+on a uniformly random tableau converges to two; and the convergence rate is the inverse logarithm
+of the tableau size. (growth-tree expectation limit two) (The Chinese text states the same.)
+
+\textbf{Reading.} The growth tree is Young's lattice: a tableau grows by adding one cell at a time,
+and the cells that can be added to $T$ are the addable (outer-corner) cells of its shape. For
+$n\ge 1$ let $E_n$ be the expectation of $a(T)$ when $T$ is a uniformly random standard Young
+tableau with $n$ cells. The conjecture asserts
+\[
+  \text{(L)}\quad E_n \to 2 \ (n\to\infty)
+  \qquad\text{and}\qquad
+  \text{(R)}\quad |E_n-2| \text{ is of order } 1/\log n .
+\]
+Every version of (R) (namely $|E_n-2|=O(1/\log n)$, $\Theta(1/\log n)$, or $E_n-2\sim c/\log n$)
+implies $|E_n-2|\le C/\log n$ for some constant $C$ and all large $n$. We refute (L), and we refute
+this weakest form of (R). We also refute both clauses for a second reading of ``tableau'', namely a
+Young diagram (Ferrers shape) with $n$ cells chosen uniformly.
+
+\textbf{Readings not covered.} (i) Semistandard tableaux: with unbounded entries there are infinitely
+many of each shape, so there is no uniform measure, and we do not treat bounded-entry variants.
+(ii) Counting removable (inner) corners instead of addable ones: the text says cells that ``can be
+added'', so we do not treat this. (iii) The Plancherel measure $f_\lambda^2/n!$: the counting
+argument below applies to it as well (the row and the column have weight $1/n!$ each), but this is
+not formalized.
+
+\section{Definitions (as in the Lean file)}
+
+\begin{definition}
+A \emph{Young diagram} is Mathlib's \texttt{YoungDiagram}: a finite set $\mu\subset\mathbb N\times\mathbb N$
+that is a lower set for the product order. Cell $(i,j)$ lies in row $i$ and column $j$, counted from
+$0$. We write $r=\mathtt{rowLen}\,0$ and $c=\mathtt{colLen}\,0$ for the lengths of the first row and the
+first column. Mathlib proves $(i,j)\in\mu \iff j<\mathtt{rowLen}\,i \iff i<\mathtt{colLen}\,j$.
+\end{definition}
+
+\begin{definition}[addable cells, \texttt{addable}, \texttt{a}]
+A cell $x\notin\mu$ is \emph{addable} (an outer corner) if $\mu\cup\{x\}$ is again a lower set,
+that is, a Young diagram. The statistic is $a(\mu)=\#\{\text{addable cells of }\mu\}$, written in Lean
+as \texttt{Set.ncard}. We prove that this set is finite (\texttt{addable\_finite}).
+\end{definition}
+
+\begin{definition}[standard Young tableaux, \texttt{SYT}]
+A standard Young tableau with $n$ cells is recorded by the injective map
+$\mathrm{pos}:\{0,\dots,n-1\}\to\mathbb N\times\mathbb N$, where $\mathrm{pos}(k)$ is the cell holding the
+entry $k+1$. Its image is required to be a lower set (the shape \texttt{SYT.shape}, a Young diagram
+with $n$ cells), and entries must increase from left to right along each row and from top to
+bottom down each column: if $\mathrm{pos}(k)$ and $\mathrm{pos}(l)$ are in the same row (column) and
+$\mathrm{pos}(k)$ is to the left of (above) $\mathrm{pos}(l)$, then $k<l$. We prove that there are
+finitely many such tableaux, since all coordinates are $<n$ (\texttt{SYT.pos\_lt}). The statistic of a
+tableau is $a$ of its shape.
+\end{definition}
+
+\begin{definition}[the two expectations]
+$E_{\mathrm{SYT}}(n)=\frac{1}{\#\mathrm{SYT}(n)}\sum_{T\in\mathrm{SYT}(n)} a(\mathrm{shape}\,T)$ (\texttt{E\_SYT}), and
+$E_{\mathrm{shape}}(n)=\frac{1}{\#\mathrm{Shape}(n)}\sum_{\mu\in\mathrm{Shape}(n)} a(\mu)$ (\texttt{E\_shape}),
+where $\mathrm{Shape}(n)$ is the set of Young diagrams with $n$ cells.
+\end{definition}
+
+\section{Proof}
+
+\begin{lemma}[\texttt{corner\_row}, \texttt{corner\_col}, \texttt{two\_le\_a}]
+The cells $(0,r)$ and $(c,0)$ are addable. If $\mu\ne\emptyset$, they are distinct, so $a(\mu)\ge 2$.
+\end{lemma}
+\begin{proof}
+A cell $(i,j)\notin\mu$ is addable as soon as $(i-1,j)\in\mu$ when $i>0$ and $(i,j-1)\in\mu$ when
+$j>0$ (\texttt{mem\_addable\_of}). Indeed, any $y<(i,j)$ in the product order is below one of these
+two cells, so it lies in $\mu$. Now $(0,r)\notin\mu$, and if $r>0$ then $(0,r-1)\in\mu$; if $r=0$
+the condition is vacuous (for the empty diagram $(0,r)=(0,0)$ is addable). The case of $(c,0)$ is
+symmetric, using $c>0$ in the same way. If $(0,0)\in\mu$, then $r,c\ge 1$, so $(0,r)\ne(c,0)$.
+\end{proof}
+
+\begin{lemma}[\texttt{three\_le\_a}]
+If some cell $(i,j)$ with $i<c$ and $j<r$ is not in $\mu$ (so $\mu$ is not the $c\times r$ rectangle),
+then $a(\mu)\ge3$.
+\end{lemma}
+\begin{proof}
+Let $k$ be the least row with $\mathtt{rowLen}\,k<r$. Such a row exists, since $\mathtt{rowLen}\,i\le j<r$, and
+$k\le i<c$. Also $k\ge 1$, because row $0$ has length $r$. Since $k<c$ we have $(k,0)\in\mu$, so
+$\mathtt{rowLen}\,k\ge1$. The cell $(k,\mathtt{rowLen}\,k)$ is not in $\mu$, and the cell to its left is in
+$\mu$. The cell above it, $(k-1,\mathtt{rowLen}\,k)$, is also in $\mu$, because $\mathtt{rowLen}(k-1)\ge r>\mathtt{rowLen}\,k$
+by minimality of $k$. So it is addable. It differs from $(0,r)$ because $k\ge1$, and from $(c,0)$
+because $k<c$.
+\end{proof}
+
+\begin{lemma}[\texttt{rowOrCol\_or\_three\_le}]
+If $\#\mu=p$ is prime, then $\mu$ is a single row ($\forall x\in\mu,\ x_1=0$), or a single column
+($\forall x\in\mu,\ x_2=0$), or $a(\mu)\ge3$.
+\end{lemma}
+\begin{proof}
+If the hypothesis of the previous lemma fails, every cell of the box $[0,c)\times[0,r)$ is in $\mu$.
+Conversely, each cell $(i,j)\in\mu$ has $i<c$ and $j<r$. So $\mu$ is that box and $p=c\cdot r$. Since $p$
+is prime, $c=1$ (a row) or $r=1$ (a column).
+\end{proof}
+
+\begin{lemma}[\texttt{SYT.row\_unique}, \texttt{SYT.col\_unique}, \texttt{shape\_eq\_of\_row}, \texttt{shape\_eq\_of\_col}]
+There is at most one standard tableau with $n$ cells whose shape is a single row, and at most one
+whose shape is a single column. Two single-row (or two single-column) diagrams with the same number
+of cells are equal.
+\end{lemma}
+\begin{proof}
+For a single-row tableau, the row condition and injectivity make $k\mapsto \mathrm{pos}(k)_2$ a strictly
+increasing map $\{0,\dots,n-1\}\to\{0,\dots,n-1\}$. Mathlib's \texttt{Finset.orderEmbOfFin\_unique} shows
+that such a map is unique, so any two single-row tableaux coincide. Columns are handled in the same
+way. A single-row diagram with $n$ cells is $\{(0,j):j<n\}$, and the same holds for a single column.
+\end{proof}
+
+\begin{lemma}[\texttt{hook}, \texttt{hook\_not\_rowOrCol}]
+For $n\ge3$, placing $1$ at $(0,0)$, $2$ at $(1,0)$, and $3,\dots,n$ at $(0,1),\dots,(0,n-2)$ gives a
+standard tableau. Its shape (the hook $(n-1,1)$) is neither a row nor a column.
+\end{lemma}
+
+\begin{lemma}[\texttt{avg\_bound}]
+Let $X$ be a finite set with a map $\mathrm{sh}:X\to\{\text{Young diagrams}\}$. Assume that every
+$\mathrm{sh}(x)$ has a prime number of cells, that at most one $x$ has single-row shape and at most one
+has single-column shape, and that some $x_0$ has another shape. Then
+$\frac{1}{\#X}\sum_{x}a(\mathrm{sh}\,x)\ge 7/3$.
+\end{lemma}
+\begin{proof}
+Let $B$ be the set of $x$ with row or column shape, so $|B|\le2$ and $|B|+1\le t:=\#X$. Lemma 1
+(the shapes are nonempty) and Lemma 3 give $a\ge 3-[x\in B]$ pointwise, so $\sum_x a\ge 3t-|B|$. Since
+$3|B|\le 2|B|+2\le 2t$, we get $3t-|B|\ge \tfrac73 t$.
+\end{proof}
+
+\begin{theorem}[\texttt{E\_SYT\_ge}, \texttt{E\_shape\_ge}]
+For every prime $p\ge3$, $E_{\mathrm{SYT}}(p)\ge 7/3$ and $E_{\mathrm{shape}}(p)\ge7/3$.
+\end{theorem}
+\begin{proof}
+Apply the previous lemma with $X=\mathrm{SYT}(p)$ and $\mathrm{sh}=\mathrm{shape}$, and with
+$X=\mathrm{Shape}(p)$ and $\mathrm{sh}=\mathrm{id}$, taking $x_0$ to be the hook tableau or its shape.
+\end{proof}
+
+\begin{theorem}[\texttt{not\_limit\_two}, \texttt{disproof}]
+Let $E$ be $E_{\mathrm{SYT}}$ or $E_{\mathrm{shape}}$. Then $E(n)\not\to2$. Moreover, there is no
+constant $C$ such that $|E(n)-2|\le C/\log n$ for all large $n$.
+\end{theorem}
+\begin{proof}
+Either statement would give $E(n)<7/3$ for all large $n$. For (R), this uses $C/\log n\to0$. But
+there are arbitrarily large primes (\texttt{Nat.exists\_infinite\_primes}), and at each of them
+$E\ge 7/3$.
+\end{proof}
+
+\begin{remark}[not used, not formalized]
+In fact $E_{\mathrm{SYT}}(n)=t_{n+1}/t_n$, where $t_n$ is the number of standard tableaux with $n$
+cells: deleting the largest entry is a bijection from tableaux with $n+1$ cells onto pairs (tableau
+with $n$ cells, addable cell). OEIS A000085 (\url{https://oeis.org/A000085}) identifies $t_n$:
+``Number of self-inverse permutations on n letters, also known as involutions; number of standard
+Young tableaux with n cells.'' It also gives the recurrence ``a(n) = a(n-1) + (n-1)*a(n-2)''. Hence
+$E_{\mathrm{SYT}}(n)\to\infty$. Our script checks $E_{\mathrm{SYT}}(n)=t_{n+1}/t_n$ numerically for
+$n\le22$.
+\end{remark}
+
+\section{Lean formalization and axiom audit}
+
+The file \texttt{lean/Conjecture421/Basic.lean} (Lean 4, Mathlib v4.33.1; its only import is
+\texttt{Mathlib}) proves
+\begin{verbatim}
+theorem C421.disproof :
+    (forall p : Nat, p.Prime -> 3 <= p -> 7/3 <= E_SYT p /\ 7/3 <= E_shape p) /\
+    (not Tendsto E_SYT atTop (nhds 2) /\
+      not exists C : Real,
+        eventually (n in atTop), |E_SYT n - 2| <= C / Real.log n) /\
+    (not Tendsto E_shape atTop (nhds 2) /\
+      not exists C : Real,
+        eventually (n in atTop), |E_shape n - 2| <= C / Real.log n)
+\end{verbatim}
+(written here in ASCII; the source uses the usual Unicode notation). All the lemmas above appear
+under the names given. It uses Mathlib's \texttt{YoungDiagram} API (\texttt{rowLen}, \texttt{colLen},
+\texttt{mem\_iff\_lt\_rowLen}, \texttt{mem\_iff\_lt\_colLen}, \texttt{rowLen\_eq\_card},
+\texttt{colLen\_eq\_card}, \texttt{up\_left\_mem}). No code was taken from other submissions.
+\texttt{lake build} succeeds, and \texttt{\#print axioms C421.disproof} reports only
+\texttt{[propext, Classical.choice, Quot.sound]}. The file contains no \texttt{sorry}, no
+\texttt{native\_decide} and no added axioms.
+
+\end{document}
