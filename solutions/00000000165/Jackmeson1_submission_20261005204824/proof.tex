@@ -1,0 +1,164 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Fp}{\mathbb{F}_p}
+
+\title{Disproof of conjecture 00000000165:\\ the sum-cover number of the $d$-th power subgroup is not $(1+o(1))\log p/(\log p-\log d)$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the reading}
+
+\textbf{Statement (English, verbatim).} Conjecture: Sum covers by multiplicative subgroups: for
+$d \mid p-1$, the minimal $k$ for which the $k$-fold sumset of the subgroup $H$ of $d$-th powers in
+$\Fp^{*}$ covers $\Fp$ is $(1+o(1))\cdot\log p/(\log p-\log d)$ (as $d\to\infty$ with
+$d<p^{1-\varepsilon}$).
+
+\textbf{Chinese text.} It states the same, except that it calls $H$ the subgroup of
+``$k$-th powers'' (\emph{k ci mi}). Since $k$ is the number of summands being minimized, and $d$
+appears in the hypothesis $d\mid p-1$ and in the formula, this is a slip for $d$-th powers. We use
+the English reading ($d$-th powers) and do not exploit the slip.
+
+\textbf{Objects.} $p$ is a prime and $d\mid p-1$. $H=\{x^d : x\in\Fp^{*}\}$ is the subgroup of
+$d$-th powers; it never contains $0$. The $k$-fold sumset is
+$kH=\{h_1+\dots+h_k : h_i\in H\}$, and
+\[
+  K(p,d)=\min\{k\ge 1 : kH=\Fp\},\qquad L(p,d)=\frac{\log p}{\log p-\log d}.
+\]
+\textbf{Reading of the asymptotic.} For each fixed $\varepsilon\in(0,1)$: for every $\eta>0$
+there is $D$ such that $|K(p,d)/L(p,d)-1|<\eta$ for all primes $p$ and all $d\mid p-1$ with
+$d\ge D$ and $d<p^{1-\varepsilon}$. (For $\varepsilon\ge 1$ the window $d<p^{1-\varepsilon}\le 1$
+contains no divisor $d$, so the claim is vacuous there; we refute it for \emph{every}
+$\varepsilon\in(0,1)$, hence both the ``for all $\varepsilon$'' and the ``for some
+$\varepsilon\in(0,1)$'' readings.)
+
+\textbf{Readings refuted (all in Lean).} The literal $K$ against $L$, $\lceil L\rceil$,
+$\lfloor L\rfloor$ and $\mathrm{round}(L)$; and the ``at most $k$ summands'' variant
+$K_0(p,d)=\min\{k\ge1: k(H\cup\{0\})=\Fp\}$ against $L$, $\lfloor L\rfloor$ and
+$\mathrm{round}(L)$. \textbf{Not refuted:} $K_0$ against $\lceil L\rceil$ (on our family both
+equal $2$ may well hold), and any reading that adds a lower bound on $d$ (such as
+$d\ge p^{\delta}$) which the text does not contain.
+
+\section{The counterexample family}
+
+\begin{lemma}[Dirichlet]\label{lem:fam}
+For every $N$ there are a prime $p$ and integers $d\ge\max(N,4)$, $q\ge0$ with $d^d<p$ and
+$p-1=d(2q+1)$.
+\end{lemma}
+\begin{proof}
+Let $d=2(N+2)$. Then $d+1$ is odd and coprime to $d$, so $\gcd(d+1,2d)=1$. By Dirichlet's theorem
+there is a prime $p>d^d$ with $p\equiv d+1\pmod{2d}$. As $d+1<2d$, $p=2dq+d+1$ for some $q$, so
+$p-1=d(2q+1)$.
+\end{proof}
+
+Fix such $(p,d,q)$. Then $d\mid p-1$, the index of $H$ is $d$, and $|H|=(p-1)/d=2q+1$ is odd.
+
+\begin{lemma}\label{lem:neg1}
+$-1\notin H$. Consequently $0\notin H$ and $0\notin H+H$.
+\end{lemma}
+\begin{proof}
+If $u^d=-1$ for a unit $u$, then by Fermat $1=u^{p-1}=(u^d)^{2q+1}=(-1)^{2q+1}=-1$, impossible
+since $p>2$. Every element of $H$ is a unit, so $0\notin H$. If $u^d+v^d=0$, then
+$(vu^{-1})^d=-1$, a contradiction.
+\end{proof}
+
+\begin{lemma}[non-degeneracy and existence of a cover]\label{lem:cover}
+$1$ and $2^d$ are distinct elements of $H$, and $pH=\Fp$. Hence $K(p,d)$ and $K_0(p,d)$ are
+genuine minima.
+\end{lemma}
+\begin{proof}
+$1=1^d$ and $2^d=(2)^d$ with $2$ a unit ($p>2$). Since $1<2^d\le d^d<p$, $2^d\not\equiv1\pmod p$.
+So $|H|\ge2$. The Cauchy--Davenport theorem $|A+B|\ge\min\{p,|A|+|B|-1\}$ in $\mathbb{Z}/p\mathbb{Z}$
+gives by induction $|kH|\ge\min\{p,k\}$ for $k\ge1$, so $|pH|=p$ and $pH=\Fp$. Since
+$H\subseteq H\cup\{0\}$, also $p(H\cup\{0\})=\Fp$.
+\end{proof}
+
+\begin{theorem}\label{thm:lower}
+$K(p,d)\ge 3$ and $K_0(p,d)\ge2$.
+\end{theorem}
+\begin{proof}
+$1H=H$ and $2H=H+H$ miss $0$ (Lemma~\ref{lem:neg1}), and a cover exists (Lemma~\ref{lem:cover}).
+$1(H\cup\{0\})=H\cup\{0\}$ misses $-1$.
+\end{proof}
+
+\begin{lemma}\label{lem:L}
+If $d\ge2$ and $d^4<p$, then $\log p-\log d>0$ and $1<L(p,d)\le 4/3$; hence $\lceil L\rceil=2$ and
+$\lfloor L\rfloor=\mathrm{round}(L)=1$. If moreover $d^d<p$ and $(1-\varepsilon)d\ge1$, then
+$d<p^{1-\varepsilon}$.
+\end{lemma}
+\begin{proof}
+$4\log d<\log p$ gives $L\le 4/3$; $\log d>0$ gives $L>1$. From $d\log d<\log p$:
+$(1-\varepsilon)\log p>(1-\varepsilon)d\log d\ge\log d$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+For every $\varepsilon\in(0,1)$ and every $N$ there is an admissible pair $(p,d)$ with $d\ge N$,
+$d\mid p-1$, $d<p^{1-\varepsilon}$, on which $K/L\ge 9/4$, $K/\lceil L\rceil\ge3/2$,
+$K/\lfloor L\rfloor=K/\mathrm{round}(L)\ge3$, $K_0/L\ge3/2$, $K_0/\lfloor L\rfloor=K_0/\mathrm{round}(L)\ge2$.
+So, with $\eta=1/2$, each asymptotic in Section~1 fails. The conjecture is false.
+\end{theorem}
+\begin{proof}
+Apply Lemma~\ref{lem:fam} with $\max(N,\lceil 1/(1-\varepsilon)\rceil)$; then $d\ge4$ gives
+$d^4\le d^d<p$, and Lemma~\ref{lem:L} and Theorem~\ref{thm:lower} give the ratios.
+\end{proof}
+
+The family is non-degenerate: $d\to\infty$; $H$ contains the distinct elements $1$ and $2^d$ (proved
+in Lean); mathematically $H$ has index $d$ and $|H|=(p-1)/d=2q+1\ge3$ (not needed for the proof); and
+$\log d/\log p<1/d\to0$, so it lies inside the window for every $\varepsilon\in(0,1)$. Numerically,
+$(d,p)=(4,269)$ and $(6,46663)$ give $K=3$ with $L\approx1.33$ and $1.20$.
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture165/Basic.lean} (namespace \texttt{C165}, \texttt{import Mathlib} only).
+\begin{itemize}
+\item \texttt{powSubgroup p d := (powMonoidHom d).range}, the subgroup of $d$-th powers of
+  $(\mathbb{Z}/p)^\times$; \texttt{H p d} is its image in \texttt{ZMod p}; \texttt{mem\_H}.
+\item The $k$-fold sumset is Mathlib's pointwise $k\bullet S$ (\texttt{k \textbullet{} S}); \texttt{mem\_kfold\_sumset}
+  proves $x\in k\bullet S$ iff $x$ is a sum of $k$ elements of $S$.
+\item \texttt{coverNumber p d := sInf \{k | 1 <= k and k nsmul H p d = univ\}};
+  \texttt{coverNumberAtMost} uses \texttt{H p d} $\cup$ \texttt{\{0\}}; \texttt{L p d} is the formula.
+  (\texttt{sInf} of an empty set is $0$; on our family a cover is proved to exist, so the value is the
+  true minimum.)
+\item \texttt{Asymp eps K F}: the uniform $(1+o(1))$ statement of Section~1;
+  \texttt{Conjecture165 := forall eps, 0 < eps -> eps < 1 -> Asymp eps coverNumber L}.
+\item \texttt{exists\_pair} (Lemma~\ref{lem:fam}, via Mathlib's
+  \texttt{Nat.forall\_exists\_prime\_gt\_and\_eq\_mod}); \texttt{neg\_one\_not\_pow},
+  \texttt{zero\_not\_mem\_H}, \texttt{zero\_not\_mem\_HH}, \texttt{neg\_one\_not\_mem\_H0};
+  \texttt{nsmul\_eq\_univ} (via \texttt{ZMod.cauchy\_davenport}), \texttt{one\_two\_pow\_mem\_H},
+  \texttt{cover\_exists}; \texttt{three\_le\_coverNumber}, \texttt{two\_le\_coverNumberAtMost};
+  \texttt{L\_bounds}, \texttt{window}, \texttt{floor\_round\_L}.
+\item \texttt{family}: Theorem~\ref{thm:main}'s family with all its properties.
+\item \texttt{main eps}: for $0<\varepsilon<1$, the seven negations
+  \texttt{not Asymp eps coverNumber F} for $F\in\{L,\lceil L\rceil,\lfloor L\rfloor,\mathrm{round}\,L\}$ and
+  \texttt{not Asymp eps coverNumberAtMost F} for $F\in\{L,\lfloor L\rfloor,\mathrm{round}\,L\}$.
+\item \texttt{not\_conjecture165 : not Conjecture165}.
+\end{itemize}
+\textbf{Axiom audit.} \texttt{\#print axioms} for \texttt{C165.not\_conjecture165},
+\texttt{C165.main} and \texttt{C165.family} reports only \texttt{propext},
+\texttt{Classical.choice}, \texttt{Quot.sound}. No \texttt{sorry}, no \texttt{native\_decide}, no
+added axioms.
+
+\section{Sources}
+\begin{itemize}
+\item Dirichlet's theorem (used through Mathlib's \texttt{Nat.forall\_exists\_prime\_gt\_and\_eq\_mod}):
+  Wikipedia, ``Dirichlet's theorem on arithmetic progressions'': ``there are infinitely many primes
+  that are congruent to a modulo d''.
+  \url{https://en.wikipedia.org/wiki/Dirichlet%27s_theorem_on_arithmetic_progressions}
+\item Cauchy--Davenport (used through Mathlib's \texttt{ZMod.cauchy\_davenport}): Wikipedia,
+  ``Restricted sumset'': it ``asserts that for any prime p and nonempty subsets A and B of the
+  prime-order cyclic group'' $\mathbb{Z}/p\mathbb{Z}$, $|A+B|\ge\min\{p,|A|+|B|-1\}$.
+  \url{https://en.wikipedia.org/wiki/Restricted_sumset}
+\end{itemize}
+
+\end{document}
