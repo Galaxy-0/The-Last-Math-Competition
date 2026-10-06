@@ -1,0 +1,151 @@
+#!/usr/bin/env python3
+"""Author-side build, direct replay, declaration inspection, and dependency audit.
+
+This script performs no mathematical computation and is not part of the Lean proof.
+It reads project/dependency sources and writes its own logs only under this directory.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+from datetime import datetime, timezone
+
+PROJECT = Path('/private/tmp/tlmc7668-proof')
+AUX = Path('/private/tmp/tlmc7668-auxiliary')
+BIN = Path('/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin')
+ENV = os.environ.copy()
+ENV.pop('LEAN_PATH', None)
+ENV.pop('LEAN_SRC_PATH', None)
+ENV['PATH'] = str(BIN) + os.pathsep + ENV.get('PATH', '')
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+records: list[dict] = []
+
+
+def run(label: str, command: list[str], cwd: Path = PROJECT) -> str:
+    result = subprocess.run(command, cwd=cwd, env=ENV, text=True,
+                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    log = AUX / (label + '.log')
+    log.write_text(result.stdout)
+    records.append({'label': label, 'command': command, 'cwd': str(cwd),
+                    'returncode': result.returncode, 'log': str(log),
+                    'log_sha256': sha256(log)})
+    print(f'{label}: exit {result.returncode}; {log}', flush=True)
+    if result.returncode != 0:
+        print(result.stdout, flush=True)
+        raise RuntimeError(label + ' failed')
+    return result.stdout
+
+
+def main() -> None:
+    start = datetime.now(timezone.utc).isoformat()
+    input_expected = {
+        '/private/tmp/tlmc7668-eligibility/conjecture.md':
+            '93008606e83dadd0d3e73d1592768d1476f3ee8127cd601ded63df7549ced28b',
+        '/private/tmp/tlmc7668-eligibility/README.md':
+            'baf790af419e0070f593eecea4861fd865cc7b544d2cde6ec674f8fc587b01d1',
+        '/private/tmp/tlmc7668-eligibility/README.zh-CN.md':
+            'd07ac1ccd888b8ee08fed8eb2e06ae15f6aa4025dbafe98790f8e2b2fc18eba7',
+        '/private/tmp/tlmc7668-eligibility/clean-math-handoff.json':
+            '19f0aa2869aedff7017b81ab5d7508103144631d5bccb6ea940b6b734be421d9',
+        '/private/tmp/tlmc7668-semantic/preassessment.txt':
+            '150ef75d66ffcfc3432fa8fcb42a53cf4a0fdd94bfbf92696394cdeb08ef1ee0',
+    }
+    for path, expected in input_expected.items():
+        assert sha256(Path(path)) == expected, 'Input identity mismatch: ' + path
+    manifest = json.loads((PROJECT / 'lake-manifest.json').read_text())
+    tracked_before = {}
+    for package in manifest['packages']:
+        directory = PROJECT / '.lake/packages' / package['name']
+        status = run('dependency-before-' + package['name'] + '-tracked',
+                     ['git', '--no-optional-locks', 'status', '--porcelain',
+                      '--untracked-files=no'], directory)
+        assert status == '', 'Tracked dependency changes before: ' + package['name']
+        tracked_before[package['name']] = 'clean'
+    source_files = sorted(PROJECT.glob('*.lean'))
+    source_files += sorted((PROJECT / 'Conjecture7668').glob('**/*.lean'))
+    assert source_files, 'No authored Lean source'
+    declarations: list[tuple[str, str]] = []
+    for path in source_files:
+        source = path.read_text()
+        for kind, name in re.findall(
+                r'^(def|theorem|lemma|instance)\s+([A-Za-z0-9_]+)', source, re.M):
+            declarations.append((kind, 'Conjecture7668.' + name))
+        forbidden = r'\b(sorry|admit|axiom|native_decide|unsafe|partial)\b'
+        assert not re.search(forbidden, source), 'Forbidden token in ' + str(path)
+    assert len({name for _, name in declarations}) == len(declarations)
+
+    inspection = ['import Conjecture7668', '',
+                  'set_option pp.all true',
+                  'set_option format.width 160', '']
+    for kind, name in declarations:
+        inspection += ['#check @' + name, '#print axioms ' + name]
+        if kind == 'def':
+            inspection += ['#print ' + name]
+        inspection += ['']
+    inspection += ['#print Real.instPow', '#print Real.rpow',
+                   '#print Complex.instNorm', '#print Polynomial.roots',
+                   '#print Asymptotics.IsBigO', '#print Asymptotics.IsBigOWith',
+                   '#check @Polynomial.count_roots',
+                   '#check @Complex.norm_eq_sqrt_sq_add_sq',
+                   '#check @Real.rpow_def_of_pos', '']
+    (AUX / 'Inspect.lean').write_text('\n'.join(inspection))
+    run('lean-version', ['lean', '--version'])
+    run('lake-build', ['lake', 'build'])
+    for index, path in enumerate(source_files):
+        run(f'direct-source-{index:02d}',
+            ['lake', 'env', 'lean', '-DwarningAsError=true', str(path)])
+    printed = run('declarations-and-axioms',
+                  ['lake', 'env', 'lean', '-DwarningAsError=true', str(AUX / 'Inspect.lean')])
+    axiom_sets = re.findall(r'depends on axioms:\s*\[([^]]*)\]', printed, re.S)
+    no_axioms = re.findall(r"does not depend on any axioms", printed)
+    assert len(axiom_sets) + len(no_axioms) == len(declarations), 'Missing axiom audit'
+    allowed = {'propext', 'Classical.choice', 'Quot.sound'}
+    actual_axioms: set[str] = set()
+    for axiom_set in axiom_sets:
+        actual_axioms.update(x.strip() for x in axiom_set.split(',') if x.strip())
+    assert actual_axioms <= allowed, ('Unexpected axioms: ' + str(actual_axioms - allowed))
+
+    pins = []
+    tracked_after = {}
+    for package in manifest['packages']:
+        directory = PROJECT / '.lake/packages' / package['name']
+        commit = run('dependency-' + package['name'],
+                     ['git', 'rev-parse', 'HEAD'], directory).strip()
+        assert commit == package['rev'], 'Pin mismatch: ' + package['name']
+        pins.append({'name': package['name'], 'expected': package['rev'], 'actual': commit})
+        status = run('dependency-after-' + package['name'] + '-tracked',
+                     ['git', '--no-optional-locks', 'status', '--porcelain',
+                      '--untracked-files=no'], directory)
+        assert status == '', 'Tracked dependency changes after: ' + package['name']
+        tracked_after[package['name']] = 'clean'
+    assert len(pins) == 9
+
+    identity_paths = source_files + [PROJECT / p for p in
+                                      ('lakefile.toml', 'lake-manifest.json', 'lean-toolchain')]
+    identity_paths += [AUX / 'Inspect.lean', AUX / 'author_check.py']
+    identities = {str(p): sha256(p) for p in identity_paths}
+    record = {'started_utc': start, 'finished_utc': datetime.now(timezone.utc).isoformat(),
+              'environment': {'LEAN_PATH': 'unset', 'LEAN_SRC_PATH': 'unset',
+                              'PATH_prefix': str(BIN)},
+              'declarations': [{'kind': k, 'name': n} for k, n in declarations],
+              'actual_axioms': sorted(actual_axioms), 'dependency_pins': pins,
+              'tracked_dependency_before': tracked_before,
+              'tracked_dependency_after': tracked_after,
+              'input_sha256': input_expected, 'file_sha256': identities,
+              'commands': records, 'status': 'PASS'}
+    (AUX / 'author-check-record.json').write_text(json.dumps(record, indent=2) + '\n')
+    print(f'PASS: {len(source_files)} source file(s), {len(declarations)} declarations, '
+          f'{len(pins)} dependency pins. Axioms: {sorted(actual_axioms)}', flush=True)
+
+
+if __name__ == '__main__':
+    main()
