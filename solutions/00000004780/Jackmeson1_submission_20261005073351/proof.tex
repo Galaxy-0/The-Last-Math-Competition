@@ -1,0 +1,188 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\C}{\mathbb{C}}
+
+\title{A proof of Conjecture 00000004780\\[2pt]
+\large Swapping the diagonal blocks keeps every joint moment but changes the
+$M_2(\C)$-valued distribution}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000004780 reads (English version; the Chinese version says the same, with
+``all joint moments asymptotically identical''):
+
+\begin{quote}
+\emph{Definition:} Joint moments and operator-valued distributions are two layers of
+noncommutative invariants. \emph{Conjecture:} There exist two matrix models whose joint moments
+have identical asymptotics while their operator-valued distributions differ, and the separation is
+realized by an explicit rearrangement of the block structure.
+\end{quote}
+
+It is an existence statement. We give two explicit matrix models, the second obtained from the
+first by swapping its two diagonal blocks, whose joint moments coincide for every matrix size and
+every noncommutative polynomial, while their $M_2(\C)$-valued distributions differ for every matrix
+size and in the limit. Everything below is proved in Lean 4 with Mathlib.
+
+\section{Definitions}
+
+Throughout, $N$ is the size parameter and matrices are written in block form
+\[ M_2(M_N(\C)) = M_{2N}(\C), \qquad \text{indexed by } \{0,1\}\times\{0,\dots,N-1\}. \]
+In Lean this is \texttt{BMat N := Matrix (Fin 2 $\times$ Fin N) (Fin 2 $\times$ Fin N) $\mathbb C$}.
+The definitions below are stated for $N\ge1$. Lean also allows $N=0$ as a formal extension (the
+matrices are empty, $b\mapsto b\otimes 1_0$ is not injective and $E_0=0$); this level plays no
+role: every separating statement assumes $N\ge1$, and it does not affect any limit.
+
+\begin{definition}[Matrix model, joint moments]
+A matrix model of $r$ matrices is a sequence $X=(X_N)_{N}$ of $r$-tuples
+$X_N=(X_{N,1},\dots,X_{N,r})$ in $M_2(M_N(\C))$ (Lean: \texttt{Model r}). Its joint moments are
+\[ \varphi_N(p) = \tr_{2N}\bigl(p(X_{N,1},\dots,X_{N,r})\bigr),\qquad
+\tr_{2N}=\tfrac{1}{2N}\Tr, \]
+for every noncommutative polynomial $p\in\C\langle x_1,\dots,x_r\rangle$ (Lean:
+\texttt{jointMoment X N p}, with $p$ in \texttt{FreeAlgebra $\mathbb C$ (Fin r)} and evaluation by
+\texttt{FreeAlgebra.lift}). Taking $p$ a monomial gives the moments
+$\tr(X_{i_1}\cdots X_{i_m})$; all matrices used below are self-adjoint, so $*$-moments are moments.
+\end{definition}
+
+\begin{definition}[Operator-valued distribution over $B=M_2(\C)$]
+Let $B=M_2(\C)$ act on $M_2(M_N(\C))$ by $b\mapsto b\otimes 1_N$ (Lean: \texttt{emb}), and let
+\[ E_N=\mathrm{id}_2\otimes\tr_N\colon M_2(M_N(\C))\to M_2(\C),\qquad
+E_N(M)_{ij}=\frac1N\sum_{a} M_{(i,a),(j,a)} \]
+be the block-wise normalized partial trace (Lean: \texttt{condExp}). For $N\ge1$ it is a unital,
+$B$-bimodular projection onto $B\otimes 1_N$, i.e.\ the usual $B$-valued conditional expectation
+for $2\times2$ block matrices.
+The $B$-valued distribution of $X_N$ is the family of $B$-valued moments
+\[ E_N\bigl(b_0\,X_{N,i_1}\,b_1\,X_{N,i_2}\cdots X_{N,i_m}\,b_m\bigr),\qquad b_k\in B \]
+(Lean: \texttt{bMoment X N b0 l} with $l=[(i_1,b_1),\dots,(i_m,b_m)]$).
+\end{definition}
+
+\begin{definition}[Rearrangement of the block structure]
+For a permutation $\sigma$ of the two block indices, let $P_\sigma=\sigma\otimes 1_N$ be the
+permutation of $\{0,1\}\times\{0,\dots,N-1\}$ (Lean: \texttt{blockPerm}). The rearranged model is
+$(\mathrm{rearrange}\ \sigma\ X)_{N,i}=P_\sigma X_{N,i}P_\sigma^{-1}$, which moves block $(k,l)$ of
+$X_{N,i}$ to position $(\sigma k,\sigma l)$ (Lean: \texttt{rearrange}, via \texttt{Matrix.reindex}).
+\end{definition}
+
+\section{General facts about rearrangements}
+
+\begin{lemma}[\texttt{rearrange\_jointMoment}]
+For every model $X$, every $\sigma$, every $N$ and every $p$:
+$\varphi_N^{\mathrm{rearrange}\,\sigma X}(p)=\varphi_N^{X}(p)$.
+\end{lemma}
+
+\begin{proof}
+$M\mapsto P_\sigma M P_\sigma^{-1}$ is an algebra automorphism of $M_{2N}(\C)$
+(\texttt{Matrix.reindexAlgEquiv}), so by the universal property of the free algebra
+$p(P_\sigma X P_\sigma^{-1})=P_\sigma\,p(X)\,P_\sigma^{-1}$ (\texttt{eval\_reindex}), and the trace is
+invariant under reindexing (\texttt{trace\_reindex\_self}).
+\end{proof}
+
+\begin{lemma}[\texttt{rearrange\_condExp}, \texttt{rearrange\_bMoment\_first}]
+$E_N(P_\sigma M P_\sigma^{-1})=\sigma\,E_N(M)\,\sigma^{-1}$ for every $M$. Consequently, for every
+model, $E_N\bigl((\mathrm{rearrange}\ \sigma X)_{N,i}\bigr)=\sigma\,E_N(X_{N,i})\,\sigma^{-1}$.
+\end{lemma}
+
+So a rearrangement never changes joint moments. On the full $B$-valued distribution it acts by
+transport of structure: with $\alpha(b)=\sigma b\sigma^{-1}$, the moment of the rearranged model
+with coefficients $b_0,\dots,b_m$ equals $\alpha$ applied to the moment of $X$ with coefficients
+$\alpha^{-1}(b_0),\dots,\alpha^{-1}(b_m)$ (conjugating the output alone, with the coefficients
+fixed, would be wrong in general). Lean proves only the special case with identity coefficients
+(Lemma~2), which is all the example below needs. The explicit pair shows that the action can be
+nontrivial.
+
+\section{The explicit pair}
+
+Let
+\[ A=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad C=\begin{pmatrix}0&1\\1&0\end{pmatrix},\qquad
+X_N=(A\otimes 1_N,\ C\otimes 1_N),\qquad Y=\mathrm{rearrange}\,(0\ 1)\,X . \]
+Thus $X_{N,1}=\begin{pmatrix}1_N&0\\0&0\end{pmatrix}$, $X_{N,2}=\begin{pmatrix}0&1_N\\1_N&0\end{pmatrix}$,
+and $Y$ swaps the two diagonal blocks:
+$Y_{N,1}=\begin{pmatrix}0&0\\0&1_N\end{pmatrix}$, $Y_{N,2}=X_{N,2}$.
+All four matrices are self-adjoint (\texttt{X\_isHermitian}, \texttt{Y\_isHermitian}).
+Lean indexes the two matrices by \texttt{Fin 2}, so $X_{N,1}$ is \texttt{X N 0} and the
+$B$-valued moment $E_N(X_{N,1})$ is \texttt{bMoment X N 1 [(0, 1)]}.
+
+\begin{theorem}[\texttt{conjecture4780}]
+\begin{enumerate}
+\item $Y=\mathrm{rearrange}\,(0\ 1)\,X$, and all matrices of both models are self-adjoint.
+\item For every $N$ and every $p\in\C\langle x_1,x_2\rangle$: $\varphi_N^X(p)=\varphi_N^Y(p)$.
+Both sequences converge, to the same limit $\tr_2(p(A,C))$.
+\item For every $N\ge1$: $E_N(X_{N,1})=\mathrm{diag}(1,0)$ and $E_N(Y_{N,1})=\mathrm{diag}(0,1)$.
+Hence the $B$-valued distributions of $X_N$ and $Y_N$ differ for every $N\ge1$.
+\item The limits of these first $B$-valued moments are $\mathrm{diag}(1,0)\ne\mathrm{diag}(0,1)$,
+so the limiting $B$-valued distributions differ as well. (Lean proves the convergence of these
+first $B$-valued moments; see the remark on full limiting distributions below.)
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(1) holds by definition and because $A,C$ and $1_N$ are self-adjoint. (2) The equality is
+Lemma 1. For the limit: $b\mapsto b\otimes 1_N$ is a unital algebra homomorphism
+(\texttt{embHom}), so $p(X_N)=p(A,C)\otimes 1_N$, and
+$\tr_{2N}(M\otimes 1_N)=\frac{\Tr M\cdot N}{2N}=\tr_2(M)$ for $N\ge1$ (\texttt{ntr\_emb},
+\texttt{jointMoment\_X}); so the sequence is eventually constant. (3) The $B$-valued moment with
+$b_0=b_1=1$ and the single letter $x_1$ is $E_N(X_{N,1})=E_N(A\otimes 1_N)=A$
+(\texttt{condExp\_emb}); by Lemma 2 the same moment of $Y$ is $\sigma A\sigma^{-1}=\mathrm{diag}(0,1)$.
+(4) Both sequences are eventually constant.
+\end{proof}
+
+\section{Remarks on the reading}
+
+\begin{itemize}
+\item \emph{Identical asymptotics.} We prove equality of the joint moments for every $N$, which
+gives identical asymptotics under any reading (same limits, same rates, same expansions), and we
+also prove that the limits exist.
+\item \emph{Operator-valued distribution.} We use the standard $M_2(\C)$-valued distribution of a
+$2\times2$ block matrix model with respect to $E_N=\mathrm{id}_2\otimes\tr_N$. The two models
+already differ at the first $B$-valued moment, which belongs to every version of the $B$-valued
+distribution (with or without $B$-coefficients, finite $N$ or limit).
+\item \emph{Full limiting distributions.} The Lean theorem states convergence only for the first
+$B$-valued moments. The full limiting distributions do exist: for $N\ge1$, multiplicativity of
+$b\mapsto b\otimes1_N$ and $E_N(b\otimes1_N)=b$ give
+$E_N(b_0X_{N,i_1}b_1\cdots X_{N,i_m}b_m)=b_0g_{i_1}b_1\cdots g_{i_m}b_m$ independently of $N$, with
+$(g_1,g_2)=(A,C)$ for $X$ and $(\sigma A\sigma^{-1},C)$ for $Y$. This observation is not formalized;
+the separation itself only needs the first moment.
+\item \emph{Rearrangement.} The second model is literally the first with its block indices
+permuted. Lemma 1 holds for every model and every $\sigma$, in particular for every sample of a
+random matrix model.
+\item \emph{Degenerate models.} The explicit models are deterministic (constant random matrices)
+and have the form $a\otimes 1_N$. The conjecture does not require randomness or a particular
+ensemble.
+\end{itemize}
+
+\section{Lean formalization and axiom audit}
+
+The file \texttt{lean/Conjecture4780/Basic.lean} (248 lines, Lean 4.33.1, Mathlib v4.33.1)
+contains \texttt{ntr}, \texttt{Model}, \texttt{eval}, \texttt{jointMoment}, \texttt{condExp},
+\texttt{emb}, \texttt{bMoment}, \texttt{blockPerm}, \texttt{rearrange}, the lemmas
+\texttt{rearrange\_jointMoment}, \texttt{rearrange\_condExp}, \texttt{rearrange\_bMoment\_first},
+\texttt{condExp\_emb}, \texttt{ntr\_emb}, \texttt{jointMoment\_X}, and the main theorem
+\texttt{Conjecture4780.conjecture4780}. It builds with \texttt{lake build}. For each of
+\texttt{conjecture4780}, \texttt{rearrange\_jointMoment}, \texttt{rearrange\_condExp} and
+\texttt{rearrange\_bMoment\_first}, \texttt{\#print axioms} reports exactly
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom.
+
+\end{document}
