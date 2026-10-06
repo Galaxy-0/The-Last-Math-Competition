@@ -1,0 +1,156 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+\sloppy
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A disproof of Conjecture 00000007795\\[2pt]
+\large The unit square has Lipschitz boundary and lattice error $2m+1$ at integer dilations $m$, not $O(m^{1/3})$}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+Conjecture 00000007795 reads (English text, verbatim): ``Definition: Regularity stratification of
+lattice counting: the error $E(t) = |tP \cap \mathbb Z^n| - t^n \operatorname{vol}(P)$ for the
+dilation $tP$. Conjecture: The optimal error for Lipschitz boundaries is $O(t^{n-2+1/3})$ and for
+$C^2$ boundaries $O(t^{n-2})$; no intermediate regularity exists between the exponents $1/3$ and $0$
+(any Holder exponent alpha in $(0,1)$ has the error order jumping when alpha crosses $1/2$), the jump
+location being jointly determined by Fourier damping and the Diophantine properties of the
+lattice.'' The Chinese text has the same content.
+
+The statement is a conjunction. We refute its first conjunct, the \emph{Lipschitz clause}:
+\begin{quote}
+(L) for every $n$ and every body $P\subset\mathbb R^n$ with Lipschitz boundary,
+$E_P(t)=O(t^{n-2+1/3})$ as $t\to\infty$.
+\end{quote}
+A false conjunct makes the conjunction false. Reading ``the optimal error for the class is
+$O(\cdot)$'' as a uniform bound over the class is stronger than the per-body bound (L), so it is
+refuted as well.
+
+\section{Definitions}
+We work in Euclidean space $\mathbb R^n$ (Lean: \texttt{EuclideanSpace R (Fin n)}).
+\begin{definition}[Lattice error; Lean: \texttt{latticeCount}, \texttt{discrepancy}]
+For $S\subseteq\mathbb R^n$, $|S\cap\mathbb Z^n|$ is the number of integer points in $S$, and
+$E_P(t)=|tP\cap\mathbb Z^n|-t^n\operatorname{vol}(P)$ with $tP=\{tx:x\in P\}$ and
+$\operatorname{vol}$ the Lebesgue measure.
+\end{definition}
+\begin{definition}[Lipschitz boundary; Lean: \texttt{HasLipschitzBoundary}]
+A set $P\subseteq\mathbb R^n$ has Lipschitz boundary if for every boundary point $x_0$ there are
+$r>0$, a unit vector $v$, $L\ge0$ and an $L$-Lipschitz function $\varphi:\mathbb R^n\to\mathbb R$
+that is constant along $v$ ($\varphi(x+sv)=\varphi(x)$ for all $x,s$) such that
+\[P\cap B(x_0,r)=\{x\in B(x_0,r): \langle x,v\rangle\le\varphi(x)\}.\]
+\end{definition}
+A function constant along $v$ is the same thing as a function of the coordinates in the hyperplane
+$v^\perp$, and it is $L$-Lipschitz on $\mathbb R^n$ exactly when it is $L$-Lipschitz on $v^\perp$.
+So the definition says: in an orthonormal frame whose last axis is $v$ (rotations allowed), $P$ is
+locally the region on one side of the graph of a Lipschitz function. This is the local
+Lipschitz-graph definition with ball neighbourhoods; $P$ is closed, so the inequality is
+non-strict.
+
+\begin{remark}[The cylinder form]
+Wikipedia's article ``Lipschitz domain'' (\url{https://en.wikipedia.org/wiki/Lipschitz_domain})
+states the definition for a domain $\Omega$ with cylinder neighbourhoods: ``for every point
+$p\in\partial\Omega$ there exists a hyperplane $H$ of dimension $n-1$ through $p$, a
+Lipschitz-continuous function $g:H\to\mathbb R$ over that hyperplane, and reals $r>0$ and $h>0$
+such that'' $\Omega\cap C=\{x+y\vec n: x\in B_r(p)\cap H,\ -h<y<g(x)\}$ and
+$(\partial\Omega)\cap C=\{x+y\vec n: x\in B_r(p)\cap H,\ g(x)=y\}$, where $C=\{x+y\vec n: x\in
+B_r(p)\cap H,\ -h<y<h\}$. For our witness this form also holds, with $\Omega=(0,1)^2$ the interior
+of the square: the chart $\varphi$ used below is $1$-Lipschitz along $v^\perp$ and satisfies
+$\varphi(p)=\langle p,v\rangle$ at boundary points, so with $r=1/16$ and $h=1/8$ the graph stays
+inside the cylinder, the cylinder lies in $B(p,1/4)$ (as $\sqrt{r^2+h^2}<1/4$), and the strict and
+equality versions of the ball identity give the two cylinder identities. This remark is not
+formalized; the Lean development uses the ball form above.
+\end{remark}
+
+\section{The witness and the proof}
+Let $P=[0,1]^2\subset\mathbb R^2$ (Lean: \texttt{unitSquare}).
+
+\begin{lemma}[Lean: \texttt{isCompact\_unitSquare}, \texttt{convex\_unitSquare},
+\texttt{interior\_unitSquare\_nonempty}]
+$P$ is compact and convex, and its interior is nonempty.
+\end{lemma}
+\begin{proof}
+$P$ is the image of $[0,1]^2$ under the continuous map to Euclidean space; convexity is coordinatewise;
+the ball of radius $1/2$ about $(1/2,1/2)$ lies in $P$ since $|x_i-y_i|\le\|x-y\|$.
+\end{proof}
+
+\begin{lemma}[Lean: \texttt{corner\_chart}, \texttt{coord\_chart},
+\texttt{unitSquare\_hasLipschitzBoundary}]
+$P$ has Lipschitz boundary.
+\end{lemma}
+\begin{proof}
+Fix $x_0$ and $r=1/4$. For the first coordinate put $(a,c_A)=(-1,0)$ if $x_{0,1}\le1/2$ and
+$(a,c_A)=(1,1)$ otherwise. On $B(x_0,1/4)$ we have $|x_1-x_{0,1}|<1/4$, so the far constraint holds
+automatically and $0\le x_1\le1\iff a x_1\le c_A$. Define $(b,c_B)$ from the second coordinate in the
+same way. Let $v=(a,b)/\sqrt2$ (a unit vector) and
+\[\varphi(x)=\bigl(c_A+c_B-|a x_1-b x_2-c_A+c_B|\bigr)/\sqrt2 .\]
+With $X=ax_1-c_A$, $Y=bx_2-c_B$ one has $\sqrt2\langle x,v\rangle=X+Y+c_A+c_B$, so
+$\langle x,v\rangle\le\varphi(x)\iff |X-Y|\le-(X+Y)\iff X\le0\text{ and }Y\le0$. Hence
+$P\cap B=\{x\in B:\langle x,v\rangle\le\varphi(x)\}$. Moving along $v$ adds $s(a^2-b^2)/\sqrt2=0$
+to $ax_1-bx_2$, so $\varphi$ is constant along $v$; and
+$|\varphi(x)-\varphi(y)|\le|x_1-y_1|+|x_2-y_2|\le2\|x-y\|$, so $\varphi$ is $2$-Lipschitz.
+\end{proof}
+
+\begin{lemma}[Lean: \texttt{volume\_unitSquare}, \texttt{latticeCount\_unitSquare},
+\texttt{discrepancy\_unitSquare}]
+$\operatorname{vol}(P)=1$, and for every integer $m\ge1$, $|mP\cap\mathbb Z^2|=(m+1)^2$, hence
+$E_P(m)=2m+1$.
+\end{lemma}
+\begin{proof}
+The map from Euclidean space to $\mathbb R^2$ with the product measure preserves volume, and
+$\operatorname{vol}([0,1]^2)=1$. A lattice point $z$ lies in $mP$ iff $0\le z_i/m\le1$, i.e.\
+$0\le z_i\le m$, for $i=1,2$; there are $(m+1)^2$ such $z$. So $E_P(m)=(m+1)^2-m^2=2m+1$.
+\end{proof}
+
+\begin{theorem}[Lean: \texttt{not\_isBigO\_nat}, \texttt{conjecture7795\_false}]
+$E_P(m)=2m+1$ is not $O(m^{1/3})$ as $m\to\infty$ through the integers. Consequently (L) fails for
+$n=2$ (where $n-2+1/3=1/3$), both for real $t\to\infty$ and for integer dilations.
+\end{theorem}
+\begin{proof}
+Suppose $2m+1\le C m^{1/3}$ for all $m\ge N$. Take an integer $m\ge N$ with $m\ge1$ and $m>C^3$ and
+put $u=m^{1/3}$, so $u\ge1$ and $u^3=m$. From $u^3=m>C^3$ and $u\ge0$ we get $u>C$, so
+$2u^3+1\le Cu<u^2\le u^3$, a contradiction. A bound for real $t\to\infty$ would restrict to integer
+$t=m$ (composition with $m\mapsto m$, which tends to infinity), so it fails too.
+\end{proof}
+
+\section{Lean formalization}
+File \texttt{lean/Conjecture7795/Basic.lean} (Lean 4, Mathlib \texttt{v4.33.1}, only import
+\texttt{Mathlib}, 297 lines). The clause (L) is formalized as \texttt{LipschitzClause} (real
+$t\to\infty$) and \texttt{LipschitzClauseNat} (integer $m\to\infty$): for all $n$ and all compact
+$P\subseteq\mathbb R^n$ with nonempty interior and \texttt{HasLipschitzBoundary P},
+$E_P=O(t^{n-2+1/3})$ along \texttt{atTop}. Main theorem (ASCII rendering):
+\begin{verbatim}
+theorem conjecture7795_false :
+    IsCompact unitSquare /\ Convex R unitSquare /\
+      (interior unitSquare).Nonempty /\ HasLipschitzBoundary unitSquare /\
+      (forall m : N, 0 < m -> discrepancy unitSquare m = 2 * m + 1) /\
+      Not LipschitzClauseNat /\ Not LipschitzClause
+\end{verbatim}
+\paragraph{Axiom audit.} \texttt{\#print axioms C7795.conjecture7795\_false} prints
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no
+\texttt{native\_decide}.
+
+\paragraph{Conventions.} $|S\cap\mathbb Z^n|$ is \texttt{Set.ncard} (finite here);
+$\operatorname{vol}$ is Mathlib's \texttt{volume} on Euclidean space, converted to a real number;
+$t^{n-2+1/3}$ is the real power \texttt{Real.rpow}; $O(\cdot)$ is Mathlib's \texttt{IsBigO} along
+\texttt{atTop}.
+
+\paragraph{Scope.} Refuted: the Lipschitz clause (per body and hence uniform over the class), for real
+and integer dilations, in dimension $n=2$. Not addressed: the $C^2$ clause and the
+Holder/``jump'' clauses (not needed, since the conjunction already fails). The cube $[0,1]^n$ gives
+$E(m)=(m+1)^n-m^n\ge n m^{n-1}$ in every dimension, but only $n=2$ is formalized.
+
+\end{document}
