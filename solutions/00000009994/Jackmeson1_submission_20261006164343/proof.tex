@@ -1,0 +1,167 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\pd}{\operatorname{pd}}
+\newcommand{\fd}{\operatorname{findim}}
+\newcommand{\LL}{\operatorname{LL}}
+
+\title{Disproof of conjecture 00000009994:\\ radical-square-zero algebras of linear quivers have
+Loewy length $2$ and unbounded finitistic dimension}
+\author{Jackmeson1}
+\date{2026-10-06}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clauses refuted}
+
+\textbf{Statement (English, verbatim).} Definition: Finitistic dimension: the supremum of projective
+dimensions of finite-dimensional modules of finite-dimensional algebras. Conjecture: The finitistic
+dimension of a finite-dimensional algebra is controlled by twice the Loewy length; the doubling
+coefficient of the bound is optimal, attained by explicit subalgebras of exterior algebras, and the
+bound is independent of quiver size. (finitistic dimension Loewy doubling bound)
+
+The Chinese text states the same conjecture (the finitistic dimension of a finite-dimensional
+algebra is controlled by twice the Loewy length; the factor two is optimal and attained by explicit
+subalgebras of exterior algebras; the bound does not depend on the size of the quiver). Its
+Definition line is garbled (it speaks of the finiteness of a supremum of dimensions of modules); we
+use the English Definition line and the standard notion below.
+
+\textbf{Readings.} The conjecture is a conjunction whose first clause is the bound. We refute the
+first clause in two readings, for every field $k$ and every universe:
+\begin{itemize}
+\item[(a)] \emph{DoublingBound}: $\fd(A)\le 2\,\LL(A)$ for every finite-dimensional $k$-algebra $A$
+(the "doubling bound" itself);
+\item[(b)] \emph{LoewyControlled}: there is a function $f:\mathbb N\to\mathbb N$ with
+$\fd(A)\le f(\LL(A))$ for every finite-dimensional $k$-algebra $A$ ("controlled by" the Loewy
+length, with a bound "independent of quiver size"). Reading (b) is weaker than (a), so refuting (b)
+also refutes every bound of the form $c\cdot\LL$ or $c\cdot\LL+d$.
+\end{itemize}
+Each reading is refuted with two versions of $\fd$: the standard little finitistic dimension and
+the literal Definition line (Section 2). Refuting the first clause refutes the conjunction, whatever
+the remaining clauses (optimality of the factor $2$, attainment by subalgebras of exterior algebras)
+mean; we do not address those clauses separately.
+
+\section{Definitions and conventions}
+
+All modules are left modules. $k$ is an arbitrary field, $A$ a ring with a $k$-algebra structure.
+
+\begin{definition}[finitistic dimension]
+A left $A$-module $X$ is \emph{finite-dimensional} if it is finite-dimensional over $k$ after
+restriction of scalars along $k\to A$. The (little) finitistic dimension is
+\[\fd(A)=\sup\{\pd X : X \text{ finite-dimensional}, \ \pd X<\infty\},\]
+and the \emph{literal} version (the English Definition line, without the finiteness condition) is
+$\fd_{\rm lit}(A)=\sup\{\pd X : X \text{ finite-dimensional}\}$. Clearly $\fd\le\fd_{\rm lit}$.
+\end{definition}
+The standard notion, quoted from O.~Giatagantzidis, \emph{Radical preservation and the finitistic
+dimension}, arXiv:2412.10965: "the little finitistic dimension introduced by Auslander and Buchsbaum
+[6], denoted by $\mathrm{fpd}\,R$, which is defined to be the supremum of the projective dimensions
+of finitely generated modules with finite projective dimension." For a finite-dimensional algebra,
+finite-dimensional and finitely generated modules coincide; this is the Lean lemma
+\texttt{isFinDimModule\_iff}.
+
+\begin{definition}[Loewy length]
+$J=J(A)$ is the Jacobson radical (Mathlib's \texttt{Ring.jacobson}, the intersection of the maximal
+left ideals). $\LL(A)$ is the smallest positive integer $L$ with $J^L=0$, where $J^L$ is the
+$k$-span of all $L$-fold products of elements of $J$ (powers of $J$ as a $k$-subspace of $A$).
+\end{definition}
+Quoted from Y.~Otokita, \emph{Loewy lengths of centers of blocks and exponents of defect groups},
+arXiv:1912.09044: "For a finite-dimensional algebra $\Lambda$ over $F$ with Jacobson radical
+$J(\Lambda)$, its Loewy length $LL(\Lambda)$ is the smallest positive integer $L$ such that
+$J(\Lambda)^{L}=\{0\}$." Consistently, Dugas, Huisgen-Zimmermann and Learned, \emph{Truncated path
+algebras are homologically transparent}, arXiv:1407.2672, call $KQ/I$ with $I$ "the ideal generated
+by all paths of length $L+1$" a "truncated path algebra of Loewy length $L+1$".
+
+\textbf{Projective dimension.} We use Mathlib's \texttt{CategoryTheory.projectiveDimension} in the
+abelian category \texttt{ModuleCat.\{u\} A}, valued in $\mathbb N\cup\{\pm\infty\}$
+(\texttt{WithBot ENat}): $\pd X<n$ means $\mathrm{Ext}^i(X,-)=0$ for all $i\ge n$; the zero module has
+$\pd=-\infty$, so all suprema exist. The field, the algebra and the modules live in one universe $u$.
+
+\section{The counterexample}
+
+Fix $m\ge 1$ and let $\Lambda_{m+1}$ be the trivial square-zero extension $R\ltimes M$ with
+$R=k^{m+1}$ (vertex algebra, idempotents $e_0,\dots,e_m$) and $M=k^m$ (arrows
+$\alpha_0,\dots,\alpha_{m-1}$), with bimodule structure $(r\cdot\mu)_i=r_i\mu_i$ and
+$(\mu\cdot r)_i=\mu_i r_{i+1}$. So $e_i\alpha_ie_{i+1}=\alpha_i$ and the product of two arrows is
+zero: $\Lambda_{m+1}$ is the radical-square-zero algebra of the linear quiver with $m+1$ vertices
+(this description is for orientation only and is not used in the proofs). It is a
+$(2m+1)$-dimensional $k$-algebra (Lean \texttt{Alg k m}).
+
+\begin{lemma}[\texttt{mem\_jacobson\_iff}, \texttt{jacobson\_sq}, \texttt{loewyLength\_eq\_two}]
+$J(\Lambda_{m+1})=\{a : a_{\rm vertex}=0\}=M$, $J^2=0$, $J\neq0$, hence $\LL(\Lambda_{m+1})=2$.
+\end{lemma}
+\begin{proof}
+We use $x\in J$ iff for all $y$ there is $z$ with $z(yx+1)=1$ (Mathlib
+\texttt{Ideal.mem\_jacobson\_iff} for $I=0$). If $x\in M$ then $(yx)^2=0$, so $z=1-yx$ works. If
+$x_j\neq 0$ for a vertex $j$, take $y=-x_j^{-1}e_j$; the $j$-th vertex coordinate of $z(yx+1)-1$ is
+$-1\ne 0$. Products of two elements of $M$ vanish, so $J^2=0$; $\alpha_0\in J$ is nonzero.
+\end{proof}
+
+\textbf{Modules.} $S_j=k$ with $a\cdot x=a_jx$ (vertex coordinate $j$) for $0\le j\le m$. For
+$0\le i<m$, $P_{i+1}=k^2$ with $(r,\mu)\cdot(x,y)=(r_{i+1}x,\ r_iy+\mu_ix)$; it is $\Lambda e_{i+1}$.
+
+\begin{lemma}[\texttt{sim\_zero\_projective}, \texttt{proj\_projective}, \texttt{ses\_shortExact},
+\texttt{sim\_succ\_not\_projective}]
+(1) $S_0$ and $P_{i+1}$ are projective: they are retracts of $\Lambda$ via
+$x\mapsto xe_0$, $a\mapsto a_0$ and $(x,y)\mapsto xe_{i+1}+y\alpha_i$, $a\mapsto(a_{i+1},\mu_i)$.
+(2) $0\to S_i\xrightarrow{y\mapsto(0,y)}P_{i+1}\xrightarrow{(x,y)\mapsto x}S_{i+1}\to0$ is short exact.
+(3) $S_{i+1}$ is not projective: a section $s$ of $P_{i+1}\to S_{i+1}$ has $s(1)=(1,t)$, and
+$\alpha_i\cdot s(1)=(0,1)\neq 0=s(\alpha_i\cdot 1)$.
+\end{lemma}
+
+\begin{theorem}[\texttt{pd\_claim}, \texttt{pd\_last}]
+$\pd S_j=j$ for $0\le j\le m$; in particular $\pd S_m=m$.
+\end{theorem}
+\begin{proof}
+Induction on $j$ (Lean: \texttt{Fin.induction}), proving $\pd S_j<j+1$ and $\neg(\pd S_j<j)$.
+$S_0$ is projective and nonzero. For the step use the sequence (2) with projective middle term and
+Mathlib's \texttt{ShortComplex.ShortExact.hasProjectiveDimensionLT\_X\_3\_iff}: $\pd S_{i+1}<n+2$ iff
+$\pd S_i<n+1$. This gives $\pd S_{i+1}<i+2$, and $\neg(\pd S_{i+1}<i+1)$ for $i\ge1$; for $i=0$ it
+is (3).
+\end{proof}
+
+\begin{theorem}[\texttt{family}, \texttt{headline}]
+For every $m\ge1$: $\LL(\Lambda_{m+1})=2$, $m\le\fd(\Lambda_{m+1})\le\fd_{\rm lit}(\Lambda_{m+1})$.
+For $m=5$ ($6$ vertices): $\fd(\Lambda_6)\ge5>4=2\,\LL(\Lambda_6)$.
+\end{theorem}
+\begin{proof}
+$S_m$ is one-dimensional over $k$ (\texttt{S\_findim}) and $\pd S_m=m<\infty$, so it enters both
+suprema.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_9994\_false}]
+For every field $k$ and every proposition \texttt{Rest}, each of
+$\mathrm{DoublingBound}\wedge\mathrm{Rest}$, $\mathrm{LoewyControlled}\wedge\mathrm{Rest}$ and their
+literal versions is false.
+\end{theorem}
+\begin{proof}
+(a) $\Lambda_6$. (b) Given $f$, take $m=f(2)+1$: $\fd(\Lambda_{m+1})\ge f(2)+1>f(\LL(\Lambda_{m+1}))$.
+The literal versions follow from $\fd\le\fd_{\rm lit}$.
+\end{proof}
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{Conjecture9994/Basic.lean} (Lean 4, Mathlib v4.33.1, \texttt{import Mathlib} only,
+namespace \texttt{Conjecture9994}). Definitions: \texttt{IsFinDimModule}, \texttt{finitisticDimension},
+\texttt{finitisticDimensionLit}, \texttt{loewyLength}, \texttt{DoublingBound},
+\texttt{LoewyControlled}, \texttt{DoublingBoundLit}, \texttt{LoewyControlledLit}, \texttt{Alg},
+\texttt{Sim}, \texttt{Proj}, \texttt{S}. Main theorem:
+\begin{verbatim}
+theorem conjecture_9994_false (k : Type u) [Field k] (Rest : Prop) :
+    not (DoublingBound k /\ Rest) /\ not (LoewyControlled k /\ Rest) /\
+    not (DoublingBoundLit k /\ Rest) /\ not (LoewyControlledLit k /\ Rest)
+\end{verbatim}
+together with \texttt{headline} ($m=5$) and \texttt{family} (all $m\ge1$).
+\texttt{\#print axioms} for \texttt{conjecture\_9994\_false}, \texttt{headline} and \texttt{family}
+reports only \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}. No \texttt{sorry}, no
+\texttt{native\_decide}, no added axioms.
+
+\end{document}
