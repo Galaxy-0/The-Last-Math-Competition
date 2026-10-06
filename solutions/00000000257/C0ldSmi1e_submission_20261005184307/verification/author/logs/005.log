@@ -1,0 +1,13 @@
+Conjecture257.lean:92:65: error: dependent elimination failed, failed to solve equation
+  (fun a =>
+      ∀
+        t ∈
+          Set.range fun t =>
+            ⋂ (_ : t ∈ Subfield.toSubring '' {S | Set.range ⇑(algebraMap ℚ ℂ) ∪ {imaginaryRoot d} ⊆ ↑S}), ↑t,
+        a ∈ t) =
+    fun a =>
+    ∀
+      t ∈
+        Set.range fun t =>
+          ⋂ (_ : t ∈ Subfield.toSubring '' {S | Set.range ⇑(algebraMap ℚ ℂ) ∪ {imaginaryRoot (d * m ^ 2)} ⊆ ↑S}), ↑t,
+      a ∈ t

@@ -1,0 +1,39 @@
+def Conjecture257.imaginaryRoot : ℕ → ℂ :=
+fun d => ↑√↑d * Complex.I
+def Conjecture257.quadraticField : ℕ → IntermediateField ℚ ℂ :=
+fun d => ℚ⟮Conjecture257.imaginaryRoot d⟯
+def Conjecture257.imaginaryClassNumber : ℕ → ℕ :=
+fun d => NumberField.classNumber ↥(Conjecture257.quadraticField d)
+def Conjecture257.Conjecture : Prop :=
+∃ c, 0 < c ∧ ∀ (n : ℕ), 2 ≤ n → c * Real.log ↑n ≤ ↑(Conjecture257.imaginaryClassNumber (n ^ 2 + 1))
+Conjecture257.imaginaryRoot_sq (d : ℕ) : Conjecture257.imaginaryRoot d ^ 2 = -↑d
+'Conjecture257.imaginaryRoot_sq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture257.imaginaryRoot_integral (d : ℕ) : IsIntegral ℚ (Conjecture257.imaginaryRoot d)
+'Conjecture257.imaginaryRoot_integral' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture257.quadraticFieldNumberField (d : ℕ) : NumberField ↥(Conjecture257.quadraticField d)
+'Conjecture257.quadraticFieldNumberField' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture257.imaginaryRoot_im_pos (d : ℕ) (hd : 0 < d) : 0 < (Conjecture257.imaginaryRoot d).im
+'Conjecture257.imaginaryRoot_im_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture257.definingPolynomial_irreducible (d : ℕ) (hd : 0 < d) : Irreducible (Polynomial.X ^ 2 + Polynomial.C ↑d)
+'Conjecture257.definingPolynomial_irreducible' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture257.quadraticField_finrank (d : ℕ) (hd : 0 < d) : Module.finrank ℚ ↥(Conjecture257.quadraticField d) = 2
+'Conjecture257.quadraticField_finrank' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture257.imaginaryRoot_mul_square (d m : ℕ) :
+  Conjecture257.imaginaryRoot (d * m ^ 2) = ↑m * Conjecture257.imaginaryRoot d
+'Conjecture257.imaginaryRoot_mul_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture257.quadraticField_mul_square (d m : ℕ) (hm : m ≠ 0) :
+  Conjecture257.quadraticField (d * m ^ 2) = Conjecture257.quadraticField d
+'Conjecture257.quadraticField_mul_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture257.classNumber_congr (K L : IntermediateField ℚ ℂ) [NumberField ↥K] [NumberField ↥L] (h : K = L) :
+  NumberField.classNumber ↥K = NumberField.classNumber ↥L
+'Conjecture257.classNumber_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture257.imaginaryClassNumber_mul_square (d m : ℕ) (hm : m ≠ 0) :
+  Conjecture257.imaginaryClassNumber (d * m ^ 2) = Conjecture257.imaginaryClassNumber d
+'Conjecture257.imaginaryClassNumber_mul_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture257.pell_unbounded (k : ℕ) : ∃ n m, k < n ∧ 0 < m ∧ n ^ 2 + 1 = 2 * m ^ 2
+'Conjecture257.pell_unbounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture257.counterexample_for_every_constant (c : ℝ) (hc : 0 < c) :
+  ∃ n, 2 ≤ n ∧ ↑(Conjecture257.imaginaryClassNumber (n ^ 2 + 1)) < c * Real.log ↑n
+'Conjecture257.counterexample_for_every_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+Conjecture257.conjecture_false : ¬Conjecture257.Conjecture
+'Conjecture257.conjecture_false' depends on axioms: [propext, Classical.choice, Quot.sound]
