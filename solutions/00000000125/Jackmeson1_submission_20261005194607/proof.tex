@@ -1,0 +1,153 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\SL}{\mathrm{SL}}
+\newcommand{\F}{\mathbb{F}}
+
+\title{Disproof of conjecture 00000000125:\\ the prime-trace count in $\SL_2(\F_p)$ is not $\Theta(p^2/\log p)$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and its reading}
+
+\textbf{Statement (English, verbatim).} Conjecture: The number of elements of $\SL_2(\F_p)$ whose
+trace has absolute value a prime is asymptotic to $c\cdot p^2/\log p$, with $c$ explicit from a
+Sato--Tate type density for the trace distribution.
+
+The Chinese text states the same claim, with the same normalisation $c\cdot p^2/\log p$ (it spells
+the name of the density ``Sato--Tarte'').
+
+\textbf{Reading.} The trace of $A\in\SL_2(\F_p)$ is an element of $\F_p=\mathbb{Z}/p\mathbb{Z}$.
+For ``its absolute value is a prime'' to make sense it must be lifted to an integer. We use an
+arbitrary lift $L$ and then the two standard lifts:
+\begin{itemize}
+\item the \emph{centered} lift: the representative in $(-p/2,p/2]$ (Lean: \texttt{ZMod.valMinAbs});
+\item the \emph{standard} lift: the representative in $[0,p)$ (Lean: \texttt{ZMod.val}).
+\end{itemize}
+
+\begin{definition}
+For a lift $L$ and a prime $p$, let
+$N_L(p)=\#\{A\in\SL_2(\F_p) : |L(\tr A)| \text{ is a prime number}\}$, where $\tr A=A_{11}+A_{22}$.
+\end{definition}
+
+The claim ``$N(p)\sim c\,p^2/\log p$'' is read as $p\to\infty$ through the primes, with $\log$ the
+natural logarithm. We refute it in three forms, each for both standard lifts and for every real
+$c$ (positive or not), which covers the hedge ``with $c$ explicit'':
+\begin{enumerate}
+\item the ratio $N(p)/(c\,p^2/\log p)$ does not tend to $1$;
+\item $N(p)$ is not asymptotically equivalent to $c\,p^2/\log p$ (Mathlib's \texttt{IsEquivalent});
+\item $N(p)$ is not even $O(p^2/\log p)$, so $N(p)=\Theta(p^2/\log p)$ also fails.
+\end{enumerate}
+
+\textbf{Conventions.} In Lean, ``$p\to\infty$ through the primes'' is the filter \texttt{atTop} on
+the subtype $\{p:\mathbb{N}\mid p \text{ prime}\}$, ordered as a subset of $\mathbb{N}$. Lean
+division satisfies $x/0=0$. This matters only for $c=0$, where the ratio is identically $0$ and
+cannot tend to $1$; the proof does not use it. $N_L(p)$ is defined with \texttt{Nat.card} of a
+subtype of Mathlib's \texttt{Matrix.SpecialLinearGroup (Fin 2) (ZMod p)}, which is a finite group
+for prime $p$. The trace is Mathlib's \texttt{Matrix.trace}. A non-negative integer $n$ is prime in
+the usual sense (\texttt{Nat.Prime}); $|\cdot|$ is \texttt{Int.natAbs}.
+
+\section{Proof}
+
+\begin{lemma}[trace-$2$ family]
+Let $R$ be a commutative ring, $a\in R$ and $b\in R^\times$. The matrix
+\[
+  T(a,b)=\begin{pmatrix} a & b\\ -(a-1)^2 b^{-1} & 2-a\end{pmatrix}
+\]
+has determinant $1$ and trace $2$, and $(a,b)\mapsto T(a,b)$ is injective.
+\end{lemma}
+
+\begin{proof}
+$\det T(a,b)=a(2-a)+(a-1)^2bb^{-1}=2a-a^2+a^2-2a+1=1$, and $\tr T(a,b)=a+(2-a)=2$. The entries
+in positions $(1,1)$ and $(1,2)$ recover $a$ and $b$.
+\end{proof}
+
+\begin{lemma}[lower bound]
+Let $p$ be prime, and suppose $|L(2)|$ is prime. Then $N_L(p)\ge p(p-1)$.
+\end{lemma}
+
+\begin{proof}
+Every $T(a,b)$ with $a\in\F_p$, $b\in\F_p^\times$ lies in $\SL_2(\F_p)$ and has trace $2$, so it is
+counted by $N_L(p)$. There are $p(p-1)$ such pairs, and the map is injective.
+\end{proof}
+
+\begin{lemma}[lifts of $2$]
+For $p\ge4$ the centered lift of $2\in\F_p$ is $2$; for $p\ge3$ the standard lift of $2$ is $2$. In
+particular, $|L(2)|=2$ is prime for both lifts and every prime $p\ge5$.
+\end{lemma}
+
+\begin{proof}
+$2\le p/2$ when $p\ge4$, and $2<p$ when $p\ge3$.
+\end{proof}
+
+\begin{theorem}
+Let $L$ be a lift such that $|L(2)|$ is prime for all large primes $p$ (for example, either
+standard lift). Then $N_L(p)\ne O(p^2/\log p)$ as $p\to\infty$ through the primes. Hence, for every
+$c\in\mathbb{R}$, $N_L(p)\not\sim c\,p^2/\log p$ and $N_L(p)/(c\,p^2/\log p)\not\to1$.
+\end{theorem}
+
+\begin{proof}
+Suppose $N_L(p)\le C\,p^2/\log p$ for all large primes $p$. Take a prime $p\ge3$ that is large
+enough for this bound, for $\log p>2C$, and for $|L(2)|$ to be prime. Write $x=p$ and
+$\ell=\log x>0$. By Lemma 2, $x(x-1)\le N_L(p)\le Cx^2/\ell$, so $\ell\,x(x-1)\le Cx^2<\ell x^2/2$.
+Then $x-1<x/2$, that is, $x<2$, which is a contradiction.
+
+If $N_L\sim c\,p^2/\log p$, then $N_L=O(c\,p^2/\log p)=O(p^2/\log p)$, which we just excluded. If
+the ratio tends to $1$, then $N_L\sim c\,p^2/\log p$ (Mathlib's \texttt{isEquivalent\_of\_tendsto\_one},
+which needs no side condition).
+\end{proof}
+
+\begin{remark}[the true order; no Lean]
+For $p$ odd and $t\in\F_p$, the number of $A\in\SL_2(\F_p)$ with $\tr A=t$ is
+$p^2+\chi(t^2-4)\,p$, where $\chi$ is the Legendre symbol with $\chi(0)=0$. To see this, write
+$A=\begin{pmatrix} a&b\\ c&t-a\end{pmatrix}$, so $bc=a(t-a)-1$. A nonzero value of $bc$ has $p-1$
+solutions $(b,c)$, the value $0$ has $2p-1$, and exactly $1+\chi(t^2-4)$ values of $a$ make
+$a(t-a)=1$. We checked this numerically for primes up to $53$. Under the centered lift the
+qualifying traces are $\pm q$ for primes $q\le(p-1)/2$; under the standard lift they are the primes
+$q<p$. So $N(p)=p^2\,\#\{\text{qualifying } t\}+O(p^2/\log p)$, which is of order $p^3/\log p$ by
+the prime number theorem. The trace distribution on $\SL_2(\F_p)$ is uniform up to a relative error
+$O(1/p)$, so a ``Sato--Tate type density'' does not enter the leading constant. We do not
+formalize this remark; the disproof uses only Lemma 2.
+\end{remark}
+
+\section{Lean formalization}
+
+Lean 4 (toolchain \texttt{v4.33.1}) with Mathlib. The file is \texttt{lean/Conjecture125/Basic.lean}
+(190 lines), namespace \texttt{C125}. It contains no \texttt{sorry}, no \texttt{native\_decide} and no
+added axioms.
+
+\begin{itemize}
+\item \texttt{SL2 p} $:=$ \texttt{Matrix.SpecialLinearGroup (Fin 2) (ZMod p)};
+  \texttt{tr A} $:=$ \texttt{Matrix.trace} of the underlying matrix.
+\item \texttt{centeredLift n x := x.valMinAbs}; \texttt{standardLift n x := (x.val : Int)}.
+\item \texttt{N L p := Nat.card \{A : SL2 p // (L p (tr A)).natAbs.Prime\}}.
+\item \texttt{PrimeNat := \{p : Nat // p.Prime\}}, with filter \texttt{atTop}.
+\item \texttt{Conjecture125 L} $:=$ \texttt{exists c : Real, 0 < c /\textbackslash{} Tendsto (fun p : PrimeNat => (N L p : Real) / (c * p\^{}2 / Real.log p)) atTop (nhds 1)}.
+\item \texttt{traceTwo}, \texttt{tr\_traceTwo}, \texttt{traceTwo\_injective}: Lemma 1.
+\item \texttt{lower\_bound}: Lemma 2, $p(p-1)\le N_L(p)$.
+\item \texttt{centeredLift\_two}, \texttt{standardLift\_two}: Lemma 3.
+\item \texttt{not\_isBigO}, \texttt{not\_isEquivalent} (every real $c$), and
+  \texttt{not\_tendsto\_ratio} (no real $c$): the theorem, for a general lift $L$.
+\item \textbf{Main theorem} \texttt{conjecture125\_false}:
+  \texttt{\textasciitilde{} Conjecture125 centeredLift /\textbackslash{} \textasciitilde{} Conjecture125 standardLift}
+  together with the failure of $N=O(p^2/\log p)$ for both lifts.
+\end{itemize}
+
+\textbf{Axiom audit.} \texttt{\#print axioms C125.conjecture125\_false} (and likewise for
+\texttt{not\_isEquivalent} and \texttt{not\_tendsto\_ratio}) prints
+\texttt{[propext, Classical.choice, Quot.sound]}. \texttt{lake build} succeeds.
+
+\end{document}
