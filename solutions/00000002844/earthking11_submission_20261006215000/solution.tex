@@ -1,0 +1,77 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Scalar E-eigenvalues versus sign-pairs: conjecture 00000002844}
+\author{earthking11}
+\date{October 6, 2026}
+\begin{document}
+\maketitle
+\section*{The precise counting convention}
+The source claims that an order-$d$, $n$-dimensional symmetric tensor has
+$((d-1)^n-1)/(d-2)$ E-eigenvalues, without identifying opposite scalar
+values or imposing a dimension lower bound. We use standard normalized
+scalar E-eigenvalues. For a real tensor complexified to $\mathbb C^n$,
+these satisfy
+\[
+ \sum_i x_i^2=1,\quad x\neq0,\qquad
+ (Tx^{d-1})_i=\lambda x_i.
+\]
+The normalization uses the complex-bilinear extension of the Euclidean
+quadratic form, not a Hermitian norm. The primary definition calls the
+scalar $\lambda$ itself an E-eigenvalue. For odd order,
+$(\lambda,x)$ and $(-\lambda,-x)$ are both normalized eigenpairs.
+See Sodomaco, Definition 1.1 \cite{sodomaco}.
+
+\begin{theorem}
+The one-dimensional order-three symmetric tensor $T_{111}=1$ has exactly
+two distinct scalar E-eigenvalues, $1$ and $-1$. The displayed formula
+equals $1$, so it does not count these E-eigenvalues as stated.
+\end{theorem}
+\begin{proof}
+There is one tensor coefficient, so all permutations of its three
+indices leave it unchanged: it is symmetric. The actual tensor
+contraction is $Tx^2=x^2$. The normalized eigenvalue equations reduce to
+\[
+ x^2=1,\qquad x\neq0,\qquad x^2=\lambda x.
+\]
+The factorization $(x-1)(x+1)=0$ over $\mathbb C$ implies
+$x=1$ or $x=-1$. Substitution then gives $\lambda=1$ or $\lambda=-1$,
+respectively. Conversely each of these pairs satisfies every equation.
+Thus the actual scalar-value set is exactly $\{1,-1\}$, with cardinality
+$2$. At $d=3,n=1$, the asserted formula is
+$((3-1)^1-1)/(3-2)=1$, not $2$.
+\end{proof}
+
+\section*{What this does and does not refute}
+This is a disproof of the source's literal scalar-E-eigenvalue count.
+It is not a counterexample to a formula counting values modulo the
+identification $\lambda\sim-\lambda$: in this example there is exactly
+one sign-pair, agreeing with the displayed number.
+The standard odd-order theorem indeed counts sign-pairs, while the
+E-characteristic polynomial has twice that pair-count degree
+\cite{sodomaco}. Confusing these two quantities is precisely the issue.
+The Lean proof establishes the actual scalar-value set and its cardinality;
+it does not assert that it formalizes a resultant construction or its
+algebraic degree. If the intended conjecture is instead sign-pair counting,
+that altered convention must be stated, and this counterexample does not
+apply to it. No such identification appears in the source.
+
+\section*{Formal verification}
+Lean defines the actual tensor on \texttt{Fin 1}, its symmetry, double-sum
+contraction, quadratic unit and nonzero conditions, eigenpair equations,
+and scalar-value set with vector witnesses. It proves both directions of
+the exact set characterization and then computes its cardinality.
+The project builds on Lean 4.33.1 with pinned Mathlib, without unfinished
+proofs, native evaluation, extra axioms, or long brute force. Its audited
+dependencies are propositional extensionality, classical choice, and
+quotient soundness.
+
+\begin{thebibliography}{1}
+\bibitem{sodomaco} Luca Sodomaco, \emph{The Product of the Eigenvalues of a
+Symmetric Tensor}, arXiv:1802.10173, 2018. Definition 1.1, p. 1;
+Theorem 1.3 and the subsequent degree discussion, p. 3.
+\url{https://arxiv.org/abs/1802.10173}.
+\end{thebibliography}
+\end{document}
