@@ -1,0 +1,158 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\SL}{\mathrm{SL}}
+
+\title{A disproof of Conjecture 00000001934\\[2pt]
+\large $\SL(n,\Z)$ acts analytically on $S^{n-1}$ with infinite image}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000001934 reads (English version; the Chinese version says the same):
+
+\begin{quote}
+\emph{Definition:} The Zimmer program classifies actions of higher-rank lattices on low-dimensional
+manifolds. \emph{Conjecture:} All actions of $\SL(n,\Z)$ ($n \ge 3$) on $(n-1)$-manifolds are finite
+(the image is a finite group); the classification table of standard forms in $n$ dimensions is exhausted
+by fractional-linear actions on projective space.
+\end{quote}
+
+The conjecture is the conjunction of two clauses:
+\begin{enumerate}[label=(\arabic*)]
+  \item for every $n\ge 3$, every action of $\SL(n,\Z)$ on an $(n-1)$-dimensional manifold $M$ has finite
+        image, i.e.\ the homomorphism $\SL(n,\Z)\to\mathrm{Perm}(M)$ defined by the action has finite range;
+  \item ``the classification table of standard forms in $n$ dimensions is exhausted by fractional-linear
+        actions on projective space''.
+\end{enumerate}
+Clause (2) is not a precise statement and we do not need it: the conjunction is false as soon as
+clause (1) is false. Clause (1) is an unconditional assertion (``All actions''), not an example or a
+parenthetical; the parenthesis only explains what ``finite'' means. Clause (1) contains no
+volume-preservation hypothesis.
+
+\paragraph{Reading.} We refute clause (1) under the following reading, uniformly in the regularity.
+Fix $r \in \{0,1,2,\dots,\infty,\omega\}$. ``Action on an $(n-1)$-manifold'' means a group action of
+$\SL(n,\Z)$ on a $C^r$ manifold $M$ (without boundary) of dimension $n-1$ in which every group element
+acts by a $C^r$ map ($r=0$: a continuous action on a topological manifold; $r=\infty$: smooth;
+$r=\omega$: real-analytic). We refute the clause even when $M$ is in addition required to be compact,
+connected and Hausdorff (these extra requirements only weaken the clause). Our counterexample works for
+\emph{every} $n\ge 3$ and every $r$ at once, because it is real-analytic on a closed connected manifold.
+
+\section{The counterexample}
+
+Let $n\ge 2$ and let $S^{n-1}=\{v\in\R^n : \|v\|=1\}$ be the unit sphere (Euclidean norm). It is a
+compact real-analytic manifold of dimension $n-1$ (stereographic charts), connected when $n\ge 3$.
+For $A\in\SL(n,\Z)$ let $L_A:\R^n\to\R^n$ be $v\mapsto Av$ (entries cast to $\R$) and define
+\[
+  A\cdot v \;=\; \frac{Av}{\|Av\|}\qquad (v\in S^{n-1}).
+\]
+
+\begin{lemma}\label{lem:action}
+This is a well-defined group action of $\SL(n,\Z)$ on $S^{n-1}$.
+\end{lemma}
+
+\begin{proof}
+$L_A$ is injective since $L_{A^{-1}}L_A=\mathrm{id}$, so $Av\ne 0$ for $v\ne 0$ and $A\cdot v\in S^{n-1}$.
+For $v\in S^{n-1}$, $I\cdot v=v/\|v\|=v$. For the composition law, put $c=\|Bv\|^{-1}>0$; then
+$A\cdot(B\cdot v)$ is the radial projection of $L_A(c\,Bv)=c\,ABv$, and radial projection is invariant
+under positive scaling: $\|cw\|^{-1}cw=\|w\|^{-1}w$. Hence $A\cdot(B\cdot v)=(AB)\cdot v$.
+\end{proof}
+
+\begin{lemma}\label{lem:analytic}
+Each $A\in\SL(n,\Z)$ acts by a real-analytic ($C^\omega$) map $S^{n-1}\to S^{n-1}$.
+\end{lemma}
+
+\begin{proof}
+The map $g(w)=\|L_Aw\|^{-1}L_Aw$ is analytic on $\{w : L_A w\ne 0\}\supset S^{n-1}$, because $L_A$ is
+linear, the Euclidean norm is analytic away from $0$, and inversion and scalar multiplication are analytic.
+The inclusion $S^{n-1}\hookrightarrow\R^n$ is analytic, and a $C^\omega$ map into $\R^n$ with values in
+$S^{n-1}$ is $C^\omega$ as a map into the manifold $S^{n-1}$.
+\end{proof}
+
+\begin{lemma}\label{lem:infinite}
+Let $n\ge 2$ and $i\ne j$. For $k\in\Z$ let $T_k=I+kE_{ij}\in\SL(n,\Z)$ (a transvection,
+$\det T_k=1$). Then the permutations $v\mapsto T_k\cdot v$ of $S^{n-1}$ are pairwise distinct; hence the
+image of $\SL(n,\Z)$ in $\mathrm{Perm}(S^{n-1})$ is infinite.
+\end{lemma}
+
+\begin{proof}
+$T_k e_j = k e_i + e_j$, so $T_k\cdot e_j = c_k(k e_i + e_j)$ with $c_k=\|T_ke_j\|^{-1}>0$. If
+$T_k\cdot e_j = T_l\cdot e_j$, the $j$-th coordinates give $c_k=c_l$ and then the $i$-th coordinates give
+$c_l k = c_l l$, so $k=l$. Thus $k\mapsto(v\mapsto T_k\cdot v)$ is injective on $\Z$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+For every $n\ge 3$ and every regularity $r$, clause (1) fails: $S^{n-1}$ is a compact connected Hausdorff
+$C^r$ manifold of dimension $n-1$, $\SL(n,\Z)$ acts on it by $C^r$ maps (Lemmas~\ref{lem:action},
+\ref{lem:analytic}), and the image of the action is infinite (Lemma~\ref{lem:infinite}). Consequently the
+conjecture (the conjunction of clauses (1) and (2)) is false, whatever clause (2) means.
+\end{theorem}
+
+\begin{remark}
+The counterexample is the double cover of the projective action of $\SL(n,\Z)$ on $\R P^{n-1}$. It is the
+standard reason why the dimension bound in Zimmer's conjecture is $\dim M < n-1$, not $\le n-1$. For
+instance, Brown--Fisher--Hurtado (arXiv:1608.04995, abstract) prove, for a cocompact lattice
+$\Gamma$ in $\mathrm{Sl}(n,\R)$, that ``any homomorphism $\rho\colon\Gamma\rightarrow\mathrm{Diff}(M)$
+has finite image if the dimension of $M$ is less than $n-1$ and that any homomorphism
+$\rho\colon\Gamma\rightarrow\mathrm{Diff}(M,\omega)$ has finite image if the dimension of $M$ is less
+than $n$''. Thus a volume-preservation hypothesis would change the problem; the conjecture has none.
+The witness is an action on the sphere, not on projective space, so it is not one of the
+``fractional-linear actions on projective space'' mentioned in clause (2).
+\end{remark}
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture1934/Basic.lean} (Lean 4, Mathlib, only \texttt{import Mathlib}; namespace
+\texttt{C1934}). The sphere is Mathlib's \texttt{Metric.sphere (0 : EuclideanSpace R (Fin (d+1))) 1}
+with Mathlib's analytic manifold structure modelled on \texttt{EuclideanSpace R (Fin d)}
+(\texttt{Geometry/Manifold/Instances/Sphere.lean}); $\SL(n,\Z)$ is
+\texttt{Matrix.SpecialLinearGroup (Fin n) Z}.
+
+\begin{itemize}[itemsep=1pt]
+  \item \texttt{lin}, \texttt{nrm}, \texttt{act}: $L_A$, radial projection and $A\cdot v$.
+  \item \texttt{instMulAction}: Lemma~\ref{lem:action} (a \texttt{MulAction} instance).
+  \item \texttt{contMDiff\_smul}: Lemma~\ref{lem:analytic},
+        \texttt{ContMDiff (R d) (R d) omega (fun x => A . x)}.
+  \item \texttt{tv}, \texttt{tv\_smul\_injective}, \texttt{range\_toPermHom\_infinite}: Lemma~\ref{lem:infinite};
+        the image is \texttt{Set.range (MulAction.toPermHom (SLZ n) (Sph n))}.
+  \item \texttt{connectedSpace\_sph}: $S^d$ is connected for $d\ge 1$ (compactness and the Hausdorff
+        property are Mathlib instances).
+  \item \texttt{Clause1At r n}: for all $d$ with $d+1=n$ and all compact, connected, Hausdorff
+        $M:\texttt{Type}$ with \texttt{ChartedSpace (EuclideanSpace R (Fin d)) M},
+        \texttt{IsManifold (R d) r M} and a \texttt{MulAction (SLZ n) M} in which every element acts by
+        a \texttt{ContMDiff} map of order $r$, the range of \texttt{MulAction.toPermHom} is finite.
+        \texttt{Clause1 r} is \texttt{Clause1At r n} for all $n\ge 3$.
+  \item Main theorems: \texttt{not\_clause1At (r) (n) (hn : 3 <= n) : not (Clause1At r n)};
+        \texttt{not\_clause1 (r) : not (Clause1 r)};
+        \texttt{not\_conjecture (r) (Clause2 : Prop) : not (Clause1 r and Clause2)}.
+\end{itemize}
+Here $r$ ranges over \texttt{WithTop ENat}: \texttt{0} is continuity, finite values are $C^k$, the
+value \texttt{(top : ENat)} is $C^\infty$ and \texttt{omega} (the top element) is analyticity.
+
+\paragraph{Axiom audit.} \texttt{\#print axioms} for \texttt{C1934.not\_clause1At},
+\texttt{C1934.not\_clause1} and \texttt{C1934.not\_conjecture} reports exactly
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no
+\texttt{native\_decide}. The file builds with \texttt{lake build} on Lean v4.33.1 and the matching
+Mathlib.
+
+\end{document}
