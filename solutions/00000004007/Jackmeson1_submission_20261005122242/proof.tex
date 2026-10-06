@@ -1,0 +1,150 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\V}{\operatorname{V}_p}
+
+\title{A disproof of Conjecture 00000004007\\[2pt]
+\large The $p$-variation is $1$-homogeneous, so $\|X+X\| = 2\|X\| > 2^{1/q}\|X\|$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000004007 reads (English):
+\begin{quote}
+\emph{Definition:} The p-variation is the p-th root of the supremum over partitions of the sum of
+p-th powers of the increments. \emph{Conjecture:} The p-variation satisfies the optimal
+subadditivity inequality $\|X+Y\| \le (\|X\|^q + \|Y\|^q)^{1/q}$, where $q$ is the conjugate
+exponent of $p$, and the inequality cannot be enlarged.
+\end{quote}
+The conjecture is a conjunction (the inequality holds, and it is optimal). We show that the
+inequality itself fails, for every $p\in(1,\infty)$ and also for $p=1$.
+
+\section{Definitions and conventions}
+
+\begin{definition}[Partition]
+A partition of $[a,b]$ is a finite sequence $a=t_0<t_1<\dots<t_n=b$ (Lean: \texttt{Partition a b},
+fields \texttt{n}, \texttt{t : Fin (n+1) -> R}, \texttt{StrictMono t}, \texttt{t 0 = a},
+\texttt{t (last n) = b}).
+\end{definition}
+
+\begin{definition}[$p$-variation]
+For a path $X:\mathbb{R}\to E$ ($E$ a real normed space; only the values on $[a,b]$ matter) and
+$p>0$,
+\[
+  \V(X;[a,b]) \;=\; \Bigl(\sup_{\pi} \sum_{i=1}^{n} \|X(t_i)-X(t_{i-1})\|^p\Bigr)^{1/p}
+  \in [0,\infty],
+\]
+the supremum over all partitions $\pi$ of $[a,b]$ (Lean: \texttt{incrSum} and \texttt{pVar}).
+\end{definition}
+
+Conventions. Values are taken in $[0,\infty]$ (Lean \texttt{ENNReal}), so the supremum always
+exists and $\infty^{1/p}=\infty$; our counterexamples have finite values, so this choice is not
+used. The conjugate exponent of $p\in(1,\infty)$ is the $q>0$ with $1/p+1/q=1$, i.e.\
+$q=p/(p-1)\in(1,\infty)$ (Mathlib's \texttt{Real.HolderConjugate p q}, which requires $p,q>0$ and
+$p^{-1}+q^{-1}=1$). For $p=1$ we take $q=\infty$ and read $(a^q+b^q)^{1/q}$ as $\max(a,b)$.
+Paths are real-valued in the counterexample; a real-valued counterexample is also one for paths in
+$\mathbb{R}^d$ (embed in the first coordinate), and Lemma~\ref{lem:diag} holds in every real normed
+space.
+
+\section{Proof}
+
+\begin{lemma}[Homogeneity; \texttt{pVar\_smul}]
+For $p>0$, $c\in\mathbb{R}$ and every path $X$: $\V(cX;[a,b]) = |c|\,\V(X;[a,b])$.
+\end{lemma}
+\begin{proof}
+For each partition the increments of $cX$ are $c$ times those of $X$, so each sum is multiplied
+by $|c|^p$ (\texttt{incrSum\_smul}). Since $\sup_\pi |c|^p S_\pi = |c|^p\sup_\pi S_\pi$ in
+$[0,\infty]$, and $(|c|^p s)^{1/p}=|c|\,s^{1/p}$, the claim follows.
+\end{proof}
+
+\begin{lemma}[Failure on the diagonal; \texttt{fails\_at\_diagonal}, \texttt{fails\_at\_diagonal\_one}]\label{lem:diag}
+Let $0<\V(X;[a,b])=:v<\infty$. If $1/p+1/q=1$ with $p,q>0$, then
+$(v^q+v^q)^{1/q} = 2^{1/q}v < 2v = \V(X+X;[a,b])$. If $p=1$, then $\max(v,v)=v<2v=\mathrm{V}_1(X+X;[a,b])$.
+\end{lemma}
+\begin{proof}
+$X+X=2X$, so the right-hand value is $2v$ by homogeneity. Since $q>1$, $1/q<1$ and $2^{1/q}<2$;
+multiply by $0<v<\infty$.
+\end{proof}
+
+\begin{lemma}[A non-degenerate path; \texttt{iSup\_incrSum\_id}, \texttt{pVar\_id}]
+Let $p\ge1$ and $b-a=1$. For $X(t)=t$, the supremum of the increment sums over partitions of
+$[a,b]$ is $1$; in particular $\V(X;[0,1])=1$.
+\end{lemma}
+\begin{proof}
+Each increment $\Delta_i=t_i-t_{i-1}$ lies in $[0,1]$, so $\Delta_i^p\le\Delta_i$ (as $p\ge1$) and
+$\sum\Delta_i^p\le\sum\Delta_i=b-a=1$ (telescoping, \texttt{sum\_succ\_sub}). The two-point
+partition $a<b$ gives exactly $1$.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_00000004007\_false}, \texttt{conjecture\_00000004007\_false'}]
+For every $p\in(1,\infty)$ with conjugate exponent $q$, the continuous paths $X=Y=(t\mapsto t)$ on
+$[0,1]$ satisfy
+\[
+  \V(X+Y;[0,1]) = 2 \;>\; 2^{1/q} = \bigl(\V(X;[0,1])^q+\V(Y;[0,1])^q\bigr)^{1/q}.
+\]
+\end{theorem}
+
+\begin{theorem}[$p=1$; \texttt{conjecture\_00000004007\_false\_one}]
+For $p=1$, $q=\infty$: $\mathrm{V}_1(X+Y;[0,1])=2>1=\max(\mathrm{V}_1(X),\mathrm{V}_1(Y))$ for the
+same paths.
+\end{theorem}
+
+\begin{remark}[Other readings refuted in Lean]
+(i) \emph{Raw supremum} (\texttt{raw\_version\_false}): if $\|X\|$ denotes the supremum without the
+$p$-th root, it is $p$-homogeneous, the left side at $Y=X$ is $2^p v$ and the right side is
+$2^{1/q}v$, and $1/q<1<p$.
+(ii) \emph{Concatenation} (\texttt{concat\_version\_false}): if $X+Y$ denotes the concatenation of
+$X$ on $[0,1]$ and $Y$ on $[1,2]$ (agreeing at $t=1$), take $Z(t)=t$ on $[0,2]$: both pieces have
+$p$-variation $1$ while $\V(Z;[0,2])\ge 2$ by the two-point partition, and $2>2^{1/q}$.
+\end{remark}
+
+\section{Scope}
+
+Refuted: the inequality for every $p\in(1,\infty)$ with $q=p/(p-1)$; for $p=1$ with $q=\infty$ read
+as the maximum; with or without the $p$-th root; with $X+Y$ the pointwise sum or the concatenation.
+Since the inequality is false, the clause ``cannot be enlarged'' is moot. Not addressed:
+$0<p<1$ (the conjugate exponent would be negative, and continuous paths of finite $p$-variation are
+then constant) and $p=\infty$ (no $p$-th root; $q=1$ and the inequality would reduce to the
+triangle inequality for the oscillation, which holds). The counterexample is not degenerate:
+$X(t)=t$ is continuous, non-constant and has $p$-variation exactly $1$.
+
+\section{Relation to the earlier submission}
+
+The same mathematical argument ($X=Y$, homogeneity, $2>2^{1/q}$) was merged as PR \#42
+(earthking11) and removed in the re-audit of commit 541cf4fb with the reason ``pure powers-of-2
+arithmetic; p-variation unformalized''. Its Lean file stated only facts such as
+$\neg(2^2\le 2)$ and $2<2^q$ over the natural numbers, and its docstring said ``There is no
+real-valued p-variation formalised here''. The present Lean file defines partitions and the
+$p$-variation as the $p$-th root of the supremum of the increment sums, proves homogeneity and the
+diagonal failure for every path of finite nonzero $p$-variation in every real normed space,
+computes the $p$-variation of $t\mapsto t$ exactly, and states the conjecture's inequality with
+Mathlib's conjugate-exponent predicate for every real $p>1$ (not only integer instances).
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture4007/Basic.lean} (Lean 4.33.1, Mathlib), namespace \texttt{Tlmc4007}.
+Main theorems: \texttt{conjecture\_00000004007\_false} (for all $p,q$ with
+\texttt{p.HolderConjugate q}), \texttt{conjecture\_00000004007\_false'} (for all $p>1$ with
+$q=p/(p-1)$), \texttt{conjecture\_00000004007\_false\_one}, \texttt{raw\_version\_false},
+\texttt{concat\_version\_false}; supporting \texttt{pVar\_smul}, \texttt{fails\_at\_diagonal},
+\texttt{pVar\_id}. \texttt{lake build} succeeds; \texttt{\#print axioms} of each main theorem gives
+\texttt{[propext, Classical.choice, Quot.sound]}. No \texttt{sorry}, no \texttt{native\_decide}, no
+added axioms.
+
+\end{document}
