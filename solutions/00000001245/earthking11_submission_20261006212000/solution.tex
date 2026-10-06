@@ -1,0 +1,62 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\title{A standard Garden-of-Eden counterexample to conjecture 00000001245}
+\author{earthking11}
+\date{October 6, 2026}
+\begin{document}
+\maketitle
+\section*{Definitions and claim}
+An elementary cellular automaton (ECA) is specified by a Wolfram rule code
+$r\in\{0,\ldots,255\}$. For a neighborhood $(\ell,c,t)\in\{0,1\}^3$,
+the output is bit $4\ell+2c+t$ of $r$. A configuration is a function
+$x:\mathbb Z\to\{0,1\}$. The global map applies the local rule to
+$(x(i-1),x(i),x(i+1))$ at every integer $i$.
+A nonempty finite word is a Garden-of-Eden (GoE) word when it occurs in no
+global output, at any translated location. Its density is the proportion
+of its symbols equal to $1$.
+
+The conjecture asserts that the infimum of the minimum GoE-word densities
+over ECAs is $1/4$. If a rule has no GoE word, its minimum is undefined;
+we include only genuinely attained per-rule minima. The counterexample
+also applies if one takes infima within nonempty GoE-density sets instead.
+
+\begin{theorem}
+Over all ECA rules with an attained minimum GoE-word density, the infimum
+of these minimum densities is $0$, not $1/4$.
+\end{theorem}
+\begin{proof}
+Rule 255 has all eight local output bits equal to $1$. Consequently its
+global image consists only of the all-$1$ configuration. The one-letter
+word $0$ cannot occur in this image at any location: it is a genuine GoE
+word in the standard, unrestricted double-infinite sense. Its density is
+$0$. Every finite-word density is nonnegative, so this word attains the
+minimum density for rule 255. The set of defined per-rule minima contains
+$0$ and is bounded below by $0$. Its infimum is therefore $0$.
+\end{proof}
+
+\section*{Correction of the prior closed submission}
+PR \#174 incorrectly tested only periodic, length-two cyclic preimages.
+It claimed that the word $00$ had no preimage under rule 133. Under the
+standard definition, the input patch $1011$ has adjacent neighborhoods
+$101$ and $011$, both mapped to $0$ by rule 133. Extend this patch by zeros
+outside its four sites to obtain a double-infinite preimage of $00$.
+Thus that earlier witness was false. The separate observation that rule
+51 is bijective addresses only the parenthetical candidate in the problem
+and does not disprove the claimed infimum. The present argument instead
+uses a standard GoE word of rule 255 to refute the full infimum statement.
+
+\section*{Formal verification}
+The Lean project defines all 256 Wolfram rules, configurations on
+$\mathbb Z$, the local and global maps, translated finite-word preimages,
+GoE status, word density, attained minima, and their set-theoretic infimum.
+It proves the rule-255 truth table, the absence of a preimage for the
+one-letter zero word, nonnegativity, attainment at zero, and the exact
+infimum. It also verifies the actual rule-133 preimage described above.
+Lean 4.33.1 and a fixed Mathlib revision are pinned. The build has no
+unfinished proofs, native evaluation, or additional axioms; the printed
+dependencies are propositional extensionality, classical choice, and
+quotient soundness. Only the eight local neighborhoods are enumerated;
+no finite cyclic-boundary surrogate or long brute-force search is used.
+\end{document}
