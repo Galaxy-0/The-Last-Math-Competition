@@ -1,0 +1,227 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{array}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\MSD}{\operatorname{MSD}}
+\newcommand{\PP}{\mathbb{P}^1(\mathbb{Q})}
+\newcommand{\Q}{\mathbb{Q}}
+
+\title{A disproof of Conjecture 00000007751\\[2pt]
+\large A quadratic rational map over $\mathbb{Q}$ with twelve rational preperiodic points,
+so $\operatorname{MSD}(1,2)\ne 9$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000007751 reads (English version; the Chinese version states the same conjecture):
+
+\begin{quote}
+\emph{Definition:} For a rational map $f$ of degree $d\ge 2$ over a field $K$, a preperiodic point has
+finite orbit; the Morton--Silverman uniform boundedness conjecture asserts a uniform bound on preperiodic
+points of degree $d$ maps of $\mathbb{P}^N(K)$, depending only on $N$ and $d$, with $\MSD(N,d)$ the minimal
+such bound.
+\emph{Conjecture:} For $N=1$, $d=2$, $K=\Q$, $\MSD(1,2)=9$, attained by a unique map; more generally
+$\MSD(N,d)$ is dominated by the exponential expression $(d^{2N+2}-1)/(d-1)$.
+\end{quote}
+
+\paragraph{Reading.} Here $\MSD(1,2)$ (over $K=\Q$) is the least uniform bound, taken in
+$\mathbb{N}_\infty=\{0,1,2,\dots\}\cup\{\infty\}$, for the number of $\Q$-rational preperiodic points in
+$\PP$ of a degree-$2$ rational map defined over $\Q$; it equals $\infty$ if no finite uniform bound
+exists. The statement is explicitly about \emph{rational maps}, not only polynomials. The conjecture is the
+conjunction of three clauses:
+\begin{enumerate}[label=(\roman*)]
+  \item $\MSD(1,2) = 9$;
+  \item this value is attained by a unique map;
+  \item in general $\MSD(N,d)$ is dominated by $(d^{2N+2}-1)/(d-1)$.
+\end{enumerate}
+We refute clause (i), which refutes the conjunction. We do \textbf{not} address the uniqueness clause (ii)
+or the general domination clause (iii). For $N=1$, $d=2$ the expression in (iii) equals
+$(2^4-1)/(2-1) = 15$, which is consistent with the twelve points exhibited below; nothing here contradicts
+(iii).
+
+\section{Conventions}
+
+These are the standard definitions of a degree-$d$ rational map of $\mathbb P^1$ and of preperiodic
+points, and they are exactly the ones used in the Lean file.
+
+\begin{itemize}
+  \item $\PP$ is modelled as $\Q\cup\{\infty\}$ (in Lean, \texttt{Option $\mathbb{Q}$}): the point $a\in\Q$
+        is $[a:1]$ and $\infty = [1:0]$ (Lean \texttt{none}).
+  \item A \emph{rational map of degree $d$} over $\Q$ is $\varphi = p/q$ with $p,q\in\Q[X]$ coprime and
+        $\max(\deg p,\deg q) = d$.
+  \item $\varphi$ acts on $\PP$ by the homogeneous formula $[x:y]\mapsto [F(x,y):G(x,y)]$ with
+        $F = Y^d p(X/Y)$, $G = Y^d q(X/Y)$, i.e.
+        \[
+          [a:1] \mapsto [p(a):q(a)], \qquad [1:0]\mapsto [\operatorname{coeff}_d p : \operatorname{coeff}_d q],
+        \]
+        where $[u:v] = u/v$ if $v\ne 0$ and $[u:0]=\infty$.
+  \item A point $x$ is \emph{preperiodic} if its forward orbit $\{\varphi^n(x) : n\ge 0\}$ is finite,
+        exactly as in the statement (``a preperiodic point has finite orbit'').
+\end{itemize}
+
+\begin{lemma}[well-definedness; Lean \texttt{RatMap.act\_wellDefined}]
+If $d\ge 1$ and $\varphi = p/q$ has degree $d$, then $(p(a),q(a))\ne(0,0)$ for all $a\in\Q$, and
+$(\operatorname{coeff}_d p,\operatorname{coeff}_d q)\ne(0,0)$. Hence the formula above never produces
+$[0:0]$.
+\end{lemma}
+
+\begin{proof}
+Coprimality gives $u,v\in\Q[X]$ with $up+vq=1$; evaluating at $a$ rules out $p(a)=q(a)=0$. If, say,
+$\deg q = d \ge \deg p$, then $q\ne 0$ (otherwise $d = \deg q = 0$), so $\operatorname{coeff}_d q$ is the
+leading coefficient of $q$ and is nonzero; symmetrically if $\deg p = d$.
+\end{proof}
+
+\section{The witness}
+
+Let
+\[
+  f(z) = \frac{P(z)}{Q(z)} = \frac{-2z^2-3z-1}{2z^2-z} = -\frac{(2z+1)(z+1)}{z(2z-1)}.
+\]
+Both $P$ and $Q$ have degree $2$, and they are coprime by the B\'ezout identity
+\[
+  (4X-3)\,P + (4X+5)\,Q = 3
+\]
+(expand: $(4X-3)P = -8X^3-6X^2+5X+3$ and $(4X+5)Q = 8X^3+6X^2-5X$). Alternatively, the resultant of $P$ and
+$Q$ is $12\ne 0$. So $f$ is a rational map of degree $2$ over $\Q$; it is not a polynomial. At infinity,
+$f(\infty) = [\operatorname{coeff}_2 P : \operatorname{coeff}_2 Q] = [-2:2] = -1$.
+
+Let
+\[
+  S = \{\infty,\ -1,\ 0,\ -\tfrac52,\ -\tfrac25,\ -\tfrac16,\ -\tfrac12,\ \tfrac12,\ -\tfrac14,\ -\tfrac32,\
+  -\tfrac13,\ 2\} \subset \PP,
+\]
+twelve distinct points. Direct evaluation gives:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{c|c|c|c}
+$x$ & $P(x)$ (resp.\ $\operatorname{coeff}_2 P$) & $Q(x)$ (resp.\ $\operatorname{coeff}_2 Q$) & $f(x)$ \\ \hline
+$\infty$ & $-2$ & $2$ & $-1$ \\
+$-1$ & $0$ & $3$ & $0$ \\
+$0$ & $-1$ & $0$ & $\infty$ \\ \hline
+$-5/2$ & $-6$ & $15$ & $-2/5$ \\
+$-2/5$ & $-3/25$ & $18/25$ & $-1/6$ \\
+$-1/6$ & $-5/9$ & $2/9$ & $-5/2$ \\ \hline
+$-1/2$ & $0$ & $1$ & $0$ \\
+$1/2$ & $-3$ & $0$ & $\infty$ \\
+$-1/4$ & $-3/8$ & $3/8$ & $-1$ \\
+$-3/2$ & $-1$ & $6$ & $-1/6$ \\
+$-1/3$ & $-2/9$ & $5/9$ & $-2/5$ \\
+$2$ & $-15$ & $6$ & $-5/2$ \\
+\end{tabular}
+\end{center}
+
+Thus $f$ has the two $3$-cycles
+\[
+  \infty\to -1\to 0\to\infty, \qquad -\tfrac52\to -\tfrac25\to -\tfrac16\to -\tfrac52,
+\]
+and the tails
+$-\tfrac12\to 0$, $\tfrac12\to\infty$, $-\tfrac14\to -1$, $-\tfrac32\to -\tfrac16$,
+$-\tfrac13\to -\tfrac25$, $2\to -\tfrac52$. In particular $f(S)\subseteq S$.
+
+\begin{lemma}[Lean \texttt{isPreperiodic\_of\_mem}]\label{lem:inv}
+Let $g:X\to X$ and let $S\subseteq X$ be finite with $g(S)\subseteq S$. Then every $x\in S$ is preperiodic
+for $g$.
+\end{lemma}
+
+\begin{proof}
+By induction on $n$, $g^n(x)\in S$ for all $n\ge 0$. So the forward orbit of $x$ is contained in the finite
+set $S$, hence finite.
+\end{proof}
+
+\section{The refutation}
+
+\begin{theorem}\label{thm:main}
+$\MSD(1,2)\ge 12$. In particular $\MSD(1,2)\ne 9$, and the conjecture is false.
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:inv} and $f(S)\subseteq S$, all twelve points of $S$ are $\Q$-rational preperiodic points
+of the degree-$2$ map $f$. Hence every uniform bound $B\in\mathbb{N}_\infty$ (a $B$ with
+$\#T\le B$ for every degree-$2$ map $g$ over $\Q$ and every finite set $T$ of $\Q$-rational preperiodic
+points of $g$) satisfies $12 = \#S \le B$. So $12$ is a lower bound of the set of uniform bounds and
+$12\le\MSD(1,2)$, the infimum of that set. (If no finite bound exists, the only bound is $\infty$ and
+$\MSD(1,2)=\infty\ne 9$.) Since $12 > 9$, $\MSD(1,2)\ne 9$. Equivalently, it is false that every degree-$2$
+rational map over $\Q$ has at most nine $\Q$-rational preperiodic points in $\PP$.
+\end{proof}
+
+\begin{remark}
+The refutation does not depend on whether $\infty$ is counted: the eleven finite points
+$S\setminus\{\infty\}$ are already preperiodic, and $11>9$ (Lean
+\texttt{exists\_degree\_two\_eleven\_affine\_preperiodic}). We claim only that the points of $S$ are
+preperiodic; we do not claim that $S$ is the full set of rational preperiodic points of $f$, nor anything
+about the exact value of $\MSD(1,2)$ beyond $\MSD(1,2)\ge 12$.
+\end{remark}
+
+\paragraph{Context.} The setting matches the one studied in the literature. The abstract of Benedetto,
+Chen, Hyde, Kovacheva and White, arXiv:1312.0491
+(\url{https://arxiv.org/abs/1312.0491v2}) begins: ``Let $f \in Q(z)$ be a polynomial or rational
+function of degree 2. A special case of Morton and Silverman's Dynamical Uniform Boundedness Conjecture
+states that the number of rational preperiodic points of $f$ is bounded above by an absolute constant.''
+We use this only as context; the proof above is self-contained and relies on no result from that paper.
+
+\section{Lean 4 formalization}
+
+The directory \texttt{lean/} contains a Lean~4 project (Lean \texttt{v4.33.1}, Mathlib \texttt{v4.33.1}).
+The single source file \texttt{Conjecture7751/Basic.lean} (namespace \texttt{C7751}) defines
+\texttt{RatMap d} (fields \texttt{p q : $\Q$[X]}, \texttt{IsCoprime p q},
+\texttt{max p.natDegree q.natDegree = d}), the action \texttt{RatMap.act} on \texttt{Option $\Q$} by the
+homogeneous formula, \texttt{IsPreperiodic g x := (Set.range fun n => g\^{}[n] x).Finite}, and
+\[
+  \texttt{MSD d} := \inf\{B\in\mathbb{N}_\infty \mid \forall f : \texttt{RatMap d},\ \forall S,\
+  (\forall x\in S,\ \texttt{IsPreperiodic f.act x}) \to \#S \le B\},
+\]
+with $S$ ranging over \texttt{Finset (Option $\Q$)}. Main results:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.36\textwidth}|>{\raggedright\arraybackslash}p{0.56\textwidth}}
+Lean name & Statement \\ \hline
+\texttt{RatMap.act\_wellDefined} & for $d\ge 1$: $(p(a),q(a))\ne(0,0)$ for all $a$, and
+  $(\operatorname{coeff}_d p,\operatorname{coeff}_d q)\ne(0,0)$ \\
+\texttt{isPreperiodic\_of\_mem} & a point of a finite forward-invariant set is preperiodic \\
+\texttt{P\_Q\_coprime} & \texttt{IsCoprime P Q} (via the B\'ezout identity above) \\
+\texttt{P\_natDegree}, \texttt{Q\_natDegree} & $\deg P = \deg Q = 2$ \\
+\texttt{f\_act\_some}, \texttt{f\_act\_none} & $f([a:1]) = [-2a^2-3a-1 : 2a^2-a]$; $f(\infty) = -1$ \\
+\texttt{S\_card} & $\#S = 12$ \\
+\texttt{S\_invariant} & $\forall x\in S,\ f(x)\in S$ \\
+\texttt{exists\_degree\_two\_twelve\_preperiodic} & some \texttt{g : RatMap 2} and \texttt{T} with
+  $\#T = 12$ and every $x\in T$ preperiodic for $g$ \\
+\texttt{exists\_degree\_two\_eleven\_affine\_preperiodic} & some \texttt{g : RatMap 2} and
+  \texttt{T : Finset $\Q$} with $\#T = 11$ and every \texttt{some a}, $a\in T$, preperiodic \\
+\texttt{twelve\_le\_MSD} & \texttt{(12 : $\mathbb{N}_\infty$) $\le$ MSD 2} \\
+\texttt{MSD\_ne\_nine} & \texttt{MSD 2 $\ne$ 9} \\
+\texttt{not\_all\_le\_nine} & $\neg\,\forall$ \texttt{g : RatMap 2}, $\forall T$,
+  $(\forall x\in T,\ $\texttt{IsPreperiodic g.act x}$) \to \#T\le 9$ \\
+\end{tabular}
+\end{center}
+
+There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom. \texttt{\#print axioms} for
+\texttt{MSD\_ne\_nine}, \texttt{not\_all\_le\_nine}, \texttt{exists\_degree\_two\_eleven\_affine\_preperiodic}
+and \texttt{RatMap.act\_wellDefined} reports only \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}. To check:
+\begin{verbatim}
+cd lean
+lake exe cache get
+lake build
+\end{verbatim}
+
+\end{document}
