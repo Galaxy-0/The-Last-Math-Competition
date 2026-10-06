@@ -1,0 +1,198 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\vol}{\operatorname{vol}}
+\newcommand{\conv}{\operatorname{conv}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\title{A discreteness obstruction to the printed polytope approximation rate}
+\author{C0ldSmi1e\\\small Conjecture 00000001451}
+\date{6 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The conjecture assigns the optimal facet count the rate
+$c_d\varepsilon^{(d-1)/2}$. Both source languages print this positive
+exponent. In dimension two, no natural number can lie between two fixed
+positive multiples of $\sqrt\varepsilon$ for every sufficiently small
+positive $\varepsilon$. Consequently the conjecture fails as an exact
+formula, a positive leading asymptotic, and even a positive two-sided
+order estimate. The Lean formalization retains the actual Euclidean
+volume approximation condition, geometric facets, and attained minimum.
+\end{abstract}
+
+\section{Statement and scope}
+Let $B_d$ be the closed unit ball in Euclidean $\R^d$. The source calls a
+polytope $P$ an $\varepsilon$-approximation when
+\[
+ \vol(B_d\mathbin{\triangle}P)\leq\varepsilon\vol(B_d).
+\]
+It states that the number of facets of the minimal approximating
+polytope is $c_d\varepsilon^{(d-1)/2}$, with an explicit exact constant
+(the constant in the optimal approximation order).
+The unmodified English and Chinese text is supplied in \code{ORIGINAL.md}.
+
+We interpret ``minimal'' as minimizing the number of facets. The phrase
+``is'' allows a literal equality, whereas ``optimal approximation order''
+suggests an asymptotic statement. We address both, as well as the weaker
+positive two-sided order. In each reading a leading or optimal-order
+constant is finite, strictly positive, and independent of $\varepsilon$.
+It suffices to refute dimension $d=2$, even if a formula is required only
+on an arbitrarily small interval $0<\varepsilon<\delta$.
+
+\begin{theorem}\label{thm:main}
+There do not exist $a,b,\delta>0$ such that for every
+$0<\varepsilon<\delta$ an attained minimum facet count $n$ satisfies
+\[
+ a\sqrt\varepsilon\leq n\leq b\sqrt\varepsilon.
+\]
+In particular the printed exact formula and positive leading asymptotic
+are false in dimension two, and hence the dimension-uniform conjecture
+is false.
+\end{theorem}
+
+No sign-corrected rate $\varepsilon^{-(d-1)/2}$ is asserted or refuted
+here. A zero constant is not a positive leading or optimal-order
+constant. We also make no claim about a bare one-sided upper-bound
+formulation. These are distinctions of scope, not alterations of the
+printed exponent.
+
+\newpage
+\section{Geometric definitions and attainment}
+The formal ambient space is \code{EuclideanSpace $\R$ (Fin d)}.
+A polytope is a convex hull $P=\conv(S)$ of a finite set of points.
+A facet is a nonempty proper exposed face $F$ of $P$ with
+\[
+ \dim\operatorname{aff}(F)+1=\dim\operatorname{aff}(P).
+\]
+These are intrinsic dimensions. In the full-dimensional case they give
+the usual codimension-one facets. The definition permits all convex
+polytopes, without imposing containment in or around the ball, symmetry,
+or a prescribed vertex arrangement. Volume is the standard Lebesgue
+volume on Euclidean space; symmetric difference is the actual set
+operation. For positive $\varepsilon$, the nonnegative extended-real
+factor used in Lean is precisely $\varepsilon$.
+
+The relation \code{HasFacetCount P n} means that $\{0,\ldots,n-1\}$ is
+in bijection with the set of these geometric facets. It is not a
+totalized cardinality of an infinite set. The relation
+\code{IsMinimumFacetCount d $\varepsilon$ n} says that an actual
+approximating polytope has $n$ facets and every admissible facet count
+$m$ satisfies $n\leq m$.
+
+\begin{lemma}\label{lem:finite}
+Every polytope has finitely many exposed faces and hence finitely many
+facets. Its finite facet count is unique. For each error, an attained
+minimum facet count exists if and only if an approximating polytope
+exists; that minimum is unique.
+\end{lemma}
+\begin{proof}
+Write $P=\conv(S)$ with $S$ finite. The set $P$ is compact. Every exposed
+face $F$ is compact and convex, and its extreme points are among the
+extreme points of $P$, which are among $S$. By the finite-dimensional
+Krein--Milman theorem,
+$F=\overline{\conv(\operatorname{ext}F)}$.
+Thus exposed faces belong to the image of the finite power set of $S$
+under $A\mapsto\overline{\conv(A)}$. Facets form a subset of this finite
+set. Two bijections with finite ordinal sets force their natural-number
+cardinalities to agree.
+
+If an approximating polytope exists, its finite facet count makes the
+set of admissible natural counts nonempty. Its least element is an
+admissible count, so a polytope attaining it exists. Conversely an
+attained minimum includes such a polytope by definition. Two minima
+satisfy both opposite inequalities, so are equal.
+\end{proof}
+
+All assertions in Lemma~\ref{lem:finite} are formalized. The disproof
+does not need a separate construction of approximants at every error:
+each of the three asserted rates already requires actual minimum
+witnesses at sufficiently small errors. We prove that no such witnesses
+can satisfy the printed rate, even before using their additional
+geometric properties.
+
+\section{The integer obstruction}
+Fix arbitrary $a,b,\delta>0$ and set
+\[
+ t=\tfrac12\min\{\sqrt\delta,1/b\},\qquad \varepsilon=t^2.
+\]
+Then $t>0$, $t<\sqrt\delta$, and $t<1/b$. Hence
+$0<\varepsilon<\delta$, $\sqrt\varepsilon=t$, and $bt<1$.
+If $n\in\N$ satisfied the two bounds in Theorem~\ref{thm:main}, then
+\[
+ 0<at\leq n\leq bt<1.
+\]
+There is no natural number strictly between $0$ and $1$. This proves
+Theorem~\ref{thm:main}. The obstruction covers every natural count;
+there is no numerical search or finite sampling of errors.
+
+\newpage
+\section{The three readings of the conjecture}
+For $d=2$ the printed real exponent is $(2-1)/2=1/2$, so the rate is
+$\sqrt\varepsilon$ exactly.
+
+\paragraph{Exact formula.}
+An equality $n=c\sqrt\varepsilon$ with $c>0$ implies the two-sided bounds
+with $a=b=c$, contradicting Theorem~\ref{thm:main}.
+
+\paragraph{Positive leading asymptotic.}
+Suppose the minimum counts satisfy
+$n(\varepsilon)/(c\sqrt\varepsilon)\longrightarrow1$ as
+$\varepsilon\to0^+$, for $c>0$. Choose the tolerance $1/2$ in the
+ordinary epsilon-delta definition. At all sufficiently small positive
+errors the ratio lies between $1/2$ and $3/2$, and therefore
+\[
+ (c/2)\sqrt\varepsilon\leq n(\varepsilon)
+ \leq (2c)\sqrt\varepsilon.
+\]
+Theorem~\ref{thm:main} again contradicts the claim. The formal predicate
+quantifies actual minimum witnesses relationally for every tolerance;
+Lemma~\ref{lem:finite} makes their count unique wherever they exist.
+The auxiliary module also proves the corresponding obstruction for
+Mathlib's standard filter-based asymptotic equivalence of functions.
+
+\paragraph{Optimal two-sided order.}
+An order $\Theta(\sqrt\varepsilon)$ with positive fixed lower and upper
+constants is exactly the already-refuted pair of bounds. Thus the
+disproof does not rely solely on literal equality of an integer with a
+noninteger. It rules out the natural optimal-order interpretation too.
+Since no positive constant has the claimed behavior, asking for that
+constant to be explicit cannot restore the statement.
+
+\section{Lean correspondence and reproduction}
+\code{Geometry.lean} defines the geometric objects and proves finiteness,
+unique counts, and the equivalence between minimum attainment and
+existence of an approximant. \code{Vanishing.lean} proves the integer
+obstruction for every positive choice of constants and error interval,
+including the standard asymptotic-equivalence version.
+
+\code{Solution.lean} defines all three readings using attained geometric
+minimum witnesses. The final universal negations in namespace
+\code{TLMC1451} are:
+\begin{flushleft}
+\code{conjecture\_exact\_false}\\
+\code{conjecture\_asymptotic\_false}\\
+\code{conjecture\_order\_false}.
+\end{flushleft}
+Each follows from a corresponding dimension-two theorem; the universal
+domain $d\geq2$ contains that counterexample dimension.
+
+The project pins Lean 4.19.0 and Mathlib v4.19.0, with exact dependency
+revisions in its manifest. From the supplied \code{lean/} directory,
+use the supplied manifest to obtain dependencies and the Mathlib cache
+with \code{lake exe cache get}, then run \code{lake build}.
+The supplied verification script additionally replays every authored
+module with warnings treated as errors and inspects compiled axiom
+dependencies. See \code{VERIFICATION.md} for the recorded commands,
+source identities, and audit scope. The mathematical argument is
+symbolic; it relies on no auxiliary numerical computation. Local
+verification and independent pre-submission review do not constitute
+maintainer acceptance.
+\end{document}
