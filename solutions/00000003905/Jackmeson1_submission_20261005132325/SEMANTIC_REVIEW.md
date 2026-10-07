@@ -1,0 +1,9 @@
+# Semantic review (independent, pre-submission)
+
+An independent model reviewer (GPT-6 Astra, reasoning effort "xhigh", separate session) received the exact conjecture text, the full LaTeX report, the full Lean source and a reviewer checklist distilled from 93 closed-unmerged pull requests of this competition. It was asked whether the Lean main theorem settles the conjecture as written, whether the reading is faithful and not a loophole, whether the Lean definitions are faithful to the standard notions, whether the mathematics is correct, and whether report and Lean match. This is an automated review prepared by the submitter, not the competition's maintainer review.
+
+**Verdict:** accept = True; severity = none; reading faithful = True.
+
+**Reviewer notes (verbatim):**
+
+> The change to I = (x) in k[x,y] is acceptable: the conjecture imposes no restriction excluding nonzero proper principal ideals of height below the ring dimension. Lean uses the actual polynomial ring and ideal, Mathlib's minimal generator count, Krull dimension and ideal height, and proves that its Frobenius-power definition agrees with powers of any generating set in prime characteristic. It establishes dimension 2, height 1 and mu(I^[p^e]) = 1 for every e. The infinite interpolation argument forces every eventual representing polynomial over any characteristic-zero field to be the constant 1, contradicting the required degree 1. The additive degree condition is equivalent to the stated condition in this example, and the supplementary theorem also handles Polynomial.degree. This refutes the degree clause and hence the conjecture's conjunction; refuting polynomiality or the leading-coefficient clause separately is unnecessary. The report's mathematical argument is correct and complete and matches the Lean source. No substantive issues were found under the stipulated compilation and axiom guarantees.
