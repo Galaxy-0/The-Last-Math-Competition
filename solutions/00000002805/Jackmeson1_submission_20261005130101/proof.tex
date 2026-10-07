@@ -1,0 +1,120 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Conjecture 00000002805 is false:\\ the Schilder rate does not vanish on the Cameron--Martin unit ball}
+\author{Jackmeson1}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+Conjecture 00000002805 (English text, verbatim): ``Definition: Schilder's theorem: the LDP on
+the path space of Brownian motion. Conjecture: Cameron--Martin rigidity of the Schilder rate: the
+rate function vanishes if and only if the path lies in the Cameron--Martin unit ball, and the
+spectral distribution of the rate on the sphere is an explicit chi-square-type law.'' The Chinese
+text says the same.
+
+\paragraph{Reading.} The conjecture is a conjunction. We refute its first clause, the
+``Cameron--Martin rigidity'' named in the title:
+\[ I(\omega)=0 \iff \omega \text{ lies in the Cameron--Martin unit ball}, \tag{$\ast$}\]
+where $I$ is the rate function of Schilder's theorem. We refute $(\ast)$ for the closed unit ball
+$\{\|\omega\|_H\le 1\}$ and for the open unit ball $\{\|\omega\|_H<1\}$, in every dimension
+$d\ge 1$ and for every time horizon $T>0$. The second clause (the ``spectral distribution on the
+sphere'') is not interpreted and not used; refuting one conjunct refutes the conjunction.
+
+\section{Definitions (Schilder's theorem)}
+We use the statement of Schilder's theorem as given on Wikipedia (``Schilder's theorem'', retrieved
+2026-10-05). Let $B$ be a standard Brownian motion in $\mathbb R^d$ started at $0$, and
+$C_0=C_0([0,T];\mathbb R^d)$ the continuous paths $\omega$ on $[0,T]$ with $\omega(0)=0$. For
+$\varepsilon>0$ the laws of $\sqrt\varepsilon B$ satisfy the large deviation principle on $C_0$
+``with good rate function $I : C_0 \to \mathbb R\cup\{+\infty\}$ given by
+$I(\omega)=\frac12\int_0^T|\dot\omega(t)|^2\,dt$ if $\omega$ is absolutely continuous, and
+$I(\omega)=+\infty$ otherwise''. The Cameron--Martin space is ``the subspace of absolutely
+continuous functions whose derivative is in $L^2$''. Its norm is
+$\|\omega\|_H=\big(\int_0^T|\dot\omega(t)|^2\,dt\big)^{1/2}$, so $I(\omega)=\frac12\|\omega\|_H^2$
+on $H$.
+
+\begin{definition}[as in Lean]
+$\mathbb R^d$ is \texttt{EuclideanSpace R (Fin d)}; paths are functions $\omega:\mathbb R\to\mathbb R^d$
+looked at on $[0,T]$.
+\begin{itemize}
+\item \texttt{PathSpace d T}: $\omega$ continuous on $[0,T]$ and $\omega(0)=0$.
+\item \texttt{CameronMartin d T}: $\omega(0)=0$, $\omega$ absolutely continuous on $[0,T]$
+  (Mathlib's \texttt{AbsolutelyContinuousOnInterval}), and $\dot\omega=$ \texttt{deriv}~$\omega$ in
+  $L^2([0,T];\mathbb R^d)$ (\texttt{MemLp (deriv omega) 2}).
+\item \texttt{cmNormSq T omega} $=\int_{[0,T]}\|\dot\omega(t)\|^2\,dt\in[0,\infty]$ (lower Lebesgue
+  integral), i.e.\ $\|\omega\|_H^2$.
+\item \texttt{cmClosedUnitBall}, \texttt{cmOpenUnitBall}: $\omega\in H$ with
+  $\|\omega\|_H^2\le 1$, resp.\ $<1$.
+\item \texttt{schilderRate d T omega} $=\frac12\,\|\omega\|_H^2$ if $\omega$ is absolutely continuous on
+  $[0,T]$, and $+\infty$ otherwise (values in $[0,\infty]$).
+\end{itemize}
+\end{definition}
+Using the lower integral makes $I(\omega)=+\infty$ automatically when $\omega$ is absolutely
+continuous but $\dot\omega\notin L^2$, which agrees with the textbook rate.
+
+\section{The counterexample}
+Let $e_0$ be the first standard basis vector of $\mathbb R^d$ ($d\ge1$), put
+$w=\frac{1}{2\sqrt T}e_0$ and $\omega_0(t)=t\,w$.
+
+\begin{theorem}
+$\omega_0\in C_0$, $\omega_0\in H$, $\|\omega_0\|_H^2=\frac14$ and $I(\omega_0)=\frac18$.
+Hence $\omega_0$ lies in the open (and so in the closed) Cameron--Martin unit ball but
+$I(\omega_0)\ne0$, and $(\ast)$ fails for both balls.
+\end{theorem}
+\begin{proof}
+$\omega_0$ is linear, so it is continuous, $\omega_0(0)=0$, it is $C^1$ and hence absolutely
+continuous on $[0,T]$, and $\dot\omega_0(t)=w$ for every $t$. A constant is in $L^2$ of the finite
+measure space $[0,T]$, so $\omega_0\in H$. Since $\|e_0\|=1$, $\|w\|=\frac{1}{2\sqrt T}$ and
+\[\|\omega_0\|_H^2=\int_0^T\frac{1}{4T}\,dt=\frac14<1,\qquad I(\omega_0)=\frac12\cdot\frac14=\frac18\neq0.\]
+If $(\ast)$ held for all $\omega\in C_0$, the implication ``in the ball $\Rightarrow I=0$'' applied
+to $\omega_0$ would give $I(\omega_0)=0$, a contradiction.
+\end{proof}
+
+\paragraph{Remark (what is true).} $I(\omega)=\frac12\|\omega\|_H^2$ vanishes exactly at the zero
+path, while the Cameron--Martin unit ball is the sublevel set $\{I\le\frac12\}$. This remark is not
+formalized and is not used.
+
+\section{Lean formalization}
+File \texttt{lean/Conjecture2805/Basic.lean} (148 lines, only import \texttt{Mathlib}), namespace
+\texttt{C2805}. Objects: \texttt{PathSpace}, \texttt{CameronMartin}, \texttt{cmNormSq},
+\texttt{cmClosedUnitBall}, \texttt{cmOpenUnitBall}, \texttt{schilderRate} as above;
+\texttt{dir d T} $=\frac{1}{2\sqrt T}e_0$; \texttt{straightPath d T} $=t\mapsto t\cdot$\texttt{dir d T}.
+Lemmas: \texttt{straightPath\_mem\_pathSpace}, \texttt{straightPath\_mem\_cameronMartin}
+(absolute continuity from \texttt{ContDiffOn.absolutelyContinuousOnInterval}),
+\texttt{cmNormSq\_straightPath} ($=1/4$), \texttt{schilderRate\_straightPath} ($=1/8$),
+\texttt{straightPath\_mem\_open\_ball}, \texttt{straightPath\_mem\_closed\_ball},
+\texttt{schilderRate\_straightPath\_ne\_zero}. Main theorems, for every $d$ with
+\texttt{[NeZero d]} and every $T>0$:
+\begin{itemize}
+\item \texttt{schilder\_rigidity\_false}: \texttt{not (forall omega in PathSpace d T,
+  (schilderRate d T omega = 0 <-> omega in cmClosedUnitBall d T))};
+\item \texttt{schilder\_rigidity\_false\_open}: the same with \texttt{cmOpenUnitBall}.
+\end{itemize}
+\texttt{\#print axioms} for both main theorems and for \texttt{schilderRate\_straightPath} gives
+\texttt{[propext, Classical.choice, Quot.sound]}; no \texttt{sorry}, no \texttt{native\_decide}.
+Checked with Lean 4.33.1 and Mathlib v4.33.1 (\texttt{lake build}).
+
+\section{Relation to the earlier submission}
+An earlier submission (PR \#277, orionsheep) gave the same counterexample $\omega(t)=t/2$ but was
+closed. The reviewer wrote that its main theorem ``is entirely vacuous $\mathbb N$ trivia
+($\forall c>0$, $0<c\cdot c$, $1\le2$, $1\ne0$, $2=1\cdot2$, $1\ne2$); the Schilder rate,
+Cameron--Martin space, sphere, and chi-square law never appear in Lean''. This submission defines
+in Lean the path space $C_0([0,T];\mathbb R^d)$, the Cameron--Martin space (absolutely continuous,
+derivative in $L^2$), the Cameron--Martin norm and both unit balls, and Schilder's rate function
+with the value $+\infty$ off the absolutely continuous paths; it proves the counterexample for
+every $d\ge1$ and $T>0$. Unlike PR \#277 it makes no claim about the second clause (the sphere and
+the chi-square law), which is left uninterpreted.
+
+\section*{Source}
+Wikipedia, ``Schilder's theorem'', \url{https://en.wikipedia.org/wiki/Schilder%27s_theorem}
+(definitions quoted above).
+\end{document}
