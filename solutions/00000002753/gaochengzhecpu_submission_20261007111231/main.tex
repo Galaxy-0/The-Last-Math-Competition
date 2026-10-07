@@ -1,0 +1,51 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\hypersetup{hidelinks}
+\newtheorem{proposition}{Proposition}
+\title{Disproof of Conjecture 00000002753\\An infinite-dimensional algebra with a nested identity}
+\author{gaochengzhecpu}\date{}
+\begin{document}\maketitle
+\noindent\textbf{Claim addressed.} The conjecture states that no nontrivial nested commutator identity of depth $k$ exists on infinite-dimensional algebras. The unital $\mathbb Q$-algebra $\mathbb Q[T]$ is infinite-dimensional and satisfies the nonzero depth-two polynomial identity $[[X,Y],Z]=0$.
+
+\begin{proposition}
+The noncommutative polynomial
+\[
+ P(X,Y,Z)=(XY-YX)Z-Z(XY-YX)
+\]
+is nonzero in $\mathbb Q\langle X,Y,Z\rangle$, but every substitution of elements of $\mathbb Q[T]$ makes it zero. The vector space $\mathbb Q[T]$ is infinite-dimensional over $\mathbb Q$.
+\end{proposition}
+\begin{proof}
+The monomials $1,T,T^2,\ldots$ are linearly independent, by uniqueness of polynomial coefficients. Thus $\mathbb Q[T]$ is infinite-dimensional. Its multiplication is commutative, so $xy-yx=0$ for all $x,y\in\mathbb Q[T]$. Therefore $P(x,y,z)=0$ for every $x,y,z$ in this algebra.
+
+Nontriviality refers to the identity polynomial, not to its value after substitution in the algebra. To verify it directly, take matrices over $\mathbb Q$:
+\[
+ A=\begin{pmatrix}0&1\\0&0\end{pmatrix},\qquad
+ B=\begin{pmatrix}0&0\\1&0\end{pmatrix}.
+\]
+Then
+\[
+ AB-BA=\begin{pmatrix}1&0\\0&-1\end{pmatrix},\qquad
+ P(A,B,A)=\begin{pmatrix}0&2\\0&0\end{pmatrix}\ne0.
+\]
+If $P$ were the zero element of the free associative algebra, every evaluation in every $\mathbb Q$-algebra would be zero. The displayed evaluation proves that it is not. Equivalently, its expansion has the four distinct words $XYZ,YXZ,ZXY,ZYX$ with coefficients $1,-1,-1,1$.
+\end{proof}
+
+\noindent\textbf{Scope.} This is a nested identity with two commutator operations and three indeterminates, so it does not depend on calling a single commutator ``nested.'' The algebra is nonzero, unital, over a characteristic-zero field, and infinite-dimensional over that field. A polynomial identity is nontrivial when its polynomial in the free associative algebra is nonzero. The source does not restrict its infinite-dimensional algebras to noncommutative, simple or identity-free classes. The separate minimal-length assertion for matrix algebras is not addressed.
+
+\section*{Lean correspondence and reproduction}
+The formal polynomial \texttt{nestedCommutator} is an element of Mathlib's actual \texttt{FreeAlgebra Q (Fin 3)}. Evaluation uses the universal algebra homomorphism \texttt{FreeAlgebra.lift}, not a custom scalar statistic. The matrix evaluation above is checked using genuine rational matrices and matrix multiplication; its $(0,1)$ entry is $2$, proving the free-algebra element is nonzero.
+
+The example algebra is the actual \texttt{Polynomial Q}. Mathlib's \texttt{Polynomial.not\_finite} proves it is not a finite module over $\mathbb Q$, which over a field is exactly failure of finite dimensionality. The identity theorem quantifies over every assignment of its three indeterminates to this algebra and proves the resulting evaluation is zero. The final theorem combines actual infinite dimensionality, a nonzero free polynomial and universal vanishing on the example.
+
+Inside \texttt{lean/}, run \texttt{lake build}, followed by
+\begin{center}\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+Lean is pinned to 4.19.0 and Mathlib to
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+All transitive dependencies are pinned. The supplemental \texttt{verify.py} checks the four free words and the matrix evaluation with exact integer arithmetic. There are no proof gaps, custom axioms or native computation shortcuts. Actual build logs, axiom dependencies and artifact hashes are in \texttt{verification/}. Author and delegated-agent review records are separate; no external independent review is claimed.
+
+\begin{thebibliography}{9}
+\bibitem{source} The Last Math Competition,
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000002753.md}{Conjecture 00000002753 (original bilingual source)}.
+\end{thebibliography}
+\end{document}
