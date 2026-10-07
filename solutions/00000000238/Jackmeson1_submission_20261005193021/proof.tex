@@ -1,0 +1,185 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\covol}{\operatorname{covol}}
+\newcommand{\vol}{\operatorname{vol}}
+
+\title{Disproof of conjecture 00000000238:\\ $D_7$ is not the densest lattice packing in dimension 7}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clause refuted}
+
+\textbf{Statement (English, verbatim).} Definition: The sphere packing density is the supremal
+fraction of space filled by non-overlapping unit balls. Conjecture: The densest lattice packings in
+dimensions five, six, and seven are given by the D lattices; and the determination is settled
+through Voronoi cell volumes. (D-lattice Voronoi volume optimality in dimensions 5-7)
+(The Chinese text states the same.)
+
+\textbf{Reading.} The main clause is a conjunction over $n\in\{5,6,7\}$ of
+\[
+  \text{(C$_n$)}\qquad \text{the densest lattice packing of unit balls in } \R^n \text{ is given by } D_n ,
+\]
+where $D_n=\{x\in\Z^n : x_1+\dots+x_n \text{ even}\}$ is the standard root lattice. We refute
+(C$_7$), which refutes the conjunction and hence the conjecture. We read ``given by $D_7$'' as:
+the unit balls are centred at the points of a similar copy $c\,\varphi(D_7)$ of $D_7$ (any scale
+$c\neq 0$, any linear isometry $\varphi$). We refute two readings:
+\begin{itemize}
+\item[(R1)] some lattice packing of unit balls centred at a similar copy of $D_7$ is at least as
+  dense as every lattice packing of unit balls (\texttt{not\_D7\_densest});
+\item[(R2)] (stronger) there is a lattice packing of unit balls that is \emph{strictly} denser than
+  every lattice packing of unit balls centred at a similar copy of $D_7$
+  (\texttt{exists\_packing\_denser\_than\_D7}). So no maximizer is of $D_7$ type.
+\end{itemize}
+\textbf{Not addressed.} The cases $n=5$ and $n=6$ are not used. The trailing clause ``the
+determination is settled through Voronoi cell volumes'' describes a method; it is the second part
+of a conjunction and is not needed. (The Voronoi cell of a lattice is a fundamental domain, so its
+volume is the covolume used below.)
+
+\section{Definitions (as in the Lean file)}
+
+We work in $\R^n$ = \texttt{EuclideanSpace R (Fin n)} with Lebesgue measure $\vol$ (Mathlib's
+\texttt{volume}) and Euclidean distance.
+
+\begin{definition}[lattice packing of unit balls; \texttt{LatticePacking n}]
+A $\Z$-submodule $\Lambda\subset\R^n$ that is discrete and spans $\R^n$ over $\R$ (Mathlib's
+\texttt{DiscreteTopology} and \texttt{IsZLattice}), such that for distinct $x,y\in\Lambda$ the open
+unit balls $B(x,1)$ and $B(y,1)$ are disjoint. Equivalently $|x-y|\ge 2$ for $x\neq y$ in $\Lambda$
+(Mathlib \texttt{disjoint\_ball\_ball\_iff}); compare the Leech lattice article: ``The last condition
+is equivalent to the condition that unit balls centered at the points of $\Lambda_{24}$ do not
+overlap.''
+\end{definition}
+
+\begin{definition}[density; \texttt{LatticePacking.density}]
+$\Delta(P)=\vol(B(0,1))/\covol(\Lambda)$, where $\covol$ is Mathlib's \texttt{ZLattice.covolume},
+the volume of a fundamental domain (``The n-dimensional volume of this fundamental domain is
+sometimes called the covolume of the lattice'', Wikipedia, Lattice (group)).
+\end{definition}
+
+\begin{lemma}[\texttt{LatticePacking.filled\_fraction}]
+For every fundamental domain $F$ of $\Lambda$,
+$\vol\big((\bigcup_{x\in\Lambda}B(x,1))\cap F\big)/\vol(F)=\Delta(P)$.
+\end{lemma}
+\begin{proof}
+$\vol(B(0,1))=\sum_{g\in\Lambda}\vol((g+B(0,1))\cap F)$ (Mathlib
+\texttt{IsAddFundamentalDomain.measure\_eq\_tsum}), $g+B(0,1)=B(g,1)$, and the sets
+$B(g,1)\cap F$ are pairwise disjoint, so the sum is $\vol((\bigcup_g B(g,1))\cap F)$. Finally
+$\covol(\Lambda)=\vol(F)$.
+\end{proof}
+So $\Delta(P)$ is the proportion of each fundamental cell, hence (by periodicity) of space, that the
+balls fill; ``The proportion of space filled by the spheres is called the packing density of the
+arrangement'' (Wikipedia, Sphere packing).
+
+\begin{definition}[\texttt{Dlat n}, \texttt{IsSimilarCopy}, \texttt{DLatticeIsDensest}]
+$D_n=\{x\in\R^n:\exists z\in\Z^n,\ x=z,\ \sum_i z_i \text{ even}\}$ (``The Dn root lattice ...
+consists of all integer vectors whose components sum to an even integer'', Wikipedia, Root system).
+$\Lambda$ is a similar copy of $M$ if $\Lambda=\{c\,\varphi(x):x\in M\}$ for some real $c\neq0$ and
+linear isometry $\varphi$ of $\R^n$. \texttt{DLatticeIsDensest n} says: there is a lattice packing
+$Q$ with $\Lambda_Q$ a similar copy of $D_n$ and $\Delta(P)\le\Delta(Q)$ for every lattice
+packing $P$.
+\end{definition}
+
+\section{Proof}
+
+\begin{lemma}[\texttt{covolume\_span}]
+If $b$ is an $\R$-basis of $\R^7$ then $\covol(\operatorname{span}_\Z b)=|\det b|$ (determinant
+in the standard basis).
+\end{lemma}
+\begin{proof}
+Mathlib \texttt{ZLattice.covolume\_eq\_det\_mul\_measureReal} with the standard basis, whose
+fundamental parallelepiped (the unit cube) has volume $1$.
+\end{proof}
+
+\textbf{The witness (Construction A).} Let $C\subset\mathbb{F}_2^7$ be the binary $[7,3,4]$
+simplex code with generators $g_1=1000111$, $g_2=0101011$, $g_3=0011101$. Its seven nonzero
+codewords all have weight $4$; Lean checks weight $\ge 4$ by \texttt{decide} over the eight messages
+(\texttt{weight\_ge}). Let $E=\{x\in\Z^7: x \bmod 2\in C\}$ (\texttt{E7A}).
+
+\begin{lemma}[\texttt{sum\_sq\_ge}, \texttt{E7A\_norm}]
+Every nonzero $x\in E$ has $|x|\ge 2$.
+\end{lemma}
+\begin{proof}
+If $x\bmod 2=0$, some coordinate is a nonzero even integer, so $|x|^2\ge4$. Otherwise $x\bmod 2$ is
+a nonzero codeword, so at least $4$ coordinates are odd, and $|x|^2\ge4$.
+\end{proof}
+
+Let $\Lambda_0$ be the $\Z$-span of the rows of
+$A_L$ = rows $g_1,g_2,g_3,2e_4,2e_5,2e_6,2e_7$ (as integer vectors). The rows lie in $E$, so
+$\Lambda_0\subseteq E$ (\texttt{span\_le\_E7A}). The matrix $A_L$ is upper triangular with
+diagonal $1,1,1,2,2,2,2$, so $\det A_L=16$ (\texttt{det\_AL}). Hence $P_0=(\Lambda_0)$ is a lattice
+packing of unit balls (\texttt{PE7}) with $\Delta(P_0)=\vol(B(0,1))/16$ (\texttt{PE7\_density}).
+
+\begin{remark}
+In fact $\Lambda_0=E$ (both have index $16$ in $\Z^7$), and $E$ is an integral model of
+$\sqrt2\,E_7$. Neither fact is used or formalized.
+\end{remark}
+
+\begin{lemma}[\texttt{Dlat\_eq\_span}, \texttt{det\_AD}]
+$D_7$ is the $\Z$-span of $e_j+e_7$ $(1\le j\le 6)$ and $2e_7$; this basis matrix $A_D$ is upper
+triangular with $\det A_D=2$.
+\end{lemma}
+\begin{proof}
+The generators have even coordinate sum. Conversely, if $\sum_i z_i=2k$ then
+$z=\sum_{j\le6}z_j(e_j+e_7)+(k-\sum_{j\le6}z_j)\,2e_7$.
+\end{proof}
+
+\begin{theorem}[\texttt{similar\_D7\_density\_lt}]
+If $Q$ is a lattice packing of unit balls with $\Lambda_Q=c\,\varphi(D_7)$, then
+$\Delta(Q)<\Delta(P_0)$.
+\end{theorem}
+\begin{proof}
+$\Lambda_Q$ is the $\Z$-span of the basis $c\,\varphi(\text{rows of }A_D)$, so
+$\covol(\Lambda_Q)=|c|^7\,|\det\varphi|\cdot 2=2|c|^7$, using $|\det\varphi|=1$
+(\texttt{abs\_det\_isometry}, from Mathlib's
+\texttt{OrthonormalBasis.det\_to\_matrix\_orthonormalBasis\_real}). The vector $v=e_1+e_7\in D_7$
+has $|v|=\sqrt2$, so $c\,\varphi(v)\in\Lambda_Q$ is nonzero of length $|c|\sqrt2$. Non-overlap of
+the balls at $c\,\varphi(v)$ and $0$ gives $|c|\sqrt2\ge2$, so $|c|\ge\sqrt2$ and
+$|c|^7\ge 8\sqrt2$. Therefore $\Delta(Q)=\vol(B(0,1))/(2|c|^7)\le\vol(B(0,1))/(16\sqrt2)
+<\vol(B(0,1))/16=\Delta(P_0)$.
+\end{proof}
+
+Taking $P=P_0$ gives (R2), and (R2) implies (R1) is false. In center-density terms: $P_0$ has
+$1/16$ and the best $D_7$ packing ($c=\sqrt2$) has $2^{-9/2}\approx 0.0442$.
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture238/Basic.lean} (360 lines, only \texttt{import Mathlib}), namespace
+\texttt{C238}. Main theorems:
+(Unicode symbols of the Lean source are transliterated to ASCII here.)
+\begin{verbatim}
+theorem exists_packing_denser_than_D7 :
+    exists P : LatticePacking 7, forall Q : LatticePacking 7,
+      IsSimilarCopy (Dlat 7) Q.Lambda -> Q.density < P.density
+theorem not_D7_densest : not (DLatticeIsDensest 7)
+theorem conjecture_238_false :
+    not (forall n in ({5, 6, 7} : Finset Nat), DLatticeIsDensest n)
+theorem LatticePacking.filled_fraction {n : Nat} (P : LatticePacking n)
+    {F : Set (Rn n)} (hF : IsAddFundamentalDomain P.Lambda F volume) :
+    volume.real ((Union x : P.Lambda, ball (x : Rn n) 1) inter F)
+      / volume.real F = P.density
+\end{verbatim}
+\textbf{Axiom audit.} \texttt{\#print axioms} for each of these theorems reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide}, and no added axiom. \texttt{lake build} succeeds.
+
+\textbf{Conventions.} Balls are open Euclidean balls. ``Lattice'' means a discrete, full-rank
+$\Z$-submodule (Mathlib \texttt{IsZLattice}). Similar copies allow any real $c\neq0$ and any linear
+isometry. Density is $\vol(B(0,1))/\covol$, which equals the filled fraction of any fundamental
+domain (Lemma \texttt{filled\_fraction}). The volume of $B(0,1)$ is never computed; it cancels.
+
+\end{document}
