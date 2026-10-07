@@ -1,0 +1,173 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Disproof of Conjecture 00000003991:\\ the functional pigeonhole principle has short cutting-plane refutations}
+\author{Jackmeson1}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and its reading}
+
+\textbf{Statement (English text of the problem).} \emph{Definition: The functional pigeonhole principle
+PHP\_n is the formalization of the absence of an injection from n+1 to n. Conjecture: The cutting plane
+proof length lower bound of PHP\_n is $2^{n/8}$, and the exponential constant $1/8$ cannot be improved under
+cutting plane rules with bounded coefficients.} The Chinese text says the same: the lower bound for the
+proof length of PHP\_n in the cutting-plane system is $2^{n/8}$, and the constant $1/8$ cannot be improved
+under cutting-plane rules with bounded coefficients.
+
+\textbf{Reading.} The conjecture is a conjunction. Its first clause says that every cutting-plane (CP)
+refutation of PHP\_n has length at least $2^{n/8}$. We read this in its weakest form, ``for all
+sufficiently large $n$''. The ``for all $n$'' version is stronger, so it fails too. The second clause
+(``$1/8$ cannot be improved'') presupposes the first. We refute the first clause, and with it the
+conjunction. We show:
+\begin{enumerate}
+\item For every $n\ge 1$, PHP\_n has a CP refutation with at most $8n^3$ lines. Every coefficient and every
+  constant term in it has absolute value at most $2n$.
+\item Hence, for every $\varepsilon>0$ and $c>0$, there is no lower bound $c\cdot 2^{\varepsilon n}$, even for
+  all large $n$. In particular there is no lower bound $2^{n/8}$. This also holds when only refutations
+  whose coefficients are bounded by $2n$ are counted, i.e.\ CP with polynomially bounded coefficients.
+\end{enumerate}
+
+\textbf{Readings that are not addressed.} (a) The reading in which \emph{both} clauses concern CP whose
+coefficients are bounded by an absolute constant independent of $n$. Our coefficients grow like $2n$, so
+we do not address this reading. (b) Clause 2 taken on its own, as ``no lower bound $2^{cn}$ with $c>1/8$
+holds under bounded coefficients''. Our result is consistent with this statement, so we do not claim
+that it is false. (c) ``Length'' always means the number of lines, as in the definition quoted below.
+Bit size is not formalized in Lean (but see Remark~\ref{rem:bits}).
+
+\section{Definitions (as in the Lean file)}
+
+\textbf{Cutting planes.} Dantchev, Galesi, Ghani and Martin \cite{DGGM} (arXiv:2102.07622) attribute the
+definition to Cook, Coullard and Tur\'an \cite{CCT}. In their words: ``The Cutting Planes (CP) proof system
+is equipped with boolean axioms and two inference rules'': the Boolean axioms $x\ge 0$ and $-x\ge -1$;
+Linear Combination, from $\mathbf a\mathbf x\ge c$ and $\mathbf b\mathbf x\ge d$ infer
+$\alpha\mathbf a\mathbf x+\beta\mathbf b\mathbf x\ge \alpha c+\beta d$; and Rounding, from
+$\alpha\mathbf a\mathbf x\ge b$ infer $\mathbf a\mathbf x\ge\lceil b/\alpha\rceil$. Moreover, ``A CP
+refutation of some unsatisfiable set of integer linear inequalities is a derivation of $0\geq 1$ by the
+aforementioned inference rules from the inequalities in $\mathcal F$'', and ``The length of a CP
+refutation is the number of inequalities in the sequence.'' Beame et al.\ \cite{BFIKPPR}
+(arXiv:1710.03219) state the rules as follows: ``From inequalities $c_ix\geq d_i, c_jx\geq d_j$, deduce any
+non-negative linear combination with integer coefficients'', and ``From an inequality $c_ix\geq d_i$, if
+$t\in\mathbb{Z}$ divides all entries in $c_i$ then deduce $(c_i/t)x\geq\lceil d_i/t\rceil$''.
+
+In Lean (\texttt{C3991.Line}, \texttt{Step}, \texttt{IsDerivation}, \texttt{IsRefutation}) a line is a pair
+$(a,b)$ with $a:V\to\mathbb Z$ and $b\in\mathbb Z$. It stands for $\sum_v a_vx_v\ge b$. A \texttt{Step} from
+the axiom set $\mathrm{Ax}$ and the earlier lines is one of the following: a member of $\mathrm{Ax}$; a
+Boolean axiom $x_v\ge 0$ or $-x_v\ge -1$; $\alpha A+\beta B$ for earlier lines $A,B$ and integers
+$\alpha,\beta>0$; or $(a/\alpha,\lceil b/\alpha\rceil)$ for an earlier line $(a,b)$ and an integer $\alpha>0$
+that divides every $a_v$. The ceiling is taken in $\mathbb Q$. A derivation is a list of lines in which
+every line is a \texttt{Step} from the lines strictly before it. A refutation is a derivation whose last
+line is $0\ge 1$. Its length is the number of lines. Each of our rules is an instance of the rules quoted
+from \cite{BFIKPPR}: we use positive rather than non-negative multipliers. So a short refutation in our
+system is also a short refutation in theirs. As in \cite{BFIKPPR}, the constant term $b$ of the rounding
+rule may be any integer: this is the standard Cutting Planes rounding rule with integer right-hand
+side, as stated in \cite{BFIKPPR}, and it is the rule our construction uses (it rounds the negative
+constant $-(2m-1)$). The rule table in \cite{DGGM} writes $b\in\mathbb Z^+$; we do not rely on any
+inference about that table, and our disproof is for standard CP as just stated. \texttt{Bdd B L}
+means that all coefficients and the constant term of $L$ have absolute value at most $B$.
+
+\textbf{The functional pigeonhole principle.} \cite{DGGM} defines $\mathrm{PHP}^m_n$ as the inequalities
+$\sum_{j=1}^n P_{i,j}\ge 1$ (``every pigeon goes into some hole'') and $P_{i,k}+P_{j,k}\le 1$ for $i\ne j$
+(``at most one pigeon enters any given hole''). The functional version adds that no pigeon is in two
+holes. In Lean, \texttt{Var n} is $\mathrm{Fin}(n+1)\times\mathrm{Fin}\,n$, and \texttt{FPHP n} consists of the
+following axioms:
+\begin{itemize}
+\item \texttt{pigeonAx i}: $\sum_j x_{i,j}\ge 1$;
+\item \texttt{holeAx i i' j}: $-x_{i,j}-x_{i',j}\ge -1$ for $i\ne i'$;
+\item \texttt{funAx i j j'}: $-x_{i,j}-x_{i,j'}\ge -1$ for $j\ne j'$.
+\end{itemize}
+\textbf{Faithfulness} (\texttt{fphp\_sat\_iff}). A $0/1$ assignment satisfies all of \texttt{FPHP n}
+(\texttt{Sat}: $b\le\sum_v a_vx_v$) if and only if it is the indicator of the graph of an injective map
+$\mathrm{Fin}(n+1)\to\mathrm{Fin}\,n$. By \texttt{fphp\_unsat}, no such assignment exists. So \texttt{FPHP n} is
+exactly the formalization of the absence of an injection from $n+1$ to $n$.
+
+\section{The short refutation}
+
+Fix $n\ge1$ and a hole $j$. Let $T_{j,m}$ be the line $-\sum_{i<m}x_{i,j}\ge -1$ (\texttt{T j m}). The
+pigeons are $0,\dots,n$.
+
+\begin{lemma}[\texttt{hole\_step}, \texttt{C\_zero}, \texttt{C\_succ}, \texttt{round\_C}]
+Let $2\le m\le n$. From $T_{j,m}$ one derives $T_{j,m+1}$ with $2m+1\le 2n+1$ further lines.
+\end{lemma}
+\begin{proof}
+Write down the hole axioms $h_k=\texttt{holeAx}\ k\ m\ j$ for $k=0,\dots,m-1$, and form
+$C_0=(m-1)T_{j,m}+h_0$ and $C_k=C_{k-1}+h_k$. Then
+$C_{m-1}=(m-1)T_{j,m}+\sum_{k<m}h_k$ is the line $-m\sum_{i\le m}x_{i,j}\ge -(2m-1)$
+(\texttt{C\_last\_coeff}). Every coefficient is divisible by $m$. Rounding by $m$ gives
+$-\sum_{i\le m}x_{i,j}\ge\lceil-(2m-1)/m\rceil=-1$, which is $T_{j,m+1}$.
+\end{proof}
+
+The line $T_{j,2}$ is the hole axiom $\texttt{holeAx}\ 0\ 1\ j$ (\texttt{T\_two}). Iterating the lemma
+gives $T_{j,n+1}$, i.e.\ $-\sum_i x_{i,j}\ge-1$, with at most $1+n(2n+1)$ lines per hole
+(\texttt{hole\_full}). Doing this for all $n$ holes takes at most $n(1+n(2n+1))$ lines (\texttt{all\_holes}).
+Next, the pigeon axioms are summed into $G_n:\ \sum_{i,j}x_{i,j}\ge n+1$ with $2n+1$ lines
+(\texttt{pigeons}). Finally, adding the $n$ lines $T_{j,n+1}$ to $G_n$ gives
+$H_n:\ 0\ge (n+1)-n=1$ with $n$ further lines (\texttt{holes\_sum}, \texttt{H\_n}). The derivation is cut
+off after its first $0\ge1$ line (\texttt{refutation\_of\_mem}). The total length is at most
+$2n^3+n^2+4n+1\le 8n^3$. The functionality axioms are not used. They are only part of the axiom set.
+The largest coefficients occur in $C_k$: they are $-m$ and $-(k+1)$, with constant term $-(m+k)$. All
+of these have absolute value at most $2n$.
+
+\begin{theorem}[\texttt{fphp\_short\_refutation}]
+For every $n\ge 1$ there is a list $l$ with \texttt{IsRefutation (FPHP n) l}, $|l|\le 8n^3$, and
+\texttt{Bdd (2n) L} for every line $L$ of $l$.
+\end{theorem}
+
+The exact length is $n^3+2n^2+n+1$. A Python check rebuilt the refutation and verified it line by line
+for $n\le 8$. Lean proves only the bound $8n^3$.
+
+\begin{theorem}[\texttt{eventually\_poly\_lt}, \texttt{fphp\_subexponential}, \texttt{no\_exponential\_lower\_bound}]
+For all $\varepsilon,c>0$, for all sufficiently large $n$, there is a refutation of \texttt{FPHP n} with
+coefficients bounded by $2n$ and fewer than $c\cdot 2^{\varepsilon n}$ lines. Hence no $c>0$ satisfies
+``for all large $n$, every refutation with coefficients bounded by $2n$ has length $\ge c\cdot
+2^{\varepsilon n}$''.
+\end{theorem}
+\begin{proof}
+Mathlib's \texttt{isLittleO\_pow\_exp\_pos\_mul\_atTop} gives $x^3=o(e^{\varepsilon\log 2\cdot x})$, and
+$e^{\varepsilon\log2\cdot n}=2^{\varepsilon n}$. Concretely, $8n^3<2^{n/8}$ for all $n\ge 209$.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_3991\_false}]
+Both of the following statements are false: ``for all large $n$, every CP refutation $l$ of
+\texttt{FPHP n} satisfies $2^{n/8}\le|l|$''; and the same statement restricted to refutations with
+coefficients bounded by $2n$.
+\end{theorem}
+
+\begin{remark}\label{rem:bits}
+This remark is not formalized. Each line has $n(n+1)$ coefficients and one constant term, each of
+absolute value at most $2n$. So the bit size of the refutation is also polynomial in $n$. The result is
+the classical fact, attributed in \cite{DGGM} to \cite{CCT}, that PHP has ``polynomial size proofs in CP''.
+Quoted from \cite{DGGM}: ``appealing to the polynomial size proofs in CP of the PHP$^{m}_{n}$
+([CCT87])''.
+\end{remark}
+
+\section{Lean verification}
+
+File \texttt{lean/Conjecture3991/Basic.lean} (namespace \texttt{C3991}) imports only Mathlib. It contains no
+\texttt{sorry}, no \texttt{native\_decide} and no added axioms. \texttt{\#print axioms} for
+\texttt{conjecture\_3991\_false}, \texttt{no\_exponential\_lower\_bound}, \texttt{fphp\_subexponential},
+\texttt{fphp\_short\_refutation}, \texttt{fphp\_sat\_iff} and \texttt{fphp\_unsat} reports only
+\texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
+
+\begin{thebibliography}{9}
+\bibitem{CCT} W.~Cook, C.~R.~Coullard, Gy.~Tur\'an, On the complexity of cutting-plane proofs,
+  Discrete Applied Mathematics (1987), \url{https://doi.org/10.1016/0166-218x(87)90039-4}.
+  (Cited through \cite{DGGM}.)
+\bibitem{DGGM} S.~Dantchev, N.~Galesi, A.~Ghani, B.~Martin, Depth lower bounds in Stabbing Planes for
+  combinatorial principles, \url{https://arxiv.org/abs/2102.07622}.
+\bibitem{BFIKPPR} P.~Beame, N.~Fleming, R.~Impagliazzo, A.~Kolokolova, D.~Pankratov, T.~Pitassi,
+  R.~Robere, Stabbing Planes, \url{https://arxiv.org/abs/1710.03219}.
+\end{thebibliography}
+\end{document}
