@@ -1,0 +1,152 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Zt}{\mathbb{Z}_2}
+\newcommand{\Qt}{\mathbb{Q}_2}
+
+\title{Disproof of conjecture 00000000745:\\ the Julia set of $x^2-1$ on $\mathbb{Z}_2$ is empty, so its Hausdorff dimension is $0$, not $1$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the reading}
+
+\textbf{Statement (English, verbatim).} Conjecture: The Julia set (repelling points) of
+$x^2 - 1$ on $\mathbb{Z}_2$ has Hausdorff dimension 1, and its complement is open and dense
+(2-adic Julia topology). (The Chinese text states the same: the Julia set (set of repelling
+points) of $x^2-1$ on $\mathbb{Z}_2$ has Hausdorff dimension 1 and its complement is a dense open
+set.)
+
+\textbf{Reading.} The conjecture is the conjunction, for the Julia set $J\subseteq\Zt$ of
+$f(x)=x^2-1$ acting on the 2-adic integers $\Zt$ with the 2-adic metric
+$d(x,y)=|x-y|_2$, of
+\[
+  \text{(A)}\ \ \dim_H J = 1 \qquad\text{and}\qquad \text{(B)}\ \ \Zt\setminus J \text{ is open and dense.}
+\]
+We work on the space the statement names, $\Zt$, and with the map it names. We formalize four
+readings of ``the Julia set (repelling points)'':
+\begin{enumerate}
+\item[(J1)] the complement of the Fatou set, where the Fatou set is the set of points having a
+  neighbourhood on which the family of iterates $\{f^{n}\}_{n\ge 0}$ is equicontinuous;
+\item[(J2)] the set of points at which the family $\{f^{n}\}$ is not equicontinuous;
+\item[(J3)] the set of repelling periodic points: $x\in\Zt$ with $f^{n}(x)=x$ for some $n\ge 1$
+  and $|(f^{n})'(x)|_2>1$;
+\item[(J4)] the closure of the set (J3).
+\end{enumerate}
+Under each reading we prove $J=\emptyset$. Hence (A) fails ($\dim_H\emptyset=0$) while (B) holds
+($\Zt\setminus J=\Zt$), and the conjunction is false.
+
+\textbf{Conventions.} (i) In (J3) the period $n\ge 1$ is any period, not only the minimal one; this
+makes the set (J3) larger, so emptiness under it implies emptiness for minimal periods.
+(ii) The multiplier $(f^{n})'(x)$ is the derivative at $x\in\Zt\subset\Qt$ of the $n$-th iterate
+of the same polynomial $g(z)=z^2-1$ on the field $\Qt$ (Mathlib \texttt{deriv}), since $\Zt$
+is not a field. (iii) Hausdorff dimension is Mathlib's \texttt{dimH} for the 2-adic metric on
+$\Zt$; $\dim_H\emptyset=0$ (\texttt{dimH\_empty}). Under the other common convention
+$\dim_H\emptyset=-\infty$, the value is still not $1$. (iv) Equicontinuity is Mathlib's
+\texttt{EquicontinuousOn} / \texttt{EquicontinuousAt} for the uniform structure of the 2-adic
+metric. The chordal metric on affine points of $\mathbb{P}^1(\Qt)$,
+$\rho(x,y)=|x-y|_2/(\max(1,|x|_2)\max(1,|y|_2))$, equals $|x-y|_2$ on $\Zt$
+(Lean \texttt{chordal\_eq\_dist}), so it does not matter which of the two metrics is used on $\Zt$.
+
+\section{Definitions and sources}
+
+The non-archimedean Fatou and Julia sets are defined by equicontinuity. Wikipedia,
+\emph{Arithmetic dynamics} (\url{https://en.wikipedia.org/wiki/Arithmetic_dynamics}): ``The metric
+on K and the standard definition of equicontinuity leads to the usual definition of the Fatou and
+Julia sets of a rational map'', and ``A striking difference is that in the nonarchimedean setting,
+the Fatou set is always nonempty, but the Julia set may be empty.'' Benedetto and Lee,
+\emph{J-Stability in non-archimedean dynamics}, arXiv:2102.05841, Section 2: ``The type I Fatou
+set consists of those points of [$\mathbb{P}^1(\mathbb{C}_v)$] having a neighborhood on which the
+sequence of iterates is equicontinuous with respect to the chordal metric'', and a periodic point
+whose multiplier has absolute value greater than $1$ ``is said to be repelling''. Over
+$\mathbb{C}$, Wikipedia, \emph{Julia set} (\url{https://en.wikipedia.org/wiki/Julia_set}): $J(f)$
+``is the closure of the set of repelling periodic points.'' Readings (J1) and (J2) follow the
+equicontinuity definition, (J3) the parenthetical ``repelling points'', and (J4) the
+complex-dynamics characterization.
+
+\section{Proof}
+
+\begin{lemma}[\texttt{lipschitz\_f}, \texttt{lipschitz\_iterate}]
+For $x,y\in\Zt$, $|f(x)-f(y)|_2\le|x-y|_2$. Hence every iterate $f^{n}$ is $1$-Lipschitz.
+\end{lemma}
+\begin{proof}
+$f(x)-f(y)=(x-y)(x+y)$ and $|x+y|_2\le 1$ in $\Zt$. Iterate.
+\end{proof}
+
+\begin{theorem}[\texttt{fatouSet\_eq\_univ}, \texttt{juliaSet\_eq\_empty}, \texttt{juliaSetPt\_eq\_empty}]
+The family $\{f^{n}\}_{n\in\mathbb{N}}$ is uniformly equicontinuous on $\Zt$. Hence the Fatou set
+is all of $\Zt$, and the sets (J1) and (J2) are empty.
+\end{theorem}
+\begin{proof}
+A family of functions that are all $1$-Lipschitz is uniformly equicontinuous (Mathlib
+\texttt{LipschitzWith.uniformEquicontinuous}). Every point then has the neighbourhood $\Zt$ on
+which the iterates are equicontinuous.
+\end{proof}
+
+\begin{lemma}[\texttt{hasDerivAt\_iterate}, \texttt{multiplier\_eq}]
+For $z\in\Qt$, $(g^{n})'(z)=\prod_{i<n}2\,g^{i}(z)$. For $x\in\Zt$, $g^{i}(x)=f^{i}(x)\in\Zt$, so
+$(g^{n})'(x)=\prod_{i<n}2 f^{i}(x)$.
+\end{lemma}
+\begin{proof}
+Chain rule by induction on $n$, using $g^{n+1}=g\circ g^{n}$ and $g'(w)=2w$. The coercion
+$\Zt\to\Qt$ intertwines $f$ and $g$.
+\end{proof}
+
+\begin{theorem}[\texttt{norm\_multiplier\_le}, \texttt{norm\_multiplier\_lt\_one}, \texttt{repellingPeriodicPts\_eq\_empty}, \texttt{juliaRep\_eq\_empty}]
+For every $x\in\Zt$ and $n\ge 0$, $|(g^{n})'(x)|_2\le 2^{-n}$; for $n\ge1$ it is $<1$. Hence no
+point of $\Zt$ is repelling (periodic or not), and the sets (J3) and (J4) are empty.
+\end{theorem}
+\begin{proof}
+$|2|_2=1/2$ and $|f^{i}(x)|_2\le1$, so each factor has absolute value at most $1/2$. The closure
+of the empty set is empty.
+\end{proof}
+
+\begin{theorem}[\texttt{julia\_facts}, \texttt{conjecture745\_false}]
+Under each reading (J1)--(J4), $J=\emptyset$, $\dim_H J=0$, and $\Zt\setminus J=\Zt$ is open and
+dense. Therefore, for each reading, ``$\dim_H J=1$ and $\Zt\setminus J$ is open and dense'' is
+false: conjunct (B) holds, conjunct (A) fails.
+\end{theorem}
+
+\textbf{Remark (not formalized).} The same argument shows $\Zt$ lies in the Fatou set of $f$ on
+$\mathbb{P}^1(\Qt)$ or $\mathbb{P}^1(\mathbb{C}_2)$: the closed unit disk is an open neighbourhood
+of each point of $\Zt$ that $f$ maps into itself, $f$ is $1$-Lipschitz there, and the chordal
+metric equals $|x-y|_2$ there. So $J\cap\Zt=\emptyset$ in those settings too. This remark is not
+part of the Lean development.
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture745/Basic.lean} (Lean 4, Mathlib \texttt{v4.33.1}; only import
+\texttt{Mathlib}). Objects: \texttt{C745.f} $:\Zt\to\Zt$ (Mathlib \texttt{PadicInt 2}),
+\texttt{f x = x\^{}2 - 1}; \texttt{C745.g} the same polynomial on $\Qt$ (Mathlib \texttt{Padic 2});
+\texttt{fatouSet}, \texttt{juliaSet} (J1), \texttt{juliaSetPt} (J2), \texttt{multiplier n x =
+deriv (g\^{}[n]) x}, \texttt{repellingPeriodicPts} (J3), \texttt{juliaRep} (J4), \texttt{chordal}.
+Main theorem:
+(Unicode transliterated to ASCII: \verb|~| is $\neg$, \verb|/\| is $\wedge$, \verb|^c| is the
+set complement.)
+\begin{verbatim}
+theorem conjecture745_false :
+    ~ (dimH juliaSet = 1 /\ IsOpen juliaSet^c /\ Dense juliaSet^c) /\
+    ~ (dimH juliaSetPt = 1 /\ IsOpen juliaSetPt^c /\ Dense juliaSetPt^c) /\
+    ~ (dimH repellingPeriodicPts = 1 /\ IsOpen repellingPeriodicPts^c /\
+        Dense repellingPeriodicPts^c) /\
+    ~ (dimH juliaRep = 1 /\ IsOpen juliaRep^c /\ Dense juliaRep^c)
+\end{verbatim}
+\texttt{julia\_facts} states that all four sets are empty, have \texttt{dimH} $0$, and have open
+dense complements.
+
+\textbf{Axiom audit.} \texttt{\#print axioms} for \texttt{C745.conjecture745\_false},
+\texttt{C745.julia\_facts} and \texttt{C745.chordal\_eq\_dist} reports only
+\texttt{[propext, Classical.choice, Quot.sound]}. No \texttt{sorry}, no \texttt{native\_decide}, no
+added axioms. \texttt{lake build} succeeds.
+
+\end{document}

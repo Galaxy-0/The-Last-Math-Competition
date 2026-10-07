@@ -1,0 +1,9 @@
+# Semantic review (independent, pre-submission)
+
+An independent model reviewer (GPT-6 Astra, reasoning effort "xhigh", separate session) received the exact conjecture text, the full LaTeX report, the full Lean source and a reviewer checklist distilled from 93 closed-unmerged pull requests of this competition. It was asked whether the Lean main theorem settles the conjecture as written, whether the reading is faithful and not a loophole, whether the Lean definitions are faithful to the standard notions, whether the mathematics is correct, and whether report and Lean match. This is an automated review prepared by the submitter, not the competition's maintainer review.
+
+**Verdict:** accept = True; severity = none; reading faithful = True.
+
+**Reviewer notes (verbatim):**
+
+> The submission gives a valid disproof on the stated space, Mathlib PadicInt 2 with its 2-adic metric. The Fatou and Julia definitions use actual equicontinuity of the iterates, and the repelling-periodic definition uses the derivative of the corresponding polynomial iterate over Q_2, with an explicit coercion-intertwining lemma and a proved derivative formula. The common Lipschitz bound establishes global uniform equicontinuity, while the multiplier bound (1/2)^n excludes every positive-period repelling point. Thus all four defined sets are empty, their Mathlib Hausdorff dimensions are zero, and their complements are open and dense; the main theorem negates the stated conjunction in each case. The report supplies the same correct arguments. Its projective-space remark is explicitly outside the formalization and is mathematically sound; Berkovich dynamics is not required for a conjecture on Z_2. Allowing arbitrary positive periods is harmless; in fact the repelling-periodic set agrees with the least-period definition, since multipliers at multiple periods are powers of the least-period multiplier. Compilation and the axiom audit are accepted as stipulated.
