@@ -1,0 +1,139 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\R}{\mathbb{R}}
+\title{Conjecture 00000007793 is false:\\ the two-point distance variance ratio diverges}
+\author{Jackmeson1}
+\date{}
+\begin{document}
+\maketitle
+
+\section{The conjecture and its reading}
+
+\textbf{Statement (English).} \emph{Definition: The variance of $R = |X-Y|$, the distance between two
+independent isotropic uniform ball points. Conjecture: $\Var(R)/\Var(|X|) = 2 - 2/\sqrt 3 + O(n^{-1})$
+with first correction coefficient $-1/(3\sqrt 3)$; the ratio strictly improves the thin-shell constant in
+the two-body case, with equality only for $X, Y$ iid uniform on the ball, any correlated coupling
+increasing the ratio.} The Chinese text says the same.
+
+\textbf{Reading.} $n$ is the dimension: it is the only parameter in the statement, and the expansion
+$O(n^{-1})$ concerns $n \to \infty$. $X$ and $Y$ are independent and both uniformly distributed on a ball of
+$\R^n$ centred at $0$. Write
+\[ a_n = \frac{\Var |X-Y|}{\Var |X|}. \]
+The first conjunct says $a_n - (2 - 2/\sqrt3) = O(1/n)$ as $n \to \infty$, i.e. there are $C, N$ with
+$|a_n - (2-2/\sqrt 3)| \le C/n$ for $n \ge N$. The statement is a conjunction, so refuting this first
+conjunct refutes it. We do not address the later conjuncts (the correction coefficient and the coupling
+clause) separately. Their natural readings presuppose the first conjunct.
+
+\textbf{Normalisation.} ``Isotropic'' may mean the unit ball or the ball scaled to covariance $I$
+(radius $\sqrt{n+2}$). The ratio $a_n$ is invariant under scaling $X \mapsto rX$, $Y \mapsto rY$
+($r>0$), because both variances are multiplied by $r^2$. We prove the refutation for an arbitrary radius
+sequence $r_n > 0$.
+
+\textbf{Conventions.} $|\cdot|$ is the Euclidean norm. $\Var Z = \E(Z - \E Z)^2$ (Mathlib's
+\texttt{ProbabilityTheory.variance}). The uniform law on the open ball $B_r = \{x : |x| < r\}$ is
+Lebesgue measure restricted to $B_r$ and normalised, $\mathrm{volume}[\,\cdot \mid B_r]$
+(Mathlib's \texttt{ProbabilityTheory.cond}). Open and closed balls differ by a null set.
+Independence is Mathlib's \texttt{IndepFun}. In the concrete model, $(X,Y)$ is the pair of
+coordinates under the product measure.
+
+\section{Result}
+
+\begin{theorem}\label{thm:main}
+For $X, Y$ independent and uniform on the unit ball of $\R^n$, $n \ge 1$,
+\[ a_n \;\ge\; \frac{(n+1)^2}{4(n+2)} \;\ge\; \frac n8 . \]
+Hence $a_n \to +\infty$. In particular $a_n$ has no finite limit, and $a_n - (2 - 2/\sqrt 3) \ne O(1/n)$.
+The same holds for any radii $r_n > 0$.
+\end{theorem}
+
+Monte Carlo agrees: $a_1 = 8/3$ exactly, and $a_n$ is about $7.4$, $27$ and $102$ at $n = 10, 50, 200$, so
+roughly $n/2$. The claimed limit is $2 - 2/\sqrt3 \approx 0.845$.
+
+\section{Proof}
+
+Let $X, Y$ be independent and uniform on $B = B_1 \subset \R^n$, $n \ge 1$.
+
+\begin{lemma}[radial moments]\label{lem:mom}
+$\E|X|^k = n/(n+k)$ for $k \in \mathbb N$. Hence $\Var|X| = \frac{n}{n+2} - \frac{n^2}{(n+1)^2}
+= \frac{n}{(n+1)^2(n+2)} > 0$.
+\end{lemma}
+\begin{proof}
+Polar coordinates give $\int_{\R^n} f(|x|)\,dx = n\,|B| \int_0^\infty y^{n-1} f(y)\,dy$, where $|B|$ is the
+volume of $B$. This is Mathlib's \texttt{integral\_fun\_norm\_addHaar}. Take
+$f(y) = y^k \mathbf 1_{y<1}$ and divide by $|B|$. This gives
+$\E|X|^k = n\int_0^1 y^{n-1+k}\,dy = n/(n+k)$.
+\end{proof}
+
+\begin{lemma}[pointwise inequality]\label{lem:pt}
+If $|x|, |y| \le 1$ and $c \in \R$, then $\langle x,y\rangle^2 \le 2\big((|x-y|-c)^2 + (|x+y|-c)^2\big)$.
+\end{lemma}
+\begin{proof}
+Put $a = |x-y|$ and $b = |x+y|$. Then $b^2 - a^2 = 4\langle x,y\rangle$ and $0 \le a, b \le 2$. Therefore
+$16\langle x,y\rangle^2 = (b-a)^2(b+a)^2 \le 16(b-a)^2$. Finally
+$2((a-c)^2+(b-c)^2) - (b-a)^2 = (a+b-2c)^2 \ge 0$.
+\end{proof}
+
+\begin{lemma}\label{lem:var}
+$\E\langle X, Y\rangle^2 \le 4 \Var|X-Y|$.
+\end{lemma}
+\begin{proof}
+Let $c = \E|X-Y|$. The uniform law on $B$ is invariant under $y \mapsto -y$, so $(X,Y)$ and $(X,-Y)$ have the
+same joint law. Hence $\E(|X+Y|-c)^2 = \E(|X-Y|-c)^2 = \Var|X-Y|$. Integrate Lemma~\ref{lem:pt},
+which applies almost surely because $|X|, |Y| < 1$.
+\end{proof}
+
+\begin{lemma}\label{lem:inner}
+$\E\langle X,Y\rangle^2 \ge (\E|X|^2)^2/n = n/(n+2)^2$.
+\end{lemma}
+\begin{proof}
+Let $m_{ij} = \E X_iX_j$. Expanding and using independence,
+$\E\langle X,Y\rangle^2 = \sum_{i,j}\E[X_iX_j]\,\E[Y_iY_j] = \sum_{i,j} m_{ij}^2 \ge \sum_i m_{ii}^2$.
+By Cauchy--Schwarz, $\sum_i m_{ii}^2 \ge (\sum_i m_{ii})^2/n = (\E|X|^2)^2/n$. Then use
+Lemma~\ref{lem:mom} with $k=2$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Lemmas~\ref{lem:var} and~\ref{lem:inner} give $\Var|X-Y| \ge n/(4(n+2)^2)$. Dividing by
+$\Var|X| = n/((n+1)^2(n+2))$ gives $a_n \ge (n+1)^2/(4(n+2))$. Moreover
+$8(n+1)^2 \ge 4n(n+2)$, so $a_n \ge n/8 \to \infty$. Suppose $a_n - L = O(1/n)$ with
+$L = 2-2/\sqrt3$. Since $1/n \to 0$, this would force $a_n \to L$, a contradiction.
+
+For radius $r > 0$, the uniform law on $B_r$ is the push-forward of the uniform law on $B_1$ under
+$x \mapsto rx$. This follows from $\mathrm{vol}(rA) = r^n\mathrm{vol}(A)$. So $X' = X/r$ and $Y' = Y/r$
+are independent and uniform on $B_1$, with $\Var|X-Y| = r^2\Var|X'-Y'|$ and $\Var|X| = r^2\Var|X'|$.
+The ratio is therefore unchanged.
+\end{proof}
+
+\section{Lean formalisation}
+
+File \texttt{lean/Conjecture7793/Basic.lean}, namespace \texttt{C7793}, built with Lean
+\texttt{v4.33.1} and Mathlib. Its only import is \texttt{Mathlib}.
+\begin{itemize}
+\item \texttt{ballUnif n := ProbabilityTheory.cond volume (ball (0 : EuclideanSpace R (Fin n)) 1)}
+  and \texttt{ballUnifR n r} (radius $r$): the uniform probability measures.
+\item \texttt{ratio n := variance (fun p => norm (p.1 - p.2)) ((ballUnif n).prod (ballUnif n)) /
+  variance (fun x => norm x) (ballUnif n)}.
+\item \texttt{moment}: $\E|X|^k = n/(n+k)$. \texttt{var\_norm}: $\Var|X| = n/((n+1)^2(n+2))$.
+\item \texttt{pointwise}, \texttt{inner\_sq\_le\_var}, \texttt{inner\_sq\_ge}, \texttt{var\_dist\_ge}:
+  Lemmas~\ref{lem:pt}--\ref{lem:inner}, and $\Var|X-Y| \ge n/(4(n+2)^2)$.
+\item \texttt{ratio\_ge (n) (hn : 1 <= n) : (n+1)\^{}2/(4(n+2)) <= ratio n}.
+\item \texttt{ratio\_tendsto\_atTop : Tendsto ratio atTop atTop}; \texttt{no\_finite\_limit (L)}.
+\item \texttt{not\_conjecture : not ((fun n => ratio n - (2 - 2/sqrt 3)) =O[atTop] (fun n => 1/n))}.
+\item \texttt{not\_conjecture\_rv}: the same negation for arbitrary probability spaces $(\Omega_n, P_n)$,
+  measurable $X_n, Y_n$ with \texttt{IndepFun (X n) (Y n) (P n)}, laws
+  \texttt{(P n).map (X n) = ballUnifR n (r n)} and the same for $Y_n$, and any radii $r_n > 0$. It uses
+  \texttt{map\_smul\_ballUnif} (scaling of the uniform law) and \texttt{ratio\_eq\_of\_indep}.
+\end{itemize}
+\textbf{Axiom audit.} \texttt{\#print axioms} for \texttt{not\_conjecture}, \texttt{not\_conjecture\_rv},
+\texttt{ratio\_ge}, \texttt{ratio\_tendsto\_atTop} and \texttt{no\_finite\_limit} reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}
