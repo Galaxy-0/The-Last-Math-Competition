@@ -1,0 +1,362 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small,breaklines=true,columns=fullflexible}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\sfcount}{S}
+\newcommand{\mm}{m}
+\title{Conjecture 00000001337: the iterated M\"obius mean\\converges to $6/\pi^2$ with an explicit error}
+\author{AlyciaBHZ on behalf of the Omega Institute}
+\date{5 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+With the convention specified in the conjecture, the composition
+$\mu(\mu(n))$ is exactly the indicator of squarefree positive integers.
+We prove, for every real $x\geq0$,
+\[
+\left|\sum_{1\leq n\leq x}\mu(\mu(n)) - \frac{6}{\pi^2}x\right|
+\leq 3\sqrt{x}.
+\]
+Consequently its mean converges to $6/\pi^2>0$ and cannot converge to zero.
+The accompanying self-contained Lean~4 project proves the literal
+composition identity, the error bound, the real-endpoint limit, and the
+failure of convergence to zero. All audited theorems use only the standard
+axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+\end{abstract}
+
+\section{Statement and interpretation}
+The statement of problem \textbf{00000001337}, verbatim (with
+mathematical symbols typeset), is:
+\begin{quote}
+``Definition: Applying $\mu$ to the values of $\mu(n)$, i.e.
+$\mu(\mu(n))$ (with $\mu(n)\in\{-1,0,1\}$, setting $\mu(\pm1)=1$
+and $\mu(0)=0$). Conjecture: The mean
+$(1/x)\Sigma_{n\leq x}\,\mu(\mu(n))$ does not converge to 0 but diverges
+to a $6/\pi^2$-type limit --- the value statistics of $\mu$ interact with
+its zero density to produce a main term.''
+\end{quote}
+
+The usual M\"obius function on positive integers is
+\[
+\mu(n)=\begin{cases}
+0,&\text{if a prime square divides }n,\\
+(-1)^r,&\text{if }n\text{ is a product of }r\text{ distinct primes}.
+\end{cases}
+\]
+In particular $\mu(1)=1$. We interpret the summation as over positive
+integers, as is conventional for this arithmetic mean. For the outer
+application, define on \emph{all} integers
+\[
+\mu_{\mathrm{out}}(z)=
+\begin{cases}1,&z=1\text{ or }z=-1,\\0,&\text{otherwise},\end{cases}
+\qquad \mm(n)=\mu_{\mathrm{out}}(\mu(n)).
+\]
+This explicitly encodes all three stated outer values. Assigning zero to
+other integer inputs is immaterial because the inner function takes only
+$-1,0,1$. We do not interpret the outer function as the usual M\"obius
+function applied to a signed integer without the stated extension.
+
+The phrase ``diverges to a limit'' is internally inconsistent if
+``diverges'' has its standard meaning of failure of convergence. The
+faithful precise claim is that this mean \emph{converges} to $6/\pi^2$,
+and thus does not tend to zero. We prove the exact constant, rather than
+only a vaguely similar ``type'' of limit. If divergence is insisted upon
+literally, that additional assertion is false: our convergence theorem
+settles the actual behavior. The nonzero-limit part of the conjecture is
+true.
+
+\section{The composition and a finite counting identity}
+A positive integer is squarefree if it has no prime-square divisor.
+The values of the ordinary M\"obius function immediately give
+\begin{equation}\label{eq:indicator}
+\mm(n)=\begin{cases}1,&n\text{ squarefree},\\0,&n\text{ not squarefree}.
+\end{cases}
+\end{equation}
+Write
+\[
+\sfcount(x)=\sum_{1\leq n\leq x}\mm(n),\qquad
+M=\lfloor\sqrt{x}\rfloor\quad(x\geq0).
+\]
+Both sums are empty when their upper endpoint is below $1$.
+
+\begin{lemma}\label{lem:divisor}
+For each positive integer $n$,
+\[
+\mathbf 1_{\mathrm{squarefree}}(n)=\sum_{d^2\mid n}\mu(d).
+\]
+Consequently
+\begin{equation}\label{eq:count}
+\sfcount(x)=\sum_{1\leq d\leq M}\mu(d)
+             \left\lfloor\frac{x}{d^2}\right\rfloor
+\qquad(x\geq0).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Factor $n=\prod_p p^{a_p}$. The only nonzero contributions to the divisor
+sum come from squarefree $d$, made from primes with $a_p\geq2$.
+The sum is therefore
+$\prod_{p:a_p\geq2}(1+\mu(p))=\prod_{p:a_p\geq2}(1-1)$.
+It equals $1$ when that product is empty, and $0$ otherwise, proving the
+indicator identity. Equivalently, if $n=t^2b$ with $b$ squarefree and
+$t=\prod_p p^{\lfloor a_p/2\rfloor}$, then $d^2\mid n$ if and only if
+$d\mid t$; the divisor sum is $\sum_{d\mid t}\mu(d)=\mathbf1_{t=1}$.
+
+Summing the identity over $1\leq n\leq\lfloor x\rfloor$ and interchanging
+finite sums, only $d\leq\sqrt{x}$ occur. For fixed $d$, the number of
+positive multiples of $d^2$ not exceeding $x$ is
+$\lfloor x/d^2\rfloor$. This proves \eqref{eq:count} for real as well as
+integer $x$, including $x=0$.
+\end{proof}
+
+\section{The coefficient and the tail}
+\begin{lemma}\label{lem:coefficient}
+The absolutely convergent series satisfies
+\[
+c:=\sum_{d=1}^{\infty}\frac{\mu(d)}{d^2}=\frac6{\pi^2}.
+\]
+\end{lemma}
+\begin{proof}
+Since $|\mu(d)|\leq1$ and $\sum_{d\geq1}d^{-2}=\pi^2/6$,
+the M\"obius series converges absolutely. Its product with the latter
+positive series may be rearranged by absolute convergence:
+\[
+\left(\sum_{d\geq1}\frac{\mu(d)}{d^2}\right)
+\left(\sum_{k\geq1}\frac1{k^2}\right)
+=\sum_{n\geq1}\frac1{n^2}\sum_{d\mid n}\mu(d)=1.
+\]
+To justify the last identity directly, the inner divisor sum equals
+$\prod_{p\mid n}(1-1)$ for $n>1$, and equals $1$ for $n=1$.
+The double absolute sum is at most
+$(\sum_{d\geq1}d^{-2})^2<\infty$, which justifies all regrouping.
+The Basel sum evaluates the second factor as $\pi^2/6$, proving the claim.
+\end{proof}
+
+\begin{lemma}\label{lem:tail}
+For every real $N\geq1$,
+\[
+\sum_{j=0}^{\infty}\frac1{(j+N)^2}\leq\frac2N.
+\]
+In particular
+\[
+\left|\sum_{d>M}\frac{\mu(d)}{d^2}\right|\leq\frac2{M+1}
+\quad\text{for every integer }M\geq0.
+\]
+\end{lemma}
+\begin{proof}
+The function $t\mapsto(t+N)^{-2}$ is nonnegative and decreasing for
+$t\geq0$. Each term with $j\geq1$ is at most the integral over
+$[j-1,j]$, so
+\[
+\sum_{j\geq0}\frac1{(j+N)^2}
+\leq\frac1{N^2}+\int_0^\infty\frac{dt}{(t+N)^2}
+=\frac1{N^2}+\frac1N\leq\frac2N.
+\]
+Absolute convergence and $|\mu(d)|\leq1$ give the second assertion by
+setting $N=M+1$.
+\end{proof}
+
+\section{The explicit error and convergence}
+\begin{theorem}\label{thm:error}
+For every real $x\geq0$,
+\begin{equation}\label{eq:error}
+\left|\sfcount(x)-\frac6{\pi^2}x\right|\leq3\sqrt{x}.
+\end{equation}
+For every real $x>0$,
+\begin{equation}\label{eq:meanerror}
+\left|\frac{\sfcount(x)}x-\frac6{\pi^2}\right|
+\leq\frac3{\sqrt{x}}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+Set $M=\lfloor\sqrt{x}\rfloor$ and use Lemmas~\ref{lem:divisor}
+and~\ref{lem:coefficient}. Subtracting the infinite series coefficient,
+\[
+\sfcount(x)-cx
+=\sum_{d=1}^{M}\mu(d)
+  \left(\left\lfloor\frac{x}{d^2}\right\rfloor-\frac{x}{d^2}\right)
+ -x\sum_{d>M}\frac{\mu(d)}{d^2}.
+\]
+The absolute value of the finite sum is at most $M$, because each
+floor error has absolute value at most $1$ and $|\mu(d)|\leq1$.
+Lemma~\ref{lem:tail} bounds the remaining part by $2x/(M+1)$.
+Since
+\[
+M\leq\sqrt{x}\leq M+1,\qquad x=(\sqrt{x})^2,
+\]
+we have $x/(M+1)\leq\sqrt{x}$. Hence
+\[
+|\sfcount(x)-cx|\leq M+\frac{2x}{M+1}\leq3\sqrt{x}.
+\]
+This argument includes $M=0$ and $x=0$. Dividing by $x>0$ gives
+\eqref{eq:meanerror}, since $\sqrt{x}/x=1/\sqrt{x}$.
+\end{proof}
+
+\begin{theorem}\label{thm:limit}
+As the real variable $x\to+\infty$,
+\[
+\frac1x\sum_{1\leq n\leq x}\mu_{\mathrm{out}}(\mu(n))
+\longrightarrow\frac6{\pi^2}>0.
+\]
+In particular this mean does not converge to zero.
+\end{theorem}
+\begin{proof}
+The right side of \eqref{eq:meanerror} tends to zero, so the squeeze
+principle proves the stated limit. Since $\pi>0$, we have
+$6/\pi^2>0$. Uniqueness of limits in the real numbers excludes a second
+limit equal to zero.
+\end{proof}
+Thus the zero density of the inner M\"obius function is responsible for
+the missing mass; the outer convention removes its signs. The main term
+is exactly the squarefree density, not a signed cancellation effect.
+
+\section{Lean statements and semantic correspondence}
+The project pins Lean~\texttt{v4.33.0} and Mathlib~\texttt{v4.33.0}.\\
+Mathlib commit: \texttt{db584cd6d46c92f209a44c0f1c829460d327499d}.
+
+The single source file is \texttt{lean4/MobiusMean.lean}. The declarations
+are in the namespace \texttt{MobiusMean}. Written with equivalent ASCII Lean syntax,
+its definitions are:
+\begin{lstlisting}
+def mobiusOuter (z : Int) : Int :=
+  if Or (z = 1) (z = -1) then 1 else 0
+noncomputable def mm (n : Nat) : Int :=
+  mobiusOuter (ArithmeticFunction.moebius n)
+noncomputable def count (x : Real) : Real :=
+  Finset.sum (Finset.Icc 1 (Nat.floor x)) (fun n => (mm n : Real))
+noncomputable def mean (x : Real) : Real := (1 / x) * count x
+\end{lstlisting}
+Here \texttt{Finset.sum} writes out the sum notation used in the delivered
+source, and \texttt{Nat}, \texttt{Int}, \texttt{Real} are the types
+usually written with blackboard-bold symbols.
+For $x\geq0$, \texttt{Nat.floor x} is $\lfloor x\rfloor$; its convention
+at negative $x$ is harmless for a limit at positive infinity.
+The inclusive interval starts at $1$, so the summation is precisely over
+positive integers at most $x$.
+
+The central theorem statement in equivalent ASCII Lean syntax is:
+\begin{lstlisting}
+theorem mean_tendsto :
+  Tendsto (fun x : Real => (1 / x) *
+    Finset.sum (Finset.Icc 1 (Nat.floor x)) (fun n => (mm n : Real)))
+    atTop (nhds (6 / Real.pi ^ 2))
+\end{lstlisting}
+The same function appears in \texttt{not\_tendsto\_zero}, whose
+conclusion is the negation of \texttt{Tendsto ... atTop (nhds 0)}.
+The remaining main statements are:
+\begin{lstlisting}
+theorem mm_eq_indicator (n : Nat) :
+  mm n = if Squarefree n then 1 else 0
+
+theorem count_error (x : Real) (hx : 0 <= x) :
+  abs (Finset.sum (Finset.Icc 1 (Nat.floor x))
+    (fun n => (mm n : Real))
+    - (6 / Real.pi ^ 2) * x) <= 3 * Real.sqrt x
+
+theorem mean_error (x : Real) (hx : 0 < x) :
+  abs (mean x - 6 / Real.pi ^ 2) <= 3 / Real.sqrt x
+
+theorem limit_ne_zero : Ne (6 / Real.pi ^ 2 : Real) 0
+\end{lstlisting}
+These statements have no conditional assumption of a density, an
+unproved asymptotic, or a numerical approximation to $\pi$.
+The only hypotheses of the error estimates restrict the real endpoint
+as stated in Theorem~\ref{thm:error}; the limit is unconditional.
+
+The supporting vendored theorem actually proves the more general
+squarefree count coprime to a squarefree modulus $Q$:
+\[
+|S_Q(x)-\rho(Q)x|\leq(2^{\omega(Q)}+2)\sqrt{x},\qquad
+\rho(Q)=\left(\sum_{n\geq0}\frac1{(n+1)^2}\right)^{-1}
+\prod_{p\mid Q}\frac p{p+1}.
+\]
+In the source, \texttt{S} is a filtered cardinality and
+\texttt{rho} is exactly this expression. Its proof is included in full;
+it is not assumed. At $Q=1$ all integers are coprime to $Q$, the prime
+factor set is empty, and $2^{\omega(1)}+2=3$.
+\texttt{count\_eq\_S} identifies this cardinality with the sum of the
+literal composition. \texttt{rho\_one} uses Mathlib's
+\texttt{hasSum\_zeta\_two} to prove $\rho(1)=6/\pi^2$.
+The vendored coefficient proof uses the M\"obius inverse identity for
+the principal Dirichlet-character $L$-series at $s=2$; its specialization
+is exactly the absolutely convergent product in
+Lemma~\ref{lem:coefficient}. The floor errors and the tail estimate are
+proved inside this source. The general coprime result is auxiliary;
+the mathematical proof above gives all arguments needed for the submitted
+$Q=1$ conclusion.
+
+\section{Verification and axiom audit}
+The actual compiler transcript is in \texttt{verification.txt}.
+The recorded Lean compilation succeeded with the pinned Lean and Mathlib versions.
+The source ends with \texttt{\#print axioms} for each of
+\texttt{mm\_eq\_indicator}, \texttt{count\_error},
+\texttt{mean\_error}, \texttt{mean\_tendsto},
+\texttt{limit\_ne\_zero}, and \texttt{not\_tendsto\_zero}.
+Every one reports exactly
+\begin{lstlisting}
+[propext, Classical.choice, Quot.sound]
+\end{lstlisting}
+No new axioms, admitted goals, or native decision procedure are used.
+The proof is checked by Lean's kernel. Noncomputable definitions use
+standard classical choice and do not introduce any unproved assertion.
+
+The independent standard-library script \texttt{verify.py} checks the
+outer convention, compares M\"obius values with trial factorization,
+verifies the exact finite floor-sum identity for $0\leq N\leq500$, and
+checks both error estimates at every integer endpoint up to $200000$
+and seven additional nonintegral endpoints. For example,
+$S(200000)=121581$ and the mean is $0.607905$, while
+$6/\pi^2\approx0.607927101854$. These floating-point checks are sanity
+checks only; the Lean statements prove all endpoints and the infinite
+limit without numerical approximation.
+
+\section{Other readings, provenance, and reproduction}
+For integer cutoffs, the same limit follows by restriction of the proved
+real-endpoint limit to $x=N\in\mathbb N$ tending to infinity; the error
+bound already applies to every such $N$. Replacing the normalizing $x$
+by $\lfloor x\rfloor$ for $x\geq1$ also gives the same limit: the numerator
+is $S(\lfloor x\rfloor)$ and $\lfloor x\rfloor/x\to1$.
+Using $n<x$ instead of $n\leq x$ changes the numerator by at most one
+term, hence the mean by at most $1/x$. Including $n=0$, with
+$\mu(0)=0$, adds zero. These variants do not change the conclusion;
+the exact statements formalized in Lean use inclusive cutoffs and the
+normalization $1/x$.
+
+The proof of the supporting coprime squarefree count, the tail lemma, and
+the definitions \texttt{C}, \texttt{e} are adapted from the Omega Institute's
+\emph{trureturing} project, licensed under Apache~2.0, at revision
+\texttt{1be30b25c4fe6cd46397090ca09b5696eb62ea78}.
+The credited source paths are
+\begin{itemize}
+\item \texttt{D5/S3/Weil/Mertens/CoprimeSquarefreeDensity.lean};
+\item \texttt{D5/S3/Weil/Mertens/Third.lean} (only
+\texttt{sum\_one\_div\_sq\_le});
+\item \texttt{D5/S3/Weil/Mertens/CoprimeMobiusCertificateError.lean}
+(only \texttt{C} and \texttt{e}).
+\end{itemize}
+All code needed from these files is inlined and renamed into the
+problem-specific namespace. There are no trureturing imports or external
+proof certificates. The upstream license accompanies the submission as
+\texttt{LICENSE.trureturing}.
+
+In a fresh environment with the pinned toolchain, reproduce with:
+\begin{lstlisting}
+cd lean4
+lake exe cache get && lake build
+cd ..
+python3 verify.py
+pdflatex -interaction=nonstopmode -halt-on-error report.tex
+pdflatex -interaction=nonstopmode -halt-on-error report.tex
+\end{lstlisting}
+
+\medskip
+\noindent Submitted by AlyciaBHZ on behalf of the Omega Institute
+(trureturing project,
+\url{https://github.com/the-omega-institute/trureturing}).
+\end{document}

@@ -1,0 +1,50 @@
+TLMC 00000001337 — verification and axiom audit
+Lean toolchain: leanprover/lean4:v4.33.0
+Mathlib revision: db584cd6d46c92f209a44c0f1c829460d327499d
+
+Recorded successful Lean compiler output:
+'MobiusMean.mm_eq_indicator' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MobiusMean.count_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MobiusMean.mean_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MobiusMean.mean_tendsto' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MobiusMean.limit_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MobiusMean.not_tendsto_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Compiler exit status: 0
+
+Independent sanity check
+Command: python3 verify.py
+Exit status: 0
+Outer convention, trial factorization, and squarefree indicators checked for n <= 1000.
+Exact Mobius-floor count identity checked for 0 <= N <= 500.
+Count and normalized error bounds checked at 200008 integer/real endpoints.
+6/pi^2 = 0.607927101854
+N=    10: count=     7, mean=0.700000000000, error=+0.920729
+N=   100: count=    61, mean=0.610000000000, error=+0.207290
+N=  1000: count=   608, mean=0.608000000000, error=+0.072898
+N= 10000: count=  6083, mean=0.608300000000, error=+3.728981
+N=100000: count= 60794, mean=0.607940000000, error=+1.289815
+N=200000: count=121581, mean=0.607905000000, error=-4.420371
+ALL CHECKS PASSED (numerical sanity only; Lean proves the universal statements).
+
+Lean source SHA-256: c53f3b98fcb5dd94340a9aa284ea994daba398068f25c7910dae218502f2ead6
+Source audit: no sorry, admit, native_decide, or added axiom declarations; automatic implicit parameters disabled.
+
+PDF build
+Command: pdflatex -interaction=nonstopmode -halt-on-error report.tex
+Pass 1 exit status: 0
+Pass 2 exit status: 0
+Output written on report.pdf (5 pages, 278089 bytes).
+No warnings, overfull boxes, underfull boxes, or unresolved references.
+All 5 pages rendered and visually inspected; no clipping or overlapping content.
+
+== Fresh standalone build (lake build in a clean copy of lean4/, Mathlib v4.33.0 dependencies prebuilt) ==
+$ lake build
+ℹ [8706/8707] Built MobiusMean (43s)
+info: MobiusMean.lean:600:0: 'MobiusMean.mm_eq_indicator' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: MobiusMean.lean:601:0: 'MobiusMean.count_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: MobiusMean.lean:602:0: 'MobiusMean.mean_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: MobiusMean.lean:603:0: 'MobiusMean.mean_tendsto' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: MobiusMean.lean:604:0: 'MobiusMean.limit_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: MobiusMean.lean:605:0: 'MobiusMean.not_tendsto_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (8707 jobs).
+exit=0
