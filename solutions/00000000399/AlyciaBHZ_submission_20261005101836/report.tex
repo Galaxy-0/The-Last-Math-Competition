@@ -1,0 +1,401 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{fancyvrb}
+\hypersetup{colorlinks=true,urlcolor=blue,linkcolor=blue}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\ph}{\varphi}
+\newcommand{\N}{\mathbb N}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\title{The Calkin--Wilf digit golden law\\
+\large A proof of TLMC conjecture 00000000399 (binary digits)}
+\author{AlyciaBHZ, on behalf of the Omega Institute}
+\date{5 October 2026}
+\begin{document}
+\maketitle
+
+\textbf{Conjecture 00000000399 (verbatim).}
+\begin{quote}
+Definition: The maximal number of digits of denominators at level n of the
+Calkin--Wilf tree. Conjecture: The maximum equals
+n$\cdot$log$_2\ph$ + O(log n); and the constant log$_2\ph$ comes
+from the branching geometry of the tree. (Calkin-Wilf digit golden law)
+\end{quote}
+The typographical double hyphen in this quotation renders the en dash in
+``Calkin--Wilf''; its wording and mathematical symbols reproduce the quoted
+statement.
+
+\textbf{Claim.} Under the binary-digit reading, the conjecture is true.
+In fact, if $D_n$ is the maximal number of binary digits of a denominator at
+level $n$, with the root at level zero, then
+\[
+ \max\{b:(a,b)\text{ is at level }n\}=F_{n+2},\qquad
+ D_n=\lfloor\log_2 F_{n+2}\rfloor+1,
+\]
+and, writing $\alpha=\log_2\ph$,
+\begin{equation}\label{eq:strong}
+ 0<D_n-n\alpha\le\alpha+1\qquad(n\ge0).
+\end{equation}
+Here $F_0=0$, $F_1=1$, $F_{k+2}=F_k+F_{k+1}$, and
+$\ph=(1+\sqrt5)/2$. Thus the error is $O(1)$, and in particular $O(\log n)$.
+The Lean theorem proves the exact maximum, exact digit count, a uniform
+absolute-error bound, and the literal asymptotic assertion on $\N$.
+
+Submitted by AlyciaBHZ on behalf of the Omega Institute (trureturing project,
+\url{https://github.com/the-omega-institute/trureturing}).
+
+\section{Interpretation and definitions}
+The word ``digits'' alone leaves the base unspecified. The coefficient
+$\log_2\ph$ is consistent with a digit count only in base two.
+Theorem~\ref{thm:allbases}, formalized in Lean, gives the slope $\log_b\ph$
+for every integer base $b\ge2$. Theorem~\ref{thm:wrongbase}, also formalized,
+shows that every $b\ge3$ produces unbounded error against the printed
+coefficient, and that this error is not $O(\log n)$. Thus the conjecture is
+true under the binary reading and false under every other admissible
+integer digit base, including decimal. This conclusion follows from the
+all-base law rather than from a choice of base made to match the claim.
+A positive integer $m$ has
+\[
+ d_2(m)=\lfloor\log_2 m\rfloor+1
+\]
+binary digits, with no leading zeros. The digit count of zero is immaterial:
+no zero denominator occurs. For definiteness, Mathlib's digit list represents
+zero by an empty list, so the Lean definition gives $d_2(0)=0$.
+
+We use the standard Calkin--Wilf rule \cite{cw}: start with $1/1$ and give
+$a/b$ the children $a/(a+b)$ and $(a+b)/b$. More precisely, put
+\[
+ L_0=\{(1,1)\},\qquad
+ L_{n+1}=\{(a,a+b):(a,b)\in L_n\}
+       \cup\{(a+b,b):(a,b)\in L_n\}.
+\]
+The finite set representation records all level labels; multiplicities cannot
+affect a maximum. Define $M_n=\max_{(a,b)\in L_n}b$ and
+$D_n=\max_{(a,b)\in L_n}d_2(b)$. Each level is nonempty, as follows also from
+the explicit witnesses below.
+
+All coordinates are positive by induction. Moreover,
+\[
+ \gcd(a,a+b)=\gcd(a,b)=\gcd(a+b,b).
+\]
+Since the root is coprime, every generated fraction is already in lowest
+terms. Consequently these second coordinates are the actual reduced
+fraction denominators; no unmentioned reduction changes the maximization.
+This property is separately proved in Lean as \texttt{level\_wellformed}.
+
+The phrase ``comes from the branching geometry'' is explanatory rather than
+an additional quantitative assertion with a formal definition. Our proof
+exhibits its mechanism: a sharp bound on coordinate sums survives the two
+branching operations, and alternating branches attain successive Fibonacci
+labels. The characteristic growth equation is $x^2=x+1$, with positive
+root $\ph$.
+
+\section{The exact denominator maximum}
+\begin{lemma}[Sharp coordinate and sum invariant]\label{lem:invariant}
+For every $n\ge0$ and every $(a,b)\in L_n$,
+\[
+ a\le F_{n+2},\qquad b\le F_{n+2},\qquad a+b\le F_{n+3}.
+\]
+\end{lemma}
+\begin{proof}
+At $n=0$ the coordinates are $1=F_2$, and their sum is $2=F_3$.
+Assume the invariant at level $n$. At the left child $(a,a+b)$,
+the coordinates are bounded by $F_{n+3}$, since $F_{n+2}\le F_{n+3}$,
+and the sum is bounded by
+\[
+ a+(a+b)\le F_{n+2}+F_{n+3}=F_{n+4}.
+\]
+At the right child $(a+b,b)$ the same coordinate bounds apply, and
+\[
+ (a+b)+b\le F_{n+3}+F_{n+2}=F_{n+4}.
+\]
+These are exactly the three assertions at level $n+1$.
+\end{proof}
+
+\begin{lemma}[Attained Fibonacci labels]\label{lem:witness}
+For every $n\ge0$, both
+\[
+ (F_{n+1},F_{n+2})\quad\hbox{and}\quad(F_{n+2},F_{n+1})
+\]
+belong to $L_n$.
+\end{lemma}
+\begin{proof}
+At level zero both labels are $(1,1)$. The left child of
+$(F_{n+2},F_{n+1})$ is
+$(F_{n+2},F_{n+2}+F_{n+1})=(F_{n+2},F_{n+3})$.
+The right child of $(F_{n+1},F_{n+2})$ is
+$(F_{n+3},F_{n+2})$. This proves both assertions simultaneously by induction.
+Tracing either family backward alternates the left and right operations;
+the two families are mirror zigzags.
+\end{proof}
+
+\begin{theorem}[Exact maxima]\label{thm:exact}
+For all $n\ge0$, $M_n=F_{n+2}$ and
+$D_n=d_2(F_{n+2})=\lfloor\log_2 F_{n+2}\rfloor+1$.
+\end{theorem}
+\begin{proof}
+Lemma~\ref{lem:invariant} bounds every denominator by $F_{n+2}$, and the
+first witness in Lemma~\ref{lem:witness} attains it. Digit count is monotone
+in a positive integer: increasing the integer cannot decrease its
+logarithm or the floor of that logarithm. Hence the same witness attains
+the maximum digit count. Since $F_{n+2}>0$, the usual floor formula applies.
+\end{proof}
+For instance, $M_0,M_1,M_2,M_3=1,2,3,5$, and the corresponding maximum
+binary digit counts are $1,2,2,3$.
+
+\section{Growth and the digit error}
+\begin{lemma}\label{lem:growth}
+For all $n\ge0$,
+\begin{equation}\label{eq:growth}
+ \ph^n\le F_{n+2}\le\ph^{n+1}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+We have $1<\ph<2$ and $\ph^2=\ph+1$. At $n=0$,
+$1\le F_2=1\le\ph$. At $n=1$, $\ph\le F_3=2\le\ph^2$.
+If \eqref{eq:growth} holds at $n$ and $n+1$, add the respective bounds
+and use the Fibonacci recurrence:
+\[
+ \ph^n+\ph^{n+1}\le F_{n+4}\le\ph^{n+1}+\ph^{n+2}.
+\]
+The outside expressions equal $\ph^{n+2}$ and $\ph^{n+3}$, respectively,
+by $\ph^2=\ph+1$. This is \eqref{eq:growth} at $n+2$.
+Induction with two initial cases proves the lemma.
+\end{proof}
+
+\begin{theorem}[Uniform error and the conjectured asymptotic]\label{thm:asymptotic}
+For every $n\ge0$, \eqref{eq:strong} holds. In particular,
+\[
+ D_n=n\log_2\ph+O(1)=n\log_2\ph+O(\log n)\quad(n\longrightarrow\infty).
+\]
+\end{theorem}
+\begin{proof}
+Taking base-two logarithms in \eqref{eq:growth} gives
+\[
+ n\alpha\le\log_2 F_{n+2}\le(n+1)\alpha.
+\]
+For any positive integer $m$,
+\[
+ \log_2 m<d_2(m)\le\log_2 m+1.
+\]
+Apply this to $m=F_{n+2}$ and use Theorem~\ref{thm:exact}. The resulting
+inequalities are precisely \eqref{eq:strong}. Thus
+$|D_n-n\alpha|\le\alpha+1$ at every level, giving $O(1)$.
+Finally, $\log n\to+\infty$ as $n\to\infty$ on the natural numbers,
+so eventually $\log n\ge1$ and
+\[
+ |D_n-n\alpha|\le\alpha+1\le(\alpha+1)|\log n|.
+\]
+This is the defining norm estimate for the literal $O(\log n)$ assertion.
+The value $\log 1=0$ causes no issue: big-O at infinity concerns an eventual
+bound, whereas the separate uniform constant bound holds for all $n$.
+\end{proof}
+
+\begin{theorem}[Every integer digit base]\label{thm:allbases}
+Fix an integer $b\ge2$. Define $d_b(m)=\lfloor\log_b m\rfloor+1$ for
+$m>0$ and $D_n^{(b)}=\max_{(a,m)\in L_n}d_b(m)$. Then for all $n\ge0$,
+\[
+ D_n^{(b)}=\lfloor\log_b F_{n+2}\rfloor+1,\qquad
+ 0<D_n^{(b)}-n\log_b\ph\le\log_b\ph+1.
+\]
+In particular, $D_n^{(b)}=n\log_b\ph+O(1)$ with explicit absolute-error
+bound $\log_b\ph+1$.
+\end{theorem}
+\begin{proof}
+The attained denominator maximum is independent of the digit base, and
+$d_b$ is monotone. Taking base-$b$ logarithms in \eqref{eq:growth} gives
+$n\log_b\ph\le\log_b F_{n+2}\le(n+1)\log_b\ph$.
+Combine this with $\log_b m<d_b(m)\le\log_b m+1$.
+\end{proof}
+
+\begin{theorem}[The binary coefficient is unique]\label{thm:wrongbase}
+For every integer $b\ge3$, put $\delta_b=\log_2\ph-\log_b\ph>0$.
+Then for every $n\ge0$,
+\[
+ \left|D_n^{(b)}-n\log_2\ph\right|
+ \ge n\delta_b-(\log_b\ph+1).
+\]
+This error is unbounded and is not $O(\log n)$. Among integer bases
+$b\ge2$, the conjecture's $O(\log n)$ assertion holds if and only if $b=2$.
+\end{theorem}
+\begin{proof}
+Since $\log\ph>0$ and $\log b>\log2>0$, the quotient
+$\log\ph/\log b$ is strictly less than $\log\ph/\log2$. Set
+$e_n=D_n^{(b)}-n\log_b\ph$, so that $0<e_n\le\log_b\ph+1$ by
+Theorem~\ref{thm:allbases}. The absolute error against the binary slope
+is $|e_n-n\delta_b|\ge n\delta_b-e_n$, proving the lower bound.
+For any real $C$, choose a natural $n>(C+\log_b\ph+1)/\delta_b$ to
+obtain error greater than $C$.
+
+Unboundedness alone does not rule out $O(\log n)$. For that stronger
+conclusion, use $\log n=o(n)$. If the error were $O(\log n)$, it would
+be $o(n)$ and eventually at most $(\delta_b/2)n$. The lower bound exceeds
+that quantity when $n>2(\log_b\ph+1)/\delta_b$, a contradiction.
+The binary case is Theorem~\ref{thm:asymptotic}.
+\end{proof}
+
+\section{Lean statement and semantic correspondence}
+The project pins Lean \texttt{v4.33.0} and Mathlib \texttt{v4.33.0}
+(commit below).
+\begin{Verbatim}[fontsize=\small]
+db584cd6d46c92f209a44c0f1c829460d327499d
+\end{Verbatim}
+Its sole source file is \texttt{lean4/GoldenLaw.lean}, in namespace \texttt{CalkinWilf399}.
+Its definitions are:
+\begin{Verbatim}[fontsize=\small]
+def left (p : Nat x Nat) := (p.1, p.1 + p.2)
+def right (p : Nat x Nat) := (p.1 + p.2, p.2)
+level 0 = {(1, 1)}
+level (n + 1) = (level n).image left union (level n).image right
+maxDen n = (level n).sup Prod.snd
+digits2 m = (Nat.digits 2 m).length
+maxDigits n = (level n).sup (fun p => digits2 p.2)
+digitsBase b m = (Nat.digits b m).length
+maxDigitsBase b n = (level n).sup (fun p => digitsBase b p.2)
+\end{Verbatim}
+Here the ASCII \texttt{x} and \texttt{union} display product and union notation;
+the definitions in the source use Lean's actual Unicode notation.
+The finite supremum in $\N$ is a maximum on a nonempty finite set.
+The witness theorem establishes nonemptiness and attainment without an
+assumption about the computed maximum.
+
+For readability, let $\alpha$ stand for the exact Lean term
+\texttt{Real.logb 2 Real.goldenRatio}. The main theorem is
+\texttt{CalkinWilf399.calkin\_wilf\_digit\_golden\_law}; its statement, with
+that one abbreviation and ASCII display notation, is:
+\begin{Verbatim}[fontsize=\small]
+(\forall n, maxDen n = Nat.fib (n+2)) /\
+(\forall n, maxDigits n = digits2 (Nat.fib (n+2))) /\
+(\exists C : Real, \forall n : Nat, 1 <= n ->
+  |(maxDigits n : Real) - (n : Real) * alpha| <= C) /\
+((fun n : Nat => (maxDigits n : Real) - (n : Real) * alpha)
+  =O[atTop] (fun n : Nat => Real.log (n : Real)))
+\end{Verbatim}
+The displayed \texttt{\textbackslash forall}, \texttt{\textbackslash exists},
+\texttt{/\textbackslash}, and \texttt{Real} are textual equivalents of
+Lean's quantifiers, conjunction, and real-number type. No mathematical
+hypothesis is suppressed. The literal compilable statement is in the source.
+
+{\raggedright
+\texttt{level\_bounds} proves Lemma~\ref{lem:invariant}, and
+\texttt{fibonacci\_witnesses} proves Lemma~\ref{lem:witness}.
+\texttt{maxDen\_eq\_fib} and \texttt{maxDigits\_eq\_fib\_digits} prove
+the maxima over the recursively defined level, rather than defining the
+maximum to be a Fibonacci number.
+\texttt{fib\_golden\_bounds} proves Lemma~\ref{lem:growth}.
+\texttt{digits2\_log\_bounds} uses Mathlib's digit-length and logarithm-floor
+identities. \texttt{bounded\_error} proves the explicit absolute bound
+with $C=\log_2\ph+1$ for every $n$, including zero.
+
+\texttt{maxDigits\_eq\_size} also identifies the maximum with
+\texttt{Nat.size (Nat.fib (n+2))}; \texttt{maxDigits\_eq\_log} gives
+\texttt{Nat.log 2 (Nat.fib (n+2)) + 1}.
+
+\texttt{exists\_bounded\_error} gives the existential form for
+$n\ge1$, and \texttt{digit\_error\_isBigO\_log} proves the eventual
+norm estimate in Mathlib's \texttt{Asymptotics.IsBigO}.\par}
+
+{\raggedright
+The all-base definitions use the same recursively generated levels.
+\texttt{maxDigitsBase\_eq\_log} proves the exact integer-log formula for
+$b\ge2$. \texttt{base\_digit\_error\_bounds} and
+\texttt{base\_bounded\_error} prove Theorem~\ref{thm:allbases}.
+\texttt{binary\_coefficient\_error\_lower} proves the explicit linear lower
+bound in Theorem~\ref{thm:wrongbase}; the unboundedness theorem is
+\texttt{binary\_coefficient\_error\_unbounded}.
+\texttt{binary\_coefficient\_error\_not\_isBigO\_log} proves the actual
+negation of Mathlib's asymptotic proposition, and
+\texttt{binary\_coefficient\_valid\_iff} proves its equivalence to $b=2$.
+The existing binary definitions and theorems are retained;
+\texttt{maxDigitsBase\_two} identifies the base-two specialization.\par}
+
+\textbf{Axiom audit.} The source ends with \texttt{\#print axioms} for the
+original binary main theorem and ten supporting or extended results. The successful compiler output
+in \texttt{verification.txt} shows only
+\begin{Verbatim}[fontsize=\small]
+[propext, Classical.choice, Quot.sound]
+\end{Verbatim}
+for each audited theorem. These are Lean's standard axioms. The project
+adds no axioms and contains no incomplete proofs or kernel-bypass tactics.
+No trureturing code is vendored; the proof is original to this package and
+uses Mathlib lemmas directly.
+
+\section{Other readings and historical context}
+In particular, Theorems~\ref{thm:allbases} and~\ref{thm:wrongbase} give
+\[
+ D_n^{(10)}=\lfloor\log_{10}F_{n+2}\rfloor+1
+           =n\log_{10}\ph+O(1),
+\]
+with explicit bound $\log_{10}\ph+1$. Its error against $n\log_2\ph$
+is unbounded and not $O(\log n)$. These decimal and general-base claims
+are consequences of the accompanying Lean theorems, rather than
+additional observations confined to the report.
+Changing the convention to put the root at level one replaces $F_{n+2}$ by
+$F_{n+1}$ and shifts $D_n$ by one level. This changes only the bounded error,
+so the claimed asymptotic coefficient remains valid.
+
+For context, Stern's diatomic sequence is defined by
+$s(0)=0$, $s(1)=1$, $s(2k)=s(k)$, and $s(2k+1)=s(k)+s(k+1)$.
+The breadth-first labels at level $n$ are
+\[
+ \frac{s(j)}{s(j+1)},\qquad 2^n\le j<2^{n+1}.
+\]
+This follows inductively because the two children at indices $2j,2j+1$
+have labels $(s(j),s(j)+s(j+1))$ and
+$(s(j)+s(j+1),s(j+1))$.
+Consequently our denominator theorem also yields
+\[
+ \max_{2^n<k\le2^{n+1}}s(k)=F_{n+2}.
+\]
+The often-used interval $[2^n,2^{n+1}]$ has the same maximum, because its
+additional left endpoint has value $s(2^n)=1$. This discussion is a bridge
+to classical diatomic-sequence literature, not a lemma assumed by the Lean
+proof. Calkin and Wilf \cite{cw} explain the rational enumeration, and
+Lehmer \cite{lehmer} is a classical reference on Stern's diatomic series.
+Lucas's 1878 work \cite{lucas} supplies historical context for recurrence
+sequences. We do not claim that the present digit statement, or the precise
+interval maximum with our indexing, is a theorem quoted from Lucas.
+The tree argument above independently proves the exact bound needed here.
+
+\section{Reproduction and supplementary computation}
+From the \texttt{lean4/} directory in a normal Lean installation, run
+\begin{verbatim}
+lake exe cache get && lake build
+\end{verbatim}
+Compilation against the pinned Mathlib environment succeeded. The recorded
+compiler output, including the standard-axiom audit and successful exit code,
+is preserved in \texttt{verification.txt}.
+
+Run \texttt{python3 verify.py} for the independent standard-library check.
+It generates the actual binary tree through level 17, checks positivity,
+coprimality, the three inequalities, both witnesses, and the two maxima.
+It also computes Stern's sequence independently and checks every label
+against the breadth-first enumeration. Finally, it checks the explicit
+error bound numerically through level 10000 using exact integer Fibonacci
+numbers and exact digit lengths in bases $2,3,4,10,16$. It checks the
+all-base bounds and the linear lower bound against the binary coefficient. The floating-point error checks are only
+sanity checks: every assertion for all levels is proved in Lean without
+numerical approximations.
+
+Build this report with \texttt{pdflatex report.tex} twice. The delivered
+PDF and TeX source are self-contained.
+
+\begin{thebibliography}{9}
+\bibitem{cw} N.~Calkin and H.~S.~Wilf,
+Recounting the rationals, \emph{American Mathematical Monthly}
+107 (2000), no.~4, 360--363.
+\bibitem{lehmer} D.~H.~Lehmer,
+On Stern's diatomic series, \emph{American Mathematical Monthly}
+36 (1929), no.~2, 59--67.
+\bibitem{lucas} E.~Lucas,
+Th\'eorie des fonctions num\'eriques simplement p\'eriodiques,
+\emph{American Journal of Mathematics} 1 (1878),
+184--240 and 289--321.
+\end{thebibliography}
+\end{document}
