@@ -1,0 +1,2 @@
+import Conjecture2511
+#print axioms C2511.symmetric_tensors_are_forms

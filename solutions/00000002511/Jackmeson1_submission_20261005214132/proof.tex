@@ -1,0 +1,171 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\lean}[1]{\texttt{#1}}
+
+\title{Conjecture 00000002511: symmetric tensors are homogeneous polynomials,\\ and the dictionary is multiplicative}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Statement and reading}
+
+\textbf{Conjecture (verbatim).} \emph{Definition: Symmetric tensors: the symmetric version.
+Conjecture: The symmetric version of tensors corresponds to homogeneous polynomials: symmetric
+tensors are forms, and the dictionary closes under homogeneous polynomials.}
+
+\textbf{Reading.} This is the classical dictionary between symmetric tensors and homogeneous
+polynomials (forms); we prove it as a known result, it is not new. We fix a field $K$ of
+characteristic $0$, a $K$-vector space $V$ with a finite basis $b=(b_j)_{j\in\iota}$
+($n=|\iota|$), and a degree $d\ge 0$. We prove:
+\begin{enumerate}
+\item[(a)] \emph{Symmetric tensors are forms:} the dictionary map sends every symmetric
+  $d$-tensor to a homogeneous polynomial of degree $d$ in the $n$ variables $X_j$.
+\item[(b)] \emph{Correspondence:} restricted to symmetric tensors, the dictionary is a linear
+  bijection $\mathrm{Sym}^d(V)\to K[X_j: j\in\iota]_d$.
+\item[(c)] \emph{The dictionary closes under products of forms:} the symmetric product
+  $T\odot U$ of symmetric tensors is sent to the product of the two forms, and conversely the
+  product $pq$ of two forms corresponds to the symmetric product of the tensors of $p$ and $q$.
+\end{enumerate}
+\textbf{Conventions.} (i) Characteristic $0$ is assumed (the standard setting; both sources
+below work in it). We do not consider other characteristics. (ii) $d=0$ is allowed:
+$V^{\otimes 0}=K$ and the forms of degree $0$ are the constants. (iii) Product convention: the
+symmetrisation is the \emph{averaging} operator $\mathrm{Sym}\,t=\frac1{d!}\sum_{\sigma\in S_d}
+\sigma\cdot t$ and $T\odot U=\mathrm{Sym}(T\otimes U)$, where $T\otimes U$ puts the $d$ factors of
+$T$ before the $e$ factors of $U$. Only this normalisation is formalised. (iv) The polynomials are formal polynomials in the
+coordinates $X_j$; Theorem~\ref{thm:eval} identifies them with the polynomial functions
+$\varphi\mapsto T(\varphi,\dots,\varphi)$ on $V^*$.
+
+\section{Definitions (as formalised)}
+
+\begin{definition}
+$V^{\otimes d}$ is Mathlib's \lean{PiTensorProduct} $\bigotimes_{k\in\mathrm{Fin}\,d}V$
+(\lean{TPow K V d}). A permutation $\sigma\in S_d$ acts by permuting the tensor factors,
+$\sigma\cdot(v_1\otimes\dots\otimes v_d)=v_{\sigma^{-1}(1)}\otimes\dots\otimes v_{\sigma^{-1}(d)}$
+(\lean{permAct}, which is \lean{PiTensorProduct.reindex}). The \emph{symmetric tensors}
+$\mathrm{Sym}^d(V)$ (\lean{symTensors K V d}) are the tensors fixed by every $\sigma\in S_d$.
+\end{definition}
+This is the definition in the retrieved Wikipedia article: ``Then T is a symmetric tensor if
+[$\tau_\sigma T=T$] for the braiding maps associated to every permutation $\sigma$ on the symbols
+\{1,2,...,k\}''.
+
+\begin{definition}
+The generic linear form is $\ell(v)=\sum_j b^*_j(v)\,X_j$, i.e.\ the linear map with
+$b_j\mapsto X_j$ (\lean{linForm}). The dictionary map $P=P_{b,d}:V^{\otimes d}\to K[X_j:j\in\iota]$
+(\lean{toPoly}) is the linear map with $P(v_1\otimes\dots\otimes v_d)=\ell(v_1)\cdots\ell(v_d)$
+(defined by the universal property \lean{PiTensorProduct.lift}). Forms of degree $d$ are Mathlib's
+\lean{MvPolynomial.homogeneousSubmodule $\iota$ K d}.
+\end{definition}
+
+\begin{theorem}[\lean{eval\_toPoly}]\label{thm:eval}
+For every linear functional $\varphi\in V^*$ and $T\in V^{\otimes d}$,
+$P(T)\big((\varphi(b_j))_j\big)=(\varphi\otimes\dots\otimes\varphi)(T)$, i.e.\ $P(T)$ is the
+polynomial $\varphi\mapsto T(\varphi,\dots,\varphi)$ written in the coordinates of $\varphi$.
+\end{theorem}
+\begin{proof}
+Both sides are linear in $T$; on $v_1\otimes\dots\otimes v_d$ both equal $\prod_k\varphi(v_k)$,
+since evaluation at $(\varphi(b_j))_j$ composed with $\ell$ is $\varphi$ (check on the basis).
+\end{proof}
+
+\section{Proof}
+
+Let $B_i=b_{i_1}\otimes\dots\otimes b_{i_d}$, $i:\mathrm{Fin}\,d\to\iota$, be the product basis of
+$V^{\otimes d}$ (\lean{tBasis}, Mathlib's \lean{Basis.piTensorProduct}) and $T_i$ the coordinates of
+$T$. The \emph{content} of a word $i$ is the exponent vector $c(i)=\sum_k e_{i_k}\in\mathbb N^\iota$
+(\lean{content}); $c(i)_a=\#\{k: i_k=a\}$ and $|c(i)|=d$.
+
+\begin{lemma}\label{lem:coord}
+(1) $P(B_i)=X^{c(i)}$, hence $P(T)=\sum_i T_i X^{c(i)}$ and the coefficient of $X^\alpha$ in $P(T)$
+is $\sum_{c(i)=\alpha}T_i$ (\lean{toPoly\_tBasis}, \lean{toPoly\_eq\_sum}, \lean{coeff\_toPoly}).
+(2) $(\sigma\cdot T)_i=T_{i\circ\sigma}$ (\lean{repr\_permAct}).
+(3) If $c(i)=c(j)$ then $i=j\circ\sigma$ for some $\sigma\in S_d$ (\lean{exists\_perm\_of\_content\_eq}:
+the fibres $\{k:i_k=a\}$ and $\{k:j_k=a\}$ have equal size, and \lean{Equiv.ofFiberEquiv} glues
+bijections between them). Hence a symmetric $T$ has $T_i=T_j$ whenever $c(i)=c(j)$
+(\lean{repr\_sym\_eq}).
+(4) Every $\alpha\in\mathbb N^\iota$ with $|\alpha|=d$ is $c(i)$ for some $i$
+(\lean{exists\_content\_eq}, induction on $d$, removing one unit from a nonzero entry).
+\end{lemma}
+
+\emph{(a) Forms.} By Lemma~\ref{lem:coord}(1), $P(T)$ is a combination of monomials of degree
+$d$, so $P(T)$ is homogeneous of degree $d$ for every $T$, in particular for symmetric $T$
+(\lean{toPoly\_mem}).
+
+\emph{(b) Injectivity.} Let $T$ be symmetric with $P(T)=0$ and fix $i$. With $F=\{j:c(j)=c(i)\}$,
+Lemma~\ref{lem:coord}(1),(3) give $0=\sum_{j\in F}T_j=|F|\,T_i$. Since $i\in F$, $|F|\ge1$, and
+$|F|\neq0$ in $K$ because $\mathrm{char}\,K=0$; so $T_i=0$ (\lean{toPoly\_eq\_zero}).
+
+\emph{(b) Surjectivity.} Let $|\alpha|=d$, $F_\alpha=\{j:c(j)=\alpha\}$ (nonempty by
+Lemma~\ref{lem:coord}(4)) and $S_\alpha=|F_\alpha|^{-1}\sum_{j\in F_\alpha}B_j$. By
+Lemma~\ref{lem:coord}(2) and $c(j\circ\sigma)=c(j)$, $S_\alpha$ is symmetric, and by (1)
+$P(S_\alpha)=X^\alpha$ (\lean{exists\_sym\_monomial}). The forms of degree $d$ are spanned by the
+monomials $X^\alpha$ with $|\alpha|=d$ (Mathlib \lean{homogeneousSubmodule\_eq\_finsupp\_supported}),
+so every form of degree $d$ is $P$ of a symmetric tensor (\lean{exists\_sym\_of\_mem}). Hence the
+restriction \lean{symToForm b d} is bijective (\lean{symToForm\_bijective}) and gives the linear
+isomorphism \lean{symEquiv b d} $:\mathrm{Sym}^d(V)\simeq K[X]_d$; in particular the two spaces have
+equal dimension (\lean{finrank\_symTensors}).
+
+\emph{(c) Products.} Let $T\otimes U\in V^{\otimes(d+e)}$ be
+\lean{reindex finSumFinEquiv (tmulEquiv (T $\otimes$ U))} (\lean{tmulL}). On pure tensors
+$P(T\otimes U)=\prod_{k<d+e}\ell(\cdot)=P(T)P(U)$ (split the product with \lean{Fin.prod\_univ\_add}),
+so by bilinearity $P(T\otimes U)=P(T)P(U)$ (\lean{toPoly\_tmulL}). Also $P(\sigma\cdot t)=P(t)$
+(the product of the $\ell(v_k)$ is reordered, \lean{toPoly\_permAct}), hence $P(\mathrm{Sym}\,t)=
+\frac1{d!}\cdot d!\cdot P(t)=P(t)$ (\lean{toPoly\_symz}). We check that $\mathrm{Sym}\,t$ is symmetric
+(\lean{symz\_mem}) and that $\mathrm{Sym}$ fixes symmetric tensors (\lean{symz\_of\_mem}). Therefore
+$P(T\odot U)=P(T\otimes U)=P(T)P(U)$ (\lean{symToForm\_symProd}). Applying the inverse isomorphisms
+gives the converse statement in (c).
+
+\section{Lean formalisation}
+
+File \lean{Conjecture2511/Basic.lean} (namespace \lean{C2511}, 341 lines, only
+\lean{import Mathlib}). The main theorem is
+\begin{verbatim}
+theorem symmetric_tensors_are_forms [CharZero K] (b : Module.Basis iota K V) :
+  (forall (d : Nat) (T : TPow K V d), T mem symTensors K V d ->
+     toPoly b d T mem homogeneousSubmodule iota K d) /\
+  (forall d : Nat, Function.Bijective (symToForm b d)) /\
+  (forall (d e : Nat) (T : symTensors K V d) (U : symTensors K V e),
+     (symToForm b (d + e) (symProd T U) : MvPolynomial iota K) =
+       symToForm b d T * symToForm b e U) /\
+  (forall (d e : Nat) (p : homogeneousSubmodule iota K d)
+     (q : homogeneousSubmodule iota K e),
+     (symEquiv b (d + e)).symm <p * q, p.2.mul q.2> =
+       symProd ((symEquiv b d).symm p) ((symEquiv b e).symm q))
+\end{verbatim}
+(ASCII transliteration of the Lean source; $\iota$ is an arbitrary \lean{Fintype}, $V$ any $K$-vector space with basis $b$). Supporting
+results: \lean{eval\_toPoly}, \lean{symEquiv}, \lean{finrank\_symTensors}, \lean{symz\_of\_mem}.
+No component from earlier packages was reused.
+
+\textbf{Axiom audit.} \lean{lake build} succeeds; \lean{\#print axioms} for
+\lean{symmetric\_tensors\_are\_forms}, \lean{eval\_toPoly}, \lean{symEquiv},
+\lean{finrank\_symTensors} and \lean{symz\_of\_mem} each reports
+\lean{[propext, Classical.choice, Quot.sound]}. There is no \lean{sorry}, no \lean{native\_decide}
+and no added axiom.
+
+\section{Sources (retrieved)}
+\begin{itemize}
+\item Wikipedia, \emph{Symmetric tensor}, \url{https://en.wikipedia.org/wiki/Symmetric_tensor}:
+``The space of symmetric tensors of order r on a finite-dimensional vector space V is naturally
+isomorphic to the dual of the space of homogeneous polynomials of degree r on V.  Over fields of
+characteristic zero, the graded vector space of all symmetric tensors can be naturally identified
+with the symmetric algebra on V.'' The same article defines the averaging symmetrisation and the
+product: ``Given two tensors T1 $\in$ Symk1(V) and T2 $\in$ Symk2(V), we use the symmetrization
+operator to define:'' $T_1\odot T_2=\mathrm{Sym}(T_1\otimes T_2)$.
+\item P. Comon, G. Golub, L.-H. Lim, B. Mourrain, \emph{Symmetric tensors and symmetric tensor
+rank}, SIAM J. Matrix Anal. Appl. (2008), \url{https://arxiv.org/abs/0802.1681}, Section 3.1
+``Equivalence with homogeneous polynomials'': ``every symmetric tensor of order and dimension may
+be uniquely associated with a homogeneous polynomial of degree in variables'' and ``the
+correspondence between symmetric tensors and homogeneous polynomials is obviously bijective''
+(mathematical symbols were lost in the retrieved text).
+\end{itemize}
+
+\end{document}
