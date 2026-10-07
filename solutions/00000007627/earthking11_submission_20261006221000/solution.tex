@@ -1,0 +1,72 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Minimal left ideals are not matrix factors\\Conjecture 00000007627}
+\author{earthking11}
+\date{October 6, 2026}
+\begin{document}
+\maketitle
+\section*{Statement and interpretation}
+The source defines ideals as left-module structures and asserts that their
+minimal-ideal count equals the matrix-factor count, with a center-dimension
+counting law. It gives no ring or field restriction. We use the usual
+meaning of minimal nonzero left ideals and matrix factors in a finite
+direct-product decomposition. We count distinct ideals, not their module
+isomorphism classes. The latter is a different assertion.
+
+\begin{theorem}
+Let $K=\mathbb F_2$ and $R=M_2(K)$, considered as its own left regular
+module. The actual finite set of minimal left ideals has cardinality at
+least $2$. Nevertheless $R$ is a single simple matrix factor, and its
+center has dimension $1$ over $K$. Thus the two claimed counts disagree.
+\end{theorem}
+\begin{proof}
+Consider the two column-supported ideals
+\[
+ L_0=\left\{\begin{pmatrix}a&0\\b&0\end{pmatrix}:a,b\in K\right\},
+ \qquad
+ L_1=\left\{\begin{pmatrix}0&a\\0&b\end{pmatrix}:a,b\in K\right\}.
+\]
+They are closed under addition and left multiplication by arbitrary
+matrices in $R$. Each is nonzero, and $E_{00}$ belongs to $L_0$ but not
+$L_1$, so they are distinct.
+
+To prove minimality, take a nonzero matrix $A\in L_0$. At least one entry
+in its first column is $1$. Let its row index be $j$. For any $B\in L_0$,
+choose $C$ whose column $j$ is the first column of $B$, with its other
+column zero. Then $CA=B$. Hence any nonzero left ideal inside $L_0$
+contains all of $L_0$. This proves minimality. The same argument, using
+the second column, proves that $L_1$ is minimal.
+
+Since $R$ is finite, its set of submodules and the subset of minimal
+left ideals are finite. The two distinct ideals give an injection from
+a two-element set, so the actual minimal-left-ideal count is at least $2$.
+On the other hand, $R$ is a simple matrix ring and has the genuine
+one-factor decomposition
+\[
+ R\ \cong\ \prod_{i\in\{0\}} M_2(K),
+ \qquad A\longmapsto (i\longmapsto A).
+\]
+The inverse evaluates at the sole index, and the actual factor-index
+set has cardinality $1$. Finally, the center of $M_2(K)$ is the scalar
+copy of $K$, so its dimension over $K$ is $1$. Neither count can equal
+the minimal-left-ideal count.
+\end{proof}
+
+\section*{Formal verification and limits}
+Lean uses the actual matrix ring, its left regular module
+\texttt{Submodule R R}, the subtype of all minimal left ideals, and the
+actual \texttt{Subalgebra.center}. It proves minimality against every
+nonzero subideal, finite cardinality, the injection, the one-factor ring
+equivalence, ring simplicity and the center dimension. The capstone
+combines the decomposition witness with both actual counting mismatches.
+
+The project builds on Lean 4.33.1 with pinned Mathlib; printed audits use
+only propositional extensionality, classical choice and quotient soundness.
+No unfinished proof, native evaluation, extra axiom or long search is used.
+The source does not restrict this problem to Clifford algebras; no claim
+that this example is a Clifford algebra is needed or made. We do not
+assign a new meaning to its unspecified ``direct-sum index.''
+\end{document}
