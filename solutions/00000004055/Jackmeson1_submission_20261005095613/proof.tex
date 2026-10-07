@@ -1,0 +1,168 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A disproof of Conjecture 00000004055\\[2pt]
+\large Over the self-injective algebra $k[x]/(x^2)$ every syzygy period is $1$, so no prime period occurs}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000004055 reads (English):
+\begin{quote}
+\emph{Definition:} The syzygy $\Omega(M)$ is the kernel of the minimal projective cover, and the
+period is the minimal number of iterations first returning to an isomorphic module.
+\emph{Conjecture:} On every self-injective algebra the syzygy period of any prescribed prime $p$
+can be realized, and the minimal period 2 is attained by open-chain modules.
+\end{quote}
+The Chinese text says the same: on every self-injective algebra, a syzygy period equal to any
+given prime $p$ can be realized.
+
+\textbf{Reading.} Clause 1: for every self-injective algebra $R$ and every prime $p$ there is an
+$R$-module $M$ of syzygy period $p$. Clause 2: every self-injective algebra has a module of
+period $2$ (an ``open-chain module''; this notion is undefined, and we show that no module at
+all has period $2$ in our example).
+
+We refute both clauses with one algebra, $A=k[\varepsilon]$ with $\varepsilon^2=0$ (isomorphic to
+$k[x]/(x^2)$), over any field $k$. It is a commutative $2$-dimensional algebra, and it is not
+semisimple (the ideal $\varepsilon A$ is a nonzero nilpotent ideal).
+
+\section{Definitions}
+
+Let $R$ be a ring.
+\begin{definition}
+A submodule $K\le P$ is \emph{superfluous} if $K+L=P$ implies $L=P$ for every submodule $L$.
+A \emph{projective cover} of $M$ is an epimorphism $\pi:P\to M$ with $P$ projective and $\ker\pi$
+superfluous in $P$. ($R$ is \emph{self-injective} if $R$ is injective as an $R$-module.)
+\end{definition}
+These are the standard notions: Wikipedia, \emph{Projective cover}: ``A projective cover is a pair
+(P,p), with P a projective object in'' $\mathcal{C}$ ``and p a superfluous epimorphism'', where for
+$R$-modules ``a superfluous epimorphism is then an epimorphism'' $p:P\to M$ ``such that the kernel
+of p is a superfluous submodule of P''. Wikipedia, \emph{Essential extension}: ``The dual notion of an
+essential submodule is that of superfluous submodule (or small submodule).'' It defines them as in
+Definition~1. Wikipedia, \emph{Injective
+module}: ``If a ring is injective over itself as a right module, then it is called a right
+self-injective ring.''
+
+\begin{definition}[Lean: \texttt{IsSyzygy}, \texttt{IterSyz}, \texttt{HasPeriod}]
+$N$ is a syzygy of $M$ if $N\cong\ker\pi$ for some projective cover $\pi:P\to M$.
+$\Omega^0(M)\cong N$ means $M\cong N$, and $\Omega^{n+1}(M)\cong N$ means that there is a syzygy
+$M'$ of $M$ with $\Omega^n(M')\cong N$. $M$ has \emph{period} $p$ if $p\ge1$,
+$\Omega^p(M)\cong M$, and $\Omega^m(M)\not\cong M$ for $1\le m<p$.
+\end{definition}
+Projective covers are unique up to isomorphism when they exist, so this agrees with the usual
+functional $\Omega$. We do not need that fact: Theorem~\ref{thm:main} shows that every syzygy of a
+periodic module is isomorphic to it, so the result holds for any choice of covers. Modules are
+arbitrary (not required to be finitely generated); this only weakens the existence claim.
+
+\textbf{Conventions.} $\mathbb{N}$ contains $0$; periods are $\ge 1$. Clause 1 is formalized for
+commutative algebras (\texttt{PrimePeriodsRealized}): for every commutative ring $R$ that is a
+finite-dimensional $k$-algebra with $R$ injective over itself, and every prime $p$, some
+$R$-module (in \texttt{Type}) has period $p$. For a commutative ring, left and right
+self-injectivity coincide, and the clause for all self-injective algebras implies this one.
+
+\section{Proof}
+
+\begin{lemma}[\texttt{selfInjective}]
+$A$ is self-injective.
+\end{lemma}
+\begin{proof}
+Baer's criterion (Mathlib \texttt{Module.Baer.injective}): let $I$ be an ideal and $g:I\to A$
+linear. If $I$ contains an element $x=a+b\varepsilon$ with $a\ne0$, then $x$ is a unit, $I=A$ and
+$g$ extends to itself. Otherwise $I\subseteq\varepsilon A$. If $I=0$, take $0$. Otherwise
+$x_0=b_0\varepsilon\in I$ with $b_0\ne0$; $c=g(x_0)$ satisfies $\varepsilon c=g(\varepsilon x_0)=0$, so
+$c=c_1\varepsilon$, and $r\mapsto r\,(c_1/b_0)$ extends $g$.
+\end{proof}
+
+\begin{lemma}[\texttt{mem\_eps\_of\_eps\_smul}, \texttt{superfluous\_le\_eps}]
+Let $P$ be a projective $A$-module. (a) If $\varepsilon p=0$ then $p\in\varepsilon P$. (b) Every
+superfluous submodule $K$ of $P$ lies in $\varepsilon P$.
+\end{lemma}
+\begin{proof}
+$P$ has a splitting $s:P\to A^{(P)}$ of the map $A^{(P)}\to P$ (Mathlib
+\texttt{Module.projective\_def'}). If every coordinate of $s(p)$ lies in $\varepsilon A$, then
+$s(p)=\varepsilon f$ and $p=\varepsilon\cdot(\text{image of }f)\in\varepsilon P$. (a): $\varepsilon s(p)=s(\varepsilon p)=0$
+forces every coordinate into $\varepsilon A$. (b): if $y\in K\setminus\varepsilon P$, some coordinate
+$\varphi(y)=s(y)_i$ is a unit. Let $L=\{p:\varphi(p)\in\varepsilon A\}$, a submodule with $y\notin L$.
+Every $p$ equals $c y+(p-cy)$ with $c=\varphi(p)_0/\varphi(y)_0$ (constant terms), and $p-cy\in L$.
+So $K+L=P$ but $L\ne P$, a contradiction.
+\end{proof}
+
+\begin{lemma}[\texttt{eps\_smul\_ker}, \texttt{ker\_equiv\_of\_eps}]
+Let $\pi:P\to M$ be a projective cover. Then $\varepsilon$ kills $\ker\pi$. If $\varepsilon$ kills $M$, then
+$\ker\pi\cong M$.
+\end{lemma}
+\begin{proof}
+By (b), $\ker\pi\subseteq\varepsilon P$, and $\varepsilon^2=0$. If $\varepsilon M=0$, then $\mu:P\to\ker\pi$,
+$p\mapsto\varepsilon p$, is well defined and onto (by (b)), and $\ker\mu=\ker\pi$: if $\varepsilon p=0$ then
+$p=\varepsilon q$ by (a), so $\pi(p)=\varepsilon\pi(q)=0$; conversely $\ker\pi$ is killed by $\varepsilon$.
+Hence $\ker\pi\cong P/\ker\mu=P/\ker\pi\cong M$.
+\end{proof}
+
+\begin{theorem}[\texttt{periodic\_imp\_period\_one}, \texttt{period\_eq\_one}, \texttt{no\_prime\_period}]\label{thm:main}
+Let $M$ be an $A$-module with $\Omega^n(M)\cong M$ for some $n\ge1$. Then every syzygy of $M$ is
+isomorphic to $M$, and $\Omega^1(M)\cong M$. Hence every module of finite period has period $1$, and
+no $A$-module has period $p$ for any prime $p$.
+\end{theorem}
+\begin{proof}
+Every syzygy is killed by $\varepsilon$ (\texttt{syzygy\_killed}), so $M\cong\Omega^n(M)$ is killed by
+$\varepsilon$ (\texttt{iterSyz\_killed}). By the lemma, every syzygy of $M$ is isomorphic to $M$. If $M$
+had period $p\ge2$, then $\Omega^1(M)\cong M$ would contradict minimality.
+\end{proof}
+
+\begin{theorem}[\texttt{simple\_has\_period\_one}, \texttt{minimal\_period\_is\_one}]
+The simple module $\varepsilon A$ has period $1$: multiplication by $\varepsilon$, $A\to\varepsilon A$, is a
+projective cover with kernel $\varepsilon A$. So the least period over $A$ is $1$, and no module has
+period $2$.
+\end{theorem}
+
+\begin{corollary}[\texttt{conjecture\_4055\_false}, \texttt{period\_two\_false}]
+For every field $k$, \texttt{PrimePeriodsRealized k} is false, and so is the period-2 clause
+(every finite-dimensional commutative self-injective $k$-algebra has a module of period 2).
+\end{corollary}
+
+\section{Scope}
+
+Refuted: the literal reading (for every self-injective algebra and every prime $p$ some module has
+period $p$), already for $p=2$ and for every $p$; and the period-2 clause, whatever ``open-chain
+module'' means. Not refuted: (a) the reading ``for every prime $p$ some self-injective algebra has a
+module of period $p$''; (b) the reading in which $\Omega^n(M)\cong M$ is taken in the stable module
+category (isomorphism up to projective summands). It is not formalized and we make no claim about
+it, although Lemma~5 and \texttt{syzygy\_killed} show that every syzygy $N$ over $A$ already satisfies
+$\Omega(N)\cong N$.
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture4055/Basic.lean} (309 lines, Lean 4.33.1, Mathlib v4.33.1),
+namespace \texttt{C4055}. Main theorem:
+\texttt{C4055.conjecture\_4055\_false (k : Type) [Field k] : \textasciitilde PrimePeriodsRealized k}.
+\texttt{\#print axioms} for \texttt{conjecture\_4055\_false}, \texttt{period\_two\_false},
+\texttt{no\_prime\_period}, \texttt{periodic\_imp\_period\_one}, \texttt{minimal\_period\_is\_one}
+and \texttt{selfInjective} reports only \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\section*{Sources}
+\begin{itemize}
+\item \url{https://en.wikipedia.org/wiki/Projective_cover}
+\item \url{https://en.wikipedia.org/wiki/Essential_extension}
+\item \url{https://en.wikipedia.org/wiki/Injective_module}
+\end{itemize}
+
+\end{document}
