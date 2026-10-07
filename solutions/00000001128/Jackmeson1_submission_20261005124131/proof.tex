@@ -1,0 +1,132 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Sch}{\mathfrak S}
+\title{Conjecture 00000001128 is false:\\ $M(321,3)=1$ is not a multiple of $\min(3,3,2)!=2$}
+\author{Jackmeson1}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+Conjecture 00000001128 (English text, verbatim): ``Definition: $M(w,j)$ is the maximal monomial
+coefficient in the degree-$j$ part of the Schubert polynomial $\Sch_w$. Conjecture: $M(w,j)$
+equals $\min(j, \ell(w), \lceil \ell(w)/2\rceil)!$ times a lattice-path count $C(w)$, where $C(w)$
+has a product formula on 321-avoiding permutations; in particular $M(w, \ell(w))$ is an explicit
+function of the increasing-subsequence count of $w$.'' The Chinese text says the same.
+
+\paragraph{Reading.} The main clause asserts: there is a function $C$ (a lattice-path count, so a
+nonnegative integer) with
+\[ M(w,j)=\min(j,\ell(w),\lceil\ell(w)/2\rceil)!\cdot C(w) \tag{$\ast$} \]
+for all permutations $w$ and degrees $j$. We refute $(\ast)$ already at $j=\ell(w)$ (the case
+the text singles out), even allowing $C(w)$ to be any integer. Two readings are covered:
+(R1) $w$ ranges over all permutations; (R2) $(\ast)$ is only claimed for 321-avoiding $w$.
+The clauses about a product formula and about increasing subsequences are not used.
+
+\section{Definitions}
+Variables are 0-indexed: $x_0,\dots,x_n$ for $S_{n+1}$ (the text's $x_1,\dots,x_{n+1}$).
+$s_i=(i,\,i+1)$; $w s_i$ is $w$ with positions $i,i+1$ swapped in one-line notation;
+$\ell(w)=\#\{(a,b): a<b,\ w(a)>w(b)\}$ (inversions); $w_0$ is the longest permutation
+$k\mapsto n-k$.
+\begin{definition}[divided difference]
+$\partial_i P=(P-s_iP)/(x_i-x_{i+1})$, where $s_i$ swaps $x_i$ and $x_{i+1}$.
+\end{definition}
+\begin{definition}[Schubert polynomials, Lascoux--Schutzenberger]
+$\Sch_{w_0}=x_0^{n}x_1^{n-1}\cdots x_{n-1}$; $\partial_i\Sch_w=\Sch_{ws_i}$ if $w(i)>w(i+1)$, and
+$\partial_i\Sch_w=0$ if $w(i)<w(i+1)$.
+\end{definition}
+Source (Wikipedia, ``Schubert polynomial'', retrieved): ``${\mathfrak S}_{w_{0}}=x_{1}^{n-1}
+x_{2}^{n-2}\cdots x_{n-1}^{1}$'', ``$\partial_{i}{\mathfrak S}_{w}={\mathfrak S}_{ws_{i}}$'' if
+``$w(i)>w(i+1)$'', where $\partial_i$ sends $P$ to ``$(P-s_{i}P)/(x_{i}-x_{i+1})$''; ``Schubert
+polynomials can be calculated recursively from these two properties.''
+\begin{definition}
+$M(P,j)$ is the maximum of the coefficients of the monomials of total degree $j$ in the support of
+$P$ (Lean: \texttt{WithBot} $\mathbb Z$, $\bot$ if there is none).
+\end{definition}
+
+\section{Proof}
+\begin{lemma}
+$x_i-x_{i+1}$ divides $P-s_iP$ for every $P\in\mathbb Z[x_0,\dots,x_n]$, and the quotient is
+unique.
+\end{lemma}
+\begin{proof}
+Induction on $P$: constants give $0$; sums are clear; for $P\cdot x_k$,
+$Px_k-s_i(P)x_{s_i(k)}=(P-s_iP)x_k+s_i(P)(x_k-x_{s_i(k)})$, and $x_k-x_{s_i(k)}$ is $0$ or
+$\pm(x_i-x_{i+1})$. Uniqueness: $\mathbb Z[x]$ is a domain and $x_i\ne x_{i+1}$.
+\end{proof}
+
+\begin{theorem}[R1]
+In $S_3$, $w=321=w_0$, $\ell(w)=3$ and $\Sch_{321}=x_0^2x_1$, so $M(321,3)=1$. The right side of
+$(\ast)$ is $\min(3,3,2)!\cdot C=2C$, and $1=2C$ has no integer solution.
+\end{theorem}
+\begin{proof}
+$\Sch_{321}=\Sch_{w_0}=x_0^2x_1$ is the base case of the recursion. Its only monomial has degree
+3 and coefficient 1. The inversions of $321$ are $(0,1),(0,2),(1,2)$.
+\end{proof}
+To show the recursion is consistent (so the statement is not vacuous), the six polynomials
+$\Sch_{123}=1$, $\Sch_{213}=x_0$, $\Sch_{132}=x_0+x_1$, $\Sch_{231}=x_0x_1$,
+$\Sch_{312}=x_0^2$, $\Sch_{321}=x_0^2x_1$ are checked against all twelve conditions
+$(w,i)$, each by an explicit identity $(x_i-x_{i+1})Q=P-s_iP$.
+
+\begin{theorem}[R2]
+$w=4123\in S_4$ avoids 321, $\ell(w)=3$ and $\Sch_{4123}=x_0^3$, so $M(4123,3)=1\ne 2C$.
+\end{theorem}
+\begin{proof}
+$4321\to4312\to4132\to4123$ is a chain of descent steps at positions $2,1,2$ (0-indexed), so
+$\Sch_{4123}=\partial_2\partial_1\partial_2(x_0^3x_1^2x_2)$ for any family satisfying the
+characterization. We give all 24 Schubert polynomials of $S_4$ explicitly and check all
+$24\times3$ conditions; this family has $\Sch_{4123}=x_0^3$, so every family does.
+\end{proof}
+For reference, every Schubert polynomial of $S_4$ has maximal coefficient 1, while
+$\lceil\ell/2\rceil!\ge2$ once $\ell\ge3$; so $(\ast)$ fails for all 15 elements of $S_4$ of
+length $\ge3$ (computed, not used).
+
+\section{Lean formalization}
+File \texttt{lean/Conjecture1128/Basic.lean} (347 lines, only import \texttt{Mathlib}).
+Objects: \texttt{s i = swap i.castSucc i.succ}; \texttt{sAct i P = rename (s i) P};
+\texttt{dd i P}, the quotient given by \texttt{dvd\_sub\_sAct} (divisibility for every $P$),
+with \texttt{dd\_spec} and uniqueness \texttt{dd\_eq}; \texttt{xDelta n}
+$=\prod_k x_k^{n-k}$; \texttt{IsSchubert S} (fields \texttt{top}, \texttt{step},
+\texttt{zero}: exactly the characterization above with $w_0$ = Mathlib's \texttt{Fin.revPerm});
+\texttt{len} (inversions); \texttt{maxCoeff P j}; \texttt{formula l j C}
+$=\min(j,\min(l,(l+1)/2))!\cdot C$ (in $\mathbb N$, $(l+1)/2=\lceil l/2\rceil$).
+Main theorems:
+\begin{itemize}
+\item \texttt{disproof}: \texttt{IsSchubert S3}, and for every \texttt{S} with
+  \texttt{IsSchubert S} there is no \texttt{C : Perm (Fin 3) -> Int} with
+  \texttt{maxCoeff (S w) j = formula (len w) j (C w)} for all \texttt{w}, \texttt{j = len w}.
+  It uses \texttt{disproof\_321}, \texttt{schubert\_321}, \texttt{len\_w321},
+  \texttt{maxCoeff\_x0sq\_x1}, \texttt{isSchubert\_S3}.
+\item \texttt{disproof\_321\_avoiding}: \texttt{IsSchubert S4}, \texttt{Avoids321 w4123}, and for
+  every \texttt{S} with \texttt{IsSchubert S} no integer \texttt{C} satisfies $(\ast)$ at
+  $(4123,\ell(4123))$. It uses \texttt{schubert\_4123}, \texttt{isSchubert\_S4},
+  \texttt{w4123\_facts}, \texttt{maxCoeff\_x0cube}.
+\end{itemize}
+\texttt{\#print axioms} for both gives \texttt{[propext, Classical.choice, Quot.sound]}; no
+\texttt{sorry}, no \texttt{native\_decide}. \texttt{decide} is used only on permutations of
+\texttt{Fin 3} and \texttt{Fin 4} (one-line values, inversions, 321-avoidance).
+
+\section{Relation to the earlier submission}
+An earlier submission (PR \#201, orionsheep) had the right numbers but was closed. The reviewer
+wrote that it ``hardcodes the polynomial as an opaque monomial list [(2,1,0,1)] with no
+divided-difference construction and no Lean proof that this list IS the Schubert polynomial of
+321'', and asked for a version ``deriving $\Sch_{321}$ from $w_0$ by divided differences''.
+(An even earlier PR \#161 formalized a wrong object.) This submission defines the divided
+difference as the exact quotient in $\mathbb Z[x_0,\dots,x_n]$, defines Schubert polynomials by
+the Lascoux--Schutzenberger characterization, and proves that the $S_3$ and $S_4$ families
+satisfy it. In $S_3$, $321=w_0$, so $\Sch_{321}=x_0^2x_1$ is the base case of the recursion;
+the $S_4$ case derives $\Sch_{4123}=x_0^3$ from $w_0=4321$ by three divided differences and
+covers the 321-avoiding reading.
+
+\section*{Source}
+Wikipedia, ``Schubert polynomial'', \url{https://en.wikipedia.org/wiki/Schubert_polynomial}
+(formulas quoted above).
+\end{document}
