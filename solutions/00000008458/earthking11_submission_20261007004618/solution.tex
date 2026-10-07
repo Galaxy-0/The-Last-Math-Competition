@@ -1,0 +1,27 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{A Logical Contradiction in Conjecture 00000008458}
+\author{earthking11}
+\date{October 7, 2026}
+\begin{document}
+\maketitle
+
+\section*{The statements being compared}
+The conjecture defines a quasi-alternating link to be one whose Khovanov homology has width 1. It then asserts that the smallest quasi-alternating nonalternating link has crossing number 11 and homological width exactly 2. The text does not introduce a second width invariant or distinguish reduced from unreduced homology.
+
+\section*{Contradiction}
+Read the unqualified width in both clauses as the same integer-valued invariant $w(K)$. By the definition,
+\[
+  K\text{ is quasi-alternating}\quad\Longleftrightarrow\quad w(K)=1.
+\]
+The assertion about the smallest example entails that there exists a quasi-alternating nonalternating link $K$ with $w(K)=2$; it additionally asserts crossing number 11 and minimality. Quasi-alternating status gives $w(K)=1$, so the same integer would satisfy
+\[
+  1=w(K)=2,
+\]
+which is impossible. Therefore the asserted smallest example cannot exist with the stated properties, and the conjecture is false on its stated single-width reading.
+
+\section*{Formalization boundary}
+The Lean project makes no claim about link classification or crossing numbers. It formalizes the logical implication from the source definition and existential assertion for an arbitrary type of links and arbitrary width and crossing-number functions. If the author intended width 1 to refer to reduced Khovanov homology and width 2 to unreduced homology, then these would be different invariants and the contradiction would not follow; the source does not state that distinction.
+
+\end{document}
