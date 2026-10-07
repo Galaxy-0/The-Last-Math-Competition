@@ -1,0 +1,116 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A disproof of Conjecture 00000008189\\[2pt]
+\large A Poisson$(1/2)$ irregularity index forces density $1-\tfrac{13}{8}e^{-1/2}$ for index $\ge 3$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000008189 reads (English):
+\begin{quote}
+\emph{Conjecture:} The density of irr\_pairs (the frequency of irregular primes $p$) is $1 - e^{-1/2}$;
+the irregularity index of $p$ (the number of zeros) is Poisson$(1/2)$ (a half-Poisson law); the density of
+primes with large irregularity index (at least 3) is $e^{-1/2} (1/2)^3/3!$ (an explicit sparsity); and the
+expected number of counterexamples in the next exponential extension of the verified threshold $10^9$ of the
+Vandiver conjecture (to $10^{11}$) is $0.00$.
+\end{quote}
+The Chinese text gives the same third clause with ``$\ge 3$''. Write the mathematical clauses as
+(A) irregular primes have density $1-e^{-1/2}$; (B) the index is Poisson$(1/2)$; (C) primes of index at
+least $3$ have density $e^{-1/2}(1/2)^3/3!$. The fourth clause (an expected count of $0.00$) is not a
+mathematical assertion about the primes, and it is not formalized. We prove that (B) and (C) are
+inconsistent, so the conjunction is false.
+
+\section{Definitions}
+
+\begin{itemize}[nosep]
+\item Irregularity index (standard; Buhler--Harvey, \url{https://arxiv.org/abs/0912.2121v2}: ``The index of
+  irregularity of $p$ \dots is the number of such irregular indices $k$''): $i(p) = \#\{k \text{ even},\ 2 \le
+  k \le p-3 : p \mid \operatorname{num}(B_k)\}$, with $B_k$ Mathlib's \texttt{bernoulli} (Lean
+  \texttt{irregIndex}). Only even $k \ge 2$ occur, so the sign convention for $B_1$ is irrelevant.
+\item Relative natural density among the primes: a property $P$ has density $d$ if
+  $\#\{p \le X \text{ prime} : P(p)\}/\#\{p \le X \text{ prime}\} \to d$ as $X \to \infty$ (Lean
+  \texttt{HasPrimeDensity}).
+\item (B) is read as: for every $k \ge 0$, the primes with $i(p) = k$ have density
+  $\mathrm{Po}(1/2)\{k\} = e^{-1/2}(1/2)^k/k!$ (Lean \texttt{HalfPoissonLaw}, using Mathlib's
+  \texttt{ProbabilityTheory.poissonMeasure} and \texttt{poissonMeasure\_real\_singleton}). For an
+  $\mathbb{N}$-valued statistic this is the same as convergence of the empirical distribution to
+  Poisson$(1/2)$.
+\item (C) is read literally: the primes with $i(p) \ge 3$ have density $e^{-1/2}(1/2)^3/3!$ (Lean
+  \texttt{LargeIndexClause}); (A): the primes with $i(p) \ge 1$ have density $1 - e^{-1/2}$ (Lean
+  \texttt{IrregularClause}).
+\end{itemize}
+
+\section{The proof}
+
+\begin{lemma}[Lean \texttt{card\_partition}, \texttt{ratio\_sum}]
+For $X \ge 2$ the four ratios for $i = 0$, $i = 1$, $i = 2$, $i \ge 3$ sum to $1$.
+\end{lemma}
+\begin{proof}
+The four classes partition the primes $\le X$, and there is at least one such prime.
+\end{proof}
+
+\begin{lemma}[Lean \texttt{tail\_ne}]
+If $\mathrm{Po}(1/2)\{0\} + \mathrm{Po}(1/2)\{1\} + \mathrm{Po}(1/2)\{2\} + d_3 = 1$ then
+$d_3 \ne e^{-1/2}(1/2)^3/3!$.
+\end{lemma}
+\begin{proof}
+The hypothesis says $d_3 = 1 - (1 + \tfrac12 + \tfrac18)e^{-1/2} = 1 - \tfrac{13}{8}e^{-1/2}$. If also
+$d_3 = e^{-1/2}/48$ then $\tfrac{79}{48} e^{-1/2} = 1$, so $e^{-1/2} = 48/79$ and
+$e = (79/48)^2 = 6241/2304 < 2.71$. But $e > 2.7182818283$ (Mathlib \texttt{Real.exp\_one\_gt\_d9}).
+\end{proof}
+Numerically the forced value is $1 - \tfrac{13}{8}e^{-1/2} \approx 0.014388$ and the stated value is
+$e^{-1/2}/48 \approx 0.012636$.
+
+\begin{theorem}[Lean \texttt{halfPoisson\_contradicts\_largeIndex}, \texttt{conjecture\_8189\_false}]
+$\neg(\mathrm{B} \wedge \mathrm{C})$, and hence $\neg(\mathrm{A} \wedge \mathrm{B} \wedge \mathrm{C})$.
+\end{theorem}
+\begin{proof}
+Under (B) and (C) the four ratios converge to $\mathrm{Po}(1/2)\{0\}, \mathrm{Po}(1/2)\{1\},
+\mathrm{Po}(1/2)\{2\}$ and $e^{-1/2}/48$. Their sum is eventually the constant $1$, so by uniqueness of limits
+the four limits sum to $1$, contradicting the previous lemma.
+\end{proof}
+
+\begin{remark}
+Only finite additivity and normalization are used, so the same contradiction holds for any finitely
+additive density on the primes (logarithmic, Dirichlet); \texttt{tail\_ne} is stated for arbitrary $d_3$.
+No property of Bernoulli numbers is used, and nothing is claimed about whether (A) or (B) is true (both are
+open heuristics of Lehmer and Siegel; Buhler--Harvey: ``This is motivated by the heuristic (Lehmer, Siegel)
+that if the Bernoulli numerators are random modulo $p$ \dots'').
+\end{remark}
+
+\section{Reading not refuted}
+
+If ``(at least 3)'' / ``$\ge 3$'' were a slip for ``exactly 3'', then (C) would be the $k=3$ case of (B),
+the clauses would be consistent, and nothing here would refute the conjecture. We do not adopt that reading:
+both languages say at least $3$, and ``large irregularity index'' names a threshold, not a single value.
+The reviewer should weigh this; the value $e^{-1/2}(1/2)^3/3!$ is exactly $\mathrm{Po}(1/2)\{3\}$.
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture8189/Basic.lean} (119 lines; only import \texttt{Mathlib}). Main theorems
+\texttt{C8189.halfPoisson\_contradicts\_largeIndex : }$\neg$\texttt{(HalfPoissonLaw }$\wedge$\texttt{
+LargeIndexClause)} and \texttt{C8189.conjecture\_8189\_false : }$\neg$\texttt{(IrregularClause }$\wedge$\texttt{
+HalfPoissonLaw }$\wedge$\texttt{ LargeIndexClause)}. \texttt{lake build} succeeds; \texttt{\#print axioms}
+reports only \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}. No \texttt{sorry}, no
+\texttt{native\_decide}, no new axioms.
+
+\end{document}
