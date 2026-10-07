@@ -1,0 +1,158 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\hgt}{\operatorname{ht}}
+
+\title{Disproof of conjecture 00000008338:\\ the optimal Siegel constant for $1\times 2$ systems is $H$, not $(nH)^{m/(n-m)}=2H$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clauses refuted}
+
+\textbf{Statement (English, verbatim).} Definition: The elimination constant of Siegel's lemma
+for linear forms: the height upper bound sieg\_c of minimal solutions of integer-coefficient
+linear systems. Conjecture: sieg\_c (the optimal constant of Siegel's lemma) is the
+Bombieri-Vaaler explicit $(n H)^{m/(n-m)}$ (a BV explicit law); tightness of the constant
+(attainment of minimal solution heights) holds for random integer matrices (a random matrix
+tightness law); the distribution of shortest kernel vectors of random matrices (Edelman's kernel
+distribution) has exponential tails (an exponential tail law); and the tail constant is the
+half-width $1/(2H)$ (a half-width tail law). (The Chinese text states the same: sieg\_c is the
+upper bound of the heights of minimal solutions, and sieg\_c, the optimal constant of Siegel's
+lemma, equals $(n\cdot H)^{m/(n-m)}$.)
+
+\textbf{Reading.} The Definition line names sieg\_c as \emph{the height upper bound of minimal
+solutions}: for $m\times n$ integer systems $Ax=0$ ($0<m<n$) with coefficients bounded by $H$,
+it is the supremum, over all such systems, of the least height of a nonzero integer solution.
+The parenthetical ``the optimal constant'' agrees. The conjecture is a conjunction. We refute
+\begin{itemize}
+\item[(C1)] $\mathrm{sieg}_c(m,n,H)=(nH)^{m/(n-m)}$ for all $0<m<n$ and $H\ge 1$;
+\item[(C2)] the attainment clause: some (random) integer system has a minimal solution of height
+$(nH)^{m/(n-m)}$.
+\end{itemize}
+Both fail at $(m,n)=(1,2)$ for \emph{every} $H\ge 1$. Since the ratio is $H/(2H)=1/2$ for all $H$,
+C1 also fails under the reading ``asymptotically equal as $H\to\infty$''. We do not address the
+two tail clauses (Edelman's kernel distribution and the constant $1/(2H)$); they are not needed,
+because the conjunction falls with C1.
+
+\textbf{Readings that are not refuted.} (a) If the first clause only meant that $(nH)^{m/(n-m)}$
+is \emph{a valid} upper bound, it is Siegel's lemma and is true. (b) If ``tightness'' only meant
+that the \emph{exponent} $m/(n-m)$ cannot be lowered (with an unspecified constant in front),
+our example does not refute it: at $(1,2)$ the exponent is $1$ and $\mathrm{sieg}_c(1,2,H)=H$,
+so the exponent is sharp there. Only the constant factor $n$ is wrong.
+
+\textbf{Remark on the name.} According to the retrieved Wikipedia article on Siegel's lemma
+(\url{https://en.wikipedia.org/wiki/Siegel%27s_lemma}), for $M$ equations in $N>M$ unknowns
+``where the coefficients are integers, not all 0, and bounded by B. The system then has a
+solution'' ``with the Xs all integers, not all 0, and bounded by'' $(NB)^{M/(N-M)}$; the same
+article (\url{https://en.wikipedia.org/wiki/Siegel%27s_lemma}) continues
+``Bombieri \& Vaaler (1983) gave the following sharper bound for the X's:'' (a bound in
+terms of $\det(AA^T)$ and the gcd of the maximal minors). So the formula $(nH)^{m/(n-m)}$ is
+Siegel's bound, not the Bombieri--Vaaler bound. We test the formula as written in the
+conjecture.
+
+\section{Definitions (as formalized)}
+
+All heights are sup norms, and $0\in\mathbb{N}$.
+
+\begin{definition}
+For $x\in\mathbb{Z}^n$, $\hgt(x)=\max_i |x_i|$ (\texttt{vecHeight}). For an integer matrix
+$A\in\mathbb{Z}^{m\times n}$, $\hgt(A)=\max_{i,j}|a_{ij}|$ (\texttt{matHeight}).
+\end{definition}
+
+\begin{definition}
+$A$ is \emph{admissible for $H$} (\texttt{Admissible}) if $A\neq 0$ and $\hgt(A)\le H$
+(coefficients integers, not all $0$, bounded by $H$, as in the statement of Siegel's lemma quoted
+above).
+\end{definition}
+
+\begin{definition}
+$\texttt{kerHeights}(A)=\{\hgt(x) : x\in\mathbb{Z}^n,\ x\neq 0,\ Ax=0\}$ and the height of a minimal
+solution is $\texttt{minSolHeight}(A)=\inf \texttt{kerHeights}(A)$ (Lean \texttt{sInf} on
+$\mathbb{N}$, whose value on $\emptyset$ is $0$; we only use it where we prove the set nonempty).
+\end{definition}
+
+\begin{definition}
+$\texttt{siegC}(m,n,H)=\sup\{\texttt{minSolHeight}(A) : A\in\mathbb{Z}^{m\times n}\text{ admissible
+for }H\}$ (Lean \texttt{sSup} on $\mathbb{N}$; for $(1,2)$ we prove the set has a greatest
+element, so no junk value is involved). The claimed value is
+$\texttt{bvValue}(m,n,H)=(nH)^{m/(n-m)}$, a real power (\texttt{Real.rpow}).
+\end{definition}
+
+\section{Proof}
+
+\begin{lemma}[\texttt{exists\_kerHeight\_le}, \texttt{minSolHeight\_le}]
+Let $H\ge 1$ and $A=(a\ \ b)\in\mathbb{Z}^{1\times 2}$ with $\hgt(A)\le H$. Then $Ax=0$ has a
+nonzero integer solution of height at most $H$, so $\texttt{minSolHeight}(A)\le H$.
+\end{lemma}
+\begin{proof}
+If $a=b=0$, take $x=(1,0)$, of height $1\le H$. Otherwise $x=(b,-a)\neq 0$ satisfies
+$ab+b(-a)=0$ and $\hgt(x)=\max(|a|,|b|)\le H$.
+\end{proof}
+
+This lemma does not use $A\ne 0$, so dropping the condition ``not all $0$'' does not change any
+of the values below.
+
+\begin{lemma}[\texttt{le\_vecHeight\_of\_witness}, \texttt{minSolHeight\_witness}]
+Let $H\ge1$ and $W=(H\ \ H-1)$ (\texttt{witnessMatrix}). $W$ is admissible for $H$, and
+$\texttt{minSolHeight}(W)=H$.
+\end{lemma}
+\begin{proof}
+$W\neq0$ and $\hgt(W)=H$. If $Hx_0+(H-1)x_1=0$ then $x_1=H(x_0+x_1)$, so $H\mid x_1$. If $x_1=0$
+then $Hx_0=0$, so $x_0=0$. Hence every nonzero solution has $x_1\neq 0$, so
+$\hgt(x)\ge|x_1|\ge H$. Combined with the previous lemma, $\texttt{minSolHeight}(W)=H$.
+\end{proof}
+
+\begin{theorem}[\texttt{isGreatest\_siegValues}, \texttt{siegC\_one\_two}, \texttt{isLeast\_real\_bound}]
+For every $H\ge1$, $H$ is the greatest minimal-solution height among admissible $1\times2$
+systems, so $\mathrm{sieg}_c(1,2,H)=H$. Moreover $H$ is the least real $B$ with
+$\texttt{minSolHeight}(A)\le B$ for all admissible $A$.
+\end{theorem}
+
+\begin{lemma}[\texttt{bvValue\_one\_two}]
+$\texttt{bvValue}(1,2,H)=(2H)^{1/(2-1)}=2H$.
+\end{lemma}
+
+\begin{theorem}[\texttt{conjecture8338\_false}]
+For every $H\ge1$:
+$\mathrm{sieg}_c(1,2,H)=H$, $\mathrm{sieg}_c(1,2,H)<(2H)^{1/(2-1)}$,
+$\mathrm{sieg}_c(1,2,H)\ne(2H)^{1/(2-1)}$, and for every admissible $1\times 2$ system $A$,
+$\texttt{minSolHeight}(A)\ne(2H)^{1/(2-1)}$ (\texttt{minSolHeight\_lt\_bvValue} gives $<$).
+\end{theorem}
+\begin{proof}
+By the theorem above, $\mathrm{sieg}_c(1,2,H)=H<2H$ since $H\ge 1$. Every admissible $A$ has
+$\texttt{minSolHeight}(A)\le H<2H$.
+\end{proof}
+
+The last part refutes C2 for every distribution on $1\times 2$ integer matrices (random or not):
+no admissible system attains the claimed value. The corollary \texttt{not\_siegC\_eq\_bvValue}
+states that $\forall\,m,n,H$ with $0<m<n$, $H\ge 1$: $\mathrm{sieg}_c(m,n,H)=(nH)^{m/(n-m)}$ is
+false.
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture8338/Basic.lean} (243 lines, \texttt{import Mathlib} only, namespace
+\texttt{Conjecture8338}), Lean \texttt{v4.33.1}, Mathlib \texttt{v4.33.1}. Main statement:
+\begin{verbatim}
+theorem conjecture8338_false (H : N) (hH : 1 <= H) :
+    siegC 1 2 H = H /\ (siegC 1 2 H : R) < bvValue 1 2 H /\
+    (siegC 1 2 H : R) != bvValue 1 2 H /\
+    forall A : Matrix (Fin 1) (Fin 2) Z, Admissible H A ->
+      (minSolHeight A : R) != bvValue 1 2 H
+\end{verbatim}
+(ASCII transliteration: \texttt{N}, \texttt{Z}, \texttt{R} are $\mathbb{N},\mathbb{Z},\mathbb{R}$.)
+\texttt{\#print axioms} for \texttt{conjecture8338\_false}, \texttt{not\_siegC\_eq\_bvValue} and
+\texttt{isLeast\_real\_bound} reports only \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}. There is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}

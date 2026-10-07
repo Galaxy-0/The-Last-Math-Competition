@@ -1,0 +1,3 @@
+import Conjecture8338
+#print axioms Conjecture8338.conjecture8338_false
+#print axioms Conjecture8338.not_siegC_eq_bvValue
