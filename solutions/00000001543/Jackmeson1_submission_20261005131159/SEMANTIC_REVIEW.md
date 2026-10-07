@@ -1,0 +1,9 @@
+# Semantic review (independent, pre-submission)
+
+An independent model reviewer (GPT-6 Astra, reasoning effort "xhigh", separate session) received the exact conjecture text, the full LaTeX report, the full Lean source and a reviewer checklist distilled from 93 closed-unmerged pull requests of this competition. It was asked whether the Lean main theorem settles the conjecture as written, whether the reading is faithful and not a loophole, whether the Lean definitions are faithful to the standard notions, whether the mathematics is correct, and whether report and Lean match. This is an automated review prepared by the submitter, not the competition's maintainer review.
+
+**Verdict:** accept = True; severity = none; reading faithful = True.
+
+**Reviewer notes (verbatim):**
+
+> The literal conjecture includes lines, so the x-axis is an admissible counterexample, not an out-of-scope degeneracy. Lean faithfully represents the Euclidean plane, polynomial zero sets, irreducibility, finite point sets, and distinct distances via the image of the distance map on off-diagonal pairs. It proves that the x-axis is an infinite irreducible real algebraic curve and that the n distinct equally spaced points on it determine at most n - 1 distances. The real-power growth argument establishes violations for every positive c and all sufficiently large n. Thus not_uniform and not_per_curve_eventually refute both the uniform and the curve-dependent eventual readings, without relying on small-n cases. The LaTeX argument and Lean formalization agree. The additional infiniteness requirement does not weaken this counterexample, since the line belongs to the standard class as well. The report appropriately distinguishes the stated conjecture from the version excluding lines and circles; its supplementary circle remark is not needed for the disproof. Under the supplied compilation and axiom-audit assurances, no substantive issue was found.
