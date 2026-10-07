@@ -1,0 +1,182 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\R}{\mathbb{R}}
+
+\title{Proof of conjecture 00000003287:\\ Gauss--Christoffel quadrature has its nodes at the zeros
+of the orthogonal polynomial and maximal precision $2n-1$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and its reading}
+
+\textbf{Statement (English, verbatim).} Definition: Orthogonal polynomials: three-term recurrence
+families of weight functions. Conjecture: Christoffel numerical integration: the nodes of Gauss
+quadrature are polynomial zeros, with the algebraic precision of quadrature the maximum $2n-1$.
+(Gauss quadrature 2n-1 maximal precision.) The Chinese text states the same.
+
+This is the classical theorem on Gauss--Christoffel quadrature; we prove it (it is a known result,
+not new). Quotations below are transliterated to ASCII. The Wikipedia article ``Gaussian
+quadrature'' (retrieved in this session) states that an
+$n$-point Gaussian rule ``is a quadrature rule constructed to yield an exact result for polynomials
+of degree 2n - 1 or less by a suitable choice of the nodes xi and weights wi for i = 1, ..., n'',
+and, in its proof of the fundamental theorem, ``Therefore pn has n distinct roots, all real, in the
+interval from a to b.''
+
+\textbf{Setting.} We work in the most general setting we could make faithful: a measure $\mu$ on
+$\R$ such that
+\begin{itemize}
+\item (\texttt{FiniteMoments}) $x\mapsto x^k$ is $\mu$-integrable for every $k\in\mathbb{N}$
+  (in particular $\mu$ is finite);
+\item (\texttt{NotFinitelySupported}) $\mu(\R\setminus s)\neq 0$ for every finite set $s$,
+  i.e.\ $\mu$ has infinitely many points of increase.
+\end{itemize}
+The second condition is the standard non-degeneracy condition: the Wikipedia article ``Orthogonal
+polynomials'' says the inner product $\langle f,g\rangle=\int fg\,d\alpha$ ``is positive definite if
+the function alpha has an infinite number of points of growth''. A weight function $w\ge 0$ on an
+interval $[a,b]$ (or on $\R$) is the case $\mu=w(x)\,dx$ with $w=0$ off the interval; Lean lemma
+\texttt{notFinitelySupported\_withDensity} proves that $w(x)\,dx$ satisfies the second condition
+whenever $\int w\neq 0$. The moment condition is kept as a hypothesis.
+
+\textbf{Definitions (all as in the Lean file).}
+\begin{itemize}
+\item $p$ is the \emph{monic orthogonal polynomial of degree $n$} (\texttt{IsMonicOrthogonal}) if
+  $p$ is monic, $\deg p=n$, and $\int p\,q\,d\mu=0$ for every real polynomial $q$ with
+  $\deg q<n$ (the zero polynomial has degree $-\infty$ and is included).
+\item An \emph{$n$-node rule} is a pair of maps $x,w:\{0,\dots,n-1\}\to\R$ (nodes and weights;
+  arbitrary, not necessarily distinct nodes, arbitrary real weights) and the functional
+  $f\mapsto\sum_i w_i f(x_i)$. It is \emph{exact up to degree $d$} (\texttt{IsExactUpTo}) if
+  $\int f\,d\mu=\sum_i w_i f(x_i)$ for every polynomial $f$ with $\deg f\le d$ (Lean's
+  \texttt{natDegree}; the zero polynomial is included).
+\item The \emph{algebraic precision} (\texttt{algebraicPrecision}) is
+  $\sup\{d\in\mathbb{N} : \text{the rule is exact up to degree } d\}$ (Lean's \texttt{sSup} on
+  $\mathbb{N}$; for the Gauss rule we prove this set has greatest element $2n-1$, so no
+  convention for empty or unbounded sets is used).
+\item The \emph{Christoffel numbers} of nodes $x$ (\texttt{christoffelWeight}) are
+  $\lambda_i=\int \ell_i\,d\mu$, where $\ell_i=\prod_{j\neq i}(X-x_j)/(x_i-x_j)$ is the Lagrange
+  basis polynomial (Mathlib's \texttt{Lagrange.basis}).
+\end{itemize}
+
+\textbf{Reading.} With $n\ge 1$ (natural-number subtraction $2n-1$ is then ordinary subtraction):
+\begin{enumerate}
+\item the orthogonal polynomial $p_n$ exists and is unique, and the ``three-term recurrence family''
+  of the Definition is realized: $p_{n+2}=(X-a)p_{n+1}-b\,p_n$ with $b>0$;
+\item $p_n$ has $n$ real zeros, all simple;
+\item the Gauss rule (nodes the zeros $x_1<\dots<x_n$ of $p_n$, weights the Christoffel numbers)
+  has positive weights, is exact up to degree $2n-1$ and not exact up to degree $2n$, so its
+  algebraic precision is exactly $2n-1$;
+\item ``the nodes of Gauss quadrature are polynomial zeros'': every $n$-node rule that is exact up
+  to degree $2n-1$ satisfies $p_n=\prod_i (X-x_i)$, so its nodes are exactly the zeros of $p_n$;
+\item ``the maximum $2n-1$'': every $n$-node rule (any nodes, any weights) exact up to degree $d$
+  has $d\le 2n-1$.
+\end{enumerate}
+
+\section{Proof}
+
+Write $I(f)=\int f\,d\mu$; by the moment condition every polynomial is integrable, so $I$ is a
+linear functional on $\R[X]$ (Lean: \texttt{integrable\_eval}, \texttt{I}).
+
+\begin{lemma}[\texttt{integral\_pos}]
+If $f\neq 0$ and $f(x)\ge 0$ for all $x\in\R$, then $I(f)>0$.
+\end{lemma}
+\begin{proof}
+$I(f)\ge 0$. If $I(f)=0$ then $f=0$ $\mu$-a.e., so $\mu$ is concentrated on the finite zero set of
+$f$, contradicting \texttt{NotFinitelySupported}.
+\end{proof}
+In particular $I(r^2)=0$ forces $r=0$ (\texttt{eq\_zero\_of\_I\_mul\_self}).
+
+\textbf{Existence and uniqueness} (\texttt{exists\_monicOrthogonal},
+\texttt{monicOrthogonal\_unique}). Let $V$ be the polynomials of degree $<n$, identified with $\R^n$
+by coefficients. The linear map $\Phi:V\to\R^n$, $\Phi(r)_i=I(rX^i)$, is injective: $\Phi(r)=0$
+gives $I(rq)=0$ for all $q\in V$, hence $I(r^2)=0$ and $r=0$. So $\Phi$ is surjective, and choosing
+$r$ with $\Phi(r)_i=-I(X^{n}X^i)$ gives the monic orthogonal $p_n=X^n+r$. If $p,p'$ are both monic
+orthogonal of degree $n$, then $d=p-p'$ has degree $<n$ and $I(d^2)=I(pd)-I(p'd)=0$, so $p=p'$.
+
+\textbf{Real simple zeros} (\texttt{roots\_card\_eq}, \texttt{roots\_nodup}). Key observation
+(\texttt{not\_nonneg\_mul}): there is no $s\neq 0$ with $\deg s<n$ and $p_n s\ge 0$ on $\R$, since
+then $0<I(p_ns)=0$. Write $p_n=P\,q$ with $P=\prod_{a}(X-a)$ over the real roots (with
+multiplicity) and $q$ without real zeros (Mathlib \texttt{exists\_prod\_multiset\_X\_sub\_C\_mul}).
+By the intermediate value theorem $q$ has constant sign (\texttt{const\_sign}). If $P$ had degree
+$<n$, then $s=\pm P$ would give $p_ns=\pm q P^2\ge 0$, impossible; so $p_n$ has $n$ real roots with
+multiplicity. If some root $a$ had multiplicity $\ge 2$, then $p_n=(X-a)^2s$ with $\deg s=n-2$ and
+$p_ns=(X-a)^2s^2\ge 0$, impossible; so the roots are simple.
+
+\textbf{Exactness up to $2n-1$} (\texttt{exact\_of\_roots}). Let $x_1,\dots,x_n$ be the zeros of
+$p_n$ and $\deg f\le 2n-1$. Divide: $f=p_n\,d+r$ with $\deg r<n$ and $\deg d\le n-1$ (Mathlib
+\texttt{modByMonic\_add\_div}). Then $I(p_nd)=0$, $r=\sum_i r(x_i)\ell_i$ (Lagrange interpolation,
+\texttt{Lagrange.eq\_interpolate}) and $f(x_i)=r(x_i)$, so
+$I(f)=I(r)=\sum_i r(x_i)\lambda_i=\sum_i\lambda_i f(x_i)$.
+
+\textbf{Positive weights} (\texttt{weight\_pos}). For any rule with distinct nodes that is exact up
+to degree $2n-1$, apply exactness to $\ell_i^2$ (degree $2n-2$): $w_i=\sum_j w_j\ell_i(x_j)^2=
+I(\ell_i^2)>0$.
+
+\textbf{Maximality} (\texttt{not\_exact\_two\_mul}, \texttt{precision\_le}). For any $n$-node rule
+let $\omega=\prod_i(X-x_i)$, of degree $n$. Then $\omega^2$ has degree $2n$,
+$I(\omega^2)>0$, and the rule gives $\sum_i w_i\omega(x_i)^2=0$. So no $n$-node rule is exact up to
+degree $2n$, hence none is exact up to any $d\ge 2n$; i.e.\ every exactness degree is $\le 2n-1$.
+For the Gauss rule the set of exactness degrees therefore has greatest element $2n-1$
+(\texttt{precision\_eq}).
+
+\textbf{Nodes are the zeros} (\texttt{nodes\_eq}). If an $n$-node rule is exact up to $2n-1$, then
+for $\deg q<n$ the product $\omega q$ has degree $\le 2n-1$, so $I(\omega q)=\sum_i
+w_i\omega(x_i)q(x_i)=0$. Thus $\omega$ is monic orthogonal of degree $n$, and by uniqueness
+$\omega=p_n$.
+
+\textbf{Three-term recurrence} (\texttt{three\_term\_recurrence}). Let $p_n,p_{n+1},p_{n+2}$ be
+monic orthogonal. $Xp_{n+1}-p_{n+2}$ has degree $\le n+1$; subtracting $a\,p_{n+1}$ and then
+$b\,p_n$ (with $a,b$ the appropriate top coefficients, \texttt{degree\_sub\_lead}) leaves
+$v$ of degree $<n$ with $I(vX^i)=0$ for $i<n$ (using $I(p_{n+1}X^{i+1})=0$), so $v=0$:
+$p_{n+2}=(X-a)p_{n+1}-b\,p_n$. Finally $b\,I(p_n^2)=I(p_{n+1}\cdot Xp_n)=I(p_{n+1}^2)>0$, so
+$b>0$.
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture3287/Basic.lean} (namespace \texttt{C3287}; only import
+\texttt{Mathlib}). The main theorem is
+\begin{verbatim}
+theorem gauss_christoffel (hmom : FiniteMoments mu)
+    (hsupp : NotFinitelySupported mu) {n : Nat} (hn : 0 < n) :
+    (exists! p : R[X], IsMonicOrthogonal mu n p) /\
+    forall p : R[X], IsMonicOrthogonal mu n p ->
+      (Multiset.card p.roots = n /\ p.roots.Nodup) /\
+      (exists x : Fin n -> R, StrictMono x /\
+        (forall a : R, p.IsRoot a <-> a in Set.range x) /\
+        (forall i, 0 < christoffelWeight mu x i) /\
+        IsExactUpTo mu x (christoffelWeight mu x) (2 * n - 1) /\
+        not IsExactUpTo mu x (christoffelWeight mu x) (2 * n) /\
+        algebraicPrecision mu x (christoffelWeight mu x) = 2 * n - 1) /\
+      (forall x w : Fin n -> R, IsExactUpTo mu x w (2 * n - 1) ->
+        p = prod i, (X - C (x i))) /\
+      (forall x w : Fin n -> R, forall d, IsExactUpTo mu x w d -> d <= 2 * n - 1)
+\end{verbatim}
+(ASCII transliteration of the Lean statement). Further top-level results:
+\texttt{three\_term\_recurrence} (item 1) and \texttt{notFinitelySupported\_withDensity} (weight
+functions $w(x)\,dx$ are admissible).
+
+\textbf{Axiom audit.} \texttt{lake build} succeeds; \texttt{\#print axioms} for
+\texttt{C3287.gauss\_christoffel}, \texttt{C3287.three\_term\_recurrence} and
+\texttt{C3287.notFinitelySupported\_withDensity} reports only \texttt{propext},
+\texttt{Classical.choice}, \texttt{Quot.sound}. No \texttt{sorry}, no \texttt{native\_decide}, no
+added axioms.
+
+\section{Sources}
+\begin{itemize}
+\item Wikipedia, ``Gaussian quadrature'', \url{https://en.wikipedia.org/wiki/Gaussian_quadrature}
+  (quoted above).
+\item Wikipedia, ``Orthogonal polynomials'', \url{https://en.wikipedia.org/wiki/Orthogonal_polynomials}
+  (quoted above).
+\end{itemize}
+
+\end{document}
