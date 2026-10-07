@@ -1,0 +1,57 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\title{A cardinality obstruction to a height-gap value set\\
+  A disproof of one assertion of conjecture 00000007766}
+\author{earthking11}
+\date{}
+
+\begin{document}
+\maketitle
+
+Conjecture 00000007766 asserts, among other things, that the value set of
+a real-valued height difference $D$ on periodic points in
+$\mathbb P^1(\overline{\mathbb Q})$ consists of $0$ and every real number at
+least a certain positive constant $c$. We show that no real-valued function
+on those periodic points can have such a value set.
+
+The algebraic closure $\overline{\mathbb Q}$ is countable: each algebraic
+number is a root of a nonzero polynomial in $\mathbb Q[X]$, there are
+countably many such polynomials, and each has finitely many roots. Also
+\[
+  \mathbb P^1(\overline{\mathbb Q})
+  =\{[z:1]:z\in\overline{\mathbb Q}\}\cup\{[1:0]\},
+\]
+so this projective line is countable. For any self-map $F$ of it, the set
+$\operatorname{Per}(F)$ of periodic points is a subset of a countable set.
+Consequently, for any function $D:\mathbb P^1(\overline{\mathbb Q})\to
+\mathbb R$, the image $D(\operatorname{Per}(F))$ is countable.
+
+On the other hand, $[c,\infty)$ is uncountable for every real $c$: the map
+$x\mapsto c+e^x$ injects $\mathbb R$ into it. Hence
+\[
+  [c,\infty)\not\subseteq D(\operatorname{Per}(F)),
+\]
+and in particular
+$D(\operatorname{Per}(F))\neq\{0\}\cup[c,\infty)$.
+This directly contradicts the conjecture's stated value-set assertion,
+regardless of the precise formula for $D$.
+
+\paragraph{Formalization.}
+The Lean file takes $K=\operatorname{AlgebraicClosure}(\mathbb Q)$ and
+represents $\mathbb P^1(K)$ by \texttt{Option K}, with \texttt{some z}
+representing $[z:1]$ and \texttt{none} representing $[1:0]$.
+It proves this type countable from the algebraicity of every element of $K$.
+For arbitrary $F$ and arbitrary real-valued $D$, the theorem
+\texttt{TLMC7766.no\_claimed\_value\_set} rules out the asserted exact
+value set. Its axiom audit contains only \texttt{propext},
+\texttt{Classical.choice}, and \texttt{Quot.sound}.
+
+\paragraph{Scope.}
+The argument does not require the formula for the canonical heights or the
+dual map. It refutes the universal coverage of a real interval claimed for
+their difference on algebraic periodic points. It makes no claim about the
+separate tail asymptotic.
+
+\end{document}
