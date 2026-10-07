@@ -1,0 +1,85 @@
+\pdfoutput=1
+\pdfmapfile{+symbols.map}
+\pdfmapfile{+cm.map}
+\pdfmapfile{+cmextra.map}
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,array}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\title{A Counterexample to the Dixon Probability Bound}
+\author{Galaxy-0}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+For the finite group of Lie type $G=\operatorname{PSL}_2(\mathbf F_5)$, eight explicitly certified proper subgroups cover 888 of the 3600 ordered pairs of elements. Consequently the probability that two independent uniform elements generate $G$ is at most $113/150$, strictly less than $1-1/5-1/25=19/25$. This disproves the universal lower-bound clause of conjecture 00000001184. The proof uses direct arithmetic of determinant-one matrices modulo five and a small finite certificate, without invoking an isomorphism with $A_5$.
+\end{abstract}
+\section{The group and the conjectured inequality}
+Let $\mathbf F_5=\mathbf Z/5\mathbf Z$ and
+\[
+G=\operatorname{SL}_2(\mathbf F_5)/\{I,-I\}
+ =\operatorname{PSL}_2(\mathbf F_5).
+\]
+This is a group of Lie type $A_1$ over the field with $q=5$ elements. Each determinant-one matrix has a nonzero first row. Its class modulo simultaneous sign has a unique representative whose first nonzero first-row entry is either 1 or 2, using the residues $0,1,2,3,4$. Write that representative as the tuple $(a,b,c,d)$ for the matrix with rows $(a,b)$ and $(c,d)$.
+
+There are $24$ possible nonzero first rows. For each, the determinant equation $ad-bc=1$ has five second-row solutions: it is a nonzero linear equation over $\mathbf F_5$. Thus $|\operatorname{SL}_2(\mathbf F_5)|=120$. The sign action is free, since a determinant-one matrix cannot equal its negative in characteristic five. Hence $|G|=60$.
+
+Products and inverses are computed as
+\[
+(a,b,c,d)(e,f,g,h)=(ae+bg,af+bh,ce+dg,cf+dh),
+\qquad (a,b,c,d)^{-1}=(d,-b,-c,a),
+\]
+reducing entries modulo five and then selecting the canonical sign. These are exactly the quotient-group operations.
+
+Let $N$ be the number of ordered pairs $(g,h)\in G^2$ with $\langle g,h\rangle=G$. Independent uniform sampling gives generation probability $N/3600$. At $q=5$ the proposed lower bound is $19/25$, so it would require
+\[
+25N\ge19\cdot3600=68400,
+\quad\text{equivalently}\quad N\ge2736.
+\]
+The source contains no exception for small fields or a restriction of this lower bound to sufficiently large $q$.
+\section{A finite proper-subgroup certificate}
+Encode a canonical tuple by the integer $125a+25b+5c+d$. The following eight sets of codes specify subsets $H_1,\ldots,H_8$ of $G$ completely.
+\begin{center}
+\small
+\begin{tabular}{ccl}
+Set&Size&Encoded elements\\[3pt]
+$H_1$&12&$45, 60, 126, 163, 183, 223, 243, 253, 289, 309, 349, 369$\\
+$H_2$&12&$46, 61, 126, 163, 199, 215, 230, 268, 289, 322, 332, 353$\\
+$H_3$&12&$46, 64, 126, 169, 185, 223, 230, 258, 292, 303, 349, 362$\\
+$H_4$&12&$49, 61, 126, 170, 183, 215, 239, 273, 292, 309, 328, 362$\\
+$H_5$&12&$49, 64, 126, 170, 185, 209, 243, 263, 278, 322, 332, 369$\\
+$H_6$&10&$45, 62, 126, 157, 199, 239, 263, 303, 340, 371$\\
+$H_7$&10&$45, 63, 126, 169, 209, 247, 268, 281, 310, 328$\\
+$H_8$&10&$47, 60, 126, 169, 199, 212, 273, 278, 316, 355$\\
+\end{tabular}
+\end{center}
+For each listed set, direct modular multiplication verifies that it contains the identity, is closed under multiplication and inversion, and consists of canonical determinant-one representatives. All eight omit the element $w=(0,1,4,3)$, whose code is 48. Thus they are proper subgroups. These checks are part of the kernel-checked Lean certificate; the accompanying independent Python checker also reconstructs the group from residue matrices and repeats them.
+
+Define
+\[
+C=\bigcup_{i=1}^8(H_i\times H_i)\subseteq G^2.
+\]
+The count uses this union, not a sum of subgroup sizes, so overlapping pairs are counted only once. Enumeration of the 3600 ordered pairs gives $|C|=888$. Equivalently, exactly 2712 pairs belong to none of these eight subgroup squares.
+
+For reproducibility, the count is the following finite procedure: enumerate residues $a,b,c,d$ from 0 to 4; retain determinant-one matrices with the canonical sign; enumerate all ordered pairs of retained tuples; count a pair once if both entries occur together in at least one row of the displayed table. The list equality between this arithmetic enumeration and the 60 submitted representatives, the subgroup certificates, and the complement count are checked directly in Lean.
+\section{Disproof}
+\begin{theorem}
+The pair-generation probability of $\operatorname{PSL}_2(\mathbf F_5)$ is strictly below $19/25$. Therefore conjecture 00000001184 is false as written.
+\end{theorem}
+\begin{proof}
+If $(g,h)\in H_i\times H_i$, then every group word in $g,h$ and their inverses lies in $H_i$. Since $w\notin H_i$, the pair does not generate $G$. Thus all 888 pairs in $C$ fail to generate, and
+\[
+N\le3600-888=2712,
+\qquad
+\frac{N}{3600}\le\frac{113}{150}<\frac{114}{150}=\frac{19}{25}.
+\]
+This contradicts the conjectured lower bound at $q=5$.
+\end{proof}
+The certificate is deliberately only an upper bound on the generation probability. No exact generating-pair count or classification of all maximal subgroups is needed. Nor does this single finite counterexample disprove an amended eventual large-$q$ bound or the separate asymptotic-tightness clause.
+\section{Formalization and verification scope}
+The standard-library-only Lean 4.31.0 source uses explicit residue-matrix arithmetic and defines the subgroup generated by a pair inductively, with constructors for the identity, the two generators, product and inverse. Induction proves that every generated element remains in any one of the certified subgroups containing the pair. A finite-list counting lemma then bounds the actual generating-pair count by the 2712 pairs not excluded by the certificates. The final theorem negates the exact cross-multiplied probability inequality at $q=5$; it does not merely negate an unrelated numerical assertion.
+
+The formal checks include all 120 determinant-one matrices, the exact fibers $\{M,-M\}$ of normalization, compatibility with multiplication and inversion, the 60 distinct canonical representatives, and duplicate-free enumeration of ordered pairs. Raw matrix associativity is proved symbolically by modular arithmetic and distributivity; quotient compatibility then proves canonical associativity. Closure, identity and inverse laws are also proved. The main theorem is \texttt{Conjecture1184.conjecture1184\_false}; its axiom dependencies are only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. No unproved classification or $A_5$ identification is assumed, and no admitted proof, custom axiom or native-evaluation proof shortcut is used.
+\paragraph{Source.} The \href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000001184.md}{original bilingual conjecture 00000001184} is also preserved in the submission.
+\end{document}
