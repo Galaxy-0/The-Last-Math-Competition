@@ -1,0 +1,170 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\qb}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}_{q}}
+\newcommand{\F}{\mathbb{F}}
+
+\title{Proof of conjecture 00000002490:\\ subspace counts over finite fields are Gaussian binomials,\\ and so are the counts in every interval of the subspace lattice}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and its reading}
+
+\textbf{Statement (English, verbatim).} Definition: The finite-field side of partitions:
+q-binomial lattices. Conjecture: The counting of subspaces over finite fields is governed by
+Gaussian binomial coefficients: the lattice count closes under the Gaussian binomial structure.
+(partition finite-field side q-binomial lattice Gaussian binomials)
+
+\textbf{Chinese text.} It says, in substance, that on the finite-field side of partitions the
+counts of the lattice are Gaussian binomials.
+
+\textbf{This is a classical theorem, not a new result.} We prove it and check the proof in
+Lean 4 with Mathlib. The wording is vague, so we prove the following explicit statements. Each
+one is a theorem in the Lean file.
+\begin{itemize}
+\item[(R1)] \emph{Counting.} Let $\F$ be any finite field with $q$ elements and let $n,k\ge 0$.
+  The number of $k$-dimensional subspaces of $\F^n$ is $\qb{n}{k}$. More generally, the same
+  holds for every $n$-dimensional $\F$-vector space $V$.
+\item[(R2)] \emph{The counts close under the q-Pascal structure.} Write $N_q(n,k)$ for the
+  number in (R1). Then both q-Pascal rules hold for these counts:
+  $N_q(n+1,k+1)=N_q(n,k)+q^{k+1}N_q(n,k+1)$, and, for $k\le n$,
+  $N_q(n+1,k+1)=N_q(n,k+1)+q^{n-k}N_q(n,k)$.
+\item[(R3)] \emph{Interval closure.} Every interval of the subspace lattice is again counted by
+  Gaussian binomials. Let $U\le T$ be subspaces of a finite $\F$-vector space $V$, and let
+  $\dim U\le k$. Then the number of $k$-dimensional $W$ with $U\le W\le T$ is
+  $\qb{\dim T-\dim U}{k-\dim U}$.
+\end{itemize}
+\textbf{Not formalized.} The word ``partitions'' appears only in the heading. We do not
+formalize the separate fact that the coefficients of $\qb{n}{k}$ count partitions in a box.
+``Lattice'' is read as the lattice of subspaces of $\F^n$, ordered by inclusion.
+
+\textbf{Conventions.} $\F$ is an arbitrary finite field with $q=|\F|$ elements, so $q\ge 2$.
+Its prime-power form is never used. A subspace is a Mathlib \texttt{Submodule}. Dimension is
+\texttt{Module.finrank}. A count is \texttt{Nat.card} of a subtype. All $k\ge 0$ are allowed,
+and for $k>n$ both sides are $0$. Natural-number subtraction is truncated, so $n-k$ and
+$k-\dim U$ appear only under the hypotheses $k\le n$ and $\dim U\le k$. We write
+$\binom{k}{2}=k(k-1)/2$.
+
+\section{Definitions as formalized}
+
+\begin{definition}[\texttt{gaussBinom}]
+The Gaussian binomial $\qb{n}{k}\in\mathbb{N}[q]$ is defined by the rules
+$\qb{n}{0}=1$, $\qb{0}{k+1}=0$, and
+$\qb{n+1}{k+1}=\qb{n}{k}+q^{k+1}\qb{n}{k+1}$.
+\end{definition}
+
+Wikipedia [W] gives this rule as the first ``analog of Pascal's identity''. It writes the rule
+as $\binom{m}{r}_q=q^r\binom{m-1}{r}_q+\binom{m-1}{r-1}_q$. Wikipedia \emph{defines} the
+coefficient by the product formula
+\[\binom{m}{r}_q=\frac{(1-q^m)(1-q^{m-1})\cdots(1-q^{m-r+1})}{(1-q)(1-q^2)\cdots(1-q^r)}.\]
+We prove that our definition agrees with that one. Lemma~\ref{lem:prod} shows that
+$\qb{n}{k}\cdot\prod_{i<k}(1-q^{i+1})=\prod_{i<k}(1-q^{n-i})$ holds in every commutative ring.
+In $\mathbb{Z}[q]$ the denominator is nonzero, because its value at $q=0$ is $1$
+(\texttt{qDen\_X\_ne\_zero}). So the product formula determines $\qb{n}{k}$ uniquely.
+
+\section{Proof}
+
+Let $P_x(n,k)=\prod_{i<k}(x^n-x^i)$ (Lean \texttt{liProd}).
+
+\begin{lemma}[\texttt{gaussBinom\_mul\_liProd}]\label{lem:li}
+In every commutative ring, $\qb{n}{k}(x)\,P_x(k,k)=P_x(n,k)$.
+\end{lemma}
+\begin{proof}
+The proof is by induction on $n$, for all $k$ at once. The base cases are immediate, since
+$P_x(0,k+1)$ has the factor $x^0-x^0=0$. The induction uses
+$P_x(n+1,k+1)=(x^{n+1}-1)x^kP_x(n,k)$ and $P_x(n,k+1)=P_x(n,k)(x^n-x^k)$. With these, the
+q-Pascal rule reduces the step to the identity
+$(x^{k+1}-1)x^k+x^{k+1}(x^n-x^k)=x^k(x^{n+1}-1)$.
+\end{proof}
+
+\begin{lemma}[\texttt{gaussBinom\_mul\_qDen}]\label{lem:prod}
+In every commutative ring,
+$\qb{n}{k}(x)\prod_{i<k}(1-x^{i+1})=\prod_{i<k}(1-x^{n-i})$. Both sides are $0$ for $k>n$.
+\end{lemma}
+\begin{proof}
+The proof is again an induction with the same structure. If $k\le n$, the step is
+$1-x^{k+1}+x^{k+1}(1-x^{n-k})=1-x^{n+1}$. If $k>n$, the numerator contains the factor $1-x^0=0$.
+\end{proof}
+
+\begin{theorem}[(R1), \texttt{card\_subspaces\_eq\_gaussBinom}]
+Let $V$ be a finite $\F$-vector space of dimension $n$. Then
+$\#\{W\le V:\dim W=k\}=\qb{n}{k}(q)$.
+\end{theorem}
+\begin{proof}
+Each linearly independent $k$-tuple $s$ in $V$ spans a $k$-dimensional subspace
+$\mathrm{span}(s)$. The fibre of this map over a subspace $W$ is in bijection with the linearly
+independent $k$-tuples of $W$ (\texttt{fibreEquiv}). Such a tuple spans $W$, because its length
+equals $\dim W$. Mathlib's \texttt{card\_linearIndependent} counts the linearly independent
+$k$-tuples in an $m$-dimensional space as $\prod_{i<k}(q^m-q^i)$ when $k\le m$. Summing over the
+fibres gives
+\[\#\{s\text{ lin.\ indep.}\}=N\cdot\prod_{i<k}(q^k-q^i)\qquad(\texttt{card\_li\_eq}),\]
+where $N$ is the number of $k$-dimensional subspaces. Suppose $k\le n$. Then the left side is
+$P_q(n,k)$. By Lemma~\ref{lem:li} we get $N\cdot P_q(k,k)=\qb{n}{k}(q)\cdot P_q(k,k)$ in
+$\mathbb{Z}$. Since $q\ge2$, $P_q(k,k)\ne0$, and we may cancel. Now suppose $k>n$. Then $N=0$,
+and $P_q(n,k)=0$, so $\qb{n}{k}(q)=0$ as well.
+\end{proof}
+
+(R2) follows from (R1). The first rule is the defining recursion, evaluated at $q$
+(\texttt{subCount\_pascal}). For the second rule (\texttt{gaussBinom\_pascal'},
+\texttt{subCount\_pascal'}), multiply both sides by $\prod_{i\le k}(1-q^{i+1})\ne0$ and use
+Lemma~\ref{lem:prod}. This is the second Pascal analog in [W]. Lemma~\ref{lem:prod} also gives
+the product formula for the counts (\texttt{subCount\_product\_formula}).
+
+\begin{theorem}[(R3), \texttt{card\_subspaces\_interval}]
+Let $U\le T\le V$ and $\dim U\le k$. Then
+$\#\{W: U\le W\le T,\ \dim W=k\}=\qb{\dim T-\dim U}{k-\dim U}(q)$.
+\end{theorem}
+\begin{proof}
+First the case $T=V$ (\texttt{card\_subspaces\_above}). The maps $W'\mapsto\pi^{-1}(W')$ and
+$W\mapsto\pi(W)$ are inverse bijections. Here $\pi:V\to V/U$ is the quotient map, $W'$ ranges
+over subspaces of $V/U$, and $W$ over subspaces containing $U$ (\texttt{aboveEquiv}). By
+rank--nullity, $\dim\pi^{-1}(W')=\dim W'+\dim U$ (\texttt{finrank\_comap\_mkQ}). Apply (R1) to
+$V/U$, which has dimension $\dim V-\dim U$. For general $T$, the maps given by pulling back and
+pushing forward along $T\hookrightarrow V$ identify the interval $[U,T]$ in $V$ with the
+subspaces of $T$ that contain $U$ (\texttt{intervalEquiv}). These maps preserve dimension.
+\end{proof}
+
+\section{Lean formalization}
+
+The file is \texttt{lean/Conjecture2490/Basic.lean}, namespace \texttt{C2490}, 365 lines. Its
+only import is \texttt{Mathlib}. The main theorem \texttt{conjecture\_2490} is a conjunction.
+It states (R1) for $\F^n$ (\texttt{Fin n -> F}) for all $n,k$, both rules of (R2), and (R3) for
+every finite $\F$-vector space $V$, for an arbitrary finite field $\F$. The supporting theorems
+are \texttt{card\_subspaces\_eq\_gaussBinom}, \texttt{subCount\_eq},
+\texttt{subCount\_pascal}, \texttt{subCount\_pascal'}, \texttt{subCount\_product\_formula},
+\texttt{gaussBinom\_mul\_qDen}, \texttt{qDen\_X\_ne\_zero} and \texttt{card\_subspaces\_interval}.
+As a sanity check, an \texttt{example} confirms that $N_2(4,2)=35$.
+
+\textbf{Axiom audit.} \texttt{lake build} succeeds. \texttt{\#print axioms} reports
+\texttt{[propext, Classical.choice, Quot.sound]} for \texttt{conjecture\_2490},
+\texttt{card\_subspaces\_interval}, \texttt{subCount\_product\_formula},
+\texttt{qDen\_X\_ne\_zero} and \texttt{gaussBinom\_mul\_qDen}. The file contains no
+\texttt{sorry} and no \texttt{native\_decide}, and it adds no axioms.
+
+\textbf{Related package.} Conjecture 00000002478 has a separate package. It covers Gauss's
+q-binomial expansion $\prod_{i<n}(1+q^it)=\sum_k q^{\binom k2}\qb nk t^k$ and its counting
+interpretation. This package covers the subspace count itself, both Pascal rules, and interval
+closure in the subspace lattice. It does not treat the expansion.
+
+\section*{Sources}
+[W] Wikipedia, ``Gaussian binomial coefficient'',
+\url{https://en.wikipedia.org/wiki/Gaussian_binomial_coefficient} (retrieved 2026-10-05). It
+gives the product-formula definition and the two analogs of Pascal's identity. It also states
+that $\binom nk_q$ ``counts the number of k-dimensional vector subspaces of an n-dimensional
+vector space over'' $\F_q$.
+
+Mathlib: \texttt{card\_linearIndependent}, in
+\path{Mathlib/LinearAlgebra/Matrix/GeneralLinearGroup/Card.lean}.
+
+\end{document}
