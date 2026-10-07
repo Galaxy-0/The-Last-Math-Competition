@@ -1,0 +1,51 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\hypersetup{hidelinks}
+\newtheorem{proposition}{Proposition}
+\title{Disproof of Conjecture 00000002831\\A stochastic HMM image is not an algebraic set}
+\author{gaochengzhecpu}\date{}
+\begin{document}\maketitle
+\noindent\textbf{Claim addressed.} The conjecture states that the image of the transition--emission parameter space in observed distributions is an algebraic variety. With stochastic parameters, the image itself need not be an algebraic set. A one-hidden-state, two-symbol hidden Markov model already gives a counterexample. The distinction between the image and its Zariski closure is essential.
+
+\begin{proposition}
+The one-observation distribution image of this HMM is the segment
+\[
+ S=\{(t,1-t):0\le t\le1\}\subset\mathbb R^2.
+\]
+There is no family of real polynomials whose common zero locus is $S$.
+\end{proposition}
+\begin{proof}
+With one hidden state, the initial distribution and the transition matrix are necessarily $(1)$ and $(1)$. A stochastic emission row has the form $(t,1-t)$, where $0\le t\le1$. The one-observation probabilities are
+\[
+ p_j=\sum_{i=0}^{0}\pi_i B_{ij}=B_{0j}.
+\]
+Thus the image is exactly the displayed segment. In particular, it contains $(t,1-t)$ for every $t\in[0,1]$, and every point in the image has nonnegative coordinates.
+
+Suppose a family $\mathcal F\subset\mathbb R[X,Y]$ has common zero locus $S$. For any $f\in\mathcal F$, define the ordinary polynomial
+\[
+ q_f(T)=f(T,1-T).
+\]
+It vanishes at every $T\in[0,1]$. A nonzero polynomial in one variable has finitely many roots; this interval is infinite. Therefore $q_f$ is identically zero. In particular, $f(2,-1)=q_f(2)=0$ for every $f\in\mathcal F$. Their common zero locus must contain $(2,-1)$, contrary to its negative second coordinate. This proves the proposition.
+\end{proof}
+
+\noindent\textbf{Scope.} The counterexample uses normalized, nonnegative probability parameters, exactly as required for a stochastic HMM and observed probability distributions. It addresses the image itself, as the source states. Its Zariski closure is the affine line $X+Y=1$, which is algebraic; the assertion with ``Zariski closure of the image'' would evade this counterexample. The argument does not address the separate statement about invariant degrees or tree parameters. It also rules out a complex polynomial zero-locus description of this real segment: restricting such equations to real points and separating real and imaginary parts would give a real polynomial description.
+
+\section*{Lean correspondence and reproduction}
+The structure \texttt{HMM} stores an initial distribution, transition matrix and emission matrix with their nonnegativity and row-sum conditions. The hidden-state type is \texttt{Fin 1}, and the observation type is \texttt{Fin 2}. The observation map is the actual finite sum of initial probabilities times emission probabilities. Its set-theoretic range is \texttt{modelImage}.
+
+Lean constructs a valid HMM for every $t\in[0,1]$, proves that its observation vector is $(t,1-t)$, and proves every observation coordinate is nonnegative. It then uses genuine \texttt{MvPolynomial} evaluation and substitution into \texttt{Polynomial} to prove that every polynomial vanishing on the segment vanishes on the whole line. Infinitude of the real interval and the finite-root theorem are used directly.
+
+The final theorem \texttt{conjecture\_false} negates the existence of any family of real polynomial equations defining the image. This is stronger than merely showing the absence of a single defining equation. The Lean contradiction only needs the inclusion of the segment in the image and exclusion of $(2,-1)$; these are proved from the stochastic model, without assuming the image formula.
+
+Inside \texttt{lean/}, run \texttt{lake build}, followed by
+\begin{center}\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+Lean is pinned to 4.19.0 and Mathlib to
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+All transitive dependencies are pinned. No numerical approximation is needed. The proof contains no gaps, custom axioms or native computation shortcuts. Actual fresh-build logs, axiom dependencies and hashes are included under \texttt{verification/}. Author and delegated-agent review records are separate; no external independent review is claimed.
+
+\begin{thebibliography}{9}
+\bibitem{source} The Last Math Competition,
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000002831.md}{Conjecture 00000002831 (original bilingual source)}.
+\end{thebibliography}
+\end{document}
