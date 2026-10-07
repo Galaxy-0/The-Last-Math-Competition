@@ -1,0 +1,128 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\title{Conjecture 00000001937 is false:\\ the subgroup zeta function of $U(\Z)\cong\Z$ has abscissa $1$, not $\dim/(\dim+1)=1/2$}
+\author{Jackmeson1}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+Conjecture 00000001937 (English text, verbatim): ``Definition: The subgroup growth zeta function
+is the Dirichlet series of subgroup-index counts. Conjecture: The abscissa of convergence of the
+zeta function of an arithmetic linear group is dim G/(dim G+1) (an explicit rational), uniquely
+determined by the algebraic dimension of the group.'' The Chinese text says the same.
+
+\paragraph{Reading.} For a group $G$ let $a_n(G)$ be the number of subgroups of $G$ of index
+$n$, and let $\zeta_G(s)=\sum_{n\ge1}a_n(G)\,n^{-s}$ (the ``Dirichlet series of subgroup-index
+counts''). The conjecture asserts that for every arithmetic linear group $G$ (integer points of
+a linear algebraic group $\mathbf G$ over $\Q$) the abscissa of convergence of $\zeta_G$ equals
+$\dim\mathbf G/(\dim\mathbf G+1)$. We give one arithmetic group for which this fails, so the
+universally quantified statement is false; the second clause (``uniquely determined by the
+dimension'') is part of the same conjunction and needs no separate treatment.
+
+\paragraph{Arithmetic groups.} We use the definition from Wikipedia, ``Arithmetic group'': ``If
+$\mathbf G$ is an algebraic subgroup of $\mathrm{GL}_n(\Q)$ for some $n$ then we can define an
+arithmetic subgroup of $\mathbf G(\Q)$ as the group of integer points
+$\Gamma=\mathrm{GL}_n(\Z)\cap\mathbf G(\Q)$.'' Take $\mathbf G=U_2$, the algebraic subgroup of
+$\mathrm{GL}_2$ of upper unitriangular matrices $\left(\begin{smallmatrix}1&t\\0&1\end{smallmatrix}\right)$
+(defined by $x_{11}=x_{22}=1$, $x_{21}=0$). It is isomorphic to the additive group, of dimension
+$1$. Its arithmetic subgroup is
+\[ U(\Z)=\mathrm{GL}_2(\Z)\cap U_2(\Q)=\left\{\begin{pmatrix}1&n\\0&1\end{pmatrix}:n\in\Z\right\}\cong\Z. \]
+The conjecture predicts abscissa $1/(1+1)=1/2$ for $U(\Z)$.
+
+\section{Definitions (as in the Lean file)}
+\begin{itemize}
+\item \texttt{subgroupCount G n} $=a_n(G)$ is the cardinality (\texttt{Nat.card}) of
+$\{H\le G : [G:H]=n\}$, with Mathlib's \texttt{Subgroup.index}. Mathlib's convention is
+$[G:H]=0$ for infinite index, so $a_0$ counts infinite-index subgroups; it does not enter the
+Dirichlet series (Mathlib's \texttt{LSeries.term f s 0 = 0}).
+\item \texttt{subgroupZeta G s} $=$ \texttt{LSeries} $(n\mapsto a_n(G))\,(s)=\sum_{n\ge1}a_n(G)n^{-s}$.
+\item \texttt{subgroupZetaAbscissaAbs G} $=$ Mathlib's \texttt{LSeries.abscissaOfAbsConv}: the
+infimum in $\overline{\mathbb R}$ of the real $x$ at which the series converges absolutely.
+\item \texttt{subgroupZetaAbscissa G}: the infimum in $\overline{\mathbb R}$ of the real
+$\sigma$ for which the ordered partial sums $\sum_{k=1}^{N}a_k(G)k^{-\sigma}$ have a finite limit
+as $N\to\infty$ (the abscissa of convergence, read at real points).
+\item \texttt{U}: the range of the homomorphism $n\mapsto\left(\begin{smallmatrix}1&n\\0&1\end{smallmatrix}\right)$
+from $\Z$ to $\mathrm{SL}_2(\Z)$; \texttt{mem\_U\_iff} proves that $U$ is exactly the set of
+matrices in $\mathrm{SL}_2(\Z)$ with $x_{11}=x_{22}=1$, $x_{21}=0$, i.e.\ $\mathrm{GL}_2(\Z)\cap U_2(\Q)$
+(such a matrix has determinant $1$ automatically).
+\end{itemize}
+
+\section{Proof}
+\begin{lemma}[\texttt{subgroupCount\_U}]
+$a_n(U(\Z))=1$ for every $n\in\mathbb N$.
+\end{lemma}
+\begin{proof}
+$n\mapsto\left(\begin{smallmatrix}1&n\\0&1\end{smallmatrix}\right)$ is an injective homomorphism,
+so $U(\Z)\cong\Z$ and $a_n(U(\Z))=a_n(\Z)$ (\texttt{subgroupCount\_eq\_add}: isomorphisms preserve
+indices). Every subgroup of $\Z$ is cyclic, $H=a\Z=|a|\Z$, and $[\Z:|a|\Z]=|a|$ (Mathlib:
+\texttt{Int.subgroup\_cyclic}, \texttt{Int.index\_zmultiples}). Hence $H=[\Z:H]\,\Z$, and the
+only subgroup of index $n$ is $n\Z$.
+\end{proof}
+
+\begin{theorem}
+$\zeta_{U(\Z)}(s)=\zeta(s)$ (Riemann zeta) for $\mathrm{Re}\,s>1$, and both abscissae of
+$\zeta_{U(\Z)}$ equal $1$.
+\end{theorem}
+\begin{proof}
+By the lemma the coefficient sequence is the constant $1$. Mathlib gives
+\texttt{LSeries\_one\_eq\_riemannZeta} and \texttt{LSeries.abscissaOfAbsConv\_one}. At a real
+$\sigma$ the partial sums $\sum_{k\le N}k^{-\sigma}$ have nonnegative terms, so they have a
+finite limit iff the series is summable, iff $\sigma>1$ (\texttt{Real.summable\_one\_div\_nat\_rpow});
+hence the set of real convergence points is the same as Mathlib's set for absolute convergence,
+and \texttt{subgroupZetaAbscissa U = 1}.
+\end{proof}
+
+\begin{theorem}[\texttt{conjecture\_1937\_false}]
+For every $d\in\mathbb N$, $d/(d+1)<1$, so neither abscissa of $\zeta_{U(\Z)}$ equals $d/(d+1)$;
+in particular neither equals $1/2=\dim U_2/(\dim U_2+1)$. The conjecture is false.
+\end{theorem}
+Since the conclusion holds for every natural number $d$, it does not depend on how the
+dimension of the ambient algebraic group is computed; the Lean file does not formalize algebraic
+dimension.
+
+\section{Lean formalization}
+File \texttt{lean/Conjecture1937/Basic.lean} (Lean 4, Mathlib v4.33.1, 206 lines, only
+\texttt{import Mathlib}). Main theorem \texttt{C1937.conjecture\_1937\_false} states, as one
+conjunction: \texttt{mem\_U\_iff}; $\forall n$, \texttt{subgroupCount U n = 1};
+$\forall s$, $1<\mathrm{Re}\,s\to$ \texttt{subgroupZeta U s = riemannZeta s};
+\texttt{subgroupZetaAbscissa U = 1}; \texttt{subgroupZetaAbscissaAbs U = 1}; for every $d:\mathbb N$
+both abscissae differ from $((d:\mathbb R)/(d+1):\overline{\mathbb R})$; and
+\texttt{subgroupZetaAbscissa U} $\ne 1/2$. Supporting theorems: \texttt{eq\_zmultiples\_index},
+\texttt{subgroupCount\_eq\_add}, \texttt{partialSum\_U\_converges\_iff},
+\texttt{subgroupZetaAbscissa\_U}, \texttt{subgroupZetaAbscissaAbs\_U}, \texttt{formula\_ne\_one}.
+\texttt{lake build} succeeds; \texttt{\#print axioms C1937.conjecture\_1937\_false} gives
+\texttt{[propext, Classical.choice, Quot.sound]}; no \texttt{sorry}, no \texttt{native\_decide}.
+
+\paragraph{Scope.} Refuted: the formula for the arithmetic group $U(\Z)$ of the unipotent group
+$U_2\cong\mathbb G_a$, with the abscissa read as absolute convergence or as convergence of the
+ordered partial sums at real points. Not covered: a reading in which ``arithmetic linear group''
+is restricted to arithmetic subgroups of semisimple groups (e.g.\ $\mathrm{SL}_n(\Z)$); no such
+group is treated here. The real-point definition of the abscissa of (ordinary) convergence is
+used; conditional convergence at non-real $s$ is not formalized.
+
+\section{Relation to the earlier submission}
+PR \#264 (orionsheep) used the same counterexample ($G=\Z$, subgroups $n\Z$, $\zeta_\Z$ the
+Riemann zeta function). It was closed because ``The theorem proves 1 $\ne$ 2 $\wedge$ 25 $>$ 24
+$\wedge$ 2 = 2$\cdot$1; the entire G = $\Z$ counterexample \ldots{} lives in prose \ldots{}
+Nothing about Dirichlet series or subgroup zeta functions is formalized.'' This submission
+defines the subgroup counts $a_n(G)$ for an arbitrary group with Mathlib's index, the subgroup
+zeta function as a Mathlib \texttt{LSeries}, and both abscissae; it constructs $U(\Z)$ as a
+subgroup of $\mathrm{SL}_2(\Z)$, proves that it has exactly one subgroup of each index, and
+proves that its abscissae equal $1$, which differs from $d/(d+1)$ for every $d$.
+
+\section*{Source}
+Wikipedia, ``Arithmetic group'', \url{https://en.wikipedia.org/wiki/Arithmetic_group}
+(definition of arithmetic subgroup quoted above). Mathlib (lemmas named above).
+\end{document}
