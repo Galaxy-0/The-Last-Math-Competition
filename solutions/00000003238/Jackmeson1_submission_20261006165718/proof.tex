@@ -1,0 +1,165 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\title{Disproof of conjecture 00000003238:\\ a direct sum of nilpotent Jordan blocks has the closed
+unit disc as spectrum, while every block has spectrum $\{0\}$}
+\author{Jackmeson1}
+\date{2026-10-06}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clause refuted}
+
+\textbf{Statement (English, verbatim).} Definition: Edge spectra: the block spectral structure of
+direct-sum operators. Conjecture: The edge theorem: the closure of the spectrum of a direct sum of
+operators is the union closure of block spectra, with limit points the accumulated edges of the
+family of summands. (direct sum block spectrum accumulated edge) (The Chinese text states the
+same.)
+
+\textbf{Reading.} Let $(H_n)_{n\ge 0}$ be complex Hilbert spaces and $(A_n)$ a uniformly bounded
+family of bounded operators $A_n:H_n\to H_n$. Their direct sum is the operator
+$\bigoplus_n A_n$ on the Hilbert direct sum $\bigoplus_n H_n$ (square-summable sequences
+$x=(x_n)$, $x_n\in H_n$) given by $(\bigoplus_n A_n)x=(A_nx_n)_n$. The conjecture's main clause is
+\[
+  \text{(E)}\qquad \overline{\sigma\Big(\bigoplus_n A_n\Big)}
+     \;=\;\overline{\bigcup_n \sigma(A_n)} .
+\]
+The clause ``with limit points the accumulated edges of the family of summands'' is joined to (E)
+by ``with'' (Chinese: ``and''); it uses the undefined term ``accumulated edges'' and is not needed:
+refuting (E) refutes the conjecture. We refute (E) for one explicit family of contractions
+($\|A_n\|\le 1$) on finite-dimensional spaces $H_n=\mathbb{C}^{n+1}$.
+
+\textbf{Readings not refuted.} The phrases ``union closure'', ``limit points'' and ``family of
+summands'' indicate an infinite family, which is what we refute. For a \emph{finite} direct sum
+the identity (E) is true, and it is also true for families of \emph{normal} operators (for normal
+$A_n$ and $\lambda$ at positive distance $d$ from $\bigcup_n\sigma(A_n)$, the resolvents satisfy
+$\|(A_n-\lambda)^{-1}\|\le 1/d$, so they assemble into a bounded inverse). Neither restriction
+appears in the text, which says ``a direct sum of operators'' with no normality hypothesis. We
+also only treat the Hilbert ($\ell^2$) direct sum, which is the standard direct sum of Hilbert
+space operators.
+
+\section{Definitions (as formalized)}
+
+All conventions below are those of the Lean file.
+\begin{itemize}
+\item $\mathbb{N}=\{0,1,2,\dots\}$. Block $n$ is $\mathbb{C}^{n+1}$ with the Euclidean norm
+  (\texttt{Block n := EuclideanSpace C (Fin (n+1))}), coordinates indexed by $0,\dots,n$.
+\item The Hilbert direct sum of a family $E:\mathbb{N}\to\text{Type}$ of complex inner product
+  spaces is Mathlib's \texttt{lp E 2}, the square-summable sections, with Mathlib's inner product
+  structure \texttt{lp.instInnerProductSpace} (Mathlib calls it the ``Hilbert sum'' of the
+  family). For our blocks it is complete (a Hilbert space).
+\item \texttt{dsum A hA}: for $A_n:E_n\to E_n$ bounded with $\|A_n\|\le 1$, the bounded operator
+  on \texttt{lp E 2} with $(\texttt{dsum A hA}\,x)_n = A_n x_n$ (theorem \texttt{dsum\_apply}); it
+  maps the $n$-th summand by $A_n$ (\texttt{dsum\_single}), is the unique bounded operator acting
+  blockwise as $(A_n)$ (\texttt{dsum\_unique}), and $\|\texttt{dsum A hA}\|\le 1$
+  (\texttt{norm\_dsum\_le}).
+\item Spectrum: Mathlib's \texttt{spectrum C a} $=\{\mu\in\mathbb{C} : \mu\cdot 1-a \text{ is not a
+  unit}\}$, computed in the Banach algebra of bounded (continuous) linear operators. Being a unit
+  there means having a bounded two-sided inverse.
+\item The shift $J_n$ on $\mathbb{C}^{n+1}$: $(J_nv)_j=v_{j+1}$ for $j<n$ and $(J_nv)_n=0$
+  (\texttt{shift n}). Equivalently $J_ne_0=0$, $J_ne_{j+1}=e_j$: a single nilpotent Jordan block of
+  size $n+1$.
+\item \texttt{EdgeTheorem}: the statement that (E) holds for every family $E:\mathbb{N}\to\text{Type}$
+  of complex Hilbert spaces and every family $(A_n)$ with $\|A_n\|\le 1$. Contractive families are
+  uniformly bounded, so \texttt{EdgeTheorem} is a special case of the conjecture's claim.
+\end{itemize}
+
+\section{Proof}
+
+\begin{lemma}[blocks]\label{lem:blocks}
+$\|J_n\|\le 1$, $J_n^{\,n+1}=0$, and $\sigma(J_n)=\{0\}$. Hence
+$\overline{\bigcup_n\sigma(J_n)}=\{0\}$.
+\end{lemma}
+\begin{proof}
+$\|J_nv\|^2=\sum_{j<n}|v_{j+1}|^2\le\|v\|^2$. By induction on $k$,
+$(J_n^kv)_j=v_{j+k}$ if $j+k\le n$ and $0$ otherwise, so $J_n^{n+1}=0$. If $\mu\ne0$, then
+$\mu\cdot1-J_n$ is the sum of the unit $\mu\cdot 1$ and the nilpotent $-J_n$, which commute, so it is
+a unit. For $\mu=0$, $-J_n$ is nilpotent in a nontrivial ring, so it is not a unit.
+\end{proof}
+
+Let $T=\bigoplus_n J_n$ (\texttt{T := dsum shift norm\_shift\_le}) on
+$\bigoplus_n\mathbb{C}^{n+1}$; $\|T\|\le1$.
+
+\begin{lemma}[test vectors]\label{lem:test}
+For $z\in\mathbb{C}$ let $v^{(n)}=(1,z,z^2,\dots,z^n)\in\mathbb{C}^{n+1}$. Then
+$(z\cdot1-J_n)v^{(n)}=z^{n+1}e_n$, and in the direct sum
+$(z\cdot 1-T)\,\iota_n(v^{(n)})=\iota_n(z^{n+1}e_n)$, where $\iota_n$ is the inclusion of the
+$n$-th summand.
+\end{lemma}
+\begin{proof}
+For $j<n$ the $j$-th coordinate is $z\cdot z^j-z^{j+1}=0$; the $n$-th is $z\cdot z^n-0$. The second
+identity follows since $T\iota_n=\iota_nJ_n$.
+\end{proof}
+
+\begin{theorem}\label{thm:disc}
+$\sigma(T)$ is the closed unit disc. In particular $\tfrac12\in\sigma(T)$.
+\end{theorem}
+\begin{proof}
+($\subseteq$) $\sigma(T)\subseteq\{|z|\le\|T\|\,\|1\|\}$ and $\|T\|\le1$, $\|1\|\le1$.
+($\supseteq$) Let $|z|<1$ and suppose $z\cdot1-T$ had a bounded inverse $S$. Put
+$x_n=\iota_n(v^{(n)})$. Then $\|x_n\|=\|v^{(n)}\|\ge|v^{(n)}_0|=1$, and by
+Lemma~\ref{lem:test}
+\[
+ 1\le\|x_n\|=\|S(z\cdot1-T)x_n\|\le\|S\|\,\|z^{n+1}e_n\|=\|S\|\,|z|^{n+1}\qquad(n\ge0).
+\]
+Choose $n$ with $|z|^n<1/(\|S\|+1)$; then $\|S\|\,|z|^{n+1}\le\|S\|\,|z|^n<1$, a contradiction.
+So the open disc lies in $\sigma(T)$; since $\sigma(T)$ is closed, so does its closure, the closed
+disc.
+\end{proof}
+
+\begin{theorem}[main]
+$\overline{\sigma(\bigoplus_nJ_n)}\ne\overline{\bigcup_n\sigma(J_n)}$. Hence \texttt{EdgeTheorem}
+is false, and the conjecture's clause (E) fails for the uniformly bounded family $(J_n)$.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:blocks} the right side is $\{0\}$; by Theorem~\ref{thm:disc} the left side
+contains $\tfrac12\ne0$.
+\end{proof}
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture3238/Basic.lean} (273 lines, only \texttt{import Mathlib}, Lean and
+Mathlib v4.33.1), namespace \texttt{C3238}. Main statements:
+\begin{itemize}
+\item \texttt{theorem not\_edgeTheorem : $\neg$ EdgeTheorem}
+\item \texttt{theorem edge\_theorem\_counterexample : closure (spectrum C T) $\ne$ closure
+  ($\bigcup$ n, spectrum C (shift n))}
+\item \texttt{theorem spectrum\_T : spectrum C T = Metric.closedBall 0 1}
+\item \texttt{theorem spectrum\_shift (n) : spectrum C (shift n) = \{0\}}
+\item \texttt{theorem closure\_iUnion\_spectrum\_shift : closure ($\bigcup$ n, spectrum C (shift n))
+  = \{0\}}
+\item \texttt{theorem mem\_spectrum\_T \{z\} (hz : $\|$z$\|$ < 1) : z $\in$ spectrum C T}
+\item supporting: \texttt{dsum\_apply}, \texttt{dsum\_single}, \texttt{dsum\_unique},
+  \texttt{norm\_dsum\_le}, \texttt{norm\_shift\_le}, \texttt{shift\_pow\_eq\_zero},
+  \texttt{block\_identity}, \texttt{sum\_identity}.
+\end{itemize}
+Here \texttt{C} stands for $\mathbb{C}$ and \texttt{T := dsum shift norm\_shift\_le}.
+
+\textbf{Axiom audit.} \texttt{\#print axioms} for \texttt{not\_edgeTheorem},
+\texttt{edge\_theorem\_counterexample}, \texttt{spectrum\_T}, \texttt{spectrum\_shift} and
+\texttt{dsum\_unique} reports exactly \texttt{[propext, Classical.choice, Quot.sound]}. There is no
+\texttt{sorry}, no \texttt{native\_decide}, and no added axiom.
+
+\section*{Sources}
+\begin{itemize}
+\item Wikipedia, \emph{Spectrum (functional analysis)},
+  \url{https://en.wikipedia.org/wiki/Spectrum_(functional_analysis)}: ``the spectrum of a bounded
+  linear operator (or, more generally, an unbounded linear operator) is a generalisation of the set
+  of eigenvalues of a matrix'' and ``More generally, by the bounded inverse theorem, T is not
+  invertible if it is not bounded below''. (Background only; the Lean proof of
+  $\tfrac12\in\sigma(T)$ is self-contained.)
+\item Mathlib, \texttt{Mathlib/Analysis/InnerProductSpace/l2Space.lean} (definition of the Hilbert
+  sum \texttt{lp G 2}) and \texttt{Mathlib/Algebra/Algebra/Spectrum/Basic.lean} (\texttt{spectrum}).
+\end{itemize}
+
+\end{document}
