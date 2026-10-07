@@ -1,0 +1,48 @@
+TLMC 00000001672 — verification and axiom audit
+Lean toolchain: leanprover/lean4:v4.33.0
+Mathlib revision: db584cd6d46c92f209a44c0f1c829460d327499d
+
+Recorded successful Lean compiler output:
+'ZarankiewiczConsistency.Z_seven' does not depend on any axioms
+'ZarankiewiczConsistency.not_value_of_formula' does not depend on any axioms
+'ZarankiewiczConsistency.local_inconsistent' does not depend on any axioms
+'ZarankiewiczConsistency.conjecture_inconsistent' does not depend on any axioms
+'ZarankiewiczConsistency.formula_range_excludes_77' does not depend on any axioms
+'ZarankiewiczConsistency.positive_parameters_inconsistent' does not depend on any axioms
+'ZarankiewiczConsistency.equivalence_reading_has_abstract_model' does not depend on any axioms
+Compiler exit status: 0
+
+Independent sanity check
+Command: python3 verify.py
+Exit status: 0
+Formula factors at (7,7): [3, 3, 3, 3]
+Z(7,7) = 81
+Z(7,7) != 77; min(7,7) <= 7
+Thus the asserted formula range forces cr(7,7)=81, contradicting cr(7,7)=77.
+No crossing-number value was computed or assumed.
+ALL CHECKS PASSED
+
+Lean source SHA-256: b53d65977ede695fc38265b741bf0b8d90f51c846c54d0ce68534181981ea997
+Source audit: no sorry, admit, native_decide, or added axiom declarations; automatic implicit parameters disabled.
+
+PDF build
+Command: pdflatex -interaction=nonstopmode -halt-on-error report.tex
+Pass 1 exit status: 0
+Pass 2 exit status: 0
+Output written on report.pdf (4 pages, 276182 bytes).
+Layout diagnostic: Underfull \hbox (badness 1460) in paragraph at lines 200--202
+No overfull boxes or unresolved references.
+All 4 pages rendered and visually inspected; no clipping or overlapping content.
+
+== Fresh standalone build (lake build in a clean copy of lean4/, Mathlib v4.33.0 dependencies prebuilt) ==
+$ lake build
+ℹ [2/3] Built ZarankiewiczConsistency (225ms)
+info: ZarankiewiczConsistency.lean:82:0: 'ZarankiewiczConsistency.Z_seven' does not depend on any axioms
+info: ZarankiewiczConsistency.lean:83:0: 'ZarankiewiczConsistency.not_value_of_formula' does not depend on any axioms
+info: ZarankiewiczConsistency.lean:84:0: 'ZarankiewiczConsistency.local_inconsistent' does not depend on any axioms
+info: ZarankiewiczConsistency.lean:85:0: 'ZarankiewiczConsistency.conjecture_inconsistent' does not depend on any axioms
+info: ZarankiewiczConsistency.lean:86:0: 'ZarankiewiczConsistency.formula_range_excludes_77' does not depend on any axioms
+info: ZarankiewiczConsistency.lean:87:0: 'ZarankiewiczConsistency.positive_parameters_inconsistent' does not depend on any axioms
+info: ZarankiewiczConsistency.lean:88:0: 'ZarankiewiczConsistency.equivalence_reading_has_abstract_model' does not depend on any axioms
+Build completed successfully (3 jobs).
+exit=0
