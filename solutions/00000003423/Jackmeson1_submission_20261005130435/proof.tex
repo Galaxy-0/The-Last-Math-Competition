@@ -1,0 +1,147 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Conjecture 00000003423 is false:\\ adding an edge can increase hitting times}
+\author{Jackmeson1}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+Conjecture 00000003423 (English text, verbatim): ``Definition: The maximum principle of hitting
+times: suprema on graphs. Conjecture: The supremum structure of hitting times: the maximal hitting
+time of the complete graph is $n-1$, and adding edges decreases hitting time submodularly.'' The
+Chinese text says the same.
+
+\paragraph{Reading.} The conjecture is a conjunction. Its first clause is true: on $K_n$ every
+$H(a\to b)$, $a\ne b$, equals $n-1$. We refute the second clause. ``Adding edges decreases hitting
+time submodularly'' contains the monotonicity claim: if $G\subseteq G'$ are connected graphs on
+the same vertex set ($G'$ is $G$ with edges added), then hitting times in $G'$ are at most those in
+$G$; submodularity is a further property of this decrease. We refute monotonicity (both weak and
+strict) in two readings of ``hitting time'':
+\begin{itemize}
+\item[(R1)] the pairwise hitting time $H_G(a\to b)$, for all pairs $a,b$;
+\item[(R2)] the maximal hitting time $\max_{a,b}H_G(a\to b)$, the quantity of the first clause.
+\end{itemize}
+Not covered: other graph parameters sometimes loosely called hitting times (commute times,
+averages of hitting times over a stationary start or target).
+
+\section{Definitions}
+Let $G$ be a finite connected simple graph. The simple random walk $(X_t)_{t\ge0}$ on $G$ moves
+from $v$ to a uniformly random neighbour: $P(v,u)=1/\deg v$ for $u\sim v$. The hitting time of $b$
+is $\tau_b=\inf\{t\ge0: X_t=b\}$ (``the first time at which a given process hits a given subset of
+the state space'', Wikipedia, ``Hitting time''), and $H_G(a\to b)=\mathbb E_a[\tau_b]$.
+
+\paragraph{First-step analysis.} $\tau_b=0$ if $X_0=b$; if $X_0=v\ne b$, then $\tau_b$ is $1$ plus
+the hitting time of $b$ by the walk started at $X_1$. By the Markov property $h(v)=\mathbb
+E_v[\tau_b]$ satisfies
+\[ h(b)=0,\qquad h(v)=1+\frac{1}{\deg v}\sum_{u\sim v}h(u)\quad(v\ne b). \tag{S}\]
+The values are finite on a finite connected graph: from every vertex, $b$ is reached within $|V|$
+steps with probability at least some $\delta>0$, so $\tau_b$ has a geometric tail. Theorem 2 below
+shows that (S) has exactly one real solution. Hence $H_G(\cdot\to b)$ is the unique solution of
+(S), and this is how Lean defines it.
+
+\begin{definition}[as in Lean]
+\texttt{IsHittingTimeVec G b h} is the system (S) with
+$\sum_{u\sim v}$ over Mathlib's \texttt{G.neighborFinset v} and $\deg v=$ \texttt{G.degree v}.
+\texttt{hittingTime G a b} is the value at $a$ of a solution of (S), chosen by
+\texttt{Classical.epsilon}; by Theorem 2 this is the unique solution when $G$ is connected.
+\texttt{maxHittingTime G} $=\max_{(a,b)\in V\times V}$ \texttt{hittingTime G a b}.
+\end{definition}
+
+\section{Existence and uniqueness for (S)}
+\begin{lemma}[maximum principle]
+Let $G$ be connected and $f:V\to\mathbb R$ with $f(b)=0$ and
+$f(v)=\frac1{\deg v}\sum_{u\sim v}f(u)$ for $v\ne b$. Then $f\le0$, and hence ($-f$ satisfies the
+same) $f=0$.
+\end{lemma}
+\begin{proof}
+Let $m$ maximise $f$ and $M=f(m)$. If $x\ne b$, $f(x)=M$ and $x\sim y$, then $\deg x>0$ and
+$\sum_{u\sim x}(M-f(u))=\deg x\cdot M-\deg x\cdot f(x)=0$ with nonnegative terms, so $f(y)=M$.
+Following a walk from $m$ to $b$ (it exists by connectedness), every vertex reached before $b$ has
+value $M$, so $f(b)=M$, i.e.\ $M=0$.
+\end{proof}
+\begin{theorem}
+If $G$ is connected, (S) has exactly one real solution.
+\end{theorem}
+\begin{proof}
+The difference of two solutions satisfies the hypothesis of the lemma, so it is $0$. For
+existence, the linear map $L:\mathbb R^V\to\mathbb R^V$, $(Lh)(b)=h(b)$,
+$(Lh)(v)=h(v)-\frac1{\deg v}\sum_{u\sim v}h(u)$ ($v\neq b$), is injective by the lemma, hence
+surjective because $\mathbb R^V$ is finite-dimensional. A preimage of the vector that is $0$ at
+$b$ and $1$ elsewhere solves (S).
+\end{proof}
+
+\section{The counterexample}
+Let $P_5$ be the path $0-1-2-3-4$ (Mathlib's \texttt{pathGraph 5}) and $P_5^{+}=P_5\cup\{0,2\}$ the
+graph obtained by adding the single edge $\{0,2\}$. Both are connected and $P_5\le P_5^+$.
+
+\paragraph{Hitting times on $P_5$.} For target $j$ and start $i$ the solution of (S) is
+$H(i\to j)=j^2-i^2$ for $i\le j$ and $(4-j)^2-(4-i)^2$ for $i\ge j$:
+\[\begin{array}{c|ccccc}
+ \text{target}\backslash\text{start} & 0&1&2&3&4\\\hline
+ 0&0&7&12&15&16\\ 1&1&0&5&8&9\\ 2&4&3&0&3&4\\ 3&9&8&5&0&1\\ 4&16&15&12&7&0
+\end{array}\]
+Each row is checked against (S) directly (for example, target $4$, vertex $2$:
+$1+\frac{15+7}{2}=12$). So $H_{P_5}(0\to4)=16$ and $\max_{a,b}H_{P_5}(a\to b)=16$.
+
+\paragraph{Hitting times on $P_5^+$, target $4$.} The neighbour sets are $N(0)=\{1,2\}$,
+$N(1)=\{0,2\}$, $N(2)=\{0,1,3\}$, $N(3)=\{2,4\}$. The vector $h=(18,18,16,9,0)$ solves (S):
+$1+\frac{18+16}2=18$ (vertices $0$ and $1$), $1+\frac{18+18+9}3=16$, $1+\frac{16+0}2=9$. So
+$H_{P_5^+}(0\to4)=18$ and $\max_{a,b}H_{P_5^+}(a\to b)\ge18$.
+
+\begin{theorem}
+Adding the edge $\{0,2\}$ to $P_5$ raises $H(0\to4)$ from $16$ to $18$ and the maximal hitting time
+from $16$ to at least $18$. Hence monotonicity fails in readings (R1) and (R2), and the second
+clause of the conjecture is false.
+\end{theorem}
+Intuition: from $0$ the walk on $P_5$ must step to $1$ and then to $2$; with the chord it can jump
+to $2$, but from $2$ it now returns to $\{0,1\}$ with probability $2/3$ instead of $1/2$.
+
+\section{Lean formalization}
+File \texttt{lean/Conjecture3423/Basic.lean} (242 lines, only import \texttt{Mathlib}), namespace
+\texttt{C3423}. General part: \texttt{IsHittingTimeVec}, \texttt{harmonic\_le\_zero} (Lemma 1),
+\texttt{isHittingTimeVec\_unique}, \texttt{exists\_isHittingTimeVec} (Theorem 2),
+\texttt{hittingTime}, \texttt{hittingTime\_eq}, \texttt{hittingTime\_spec}, \texttt{maxHittingTime}.
+Instance part: \texttt{P5chord} $:=$ \texttt{pathGraph 5} $\sqcup$ \texttt{SimpleGraph.edge 0 2};
+\texttt{P5\_connected} (from Mathlib's \texttt{pathGraph\_connected}), \texttt{P5chord\_connected},
+\texttt{nbr\_P5}, \texttt{nbr\_P5chord} (by \texttt{decide} on \texttt{Fin 5}), \texttt{hP5\_spec},
+\texttt{hChord\_spec}, \texttt{hittingTime\_P5}, \texttt{hittingTime\_P5\_0\_4} ($=16$),
+\texttt{hittingTime\_P5chord\_0\_4} ($=18$), \texttt{maxHittingTime\_P5} ($=16$),
+\texttt{maxHittingTime\_P5chord\_ge} ($\ge18$), \texttt{adding\_edge\_increases\_hittingTime}.
+Main theorems:
+\begin{itemize}
+\item \texttt{not\_edge\_monotone\_hittingTime}: \texttt{not (forall (G G' : SimpleGraph (Fin 5))
+  [DecidableRel G.Adj] [DecidableRel G'.Adj], G.Connected -> G <= G' -> forall a b,
+  hittingTime G' a b <= hittingTime G a b)};
+\item \texttt{not\_edge\_monotone\_maxHittingTime}: the same with \texttt{maxHittingTime G' <=
+  maxHittingTime G}.
+\end{itemize}
+\texttt{\#print axioms} for both main theorems, \texttt{adding\_edge\_increases\_hittingTime} and
+\texttt{hittingTime\_spec} gives \texttt{[propext, Classical.choice, Quot.sound]}; no
+\texttt{sorry}, no \texttt{native\_decide}. Checked with Lean 4.33.1 and Mathlib v4.33.1
+(\texttt{lake build}). In Lean, $H$ is defined through (S) (Theorem 2); the identification of (S)
+with $\mathbb E_a[\tau_b]$ is the first-step analysis above, which is not formalized.
+
+\section{Relation to the earlier submission}
+An earlier submission (PR \#224, orionsheep) was closed. It used $P_3\to K_3$, where adding the edge
+$\{1,3\}$ raises $H(1\to2)$ from $1$ to $2$. The reviewer wrote: ``the Lean theorems are
+$2\cdot2 = 2+2$ (twice), $2\cdot2-1\ne0$, $1 = 1$, $2 > 1$; graphs, random walks, and hitting times
+appear nowhere, so the $P_3$-vs-$K_3$ counterexample is exclusively prose''. This submission
+defines graphs (Mathlib \texttt{SimpleGraph}), the simple random walk's hitting-time system and
+the hitting time itself, and proves existence and uniqueness of the solution on every connected
+graph. It also replaces the example. In $P_3\to K_3$ the maximal hitting time drops from $4$ to
+$2$, so that example refutes only reading (R1). The $P_5\to P_5^+$ example refutes (R1) and (R2).
+
+\section*{Source}
+Wikipedia, ``Hitting time'', \url{https://en.wikipedia.org/wiki/Hitting_time} (definition quoted
+above).
+\end{document}

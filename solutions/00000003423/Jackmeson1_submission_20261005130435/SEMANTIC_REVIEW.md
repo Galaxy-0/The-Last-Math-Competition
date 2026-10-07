@@ -1,0 +1,9 @@
+# Semantic review (independent, pre-submission)
+
+An independent model reviewer (GPT-6 Astra, reasoning effort "xhigh", separate session) received the exact conjecture text, the full LaTeX report, the full Lean source and a reviewer checklist distilled from 93 closed-unmerged pull requests of this competition. It was asked whether the Lean main theorem settles the conjecture as written, whether the reading is faithful and not a loophole, whether the Lean definitions are faithful to the standard notions, whether the mathematics is correct, and whether report and Lean match. This is an automated review prepared by the submitter, not the competition's maintainer review.
+
+**Verdict:** accept = True; severity = none; reading faithful = True.
+
+**Reviewer notes (verbatim):**
+
+> The disproof faithfully targets the decrease asserted in the second conjunct, including the maximal-hitting-time reading suggested by the conjecture. Lean defines the actual path and its single-edge extension, proves connectedness and inclusion, and verifies H_P5(0,4)=16, H_P5chord(0,4)=18, maxHittingTime(P5)=16, and maxHittingTime(P5chord)>=18. This finite counterexample suffices to refute universal monotonicity; no separate failure of submodularity is needed. The first-step system is a faithful characterization of expected hitting time on finite connected graphs: Lean proves existence and uniqueness generally, so the epsilon definition is canonical on the relevant domain. The report correctly supplies the finite-expectation and Markov-property justification of this characterization, while explicitly disclosing that the probabilistic equivalence is not separately formalized. The report's calculations, maximum-principle argument, and finite-dimensional existence proof are correct and agree with Lean. No substantive mismatch or loophole was found.

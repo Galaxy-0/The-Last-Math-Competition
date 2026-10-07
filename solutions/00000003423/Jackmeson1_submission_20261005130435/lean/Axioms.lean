@@ -1,0 +1,3 @@
+import Conjecture3423
+#print axioms C3423.not_edge_monotone_hittingTime
+#print axioms C3423.not_edge_monotone_maxHittingTime
