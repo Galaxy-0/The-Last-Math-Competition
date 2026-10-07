@@ -1,0 +1,167 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\vol}{\operatorname{vol}}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+
+\title{Disproof of conjecture 00000007792:\\ the M-ellipsoid constant of the Euclidean ball is $4$, not $\le (\pi/4)e$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clause refuted}
+
+\textbf{Statement (English, verbatim).} Definition: The M-ellipsoid condition: an M-position of a
+convex body $K$ is an ellipsoid $E$ with
+$\vol(K+E)\,\vol(K^\circ+E^\circ)\le C^n\,\vol(K)\,\vol(K^\circ)$. Conjecture: The optimal constant
+$C$ is uniformly attainable over all bodies with $C\le(\pi/4)e$, given asymptotically by the John
+ellipsoid position; and M-positions are stable: bodies deviating from the optimal position lose
+exponentially and strictly monotonically in volume product, with characterization function
+$e^{c d^2}$ in the position deviation $d$. (The Chinese text states the same: the optimal constant
+$C$ is uniformly attainable over all bodies and $C\le \pi/4\cdot e$.)
+
+\textbf{Reading.} The conjecture is a conjunction. Its first conjunct says that a single constant
+$C\le(\pi/4)e\approx 2.135$ works for all convex bodies $K$ (in every dimension $n$), i.e.\ every
+$K$ has an ellipsoid $E$ with
+\[
+  \vol(K+E)\,\vol(K^\circ+E^\circ)\le C^n\,\vol(K)\,\vol(K^\circ),
+\]
+the inequality exactly as written in the Definition line (with $C^n$, not $C^{2n}$). We refute this
+conjunct, which refutes the conjunction. The stability conjunct (the $e^{cd^2}$ law) is not
+addressed. We refute three readings of the first conjunct:
+\begin{itemize}
+\item[(R1)] one $C\le(\pi/4)e$ is admissible in every dimension $n\ge 1$;
+\item[(R2)] (``asymptotically'') one $C\le(\pi/4)e$ is admissible in all sufficiently large
+  dimensions;
+\item[(R3)] admissible constants $C_n\ge 0$ in dimension $n$ (for all large $n$) converge to a
+  limit $L\le(\pi/4)e$.
+\end{itemize}
+In fact, in every dimension $n\ge1$ every admissible constant satisfies $|C|\ge 4$. A reading with
+$C\le \pi/(4e)$ is stronger than (R1) and is refuted too. The witness is the Euclidean unit ball,
+and the bound $4$ holds against \emph{every} ellipsoid,
+so no choice of position (John or otherwise) helps.
+
+\textbf{Conventions.} Space $\mathbb{R}^n$ with the Euclidean inner product (Mathlib
+\texttt{EuclideanSpace R (Fin n)}); $\vol$ is Lebesgue measure (Mathlib \texttt{volume}, valued in
+$[0,\infty]$); $K+E$ is the Minkowski sum. Polarity is with respect to the origin. Ellipsoids may
+have any centre. The constant $C$ is real; we prove $|C|\ge4$ in each dimension, and $C\ge 4$ in
+odd dimensions (where $C^n<0$ is excluded automatically).
+
+\section{Definitions (as formalized)}
+
+\begin{definition}
+$B=\{x:\|x\|\le1\}$. The \emph{polar} of $K\subseteq\mathbb{R}^n$ is
+$K^\circ=\{y:\ \ip{x}{y}\le1\ \text{for all } x\in K\}$ (\texttt{polar}). An \emph{ellipsoid} is a
+set $E=\{c+Ax:\ x\in B\}$ with $c\in\mathbb{R}^n$ and $A$ an invertible linear map
+(\texttt{IsEllipsoid}). A \emph{convex body} is a compact convex set with nonempty interior
+(\texttt{IsConvexBody}).
+\end{definition}
+
+\begin{definition}
+$E$ satisfies the \emph{M-ellipsoid condition} for $K$ with constant $C$
+(\texttt{MEllipsoidCondition}) if $E$ is an ellipsoid and
+$\vol(K+E)\vol(K^\circ+E^\circ)\le C^n\vol(K)\vol(K^\circ)$, where $C^n$ enters through
+$\max(C^n,0)$ (\texttt{ENNReal.ofReal}). $C$ is \emph{admissible in dimension $n$}
+(\texttt{AdmissibleConstant n C}) if every convex body $K\subseteq\mathbb{R}^n$ with
+$0\in\operatorname{int}K$ has an ellipsoid $E$ satisfying the condition.
+\end{definition}
+
+\section{Proof}
+
+\begin{lemma}[\texttt{polar\_closedBall}, \texttt{closedBall\_isConvexBody}]
+$B^\circ=B$, and $B$ is a convex body with $0$ in its interior.
+\end{lemma}
+\begin{proof}
+If $\|y\|\le 1$ then $\ip{x}{y}\le\|x\|\|y\|\le1$ on $B$. If $y\in B^\circ$, $y\ne0$, test
+$x=y/\|y\|$ to get $\|y\|\le 1$.
+\end{proof}
+
+\begin{lemma}[\texttt{key\_ineq}]
+For $d,x\in\mathbb{R}^n$ with $\|x\|\le1$ and $k=(1+\|d\|)^{-1}$:
+$\ip{d}{x-kd}+\|x-kd\|\le1$.
+\end{lemma}
+\begin{proof}
+Put $r=\|d\|$, $p=\ip{d}{x}\le r$. Then $\ip{d}{x-kd}=p-kr^2$, and $R:=1-p+kr^2\ge 1-r+kr^2=k>0$.
+Using $k(1+r)=1$ one checks the identity
+$R^2-\|x-kd\|^2=(r-p)^2+1-\|x\|^2\ge0$, so $\|x-kd\|\le R$.
+\end{proof}
+
+\begin{theorem}[\texttt{ball\_volume\_product\_ge}]
+For every $n$ and every ellipsoid $E\subseteq\mathbb{R}^n$:
+$4^n\vol(B)\vol(B^\circ)\le\vol(B+E)\,\vol(B^\circ+E^\circ)$.
+\end{theorem}
+\begin{proof}
+Let $E=c+AB$. The map $A^*A$ is symmetric; let $v_1,\dots,v_n$ be an orthonormal eigenbasis,
+$A^*Av_j=\lambda_jv_j$ (Mathlib \texttt{LinearMap.IsSymmetric.eigenvectorBasis}). Then
+$\ip{Av_i}{Av_j}=\lambda_j\delta_{ij}$, so $\lambda_j=\|Av_j\|^2>0$. Put $s_j=\sqrt{\lambda_j}$ and
+$u_j=s_j^{-1}Av_j$; the $u_j$ form an orthonormal basis. Let $R$ be the isometry with $Ru_j=v_j$,
+and for $a\in\mathbb{R}^n$ let $D_a$ be the linear map with $D_au_j=a_ju_j$, so
+$\det D_a=\prod_j a_j$ and $D_{1+a}=I+D_a$. Checking on the basis $u_j$:
+$A R=D_s$ and $A^*D_{s^{-1}}=R$.
+
+\emph{First factor.} For $x\in B$, $c+D_{1+s}x=x+(c+A(Rx))\in B+E$ because $\|Rx\|=\|x\|$. Hence
+$B+E\supseteq c+D_{1+s}B$ and, by translation invariance and the linear change of variables
+(\texttt{addHaar\_image\_linearMap}), $\vol(B+E)\ge\prod_j(1+s_j)\,\vol(B)$.
+
+\emph{Second factor.} Let $d=D_{s^{-1}}^*c$ and $k=(1+\|d\|)^{-1}$. For $x,x'\in B$ and
+$z=x-kd$:
+\[
+ \ip{c+Ax'}{D_{s^{-1}}z}=\ip{d}{z}+\ip{x'}{A^*D_{s^{-1}}z}=\ip{d}{z}+\ip{x'}{Rz}
+ \le\ip{d}{z}+\|z\|\le1
+\]
+by the key inequality. So $D_{s^{-1}}(x-kd)\in E^\circ$, and
+$x+D_{s^{-1}}(x-kd)=-kD_{s^{-1}}d+D_{1+s^{-1}}x\in B+E^\circ$. Hence
+$\vol(B^\circ+E^\circ)=\vol(B+E^\circ)\ge\prod_j(1+s_j^{-1})\,\vol(B)$.
+
+\emph{Product.} $(1+s)(1+s^{-1})-4=(s-1)^2/s\ge0$ for $s>0$
+(\texttt{four\_le\_mul\_inv}), so the product of the two lower bounds is at least
+$4^n\vol(B)^2=4^n\vol(B)\vol(B^\circ)$.
+\end{proof}
+
+\begin{corollary}[\texttt{ball\_condition\_pow\_ge}, \texttt{admissible\_abs\_ge\_four},
+\texttt{admissible\_ge\_four\_of\_odd}]
+If some ellipsoid satisfies the M-ellipsoid condition for $B$ with constant $C$, then
+$4^n\le C^n$. Hence in every dimension $n\ge1$ every admissible $C$ has $|C|\ge4$, and $C\ge4$ when
+$n$ is odd.
+\end{corollary}
+\begin{proof}
+Combine the theorem with the hypothesis and cancel $\vol(B)^2\in(0,\infty)$; if $C^n\le0$ the
+right side is $0$, contradicting $4^n>0$.
+\end{proof}
+
+\begin{corollary}[\texttt{uniform\_admissible\_ge\_four}, \texttt{conjecture\_7792\_false},
+\texttt{conjecture\_7792\_false\_eventually}, \texttt{conjecture\_7792\_false\_limit}]
+Since $(\pi/4)e<e<3<4$: (R1) fails (a uniformly admissible $C$ is $\ge4$, using $n=1$); (R2) fails
+(use the odd dimension $2N+1$); (R3) fails (eventually $C_n\ge4$, so $L\ge4$).
+\end{corollary}
+
+The bound is sharp for the ball: $E=B$ gives $\vol(2B)^2=4^n\vol(B)^2$ (not formalized; not needed).
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture7792/Basic.lean} (332 lines, \texttt{import Mathlib} only, Lean
+\texttt{v4.33.1}, Mathlib \texttt{v4.33.1}). Main theorem:
+\begin{verbatim}
+theorem conjecture_7792_false :
+    Not (exists C : Real, C <= Real.pi / 4 * Real.exp 1 /\
+      forall n : Nat, 1 <= n -> AdmissibleConstant n C)
+\end{verbatim}
+(ASCII rendering of the Lean statement)
+together with \texttt{conjecture\_7792\_false\_eventually},
+\texttt{conjecture\_7792\_false\_limit}, \texttt{admissible\_abs\_ge\_four} and the core estimate
+\texttt{ball\_volume\_product\_ge}. \texttt{lake build} succeeds. \texttt{\#print axioms} for each
+of these reports only \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}. There is
+no \texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}
