@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A proof of Conjecture 00000001016\\[2pt]
+\large There is no binary self-dual $[84,12]$ code}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000001016 reads:
+\begin{quote}
+\emph{Definition:} The $[84,12,12]$ binary extremal self-dual code is a candidate at the Griesmer boundary.
+\emph{Conjecture:} This code does not exist; moreover, the automorphism group of every $[84,12]$ binary
+self-dual code contains no element of order 11, and the minimum distance is at most 11.
+\end{quote}
+The Chinese text agrees. The claims are:
+(1) there is no binary self-dual $[84,12,12]$ code (in particular no extremal one);
+(2) no binary self-dual $[84,12]$ code has an automorphism of order $11$;
+(3) every binary self-dual $[84,12]$ code has minimum distance $\le 11$.
+The statement asserts the existence of nothing: the definition calls the $[84,12,12]$ code a
+``candidate'', and the conjecture asserts that it does not exist. We prove all three claims: (1) is a
+genuine non-existence theorem, and (2), (3) then hold vacuously.
+
+\section{Definitions (standard)}
+
+All notions are the textbook ones (e.g.\ \url{https://en.wikipedia.org/wiki/Dual_code}: ``A self-dual code is
+one which is its own dual. This implies that n is even and dim C = n/2.'').
+\begin{itemize}[nosep]
+\item A binary linear $[n,k]$ code is a $k$-dimensional subspace $C \subseteq \mathbb{F}_2^n$ (Lean
+  \texttt{BinaryCode n}, a \texttt{Submodule (ZMod 2) (Fin n -> ZMod 2)}, with \texttt{finrank} $= k$).
+\item $C^\perp = \{x : x \cdot c = 0 \ \forall c \in C\}$ for the standard dot product $x\cdot y=\sum_i x_iy_i$
+  (Lean \texttt{dual}, the orthogonal complement for the bilinear form \texttt{dotForm}; \texttt{mem\_dual}).
+\item $C$ is self-dual if $C = C^\perp$ (Lean \texttt{IsSelfDual}).
+\item The minimum distance is the least Hamming weight of a nonzero codeword (Lean \texttt{minDistance},
+  using Mathlib's \texttt{hammingNorm}); an $[n,k,d]$ code has minimum distance $d$.
+\item An automorphism of $C$ is a coordinate permutation $\sigma$ with $c \circ \sigma \in C \iff c \in C$
+  (Lean \texttt{IsAutomorphism}); over $\mathbb{F}_2$ monomial automorphisms are exactly permutations.
+  ``The automorphism group contains an element of order $11$'' means some automorphism $\sigma$ has
+  \texttt{orderOf} $\sigma = 11$.
+\end{itemize}
+The word ``extremal'' needs no definition: claim (1) is proved for every self-dual $[84,12,12]$ code.
+
+\section{The proof}
+
+\begin{lemma}[Lean \texttt{dotForm\_nondegenerate}, \texttt{finrank\_add\_finrank\_dual}]
+The dot product on $\mathbb{F}_2^n$ is nondegenerate, and $\dim C + \dim C^\perp = n$ for every subspace $C$.
+\end{lemma}
+\begin{proof}
+$x \cdot e_i = x_i$, so $x \cdot y = 0$ for all $y$ forces $x = 0$ (and symmetrically). For a nondegenerate
+bilinear form on a finite-dimensional space, $\dim C^\perp = n - \dim C$ (Mathlib
+\texttt{LinearMap.BilinForm.finrank\_orthogonal}).
+\end{proof}
+
+\begin{theorem}[Lean \texttt{two\_mul\_finrank\_of\_selfDual}, \texttt{no\_selfDual\_84\_12}]
+A binary self-dual code of length $n$ has $2\dim C = n$. In particular no binary self-dual code of length
+$84$ has dimension $12$ (its dimension is $42$).
+\end{theorem}
+\begin{proof}
+Substitute $C^\perp = C$ in the lemma: $2 \dim C = n$. For $n = 84$, $\dim C = 42 \ne 12$.
+\end{proof}
+
+\begin{corollary}[Lean \texttt{conjecture\_1016}]
+Claims (1), (2), (3) hold.
+\end{corollary}
+\begin{proof}
+(1) A self-dual $[84,12,12]$ code would be a self-dual code of length 84 and dimension 12. (2), (3): there
+is no self-dual $[84,12]$ code, so the universal statements hold vacuously.
+\end{proof}
+
+\section{Remarks on the reading}
+
+The non-existence in (1) is the substance of the result; (2) and (3) are vacuous because the class is
+empty. Under the nonstandard reading ``self-dual = self-orthogonal'' ($C \subseteq C^\perp$) the answer
+changes: the triple extended Golay code $\{(c,c,c) : c \in G_{24}\}$ padded by $12$ zero coordinates is a
+self-orthogonal $[84,12,24]$ code, so claim (3) would fail. We use the standard definition $C = C^\perp$.
+The phrase ``at the Griesmer boundary'' in the definition is not part of the conjecture and is not used
+(the Griesmer bound for $k = d = 12$ is $n \ge 31$).
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture1016/Basic.lean} (107 lines; only import \texttt{Mathlib}). Main theorem
+\texttt{C1016.conjecture\_1016}:
+$(\neg\exists C,\ \texttt{IsSelfDual } C \wedge \dim C = 12 \wedge \texttt{minDistance } C = 12) \wedge
+(\forall C,\ \texttt{IsSelfDual } C \to \dim C = 12 \to \forall \sigma,\ \texttt{IsAutomorphism } C\,\sigma
+\to \texttt{orderOf } \sigma \ne 11) \wedge (\forall C,\ \texttt{IsSelfDual } C \to \dim C = 12 \to
+\texttt{minDistance } C \le 11)$, with $C$ ranging over \texttt{BinaryCode 84}. \texttt{lake build} succeeds;
+\texttt{\#print axioms} reports only \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}. No
+\texttt{sorry}, no \texttt{native\_decide}, no new axioms.
+
+\end{document}
