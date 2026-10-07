@@ -1,0 +1,206 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\nml}{\eta}
+
+\title{Disproof of conjecture 00000009523:\\ the completely dephasing qubit channel has $C_E=\chi=\log 2$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clause refuted}
+
+\textbf{Statement (English, verbatim).} Definition: The entanglement-assisted classical capacity
+$C_E(\varphi)$ is given by the Bennett-Shor-Smolin-Thapliyal formula
+$C_E(\varphi)=\max_\rho I(\rho,\varphi)$, where
+$I(\rho,\varphi)=S(\rho)+S(\varphi(\rho))-S((\mathrm{id}\otimes\varphi)(\text{purification}))$ is the
+quantum mutual information. Conjecture: Except for the completely depolarizing constant channel,
+$C_E(\varphi)>\chi(\varphi)$ strictly for every channel; and the maximal ratio $C_E/\chi$ over
+$d$-dimensional channels is $d$, attained by trace-halving channels, with the attaining channel
+unique up to joint unitary equivalence. (The Chinese text states the same.)
+
+\textbf{Reading.} The conjecture is a conjunction. Its first conjunct is the universal claim
+\[
+  \text{(A)}\qquad \forall\ \text{channels } \varphi \neq \Delta:\quad C_E(\varphi) > \chi(\varphi),
+\]
+where $\Delta(X)=\tr(X)\,I/d$ is the completely depolarizing channel. We refute (A) with $d=2$,
+which refutes the conjunction. We do not address the second conjunct (ratio $C_E/\chi$), which is
+not needed. The witness is non-constant on states and has $\chi>0$, so it also refutes (A) under
+two weaker readings: (A$'$) every channel that is constant on states is excepted, and (A$''$) in
+addition only channels with $\chi(\varphi)>0$ are considered.
+
+\textbf{Conventions.} Natural logarithm (the claim $C_E=\chi$ does not depend on the base).
+$\nml(x)=-x\log x$ with $\nml(0)=0$ (Mathlib \texttt{Real.negMulLog}). States are on
+$\mathbb{C}^d$; the purification of a state on $\mathbb{C}^d$ lives in
+$\mathbb{C}^d_R\otimes\mathbb{C}^d_A$ with the reference $R$ as the \emph{first} factor, and
+$\varphi$ acts on the second factor. The supremum in $C_E$ is taken over all states and all
+purifications of each state (we show it is attained, so it is the maximum).
+
+\section{Definitions (as formalized)}
+
+\begin{definition}
+A \emph{state} is a matrix $\rho\in M_d(\mathbb{C})$ that is positive semidefinite with
+$\tr\rho=1$. The \emph{von Neumann entropy} of a Hermitian matrix $A$ is
+$S(A)=\sum_i \nml(\lambda_i)$, where $\lambda_i$ are the eigenvalues of $A$ with multiplicity
+(Mathlib \texttt{Matrix.IsHermitian.eigenvalues}).
+\end{definition}
+
+\begin{definition}
+For $X\in M_{k\cdot n}(\mathbb{C})$ indexed by pairs $(r,a)$, and a linear map
+$\Phi:M_n\to M_m$, $(\mathrm{id}_k\otimes\Phi)(X)_{(r,a),(r',a')}=\Phi(X_{rr'})_{aa'}$, where
+$X_{rr'}$ is the block $(a,b)\mapsto X_{(r,a),(r',b)}$. A \emph{channel} is a $\mathbb{C}$-linear
+map $\Phi$ that is completely positive ($(\mathrm{id}_k\otimes\Phi)(X)\succeq 0$ for every $k$ and
+every $X\succeq 0$) and trace preserving.
+\end{definition}
+
+\begin{definition}
+For $\psi\in\mathbb{C}^d\otimes\mathbb{C}^d$, $|\psi\rangle\langle\psi|$ is the matrix
+$\psi\psi^*$, and $\tr_R$ is the partial trace over the first factor. $\psi$ is a
+\emph{purification} of $\rho$ if $\tr_R|\psi\rangle\langle\psi|=\rho$. The mutual information is
+$I(\rho,\psi,\Phi)=S(\rho)+S(\Phi\rho)-S((\mathrm{id}\otimes\Phi)|\psi\rangle\langle\psi|)$ and
+$C_E(\Phi)=\sup\{I(\rho,\psi,\Phi):\rho \text{ a state},\ \psi \text{ a purification of } \rho\}$.
+This is the formula of Bennett, Shor, Smolin and Thapliyal, whose abstract
+(arXiv:quant-ph/0106052) describes the capacity as ``the maximum, over channel inputs $\rho$, of the
+entropy of the channel input plus the entropy of the channel output minus their joint entropy, the
+latter being defined as the entropy of an entangled purification of $\rho$ after half of it has
+passed through the channel.''
+\end{definition}
+
+\begin{definition}
+The \emph{Holevo quantity} of a finite ensemble ($p_i\ge 0$, $\sum_i p_i=1$, states $\rho_i$) is
+$S(\sum_i p_i\Phi(\rho_i))-\sum_i p_i S(\Phi(\rho_i))$, and the \emph{Holevo capacity}
+$\chi(\Phi)$ is its supremum over all finite ensembles.
+\end{definition}
+
+The witness is the \emph{completely dephasing qubit channel}
+$D(X)=\mathrm{diag}(X_{00},X_{11})$ on $M_2(\mathbb{C})$.
+
+\section{Proof}
+
+\begin{lemma}[entropy from the characteristic polynomial]\label{l:cp}
+If $A$ is Hermitian and $\det(tI-A)=\prod_i(t-w_i)$ with $w_i\in\mathbb{R}$, then
+$S(A)=\sum_i\nml(w_i)$. In particular $S(\mathrm{diag}(w))=\sum_i\nml(w_i)$.
+\end{lemma}
+\begin{proof}
+The roots of the characteristic polynomial, with multiplicity, are the eigenvalues
+(\texttt{IsHermitian.roots\_charpoly\_eq\_eigenvalues}); they are also the multiset $\{w_i\}$.
+Apply $\nml\circ\mathrm{Re}$ and sum.
+\end{proof}
+
+\begin{lemma}\label{l:log2}
+Every qubit state $\rho$ has $S(\rho)\le\log 2$.
+\end{lemma}
+\begin{proof}
+The two eigenvalues satisfy $\lambda_0+\lambda_1=\tr\rho=1$, so
+$S(\rho)=\nml(\lambda_0)+\nml(1-\lambda_0)=h(\lambda_0)\le\log 2$, where $h$ is the binary entropy
+(Mathlib \texttt{Real.binEntropy\_le\_log\_two}).
+\end{proof}
+
+\begin{lemma}\label{l:ch}
+$D$ is a channel, it is not constant on states (it fixes $|0\rangle\langle 0|$ and
+$|1\rangle\langle 1|$), and hence $D\neq\Delta$.
+\end{lemma}
+\begin{proof}
+Trace preservation is clear. With the diagonal projectors
+$P_a=\mathrm{diag}(\mathbf{1}[\,\text{second index}=a\,])$ on $\mathbb{C}^k\otimes\mathbb{C}^2$
+one checks entrywise that $(\mathrm{id}_k\otimes D)(X)=\sum_{a\in\{0,1\}}P_a^*XP_a$, a sum of
+positive semidefinite matrices when $X\succeq 0$. Finally $\Delta(\rho)=I/2$ for every state.
+\end{proof}
+
+\begin{lemma}[key identity]\label{l:key}
+For every $\psi\in\mathbb{C}^2\otimes\mathbb{C}^2$, with $\rho=\tr_R|\psi\rangle\langle\psi|$,
+we have $I(\rho,\psi,D)=S(\rho)$.
+\end{lemma}
+\begin{proof}
+Let $\tau_a=\sum_r|\psi(r,a)|^2$. Then $D(\rho)=\mathrm{diag}(\tau_0,\tau_1)$, so
+$S(D\rho)=\nml(\tau_0)+\nml(\tau_1)$ by Lemma~\ref{l:cp}. Entrywise,
+$\omega:=(\mathrm{id}\otimes D)|\psi\rangle\langle\psi|$ is the block-diagonal matrix
+$\mathrm{blockDiag}_a(v_av_a^*)$ with $v_a=\psi(\cdot,a)\in\mathbb{C}^2$. Its characteristic
+polynomial is $\prod_a\det(tI-v_av_a^*)=\prod_a t(t-\tau_a)$ (a $2\times2$ rank-one matrix has
+determinant $0$ and trace $\tau_a$). By Lemma~\ref{l:cp}, $S(\omega)=\nml(\tau_0)+\nml(\tau_1)$.
+Hence $S(D\rho)=S(\omega)$ and $I=S(\rho)$.
+\end{proof}
+
+\begin{theorem}\label{t:main}
+$C_E(D)=\log 2=\chi(D)$, both suprema are attained, and $\chi(D)>0$.
+\end{theorem}
+\begin{proof}
+$C_E$: by Lemmas~\ref{l:key} and~\ref{l:log2}, every $I(\rho,\psi,D)\le\log 2$. For
+$\psi=(|00\rangle+|11\rangle)/\sqrt2$, $\rho=I/2$ and $I=S(I/2)=2\nml(1/2)=\log 2$.
+
+$\chi$: for any ensemble, write $d_{i,a}=(\rho_i)_{aa}\in[0,1]$ (real since $\rho_i\succeq0$),
+$d_{i,0}+d_{i,1}=1$. Then $\sum_ip_iD(\rho_i)=\mathrm{diag}(\sum_ip_id_{i,a})$, so the Holevo
+quantity is $\sum_a\nml(\sum_ip_id_{i,a})-\sum_ip_i\sum_a\nml(d_{i,a})\le\log2-0$, using the
+binary-entropy bound and $\nml\ge0$ on $[0,1]$. The ensemble
+$\{\tfrac12:|0\rangle\langle0|,\ \tfrac12:|1\rangle\langle1|\}$ gives $S(I/2)-0=\log 2$.
+\end{proof}
+
+\begin{theorem}
+Clause (A) is false for $d=2$: $D$ is a channel, $D\ne\Delta$, and $C_E(D)=\chi(D)$, so
+$C_E(D)>\chi(D)$ fails. Readings (A$'$) and (A$''$) also fail with the same witness.
+\end{theorem}
+
+This agrees with the literature: Shirokov (arXiv:1202.3449) writes ``It is easy to show coincidence
+of the entanglement-assisted classical capacity and the Holevo capacity for any c-q channel between
+finite dimensional quantum systems.'' The channel $D$ is a c-q channel (measure in the computational
+basis, prepare the corresponding basis state). The Lean proof does not use this result.
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture9523/Basic.lean} (namespace \texttt{C9523}, Lean v4.33.1, Mathlib
+v4.33.1, 338 lines, only import \texttt{Mathlib}). Definitions: \texttt{IsState},
+\texttt{vnEntropy}, \texttt{proj}, \texttt{ptraceRef}, \texttt{idTensor}, \texttt{IsChannel},
+\texttt{mutualInfo}, \texttt{mutualInfoSet}, \texttt{CE}, \texttt{holevoQ}, \texttt{holevoSet},
+\texttt{chi}, \texttt{depol}, \texttt{deph}. Main lemmas: \texttt{vnEntropy\_of\_charpoly}
+(Lemma~\ref{l:cp}), \texttt{vnEntropy\_le\_log\_two} (Lemma~\ref{l:log2}),
+\texttt{deph\_isChannel}, \texttt{deph\_nonconstant}, \texttt{deph\_ne\_depol}
+(Lemma~\ref{l:ch}), \texttt{idTensor\_deph\_proj}, \texttt{charpoly\_blockDiagonal},
+\texttt{vnEntropy\_omega}, \texttt{mutualInfo\_deph} (Lemma~\ref{l:key}), \texttt{CE\_deph},
+\texttt{chi\_deph} (Theorem~\ref{t:main}, each as \texttt{IsGreatest} of the defining set plus the
+value of \texttt{sSup}).
+
+Main theorems:
+\begin{verbatim}
+theorem deph_counterexample :
+    IsChannel deph /\ deph != depol 2 /\
+      (exists rho sigma,
+        IsState rho /\ IsState sigma /\ deph rho != deph sigma) /\
+      0 < chi deph /\ CE deph = chi deph /\ chi deph = log 2
+theorem conjecture9523_false :
+    not (forall Phi : Matrix (Fin 2) (Fin 2) C ->l[C] Matrix (Fin 2) (Fin 2) C,
+      IsChannel Phi -> Phi != depol 2 -> chi Phi < CE Phi)
+theorem conjecture9523_false_strong :
+    not (forall Phi : Matrix (Fin 2) (Fin 2) C ->l[C] Matrix (Fin 2) (Fin 2) C,
+      IsChannel Phi ->
+      (exists rho sigma,
+        IsState rho /\ IsState sigma /\ Phi rho != Phi sigma) ->
+      0 < chi Phi -> chi Phi < CE Phi)
+\end{verbatim}
+(ASCII transcription. The Lean source writes $\wedge$, $\neq$, $\exists$, $\neg$, $\forall$,
+$\to$, $\rho$, $\sigma$, $\Phi$, $\mathbb{C}$, and $\to_l[\mathbb{C}]$ for $\mathbb{C}$-linear
+maps.)
+
+\textbf{Axiom audit.} \texttt{\#print axioms} for each of the three theorems reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide}, and no added axiom. \texttt{lake build} succeeds.
+
+\section*{Sources}
+\begin{itemize}
+\item C. H. Bennett, P. W. Shor, J. A. Smolin, A. V. Thapliyal, Entanglement-assisted capacity of a
+quantum channel and the reverse Shannon theorem, \url{https://arxiv.org/abs/quant-ph/0106052}.
+\item M. E. Shirokov, A criterion for coincidence of the entanglement-assisted classical capacity and
+the Holevo capacity of a quantum channel, \url{https://arxiv.org/abs/1202.3449}.
+\end{itemize}
+
+\end{document}
