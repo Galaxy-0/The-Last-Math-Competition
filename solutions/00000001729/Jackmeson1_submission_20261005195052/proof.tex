@@ -1,0 +1,179 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\title{Disproof of conjecture 00000001729:\\ the Campana count of $(\mathbb{P}^1,\tfrac12[0]+\tfrac12[1]+\tfrac12[\infty])$
+is not $c\sqrt{B}/\sqrt{\log B}$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the reading}
+
+\textbf{Statement (English, verbatim).} Definition: Campana points are rational points satisfying
+orbifold denominator divisibility conditions. Conjecture: The count of Campana points of
+$(\mathbb{P}^1, 2[0]+2[1]+2[\infty])$ is always $c$ times the square root of $B$ divided by the square
+root of $\log B$; and the logarithmic correction is given by the additive-energy duality. (The Chinese
+text states the same: the count is always $c\cdot B^{1/2}/(\log B)^{1/2}$, and the logarithmic
+correction is given by additive-energy duality.)
+
+\textbf{Reading.} The notation $2[0]+2[1]+2[\infty]$ assigns multiplicity $m=2$ to each of the points
+$0,1,\infty$; as a Campana orbifold divisor this is $\Delta=\tfrac12[0]+\tfrac12[1]+\tfrac12[\infty]$
+(a coefficient $2$ itself is not an orbifold coefficient). The conjecture is a conjunction. We refute
+its first conjunct,
+\[
+\text{(A)}\qquad N(B) \text{ ``is'' } c\,\sqrt{B}/\sqrt{\log B},
+\]
+which refutes the conjunction. The second conjunct (``additive-energy duality'') is undefined in the
+text; it is not used and not addressed. We refute (A) under each of the following readings, for every
+real constant $c$:
+\begin{itemize}
+\item (exact) $N(B)=c\sqrt B/\sqrt{\log B}$ for all $B\ge B_0$ (any $B_0$; ``always'');
+\item (asymptotic) $N(B)\sim c\sqrt B/\sqrt{\log B}$ as $B\to\infty$;
+\item (order of magnitude) $N(B)=O(\sqrt B/\sqrt{\log B})$; this also covers $N(B)\asymp\sqrt B/\sqrt{\log B}$.
+\end{itemize}
+We do this for the naive height $H$ and for every height $H^\kappa$ with $0<\kappa\le 1$, which
+includes the orbifold anticanonical height $H^{1/2}$ (on $\mathbb{P}^1$, $-(K+\Delta)$ has degree
+$2-\tfrac32=\tfrac12$). \emph{Not refuted:} the one-sided reading $N(B)\gg \sqrt B/\sqrt{\log B}$
+(our lower bound implies it), and heights $H^\kappa$ with $\kappa>1$.
+
+\section{Definitions (as formalized)}
+
+\textbf{Conventions.} A point of $\mathbb{P}^1(\mathbb{Q})$ outside the support $\{0,1,\infty\}$ of
+$\Delta$ is a rational number $x\neq 0,1$. We write $x=a/b$ in lowest terms with $b>0$ (Lean
+\texttt{x.num}, \texttt{x.den}). On the standard model $\mathbb{P}^1_{\mathbb{Z}}$ the $p$-adic
+intersection numbers of $x$ with the closures of $[0]$, $[\infty]$, $[1]$ are $v_p(a)$, $v_p(b)$ and
+$v_p(a-b)$. Valuations of integers are Mathlib's \texttt{padicValInt} (of $|n|$).
+
+\begin{definition}[Campana condition, multiplicity 2]
+An integer $n$ satisfies \texttt{Mult2} if for every prime $p$, $v_p(n)=0$ or $v_p(n)\ge 2$.
+\end{definition}
+
+\begin{definition}[Campana point]
+$x\in\mathbb{Q}$ is a Campana point of $(\mathbb{P}^1,\tfrac12[0]+\tfrac12[1]+\tfrac12[\infty])$
+(\texttt{IsCampanaPoint}) if $x\neq0$, $x\neq1$, and $a$, $b$, $a-b$ all satisfy \texttt{Mult2}. That
+is: for each of the three divisors and each prime $p$, the intersection number is $0$ or at least the
+multiplicity $2$. Equivalently, $|a|$, $b$, $|a-b|$ are squareful (powerful) and $\gcd(a,b)=1$.
+\end{definition}
+
+\begin{definition}[Height and count]
+The naive height is $H(a/b)=\max(|a|,b)$ (\texttt{height}). For real $B$,
+$N(B)=\#\{x : x \text{ Campana}, H(x)\le B\}$ (\texttt{campanaCount}, a \texttt{Set.ncard}; the set is
+finite by \texttt{finite\_height\_le}), and
+$N_\kappa(B)=\#\{x : x \text{ Campana}, H(x)^\kappa\le B\}$ (\texttt{campanaCountPow}; finite for
+$\kappa>0$ by \texttt{finite\_pow}).
+\end{definition}
+
+\section{The proof}
+
+\begin{lemma}[\texttt{pt\_num\_den}, \texttt{pt\_campana}, \texttt{pt\_inj}]
+Let $m,n$ be positive integers with $\gcd(m,n)=1$, $m$ odd and $n$ even. Put
+$x=(m^2+n^2)^2/(m^2-n^2)^2$. Then $x$ is in lowest terms as written, i.e. $a=(m^2+n^2)^2$,
+$b=(m^2-n^2)^2$, and $a-b=(2mn)^2$; $x$ is a Campana point; and $(m,n)$ is determined by $x$.
+\end{lemma}
+
+\begin{proof}
+$m^2-n^2$ is odd, hence nonzero. By the classification of primitive Pythagorean triples (Mathlib
+\texttt{PythagoreanTriple.coprime\_classification}, used in the easy direction),
+$\gcd(m^2-n^2,2mn)=1$. Hence $(m^2-n^2)^2$ is coprime to $(2mn)^2+(m^2-n^2)^2=(m^2+n^2)^2$, so the
+fraction is reduced. Each of $a,b,a-b$ is a nonzero square $k^2$, and $v_p(k^2)=2v_p(k)\in\{0\}\cup[2,\infty)$.
+$x\neq0$ as $a\neq0$; $x\neq1$ since otherwise $a=b=1$ and $(2mn)^2=a-b=0$. If two such pairs give
+the same $x$, then $m^2+n^2=m'^2+n'^2$ and $m^2-n^2=\pm(m'^2-n'^2)$. The sign $+$ gives $m=m'$,
+$n=n'$; the sign $-$ gives $m=n'$, impossible by parity.
+\end{proof}
+
+\begin{lemma}[\texttt{card\_good}]
+For every $K\ge0$, the set $G_K$ of pairs $(i,j)$ with $0\le i<K$, $1\le j\le K$ and
+$\gcd(2i+1,2j)=1$ has at least $K^2/2$ elements.
+\end{lemma}
+
+\begin{proof}
+There are $K^2$ pairs. If $\gcd(2i+1,2j)=g\neq1$, then $g$ is odd (it divides $2i+1$) and
+$3\le g\le 2K$, so $g=2e+3$ with $0\le e<K$, and $d=2e+3$ divides both $2i+1$ and $2j$. For fixed odd
+$d$, the map $i\mapsto 2i+1$ injects $\{i<K: d\mid 2i+1\}$ into the multiples of $d$ in $(0,2K]$, of
+which there are $\lfloor 2K/d\rfloor$ (Mathlib \texttt{Nat.Ioc\_filter\_dvd\_card\_eq\_div}); and
+$d\mid 2j$ iff $d\mid j$, giving at most $\lfloor K/d\rfloor$ values of $j$. So at most
+$2K^2/d^2$ bad pairs are divisible by $d$, and the number of bad pairs is at most
+\[
+2K^2\sum_{e=0}^{K-1}\frac{1}{(2e+3)^2}\le 2K^2\Big(\frac14-\frac1{4(K+1)}\Big)\le \frac{K^2}{2},
+\]
+by the telescoping bound $\frac1{(2e+3)^2}\le\frac1{4(e+1)}-\frac1{4(e+2)}$ (\texttt{sum\_inv\_sq\_odd},
+proved by induction), which holds because $(2e+3)^2\ge 4(e+1)(e+2)$.
+\end{proof}
+
+\begin{theorem}[\texttt{campanaCount\_lower}]
+For every $K\in\mathbb{N}$, $N(64K^4)\ge K^2/2$; that is, $N(B)\ge\sqrt B/16$ along $B=64K^4$.
+\end{theorem}
+
+\begin{proof}
+Map $(i,j)\in G_K$ to the point $x$ of Lemma 1 with $m=2i+1$, $n=2j$. It is injective and lands in
+Campana points with $H(x)=(m^2+n^2)^2\le (8K^2)^2=64K^4$, since $m^2+n^2\le(2K)^2+(2K)^2$. Apply
+Lemma 2.
+\end{proof}
+
+\begin{theorem}[\texttt{campana\_count\_disproof}, \texttt{campana\_count\_pow\_disproof}]
+For the naive height, and for $N_\kappa$ with $0<\kappa\le1$: $N(B)$ is not $O(\sqrt B/\sqrt{\log B})$
+as $B\to\infty$ over the reals; for no real $c$ is $N(B)\sim c\sqrt B/\sqrt{\log B}$; and for no real
+$c,B_0$ is $N(B)=c\sqrt B/\sqrt{\log B}$ for all $B\ge B_0$.
+\end{theorem}
+
+\begin{proof}
+(\texttt{not\_isBigO\_of\_lower}) Suppose $|N(B)|\le C\,\sqrt B/\sqrt{\log B}$ for $B\ge B_0$. Choose
+an integer $K\ge 1$ with $K>\max(e^{256C^2},B_0)$ and put $B=64K^4\ge B_0$. Then $\sqrt B=8K^2$ and
+$s=\sqrt{\log B}\ge\sqrt{\log K}>16|C|$, so $K^2/2\le N(B)\le 8CK^2/s<K^2/2$, a contradiction.
+(\texttt{readings\_of\_not\_isBigO}) An eventual equality $N=c\,g$ or an equivalence $N\sim c\,g$
+implies $N=O(c\,g)=O(g)$ with $g=\sqrt B/\sqrt{\log B}$. For $N_\kappa$: if $H(x)\le B$ and $B\ge1$ then
+$H(x)^\kappa\le B^\kappa\le B$, so $N(B)\le N_\kappa(B)$ (\texttt{count\_le\_countPow}), and the lower
+bound transfers.
+\end{proof}
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture1729/Basic.lean} (370 lines, only \texttt{import Mathlib}; identical to the
+checked file), namespace \texttt{C1729}. Main statements:
+\begin{verbatim}
+theorem campana_count_disproof :
+  (not exists c B0 : Real, forall B >= B0,
+      (campanaCount B : Real) = c * (sqrt B / sqrt (log B))) /\
+  (forall c : Real, not (fun B => (campanaCount B : Real)) ~[atTop]
+      (fun B => c * (sqrt B / sqrt (log B)))) /\
+  not (fun B => (campanaCount B : Real)) =O[atTop]
+      (fun B => sqrt B / sqrt (log B))
+theorem campana_count_pow_disproof (k : Real) (hk : 0 < k) (hk1 : k <= 1) :
+  (the same three statements for campanaCountPow k)
+theorem campanaCount_lower (K : Nat) :
+  (K : Real) ^ 2 / 2 <= campanaCount (64 * (K : Real) ^ 4)
+\end{verbatim}
+(ASCII rendering: in the Lean source, \texttt{not}, \texttt{exists}, \texttt{forall}, \texttt{/\char`\\}
+are the logical symbols, \texttt{Real} and \texttt{Nat} are $\mathbb{R}$ and $\mathbb{N}$,
+\texttt{sqrt} is \texttt{Real.sqrt}, \texttt{log} is \texttt{Real.log}, and the exponent is named
+$\kappa$.)
+\texttt{lake build} succeeds. \texttt{\#print axioms} for each of the three theorems reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom.
+
+\section{Remarks}
+
+\begin{itemize}
+\item The points used have $a>b>0$, so they are also counted by any variant restricted to positive
+squareful triples $b+(a-b)=a$ or to $x>1$. All of $a,b,a-b$ are perfect squares, so the same points
+are also Darmon points (valuations divisible by 2); this variant is not formalized.
+\item Context. Browning and Van Valckenborgh, \emph{Sums of three squareful numbers}
+(\url{https://arxiv.org/abs/1106.4472}), ``investigate the frequency of positive squareful numbers
+x,y,z for which x+y=z'' and ``examine the quantitative arithmetic of integral points on certain
+Campana orbifolds''; they note that a lower bound follows ``via the familiar parametrisation for
+Pythagorean triples''. The argument above is an elementary, self-contained version of that
+observation; nothing from that paper is used in the proof.
+\end{itemize}
+
+\end{document}
