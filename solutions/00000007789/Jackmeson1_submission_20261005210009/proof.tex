@@ -1,0 +1,167 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\R}{\mathbb{R}}
+
+\title{Disproof of conjecture 00000007789:\\ the worst-case log-concave CLT distance $d_n$ is not $O(n^{-1/2})$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clause refuted}
+
+\textbf{Statement (English, verbatim).} Definition: The quantitative log-concave CLT: the worst
+Kolmogorov distance $d_n$ from one-dimensional projections of an isotropic log-concave $X$ to the
+standard normal, over $X$ and directions. Conjecture: $d_n = O(n^{-1/2})$, the same order as
+classical independent sums without log factors; and the extremal measure is the generalized
+simplex (exponential distribution on the simplex), with projecting directions concentrated near
+the central ray of the simplex, $d_n$ being convex in the deviation from the central direction.
+
+\textbf{Chinese text.} It defines $d_n$ as the worst value (``zui huai zhi'') of the Kolmogorov
+distance from the law of the projection $\langle X,\theta\rangle$ of an isotropic log-concave $X$
+to the standard normal, ``ranging over $X$ and $\theta$'' (``bian li $X$ yu $\theta$''), and
+conjectures $d_n=O(n^{-1/2})$, followed by the same clauses on the extremal measure.
+
+\textbf{Reading.} Both languages define
+\[
+  d_n \;=\; \sup\Bigl\{\, d_K\bigl(\mathrm{Law}\langle X,\theta\rangle,\ N(0,1)\bigr) \;:\;
+  X \text{ isotropic log-concave in } \R^n,\ \theta\in S^{n-1}\Bigr\},
+\]
+a supremum over $X$ \emph{and} over directions $\theta$. The conjecture's later clause, which
+speaks of the ``projecting directions'' at which the worst $d_n$ is attained, confirms that the
+maximum over $\theta$ is part of $d_n$. The conjecture is a conjunction whose first conjunct is
+\[
+  \text{(A)}\qquad d_n = O(n^{-1/2}) \quad (n\to\infty).
+\]
+We refute (A); this refutes the conjunction. We do not address the later clauses (extremal
+measure, convexity in the direction), which are not needed.
+
+\textbf{Reading not addressed.} We do not address a ``typical direction'' quantity (a bound
+for most $\theta$ rather than the supremum over $\theta$), which is a different quantity from
+the $d_n$ the Definition names. For context, the abstract of B.~Klartag, \emph{A Central Limit
+Theorem for Convex Sets} (arXiv:math/0605014), says: ``when the expectation of X is zero, and the
+covariance of X is the identity matrix, we show that for 'most' unit vectors u, the random
+variable \textless X,u\textgreater{} is distributed approximately according to the gaussian law.''
+
+\section{Definitions (as formalized)}
+
+All of the following are the definitions in the Lean file \texttt{Conjecture7789/Basic.lean}.
+$\R^n$ is \texttt{Fin n -> R} with Lebesgue measure (the product of $n$ copies of the 1-D
+Lebesgue measure).
+
+\begin{definition}[log-concave]
+A function $f:\R^n\to\R$ is log-concave (\texttt{IsLogConcaveFun}) if it is measurable,
+$f\ge 0$, and $f(tx+(1-t)y)\ge f(x)^t f(y)^{1-t}$ for all $x,y$ and $0<t<1$ (real powers). A
+measure $\mu$ on $\R^n$ is log-concave (\texttt{IsLogConcave}) if $\mu$ has a log-concave density
+$f$ with respect to Lebesgue measure: $\mu = \mathrm{volume.withDensity}(\mathrm{ofReal}\circ f)$.
+(This is the density form of log-concavity. An isotropic measure has identity covariance, so it
+is not supported on a hyperplane, and the density form is the relevant one.)
+\end{definition}
+
+\begin{definition}[isotropic]
+$\mu$ is isotropic (\texttt{IsIsotropic}) if it is a probability measure, every coordinate has a
+finite second moment ($x_i^2$ integrable), $\int x_i\,d\mu = 0$ for all $i$, and
+$\int x_i x_j\,d\mu = \delta_{ij}$ for all $i,j$ (mean $0$, covariance $I$).
+\end{definition}
+
+\begin{definition}[directions, Kolmogorov distance, $d_n$]
+A direction is $\theta\in\R^n$ with $\sum_i\theta_i^2=1$; the projection is
+$\langle x,\theta\rangle=\sum_i \theta_i x_i$ (\texttt{proj}). For a law $\nu$ on $\R$,
+$d_K(\nu)=\sup_{t\in\R}|F_\nu(t)-\Phi(t)|$ (\texttt{kolmogorovToStdNormal}), where $F_\nu$ is
+Mathlib's \texttt{cdf} and $\Phi$ is the cdf of \texttt{gaussianReal 0 1}. Finally
+\texttt{worstDist n} is the real supremum (\texttt{sSup}) of $d_K(\mu\circ\langle\cdot,\theta\rangle^{-1})$
+over isotropic log-concave $\mu$ on $\R^n$ and directions $\theta$.
+\end{definition}
+
+Conventions: for $n=0$ there is no direction, the set is empty and \texttt{sSup} gives $0$;
+this does not affect a statement as $n\to\infty$. The set is bounded above by $1$ (each $d_K\le 1$
+because cdfs take values in $[0,1]$), so the supremum is a genuine least upper bound.
+
+\section{Proof}
+
+Let $I=[-\sqrt3,\sqrt3]$, $c=1/(2\sqrt3)$, and let $U=c\cdot\mathrm{Leb}|_I$ be the uniform law on
+$I$. Let $Q_n=I^n$ be the cube and $\mu_n=U^{\otimes n}$ (\texttt{cubeLaw n}).
+
+\begin{lemma}[\texttt{cubeLaw\_logConcave}]
+$\mu_n$ has density $g_n = c^n\,\mathbf 1_{Q_n}$, and $g_n$ is log-concave.
+\end{lemma}
+\begin{proof}
+Both $\mu_n$ and $\mathrm{Leb}$ with density $g_n$ give a box $\prod_i s_i$ the mass
+$c^n\prod_i \mathrm{Leb}(s_i\cap I)$, so they agree (\texttt{cubeLaw\_eq\_withDensity}, via
+\texttt{Measure.pi\_eq}). For $0<t<1$: if $x,y\in Q_n$, then $tx+(1-t)y\in Q_n$ by convexity and
+$g_n(x)^tg_n(y)^{1-t}=c^{n(t+1-t)}=c^n=g_n(tx+(1-t)y)$. If $x\notin Q_n$ then $g_n(x)^t=0^t=0$
+since $t>0$; if $y\notin Q_n$ then $g_n(y)^{1-t}=0$ since $1-t>0$. In both cases the left side is
+$0\le g_n(tx+(1-t)y)$ (\texttt{cubeDensity\_logConcave}).
+\end{proof}
+
+\begin{lemma}[\texttt{cubeLaw\_isotropic}]
+$\mu_n$ is isotropic.
+\end{lemma}
+\begin{proof}
+$U(\R)=c\cdot 2\sqrt3=1$. $\int y\,dU=c(\tfrac{3}{2}-\tfrac{3}{2})=0$ and
+$\int y^2\,dU=c\cdot\frac{(\sqrt3)^3-(-\sqrt3)^3}{3}=c\cdot2\sqrt3=1$. The coordinate
+$x\mapsto x_i$ pushes $\mu_n$ to $U$ (\texttt{measurePreserving\_eval}), which gives integrability
+of $x_i^2$, $\int x_i\,d\mu_n=0$ and $\int x_i^2\,d\mu_n=1$. For $i\ne j$ the coordinates are
+independent under the product measure (\texttt{iIndepFun\_pi}), so
+$\int x_ix_j\,d\mu_n=\int x_i\,d\mu_n\int x_j\,d\mu_n=0$.
+\end{proof}
+
+\begin{lemma}[\texttt{cdf\_gauss\_sqrt3\_lt\_one}, \texttt{cdf\_U\_sqrt3}]
+$F_U(\sqrt3)=1$ and $\Phi(\sqrt3)<1$.
+\end{lemma}
+\begin{proof}
+$U(({-\infty},\sqrt3])=U(I)=1$. Lebesgue measure is absolutely continuous with respect to
+$N(0,1)$ (Mathlib \texttt{gaussianReal\_absolutelyContinuous'}), and $\mathrm{Leb}((\sqrt3,\infty))=\infty\ne0$,
+so $N(0,1)((\sqrt3,\infty))>0$, that is, $\Phi(\sqrt3)<1$.
+\end{proof}
+
+\begin{theorem}[\texttt{delta\_le\_worstDist}]
+Let $\delta = 1-\Phi(\sqrt3)>0$ (numerically $\delta\approx0.0416$). For every $n\ge1$,
+$d_n\ge\delta$.
+\end{theorem}
+\begin{proof}
+Take $X\sim\mu_n$ and $\theta=e_1$ (\texttt{Pi.single i 1} with $i=0$), so
+$\sum_i\theta_i^2=1$ and $\langle x,\theta\rangle=x_1$. The law of $\langle X,\theta\rangle$ is
+$U$ (\texttt{map\_proj\_cubeLaw}). Then $d_K(U)\ge|F_U(\sqrt3)-\Phi(\sqrt3)|=1-\Phi(\sqrt3)=\delta$,
+and $d_n\ge d_K(U)$ since $(\mu_n,e_1)$ is admissible.
+\end{proof}
+
+\begin{theorem}[\texttt{worstDist\_not\_isBigO}, \texttt{conjecture\_false}]
+$d_n$ is not $O(n^{-1/2})$ as $n\to\infty$. Hence, for every proposition $P$ (the remaining
+clauses), the conjunction ``$d_n=O(n^{-1/2})$ and $P$'' is false.
+\end{theorem}
+\begin{proof}
+If $d_n=O(n^{-1/2})$, then since $n^{-1/2}\to0$ we get $d_n\to0$, so $d_n<\delta$ for some
+$n\ge1$, contradicting the previous theorem.
+\end{proof}
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture7789/Basic.lean} (265 lines, only \texttt{import Mathlib}, Lean
+\texttt{v4.33.1}, Mathlib \texttt{v4.33.1}). Main statements, in namespace \texttt{Conjecture7789}:
+\begin{verbatim}
+theorem delta_le_worstDist (n : Nat) (hn : 1 <= n) : delta <= worstDist n
+theorem worstDist_not_isBigO :
+    Not (worstDist =O[atTop] fun n : Nat => (n : Real) ^ (-(1 / 2 : Real)))
+theorem conjecture_false (P : Prop) :
+    Not ((worstDist =O[atTop] fun n : Nat => (n : Real) ^ (-(1 / 2 : Real))) /\ P)
+\end{verbatim}
+(The Lean source writes \texttt{Nat}, \texttt{Real}, \texttt{Not}, \texttt{/\textbackslash},
+\texttt{<=} with their Unicode notations.) Here
+\texttt{delta := 1 - cdf (gaussianReal 0 1) (Real.sqrt 3)} and \texttt{delta\_pos : 0 < delta}.
+\texttt{lake build} succeeds, and \texttt{\#print axioms} reports, for each of the three theorems,
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom.
+
+\end{document}
