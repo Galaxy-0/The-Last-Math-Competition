@@ -1,0 +1,19 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\title{A Finite-versus-Infinite Contradiction in Conjecture 00000008304}
+\author{earthking11}
+\date{October 7, 2026}
+\begin{document}
+\maketitle
+
+\section*{The incompatible clauses}
+The conjecture calls $\mathrm{brk\_pts}$ the breakpoint set of the packing function and asserts that this set is finite with exact count $2^n-n-1$. It also states that the threshold for infinitely many breakpoints is 24, specifically saying that there are infinitely many breakpoints for $n\ge 24$. No different breakpoint set or parameter is introduced between these clauses.
+
+\section*{Contradiction at $n=24$}
+The exact-count assertion makes the breakpoint set at $n=24$ equivalent to a finite set with $2^{24}-24-1=16777191$ elements. In particular, it is finite. The threshold assertion says that the same set at $n=24$ is infinite. A set cannot be both finite and infinite. Thus these two clauses cannot simultaneously hold, so the full conjecture, which includes both, is false as written.
+
+\section*{Formalization boundary}
+Lean represents the breakpoint sets by an arbitrary family of types indexed by $n$. It expresses finite cardinality as equivalence to a standard finite type and infinite cardinality as the negation of that property. The contradiction is proved at $n=24$ without formalizing symplectic ball packings, EHZ capacities, or E8 lattices, because those other conjecture clauses cannot repair the inconsistent pair.
+
+\end{document}
