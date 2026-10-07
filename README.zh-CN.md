@@ -34,22 +34,22 @@
 
 | # | GitHub ID | 解题数 | 首解数 | 证明 | 证伪 |
 |---|----------|-------:|-------:|-------:|----------:|
-| 1 | [ziangni-sys](https://github.com/ziangni-sys) | 124 | 124 | 11 | 113 |
-| 2 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 82 | 82 | 6 | 76 |
-| 3 | [orionsheep](https://github.com/orionsheep) | 73 | 65 | 0 | 73 |
-| 4 | [earthking11](https://github.com/earthking11) | 66 | 59 | 0 | 66 |
-| 5 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 37 | 36 | 8 | 29 |
-| 6 | [C0ldSmi1e](https://github.com/C0ldSmi1e) | 35 | 35 | 3 | 32 |
-| 7 | [jilint777](https://github.com/jilint777) | 34 | 34 | 2 | 32 |
-| 8 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
-| 9 | [Jackmeson1](https://github.com/Jackmeson1) | 16 | 16 | 1 | 15 |
+| 1 | [Jackmeson1](https://github.com/Jackmeson1) | 160 | 160 | 29 | 131 |
+| 2 | [ziangni-sys](https://github.com/ziangni-sys) | 124 | 124 | 11 | 113 |
+| 3 | [earthking11](https://github.com/earthking11) | 99 | 92 | 0 | 99 |
+| 4 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 82 | 82 | 6 | 76 |
+| 5 | [orionsheep](https://github.com/orionsheep) | 73 | 65 | 0 | 73 |
+| 6 | [C0ldSmi1e](https://github.com/C0ldSmi1e) | 50 | 50 | 4 | 46 |
+| 7 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 37 | 36 | 8 | 29 |
+| 8 | [jilint777](https://github.com/jilint777) | 34 | 34 | 2 | 32 |
+| 9 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
 | 10 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
-| 11 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
-| 12 | [GodBlf](https://github.com/GodBlf) | 2 | 2 | 0 | 2 |
-| 13 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
-| 14 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
-| 15 | [champagnepapihz](https://github.com/champagnepapihz) | 1 | 1 | 0 | 1 |
-| 16 | [Galaxy-0](https://github.com/Galaxy-0) | 1 | 1 | 1 | 0 |
+| 11 | [Galaxy-0](https://github.com/Galaxy-0) | 3 | 3 | 2 | 1 |
+| 12 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
+| 13 | [GodBlf](https://github.com/GodBlf) | 2 | 2 | 0 | 2 |
+| 14 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
+| 15 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
+| 16 | [champagnepapihz](https://github.com/champagnepapihz) | 1 | 1 | 0 | 1 |
 
 ## 早期声明
 
