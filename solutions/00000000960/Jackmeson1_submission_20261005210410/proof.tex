@@ -1,0 +1,216 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+
+\title{Proof of conjecture 00000000960:\\ $\ell^2(\mathbb{R})$ has no Schauder basis, but every separable subspace has one}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and its reading}
+
+\textbf{Statement (English, verbatim).} Conjecture: There exists a Banach space with no Schauder
+basis, each of whose separable subspaces has one (the Enflo direction of the basis problem).
+The Chinese text says the same: there exists a Banach space with no Schauder basis, every
+separable subspace of which has a basis.
+
+\textbf{Reading.} The claim is the existential statement
+\[
+  \exists\ \text{Banach space } X:\quad X \text{ has no Schauder basis} \ \wedge\
+  \forall\, V\le X \text{ separable}:\ V \text{ has a Schauder basis}.
+\]
+If such an $X$ were separable, it would be a separable subspace of itself and would have a basis
+and also not have one. So any witness is non-separable. We prove the statement with
+$X=\ell^2(\mathbb{R},\K)$, $\K=\mathbb{R}$ or $\mathbb{C}$.
+
+\textbf{Conventions (all used in the proof and the Lean code).}
+\begin{enumerate}
+\item \emph{Schauder basis} means the classical, sequence-indexed notion. A Schauder basis of a
+normed space $Y$ is a sequence $(e_n)_{n\in\mathbb{N}}$ in $Y$ with continuous linear functionals
+$(f_n)$ such that $f_i(e_j)=\delta_{ij}$ and $\sum_{i<n} f_i(x)e_i\to x$ as $n\to\infty$ for every
+$x\in Y$. This is Mathlib's \texttt{SchauderBasis}~$\K$~$Y$ (an abbreviation of
+\texttt{GeneralSchauderBasis} $\mathbb{N}$ $\K$ $Y$ with the conditional summation filter),
+\nolinkurl{Mathlib/Analysis/Normed/Module/Bases.lean}. Some authors also call an \emph{uncountable}
+family a Schauder basis (Source~1 says so). Under that convention $\ell^2(\mathbb{R})$ has one, its
+orthonormal basis, and this proof does not apply. See Section~4.
+\item \emph{No basis} is proved in a strong form. $X$ has no Mathlib \texttt{SchauderBasis}. More
+generally, $X$ has no \texttt{GeneralSchauderBasis} indexed by any countable type along any
+non-trivial summation filter. It also has no sequence $(e_n)$ such that every $x$ is the limit of
+the partial sums of some series $\sum a_n e_n$. That last form needs neither uniqueness nor
+continuity of the coefficients, so it also rules out the definition in Source~1 (a sequence with
+unique expansions), with or without zero-padded finite bases.
+\item \emph{Separable subspace} means any linear subspace $V\le X$ (closed \emph{or not}) whose
+underlying set is separable, with the inherited norm. We do not restrict to closed subspaces.
+\item \emph{Finite-dimensional subspaces.} An $\mathbb{N}$-indexed Schauder basis is linearly
+independent, so a finite-dimensional space never has one. For finite-dimensional $V$ we give a
+finite basis: a \texttt{GeneralSchauderBasis} indexed by \texttt{Fin}~$(\dim V)$ (biorthogonal,
+with $x=\sum_{i<\dim V} f_i(x)e_i$). For infinite-dimensional $V$ we give a classical
+$\mathbb{N}$-indexed Schauder basis.
+\end{enumerate}
+
+\textbf{The parenthetical.} ``The Enflo direction of the basis problem'' refers to Banach's basis
+problem. Source~1: ``A Banach space with a Schauder basis is necessarily separable, but the converse
+is false. The basis problem is the question asked by Banach, whether every separable Banach space has
+a Schauder basis. This was negatively answered by Per Enflo who constructed a reflexive and
+separable Banach space failing the approximation property, thus a space without a Schauder
+basis.'' (Enflo, Acta Math.\ 130 (1973) 309--317, \url{https://doi.org/10.1007/bf02392270},
+Source~2.) Enflo's space is separable, so it is
+a separable subspace of itself without a basis. It is therefore \emph{not} a witness for the
+stated existential, which is a different and easier statement. We prove the statement as written.
+
+\section{Proof}
+
+Let $X=\ell^2(\mathbb{R},\K)$, the Hilbert space of square-summable families
+$(x_t)_{t\in\mathbb{R}}$. It is complete.
+
+\begin{lemma}[countable bases force separability]\label{l:sep}
+Let $Y$ be a normed space over $\K$ and $s\subseteq Y$ a countable set. If every $x\in Y$ lies in
+the closure of $\operatorname{span}s$, then $Y$ is separable. Hence a space with a Schauder basis,
+with a countably indexed generalized basis, or with a sequence $(e_n)$ such that every $x$ is a
+limit of partial sums $\sum_{i<n}a_ie_i$, is separable.
+\end{lemma}
+\begin{proof}
+The span of a countable set over the separable field $\K$ is separable, and so is its closure,
+which is $Y$. In each of the three cases every $x$ is a limit of finite linear combinations of the
+countably many basis vectors.
+\end{proof}
+
+\begin{lemma}\label{l:nonsep}
+$X$ is not separable.
+\end{lemma}
+\begin{proof}
+Let $(b_t)_{t\in\mathbb{R}}$ be an orthonormal family indexed by $\mathbb{R}$ (Mathlib's default
+Hilbert basis of $\ell^2(\mathbb{R},\K)$). For $s\ne t$,
+$\|b_s-b_t\|^2=\|b_s\|^2-2\operatorname{Re}\ip{b_s}{b_t}+\|b_t\|^2=2$, so the open balls
+$B(b_t,1/2)$ are pairwise disjoint. In a separable space a family of pairwise disjoint non-empty open
+sets is countable. But $\mathbb{R}$ is uncountable.
+\end{proof}
+
+By Lemmas~\ref{l:sep} and~\ref{l:nonsep}, $X$ has no Schauder basis in any of the senses of
+Convention~2.
+
+\begin{lemma}[expansion in an incomplete space]\label{l:exp}
+Let $E$ be an inner product space, not necessarily complete, and let $(v_i)_{i\in I}$ be orthonormal
+with dense span. Then $x=\sum_i\ip{v_i}{x}v_i$, with unconditional convergence, for every $x\in E$.
+\end{lemma}
+\begin{proof}
+Let $j:E\to\widehat E$ be the isometric embedding into the completion. The family $(j v_i)$ is
+orthonormal, and its span $j(\operatorname{span}\{v_i\})$ is dense, because $j$ is continuous with
+dense range. So it is a Hilbert basis of $\widehat E$, and $jx=\sum_i\ip{jv_i}{jx}jv_i
+=\sum_i\ip{v_i}{x}jv_i$. Since $j$ is a linear isometric embedding, the finite partial sums
+converge to $x$ in $E$.
+\end{proof}
+
+\begin{lemma}\label{l:sepbasis}
+Let $E$ be a separable inner product space, not necessarily complete. If $E$ is
+infinite-dimensional, it has a classical Schauder basis. If it is finite-dimensional, it has a
+finite basis of length $\dim E$.
+\end{lemma}
+\begin{proof}
+Finite-dimensional case: take an orthonormal basis $(v_i)_{i<\dim E}$ and the coordinates
+$f_i=\ip{v_i}{\cdot}$. Infinite-dimensional case: take a dense sequence $(x_n)$ and apply the
+normalized Gram--Schmidt process. Discard the indices where the output is $0$. This leaves an
+orthonormal family $(v_i)_{i\in S}$, $S\subseteq\mathbb{N}$, with
+$\operatorname{span}\{v_i\}=\operatorname{span}\{x_n\}$, which is dense. If $S$ were finite, the
+expansion of Lemma~\ref{l:exp} would be a finite sum and $E$ would be finite-dimensional. So $S$
+is countably infinite. Enumerate it by $\mathbb{N}$, which gives an orthonormal sequence $(e_n)$
+with dense span. Let $f_n=\ip{e_n}{\cdot}$. These are continuous, and $f_m(e_n)=\delta_{mn}$. By
+Lemma~\ref{l:exp}, $\sum_n f_n(x)e_n$ converges unconditionally to $x$, so in particular its
+partial sums converge to $x$.
+\end{proof}
+
+\begin{theorem}
+$X=\ell^2(\mathbb{R},\K)$ is a Banach space without a Schauder basis. Every separable linear
+subspace $V\le X$, closed or not, has a classical Schauder basis if it is infinite-dimensional and a
+finite basis if it is finite-dimensional. Moreover, $X$ has closed, separable, infinite-dimensional
+subspaces, so the second clause is not vacuous.
+\end{theorem}
+\begin{proof}
+The first claim is Lemmas~\ref{l:sep} and~\ref{l:nonsep}. For the second, $V$ with the inherited
+inner product is a separable inner product space, so Lemma~\ref{l:sepbasis} applies. For the
+third, the closure of $\operatorname{span}\{b_n:n\in\mathbb{N}\}$ is closed and separable, and it
+contains infinitely many orthonormal, hence linearly independent, vectors.
+\end{proof}
+
+\section{Lean formalization and axiom audit}
+
+The file \texttt{lean/Conjecture960/Basic.lean} (256 lines, \texttt{import Mathlib} only) is
+byte-identical to the checked file. It uses the namespace \texttt{C960}. Below, \texttt{K}
+stands for the Lean scalar variable (a blackboard-bold k in the Lean source). It ranges over
+every \texttt{RCLike} field in \texttt{Type}, so $\mathbb{R}$ or $\mathbb{C}$. $X$ is Mathlib's
+$\ell^2(\mathbb{R},\K)$, i.e.\ \texttt{lp (fun \_ => K) 2} over the index type $\mathbb{R}$.
+\begin{itemize}
+\item \texttt{separableSpace\_of\_closure\_span}, \texttt{separableSpace\_of\_series},
+\texttt{separableSpace\_of\_generalSchauderBasis}: Lemma~\ref{l:sep}.
+\item \texttt{not\_separableSpace\_l2}: Lemma~\ref{l:nonsep}.
+\item \texttt{l2\_no\_countable\_basis}: \texttt{IsEmpty (SchauderBasis K X)}, no countably
+indexed \texttt{GeneralSchauderBasis}, and no representing sequence.
+\item \texttt{hasSum\_of\_orthonormal\_dense}, \texttt{onbBasis}: Lemma~\ref{l:exp} and the
+resulting basis $(v_i,\ip{v_i}{\cdot})$. \texttt{toSchauder}: an $\mathbb{N}$-indexed
+unconditional basis is a classical one.
+\item \texttt{exists\_orthonormal\_dense} (Gram--Schmidt, Mathlib's \texttt{gramSchmidtNormed}),
+\texttt{finiteDimensional\_of\_basis}, \texttt{finite\_has\_basis},
+\texttt{separable\_has\_schauderBasis}: Lemma~\ref{l:sepbasis}.
+\item \texttt{l2\_separable\_subspace\_has\_basis}, \texttt{l2\_exists\_closed\_separable\_infinite}.
+\item The main theorem \texttt{conjecture960} states that there exist \texttt{X : Type},
+\texttt{NormedAddCommGroup X} and \texttt{NormedSpace K X} such that:
+  \begin{itemize}
+  \item \texttt{CompleteSpace X} and \texttt{not (SeparableSpace X)};
+  \item \texttt{IsEmpty (SchauderBasis K X)};
+  \item for every countable \texttt{iota : Type} and every \texttt{SummationFilter} $L$ on it with
+  \texttt{L.NeBot}, \texttt{IsEmpty (GeneralSchauderBasis iota K X L)};
+  \item there is no $e:\mathbb{N}\to X$ such that every $x$ has scalars $a:\mathbb{N}\to\K$ with
+  $\sum_{i<n}a_ie_i\to x$ (\texttt{Tendsto \ldots\ atTop (nhds x)});
+  \item for every \texttt{V : Submodule K X} with \texttt{IsSeparable (V : Set X)},
+  \texttt{FiniteDimensional K V} implies
+  \texttt{Nonempty (UnconditionalSchauderBasis (Fin (Module.finrank K V)) K V)}, and
+  \texttt{not (FiniteDimensional K V)} implies \texttt{Nonempty (SchauderBasis K V)};
+  \item some \texttt{V : Submodule K X} is closed, separable and not finite-dimensional.
+  \end{itemize}
+\item \texttt{conjecture960\_real} restates the real case in the form closest to the wording: a
+complete real normed space with \texttt{IsEmpty (SchauderBasis R X)} in which every separable,
+infinite-dimensional subspace has a \texttt{SchauderBasis}.
+\end{itemize}
+\textbf{Axiom audit.} \texttt{\#print axioms} for \texttt{C960.conjecture960} and
+\texttt{C960.conjecture960\_real} reports exactly \texttt{[propext, Classical.choice,
+Quot.sound]}. There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+\texttt{lake build} succeeds (Lean v4.33.1, Mathlib v4.33.1).
+
+\section{What is not covered}
+Under the convention that admits uncountable, linearly ordered ``Schauder bases'' (Source~1:
+``some authors define Schauder bases to be countable (as above), while others use the term to
+include uncountable bases''), $\ell^2(\mathbb{R})$ has a basis, its orthonormal basis, and is not a
+witness. We do not address that reading. The conjecture says ``Schauder basis'', and the definition
+quoted in Source~1 (``A Schauder basis is a sequence $\{b_n\}$ \ldots'') is sequence-indexed, so we
+use the countable notion.
+
+\section*{Sources}
+\begin{enumerate}
+\item Wikipedia, ``Schauder basis'',
+\url{https://en.wikipedia.org/wiki/Schauder_basis} (retrieved 2026-10-05). Quotes used: ``A
+Schauder basis is a sequence $\{b_n\}$ of elements of $V$ such that for every element $v\in V$
+there exists a unique sequence $\{\alpha_n\}$ of scalars in $F$ so that $v=\sum\alpha_nb_n$'';
+``Note that some authors define Schauder bases to be countable (as above), while others use the
+term to include uncountable bases''; and the basis-problem passage quoted in Section~1.
+\item P.~Enflo, ``A counterexample to the approximation problem in Banach spaces'', Acta
+Mathematica 130 (1973) 309--317, \url{https://doi.org/10.1007/bf02392270} (Crossref record
+retrieved 2026-10-05).
+\item Mathlib: \nolinkurl{Mathlib/Analysis/Normed/Module/Bases.lean} (\texttt{SchauderBasis},
+\texttt{GeneralSchauderBasis}), \nolinkurl{Mathlib/Analysis/InnerProductSpace/l2Space.lean}
+(\texttt{HilbertBasis.mk}, \texttt{hasSum\_repr}),
+\nolinkurl{Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean}.
+\end{enumerate}
+
+\end{document}
