@@ -1,0 +1,79 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\title{Equal consecutive Ulm quotients: a counterexample to 00000004273}
+\author{earthking11}
+\date{October 6, 2026}
+\begin{document}
+\maketitle
+\section*{Statement and actual invariants}
+The conjecture describes the Ulm cardinal sequence of a countable
+$p$-group and requires realizable sequences to decrease strictly in
+ordinal order. We exhibit a finite abelian $2$-group with two equal,
+nonzero consecutive Ulm invariants. Neither terminal zeroes nor an
+infinite-stage convention is involved.
+
+Take the actual additive group
+$G=\mathbb Z/2\mathbb Z\oplus\mathbb Z/4\mathbb Z$.
+It is finite, hence countable, and $4x=0$ for every $x\in G$; therefore it
+is $2$-primary. Write
+$U_n=(2^nG)[2]$, the subgroup of elements annihilated by $2$ inside the
+image of multiplication by $2^n$. At each finite stage the corresponding
+Ulm quotient is $Q_n=U_n/U_{n+1}$. We use its actual cardinality; the
+usual vector-space-dimension convention gives the same equal adjacent
+values in this example.
+
+\begin{theorem}
+The actual Ulm quotient cardinalities of this countable $2$-group do
+not form a strictly decreasing sequence: $|Q_0|=|Q_1|=2$.
+\end{theorem}
+\begin{proof}
+In the indicated coordinate groups,
+\[
+\begin{split}
+ U_0&=\{(0,0),(1,0),(0,2),(1,2)\},\\
+ U_1&=\{(0,0),(0,2)\},\qquad U_2=\{(0,0)\}.
+\end{split}
+\]
+The first-coordinate map $U_0\to\mathbb Z/2\mathbb Z$ is a surjective
+homomorphism with kernel $U_1$. The map
+$U_1\to\mathbb Z/2\mathbb Z$ sending $(0,0)$ to $0$ and $(0,2)$ to $1$
+is a surjective homomorphism with kernel $U_2$. The actual quotient
+groups $Q_0$ and $Q_1$ are therefore both isomorphic to
+$\mathbb Z/2\mathbb Z$, by the first isomorphism theorem.
+Their cardinals are equal and nonzero. Strict anti-monotonicity would
+require $|Q_1|<|Q_0|$, a contradiction.
+If Ulm entries are instead recorded as dimensions over $\mathbb F_2$,
+these same quotients are both one-dimensional, so strict decrease still
+fails. The formal capstone uses literal cardinal-valued entries.
+\end{proof}
+
+An ordinal-indexed strictly decreasing sequence has strictly decreasing
+restriction to its indices $0$ and $1$. Failure on this finite pair thus
+refutes the proposed necessary condition for realizability, regardless
+of how later ordinal stages or a ``full'' sequence are presented. The
+additional lattice-closure clause is not needed.
+
+\section*{Formal verification and earlier submission}
+Lean uses Mathlib's actual additive group \texttt{ZMod 2 $\times$ ZMod 4},
+homomorphism images and kernels, additive subgroups, and actual quotient
+groups. It verifies the subgroup descriptions, the two surjective
+coordinate homomorphisms, their kernels, quotient equivalences, and
+both natural and literal \texttt{Cardinal.mk} cardinalities.
+The final theorem simultaneously proves countability, the $2$-primary
+condition, and failure of standard \texttt{StrictAnti} for the actual
+cardinal sequence.
+
+Earlier closed PR \#309 used this same finite counterexample, but its
+capstone encoded the supposed strict decrease as a tailored prohibition
+on two quotient certificates rather than directly negating strict
+decrease of a cardinal-valued sequence. This replacement supplies that
+semantic bridge, uses Mathlib's quotient objects, and credits the prior
+example; it does not claim that PR \#309 received a rejecting review.
+The development compiles on Lean 4.33.1 with pinned Mathlib. It has no
+unfinished proofs, native evaluation, or extra axioms. The only printed
+dependencies are propositional extensionality, classical choice, and
+quotient soundness. The tiny coordinate checks range over eight group
+elements, not a long brute-force computation.
+\end{document}
