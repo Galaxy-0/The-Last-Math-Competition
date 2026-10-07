@@ -1,0 +1,9 @@
+# Semantic review (independent, pre-submission)
+
+An independent model reviewer (GPT-6 Astra, reasoning effort "xhigh", separate session) received the exact conjecture text, the full LaTeX report, the full Lean source and a reviewer checklist distilled from 93 closed-unmerged pull requests of this competition. It was asked whether the Lean main theorem settles the conjecture as written, whether the reading is faithful and not a loophole, whether the Lean definitions are faithful to the standard notions, whether the mathematics is correct, and whether report and Lean match. This is an automated review prepared by the submitter, not the competition's maintainer review.
+
+**Verdict:** accept = True; severity = none; reading faithful = True.
+
+**Reviewer notes (verbatim):**
+
+> The nonzero-scale reading is acceptable: an explicit value of q^{-2} type naturally asserts a nonzero quantity of that scale, rather than merely an O(q^{-2}) upper bound. The wording is informal, so acceptance is for this stated reading; the submission correctly acknowledges that a pure upper bound is not refuted. Lean faithfully defines the product of the first n primes, Euclid numbers, divisibility sets, and natural density with real division. For q = p_{r+1}, it proves that q cannot divide E_n when n > r, bounds the entire divisibility set by [0,r], and proves its density is zero by a uniform counting bound and a limit. Density uniqueness then excludes every nonzero density, the exact c/q^2 form, and the nonzero asymptotic form along the primes. These are genuine infinite statements about the conjecture's objects. Refuting this density clause suffices to refute the conjunction without settling the other clauses. The LaTeX argument, indexing conventions, numerical example, and capstone theorem agree; no substantive mathematical error or Lean/report mismatch was found. Compilation and axiom compliance are taken as supplied in the prompt.
