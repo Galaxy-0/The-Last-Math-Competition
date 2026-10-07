@@ -1,0 +1,58 @@
+TLMC 00000008482 — verification and axiom audit
+Lean toolchain: leanprover/lean4:v4.33.0
+Mathlib revision: db584cd6d46c92f209a44c0f1c829460d327499d
+
+Recorded successful Lean compiler output:
+'KingmanCounterexample.sqrtFamily_hypotheses' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KingmanCounterexample.sqrtFamily_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KingmanCounterexample.sqrtFamily_infimum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KingmanCounterexample.sqrtFamily_not_bigO' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KingmanCounterexample.conjecture_00000008482_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KingmanCounterexample.uniformlyBounded_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KingmanCounterexample.uniformlyBounded_error_isLittleO' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KingmanCounterexample.sharpness_false_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KingmanCounterexample.conjecture_00000008482_false_both_readings' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Compiler exit status: 0
+
+Independent sanity check
+Command: python3 verify.py
+Exit status: 0
+Checked 39711 ordered triples, lengths 0..60; shifts 0..7.
+n             error=1/sqrt(n)       error/(log(n)/n)
+10^2          1.000000000000e-01     2.171472409516e+00
+10^4          1.000000000000e-02     1.085736204758e+01
+10^8          1.000000000000e-04     5.428681023791e+02
+10^12         1.000000000000e-06     3.619120682527e+04
+10^16         1.000000000000e-08     2.714340511895e+06
+10^20         1.000000000000e-10     2.171472409516e+08
+ALL SANITY CHECKS PASSED. Finite checks do not certify asymptotics.
+
+Lean source SHA-256: 2bd83de17a6658a6a3c44a1dccab23489e5c61bf3e6935d82872ded084a338f6
+Source audit: no sorry, admit, native_decide, or added axiom declarations; automatic implicit parameters disabled.
+
+PDF build
+Command: pdflatex -interaction=nonstopmode -halt-on-error report.tex
+Pass 1 exit status: 0
+Pass 2 exit status: 0
+Output written on report.pdf (5 pages, 221646 bytes).
+No warnings, overfull boxes, underfull boxes, or unresolved references.
+All 5 pages rendered and visually inspected; no clipping or overlapping content.
+
+== Fresh standalone build (lake build in a clean copy of lean4/, Mathlib v4.33.0 dependencies prebuilt) ==
+$ lake build
+ℹ [8706/8707] Built KingmanCounterexample (31s)
+info: KingmanCounterexample.lean:211:0: 'KingmanCounterexample.sqrtFamily_hypotheses' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: KingmanCounterexample.lean:212:0: 'KingmanCounterexample.sqrtFamily_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: KingmanCounterexample.lean:213:0: 'KingmanCounterexample.sqrtFamily_infimum' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: KingmanCounterexample.lean:214:0: 'KingmanCounterexample.sqrtFamily_not_bigO' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: KingmanCounterexample.lean:215:0: 'KingmanCounterexample.conjecture_00000008482_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: KingmanCounterexample.lean:216:0: 'KingmanCounterexample.uniformlyBounded_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: KingmanCounterexample.lean:217:0: 'KingmanCounterexample.uniformlyBounded_error_isLittleO' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: KingmanCounterexample.lean:218:0: 'KingmanCounterexample.sharpness_false_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: KingmanCounterexample.lean:219:0: 'KingmanCounterexample.conjecture_00000008482_false_both_readings' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Build completed successfully (8707 jobs).
+exit=0
