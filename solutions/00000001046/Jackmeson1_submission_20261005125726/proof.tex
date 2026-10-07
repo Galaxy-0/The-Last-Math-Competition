@@ -1,0 +1,129 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Conjecture 00000001046 is false:\\ $x\mapsto x+x^{q-2}$ has differential uniformity at least $4$ whenever $3\mid q-1$}
+\author{Jackmeson1}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+Conjecture 00000001046 (English text, verbatim): ``Conjecture: The differential uniformity of
+$x \mapsto x + x^{q-2}$ is 2 for large $q$ (uniqueness of the optimal almost perfectly nonlinear
+(APN) function for large $q$).'' The Chinese text says the same: the differential uniformity of
+$x\mapsto x+x^{q-2}$ is 2 for large $q$.
+
+\paragraph{Reading.} $q$ is a prime power and $f_q(x)=x+x^{q-2}$ is a map
+$\mathbb F_q\to\mathbb F_q$. ``For large $q$'' means: there is $N$ such that
+$\delta(f_q)=2$ for every $q>N$. We refute this in three settings, and claim no more:
+(R1) $q$ ranges over all prime powers; (R2) $q=2^m$ (the usual APN setting); (R3) $q$ ranges over
+odd prime powers. The parenthetical (uniqueness of an optimal APN function) is a separate assertion; we
+neither use nor refute it. Only the explicit differential-uniformity clause is refuted, which already
+makes the conjunction false. Not refuted: a reading restricted to $q=2^m$ with
+$m$ odd, or to $q=3^k$ (there $3\nmid q-1$ and our argument does not apply).
+
+\section{Definitions}
+\begin{definition}
+For a finite field $F$ and $g:F\to F$, the differential uniformity is
+\[ \delta(g)=\max_{a\ne 0,\ b\in F}\ \#\{x\in F : g(x+a)-g(x)=b\}. \]
+\end{definition}
+This is the $c=1$ case of the definition quoted in the source below (Yan, arXiv:2101.10543):
+``$F(x)$ is differentially $(c,\delta)$ uniform, when the maximum number of solutions
+$x\in\mathrm{GF}(p^n)$ of $F(x+a)-F(cx)=b$, $a,b,c\in\mathrm{GF}(p^n)$, $c\neq1$ if $a=0$, is
+equal to $\delta$.'' With $c=1$ the condition is $a\ne0$. In characteristic 2, $-$ equals $+$.
+
+\section{Proof}
+\begin{lemma}\label{lem:inv}
+If $q=|F|\ge 3$ then $x^{q-2}=x^{-1}$ for $x\ne0$ and $0^{q-2}=0$. Hence $f(x)=x+x^{-1}$, with
+the convention $0^{-1}=0$.
+\end{lemma}
+\begin{proof}
+For $x\ne0$, $x^{q-1}=1$ (Lagrange in $F^\times$), so $x^{q-2}\cdot x=1$. Since $q-2\ge1$,
+$0^{q-2}=0$.
+\end{proof}
+
+\begin{lemma}\label{lem:omega}
+If $3\mid q-1$ there is $\omega\in F$ with $\omega\ne1$ and $\omega^3=1$; then
+$\omega^2+\omega+1=0$.
+\end{lemma}
+\begin{proof}
+$|F^\times|=q-1$ is divisible by the prime $3$, so by Cauchy's theorem $F^\times$ has an element
+of order $3$. From $(\omega-1)(\omega^2+\omega+1)=\omega^3-1=0$ and $\omega\ne1$ we get
+$\omega^2+\omega+1=0$.
+\end{proof}
+
+\begin{theorem}\label{thm:main}
+If $3\mid q-1$ then the equation $f(x+1)-f(x)=2$ has the four distinct solutions
+$x=0,-1,\omega,\omega^2$. Hence $\delta(f_q)\ge4$, so $\delta(f_q)\ne2$.
+\end{theorem}
+\begin{proof}
+$q-1\ge3$, so $q\ge4$ and Lemma~\ref{lem:inv} applies. We have $\omega^{-1}=\omega^2$,
+$(\omega^2)^{-1}=\omega$, $\omega+1=-\omega^2$ and $\omega^2+1=-\omega$.
+\begin{itemize}
+\item $x=0$: $f(1)-f(0)=(1+1)-0=2$.
+\item $x=-1$: $f(0)-f(-1)=0-(-1-1)=2$.
+\item $x=\omega$: $f(\omega+1)-f(\omega)=(-\omega^2-\omega)-(\omega+\omega^2)
+  =-2(\omega^2+\omega)=2$.
+\item $x=\omega^2$: $f(\omega^2+1)-f(\omega^2)=(-\omega-\omega^2)-(\omega^2+\omega)=2$.
+\end{itemize}
+Distinctness: $\omega\ne0$; $\omega\ne-1$ (else $\omega^2+\omega+1=1$); $\omega^2\ne-1$
+(else $\omega=\omega^2+\omega+1-\omega^2-1=0$); $\omega^2\ne\omega$ (else $\omega=1$);
+$0\ne-1$; $\omega^2\ne0$. Taking $a=1\ne0$, $b=2$ gives $\delta(f_q)\ge4$.
+\end{proof}
+
+\begin{theorem}
+(R1) For every $N$ there is a finite field with $q>N$ and $\delta(f_q)\ge4$.
+(R2) For every $k\ge1$, $\delta(f_{4^k})\ge4$; so no $N$ has $\delta(f_{2^m})=2$ for all
+$m\ge N$. (R3) For every $k\ge1$, $\delta(f_{7^k})\ge4$; so no $N$ has $\delta(f_q)=2$ for all
+odd $q>N$.
+\end{theorem}
+\begin{proof}
+$4\equiv7\equiv1\pmod 3$, so $3\mid 4^k-1$ and $3\mid 7^k-1$; apply Theorem~\ref{thm:main} to
+$\mathbb F_{4^k}=\mathrm{GaloisField}(2,2k)$ and $\mathbb F_{7^k}=\mathrm{GaloisField}(7,k)$,
+which have $2^{2k}$ and $7^k$ elements and are arbitrarily large.
+\end{proof}
+Numerical check (not used in the proof): $\delta(f_{2^m})=4$ for $m=2,4,6,8$ and $=2$ for
+$m=3,5,7$.
+
+\section{Lean formalization}
+File \texttt{lean/Conjecture1046/Basic.lean} (221 lines, Lean 4 + Mathlib, only import
+\texttt{Mathlib}). Definitions: \texttt{f x = x + x \^{} (Fintype.card F - 2)};
+\texttt{diffCount g a b} $=\#\{x\mid g(x+a)-g(x)=b\}$; \texttt{diffUniformity g} is the
+\texttt{Finset.sup} of \texttt{diffCount g a b} over $a\ne0$ and all $b$. Main theorems:
+\begin{itemize}
+\item \texttt{four\_le\_diffUniformity}: for any finite field $F$ with
+  \texttt{3 | Fintype.card F - 1}, \texttt{4 <= diffUniformity f}.
+\item \texttt{not\_eventually\_two}: no $N$ such that every finite field $F$ with $N<|F|$ has
+  \texttt{diffUniformity f = 2} (R1).
+\item \texttt{not\_eventually\_two\_char\_two}: no $N$ such that \texttt{diffUniformity f = 2} on
+  \texttt{GaloisField 2 m} for all $m\ge N$, $m\ne0$ (R2); via \texttt{char\_two\_even}.
+\item \texttt{not\_eventually\_two\_odd}: the same over all finite fields of odd order larger than
+  $N$ (R3); via \texttt{char\_seven}.
+\end{itemize}
+Supporting lemmas: \texttt{pow\_card\_sub\_two} (Lemma~\ref{lem:inv}), \texttt{exists\_cube\_root}
+(Lemma~\ref{lem:omega}, from Mathlib's \texttt{exists\_prime\_orderOf\_dvd\_card}),
+\texttt{four\_le\_diffCount} (Theorem~\ref{thm:main}). \texttt{\#print axioms} for each main
+theorem gives \texttt{[propext, Classical.choice, Quot.sound]}; there is no \texttt{sorry} and
+no \texttt{native\_decide}. Build: \texttt{lake build} with Mathlib \texttt{v4.33.1}.
+
+\section{Relation to the earlier submission}
+An earlier submission (PR \#157, orionsheep) was closed. Its Lean checked only three instances
+$q=16,256,1024$, and the reviewer wrote: ``Three data points are consistent with $\delta = 2$ for
+all $q > 1024$, so the asymptotic claim is untouched. The genuine argument [...] appears only in
+prose. Happy to re-review a version proving the general even-$m$ case in Lean.'' This submission
+proves the general case in Lean: $\delta\ge4$ for every finite field with $3\mid q-1$, which
+includes $\mathbb F_{2^m}$ for every even $m\ge2$ and $\mathbb F_{7^k}$ for every $k\ge1$, and it
+states the refutation of the eventual claim directly.
+
+\section*{Source}
+H.~Yan, ``On $-1$-differential uniformity of ternary APN power functions'', arXiv:2101.10543,
+\url{https://arxiv.org/abs/2101.10543} (abstract; definition quoted above).
+\end{document}
