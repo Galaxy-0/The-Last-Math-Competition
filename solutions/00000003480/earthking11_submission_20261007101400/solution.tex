@@ -1,0 +1,58 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\title{A countability obstruction to a full interval of graph-invariant gaps\\
+  A disproof of one assertion of conjecture 00000003480}
+\author{earthking11}
+\date{}
+
+\begin{document}
+\maketitle
+
+Conjecture 00000003480 states that the difference between the fractional
+chromatic number and a fractional Hall bound takes every real value from
+$0$ to $1$, with a Mycielski-type family realizing the values. For finite
+unweighted simple graphs, such a full interval is impossible for any pair of
+real-valued graph invariants.
+
+For each $n\geq 0$ there are at most $2^{\binom n2}$ simple graphs on a
+labeled $n$-element vertex set. Hence the disjoint union of the graph sets
+over all $n$ is countable. Every finite simple graph is isomorphic to one
+in this union. If $A$ and $B$ are any real-valued graph invariants, their
+difference has at most countably many values:
+\[
+  \bigl\{A(G)-B(G):G\text{ a finite simple graph}\bigr\}
+  \quad\text{is countable}.
+\]
+In contrast, $[0,1]$ is uncountable. For example, the injective map
+\[
+  x\longmapsto\frac{\arctan(x)+\pi/2}{\pi}
+\]
+sends $\mathbb R$ into $(0,1)$. Therefore
+\[
+  [0,1]\not\subseteq
+  \bigl\{\chi_f(G)-H_f(G):G\text{ a finite simple graph}\bigr\},
+\]
+where $\chi_f$ and $H_f$ denote the two invariants in the conjecture.
+The asserted continuous spectrum fails, regardless of the definitions of
+these invariants or the behavior of the endpoint $1$.
+
+\paragraph{Formalization.}
+The Lean file encodes the class of all finite labeled simple graphs as
+\texttt{$\Sigma$ n : $\mathbb N$, SimpleGraph (Fin n)}. It proves this class
+countable and the real interval $[0,1]$ uncountable. The theorem
+\texttt{TLMC3480.no\_full\_interval\_of\_difference} states that the
+difference of any two real-valued functions on this graph class cannot take
+every value in $[0,1]$. The arbitrary-function statement applies to the
+named fractional graph invariants without using their LP formulas. Its
+axiom audit contains only \texttt{propext}, \texttt{Classical.choice}, and
+\texttt{Quot.sound}.
+
+\paragraph{Scope.}
+The argument addresses finite unweighted simple graphs, the standard domain
+of the described Mycielski construction. A differently stated conjecture
+allowing continuously weighted or otherwise uncountably parametrized graph
+objects is outside its scope.
+
+\end{document}
