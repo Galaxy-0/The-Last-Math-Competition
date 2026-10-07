@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\hypersetup{hidelinks}
+\setlength{\emergencystretch}{2em}
+\newtheorem{proposition}{Proposition}
+\title{Disproof of Conjecture 00000000320\\A Cantor set cannot contain a Hall ray}
+\author{gaochengzhecpu}\date{}
+\begin{document}\maketitle
+\noindent\textbf{Claim addressed.} The source asserts simultaneously that the restricted Markov spectrum $M(1,2,5)$ is a Cantor set and that it contains a Hall ray beginning before $4$. These two assertions are incompatible for any subset of $\mathbb R$. Consequently, one need not compute the spectrum to disprove their conjunction.
+
+\begin{proposition}
+No totally disconnected subset of $\mathbb R$ contains a ray $(a,\infty)$ or $[a,\infty)$. No nowhere dense subset of $\mathbb R$ contains such a ray either.
+\end{proposition}
+\begin{proof}
+Suppose $S$ is totally disconnected and $(a,\infty)\subseteq S$. The nondegenerate interval
+\[
+ [a+1,a+2]\subseteq(a,\infty)\subseteq S
+\]
+is connected and contains the distinct points $a+1$ and $a+2$. Total disconnectedness says every connected subset of $S$ has at most one point. This is a contradiction.
+
+Alternatively, suppose $S$ is nowhere dense. Then the interior of its closure is empty. If $(a,\infty)\subseteq S$, this nonempty open set is contained in $\overline S$, and hence in its interior. In particular $a+1$ belongs to the empty set, another contradiction.
+
+A closed ray contains the corresponding open ray, so the same arguments cover the endpoint-inclusive convention.
+\end{proof}
+
+A Cantor subset of the real line is totally disconnected and nowhere dense. A Hall ray means a half-line contained in the spectrum. Applying either part of the proposition to the set named in the source rules out the asserted conjunction, regardless of where the proposed endpoint lies. In particular it cannot begin before $4$. The further claim identifying that endpoint with a spectral radius cannot repair this contradiction.
+
+\noindent\textbf{Scope.} This is an internal contradiction in two stated properties of the same set. It does not claim to determine the actual restricted spectrum, prove that it is a Cantor set, or compute a transition-matrix spectral radius. No claim is made against a corrected statement in which a \emph{sum} of two Cantor sets contains an interval or a ray: the source explicitly assigns both properties to the sub-spectrum itself. Both open and closed Hall-ray conventions are covered.
+
+\section*{Lean correspondence and reproduction}
+The project uses actual subsets of $\mathbb R$ with their standard topology.
+
+The predicate \texttt{IsTotallyDisconnected} quantifies over preconnected subsets. Mathlib defines \texttt{IsNowhereDense} by the interior of the closure being empty. \texttt{HasHallRay} is exactly the existence of an $a\in\mathbb R$ with \texttt{Set.Ioi a} contained in the set.
+
+The theorem \texttt{totally\_disconnected\_no\_ray} uses the genuine connected interval $[a+1,a+2]$ to obtain equality of its endpoints, then derives a contradiction. \texttt{nowhere\_dense\_no\_ray} separately uses monotonicity of interior. The final statements rule out the conjunction for every real set, the endpoint-before-$4$ condition, and the closed-ray convention. Quantifying over every set directly includes the spectrum in the source; no substitute definition of Markov spectrum or numerical surrogate is introduced.
+
+Inside \texttt{lean/}, run \texttt{lake build}, followed by
+\begin{center}\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+Lean is pinned to 4.19.0 and Mathlib to
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+All transitive dependencies are pinned. No auxiliary numerical computation is needed. The proof contains no gaps, custom axioms or native computation shortcuts. Actual build logs, axiom dependencies and hashes are in \texttt{verification/}. Author and delegated-agent review records are separate; no external independent review is claimed.
+
+\begin{thebibliography}{9}
+\bibitem{source} The Last Math Competition,
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000000320.md}{Conjecture 00000000320 (original bilingual source)}.
+\end{thebibliography}
+\end{document}
