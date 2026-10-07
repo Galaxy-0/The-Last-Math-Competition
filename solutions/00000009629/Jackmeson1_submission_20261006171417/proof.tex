@@ -1,0 +1,211 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+
+\title{Disproof of conjecture 00000009629:\\ the full 2-shift and the full 4-shift have
+order-isomorphic dimension groups but are not orbit equivalent}
+\author{Jackmeson1}
+\date{2026-10-06}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clause refuted}
+
+\textbf{Statement (English, verbatim).} Definition: Orbit equivalence is an orbit-preserving Borel
+isomorphism; Ornes theory connects dimension groups with orbit equivalence classification.
+Conjecture: Two mixing SFTs are orbit equivalent if and only if their dimension groups are
+order-isomorphic; entropy takes all nonnegative values within an orbit equivalence class, and
+entropy-changing orbit equivalences are realizable by explicit Kakutani-Rokhlin tower
+reconstructions. (orbit equivalence dimension criterion)
+
+The conjecture is a conjunction of three clauses. We refute the first clause, and in fact its
+``if'' direction: we exhibit two mixing SFTs whose dimension groups are order-isomorphic but which
+are not orbit equivalent. This refutes the conjunction, whatever the second and third clauses mean.
+We do not address the entropy clause or the Kakutani-Rokhlin clause.
+
+\textbf{Reading.}
+\begin{itemize}
+\item \emph{Orbit equivalence} is exactly as in the Definition line: a bijection
+$\varphi:X\to Y$, Borel measurable in both directions (Borel $\sigma$-algebras of the subspace
+topologies), with $\varphi(\mathrm{orb}(x))=\mathrm{orb}(\varphi(x))$ for every $x$, where
+$\mathrm{orb}(x)=\{\sigma^k x: k\in\Z\}$. Our non-equivalence argument uses only that $\varphi$ is a
+bijection with $\varphi(\mathrm{orb}(x))\subseteq\mathrm{orb}(\varphi(x))$, so it also covers
+topological orbit equivalence and every weaker orbit-preserving notion that still consists of a
+bijection of the entire spaces mapping each orbit into an orbit (it does not cover notions that
+discard exceptional sets or allow non-bijective maps).
+\item \emph{SFTs} are presented as edge shifts $X_A$ of square matrices $A$ over $\Z_{\ge 0}$; every
+SFT is conjugate to an edge shift [W1].
+\item \emph{Mixing} is topological mixing of $(X,\sigma)$ [W2].
+\item \emph{Dimension group} is the dimension group of $A$ with its positive cone,
+$(\mathcal G_A,\mathcal G_A^+)$ [S]; \emph{order-isomorphic} means a group isomorphism carrying
+$\mathcal G_A^+$ onto $\mathcal G_B^+$. The text says ``dimension groups are order-isomorphic''
+(Chinese: ``wei shu qun you xu tong gou'', ordered isomorphism of the dimension groups). The
+literature separates the dimension group with its order from the \emph{dimension triple}, which adds
+the shift automorphism $\delta_A$ ([S], and [E]: ``One can further endow this group by an order and
+the automorphism induced by the shift map to obtain the so called dimension triple'').
+\end{itemize}
+\textbf{Readings not refuted.} (a) The reading in which ``dimension groups'' means the dimension
+triple $(\mathcal G_A,\mathcal G_A^+,\delta_A)$, i.e.\ order isomorphisms that also intertwine the
+shift automorphisms. Under it, $[2]$ and $[4]$ are not equivalent and our witness does not apply.
+(b) The reading in which ``dimension group'' means the Giordano-Putnam-Skau group
+$K^0(X,\sigma)=C(X,\Z)/(1-\sigma)C(X,\Z)$ rather than Krieger's dimension group.
+
+\section{Definitions (as formalized)}
+
+\begin{definition}[Edge shift {[E]}]
+Let $A$ be an $r\times r$ matrix over $\Z_{\ge0}$. Its edges are the triples $(i,j,k)$ with
+$k<A_{ij}$, from $i$ to $j$ (the canonical labelling of [E]). The edge shift $X_A$ is the set of
+bi-infinite edge sequences $(e_k)_{k\in\Z}$ with $\mathrm{i}(e_{k+1})=\mathrm{t}(e_k)$ for all
+$k$. With the discrete topology on edges, $X_A$ is closed and shift-invariant in $E^{\Z}$; in Lean it
+is a Mathlib \texttt{Subshift} (\texttt{edgeShift}). The shift is $(\sigma x)_i=x_{i+1}$ (Mathlib's
+\texttt{shift 1}).
+\end{definition}
+
+\begin{definition}[SFT, mixing]
+\texttt{IsSFT X}: $X$ is Mathlib's \texttt{forbidden F} for a finite set $F$ of patterns.
+\texttt{IsMixing X}: for all nonempty open $U,V\subseteq X$ there is $N$ with
+$\sigma^n(U)\cap V\neq\emptyset$ for every $n>N$ [W2].
+\end{definition}
+
+\begin{definition}[Dimension group {[S, Sec.~2]}]
+Let $A$ be $r\times r$ over $\Z_{\ge0}$, acting on row vectors. $R(A)=\Q^rA^r$ is the eventual range,
+$$\mathcal G_A=\{x\in R(A): xA^k\in\Z^r\text{ for some }k\ge0\},\qquad
+\mathcal G_A^+=\{x\in R(A): xA^k\in\Z_{\ge0}^r\text{ for some }k\ge0\}.$$
+In Lean, \texttt{dimGroup A} is an \texttt{AddSubgroup} of $\Q^r$ (closure under $+$ and $-$ is
+proved) and \texttt{dimCone A} is $\mathcal G_A^+$. \texttt{DimOrderIso A B} asserts an additive group
+isomorphism $e:\mathcal G_A\to\mathcal G_B$ with $x\in\mathcal G_A^+\iff e(x)\in\mathcal G_B^+$.
+\end{definition}
+
+\begin{definition}[Orbit equivalence]
+\texttt{OrbitEquivalent X Y}: there is a bijection $\varphi:X\to Y$, measurable from
+\texttt{borel X} to \texttt{borel Y} with measurable inverse, such that
+$\varphi(\mathrm{orb}(x))=\mathrm{orb}(\varphi(x))$ for all $x\in X$.
+\end{definition}
+
+The witnesses are $X_{[2]}$ and $X_{[4]}$ for the $1\times1$ matrices $[n]$: one vertex with $n$
+loops. Since every edge is a loop, every edge sequence is allowed, so $X_{[n]}$ is the full shift on
+an $n$-letter alphabet (Lean: \texttt{carrier\_full}, \texttt{card\_edge\_full}).
+
+\section{Proof}
+
+\begin{lemma}[SFT and mixing]
+$X_{[n]}$ equals \texttt{forbidden} $\emptyset$, so it is an SFT, and it is topologically mixing.
+\end{lemma}
+\begin{proof}
+Its carrier is all of $E^{\Z}$. For mixing, let $U,V$ be nonempty open in $E^{\Z}$, $u\in U$,
+$v\in V$. By the definition of the product topology there are finite $I,J\subset\Z$ with
+$\{y: y|_I=u|_I\}\subseteq U$ and $\{y:y|_J=v|_J\}\subseteq V$. Let $M=\sum_{i\in I\cup J}|i|$.
+For $n>2M$ put $x_i=u_i$ for $i\in I$ and $x_i=v_{i-n}$ otherwise. Then $x\in U$, and for $j\in J$
+we have $n+j>M\ge \max I$, so $(\sigma^nx)_j=x_{n+j}=v_j$; hence $\sigma^nx\in V$.
+\end{proof}
+
+\begin{lemma}[Dimension groups]
+For $n\ne0$, $R([n])=\Q$, $\mathcal G_{[n]}=\{q: qn^k\in\Z\text{ for some }k\}$ and
+$\mathcal G_{[n]}^+=\{q:qn^k\in\Z_{\ge0}\text{ for some }k\}$. Moreover
+$\mathcal G_{[2]}=\mathcal G_{[4]}$ and $\mathcal G_{[2]}^+=\mathcal G_{[4]}^+$, so the identity is
+an order isomorphism. (Both equal $\Z[1/2]$ with its usual cone.)
+\end{lemma}
+\begin{proof}
+$x[n]^k=xn^k$ and $x=(x/n)[n]$. If $q2^k\in\Z$ then $q4^k=(q2^k)2^k\in\Z$; if $q4^k\in\Z$ then
+$q2^{2k}\in\Z$. The same holds with $\Z_{\ge0}$.
+\end{proof}
+
+\begin{lemma}[Fixed points]
+Let $\varphi:X\to Y$ be a bijection between subshifts with
+$\varphi(\mathrm{orb}(x))\subseteq\mathrm{orb}(\varphi(x))$ for all $x$. If $\sigma y=y$, then
+$\sigma(\varphi^{-1}y)=\varphi^{-1}y$.
+\end{lemma}
+\begin{proof}
+A fixed configuration is constant (induction on $\Z$), so $\sigma^ky=y$ for all $k\in\Z$ and
+$\mathrm{orb}(y)=\{y\}$. Put $x=\varphi^{-1}y$. Since $\sigma x\in\mathrm{orb}(x)$,
+$\varphi(\sigma x)\in\mathrm{orb}(y)=\{y\}=\{\varphi(x)\}$, so $\sigma x=x$ by injectivity.
+\end{proof}
+
+\begin{theorem}
+For $m<n$ there is no bijection $X_{[m]}\to X_{[n]}$ mapping every orbit into an orbit. In
+particular $X_{[2]}$ and $X_{[4]}$ are not orbit equivalent.
+\end{theorem}
+\begin{proof}
+The $n$ constant sequences $c_e$ ($e$ an edge of $[n]$) are fixed points of $X_{[n]}$. By the lemma,
+each $\varphi^{-1}(c_e)$ is a fixed, hence constant, point of $X_{[m]}$, determined by its value at
+$0$. So $e\mapsto\varphi^{-1}(c_e)_0$ is an injection from an $n$-set into an $m$-set, contradicting
+$m<n$.
+\end{proof}
+
+\begin{theorem}
+$X_{[2]}$ and $X_{[4]}$ are mixing SFTs with order-isomorphic dimension groups that are not orbit
+equivalent. Hence the ``if'' direction of the first clause fails, and the conjecture is false.
+\end{theorem}
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture9629/Basic.lean} (namespace \texttt{C9629}), Lean 4 with Mathlib, only
+\texttt{import Mathlib}. Main theorems:
+\begin{itemize}
+\item \texttt{counterexample : IsSFT (edgeShift (full 2)) $\wedge$ IsSFT (edgeShift (full 4))
+$\wedge$ IsMixing (edgeShift (full 2)) $\wedge$ IsMixing (edgeShift (full 4)) $\wedge$
+DimOrderIso (full 2) (full 4) $\wedge$ $\neg$ OrbitEquivalent (edgeShift (full 2)) (edgeShift (full 4))}.
+\item \texttt{not\_OEDimCriterion : $\neg$ OEDimCriterion}, where \texttt{OEDimCriterion} says: for all
+$r,s$ and all $A$ ($r\times r$), $B$ ($s\times s$) over $\N$, if $X_A$ and $X_B$ are mixing then
+\texttt{OrbitEquivalent} $X_A$ $X_B$ $\iff$ \texttt{DimOrderIso A B}.
+\item \texttt{conjecture\_false (entropyClause krClause : Prop) : $\neg$ (OEDimCriterion $\wedge$
+entropyClause $\wedge$ krClause)}.
+\item Supporting: \texttt{no\_orbit\_map} (no bijection $X_{[m]}\to X_{[n]}$, $m<n$, maps orbits into
+orbits), \texttt{symm\_fixed}, \texttt{isMixing\_of\_eq\_univ}, \texttt{mem\_dimGroup\_full},
+\texttt{mem\_dimCone\_full}, \texttt{dimOrderIso\_two\_four}.
+\end{itemize}
+Conventions: matrices act on row vectors (\texttt{vecMul}); $\N$ contains $0$ and $k\ge0$ in the
+definition of $\mathcal G_A$; Mathlib's \texttt{shift k x} is $i\mapsto x(k+i)$.
+
+\textbf{Axiom audit.} \texttt{\#print axioms} for \texttt{counterexample}, \texttt{not\_OEDimCriterion},
+\texttt{conjecture\_false} and \texttt{no\_orbit\_map} reports exactly
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom. Checked with \texttt{lake build} (Lean v4.33.1,
+Mathlib v4.33.1). The Lean file has 381 lines.
+
+\section*{Sources}
+\begin{itemize}
+\item[{[S]}] S.~Schmieding, \emph{Automorphisms of the shift: Lyapunov exponents, entropy, and the
+dimension representation}, arXiv:1803.04060, Sec.~2: ``Let $A$ be a $k\times k$ square matrix over
+$\mathbb{Z}_{+}$. We let $R(A)$ denote the eventual range subspace $\mathbb{Q}^{k}A^{k}\subset
+\mathbb{Q}^{k}$ (throughout we will always assume matrices to act on row vectors). The dimension
+triple $(\mathcal{G}_{A},\mathcal{G}_{A}^{+},\delta_{A})$ associated to $A$ consists of the abelian
+group $\mathcal{G}_{A}$, the semi-group $\mathcal{G}_{A}^{+}\subset\mathcal{G}_{A}$, and the
+automorphism $\delta_{A}$ of $\mathcal{G}_{A}$, where (1)
+$\mathcal{G}_{A}=\{x\in R(A)\mid xA^{k}\in\mathbb{Z}^{k}\text{ for some }k\geq 0\}$. (2)
+$\mathcal{G}_{A}^{+}=\{x\in R(A)\mid xA^{k}\in(\mathbb{Z}_{+})^{k}\text{ for some }k\geq 0\}$. (3)
+$\delta_{A}(x)=xA$. While the definition of $(\mathcal{G}_{A},\mathcal{G}_{A}^{+},\delta_{A})$ above
+relies on the matrix $A$, there is an alternative definition, due to Krieger, which is built more
+directly from the system $(X_{A},\sigma_{A})$.'' \url{https://arxiv.org/abs/1803.04060}
+\item[{[E]}] J.~Epperlein, \emph{Eventual conjugacy of free inert $G$-SFTs}, arXiv:2309.08512:
+``Every essential graph $\Gamma$ defines an edge shift $X_{\Gamma}$. This subshift of finite type over
+the alphabet $E(\Gamma)$ consists of all biinfinite sequences of edges $(e_{k})_{k\in\mathbb{Z}}$ with
+$\mathrm{i}(e_{k+1})=\mathrm{t}(e_{k})$ for all $k\in\mathbb{Z}$. [...] For
+$A\in\mathbb{Z}_{+}^{V\times V}$ we can canonically label the edges in the graph defined by $A$ from
+$i$ to $j$ by $(i,j,1),(i,j,2),\dots,(i,j,A_{i,j})$''; and ``The dimension group $D_A$ of $X_A$ is
+defined as the direct limit of the diagram $\mathbb{Z}^V\xrightarrow{A}\mathbb{Z}^V\xrightarrow{A}
+\cdots$ [...] One can further endow this group by an order and the automorphism induced by the shift
+map to obtain the so called dimension triple''. \url{https://arxiv.org/abs/2309.08512}
+\item[{[W1]}] Wikipedia, \emph{Subshift of finite type}: ``every subshift of finite type is
+topologically conjugate to an edge shift via a local recoding.''
+\url{https://en.wikipedia.org/wiki/Subshift_of_finite_type}
+\item[{[W2]}] Wikipedia, \emph{Mixing (mathematics)}: ``A system is said to be topologically mixing if,
+given open sets $A$ and $B$, there exists an integer $N$, such that, for all $n>N$, one has
+$f^n(A)\cap B\neq\emptyset$.'' \url{https://en.wikipedia.org/wiki/Mixing_(mathematics)}
+\end{itemize}
+
+\end{document}
