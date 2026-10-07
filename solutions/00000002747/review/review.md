@@ -1,0 +1,32 @@
+# Solution Review — Conjecture 00000002747 (PR 699)
+
+**Submission:** Jackmeson1 — `Jackmeson1_submission_20261005124949`
+**Reviewer:** independent competition reviewer
+**Date:** 2026-10-06
+*Note: this PR competes with PR 810 (earthking11) for the same conjecture; this review judges PR 699 purely on its own merits.*
+
+## Checklist results
+
+- **Official conjecture read in full** (`conjectures/00000002747.md`, bilingual). Shipped `conjecture.md` is **byte-identical** to the official file (`diff` clean). `verification/SHA256SUMS.txt` is stale for **two** files: `conjecture.md` and `lean/Conjecture2747/Basic.lean` (the Lean source was edited after checksums were generated and the sums were not regenerated). The committed sources themselves build and verify, so this is a provenance-hygiene defect, not a content defect — but it is recorded here given the competing submission.
+- **LaTeX rebuild:** `latexmk` from the shipped `proof.tex` in a scratch dir, exit 0. **PDF comparison:** content matches; only cosmetic extraction artifacts (math glyphs `≥ − ∈ × ⊆ → ̸` mapped to control codes by the submitter's font encoding, ligatures, extraction-order shuffling of one passage).
+- **lake build:** succeeds with **zero errors and zero warnings** (Lean 4.33.1, Mathlib v4.33.1, pool rev 0df444a360, 8708 jobs).
+- **Axioms:** fresh run of a scratch check file covering **all seven** decisive/constitutive theorems (`conjecture_false`, `formula_lt_capacity`, `capacity_two_two`, `capacity_one_one`, `capacity_ge`, `finrank_rowZeroSpace`, `rowZeroSpace_singular`): every one depends only on `propext`, `Classical.choice`, `Quot.sound`. Cheat greps are clean (no `sorry`, `native_decide`, `decide`-tactic shortcuts, `admit`, `implemented_by`, `extern`, `unsafe`, `axiom`).
+- **Aux code:** none (verification folder holds only logs/checksums; its `axioms.txt` matches the fresh run).
+- **Metadata:** `metadata.csv` lists 00000002747 as `proven=false, disproven=false` (unsolved).
+
+## Semantic audit
+
+The conjecture defines capacity as "the maximal dimension of a matrix space on which the determinant vanishes" and claims (i) the capacity of `M_m(M_n)` equals `(m−1)n² + n` and (ii) a classification of capacity spaces as a single orbit. The submission refutes clause (i), which is legitimate: the conjecture is a conjunction, and one false conjunct makes it false. The Lean main theorem is carefully phrased to be robust on this point: `conjecture_false (Classif : ℕ → ℕ → Prop) : ¬ ∀ m n, 1 ≤ m → 1 ≤ n → (capacity K m n = (m−1)*n^2 + n ∧ Classif m n)` — it holds for **every field** `K` and for **any** formalization `Classif` of the orbit-classification clause, so the disproof does not depend on how (or whether) the vague second clause is formalized.
+
+The formalization uses the conjecture's own objects, not a surrogate. `BlockMat K m n = Matrix (Fin m) (Fin m) (Matrix (Fin n) (Fin n) K)` is the block algebra `M_m(M_n(K))`; `blockDet` is the determinant of the flattened `mn × mn` scalar matrix — I verified in the pool's Mathlib source that `Matrix.comp`/`Matrix.compLinearEquiv` (Data/Matrix/Composition.lean) is exactly the block-flattening equiv `(i,k),(j,l) ↦ A i j k l`, the canonical identification `M_m(M_n(K)) ≅ M_{mn}(K)`, which is the only standard determinant notion here (a "determinant over the noncommutative ring `M_n`" does not exist classically). Singular spaces are `Submodule K (BlockMat K m n)` on which `blockDet` vanishes identically, and `capacity K m n` is the supremum of the `finrank`s of such submodules — a faithful rendering of the Definition line, with boundedness and both sup-lemmas proved.
+
+Two independent counterexample mechanisms are proved, both fully checked: (a) `capacity K 1 1 = 0` — on `K` itself the determinant is the entry, so the only singular subspace is `{⊥}` — while the formula gives `(1−1)·1 + 1 = 1`; (b) the zero-row space: fix a scalar row index `(i₀,k₀)` of the underlying `mn × mn` matrix; the preimage of `{0}` under the surjective row map `B ↦ B_{(i₀,k₀),•}` (surjectivity proved) is a singular subspace of dimension `N² − N` with `N = mn` by rank–nullity, so `cap(m,n) ≥ N² − N`, and `(m−1)n² + n < N² − N` whenever `m,n ≥ 1` and `mn ≥ 3` (an `omega`-closed arithmetic lemma I verified numerically at the boundary cases `(2,2): 6 < 12`, `(1,3): 3 < 6`, `(3,1): 3 < 9`, and confirmed by computing 20 random zero-row determinants per case). The hypothesis `mn ≥ 3` correctly excludes the two cases where `N² − N = (m−1)n² + n` (`(1,2)`, `(2,1)`), and `(1,1)` is handled by (a) — so the formula fails for `(1,1)` and for every `m,n ≥ 1` with `mn ≥ 3`, with no gap. The mathematics is elementary but genuinely about the conjecture's objects: a linear subspace of the actual block matrix algebra on which the actual determinant vanishes identically, with its actual dimension computed. Quantifier structure matches the conjecture's universal claim; the refutation is by universal failure of the formula clause, stronger than a single counterexample.
+
+## Issues found
+
+- **Non-blocking (hygiene, flagged for the competition of PR 699 vs PR 810):** `verification/SHA256SUMS.txt` does not match the shipped tree — `conjecture.md` (byte-identical to the official file; the recorded hash is of an earlier copy) and `lean/Conjecture2747/Basic.lean` (edited after checksum generation; recorded `9d892b…` vs actual `437ceb…`). The committed `Basic.lean` is the version I built and axiom-checked; nothing suspicious in the delta of workflow, but the checksum file is stale.
+- **Non-blocking:** the tex claims `#print axioms` was run for `capacity_two_two` as well; the shipped `Axioms.lean`/`axioms.txt` cover only the two named main theorems. I ran the extended check myself: all seven theorems are clean, so the tex claim is true.
+
+## Verdict
+
+APPROVED. A faithful disproof of conjecture 00000002747 as written: the Lean file realizes exactly the conjecture's Definition (block algebra, flattened determinant, linear singular subspaces, capacity as sup of dimensions) and proves the capacity clause false at `(m,n) = (1,1)` (0 ≠ 1) and at every `m,n ≥ 1` with `mn ≥ 3` (`cap ≥ mn(mn−1) > (m−1)n² + n`), for every field and for any interpretation of the classification clause. Clean build, standard axioms only, honest scoping in the report. The stale SHA256SUMS entries are a provenance-hygiene defect worth fixing but do not affect the correctness of the committed, verifiable sources.

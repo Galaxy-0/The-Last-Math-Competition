@@ -1,6 +1,6 @@
 # The Last Math Competition — Leaderboard
 
-Generated: 2026-10-05. Sources: all audited & merged submission pull requests plus the
+Generated: 2026-10-06. Sources: all audited & merged submission pull requests plus the
 local `lidangzzz` submissions (2026-09-12). Every submission passed the audit: LaTeX + PDF +
 a compiling Lean 4 project (Mathlib or self-contained core Lean), no `sorry`, no
 `native_decide`/extra axioms, a semantic review confirming the Lean theorem actually
@@ -10,28 +10,28 @@ archived under solutions/[number_ID]/review/. After the full re-audit of 2026-10
 reverted to open unless another valid submission remains); 98 PRs were closed unmerged with
 full review comments.
 
-**Total solved: 492 / 10000 conjectures** — 38 proven, 454 disproven.
+**Total solved: 694 / 10000 conjectures** — 70 proven, 624 disproven.
 
 Ranking is by **Solved** (accepted submissions), ties broken by first solves.
 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
-| 1 | [ziangni-sys](https://github.com/ziangni-sys) | 124 | 124 | 11 | 113 |
-| 2 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 82 | 82 | 6 | 76 |
-| 3 | [orionsheep](https://github.com/orionsheep) | 73 | 65 | 0 | 73 |
-| 4 | [earthking11](https://github.com/earthking11) | 66 | 59 | 0 | 66 |
-| 5 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 37 | 36 | 8 | 29 |
-| 6 | [C0ldSmi1e](https://github.com/C0ldSmi1e) | 35 | 35 | 3 | 32 |
-| 7 | [jilint777](https://github.com/jilint777) | 34 | 34 | 2 | 32 |
-| 8 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
-| 9 | [Jackmeson1](https://github.com/Jackmeson1) | 16 | 16 | 1 | 15 |
+| 1 | [Jackmeson1](https://github.com/Jackmeson1) | 160 | 160 | 29 | 131 |
+| 2 | [ziangni-sys](https://github.com/ziangni-sys) | 124 | 124 | 11 | 113 |
+| 3 | [earthking11](https://github.com/earthking11) | 99 | 92 | 0 | 99 |
+| 4 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 82 | 82 | 6 | 76 |
+| 5 | [orionsheep](https://github.com/orionsheep) | 73 | 65 | 0 | 73 |
+| 6 | [C0ldSmi1e](https://github.com/C0ldSmi1e) | 50 | 50 | 4 | 46 |
+| 7 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 37 | 36 | 8 | 29 |
+| 8 | [jilint777](https://github.com/jilint777) | 34 | 34 | 2 | 32 |
+| 9 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
 | 10 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
-| 11 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
-| 12 | [GodBlf](https://github.com/GodBlf) | 2 | 2 | 0 | 2 |
-| 13 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
-| 14 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
-| 15 | [champagnepapihz](https://github.com/champagnepapihz) | 1 | 1 | 0 | 1 |
-| 16 | [Galaxy-0](https://github.com/Galaxy-0) | 1 | 1 | 1 | 0 |
+| 11 | [Galaxy-0](https://github.com/Galaxy-0) | 3 | 3 | 2 | 1 |
+| 12 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
+| 13 | [GodBlf](https://github.com/GodBlf) | 2 | 2 | 0 | 2 |
+| 14 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
+| 15 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
+| 16 | [champagnepapihz](https://github.com/champagnepapihz) | 1 | 1 | 0 | 1 |
 
 ## Solved conjectures per solver
 
@@ -49,7 +49,7 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 #2211★ (D), #2231★ (D), #2404★ (D), #2476★ (D), #2715★ (D), #2732★ (D), #3797★ (D), #3843★ (D), #7986★ (D)
 #8540★ (D)
 
-### earthking11 — 66 solved (59 first)
+### earthking11 — 99 solved (92 first)
 
 #153★ (D), #155★ (D), #159★ (D), #226★ (D), #277★ (D), #418★ (D), #427★ (D), #429★ (D), #437★ (D)
 #443★ (D), #458 (D), #463★ (D), #588★ (D), #750★ (D), #807★ (D), #938★ (D), #1003★ (D), #1006★ (D)
@@ -58,7 +58,10 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 #1323★ (D), #1367★ (D), #1556 (D), #1671★ (D), #1676★ (D), #1678★ (D), #1682★ (D), #1737★ (D), #1752★ (D)
 #2048★ (D), #2051★ (D), #2175★ (D), #2192★ (D), #2308 (D), #2601★ (D), #2605★ (D), #3485★ (D), #3837★ (D)
 #3844★ (D), #3949★ (D), #3955★ (D), #5626★ (D), #8234★ (D), #8371★ (D), #8417★ (D), #8419★ (D), #8422★ (D)
-#8434★ (D), #8848★ (D), #462★ (D)
+#8434★ (D), #8848★ (D), #462★ (D), #4273★ (D), #8304★ (D), #3497★ (D), #2844★ (D), #753★ (D), #3479★ (D)
+#6289★ (D), #3940★ (D), #8458★ (D), #3836★ (D), #7612★ (D), #961★ (D), #748★ (D), #7766★ (D), #7623★ (D)
+#2712★ (D), #7757★ (D), #5244★ (D), #5344★ (D), #7674★ (D), #7611★ (D), #4236★ (D), #3295★ (D), #7629★ (D)
+#1952★ (D), #7684★ (D), #4340★ (D), #3480★ (D), #1245★ (D), #4383★ (D), #4761★ (D), #7669★ (D), #7627★ (D)
 
 ### feiyuceng06-prog — 37 solved (36 first)
 
@@ -103,12 +106,14 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 
 #252★ (D)
 
-### C0ldSmi1e — 35 solved (35 first)
+### C0ldSmi1e — 50 solved (50 first)
 
 #310★ (D), #464★ (D), #420★ (D), #308★ (D), #360★ (D), #747★ (D), #1259★ (D), #7790★ (D), #973★ (D)
 #141★ (D), #3794★ (D), #4107★ (D), #6480★ (P), #428★ (D), #9028★ (D), #367★ (D), #1561★ (D), #574★ (D)
 #1554★ (D), #5960★ (P), #1277★ (D), #283★ (D), #978★ (D), #2802★ (D), #7718★ (D), #6891★ (D), #1227★ (P)
-#7662★ (D), #7767★ (D), #1066★ (D), #7158★ (D), #331★ (D), #989★ (D), #4289★ (D), #2131★ (D)
+#7662★ (D), #7767★ (D), #1066★ (D), #7158★ (D), #331★ (D), #989★ (D), #4289★ (D), #2131★ (D), #2161★ (D)
+#525★ (D), #7744★ (D), #2531★ (D), #236★ (D), #1451★ (D), #637★ (D), #257★ (D), #7668★ (D), #545★ (D)
+#407★ (D), #106★ (P), #240★ (D), #9700★ (D), #5754★ (D)
 
 ### ziangni-sys — 124 solved (124 first)
 
@@ -127,9 +132,9 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 #6380★ (P), #2233★ (D), #8561★ (D), #8570★ (D), #7807★ (D), #6340★ (P), #7857★ (D), #8975★ (D), #2391★ (D)
 #8840★ (D), #8859★ (D), #7843★ (D), #5390★ (D), #8853★ (D), #995★ (D), #7389★ (P)
 
-### Galaxy-0 — 1 solved (1 first)
+### Galaxy-0 — 3 solved (3 first)
 
-#205★ (P)
+#205★ (P), #8420★ (D), #585★ (P)
 
 ### jilint777 — 34 solved (34 first)
 
@@ -146,7 +151,28 @@ P = proof, D = disproof, ★ = first solve of the conjecture. Same-day ties (202
 
 #36★ (D)
 
-### Jackmeson1 — 16 solved (16 first)
+### Jackmeson1 — 160 solved (160 first)
 
 #2307★ (D), #5400★ (D), #1273★ (D), #5600★ (P), #4042★ (D), #741★ (D), #1354★ (D), #7664★ (D), #2041★ (D)
-#8666★ (D), #2167★ (D), #8197★ (D), #30★ (D), #3462★ (D), #502★ (D), #7752★ (D)
+#8666★ (D), #2167★ (D), #8197★ (D), #30★ (D), #3462★ (D), #502★ (D), #7752★ (D), #2718★ (D), #4515★ (D)
+#2747★ (D), #2149★ (D), #2491★ (D), #307★ (D), #6630★ (P), #165★ (D), #7758★ (D), #8338★ (D), #1046★ (D)
+#960★ (P), #1756★ (D), #2221★ (D), #8228★ (D), #3905★ (D), #351★ (D), #591★ (D), #223★ (D), #4053★ (D)
+#810★ (D), #4285★ (D), #7751★ (D), #4044★ (D), #504★ (D), #9682★ (D), #4082★ (D), #2913★ (D), #9523★ (D)
+#3888★ (D), #1543★ (D), #1951★ (D), #1729★ (D), #211★ (D), #7792★ (D), #2450★ (P), #9939★ (D), #4011★ (D)
+#2348★ (D), #4124★ (D), #751★ (D), #4116★ (D), #7869★ (D), #7928★ (D), #3991★ (D), #3238★ (D), #5640★ (D)
+#7630★ (P), #4780★ (P), #2310★ (D), #7679★ (D), #1213★ (D), #981★ (D), #7661★ (D), #7794★ (D), #4055★ (D)
+#6120★ (D), #9984★ (D), #3287★ (P), #2341★ (D), #3482★ (D), #2853★ (D), #2805★ (D), #5120★ (P), #2510★ (P)
+#7793★ (D), #7789★ (D), #125★ (D), #7993★ (D), #7785★ (D), #7000★ (P), #7783★ (D), #37★ (P), #1857★ (D)
+#745★ (D), #2684★ (D), #8185★ (D), #539★ (D), #2481★ (P), #2154★ (D), #3526★ (P), #314★ (D), #206★ (P)
+#7795★ (D), #1870★ (D), #4399★ (D), #3423★ (D), #1673★ (D), #982★ (D), #6420★ (P), #2416★ (D), #2139★ (P)
+#86★ (D), #9779★ (D), #489★ (D), #537★ (D), #6320★ (P), #172★ (D), #1195★ (D), #2591★ (D), #4910★ (P)
+#3848★ (D), #3524★ (D), #8330★ (D), #2158★ (D), #8565★ (D), #238★ (D), #2478★ (P), #5980★ (P), #7665★ (D)
+#2181★ (D), #716★ (D), #5402★ (D), #1934★ (D), #8189★ (D), #3730★ (D), #543★ (D), #2511★ (P), #3891★ (D)
+#421★ (D), #702★ (D), #7864★ (D), #2251★ (D), #1016★ (P), #2490★ (P), #1485★ (D), #9629★ (D), #8433★ (D)
+#3963★ (D), #4007★ (D), #1680★ (D), #3200★ (P), #3419★ (P), #1128★ (D), #732★ (D), #9994★ (D), #1144★ (D)
+#1025★ (D), #4930★ (P), #1937★ (D), #1012★ (P), #27★ (P), #2291★ (D), #2410★ (P)
+
+
+### AlyciaBHZ — 8 solved (8 first)
+
+#7885★ (D), #1337★ (P), #8482★ (D), #7701★ (D), #399★ (P), #7713★ (D), #1209★ (D), #1672★ (D)

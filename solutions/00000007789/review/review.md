@@ -1,0 +1,25 @@
+# Solution Review — Conjecture 00000007789 (PR 755)
+**Submission:** Jackmeson1 — `solutions/00000007789/Jackmeson1_submission_20261005210009`
+**Reviewer:** independent competition reviewer
+**Date:** 2026-10-06
+
+## Checklist results
+- **Official conjecture read in full** (bilingual, `conjectures/00000007789.md`); shipped `conjecture.md` is **byte-identical** to it (`diff` clean).
+- **LaTeX:** entire `proof.tex` read; rebuilt independently with `latexmk -pdf -interaction=nonstopmode` — exit 0, 3 pages as shipped. Rebuilt vs shipped PDF text compared with pypdf after Unicode/whitespace normalization: content matches; differences are pure extraction artifacts (shipped fonts map `⟨⟩`, `∈`, `→`, `√`, `∫`, `∩`, `≥` to placeholder glyphs, plus two hyphenation splits) — cosmetic.
+- **Lean build:** `lake build` re-run: **zero errors, zero warnings**, `Build completed successfully (8708 jobs)`; toolchain `leanprover/lean4:v4.33.1`, Mathlib rev `0df444a360` (v4.33.1).
+- **Axioms:** no `sorry`/`admit`/`native_decide`/`implemented_by`/`extern`/`unsafe`/declared `axiom` anywhere. Independent audit via `lake env lean Axioms.lean`: `Conjecture7789.worstDist_not_isBigO` and `Conjecture7789.conjecture_false` depend only on `[propext, Classical.choice, Quot.sound]`; matches shipped `verification/axioms.txt`.
+- **Aux code:** `verification/axioms.txt` reproduced by my fresh run; `build.txt` consistent; all 14 SHA-256 checksums match after CRLF→LF normalization (author hashed on Windows; `proof.pdf` matches as-is).
+- **Metadata:** `metadata.csv` lists 00000007789 as `proven=false, disproven=false`; no solution folder for it on `main`.
+
+## Semantic audit
+The official definition (both languages) fixes `d_n` as the **worst** Kolmogorov distance from one-dimensional projections of an isotropic log-concave `X` to the standard normal, "遍历 X 与 θ" — ranging over `X` *and* directions — and the first conjunct claims `d_n = O(n^{-1/2})`. The Lean `worstDist n` is the `sSup` of `kolmogorovToStdNormal (μ.map (proj θ))` over exactly this admissible class: probability measures with log-concave Lebesgue density (`IsLogConcave`), finite second moments, zero mean and identity covariance (`IsIsotropic`), and directions with `Σ θᵢ² = 1`. The set is proved bounded above by 1, so the supremum is a genuine least upper bound; the convention choices (density form of log-concavity, `n = 0` giving 0) are disclosed and immaterial as `n → ∞`.
+
+The witness is the uniform law on the cube `[−√3, √3]^n` — the canonical example of an isotropic log-concave measure, not a toy surrogate. The Lean file proves everything needed about it: the product law equals Lebesgue with density `c^n·1_cube` (`cubeLaw_eq_withDensity`); that density is log-concave (convexity of the cube plus `0^t = 0` for `t > 0` outside, handling all cases); isotropy holds since coordinates are independent with `∫y dU = 0` and `∫y² dU = c·2√3 = 1` (indeed `(2√3)²/12 = 1`); and the coordinate projection `⟨x, e₁⟩` has law exactly `U[-√3, √3]` for every `n ≥ 1` (`map_proj_cubeLaw`). At `t = √3` the cdf of `U` equals 1 while `Φ(√3) < 1` — proved via Lebesgue's absolute continuity with respect to the Gaussian and `Leb(√3, ∞) = ∞`. Hence `d_n ≥ δ = 1 − Φ(√3) ≈ 0.0416 > 0` in every positive dimension (`delta_le_worstDist`), so `d_n` cannot tend to 0 and `worstDist_not_isBigO` follows: an `O(n^{-1/2})` function tends to 0, contradicting the uniform positive lower bound. `conjecture_false (P)` then negates the full conjunction for arbitrary remaining clauses (extremal simplex, direction concentration, convexity), which the report explicitly does not need to address.
+
+The mathematics is correct and I verified it independently: `δ = 1 − Φ(√3) = 0.041632 > 0` numerically, and in fact the full Kolmogorov distance of the uniform law on `[−√3, √3]` to `N(0,1)` is a positive constant (≈ 0.34 by direct computation of `sup_t |F_U − Φ|`), so the counterexample is robust — the coordinate marginal of the cube simply never approaches a normal, exactly as Klartag's "most directions" theorem would predict for this non-universal direction. The submission is scrupulous about scope: it refutes the stated worst-case quantity and states plainly that a typical-direction quantity (as in Klartag's CLT, cited for context) is a different statement it does not address. The counterexample satisfies all stated hypotheses, so this is the exact negation of the literal conjecture, with no strengthened hypotheses, no redefinition, and no loophole.
+
+## Issues found
+None blocking. Non-substantive: `SHA256SUMS.txt` hashes were computed with CRLF line endings (git normalized to LF); contents verified identical modulo line endings.
+
+## Verdict
+APPROVED. A complete, faithful, machine-checked refutation of the first conjunct — the worst-case quantity as defined in both language versions — using a genuine extremal-quality witness (the isotropic cube), with exact quantifier structure, clean build, minimal axiom footprint, and independently confirmed numerics.
