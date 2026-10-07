@@ -1,0 +1,187 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\PSL}{\mathrm{PSL}}
+\newcommand{\SL}{\mathrm{SL}}
+\newcommand{\PG}{\mathrm{PG}}
+\newcommand{\Stab}{\mathrm{Stab}}
+
+\title{Proof of conjecture 00000001012:\\ the subdegrees of $\PSL(n,q)$ on $\PG(n-1,q)$ are $1$ and $(q^n-q)/(q-1)$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and its reading}
+
+\textbf{Statement (English, verbatim).} Definition: The permutation representation of minimal
+degree of classical groups (acting on the points of projective space). Conjecture: The subdegrees
+of $\PSL(n,q)$ acting on $\PG(n-1,q)$ are of the explicit $(q^n-q)/(q-1)$ type (a subdegree
+formula). (The Chinese text states the same.)
+
+\textbf{Reading.} The subdegrees of a transitive permutation group are the lengths of the orbits
+of a point stabilizer. Every transitive action has the trivial subdegree $1$ (the orbit $\{p\}$ of
+the fixed point $p$ itself), so ``the subdegrees are of the $(q^n-q)/(q-1)$ type'' is read as: the
+subdegrees are $1$ and $(q^n-q)/(q-1)$, i.e.\ the only nontrivial subdegree is $(q^n-q)/(q-1)$.
+We prove the complete statement: for every point $p$ the stabilizer has \emph{exactly two}
+orbits, $\{p\}$ and the set of all other points, of sizes $1$ and $(q^n-q)/(q-1)$. This covers both
+the ``full multiset of subdegrees is $[1,(q^n-q)/(q-1)]$'' reading and the ``nontrivial subdegree
+equals $(q^n-q)/(q-1)$'' reading. The reading in which \emph{every} subdegree, including the
+trivial one, equals $(q^n-q)/(q-1)$ is false for every transitive action on more than one point
+(the orbit $\{p\}$ has size $1\neq(q^n-q)/(q-1)$, which is at least $2$), and we do not adopt it.
+
+\textbf{Scope.} We take $n\ge 2$ (for $n=1$, $\PG(0,q)$ is a single point, which we also prove,
+and there is no nontrivial subdegree) and $q$ the order of an arbitrary finite field $F$. The
+Definition line's phrase ``of minimal degree'' is not used: the conjecture names the action of
+$\PSL(n,q)$ on the points of $\PG(n-1,q)$ explicitly, and that is the action we treat. We do not
+prove that this action has minimal degree among faithful transitive actions.
+
+\section{Definitions (as formalized)}
+
+\begin{definition}
+Let $F$ be a finite field with $q=|F|$ elements and $n\ge 0$. $\SL(n,F)$ is the group of
+$n\times n$ matrices over $F$ of determinant $1$ (Mathlib \texttt{Matrix.SpecialLinearGroup (Fin n) F}).
+$\PSL(n,F)=\SL(n,F)/Z(\SL(n,F))$, the quotient by the centre (Mathlib
+\texttt{Matrix.ProjectiveSpecialLinearGroup (Fin n) F}; Lean abbreviation \texttt{PSL n F}).
+\end{definition}
+
+\begin{definition}
+The point set of $\PG(n-1,F)$ is the set of one-dimensional subspaces of $F^n$, i.e.\ nonzero
+vectors of $F^n$ modulo nonzero scalars (Mathlib \texttt{Projectivization F (Fin n -> F)}; Lean
+abbreviation \texttt{PG n F}). $\SL(n,F)$ acts by $g\cdot[v]=[gv]$, and $\PSL(n,F)$ acts through
+$\SL(n,F)$: Mathlib defines the action of $\PSL$ as the factorization of the $\SL$ permutation
+representation through $\SL/Z$, and \texttt{Matrix.ProjectiveSpecialLinearGroup.smul\_proj\_mk}
+states $\bar g\cdot x=g\cdot x$ for the image $\bar g$ of $g\in\SL(n,F)$ (our \texttt{psl\_smul\_eq}).
+\end{definition}
+
+\begin{definition}
+For a point $p$, $\Stab(p)=\{g\in\PSL(n,F): g\cdot p=p\}$ (Mathlib \texttt{MulAction.stabilizer}),
+acting on the points by restriction. The orbit of $x$ under $\Stab(p)$ is
+$\Stab(p)\cdot x=\{h\cdot x : h\in\Stab(p)\}$ (Mathlib \texttt{MulAction.orbit}); the set of
+orbits is the quotient \texttt{MulAction.orbitRel.Quotient}. The \emph{subdegrees} are the
+cardinalities \texttt{Nat.card} of these orbits.
+\end{definition}
+
+\textbf{Conventions.} Natural-number arithmetic: $q^n-q$ and $q-1$ are truncated differences and
+$/$ is floor division in $\mathbb{N}$; we prove that the division is exact,
+$(q-1)\cdot\frac{q^n-q}{q-1}=q^n-q$, so the formula has its usual meaning.
+
+\section{Proof}
+
+\begin{lemma}[2-transitivity; \texttt{psl\_two\_transitive}]
+If $a\neq b$ and $c\neq d$ are points of $\PG(n-1,F)$, there is $g\in\PSL(n,F)$ with
+$g\cdot a=c$ and $g\cdot b=d$.
+\end{lemma}
+\begin{proof}
+Mathlib proves that $\SL(n,F)$ acts 2-transitively on the points
+(instance \texttt{IsMultiplyPretransitive (Matrix.SpecialLinearGroup (Fin n) F) (P F (Fin n -> F)) 2},
+derived from \texttt{Projectivization.specialLinearGroup\_is\_two\_pretransitive}, file
+\texttt{Mathlib/LinearAlgebra/Projectivization/Action.lean}, by D.~Loeffler and A.~Chambert-Loir):
+a linear isomorphism carrying representatives of $a,b$ to representatives of $c,d$ exists because
+two distinct points have linearly independent representatives, and its determinant is corrected
+to $1$ by a dilatation fixing $a$ and $b$. By \texttt{MulAction.is\_two\_pretransitive\_iff} this gives
+$g\in\SL(n,F)$ with $g\cdot a=c$, $g\cdot b=d$, and its image $\bar g\in\PSL(n,F)$ acts the same way.
+\end{proof}
+
+\begin{lemma}[\texttt{orbit\_stabilizer\_self}, \texttt{orbit\_stabilizer\_of\_ne}]
+$\Stab(p)\cdot p=\{p\}$, and for $x\ne p$, $\Stab(p)\cdot x=\PG(n-1,F)\setminus\{p\}$.
+\end{lemma}
+\begin{proof}
+The first is the definition of the stabilizer. For $x\ne p$: if $h\in\Stab(p)$ and $h\cdot x=p=h\cdot p$
+then $x=p$ by injectivity of $h$, so $\Stab(p)\cdot x\subseteq\{p\}^c$. Conversely, for $y\ne p$
+apply the previous lemma to $(p,x)\mapsto(p,y)$: the element $g$ found fixes $p$ and sends $x$ to $y$.
+\end{proof}
+
+\begin{lemma}[point count; \texttt{pow\_eq\_card\_points}, \texttt{card\_points}, \texttt{arith}]
+Let $N$ be the number of points. Then $q^n=N(q-1)+1$, i.e.\ $N=(q^n-1)/(q-1)$. If $n\ge 2$ then
+$N\ge 3$, $N-1=(q^n-q)/(q-1)$ and $(q-1)\cdot\frac{q^n-q}{q-1}=q^n-q$.
+\end{lemma}
+\begin{proof}
+The count is Mathlib's \texttt{Projectivization.card'} and \texttt{Projectivization.card''}
+(nonzero vectors are partitioned into $N$ classes of size $q-1$), with $|F^n|=q^n$.
+Write $q=r+2$. Since $q^n\ge q^2$, $N(r+1)+1\ge (r+2)^2$ forces $N\ge 3$. Writing $N=M+1$,
+$q^n-q=M(r+1)+(r+2)-(r+2)=M(q-1)$, so $(q^n-q)/(q-1)=M=N-1$, with exact division.
+\end{proof}
+
+\begin{theorem}[main theorem, \texttt{Conjecture1012.subdegrees\_PSL}]
+Let $F$ be a finite field with $q$ elements, $n\ge 2$, and $p$ any point of $\PG(n-1,F)$. Then
+\begin{enumerate}
+\item $\PSL(n,F)$ acts transitively and faithfully on the points of $\PG(n-1,F)$;
+\item the set of orbits of $\Stab(p)$ is exactly $\{\{p\},\ \{p\}^c\}$, these two sets are
+  different, and the number of orbits (\texttt{Nat.card} of the orbit quotient) is $2$;
+\item $|\Stab(p)\cdot p|=1$ and $|\Stab(p)\cdot x|=(q^n-q)/(q-1)$ for every $x\neq p$;
+\item $(q-1)\cdot\frac{q^n-q}{q-1}=q^n-q$ and $\frac{q^n-q}{q-1}=\frac{q^n-1}{q-1}-1$;
+\item the set of subdegrees $\{|\Stab(p)\cdot x| : x\}$ equals $\{1,(q^n-q)/(q-1)\}$, and
+  $1\neq(q^n-q)/(q-1)$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Transitivity and faithfulness are found by instance search in Mathlib (Mathlib proves the action primitive, which includes transitivity;
+\texttt{FaithfulSMul} holds since the kernel of the $\SL$ action is the centre,
+\texttt{Projectivization.SL\_mulAction\_ker}). Since $N\ge 3$ there is a point $x_0\neq p$, so
+$\{p\}\neq\{p\}^c$. Item 2 follows from the orbit lemma, and the orbit quotient injects into sets
+of points (\texttt{orbitRel.Quotient.orbit\_injective}) with image $\{\{p\},\{p\}^c\}$, so it has
+$2$ elements. Item 3: $|\{p\}|=1$ and $|\{p\}^c|=N-1=(q^n-q)/(q-1)$. Item 4 is the counting lemma.
+Item 5 follows from items 2 and 3, and $(q^n-q)/(q-1)=N-1\ge 2$.
+\end{proof}
+
+\begin{remark}[\texttt{card\_points\_one}]
+For $n=1$ the space $\PG(0,F)$ has exactly one point, so the hypothesis $n\ge 2$ is needed for a
+nontrivial subdegree to exist.
+\end{remark}
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture1012/Basic.lean} (namespace \texttt{Conjecture1012}, only
+\texttt{import Mathlib}). Main theorem:
+{\small
+\begin{verbatim}
+theorem subdegrees_PSL (hn : 2 <= n) (p : PG n F) :
+    IsPretransitive (PSL n F) (PG n F) /\ FaithfulSMul (PSL n F) (PG n F) /\
+    Set.range (fun x : PG n F => orbit (stabilizer (PSL n F) p) x) =
+      {{p}, {p}^c} /\
+    ({p} : Set (PG n F)) != {p}^c /\
+    Nat.card (orbitRel.Quotient (stabilizer (PSL n F) p) (PG n F)) = 2 /\
+    Nat.card (orbit (stabilizer (PSL n F) p) p) = 1 /\
+    (forall x : PG n F, x != p -> Nat.card (orbit (stabilizer (PSL n F) p) x) =
+      (Fintype.card F ^ n - Fintype.card F) / (Fintype.card F - 1)) /\
+    (Fintype.card F - 1) *
+      ((Fintype.card F ^ n - Fintype.card F) / (Fintype.card F - 1)) =
+      Fintype.card F ^ n - Fintype.card F /\
+    (Fintype.card F ^ n - Fintype.card F) / (Fintype.card F - 1) =
+      (Fintype.card F ^ n - 1) / (Fintype.card F - 1) - 1 /\
+    Set.range (fun x : PG n F => Nat.card (orbit (stabilizer (PSL n F) p) x)) =
+      {1, (Fintype.card F ^ n - Fintype.card F) / (Fintype.card F - 1)} /\
+    1 != (Fintype.card F ^ n - Fintype.card F) / (Fintype.card F - 1)
+\end{verbatim}
+}
+(ASCII rendering; the source uses the Unicode symbols.) Here $F$ is any type with
+\texttt{[Field F] [Fintype F]}, \texttt{PSL n F} is
+\texttt{Matrix.ProjectiveSpecialLinearGroup (Fin n) F} and \texttt{PG n F} is
+\texttt{Projectivization F (Fin n -> F)}.
+Supporting theorems: \texttt{psl\_smul\_eq}, \texttt{psl\_two\_transitive},
+\texttt{orbit\_stabilizer\_self}, \texttt{orbit\_stabilizer\_of\_ne}, \texttt{pow\_eq\_card\_points},
+\texttt{arith}, \texttt{card\_points}, \texttt{card\_compl\_point}, \texttt{subdegree\_ge\_two},
+\texttt{card\_points\_one}.
+
+\textbf{Axiom audit.} \texttt{lake build} succeeds, and
+\texttt{\#print axioms Conjecture1012.subdegrees\_PSL} and
+\texttt{\#print axioms Conjecture1012.card\_points\_one} both report
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom.
+
+\textbf{Credit.} The 2-transitivity of $\SL$ on projective space, the $\PSL$ action, its
+faithfulness and the point count are Mathlib results
+(\texttt{Mathlib/LinearAlgebra/Projectivization/Action.lean} and \texttt{Cardinality.lean}).
+
+\end{document}
