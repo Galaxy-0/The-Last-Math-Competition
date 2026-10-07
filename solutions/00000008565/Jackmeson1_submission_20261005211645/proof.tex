@@ -1,0 +1,192 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Conjecture 00000008565 is false:\\ Cayley graphs of $\mathbb{Z}/n$, $n\ge 3$, never have simple spectrum}
+\author{Jackmeson1}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture}
+
+The English text of conjecture 00000008565 reads:
+
+\begin{quote}
+Definition: The spectrum of a Cayley graph of a group G: the integrality of adjacency operator
+eigenvalues as algebraic integers. Conjecture: All Cayley graph spectra consist of algebraic
+integers (an algebraic integer law); simple spectrum (no multiplicity) is generic for cyclic
+generating sets of abelian groups (an abelian simple spectrum law); the lower bound on spectral
+multiplicities for nonabelian groups is the dimension of irreducible representations (a
+representation dimension lower bound law); and the extremal spectral norm is given by the growth
+rate of the ball length function of the group (a ball length extremal law).
+\end{quote}
+
+The Chinese text states the same four laws; its second clause says that single-multiplicity
+spectrum (no multiplicity) is generic (universal) for cyclic generating sets of abelian groups.
+
+The conjecture is a conjunction of four laws, so refuting one of them refutes it. We refute the
+second law, the \emph{abelian simple spectrum law}.
+
+\section{Reading and conventions}
+
+\begin{itemize}
+\item \textbf{Groups.} We take the cyclic groups $G=\mathbb{Z}/n\mathbb{Z}$ (Lean: \texttt{ZMod n})
+  for every $n\ge 3$. They are abelian, and every generating set of them is a generating set of a
+  cyclic group. The result holds for \emph{every} subset $S$, so it covers every reading of
+  ``cyclic generating set'': any generating set of a cyclic group, a single generator $\{g\}$ or
+  $\{g,-g\}$, and also non-generating sets.
+\item \textbf{Cayley graph.} The Cayley graph is the undirected one. For a symmetric set $S=-S$
+  with $0\notin S$, the vertices are the elements of $G$ and $u\sim v$ iff $v-u\in S$. We use
+  Mathlib's \texttt{SimpleGraph.addCayley S}, in which $u\sim v$ iff $u\ne v$ and ($v-u\in S$ or
+  $u-v\in S$). In other words, Mathlib symmetrizes $S$ and drops $0$. Lean checks (theorem
+  \texttt{addCayley\_adj\_iff\_sub\_mem}) that, for symmetric $S$ with $0\notin S$, this is exactly
+  the textbook relation $v-u\in S$. The spectrum is that of the adjacency matrix
+  $A\in\mathbb{C}^{G\times G}$, $A_{uv}=1$ if $u\sim v$ and $0$ otherwise, acting on
+  $\mathbb{C}^G$. We also treat the textbook matrix $A_{uv}=[v-u\in S]$ for any symmetric $S$,
+  which allows a loop at every vertex when $0\in S$ (\texttt{connMatrix}).
+\item \textbf{Simple spectrum.} A matrix has simple spectrum if every eigenspace has dimension at
+  most $1$ (\texttt{HasSimpleSpectrum}). Since $A$ is real symmetric, this is the same as all roots
+  of the characteristic polynomial being simple. We refute both forms: we exhibit an eigenspace of
+  dimension $\ge 2$, and a root of $\chi_A$ of multiplicity $\ge 2$.
+\item \textbf{Generic.} Whatever ``generic'' means (all but finitely many, density or proportion
+  tending to $1$, probability $1$, open dense), a property that holds for \emph{no} member of a
+  nonempty family is not generic in that family. We prove that for every $n\ge 3$ none of the
+  generating sets of $\mathbb{Z}/n\mathbb{Z}$, which form a nonempty family, gives simple
+  spectrum. The proportion is $0$ for every $n\ge 3$.
+\item \textbf{Reading not refuted.} We do not treat \emph{directed} Cayley digraphs with a
+  non-symmetric $S$ and the non-symmetric matrix $A_{uv}=[v-u\in S]$. There the clause may
+  survive. For example, $\mathrm{Cay}(\mathbb{Z}/n,\{1\})$ is a directed $n$-cycle whose
+  eigenvalues are the $n$ distinct $n$-th roots of unity. We take the undirected reading because
+  the text speaks of the spectrum, multiplicities and spectral norm of ``the adjacency
+  operator''. The retrieved Wikipedia article (Section~\ref{sec:sources}) describes the symmetric
+  case as ``a simple undirected graph''.
+\end{itemize}
+
+\section{Proof}
+
+Fix $n\ge 3$, put $\zeta=e^{2\pi i/n}$, and let $\chi(x)=\zeta^{x}$ be the standard additive
+character of $\mathbb{Z}/n$ (Mathlib \texttt{ZMod.stdAddChar}). It is injective
+(\texttt{ZMod.injective\_stdAddChar}).
+
+\begin{lemma}[circulant eigenvectors, \texttt{mulVec\_of\_mul}]
+Let $A_{uv}=f(v-u)$ for some $f:\mathbb{Z}/n\to\mathbb{C}$, and let
+$\psi:\mathbb{Z}/n\to\mathbb{C}$ satisfy $\psi(a+b)=\psi(a)\psi(b)$. Then $A\psi=\lambda_f(\psi)\,\psi$
+with $\lambda_f(\psi)=\sum_w f(w)\psi(w)$.
+\end{lemma}
+\begin{proof}
+$(A\psi)(u)=\sum_v f(v-u)\psi(v)=\sum_w f(w)\psi(u+w)=\psi(u)\sum_w f(w)\psi(w)$, substituting $v=u+w$.
+\end{proof}
+
+\begin{lemma}[key lemma, \texttt{exists\_eigenspace\_finrank\_ge\_two\_of\_kernel}]
+If moreover $f(-w)=f(w)$ for all $w$, then the eigenspace of $A$ for
+$\mu=\lambda_f(\chi)$ has dimension at least $2$.
+\end{lemma}
+\begin{proof}
+Put $v_1=\chi$ and $v_2(x)=\chi(-x)$. Both are multiplicative, so by the previous lemma they are
+eigenvectors with eigenvalues $\lambda_f(v_1)$ and $\lambda_f(v_2)$. Substituting $w\mapsto -w$ and
+using the evenness of $f$ gives
+$\lambda_f(v_2)=\sum_w f(w)\chi(-w)=\sum_w f(-w)\chi(w)=\lambda_f(v_1)=\mu$.
+Suppose $s v_1+t v_2=0$. Evaluating at $0$ gives $s+t=0$. Evaluating at $1$ gives
+$s(\chi(1)-\chi(-1))=0$. Since $n\ge 3$ we have $1\ne -1$ in $\mathbb{Z}/n$
+(\texttt{ZMod.neg\_one\_ne\_one}), and $\chi$ is injective, so $\chi(1)\ne\chi(-1)$. Hence
+$s=t=0$. So $v_1,v_2$ are linearly independent vectors of the $\mu$-eigenspace, and its
+\texttt{finrank} is at least $2$.
+\end{proof}
+
+\begin{theorem}[\texttt{exists\_eigenspace\_finrank\_ge\_two}, \texttt{not\_hasSimpleSpectrum}]
+For every $n\ge 3$ and every $S\subseteq\mathbb{Z}/n$, the adjacency matrix of
+$\mathrm{Cay}(\mathbb{Z}/n,S)$ (Mathlib \texttt{addCayley}) has an eigenspace of dimension at
+least $2$. Hence it does not have simple spectrum.
+\end{theorem}
+\begin{proof}
+The Cayley graph is translation invariant: $u\sim u+w$ iff $0\sim w$
+(\texttt{addCayley\_adj\_add\_iff\_right}). Hence $A_{uv}=A_{0,v-u}$
+(\texttt{adjMatrix\_eq\_kernel}). The neighbourhood of $0$ is closed under negation: $0\sim -w$
+iff $w\sim 0$ iff $0\sim w$ (\texttt{adj\_zero\_neg}). Apply the key lemma with $f(w)=A_{0w}$.
+\end{proof}
+
+\begin{corollary}[\texttt{exists\_charpoly\_rootMultiplicity\_ge\_two}]
+The same $\mu$ is a root of the characteristic polynomial of $A$ of multiplicity at least $2$.
+This follows because the geometric multiplicity is at most the algebraic multiplicity (Mathlib
+\texttt{LinearMap.finrank\_eigenspace\_le} and \texttt{Matrix.charpoly\_toLin'}).
+\end{corollary}
+
+\begin{corollary}[\texttt{connMatrix\_not\_hasSimpleSpectrum}]
+For every $n\ge 3$ and every symmetric $S\subseteq\mathbb{Z}/n$, the textbook matrix
+$A_{uv}=[v-u\in S]$ does not have simple spectrum. Loops are allowed when $0\in S$.
+\end{corollary}
+\begin{proof}
+Apply the key lemma with $f(w)=[w\in S]$, which is even because $S=-S$.
+\end{proof}
+
+\begin{corollary}[\texttt{simple\_spectrum\_not\_generic}]
+For every $n\ge 3$, the number of finite sets $S\subseteq\mathbb{Z}/n$ with
+$\langle S\rangle=\mathbb{Z}/n$ whose Cayley graph has simple spectrum is $0$. The number of
+generating sets is positive, since $\{1\}$ generates (\texttt{closure\_one\_eq\_top}).
+\end{corollary}
+
+For example, $S=\{1,-1\}$ gives the cycle $C_n$, with eigenvalues $2\cos(2\pi j/n)$. Each of these
+with $j\not\equiv -j \pmod n$ occurs twice. This matches the 5-cycle example in the retrieved
+Wikipedia article.
+
+\section{Remarks on the other clauses (not formalized)}
+
+Clause 1 holds for \emph{finite} Cayley graphs: the eigenvalues of an integer matrix are roots of
+its monic integer characteristic polynomial. If infinite groups are allowed, as the fourth law's
+``growth rate of the ball length function'' suggests, clause 1 also fails. For $\mathrm{Cay}(\mathbb{Z},\{\pm1\})$
+on $\ell^2(\mathbb{Z})$, the Fourier transform turns the adjacency operator into multiplication by
+$2\cos\theta$ on $L^2$ of the circle. Its (full operator) spectrum is therefore $[-2,2]$, which
+contains $1/2$, and $1/2$ is not an algebraic integer. Note that this operator has no point
+spectrum ($1/2$ is not an $\ell^2$ eigenvalue), so this backup refutes algebraic integrality of the
+full spectrum, not a version restricted to eigenvalues. We only sketch this backup and do not formalize it. Clauses 3
+and 4 are not addressed.
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture8565/Basic.lean} (207 lines, \texttt{import Mathlib} only, namespace
+\texttt{C8565}). It was built with \texttt{lake build} (Lean toolchain and Mathlib as in
+\texttt{lean-toolchain} and \texttt{lake-manifest.json}). The main statements are:
+\begin{itemize}
+\item \texttt{not\_hasSimpleSpectrum (hn : 3 <= n) (S : Set (ZMod n)) [DecidableRel (addCayley S).Adj] :
+  not HasSimpleSpectrum ((addCayley S).adjMatrix C)};
+\item \texttt{exists\_eigenspace\_finrank\_ge\_two}: there is $\mu$ with
+  \texttt{2 <= finrank C (eigenspace (toLin' A) mu)};
+\item \texttt{exists\_charpoly\_rootMultiplicity\_ge\_two}: there is $\mu$ with
+  \texttt{2 <= A.charpoly.rootMultiplicity mu};
+\item \texttt{connMatrix\_not\_hasSimpleSpectrum}, for the textbook matrix with symmetric $S$;
+\item \texttt{simple\_spectrum\_not\_generic}, the counting statement over generating Finsets;
+\item \texttt{addCayley\_adj\_iff\_sub\_mem}, the faithfulness check of the Cayley graph.
+\end{itemize}
+Here \texttt{HasSimpleSpectrum A} is \texttt{forall mu, finrank C (eigenspace (toLin' A) mu) <= 1}.
+\texttt{\#print axioms} reports \texttt{[propext, Classical.choice, Quot.sound]} for each of the
+first five, and \texttt{[propext, Quot.sound]} for the last. There is no \texttt{sorry}, no
+\texttt{native\_decide} and no added axiom.
+
+\section{Sources}\label{sec:sources}
+
+\begin{itemize}
+\item Wikipedia, ``Cayley graph'', \url{https://en.wikipedia.org/wiki/Cayley_graph} (retrieved
+  2026-10-05). Verbatim: ``In this case, the uncolored Cayley graph can be represented as a simple
+  undirected graph.'' The case meant is a symmetric $S$ without the identity. Also: ``Every group
+  character \dots{} induces an eigenvector of the adjacency matrix'', and ``It is interesting to
+  note that this eigenbasis is independent of the generating set''.
+\item Mathlib: \texttt{SimpleGraph.addCayley} (Mathlib/Combinatorics/SimpleGraph/Cayley.lean, by
+  Edward van de Meent); \texttt{ZMod.stdAddChar} (Mathlib/Analysis/SpecialFunctions/Complex/CircleAddChar.lean);
+  \texttt{LinearMap.finrank\_eigenspace\_le} (Mathlib/LinearAlgebra/Eigenspace/Zero.lean).
+\end{itemize}
+
+\end{document}
