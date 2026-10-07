@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\hypersetup{hidelinks}
+\newtheorem{proposition}{Proposition}
+\title{Disproof of Conjecture 00000009689\\Algebraic auxiliary values cannot add transcendence degree}
+\author{gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\noindent\textbf{Claim addressed.} The conjecture asserts that finitely many values $e^{\pi\sqrt{d_i}}$, together with the algebraic values of the modular $j$ function at the corresponding CM points, have joint transcendence degree equal to the number of $d_i$ plus one. Its singleton case would therefore have transcendence degree $2$. This contradicts an elementary field-theoretic bound, irrespective of any independence or transcendence properties of the exponential values.
+
+\begin{proposition}
+For every $x\in\mathbb C$ and every $j\in\mathbb C$ algebraic over $\mathbb Q$,
+\[
+ \operatorname{trdeg}_{\mathbb Q}\mathbb Q(x,j)\le 1.
+\]
+\end{proposition}
+\begin{proof}
+Put $K=\mathbb Q(j)$. Since $j$ is algebraic, $K/\mathbb Q$ is algebraic and has transcendence degree zero. The algebra $K[x]$ is the image of the evaluation map $K[X]\to\mathbb C$ sending $X$ to $x$. Thus it has transcendence degree at most $1$ over $K$. Passing to its fraction field $K(x)$ preserves transcendence degree. The tower formula gives
+\[
+ \operatorname{trdeg}_{\mathbb Q}K(x)
+ =\operatorname{trdeg}_{\mathbb Q}K
+   +\operatorname{trdeg}_{K}K(x)\le 0+1=1.
+\]
+Finally, $K(x)=\mathbb Q(x,j)$, proving the bound.
+\end{proof}
+
+Take the singleton $d_1=1$, a positive squarefree integer. Its exponential value is $x=e^\pi$. Let $j_1$ be the algebraic CM value specified by the conjecture. The proposition gives
+\[
+ \operatorname{trdeg}_{\mathbb Q}\mathbb Q(e^\pi,j_1)\le1<2,
+\]
+whereas the conjecture prescribes $1+1=2$. This disproves the stated joint-degree clause and hence the conjecture as a conjunction. The same obstruction applies to every positive squarefree singleton $d$, so the argument would also work if one imposed $d>1$.
+
+\noindent\textbf{Scope and the CM value.} The source explicitly describes the auxiliary $j$ values as algebraic. The proof uses exactly that property; it does not need to select a CM-point convention, compute a singular modulus, or define an alternative function called $j$. Even adjoining several algebraic CM values would not increase the transcendence degree. No assertion is made about the separate algebraic independence claim for distinct Gelfond values.
+
+\section*{Lean correspondence and reproduction}
+The Lean theorem \texttt{adjoining\_algebraic\_value\_bound} proves the proposition for all complex $x,j$ with the actual Mathlib hypothesis \texttt{IsAlgebraic Q j}. It uses the genuine intermediate fields $\mathbb Q(j)$ and $\mathbb Q(j)(x)$, proves their iterated adjoining identity with $\mathbb Q(x,j)$, and applies the transcendence-degree tower formula. The one-generator bound is obtained from a surjective polynomial evaluation map and the algebraic extension from a generated algebra to its fraction field. Both \texttt{Algebra.trdeg} and \texttt{IntermediateField.adjoin} are Mathlib's actual definitions.
+
+The definition \texttt{gelfondValue} uses the actual \texttt{Complex.exp}, \texttt{Real.pi}, and \texttt{Real.sqrt}. The formal theorem \texttt{gelfond\_joint\_degree\_not\_two} holds for every natural $d$ and every algebraic auxiliary value. The final theorem says there is no assignment of algebraic auxiliary values to positive squarefree $d$ satisfying the claimed degree $2$ for all singleton cases. It explicitly instantiates $d=1$ and verifies positivity and squarefreeness. Consequently the theorem covers any assignment of the algebraic CM values appearing in the source; it does not formalize or postulate a modular $j$ function.
+
+Inside \texttt{lean/}, run \texttt{lake build}, then
+\begin{center}\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The project uses Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+The manifest pins the transitive dependencies. The proof is entirely algebraic; no numerical or experimental calculation is needed. The exact bilingual conjecture is preserved in \texttt{SOURCE.md}. Build logs, axiom output, source hashes, and PDF checks are in \texttt{verification/}. Author self-review and parent-agent adversarial review are recorded separately; no external independent review is claimed.
+
+\begin{thebibliography}{9}
+\bibitem{source} The Last Math Competition,
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000009689.md}{Conjecture 00000009689 (original bilingual source)}.
+\end{thebibliography}
+\end{document}
