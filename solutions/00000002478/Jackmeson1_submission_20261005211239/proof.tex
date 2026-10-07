@@ -1,0 +1,152 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\qb}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}_{q}}
+\newcommand{\F}{\mathbb{F}}
+
+\title{Proof of conjecture 00000002478:\\ the q-binomial (Gauss) expansion and its finite-field counting content}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and its reading}
+
+\textbf{Statement (English, verbatim).} Definition: The q-binomial theorem: the Gauss
+expansion. Conjecture: The q-binomial theorem generalizes to the Gauss expansion, with the
+counting content given by the lattices of finite fields -- the q-binomial coefficient counts
+subspaces, and the expansion closes under the Gaussian lattice. (q-binomial theorem Gauss
+expansion finite-field lattice)
+
+\textbf{Chinese text.} It says, in substance, that the q-binomial theorem has a Gauss
+generalization, and that its combinatorics is given by the lattices of finite fields.
+
+\textbf{These are classical theorems, not new results.} We prove them and check the proofs in
+Lean 4 with Mathlib. We read the statement as four claims. Each one is a theorem in the Lean
+file.
+\begin{itemize}
+\item[(E)] \emph{The expansion.} As polynomials in two variables $q,t$ with integer (indeed
+  natural) coefficients,
+  \[\prod_{i=0}^{n-1}(1+q^it)=\sum_{k=0}^{n}q^{k(k-1)/2}\qb{n}{k}t^k .\]
+  The same identity holds after evaluating $q$ and $t$ in any commutative semiring. Wikipedia
+  [W] states this exact formula and names it the ``Cauchy binomial theorem''. The conjecture
+  calls it the Gauss expansion.
+\item[(C1)] \emph{The coefficient counts subspaces.} Let $\F$ be a finite field with $q$
+  elements. The number $N_q(n,k)$ of $k$-dimensional subspaces of $\F^n$ is $\qb{n}{k}$
+  evaluated at $q$.
+\item[(C2)] \emph{Counting content of the expansion.} For $q=|\F|$,
+  $\prod_{i<n}(1+q^it)=\sum_{k\le n}q^{k(k-1)/2}N_q(n,k)\,t^k$ in $\mathbb{N}[t]$.
+\item[(P)] \emph{The expansion closes.} The coefficients and the counts satisfy the q-Pascal
+  recursion $\qb{n+1}{k+1}=\qb{n}{k}+q^{k+1}\qb{n}{k+1}$. Multiplying by one more factor turns
+  the order-$n$ expansion into the order-$(n+1)$ expansion exactly by this recursion; see the
+  proof of (E).
+\end{itemize}
+\textbf{Not covered here.} We read ``closes under the Gaussian lattice'' as (P). A different
+reading is \emph{interval closure}: every interval of the subspace lattice is again counted by
+Gaussian binomials. That reading belongs to the subspace-count conjecture 00000002490, and it is
+proved in our separate package for that conjecture. This package does not repeat it.
+
+\textbf{Conventions.} $\F$ is any finite field with $q=|\F|\ge 2$; its prime-power form is not
+used. A subspace is a Mathlib \texttt{Submodule}. Dimension is \texttt{finrank}. A count is
+\texttt{Nat.card}. $k(k-1)/2$ is natural-number division, and it equals $\binom{k}{2}$
+(\texttt{Nat.choose\_two\_right}). The two-variable polynomial ring is $\mathbb{N}[q][t]$, with
+$q$ the inner variable and $t$ the outer one.
+
+\section{Definitions as formalized}
+
+\begin{definition}[\texttt{gaussBinom}]
+The Gaussian binomial $\qb{n}{k}\in\mathbb{N}[q]$ is defined by the rules $\qb{n}{0}=1$,
+$\qb{0}{k+1}=0$, and $\qb{n+1}{k+1}=\qb{n}{k}+q^{k+1}\qb{n}{k+1}$.
+\end{definition}
+
+This is the first ``analog of Pascal's identity'' in [W]. Wikipedia instead \emph{defines} the
+coefficient by the quotient $(1-q^m)\cdots(1-q^{m-r+1})/((1-q)\cdots(1-q^r))$. We prove
+(\texttt{gaussBinom\_mul\_qDen}) that
+$\qb nk\prod_{i<k}(1-q^{i+1})=\prod_{i<k}(1-q^{n-i})$ holds in every commutative ring, so the
+two definitions agree. For $k>n$ both sides are $0$, which matches [W] (``If r > m, this
+evaluates to 0''). We also show that $\qb nk=0$ for $n<k$ (\texttt{gaussBinom\_eq\_zero\_of\_lt}).
+
+\section{Proofs}
+
+\begin{theorem}[(E), \texttt{qBinomial\_eval}, \texttt{qBinomial\_expansion}]
+In every commutative semiring, for all $x,t$,
+$\prod_{i<n}(1+x^it)=\sum_{k\le n}x^{\binom k2}\qb nk(x)\,t^k$.
+\end{theorem}
+\begin{proof}
+The proof is by induction on $n$, for all $t$ at once; $n=0$ is trivial. Peel off the factor
+$i=0$:
+\[\prod_{i<n+1}(1+x^it)=(1+t)\prod_{i<n}\bigl(1+x^i(xt)\bigr)=(1+t)\sum_{k\le n}a_k\,x^kt^k,\]
+where $a_k=x^{\binom k2}\qb nk(x)$ and the induction hypothesis is used at $xt$. Since
+$\qb{n}{n+1}=0$, we have $\sum_{k\le n}a_kx^kt^k=1+\sum_{k\le n}a_{k+1}x^{k+1}t^{k+1}$. So the
+coefficient of $t^{k+1}$ is
+$a_{k+1}x^{k+1}+a_kx^k=x^{\binom{k+1}2}\bigl(\qb nk+x^{k+1}\qb n{k+1}\bigr)=x^{\binom{k+1}2}\qb{n+1}{k+1}$.
+Here we used $\binom{k+1}2=\binom k2+k$ and the q-Pascal rule (P). The constant term is $1$ on
+both sides. The polynomial identity follows by evaluating at $x=q$ and $t$ in
+$\mathbb{N}[q][t]$.
+\end{proof}
+
+\begin{theorem}[(C1), \texttt{card\_subspaces\_eq\_gaussBinom}, \texttt{subCount\_eq}]
+Let $V$ be a finite $\F$-vector space of dimension $n$. Then
+$\#\{W\le V:\dim W=k\}=\qb nk(q)$.
+\end{theorem}
+\begin{proof}
+Double count the ordered linearly independent $k$-tuples. Each one spans a $k$-dimensional
+subspace $W$. The tuples that span a fixed $W$ are exactly the linearly independent $k$-tuples
+of $W$ (\texttt{fibreEquiv}). Mathlib's \texttt{card\_linearIndependent} counts the linearly
+independent $k$-tuples in an $m$-dimensional space as $\prod_{i<k}(q^m-q^i)$ when $k\le m$. This
+gives $\prod_{i<k}(q^n-q^i)=N\cdot\prod_{i<k}(q^k-q^i)$ for $k\le n$ (\texttt{card\_li\_eq}).
+By induction on $n$ via q-Pascal,
+$\qb nk(x)\prod_{i<k}(x^k-x^i)=\prod_{i<k}(x^n-x^i)$ in every commutative ring
+(\texttt{gaussBinom\_mul\_liProd}). Since $q\ge2$, we may cancel
+$\prod_{i<k}(q^k-q^i)\neq0$ in $\mathbb{Z}$. For $k>n$, both $N$ and $\qb nk(q)$ are $0$.
+\end{proof}
+
+(C2) is (E) evaluated at $x=q$, with each $\qb nk(q)$ replaced by $N_q(n,k)$ using (C1)
+(\texttt{qBinomial\_expansion\_count}). (P) for the counts is the defining recursion, evaluated
+at $q$ and transported by (C1) (\texttt{subCount\_pascal}).
+
+\section{Lean formalization}
+
+The file is \texttt{lean/Conjecture2478/Basic.lean}, namespace \texttt{C2478}, 304 lines. Its
+only import is \texttt{Mathlib}. The main theorem \texttt{conjecture\_2478} is a conjunction.
+It states (E) as an identity in $\mathbb{N}[q][t]$ (Lean \texttt{Polynomial (Polynomial Nat)})
+for all $n$. For every finite field $\F$, it also states (C1) for \texttt{Fin n -> F}, (C2), and
+(P) for the counts. Supporting theorems: \texttt{qBinomial\_eval},
+\texttt{qBinomial\_expansion}, \texttt{gaussBinom\_mul\_qDen},
+\texttt{card\_subspaces\_eq\_gaussBinom}, \texttt{qBinomial\_expansion\_count} and
+\texttt{subCount\_pascal}. The subspace-count part (\texttt{spanMap}, \texttt{fibreEquiv},
+\texttt{card\_li\_eq}, \texttt{gaussBinom\_mul\_liProd}) is shared with our package for
+00000002490 (same author).
+
+\textbf{Axiom audit.} \texttt{lake build} succeeds. \texttt{\#print axioms} reports
+\texttt{[propext, Classical.choice, Quot.sound]} for \texttt{conjecture\_2478},
+\texttt{qBinomial\_expansion}, \texttt{qBinomial\_expansion\_count},
+\texttt{gaussBinom\_mul\_qDen} and \texttt{card\_subspaces\_eq\_gaussBinom}. The file contains
+no \texttt{sorry} and no \texttt{native\_decide}, and it adds no axioms.
+
+\textbf{Related package.} Conjecture 00000002490 is about the subspace count itself. Its
+package proves (C1), both q-Pascal rules for the counts, and the interval closure of the
+subspace lattice. This package is about the expansion (E) and its counting interpretation (C2).
+
+\section*{Sources}
+[W] Wikipedia, ``Gaussian binomial coefficient'',
+\url{https://en.wikipedia.org/wiki/Gaussian_binomial_coefficient} (retrieved 2026-10-05).
+Section ``q-binomial theorem'': ``There is an analog of the binomial theorem for q-binomial
+coefficients, known as the Cauchy binomial theorem'', followed by the displayed formula (E). The
+page also gives the product-formula definition and the Pascal analogs, and states that
+$\binom nk_q$ ``counts the number of k-dimensional vector subspaces of an n-dimensional vector
+space over'' $\F_q$.
+
+Mathlib: \texttt{card\_linearIndependent}, in
+\path{Mathlib/LinearAlgebra/Matrix/GeneralLinearGroup/Card.lean}.
+
+\end{document}
