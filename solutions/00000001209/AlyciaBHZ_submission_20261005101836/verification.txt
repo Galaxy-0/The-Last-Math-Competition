@@ -1,0 +1,65 @@
+TLMC 00000001209 — verification and axiom audit
+Lean toolchain: leanprover/lean4:v4.33.0
+Mathlib revision: db584cd6d46c92f209a44c0f1c829460d327499d
+Source: Wythoff.lean
+Source SHA-256: 4344085d232da2232f31f2fac9de77f72b14b57899ae2de946774724e6321f77
+Report SHA-256: fb913c276e147ab6eafcc1009a96bf2027868dfe602678675c5aa73a50b8810e
+PDF SHA-256: 10ff5359aa6b855ecc910d0b032504e0dbf1b24bbb1a601b67be9d28bce8253e
+Python SHA-256: dceeb77d87334978158b61b04838fc9fb929040e2a8c726d13b7aa43bb996d66
+
+Recorded successful Lean compiler output:
+'Wythoff.correction_slope' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Wythoff.p_characterization' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Wythoff.sorted_p_positions' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Wythoff.nthLower_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Wythoff.lower_slope' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Wythoff.t_two_refutation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Wythoff.universal_refutation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Wythoff.moveLE_iff_move_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Wythoff.isPLE_iff_isP_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Wythoff.lowerLE_one_slope' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Wythoff.t_one_le_refutation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Wythoff.universal_le_refutation' depends on axioms: [propext, Classical.choice, Quot.sound]
+Compiler exit status: 0
+
+Independent sanity check
+Command: python3 verify.py
+Exit status: 0
+PASS: complete game recursion on [0,100]^2 matches exact integer Beatty pairs.
+PASS: first 101 mex pairs match a_n = isqrt(2*n*n), b_n = a_n+2*n.
+PASS: direct <= convention at t=1 matches strict t=2 on [0,100]^2; differs from classical Wythoff.
+First 10 sorted <= t=1 P-positions: [(0, 0), (1, 3), (2, 6), (4, 10), (5, 13), (7, 17), (8, 20), (9, 23), (11, 27), (12, 30)]
+Box-derived <= t=1 slope: n=29, P=(41,99), a_n/n=1.413793103, b_n/n=3.413793103
+<= t=1 (= strict t=2), n=100: a_n/n=1.410000000; a_n/(phi*n)=0.871427924
+<= t=1 (= strict t=2), n=1000: a_n/n=1.414000000; a_n/(phi*n)=0.873900060
+<= t=1 (= strict t=2), n=10000: a_n/n=1.414200000; a_n/(phi*n)=0.874023667
+<= t=1 (= strict t=2), n=1000000: a_n/n=1.414213000; a_n/(phi*n)=0.874031701
+sqrt(2)=1.414213562373; phi=1.618033988750; normalized limit=0.874032048898
+ALL CHECKS PASSED. Finite checks are supplementary, not an infinite proof.
+
+PDF build
+Command: pdflatex -interaction=nonstopmode -halt-on-error report.tex
+Pass 1 exit status: 0
+Pass 2 exit status: 0
+Output written on report.pdf (5 pages, 171318 bytes).
+No layout warnings or unresolved references.
+All 5 pages rendered and visually inspected; no clipping or overlapping content.
+Source audit: no proof admissions, additional axioms, or kernel-bypass tactics.
+
+== Fresh standalone build (lake build in a clean copy of lean4/, Mathlib v4.33.0 dependencies prebuilt) ==
+$ lake build
+ℹ [8706/8707] Built Wythoff (54s)
+info: Wythoff.lean:421:0: 'Wythoff.correction_slope' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Wythoff.lean:423:0: 'Wythoff.p_characterization' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Wythoff.lean:424:0: 'Wythoff.sorted_p_positions' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Wythoff.lean:425:0: 'Wythoff.nthLower_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Wythoff.lean:426:0: 'Wythoff.lower_slope' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Wythoff.lean:427:0: 'Wythoff.t_two_refutation' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Wythoff.lean:428:0: 'Wythoff.universal_refutation' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Wythoff.lean:430:0: 'Wythoff.moveLE_iff_move_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Wythoff.lean:431:0: 'Wythoff.isPLE_iff_isP_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Wythoff.lean:432:0: 'Wythoff.lowerLE_one_slope' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Wythoff.lean:433:0: 'Wythoff.t_one_le_refutation' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Wythoff.lean:434:0: 'Wythoff.universal_le_refutation' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (8707 jobs).
+exit=0
