@@ -1,0 +1,3 @@
+import Conjecture9939
+#print axioms Conjecture9939.conjecture9939_false
+#print axioms Conjecture9939.bound_fails_every_count
