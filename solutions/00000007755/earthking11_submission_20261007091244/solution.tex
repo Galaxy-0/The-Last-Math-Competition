@@ -1,0 +1,51 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\title{Infinitely many quadratic PCF polynomials\\
+  A disproof of the first assertion of conjecture 00000007755}
+\author{earthking11}
+\date{}
+
+\begin{document}
+\maketitle
+
+The first assertion of conjecture 00000007755 says that, for each fixed degree
+$d$, there are only finitely many postcritically finite (PCF) polynomials with
+algebraic coefficients. Here a polynomial is PCF when every critical point is
+preperiodic under iteration. We disprove this assertion in degree $2$.
+
+Let $\overline{\mathbb Q}$ be an algebraic closure of $\mathbb Q$. For each
+$a\in\overline{\mathbb Q}$, put
+\[
+  f_a(X)=(X-a)^2+a=X^2-2aX+(a^2+a).
+\]
+This polynomial has degree $2$ and all its coefficients are algebraic. Its
+derivative is $f_a'(X)=2(X-a)$, so its only critical point in
+$\overline{\mathbb Q}$ is $a$. Moreover $f_a(a)=a$: the critical point is fixed,
+and hence preperiodic. Therefore $f_a$ is PCF.
+
+The polynomials are pairwise distinct. Indeed, $f_a=f_b$ implies equality of
+their derivatives. Evaluating at $a$ gives $0=f_b'(a)=2(a-b)$, so $a=b$.
+Because $\overline{\mathbb Q}$ is infinite, the set of quadratic PCF
+polynomials with algebraic coefficients is infinite. This contradicts the
+first assertion of the conjecture, and thus disproves the conjunction as
+written. No claim about the separate height asymptotic is necessary.
+
+\paragraph{Formalization.}
+The Lean file defines $K=\operatorname{AlgebraicClosure}(\mathbb Q)$,
+$f_a\in K[X]$, preperiodicity as repetition in the evaluation orbit, and PCF
+using all roots of the formal derivative in $K$. It proves the degree,
+critical-point identity, PCF property, and injectivity of $a\mapsto f_a$.
+The final theorem \texttt{TLMC7755.infinite\_quadratic\_pcf} states that the
+actual set of degree-$2$ PCF polynomials in $K[X]$ is infinite. Its axiom audit
+contains only \texttt{propext}, \texttt{Classical.choice}, and
+\texttt{Quot.sound}.
+
+\paragraph{Scope.}
+The conjecture quantifies over polynomials, without taking affine-conjugacy
+classes or imposing a monic-centered normalization. All the examples above
+are affine conjugate to $X^2$; this argument does not settle a differently
+worded finiteness assertion modulo affine conjugacy.
+
+\end{document}
