@@ -1,0 +1,75 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\title{A one-edge flag-complex counterexample to conjecture 00000002712}
+\author{earthking11}
+\date{October 6, 2026}
+\begin{document}
+\maketitle
+\section*{Scope and standard definitions}
+The conjecture proposes that the $g$-vectors of flag simplicial complexes
+are nonnegative. It does not require the complexes to be homology
+spheres, boundaries of polytopes, or closed manifolds. We use a connected,
+pure flag complex within that stated class: the full $1$-simplex.
+No assertion concerning the usual sphere-restricted $g$-conjecture is
+being refuted.
+
+For a $(d-1)$-dimensional complex, let $f_{j-1}$ count faces with $j$
+vertices, including $f_{-1}=1$ for the empty face. The standard transform
+and truncated $g$-vector are
+\[
+ \sum_{i=0}^{d}h_i t^{d-i}
+ =\sum_{j=0}^{d}f_{j-1}(t-1)^{d-j},\qquad
+ g_0=h_0,\quad g_i=h_i-h_{i-1}\quad(1\leq i\leq\lfloor d/2\rfloor).
+\]
+
+\begin{theorem}
+The clique complex of the actual graph $K_2$ is connected, pure, and
+flag, but its standard truncated $g$-vector has $g_1=-1$.
+\end{theorem}
+\begin{proof}
+Let the vertices be $\{0,1\}$ with the single edge $\{0,1\}$. Its clique
+complex consists exactly of the empty face, the two singleton faces,
+and the full edge. The face collection is downward closed; every set of
+pairwise adjacent vertices is a face, so it is flag. The graph is
+connected. The full edge is the unique facet, so the complex is pure of
+dimension $1$, with rank $d=2$.
+
+Counting these actual faces gives $(f_{-1},f_0,f_1)=(1,2,1)$.
+Therefore
+\[
+ \sum_{i=0}^{2}h_i t^{2-i}
+ =(t-1)^2+2(t-1)+1=t^2,
+\]
+and $h=(1,0,0)$. The truncation range includes index $1$, since
+$\lfloor d/2\rfloor=1$. Thus $g_1=h_1-h_0=-1<0$, contradicting the
+claimed nonnegativity for flag complexes.
+\end{proof}
+
+The counterexample is a simplex (a ball), not a sphere. Adding a sphere
+hypothesis would change the original assertion and exclude this example;
+the submission does not claim to solve that modified question.
+Refuting the stated nonnegativity already suffices, so its further
+suggestion of a free-resolution proof is unnecessary.
+
+\section*{Formal verification}
+Lean uses Mathlib's actual \texttt{SimpleGraph (Fin 2)} and defines its
+clique faces as a finite set of vertex sets. It proves downward closure,
+flagness, connectedness, and facet purity. The rank is defined as the
+maximum actual face size and proved to equal $2$; the dimension then
+equals $1$. All entries of the face counts, including the empty-face
+count, are computed from this actual face collection, not assumed as
+an external vector.
+
+The $h$-polynomial is an integer polynomial obtained by the displayed
+standard transform, and its coefficients define $h_i$. The $g$-vector
+has the exact formal index type $0,\ldots,\lfloor d/2\rfloor$.
+Lean proves the negative entry and a single combined counterexample
+theorem containing the connected, flag, pure, dimension, and negativity
+properties. The project compiles on Lean 4.33.1 with pinned Mathlib,
+without unfinished proofs, native evaluation, additional axioms, or
+warnings. The reported dependencies are propositional extensionality,
+classical choice, and quotient soundness. Computation enumerates only
+the four faces of this two-vertex graph; no long brute force is used.
+\end{document}
