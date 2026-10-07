@@ -1,0 +1,183 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Reff}{R_{\mathrm{eff}}}
+
+\title{Proof of conjecture 00000003419:\\ commute time $=2m\cdot$ effective resistance}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and its reading}
+
+\textbf{Statement (English, verbatim).} Definition: Hitting times: the symmetry of commute times.
+Conjecture: The commute-time symmetry: the two-point commute time is twice the edge count times the
+resistance, with the proof of symmetry the symmetric difference of Green functions. (commute
+resistance twice symmetric difference)
+
+The Chinese text says the same; its Definition line contains the stray word ``Holant'', which plays
+no role in the claim and is ignored.
+
+\textbf{Reading.} $G=(V,E)$ is a finite, connected, simple (unweighted) graph with $m=|E|$ edges.
+The walk is the simple random walk; every edge is a resistor of one ohm. For vertices $a,b$ the
+claim is
+\[ \kappa(a,b) := H(a,b)+H(b,a) = 2m\,\Reff(a,b), \]
+together with the symmetry $\kappa(a,b)=\kappa(b,a)$ and $\Reff(a,b)=\Reff(b,a)$. The clause ``the
+proof of symmetry [is] the symmetric difference of Green functions'' describes a proof method. We
+follow it through the hitting-time vectors $h_b=H(\cdot,b)$: the unit-current potential is the
+normalized difference $(h_b-h_a)/(2m)$ (Lemma~\ref{lem:pot}). Green functions are not built in Lean
+as separate objects. The bridge to the Green-function formulation is as follows: with
+$\Gamma=L^{+}$ (the Green function of the Laplacian on the orthogonal complement of the constants),
+$L\,\Gamma(\cdot,a)=e_a-\tfrac1n\mathbf 1$, so for $a\ne b$ the vector $\Gamma(\cdot,a)-\Gamma(\cdot,b)$
+solves $Lv=e_a-e_b$; since the kernel of $L$ is the constants (connectedness), our established
+equation $L\big((h_b-h_a)/(2m)\big)=e_a-e_b$ gives
+$(h_b-h_a)/(2m)=\Gamma(\cdot,a)-\Gamma(\cdot,b)$ modulo an additive constant. Thus the symmetric
+difference of Green functions is exactly the potential used in the proof (this remark is not
+formalized; the main identity does not depend on it).
+
+\textbf{Conventions.} $T_b=\min\{t\ge 0: X_t=b\}$, so $H(b,b)=0$. Connectedness is needed, since
+otherwise hitting times are infinite. The case $a=b$ is allowed, and both sides are then $0$.
+Weighted graphs and multigraphs are not treated.
+
+\textbf{Attribution.} The identity is due to A.~K. Chandra, P. Raghavan, W.~L. Ruzzo and
+R. Smolensky, \emph{The electrical resistance of a graph captures its commute and cover times},
+first presented at STOC 1989; the journal version, with P. Tiwari as an additional author, appeared in
+Computational Complexity 6 (1996) 312--340 (Crossref record retrieved:
+\url{https://doi.org/10.1007/bf01270385}). Wikipedia's article
+``Resistance distance'' (\url{https://en.wikipedia.org/wiki/Resistance_distance}) defines the resistance distance of a simple connected graph as the resistance
+``with each edge being replaced by a resistance of one ohm''. It describes the commute time as ``the
+expected number of steps in a random walk that starts at'' $u$, visits $v$ and returns to $u$, and
+states $C_{u,v}=2m\Omega_{u,v}$ with that reference. Our proof is self-contained and fully
+formalized.
+
+\section{Definitions (as in the Lean file)}
+
+Let $L=D-A$ be the Laplacian (Mathlib \texttt{SimpleGraph.lapMatrix}).
+\begin{definition}
+\begin{enumerate}
+\item Transition probability: $P(x,y)=1/\deg x$ if $x\sim y$, else $0$ (\texttt{trans}). Lemma
+\texttt{sum\_trans}: $\sum_y P(x,y)=1$ when $\deg x>0$.
+\item Trajectory probability of $w=(w_0,\dots,w_t)$: $\prod_{i<t}P(w_i,w_{i+1})$
+(\texttt{pathProb}). On graphs where every vertex has positive degree this is the law of the
+Markov chain on the first $t+1$ steps. On the connected one-vertex graph, \texttt{trans} is
+identically $0$, so \texttt{pathProb} is not a probability law for $t>0$; there the only hitting
+target is the starting vertex, every survival probability is $0$, and both sides of the identity
+vanish, so the theorem still holds (equivalently, one may adopt an absorbing self-loop convention
+at an isolated vertex).
+\item $P_x(T_b>t)=\sum\{\prod_{i<t}P(w_i,w_{i+1}) : w_0=x,\ w_i\ne b \text{ for all } i\le t\}$
+(\texttt{survProb}).
+\item $H(x,b)=E_x[T_b]=\sum_{t\ge 0}P_x(T_b>t)$, the tail-sum formula for the expectation of a
+random variable with values in $\{0,1,2,\dots\}\cup\{\infty\}$ (\texttt{hittingTime}, a real
+\texttt{tsum}; the series is proved to converge). $\kappa(a,b)=H(a,b)+H(b,a)$
+(\texttt{commuteTime}).
+\item A unit-current potential from $a$ to $b$ is a $v:V\to\mathbb R$ with $Lv=e_a-e_b$
+(\texttt{IsUnitPotential}): one unit of current enters at $a$ and leaves at $b$, and Kirchhoff's
+and Ohm's laws hold with unit resistors. $\Reff(a,b)=v(a)-v(b)$ (\texttt{effRes}, chosen by
+\texttt{Classical.choose}). We prove that such a $v$ exists and that $v(a)-v(b)$ does not depend on
+the choice. Equivalently, $\Reff(a,b)=(e_a-e_b)^{\top}L^{+}(e_a-e_b)$ with $L^+$ the Moore--Penrose
+inverse; this remark is not formalized.
+\end{enumerate}
+\end{definition}
+
+\section{Proof}
+
+\begin{lemma}[\texttt{survProb\_zero}, \texttt{survProb\_succ}, \texttt{survProb\_self}]
+$P_x(T_b>0)=[x\ne b]$, $P_b(T_b>t)=0$, and
+$P_x(T_b>t+1)=[x\ne b]\sum_y P(x,y)P_y(T_b>t)$.
+\end{lemma}
+\begin{proof}
+Split a trajectory of length $t+1$ as $(w_0,w')$ using \texttt{Fin.consEquiv}. The product
+factors as $P(w_0,w'_0)\cdot\prod_{i<t} P(w'_i,w'_{i+1})$. Then sum over $w_0=x$ and group by $w'_0=y$.
+\end{proof}
+
+\begin{lemma}[\texttt{exists\_dirichlet}, \texttt{dirichlet\_nonneg}]
+There is $g$ with $g(b)=0$, $(Lg)(x)=\deg x$ for $x\neq b$, and $g\ge 0$.
+\end{lemma}
+\begin{proof}
+Let $M$ be $L$ with row $b$ replaced by $e_b^{\top}$. If $Mg=0$, then $g(b)=0$ and $(Lg)(x)=0$ for
+$x\ne b$. Column sums of $L$ vanish (\texttt{sum\_lapMatrix\_mulVec}, from $L^{\top}=L$ and $L\mathbf
+1=0$), so $(Lg)(b)=0$ too. On a connected graph $\ker L$ consists of the constants
+(\texttt{lapMatrix\_mulVec\_eq\_zero\_iff\_forall\_reachable}), so $g=0$. Thus $M$ is injective,
+hence invertible and surjective, and we solve $Mg=(\deg x\,[x\ne b])_x$. Minimum principle: let
+$g$ attain its minimum at $x_0$. If $x_0\ne b$, then $\deg x_0>0$ by connectedness, and
+$\deg x_0=(Lg)(x_0)=\sum_{y\sim x_0}(g(x_0)-g(y))\le 0$, a contradiction. So the minimum is
+$g(b)=0$.
+\end{proof}
+
+\begin{lemma}[\texttt{partial\_le}, \texttt{summable\_survProb}]
+$\sum_{t<N}P_x(T_b>t)\le g(x)$ for all $N$, so $\sum_t P_x(T_b>t)$ converges.
+\end{lemma}
+\begin{proof}
+For $x\ne b$, $(Lg)(x)=\deg x$ means $g(x)=1+\sum_yP(x,y)g(y)$ (\texttt{lap\_eq\_degree\_iff}).
+Induct on $N$. Using the recursion and $P\ge0$, we get
+$\sum_{t<N+1}P_x(T_b>t)=1+\sum_yP(x,y)\sum_{t<N}P_y(T_b>t)\le 1+\sum_yP(x,y)g(y)=g(x)$. The
+terms are nonnegative, so \texttt{summable\_of\_sum\_range\_le} applies.
+\end{proof}
+
+\begin{lemma}[\texttt{hittingTime\_step}, \texttt{lap\_hittingTime}]
+$H(b,b)=0$, and $H(x,b)=1+\sum_yP(x,y)H(y,b)$ for $x\ne b$. Hence
+$(Lh_b)(x)=\deg x-2m[x=b]$.
+\end{lemma}
+\begin{proof}
+Shift the convergent series by one and exchange the finite sum with the series. For $x\neq b$ the
+first-step equation is $(Lh_b)(x)=\deg x$. At $b$, vanishing column sums and
+$\sum_x\deg x=2m$ (\texttt{sum\_degrees\_eq\_twice\_card\_edges}) give
+$(Lh_b)(b)=-\sum_{x\ne b}\deg x=\deg b-2m$.
+\end{proof}
+
+\begin{lemma}[\texttt{hitting\_potential}]\label{lem:pot}
+If $a\ne b$, then $m>0$ and $v=(h_b-h_a)/(2m)$ satisfies $Lv=e_a-e_b$.
+\end{lemma}
+\begin{proof}
+$2m=\sum_x\deg x\ge\deg a>0$. Also $Lv=\big((\deg-2m e_b)-(\deg-2m e_a)\big)/(2m)=e_a-e_b$.
+\end{proof}
+
+\begin{theorem}[\texttt{commute\_time\_identity}]
+For every finite connected simple graph $G$ and all vertices $a,b$:
+both tail series converge; a unit-current potential exists; for $a\ne b$,
+$(h_b-h_a)/(2m)$ is one; every unit-current potential $v$ gives $\kappa(a,b)=2m\,(v(a)-v(b))$;
+$\kappa(a,b)=2m\,\Reff(a,b)$; $\kappa(a,b)=\kappa(b,a)$; and $\Reff(a,b)=\Reff(b,a)$.
+\end{theorem}
+\begin{proof}
+If $a=b$, both sides are $0$. Otherwise, two unit potentials differ by an element of $\ker L$,
+i.e.\ by a constant (\texttt{potential\_diff\_eq}). So for any unit potential $v$,
+$v(a)-v(b)=\big[(h_b(a)-h_a(a))-(h_b(b)-h_a(b))\big]/(2m)=(H(a,b)+H(b,a))/(2m)$, using
+$H(a,a)=H(b,b)=0$. The same holds for $\Reff$ (\texttt{effRes\_eq}). $\kappa$ is symmetric by
+definition. $\Reff$ is symmetric because $-v$ is a unit potential from $b$ to $a$
+(\texttt{effRes\_comm}).
+\end{proof}
+
+\section{Lean formalization and axiom audit}
+
+The file \texttt{lean/Conjecture3419/Basic.lean} (315 lines, \texttt{import Mathlib} only) contains
+all the definitions and lemmas above, in namespace \texttt{C3419}. The main theorem is as follows
+(Lean's conjunction, existential, inequality, implication and universal quantifier are written here
+in ASCII as \verb|/\|, \verb|exists|, \verb|!=|, \verb|->| and \verb|forall|):
+\begin{verbatim}
+theorem commute_time_identity (hG : G.Connected) (a b : V) :
+  (Summable fun t => survProb G b t a) /\
+  (Summable fun t => survProb G a t b) /\
+  (exists v, IsUnitPotential G a b v) /\
+  (a != b -> IsUnitPotential G a b fun x =>
+    (hittingTime G x b - hittingTime G x a) / (2 * #G.edgeFinset)) /\
+  (forall v, IsUnitPotential G a b v ->
+    commuteTime G a b = 2 * #G.edgeFinset * (v a - v b)) /\
+  commuteTime G a b = 2 * #G.edgeFinset * effRes G a b /\
+  commuteTime G a b = commuteTime G b a /\ effRes G a b = effRes G b a
+\end{verbatim}
+Here \texttt{V} is a \texttt{Fintype} with decidable equality and \texttt{G : SimpleGraph V}. The
+command \texttt{lake build} succeeds. \texttt{\#print axioms C3419.commute\_time\_identity} reports
+only \texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry} and no
+\texttt{native\_decide}.
+
+\end{document}
