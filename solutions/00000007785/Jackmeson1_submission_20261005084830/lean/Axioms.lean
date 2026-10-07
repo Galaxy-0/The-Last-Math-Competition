@@ -1,0 +1,2 @@
+import Conjecture7785
+#print axioms C7785.conjecture_7785_symmetric_clause_false

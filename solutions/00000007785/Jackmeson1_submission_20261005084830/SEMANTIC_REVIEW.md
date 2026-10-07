@@ -1,0 +1,9 @@
+# Semantic review (independent, pre-submission)
+
+An independent model reviewer (GPT-6 Astra, reasoning effort "xhigh", separate session) received the exact conjecture text, the full LaTeX report, the full Lean source and a reviewer checklist distilled from 93 closed-unmerged pull requests of this competition. It was asked whether the Lean main theorem settles the conjecture as written, whether the reading is faithful and not a loophole, whether the Lean definitions are faithful to the standard notions, whether the mathematics is correct, and whether report and Lean match. This is an automated review prepared by the submitter, not the competition's maintainer review.
+
+**Verdict:** accept = True; severity = none; reading faithful = True.
+
+**Reviewer notes (verbatim):**
+
+> Accepted as a disproof of the literal statement with the explicitly printed constant 4^n. The Lean theorem establishes, for every n >= 2, that the cube is an origin-symmetric convex body and a Hanner polytope with Mahler product 4^n/n! < 4^n, and explicitly negates both the universal symmetric bound and the claimed Hanner equality. The polar, dot product, Lebesgue volume, and convex-body conditions are standard; the coordinate space having the sup norm does not change its topology or product Lebesgue measure. The restricted IsHanner predicate is sufficient here: its constructors produce genuine Hanner polytopes, and the cube is an explicit member. Taking n >= 4 avoids the low-dimensional exception hedge. The report correctly computes the polar and volumes and matches the formal theorem. Refuting the symmetric clause suffices to refute the conjunction, so separately refuting the nonsymmetric and stability clauses is unnecessary. This result identifies the missing factorial in the stated bound; it does not refute the corrected classical Mahler conjecture, as the report explicitly acknowledges.
