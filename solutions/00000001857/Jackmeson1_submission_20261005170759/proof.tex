@@ -1,0 +1,187 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\title{Disproof of conjecture 00000001857:\\ the closed form gives $c_3=\frac{2-\sqrt3}{2}\cdot\frac{1+\sqrt5}{2}\approx 0.2168<1$,\\ so $\tau(G)\not\sim c_3^{\,n}$ and $c_3\neq 1.175\ldots$}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the clauses refuted}
+
+\textbf{Statement (English, verbatim up to typesetting).} Definition: The spanning-tree count
+$\tau(G)$ of a random $d=3$ regular graph. Conjecture: $\tau(G)$ is asymptotically $c_3^{\,n}$ (an
+exponential constant) with
+\[
+  c_3=\Big(\frac{\sqrt3-1}{2}\Big)^2\exp\Big(\int\log(3-2\cos\theta)\,d\theta\,/\,4\pi\Big)
+\]
+(a McKay-type formula); the numerical limit is $1.175\ldots$, and the closed form is computable.
+The Chinese line states the same: the asymptotics of $\tau(G)$ is $c_3^{\,n}$ with the same
+formula (called a ``McKay-norm type formula''), the numerical limit is $1.175\ldots$, and an
+explicit closed form is computable.
+
+\textbf{Reading.} $n$ is the number of vertices; a random 3-regular graph on $n$ vertices
+($n$ even) is a uniformly chosen 3-regular simple graph on the labelled vertex set
+$\{0,\dots,n-1\}$. The integral is over a full period $[0,2\pi]$ ($[-\pi,\pi]$ gives the same
+value by periodicity), and ``$/4\pi$'' divides the integral by $4\pi$. Our main bound holds for
+every window $[a,b]$ with $0\le b-a\le 4\pi$, so it also covers $[-\pi,\pi]$, $[0,\pi]$ and
+$[0,4\pi]$. ``The numerical limit is $1.175\ldots$'' means a real number whose decimal expansion
+begins $1.175$, i.e.\ a number in $[1.175,1.176)$. For ``$\tau(G)$ is asymptotically
+$c_3^{\,n}$'' we treat three readings: (A) $\tau(G_n)/c_3^{\,n}\to1$; (B)
+$\tau(G_n)=O(c_3^{\,n})$ (hence also $\Theta$); (C) the exponential-rate reading
+$\tau(G_n)^{1/n}\to c_3$.
+
+\textbf{What is refuted.} (1) The conjunction ``$c_3$ equals the stated formula and its numerical
+value is $1.175\ldots$'': the formula is $<1$ for every window of length $\le4\pi$ and equals
+$\approx0.2168$ on $[0,2\pi]$. (2) The main asymptotic clause with $c_3$ given by the formula:
+under each of (A), (B), (C) it fails for \emph{every} sequence of connected finite graphs with
+$n\to\infty$, because $\tau\ge1$ while $c_3^{\,n}\to0$; random 3-regular graphs are connected
+asymptotically almost surely, so it fails for them. Both clauses are main-clause content; we do
+not use the parentheticals or the word ``type''. Not refuted: a reading that discards the formula
+and keeps only ``$\tau(G)\approx 1.175^{\,n}$''.
+
+\section{Definitions (as formalized)}
+
+\begin{definition}[spanning-tree count]
+For a simple graph $G$ on a vertex type $V$, \texttt{tau G} is the number of simple graphs $T$ on
+$V$ with $T\le G$ (every edge of $T$ is an edge of $G$) and $T$ a tree (Mathlib
+\texttt{SimpleGraph.IsTree}: connected, hence nonempty, and acyclic). These are exactly the
+spanning trees of $G$. Lean theorem \texttt{tau\_eq\_card\_edgeSets} proves that the same number
+counts the edge subsets $s\subseteq E(G)$ whose spanning graph \texttt{fromEdgeSet s} is a tree.
+(Lean uses \texttt{Nat.card}; every theorem below assumes $V$ finite.)
+\end{definition}
+
+\begin{definition}[closed form]
+$\mathtt{c3On}\ a\ b=((\sqrt3-1)/2)^2\cdot\exp\big((\int_a^b\log(3-2\cos\theta)\,d\theta)/(4\pi)\big)$
+and $c_3=\mathtt{c3}=\mathtt{c3On}\ 0\ (2\pi)$. Here $\log$ is the real natural logarithm and
+$3-2\cos\theta\ge1>0$, so no branch issue arises.
+\end{definition}
+
+\begin{definition}[uniform random 3-regular graph]
+\texttt{reg3 n} is the finite set of simple graphs on \texttt{Fin n} that are 3-regular (Mathlib
+\texttt{IsRegularOfDegree 3}); \texttt{prob n P} $=|\{G\in\mathtt{reg3}\ n: P(G)\}|/|\mathtt{reg3}\ n|$.
+\end{definition}
+
+\section{Proof}
+
+\begin{lemma}[\texttt{one\_le\_tau}]
+If $V$ is finite and $G$ is connected then $\tau(G)\ge1$.
+\end{lemma}
+\begin{proof}
+Mathlib's \texttt{SimpleGraph.Connected.exists\_isTree\_le} gives a tree $T\le G$; the set of
+spanning trees is nonempty and finite.
+\end{proof}
+
+\begin{theorem}[\texttt{c3On\_lt\_one}, \texttt{c3On\_not\_numerical}, \texttt{c3\_lt\_one}]
+If $a\le b\le a+4\pi$ then $0<\mathtt{c3On}\ a\ b<1$; in particular
+$\mathtt{c3On}\ a\ b\notin[1.175,1.176)$. This applies to $[0,2\pi]$ and $[-\pi,\pi]$.
+\end{theorem}
+\begin{proof}
+Since $-1\le\cos\theta\le1$ we have $1\le3-2\cos\theta\le5$, so the integrand is continuous and
+$\int_a^b\log(3-2\cos\theta)\,d\theta\le(b-a)\log5\le4\pi\log5$. Hence the exponential is at most
+$5$. Also $((\sqrt3-1)/2)^2=(2-\sqrt3)/2$ and $\sqrt3>1.732$, so the product is at most
+$5(2-\sqrt3)/2<0.67<1$.
+\end{proof}
+
+\begin{theorem}[\texttt{integral\_eq}, \texttt{c3\_eq}, \texttt{c3\_bounds}]
+$\int_0^{2\pi}\log(3-2\cos\theta)\,d\theta=2\pi\log q$ with $q=(3+\sqrt5)/2$, hence
+$c_3=\frac{2-\sqrt3}{2}\cdot\frac{1+\sqrt5}{2}$ and $0.2167<c_3<0.2169$.
+\end{theorem}
+\begin{proof}
+Since $q^2=3q-1$, $|e^{i\theta}-q|^2=1-2q\cos\theta+q^2=q(3-2\cos\theta)$, so
+$\log|e^{i\theta}-q|=\tfrac12(\log(3-2\cos\theta)+\log q)$. Mathlib's
+\texttt{circleAverage\_log\_norm\_sub\_const\_2} states that for $|q|>1$ the average of
+$\log|z-q|$ over the unit circle is $\log|q|$. Averaging the identity gives
+$\frac1{2\pi}\int_0^{2\pi}\log(3-2\cos\theta)\,d\theta=\log q$. Then
+$\exp(2\pi\log q/4\pi)=\sqrt q=(1+\sqrt5)/2$, because $((1+\sqrt5)/2)^2=q$. The enclosure follows
+from $1.7320<\sqrt3<1.7321$ and $2.2360<\sqrt5<2.2361$.
+\end{proof}
+
+\begin{theorem}[\texttt{tau\_ratio\_tendsto\_atTop}, \texttt{not\_tau\_asymp}, \texttt{not\_tau\_isBigO}, \texttt{not\_tau\_rpow\_tendsto}, \texttt{conjecture1857\_false}]
+Let $(G_k)$ be connected graphs on finite vertex types $V_k$ with $n_k=|V_k|\to\infty$, and let
+$c=\mathtt{c3On}\ a\ b$ with $a\le b\le a+4\pi$. Then $\tau(G_k)/c^{\,n_k}\to\infty$ (so it does not
+tend to $1$), $\tau(G_k)$ is not $O(c^{\,n_k})$, and $\tau(G_k)^{1/n_k}\not\to c$.
+\end{theorem}
+\begin{proof}
+$0<c<1$, so $c^{\,n_k}\to0^+$ and $1/c^{\,n_k}\to\infty$; and $\tau(G_k)/c^{\,n_k}\ge1/c^{\,n_k}$ by
+the lemma. If $\tau(G_k)=O(c^{\,n_k})$ then $\tau(G_k)\to0$, contradicting $\tau\ge1$. Finally
+$\tau(G_k)^{1/n_k}\ge1$ for all $k$, so any limit is $\ge1>c$.
+\end{proof}
+
+\begin{theorem}[\texttt{prob\_good\_le\_prob\_disconnected}, \texttt{not\_prob\_good\_tendsto\_one}]
+Let $c=\mathtt{c3On}\ a\ b$ with $a\le b\le a+4\pi$ and let $\varepsilon\le1$. There is $N$ such
+that for all $n\ge N$,
+$\mathtt{prob}\ n\ (|\tau(G)/c^{\,n}-1|<\varepsilon)\le\mathtt{prob}\ n\ (G\text{ disconnected})$.
+Consequently, if $\mathtt{prob}\ (2m)\ (G\text{ disconnected})\to0$, then
+$\mathtt{prob}\ (2m)\ (|\tau(G)/c^{\,2m}-1|<\varepsilon)\to0$, and in particular it does not tend
+to $1$.
+\end{theorem}
+\begin{proof}
+Choose $N$ with $c^{\,n}<1/2$ for $n\ge N$. A connected $G$ then has $\tau(G)/c^{\,n}\ge2$, so
+$|\tau(G)/c^{\,n}-1|\ge1\ge\varepsilon$. Thus the good event lies inside the disconnection event,
+and the probabilities compare. The second part is a squeeze argument.
+\end{proof}
+
+The hypothesis of the second part is a known theorem, not proved in Lean: Wikipedia's article on
+random regular graphs states that ``a random r-regular graph of large size is asymptotically
+almost surely r-connected'' for $r\ge3$. In particular a random 3-regular graph is connected
+a.a.s. Hence $\tau(G)/c_3^{\,n}\to\infty$ in probability, and $\tau(G)\sim c_3^{\,n}$ fails in
+probability and a.a.s. The deterministic theorem above needs no probabilistic input: it holds
+along every sequence of connected graphs.
+
+\section{Lean formalization and axiom audit}
+
+File \texttt{lean/Conjecture1857/Basic.lean} (315 lines, Lean 4.33.1, Mathlib v4.33.1; namespace
+\texttt{C1857}; only import \texttt{Mathlib}). Its main theorem is
+\begin{quote}\small
+\texttt{theorem conjecture1857\_false :}\\
+\hspace*{1em}\texttt{c3} $\notin$ \texttt{Set.Ico (1.175 :} $\mathbb{R}$\texttt{) 1.176} $\wedge$\\
+\hspace*{1em}$\forall$ \texttt{\{V :} $\mathbb{N}\to$ \texttt{Type\} [}$\forall$\texttt{ k, Finite (V k)] (G :} $\forall$\texttt{ k, SimpleGraph (V k)),}\\
+\hspace*{2em}\texttt{Tendsto (fun k => Nat.card (V k)) atTop atTop} $\to$ \texttt{(}$\forall$\texttt{ k, (G k).Connected)} $\to$\\
+\hspace*{2em}$\neg$ \texttt{Tendsto (fun k => (tau (G k) :} $\mathbb{R}$\texttt{) / c3 \^{} Nat.card (V k)) atTop (}$\mathcal{N}$\texttt{ 1)}
+\end{quote}
+(here $\mathcal{N}$ is Mathlib's neighbourhood filter \texttt{nhds}), together with \texttt{c3On\_lt\_one}, \texttt{c3On\_not\_numerical}, \texttt{c3\_lt\_one},
+\texttt{integral\_eq}, \texttt{c3\_eq}, \texttt{c3\_bounds}, \texttt{not\_tau\_asymp},
+\texttt{not\_tau\_isBigO}, \texttt{not\_tau\_rpow\_tendsto}, \texttt{tau\_eq\_card\_edgeSets},
+\texttt{prob\_good\_le\_prob\_disconnected} and \texttt{not\_prob\_good\_tendsto\_one}. The last
+one takes a.a.s.\ connectivity as an explicit hypothesis \texttt{hconn}, along the even vertex
+counts $n=2m$. It adds no axiom. \texttt{lake build} succeeds, and the file contains no
+\texttt{sorry} or \texttt{native\_decide}. For each of the theorems listed,
+\texttt{\#print axioms} reports exactly \texttt{[propext, Classical.choice, Quot.sound]}.
+
+\section{Relation to the earlier submission}
+
+PR \#236 (orionsheep, closed) computed the same value, $\approx0.2168$, but did so only in prose.
+The reviewer wrote: ``the main theorem is a vacuous implication over an abstract Nat (any c2 < 1000
+$\neq$ 2350, plus 9 > 4 $\wedge$ 25 > 20); none of $\tau$(G), c$_3$, the integral, exp, or
+$\sqrt{\ }$ appears in Lean, and the entire closed-form evaluation $\approx$ 0.217 vs 1.175 exists
+only in prose.'' This submission formalizes the actual objects. These are the spanning-tree count
+$\tau(G)$ of a Mathlib simple graph, the closed form with the real integral, $\exp$ and
+$\sqrt{\ }$, the exact evaluation of that integral, and the uniform random 3-regular graph on
+\texttt{Fin n}. It also refutes the asymptotic clause itself, for every sequence of connected
+graphs, which the earlier submission did not address. The earlier submission also said the
+literature constant is $\approx1.216$; we do not rely on any literature constant.
+
+\section*{Sources}
+\begin{itemize}
+\item Wikipedia, ``Random regular graph'', \url{https://en.wikipedia.org/wiki/Random_regular_graph}
+  (retrieved 2026-10-05): ``a random r-regular graph of large size is asymptotically almost surely
+  r-connected''.
+\item PR \#236 and its review,
+  \url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/pull/236}.
+\item Mathlib: \texttt{SimpleGraph.Connected.exists\_isTree\_le}
+  (Combinatorics/SimpleGraph/Acyclic.lean), \texttt{circleAverage\_log\_norm\_sub\_const\_2}
+  (Analysis/SpecialFunctions/Integrals/PosLogEqCircleAverage.lean).
+\end{itemize}
+
+\end{document}
