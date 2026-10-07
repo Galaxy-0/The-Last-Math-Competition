@@ -1,0 +1,333 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small,breaklines=true,columns=fullflexible,keepspaces=true,
+ literate={ℝ}{{$\mathbb R$}}1 {ℕ}{{$\mathbb N$}}1 {ℤ}{{$\mathbb Z$}}1
+ {∧}{{$\land$}}1 {∃}{{$\exists$}}1 {≠}{{$\ne$}}1 {∀}{{$\forall$}}1
+ {→}{{$\to$}}1 {≤}{{$\le$}}1 {∈}{{$\in$}}1 {¬}{{$\neg$}}1
+ {⁻¹}{{$^{-1}$}}2}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newcommand{\QI}{\operatorname{QI}}
+\newcommand{\HH}{\operatorname{Hyp}}
+\title{Disproof of TLMC Conjecture 00000007713:\\Incompatible Quantitative Clauses for Corona Growth}
+\author{AlyciaBHZ on behalf of the Omega Institute}
+\date{5 October 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The conjecture requires an exponential growth rate $\lambda(p,q)$ to satisfy
+$\lambda+\lambda^{-1}=(p-2)(q-2)-2$, while allowing quadratic irrationality
+only if $(p-2)(q-2)\in\{4,5,6,10\}$. These exact clauses are incompatible.
+At the hyperbolic pair $(4,6)$ the equation has the two quadratic irrational
+roots $3\pm2\sqrt2$, although $(4-2)(6-2)=8$ is excluded by the list.
+More generally, for every integer $N\ge3$, every real solution of
+$x+x^{-1}=N$ is quadratic irrational. Consequently the same contradiction
+occurs on every simultaneous tail $p,q\ge K$, using $p=q=\max(K,6)$.
+The global and tail refutations are both proved in Lean 4 with Mathlib;
+no knowledge of the true corona growth rate is needed.
+\end{abstract}
+
+\section{Statement and interpretation}
+The English statement of \textbf{Conjecture 00000007713} is reproduced
+verbatim below (mathematical symbols are typeset):
+\begin{quote}
+Definition: For the regular tiling $\{p,q\}$ of the hyperbolic plane, the vertex
+corona count $C_k$ is the number of vertices at graph distance at most $k$
+from a fixed vertex. Conjecture: For the two-parameter family with $p,q$ both
+tending to infinity, the growth rate of $C_k$ is given by a quadratic form
+in $2\cosh$, with exponential growth rate $\lambda(p,q)$ satisfying the
+transcendental equation $\lambda+\lambda^{-1}=(p-2)(q-2)-2$, and $\lambda$ is
+a quadratic irrational only when $(p-2)(q-2)$ lies in $\{4,5,6,10\}$.
+(transcendental corona growth equation)
+\end{quote}
+
+The regular hyperbolic tiling parameters are integers $p,q\ge3$ with
+\[
+\HH(p,q)\quad\Longleftrightarrow\quad
+p\ge3,\quad q\ge3,\quad \frac1p+\frac1q<\frac12.
+\]
+Write $S(p,q)=(p-2)(q-2)$ and $L=\{4,5,6,10\}$. We use the standard definition
+\[
+\QI(x)\quad\Longleftrightarrow\quad
+x\notin\mathbb Q\ \text{ and }\
+\exists a,b,c\in\mathbb Z:\ a\ne0,\quad ax^2+bx+c=0.
+\]
+An irrational root of a genuine quadratic over $\mathbb Q$ has algebraic
+degree exactly two; this definition therefore has the usual mathematical
+meaning of ``quadratic irrational.''
+
+The two precise quantitative clauses in the statement are
+\begin{align}
+\tag{A}\label{A}
+&\forall p,q\text{ with }\HH(p,q),\qquad
+\lambda(p,q)+\lambda(p,q)^{-1}=S(p,q)-2,\\
+\tag{B}\label{B}
+&\forall p,q\text{ with }\HH(p,q),\qquad
+\QI(\lambda(p,q))\ \Longrightarrow\ S(p,q)\in L.
+\end{align}
+``Only when'' expresses the implication in (B), not its converse.
+The written equality in (A) is read literally. The phrase ``quadratic form
+in $2\cosh$'' lacks a specified form, but any further condition on the growth
+rate cannot make these two necessary clauses compatible. This argument
+neither defines a replacement corona growth rate nor assumes that the
+claimed equation correctly describes it.
+
+The reference to $p,q$ tending to infinity admits a second natural reading:
+(A) and (B) are asserted only once both parameters are sufficiently large.
+We refute that reading too: for every cutoff $K$, no real-valued function
+satisfies both clauses on all hyperbolic pairs $p,q\ge K$. In fact, on the
+diagonal every individual pair $(t,t)$ with $t\ge6$ gives the contradiction.
+Thus neither a finite exceptional range nor restriction to the large diagonal
+repairs these exact clauses. An equality asserted only approximately or in a
+limit would be a different statement, requiring an error term or a specified
+limit; such a modified statement is not asserted or refuted here.
+
+\section{The elementary arithmetic obstruction}
+\begin{lemma}\label{nonsquare}
+For every integer $N\ge3$, the integer $N^2-4$ is not a square.
+\end{lemma}
+\begin{proof}
+We have
+\[
+(N-1)^2<N^2-4<N^2,
+\]
+because the difference in the left inequality is $2N-5>0$ and the difference
+in the right inequality is $4>0$. If $m^2=N^2-4$ for an integer $m$, taking
+absolute values would give $N-1<|m|<N$. No integer lies strictly between the
+consecutive integers $N-1$ and $N$.
+\end{proof}
+
+\begin{lemma}\label{rational-square}
+If a rational number $r$ has integer square, then $r$ is an integer.
+\end{lemma}
+\begin{proof}
+Write $r=a/b$ with $a\in\mathbb Z$, $b\in\mathbb Z_{>0}$, and
+$\gcd(|a|,b)=1$. If $r^2=d\in\mathbb Z$, then $a^2=db^2$. If a prime
+$\ell$ divided $b$, it would divide $a^2$ and hence $a$, contradicting
+coprimality. Thus $b$ has no prime divisor, so $b=1$.
+\end{proof}
+
+\begin{theorem}\label{general}
+Let $N\in\mathbb Z$ satisfy $N\ge3$, and let $x\in\mathbb R$ satisfy
+$x+x^{-1}=N$. Then $x$ is a quadratic irrational.
+\end{theorem}
+\begin{proof}
+For the ordinary reciprocal, $x\ne0$ is implicit. Lean defines $0^{-1}=0$;
+under this convention the equation itself excludes $x=0$, since $N\ge3$.
+Multiplying the equation by $x$ gives
+\begin{equation}\label{quadratic}
+x^2-Nx+1=0.
+\end{equation}
+This is an integer quadratic with nonzero leading coefficient $1$.
+Completing the square gives
+\[
+(2x-N)^2=N^2-4.
+\]
+If $x$ were rational, $2x-N$ would be rational with integer square.
+By Lemma~\ref{rational-square} it would be an integer, contradicting
+Lemma~\ref{nonsquare}. Hence $x$ is irrational and satisfies
+\eqref{quadratic}, proving $\QI(x)$.
+
+Equivalently, the two roots are
+\[
+x=\frac{N\pm\sqrt{N^2-4}}{2}.
+\]
+Both are positive, reciprocal, and irrational; the plus root is greater
+than $1$ and the minus root is less than $1$. The argument proves
+irrationality for both without selecting the growth branch.
+\end{proof}
+
+For context, every hyperbolic pair in the specified integer range has
+$S(p,q)\ge5$. Indeed, multiplying $1/p+1/q<1/2$ by the positive number $2pq$
+gives $2(p+q)<pq$, and therefore
+\[
+S(p,q)=pq-2(p+q)+4>4.
+\]
+Since $S(p,q)$ is an integer, $N=S(p,q)-2\ge3$. Thus if the conjectured
+equation holds, its solution is quadratic irrational at \emph{every}
+hyperbolic pair. The formal proof below needs only the explicit pair
+$(4,6)$ and the diagonal $t\ge6$; this additional observation explains why
+the arithmetic restriction is systematically incompatible with the equation.
+
+\section{Concrete and arbitrarily large contradictions}
+\begin{theorem}\label{concrete}
+There is no function $\lambda:\mathbb N\times\mathbb N\to\mathbb R$
+satisfying both (A) and (B).
+\end{theorem}
+\begin{proof}
+The tiling parameters $(p,q)=(4,6)$ are hyperbolic:
+\[
+\frac14+\frac16=\frac5{12}<\frac12.
+\]
+Here $S=(4-2)(6-2)=8$. Clause (A) yields
+\[
+\lambda(4,6)+\lambda(4,6)^{-1}=6.
+\]
+By Theorem~\ref{general}, $\lambda(4,6)$ is quadratic irrational.
+In this case the quadratic is $x^2-6x+1=0$, with roots
+$3\pm2\sqrt2$. Clause (B) would then force
+$8\in\{4,5,6,10\}$, which is false.
+\end{proof}
+
+\begin{theorem}\label{tail}
+For every $K\in\mathbb N$ and every function
+$\lambda:\mathbb N\times\mathbb N\to\mathbb R$, the restrictions of
+(A) and (B) to hyperbolic pairs with $p,q\ge K$ cannot both hold.
+\end{theorem}
+\begin{proof}
+Let $t=\max(K,6)$ and take $p=q=t$. Both parameters are at least $K$,
+and the pair is hyperbolic since
+\[
+\frac1t+\frac1t=\frac2t\le\frac13<\frac12.
+\]
+Let $M=(t-2)^2$. Since $t\ge6$, we have $M\ge16$, so $M\notin L$.
+Set $N=M-2\ge14\ge3$. The restricted clause (A) gives
+$\lambda(t,t)+\lambda(t,t)^{-1}=N$, whence
+$\QI(\lambda(t,t))$ by Theorem~\ref{general}.
+The restricted clause (B) forces $M\in L$, a contradiction.
+\end{proof}
+
+In particular there is no existentially chosen cutoff $K$ beyond which the
+clauses are simultaneously valid. If the two clauses are assigned separate
+cutoffs, their maximum is a common cutoff, so that reading fails as well.
+The contradiction also applies when the growth rate is required to be
+positive or greater than $1$, since the theorems already quantify over all
+real-valued functions and prove impossibility without additional hypotheses.
+A stronger reading of ``only when'' as an equivalence still includes (B)
+and is therefore refuted.
+
+\section{Lean formalization and semantic correspondence}
+The project is pinned to \texttt{leanprover/lean4:v4.33.0} and Mathlib tag
+\texttt{v4.33.0}, whose manifest revision is
+\texttt{db584cd6d46c92f209a44c0f1c829460d327499d}.
+The sole source module is \texttt{lean4/CoronaGrowth.lean}. The following
+statements reproduce the definitions and main theorem from the source:
+\begin{lstlisting}
+def IsQuadraticIrrational (x : ℝ) : Prop :=
+  Irrational x ∧ ∃ a b c : ℤ, a ≠ 0 ∧
+    (a : ℝ) * x ^ 2 + (b : ℝ) * x + (c : ℝ) = 0
+
+def Hyperbolic (p q : ℕ) : Prop :=
+  3 ≤ p ∧ 3 ≤ q ∧ 1 / (p : ℝ) + 1 / (q : ℝ) < 1 / 2
+
+def EquationClause (lam : ℕ → ℕ → ℝ) : Prop :=
+  ∀ p q, Hyperbolic p q →
+    lam p q + (lam p q)⁻¹ = ((p : ℝ) - 2) * ((q : ℝ) - 2) - 2
+
+def OnlyWhenClause (lam : ℕ → ℕ → ℝ) : Prop :=
+  ∀ p q, Hyperbolic p q → IsQuadraticIrrational (lam p q) →
+    (p - 2) * (q - 2) ∈ ({4, 5, 6, 10} : Finset ℕ)
+
+theorem conjecture_00000007713_false (lam : ℕ → ℕ → ℝ) :
+    ¬ (EquationClause lam ∧ OnlyWhenClause lam)
+\end{lstlisting}
+The definitions in the main theorem expand to exactly (A) and (B).
+Natural subtraction in the membership clause agrees with integer subtraction
+because every \texttt{Hyperbolic} pair has $p,q\ge3$; it does not truncate any
+quantity used in the proof. The equation uses real subtraction explicitly.
+
+The more robust theorem states:
+\begin{lstlisting}
+theorem conjecture_00000007713_false_on_every_tail
+    (K : ℕ) (lam : ℕ → ℕ → ℝ) : ¬ TailClauses K lam
+
+theorem no_eventual_quantitative_clauses (lam : ℕ → ℕ → ℝ) :
+    ¬ ∃ K : ℕ, TailClauses K lam
+\end{lstlisting}
+Here \texttt{TailClauses K lam} is precisely the conjunction of (A) and (B),
+with \texttt{K <= p} and \texttt{K <= q} hypotheses added to each clause.
+Thus the tail theorem formalizes Theorem~\ref{tail}, and the final theorem
+rules out choosing any sufficient cutoff.
+
+The supporting theorem is:
+\begin{lstlisting}
+theorem equation_quadratic_irrational (N : ℤ) (hN : 3 ≤ N) (x : ℝ)
+    (heq : x + x⁻¹ = (N : ℝ)) : IsQuadraticIrrational x
+\end{lstlisting}
+Its proof follows Theorem~\ref{general}. The theorem
+\path{discriminant_not_square} proves Lemma~\ref{nonsquare} over the actual
+integers. The imported standard Mathlib theorem
+\texttt{Rat.isSquare\_intCast\_iff} supplies the rational-square fact of
+Lemma~\ref{rational-square}; the proof uses rational and real casts only to
+transfer equalities, not as approximations. The quadratic coefficients
+witnessed in Lean are $a=1$, $b=-N$, and $c=1$.
+\texttt{equation\_nonzero} handles Lean's total inverse explicitly.
+The two counterexample proofs invoke these lemmas and certify all finite
+arithmetic and membership facts within Lean.
+
+No graph or tiling construction is required in Lean: the claim assigns a
+real growth rate to every eligible parameter pair and entails the two
+formalized numerical conditions. The Lean theorem proves that no function
+at all can meet those conditions on the specified domain. Therefore any
+actual function of corona growth rates also cannot meet them. This is a
+refutation by internal inconsistency, rather than a calculation of the true
+corona counts or a weakening of either exact quantitative clause.
+
+\section{Verification and axiom audit}
+The final source compiled successfully with Lean and Mathlib \texttt{v4.33.0}.
+The compiler output and axiom audit are saved in \texttt{verification.txt}.
+The source ends with \texttt{\#print axioms} commands auditing the general
+arithmetic lemmas and all three refutation theorems. Every audited theorem
+has the same axiom output:
+\[
+\texttt{[propext, Classical.choice, Quot.sound]}.
+\]
+These are the permitted standard Lean axioms. There are no added axioms,
+no incomplete proofs, and no use of \texttt{native\_decide}. Arithmetic tactics
+construct proofs checked by the Lean kernel.
+
+The optional standard-library script \texttt{verify.py} uses exact rational
+arithmetic and integer square roots. It checks the $(4,6)$ instance and both
+roots in $\mathbb Q(\sqrt2)$; the discriminant inequalities for
+$3\le N\le10000$; all hyperbolic pairs $3\le p,q\le100$; and the diagonal
+witnesses for $0\le K\le1000$. Its output is also included in
+\texttt{verification.txt}. These finite computations are independent sanity
+checks. The infinite theorems are established by the mathematical proof
+and Lean, with no dependence on the script.
+
+To build the delivered project in a fresh environment with Lean installed:
+\begin{lstlisting}
+cd lean4
+lake exe cache get && lake build
+\end{lstlisting}
+To rerun the optional checks and rebuild the report from the package root:
+\begin{lstlisting}
+python3 verify.py
+pdflatex -interaction=nonstopmode -halt-on-error report.tex
+pdflatex -interaction=nonstopmode -halt-on-error report.tex
+\end{lstlisting}
+
+\section{Scope and reading choices}
+The disproof covers exact equality, the necessary implication meant by
+``only when,'' all valid hyperbolic parameters, every simultaneous tail,
+and every sufficiently large diagonal pair. It requires no additional
+hypothesis on the value of $\lambda$. The assertion about quadratic forms
+in $2\cosh$ and the actual behavior of $C_k$ remain unspecified, but cannot
+repair the incompatible necessary clauses. The observation that all
+hyperbolic pairs have $N\ge3$ is proved in this report; Lean formalizes the
+general integer-$N$ lemma and all parameter facts needed for both main
+refutations, without formalizing that additional all-pairs observation.
+
+A reading that replaces the displayed equality by an asymptotic approximation
+is not a literal reading of the exact equation. This submission makes no
+claim about such an unstated replacement. The large-parameter theorem
+addresses the explicit ``both tending to infinity'' qualification while
+preserving the two exact quantitative assertions.
+
+\medskip
+\noindent\textbf{Attribution.} Submitted by AlyciaBHZ on behalf of the Omega
+Institute (trureturing project,
+\url{https://github.com/the-omega-institute/trureturing}).
+All proof code in this submission is newly written; no trureturing code
+has been vendored.
+
+\end{document}
