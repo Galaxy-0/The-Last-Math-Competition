@@ -2,7 +2,8 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[T1]{fontenc}
-\title{Infinitely many quadratic PCF polynomials\\
+\newtheorem{theorem}{Theorem}
+\title{Infinitely many affine-inequivalent quadratic PCF maps\\
   A disproof of the first assertion of conjecture 00000007755}
 \author{earthking11}
 \date{}
@@ -10,42 +11,69 @@
 \begin{document}
 \maketitle
 
-The first assertion of conjecture 00000007755 says that, for each fixed degree
-$d$, there are only finitely many postcritically finite (PCF) polynomials with
-algebraic coefficients. Here a polynomial is PCF when every critical point is
-preperiodic under iteration. We disprove this assertion in degree $2$.
+\paragraph{Correction to PR \#826.}
+The previous submission used $(X-a)^2+a$. Although every member is PCF,
+these polynomials all lie in the affine-conjugacy class of $X^2$. That family
+does not give distinct parameters in the intended moduli space. We replace it
+with a construction of infinitely many PCF maps in the normalized quadratic
+family $F_c(X)=X^2+c$.
 
-Let $\overline{\mathbb Q}$ be an algebraic closure of $\mathbb Q$. For each
-$a\in\overline{\mathbb Q}$, put
+Put $K=\overline{\mathbb Q}$. A polynomial over $K$ is PCF if every root of
+its formal derivative in $K$ has a preperiodic forward orbit. The only
+critical point of $F_c$ is $0$, because $F_c'(X)=2X$.
+
+\begin{theorem}
+There are infinitely many parameters $c\in K$ for which $F_c$ is PCF.
+The corresponding maps are pairwise inequivalent under affine conjugacy.
+Consequently the finiteness assertion of conjecture 00000007755 is false
+already for degree $2$, even in the space of affine-conjugacy classes.
+\end{theorem}
+
+\begin{proof}
+Work first in $K[T]$. Define the critical-orbit polynomials by
 \[
-  f_a(X)=(X-a)^2+a=X^2-2aX+(a^2+a).
+P_0(T)=0,\qquad P_{n+1}(T)=P_n(T)^2+T.
 \]
-This polynomial has degree $2$ and all its coefficients are algebraic. Its
-derivative is $f_a'(X)=2(X-a)$, so its only critical point in
-$\overline{\mathbb Q}$ is $a$. Moreover $f_a(a)=a$: the critical point is fixed,
-and hence preperiodic. Therefore $f_a$ is PCF.
+Induction gives $P_n(c)=F_c^{\circ n}(0)$. Define a second sequence by
+\[
+Q_0(T)=1,\qquad Q_{n+1}(T)=TQ_n(T)^2+1.
+\]
+Another induction shows $P_{n+1}(T)=TQ_n(T)$. For every $n\geq1$,
+$Q_n(0)=1$ and the coefficient of $T$ in $Q_n$ is $Q_{n-1}(0)^2=1$.
+Therefore $Q_n$ is nonconstant and has a root in the algebraically closed
+field $K$. Such a root is nonzero because $Q_n(0)=1$.
 
-The polynomials are pairwise distinct. Indeed, $f_a=f_b$ implies equality of
-their derivatives. Evaluating at $a$ gives $0=f_b'(a)=2(a-b)$, so $a=b$.
-Because $\overline{\mathbb Q}$ is infinite, the set of quadratic PCF
-polynomials with algebraic coefficients is infinite. This contradicts the
-first assertion of the conjecture, and thus disproves the conjunction as
-written. No claim about the separate height asymptotic is necessary.
+Let $p$ be any prime. Choose a nonzero root $c_p$ of $Q_{p-1}$. Then
+$P_p(c_p)=c_pQ_{p-1}(c_p)=0$, so $0$ is periodic under $F_{c_p}$ with
+period dividing $p$. Its period is not $1$, since $F_{c_p}(0)=c_p\neq0$.
+Primality forces the minimal period to equal $p$. In particular $F_{c_p}$
+is PCF, and the parameters associated with different primes are distinct.
+The infinitude of primes gives infinitely many such parameters.
 
-\paragraph{Formalization.}
-The Lean file defines $K=\operatorname{AlgebraicClosure}(\mathbb Q)$,
-$f_a\in K[X]$, preperiodicity as repetition in the evaluation orbit, and PCF
-using all roots of the formal derivative in $K$. It proves the degree,
-critical-point identity, PCF property, and injectivity of $a\mapsto f_a$.
-The final theorem \texttt{TLMC7755.infinite\_quadratic\_pcf} states that the
-actual set of degree-$2$ PCF polynomials in $K[X]$ is infinite. Its axiom audit
-contains only \texttt{propext}, \texttt{Classical.choice}, and
+Finally, suppose $F_c$ and $F_d$ are affinely conjugate via
+$\phi(X)=aX+b$, where $a\neq0$. The relation
+$\phi\circ F_c=F_d\circ\phi$ reads
+\[
+a(X^2+c)+b=(aX+b)^2+d.
+\]
+Comparing coefficients of $X^2$ yields $a=a^2$, hence $a=1$.
+Comparing coefficients of $X$ then yields $2ab=0$, hence $b=0$.
+The constant terms give $c=d$. Thus distinct parameters in the normalized
+family represent distinct affine-conjugacy classes.
+\end{proof}
+
+\paragraph{Formalization and scope.}
+The Lean file uses $K=\operatorname{AlgebraicClosure}(\mathbb Q)$ and proves
+the orbit-polynomial identity, existence of a nonzero root of every $Q_n$
+with $n\geq1$, exact prime periods, infinitude of normalized PCF
+parameters, and affine-conjugacy rigidity. The decisive theorems are
+\begin{itemize}
+  \item \texttt{TLMC7755.infinite\_normalized\_pcf\_parameters};
+  \item \texttt{TLMC7755.normalized\_affine\_conjugate\_iff}.
+\end{itemize}
+The axiom audit lists only \texttt{propext}, \texttt{Classical.choice}, and
 \texttt{Quot.sound}.
-
-\paragraph{Scope.}
-The conjecture quantifies over polynomials, without taking affine-conjugacy
-classes or imposing a monic-centered normalization. All the examples above
-are affine conjugate to $X^2$; this argument does not settle a differently
-worded finiteness assertion modulo affine conjugacy.
+We disprove the conjecture's first assertion; we make no claim about the
+separate height asymptotic.
 
 \end{document}
