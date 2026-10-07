@@ -1,0 +1,55 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\hypersetup{hidelinks}
+\newtheorem{proposition}{Proposition}
+\title{Disproof of Conjecture 00000003711\\Resistance sums and spanning trees of a triangle}
+\author{gaochengzhecpu}\date{}
+\begin{document}\maketitle
+\noindent\textbf{Claim addressed.} The conjecture identifies the sum of the resistance-distance quadratic forms with the number of spanning trees. The connected simple graph $K_3$, with unit conductance on each edge, disproves this identification under both unordered-pair and ordered-pair conventions. The individual pseudoinverse formula for resistance is not disputed.
+
+\begin{proposition}
+For the unit triangle, every pair of distinct vertices has effective resistance $2/3$. The sum over unordered vertex pairs is $2$, the sum over ordered pairs is $4$, and the number of spanning trees is $3$.
+\end{proposition}
+\begin{proof}
+Let $I$ be the $3\times3$ identity and $J$ the all-ones matrix. The graph Laplacian and its Moore--Penrose inverse are
+\[
+ L=3I-J=\begin{pmatrix}2&-1&-1\\-1&2&-1\\-1&-1&2\end{pmatrix},
+ \qquad Q=\frac13I-\frac19J.
+\]
+Indeed $J^2=3J$, so $LQ=QL=I-J/3$. Direct multiplication gives $LQL=L$, $QLQ=Q$, and both $LQ$ and $QL$ are symmetric. These are the four defining Moore--Penrose equations.
+
+For vertices $i,j$, write $b=e_i-e_j$. Then $Jb=0$, and hence
+\[
+ v=Qb=\frac13b,\qquad Lv=b.
+\]
+This is the voltage solving Kirchhoff's law for a unit current entering at $i$ and leaving at $j$. Its terminal drop equals the quadratic form:
+\[
+ R_{ij}=v_i-v_j=b^TQb=
+ \begin{cases}0&i=j,\\2/3&i\ne j.\end{cases}
+\]
+The drop does not depend on the voltage representative. If $Lw=0$, subtracting the first two equations gives $w_0=w_1$, and either equation then gives $w_2=w_0$. Thus two solutions differ by a constant.
+
+There are three unordered pairs and six ordered distinct pairs. Their sums are consequently $3(2/3)=2$ and $6(2/3)=4$. A spanning tree of $K_3$ consists of exactly two of its three edges. Each such choice is connected and acyclic, and there are exactly three choices. Therefore neither resistance sum equals the spanning-tree count $3$.
+\end{proof}
+
+\noindent\textbf{Scope.} This is a connected, unweighted, loopless simple graph; no missing connectedness hypothesis is exploited. Including diagonal pairs adds zero. The source's assertion about the sum fails with either usual pair-counting convention. No assertion is made against the usual matrix-tree theorem or the individual effective-resistance formula.
+
+\section*{Lean correspondence and reproduction}
+The project defines $K_3$ as Mathlib's complete \texttt{SimpleGraph (Fin 3)}. Its actual \texttt{lapMatrix} is proved equal to $L$. The four Moore--Penrose equations for the real matrix $Q$ are proved entry by entry. The current, voltage and quadratic form are genuine matrix-vector and dot products. In addition, \texttt{electrical\_resistance} proves that every solution of the actual Kirchhoff equation has the claimed terminal drop.
+
+Spanning trees are subgraphs on the full vertex set satisfying Mathlib's actual \texttt{IsTree}. They are placed in bijection with the three-edge masks having exactly two edges. The proof uses the connectedness and edge-count characterization of finite trees, with finite connectedness checked by the library's walk-based decision procedure. Thus the number $3$ is a derived cardinality, not a count assigned by definition.
+
+The final theorems \texttt{unordered\_conjecture\_false} and \texttt{ordered\_conjecture\_false} compare the actual quadratic-form sums with that cardinality.
+
+Inside \texttt{lean/}, run \texttt{lake build}, followed by
+\begin{center}\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+Lean is pinned to 4.19.0 and Mathlib to
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+The dependency manifest pins every transitive dependency. The supplementary \texttt{verify.py} independently checks the matrix equations and tree enumeration with exact rational arithmetic. There are no proof gaps, custom axioms or native computation shortcuts. Actual fresh-build logs, axiom dependencies and artifact hashes are in \texttt{verification/}. Author and delegated-agent review records are separate; no external independent review is claimed.
+
+\begin{thebibliography}{9}
+\bibitem{source} The Last Math Competition,
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000003711.md}{Conjecture 00000003711 (original bilingual source)}.
+\end{thebibliography}
+\end{document}
