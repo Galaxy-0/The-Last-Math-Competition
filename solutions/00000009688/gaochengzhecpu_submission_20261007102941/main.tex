@@ -1,0 +1,58 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\hypersetup{hidelinks}
+\newtheorem{proposition}{Proposition}
+\title{Disproof of Conjecture 00000009688\\Identical exponent sets, different common zero counts}
+\author{gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\noindent\textbf{Claim addressed.} The conjecture says that the number of common zeros of two algebraic-coefficient exponential polynomials is determined by the intersection of their exponent sets. It additionally proposes a zero-separation constant when that intersection is empty. The counterexample below refutes the first assertion even with the two full exponent sets held fixed. It also rules out any positive distance separating the two zero sets.
+
+\begin{proposition}
+There are two pairs of nonzero exponential polynomials, all with rational coefficients and nonnegative integer exponents, having the same disjoint exponent sets, such that one pair has infinitely many common zeros and the other has none.
+\end{proposition}
+\begin{proof}
+For $z\in\mathbb C$, set
+\[
+ f(z)=e^z-1,\qquad
+ g(z)=e^{3z}-e^{2z},\qquad
+ h(z)=e^{3z}+e^{2z}.
+\]
+The exponent set of $f$ is $\{0,1\}$; those of $g$ and $h$ are both $\{2,3\}$. In particular, both intersections are empty. The coefficients $1$ and $-1$ are rational, hence algebraic.
+
+The exponential law gives
+\[
+ g(z)=e^{2z}(e^z-1)=e^{2z}f(z),
+ \qquad h(z)=e^{2z}(e^z+1).
+\]
+For every integer $k$, the point $z_k=2\pi i k$ satisfies $e^{z_k}=1$, so $f(z_k)=g(z_k)=0$. These points are distinct because $2\pi i\ne0$. Thus $f$ and $g$ have infinitely many common zeros.
+
+Conversely, $f(z)=0$ implies $e^z=1$, hence $e^{2z}=1$ and $h(z)=2$. Therefore $f$ and $h$ have no common zeros. The same exponent sets, and therefore the same empty intersection, yield different common-zero counts. This contradicts determination of that count by the intersection alone.
+\end{proof}
+
+\noindent\textbf{Separation.} If a positive separation constant means a number $\delta>0$ with $|z-w|\ge\delta$ whenever $f(z)=g(w)=0$, the common zero $z=w=0$ contradicts it. This conclusion is stated with that precise meaning; the disproof of the counting assertion does not depend on interpreting the word ``separation.''
+
+\noindent\textbf{Scope.} No finiteness assumption absent from the source is introduced. The two zero counts are $\infty$ and $0$. No claim is made about a corrected statement imposing coprimality, excluding exponential multiples, or permitting dependence on coefficients. None of those restrictions appears in the supplied conjecture.
+
+\section*{Lean correspondence and reproduction}
+The accompanying Lean 4 project uses genuine polynomials over $\mathbb Q$ to store coefficients. Its function \texttt{expPoly} substitutes the actual complex exponential $e^z$ into a polynomial, so $X^n$ becomes $e^{nz}$. The polynomials \texttt{f}, \texttt{g}, and \texttt{h} are $X-1$, $X^3-X^2$, and $X^3+X^2$.
+
+The support theorems compute the actual \texttt{Polynomial.support} sets. The formula theorems prove the displayed identities with \texttt{Complex.exp}. The set \texttt{commonZeros} uses those function evaluations directly. Lean proves that $k\mapsto2\pi i k$ is injective and has image contained in the common-zero set of $f,g$, establishing infinitude. It separately proves the common-zero set of $f,h$ is empty.
+
+The final theorem \texttt{no\_intersection\_count\_formula} rules out every function from exponent intersections to extended natural numbers that purports to give all common-zero counts. The theorem \texttt{no\_positive\_zero\_separation} formalizes the positive-distance interpretation above. These statements use the actual zero sets; the counts are not assigned by definition.
+
+Inside \texttt{lean/}, run \texttt{lake build} and then
+\begin{center}\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+Lean is pinned to 4.19.0 and Mathlib to commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+The manifest also pins all transitive dependencies. There are no proof gaps, custom axioms, or native computation shortcuts. The supplemental \texttt{verify.py} checks coefficient supports and factorization by exact integer arithmetic; the infinite analytic assertions are proved in Lean.
+
+The unchanged bilingual source is supplied as \texttt{SOURCE.md}. Actual build logs, theorem-axiom output, source hashes, and PDF checks are in \texttt{verification/}. Author self-review and parent-agent adversarial review are recorded separately; no external independent review is claimed.
+
+\begin{thebibliography}{9}
+\bibitem{source} The Last Math Competition,
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000009688.md}{Conjecture 00000009688 (original bilingual source)}.
+\end{thebibliography}
+\end{document}
