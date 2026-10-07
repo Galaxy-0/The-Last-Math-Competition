@@ -1,0 +1,164 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A disproof of Conjecture 00000002348\\[2pt]
+\large An expected condition number is at least $1$, never $m^{-1/2}$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture and its reading}
+
+Conjecture 00000002348 reads: \emph{The expected condition number of the norm matrix of random
+interpolation on smooth varieties is $m^{-1/2}$ ($m$ the sample count; a negative half power); the
+expectation comes from the logarithmic-potential integral of the determinant of the norm matrix.}
+
+The claim is a value for $\mathbb{E}[\kappa(A)]$, where $A$ is the (random) norm matrix built from
+$m$ random samples. We refute two readings of ``is $m^{-1/2}$'':
+\begin{itemize}
+\item[(E)] \emph{exact:} $\mathbb{E}[\kappa(A_m)] = m^{-1/2}$ for the sample counts $m$;
+\item[(O)] \emph{order of magnitude:} $\mathbb{E}[\kappa(A_m)] \le C\,m^{-1/2}$ for some constant $C$
+and all large $m$. This is implied by $\mathbb{E}[\kappa(A_m)] = C m^{-1/2}$,
+$\mathbb{E}[\kappa(A_m)] = \Theta(m^{-1/2})$, $\mathbb{E}[\kappa(A_m)] = O(m^{-1/2})$ and
+$\mathbb{E}[\kappa(A_m)] \sim c\, m^{-1/2}$, so all of these are refuted too.
+\end{itemize}
+The construction of the norm matrix (the variety, the sampling law, the basis) is never used: the
+theorems below hold for \emph{every} random matrix on \emph{every} probability space, with the matrix size
+allowed to depend on $m$. Hence they apply to whatever norm matrix the conjecture intends. The remark
+about the logarithmic-potential integral describes how the expectation would be computed and does
+not change its value, so it is not used.
+
+\paragraph{Conventions.}
+Condition numbers take values in $[0,+\infty]$, with the standard convention $\kappa(A)=+\infty$ when
+$A$ is singular (rank deficient). The expectation of a $[0,+\infty]$-valued random variable is its
+Lebesgue integral. For measurable random variables this is the ordinary expectation; for arbitrary
+$[0,+\infty]$-valued functions we use the lower Lebesgue integral (Mathlib's 	exttt{lintegral}), which
+always exists, so no integrability or measurability assumption is needed for the bound. A
+real-valued variant is in Theorem~\ref{thm:bochner}. Matrices are real and have at least one column
+($n\ge1$, resp.\ $q\ge 1$): an empty $0\times 0$ matrix has $\|I\|=0$ and is excluded.
+We use $m^{-1/2}=1/\sqrt m$ for $m\ge1$.
+
+\section{Condition numbers are at least 1}
+
+\begin{definition}[norm condition number]
+Let $R$ be a nontrivial normed ring, i.e.\ a ring with a norm satisfying
+$\|xy\|\le\|x\|\,\|y\|$ and $1\ne 0$. For $A\in R$ put $\kappa(A)=\|A\|\,\|A^{-1}\|$ if $A$ is invertible
+and $\kappa(A)=+\infty$ otherwise. For real $n\times n$ matrices we use the spectral norm
+$\|A\|_2=\sup_{\|x\|=1}\|Ax\|$ (Euclidean norms), which is submultiplicative; then
+$\kappa(A)=\|A\|_2\|A^{-1}\|_2=\sigma_{\max}(A)/\sigma_{\min}(A)$ for invertible $A$.
+\end{definition}
+
+\begin{definition}[singular-value condition number]
+For a real $p\times q$ matrix $A$ put $\sigma_{\max}(A)=\sup_{\|x\|=1}\|Ax\|$ and
+$\sigma_{\min}(A)=\inf_{\|x\|=1}\|Ax\|$ (Euclidean norms, $x\in\mathbb{R}^q$). Define
+$\kappa_2(A)=\sigma_{\max}(A)/\sigma_{\min}(A)$ if $\sigma_{\min}(A)>0$ and $\kappa_2(A)=+\infty$ if
+$\sigma_{\min}(A)=0$, i.e.\ if $A$ does not have full column rank. This covers rectangular norm matrices,
+for example an $m\times N$ matrix of evaluations at the samples.
+\end{definition}
+
+\begin{lemma}\label{lem:ge1}
+(a) In a nontrivial normed ring, $\kappa(A)\ge 1$ for every $A$.
+(b) For every real $p\times q$ matrix with $q\ge1$, $\kappa_2(A)\ge1$.
+\end{lemma}
+
+\begin{proof}
+(a) If $A$ is singular, $\kappa(A)=+\infty$. Otherwise $\|1\|=\|1\cdot 1\|\le\|1\|^2$ and $\|1\|>0$ (as
+$1\ne0$) give $\|1\|\ge1$, so $1\le\|1\|=\|AA^{-1}\|\le\|A\|\,\|A^{-1}\|$.
+(b) If $\sigma_{\min}(A)=0$, $\kappa_2(A)=+\infty$. Otherwise pick the unit vector $e_1\in\mathbb{R}^q$:
+$\sigma_{\min}(A)\le\|Ae_1\|\le\sigma_{\max}(A)$, and $\sigma_{\min}(A)$ is finite and positive, so
+$\kappa_2(A)\ge\sigma_{\min}(A)/\sigma_{\min}(A)=1$.
+\end{proof}
+
+\section{The refutation}
+
+\begin{lemma}\label{lem:exp}
+If $(\Omega,P)$ is a probability space and $X:\Omega\to[0,+\infty]$ satisfies $X\ge1$ pointwise, then
+$\mathbb{E}[X]=\int X\,dP\ge\int 1\,dP=1$.
+\end{lemma}
+
+\begin{theorem}[exact reading (E)]\label{thm:exact}
+Let $m\ge2$, let $(\Omega,P)$ be any probability space, and let $A:\Omega\to\mathbb{R}^{n\times n}$
+($n\ge1$) or $A:\Omega\to\mathbb{R}^{p\times q}$ ($q\ge1$) be any random matrix. Then
+$\mathbb{E}[\kappa(A)]\ge1>m^{-1/2}$, resp.\ $\mathbb{E}[\kappa_2(A)]\ge1>m^{-1/2}$. In particular
+neither expectation equals $m^{-1/2}$.
+\end{theorem}
+
+\begin{proof}
+Lemmas~\ref{lem:ge1} and~\ref{lem:exp} give the lower bound $1$, and $m^{-1/2}<1$ because $m>1$ and
+the exponent is negative.
+\end{proof}
+
+\begin{theorem}[order reading (O)]\label{thm:order}
+Let $(\Omega_m,P_m)$ be probability spaces and $A_m$ random $N_m\times N_m$ matrices ($N_m\ge1$), resp.\
+random $p_m\times q_m$ matrices ($q_m\ge1$), indexed by the sample count $m$. There are no $C\in\mathbb{R}$
+and $M$ with $\mathbb{E}[\kappa(A_m)]\le C m^{-1/2}$ (resp.\ with $\kappa_2$) for all $m\ge M$.
+\end{theorem}
+
+\begin{proof}
+Take $m=\max(M,\lceil C^2\rceil+1)$, so $m>C^2$. If $C\le0$ then $Cm^{-1/2}\le0<1$. If $C>0$ then
+$C<\sqrt m$, so $Cm^{-1/2}=C/\sqrt m<1$. In both cases $\mathbb{E}\ge1>Cm^{-1/2}$.
+\end{proof}
+
+\begin{theorem}[real-valued expectation]\label{thm:bochner}
+In any nontrivial normed ring, if $A$ is almost surely invertible and $\|A\|\,\|A^{-1}\|$ is integrable,
+then $\int\|A\|\,\|A^{-1}\|\,dP\ge1$.
+\end{theorem}
+
+\begin{remark}[what is not refuted]
+At $m=1$ we have $m^{-1/2}=1$, which is attainable (e.g.\ $A=I$), so (E) is refuted for every $m\ge 2$
+only. We do not address non-literal rewordings that change the quantity, such as
+``$\mathbb{E}[\kappa]-1$ is of order $m^{-1/2}$'' (a deviation-from-isometry statement) or
+``$\mathbb{E}[\log\kappa]=m^{-1/2}$''. The conjecture states the value of the expected condition number
+itself.
+\end{remark}
+
+\section{Relation to the earlier submission}
+
+PR \#241 (orionsheep) gave the same argument ($\kappa\ge1$, hence $\mathbb{E}[\kappa]\ge1>m^{-1/2}$),
+but it was closed without merging because its Lean capstone was the arithmetic fact
+\texttt{(1:Nat) < 2 $\wedge$ 2 $\ne$ 1}. The reviewer wrote that ``the condition-number bound
+$\kappa\ge1$ that constitutes the entire refutation of $E[\kappa]=m^{-1/2}$ appears only in prose, with no
+matrices or expectations in Lean''. That PR also refuted only the exact value. The present Lean file
+defines both condition numbers on actual real matrices and proves $\kappa\ge 1$ from submultiplicativity
+and $\sigma_{\min}\le\sigma_{\max}$. It formalizes the expectation as a Lebesgue integral over an
+arbitrary probability space and refutes both the exact reading at every $m\ge2$ and the order reading
+for arbitrary $m$-indexed families.
+
+\section{Lean formalization}
+
+The file \texttt{lean/Conjecture2348/Basic.lean} (226 lines, Lean 4 / Mathlib \texttt{v4.33.1}, only
+\texttt{import Mathlib}) contains, in namespace \texttt{C2348}:
+\begin{itemize}
+\item \texttt{condNum} (norm condition number in a normed ring, $+\infty$ for non-units) and
+\texttt{one\_le\_condNum}; \texttt{condNum\_matrix\_eq} unfolds it, under the spectral norm
+(\texttt{Matrix.Norms.L2Operator}), to $\|A\|_2\|A^{-1}\|_2$ with $A^{-1}$ the matrix inverse if
+$\det A\ne0$, and to $+\infty$ if $\det A=0$;
+\item \texttt{stretchMax}, \texttt{stretchMin}, \texttt{svCond} ($\sigma_{\max}/\sigma_{\min}$ via
+\texttt{Matrix.toEuclideanLin}) and \texttt{one\_le\_svCond};
+\item \texttt{one\_le\_expectation} (Lemma~\ref{lem:exp}, with \texttt{lintegral}),
+\texttt{rpow\_neg\_half\_lt\_one}, \texttt{ne\_rpow\_neg\_half}, \texttt{not\_le\_C\_rpow\_neg\_half};
+\item main theorems \texttt{conjecture\_2348\_false\_exact}, \texttt{conjecture\_2348\_false\_exact\_sv}
+(Theorem~\ref{thm:exact}), \texttt{conjecture\_2348\_false\_order},
+\texttt{conjecture\_2348\_false\_order\_sv} (Theorem~\ref{thm:order}) and
+\texttt{one\_le\_integral\_condNum} (Theorem~\ref{thm:bochner}).
+\end{itemize}
+In the main theorems $m^{-1/2}$ is \texttt{(m:$\mathbb{R}$) \^{} (-(1/2:$\mathbb{R}$))}, embedded into
+$[0,+\infty]$ by \texttt{ENNReal.ofReal}. \texttt{lake build} succeeds, and \texttt{\#print axioms} reports
+only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound} for every main theorem. There
+is no \texttt{sorry} and no \texttt{native\_decide}.
+
+\end{document}
