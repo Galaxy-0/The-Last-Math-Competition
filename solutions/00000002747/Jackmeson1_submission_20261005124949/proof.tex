@@ -1,0 +1,152 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A disproof of Conjecture 00000002747\\[2pt]
+\large The capacity of $M_m(M_n)$ is not $(m-1)n^2+n$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture and its reading}
+
+Conjecture 00000002747 reads: \emph{Definition: Capacity: the maximal dimension of a matrix space on
+which the determinant vanishes. Conjecture: The higher-order Flanders--Atkinson capacity theorem: the
+capacity of $M_m(M_n)$ is $(m-1)n^2+n$, and the classification of capacity spaces is a single orbit of
+linear spaces.}
+
+\paragraph{Reading.} Fix any field $K$ and integers $m,n\ge 1$.
+\begin{itemize}
+\item $M_m(M_n)=M_m(M_n(K))$ is the algebra of $m\times m$ matrices whose entries are $n\times n$
+matrices over $K$.
+\item Its determinant is the determinant of the $mn\times mn$ scalar matrix obtained by forgetting the
+block structure, i.e.\ via the canonical isomorphism $M_m(M_n(K))\cong M_{mn}(K)$,
+$A\mapsto\bigl(A_{ij}(k,l)\bigr)_{(i,k),(j,l)}$.
+\item A \emph{singular space} is a $K$-linear subspace $V\subseteq M_m(M_n(K))$ with $\det A=0$ for all
+$A\in V$.
+\item The \emph{capacity} $\operatorname{cap}(m,n)$ is the supremum (a maximum, since dimensions are
+bounded by $m^2n^2$) of $\dim_K V$ over singular spaces $V$.
+\end{itemize}
+The conjecture is a conjunction. We refute its first clause, ``$\operatorname{cap}(m,n)=(m-1)n^2+n$
+for all $m,n\ge1$''. This refutes the conjunction whatever the precise meaning of the second
+(classification) clause; that clause is not analysed.
+
+\section{The counterexamples}
+
+\begin{lemma}[$m=n=1$]
+$\operatorname{cap}(1,1)=0$, while $(1-1)\cdot1^2+1=1$.
+\end{lemma}
+\begin{proof}
+$M_1(M_1(K))$ is one-dimensional and the determinant of a $1\times1$ matrix is its entry. So a singular
+space contains only the zero matrix, and its dimension is $0$.
+\end{proof}
+
+\begin{lemma}[zero-row space]
+Let $m,n\ge1$, $N=mn$, and fix a scalar row index $(i_0,k_0)$. The space $V_0$ of block matrices whose
+underlying $N\times N$ matrix has zero row $(i_0,k_0)$ is singular and $\dim_K V_0=N^2-N$. Hence
+$\operatorname{cap}(m,n)\ge N^2-N$.
+\end{lemma}
+\begin{proof}
+A square matrix with a zero row has determinant $0$, so $V_0$ is singular. Under the block isomorphism,
+$V_0$ corresponds to the kernel of the row map $B\mapsto B_{(i_0,k_0),\bullet}$, from $M_N(K)$ onto
+$K^N$. This map is surjective, so by rank--nullity its kernel has dimension $N^2-N$.
+\end{proof}
+
+\begin{lemma}[arithmetic]
+If $m,n\ge1$ and $mn\ge3$, then $(m-1)n^2+n<(mn)^2-mn$.
+\end{lemma}
+\begin{proof}
+Write $m=a+1$ and $n=b+1$. The claim is equivalent to
+$(a+1)^2(b+1)>ab+2a+2$, i.e.\ to $a^2b+a^2+ab+b\ge2$. The hypothesis $mn\ge3$ means
+$ab+a+b\ge2$. If $a=0$ then $b\ge2$; if $b=0$ then $a\ge2$, so $a^2\ge4$; if $a,b\ge1$ then
+$a^2b+b\ge2$.
+\end{proof}
+
+\begin{theorem}
+For every field $K$:
+\begin{enumerate}
+\item $\operatorname{cap}(1,1)=0\neq1$;
+\item for all $m,n\ge1$ with $mn\ge3$, $\operatorname{cap}(m,n)>(m-1)n^2+n$; for example
+$\operatorname{cap}(2,2)\ge12>6$.
+\end{enumerate}
+So the capacity formula fails for $(m,n)=(1,1)$ and for every $m,n\ge1$ with $mn\ge3$. It can hold only at
+$(m,n)\in\{(1,2),(2,1)\}$, which we do not need. In particular, the conjunction stated in the conjecture
+is false.
+\end{theorem}
+
+\begin{remark}
+The theorem uses only the lower bound $\operatorname{cap}(m,n)\ge N^2-N$ (and the trivial case
+$m=n=1$). No upper bound on singular spaces of size $N\ge2$ is needed or claimed.
+\end{remark}
+
+\section{Relation to the earlier submission}
+PR \#198 by orionsheep was closed unmerged. Its mathematics (the cases $m=n=1$ and $m=n=2$) is the same as
+here. The reason for closing was that ``the main Lean theorem is vacuous arithmetic with none of the
+conjecture's objects in Lean'': there was ``no matrix space, determinant, or linear subspace in Lean
+(theorems are $0\ne1$ and $12>6$); the decisive facts --- $\det(\lambda)=\lambda$ on scalars and the
+12-dimensional row-zero subspace being identically singular --- are prose only.''
+
+The present Lean file defines the following objects:
+\begin{itemize}
+\item the block algebra \texttt{BlockMat K m n} $=M_m(M_n(K))$;
+\item its determinant \texttt{blockDet}, through Mathlib's block isomorphism \texttt{Matrix.comp};
+\item singular subspaces as \texttt{Submodule}s;
+\item \texttt{capacity} as the supremum of their \texttt{finrank}.
+\end{itemize}
+It proves both facts that the reviewer flagged as prose-only. It also proves the failure for every
+$m,n\ge1$ with $mn\ge3$, not only at $m=n=2$.
+
+\section{Lean formalization}
+The file is \texttt{lean/Conjecture2747/Basic.lean} (namespace \texttt{C2747}). It imports only Mathlib.
+\begin{itemize}
+\item Definitions:
+  \begin{itemize}
+  \item \texttt{BlockMat K m n := Matrix (Fin m) (Fin m) (Matrix (Fin n) (Fin n) K)};
+  \item \texttt{blockDet A := (Matrix.comp \_ \_ \_ \_ K A).det};
+  \item \texttt{IsSingularSpace V} for \texttt{V : Submodule K (BlockMat K m n)}: every member has
+  \texttt{blockDet} $0$;
+  \item \texttt{capacity K m n := sSup \{d | $\exists$ V, IsSingularSpace K V $\wedge$ finrank K V = d\}}.
+  \end{itemize}
+\item Bounds on the supremum: \texttt{finrank\_le\_capacity} and \texttt{capacity\_le}.
+\item \texttt{capacity\_one\_one : capacity K 1 1 = 0}.
+\item Zero-row space:
+  \begin{itemize}
+  \item \texttt{rowZeroSpace} (the image of \texttt{ker (rowMap (i0,k0))} under the inverse of
+  \texttt{Matrix.compLinearEquiv});
+  \item \texttt{rowZeroSpace\_singular};
+  \item \texttt{finrank\_rowZeroSpace}: the dimension is $(mn)(mn)-mn$;
+  \item \texttt{capacity\_ge}: the capacity is at least $(mn)(mn)-mn$.
+  \end{itemize}
+\item Failure of the formula:
+  \begin{itemize}
+  \item \texttt{formula\_lt\_capacity}: for $m,n\ge1$ and $mn\ge3$,
+  $(m-1)n^2+n<\texttt{capacity K m n}$;
+  \item \texttt{capacity\_two\_two}: $12\le\texttt{capacity K 2 2}$.
+  \end{itemize}
+\item Main theorem \texttt{conjecture\_false (Classif : $\mathbb N\to\mathbb N\to$ Prop)}:
+\[
+\neg\,\forall\, m\,n,\ 1\le m\to 1\le n\to
+\bigl(\texttt{capacity K m n}=(m-1)n^2+n\ \wedge\ \texttt{Classif m n}\bigr).
+\]
+It holds for an arbitrary field \texttt{K} and an arbitrary formalization \texttt{Classif} of the
+classification clause.
+\item Axiom audit: \texttt{\#print axioms} for \texttt{C2747.conjecture\_false},
+\texttt{C2747.formula\_lt\_capacity} and \texttt{C2747.capacity\_two\_two} reports
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no \texttt{decide} and no
+\texttt{native\_decide}.
+\end{itemize}
+
+\end{document}

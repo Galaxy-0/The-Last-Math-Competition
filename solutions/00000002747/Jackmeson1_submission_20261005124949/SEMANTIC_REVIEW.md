@@ -1,0 +1,9 @@
+# Semantic review (independent, pre-submission)
+
+An independent model reviewer (GPT-6 Astra, reasoning effort "xhigh", separate session) received the exact conjecture text, the full LaTeX report, the full Lean source and a reviewer checklist distilled from 93 closed-unmerged pull requests of this competition. It was asked whether the Lean main theorem settles the conjecture as written, whether the reading is faithful and not a loophole, whether the Lean definitions are faithful to the standard notions, whether the mathematics is correct, and whether report and Lean match. This is an automated review prepared by the submitter, not the competition's maintainer review.
+
+**Verdict:** accept = True; severity = none; reading faithful = True.
+
+**Reviewer notes (verbatim):**
+
+> The disproof is faithful to the stated notion of capacity: BlockMat is the full block matrix algebra, blockDet is the determinant of its underlying scalar matrix, and singular spaces are K-linear submodules. The natural-number supremum agrees with the maximal dimension because the ambient space is finite-dimensional and, for positive m and n, the zero subspace is singular. Lean establishes capacity K 1 1 = 0 and constructs the zero-row subspace using the block linear equivalence, proving both its singularity and its dimension (mn)^2 - mn. The report's rank-nullity argument and arithmetic inequality are correct; formula_lt_capacity formally proves failure for every positive m,n with mn >= 3, including the nondegenerate example (2,2). Although conjecture_false uses (1,1), the additional theorems establish the advertised broader failure. Leaving Classif arbitrary is logically sound: failure of the capacity equality refutes the conjunction regardless of the classification clause. The report and Lean agree on the definitions, hypotheses, and scope. Compilation and the permitted axiom audit are accepted as supplied.
