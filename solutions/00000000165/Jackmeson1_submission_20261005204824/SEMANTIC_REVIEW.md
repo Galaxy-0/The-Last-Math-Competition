@@ -1,0 +1,9 @@
+# Semantic review (independent, pre-submission)
+
+An independent model reviewer (GPT-6 Astra, reasoning effort "xhigh", separate session) received the exact conjecture text, the full LaTeX report, the full Lean source and a reviewer checklist distilled from 93 closed-unmerged pull requests of this competition. It was asked whether the Lean main theorem settles the conjecture as written, whether the reading is faithful and not a loophole, whether the Lean definitions are faithful to the standard notions, whether the mathematics is correct, and whether report and Lean match. This is an automated review prepared by the submitter, not the competition's maintainer review.
+
+**Verdict:** accept = True; severity = none; reading faithful = True.
+
+**Reviewer notes (verbatim):**
+
+> The submission correctly disproves the stated uniform asymptotic. Lean faithfully defines the subgroup as the range of the d-th power homomorphism on units, its image in ZMod p, exactly-k sumsets (with an explicit membership equivalence), and the minimum positive cover number. Dirichlet supplies arbitrarily large d and primes p > d^d with p-1 = d(2q+1). The exclusion of -1 from H implies that H and H+H miss zero; two distinct subgroup elements and Cauchy-Davenport establish a cover, so the sInf lower bound K >= 3 is not an empty-set artifact. For every fixed 0 < eps < 1, the family eventually satisfies d < p^(1-eps), while 1 < L <= 4/3. This contradicts the asymptotic with a fixed positive error. The report's mathematics and both numerical examples are correct, and its claims agree with the supplied Lean source and compilation/axiom assurances. Treating the Chinese k-th-power wording as a slip for d-th powers is consistent with the English statement. The small-d family is allowed by the stated window. The seven variant negations follow as claimed; the report correctly excludes the at-most-k versus ceil(L) variant and readings imposing an additional lower bound d >= p^delta.
