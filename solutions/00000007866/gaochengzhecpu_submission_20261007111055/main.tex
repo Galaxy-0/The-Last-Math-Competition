@@ -1,0 +1,71 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\hypersetup{hidelinks}
+\newtheorem{proposition}{Proposition}
+\title{Disproof of Conjecture 00000007866\\The displayed deviation has a linear lower bound}
+\author{gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\noindent\textbf{Claim addressed.} The source defines
+\[
+ D_n=\sup\left|S_n\bmod1-\frac n2\right|
+\]
+and asserts growth $O(\sqrt{\log n})$, with an $O(1)$ bound for transcendental steps. With the fractional-part operation stated in the source, both assertions are impossible. The obstruction holds for every real trajectory, so it is unaffected by step choices or the distribution and independence of rounding errors.
+
+For a real number $s$, write $\{s\}=s-\lfloor s\rfloor\in[0,1)$. For any nonempty sample space $\Omega$ and any family of real trajectories $S_n(\omega)$, set
+\[
+ \delta_n(\omega)=\left|\{S_n(\omega)\}-\frac n2\right|,
+ \qquad D_n=\sup_{\omega\in\Omega}\delta_n(\omega).
+\]
+This supremum exists as a finite real number: the family is nonempty and every term is at most $n/2+1$.
+
+\begin{proposition}
+For every $n\ge0$ and every trajectory,
+\[
+ \delta_n(\omega)>\frac n2-1.
+\]
+Consequently $D_n>n/2-1$, and $D_n$ is neither $O(\sqrt{\log n})$ nor $O(1)$ as $n\to\infty$ through the natural numbers.
+\end{proposition}
+\begin{proof}
+Since $\{S_n(\omega)\}<1$,
+\[
+ \delta_n(\omega)\ge\frac n2-\{S_n(\omega)\}>\frac n2-1.
+\]
+The supremum dominates any one trajectory, giving the same lower bound.
+
+If $D_n=O(\sqrt{\log n})$, there would be $C>0$ and $N$ with $|D_n|\le C\sqrt{\log n}$ for all $n\ge N$. Choose an integer
+\[
+ n>\max\{N,4,(4C)^2\}.
+\]
+Using $\log n\le n$, we obtain
+\[
+ C\sqrt{\log n}\le C\sqrt n<\frac n4
+ <\frac n2-1<D_n\le |D_n|,
+\]
+a contradiction. For an alleged constant bound $|D_n|\le C$ eventually, take $n>\max\{N,2C+2\}$ instead. Then $D_n>n/2-1>C$, another contradiction.
+\end{proof}
+
+\noindent\textbf{The constant $1/4$.} Already $D_3>1/2>1/4$ for every such family. More generally $D_n>n/2-1$ rules out any eventual constant bound, so this is not a small-$n$ issue.
+
+\noindent\textbf{Scope.} The proof applies to the literal displayed definition involving the fractional part of $S_n$. It also applies to any maximum that dominates this quantity for one trajectory. In particular, one may take $S_n$ to be any partial sums produced by a random rounding model; every outcome obeys the same lower bound. Independence and uniformity cannot reverse a pointwise inequality. No replacement of the definition by a sum of fractional parts or by star discrepancy is made or assessed here.
+
+As an elementary illustration of the displayed expression, the integer partial sums $T_n=\sum_{i=1}^n2^i$ have fractional part zero, so $|\{T_n\}-n/2|=n/2$. This unrounded illustration is not needed as a probabilistic counterexample: the preceding universal argument already covers every random perturbation of these sums.
+
+\section*{Lean correspondence and reproduction}
+The Lean definition \texttt{deviation} uses Mathlib's actual \texttt{Int.fract} and real absolute value. The definition \texttt{maximalDeviation} is the actual real supremum \texttt{sSup} of the range over an arbitrary sample space. The proof bounds that range above, proves that its supremum dominates each term, and derives the linear lower bound whenever the sample space is nonempty.
+
+The growth claims use Mathlib's \texttt{Asymptotics.IsBigO} at the filter \texttt{atTop}. The comparison functions use \texttt{Real.log} and \texttt{Real.sqrt}. The proofs unpack eventual norm bounds and construct an integer beyond their thresholds. The main theorem \texttt{every\_maximum\_violates\_both\_bounds} negates both growth claims for every trajectory family. Separate theorems establish failure of $1/4$ at $n=3$ and the exact dyadic integer-sum illustration. No probability law or rounding rule is postulated: the universal real-trajectory result is stronger than the needed statement for any such rule.
+
+Inside \texttt{lean/}, run \texttt{lake build}, then
+\begin{center}\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The project uses Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+The manifest pins the dependencies. No numerical experiment is required. The exact bilingual source is in \texttt{SOURCE.md}; actual build logs, theorem-axiom output, hashes, and PDF checks are in \texttt{verification/}. Author self-review and parent-agent review are separate; no external independent review is claimed.
+
+\begin{thebibliography}{9}
+\bibitem{source} The Last Math Competition,
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000007866.md}{Conjecture 00000007866 (original bilingual source)}.
+\end{thebibliography}
+\end{document}
