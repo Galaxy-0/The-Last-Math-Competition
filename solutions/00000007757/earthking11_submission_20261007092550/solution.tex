@@ -1,0 +1,59 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\title{An infinite common periodic-point set\\
+  A disproof of the finiteness assertion of conjecture 00000007757}
+\author{earthking11}
+\date{}
+
+\begin{document}
+\maketitle
+
+Conjecture 00000007757 asserts that two distinct rational maps of degree at
+least two in a commuting semigroup have only finitely many common periodic
+points in $\mathbb P^1(\overline{\mathbb Q})$, with a cardinality bound
+depending uniformly on the product of their degrees. We give a counterexample
+over $\mathbb Q$.
+
+Put
+\[
+  f(z)=z^2, \qquad g(z)=z^4=f^{\circ 2}(z).
+\]
+These are distinct rational maps of degrees $2$ and $4$. They commute because
+$f(g(z))=z^8=g(f(z))$. Their polynomial extensions both fix infinity, so the
+commutation holds on the entire projective line.
+
+For each $n\geq 0$, choose a primitive $(2^{n+1}-1)$st root of unity
+$\zeta_n\in\overline{\mathbb Q}$. Since
+\[
+  f^{\circ(n+1)}(\zeta_n)
+  =\zeta_n^{2^{n+1}}
+  =\zeta_n^{(2^{n+1}-1)+1}
+  =\zeta_n,
+\]
+the point $[\zeta_n:1]$ is periodic for $f$. Also
+$g^{\circ(n+1)}=f^{\circ 2(n+1)}$, so it is periodic for $g$.
+The orders $2^{n+1}-1$ strictly increase with $n$. Primitive roots of
+different orders are distinct, so these give infinitely many different
+points of $\mathbb P^1(\overline{\mathbb Q})$ in $P_f\cap P_g$. Thus the
+intersection is infinite even though $\deg f\deg g=8$ is fixed.
+
+\paragraph{Formalization.}
+The Lean file works over $K=\operatorname{AlgebraicClosure}(\mathbb Q)$.
+It represents $\mathbb P^1(K)$ by its affine chart together with infinity,
+using \texttt{Option K}: \texttt{some z} is $[z:1]$ and \texttt{none} is
+$[1:0]$. The functions \texttt{F} and \texttt{G} extend the two polynomial
+maps to this model. The file proves their commutation on all points,
+distinctness, the two polynomial degrees, and the periodicity and injectivity
+of the chosen roots. The final theorem
+\texttt{TLMC7757.infinite\_common\_periodic} states that the actual common
+periodic-point set is infinite. Its axiom audit contains only
+\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+
+\paragraph{Scope.}
+The example deliberately has a common iterate. The conjecture's first
+finiteness assertion does not exclude this case, and its separate clause for
+maps with no common iterate is not needed for the contradiction.
+
+\end{document}
