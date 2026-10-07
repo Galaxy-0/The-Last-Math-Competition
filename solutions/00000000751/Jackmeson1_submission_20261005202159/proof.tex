@@ -1,0 +1,196 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage{hyperref}
+\sloppy
+\let\oldus\_ \renewcommand{\_}{\oldus\allowbreak}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Qp}{\mathbb{Q}_p}
+\newcommand{\Cp}{\mathbb{C}_p}
+\newcommand{\PP}{\mathbb{P}^1}
+
+\title{Disproof of conjecture 00000000751:\\ over $\mathbb{Q}_p$, $z\mapsto z/p$ (degree $1$) has a nonempty Julia set and $z\mapsto z^2$ (degree $2$) an empty one}
+\author{Jackmeson1}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+
+\section{The conjecture and the reading}
+
+\textbf{Statement (English, verbatim).} Definition: The p-adic Fatou decomposition. Conjecture:
+For iterations of rational functions over Q\_p, the Fatou set within the field of uniformly
+rational functions is completely invariant and open, and the Julia set is nonempty if and only if
+the degree is $\ge 2$ (a complex-p parallel structure). (The Chinese text says the same: for
+iteration of rational functions over $\Qp$, the Fatou set ``of the field of uniformly rational
+functions'' is a completely invariant open set, and the Julia set is nonempty if and only if the
+degree is $\ge 2$.)
+
+\textbf{Reading.} The phrase ``within the field of uniformly rational functions'' has no standard
+meaning; we read it as referring to the Fatou set of the iterates of a rational function
+$\varphi\in\Qp(z)$, defined by a uniform (equicontinuity) condition. The conjecture then says: for
+every prime $p$ and every nonconstant $\varphi\in\Qp(z)$,
+\[
+ \text{(A) } F(\varphi) \text{ is open and } \varphi^{-1}(F)=F=\varphi(F),
+ \qquad\text{and}\qquad
+ \text{(B) } J(\varphi)\neq\emptyset \iff \deg\varphi\ge 2 .
+\]
+We refute the universal statement by refuting (B), in both directions, for every prime $p$. The
+dynamics takes place on the classical projective line $\PP(\Qp)$ (the text says ``over $\Qp$''); we
+also prove the same results on $\PP(\Cp)$. We formalize three readings of the Julia set:
+(J1) the complement of the Fatou set, where a point is Fatou if it has a neighbourhood on which the
+iterates $\{\varphi^{n}\}_{n\ge0}$ are equicontinuous for the chordal metric; (J2) the set of points
+at which the iterates are not equicontinuous; (J3) the closure of the set of repelling periodic
+points. In each case the Fatou set in (A) is the complement of the Julia set.
+
+\textbf{Not covered.} We do not treat the Berkovich projective line. The degree-$2$ example below
+is a statement about the classical line only. The degree-$1$ example also concerns the classical
+line, but it uses no property of maps of degree $\ge 2$.
+
+\section{Definitions and sources}
+
+\textbf{Projective line and chordal metric.} $\PP(K)=K\cup\{\infty\}$ (Lean: an inductive type with
+constructors \texttt{aff z} $=[z:1]$ and \texttt{infty} $=[1:0]$). Benedetto and Lee, \emph{J-Stability
+in non-archimedean dynamics}, arXiv:2102.05841, Section 2.1: ``Equivalently, in affine
+coordinates we have'' $\rho(z,w)=\frac{|z-w|}{\max\{1,|z|\}\max\{1,|w|\}}$, which equals $|z-w|$ if
+$z,w\in\mathcal{O}$, $|1/z-1/w|$ if $z,w\notin\mathcal{O}$, and $1$ otherwise; they add ``See
+[ Sil07 , Section 2.1] or [ B19 , Section 5.1] for more on the chordal metric.'' We use
+$\rho(z,w)=|z-w|/(M(z)M(w))$ with $M(z)=\max\{1,|z|\}$, $\rho(z,\infty)=1/M(z)$ and
+$\rho(\infty,\infty)=0$. The value at $\infty$ agrees with their case formula with $1/\infty=0$. We
+prove in Lean that $\rho$ is a metric (triangle inequality included); the topology and the uniform
+structure of $\PP(K)$ are the ones it induces.
+
+\textbf{Fatou and Julia sets.} Wikipedia, \emph{Arithmetic dynamics}
+(\url{https://en.wikipedia.org/wiki/Arithmetic_dynamics}): ``The metric on K and the standard
+definition of equicontinuity leads to the usual definition of the Fatou and Julia sets of a
+rational map'', and ``A striking difference is that in the nonarchimedean setting, the Fatou set is
+always nonempty, but the Julia set may be empty.'' Benedetto--Lee, Section 2: the type I Fatou set
+consists of points ``having a neighborhood on which the sequence of iterates'' ``is equicontinuous
+with respect to the chordal metric''. A periodic point with multiplier $|\lambda|>1$ ``is said to be
+repelling''. These definitions and quotes are reused from our package for conjecture 00000000745
+and were retrieved again for this package.
+
+\textbf{Rational functions and degree.} $\varphi\in K(z)$ is written $P/Q$ in lowest terms with $Q$
+monic (Mathlib \texttt{RatFunc.num}, \texttt{RatFunc.denom}). Wikipedia, \emph{Rational function}
+(\url{https://en.wikipedia.org/wiki/Rational_function}): ``Most commonly, the degree of a rational
+function is the maximum of the degrees of its constituent polynomials P and Q, when the fraction is
+reduced to lowest terms.'' Action on $\PP(K)$ (Lean \texttt{act}): $\varphi(a)=\infty$ if $Q(a)=0$,
+otherwise $P(a)/Q(a)$; $\varphi(\infty)$ is $\infty$, $0$, or the ratio of leading coefficients,
+according as $\deg P>\deg Q$, $\deg P<\deg Q$, or $\deg P=\deg Q$. For a polynomial $P$ of degree
+$\ge1$ this is $z\mapsto P(z)$, $\infty\mapsto\infty$ (Lean \texttt{act\_poly}).
+
+\textbf{Conventions.} (i) Equicontinuity is Mathlib's \texttt{EquicontinuousOn} /
+\texttt{EquicontinuousAt} for the family $(\varphi^{n})_{n\in\mathbb{N}}$, where $\varphi^0$ is the
+identity. (ii) In (J3), $x$ is periodic if $\varphi^{n}(x)=x$ for some $n\ge1$, not necessarily
+minimal. This only enlarges the set, and for $z/p$ we use $n=1$. (iii) The multiplier of
+$\varphi^{n}$ at an affine point $z$ is the derivative at $z$ of $w\mapsto\varphi^{n}(w)$, where the
+affine coordinate of $\infty$ is set to $0$; the derivative only depends on a neighbourhood. At
+$\infty$ it is the derivative at $0$ of the conjugate $w\mapsto 1/\varphi^{n}(1/w)$. For
+$\varphi(z)=z^2$ the $n$-th iterate is $w\mapsto w^{2^n}$ in both charts. For $\psi(z)=z/p$ the
+$n$-th iterate is $w\mapsto w/p^{n}$ in the affine chart and $w\mapsto p^{n}w$ in the chart at
+$\infty$; the repelling fixed point used below is the affine point $0$ with $n=1$, where the
+relevant map is $w\mapsto w/p$ (proved in Lean: \texttt{lin\_iterate}, \texttt{zero\_mem\_repelling\_lin}).
+(iv) The field $K$ is any nontrivially normed field with an ultrametric norm; we apply the results
+to $K=\Qp$ and $K=\Cp$ (Mathlib \texttt{Padic}, \texttt{PadicComplex}). The degree-$1$ part
+does not use the ultrametric inequality.
+
+\section{Proof}
+
+\begin{lemma}[\texttt{tri\_aff}, \texttt{tri\_inf\_right}, \texttt{tri\_inf\_left}, \texttt{tri\_inf\_mid}; MetricSpace instance]
+$\rho$ is a metric on $\PP(K)$.
+\end{lemma}
+\begin{proof}
+For affine $x,y,z$, $(x-z)y=(x-y)z+(y-z)x$ gives $|x-z||y|\le|x-y|M(z)+|y-z|M(x)$, and
+$|x-z|\le|x-y|+|y-z|$ gives the same bound for $|x-z|\cdot1$. Hence $|x-z|M(y)\le
+|x-y|M(z)+|y-z|M(x)$, which is the triangle inequality after dividing by $M(x)M(y)M(z)$. The cases
+involving $\infty$ reduce to $M(y)\le|x-y|+M(x)$ and $|x-z|\le M(x)+M(z)$.
+\end{proof}
+
+\begin{lemma}[\texttt{lipschitz\_sq}]
+For $\varphi(z)=z^2$, $\rho(\varphi(a),\varphi(b))\le\rho(a,b)$ for all $a,b\in\PP(K)$.
+\end{lemma}
+\begin{proof}
+$M(x^2)=M(x)^2$. For affine $x,y$: $|x^2-y^2|=|x-y||x+y|\le|x-y|\max\{|x|,|y|\}\le|x-y|M(x)M(y)$,
+by the ultrametric inequality, so $\rho(x^2,y^2)\le|x-y|M(x)M(y)/(M(x)^2M(y)^2)=\rho(x,y)$. Also
+$\rho(x^2,\infty)=1/M(x)^2\le1/M(x)$.
+\end{proof}
+
+\begin{theorem}[\texttt{fatouSet\_sq}, \texttt{juliaSet\_sq}, \texttt{juliaSetPt\_sq}, \texttt{repelling\_sq}, \texttt{juliaRep\_sq}]
+For $\varphi(z)=z^2$ (degree $2$, \texttt{deg\_sqFun}), $F=\PP(K)$, and the sets (J1), (J2), (J3) are empty.
+\end{theorem}
+\begin{proof}
+All iterates are $1$-Lipschitz, so the family is uniformly equicontinuous, which gives (J1) and (J2).
+For (J3): $\varphi^{n}(z)=z^{2^n}$. If $z$ is affine and $z^{2^n}=z$ with $n\ge1$, then $|z|\le1$
+(otherwise $|z|^{2^n}>|z|$), so the multiplier $2^n z^{2^n-1}$ has $|2^n z^{2^n-1}|\le1$, since
+integers have norm $\le1$ in an ultrametric field. At $\infty$ the conjugate is $w\mapsto w^{2^n}$,
+whose derivative at $0$ is $0$. So no periodic point is repelling, and the closure of the empty set
+is empty.
+\end{proof}
+
+\begin{theorem}[\texttt{not\_equicontinuousAt\_lin}, \texttt{zero\_mem\_juliaSet\_lin}, \texttt{zero\_mem\_juliaSetPt\_lin}, \texttt{zero\_mem\_repelling\_lin}, \texttt{zero\_mem\_juliaRep\_lin}]
+Let $c\in K$ with $0<|c|<1$ and $\psi(z)=c^{-1}z$ (degree $1$, \texttt{deg\_linFun}). Then the point
+$0$ lies in each of (J1), (J2), (J3) for $\psi$.
+\end{theorem}
+\begin{proof}
+$\psi^{n}(z)=c^{-n}z$. Put $x_n=c^n$. Then $\rho(x_n,0)=|c|^n\to0$, but
+$\rho(\psi^{n}(0),\psi^{n}(x_n))=\rho(0,1)=1$. So the iterates are not equicontinuous at $0$ (J2). A
+neighbourhood $U$ of $0$ on which they were equicontinuous would give equicontinuity at $0$, since
+$\mathcal{N}_U(0)=\mathcal{N}(0)$ (J1). Finally, $\psi(0)=0$ and the multiplier is $c^{-1}$, with
+$|c^{-1}|>1$. So $0$ is a repelling fixed point and lies in the closure of the repelling periodic
+points (J3).
+\end{proof}
+
+\begin{theorem}[\texttt{both\_directions\_fail}, \texttt{not\_conjecture}, \texttt{conjecture751\_false}, \texttt{conjecture751\_false\_Cp}]
+For every prime $p$ and each reading $J\in\{$J1, J2, J3$\}$, the conjecture ``for all
+$\varphi\in\Qp(z)$ with $\deg\varphi\ge1$: (A) and (B)'' is false. Moreover $z\mapsto z/p$ has degree
+$1$ and $J\ne\emptyset$, while $z\mapsto z^2$ has degree $2$ and $J=\emptyset$. The same holds with
+$\Cp$ in place of $\Qp$.
+\end{theorem}
+\begin{proof}
+Take $c=p$: $|p|_p=p^{-1}\in(0,1)$, and $|p|$ is the same in $\Cp$ (\texttt{PadicComplex.norm\_extends'}).
+If the conjecture held, applying it to $\psi$ (degree $1$, $0\in J(\psi)$) would give
+$\deg\psi\ge2$, a contradiction.
+\end{proof}
+
+Clause (A) is not examined: the conjunction already fails at clause (B), and it fails in both
+directions.
+
+\section{Lean formalization}
+
+File \texttt{lean/Conjecture751/Basic.lean} (Lean 4, Mathlib \texttt{v4.33.1}; its only import is
+\texttt{Mathlib}; 440 lines). Objects: \texttt{C751.P1}, \texttt{P1.chordal} with its
+\texttt{MetricSpace} instance, \texttt{act}, \texttt{deg}, \texttt{fatouSet}, \texttt{juliaSet} (J1),
+\texttt{juliaSetPt} (J2), \texttt{inv}, \texttt{mult}, \texttt{repelling}, \texttt{juliaRep} (J3),
+\texttt{Conjecture J}, \texttt{sqFun} $=X^2$, \texttt{linFun c} $=C(c^{-1})\cdot X$. In ASCII
+(\verb|~| is $\neg$, \verb|/\| is $\wedge$, \verb|Q_[p]| is $\Qp$):
+\begin{verbatim}
+def Conjecture (J : RatFunc K -> Set (P1 K)) : Prop :=
+  forall phi : RatFunc K, 1 <= deg phi ->
+    (IsOpen (J phi)^c /\ act phi ^-1' (J phi)^c = (J phi)^c /\
+       act phi '' (J phi)^c = (J phi)^c) /\
+    ((J phi).Nonempty <-> 2 <= deg phi)
+
+theorem conjecture751_false (p : Nat) [Fact p.Prime] :
+    (~ Conjecture (juliaSet (K := Q_[p])) /\
+      ~ Conjecture (juliaSetPt (K := Q_[p])) /\
+      ~ Conjecture (juliaRep (K := Q_[p]))) /\
+    (exists phi : RatFunc Q_[p], deg phi = 1 /\ (juliaSet phi).Nonempty /\
+      (juliaSetPt phi).Nonempty /\ (juliaRep phi).Nonempty) /\
+    (exists phi : RatFunc Q_[p], deg phi = 2 /\ juliaSet phi = {} /\
+      juliaSetPt phi = {} /\ juliaRep phi = {})
+\end{verbatim}
+\texttt{conjecture751\_false\_Cp} states the three negations and the degree-$2$ example for
+\texttt{RatFunc} over $\Cp$. The metric part (the triangle inequality and the chordal formulas) is
+our own work. The Fatou/Julia definitions follow the 00000000745 package (GPL-3.0), adapted from
+$\mathbb{Z}_2$ to $\PP(K)$.
+
+\textbf{Axiom audit.} \texttt{\#print axioms} for \texttt{C751.conjecture751\_false},
+\texttt{C751.conjecture751\_false\_Cp} and \texttt{C751.both\_directions\_fail} reports only
+\texttt{[propext, Classical.choice, Quot.sound]}. There is no \texttt{sorry}, no \texttt{native\_decide} and
+no added axiom. \texttt{lake build} succeeds.
+
+\end{document}
