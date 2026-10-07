@@ -1,0 +1,244 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{array}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{xurl}
+\let\oldus\_
+\renewcommand{\_}{\oldus\allowbreak}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\Out}{\operatorname{Out}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\vect}{\operatorname{vec}}
+\newcommand{\mat}{\operatorname{mat}}
+\newcommand{\conj}{\operatorname{conj}}
+
+\title{A disproof of Conjecture 00000001951\\[2pt]
+\large $\Out(F_n)$ has a normal subgroup of index $2$, so the smallest index of a proper subgroup
+is not $2^n\cdot C(n,2)$}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section{The conjecture}
+
+Conjecture 00000001951 reads (English version; the Chinese version states the same conjecture, also for
+$\Out(F_n)$):
+
+\begin{quote}
+\emph{Definition:} The congruence subgroup property (CSP) of $\Out(F_n)$ is the coincidence of its
+congruence subgroups with all finite-index subgroups.
+\emph{Conjecture:} $\Out(F_n)$ ($n\ge 3$) fails CSP (its smallest-index proper subgroup is an automorphism
+kernel); the smallest index of a proper subgroup is $2^n\cdot C(n,2)$.
+\end{quote}
+
+\paragraph{Reading.} Here $C(n,2)=\binom{n}{2}$. The conjecture is the conjunction of two clauses, for
+every $n\ge 3$:
+\begin{enumerate}[label=(\alph*)]
+  \item $\Out(F_n)$ fails CSP (with the parenthetical remark that its smallest-index proper subgroup is an
+        automorphism kernel);
+  \item the smallest index of a proper subgroup of $\Out(F_n)$ is $2^n\cdot C(n,2)$.
+\end{enumerate}
+We refute clause (b) for every $n\ge 3$ (indeed for every $n\ge 2$), which refutes the conjunction. We do
+\textbf{not} address clause (a): whether $\Out(F_n)$, $n\ge 3$, has the congruence subgroup property is
+open, and the refutation below does not depend on it in any way.
+
+``Proper subgroup'' is read as a proper subgroup of finite index ($H\ne\Out(F_n)$ and
+$[\Out(F_n):H]<\infty$), since only these have an index that is a positive integer. (Admitting
+infinite-index subgroups, with index $\infty$, would not change a minimum that is attained at a finite
+value.) The index-$2$ subgroup we exhibit is moreover \emph{normal}, so the reading ``smallest index of a
+proper normal subgroup'' is refuted as well. The statement is about $\Out(F_n)$ in both the English and the
+Chinese versions, so we do not treat the special outer automorphism group $\mathrm{SOut}(F_n)$ or any other
+subgroup in place of $\Out(F_n)$. (The subgroup $K$ constructed below is the one usually denoted $\mathrm{SOut}(F_n)$, the image of
+$\mathrm{SAut}(F_n)$ in $\Out(F_n)$; this identification is not used.)
+
+\section{Conventions}
+
+These are the standard definitions, and they are exactly the ones used in the Lean file.
+\begin{itemize}
+  \item $F_n$ is the free group on $x_0,\dots,x_{n-1}$ (Lean \texttt{FreeGroup (Fin n)}); $\Aut(F_n)$ is its
+        group of automorphisms (Lean \texttt{MulAut (F n)}), with multiplication $\varphi\psi=\varphi\circ\psi$.
+  \item $\Inn(F_n)$ is the range of the homomorphism $g\mapsto\conj_g$, $\conj_g(x)=gxg^{-1}$
+        (Lean \texttt{MulAut.conj}); it is normal (Lemma~\ref{lem:inn}), and
+        $\Out(F_n)=\Aut(F_n)/\Inn(F_n)$.
+  \item The abelianization $F_n\to F_n^{ab}\cong\Z^n$ is realised concretely as the exponent-sum
+        homomorphism $\vect:F_n\to\Z^n$, $x_i\mapsto e_i$ (the $i$-th standard basis vector), so
+        $\vect(xy)=\vect x+\vect y$ and $\vect(x^{-1})=-\vect x$.
+  \item For $\varphi\in\Aut(F_n)$, $\mat\varphi$ is the integer $n\times n$ matrix whose $j$-th column is
+        $\vect(\varphi(x_j))$, i.e.\ $(\mat\varphi)_{ij}=\vect(\varphi(x_j))_i$.
+  \item Mathlib's \texttt{Subgroup.index} is $0$ for a subgroup of infinite index. All our statements about
+        proper subgroups require finite index (\texttt{FiniteIndex}, i.e.\ index $\ne 0$), so nothing relies
+        on that convention. Likewise \texttt{sInf} of a set of natural numbers is its least element when the
+        set is nonempty, which is the case here.
+\end{itemize}
+
+\section{The proof}
+
+\begin{lemma}[Lean \texttt{Inn.normal}]\label{lem:inn}
+$\Inn(F_n)$ is a normal subgroup of $\Aut(F_n)$.
+\end{lemma}
+\begin{proof}
+For $\psi\in\Aut(F_n)$ and $g\in F_n$: $\psi\,\conj_g\,\psi^{-1}(x)=\psi(g\,\psi^{-1}(x)\,g^{-1})
+=\psi(g)\,x\,\psi(g)^{-1}$, so $\psi\,\conj_g\,\psi^{-1}=\conj_{\psi(g)}\in\Inn(F_n)$.
+\end{proof}
+
+\begin{lemma}[Lean \texttt{vec\_apply}]\label{lem:vec}
+For $\varphi\in\Aut(F_n)$ and $w\in F_n$: $\vect(\varphi(w))=\mat(\varphi)\,\vect(w)$.
+\end{lemma}
+\begin{proof}
+Induction on words. For $w=1$ both sides are $0$. For $w=x_j$, $\mat(\varphi)\,e_j$ is the $j$-th column
+$\vect(\varphi(x_j))$. For $w=x_j^{-1}$, $\vect(\varphi(x_j^{-1}))=-\vect(\varphi(x_j))=-\mat(\varphi)e_j
+=\mat(\varphi)\vect(x_j^{-1})$. For $w=xy$, both sides are additive in $w$ ($\varphi$ and $\vect$ are
+homomorphisms, matrix-vector multiplication is linear).
+\end{proof}
+
+\begin{lemma}[Lean \texttt{mat\_one}, \texttt{mat\_mul}]\label{lem:mul}
+$\mat(1)=I$ and $\mat(\varphi\psi)=\mat(\varphi)\mat(\psi)$.
+\end{lemma}
+\begin{proof}
+The $j$-th column of $\mat(1)$ is $\vect(x_j)=e_j$. The $j$-th column of $\mat(\varphi\psi)$ is
+$\vect(\varphi(\psi(x_j)))=\mat(\varphi)\,\vect(\psi(x_j))$ by Lemma~\ref{lem:vec}, which is
+$\mat(\varphi)$ times the $j$-th column of $\mat(\psi)$.
+\end{proof}
+
+Hence $\mat:\Aut(F_n)\to M_n(\Z)$ is a monoid homomorphism (\texttt{matHom}), and so is
+$\det\circ\mat:\Aut(F_n)\to(\Z,\cdot)$. Since $\Aut(F_n)$ is a group, its image consists of units, giving a
+group homomorphism $\mathrm{detHom}:\Aut(F_n)\to\Z^\times=\{\pm1\}$ with value $\det(\mat\varphi)$ (Lean
+\texttt{detHom} via \texttt{MonoidHom.toHomUnits}, and \texttt{detHom\_val}).
+
+\begin{lemma}[Lean \texttt{mat\_conj}, \texttt{Inn\_le\_ker}]\label{lem:conj}
+$\mat(\conj_g)=I$ for every $g\in F_n$. Hence $\Inn(F_n)\le\ker(\mathrm{detHom})$, and $\mathrm{detHom}$
+factors through a homomorphism $\mathrm{outDet}:\Out(F_n)\to\Z^\times$, $[\varphi]\mapsto\det(\mat\varphi)$
+(Lean \texttt{outDet}, via \texttt{QuotientGroup.lift}).
+\end{lemma}
+\begin{proof}
+$\vect(g x_j g^{-1})=\vect g+e_j-\vect g=e_j$, so every column of $\mat(\conj_g)$ is the corresponding
+column of $I$, and $\det I=1$.
+\end{proof}
+
+\begin{lemma}[Lean \texttt{flip}, \texttt{mat\_flip}, \texttt{det\_flip}]\label{lem:flip}
+Fix $i_0$ with $0\le i_0<n$. The endomorphism $f_{i_0}$ of $F_n$ with $x_{i_0}\mapsto x_{i_0}^{-1}$ and
+$x_i\mapsto x_i$ ($i\ne i_0$) is an involution, hence an automorphism; $\mat(f_{i_0})$ is the diagonal
+matrix with entry $-1$ at $i_0$ and $1$ elsewhere, and $\det\mat(f_{i_0})=-1$.
+\end{lemma}
+\begin{proof}
+$f_{i_0}\circ f_{i_0}$ fixes every generator, so it is the identity, and $f_{i_0}$ is its own inverse. The
+$j$-th column of $\mat(f_{i_0})$ is $\vect(x_{i_0}^{-1})=-e_{i_0}$ for $j=i_0$ and $\vect(x_j)=e_j$
+otherwise. The determinant of a diagonal matrix is the product of its diagonal entries, here $-1$.
+\end{proof}
+
+\begin{lemma}[Lean \texttt{outDet\_surjective}]\label{lem:surj}
+If $n\ge 1$, then $\mathrm{outDet}:\Out(F_n)\to\Z^\times$ is surjective.
+\end{lemma}
+\begin{proof}
+$\Z^\times=\{1,-1\}$. We have $\mathrm{outDet}(1)=1$, and since $n\ge1$ the generator $x_0$ exists, so
+$\mathrm{outDet}([f_0])=\det\mat(f_0)=-1$ by Lemma~\ref{lem:flip}.
+\end{proof}
+
+\begin{theorem}[Lean \texttt{K\_index}, \texttt{exists\_normal\_index\_two}]\label{thm:K}
+Let $n\ge 1$ and $K=\ker(\mathrm{outDet})\le\Out(F_n)$. Then $K$ is a proper normal subgroup of
+$\Out(F_n)$ of index exactly $2$.
+\end{theorem}
+\begin{proof}
+$K$ is normal as a kernel. By the first isomorphism theorem and Lemma~\ref{lem:surj},
+$\Out(F_n)/K\cong\Z^\times$, so $[\Out(F_n):K]=|\Z^\times|=2$. Since the whole group has index $1\ne 2$,
+$K\ne\Out(F_n)$.
+\end{proof}
+
+\begin{theorem}[Lean \texttt{sInf\_properIndices}]\label{thm:min}
+For $n\ge 1$ let $\mathrm{properIndices}(n)=\{[\Out(F_n):H] : H\ne\Out(F_n),\ [\Out(F_n):H]<\infty\}$. Then
+its least element is $2$.
+\end{theorem}
+\begin{proof}
+$2$ belongs to the set by Theorem~\ref{thm:K}. Conversely, if $H$ is proper of finite index, then its index
+is a positive integer, and it is not $1$ because a subgroup of index $1$ is the whole group; so the index is
+at least $2$.
+\end{proof}
+
+\begin{lemma}[Lean \texttt{two\_lt}]\label{lem:two}
+For $n\ge 2$: $2<2^n\cdot C(n,2)$.
+\end{lemma}
+\begin{proof}
+$2^n\ge 2^2=4$ and $C(n,2)\ge 1$, so $2^n\cdot C(n,2)\ge 4>2$.
+\end{proof}
+
+\begin{theorem}[Lean \texttt{smallest\_index\_ne}, \texttt{not\_all\_index\_ge}]\label{thm:main}
+For every $n\ge 3$, the smallest index of a proper (finite-index) subgroup of $\Out(F_n)$ is $2$, which is
+different from $2^n\cdot C(n,2)$. Equivalently, not every proper finite-index subgroup of $\Out(F_n)$ has
+index at least $2^n\cdot C(n,2)$. Hence clause (b), and with it the conjecture, is false.
+\end{theorem}
+\begin{proof}
+Theorem~\ref{thm:min} gives the minimum $2$, and Lemma~\ref{lem:two} gives $2<2^n\cdot C(n,2)$. The subgroup
+$K$ of Theorem~\ref{thm:K} is a proper finite-index subgroup of index $2<2^n\cdot C(n,2)$.
+\end{proof}
+
+\begin{remark}
+For $n=3$ the conjectured value is $2^3\cdot C(3,2)=8\cdot 3=24$, whereas $\Out(F_3)$ has the proper
+normal subgroup $K$ of index $2$. Since $K$ is normal and every proper finite-index subgroup has index at
+least $2$, the minimum is also $2$ under the reading ``proper normal subgroup''. The argument uses only the
+action on $F_n^{ab}\cong\Z^n$ and is valid for every $n\ge 1$; the hypothesis $n\ge 2$ is needed only for
+$2<2^n\cdot C(n,2)$ (for $n=1$ the right side is $0$).
+\end{remark}
+
+\section{Lean 4 formalization}
+
+The directory \texttt{lean/} contains a Lean~4 project (Lean \texttt{v4.33.1}, Mathlib \texttt{v4.33.1}).
+The single source file \texttt{Conjecture1951/Basic.lean} (namespace \texttt{C1951}) defines
+\texttt{F n := FreeGroup (Fin n)}, \texttt{Inn n := (MulAut.conj).range},
+\texttt{Out n := MulAut (F n) / Inn n} (quotient group), the exponent-sum map \texttt{vec}, the
+matrix \texttt{mat}, the characters \texttt{detHom} and \texttt{outDet}, the automorphism \texttt{flip},
+\texttt{K n := (outDet n).ker}, and
+\[
+  \texttt{properIndices n} := \{k \mid \exists H : \texttt{Subgroup (Out n)},\ H\ne\top\ \wedge\
+  \texttt{H.FiniteIndex}\ \wedge\ \texttt{H.index} = k\}.
+\]
+Main results:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.30\textwidth}|>{\raggedright\arraybackslash}p{0.62\textwidth}}
+Lean name & Statement \\ \hline
+\texttt{Inn.normal} & instance: \texttt{(Inn n).Normal} \\
+\texttt{vec\_apply} & $\vect(\varphi\,w)=\mat\varphi\cdot\vect w$ (matrix-vector product \texttt{mulVec}) \\
+\texttt{mat\_mul} & $\mat(\varphi\psi)=\mat\varphi\cdot\mat\psi$ (and \texttt{mat\_one}: $\mat 1=1$) \\
+\texttt{mat\_conj} & $\mat(\texttt{MulAut.conj}\ g)=1$ \\
+\texttt{outDet} & definition: \texttt{Out n $\to$* $\Z^\times$}, the lift of \texttt{detHom} through
+  \texttt{Inn\_le\_ker : Inn n $\le$ (detHom n).ker} \\
+\texttt{det\_flip} & $\det(\mat(\texttt{flip}\ i_0))=-1$ (via \texttt{mat\_flip}: diagonal, $-1$ at $i_0$,
+  $1$ elsewhere) \\
+\texttt{outDet\_surjective} & $1\le n\to$ \texttt{Function.Surjective (outDet n)} \\
+\texttt{K\_index} & $1\le n\to$ \texttt{(K n).index = 2} \\
+\texttt{exists\_normal\_index\_two} & $1\le n\to\exists H$ \texttt{: Subgroup (Out n)},
+  \texttt{H.Normal} $\wedge$ $H\ne\top$ $\wedge$ \texttt{H.index = 2} \\
+\texttt{sInf\_properIndices} & $1\le n\to$ \texttt{sInf (properIndices n) = 2} \\
+\texttt{two\_lt} & $2\le n\to 2<2^n\cdot$\texttt{n.choose 2} \\
+\texttt{smallest\_index\_ne} & $3\le n\to$ \texttt{sInf (properIndices n)} $\ne 2^n\cdot$\texttt{n.choose 2} \\
+\texttt{not\_all\_index\_ge} & $3\le n\to\neg\,\forall H$ \texttt{: Subgroup (Out n)}, $H\ne\top\to$
+  \texttt{H.FiniteIndex} $\to 2^n\cdot$\texttt{n.choose 2} $\le$ \texttt{H.index} \\
+\end{tabular}
+\end{center}
+
+There is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom. \texttt{\#print axioms} for
+\texttt{smallest\_index\_ne}, \texttt{not\_all\_index\_ge}, \texttt{sInf\_properIndices} and
+\texttt{exists\_normal\_index\_two} reports only \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}. To check:
+\begin{verbatim}
+cd lean
+lake exe cache get
+lake build
+\end{verbatim}
+
+\end{document}
