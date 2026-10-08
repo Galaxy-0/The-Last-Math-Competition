@@ -1,0 +1,116 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\title{Extremal Betti Corners Form an Antichain}
+\author{Source-faithful proof draft for conjecture 00000000508}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+
+The source states that the extremal positions of $\beta_{k,k+d}$ for a
+monomial ideal form an antichain. We use the standard Betti-diagram
+coordinates $(k,d)$: $k$ is homological degree and $d$ is total degree
+minus homological degree. The order is coordinatewise. Signed $d\in\Z$
+is allowed throughout.
+
+Let $\beta:\N\times\Z\longrightarrow\N$ be any numerical table. No
+finiteness, resolution, or support hypothesis is imposed. We use the
+definition in Bayer--Charalambous--Popescu~\cite{BCP}: an entry at the raw
+indices $(i,j)$ is extremal when $\beta_{i,j}\ne0$ and
+\[
+ \beta_{l,r}=0\quad\text{for every }l\ge i,\quad r\ge j+1,
+ \quad r-l\ge j-i.
+\]
+Write $\operatorname{Ext}(\beta)$ for the set of shifted positions
+$(k,d)$ at which the raw entry $\beta_{k,k+d}$ is extremal, and put
+\[
+ P_\beta=\{(k,d)\in\N\times\Z:\beta_{k,k+d}\ne0\}.
+\]
+
+\begin{lemma}\label{lem:maximal}
+For every numerical table $\beta$ and every $p=(k,d)$,
+$p\in\operatorname{Ext}(\beta)$ if and only if $p$ is a maximal
+element of $P_\beta$ in the coordinatewise order.
+\end{lemma}
+\begin{proof}
+Suppose that $p$ is extremal and $q=(l,u)\in P_\beta$ satisfies
+$p\le q$. Thus $l\ge k$ and $u\ge d$. If $q\ne p$, at least one
+of these inequalities is strict. Since both coordinates are integral,
+$l+u\ge k+d+1$. Taking $r=l+u$, the extremality conditions hold:
+$l\ge k$, $r\ge(k+d)+1$, and $r-l=u\ge d$. They force
+$\beta_{l,l+u}=0$, contradicting $q\in P_\beta$. Therefore $q=p$,
+so $p$ is maximal.
+
+Conversely, suppose that $p$ is maximal in $P_\beta$. In particular,
+$\beta_{k,k+d}\ne0$. Let $l,r$ satisfy the three vanishing-region
+conditions for the raw index $(k,k+d)$. If $\beta_{l,r}\ne0$, then
+$q=(l,r-l)\in P_\beta$ and $p\le q$. Maximality gives $q\le p$,
+so $q=p$. This implies $r=k+d$, contradicting $r\ge k+d+1$.
+Consequently $\beta_{l,r}=0$, as required.
+\end{proof}
+
+\begin{theorem}\label{thm:antichain}
+For every numerical table $\beta:\N\times\Z\to\N$,
+$\operatorname{Ext}(\beta)$ is an antichain in $\N\times\Z$ with
+the coordinatewise order.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:maximal}, its elements are precisely the maximal
+elements of $P_\beta$. If two such elements $p,q$ satisfy $p\le q$,
+maximality of $p$ gives $q\le p$, hence $p=q$. This excludes
+comparability of distinct elements.
+\end{proof}
+
+\begin{corollary}\label{cor:decrease}
+If $(k,d)$ and $(l,u)$ are extremal positions and $k<l$, then $u<d$.
+\end{corollary}
+\begin{proof}
+If instead $d\le u$, then $(k,d)\le(l,u)$, contradicting
+Theorem~\ref{thm:antichain} because their homological degrees differ.
+\end{proof}
+
+The graded Betti numbers of any monomial ideal give a numerical table
+of the type in Theorem~\ref{thm:antichain}. Substitution therefore gives
+the source's antichain assertion with no additional algebraic premise.
+The Lean proof deliberately establishes this universal numerical fact;
+it does not construct a particular ideal or assume that its extremal
+support is an antichain.
+
+\paragraph{Coordinate clarification.}
+The conclusion concerns $(k,d)$ for $\beta_{k,k+d}$. It does not assert
+the same product-order claim for raw indices $(k,j)$. For example, the
+numerical table with only $\beta_{0,2}=\beta_{1,2}=1$ nonzero has two
+extremal raw entries comparable at $(0,2)\le(1,2)$. Their shifted
+positions $(0,2)$ and $(1,1)$ are incomparable. This example is only
+a coordinate diagnostic; it is not asserted to be the Betti table of
+a monomial ideal. The source does not explicitly spell out the order,
+so acceptance requires independent review of the standard shifted
+coordinate interpretation.
+
+\paragraph{Formal verification scope.}
+The corresponding Lean declarations are listed individually to keep their
+names legible:
+\begin{itemize}
+\item \texttt{TLMC508.rawExtremal\_iff\_maximal\_shiftedSupport}
+\item \texttt{TLMC508.extremal\_positions\_antichain}
+\item \texttt{TLMC508.shifted\_degree\_strictly\_decreases}
+\end{itemize}
+Local compilation and an axiom audit are worker evidence. Deterministic
+package checks and source-bound semantic acceptance remain with the manager
+and independent reviewer. This document is an unaccepted source draft.
+
+\begin{thebibliography}{1}
+\bibitem{BCP}
+D. Bayer, H. Charalambous, and S. Popescu,
+\emph{Extremal Betti Numbers and Applications to Monomial Ideals},
+Manuscript, arXiv:math/9804052.
+Primary definition in the introduction, p.~1 of the manuscript:
+\url{https://www.math.columbia.edu/~bayer/papers/Betti_BCP99/Betti_BCP99.pdf}.
+\end{thebibliography}
+\end{document}
