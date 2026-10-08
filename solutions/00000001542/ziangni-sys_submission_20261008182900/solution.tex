@@ -1,0 +1,32 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\title{Disproof of Conjecture 00000001542\\The literal finite-set bound fails on a triangle}
+\author{ziangni-sys}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+Both source versions claim that every $n$-point set has a point determining at least $n^{0.687}$ distinct distances. There is no multiplicative constant or sufficiently-large qualification. The literal coefficient-one finite-set bound is false.
+
+In the actual Euclidean plane, take the three points
+\[
+ A=(0,0),\quad B=(1,0),\quad C=\left(\tfrac12,\tfrac{\sqrt3}{2}\right).
+\]
+They are distinct and all three pairwise distances equal $1$, since
+\[
+ |A-B|^2=1,\qquad |A-C|^2=|B-C|^2=\tfrac14+\tfrac34=1.
+\]
+At each pin in $\{A,B,C\}$, the distance set including the distance to the pin itself is exactly $\{0,1\}$, hence has cardinality $2$. Excluding zero would only reduce this cardinality to $1$.
+
+For the exact exponent $0.687=687/1000$, we have
+\[
+ \frac{687}{1000}>\frac23,\qquad 3^{2/3}>2,
+ \qquad 3^{687/1000}>2.
+\]
+The middle inequality follows by cubing both positive sides: $(3^{2/3})^3=9>8=2^3$. Increasing the exponent of the base $3>1$ then proves the final strict inequality. Thus no point of this three-point set determines as many as $3^{0.687}$ distances, even with zero included. This disproves the stated bound.
+
+This counterexample does not disprove an asymptotic $\Omega(n^{0.687})$ claim, a lower bound with a smaller multiplicative constant, or a sufficiently-large-$n$ formulation. Those are different statements. It establishes the negation of the literal assertion appearing in both original versions.
+
+\paragraph{Formal verification.}
+Lean uses the actual Euclidean space $\mathbb R^2$, the displayed vertices, Euclidean distances and finite sets of their actual distance values. It proves the complete distance formula, vertex injectivity and cardinality three, the pinned cardinality bound two, the exact real-power inequality and the contradiction to the universal stated bound. All six final printed axiom audits use only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
+\end{document}
