@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\title{Disproof of Conjecture 00000002697\\Pointwise Jacobian spectra miss tangent growth}
+\author{ziangni-sys}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+The logarithmic average of the pointwise Jacobian eigenvalues need not equal the Lyapunov exponent of the actual tangent evolution. A polynomial map of the affine plane provides a concrete counterexample; no independent cocycle certificate is assumed.
+
+Define the actual map
+\[
+ F(x,y)=\bigl(1+x-6x^2+4x^3+(1-x)y,\ x^3-x^2+y\bigr).
+\]
+It has a two-cycle $p_0=(0,0)$ and $p_1=(1,0)$, since $F(p_0)=p_1$ and $F(p_1)=p_0$. Its true derivative is
+\[
+ DF(x,y)=\begin{pmatrix}
+ 1-12x+12x^2-y&1-x\\3x^2-2x&1
+ \end{pmatrix}.
+\]
+Consequently the Jacobians along the orbit alternate between
+\[
+ A=DF(p_0)=\begin{pmatrix}1&1\\0&1\end{pmatrix},\qquad
+ B=DF(p_1)=\begin{pmatrix}1&0\\1&1\end{pmatrix}.
+\]
+Each complex spectrum is exactly $\{1\}$: in both cases $\det(zI-DF)=(z-1)^2$. Thus every choice of pointwise Jacobian eigenvalues, and their logarithmic norm average along this orbit, gives zero.
+
+However, $BA=\left(\begin{smallmatrix}1&1\\1&2\end{smallmatrix}\right)$ has an expanding eigenvalue
+\[
+ \rho=\frac{3+\sqrt5}{2}>2,\qquad \rho^2-3\rho+1=0.
+\]
+Let $v=(1,\rho-1)$ and $w=Av=(\rho,\rho-1)$. The actual tangent evolution $v_0=v$, $v_{n+1}=DF(p_n)v_n$ satisfies
+\[
+ Bw=\rho v,\qquad v_{2m}=\rho^m v,\qquad v_{2m+1}=\rho^m w.
+\]
+These identities follow from the actual derivative and orbit recurrence. The Zariski tangent spaces of the smooth affine plane are its usual two-dimensional tangent spaces, so this example also applies to the tangent-space wording of the source.
+
+Use the maximum norm on the real plane. Then $\|v\|=\rho-1$ and $\|w\|=\rho$, both positive. For every $n$,
+\[
+ \log\|v_n\|=\left\lfloor\frac n2\right\rfloor\log\rho+r_n,
+ \qquad r_n\in\{\log(\rho-1),\log\rho\}.
+\]
+The remainder is bounded, while $\lfloor n/2\rfloor/n\to1/2$. Therefore the actual Lyapunov limit, along all iteration counts rather than just the even subsequence, is
+\[
+ \lim_{n\to\infty}\frac{\log\|v_n\|}{n}
+ =\frac{\log\rho}{2}>0.
+\]
+This contradicts the pointwise spectral logarithmic average zero. In finite dimension changing the norm does not change this limit. Noncommuting products must be accounted for; pointwise eigenvalues alone do not determine tangent-vector growth. Here ``Jacobi spectrum'' is interpreted in its usual sense as the Jacobian eigenvalue spectrum. The separate symmetry-group assertion is not needed for the disproof.
+
+\paragraph{Formal verification.}
+Lean verifies the actual polynomial derivative, the two-cycle recurrence, the complete complex matrix spectrum at every orbit point, actual tangent iteration formulas, its logarithmic growth and the limit for all $n$, positivity of the resulting exponent, and zero logarithmic averages for every actual pointwise spectral selection. All nine final printed axiom audits use only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
+\end{document}
