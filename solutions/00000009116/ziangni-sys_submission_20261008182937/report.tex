@@ -1,0 +1,70 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{proposition}{Proposition}
+\title{An even spherical-harmonic mode survives the Radon transform}
+\author{Conjecture 00000009116}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Result.} The asserted vanishing at even degrees fails for the hyperplane Radon transform defined in the source. The radial Gaussian has spherical-harmonic degree zero and strictly positive Radon transform in every normal direction and at every finite offset.
+
+\section*{The genuine hyperplane integral}
+Work in the Euclidean plane. For an angle $\theta$ let
+\[
+ \omega_\theta=(\cos\theta,\sin\theta),\qquad
+ v_\theta=(-\sin\theta,\cos\theta).
+\]
+These vectors are orthonormal. The line with unit normal $\omega_\theta$ and signed offset $s$ has unit-speed parametrization
+\[
+ x(t)=s\omega_\theta+t v_\theta
+ =(s\cos\theta-t\sin\theta,\ s\sin\theta+t\cos\theta).
+\]
+Thus Lebesgue measure $dt$ is Euclidean arclength and the ordinary Radon transform is
+\[
+ Rf(\theta,s)=\int_{\mathbb R} f(s\omega_\theta+t v_\theta)\,dt.
+\]
+Take the smooth, rapidly decreasing function
+\[
+ f(x,y)=e^{-(x^2+y^2)}.
+\]
+Orthogonality gives $|s\omega_\theta+t v_\theta|^2=s^2+t^2$, so the actual integral evaluates to
+\[
+ Rf(\theta,s)=e^{-s^2}\int_{\mathbb R}e^{-t^2}\,dt
+ =\sqrt\pi\,e^{-s^2}>0.
+\]
+All slices are integrable. In particular $Rf(\theta,0)=\sqrt\pi$ for every direction. No spectral multiplier is assigned or assumed in this calculation.
+
+\section*{The angular degree is genuinely even}
+The constant polynomial $H(x,y)=1$ is nonzero, homogeneous of degree zero and harmonic: $\partial_x^2H+\partial_y^2H=0$. Its restriction to the unit circle is the constant spherical harmonic $Y_0(\theta)=1$. In polar coordinates,
+\[
+ f(r\cos\theta,r\sin\theta)=e^{-r^2}Y_0(\theta).
+\]
+Hence the input lies entirely in angular degree zero, an even degree. The output is also independent of $\theta$ and nonzero, so this even mode survives.
+
+\newpage
+\begin{proposition}
+Even angular degree is not an annihilation criterion for the planar hyperplane Radon transform. A nonzero degree-zero input mode has nonzero degree-zero output at every finite offset.
+\end{proposition}
+\begin{proof}
+The radial Gaussian and the explicit integral above establish both assertions.
+\end{proof}
+
+\section*{Scope and the parity distinction}
+Both source versions define the Radon transform by integration over hyperplanes and assert vanishing at even degrees. Under the literal spherical-harmonic annihilation interpretation, degree zero already contradicts this assertion; no exception for degree zero is stated. The example uses the actual Radon transform on the Euclidean plane, where hyperplanes are lines, and actual harmonic polynomial data.
+
+The phrase ``support spectrum of the Radon kernel'' is not otherwise defined in the conjecture. This submission identifies the precise asserted consequence being refuted: annihilation of even spherical-harmonic modes. It does not claim a general classification for an unspecified alternative meaning of that phrase.
+
+Angular degree must also be distinguished from the symmetry of the signed offset. Hyperplane coordinates have the redundancy
+$R f(\theta+\pi,-s)=Rf(\theta,s)$; this does not imply that even angular degrees vanish. The displayed output satisfies that redundancy and remains positive. Nor should the hyperplane transform here be replaced by a spherical great-circle or Funk transform, which is a different operator with a different parity discussion. The proof needs no such replacement.
+
+\section*{Formal verification}
+The accompanying Lean development defines the actual line parametrization and Lebesgue integral. It proves the normal is a unit vector, verifies that every parametrized point lies on the correct line, computes the unit tangent speed, and proves the squared-radius identity. Mathlib's Gaussian integral then gives the exact transform for every angle and every offset, together with integrability and positivity.
+
+The angular factor is obtained by evaluating the actual constant multivariable polynomial. Its total degree is proved to be zero, homogeneity is checked, and the two partial second derivatives giving the Laplacian vanish. The formal Gaussian angular-mode identity and the angle-independent output link this harmonic data to the integral. The theorem \texttt{even\_degree\_survives} assembles the counterexample, while \texttt{radon\_not\_zero} rules out identically zero output.
+
+Run \texttt{lake build} in \texttt{lean/} with Lean 4.19.0. Mathlib is pinned to
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+The principal theorem audits use only standard logical axioms. The proof has no extra assumptions or unproved transform identities.
+\end{document}
