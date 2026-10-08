@@ -1,0 +1,85 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,geometry,hyperref}
+\geometry{margin=1in}
+\title{A singular solvable free Pick problem\\Disproof of Conjecture 00000002352}
+\author{ziangni-sys}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\paragraph{Claim and scope.}
+The conjecture identifies solvability of free Nevanlinna--Pick interpolation
+on the matrix ball with positive definiteness of its free Pick matrix.
+The Chinese version also says positive definite (rather than positive
+semidefinite). This strict requirement is false. We give distinct nodes
+and strictly interior target values, so no boundary target is involved.
+We use the standard Schur-class condition of multiplier norm at most one.
+No uniform norm strictly less than one is required in the conjecture.
+
+\paragraph{The genuine free interpolant.}
+Take the one-variable free matrix ball
+\[
+ \mathfrak B_1=\coprod_{n\geq1}\{X\in M_n(\mathbb C):\|X\|_{\mathrm{op}}<1\}.
+\]
+The free polynomial $F(X)=X$ is defined at every matrix size. It is
+analytic, respects direct sums and similarities, and even respects every
+intertwiner: $SX=YS$ implies $SF(X)=F(Y)S$. Moreover
+$\|F(X)\|_{\mathrm{op}}=\|X\|_{\mathrm{op}}<1$ throughout the open ball.
+Its multiplier on one-variable Fock space is the unilateral shift,
+an isometry, so its multiplier norm is one. Thus it is a legitimate
+contractive free Schur interpolant, including pointwise strict contractivity.
+If the free ball has a prescribed number $d>1$ of coordinates, use
+$F(X)=X_1$ and nodes $(0,\ldots,0)$ and $(1/2,0,\ldots,0)$ instead;
+the same calculation applies.
+
+\paragraph{Data and the actual kernel.}
+At scalar level choose $z_1=0$, $z_2=1/2$ and prescribe
+$w_1=0$, $w_2=1/2$. These are distinct interior nodes and interior
+targets, and $F(z_i)=w_i$. The free Szeg\H{o} kernel in one variable is
+\[
+ K(Z,W)[P]=\sum_{k\geq0}Z^kP(W^*)^k.
+\]
+At scalar level its coefficient is the convergent geometric series
+$K(z,\zeta)=\sum_{k\geq0}(z\overline\zeta)^k
+=(1-z\overline\zeta)^{-1}$. Consequently the actual Pick matrix is
+\[
+ P_{ij}=(1-w_i\overline{w_j})K(z_i,z_j)
+       =\frac{1-z_i\overline{z_j}}{1-z_i\overline{z_j}}=1,
+ \qquad
+ P=\begin{pmatrix}1&1\\1&1\end{pmatrix}.
+\]
+All denominators are nonzero (they are $1$ or $3/4$).
+For the nonzero vector $v=(1,-1)^T$, $Pv=0$, hence $v^*Pv=0$.
+The matrix is not positive definite, even though the interpolation is
+solvable. It is positive semidefinite, since
+$u^*Pu=|u_1+u_2|^2\geq0$.
+
+\paragraph{Conclusion and interpretation.}
+This disproves the positive-definite necessity asserted in the first
+conjunct; no disproof of the Szeg\H{o}-kernel identification is needed.
+Positive semidefiniteness (or complete positivity in the operator-valued
+formulation) is the usual non-strict Schur-class criterion. If
+``positive definite'' were intended as terminology for nonnegative
+kernels, the statement would need that clarification; our disproof
+addresses the strict matrix meaning stated in both languages.
+Requiring a uniformly strictly contractive multiplier would change the
+problem and exclude this extremal interpolant.
+
+\paragraph{Formal verification.}
+The Lean project uses complex Euclidean spaces and continuous linear
+endomorphisms, with their operator norm, to verify analyticity,
+contractivity and nc intertwining at every size. It also verifies the
+Szeg\H{o} geometric-series identity, interior distinct scalar nodes,
+interpolation, all four Pick entries, and failure of
+\texttt{Matrix.PosDef} using the exhibited nonzero vector.
+The finite matrix data are an allowed level of the free problem;
+the interpolant is defined on every level. No scalar surrogate is
+assumed in place of the free function.
+
+\paragraph{Reference.}
+J. A. Ball, G. Marx and V. Vinnikov, \emph{Interpolation and
+transfer-function realization for the noncommutative Schur--Agler class},
+\href{https://arxiv.org/abs/1602.00762}{arXiv:1602.00762}.
+This is background for the standard complete-positivity formulation;
+the counterexample and kernel calculation above are self-contained.
+\end{document}
