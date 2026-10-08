@@ -1,0 +1,68 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\begin{document}
+\begin{center}{\Large Magnetic degeneracy persists on a connected star}\\[4pt]
+Disproof of conjecture 00000003721\\[4pt]
+ziangni-sys --- October 8, 2026\end{center}
+
+Take the connected simple graph $K_{1,3}$ with center $0$, leaves $1,2,3$
+and edges $\{0,1\},\{0,2\},\{0,3\}$. Assign arbitrary unit-modulus complex
+phases $z_0,z_1,z_2$ to these three oriented edges. In particular,
+$z_j\overline{z_j}=1$ and $z_j\ne0$. The magnetic adjacency matrix and the
+degree matrix are
+\[
+ A_z=\begin{pmatrix}
+ 0&z_0&z_1&z_2\\
+ \overline{z_0}&0&0&0\\
+ \overline{z_1}&0&0&0\\
+ \overline{z_2}&0&0&0
+ \end{pmatrix},\qquad D=\operatorname{diag}(3,1,1,1).
+\]
+The genuine Hermitian magnetic Laplacian is $L_z=D-A_z$. Consider
+\[
+ v_z=(0,\overline{z_0},-\overline{z_1},0)^T,
+ \qquad
+ w_z=(0,\overline{z_0},0,-\overline{z_2})^T.
+\]
+Direct multiplication gives $L_zv_z=v_z$ and $L_zw_z=w_z$. For example,
+the central coordinate of the first product is
+$-z_0\overline{z_0}+z_1\overline{z_1}=-1+1=0$; the leaf coordinates
+are the unchanged coordinates of $v_z$. The second calculation is identical
+with the third leaf replacing the second.
+
+These eigenvectors are independent. If $av_z+bw_z=0$, the coordinate at
+leaf $2$ gives $-a\overline{z_1}=0$, hence $a=0$; the coordinate at leaf
+$3$ then gives $-b\overline{z_2}=0$, hence $b=0$. Therefore
+\[
+ \dim_{\mathbb C}\ker(L_z-I)\ge2
+ \quad\text{for every admissible phase tuple }z.
+\]
+Eigenvalue one is thus degenerate for \emph{all} phases. There is no phase
+at which the spectrum is nondegenerate, so degeneracy cannot disappear on
+any nonempty generic subset, whether generic is understood topologically,
+algebraically or in the almost-everywhere sense.
+
+\paragraph{Geometric explanation.}
+A tree has no magnetic cycle flux: its edge phases can be removed by a
+vertex gauge. Here the diagonal unitary
+$U=\operatorname{diag}(1,\overline{z_0},\overline{z_1},\overline{z_2})$
+satisfies $L_z=UL_1U^*$. The ordinary star's repeated eigenvalue therefore
+persists. The explicit eigenvectors above already prove the required
+conclusion without invoking this general gauge principle.
+
+\paragraph{Scope.}
+The source states no restriction excluding trees or demanding cycle fluxes.
+The example is connected and has three actual, arbitrary edge phases; it
+is not an isolated-vertex or zero-operator example. It refutes the asserted
+generic disappearance of spectral degeneracy as written, independently
+of the additional unspecified flow-coprimality criterion. A statement
+restricted to some special class of graphs would need extra hypotheses.
+
+\paragraph{Lean certificate.}
+The project constructs the actual simple graph, proves connectedness and
+its degrees, builds the phased adjacency and verifies $L_z=D-A_z$ and
+Hermitian symmetry. It checks both eigenvectors, proves their linear
+independence in the genuine eigenvalue-one eigenspace and establishes its
+finite dimension is at least two for every unit-phase tuple.
+\end{document}
