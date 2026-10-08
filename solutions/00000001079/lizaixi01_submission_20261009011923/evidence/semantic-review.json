@@ -1,0 +1,144 @@
+{
+  "verdict": "pass",
+  "target": "ShorFamily.refute_base",
+  "targets": [
+    "BinaryCSS.stabilizer_eq_span",
+    "Shor.quantum_distance_five",
+    "ShorFamily.quantum_distance_five",
+    "ShorFamily.girth_four",
+    "ShorFamily.row_degree_bound",
+    "ShorFamily.col_degree_bound",
+    "ShorFamily.qubit_card",
+    "ShorFamily.unbounded_length",
+    "ShorFamily.isLDPCFamily",
+    "ShorFamily.refute_natural",
+    "ShorFamily.refute_binary",
+    "ShorFamily.refute_base"
+  ],
+  "task_id": "d1079-final-review",
+  "candidate": "00000001079",
+  "reviewer": "/root/phase1d_review",
+  "review_of": "c82f9a1cd3b2338e50845e839e0c9e1e269651b7f64b7c4028e6d9bdefc8bbad",
+  "reviewed_at": "2026-10-08T10:47:08Z",
+  "source_first_checklist": "workers/reviewer1079-final/source-first-checklist.md",
+  "source_first_checklist_sha256": "643f1c48116308563ab8e03ee4cd38d3d377b2f76b8bd7e5a708b0f0a13254de",
+  "source_first_checklist_saved_at": "2026-10-08T10:41:48.9780201Z",
+  "original_read_and_hash_at": "2026-10-08T10:40:48.1375038Z",
+  "independence": "Re-read current Worker Skill and exact original, copied and hash-checked original, and saved a fresh independent checklist before opening any final frozen candidate file, seal, manifest, correspondence or paper. Earlier route-review exposure is disclosed, but its claims were rechecked against this new candidate. Author confidence, self-evaluation and build logs were not read or used as acceptance evidence.",
+  "reviewed_hashes": {
+    "original": "efd76d390306fbb64342be3d2fb8c7c6d9ea53e1789ac734289f17a0aa5a9d85",
+    "00000001079.md": "efd76d390306fbb64342be3d2fb8c7c6d9ea53e1789ac734289f17a0aa5a9d85",
+    "lean/Copies.lean": "8f3819b916b0fbc469380953a093dc75c71374aa0bf4eca7e3f1e4ebb447e16e",
+    "lean/CSS.lean": "6d299c8fc0c73bfd4308a7bb9272ec223543751441338ce79c86b4c6097c7ae2",
+    "lean/lake-manifest.json": "e792b0f81943b9b7a3ac6059283884ef6247721aed65c91f66754060c6347ff4",
+    "lean/lakefile.toml": "147af441ce5ccddf768bb90bfe37ee3d686bb4e9e1bb7b38c4dcdc521c9b39d8",
+    "lean/LDPC.lean": "863ecbfd291a010ff1c8255a1746a3cb3ef52f690c7fd2da7584b2e692590375",
+    "lean/lean-toolchain": "b2b5068d5a4835675e651ce83b29c0ddb308d28b80076e7c007aef4630af0477",
+    "lean/Local.lean": "50a2a78d92a45de56ac5a6c0a55c5bc337c78ed10bf2d375d7a4cdcf5dc7ede3",
+    "lean/Main.lean": "10e588bd8d806acc756cb10ea526ef10d7aca1b6f42f0c2b2cf3066950c7232a",
+    "lean/Shor.lean": "e051d07aaa5dad8b6769ba0ffb7cac40d0d051213c1241021504bcb06389ed77",
+    "lean/Tanner.lean": "0e377068ce48ed6a03f929783dd98b9acf68011cae0a95c8ddfce11274ee038e",
+    "original.md": "efd76d390306fbb64342be3d2fb8c7c6d9ea53e1789ac734289f17a0aa5a9d85",
+    "proof.pdf": "95a9269b9a6d4ce83f2838fa4b9db73b8e140683af00c40a06c7a233873465c2",
+    "proof.tex": "09ca9812af7a0ccf83278aebe0ff5759f42108ca36f71b8fab2a25b8659d8dd6",
+    "README.md": "5f9f8cf2f7d333c18895285405d9bb9fe5dee0558517d3c27170ab342d485fb3",
+    "source-correspondence.md": "fc2ec2b3cdc87862818433a9c5c06af1b05d7d88f7be5184030a1c7975826f27"
+  },
+  "frozen_file_review": {
+    "inventory": "workers/reviewer1079-final/frozen-hash-inventory.json",
+    "semantic_files": 16,
+    "all_required_files_independently_hashed": true,
+    "all_hashes_match_seal_and_manager_manifest": true,
+    "all_seven_Lean_modules_read_in_full": true,
+    "other_text_files_read": 8,
+    "PDF_pages_independently_rendered_and_inspected": 2,
+    "configuration": "Lean 4.33.0 and mathlib db584cd6d46c92f209a44c0f1c829460d327499d are pinned consistently. Lake roots include CSS, Local, Shor, Copies, Tanner, LDPC and Main. Configuration and both exact original copies were read; no candidate build was run.",
+    "contract_review": "All twelve manager-owned expected theorem contracts correspond to the actual declarations and mathematical meanings in the frozen source. The reviewer did not alter the contracts, proof sources, checker or package."
+  },
+  "source_scope_and_interpretation": {
+    "bilingual_agreement": "English and Chinese agree on the paired-classical-code CSS quantum LDPC definition, Tanner girth, minimum-distance/girth bound with explicit constant 1/2, extremal-attainment clause and higher-girth-family decay clause.",
+    "necessary_first_clause": "The generally phrased universal inequality is a necessary clause of the whole conjunction. Showing a genuine CSS LDPC family violates it refutes the conjunction. The candidate does not claim the extremality or higher-girth clauses are individually disproved or separately formalized; that is not needed for this counterexample.",
+    "g": "The variable g is explicitly read as the preceding Tanner girth. The graph is the actual combined X/Z-check incidence presentation on physical qubits. This disclosed convention matches the requested CSS Tanner object; no assumed abstract girth value or selected classical proxy is used.",
+    "family_scope": "The source does not restrict the first inequality to connected graphs, indecomposable codes, growing distance/girth, positive relative distance or asymptotically good codes. Importing any such restriction would narrow the text. The actual family is uniformly sparse with strictly growing qubit count 25(n+1), nontrivial logical quotient and fixed d=5,g=4, so disconnected direct sums are admissible.",
+    "binary_subset": "A binary CSS LDPC example lies inside the source's general CSS class. Refuting the necessary binary-family consequence suffices for its universal inequality; it does not require proving every CSS code is binary.",
+    "logarithms": "Natural log is a standard mathematical reading and binary log a plausible coding convention. Unlike the earlier d=3 route, this new d=5,g=4 example violates both. The package also proves every base b>=2. The source's omitted base remains disclosed; no result for 1<b<2 is claimed and no source fact asserting b>=2 is invented.",
+    "zero_cases": "Every actual family member uses m=n+1>0. The exact family distance/girth theorems explicitly require m>0. The exhibited girth is 4, so division by zero or acyclic-girth defaults cannot generate the contradiction."
+  },
+  "CSS_and_physical_correspondence": {
+    "standard_reference": "The intrinsic combinatorial interpretation was independently checked against [Ball-Centelles-Huber, Theorems 5.4 and 5.5](https://web.mat.upc.edu/simeon.michael.ball/quantumf.pdf) in the preceding route review. The finite symplectic stabilizer/CSS characterization supplies the standard physical-code correspondence; separate Hilbert-space reconstruction is unnecessary for this conventional definition.",
+    "actual_generators_and_span": "Code contains actual X and Z matrices with proved cross-orthogonality. stabilizer is an F2 Submodule of full physical Pauli labels (Q->F2) x (Q->F2). stabilizer_eq_span proves equality with the span of every pure X/Z check generator, so rowspace labels are not merely an asserted proxy for the generated stabilizer.",
+    "commutation": "symp(p,q)=dot(p.X,q.Z)+dot(p.Z,q.X) is the binary symplectic form; plus and minus agree in characteristic 2. isotropic is proved from actual matrix orthogonality and linearity, establishing commuting CSS generators and their span.",
+    "full_logical_space": "centralizer quantifies over EVERY stabilizer label. centralizer_iff proves generator check equivalence. logical is the full centralizer outside the stabilizer. This excludes stabilizer degeneracies and gives the genuine nontrivial logical quotient; no selected-error restriction is introduced.",
+    "physical_distance": "sweight counts physical coordinates where X OR Z is nonzero, so a Y label is counted once. HasQuantumDistance contains both an attained nonstabilizer centralizer and a lower bound for every full Pauli label in that set. It is the exact quantum support minimum, not classical constituent distance, check weight, or the sum of X/Z weights.",
+    "nontriviality_and_rank": "The proved logical witness makes the quotient nontrivial, hence the nontrivial-code case of conventional stabilizer distance applies. The package does not claim a separately proved exact encoded-rank/dimension parameter; no such unrequested parameter is required for the counterexample."
+  },
+  "module_correspondence": [
+    {
+      "module": "Local",
+      "conclusion": "The four adjacent-pair generators on five bits span exactly the parity-zero vectors; their check equations force a constant vector. The finite domains are genuinely all 32 vectors and all 16 coefficient lists. The odd length five gives constant parity t and single-basis parity 1. Independent bit enumeration reproduces the full local span/kernel facts."
+    },
+    {
+      "module": "Shor",
+      "conclusion": "The 25 physical qubits are Fin5 x Fin5. X checks cover two adjacent whole five-qubit blocks; Z checks cover adjacent coordinate pairs within one block. Their overlaps are zero or two, giving actual orthogonality. X_rowspace and Z_rowspace prove the exact descriptions, and centralizer_iff is derived from actual full generator tests, not assumed."
+    },
+    {
+      "module": "Shor distance",
+      "conclusion": "For every centralizer Pauli, X is constant on each five-qubit block and Z block parities are equal. If any constant X block is nonzero, its five distinct coordinates inject into total union support. Otherwise X=0; being outside the stabilizer forces nonzero common Z parity, giving a supported coordinate in each of five distinct blocks. This covers all mixed X/Z labels. The X-only single-block witness has odd block-value parity, is outside the actual stabilizer and has support five. quantum_distance_five follows with both directions."
+    },
+    {
+      "module": "Copies",
+      "conclusion": "The actual family matrices are diagonal copies of the same Shor X/Z matrices. diagonal_synth and diagonal_rowspace prove full rowspace decomposition; stabilizer_blocks and centralizer_blocks prove exact generated-stabilizer and full symplectic-orthogonal decomposition. A global logical label has a logical component by contraposition of the proved stabilizer identity. block_weight_le injects component support into total support. Supported witnesses are logical and have exact weight five. These prove exact distance five for every m>0, without assuming the key block bridge."
+    },
+    {
+      "module": "Tanner",
+      "conclusion": "combinedCheck includes both X and Z rows of the SAME code. tanner is their actual symmetric loopless bipartite incidence SimpleGraph against physical qubits. Two X checks in the first copy share block 1; two distinct coordinates there give the displayed genuine four-cycle. IsCycle uses a proved tail path and length four. Bipartite incidence excludes three-step closed walks; simplicity and Mathlib's cyclic-girth lower bound exclude shorter cycles. The actual shortest-cycle argument gives girth_four for every m>0."
+    },
+    {
+      "module": "LDPC",
+      "conclusion": "rowDegree_card and colDegree_card identify the counters with actual incidence support cardinalities. Seed X rows have weight 10, Z rows weight 2, and each qubit has at most two X plus two Z checks. Diagonal row/column identities preserve these actual combined bounds, proving row<=10 and col<=4 for every m. qubit_card is 25m and unbounded_length uses positive m=n+1. All bounds and distance/graph objects share the same Code definitions."
+    },
+    {
+      "module": "Main family",
+      "conclusion": "IsLDPCFamily explicitly requires uniform row/column bounds and unbounded qubit cardinality. familyCode n=code(n+1) has no zero-block member, and isLDPCFamily, family_distance and family_girth establish admissibility and exact values. The constructed sequence in fact grows linearly, not only along a sparse subsequence."
+    },
+    {
+      "module": "Main contradiction",
+      "conclusion": "UniversalBound is the necessary family consequence of the source's universal CSS LDPC inequality: every member with an attained quantum distance must obey d/g<=L(g)/2. refute_bound instantiates it on this actual admissible family at its real distance 5 and real Tanner girth 4. The arithmetic contradiction 5/4>1 is then on these proved source objects, not substituted input numbers."
+    },
+    {
+      "module": "Main logarithms",
+      "conclusion": "log_four proves ln4=2ln2. The established ln2 bound supplies L(4)<=2 for natural log. For b>=2, ln(b)>=ln2>0, so the proved logb definition and division inequality give log_b4<=2. No denominator-sign hypothesis is assumed without proof. refute_natural, refute_binary and refute_base discharge the helper's L(4)<=2 premise, giving the three unconditional final targets with only refute_base's declared b>=2 hypothesis."
+    }
+  ],
+  "independent_checks": {
+    "seed_audit": "workers/reviewer1079-final/independent-seed-audit.json",
+    "method": "Exact integer-bit arithmetic, independently generated from the displayed seed matrix formulas; no Lean compile result used.",
+    "local_facts": "Exhaustively checked all 32 five-bit vectors and the adjacent-generator span.",
+    "distance_lower": "Exhaustively checked every Pauli label of union support 0,1,2,3,4: 1,089,526 labels total. There were no logical labels. All centralizer labels in that range were stabilizers, including 50 weight-two and 1025 weight-four degeneracies.",
+    "distance_attainment": "The actual X-only support {0,1,2,3,4} commutes with all checks, lies outside the X rowspace, and has union support five.",
+    "combined_graph": "Independently generated the 49-vertex, 80-edge combined seed graph; shortest-cycle search gives girth 4, X check weights 10, Z weights 2 and qubit degrees 2,3,4.",
+    "family_scope": "The finite audit is not substituted for the universal-m result. The complete arbitrary-m Lean arguments were independently read and assessed structurally."
+  },
+  "paper_and_README": {
+    "PDF_pages": 2,
+    "independent_render_directory": "workers/reviewer1079-final/pdf-review",
+    "all_pages_inspected": true,
+    "conclusion": "Every PDF page is legible without clipping or overlap. The paper states all source scope needed for the refutation, actual quantum support distance, generated CSS stabilizer, full centralizer, arbitrary positive-m diagonal copies, both-check Tanner graph, uniform sparsity, growing 25m length, final log inequalities and necessary-first-clause logic. TeX, paper, README and correspondence agree with Lean. The limits 1<b<2 and absence of a separately proved encoded-dimension claim are accurate. No unproved mathematical premise is added.",
+    "provenance": "Known generalized Shor construction and earlier failed/base-sensitive Steane attempts are credited; no new-code discovery, submission eligibility, first-solve or upstream acceptance claim is made."
+  },
+  "objections": [],
+  "required_repairs": [],
+  "nonblocking_observations": [
+    "source-correspondence.md calls the author's copied original source.md; the frozen retained names are original.md and 00000001079.md. Both hashes match the task exactly, so the stale filename does not obscure source binding.",
+    "Source log base and exact check-presentation convention were omitted. The package discloses its actual combined graph and proves natural, binary and every base>=2 interpretations. It does not silently claim a result for every conceivable base>1.",
+    "Exact encoded dimension is not separately formalized or claimed. The actual nontrivial logical witness and conventional intrinsic CSS definition suffice for the stated quantum distance."
+  ],
+  "limitations": [
+    "The verdict covers the disclosed standard binary CSS combinatorial interpretation and actual combined Tanner check presentation.",
+    "The final universal bound is refuted for natural logarithm, binary logarithm and all bases b>=2; no conclusion is claimed for 1<b<2.",
+    "The further extremality and higher-girth clauses are not individually formalized; failure of their conjunction's necessary universal first clause is sufficient.",
+    "This is a semantic verdict. Only the manager may bind these exact hashes and contracts to actual build/kernel/audit evidence."
+  ],
+  "mechanical_gate_boundary": "No candidate build, self-certifying status or mechanical/local verification status is issued by this reviewer. All review commands completed synchronously; no reviewer background process or child agent remains.",
+  "tool_failures": "workers/reviewer1079-final/review-tool-failures.json"
+}

@@ -1,0 +1,116 @@
+\documentclass[11pt]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\F}{\mathbb F_2}
+\title{Conjecture 1079: a sparse CSS family violates the distance--girth bound}
+\author{Local development pilot; not an upstream submission}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+The source asserts the universal inequality $d/g\le\log(g)/2$ for CSS quantum
+LDPC codes. We refute this necessary first clause with an explicit family.
+We use the standard binary Pauli definition of quantum distance and the
+bipartite Tanner graph of both X and Z checks. The source imposes neither
+connectedness nor increasing distance. Our family has uniformly bounded
+check weights and qubit incidences and unbounded block length. Both natural
+and binary logarithms, and every base at least two, give a contradiction.
+The claimed further extremality and high-girth clauses need not be separately
+refuted once this universal clause fails.
+
+\begin{theorem}
+For every positive integer $m$ there is a binary CSS code on $25m$ qubits
+whose quantum minimum distance is $5$, whose combined Tanner graph has girth
+$4$, whose check rows have weight at most $10$, and whose qubit incidences
+are at most $4$. Thus this unbounded-length LDPC family violates the stated
+bound for natural logarithm and for logarithm to every base $b\ge2$.
+\end{theorem}
+
+\begin{proof}
+First construct one block. Label its 25 qubits by $(i,j)\in\{0,1,2,3,4\}^2$.
+For each $a\in\{0,1,2,3\}$, let the X check flip all qubits in blocks
+$i=a,a+1$. For each $i$ and $a\in\{0,1,2,3\}$, let the Z check flip just
+$(i,a),(i,a+1)$. Every X/Z intersection has size zero or two, so the two
+binary check matrices are orthogonal. Their pure X/Z Pauli labels span a
+commuting stabilizer $S$ in $(\F^{25})^2$. Write a Pauli label as $(x,z)$;
+its weight is the cardinality of the union of their nonzero coordinates,
+and the quantum distance is
+\[
+ d=\min\{\operatorname{wt}(x,z):(x,z)\in S^\perp\setminus S\}.
+\]
+The orthogonal complement here uses the actual binary symplectic form
+$x\cdot z'+z\cdot x'$, not the classical Hamming distance of one check code.
+
+In a five-coordinate binary vector space, the four adjacent-pair vectors
+span exactly the even-parity vectors, and their dot-product constraints
+force a vector to be constant. These two finite facts are checked directly
+in Lean over 32 vectors and 16 coefficient lists. Consequently the X
+rowspace consists of vectors constant on each block, with an even-parity
+list of the five block values; the Z rowspace consists of vectors having
+even parity separately in every block. The full centralizer condition
+says that $x$ is constant on each block and that the five block parities
+of $z$ are all equal.
+
+A centralizer label outside $S$ has either a nonzero X block, which supplies
+five supported qubits, or zero $x$ and odd Z parity in every block, which
+supplies at least one supported qubit per block. (The same lower bound
+also covers any nonzero $x$ whose block-value parity is even.) Hence its
+weight is at least five. The pure X label supported on exactly one whole
+block commutes with every check and is not in the X rowspace; it attains
+weight five. This proves the actual quantum distance, including both the
+minimum lower bound and an attaining logical Pauli.
+
+For arbitrary $m>0$, take the block diagonal X and Z matrices of $m$ such
+codes. The stabilizer and centralizer decompose into these actual blocks;
+these are proved rowspace and symplectic identities. Any global logical
+Pauli has a logical component in some block. Its global support has
+cardinality at least that component's support, so its weight is at least
+five. Extending the attaining witness by zero in all other blocks attains
+five, proving $d=5$ for every family member.
+
+The combined Tanner graph has a check vertex for each row of either type
+and a qubit vertex for each coordinate, with matrix incidence as adjacency.
+It is bipartite, so has no three-cycle. In the first block copy, X checks
+$a=0$ and $a=1$ share every qubit of block $i=1$; choosing two distinct such
+qubits gives a genuine four-cycle with four distinct vertices. Thus its
+shortest cycle length is $g=4$. This uses the actual simple graph, not an
+assumed girth value or an abstract numerical proxy.
+
+X check weights are ten and Z check weights two. Every qubit belongs to at
+most two X checks and two Z checks, so combined incidence is at most four.
+These bounds survive block diagonal replication. The qubit count is $25m$,
+which is unbounded; thus the matrices form a uniformly sparse LDPC family.
+Finally every member has
+\[
+ \frac d g=\frac54>1=\frac{\log_2 4}{2}
+             >\frac{\ln4}{2}.
+\]
+For $b\ge2$, monotonicity of logarithm gives $\log_b4\le2$, so the same
+contradiction holds. No distance, girth, orthogonality or family-admissibility
+premise is left as an unproved assumption.
+\end{proof}
+
+\paragraph{Lean correspondence.}
+The seven source modules implement the actual binary CSS objects, the two
+five-bit facts, the 25-qubit code, arbitrary diagonal copies, the Tanner
+graph, degree bounds and the final contradiction. The generated-stabilizer
+span identity and full centralizer tests bridge the check matrices to quantum
+distance. The final family predicate requires uniform row and column bounds
+and unbounded length. Its universal bound quantifies over every member of
+every such binary CSS family. The checked final negative theorems cover
+natural logarithm, binary logarithm and all bases at least two. The supplied
+correspondence file lists their precise names and quantifiers.
+
+\paragraph{Provenance and limits.}
+This is the known generalized Shor construction, used as a counterexample;
+we do not claim to have discovered a new quantum code. Earlier Steane-code
+partial work gave distance three and girth four but did not refute the
+plausible binary-log convention. That route was stopped after independent
+review; its partial artifacts remain separately recorded. The source does
+not specify a log base or exclude disconnected families; these conventions
+are disclosed for independent review. We claim no result for bases between
+one and two and no separately formalized encoded-qubit dimension. Local
+verification is separate from submission eligibility, first-solve status and
+upstream acceptance.
+\end{document}
