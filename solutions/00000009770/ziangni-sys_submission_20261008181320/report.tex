@@ -1,0 +1,71 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{proposition}{Proposition}
+\title{Trace-norm equality does not require equal supports}
+\author{Conjecture 00000009770}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Result.} The necessity of the stated same-support condition is false. Two nonzero positive operators with orthogonal supports already give equality in the trace-norm triangle inequality.
+
+\section*{The operators and the actual trace norm}
+On the complex Hilbert space $\mathbb C^2$ with its standard inner product, set
+\[
+ P=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad
+ Q=\begin{pmatrix}0&0\\0&1\end{pmatrix}.
+\]
+Both are nonzero positive orthogonal projections, $PQ=0$, and $P+Q=I$.
+For every complex matrix $A$, its modulus and Schatten one-norm are
+\[
+ |A|=(A^*A)^{1/2},\qquad \|A\|_1=\operatorname{tr}|A|.
+\]
+The square root is the unique positive semidefinite square root. In particular, positivity and idempotence give
+\[
+ |P|=P,\quad |Q|=Q,\quad |P+Q|=I.
+\]
+Consequently,
+\[
+ \|P+Q\|_1=2=1+1=\|P\|_1+\|Q\|_1.
+\]
+These are evaluations of the canonical trace norm, with no replacement by an unrelated entrywise norm.
+
+\section*{Different polar supports}
+The support of $|A|$ in finite dimension is its range, equivalently the orthogonal complement of its kernel. Here
+\[
+ \operatorname{supp}|P|=\mathbb C(1,0),\qquad
+ \operatorname{supp}|Q|=\mathbb C(0,1).
+\]
+The ranges are unequal and intersect only at zero. Their orthogonal support projections are respectively $P$ and $Q$.
+The supported polar partial isometries are likewise $P$ and $Q$: the identities
+$P|P|=P$, $P^*P=P$ and their $Q$ analogues verify the polar factorizations, with the correct initial support projections.
+
+\begin{proposition}
+There exist nonzero complex operators $A,B$ such that
+$\|A+B\|_1=\|A\|_1+\|B\|_1$ but the supports of their polar moduli differ.
+\end{proposition}
+\begin{proof}
+Take $A=P$ and $B=Q$ and use the calculations above.
+\end{proof}
+
+\newpage
+\section*{The polar-measure wording}
+The same example has a literal measure interpretation in the commutative diagonal algebra on the two-point space $\{0,1\}$. The positive diagonal entries of $P$ and $Q$ define the positive atomic measures
+\[
+ \mu_P=\delta_0,\qquad \mu_Q=\delta_1.
+\]
+Their phases may both be chosen as $+1$, whereas their atomic supports are $\{0\}$ and $\{1\}$. Their total variation norms are both one, and the total variation norm of their sum is two. The formal development constructs these actual Dirac measures and verifies that their singleton masses equal the corresponding diagonal entries. Thus the distinction is between supports on the underlying two-point space; it is not a claim that the two matrices have different sets of spectral values. Indeed, both matrices have eigenvalues zero and one.
+
+\section*{Exact scope}
+The English conjecture demands shared support and phase; the Chinese version explicitly demands the same support and the same phase. Under this literal same-support requirement, the displayed pair disproves the necessary direction of the proposed equivalence. A false necessary condition suffices to disprove the conjecture as stated.
+
+There is a different, compatible-polar-factor formulation which this example does not refute: the identity operator is a common factor satisfying $P=I|P|$ and $Q=I|Q|$. Positivity therefore allows equality despite differing supports. This submission neither rejects such a corrected criterion nor makes a claim against the separate general theory of exposed faces. The phrase ``polar measures'' is handled by the explicit diagonal atomic model above, without identifying support with an eigenvalue set.
+
+\section*{Formal verification}
+The accompanying Lean 4.19.0 project uses Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+The matrix modulus is Mathlib's canonical positive square root of the Gram matrix, whose positivity is proved for every complex $2\times2$ matrix. The lemma \texttt{modulus\_positive} uses uniqueness of the positive square root to compute the modulus of any positive matrix. The final theorem \texttt{counterexample} supplies the actual nonzero matrices, triangle equality and unequal supports. The final negation theorem also refutes the universal implication directly.
+
+The support ranges and their intersection, the supported polar factorizations, and the actual Dirac-measure bridge are also checked. Run \texttt{lake build} in \texttt{lean/}. The source prints the axioms of its principal theorems. Only the standard logical axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound} are used; no additional mathematical assumptions are introduced.
+\end{document}
