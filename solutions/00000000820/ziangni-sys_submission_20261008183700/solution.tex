@@ -1,0 +1,40 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\title{Disproof of Conjecture 00000000820\\A double zero of a square-torus eigenfunction}
+\author{ziangni-sys}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+The asserted vanishing-order bound fails for a basic nonzero eigenfunction outside the stated exceptional indices.
+
+Use the square torus $\mathbb T^2=(\mathbb R/2\pi\mathbb Z)^2$, with its ordinary flat metric. The smooth periodic function
+\[
+ f(x,y)=\sin x\sin y
+\]
+descends to an actual function on this quotient. In Lean this descent is implemented by the sine function on \texttt{Real.Angle}, not by an assumed periodic certificate. Its actual partial derivatives satisfy
+\[
+ f_x=\cos x\sin y,\quad f_y=\sin x\cos y,
+ \quad f_{xx}=f_{yy}=-f.
+\]
+Therefore $-\Delta f=2f$: it is a Laplace eigenfunction with index $(a,b)=(1,1)$ and eigenvalue $\ell=a^2+b^2=2$. It is nonzero, for example by its nonzero mixed derivative below.
+
+At the origin,
+\[
+ f(0,0)=f_x(0,0)=f_y(0,0)=0,\qquad
+ f_{xx}(0,0)=f_{yy}(0,0)=0,\qquad
+ f_{xy}(0,0)=f_{yx}(0,0)=1.
+\]
+The degree-two Taylor polynomial, computed from these actual derivatives, is
+\[
+ f(0,0)+f_x(0,0)x+f_y(0,0)y+
+ \frac{f_{xx}(0,0)x^2+2f_{xy}(0,0)xy+f_{yy}(0,0)y^2}{2}
+ =xy.
+\]
+The smooth Taylor theorem gives $f(x,y)=xy+o(x^2+y^2)$ near the origin. Equivalently, the convergent sine series directly gives $f(x,y)=xy+\text{terms of total degree at least four}$. Thus the polynomial leading part is the nonzero homogeneous polynomial $xy$, of degree $2$, and the vanishing order is exactly $2$.
+
+This index is outside the claimed exception: $\gcd(1,1)=1\ne2$. Moreover, $2$ is not triangular, since $n(n+1)=4$ has no solution in nonnegative integers: $n\le2$, and none of $0,2,6$ equals $4$. The conjecture consequently predicts order at most $1$ at this zero, whereas its order is $2$. This disproves the first asserted constituent; no conclusion about the separate zero-set description is needed.
+
+\paragraph{Formal verification.}
+The Lean project defines the actual function on the quotient torus, proves continuity there and smoothness of its periodic lift, computes actual first and second partial derivatives and the Laplacian eigenvalue, and verifies the zero first jet, nonzero quadratic Taylor jet $xy$, and exclusion of the stated exceptional index. A simple zero must have a nonzero first derivative; Lean proves that this actual zero is not simple. All eight final printed theorem axiom audits use only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
+\end{document}
