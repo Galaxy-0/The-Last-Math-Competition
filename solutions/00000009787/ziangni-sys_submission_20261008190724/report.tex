@@ -1,0 +1,70 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{proposition}{Proposition}
+\title{Fixed perturbation singular values do not bound spectral displacement}
+\author{Counterexample to Conjecture 00000009787}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Result.} A fixed rank-one compact perturbation with singular values $(1,0)$ can move isolated eigenvalues arbitrarily far. Thus no finite bound depending only on the perturbation singular-value sequence holds for the unrestricted operators in the source.
+
+\section*{The operators and the fixed perturbation}
+On the standard complex Hilbert space $\mathbb C^2$, let $t>0$ and set
+\[
+ A_t=\begin{pmatrix}0&t^2\\0&0\end{pmatrix},\qquad
+ E=\begin{pmatrix}0&0\\1&0\end{pmatrix}.
+\]
+These are genuine finite-dimensional linear operators. In particular $E$ is compact: the continuous image of a closed bounded ball is compact. Its action is $E(x_1,x_2)=(0,x_1)$, so its rank is one and its operator norm is one.
+
+Its Gram matrix and canonical positive modulus are
+\[
+ E^*E=\begin{pmatrix}1&0\\0&0\end{pmatrix}=Q,
+ \qquad |E|=(E^*E)^{1/2}=Q.
+\]
+Indeed $Q$ is positive semidefinite and $Q^2=E^*E$, so uniqueness of the positive square root gives the identity. The standard orthonormal coordinate vectors are eigenvectors of $|E|$ with eigenvalues $1$ and $0$. Therefore the singular values of the fixed perturbation are exactly $(1,0)$, with any extended singular-value sequence padded by zeros. They do not depend on $t$.
+
+\section*{Actual isolated spectra}
+The characteristic determinants are
+\[
+ \det(zI-A_t)=z^2,\qquad
+ \det(zI-(A_t+E))=z^2-t^2=(z-t)(z+t).
+\]
+Hence
+\[
+ \sigma(A_t)=\{0\},\qquad \sigma(A_t+E)=\{t,-t\}.
+\]
+Every point in these finite spectra is isolated. The two perturbed eigenvalues both have distance exactly $t$ from the entire original spectrum:
+\[
+ \operatorname{dist}(t,\sigma(A_t))=
+ \operatorname{dist}(-t,\sigma(A_t))=t.
+\]
+The distance here is the actual infimum of distances to the spectral set.
+
+\newpage
+\section*{No finite perturbation-only bound}
+\begin{proposition}
+There is a fixed compact perturbation $E$ for which no finite real constant $C$ bounds the displacement from $\sigma(A_t)$ of all eigenvalues of $A_t+E$, even with ambient dimension fixed at two.
+\end{proposition}
+\begin{proof}
+Given $C\in\mathbb R$, choose $t=|C|+1$. Then $t>0$, $t\in\sigma(A_t+E)$, and
+\[
+ \operatorname{dist}(t,\sigma(A_t))=t=|C|+1>C.
+\]
+Throughout this construction the perturbation $E$ and its singular values remain unchanged.
+\end{proof}
+If a proposed functional $F$ of the perturbation singular-value sequence has a finite value at $(1,0)$, take $C=F(1,0)$ in the proposition. This immediately contradicts the claimed bound. The harmonic mean of the first positive singular value is $1$; a convention extending a harmonic mean through a zero entry gives zero, or leaves it undefined. Neither a finite value nor an undefined expression can supply the claimed general finite displacement bound. Allowing infinity would make it vacuous at this elementary rank-one perturbation.
+
+\section*{Scope and the missing control}
+The original matrices are nonnormal, and their norms are not bounded as $t$ grows. The source imposes neither normality nor a norm, resolvent or conditioning restriction on the original operator. This is precisely why the fixed perturbation can cause unbounded displacement. The conclusion does not challenge perturbation estimates for normal operators or estimates that also depend on the original operator's size or conditioning.
+
+The report targets the asserted control by a functional of the perturbation singular-value sequence alone. The example already uses two-dimensional nilpotent Jordan-type matrices and isolated eigenvalues, so the advertised Jordan-block setting does not repair that assertion. No issue of essential spectrum or infinite-dimensional accumulation is involved.
+
+\section*{Formal verification}
+Lean defines the matrices over $\mathbb C$, computes the canonical positive square root of $E^*E$ and its full spectrum, and checks its action on the coordinate eigenbasis. It proves compactness of the actual matrix action using the image of a compact ball. Determinant computations establish the complete algebra spectra. Positive-radius ball neighborhoods verify isolation, and Mathlib's distance-to-set function yields the exact displacement. The final result quantifies over every finite candidate bound.
+
+Run \texttt{lake build} in \texttt{lean/} with Lean 4.19.0. Mathlib is pinned to
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+The principal theorem audits use only standard logical axioms. No spectral or singular-value certificate is assumed.
+\end{document}
