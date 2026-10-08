@@ -1,0 +1,59 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\begin{document}
+\begin{center}{\Large A rational scalar determinant is not integral}\\[4pt]
+Disproof of conjecture 00000001645\\[4pt]
+ziangni-sys --- October 8, 2026\end{center}
+
+Take the trivial group $G=\{e\}$ and the rational group-ring matrix
+$A=[\tfrac12 e]\in M_1(\mathbb QG)$. The group is torsion-free. Moreover,
+$\ell^2(G)=\mathbb C$, its group von Neumann algebra is $\mathbb C$, and its
+canonical trace is $\tau(z)=z$. For arbitrary rectangular matrices over this
+algebra the von Neumann dimension of the kernel is its ordinary complex
+dimension: the extended canonical trace is the usual, unnormalized matrix
+trace, and the trace of an orthogonal projection is its rank. Thus $G$
+satisfies the strong Atiyah conjecture, including its integer-dimension
+requirement for torsion-free groups.
+
+The regular representation of $\tfrac12 e$ is genuinely multiplication by
+$\tfrac12$: convolution gives
+\[
+ (\lambda(\tfrac12 e)f)(x)
+ =\sum_{g\in G}(\tfrac12 e)(g)f(g^{-1}x)=\tfrac12 f(x).
+\]
+In the orthonormal basis $\delta_e$, this operator is the matrix
+$T=[\tfrac12]$. It is invertible, $T^*T=[\tfrac14]$, and therefore
+$|T|=(T^*T)^{1/2}=[\tfrac12]$. The defining spectral-calculus formula for
+the Fuglede--Kadison determinant consequently gives
+\[
+ \det^{\rm FK}_{\tau}(T)
+ =\exp\bigl(\tau(\log |T|)\bigr)
+ =\exp\bigl(\log(\tfrac12)\bigr)=\tfrac12.
+\]
+This uses the canonical normalized trace $\tau(1)=1$; there is no matrix
+normalization ambiguity in size one.
+
+A rational number is an algebraic integer exactly when it is an integer.
+Hence $\tfrac12$ is not an algebraic integer, and in particular is not an
+algebraic unit. This contradicts the conjecture's explicit assertion about
+\emph{all rational-coefficient matrices}. Even if the preceding integrality
+clause were intended only for integral group-ring matrices, the rational
+algebraic-unit clause would still be false. The usual determinant conjecture
+for integral group rings is a lower-bound statement, not the rational claim
+made here; no such lower-bound statement is being refuted.
+
+\paragraph{Formal certificate.}
+The Lean project constructs the trivial group, its actual rational monoid
+algebra, convolution and regular matrix, canonical trace and the singleton
+spectral-calculus logarithm. It proves the determinant value and its failure
+to be integral over $\mathbb Z$, using integrally closedness of $\mathbb Z$ in
+$\mathbb Q$ and the injective embedding into $\mathbb R$. It also records
+integer kernel dimensions for every finite rectangular complex matrix,
+the finite-dimensional interpretation of Atiyah's requirement above.
+
+\paragraph{Reference.}
+P. de la Harpe, \emph{The Fuglede--Kadison determinant},
+\href{https://arxiv.org/abs/1107.1059}{arXiv:1107.1059}, Section 3,
+formula (6) and its scalar consequence.
+\end{document}
