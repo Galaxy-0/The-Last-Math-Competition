@@ -1,0 +1,106 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{theorem}{Theorem}
+\title{An observable can miss the slow mixing mode\\Disproof of Conjecture 00000003429}
+\author{ziangni-sys}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Scope.}
+Both source language versions identify the autocorrelation decay of
+observables with the mixing spectral radius and propose lag regression
+to estimate that radius. An individual observable need not detect the
+slowest nonconstant mode. We give a strictly positive, lazy, reversible
+finite-state chain and a nonzero centered observable whose exact
+exponential decay factor is strictly smaller than the mixing spectral
+radius. The example refutes the blanket equality for observables.
+It does not refute a worst-case upper bound or an equality obtained by
+taking the supremum over all observables, nor a claim restricted to
+observables having nonzero projection onto the slowest mode.
+
+\paragraph{A genuine Markov chain.}
+On the state space $\{0,1,2\}$, use the transition matrix
+\[
+ P=\begin{pmatrix}
+ 5/8&1/8&1/4\\
+ 1/8&5/8&1/4\\
+ 1/4&1/4&1/2
+ \end{pmatrix},\qquad \pi=(1/3,1/3,1/3).
+\]
+Every entry is strictly positive and each row sums to one. Thus the chain
+is irreducible and aperiodic. Its diagonal entries are at least $1/2$, so
+it is lazy. Symmetry gives both stationarity $\pi P=\pi$ and detailed
+balance $\pi_iP_{ij}=\pi_jP_{ji}$.
+
+\paragraph{The actual centered restriction.}
+The centered space is
+$H_0=\{v:\sum_i\pi_i v_i=0\}$.
+Set $g=(1,-1,0)$ and $f=(1,1,-2)$. These vectors form a basis of $H_0$,
+and direct multiplication gives
+\[
+                   Pg=\tfrac12g,\qquad Pf=\tfrac14f.
+\]
+For completeness, the coordinate map and its inverse are explicit:
+\[
+ E(a,b)=(a+b,-a+b,-2b),\qquad
+ a=\frac{v_0-v_1}{2},\quad b=\frac{v_0+v_1}{2}
+       \quad(v\in H_0).
+\]
+Thus $E$ is a linear bijection onto $H_0$ and
+\[
+        PE=ED,\qquad D=\begin{pmatrix}1/2&0\\0&1/4\end{pmatrix}.
+\]
+The spectrum of this restriction is exactly $\{1/2,1/4\}$, as also follows
+from $\det(zI-D)=(z-1/2)(z-1/4)$. The same diagonalization holds on
+complexifying $H_0$, so no nonreal spectral values arise. The mixing
+spectral radius, the largest modulus on the centered restriction, is
+therefore
+\[
+                         \rho_{\mathrm{mix}}=\tfrac12.
+\]
+
+\begin{theorem}
+For the nonzero centered observable $f=(1,1,-2)$, the normalized stationary
+autocorrelation is $C_f(n)=4^{-n}$. Its exponential decay factor and every
+consecutive-lag regression ratio equal $1/4$, whereas
+$\rho_{\mathrm{mix}}=1/2$.
+\end{theorem}
+\begin{proof}
+Induction gives $P^nf=4^{-n}f$. In stationarity, the Markov property gives
+\[
+ \operatorname{Cov}_\pi(f(X_0),f(X_n))
+   =\sum_i\pi_i f_i(P^nf)_i
+   =4^{-n}\frac{1+1+4}{3}=2\cdot4^{-n},
+\]
+because $\sum_i\pi_i f_i=0$. In particular $\operatorname{Var}_\pi(f)=2>0$,
+so normalization gives $C_f(n)=4^{-n}$. For all $n\geq0$,
+\[
+ \frac{C_f(n+1)}{C_f(n)}=\frac14,\qquad
+ |C_f(n+1)|^{1/(n+1)}=\frac14.
+\]
+Hence the positive-root exponential-rate limit is exactly $1/4$,
+strictly smaller than $1/2$. In logarithmic conventions the rates are
+$\log4$ and $\log2$, likewise unequal.
+\end{proof}
+
+\paragraph{Why the spectral information is lost.}
+Under the stationary inner product, $\langle f,g\rangle_\pi=0$.
+This observable has no component in the eigenvalue-$1/2$ direction.
+There is no defect in positivity, laziness, reversibility, centering, or
+variance: it simply probes a different nonconstant eigenspace.
+Lag regression cannot recover an unobserved mode from this autocorrelation.
+
+\paragraph{Lean coverage.}
+The project defines the actual transition matrix and stationary weights,
+proves positivity, stochasticity, laziness, stationarity and detailed
+balance, and uses explicit coordinates to identify the entire centered
+restriction. It computes its spectrum and spectral radius via matrix
+invertibility. Autocovariance is the actual stationary finite-sum formula
+using powers of $P$. Its exact value, normalized correlation, all lag
+ratios and the root-rate limit are proved, ending in the inequality
+between the two rates. No eigenvalue, covariance identity, or decay-rate
+certificate is assumed as a hypothesis.
+\end{document}
