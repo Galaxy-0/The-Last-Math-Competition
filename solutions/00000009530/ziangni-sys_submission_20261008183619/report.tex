@@ -1,0 +1,73 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{proposition}{Proposition}
+\title{Dephasing gives an intermediate R\'enyi equality case}
+\author{Conjecture 00000009530}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Result.} Pairwise equality in the Petz R\'enyi data-processing inequality does not force a channel to be unitary on the reference state's support or to collapse into a one-dimensional output space. Qubit dephasing supplies a counterexample with distinct full-rank states and strictly positive divergence.
+
+\section*{The channel is completely positive and trace preserving}
+Put $P=\operatorname{diag}(1,0)$ and $Q=\operatorname{diag}(0,1)$, and define
+\[
+ \Phi(X)=PXP+QXQ
+ =\begin{pmatrix}X_{00}&0\\0&X_{11}\end{pmatrix}.
+\]
+This map is complex linear and preserves trace. For every ancillary dimension $n$, let $E_0=I_n\otimes P$ and $E_1=I_n\otimes Q$. Its actual block amplification satisfies
+\[
+ (\operatorname{id}_n\otimes\Phi)(Z)=E_0^*ZE_0+E_1^*ZE_1.
+\]
+Each term is positive semidefinite when $Z$ is, proving complete positivity at every finite ancillary dimension. Thus $\Phi$ is a genuine quantum channel.
+
+\section*{A nontrivial equality at $\alpha=1/2$}
+Use the density matrices
+\[
+ \rho=\operatorname{diag}\left(\frac9{25},\frac{16}{25}\right),\qquad
+ \sigma=\operatorname{diag}\left(\frac{16}{25},\frac9{25}\right).
+\]
+They are distinct, positive, have trace one and nonzero determinant. Their canonical positive square roots are
+\[
+ \rho^{1/2}=\operatorname{diag}\left(\frac35,\frac45\right),\qquad
+ \sigma^{1/2}=\operatorname{diag}\left(\frac45,\frac35\right).
+\]
+Therefore the actual Petz overlap and divergence are
+\[
+ \operatorname{tr}(\rho^{1/2}\sigma^{1/2})=\frac{24}{25},\qquad
+ D_{1/2}(\rho\Vert\sigma)=-2\log\frac{24}{25}>0.
+\]
+The logarithm has a strictly positive finite argument. Since $\Phi(\rho)=\rho$ and $\Phi(\sigma)=\sigma$, the data-processing equality holds exactly:
+\[
+ D_{1/2}(\Phi(\rho)\Vert\Phi(\sigma))=D_{1/2}(\rho\Vert\sigma).
+\]
+
+\newpage
+\section*{Neither proposed class contains this channel}
+The reference state $\sigma$ has full support $\mathbb C^2$. A unitary rotation on its support would therefore make $\Phi$ a unitary conjugation on the entire matrix algebra. Such a conjugation is injective. But
+\[
+ J=\begin{pmatrix}0&1\\0&0\end{pmatrix}\ne0,
+ \qquad \Phi(J)=0.
+\]
+Consequently $\Phi$ is not a unitary conjugation on the support of $\sigma$.
+
+It cannot collapse all states into a one-dimensional output space either. The output $\Phi(\sigma)=\sigma$ is already full rank, with range $\mathbb C^2$. More explicitly, multiplication by $\sigma$ is surjective: the vector $w=(w_0,w_1)$ is the image of $(25w_0/16,25w_1/9)$. A range containing both coordinate vectors cannot lie in a single line. This rules out one-dimensional collapse altogether, and thus also the more restrictive collapse outside the support of $\sigma$.
+
+\begin{proposition}
+At $\alpha=1/2\in(0,1)$ there is a completely positive trace-preserving map attaining Petz data-processing equality for distinct full-rank density matrices with positive divergence, although it belongs to neither of the two asserted channel classes.
+\end{proposition}
+\begin{proof}
+Take the channel and states displayed above.
+\end{proof}
+
+\section*{Exact scope}
+Both versions introduce equidistant channels as equality cases of the data-processing inequality, which is formulated for a pair $\rho,\sigma$. The example disproves the claimed two-class classification for this stated pairwise equality notion. It does not assert that dephasing preserves divergence for every pair of quantum states, and it does not refute a different classification whose hypothesis is global preservation for all pairs. The fact that dephasing acts like the identity on these two diagonal states does not make the channel itself a unitary rotation on the full support. The conjecture's additional assertions for $\alpha\geq2$ are not needed once its claim for $\alpha\in(0,1)$ fails.
+
+\section*{Formal verification}
+The Lean project verifies the full ancillary Kraus identity and positivity, trace preservation, the actual density matrices and their distinctness and determinants, and canonical square roots using Mathlib's uniqueness theorem. It evaluates the overlap as $24/25$, proves strictly positive divergence and exact preservation, and proves both nonunitarity and the impossibility of a common one-dimensional output range.
+
+Run \texttt{lake build} in \texttt{lean/} with Lean 4.19.0. Mathlib is pinned to
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+The final theorem \texttt{counterexample} assembles these properties. Principal theorem audits use only standard logical axioms; no entropy-preservation certificate is assumed.
+\end{document}
