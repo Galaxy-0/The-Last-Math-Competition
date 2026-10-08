@@ -1,0 +1,99 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Conjecture 00000001457 is false\\A planar Banach--Mazur obstruction}
+\author{GodBlf}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The conjecture predicts distance $n-1$ between an $n$-simplex and the
+$\ell_1^n$ unit ball. In dimension two this predicts one. We show that
+every affine copy of the planar cross-polytope containing the standard
+triangle requires dilation at least two to fit inside a translated copy
+of that triangle. The distance is therefore at least two.
+\end{abstract}
+\section{Bodies and distance convention}
+Let
+\[
+ K=\{(x,y):x\geq0,\ y\geq0,\ x+y\leq1\},\qquad
+ B=\{(x,y):|x|+|y|\leq1\}.
+\]
+$K$ is a two-dimensional simplex and $B$ is the cross-polytope, that is,
+the unit ball of $\ell_1^2$. Use the affine convex-body Banach--Mazur
+distance
+\[
+ d_{\rm BM}(K,B)=\inf\{\lambda>0:
+ K\subseteq c+T(B)\subseteq d+\lambda K,
+ \ c,d\in\mathbb R^2,\ T\in\mathrm{GL}_2(\mathbb R)\}.
+\]
+The middle and outer translations are independent. This convention is
+equivalent to putting the inner and outer homothetic copies in the usual
+common-center form when $\lambda>1$: their homothety center is
+$d/(1-\lambda)$. The proof below even allows all positive dilation factors.
+The multiplicative convention is the one in which the question states its
+numerical bounds; no logarithm of the distance is being used.
+
+\section{A lower bound for every affine image}
+\begin{theorem}
+If $K\subseteq c+T(B)\subseteq d+\lambda K$ with $\lambda>0$ and $T$
+invertible, then $\lambda\geq2$.
+\end{theorem}
+\begin{proof}
+The middle body is centrally symmetric about $c=(c_1,c_2)$.
+Since it contains the three vertices $(0,0),(1,0),(0,1)$, it also contains
+their reflections
+\[
+ (2c_1,2c_2),\quad (2c_1-1,2c_2),\quad (2c_1,2c_2-1).
+\]
+Membership of $(x,y)$ in $d+\lambda K$ is exactly
+$x\geq d_1$, $y\geq d_2$, and $x+y\leq\lambda+d_1+d_2$.
+Applying the sum inequality to the first reflected vertex, the first
+coordinate inequality to the second, and the second coordinate inequality
+to the third gives
+\[
+ 2c_1+2c_2\leq\lambda+d_1+d_2,
+ \qquad d_1\leq2c_1-1,\qquad d_2\leq2c_2-1.
+\]
+Combining these three inequalities gives $2\leq\lambda$.
+\end{proof}
+
+\newpage
+The admissible set is nonempty, so taking its infimum is legitimate.
+For example, choose $T=I$, $c=(1/3,1/3)$, $d=(-2/3,-2/3)$, and
+$\lambda=4$. Each vertex of $K$ lies in $c+B$; convexity gives
+$K\subseteq c+B$. For any $q\in B$, the coordinates of $c+q$ are at least
+$-2/3$ and its coordinate sum is at most $5/3<8/3$, giving the outer
+inclusion. Thus the distance lies in $[2,4]$, which already contradicts
+the claimed value $2-1=1$. An exact optimal upper bound is unnecessary.
+This refutes the statement in a nondegenerate two-dimensional case,
+without relying on the one-dimensional endpoint. It does not decide a
+modified conjecture restricted to higher dimensions or an asymptotic claim.
+
+\section{Formal verification and semantic correspondence}
+The Lean plane is $\mathbb R\times\mathbb R$.
+\texttt{diamond} and \texttt{triangle} encode $B$ and $K$ by their defining
+inequalities. \texttt{affineDiamond} uses a real linear equivalence, so it
+ranges over every invertible real linear transformation and every center.
+\texttt{outerTriangle} is exactly $d+\lambda K$ for $\lambda>0$:
+subtract $d$ and divide both coordinates by $\lambda$ to obtain a point
+of $K$; \texttt{outerTriangle\_iff} formally verifies this equivalence.
+\texttt{Admissible} encodes precisely the two inclusions above,
+with independent translations.
+
+\texttt{admissible\_lower\_bound} proves the universal geometric bound;
+\texttt{four\_admissible} proves nonemptiness with all inclusions checked
+pointwise. The real infimum in \texttt{distance} is bounded below by two
+in \texttt{distance\_lower\_bound}, and \texttt{conjecture\_false} refutes
+the claimed value one. This is an infimum proof, not merely a failure to
+attain dilation one.
+
+The project pins Lean and Mathlib. Run \texttt{lake build} and
+\texttt{lake env lean Check.lean} in \texttt{lean}. The axiom audit is in
+\texttt{verification.txt}; no admitted proofs, additional axioms, or
+\texttt{native\_decide} are used. Rebuild the PDF with
+\texttt{pdflatex main.tex} twice.
+\end{document}
