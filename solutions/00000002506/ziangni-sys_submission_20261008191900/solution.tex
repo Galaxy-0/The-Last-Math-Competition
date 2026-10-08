@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Tucker factorization and closure under mode products\\Proof of Conjecture 00000002506}
+\author{ziangni-sys}\date{8 October 2026}
+\begin{document}\maketitle
+We prove the stated algebraic structure for arbitrary finite-order coordinate tensors. Let $D$ be a finite set of modes; for each $i\in D$, let $I_i,J_i,L_i$ be finite index sets. Over any commutative semiring $K$ (in particular $\mathbb R$ or $\mathbb C$), a core is an actual array $C:\prod_iJ_i\to K$ and the factors are rectangular matrices $U_i:I_i\times J_i\to K$. Define their Tucker contraction by
+\[
+ [\mathcal T_U C](x)=\sum_{y\in\prod_iJ_i}C(y)\prod_{i\in D}U_i(x_i,y_i).
+\]
+This is exactly a core times one factor matrix in every mode. A product in a single mode is obtained by taking its designated factor matrix and identity matrices in all other modes.
+
+For arbitrary further factors $V_i:L_i\times I_i\to K$, finite distributivity gives the full closure identity
+\[
+ \mathcal T_V(\mathcal T_U C)=\mathcal T_W C,
+ \qquad W_i=V_iU_i.
+\]
+Indeed its left-hand side at $z$ is
+\begin{align*}
+ \sum_x\sum_y C(y)\prod_i U_i(x_i,y_i)\prod_i V_i(z_i,x_i)
+ &=\sum_y C(y)\sum_x\prod_i[V_i(z_i,x_i)U_i(x_i,y_i)]\\
+ &=\sum_y C(y)\prod_i\left[\sum_{x_i\in I_i}V_i(z_i,x_i)U_i(x_i,y_i)\right]\\
+ &= [\mathcal T_W C](z).
+\end{align*}
+All sums are finite, so no convergence assumption is required. Thus every given Tucker representation remains a Tucker representation after mode products, with the same core and updated factor matrices. In one mode, successive factors $A$ then $B$ combine as $BA$. In distinct modes, they commute, since in every mode at most one of the two factors is nonidentity; both orders give the same updated tuple.
+
+Existence of a Tucker representation without additional compression requirements is immediate but also explicit: take $C=T$ and every factor to be its identity matrix. Then $\prod_i\delta_{x_i,y_i}$ is one precisely when $y=x$ and zero otherwise, hence $\mathcal T_{\mathrm{id}}T=T$. This covers every tensor, including zero tensors, empty mode sets and empty index sets. The source states algebraic factorization and closure; it does not require a smallest core, optimal multilinear rank or orthogonal factors, and no such stronger conclusion is asserted here.
+
+\paragraph{Formal verification.} Lean uses genuine dependent coordinate arrays and actual rectangular matrices for arbitrary finite mode/index types. It proves the finite contraction composition identity, the identity kernel and factorization, universal existence and closure of Tucker representations, same-mode composition and distinct-mode commutation. The seven final theorem audits use only standard Lean axioms; no decomposition or contraction certificate is assumed.
+\end{document}
