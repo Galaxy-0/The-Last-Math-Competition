@@ -1,0 +1,65 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\title{The scalar algebra contradicts the Capelli equivalence\\Disproof of Conjecture 00000002755}
+\author{ziangni-sys}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\paragraph{Convention and claim.}
+Use the standard Capelli index counting the alternating variables:
+\[
+ C_n(x_1,\ldots,x_n;y_1,\ldots,y_{n-1})
+ =\sum_{\sigma\in S_n}\operatorname{sgn}(\sigma)
+ x_{\sigma(1)}y_1x_{\sigma(2)}\cdots y_{n-1}x_{\sigma(n)}.
+\]
+In particular $C_1(x_1)=x_1$. The conjecture asserts that an algebra
+satisfies $C_n=0$ if and only if its PI exponent is at most $n$.
+We disprove this equivalence at $n=1$ for the unital characteristic-zero
+algebra $A=\mathbb Q$. No restriction excluding this algebra or this
+index occurs in either version of the problem.
+
+\paragraph{Actual multilinear codimensions.}
+For $m\geq1$, let $P_m$ be the vector space with basis the noncommutative
+multilinear words $x_{\sigma(1)}\cdots x_{\sigma(m)}$, $\sigma\in S_m$.
+Its evaluation map is
+\[
+ E_m:P_m\longrightarrow \{\mathbb Q^m\to\mathbb Q\},\qquad
+ E_m\Bigl(\sum_\sigma a_\sigma x_{\sigma(1)}\cdots x_{\sigma(m)}\Bigr)(t)
+ =\sum_\sigma a_\sigma\prod_{j=1}^m t_{\sigma(j)}.
+\]
+Its kernel is precisely $P_m\cap\operatorname{Id}(A)$, since belonging
+to the kernel means vanishing on every substitution in the actual algebra.
+Commutativity gives
+\[
+ E_m(p)(t)=\Bigl(\sum_\sigma a_\sigma\Bigr)\prod_{j=1}^m t_j.
+\]
+Thus its image is the span of $g_m(t)=\prod_j t_j$. This function is
+nonzero because $g_m(1,\ldots,1)=1$, and it belongs to the image by
+evaluating the identity-permutation word. The first isomorphism theorem
+therefore yields
+\[
+ c_m(A)=\dim_{\mathbb Q}\bigl(P_m/(P_m\cap\operatorname{Id}(A))\bigr)
+       =\dim_{\mathbb Q}\operatorname{im}E_m=1.
+\]
+Consequently the genuine PI exponent is
+$\operatorname{exp}(A)=\lim_{m\to\infty}\sqrt[m]{c_m(A)}=1$.
+
+\paragraph{Failure of the equivalence.}
+The proposed bound $\operatorname{exp}(A)\leq1$ holds. However,
+$C_1(1)=1\ne0$, so $A$ does not satisfy the Capelli identity of index
+one. This disproves the stated equivalence and hence the conjecture.
+For orientation, $C_2=x_1y_1x_2-x_2y_1x_1$ does vanish in this
+commutative algebra, so its actual minimal index is two. This agrees
+with the separate ``ceiling plus one'' clause, which does not repair
+the false equivalence.
+
+\paragraph{Formal certificate.}
+The Lean project constructs permutation words, their linear evaluation
+map into all scalar-valued functions, its exact one-dimensional image,
+and the quotient-by-kernel linear equivalence. It derives all
+codimensions and the exponent limit, then evaluates the actual
+index-one polynomial at one. Final theorem axiom audits use only the
+standard axioms of Lean and Mathlib.
+\end{document}
