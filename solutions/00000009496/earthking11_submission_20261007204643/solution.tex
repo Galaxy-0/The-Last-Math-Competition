@@ -1,0 +1,109 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\title{Chevalley--Warning divisibility for conjecture 00000009496}
+\author{earthking11}
+\date{7 October 2026}
+\begin{document}
+\maketitle
+
+\section*{Statement and interpretation}
+The official conjecture describes Chevalley--Warning divisibility for a
+system of polynomial equations, with the degrees combined by their sum.
+The precise standard assertion is the following. Here all degrees are total
+degrees, and the empty family is allowed.
+
+\begin{theorem}\label{thm:cw}
+Let $p$ be prime, let $n,r\geq 0$, and let
+$f_1,\ldots,f_r\in\mathbb F_p[X_1,\ldots,X_n]$. If
+\[
+  \sum_{i=1}^{r}\deg f_i<n,
+\]
+then the number
+\[
+  N=\#\{x\in\mathbb F_p^n:f_i(x)=0\text{ for every }1\leq i\leq r\}
+\]
+is divisible by $p$.
+\end{theorem}
+
+The strict inequality is the standard Chevalley--Warning hypothesis. The
+conjecture gives no separate numerical meaning to its phrase about the
+``combination'' of divisibility; this report uses the degree-sum condition
+above and makes no stronger claim.
+
+\section*{Elementary proof}
+\begin{lemma}\label{lem:power}
+For each integer $e$ with $0\leq e<p-1$,
+$\sum_{t\in\mathbb F_p}t^e=0$ in $\mathbb F_p$.
+\end{lemma}
+\begin{proof}
+When $e=0$, every summand is $1$, including $0^0$ as used in polynomial
+evaluation, so the sum is $p=0$ in $\mathbb F_p$. For $1\leq e<p-1$,
+choose a generator $g$ of the cyclic group $\mathbb F_p^\times$.
+Then $g^e\neq1$ and
+\[
+  (g^e-1)\sum_{t\in\mathbb F_p}t^e
+  =(g^e-1)\sum_{k=0}^{p-2}g^{ke}
+  =g^{e(p-1)}-1=0.
+\]
+Since $g^e-1\neq0$ in a field, the sum is zero.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:cw}]
+Put $q=p-1$ and form the polynomial
+\[
+  P(X)=\prod_{i=1}^{r}\bigl(1-f_i(X)^q\bigr).
+\]
+For each $x\in\mathbb F_p^n$, Fermat's theorem gives $a^q=1$ for
+$a\neq0$, while $0^q=0$ because $q>0$. Thus $P(x)$ is exactly the
+indicator, in $\mathbb F_p$, of the common zero set. Consequently
+\[
+  \sum_{x\in\mathbb F_p^n}P(x)=N\cdot1_{\mathbb F_p}.
+\]
+Moreover,
+\[
+  \deg P\leq q\sum_{i=1}^{r}\deg f_i<qn.
+\]
+Each monomial $cX_1^{e_1}\cdots X_n^{e_n}$ occurring in $P$ therefore
+has $\sum_j e_j<qn$. At least one exponent, say $e_j$, is less than $q$;
+otherwise every exponent would be at least $q$ and their sum at least $qn$.
+Summation over all $x\in\mathbb F_p^n$ factors as
+\[
+  \sum_x c\prod_{j=1}^{n}x_j^{e_j}
+  =c\prod_{j=1}^{n}\left(\sum_{t\in\mathbb F_p}t^{e_j}\right)=0
+\]
+by Lemma~\ref{lem:power}. Summing the monomials of $P$ gives
+$N\cdot1_{\mathbb F_p}=0$. The kernel of the canonical map
+$\mathbb Z\to\mathbb F_p$ is $p\mathbb Z$, so $p\mid N$.
+\end{proof}
+
+\section*{Correspondence with the Lean theorem}
+In \texttt{lean/Main.lean}, the theorem is stated for an arbitrary finite
+field $K$, a finite variable index type $\sigma$, and a finite equation
+index type $\iota$. For the prime-field assertion take $K=\mathbb F_p$
+(represented by \texttt{ZMod p}), $\sigma=\texttt{Fin n}$, and
+$\iota=\texttt{Fin r}$. Its family $f$ consists of actual multivariate
+polynomials. The hypothesis sums their actual \texttt{totalDegree} values.
+The conclusion counts the subtype of coordinate vectors satisfying every
+polynomial equation. Mathlib's theorem
+\texttt{char\_dvd\_card\_solutions\_of\_fintype\_sum\_lt} proves exactly
+this finite-field assertion; the submitted final theorem specializes its
+field to an arbitrary finite field, which includes \texttt{ZMod p} for
+prime $p$. The imported theorem contains the indicator-polynomial argument
+above. Both the final theorem and this
+dependency are audited with \texttt{\#print axioms}.
+
+\section*{Reproduction}
+The Lean project uses Lean v4.33.1; the exact Mathlib revision is pinned in
+\texttt{lakefile.lean} and \texttt{lake-manifest.json}. Run
+\texttt{lake build} from the \texttt{lean/} directory; run
+\texttt{tectonic solution.tex} from the submission
+directory to regenerate this PDF. No auxiliary numerical computation is
+needed.
+
+\end{document}
