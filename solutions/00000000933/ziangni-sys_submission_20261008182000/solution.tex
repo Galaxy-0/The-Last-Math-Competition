@@ -1,0 +1,43 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\title{Disproof of Conjecture 00000000933\\A fixed spectral gap does not bound Riesz projections}
+\author{ziangni-sys}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+For nonnormal operators, spectral separation alone cannot control the norm of Riesz projections. In fact, even the infimum over all nontrivial spectral splittings is unbounded with the spectral gap fixed at one.
+
+On the complex Banach plane $E=\mathbb C^2$ with norm $\|(u,v)\|=\max\{|u|,|v|\}$, define for real $k$ the bounded operator
+\[
+ T_k=\begin{pmatrix}0&k\\0&1\end{pmatrix},\qquad
+ P_k=T_k,\qquad Q_k=I-P_k.
+\]
+Both $P_k$ and $Q_k$ are idempotent, $P_kQ_k=Q_kP_k=0$, and $P_k+Q_k=I$. Their eigenvectors $(1,0)$ and $(k,1)$ give eigenvalues $0$ and $1$ respectively. For every $z\notin\{0,1\}$, direct multiplication verifies that
+\[
+ (zI-T_k)^{-1}=z^{-1}Q_k+(z-1)^{-1}P_k.
+\]
+The two displayed eigenvalues prevent invertibility at $0$ and $1$, so the complete spectrum is exactly $\{0,1\}$, with gap $1$ for every $k$.
+
+Let $\Gamma_j$ be the positively oriented circle of radius $1/2$ about $j$, for $j=0,1$. The actual Dunford contour integrals are
+\begin{align*}
+ R_0(T_k)&=\frac1{2\pi i}\oint_{\Gamma_0}(zI-T_k)^{-1}\,dz=Q_k,\\
+ R_1(T_k)&=\frac1{2\pi i}\oint_{\Gamma_1}(zI-T_k)^{-1}\,dz=P_k.
+\end{align*}
+Indeed, the scalar inverse term with its pole inside the circle integrates to $2\pi i$, and the other term integrates to zero by Cauchy's theorem. The operator integral is a genuine Bochner contour integral in the Banach space of continuous linear maps.
+
+Testing the actual operator norms on the unit vector $e_2=(0,1)$ gives
+\[
+ \|P_k\|\ge\|(k,1)\|\ge|k|,\qquad
+ \|Q_k\|\ge\|(-k,0)\|=|k|.
+\]
+There are exactly two nonempty proper subsets of this spectrum, namely $\{0\}$ and $\{1\}$. Therefore the infimum over all nontrivial Riesz spectral splittings is
+\[
+ \inf\{\|R_0(T_k)\|,\|R_1(T_k)\|\}
+ =\min\{\|Q_k\|,\|P_k\|\}\ge |k|.
+\]
+Taking $k=|B|+1$ makes this infimum greater than any prescribed real bound $B$, while the reciprocal spectral gap remains $1$. This disproves the asserted spectral-separation control. Allowing an empty split would produce the zero projection and a vacuous infimum of zero; the meaningful nontrivial splitting interpretation fails as shown. Additional normality or resolvent control would be needed for a bound of this kind.
+
+\paragraph{Formal verification.}
+Lean constructs actual continuous linear operators, proves both resolvent inverse identities and the exact spectrum, evaluates both actual complex Bochner contour integrals using Cauchy's theorem, bounds their operator norms, classifies every nontrivial spectrum subset, and proves the actual real set-infimum unbounded. All eight printed final theorem axiom audits use only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
+\end{document}
