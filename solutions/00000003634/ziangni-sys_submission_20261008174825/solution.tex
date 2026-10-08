@@ -1,0 +1,40 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\title{Disproof of Conjecture 00000003634\\Zero Floquet real parts do not decide stability}
+\author{ziangni-sys}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+The conjecture says that signs of the real parts of Floquet exponents decide stability for systems with periodic coefficients. The boundary case with zero real parts invalidates this assertion: Jordan structure matters. We use Lyapunov stability of the zero solution, the usual bounded-perturbation notion, rather than asymptotic or exponential stability.
+
+Consider the constant, hence one-periodic, real systems
+\[
+ \dot x=A_0x,\quad A_0=\begin{pmatrix}0&0\\0&0\end{pmatrix},
+ \qquad \dot x=A_1x,\quad A_1=N=\begin{pmatrix}0&1\\0&0\end{pmatrix}.
+\]
+Their normalized fundamental matrices are
+\[
+ \Phi_0(t)=I,\qquad \Phi_1(t)=I+tN,
+\]
+respectively. Indeed $N^2=0$, so $e^{tN}=I+tN$, $(I+tN)^{-1}=I-tN$, and
+$\Phi_1'(t)=N=N\Phi_1(t)$ with $\Phi_1(0)=I$. Thus both have genuine Floquet decompositions
+$\Phi_j(t)=P_j(t)e^{tB_j}$, where $P_j(t)=I$ is one-periodic and $B_j=A_j$.
+
+Both $B_0$ and $B_1$ have eigenvalues $0,0$, even over $\mathbb C$. Therefore the real parts of all Floquet exponents have sign zero for both systems. Their monodromy matrices are $I$ and $I+N$, each with eigenvalues $1,1$. Other logarithm choices for a Floquet exponent can add integer multiples of $2\pi i$; their real parts remain zero.
+
+The zero system is Lyapunov stable: every solution is the constant initial vector. The Jordan system is not. Its flow is
+\[
+ \Phi_1(t)(u,v)=(u+tv,v).
+\]
+In the maximum norm on $\mathbb R^2$, fix an allowed output radius $\varepsilon=1$. For every proposed initial radius $\delta>0$, take $x(0)=(0,\delta/2)$. Then $\|x(0)\|=\delta/2<\delta$, whereas at the nonnegative time $t=2/\delta$,
+\[
+ x(t)=(1,\delta/2),\qquad \|x(t)\|\ge1.
+\]
+This negates the definition of Lyapunov stability. Norm equivalence in finite dimension makes the conclusion independent of the chosen norm.
+
+Thus identical real-part signs and identical monodromy eigenvalue lists coexist with opposite stability outcomes. A valid criterion must include the semisimplicity of multipliers on the unit circle (equivalently, absence of nontrivial Jordan blocks at zero real-part Floquet exponents). The stated sign-only criterion omits this requirement.
+
+\paragraph{Lean verification.}\sloppy
+The Lean project models the matrices as their actual continuous linear operators on $\mathbb R\times\mathbb R$: $N(u,v)=(v,0)$. It proves the operator exponential identity from its infinite series, verifies the initial value, inverse and differential equation for the fundamental operator, and checks the complex eigenvector equations for the two Floquet matrices. It defines Lyapunov stability with its full radius/time quantifiers and proves the stable and unstable cases above. No solution, exponential or spectral certificate is assumed. The final theorem axiom audits use only standard Lean axioms.
+\end{document}
