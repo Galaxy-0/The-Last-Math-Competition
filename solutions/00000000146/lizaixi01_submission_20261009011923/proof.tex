@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Pp}{\mathcal P}
+\title{Conjecture 146: the stated normalization has no weak probability limit}
+\author{Local development pilot; not an upstream submission}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+\noindent The source uses primes $p\le N$, denominator $N$, and scaling $N$.
+We preserve all three. Its supremum domain and law of $\alpha$ are unstated.
+We use the conventional Kolmogorov--Smirnov domain $[0,1]$ and prove a stronger
+statement covering every probability law of $\alpha$, even one changing with $N$.
+A supremum over all real thresholds would be unbounded; that interpretation is
+not used as a shortcut.
+
+For $N\ge1$, put $\Pp_N=\{p\in\mathbb N:p\text{ prime},\ p\le N\}$ and
+\[
+ F_N(\alpha,t)=\frac{\#\{p\in\Pp_N:\{\alpha p\}<t\}}{N},\qquad
+ D_N(\alpha)=\sup_{0\le t\le1}|F_N(\alpha,t)-t|,\qquad
+ X_N(\alpha)=N D_N(\alpha).
+\]
+The Lean definitions are total at $N=0$ using real division by zero; every
+limiting argument only uses $N\ge4$.
+
+\begin{theorem}
+For any sequence of Borel probability measures $\mu_N$ on $\R$, the actual
+pushforward laws $\lambda_N=(X_N)_*\mu_N$ have no weak limit which is a
+probability measure on $\R$. In particular they cannot converge to the law of
+any real-valued Brownian-bridge functional.
+\end{theorem}
+
+\begin{proof}
+Every fractional part belongs to $[0,1)$, so
+$F_N(\alpha,1)=\#\Pp_N/N$ for every $\alpha$. Hence
+\[
+ X_N(\alpha)\ge N-\#\Pp_N\ge N/2-2\quad(N\ge2).
+\tag{1}
+\]
+For the last inequality, all primes other than $2$ are odd. Counting those
+integers gives $\#\Pp_N\le N/2+2$; no prime number theorem is needed. The Lean
+proof uses the corresponding arithmetic prime-counting bound.
+
+These are genuine measurable statistics. For fixed $t$, each comparison
+$\{\alpha p\}<t$ is measurable: multiplication and fractional part are Borel
+measurable. A finite sum of indicators therefore makes $F_N(\cdot,t)$
+measurable. Furthermore,
+\[
+ D_N(\alpha)=\sup_{q\in\mathbb Q\cap[0,1]}
+                   |F_N(\alpha,q)-q|.
+\tag{2}
+\]
+To check the nontrivial direction, take $t>0$. The finite collection of samples
+strictly below $t$ has a maximum below $t$, if nonempty. Choose rational $q<t$
+arbitrarily close to $t$ and above every such sample. Then the strict-threshold
+count at $q$ equals the count at $t$, and the displayed errors approach one
+another. The case $t=0$ is itself rational. This argument also handles $t=1$,
+repeated samples and an empty collection. The ranges of errors are nonempty
+and bounded, as checked in Lean. Equation (2) is a countable supremum of
+measurable functions; thus $D_N$ and $X_N$ are measurable, and $\lambda_N$ is
+indeed a probability measure.
+
+Use the bounded continuous, everywhere strictly positive test
+\[
+ f(x)=\frac1{1+|x|},\qquad 0<f(x)\le1.
+\]
+For $N\ge4$, (1) implies
+\[
+ 0\le\int f\,d\lambda_N
+   =\int f(X_N(\alpha))\,d\mu_N(\alpha)
+   \le \frac1{N/2-1}\longrightarrow0.
+\tag{3}
+\]
+The equality is the proved pushforward integral identity. If $\lambda_N$
+converged weakly to a real probability measure $\nu$, this bounded continuous
+test would also give $\int f\,d\lambda_N\to\int f\,d\nu$.
+Yet $\int f\,d\nu>0$: a nonnegative measurable function has zero integral only
+if it vanishes almost everywhere, whereas $f$ is positive everywhere and
+$\nu(\R)=1$. This contradicts (3).
+\end{proof}
+
+\paragraph{Formal correspondence.}
+\texttt{Route2.primeKS} is the actual supremum over the subtype $[0,1]$;
+\texttt{scaledKS} multiplies it by $N$.
+\texttt{measurable\_primeKS} proves (2)'s measurability consequence, and
+\texttt{laws\_probability} and \texttt{test\_transport} certify the actual image
+laws. The zero-limit and strictly-positive-integral theorems supply the
+contradictory limits.
+The final theorem is \texttt{Route2.no\_probability\_weak\_limit}.
+Its explicit weak-convergence predicate tests all continuous real functions
+with values in $[0,1]$, using their nonnegative lower integrals. This is the
+usual normalized bounded-continuous-test formulation for probabilities; in
+particular standard weak convergence necessarily passes the test used above.
+No extra premise assumes measurability, the escape bound, or an object bridge.
+
+\paragraph{Provenance and limits.}
+The endpoint bound, rational-supremum equality and fixed-threshold CDF
+measurability reuse disclosed Phase~1c B partial work; an uncompiled Phase~1c A
+draft supplied the proposed integral route. This round completes the
+measurability, probability-law and weak-limit connections. Those prior ideas
+are not claimed as new discoveries. The exact original, pinned Lean sources,
+source correspondence and independent verification records accompany this
+local package. Local verification does not establish submission eligibility,
+a first solve, or upstream acceptance.
+\end{document}

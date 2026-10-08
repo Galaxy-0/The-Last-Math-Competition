@@ -1,0 +1,87 @@
+{
+  "verdict": "pass",
+  "target": "Route2.no_probability_weak_limit",
+  "reviewer": "/root/phase1d_review",
+  "author": "/root/phase1d_146",
+  "task_id": "d146-review-v1",
+  "candidate": "00000000146",
+  "review_of": "403f3ef4dc966e12d5a4008a79cb50a883a5b05b80b36a635f29b727c16d9fb9",
+  "reviewed_at": "2026-10-08T09:28:02Z",
+  "source_first_checklist": "workers/reviewer/source-first-checklist.md",
+  "source_first_checklist_saved_at": "2026-10-08T09:22:24Z",
+  "source_first_method": "Read the assigned task, Worker Skill and exact bilingual original; saved an independent checklist and original copy before reading the author's Lean, correspondence, paper or result. The author's confidence and self-evaluation were not read or used as acceptance evidence.",
+  "reviewed_hashes": {
+    "original": "ca18b752d06ac3a9dab6501cb636aeb332b03037389b33a02f7c3703e1cba748",
+    "00000000146.md": "ca18b752d06ac3a9dab6501cb636aeb332b03037389b33a02f7c3703e1cba748",
+    "lean/lake-manifest.json": "e792b0f81943b9b7a3ac6059283884ef6247721aed65c91f66754060c6347ff4",
+    "lean/lakefile.toml": "75803f3c1e89f3055f371da5fdd4fe33a54610f6efe3dcdfb3623d6e4a8e84e8",
+    "lean/lean-toolchain": "b2b5068d5a4835675e651ce83b29c0ddb308d28b80076e7c007aef4630af0477",
+    "lean/Main.lean": "90412cb45852a604af58288528d7184bfdfa845b23ffdef30e08a9bae792a8d4",
+    "original.md": "ca18b752d06ac3a9dab6501cb636aeb332b03037389b33a02f7c3703e1cba748",
+    "proof.pdf": "6d3bef97f2c9268f3547c65142e10d418eae272658e69ffe6f085525948d6e2f",
+    "proof.tex": "a74025b924e842b858c4ff5990a7ea09634e78846f0ac927cfee37dba21c6813",
+    "README.md": "3646c28c22e14c215e8f7c74e01694d286d617182eae919b05e9473a4fb18896",
+    "source-correspondence.md": "11fedafbdd8b291eb0ec49beb0578f8b3f96a2f00fa3ec7140128ddeeb6544ea"
+  },
+  "frozen_file_review": {
+    "inventory": "workers/reviewer/frozen-hash-inventory.json",
+    "required_file_count": 10,
+    "all_files_read_or_visually_inspected": true,
+    "all_independent_sha256_match_seal": true,
+    "original_matches_task": true,
+    "main_matches_supplied_immutable_source": true,
+    "configuration_conclusion": "Frozen lakefile and manifest agree on mathlib revision db584cd6d46c92f209a44c0f1c829460d327499d and Lean toolchain leanprover/lean4:v4.33.0. The nine text files were read, including the entire frozen Main.lean. The tenth file, proof.pdf, was independently extracted, rendered and inspected on both pages."
+  },
+  "source_correspondence": {
+    "bilingual_agreement": "English and Chinese preserve the same primes p_n <= N, count divided by N, strict fractional-part comparison < t, absolute discrepancy from t, and scaling N. Neither supplies a threshold domain, alpha sampling law or explicit Brownian-bridge functional.",
+    "domain_convention": "The pass applies to the explicitly declared standard Kolmogorov-Smirnov convention t in [0,1]. Both endpoints are present. This convention is disclosed in Lean, correspondence, README and paper. It is not asserted to have been explicitly supplied by the source. A literal all-real threshold reading gives an unbounded supremum and is separately acknowledged; no arbitrary Lean conditional-supremum value is used to disguise that issue.",
+    "prime_objects": "Route2.primesLE N is exactly the finite set of natural prime values p <= N, each once, definitionally Mathlib Nat.primesLE N. It is not the first N primes. Route2.primeCDF is the source's count divided by the cutoff N, including the strict comparison Int.fract(alpha * p) < t. Route2.primeKS is the actual absolute-discrepancy supremum; scaledKS multiplies it by N.",
+    "zero_and_positive_N": "The mathematical paper states N>=1. Lean totalizes division at N=0, but positive-N cancellation explicitly assumes 0<N, the escape theorem assumes N>=2, and the eventual integral argument uses N>=4. No limiting conclusion depends on the arbitrary initial zero convention.",
+    "quantifiers": "The result holds for every real alpha and arbitrary sequences of real probability laws mu_N, including a fixed law or a Dirac law. No rational/irrational alpha restriction, exceptional-set premise, primality condition on N, equidistribution hypothesis or impossible Brownian assumption is introduced."
+  },
+  "mathematical_and_Lean_conclusions": [
+    {
+      "obligation": "Actual supremum, endpoints and strict threshold",
+      "conclusion": "ks_range_nonempty and ks_range_bdd establish a genuine real supremum for every N and alpha. primeCDF_zero uses fract>=0; primeCDF_one uses fract<1. endpoint_lower invokes the actual supremum at t=1. These are faithful to strict < and include both endpoints."
+    },
+    {
+      "obligation": "Countable rational equality and measurability",
+      "conclusion": "primeKS_eq_rationalKS proves equality of actual and rational suprema. For t>0 finite_gap finds a number a<t above every sample strictly below t. Rational q between max(a,t-epsilon) and t preserves the finite count, excludes samples equal to t in both counts, and changes the discrepancy by less than epsilon. The t=0 case is zero; t=1 and repeated/empty samples are covered. Rational and real ranges are nonempty and bounded. Fixed-threshold CDF measurability follows from finite sums of measurable indicators and measurable fractional part. RatUnit is countable; Measurable.iSup and the proved equality yield measurable_primeKS and measurable_scaledKS for the actual statistic. No measurability bridge is assumed."
+    },
+    {
+      "obligation": "Uniform divergent bound",
+      "conclusion": "scaled_endpoint_lower proves N-#primesLE(N) <= scaledKS for positive N. prime_card_bound instantiates the pinned Mathlib primeCounting_add_le with a=k=2 and N-2, producing #primesLE(N)<=floor(N/2)+2 for N>=2. Its elementary coprime-residue-class theorem and cardinality correspondence were read independently. Natural division bounds and real casting yield N/2-2 <= scaledKS for all alpha. This bound diverges uniformly without analytic prime distribution or a chosen alpha."
+    },
+    {
+      "obligation": "Genuine probability pushforwards and integral transport",
+      "conclusion": "laws mu N is Measure.map (scaledKS N) (mu N), exactly the law of the source statistic. laws_probability uses measurable_scaledKS to prove a probability measure for every N when mu_N has mass one. test_transport invokes the measurable-map lower-integral identity for this actual map. The probability typeclass and transport are supplied by proofs, not unproved law/proxy equality assumptions."
+    },
+    {
+      "obligation": "Standard weak convergence rather than a weakened conclusion",
+      "conclusion": "WeaklyConverges quantifies over all continuous real tests in [0,1], with their nonnegative expectations represented in ENNReal. This is a necessary standard weak condition for probabilities: each normalized continuous test is bounded, measurable and integrable; ofReal of its real expectation equals its lower integral, and continuous ofReal transports real test convergence to exactly the displayed condition. The identity is the pinned Mathlib ofReal_integral_eq_lintegral_ofReal. These expectations lie in [0,1], so ENNReal and real convergence agree there (tendsto_toReal_iff). Affine normalization f=(g+C)/(2C), C>0 and |g|<=C, recovers every bounded real continuous test via E(g)=2C E(f)-C for mass-one measures. A separate normalization-equivalence theorem is not formalized, but this independently checked definition-level justification is complete; no unproved keybridge is made a premise. Failure of even the necessary direction is enough to refute full standard weak convergence."
+    },
+    {
+      "obligation": "Complete weak-limit contradiction",
+      "conclusion": "test(x)=1/(1+|x|) is continuous, normalized and strictly positive on every real x. For N>=4, the uniform escape bound yields test(scaledKS N alpha)<=1/(N/2-1). Transporting and integrating over any probability mu_N gives an expectation tending to zero, via reciprocal-at-infinity, continuous ofReal and squeezing. For every probability target nu, the test support is all R with nu(R)=1, and test_integral_positive gives strictly positive expectation. no_probability_weak_limit applies the entire weak-test condition to this valid test, then uniqueness of limits contradicts positivity. All ingredients concern the actual statistic and actual laws."
+    },
+    {
+      "obligation": "Brownian-bridge target and original conclusion",
+      "conclusion": "Excluding every real probability weak target is stronger than excluding the image law of any real-valued measurable Brownian-bridge functional. Therefore the unspecified functional and alpha law need not be chosen or formalized. The pass does not claim to exclude an extended-real target at +infinity or to repair a different denominator/normalization that the source did not state."
+    }
+  ],
+  "paper_review": {
+    "page_count": 2,
+    "independent_render_directory": "workers/reviewer/pdf-review",
+    "all_pages_visually_inspected": true,
+    "conclusion": "The final PDF and TeX give the same actual objects, disclosed domain convention, positive-N treatment, uniform bound, rational measurability argument, genuine image laws and bounded-continuous-test contradiction as Lean. Both pages are legible; equations and theorem identifiers are present without clipping or overlap. Prior partial work is credited. README and paper do not self-certify upstream acceptance or eligibility."
+  },
+  "objections": [],
+  "required_repairs": [],
+  "nonblocking_observations": [
+    "source-correspondence.md names the exact copied source as source-00000000146.md, its filename in the author workspace. In the frozen package its retained names are original.md and 00000000146.md. Both exact hashes match the task, so this stale filename does not obscure the binding or affect the semantic verdict.",
+    "Threshold domain, alpha sampling law and Brownian functional formula remain omitted by the original. The claim is explicitly qualified by standard KS [0,1] and real-valued probability weak convergence; arbitrary mu_N and all real probability targets resolve the latter omissions without inventing particular objects."
+  ],
+  "mechanical_gate_boundary": "This is an independent semantic verdict only. No compile success, author confidence, copied prior log, or self-evaluation has been treated as mathematical correctness. The reviewer has not issued a mechanical or local verification status; the manager must bind the verdict and exact reviewed hashes to actual deterministic build/audit receipts separately.",
+  "detailed_checkpoint": "workers/reviewer/initial-review.md",
+  "review_tool_failures": "workers/reviewer/review-tool-failures.json"
+}
