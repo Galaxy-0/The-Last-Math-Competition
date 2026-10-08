@@ -1,0 +1,65 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\hypersetup{hidelinks}
+\newtheorem{proposition}{Proposition}
+\title{Disproof of Conjecture 00000006953\\Variance-proportional allocation need not be optimal}
+\author{gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\noindent\textbf{Claim addressed.} The conjecture proposes allocation in proportion to stratum variances as optimal for stratified estimation. The following counterexample has two strata of equal weight, equal observation cost, and independent sampling with replacement. A competing allocation has the same total cost and strictly smaller variance, so the proposed allocation is not optimal even in this elementary setting.
+
+\begin{proposition}
+For two equal-weight strata and five observations, allocating observations in the ratio of the stratum variances can have strictly larger variance than another admissible allocation.
+\end{proposition}
+\begin{proof}
+In the first stratum let $X$ be equally likely to be $-1$ or $1$. In the second let $Y$ be equally likely to be $-2$ or $2$. Then
+\[
+ \mathbb EX=\mathbb EY=0,\qquad
+ \operatorname{Var}(X)=1,\qquad \operatorname{Var}(Y)=4.
+\]
+Use independent observations in each stratum and across strata. For an allocation $(n_1,n_2)$ with $n_1+n_2=5$ and $n_1,n_2>0$, the usual stratified mean is
+\[
+ T_{n_1,n_2}=\frac12\left(
+ \frac1{n_1}\sum_{i=1}^{n_1}X_i+
+ \frac1{n_2}\sum_{j=1}^{n_2}Y_j\right).
+\]
+It is unbiased for the equally weighted population mean $0$. Independence gives
+\[
+ \operatorname{Var}(T_{n_1,n_2})
+ =\frac14\left(\frac1{n_1}+\frac4{n_2}\right).
+\]
+The variance-proportional allocation is exactly $(1,4)$, with no rounding issue. Its variance is
+\[
+ \operatorname{Var}(T_{1,4})=\frac12.
+\]
+The allocation $(2,3)$ has the same total of five observations and the same total cost, but
+\[
+ \operatorname{Var}(T_{2,3})
+ =\frac14\left(\frac12+\frac43\right)
+ =\frac{11}{24}<\frac12.
+\]
+Thus allocating in proportion to the variances is not optimal.
+\end{proof}
+
+\noindent\textbf{Scope.} The counterexample uses positive variances, positive sample counts, identical costs, equal stratum weights, and an unbiased estimator. It does not depend on finite-population corrections, unequal weights, unequal costs, limiting approximations, or a convention for rounding nonintegral allocations. One better allocation suffices; no claim about all possible estimators or a general optimal-allocation theorem is needed.
+
+\section*{Exact finite probability model and Lean proof}
+The sample space is the full Cartesian product $\Omega=\{0,1\}^5$, with each of its $32$ points having probability $1/32$. A coordinate $0$ represents sign $-1$ and coordinate $1$ sign $1$. The first $n_1$ coordinates provide observations from the first stratum; twice the signs of the remaining coordinates provide observations from the second. Every joint coordinate pattern has probability $(1/2)^5$, exactly the independent fair-bit law.
+
+The Lean project defines this genuine measure as \texttt{(1/32) * Measure.count}, with scalar multiplication of measures, and proves its total mass is one. The estimators are sums of the sampled values divided by their actual sample counts, with the two stratum weights $1/2$. The function \texttt{Optimal} compares the actual \texttt{ProbabilityTheory.variance} among all positive allocations with total count five.
+
+Lean reduces the Bochner integral and the variance to their exact finite sums, verifies the stratum means and variances, proves the allocation ratio $1/4$ equals the variance ratio, proves both estimators unbiased, and computes their variances $1/2$ and $11/24$. The final theorem proves that the variance-proportional allocation is not optimal. No variance value is assigned by definition, and no simulation is used.
+
+Inside \texttt{lean/}, run \texttt{lake build}, then
+\begin{center}\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The toolchain is Lean 4.19.0 and Mathlib is pinned to
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+All transitive commits are pinned. The supplementary \texttt{verify.py} independently enumerates all $32$ outcomes with exact rational arithmetic. The unchanged source and actual verification records accompany the submission. Author self-review and parent-agent adversarial review are recorded separately; no external independent review is claimed.
+
+\begin{thebibliography}{9}
+\bibitem{source} The Last Math Competition,
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000006953.md}{Conjecture 00000006953 (original bilingual source)}.
+\end{thebibliography}
+\end{document}
