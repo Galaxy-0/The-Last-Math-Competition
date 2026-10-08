@@ -1,0 +1,105 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\title{A deterministic positive-weight counterexample\\to Conjecture 00000009876}
+\author{ziangni-sys}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Claim and scope.}
+The English statement asserts that passage-time variances of general
+finite-variance-weight first-passage percolation grow as the one-half power
+of distance, and that the exponent $1/2$ is universal under finite
+exponential moments. The Chinese statement makes the same universal
+assertions. Neither version requires a nonconstant edge-weight law.
+We disprove both assertions as written using strictly positive,
+independent, identically distributed weights on the standard square lattice.
+The example does not address a modified conjecture that explicitly excludes
+deterministic edge laws. A false universal clause suffices to disprove the
+conjunction; no claim concerning the heavy-tail clause is needed.
+
+\paragraph{The probability model.}
+Let $V=\mathbb Z^2$, and join two vertices when they differ by one in exactly
+one coordinate. Let $E$ be the set of its undirected edges. On the one-point
+probability space $(\{*\},\delta_*)$, set
+\[
+             W_e(*)=1 \qquad(e\in E).
+\]
+Every $W_e$ has law $\delta_1$, is strictly positive, has finite second moment,
+and satisfies $\mathbb E e^{tW_e}=e^t<\infty$ for every real $t$.
+These variables are independent, including in the full finite-family sense:
+for any finite $F\subset E$ and Borel sets $B_e$,
+\[
+ \mathbb P\left(\bigcap_{e\in F}\{W_e\in B_e\}\right)
+ =\prod_{e\in F}\mathbf1_{\{1\in B_e\}}
+ =\prod_{e\in F}\mathbb P(W_e\in B_e).
+\]
+Thus this is an iid first-passage-percolation model, despite its degenerate
+distribution. In particular, neither lack of positivity nor lack of moments
+causes the counterexample.
+
+\paragraph{Actual passage times.}
+For a finite nearest-neighbor walk $p=(v_0,\ldots,v_k)$, its cost is
+$C(p)=\sum_{j=0}^{k-1}W_{\{v_j,v_{j+1}\}}=k$.
+Define passage time by the usual infimum over all such walks:
+\[
+ T(x,y)=\inf\{C(p):p\text{ is a finite nearest-neighbor walk from }x\text{ to }y\}.
+\]
+Allowing walks with repeated vertices makes no difference here: all costs
+are positive. Put $T_n=T((n,0),(0,0))$, where $n\geq0$ is an integer.
+Undirected symmetry also gives the same passage time in the reverse direction.
+
+\begin{lemma}
+For every $n\geq0$, $T_n=n$ at every outcome.
+\end{lemma}
+\begin{proof}
+Each edge can decrease the first coordinate by at most one. Thus a walk of
+length $k$ from $(n,0)$ to $(0,0)$ must have $n\leq k$. More explicitly,
+the inequality $v_{j,1}\leq v_{j+1,1}+1$ sums to $n\leq k$.
+Consequently every admissible cost is at least $n$. The horizontal walk
+$(n,0),(n-1,0),\ldots,(0,0)$ has exactly $n$ edges and cost $n$.
+The set in the infimum is therefore nonempty and bounded below, its infimum
+equals $n$, and the infimum is attained.
+\end{proof}
+
+\begin{theorem}
+The passage-time variances are identically zero. In particular there are no
+$c>0$ and $N\in\mathbb N$ such that
+\[
+       c\sqrt n\leq\operatorname{Var}(T_n)\quad\hbox{for all }n\geq N.
+\]
+Hence the universal one-half growth assertion is false.
+\end{theorem}
+\begin{proof}
+The preceding lemma gives $\mathbb E T_n=n$ and
+$\operatorname{Var}(T_n)=\mathbb E[(T_n-n)^2]=0$.
+If the displayed inequality held, substituting $n=N+1$ would give a strictly
+positive left side and zero right side, a contradiction.
+\end{proof}
+
+\paragraph{Meaning of ``grow as''.}
+The contradiction applies to $\operatorname{Var}(T_n)\sim c\sqrt n$ with
+$c>0$, to two-sided comparability with $\sqrt n$, and to any assertion of
+a positive growth exponent $1/2$. Zero variance cannot have that exponent.
+An upper bound $O(\sqrt n)$ alone would be consistent with this example,
+but would not assert growth as a one-half power or universality of that
+exponent, as the source does.
+
+\paragraph{Formal verification.}
+The accompanying Lean 4 project defines the square lattice as a
+\texttt{SimpleGraph} on $\mathbb Z\times\mathbb Z$, its actual undirected
+edge type, the Dirac probability measure, and the edge random variables.
+It proves their joint independence with Mathlib's \texttt{iIndepFun}, their
+common law, positivity, second-moment integrability, and exponential-moment
+integrability for every real parameter. Costs are recursively summed along
+\texttt{SimpleGraph.Walk}; passage times use the real infimum of all walk
+costs. The coordinate lower bound and explicit horizontal walk establish
+\texttt{passage\_eq\_distance}. Mathlib's measure-theoretic variance yields
+\texttt{passage\_variance\_zero}, followed by the explicit negation
+\texttt{no\_positive\_sqrt\_lower\_bound}. No asymptotic conclusion, shortest-path
+certificate, or variance identity is assumed as a hypothesis.
+\end{document}
