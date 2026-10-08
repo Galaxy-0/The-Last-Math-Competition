@@ -1,0 +1,60 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\hypersetup{hidelinks}
+\newtheorem{proposition}{Proposition}
+\title{Disproof of Conjecture 00000009675\\A two-generator obstruction to the totient clause}
+\author{gaochengzhecpu}
+\date{}
+\begin{document}
+\maketitle
+\noindent\textbf{Claim addressed.} The conjecture concerns the two numbers $\Gamma(1/N)$ and $\Gamma(2/N)$. Its last clause asserts that, when the denominator has more than two distinct prime factors, their transcendence degree is $\varphi(N)/2$. The degree of these two numbers means the transcendence degree over $\mathbb Q$ of the field they generate. This clause is impossible already at $N=105$.
+
+\begin{proposition}
+For every $a,b\in\mathbb C$,
+\[
+ \operatorname{trdeg}_{\mathbb Q}\mathbb Q(a,b)\le2.
+\]
+Consequently,
+\[
+ \operatorname{trdeg}_{\mathbb Q}
+ \mathbb Q\bigl(\Gamma(1/105),\Gamma(2/105)\bigr)
+ \ne\frac{\varphi(105)}2.
+\]
+\end{proposition}
+\begin{proof}
+The algebra $\mathbb Q[a,b]$ is the image of the evaluation homomorphism
+\[
+ \mathbb Q[X,Y]\longrightarrow\mathbb C,\qquad X\mapsto a,\quad Y\mapsto b.
+\]
+Its transcendence degree is therefore at most the transcendence degree $2$ of the polynomial ring. Passing to its fraction field $\mathbb Q(a,b)$ preserves transcendence degree. This proves the bound for arbitrary $a,b$, without any independence assumption.
+
+Now $105=3\cdot5\cdot7$ has three distinct prime divisors and $105\ge7$. Moreover,
+\[
+ \varphi(105)=105\left(1-\frac13\right)
+ \left(1-\frac15\right)\left(1-\frac17\right)=48,
+ \qquad \frac{\varphi(105)}2=24>2.
+\]
+Apply the bound to $a=\Gamma(1/105)$ and $b=\Gamma(2/105)$. Both arguments are positive, so these are ordinary finite Gamma values. The claimed degree $24$ contradicts the universal upper bound $2$.
+\end{proof}
+
+\noindent\textbf{Scope.} Both fractions $1/105$ and $2/105$ are reduced and have denominator $105$; there is no ambiguity caused by canceling a factor of $2$. This disproof addresses exactly the two Gamma values named in the source. It does not replace them by the larger collection of all Gamma values at denominator $N$. It also makes no assertion about the separate independence clauses at $N=5$ or $N\ge7$.
+
+\section*{Lean correspondence and reproduction}
+The Lean theorem \texttt{two\_generated\_trdeg\_le\_two} quantifies over every function $v:\mathrm{Fin}(2)\to\mathbb C$ and bounds Mathlib's actual \texttt{Algebra.trdeg} of \texttt{IntermediateField.adjoin} of its range. The proof uses the genuine evaluation homomorphism from \texttt{MvPolynomial (Fin 2) Q}, its surjection onto the generated algebra, and the algebraic fraction-field extension to the generated field. The tower formula supplies the equality of the two transcendence degrees.
+
+The definitions \texttt{gammaPair} and \texttt{gammaField} use Mathlib's actual \texttt{Complex.Gamma}. The prime-factor and totient theorems use \texttt{Nat.primeFactors} and \texttt{Nat.totient}. The final theorem negates the universal totient clause and verifies $N=105$ meets its hypotheses. No numeric approximation of a Gamma value, transcendence assumption, or substitute dimension statistic is used.
+
+Inside \texttt{lean/}, run \texttt{lake build}, then
+\begin{center}\texttt{lake env lean -DwarningAsError=true Main.lean}.\end{center}
+The project uses Lean 4.19.0 and Mathlib commit
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+All transitive dependencies are pinned in the manifest. The supplementary \texttt{verify.py} independently enumerates the totatives and prime divisors of $105$ using exact integer arithmetic. The transcendence-degree bound is proved in Lean, independently of that enumeration.
+
+The unchanged bilingual conjecture is included as \texttt{SOURCE.md}. Build logs, source hashes, theorem-axiom output, and PDF checks are in \texttt{verification/}. Author self-review and parent-agent adversarial review are separate; no external independent review is claimed.
+
+\begin{thebibliography}{9}
+\bibitem{source} The Last Math Competition,
+\href{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000009675.md}{Conjecture 00000009675 (original bilingual source)}.
+\end{thebibliography}
+\end{document}
