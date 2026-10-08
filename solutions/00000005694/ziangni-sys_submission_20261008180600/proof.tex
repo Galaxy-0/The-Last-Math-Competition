@@ -1,0 +1,62 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,geometry,hyperref}
+\geometry{margin=1in}
+\title{The orthogonal indicator has the opposite sign\\Disproof of Conjecture 00000005694}
+\author{ziangni-sys}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\paragraph{Statement and standard definition.}
+The conjecture asserts that the symplectic type has indicator $+1$
+and the orthogonal type has indicator $-1$. We use the standard
+Frobenius--Schur indicator of a complex representation of a finite group,
+\[
+ \nu(\rho)=\frac{1}{|G|}\sum_{g\in G}\chi_\rho(g^2),
+ \qquad \chi_\rho(g)=\operatorname{tr}(\rho(g)).
+\]
+An irreducible representation is of orthogonal type when it admits a
+nondegenerate invariant symmetric complex bilinear form. Symplectic
+type refers to an invariant alternating form. This is the usual
+representation-theoretic meaning of these indicator types.
+
+\paragraph{Actual orthogonal representation.}
+Let $G=C_2=\mathbb Z/2\mathbb Z$ and $V=\mathbb C$, with the trivial
+representation $\rho(g)z=z$. This is a genuine group representation:
+$\rho(gh)=\rho(g)\rho(h)$ and $\rho(e)=I$. It is irreducible, since a
+one-dimensional complex vector space has no proper nonzero subspace.
+For completeness, if a subspace $S$ contains $a\ne0$, then every
+$z\in\mathbb C$ equals $(z/a)a$ and therefore belongs to $S$.
+
+The bilinear form $B(x,y)=xy$ is symmetric and $G$-invariant:
+\[
+ B(x,y)=B(y,x),\qquad B(\rho(g)x,\rho(g)y)=B(x,y).
+\]
+It is nondegenerate because $B(x,y)=0$ for every $y$ forces
+$B(x,1)=x=0$. It is not alternating, since $B(1,1)=1$.
+Thus this irreducible representation has orthogonal type.
+
+\paragraph{Indicator computation.}
+For each of the two elements $g\in C_2$, $\rho(g^2)=I_V$ has trace
+$1$. The normalized character sum, with the actual group and actual
+representation, is consequently
+\[
+ \nu(\rho)=\frac12(1+1)=1\ne-1.
+\]
+This disproves the asserted value for orthogonal type and hence the
+conjunction in the conjecture. The fixed-point-dimension and signature
+clauses cannot rescue this failed clause. In fact the conventional signs
+are orthogonal $+1$ and symplectic $-1$; only the exhibited orthogonal
+counterexample is needed here.
+
+\paragraph{Formalization and reference.}
+The Lean project constructs $C_2$ as the multiplicative version of
+\texttt{ZMod 2}, uses \texttt{Representation.trivial}, obtains its character
+from \texttt{LinearMap.trace}, computes the finite normalized indicator
+sum, and proves irreducibility and all bilinear-form properties above.
+The final theorem combines these facts with the failure of the proposed
+orthogonal sign. The standard convention is documented in B. Conrad,
+\emph{Frobenius--Schur indicator}, Stanford Math 210B,
+\href{https://math.stanford.edu/~conrad/210BPage/handouts/realrep.pdf}{course handout}.
+The counterexample is self-contained.
+\end{document}
