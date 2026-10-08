@@ -1,0 +1,71 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,geometry,hyperref}
+\geometry{margin=1in}
+\begin{document}
+\begin{center}
+{\Large Quasi-complete graphs need not maximize spectral moments}\\[4pt]
+Disproof of Conjecture 00000003725\\[4pt]
+ziangni-sys --- October 8, 2026
+\end{center}
+\paragraph{Moment convention and scope.}
+For a finite simple graph $G$ with actual adjacency matrix $A_G$,
+the standard adjacency spectral moment of order $k$ is
+\[
+ M_k(G)=\sum_j\lambda_j(A_G)^k=\operatorname{tr}(A_G^k).
+\]
+The trace equality follows by diagonalizing the real symmetric
+adjacency matrix. It also counts length-$k$ closed walks.
+We use $k=4$ and compare actual graphs with both vertex count and
+edge count fixed. A single competing graph with larger fourth
+moment is enough to refute the asserted quasi-complete extremum.
+No lexicographic ordering of the entire moment sequence is stated
+in the problem, and we make no claim about that different ordering.
+
+\paragraph{The prescribed quasi-complete graph.}
+The standard quasi-complete construction writes
+$m=\binom{r}{2}+s$, $0\leq s<r$: take a clique on $r$ vertices,
+join one new vertex to $s$ clique vertices, and leave any remaining
+vertices isolated. This convention is described in
+\emph{Sum of squares of degrees in a graph}, Section 1,
+by Abrego, Fernandez-Merchant, Neubauer and Watkins (2009),
+\url{https://emis.de/ft/14223}.
+For $n=5,m=4$, the parameters are $r=3,s=1$.
+Thus $Q=QC(5,4)$ has edges $01,02,12,03$ and isolated vertex $4$.
+Compare it with the star $S=K_{1,4}$, whose edges are
+$01,02,03,04$. Both are actual simple five-vertex, four-edge graphs.
+
+\paragraph{Exact fourth moments.}
+Their adjacency matrices, in vertex order $0,1,2,3,4$, are
+\[
+ A_Q=\begin{pmatrix}
+ 0&1&1&1&0\\1&0&1&0&0\\1&1&0&0&0\\1&0&0&0&0\\0&0&0&0&0
+ \end{pmatrix},\qquad
+ A_S=\begin{pmatrix}
+ 0&1&1&1&1\\1&0&0&0&0\\1&0&0&0&0\\1&0&0&0&0\\1&0&0&0&0
+ \end{pmatrix}.
+\]
+Because the matrices are symmetric,
+$\operatorname{tr}(A^4)=\sum_{i,j}(A^2_{ij})^2$.
+For $Q$, the nonzero part of $A_Q^2$ is
+\[
+ \begin{pmatrix}3&1&1&0\\1&2&1&1\\1&1&2&1\\0&1&1&1\end{pmatrix},
+\]
+whose squared entries sum to $11+7+7+3=28$. For the star, $A_S^2$ consists of the central diagonal
+entry $4$ and an all-one $4\times4$ leaf block, giving
+$4^2+16=32$. Consequently
+\[
+ M_4(S)=32>28=M_4(Q).
+\]
+Hence $QC(5,4)$ does not maximize the actual fourth spectral
+moment among graphs with the prescribed counts, and the conjecture
+is false. The same strict comparison holds for moments divided by
+the common vertex count five.
+
+\paragraph{Formal certificate.}
+Lean constructs the actual graphs and checks the canonical parameters
+and both edge sets. It verifies the real adjacency matrices and
+calculates the fourth-power traces. The final theorem disproves the
+asserted maximum. All calculations are checked by the Lean kernel;
+final audits use only standard Lean and Mathlib axioms.
+\end{document}
