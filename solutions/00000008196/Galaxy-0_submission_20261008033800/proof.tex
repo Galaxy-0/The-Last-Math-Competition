@@ -1,0 +1,68 @@
+\pdfoutput=1
+\pdfmapfile{+symbols.map}
+\pdfmapfile{+cm.map}
+\pdfmapfile{+cmextra.map}
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Dependent Staudt Hits at the Primes Five and Seventeen}
+\author{Galaxy-0}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The independence clause of conjecture 00000008196 fails for the distinct primes 5 and 17 under uniform even-index sampling and its natural-density interpretation. On uniformly sampled positive even indices $k=2n$, the events $4\mid k$ and $16\mid k$ have probabilities $1/2$ and $1/8$, while their intersection has probability $1/8$, not $1/16$. These values hold exactly on every initial segment of $8m$ such indices, and are also their natural densities. The obstruction is elementary divisibility, independent of any computation of Bernoulli numerators or denominators.
+\end{abstract}
+\section{The precise clause and sampling convention}
+The source explicitly defines a Staudt hit at a prime $p$ by $p-1\mid k$, and asserts that the hits at primes are independent. We refute this clause; none of the claims about expected counts or numerator distributions is needed.
+
+The statement does not specify a probability space. We use the standard arithmetic interpretation: sample an index uniformly from a growing initial segment and take natural-density limits. Positive even indices are the usual domain of the von Staudt denominator description, so we first use $k=2n$, $n\ge1$. The counterexample also works if all positive indices are sampled, as recorded below. No probability distribution uniform on all positive integers is presumed to exist.
+
+For a positive integer $m$, let $n$ be uniform on $\{1,\ldots,8m\}$ and put $k=2n$. Write
+\[
+ E_5=\{n:5-1\mid 2n\},\qquad
+ E_{17}=\{n:17-1\mid 2n\}.
+\]
+The integers 5 and 17 are distinct primes. Cancelling the common factor 2 in divisibility gives
+\[
+ E_5=\{n:2\mid n\},\qquad E_{17}=\{n:8\mid n\}.
+\]
+In particular $E_{17}\subseteq E_5$.
+\section{Exact counts and failure of independence}
+\begin{theorem}
+For every positive integer $m$, the Staudt hits at 5 and 17 are not independent under uniform sampling of $k\in\{2,4,\ldots,16m\}$.
+\end{theorem}
+\begin{proof}
+Exactly $4m$ integers in $\{1,\ldots,8m\}$ are divisible by 2; exactly $m$ are divisible by 8. As the second event implies the first, exactly $m$ satisfy both. Thus
+\[
+ \mathbb P(E_5)=\frac{4m}{8m}=\frac12,\qquad
+ \mathbb P(E_{17})=\frac{m}{8m}=\frac18,\qquad
+ \mathbb P(E_5\cap E_{17})=\frac18.
+\]
+Independence would instead require $(1/2)(1/8)=1/16$. Since $1/8\ne1/16$, it fails. Equivalently, the finite counting identity required for independence is false:
+\[
+ (8m)\,|E_5\cap E_{17}|=8m^2
+ \ne 4m^2=|E_5|\,|E_{17}|.
+\]
+\end{proof}
+This is not a finite-size discrepancy that disappears as the sample grows. The difference between the joint probability and the product of marginals equals $1/16$ for every $m\ge1$.
+
+For an arbitrary positive endpoint $N$, the numbers of hits in $\{1,\ldots,N\}$ are $\lfloor N/2\rfloor$ and $\lfloor N/8\rfloor$, and the intersection count is $\lfloor N/8\rfloor$. Dividing by $N$ and using $0\le x-\lfloor x\rfloor<1$ gives the natural densities $1/2$, $1/8$ and $1/8$. Hence asymptotic independence fails as well. Even without evaluating the full limits, the constant nonzero discrepancy along $N=8m$ alone rules out asymptotic independence.
+\section{Robustness of the obstruction}
+The divisibility implication $16\mid k\Rightarrow4\mid k$ holds for every integer index. Under any probability model for these indices, the second hit event is contained in the first. For nested events $B\subseteq A$, independence implies
+\[
+ \mathbb P(B)=\mathbb P(A\cap B)=\mathbb P(A)\mathbb P(B).
+\]
+It follows that either $\mathbb P(B)=0$ or $\mathbb P(A)=1$. Thus the two hits cannot be independent under any model in which the 17-hit has positive probability and the 5-hit is not certain. Both requirements hold under natural-density sampling.
+
+If all positive indices $k$ are sampled instead, the respective densities are $1/4$, $1/16$ and $1/16$, again with the intersection unequal to the product $1/64$. Restricting to even Bernoulli indices is therefore not responsible for the failure.
+\section{Formalization and scope}
+The accompanying standard-library-only Lean 4.31.0 project uses the literal divisibility predicate $p-1\mid k$. It checks primality of the two selected integers, proves the divisibility implication and the periodic counting statements, and refutes the exact cross-multiplied counting condition for independence. The theorem \texttt{TLMC8196.evenSample\_initial\_segment} identifies the sample with exactly the first $8m$ positive even integers. Theorems \texttt{exact\_counts}, \texttt{not\_independent}, \texttt{arbitrarily\_large\_counterexamples} and \texttt{conjecture8196\_false} establish the counts and refutation. A clean \texttt{lake build} and strict direct Lean check pass; the audited theorems use only \texttt{propext} and \texttt{Quot.sound}.
+
+The elementary natural-density limit calculation and the general probability observation above explain the interpretation in ordinary mathematical language. The formal counterexample is based on exact finite counts for every sample size in an unbounded sequence, rather than a formal development of real limits or probability measures. No Bernoulli-number implementation or von Staudt--Clausen theorem is required: the relevant event predicate is expressly supplied in the conjecture itself. No claim is made about the remaining conjuncts or a specially chosen degenerate probability model.
+\section{Source}
+The original English and Chinese statement is preserved with the submission:
+\begin{center}\url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000008196.md}.\end{center}
+\end{document}
