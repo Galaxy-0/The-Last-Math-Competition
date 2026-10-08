@@ -1,0 +1,61 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\begin{document}
+\begin{center}
+{\Large The Engel correction cannot tend to zero}\\[4pt]
+Disproof of Conjecture 00000002760\\[4pt]
+ziangni-sys --- October 8, 2026
+\end{center}
+\paragraph{Scope.}
+The problem proposes that the dimension of $k$-Engel linear matrix
+spaces is $n^2-n+c(k)$, where $c(k)$ decreases to zero as $k$ grows.
+Neither language version excludes $n=1$. We give a counterexample
+in this matrix size, which also works if the stated dimension is
+interpreted as the maximum possible dimension.
+
+\paragraph{Actual iterated commutators.}
+Let $M=M_1(\mathbb Q)$ and take the full linear space $S=M$.
+For matrices $X,Y\in M$, define
+\[
+ E_0(X,Y)=Y,\qquad
+ E_{k+1}(X,Y)=[X,E_k(X,Y)]
+             =XE_k(X,Y)-E_k(X,Y)X.
+\]
+These are the usual iterated Engel commutators. Every $1\times1$
+matrix is a scalar matrix, so actual matrix multiplication commutes.
+It follows immediately that $E_k(X,Y)=0$ for every $k\geq1$ and
+all $X,Y\in M$. Thus the full space is $k$-Engel for every positive
+$k$. The same conclusion holds if the repeated commutator is
+conventionally taken on the other side.
+
+\paragraph{Dimension and maximality.}
+The matrix $(1)$ is a basis of $M$ over $\mathbb Q$, so
+$\dim_{\mathbb Q}S=1$. Every linear subspace of $M$ has dimension
+at most one. Consequently the maximum dimension of a $k$-Engel
+linear space in $M_1(\mathbb Q)$ is also exactly one for every
+positive $k$.
+
+\paragraph{Contradiction.}
+Apply the proposed formula at $n=1$. Since the actual dimension is
+one, it forces
+\[
+ 1=1^2-1+c(k)=c(k)\qquad\text{for every }k\geq1.
+\]
+Hence the correction has a constant tail equal to one and converges
+to one. It cannot converge to zero: uniqueness of limits would give
+$1=0$. Monotonicity does not remove this contradiction. Therefore
+no correction function with the stipulated properties can satisfy
+the claimed dimension formula, and the conjecture is false.
+
+\paragraph{Formal certificate.}
+The Lean project uses the actual type of $1\times1$ rational matrices,
+its genuine multiplication, the recursive iterated commutator, and
+the full matrix submodule. It proves the Engel property for every
+positive index, calculates its finrank, bounds every subspace's
+finrank and certifies the maximal dimension. The final theorem
+rules out any real-valued correction satisfying the formula,
+monotonicity and convergence to zero. Printed axiom audits use
+only the standard axioms of Lean and Mathlib.
+\end{document}
