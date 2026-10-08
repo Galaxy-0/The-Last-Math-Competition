@@ -1,0 +1,13 @@
+# Conjecture 00000007862: literal bound counterexample
+
+This package gives an admissible singleton Bernoulli event family for which the exact displayed source bound has a first-order pole. Its square-normalization tends to zero, so no positive quadratic asymptotic coefficient or eventual positive quadratic lower comparison exists. The premise-free `LLLSingleton.literal_bound_counterexample` certificate connects the probability law, actual event family, largest probability, dependency degree, admissibility, displayed bound and asymptotic contradiction.
+
+The source's quadratic clause is explicitly about the bound in both languages. This package refutes the unqualified universal divergence claim on admissible families. It does not assert a theorem about the restart expectation T, a generic resampling algorithm, branching survival or adaptive event selection. An unspecified worst-case supremum or growing-event family is not the quantified target and is not disproved here. Independent source-bound review must assess this interpretation.
+
+The variable has outcome space Fin 2; its identity value is the only variable in Fin 1. The Bernoulli law has proved nonnegative masses p and 1-p with total 1, and the sole event is the actual subset {0}. The dependency adjacency relation requires distinct events sharing variable support and is proved to have degree zero. `actualBound` uses the original finite sum/product of the actual event probabilities and the proved maximum `pStar`.
+
+`lean/Main.lean` is the complete formalization. `original.md` and `00000007862.md` retain the exact bilingual input; `source-correspondence.md` maps its clauses and discloses the asymptotic interpretation. `proof.tex` and `proof.pdf` give the English proof.
+
+Prototype compilation uses the official Lean 4.33.0 toolchain and locked mathlib revision db584cd6d46c92f209a44c0f1c829460d327499d. Replay with `lake build +Main` from `lean`. The author checked the complete source with `lake env lean Main.lean`; final kernel replay, dependency-copy provenance, the deterministic submission gate, independent semantic/PDF review and acceptance belong to the manager. No author assertion here is locally_verified. Nothing was submitted upstream.
+
+The mathematical precursor is the sealed run7862-scout-v1 bridge, reused with explicit credit. Only its clean proof was copied into this new author directory; the scout package and earlier results were not modified. Probability/Geometric and SimpleGraph oleans were absent in the authorized cache, so the package uses explicit finite probability masses and support adjacency rather than installing or building missing probability libraries.

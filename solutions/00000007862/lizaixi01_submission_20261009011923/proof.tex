@@ -1,0 +1,128 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\newcommand{\E}{\mathrm e}
+\newcommand{\B}{B}
+\begin{document}
+\begin{center}
+{\Large\bfseries A singleton-event counterexample to the stated\\[3pt]
+quadratic divergence law}\\[7pt]
+{\small Conjecture 00000007862 --- literal displayed-bound clause}
+\end{center}
+
+\textbf{Scope.} The bilingual source gives the bound
+\[
+ \B(\Phi)=\frac{\sum_i p_i}
+ {(1-\E p^*)\prod_i(1-p_i)}
+\]
+and then states that \emph{the bound} diverges quadratically as
+\(\E p^*\to1\). We disprove this unqualified law on a fixed admissible
+family. The proof concerns the displayed bound, without assuming or
+formalizing a formula for the expected restart count \(T(\Phi)\).
+
+\textbf{Concrete probability and event model.} There is one variable
+with two possible outcomes, \(0\) and \(1\). For \(0<p<1\), put
+\[
+ \mathbb P(0)=p,\qquad \mathbb P(1)=1-p.
+\]
+These masses are nonnegative and sum to one. There is one bad event,
+\(A=\{0\}\). Its probability, computed by summing the masses of its
+outcomes, is \(\mathbb P(A)=p\). Thus the largest event probability is
+actually \(p^*=p\), attained by the sole event.
+
+The event depends on the sole variable. Define dependency adjacency by
+requiring distinct events whose variable supports overlap. This graph
+has no edges and degree \(d=0\): a singleton set of events contains no
+distinct pair. The usual symmetric LLL admissibility condition
+\(\E p^*(d+1)<1\) therefore reduces to \(\E p<1\). Any requirement of
+independence for distinct nonadjacent events is vacuous in this genuine
+singleton event family.
+
+\textbf{Approach to the critical value.} Let \(\E=\exp(1)>1\), and for
+every integer \(n\geq0\) choose
+\[
+ p_n=\frac{1-1/(n+2)}{\E},\qquad
+ \delta_n=1-\E p_n=\frac1{n+2}.
+\]
+Then \(0<p_n<1/\E<1\), \(\E p_n<1\), and
+\(\E p_n\to1\) from below. This is an admissible sequence of actual
+probability laws on the same variable-event hypergraph.
+
+For this family the finite sum and product in the source reduce to
+\(\sum_i p_i=p_n\) and \(\prod_i(1-p_i)=1-p_n\). Consequently its
+\emph{actual displayed bound} is the positive number
+\[
+ \B_n=\frac{p_n}{\delta_n(1-p_n)}.
+\]
+No scalar probability or maximum is added as an unproved premise:
+both are computed from the concrete event family.
+
+\newpage
+\begin{center}
+{\large\bfseries The asymptotic contradiction and its formal scope}
+\end{center}
+
+\textbf{First-order behavior.} Multiplication by the critical gap gives
+\[
+ \delta_n\B_n=\frac{p_n}{1-p_n}
+   \longrightarrow
+   \frac{1/\E}{1-1/\E}
+   =\frac1{\E-1}>0.
+\]
+Hence \(\B_n\sim(\E-1)^{-1}\delta_n^{-1}\). The displayed bound really
+diverges along this family, but its pole has order one.
+
+\textbf{Quadratic normalization.} A second multiplication gives
+\[
+ \delta_n^2\B_n
+   =\delta_n\frac{p_n}{1-p_n}
+   \longrightarrow0.
+\]
+For any fixed \(c>0\), convergence to zero implies that eventually
+\(\delta_n^2\B_n<c\). Since \(\delta_n>0\), it follows that
+\[
+ \neg\bigl(\text{eventually }c\,\delta_n^{-2}\leq\B_n\bigr).
+\]
+Thus the bound cannot have a positive quadratic asymptotic coefficient.
+It also cannot satisfy a two-sided \(\Theta(\delta_n^{-2})\) law, because
+such a law would supply the positive eventual lower comparison just
+excluded. This refutes the asserted universal quadratic divergence
+conjunct of the source.
+
+\textbf{What is, and is not, concluded.} The source does not specify a
+worst-case supremum over instances or a growing family of event counts.
+An expression can have different behavior if its remaining factors
+also vary singularly in a specially chosen growing family. Such an
+existential or worst-case statement is a different claim, and is not
+disproved here. Our counterexample applies to the unqualified law when
+it is asserted for admissible families. This interpretation is explicit
+and must receive independent source-bound review.
+
+The source's other claims concern an upper bound for \(T\), a branching
+process explanation, and an adaptive-selection exponent. We neither
+prove nor individually disprove those claims. A false necessary
+conjunct suffices to reject the original conjunction under the stated
+universal reading. No resampling algorithm is silently supplied to
+repair the source's omitted definition of restart rounds.
+
+\textbf{Lean correspondence.} \texttt{Main.lean} defines a finite
+probability law with nonnegative masses and total mass one;
+\texttt{instanceLaw}, \texttt{variableValue}, and \texttt{eventFamily}
+give the actual variable and event model.
+\texttt{pStar\_largest} proves the maximum by
+\texttt{IsGreatest}; \texttt{dependencyDegree\_zero} and
+\texttt{instance\_admissible} establish degree-zero admissibility.
+\texttt{actualBound} retains the original finite expression.
+\texttt{actual\_scaled\_square\_tendsto\_zero},
+\texttt{actual\_scaled\_linear\_tendsto}, and
+\texttt{actual\_no\_positive\_quadratic\_lower\_bound} prove the limits
+and contradiction for this actual bound. The premise-free theorem
+\texttt{literal\_bound\_counterexample} collects the certificate.
+
+\textit{Verification status.} The pinned Lean package and this proof
+are author artifacts. Deterministic replay, independent semantic
+review, and acceptance belong to the manager; this document does not
+self-certify them.
+\end{document}
