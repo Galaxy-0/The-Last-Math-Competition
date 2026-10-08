@@ -1,0 +1,70 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\begin{document}
+\begin{center}
+{\Large Upper Laplacian kernels are not cohomology}\\[4pt]
+Disproof of Conjecture 00000003713\\[4pt]
+ziangni-sys --- October 8, 2026
+\end{center}
+\paragraph{The actual simplicial complex.}
+Let $K$ be the filled two-simplex on vertices $0,1,2$: its faces
+are every subset of these three vertices. Orient its three edges
+as $01,02,12$ and its unique face as $012$. Work with rational
+cochains and the standard coordinate dot products. Thus
+$C^0(K;\mathbb Q)=\mathbb Q^3$, $C^1(K;\mathbb Q)=\mathbb Q^3$
+and $C^2(K;\mathbb Q)=\mathbb Q$. The oriented incidence rule gives
+\[
+ d_0(a,b,c)=(b-a,c-a,c-b),\qquad d_1(x,y,z)=x-y+z.
+\]
+The second formula uses the actual oriented boundary
+$\partial[012]=[12]-[02]+[01]$. Direct substitution shows
+$d_1d_0=0$.
+
+\paragraph{Genuine first cohomology.}
+By definition,
+\[
+ H^1(K;\mathbb Q)=\ker d_1/\operatorname{im}d_0.
+\]
+If $(x,y,z)\in\ker d_1$, then $x-y+z=0$ and $z=y-x$.
+The vertex potential $(0,x,y)$ consequently satisfies
+$d_0(0,x,y)=(x,y,y-x)=(x,y,z)$. Hence
+$\operatorname{im}d_0=\ker d_1$ and the actual quotient
+$H^1(K;\mathbb Q)$ is the zero vector space.
+
+\paragraph{Actual upper Laplacian.}
+The degree-one upper Laplacian is $L_1^{\rm up}=d_1^*d_1$.
+For the specified dot products, the adjoint is the transpose of
+the face-edge incidence matrix $B=(1,-1,1)$, so
+\[
+ L_1^{\rm up}=B^{\mathsf T}B=
+ \begin{pmatrix}1&-1&1\\-1&1&-1\\1&-1&1\end{pmatrix}.
+\]
+The nonzero cochain $v=(1,1,0)$ satisfies $Bv=0$, and therefore
+$L_1^{\rm up}v=0$. Its kernel is consequently nonzero and cannot
+be isomorphic to the zero first cohomology space. This contradicts
+the claimed identification of the upper-Laplacian nullspace with
+cohomology, disproving the conjecture.
+
+\paragraph{Why the distinction matters.}
+The full Hodge Laplacian includes the lower term
+$d_0d_0^*$ as well. The standard harmonic-cohomology statement
+concerns that full operator. The upper term alone also kills
+nonzero coboundaries: our witness is explicitly
+$v=d_0(0,1,1)$. Those coboundaries represent zero in cohomology,
+but remain nonzero vectors in the upper kernel. The extra clause
+about flow weights need not be resolved to disprove the conjunction.
+
+\paragraph{Formal certificate.}
+Lean constructs the full finite face family, certifies downward
+closure and all face counts, and checks the actual three edges.
+It defines the oriented coboundaries, proves the cochain identity,
+forms the genuine quotient of cycles by boundaries and proves it
+subsingleton. It certifies transpose adjointness for the dot
+products, constructs the upper operator as the actual incidence
+transpose product and verifies a nonzero kernel witness. The
+final theorem rules out any linear equivalence between that kernel
+and the actual cohomology quotient. Final audits use only standard
+Lean and Mathlib axioms.
+\end{document}
