@@ -1,0 +1,76 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\title{A redundant tight-frame erasure counterexample\\Disproof of Conjecture 00000000952}
+\author{ziangni-sys}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\paragraph{Scope.}
+The conjecture bounds the worst spectral deviation after deleting $k$
+vectors from an $n$-dimensional uniform tight frame by $k/n$, with
+equiangular tight frames as equality cases. We use a redundant
+Parseval equiangular tight frame. Its original frame operator is exactly
+the identity, so the deviation is already normalized relative to the
+original tight-frame bound. No arbitrary scale factor is present.
+
+\paragraph{The actual frame.}
+In $H=\mathbb R^3$ take
+\[
+ v_0=\tfrac12(1,1,1)^T,\quad
+ v_1=\tfrac12(1,-1,-1)^T,\quad
+ v_2=\tfrac12(-1,1,-1)^T,\quad
+ v_3=\tfrac12(-1,-1,1)^T.
+\]
+Their inner products are
+\[
+ \langle v_i,v_j\rangle=
+ \begin{cases}3/4&i=j,\\-1/4&i\ne j.\end{cases}
+\]
+Thus their lengths are equal and the absolute pairwise inner products
+are equal: this is an equiangular family. Directly adding the four
+outer products gives
+\[
+ S=\sum_{i=0}^3 v_i v_i^T=I_3.
+\]
+Indeed each diagonal entry is $4(1/4)=1$, and each off-diagonal entry
+is a sum of two $1/4$ and two $-1/4$. Hence
+$\sum_i|\langle v_i,x\rangle|^2=\langle Sx,x\rangle=\|x\|^2$.
+This proves that the four vectors are a uniform Parseval tight frame
+in dimension $n=3$, with genuine redundancy and the ETF property.
+The same real matrices define a complex ETF in $\mathbb C^3$ if desired.
+
+\paragraph{One erasure.}
+Delete $v_0$, so $k=1$. The remaining frame operator and its deviation are
+\[
+ S_-=\sum_{i=1}^3v_iv_i^T=I_3-v_0v_0^T,
+ \qquad D=S-S_-=v_0v_0^T.
+\]
+The nonzero vector $v_0$ is an eigenvector of $D$, with
+$Dv_0=\|v_0\|^2v_0=(3/4)v_0$. Every vector orthogonal to $v_0$ lies
+in the kernel of $D$. Therefore the eigenvalues of $S_-$ are
+$1/4,1,1$, and the worst spectral deviation from the original
+identity is
+\[
+ \|D\|_{\mathrm{op}}=\frac34>\frac13=\frac{k}{n}.
+\]
+This already occurs for an ETF, so neither the bound nor its asserted
+equality description holds as written. If uniform tight means unit-norm
+tight instead, multiply every vector by $2/\sqrt3$. The tight-frame
+bound becomes $4/3$, the erasure defect has norm $1$, and the relative
+deviation remains $1/(4/3)=3/4$. The counterexample therefore survives
+that usual normalization as well. Renormalizing after erasure or changing
+the denominator to the number of frame vectors would be a different
+statement from the given $n$-dimensional bound.
+
+\paragraph{Formal verification.}
+The Lean project uses complex-free real Euclidean space of dimension
+three and actual continuous linear frame operators, formed from
+$x\mapsto\langle v_i,x\rangle v_i$. It verifies all inner products,
+the full operator identity, the remaining operator and defect, and the
+eigenvector equation. Its final theorem derives
+$\|D\|_{\mathrm{op}}\geq3/4>1/3$ using the genuine operator norm.
+Thus the formal proof needs only a lower bound and does not assume the
+claimed norm value or replace the operator with a scalar certificate.
+\end{document}
