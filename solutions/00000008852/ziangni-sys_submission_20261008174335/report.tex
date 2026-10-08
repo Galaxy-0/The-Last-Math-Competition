@@ -1,0 +1,99 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\title{Equal perturbation norms do not characterize\\maximal monotonicity: Conjecture 00000008852}
+\author{ziangni-sys}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{The clause being disproved.}
+The English statement says that the perturbed operator remains maximal
+monotone \emph{exactly when} its perturbation norm $\delta$ does not exceed
+the strong monotonicity constant $\gamma$ of the original operator.
+We refute this necessary-and-sufficient claim for individual perturbations,
+even for bounded linear operators on the real Hilbert space $\mathbb R$,
+using the optimal strong monotonicity constant. The counterexamples can
+have arbitrarily small absolute perturbation norm.
+The Chinese version describes a threshold at $\delta\leq\gamma$.
+A \emph{uniform worst-case guarantee} over all perturbations of bounded norm
+is a different statement: our example does not refute that sufficient
+guarantee or a sharp worst-case threshold. It refutes the pointwise
+``exactly when'' assertion in the supplied English statement.
+Since this is a conjunct of the conjecture, the other trajectory assertions
+need not be decided.
+
+\paragraph{Definitions.}
+On $H=\mathbb R$, the inner product is $\langle x,y\rangle=xy$ and the norm is
+$|x|$. An operator $F$ is $\gamma$-strongly monotone when
+\[
+ (x-y)(F(x)-F(y))\geq\gamma |x-y|^2 \qquad(x,y\in\mathbb R).
+\]
+A relation $R\subset\mathbb R^2$ is monotone if
+$(x-y)(u-v)\geq0$ whenever $(x,u),(y,v)\in R$.
+An operator is maximal monotone if its graph is monotone and has no proper
+monotone relational extension. Thus maximality here is not merely maximality
+among bounded linear operators.
+
+\begin{lemma}
+For every $t>0$, the operator $F_t(x)=tx$ is maximal monotone.
+\end{lemma}
+\begin{proof}
+Graph monotonicity is $t(x-y)^2\geq0$. Suppose a monotone relation $R$
+contains the graph, and $(x,u)\in R$. Put $y=(u+tx)/(2t)$.
+The point $(y,ty)$ belongs to the graph, hence to $R$, so
+\[
+ 0\leq(x-y)(u-ty)=-\frac{(u-tx)^2}{4t}\leq0.
+\]
+It follows that $u=tx$. Every point of $R$ already belongs to the graph,
+which proves full relational maximality.
+\end{proof}
+
+\begin{theorem}
+For any $a>0$, let $A=aI$ and $B_+=2aI$, $B_-=-2aI$. Then:
+\begin{enumerate}
+\item The optimal strong monotonicity constant of $A$ is $\gamma=a$.
+\item Both perturbations have operator norm $\delta=2a>\gamma$.
+\item $A+B_+=3aI$ is maximal monotone.
+\item $A+B_-=-aI$ is not even monotone.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+For $A$, the strong monotonicity inequality holds with equality at
+$\gamma=a$. Conversely, testing that inequality at $x=1$, $y=0$ forces
+every admissible constant to be at most $a$.
+The bounded linear scalar operator $cI$ has norm $|c|$: its action has
+$|cx|=|c||x|$ for all $x$, and the upper bound is attained at $x=1$.
+This gives both stated perturbation norms. The preceding lemma with
+$t=3a$ proves the positive case. In the negative case, graph points
+$(1,-a)$ and $(0,0)$ have monotonicity pairing $-a<0$.
+\end{proof}
+
+\paragraph{Arbitrarily small perturbations and zeros.}
+Given any tolerance $\varepsilon>0$, take $a=\varepsilon/4$.
+Then $\|B_+\|=\varepsilon/2<\varepsilon$, but
+$\|B_+\|>\gamma=\varepsilon/4$, while $A+B_+$ is maximal monotone.
+This prevents an unspecified requirement of small \emph{absolute} norm from
+saving the necessity claim. The unperturbed and both perturbed operators
+have the unique zero $0$, so the example lies within the setting of operators
+with a zero described by the source. In particular, zero existence causes
+no difficulty. The opposite outcomes of $B_+$ and $B_-$ show concretely
+why perturbation size alone cannot decide the property for a given operator.
+
+\paragraph{Formalization.}
+The Lean project uses Mathlib's actual continuous linear maps
+$\mathbb R\to_L\mathbb R$ and their operator norm. It defines monotone
+relations and maximality by quantification over all relations on the real
+Hilbert space, and proves the maximality lemma directly.
+The theorem \texttt{same\_norm\_opposite\_behavior} establishes the optimal
+constant, both exact operator norms, and the opposite monotonicity outcomes.
+The theorem \texttt{arbitrarily\_small\_counterexample} proves the tolerance
+statement for every $\varepsilon>0$, and \texttt{conjectured\_iff\_false}
+negates the claimed criterion even when the constant is required to be
+optimal. No graph maximality or spectral fact is assumed as a certificate.
+The final theorem concerns the disputed conjunct, not a replacement
+statement about convergence or continuity of zeros.
+\end{document}
