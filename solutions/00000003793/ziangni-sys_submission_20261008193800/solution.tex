@@ -1,0 +1,36 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Strong convexity alone does not ensure projected convergence\\Disproof of Conjecture 00000003793}
+\author{ziangni-sys}\date{8 October 2026}
+\begin{document}\maketitle
+Consider the smooth polynomial objective on the closed convex constraint set $C=\mathbb R$:
+\[
+ f(x)=\frac{x^2}{2}+\frac{x^4}{4},\qquad f'(x)=x+x^3.
+\]
+Its unique global minimizer is zero. It is genuinely $1$-strongly convex. Indeed
+\[
+ f(y)-f(x)-f'(x)(y-x)-\frac{(y-x)^2}{2}
+ =\frac{(y-x)^2\bigl((x+y)^2+2x^2\bigr)}4\ge0.
+\]
+Equivalently, for $a,b\ge0$ with $a+b=1$, it satisfies the full strong-convex Jensen inequality
+\[
+ f(ax+by)+\frac{ab}{2}(x-y)^2\le af(x)+bf(y).
+\]
+The metric projection onto $C$ is the identity: $x$ is the unique point of $C$ at distance zero from $x$. Therefore the genuine fixed-step projected gradient method is
+\[
+ x_{n+1}=P_C(x_n-\alpha f'(x_n))=x_n-\alpha(x_n+x_n^3).
+\]
+We show that \emph{every} fixed positive step $\alpha$ admits a divergent true orbit, so this issue cannot be repaired just by choosing a smaller fixed step.
+
+Put $R=\sqrt{3/\alpha}>0$ and start at $x_0=R$. If $|x|\ge R$, then $\alpha x^2\ge3$ and
+\[
+ x-\alpha(x+x^3)=-x(\alpha x^2+\alpha-1),\qquad
+ |x-\alpha(x+x^3)|\ge2|x|.
+\]
+Induction gives $|x_n|\ge2^nR$ and also $|x_n|\ge R+nR$. In particular $|x_n|\to+\infty$ along the full sequence. These genuine projected iterates do not converge to the unique minimizer and hence do not converge linearly.
+
+The source assumes strong convexity but states no global gradient-Lipschitz bound, step restriction tied to such a bound, adaptive rule or contraction hypothesis. Our objective is strongly convex and smooth, but $f''(x)=1+3x^2$ is unbounded. This disproves the unrestricted fixed-step conclusion from strong convexity alone. It does not dispute convergence theorems with additional global smoothness and suitable steps or adaptive algorithms. The claimed rate constant is unnecessary once convergence itself fails.
+
+\paragraph{Formal verification.} Lean proves the actual derivative, exact curvature remainder, full $1$-strong-convex Jensen inequality and unique minimizer. It verifies the actual metric projection onto the full line, defines the true projected iteration, proves the magnitude-doubling and linear lower bounds for every iteration count, and proves full-sequence divergence for an explicit initial point for every positive fixed step. All ten final theorem audits use only standard Lean axioms; no derivative, convexity, projection or orbit certificate is assumed.
+\end{document}
