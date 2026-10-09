@@ -1,0 +1,35 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\title{Proof of Conjecture 00000002515\\The tensor norm is an attained maximal multilinear gain}
+\author{ziangni-sys}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+We work with ordinary finite real tensors, with positive-dimensional factors so that unit vectors exist. More generally, let $I$ be a finite index set, let each $E_i$ be a nontrivial finite-dimensional real normed space, and let
+\[
+ T:\prod_{i\in I}E_i\longrightarrow\mathbb R
+\]
+be an actual continuous multilinear map. Finite tensor contractions on Euclidean factors are included. Its multilinear operator norm is the least $B\ge0$ satisfying
+\[
+ |T(v)|\le B\prod_{i\in I}\|v_i\|\quad\hbox{for all }v.
+\]
+We prove that
+\[
+ \|T\|=\max_{\|u_i\|=1\ (i\in I)}|T(u)|.
+\]
+
+The unit-tuple set $S=\prod_{i\in I}\{u_i:\|u_i\|=1\}$ is nonempty, because each factor is nontrivial. It is compact, because the factors are finite dimensional and their unit spheres are compact. The actual map $u\mapsto|T(u)|$ is continuous. Thus it has a maximizer $u\in S$; write $M=|T(u)|$. The ordinary operator-norm inequality immediately gives $M\le\|T\|$.
+
+For the reverse bound, take any tuple $v$. If one coordinate is zero, multilinearity gives $T(v)=0$, so the required inequality holds. Otherwise put $w_i=v_i/\|v_i\|$. All $w_i$ are unit vectors, and actual multilinearity gives
+\[
+ T(v)=\left(\prod_i\|v_i\|\right)T(w),\qquad
+ |T(v)|\le\left(\prod_i\|v_i\|\right)M.
+\]
+Since $M\ge0$ is consequently a global multilinear norm bound, the least-bound property yields $\|T\|\le M$. Combining both directions proves equality and attainment. In particular, every unit-tuple gain is at most $\|T\|$, and at least one equals it.
+
+This argument includes the zero tensor: every unit tuple realizes gain and norm zero. It also covers every finite arity. At arity zero the product of spheres has one empty tuple and the empty scalar product equals one; no nonempty-arity assumption is required. A zero-dimensional factor has no unit vectors, so the unit-vector maximum formulation requires the conventional positive-dimensional factor assumption stated above.
+
+\paragraph{Formal verification.}
+Lean proves the result for arbitrary finite families of nontrivial finite-dimensional real normed spaces and every actual \texttt{ContinuousMultilinearMap}. It verifies nonemptiness and compactness of the unit-tuple set, the actual norm inequality there, normalization and global scaling using multilinearity, attainment of the genuine operator norm and the zero-tensor case. The norm is Mathlib's operator norm defined as the infimum of all global bounds; no maximizing certificate is assumed. All six final printed theorem axiom audits use only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
+\end{document}
