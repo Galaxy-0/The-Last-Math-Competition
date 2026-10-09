@@ -1,0 +1,75 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{proposition}{Proposition}
+\title{Constant Almgren frequency does not imply spherical symmetry}
+\author{Conjecture 00000005714}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Result.} The harmonic polynomial $u(x,y)=x$ has Almgren frequency identically one at every positive radius, although it is not spherically symmetric. Thus the asserted restriction of frequency saturation to spherically symmetric solutions is false.
+
+\section*{The polynomial and its genuine energy}
+Identify the Euclidean plane with $\mathbb C$ and put $u(z)=\operatorname{Re}z$. In real coordinates this is the polynomial $X_0$. Its derivatives satisfy
+\[
+ \partial_xu=1,\qquad\partial_yu=0,\qquad
+ \Delta u=0,\qquad |\nabla u|^2=1.
+\]
+It is therefore a globally defined, nonzero harmonic polynomial, and in particular a harmonic polynomial germ at the origin.
+
+For $r>0$, the Dirichlet energy over the actual Euclidean disk is
+\[
+ D(r)=\int_{B_r(0)}|\nabla u|^2\,dA
+ =\int_{B_r(0)}1\,dA=\pi r^2.
+\]
+Here $dA$ is Lebesgue area. This is an integral of the squared gradient, not an assigned energy value.
+
+\section*{The boundary mass and frequency}
+Parametrize the boundary circle by
+$\gamma_r(\theta)=(r\cos\theta,r\sin\theta)$ for $0\leq\theta\leq2\pi$.
+It lies on the radius-$r$ circle, and its actual derivative is
+$\gamma_r'(\theta)=(-r\sin\theta,r\cos\theta)$, of norm $r$. Thus the arclength element is $dS=r\,d\theta$ and
+\[
+ \begin{aligned}
+ H(r)&=\int_{\partial B_r(0)}u^2\,dS\\
+ &=\int_0^{2\pi}(r\cos\theta)^2r\,d\theta
+ =r^3\int_0^{2\pi}\cos^2\theta\,d\theta=\pi r^3>0.
+ \end{aligned}
+\]
+The classical Almgren quotient therefore equals
+\[
+ N(r)=\frac{rD(r)}{H(r)}
+ =\frac{r\,\pi r^2}{\pi r^3}=1\qquad(r>0).
+\]
+In particular $N'(r)=0$ throughout the positive-radius domain, and $N$ is not strictly increasing there.
+
+\newpage
+\section*{The solution is not radial}
+The two points $z=1$ and $w=i$ have the same Euclidean norm, but
+\[
+ u(1)=1,\qquad u(i)=0.
+\]
+Hence $u$ is not constant on spheres centered at the origin. This also holds at arbitrarily small radii, since $u(r)=r$ and $u(ir)=0$ for every $r>0$. The failure of spherical symmetry is a property of the polynomial germ, not just of distant values.
+
+\begin{proposition}
+There is a nonzero harmonic polynomial germ with positive boundary mass and zero Almgren-frequency derivative at every positive radius which is not spherically symmetric.
+\end{proposition}
+\begin{proof}
+The polynomial $u(x,y)=x$, with the explicitly evaluated integrals above, has all these properties.
+\end{proof}
+
+\section*{Exact scope}
+Both source versions explicitly assert that zero frequency slope occurs only at spherically symmetric solutions. The counterexample disproves this conjunct within the polynomial class mentioned in the conjecture. It does not depend on an interpretation of the separate ``uniqueness'' assertion or on an unspecified lower-bound slope constant.
+
+The geometric distinction is between homogeneity and radial symmetry. This polynomial is homogeneous of degree one, so every rescaled profile $u(rz)/r$ is exactly $u(z)$ for $r>0$, yet its angular dependence is nonconstant. Constant frequency is therefore compatible with nonradial homogeneous solutions. No additional PDE or obstacle restriction is stated in the source; the example uses the classical harmonic setting of Almgren's energy-to-boundary quotient.
+
+\section*{Formal verification}
+The Lean project uses the complex plane with its Euclidean norm and Lebesgue measure. It verifies the polynomial evaluation, actual first and second real partial derivatives, and the squared-gradient energy integral over the metric disk. Mathlib's disk-volume theorem yields $D(r)$.
+
+For the boundary integral it verifies the circle parametrization, its actual derivative and tangent norm, and evaluates the trigonometric interval integral with the arclength factor. It proves $H(r)>0$ and $N(r)=1$ for all $r>0$. The derivative theorem follows from local equality of $N$ with the constant function on the open positive-radius domain. Nonradiality is checked at equal-radius points, and the final theorem assembles harmonicity, positive boundary mass, constant frequency, zero derivative and nonradiality.
+
+Run \texttt{lake build} in \texttt{lean/} using Lean 4.19.0. Mathlib is pinned to
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+Principal theorem audits use only standard logical axioms. No energy, boundary-mass or frequency identity is assumed.
+\end{document}
