@@ -30,28 +30,28 @@
 
 ## 排行榜（Leaderboard）
 
-截至 2026-10-08 的当前战绩——**10000 个猜想中已解决 709 个**（71 个证明，638 个证伪）。上榜的每一份提交都通过了完整审计：LaTeX 源码、PDF 文档，以及一个完整编译的 Lean 4 项目（Mathlib 或自包含核心 Lean）——无 `sorry`、无 `native_decide`、无额外公理——并通过语义审查确认 Lean 定理确实建立了该猜想或其否定。排名按解题数降序。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
+截至 2026-10-08 的当前战绩——**10000 个猜想中已解决 768 个**（77 个证明，691 个证伪）。上榜的每一份提交都通过了完整审计——LaTeX 源码、PDF 文档，以及一个完整编译的 Lean 4 项目（Mathlib 或自包含核心 Lean）——无 `sorry`、无 `native_decide`、无额外公理——并通过语义审查确认 Lean 定理确实建立了该猜想或其否定。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
 
-| # | GitHub ID | 解题数 | 首解数 | 证明 | 证伪 |
-|---|----------|-------:|-------:|-------:|----------:|
-| 1 | [Jackmeson1](https://github.com/Jackmeson1) | 160 | 160 | 29 | 131 |
-| 2 | [ziangni-sys](https://github.com/ziangni-sys) | 124 | 124 | 11 | 113 |
+| # | GitHub ID | Solved | First solves | Proven | Disproven |
+|---|----------|-------:|-------------:|-------:|----------:|
+| 1 | [ziangni-sys](https://github.com/ziangni-sys) | 173 | 173 | 15 | 158 |
+| 2 | [Jackmeson1](https://github.com/Jackmeson1) | 160 | 160 | 29 | 131 |
 | 3 | [earthking11](https://github.com/earthking11) | 101 | 94 | 1 | 100 |
 | 4 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 92 | 92 | 6 | 86 |
-| 5 | [orionsheep](https://github.com/orionsheep) | 73 | 65 | 0 | 73 |
-| 6 | [C0ldSmi1e](https://github.com/C0ldSmi1e) | 50 | 50 | 4 | 46 |
+| 5 | [orionsheep](https://github.com/orionsheep) | 73 | 64 | 0 | 73 |
+| 6 | [C0ldSmi1e](https://github.com/C0ldSmi1e) | 51 | 51 | 4 | 47 |
 | 7 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 37 | 36 | 8 | 29 |
 | 8 | [jilint777](https://github.com/jilint777) | 34 | 34 | 2 | 32 |
 | 9 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
 | 10 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
-| 11 | [AlyciaBHZ](https://github.com/AlyciaBHZ) | 8 | 8 | 2 | 6 |
-| 12 | [Galaxy-0](https://github.com/Galaxy-0) | 5 | 5 | 2 | 3 |
-| 13 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
-| 14 | [GodBlf](https://github.com/GodBlf) | 2 | 2 | 0 | 2 |
-| 15 | [lizaixi01](https://github.com/lizaixi01) | 2 | 2 | 0 | 2 |
-| 16 | [Cosica](https://github.com/Cosica) | 1 | 1 | 0 | 1 |
-| 17 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
-| 18 | [champagnepapihz](https://github.com/champagnepapihz) | 1 | 1 | 0 | 1 |
+| 11 | [lizaixi01](https://github.com/lizaixi01) | 9 | 9 | 2 | 7 |
+| 12 | [AlyciaBHZ](https://github.com/AlyciaBHZ) | 8 | 8 | 2 | 6 |
+| 13 | [Galaxy-0](https://github.com/Galaxy-0) | 5 | 5 | 2 | 3 |
+| 14 | [GodBlf](https://github.com/GodBlf) | 4 | 4 | 0 | 4 |
+| 15 | [idealistichacker](https://github.com/idealistichacker) | 3 | 3 | 2 | 1 |
+| 16 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
+| 17 | [champagnepapihz](https://github.com/champagnepapihz) | 1 | 1 | 0 | 1 |
+| 18 | [Cosica](https://github.com/Cosica) | 1 | 1 | 0 | 1 |
 
 ## 早期声明
 
