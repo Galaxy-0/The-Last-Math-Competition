@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{proposition}{Proposition}
+\title{The stated unnormalized Mahler bound fails for a cube}
+\author{Conjecture 00000003552}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Result.} With the volume product defined in the source as ordinary volume times polar volume, the symmetric cube in dimension twelve has product
+\[
+ \frac{4^{12}}{12!}<\frac12\leq\frac{8}{\pi^2}.
+\]
+This contradicts the stated dimension-independent lower bound. In dimension three, the cube's product is $32/3$, which also differs from the claimed extremal value $8/\pi^2$.
+
+\section*{An admissible body and its actual polar}
+Let $n\geq1$ and use standard coordinates and Lebesgue measure on $\mathbb R^n$. Put
+\[
+ C_n=[-1,1]^n,\qquad
+ C_n^\circ=\{y\in\mathbb R^n:\textstyle\sum_{i=1}^n x_i y_i\leq1
+                       \text{ for every }x\in C_n\}.
+\]
+The cube is compact, convex and centrally symmetric, and the origin is an interior point. Thus it is an admissible symmetric convex body. Its polar is exactly
+\[
+ C_n^\circ=\{y:\textstyle\sum_{i=1}^n|y_i|\leq1\}.
+\]
+Indeed, for $x\in C_n$ we have $\sum_i x_i y_i\leq\sum_i|y_i|$. Conversely, choose $x_i=1$ when $y_i\geq0$ and $x_i=-1$ otherwise. This vector lies in $C_n$ and gives $\sum_i x_i y_i=\sum_i|y_i|$. Hence the polar is the genuine cross-polytope determined by the defining pairing.
+
+\section*{Lebesgue volumes}
+The box product formula gives $|C_n|=2^n$. In each orthant the polar is a coordinate reflection of the standard simplex $\{t_i\geq0,\ \sum_i t_i\leq1\}$, whose volume is $1/n!$. The orthants overlap only on coordinate hyperplanes of measure zero, so
+\[
+ |C_n^\circ|=\frac{2^n}{n!},\qquad
+ |C_n|\,|C_n^\circ|=\frac{4^n}{n!}.
+\]
+The Lean proof evaluates the same Lebesgue volume directly by Mathlib's volume formula for $\ell^p$ balls, at $p=1$:
+\[
+ \left|\left\{x:\sum_i |x_i|\leq1\right\}\right|
+ =\frac{(2\Gamma(2))^n}{\Gamma(n+1)}=\frac{2^n}{n!}.
+\]
+No polar volume or volume-product identity is assumed.
+
+\newpage
+\section*{The numerical contradiction}
+At $n=12$, direct integer arithmetic gives $4^{12}/12!<1/2$. Since $0<\pi\leq4$, we have $\pi^2\leq16$ and therefore $1/2\leq8/\pi^2$.
+\begin{proposition}
+There is a compact, convex, centrally symmetric body with the origin in its interior whose unnormalized Mahler volume is strictly less than $8/\pi^2$.
+\end{proposition}
+\begin{proof}
+Take $C_{12}$. The verified polar and volume computations give the strict inequality above.
+\end{proof}
+For the ordinary three-dimensional cube, the same computation gives
+\[
+ |C_3|\,|C_3^\circ|=\frac{4^3}{3!}=\frac{32}{3}\ne\frac{8}{\pi^2}.
+\]
+Thus if the source's word ``cube'' is read specifically in dimension three, it still does not attain the displayed claimed value under the source's stated volume convention.
+
+\section*{Exact scope and normalization}
+The source explicitly defines Mahler volume as the product of volume and polar volume; no normalization or dimension restriction is supplied. The dimension-twelve example refutes its literal universal lower bound. The dimension-three calculation separately refutes attainment of the displayed value by the spatial cube. It does not assert a lower-bound violation in dimension three.
+
+This does not refute the standard symmetric Mahler conjecture with the dimension-dependent value $4^n/n!$. Nor does it refute a statement about a normalized product. For example, in dimension two the square has unnormalized product $8$, whereas dividing by the squared area $\pi^2$ of the Euclidean unit disk gives $8/\pi^2$. Such a normalization would change the quantity defined in the source. The asymmetric conjunct is not needed for this disproof.
+
+\section*{Formal verification}
+The Lean project uses finite real coordinate space with its genuine product Lebesgue measure. It proves cube convexity, compactness, symmetry and origin interior; identifies the polar through the complete universal pairing condition and a sign-vector witness; evaluates the two volumes; and derives both dimension-specific conclusions. The concluding theorem assembles the admissibility conditions and strict lower-bound violation.
+
+Run \texttt{lake build} in \texttt{lean/} using Lean 4.19.0. Mathlib is pinned to
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+The final theorem audits use only standard logical axioms. The proof contains no assumed certificates or proof placeholders.
+\end{document}
