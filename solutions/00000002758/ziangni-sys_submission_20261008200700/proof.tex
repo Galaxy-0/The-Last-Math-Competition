@@ -1,0 +1,67 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\begin{document}
+\begin{center}
+{\Large Two multiplicative bases in a group algebra}\\[4pt]
+Disproof of Conjecture 00000002758\\[4pt]
+ziangni-sys --- October 8, 2026
+\end{center}
+\paragraph{The actual group algebra.}
+Let $G=C_2=\{1,g\}$, $g^2=1$, and let $A=\mathbb Q[G]$ with its
+usual convolution multiplication. Its standard group basis is
+$B=\{1,g\}$. Define
+\[
+ e=\frac{1+g}{2},\qquad B'=\{1,e\}.
+\]
+These are two genuine vector-space bases: for the second one,
+$g=2e-1$, and the coordinates of $a+bg$ in $B'$ are $(a-b,2b)$.
+The inverse coordinate map is $(s,t)\mapsto s+te$.
+
+\paragraph{Product closure and nonisomorphism.}
+The group basis is closed under multiplication since $g^2=1$.
+In the second basis,
+\[
+ e^2=\frac{1+2g+g^2}{4}=\frac{1+g}{2}=e,
+ \qquad 1e=e1=e.
+\]
+Thus $B'$ is also closed under products, exactly as required by
+the problem's explicit definition. The coefficient of $g$ in $e$
+is $1/2$, whereas it is zero in $1$, so $e\ne1$.
+Every element of $B$ has square $1$. A multiplication-preserving
+bijection $B\to B'$ would map the identity to the identity and hence
+would force every element of $B'$ to have square $1$. This is
+impossible for $e$, whose square equals $e\ne1$. Therefore the two
+multiplicative bases are not isomorphic as multiplicative structures.
+In particular no algebra automorphism of $A$ maps $B$ onto $B'$:
+if $\phi(b)=e$ for $b\in B$, then $e^2=\phi(b^2)=\phi(1)=1$,
+a contradiction.
+
+\paragraph{The subgroup hypothesis.}
+The group $C_2$ has exactly two subgroups, $\{1\}$ and $C_2$.
+Indeed any subgroup containing $g$ is the full group, and otherwise
+contains only the identity. The two subgroups have orders one and
+two, so they are not isomorphic. Thus there are no distinct
+isomorphic subgroup pairs, precisely the stated uniqueness hypothesis.
+Nevertheless the two multiplicative bases above are nonisomorphic,
+which disproves the conjecture's uniqueness assertion.
+
+\paragraph{Scope of isomorphism.}
+The isomorphisms here preserve the basis multiplication, as required
+for a meaningful assertion of uniqueness of multiplicative bases.
+All vector-space bases of the same size admit linear bijections,
+so forgetting multiplication would make the proposed uniqueness
+condition vacuous. The source does not require basis elements to
+be units; imposing that extra requirement would exclude the
+idempotent basis and would be a different claim.
+
+\paragraph{Formal certificate.}
+Lean uses the actual monoid algebra of the multiplicative group of
+$\mathbb Z/2\mathbb Z$, with its genuine convolution product.
+Both bases are constructed from explicit invertible coordinate
+maps. Product closure, idempotence and the impossibility of an
+algebra automorphism between the bases are certified, as is the
+absence of distinct isomorphic subgroups. Final axiom audits use
+only standard Lean and Mathlib axioms.
+\end{document}
