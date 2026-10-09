@@ -1,0 +1,80 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\begin{document}
+\begin{center}
+{\Large Normalized spectral support need not fill an interval}\\[4pt]
+Disproof of Conjecture 00000003702\\[4pt]
+ziangni-sys --- October 8, 2026
+\end{center}
+\paragraph{Scope of the claim.}
+Both language versions state that the limiting measure has support
+the interval $[0,2]$. We disprove this literal equality. The usual
+statement that normalized Laplacian spectra are \emph{contained}
+in $[0,2]$ is valid and is not contradicted here. The source imposes
+no connectedness hypothesis. Our graphs have unbounded vertex count.
+
+\paragraph{Actual graphs and normalized operator.}
+For $m\geq0$, let $G_m$ be the disjoint union of $m+1$ copies of
+$K_2$. More explicitly its vertices are $(c,i)$ with
+$c\in\{0,\ldots,m\}$ and $i\in\{0,1\}$; adjacency holds exactly
+when the copy labels agree and the endpoints differ. Every vertex
+has its opposite endpoint as its unique neighbor, so every degree
+is one and $|V(G_m)|=2(m+1)\to\infty$.
+Consequently the genuine normalized Laplacian is
+\[
+ L_m=I-D^{-1/2}A_mD^{-1/2}=I-A_m,
+ \qquad (L_mf)(c,i)=f(c,i)-f(c,1-i).
+\]
+The random-walk normalization $I-D^{-1}A_m$ gives the same operator
+because $D=I$.
+
+\paragraph{Complete spectrum.}
+On each edge the symmetric vector $(1,1)$ has eigenvalue zero,
+and the antisymmetric vector $(1,-1)$ has eigenvalue two. They
+form a basis of that edge's two-dimensional function space.
+Putting these bases on the disjoint copies gives a complete
+$2(m+1)$-element eigenbasis of the actual graph operator.
+Its invertible coordinates on copy $c$ are
+\[
+ a_c=\frac{f(c,0)+f(c,1)}2,\qquad
+ b_c=\frac{f(c,0)-f(c,1)}2,
+ \qquad f(c,i)=a_c+(-1)^i b_c.
+\]
+Thus there are exactly $m+1$ eigenvalues zero and $m+1$ eigenvalues
+two, including multiplicities.
+
+\paragraph{Empirical measures and weak limit.}
+The ordinary normalized empirical spectral probability measure is
+\[
+ \mu_m=\frac1{2(m+1)}\sum_{c=0}^{m}\bigl(\delta_0+\delta_2\bigr)
+      =\frac12\delta_0+\frac12\delta_2=:\mu.
+\]
+This is a constant sequence of actual empirical measures, so it
+converges weakly to $\mu$; equivalently every bounded continuous
+test function has identical integral against every $\mu_m$ and $\mu$.
+
+\paragraph{Failure of full support.}
+The open neighborhood $U=(1/2,3/2)$ of the point $1$ has
+$\mu(U)=0$, since it contains neither atom. By the standard
+neighborhood definition of topological support, $1$ is absent
+from $\operatorname{supp}\mu$, although $1\in[0,2]$.
+Indeed the support is exactly $\{0,2\}$. Therefore the limiting
+support is not the full interval asserted in the conjecture.
+This false clause suffices for the disproof even though this
+particular sequence does converge.
+
+\paragraph{Formal certificate.}
+Lean constructs the genuine simple graphs, certifies every degree,
+defines the normalized operator from actual neighbor sums and
+constructs the complete eigenbasis via invertible coordinates.
+It verifies all eigenvectors and both multiplicity counts, forms
+the empirical Dirac measures, proves their exact constant value
+and their weak convergence in the probability-measure topology.
+The standard neighborhood support definition is written explicitly
+because this Mathlib pin has no packaged measure-support function.
+It verifies the zero-mass open neighborhood and refutes support
+equality with $[0,2]$. Final audits use only standard Lean and
+Mathlib axioms.
+\end{document}
