@@ -1,0 +1,135 @@
+{
+  "conjecture": "00000000374",
+  "reviewer_role": "fresh independent semantic reviewer",
+  "status": "PASS",
+  "full_report_reviewed": true,
+  "source_hash": "a51a0f94ce5651406733197f08bf0b0b9ecc874641a3eab5d5ab60f12f1a778f",
+  "frozen_sources": {
+    "Counterexample.lean": "b6cdda44e8848fb6d1b39ecda46739df8074eaeab76bc1e3f18662d46776c210",
+    "HeightRoots.lean": "8672cc39356a93259ad9cc72c0438bc81309edd35c7c14568fca38a765bfc424"
+  },
+  "semantic_conclusion": "PASS: the final formal theorem disproves the literal full-real-line conjunct at tau=3 and xi=0 for all three explicitly defined standard multiplicative arithmetic height conventions and both approximant domains. The entire final LaTeX report is mathematically faithful, states the missing-height limitation, and accurately describes the tested proof-dependency audit. No unresolved mathematical or verification-boundary finding remains.",
+  "bilingual_source": {
+    "agreement": true,
+    "assertion_refuted": "For every real tau<=3, P(tau)=R",
+    "target": "xi=0 is included in both original language versions; neither excludes rationals/algebraic targets.",
+    "height_ambiguity": "Neither original defines H. The candidate explicitly handles naive coefficient height, Mahler measure, and absolute multiplicative Weil height. An unconditional theorem for every function denoted H is neither meaningful nor established. This limitation must remain explicit in the report."
+  },
+  "checks": [
+    {
+      "item": "Algebraicity and degree",
+      "result": "PASS",
+      "evidence": "DegreeAtMostTwo explicitly conjoins IsAlgebraic Q z with natDegree(minpoly Q z)<=2. minpoly positive degree then makes the actual degree 1 or 2; transcendental elements cannot enter via the zero minpoly."
+    },
+    {
+      "item": "Primitive integer minimal polynomial",
+      "result": "PASS",
+      "evidence": "Cleared-denominator rational minpoly followed by primPart is nonzero and primitive. A nonzero rational scalar bridge proves unchanged degree, vanishing, irreducibility via Gauss, and nonzero constant coefficient for nonzero z. Does not assume algebraic integrality over Z."
+    },
+    {
+      "item": "Normalization uniqueness",
+      "result": "PASS",
+      "evidence": "Any primitive irreducible integer polynomial vanishing at z is associated over Q to the monic minpoly, primitive divisibility descends to Z, and integer polynomial units give equality up to sign. Positive-leading representative is proved positive, minimal and unique."
+    },
+    {
+      "item": "Exact naive coefficient height",
+      "result": "PASS",
+      "evidence": "Finite supremum of natAbs coefficients over polynomial support equals the maximum coefficient absolute value, with coefficients outside support zero. Nonzero polynomial gives height at least 1; sign invariance and unique-positive representative bridge are proved."
+    },
+    {
+      "item": "Mahler/Weil formulas",
+      "result": "PASS_WITH_EXPLICIT_DEFINITION",
+      "evidence": "Mahler uses absolute integer leading coefficient and full complex root multiset with multiplicity; Weil is M^(1/d), where d is the actual primitive/minpoly degree. Sign invariance, exact polynomial bridge, and W^d=M are proved. No equivalence to a separate places-based height definition is claimed or needed for the stated formula-based convention."
+    },
+    {
+      "item": "Naive finite exception argument",
+      "result": "PASS",
+      "evidence": "For nonzero degree<=2 root, 1<=|a0|<=H*r+H*r^2. With H>=2 and r<H^(-3), exact real arithmetic gives RHS<1. Remaining H<=1 polynomials have bounded integer coefficients and degree; finite union of their finite root sets plus zero proves actual finite set of possible numbers."
+    },
+    {
+      "item": "Mahler/Weil root bound",
+      "result": "PASS",
+      "evidence": "Exact constant-term product and separating one root give 1<=r*M. M>=1; W>=1 and degree 1 or 2 give M<=W^2. Thus 1<=r*H^2 for both conventions, incompatible with r<H^(-3). Approximation set is contained in {0}."
+    },
+    {
+      "item": "Real and complex domains",
+      "result": "PASS",
+      "evidence": "Complex approximation uses norm of ofReal(xi)-z. Real predicate uses absolute value. ofReal is injective and norm agrees exactly with absolute value, so finite complex set transfers to finite real set. degreeAtMostTwo_real_iff identifies the real minpoly and algebraicity exactly."
+    },
+    {
+      "item": "Distinct infinitude",
+      "result": "PASS",
+      "evidence": "Pcomplex and Preal use Set.Infinite of actual numbers, not an indexed sequence allowing repeated values. Zero itself contributes at most one value."
+    },
+    {
+      "item": "Constant/exponent/strictness",
+      "result": "PASS",
+      "evidence": "All predicates use literal real exponent -tau and strict < with coefficient 1. No asymptotic constant, rescaled exponent, big-O proxy, or non-strict replacement is used."
+    },
+    {
+      "item": "Logical relationship to complete conjecture",
+      "result": "PASS",
+      "evidence": "source_conjunct_false is the exact negation of forall tau:R, tau<=3 -> P d c tau=Set.univ. Since this is a necessary included conjunct of both original language statements, its negation disproves the conjunction. Hausdorff dimension and continuity need not be proved or refuted."
+    }
+  ],
+  "verification": {
+    "clean_project": "/private/tmp/tlmc374-semantic-review/project",
+    "lake_build": "PASS; no author oleans copied; run-001.stdout",
+    "lean_version": "4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94",
+    "mathlib_revision": "c44e0c8ee63ca166450922a373c7409c5d26b00b; tracked tree clean",
+    "independent_inspector": "ReviewInspect.lean compiled with warningAsError=true; exact printed definitions and critical/final theorem axioms inspected.",
+    "axioms": "All safe mathematical declarations, including generated safe declarations, have only propext, Classical.choice, Quot.sound as transitive axioms. Two unreachable unsafe compiler noConfusion execution helpers use runtime lcUnreachable; this is explicitly outside mathematical proof dependencies and not counted as a proof foundation.",
+    "source_scan": "Only allowed maxHeartbeats set_option appeared in comprehensive suspicious-token scan; no sorry, admit, axiom, native_decide, unsafe, implementation override, macro, or custom elaborator.",
+    "strict_source_replays": "PASS: HeightRoots.lean and Counterexample.lean each directly recompiled with warningAsError=true, exit 0 and empty stdout/stderr.",
+    "external_computation": "No mathematical numerical computation is required; all arguments are symbolic.",
+    "compiled_declaration_scope": "PASS: independently ran final Audit.lean against separately rebuilt final modules. Full exported inventory byte-identical to frozen baseline. Every one of 137 owned declarations retained; 122 safe mathematics, 15 exact unsafe compiler execution definitions, zero owned axiomInfo. All 41623 constants reachable through types and values from safe roots contain zero unsafe dependencies and only standard three axioms.",
+    "final_build": "PASS: final b6cdda44... Counterexample rebuilt in isolated reviewer project, strict source replay and own ReviewInspect passed. HeightRoots unchanged and independently rebuilt/replayed earlier. No author mathematical .olean files copied.",
+    "compiled_audit": "independent-audit-comparison.json",
+    "portable_runner": "Read final frozen verify.py and its delta from the initial full read. Fresh-project portable execution result PASS, SHA256 993908edf0120ce32b8cfd04b21bdb160b2db0c1aae8e54e282db034c12a9a96; all commands exit 0, strict mathematical replays silent, nine dependency pins/tracked cleanliness and input hashes unchanged before/after.",
+    "negative_controls": "Read final test_verify.py and actual unit/compiled records: 21 unit tests and six compiled fixtures passed. Added axioms, unsafe definitions and sorry proofs are rejected in each owned module; strict source replays also reject both sorry fixtures. Controls result SHA256 29a779385490cd777dff8a09c6616d1e2bfce06b356aefce619bffafb3e35f5f.",
+    "runtime_boundary_assessment": "PASS: exact source and whole-inventory freeze plus exact execution-helper identities are used, no wildcard exemption. The auditor rejects every owned axiomInfo and unexpected unsafe declaration, and traverses imported intermediates through every safe declaration type/value dependency. Existing compiler execution artifacts are not used to prove propositions.",
+    "dependency_cache_limit": "Both independent builds reuse prebuilt standard dependency caches at pinned revisions; this review does not claim to rebuild all Lean/Mathlib dependencies from source."
+  },
+  "limitations": [
+    "The original never specifies H; PASS is scoped to the three explicitly defined standard multiplicative arithmetic height conventions.",
+    "No theorem about logarithmic height, house, arbitrary height functions, arbitrary rescalings/powers, or their effects is asserted.",
+    "No claim to settle the separate Hausdorff dimension or continuity clauses.",
+    "This is local independent semantic/verification review, not maintainer acceptance or a claim about publication/merge status."
+  ],
+  "findings": [],
+  "provenance": "/private/tmp/tlmc374-semantic-review/provenance.json",
+  "reviewed_report": {
+    "path": "/private/tmp/tlmc374-package-stage/report.tex",
+    "sha256": "90bd6a2901c11ebbacf9ba07c7dddbd4a85f8fc2534266a39f7bbd051bc813ef",
+    "read_entire_source": true,
+    "mathematical_match": "PASS",
+    "pdf_sha256": "ebdfc926b235daa509afd78b9a7d00905be8f6f71c6bcb61e7dc3d89253b0d52",
+    "visual_qa_record": "/private/tmp/tlmc374-report-qa/visual-review-revised.json",
+    "visual_qa_scope": "Read parent-produced revised three-page PASS record and independently verified final PDF hash; this semantic reviewer did not inspect page images independently."
+  },
+  "source_change_review": "Independent successive diffs confirm only removal of two unused deriving DecidableEq clauses and an explicit noncomputable annotation on the unchanged naivePolynomialHeight expression. No mathematical definition expression, theorem statement or proof script changed. Final Counterexample independently rebuilt and strictly replayed.",
+  "completed_utc": "2026-10-09T01:03:47.099837+00:00",
+  "final_stage_binding": {
+    "path": "/private/tmp/tlmc374-package-stage",
+    "sha256": {
+      "lean/Counterexample.lean": "b6cdda44e8848fb6d1b39ecda46739df8074eaeab76bc1e3f18662d46776c210",
+      "lean/HeightRoots.lean": "8672cc39356a93259ad9cc72c0438bc81309edd35c7c14568fca38a765bfc424",
+      "report.tex": "90bd6a2901c11ebbacf9ba07c7dddbd4a85f8fc2534266a39f7bbd051bc813ef",
+      "report.pdf": "ebdfc926b235daa509afd78b9a7d00905be8f6f71c6bcb61e7dc3d89253b0d52",
+      "verification/source-manifest.json": "d8114b01aaeffe1899bb9fe4af6d712e5a08b54762a909503e4f50855ed67ae7",
+      "verification/compiled-inventory.json": "163f4b61bc6cd7f656e8fc1a1b07e09d425caae8e0eddacbd5a8794563f9a30d"
+    },
+    "verified_utc": "2026-10-09T01:03:47.099837+00:00",
+    "currentness": "Exact listed final stage files matched at completion. Moving/copying unchanged artifacts preserves this review; changing mathematical/report/verification files requires matching revalidation."
+  },
+  "resolved_review_findings": [
+    {
+      "issue": "Initial report axiom wording could ambiguously include compiler-generated unsafe artifacts.",
+      "resolution": "Final entire report explicitly limits foundations to safe mathematical dependencies and states no unsafe helper is reachable."
+    },
+    {
+      "issue": "Initial blanket isUnsafe rejection incorrectly treated compiler execution helpers as proof assumptions.",
+      "resolution": "Final frozen audited boundary records exact helpers, rejects all owned axiomInfo, and rejects unsafe nodes anywhere in safe mathematical type/value closure; independently executed successfully."
+    }
+  ]
+}

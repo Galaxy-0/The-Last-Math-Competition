@@ -1,0 +1,61 @@
+{
+  "result": "PASS",
+  "completed_utc": "2026-10-09T01:01:52.057043+00:00",
+  "role": "Independent technical verification engineering; no mathematical proof authored",
+  "package_stage": "/private/tmp/tlmc374-package-stage",
+  "artifact_hashes": {
+    "verify.py": "a046723f1d9fa42f759048b8be7d4bb05ae1bcb2d9e71a091c36f89508831ba9",
+    "test_verify.py": "133f9eb23ca0217ea4da519e44e4690d0fa7ca1d59c174f117e5ab8f3f777be0",
+    "lean/Audit.lean": "89643c06a7852f3363e1e773c1e93a15712c6c885da19581e0e3911920ef0f45",
+    "lean/Counterexample.lean": "b6cdda44e8848fb6d1b39ecda46739df8074eaeab76bc1e3f18662d46776c210",
+    "lean/HeightRoots.lean": "8672cc39356a93259ad9cc72c0438bc81309edd35c7c14568fca38a765bfc424",
+    "verification/compiled-inventory.json": "163f4b61bc6cd7f656e8fc1a1b07e09d425caae8e0eddacbd5a8794563f9a30d",
+    "verification/source-manifest.json": "d8114b01aaeffe1899bb9fe4af6d712e5a08b54762a909503e4f50855ed67ae7",
+    "verification/author-freeze.json": "7cdc6b7c706622146f52d24fa06b17ecd15ec9387627d359476a0a79aec10082"
+  },
+  "portable_result": {
+    "path": "/private/tmp/tlmc374-verifier-work/portable-final/result.json",
+    "sha256": "993908edf0120ce32b8cfd04b21bdb160b2db0c1aae8e54e282db034c12a9a96"
+  },
+  "negative_controls_result": {
+    "path": "/private/tmp/tlmc374-verifier-work/controls-final/result.json",
+    "sha256": "29a779385490cd777dff8a09c6616d1e2bfce06b356aefce619bffafb3e35f5f"
+  },
+  "audit_contract": {
+    "module_ownership": "Every compiled declaration owned by Counterexample or HeightRoots, including private, generated, and execution declarations; no namespace filter",
+    "owned_declaration_count": 137,
+    "safe_mathematical_count": 122,
+    "unsafe_execution_definition_count": 15,
+    "owned_axiomInfo_count": 0,
+    "runtime_artifact_policy": "Exactly 15 named compiler execution definitions; no wildcard/name-pattern exemption. Every name/kind/safety/role/type/direct-reference list/transitive-axiom list matches frozen full inventory, and exact mathematical/verification sources are SHA256-frozen. All owned axiomInfo entries are rejected. None of these definitions is permitted in the mathematical dependency closure.",
+    "proof_closure": "All 122 safe mathematical declarations are roots, with type and value edges including theorem proof values. Traversal includes imported intermediates; 41623 distinct reachable constants, zero unsafe nodes, exactly propext, Classical.choice, Quot.sound as axioms.",
+    "execution_foundations": "Two compiler noConfusion stage1 definitions contain Lean runtime lcUnreachable; these are inventoried execution artifacts, unreachable from all safe mathematical roots, and never counted as mathematical foundations.",
+    "source_policy": "Frozen mathematical/inspection sources also reject sorry/sorryAx/admit/axiom/unsafe/native_decide/implemented_by/extern/run_cmd/elab/macro/initialize/declare_syntax_cat tokens.",
+    "checks": "Fresh project with no authored build products, full Lake build, warning-as-error replay of both mathematical modules and Inspect/HeightRootsAudit/Audit, exact complete inventory comparison, before/after input and nine-dependency revision/tracked-clean checks.",
+    "limits": "Reuses prebuilt Lean 4.19.0 dependency caches at the nine pinned standard Git revisions; does not rebuild all dependency source or independently establish the mathematical statement matches the original prose. No maintainer acceptance is claimed."
+  },
+  "controls": {
+    "unit_count": 21,
+    "compiled_count": 6,
+    "compiled_fixtures": [
+      "custom-axiom-HeightRoots",
+      "custom-axiom-Counterexample",
+      "unsafe-definition-HeightRoots",
+      "unsafe-definition-Counterexample",
+      "sorry-proof-HeightRoots",
+      "sorry-proof-Counterexample"
+    ],
+    "extra_unit_subcases": [
+      "compiler-shaped spoof rejected in each module",
+      "safe/helper/unsafe bridge rejected even with altered expected inventory",
+      "generated execution type/dependency tamper rejected",
+      "missing proof root, unsafe closure, missing value edges, custom proof foundation rejected"
+    ]
+  },
+  "diagnostic_change": "Root applied explicit noncomputable annotation to naivePolynomialHeight after diagnostic test; expression/proofs unchanged. It removed 11 compiler nodes including all 3 specialization axiomInfo placeholders. Final audit therefore makes zero authored axiomInfo exceptions.",
+  "evidence": {
+    "portable_hashes": "/private/tmp/tlmc374-verifier-work/portable-final/SHA256SUMS.json",
+    "control_hashes": "/private/tmp/tlmc374-verifier-work/controls-final/SHA256SUMS.json",
+    "actual_failure_logs": "Each compiled-control folder retains command.json/stdout.txt/stderr.txt for expected audit/strict-replay failures; earlier diagnostic failure logs remain in verifier-work and root-rebuild-clean."
+  }
+}
