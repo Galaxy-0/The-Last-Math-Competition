@@ -1,0 +1,56 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\title{Rank zero has a degree-one identity\\Disproof of Conjecture 00000002766}
+\author{ziangni-sys}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\paragraph{Stated scope.}
+The conjecture concerns polynomial identities of the variety of
+matrices of rank at most $r$, and asserts that its minimal identity
+degree is $2r+2$. Neither the English nor the Chinese version requires
+$r>0$. We disprove this clause at the admissible rank bound $r=0$.
+The coefficient-growth clause need not be resolved to disprove the
+conjunction.
+
+\paragraph{The actual matrix variety.}
+Work over $\mathbb Q$. For every ambient size $n\geq1$,
+\[
+ V_0(n)=\{A\in M_n(\mathbb Q):\operatorname{rank}(A)\leq0\}
+       =\{0\}.
+\]
+Indeed the rank is the dimension of the image of the linear map
+$x\mapsto Ax$. Dimension zero forces that image to be the zero
+subspace, hence the linear map vanishes. Evaluating it on every
+standard basis vector shows that every column of $A$ is zero.
+The converse is immediate. Thus this description covers every
+matrix in the actual rank-constrained variety, at every ambient size.
+
+\paragraph{A genuine polynomial identity.}
+Take $p(X)=X\in\mathbb Q[X]$. This is a nonzero polynomial of degree
+one. A one-variable polynomial is also a noncommutative polynomial
+identity candidate: its evaluation in a matrix algebra is well-defined
+by sending scalars to scalar matrices and $X$ to the input matrix.
+For all $n$ and all $A\in V_0(n)$ its actual evaluation is
+\[
+ p(A)=A=0.
+\]
+Consequently a nonzero degree-one identity holds on the full rank-zero
+matrix variety, uniformly in ambient size. Its minimum identity degree
+is therefore at most one, whereas the asserted formula gives
+$2(0)+2=2$. This is a contradiction.
+
+\paragraph{Conclusion and formal coverage.}
+The conjecture is false without an additional positive-rank hypothesis.
+This proof makes no assertion about such a modified version.
+The Lean project uses the actual \texttt{Matrix.rank}, defined by the
+dimension of the matrix linear map's range. It proves rank at most zero
+if and only if the matrix is zero, verifies the polynomial's nonzero
+status and degree, and evaluates that polynomial through the actual
+scalar-to-matrix algebra map at every square matrix size. Its final
+theorem refutes the necessary degree lower bound that the proposed
+minimum would entail. No assumed rank-zero certificate or scalar
+replacement for the matrix variety is used.
+\end{document}
