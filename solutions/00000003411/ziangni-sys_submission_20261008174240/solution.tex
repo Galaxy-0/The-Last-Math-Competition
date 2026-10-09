@@ -1,0 +1,44 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Disproof of Conjecture 00000003411\\Entropy rates are not globally Lipschitz}
+\author{ziangni-sys}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+The conjecture asserts Lipschitz dependence of stationary Markov-chain entropy rates on transition probabilities, with a constant described in terms of minimal distribution values. There is no global Lipschitz dependence on the stated class. A uniform positive lower bound on the probabilities is not among the hypotheses.
+
+Consider the two-state chain with transition matrix and stationary distribution
+\[
+ P_p=\begin{pmatrix}p&1-p\\p&1-p\end{pmatrix},
+ \qquad \pi_p=(p,1-p),\qquad 0\le p\le1.
+\]
+Both rows have nonnegative entries summing to one, and $\pi_pP_p=\pi_p$. The chain started in this distribution is stationary; its successive states are independent with common distribution $\pi_p$. The usual entropy rate is
+\[
+ h(P_p,\pi_p)=-\sum_i\pi_p(i)\sum_jP_p(i,j)\log P_p(i,j)
+ = H(p):=-p\log p-(1-p)\log(1-p).
+\]
+As usual, $0\log0=0$, so $H(0)=0$. Using natural logarithms changes only a fixed factor compared with any other logarithm base. In the maximum-entry norm on transition matrices,
+\[
+ \|P_p-P_q\|_\infty=\max_{i,j}|P_p(i,j)-P_q(i,j)|=|p-q|.
+\]
+Thus the scalar parameter distance here is exactly the distance of the actual transition matrices.
+
+\begin{theorem}
+No finite constant $C\ge0$ satisfies
+$|h(P,\pi)-h(Q,\rho)|\le C\|P-Q\|_\infty$
+for all stationary finite-state Markov chains, even with two states.
+\end{theorem}
+\begin{proof}
+Given $C\ge0$, choose $p=e^{-(C+1)}$, so $0<p<1$ and $\log p=-(C+1)$. Since $\log(1-p)\le0$,
+\[
+ H(p)\ge-p\log p=(C+1)p>Cp.
+\]
+But $\|P_p-P_0\|_\infty=p$ and $H(0)=0$. This contradicts the proposed bound.
+\end{proof}
+All norms on the finite-dimensional space of two-by-two matrices are equivalent, so replacing the maximum-entry norm by another fixed matrix norm does not restore a global Lipschitz bound. Continuity itself is consistent with this example; the stronger claimed Lipschitz property fails. An estimate restricted to a class whose positive entries are uniformly bounded away from zero would be a different statement.
+
+\paragraph{Formal verification.}\sloppy
+The Lean project defines the actual two-state distribution, transition kernel, row-stochastic and stationarity conditions, and the standard finite-sum entropy-rate functional. It proves validity, evaluates that functional, proves the exact maximum-entry transition-distance identity using the standard function-space metric, and constructs the explicit counterexample for every $C$. The final theorem negates a global Lipschitz bound even on this valid family. The definitions and proof do not assume an entropy or transition-distance certificate. Final axiom audits use only standard Lean axioms.
+\end{document}
