@@ -1,0 +1,36 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\title{Disproof of Conjecture 00000004021\\Signatures cannot recover the initial position}
+\author{ziangni-sys}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+The conjecture quantifies over Lipschitz functionals without requiring paths to have a common initial point or functionals to be translation invariant. This omission prevents even convergence on a compact family of two smooth paths.
+
+Give $\mathcal P=C([0,1],\mathbb R)$ the supremum metric. The functional
+\[
+ F(\gamma)=\gamma(0)
+\]
+is $1$-Lipschitz, since $|\gamma(0)-\eta(0)|\le\sup_{t\in[0,1]}|\gamma(t)-\eta(t)|$. For $a\in\mathbb R$, let $\gamma_a(t)=a$. These paths are smooth, with zero derivative and finite variation.
+
+For a smooth one-dimensional path, the ordinary signature levels are the genuine iterated integrals
+\[
+ S_0(t)=1,\qquad S_{n+1}(t)=\int_0^t S_n(s)\gamma'(s)\,ds.
+\]
+For every constant path, $S_0(1)=1$ and $S_n(1)=0$ for every $n\ge1$. Thus every linear combination of coordinates through level $N$, including the optional zeroth level, takes a common value $b_N$ on all the paths $\gamma_a$.
+
+The finite set $\{\gamma_0,\gamma_1\}$ is compact. On these paths the target values are $0$ and $1$, so
+\[
+ 1\le |b_N|+|1-b_N|,\qquad
+ \max\{|b_N|,|1-b_N|\}\ge\tfrac12.
+\]
+Consequently no signature linear functionals can approximate $F$ on this family with error tending to zero. In particular, for any fixed finite $C\ge0$, choosing $N>(2C+1)^2$ gives $C/\sqrt N<1/2$, contradicting the claimed rate.
+
+On the whole constant-path family the failure is stronger: no finite uniform error bound exists, because $F(\gamma_a)=a$ is unbounded while every truncated signature linear functional is constant there. For a proposed bound $E$, take $a=b_N+|E|+1$.
+
+The ordinary signature is translation invariant and discards the initial position. A statement restricted to a common starting point, or augmented by initial-position coordinates, would be different from the present assertion. This proof concerns the signature explicitly defined in the source.
+
+\paragraph{Formal verification.}
+Lean uses actual continuous maps on $[0,1]$ with their supremum metric, proves the evaluation Lipschitz bound, defines the signature by recursive interval integrals with the actual derivative, and computes all levels on the constant paths. It verifies the $1/2$ lower bound, failure of every finite bound on all constant paths, and impossibility of the proposed decaying rate on the two-path family. All six printed final axiom audits use only the standard axioms \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}.
+\end{document}
