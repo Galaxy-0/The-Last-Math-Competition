@@ -1,0 +1,41 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\title{Disproof of Conjecture 00000009924\\An edge insertion makes a Hodge eigenvalue jump}
+\author{ziangni-sys}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+The conjecture defines persistent Laplacians as Hodge Laplacians varying with a filtration parameter and asserts that their eigenvalues are Lipschitz in that parameter. For the ordinary unweighted Hodge Laplacians of a simplicial filtration, already the diagonal persistent case, a single edge insertion disproves this assertion.
+
+Let the vertices be $0,1$. For $t<0$, let $K_t$ contain the empty simplex and the two singleton vertices. For $t\ge0$, also include the edge $\{0,1\}$. These are downward-closed simplicial complexes and $K_s\subseteq K_t$ whenever $s\le t$. Vertex degrees are at most one, and the only insertion is one edge.
+
+Use the usual inner products in which oriented simplices are orthonormal. The edge chain space $C_1(K_t;\mathbb R)$ is zero-dimensional before insertion and one-dimensional afterward; the vertex space is $\mathbb R^2$ throughout. Orient the edge from $0$ to $1$. Its boundary matrix is
+\[
+ B_t:\ C_1(K_t;\mathbb R)\longrightarrow\mathbb R^2,
+ \quad B_t=\begin{cases}\text{the $2\times0$ matrix},&t<0,\\[-1mm]
+ \begin{pmatrix}-1\\1\end{pmatrix},&t\ge0.
+ \end{cases}
+\]
+The unaugmented degree-zero Hodge Laplacian is $L_t=B_tB_t^*$, since there is no lower boundary contribution. Consequently
+\[
+ L_t=\begin{cases}
+ \begin{pmatrix}0&0\\0&0\end{pmatrix},&t<0,\\[2mm]
+ \begin{pmatrix}1&-1\\-1&1\end{pmatrix},&t\ge0.
+ \end{cases}
+\]
+Before insertion, both eigenvalues are zero. After insertion, $(1,1)$ is a zero eigenvector and $(1,-1)$ is a two eigenvector. These independent vectors span the entire vertex space, so the complete sorted eigenvalue list is $(0,2)$. Hence the largest eigenvalue is
+\[
+ \lambda_{\max}(t)=\begin{cases}0,&t<0,\\2,&t\ge0.\end{cases}
+\]
+
+This eigenvalue is not even continuous at $t=0$, and therefore is not Lipschitz. Explicitly, for any proposed $C\ge0$, choose $t=-1/(C+1)$. Then
+\[
+ |\lambda_{\max}(t)-\lambda_{\max}(0)|=2,
+ \qquad C|t|=\frac{C}{C+1}<1.
+\]
+Thus no finite Lipschitz constant works, irrespective of the bounded insertion degree. The claimed differentiability conclusion also cannot hold at the insertion. Replacing unweighted insertion by a specified smooth weighting would be a different hypothesis absent from the statement.
+
+\paragraph{Formal verification.}\sloppy
+The Lean project constructs the downward-closed simplicial complexes and proves filtration monotonicity and the edge-insertion criterion. Its boundary matrices use actual edge indices of size zero or one, rather than a fictitious existing edge. It forms the Hodge matrix by multiplying the boundary by its transpose, evaluates its entries, proves the eigenvalue constraints and largest-eigenvalue characterization, and negates every Lipschitz bound for that actual largest eigenvalue. The proof assumes no spectral or boundary certificate; final axiom audits use only standard Lean axioms.
+\end{document}
