@@ -1,0 +1,125 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\newcommand{\V}{V}
+\newcommand{\E}{\mathrm e}
+\begin{document}
+\begin{center}
+{\Large\bfseries Full budget permits zero oracle queries}\\[7pt]
+{\small A counterexample to Conjecture 00000007863's linear lower bound}
+\end{center}
+
+\textbf{The source claim.} The bilingual source asserts that the expected
+query complexity \(q(n,k)\) of randomized value-oracle maximization of a
+normalized monotone submodular function is \(\Theta(n)\) for a
+\((1-1/\E)\)-approximation, with exact lower-bound constant one and every
+point queried at least once. It imposes no exclusion of \(k=n\), no
+fixed-\(k\) asymptotic, and no restriction separating \(k\) from \(n\).
+We disprove the necessary positive linear lower-bound conjunct on the
+unbounded admissible family \(k=n\).
+
+\textbf{Every objective is handled.} Let \(\V=\{0,\ldots,n-1\}\).
+The allowed objective is an actual set function
+\(f:2^{\V}\to\mathbb R\) satisfying
+\[
+ f(\varnothing)=0,\quad A\subseteq B\Longrightarrow f(A)\leq f(B),
+ \quad f(A\cup B)+f(A\cap B)\leq f(A)+f(B).
+\]
+At budget \(k=n\), the ground set itself is feasible. Every feasible
+set \(S\) is a subset of \(\V\), so monotonicity gives
+\[
+ f(S)\leq f(\V).
+\]
+Thus \(\V\) attains the actual maximum, for \emph{every} objective in
+the source class. This does not select an easy instance such as the
+zero function. The cardinality objective \(f(S)=|S|\), for example, is
+normalized, monotone and modular, and has positive optimum \(n\) when
+\(n>0\). It witnesses that the class and counterexample are nonvacuous.
+
+\textbf{Approximation guarantee.} Normalization and monotonicity imply
+\(0=f(\varnothing)\leq f(S)\) for every set. Put
+\(\alpha=1-1/\exp(1)\), so \(0<\alpha\leq1\). Consequently
+\[
+ \alpha f(S)\leq f(S)\leq f(\V).
+\]
+Returning \(\V\) therefore satisfies the requested approximation,
+indeed exact optimality, uniformly over the whole class. Submodularity
+is retained in the hypotheses, even though monotonicity alone makes
+this full-budget argument work.
+
+\textbf{Actual zero-query protocol.} The algorithm is simply
+\[
+ \text{return }\V.
+\]
+It does not use an oracle answer or depend on which objective is
+present. In the formal model, a protocol is built from return nodes
+and query nodes; a query requests \(f(S)\), feeds that real answer to
+its continuation, and increases the interpreter's query count by one.
+The return node evaluates to output \(\V\) and count zero for every
+oracle. Zero cost is proved from this actual interpreter, not supplied
+as a premise or assigned to an unrelated complexity scalar.
+
+\newpage
+\begin{center}
+{\large\bfseries Expected cost, asymptotics, and precise scope}
+\end{center}
+
+\textbf{A legitimate randomized special case.} A deterministic protocol
+is allowed among randomized algorithms. Explicitly, take a singleton
+random seed with probability mass one. The seed law is nonnegative
+and normalized. Its expected query count is the finite weighted sum
+of the actual interpreter counts. For the same return-ground-set
+protocol this gives
+\[
+ \mathbb E[\text{queries}\mid f]=1\cdot0=0
+ \qquad\text{for every allowed }f.
+\]
+Therefore even the worst case over all source objectives has zero
+expected queries. Query counts are nonnegative, so this uniformly
+valid algorithm already rules out any positive lower bound on the
+least required worst-case expected count at full budget.
+
+\textbf{Asymptotic contradiction.} Suppose a positive linear lower
+bound held eventually along \((n,k)=(n,n)\). There would be \(c>0\)
+and a threshold such that every valid randomized approximation
+algorithm, for every sufficiently large \(n\), had expected cost at
+least \(cn\) on some allowed objective. Apply that claim to the
+return-ground-set protocol. Its expected cost is zero on every
+objective, whereas \(cn>0\) once \(n\geq1\). This is a contradiction.
+Thus no eventual positive \(\Omega(n)\) lower comparison is possible
+on this unbounded family, and the stated unrestricted
+\(\Theta(n)\) law, including its exact-constant assertion, fails.
+
+\textbf{Scope of the conclusion.} We use the standard optimization
+output: a feasible set with the promised objective guarantee. The
+source does not request separately reporting its unknown objective
+value. It also does not restrict the budget to \(k<n\) or fix \(k\)
+as \(n\) grows. Those restrictions would describe a different claim.
+Independent source-bound review must assess these conventions.
+
+The source additionally asserts a query jump for improved
+approximation and a uniquely determined information-theoretic
+exponent. Those clauses are not individually formalized or settled
+here. A false necessary linear lower-bound conjunct suffices to
+refute the original conjunction on its stated domain. The simple
+protocol class is used only to give an allowed counterexample;
+it does not purport to rebuild the full randomized oracle model.
+
+\textbf{Lean correspondence.} \texttt{SourceObjective} retains all
+three source properties on actual \texttt{Finset (Fin n)} objects.
+The complete source proves greatest-value optimality, a nontrivial
+cardinality witness, and the exact approximation for every objective.
+\texttt{ValueProgram} and \texttt{run} implement actual oracle queries
+and their cost; the normalized seed expectation is proved zero.
+The expected-query lower-bound theorem supplies the asymptotic
+contradiction. The premise-free theorem
+\texttt{full\_budget\_counterexample} collects the full certificate.
+
+\textit{Provenance and verification.} This elementary full-budget route
+was identified by the root coordinator and formalized in the same-run
+scout before this author package. No first-discovery claim is made.
+The packet is an author artifact; deterministic replay, independent
+semantic review and acceptance belong to the manager.
+\end{document}

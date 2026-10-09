@@ -1,0 +1,53 @@
+{
+  "verdict": "pass",
+  "review_of": "cabf215038666cc934fd5fac864c201a785a3436c201cad6316b6f7efe91063e",
+  "interpretation": {
+    "computed_value_not_required_by_source": true,
+    "not_full_randomized_model_equivalence": true,
+    "standard_feasible_set_output": true,
+    "k_equals_n_admissible": true,
+    "unrestricted_two_parameter_domain": true,
+    "protocol_subclass_only": true
+  },
+  "target": "FullBudgetOracle.full_budget_counterexample",
+  "report": "workers/7863-final-review/report.md",
+  "original_first_checklist": "workers/7863-final-review/pre-evaluation-checklist.md",
+  "scope": "complete frozen-package review: all-objective full-budget witness against the original necessary unrestricted positive linear query lower bound",
+  "completed_at_utc": "2026-10-08T16:36:26.8925069Z",
+  "semantic_missing_obligations": [],
+  "reviewed_hashes": {
+    "original": "055b0710d93405331ed765147d4deef11a9f4a20f3aa74dca984dcbdf6ba72e2",
+    "00000007863.md": "055b0710d93405331ed765147d4deef11a9f4a20f3aa74dca984dcbdf6ba72e2",
+    "lean/lake-manifest.json": "e792b0f81943b9b7a3ac6059283884ef6247721aed65c91f66754060c6347ff4",
+    "lean/lakefile.toml": "75803f3c1e89f3055f371da5fdd4fe33a54610f6efe3dcdfb3623d6e4a8e84e8",
+    "lean/lean-toolchain": "b2b5068d5a4835675e651ce83b29c0ddb308d28b80076e7c007aef4630af0477",
+    "lean/Main.lean": "5e3c9814d757952995f13fce993b716c01dd022a7aabd7a70a203ff797cba317",
+    "original.md": "055b0710d93405331ed765147d4deef11a9f4a20f3aa74dca984dcbdf6ba72e2",
+    "proof.compile.json": "e5de0d2353fae984bfaffe2d209adf48a2db164db41a4b56ec1c8a3b2bb88af1",
+    "proof.log": "d15725b12579e58818826c908d95ceeef5e1c5ac7236f64ff343198587a3b356",
+    "proof.pdf": "2aa7cb541c169db721cb118f709bd43d841bc24e35fbb38245a101ee71ce1e3c",
+    "proof.tex": "0b3d46a1d9ddceccb469b294e63991680584fd2ca0cab421cdb158e4fbb304ce",
+    "README.md": "b10c81ae1f07cf931ad0c37b6c4ee8356f6f84c3e1f8f3284181ac0cc7b3ce2c",
+    "source-correspondence.md": "d2a9d27a73ad1bd59a3ded9e0af2ccf330f4320c59acc578e7b7c7305ff07aa8"
+  },
+  "focused_type_check": {
+    "allowed_axioms_only": true,
+    "log": "workers/7863-final-review/focused-review.log",
+    "exit_code": 0,
+    "target_count": 12
+  },
+  "attacks": [
+    "A fixed-k-only limit would not be refuted by the diagonal, but the actual q(n,k) claim supplies no fixed-parameter regime and its every-point assertion is unrestricted",
+    "Requiring a separately computed objective value would change output; the actual standard feasible-set guarantee needs no value report",
+    "A zero-cost algorithm on an easy f would not refute worst-case complexity; this one is proved valid and zero-cost for every raw source objective",
+    "The finite one-seed subclass is not all randomized algorithms; the deterministic exact strategy is nevertheless an admissible witness within the broader class, so a universal lower bound must apply to it",
+    "The asymptotic proof uses eventually n>=1 and every c>0 on unbounded n=k, avoiding n=0 or a lone finite edge case"
+  ],
+  "reviewer": "/root/runreview",
+  "remaining_obligations": [
+    "Root-owned mechanical/registered/native binding, final acceptance and official fresh kernel replay",
+    "A clarified fixed-k/excluded-full-budget/value-reporting contract needs different source-bound review",
+    "Changed reviewed files/PDF require re-review"
+  ],
+  "pdf_visual": "workers/7863-final-review/pdf-visual.json"
+}
