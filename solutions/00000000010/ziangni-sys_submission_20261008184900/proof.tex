@@ -1,0 +1,76 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\title{The linear polynomial defeats the constant bound\\Disproof of Conjecture 00000000010}
+\author{ziangni-sys}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\paragraph{Scope of the disproof.}
+The conjecture concerns a square-free integer polynomial $f$ and asserts,
+among other clauses, the explicit upper bound
+\[
+ C_f\leq2\log D_f,
+\]
+where $C_f$ is its Bateman--Horn local-density product and $D_f$ is the
+discriminant (or its absolute value). Neither language imposes a degree
+lower bound, excludes discriminant one, or replaces the discriminant
+by a truncated quantity such as $\max\{2,|\operatorname{disc}(f)|\}$.
+We disprove this upper bound alone; the remaining asymptotic and
+optimality clauses need not be decided. In particular, the disproof
+uses no convention about dividing by zero in the separate lower bound.
+
+\paragraph{An admissible polynomial and its discriminant.}
+Take the actual polynomial $f(X)=X\in\mathbb Z[X]$. It has degree one,
+is primitive, has positive leading coefficient and has no repeated root.
+In particular it is square-free. The standard root-product definition
+of the discriminant of a split degree-$d$ polynomial with leading
+coefficient $a_d$ is
+\[
+ \operatorname{disc}(f)=a_d^{2d-2}
+     \prod_{1\leq i<j\leq d}(r_i-r_j)^2.
+\]
+Here $d=1$, $a_d=1$, and the single root is $r_1=0$. The product over
+root pairs is empty, so it equals one. Consequently
+$\operatorname{disc}(X)=1$ and $D_X=1$, for either signed or absolute
+discriminant. This value is computed from the definition, not assigned
+as an auxiliary certificate.
+
+\paragraph{The genuine local-density product.}
+For each prime $p$, the reduction of $X$ in $\mathbb F_p[X]$ has exactly
+one root, namely zero. Thus its root count $\rho_X(p)$ is one, and the
+single-polynomial Bateman--Horn factor is
+\[
+ \frac{1-\rho_X(p)/p}{1-1/p}
+   =\frac{1-1/p}{1-1/p}=1.
+\]
+The denominator is positive since $p\geq2$. Every actual prime partial
+product
+\[
+ \prod_{p\leq N}\frac{1-\rho_X(p)/p}{1-1/p}
+\]
+therefore equals one.
+These partial products converge to one, proving $C_X=1$ directly from
+the stated local-density product. There is no local obstruction and
+no unproved prime-counting assertion in this calculation.
+
+\paragraph{Contradiction.}
+The asserted upper bound at this admissible polynomial becomes
+\[
+ 1=C_X\leq2\log D_X=2\log1=0,
+\]
+which is false. Hence the conjecture, with its stated scope, is false.
+Adding a degree or discriminant restriction would change that scope;
+the present counterexample does not purport to decide such a modified
+claim.
+
+\paragraph{Formal verification.}
+The Lean project constructs the polynomial $X$ over $\mathbb Z$, proves
+its square-freeness and degree, maps it into $\mathbb C[X]$, verifies
+its one-root factorization and computes the standard discriminant
+product. It counts the actual zeros of its reduction in \texttt{ZMod p}
+for every prime, computes each local factor, forms the prime partial
+products, proves their limit, and defines the constant by that limit.
+Its final theorem disproves the stated logarithmic upper bound.
+\end{document}
