@@ -1,0 +1,94 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{proposition}{Proposition}
+\title{Identical spectra, different Richardson trajectories}
+\author{Proof of Conjecture 00000005130}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Result.} Two positive-definite preconditioners for the same linear system have identical spectra, as do their preconditioned systems and iteration matrices, yet their iterates differ from the same starting point. A quarter-turn of the initial error gives the exact relation between the trajectories.
+
+\section*{The system and preconditioners}
+Solve $Ax=b$ with
+\[
+ A=I_2,\qquad b=e_1=(1,0)^T,\qquad x_0=0,
+\]
+using unit-step preconditioned Richardson iteration
+\[
+ x_{k+1}=x_k+M^{-1}(b-Ax_k).
+\]
+The solution is $x_*=b$. Its error $e_k=b-x_k$ therefore satisfies the genuine recurrence
+\[
+ e_0=e_1,\qquad e_{k+1}=G_Me_k,\qquad G_M=I-M^{-1}.
+\]
+Choose
+\[
+ M_1=\begin{pmatrix}1&0\\0&2\end{pmatrix},\quad
+ M_2=\begin{pmatrix}2&0\\0&1\end{pmatrix},\quad
+ R=\begin{pmatrix}0&-1\\1&0\end{pmatrix}.
+\]
+Both $M_1$ and $M_2$ are symmetric positive definite. The matrix $R$ is a rotation: $R^TR=RR^T=I$ and $\det R=1$. Direct multiplication gives
+\[
+ M_2=RM_1R^T.
+\]
+The canonical inverses and resulting iteration matrices are
+\[
+ M_1^{-1}=\operatorname{diag}(1,1/2),\quad
+ M_2^{-1}=\operatorname{diag}(1/2,1),
+\]
+\[
+ G_1=\operatorname{diag}(0,1/2),\qquad
+ G_2=\operatorname{diag}(1/2,0).
+\]
+Consequently the full spectra agree in all three relevant senses:
+\[
+ \sigma(M_1)=\sigma(M_2)=\{1,2\},\quad
+ \sigma(M_1^{-1}A)=\sigma(M_2^{-1}A)=\{1,1/2\},
+\]
+\[
+ \sigma(G_1)=\sigma(G_2)=\{0,1/2\}.
+\]
+Exact equality of spectra is stronger than merely having the same spectral clustering.
+
+\newpage
+\section*{Different trajectories from the same initial error}
+Starting with the common unit vector $e_0=e_1$, the recurrences give
+\[
+ e_k^{(1)}=0\quad(k\geq1),\qquad
+ e_k^{(2)}=2^{-k}e_1\quad(k\geq0).
+\]
+The first method solves the system in one step. The second follows
+\[
+ x_k^{(2)}=(1-2^{-k})e_1,
+\]
+and in particular $x_1^{(1)}=e_1$ whereas $x_1^{(2)}=\tfrac12e_1$. The Euclidean error norms are $0$ and $2^{-k}$ for $k\geq1$. Since $A=I$, these are also the residual norms.
+
+\section*{Explicit rotation of the initial direction}
+Write $E_j(v,k)$ for the error after $k$ recurrence steps with $M_j$ and initial error $v$. The identity $G_2R=RG_1$ implies by induction
+\[
+ E_2(Rv,k)=R E_1(v,k).
+\]
+Taking $v=R^Te_1=-e_2$ gives the exact trajectory relation
+\[
+ E_2(e_1,k)=R E_1(R^Te_1,k).
+\]
+Thus the difference is realized by explicitly rotating the initial direction relative to the eigenspaces. With $M_1$, the direction $e_1$ belongs to the zero eigenspace of $G_1$, while the rotated direction $-e_2$ belongs to its $1/2$ eigenspace.
+
+\begin{proposition}
+There exist two positive-definite preconditioners with identical spectral clustering but different iteration trajectories for the same system and starting point. Their trajectories are related by an explicit rotation of the initial error direction.
+\end{proposition}
+\begin{proof}
+The matrices and initial vector above satisfy all assertions. The canonical inverse calculations determine the actual preconditioned Richardson recurrences, their spectra agree, the first iterates differ, and the displayed rotation identity holds at every iteration.
+\end{proof}
+
+\section*{Scope and formal verification}
+The source is existential, so a single standard iterative method and explicit pair establish the full assertion. No claim that all methods or all starting directions behave differently is required. Both the linear system and the initial point are fixed; the preconditioners themselves are changed by rotation.
+
+Lean proves positive definiteness, the canonical matrix inverses, full real spectra, the genuine Richardson recurrence, the exact error sequences and their Euclidean norms, and the quarter-turn conjugacy. It verifies the trajectory identity for every iteration and supplies an existential witness theorem.
+
+Run \texttt{lake build} in \texttt{lean/} using Lean 4.19.0. Mathlib is pinned to
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+All principal theorem audits use only standard logical axioms; no trajectory formula is assumed.
+\end{document}
