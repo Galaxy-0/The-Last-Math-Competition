@@ -1,0 +1,35 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\title{Disproof of Conjecture 00000002507\\Z-eigenpair normalization is not homogeneous}
+\author{ziangni-sys}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+The English statement specifically asserts that the tensor Z-eigenvalue system is a system of homogeneous polynomial equations. The unit-vector normalization in the Z-eigenpair definition prevents this, even for an order-three tensor in dimension one. Here ``homogeneous'' means ordinary polynomial homogeneity in the original affine variables $(\lambda,x)$.
+
+Recall that a real Z-eigenpair of an order-$m$ tensor $A$ satisfies
+\[
+ A x^{m-1}=\lambda x,\qquad \sum_i x_i^2=1.
+\]
+For $m=3$ and dimension one, take the actual tensor with sole component $A_{111}=1$. Its contraction is
+\[
+ (Ax^2)_1=\sum_{j,k}A_{1jk}x_jx_k=x^2.
+\]
+The Z-eigenpair equations therefore become
+\[
+ x^2=\lambda x,\qquad x^2=1.
+\]
+They have exactly the two real solutions $(\lambda,x)=(1,1),(-1,-1)$. In particular $(1,1)$ is valid, whereas the doubled pair $(2,2)$ fails $x^2=1$.
+
+Every common zero set of homogeneous polynomials is closed under scalar multiplication. Indeed, if $p$ is homogeneous of degree $d$, then
+\[
+ p(c\lambda,cx)=c^d p(\lambda,x).
+\]
+This identity holds for $d=0$ as well. Thus if every member of any family of homogeneous polynomials vanishes at $(1,1)$, every member also vanishes at $(2,2)$. No such family, finite or infinite, can define exactly the Z-eigenpair set above. This disproves the homogeneous-system conjunct independently of the claimed algebraic-count conclusion.
+
+The eigen-equation $x^2=\lambda x$ alone happens to be homogeneous in this example. It is the genuine normalization equation $x^2-1=0$ that breaks homogeneity. Dropping normalization would change the Z-eigensystem; replacing it by $x^2-u^2=0$ introduces a new homogenizing variable and requires choosing the affine chart $u=1$. Such augmented or projective reformulations do not make the normalized equations in the original variables homogeneous. The unnormalized H-eigenvalue equations are also a different system.
+
+\paragraph{Lean verification.}\sloppy
+The project represents the order-three tensor by its actual three-index array on a one-element index set, defines its finite-sum contraction, and defines the normalized Z-eigenpair predicate with the squared-norm equation. It verifies the valid and invalid pairs. For arbitrary ordinary homogeneous multivariate polynomials, it proves the evaluation scaling identity using their monomial supports. The final theorem rules out any homogeneous polynomial family whose common affine zero set equals this actual Z-eigenpair set. No polynomial, contraction or spectral certificate is assumed; final theorem axiom audits use only standard Lean axioms.
+\end{document}
