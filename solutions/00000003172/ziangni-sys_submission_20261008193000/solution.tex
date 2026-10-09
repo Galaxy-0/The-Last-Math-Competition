@@ -1,0 +1,34 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\title{IHT converges linearly without restricted strong convexity\\Disproof of Conjecture 00000003172}
+\author{ziangni-sys}\date{8 October 2026}
+\begin{document}\maketitle
+The stated necessity of restricted strong convexity is false for convergence to a sparse global minimizer. Consider the genuine least-squares problem on $\mathbb R^2$ with measurement matrix $A=(1\quad0)$, data zero, and sparsity one:
+\[
+ f(x,y)=\tfrac12\|A(x,y)\|_2^2=\tfrac12 x^2,\qquad \nabla f(x,y)=(x,0).
+\]
+This is a nonconstant convex smooth objective. Let $H_1$ keep the coordinate of larger absolute magnitude, retaining the first coordinate in a tie. It is a genuine nearest projection in Euclidean distance onto the union of the two coordinate axes: discarding the smaller coordinate minimizes the squared error. The actual IHT step with step size $1/2$ is
+\[
+ S(x,y)=H_1\bigl((x,y)-\tfrac12\nabla f(x,y)\bigr)=H_1(x/2,y).
+\]
+Fix any initial point $p$ and put $q=S(p)$. Either $q=(a,0)$, in which case all subsequent steps halve the first coordinate, or $q=(0,b)$, in which case it is already a fixed global minimizer. Hence the true iterates satisfy, for every $n\ge0$,
+\[
+ S^{n+1}(p)=(2^{-n}q_1,q_2).
+\]
+They converge to $p_\infty=(0,q_2)$, a one-sparse global minimizer with objective zero. In either the Euclidean or maximum norm the exact error is
+\[
+ \|S^{n+1}(p)-p_\infty\|=2^{-n}|q_1|.
+\]
+Thus convergence is linear for \emph{every} initial point, with common ratio $1/2$; it includes finite termination when $q_1=0$.
+
+However no positive restricted strong convexity constant exists. The standard restricted curvature inequality, even restricted merely to one-sparse $u,v$, would require
+\[
+ f(v)\ge f(u)+\langle\nabla f(u),v-u\rangle+\tfrac\mu2\|v-u\|_2^2.
+\]
+Take $u=(0,0)$ and $v=(0,1)$, both admissibly sparse. Their objective values and the derivative term vanish, while their squared Euclidean separation is one. The inequality forces $0\ge\mu/2$, contradicting $\mu>0$. Any stronger restricted-convexity condition on two- or three-sparse differences also fails on this same direction. Therefore linear convergence does not imply the conjunction of restricted strong convexity and smoothness, disproving the stated biconditional.
+
+This is convergence to a genuine global minimizer, possibly depending on the initial point. It is not uniform recovery of an independently specified ground truth; no identifiability or uniqueness hypothesis appears in the source. Restricted curvature remains a useful sufficient condition for stronger recovery guarantees. The acceleration-threshold constituent is unnecessary for this disproof.
+
+\paragraph{Formal verification.} Lean constructs the measurement map, objective, true Fr\'echet derivative and Euclidean gradient representation. It proves that the actual hard threshold is sparse and nearest in squared Euclidean distance, verifies true iterations for every initial point, proves the exact geometric norm error and full-sequence convergence, and disproves every positive restricted curvature constant. The plane's maximum Banach norm in Lean gives the same error here because the error has only one nonzero coordinate. All ten final theorem audits use standard Lean axioms.
+\end{document}
