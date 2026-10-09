@@ -1,0 +1,37 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Disproof of Conjecture 00000000945\\Real-valued Lipschitz functions on the circle extend}
+\author{ziangni-sys}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+The conjecture asserts that there exists a Lipschitz function $f:S^1\to\mathbb R$ that extends to no Banach plane but extends to a three-dimensional target. Its obstruction already fails: every such function extends, preserving its Lipschitz constant, to the Euclidean plane.
+
+Here $S^1=\{x\in\mathbb R^2:\|x\|_2=1\}$ has the metric induced from the Euclidean norm. An extension to a plane means a function defined on that plane agreeing with $f$ on the embedded circle. We also discuss the alternative reading of ``target'' below.
+
+\begin{theorem}
+Let $(X,d)$ be a metric space, $A\subseteq X$ be nonempty, and let $f:A\to\mathbb R$ satisfy $|f(a)-f(b)|\le Kd(a,b)$ for all $a,b\in A$, where $K\ge0$. There is a function $F:X\to\mathbb R$ agreeing with $f$ on $A$ and satisfying the same Lipschitz bound.
+\end{theorem}
+\begin{proof}
+Define
+\[
+ F(x)=\inf_{a\in A}\bigl(f(a)+Kd(x,a)\bigr).
+\]
+For a fixed $a_0\in A$, the triangle inequality and the Lipschitz bound give
+\[
+ f(a)+Kd(x,a)\ge f(a_0)-Kd(a,a_0)+Kd(x,a)
+ \ge f(a_0)-Kd(x,a_0).
+\]
+The family defining the infimum is nonempty and bounded below; taking $a=a_0$ bounds it above as well. Thus $F(x)$ is a finite real number. For $x\in A$, every term is at least $f(x)$, and the term $a=x$ equals $f(x)$, so $F(x)=f(x)$.
+
+For every $a\in A$, $d(x,a)\le d(y,a)+d(x,y)$. Taking infima yields $F(x)\le F(y)+Kd(x,y)$. Exchanging $x,y$ proves $|F(x)-F(y)|\le Kd(x,y)$.
+\end{proof}
+Apply the theorem with $X=\mathbb R^2$, $A=S^1$. The Euclidean plane is a two-dimensional real Banach space. Consequently no Lipschitz $f:S^1\to\mathbb R$ has the claimed obstruction. This negates a necessary conjunct of the existential statement, irrespective of its additional three-dimensional extension requirement.
+
+If ``Banach plane'' instead describes the codomain, embed $\mathbb R$ isometrically as $t\mapsto(t,0)$ in the Banach plane $(\mathbb R^2,\|\cdot\|_\infty)$. The map $x\mapsto(F(x),0)$ agrees with the embedded original function and is $K$-Lipschitz. Thus this reading also supplies a plane-valued extension. Without specifying an embedding or superspace, a different meaning of extension would require additional data absent from the statement.
+
+\paragraph{Formal verification.}\sloppy
+The accompanying Lean project uses actual functions on the subtype of the Euclidean unit sphere, not scalar substitutes or assumed extension certificates. \texttt{subset\_extension} proves the general metric-space result using Mathlib's \texttt{LipschitzOnWith.extend\_real}; \texttt{circle\_extension} specializes it to the circle. \texttt{conjecture\_false} negates the existential failure of any Lipschitz extension to the plane, and \texttt{plane\_target\_extension} verifies the codomain interpretation. The final theorems' axiom audits use only standard Lean axioms. The Mathlib implementation contains the infimum proof above.
+\end{document}
