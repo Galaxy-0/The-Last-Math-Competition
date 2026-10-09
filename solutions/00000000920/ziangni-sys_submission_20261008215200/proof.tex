@@ -1,0 +1,64 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\begin{document}
+\begin{center}{\Large Real rank zero does not mean projection density}\\[4pt]
+Disproof of conjecture 00000000920\\[4pt]
+ziangni-sys --- October 8, 2026\end{center}
+
+Let $A=\mathbb C$ with its usual norm and involution $z^*=\overline z$.
+This is an actual homogeneous $C^*$-algebra:
+\[
+ \mathbb C\cong C(\{\mathrm{pt}\},M_1(\mathbb C)),
+ \qquad f\longmapsto f(\mathrm{pt}).
+\]
+Evaluation preserves multiplication, involution and norm, since the
+supremum norm on a singleton equals the norm at that point. In particular,
+$A$ is AH: it is the inductive limit of the constant homogeneous system
+$A\xrightarrow{\mathrm{id}}A\xrightarrow{\mathrm{id}}\cdots$. No
+infinite-dimensional restriction appears in the conjecture.
+
+\paragraph{Real rank zero.}
+The self-adjoint elements of $A$ are the real numbers. Given a self-adjoint
+$a$ and $\varepsilon>0$, if $a\ne0$ take $b=a$. It is self-adjoint and
+invertible, and $\|b-a\|=0<\varepsilon$. If $a=0$, take the real scalar
+$b=\varepsilon/2$. It is nonzero, hence invertible, and
+$\|b-a\|=\varepsilon/2<\varepsilon$. Thus every self-adjoint element is
+approximable by self-adjoint invertibles, proving real rank zero in precisely
+the approximation formulation stated in the source.
+
+\paragraph{Projections are not dense.}
+A projection $p\in\mathbb C$ satisfies $p^*=p$ and $p^2=p$. The latter
+equation gives $p(p-1)=0$, so $p=0$ or $p=1$. Conversely both are
+projections. For the self-adjoint element $a=1/2$,
+\[
+ \|p-a\|=\frac12\qquad\text{for every projection }p.
+\]
+Consequently the open norm ball of radius $1/4$ around $1/2$ contains no
+projection. The projection semilattice is exactly $\{0,1\}$, with its usual
+order, and is therefore not dense among self-adjoint elements.
+
+This disproves the claimed equivalence: the AH algebra has real rank zero
+but fails the stated density condition. The further cancellation description
+cannot restore an already-false equivalence.
+
+\paragraph{Interpretation of the density clause.}
+The Chinese version explicitly uses the projection semilattice, while the
+English version calls it the projection semigroup. Neither notion means
+arbitrary real linear combinations of projections. Even the more generous
+interpretation as finite additive sums of projections fails here: such sums
+are nonnegative integers, each at distance at least $1/2$ from $1/2$.
+The stable Murray--von Neumann semigroup $V(A)$ is an abstract semigroup
+of classes, not itself a normed subset of $A$. The counterexample addresses
+the literal projection-density assertion in the source. The familiar
+real-rank-zero characterization by approximation with self-adjoint
+\emph{finite-spectrum} elements, or by suitable real linear combinations
+of projections, is a different condition and is not refuted.
+
+\paragraph{Lean certificate.}
+The project constructs the actual continuous-function algebra on a point,
+its algebra equivalence with $\mathbb C$ and the universal property of the
+constant identity system. It proves self-adjoint invertible approximation,
+classifies all complex projections, computes the exact norm gap at $1/2$
+and proves real rank zero together with failure of projection density.
+\end{document}
