@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\title{Two independent repelling directions at criticality\\Disproof of Conjecture 00000005672}
+\author{ziangni-sys}\date{8 October 2026}
+\begin{document}\maketitle
+The assertion of a unique unstable direction at Jacobian spectral radius one is false without a simplicity or genericity hypothesis. We use the smooth polynomial family on the actual Banach plane $\mathbb R^2$, equipped with its maximum norm,
+\[
+ F_\mu(x,y)=(\mu x+x^3,\mu y+y^3).
+\]
+The origin is fixed for every parameter, and direct differentiation gives
+\[
+ DF_\mu(x,y)=\begin{pmatrix}\mu+3x^2&0\\0&\mu+3y^2\end{pmatrix}.
+\]
+In particular $DF_\mu(0)=\mu I$. Its complete complex spectrum is $\{\mu\}$, so the spectral radius is $|\mu|$. At the critical parameter $\mu=1$ it is exactly one.
+
+Both coordinate axes are invariant under the actual nonlinear map. For a positive initial displacement $a$, put $u_0=a$ and $u_{n+1}=u_n+u_n^3$. Induction gives
+\[
+ u_n\ge a+n a^3.
+\]
+Indeed $u_n\ge a>0$ implies $u_n^3\ge a^3$, completing the induction. Consequently $u_n$ eventually exceeds any prescribed real bound. The true iterates satisfy
+\[
+ F_1^n(a,0)=(u_n,0),\qquad F_1^n(0,a)=(0,u_n).
+\]
+For every $\varepsilon>0$, choose $a=\varepsilon/2$. The initial norm on either axis is less than $\varepsilon$, but a later iterate has norm greater than one. Thus each of the two linearly independent directions $(1,0)$ and $(0,1)$ is nonlinearly repelling. They cannot both belong to any single one-dimensional subspace. The critical unstable direction is therefore not unique.
+
+Here ``unstable direction'' means a nonlinear repelling direction: arbitrarily small positive displacements escape a fixed neighborhood under genuine forward iteration. If instead it means a direction in the strictly unstable eigenspace of the linearization, that space at this example is zero, since every eigenvalue is one; it still does not have a unique unstable direction. Critical linearization alone does not resolve nonlinear stability. This disproof concerns only the critical uniqueness constituent and does not dispute the usual sufficient criterion of spectral radius less than one.
+
+\paragraph{Formal verification.} The supplied Lean project proves the full Fr\'echet derivative of the polynomial family, the fixed point, the actual matrix spectrum, the critical spectral radius, the scalar growth and escape statements, and both true axis-iterate formulas. It defines the nonlinear repelling property, proves it for both axes and their independence, and formally negates containment of all repelling directions in a single line. No derivative, iteration or spectral certificate is assumed. The ten final theorem audits use only standard Lean axioms.
+\end{document}
