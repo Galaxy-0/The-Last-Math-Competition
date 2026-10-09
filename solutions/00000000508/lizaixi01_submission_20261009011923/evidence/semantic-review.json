@@ -1,0 +1,87 @@
+{
+  "verdict": "pass",
+  "reviewer": "/root/research_review",
+  "review_of": "46e60b4e077c3420394019af62e0fe546ad81af80e33d98fd5b009363a1e96d7",
+  "candidate_id": "00000000508",
+  "target_theorem": "TLMC508.exact_raw_definition_antichain",
+  "target_statement": "For every beta : Nat -> Int -> Nat, the set of shifted positions p=(k,d) satisfying RawExtremal beta k (k+d) is an antichain under the usual product order on Nat x Int.",
+  "reviewed_hashes": {
+    "original": "1066988073f5e8125e865edccdd81c0b53ae2b0a15753331a0e50cd70eeb21bc",
+    "00000000508.md": "1066988073f5e8125e865edccdd81c0b53ae2b0a15753331a0e50cd70eeb21bc",
+    "lean/lake-manifest.json": "e792b0f81943b9b7a3ac6059283884ef6247721aed65c91f66754060c6347ff4",
+    "lean/lakefile.toml": "75803f3c1e89f3055f371da5fdd4fe33a54610f6efe3dcdfb3623d6e4a8e84e8",
+    "lean/lean-toolchain": "b2b5068d5a4835675e651ce83b29c0ddb308d28b80076e7c007aef4630af0477",
+    "lean/Main.lean": "a1e5f0dd667e111a7b447fd0d63564d841389cec657a56391fad29e9a5d220b1",
+    "original.md": "1066988073f5e8125e865edccdd81c0b53ae2b0a15753331a0e50cd70eeb21bc",
+    "proof.pdf": "11e9d5961b528ca98a62a77cce2d44a4c1c61275b8b39fcbd88ecb87523d2b1c",
+    "proof.tex": "1a3b292cf0a5633ed18b2de92f84e3369770df6e117a7b6e8785121bb93d9f61",
+    "README.md": "217145c5c3d5115391db68d040833a3556e816a9b4dc067476ce5c5b2ac660eb",
+    "source-correspondence.md": "3b6918ac2390e1d92ddd2e1ec948ba5a19810e6c27fc1f19e7430f3621fae2ad"
+  },
+  "original_checklist_saved_before_package": true,
+  "author_result_claim_or_confidence_used": false,
+  "source_fidelity": {
+    "bilingual_agreement": "Both languages use beta_{k,k+d} and require extremal positions to form an antichain.",
+    "coordinate_interpretation": "Standard shifted Betti-diagram corner positions (k,d), with coordinatewise order. The original omits an explicit order, but its notation and the primary standard corner definition support this interpretation; no conflicting raw-order requirement is stated.",
+    "primary_definition": "BCP99 p.1: beta(i,j) nonzero and beta(l,r)=0 for l>=i, r>=j+1, r-l>=j-i. The independently viewed p.2 identifies corner (l,m) with beta(l,m+l).",
+    "primary_reference": "https://www.math.columbia.edu/~bayer/papers/Betti_BCP99/Betti_BCP99.pdf",
+    "source_clarification_needed": false,
+    "scope_limit": "This pass does not certify product-order antichain in raw coordinates (k,j). The coordinate diagnostic is not alleged to be an actual monomial ideal."
+  },
+  "universal_specialization": {
+    "assessment": "Valid stronger general theorem, not an unproved numeric proxy.",
+    "reason": "Actual graded Betti numbers are natural multiplicities of S(-j) summands in homological degree k, hence a function Nat -> Int -> Nat. The proved theorem quantifies over every such function and uses exactly the standard numerical extremality predicate, so choosing the actual multiplicities is ordinary universal specialization. No realizability, algebraic support, finite resolution, or Tor bridge is assumed.",
+    "actual_ideal_nonvacuity": "Over K[x], the principal monomial ideal (x) is S(-1), with beta(0,1)=1 and every other entry zero, giving one extremal shifted corner (0,1). This explanatory actual example is not a premise or the coordinate diagnostic."
+  },
+  "vanishing_region_equivalence": {
+    "forward": "A distinct shifted support point q>=p raises at least one integral coordinate, so its total degree is >=k+d+1; exact raw vanishing forbids it.",
+    "reverse": "A nonzero forbidden raw entry beta(l,r) maps to q=(l,r-l); maximality forces q=p and r=k+d, contradicting r>=k+d+1.",
+    "boundary_assessment": "Homological degree 0, all signed degrees/shifts, equality/self, exact +1 boundary, and nonzero support are covered. No Nat-subtraction truncation occurs."
+  },
+  "audited_contracts": [
+    {
+      "name": "TLMC508.rawExtremal_iff_maximal_shiftedSupport",
+      "assessment": "Both directions for every table and signed shifted point; nonzero condition, exact j+1 boundary, and all raw indices preserved."
+    },
+    {
+      "name": "TLMC508.extremalPositions_eq_maximal_support",
+      "assessment": "Actual set equality by pointwise application of the proved equivalence."
+    },
+    {
+      "name": "TLMC508.extremal_positions_antichain",
+      "assessment": "Product-order antichain of all extremal points, via maximal support and antisymmetry; no antichain premise."
+    },
+    {
+      "name": "TLMC508.exact_raw_definition_antichain",
+      "assessment": "The audited direct source conclusion exposes the exact standard raw predicate at beta(k,k+d)."
+    },
+    {
+      "name": "TLMC508.distinct_extremal_corners_incomparable",
+      "assessment": "Distinct arbitrary extremal points are incomparable in both directions; implicit point binders remain universal."
+    },
+    {
+      "name": "TLMC508.shifted_degree_strictly_decreases",
+      "assessment": "Strictly increasing homological degree forces strictly decreasing signed shift, including equality boundaries."
+    }
+  ],
+  "nonfinite_and_zero_scope": "No finiteness or existence-of-maxima assumption. Empty support gives no extremal entries. Infinite support may have no corners or infinitely many incomparable corners; the universal implication remains valid.",
+  "independent_diagnostics": "7,807 finite supports of sizes 0..3 on k=0..3, j=-3..5 checked independently against raw inequalities and shifted maximality/antichain; no discrepancies. These tests supplement the general proof, not replace it or assert ideal realizability.",
+  "paper_lean_correspondence": "All frozen source/report files fully inspected. proof.tex and both actual PDF pages give the same exact definition, equivalence, antichain, strict-decrease corollary, universal specialization and explicit raw-coordinate diagnostic limitation as Main.lean.",
+  "configuration": "Lean 4.33.0, pinned mathlib db584cd6d46c92f209a44c0f1c829460d327499d. Actual imported IsAntichain definition and maximal-antichain lemma were read. No source-level custom axiom, sorry, assumed bridge or oracle appears in Main.lean. This review is not the manager's build/audit gate.",
+  "nonblocking_documentation_note": "README lists worker-local artifacts absent from the 10-file package; those files and its historical compile assertions were not used as review evidence.",
+  "pdf_assessment": "Two actual pages rendered and individually viewed; full content legible, no clipping/overlap observed, glyph bounds within page edges.",
+  "artifacts": [
+    "workers/reviewer508/original.md",
+    "workers/reviewer508/original-checklist.md",
+    "workers/reviewer508/semantic-audit.md",
+    "workers/reviewer508/frozen-hashes.json",
+    "workers/reviewer508/pdf-visual.json",
+    "workers/reviewer508/independent-check.json"
+  ],
+  "reference_hashes": {
+    "primary-BCP99.pdf": "343f357c9122b32f4652afcadfe62796701cfc072540289001bd01fb82f006ad"
+  },
+  "reviewed_at_utc": "2026-10-08T13:42:33.674026+00:00",
+  "final_promotion_claimed": false,
+  "target": "TLMC508.exact_raw_definition_antichain"
+}
