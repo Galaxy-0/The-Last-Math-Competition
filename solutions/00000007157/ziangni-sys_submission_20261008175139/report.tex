@@ -1,0 +1,92 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{theorem}{Theorem}
+\title{A singleton spectral boundary is not a semicircle\\Disproof of Conjecture 00000007157}
+\author{ziangni-sys}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Statement and interpretation.}
+Both supplied language versions assert that the spectral boundary of a
+nonnormal complex matrix is a semicircle whose radius is its numerical
+radius. We use ``spectral boundary'' in its standard literal sense, the
+topological boundary of the spectrum in $\mathbb C$. The counterexample
+below rules out every center and orientation of the proposed semicircle.
+It does not refute an alternative statement giving a semicircular enclosure
+or an inequality: such a statement is different from saying that the
+boundary \emph{is} a semicircle. No enclosure formula or additional
+hypothesis is specified in the source.
+
+\begin{theorem}
+The nonnormal matrix
+\[
+                J=\begin{pmatrix}0&1\\0&0\end{pmatrix}
+\]
+has spectral boundary $\partial\sigma(J)=\{0\}$ and strictly positive
+numerical radius. Consequently its spectral boundary is not a semicircle
+of its numerical radius.
+\end{theorem}
+\begin{proof}
+First,
+\[
+ JJ^*=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad
+ J^*J=\begin{pmatrix}0&0\\0&1\end{pmatrix},
+\]
+so $J$ is nonnormal. For any complex $z$,
+\[
+          \det(zI-J)=\det\begin{pmatrix}z&-1\\0&z\end{pmatrix}=z^2.
+\]
+Thus $zI-J$ is invertible exactly when $z\ne0$, and $\sigma(J)=\{0\}$.
+A singleton in $\mathbb C$ is closed and has empty interior, hence its
+topological boundary is itself.
+
+For a unit vector $v=(v_1,v_2)\in\mathbb C^2$ with the Euclidean norm,
+\[
+      v^*Jv=\overline{v_1}v_2,
+      \qquad |v_1|^2+|v_2|^2=1.
+\]
+Therefore the numerical radius, by its actual quadratic-form definition, is
+\[
+ w(J)=\sup_{|v_1|^2+|v_2|^2=1}|\overline{v_1}v_2|.
+\]
+The inequality $(|v_1|-|v_2|)^2\geq0$ gives
+$|\overline{v_1}v_2|=|v_1||v_2|\leq1/2$. Conversely, the rational vector
+$v=(3/5,4/5)$ is a unit vector and gives
+$|\overline{v_1}v_2|=12/25$. Hence
+\[
+                  0<\frac{12}{25}\leq w(J)\leq\frac12.
+\]
+These bounds, rather than an assumed numerical-radius formula, suffice.
+
+Let $r=w(J)>0$. Any closed semicircle of radius $r$ can be expressed as
+\[
+ S(c,u,r)=\{c+u\zeta:\ |\zeta|=r,\ \operatorname{Im}\zeta\geq0\},
+       \qquad c\in\mathbb C,\quad |u|=1.
+\]
+Both $c+ur$ and $c-ur$ belong to this semicircle, and they are distinct
+because $u\ne0$ and $r>0$. They cannot both belong to $\{0\}$.
+Thus $\partial\sigma(J)\ne S(c,u,w(J))$ for every center and orientation.
+The same elementary cardinality obstruction also applies if ``semicircle''
+excludes its endpoints: a positive-radius open semicircular arc still
+contains more than one point.
+\end{proof}
+
+\paragraph{Formal verification.}
+The Lean project represents $J$ as a genuine $2\times2$ complex matrix,
+and checks nonnormality using conjugate transpose and matrix multiplication.
+Its spectrum is Mathlib's algebraic spectrum: invertibility of $zI-J$ is
+reduced to its determinant, establishing \texttt{spectrum\_singleton}.
+The standard topological frontier yields \texttt{boundary\_singleton}.
+The formal numerical radius is the real supremum of the moduli of
+$v^*Jv$ over all Euclidean unit vectors, with the Euclidean unit condition
+written explicitly in coordinates. The proof establishes nonemptiness,
+boundedness, and the bounds $12/25\leq w(J)\leq1/2$.
+The final theorem \texttt{boundary\_not\_semicircle} quantifies over arbitrary
+complex centers and unit complex orientations. It uses the actual
+positive numerical radius, not a scalar substitute or an assumed
+spectral certificate. This directly negates the conjecture's universal
+boundary assertion.
+\end{document}
