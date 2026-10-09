@@ -1,0 +1,73 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{proposition}{Proposition}
+\title{The identity channel disproves a span criterion for symmetrizability}
+\author{Conjecture 00000009543}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Result.} Containment of the identity map in the linear span of an arbitrarily varying quantum channel family does not imply symmetrizability. A singleton family containing the identity channel is a counterexample.
+
+\section*{An actual quantum channel}
+Take $H=\mathbb C^2$, $S=\{s_0\}$, and let the only channel be
+\[
+ \mathcal N_{s_0}:M_2(\mathbb C)\longrightarrow M_2(\mathbb C),
+ \qquad\mathcal N_{s_0}(X)=X.
+\]
+It is complex linear and trace preserving. It is completely positive, not merely positive: for every finite ancillary dimension $n$, the amplification
+$\operatorname{id}_n\otimes\mathcal N_{s_0}$ is the identity on $M_n(M_2(\mathbb C))$, so it preserves every positive semidefinite matrix. Thus this is a genuine completely positive trace-preserving channel family.
+The identity belongs to its complex linear span because it is itself the sole member:
+\[
+ \operatorname{id}\in\operatorname{span}_{\mathbb C}\{\mathcal N_{s_0}\}.
+\]
+The same observation holds for the real linear span if that convention is intended.
+
+\section*{The necessary one-use symmetrization condition}
+The standard finite-ensemble condition at block length one asks that for every finite collection of density matrices $\rho_1,\ldots,\rho_k$, there be probability distributions $p_i$ on $S$ such that
+\begin{equation}\label{eq:sym}
+ \sum_{s\in S}p_i(s)\mathcal N_s(\rho_j)
+ =\sum_{s\in S}p_j(s)\mathcal N_s(\rho_i)
+ \qquad\text{for all }i,j.
+\end{equation}
+The adversarial distribution is allowed to depend on the input state. In the usual all-block definition, this condition must hold at every block length; therefore failure at length one suffices to disprove symmetrizability. This is Definition 11 in the primary source cited below.
+
+Consider the two density matrices
+\[
+ \rho_0=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad
+ \rho_1=\begin{pmatrix}0&0\\0&1\end{pmatrix}.
+\]
+They are positive semidefinite, have trace one, and are different: their upper-left entries are one and zero respectively.
+
+\newpage
+\section*{Failure of symmetrization}
+Every probability distribution $p$ on the singleton $S$ satisfies $p(s_0)=1$. Hence, for every density matrix $\rho$,
+\[
+ \sum_{s\in S}p(s)\mathcal N_s(\rho)=\rho.
+\]
+Applied to the pair $\rho_0,\rho_1$, equation \eqref{eq:sym} would require $\rho_1=\rho_0$, a contradiction. Allowing separate input-dependent distributions does not help because a singleton has only one probability distribution.
+
+\begin{proposition}
+There exists a finite family of completely positive trace-preserving maps whose linear span contains the identity, but which is not one-use symmetrizable and therefore is not symmetrizable in the all-block sense.
+\end{proposition}
+\begin{proof}
+The singleton identity-channel family constructed above has all the asserted properties.
+\end{proof}
+
+\section*{Scope of the disproof}
+Both language versions assert the proposed span criterion for quantum AVC symmetrizability. The example refutes its sufficient direction. No nontriviality or lower bound on the size of $S$ is stated; a singleton is a finite adversarial state set. The counterexample uses two genuine quantum input states and a quantum channel verified at every ancillary dimension.
+
+This argument does not use capacity formulas, an entanglement-transmission convention, or an estimate of any symmetrization cost. It refutes the first claimed equivalence, which suffices to disprove the conjunction as written. In particular, it does not equate one-use symmetrizability with all-block symmetrizability; it uses only the necessary implication from all blocks to block length one.
+
+\section*{Lean verification and reproduction}
+The supplied Lean 4.19.0 project pins Mathlib to
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+The formalization uses complex matrix linear maps, actual block amplification, Mathlib positive semidefiniteness, trace-one density matrices, and finite nonnegative weights summing to one. The full finite-ensemble one-use condition is quantified over every finite input list. The theorem \texttt{counterexample} combines complete positivity, trace preservation, span membership and failure of this necessary symmetrization condition. The final theorem negates the proposed sufficient implication directly. Run \texttt{lake build} in \texttt{lean/}; the source prints standard-only axiom audits.
+
+\section*{Definition reference}
+R. Ahlswede, I. Bjelakovi\'c, H. Boche and J. N\"otzel,
+\emph{Entanglement Transmission over Arbitrarily Varying Quantum Channels}, ISIT 2010, Definition 11 and equation (18).
+\href{https://mediatum.ub.tum.de/doc/1070709/758380.pdf}{Author-hosted conference paper}.
+Only the definition is used; the counterexample above is self-contained.
+\end{document}
