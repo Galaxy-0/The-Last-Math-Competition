@@ -1,0 +1,81 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{proposition}{Proposition}
+\title{A fundamental matrix has reciprocal spectral gaps}
+\author{Counterexample to Conjecture 00000003422}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Result.} A positive, lazy, reversible two-state chain has transition spectrum $\{1,1/2\}$ and fundamental-matrix spectrum $\{1,2\}$. The latter is neither the arithmetic complement $\{1-\lambda:\lambda\in\sigma(P)\}$ nor the literal set complement of the transition spectrum.
+
+\section*{The chain and its canonical fundamental matrix}
+Consider
+\[
+ P=\begin{pmatrix}3/4&1/4\\1/4&3/4\end{pmatrix},\qquad
+ \pi=(1/2,1/2),\qquad
+ \Pi=\begin{pmatrix}1/2&1/2\\1/2&1/2\end{pmatrix}.
+\]
+All transition probabilities are strictly positive and every row sums to one. The chain is irreducible and aperiodic, and it is lazy because the diagonal entries exceed $1/2$. Direct calculation gives $\pi P=\pi$, and detailed balance $\pi_iP_{ij}=\pi_jP_{ji}$ holds.
+
+Use the usual fundamental matrix of an irreducible finite chain,
+\[
+ Z=(I-P+\Pi)^{-1}.
+\]
+This is the convention in the University of Ulm notes, equation (74), cited below. In the present example
+\[
+ I-P+\Pi=\begin{pmatrix}3/4&1/4\\1/4&3/4\end{pmatrix},\qquad
+ Z=\begin{pmatrix}3/2&-1/2\\-1/2&3/2\end{pmatrix}.
+\]
+The displayed matrices multiply to $I$. Thus $Z$ is the actual canonical inverse, not a matrix selected independently of the chain.
+
+\section*{Complete spectra}
+The characteristic determinants factor as
+\[
+ \det(zI-P)=(z-1)(z-1/2),\qquad
+ \det(zI-Z)=(z-1)(z-2).
+\]
+Consequently the complete spectra over $\mathbb C$ are
+\[
+ \sigma(P)=\{1,1/2\},\qquad \sigma(Z)=\{1,2\}.
+\]
+The arithmetic complement of the transition spectrum is
+\[
+ \{1-\lambda:\lambda\in\sigma(P)\}=\{0,1/2\},
+\]
+which excludes $2\in\sigma(Z)$.
+
+\newpage
+\begin{proposition}
+The spectrum of a finite irreducible chain's fundamental matrix need not equal the arithmetic complement of its transition spectrum. Nor does the equality hold when complement means set complement in $\mathbb C$.
+\end{proposition}
+\begin{proof}
+The matrices above give the arithmetic-complement failure. For the literal set complement, note that $1$ belongs to both $\sigma(P)$ and $\sigma(Z)$, so it cannot belong to $\mathbb C\setminus\sigma(P)$.
+\end{proof}
+
+\section*{The missing reciprocal and the stationary mode}
+Let $\mathbf 1=(1,1)^T$ and $v=(1,-1)^T$. The chain satisfies
+\[
+ P\mathbf1=\mathbf1,\quad Pv=\tfrac12 v,\quad
+ \Pi\mathbf1=\mathbf1,\quad\Pi v=0.
+\]
+Hence $Z\mathbf1=\mathbf1$ and $Zv=2v$. On a nonstationary eigenvector with $Pv=\lambda v$ and $\Pi v=0$, the defining inverse gives the eigenvalue
+\[
+ \frac{1}{1-\lambda},
+\]
+not $1-\lambda$. The stationary direction must be treated separately. In this example the nonstationary reciprocal image is exactly $\{2\}$.
+
+Some conventions instead use the deviation matrix $Z-\Pi$. It has spectrum $\{0,2\}$ here, so removing the stationary mode does not repair the claimed arithmetic-complement formula. The row sums of $Z$ are all $1$; no hitting-time identity is assumed or needed for the spectral contradiction.
+
+\section*{Scope and verification}
+Both source versions claim a complement relation for the spectrum. The report explicitly treats arithmetic complement and literal set complement. It does not reinterpret ``complement'' as the correct reciprocal-gap transform, and it makes no separate claim about the source's loosely phrased hitting-expectation clause.
+
+Lean defines the real transition matrix and stationary distribution, verifies positivity, row normalization, laziness, stationarity and reversibility, and complexifies the matrix for spectral calculations. It defines $Z$ through Mathlib's canonical matrix inverse and proves the displayed inverse identity. Determinant factorizations establish the full algebra spectra, including the deviation variant. The final theorem assembles the Markov conditions and the spectral failure.
+
+Run \texttt{lake build} in \texttt{lean/} using Lean 4.19.0. Mathlib is pinned to
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+Principal theorem audits use only standard logical axioms.
+
+\smallskip\noindent\small\textbf{Definition reference.} University of Ulm, \emph{Markov chains}, ``MCMC Estimators; Bias and Fundamental Matrix,'' equation (74): \url{https://www.mathematik.uni-ulm.de/stochastik/lehre/ss06/markov/skript_engl/node39.html}. All computations used here are proved directly.
+\end{document}
