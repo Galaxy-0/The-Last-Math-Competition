@@ -1,0 +1,63 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\begin{document}
+\begin{center}{\Large A nonzero class above the predicted top degree}\\[4pt]
+Disproof of conjecture 00000001649\\[4pt]
+ziangni-sys --- October 8, 2026\end{center}
+
+Conjecture 00000001649 predicts that the largest degree of nonzero rational
+cohomology of $SL_n(\mathbb Z)$ is
+\[
+ t(n)=\left\lfloor\frac{n^2-1}{4}\right\rfloor-1.
+\]
+There is no exclusion of $n=2$ in either language version. For this standard
+case, integer arithmetic gives
+\[
+ t(2)=\left\lfloor\frac34\right\rfloor-1=-1.
+\]
+We exhibit a genuine nonzero cohomology class in degree zero, which lies
+strictly above this predicted top degree.
+
+\paragraph{The actual group and its cochains.}
+Take
+$G=SL_2(\mathbb Z)=\{M\in M_2(\mathbb Z):\det M=1\}$, with ordinary matrix
+multiplication, and trivial rational coefficients. In its inhomogeneous
+group cochain complex, $C^0=\mathbb Q$, $C^1=\operatorname{Map}(G,\mathbb Q)$,
+and the differential is
+\[
+ (d^0q)(h)=h\cdot q-q=q-q=0.
+\]
+Thus $\ker d^0=\mathbb Q$. Since there are no negative-degree cochains,
+$\operatorname{im}d^{-1}=0$, so
+\[
+ H^0(SL_2(\mathbb Z);\mathbb Q)
+ =\ker d^0/\operatorname{im}d^{-1}
+ =\mathbb Q/0\cong\mathbb Q.
+\]
+The class of the constant zero-cochain $1$ is nonzero: its image under this
+isomorphism is $1\ne0$. In particular, $H^0$ has dimension one.
+
+\paragraph{Contradiction.}
+By the conjecture's definition, a largest nonzero degree $d$ must satisfy
+$i\le d$ whenever $H^i(SL_2(\mathbb Z);\mathbb Q)\ne0$. The class above
+therefore forces $0\le d$. The proposed value $d=t(2)=-1$ instead forces
+$0\le-1$, a contradiction. This argument needs no calculation of higher
+cohomology and no assumption about its vanishing. A single nonzero class
+above a proposed maximum refutes that maximum.
+
+\paragraph{Scope and arithmetic.}
+The subtraction in the displayed conjecture is ordinary integer
+subtraction; $\lfloor3/4\rfloor-1=-1$, rather than natural-number truncated
+subtraction. The asserted formula is already false at $n=2$, independently
+of the additional virtual-cohomological-dimension and boundary descriptions.
+An amended formula restricted to larger $n$ would be a different statement.
+
+\paragraph{Lean certificate.}
+The project uses Mathlib's actual $2\times2$ integer special linear group,
+constructs trivial-action group cochains, the degree-zero differential,
+cocycles and the zero-boundary quotient, and gives an explicit linear
+equivalence with $\mathbb Q$. It certifies a nonzero class, dimension one,
+the integer floor computation and the impossibility of any proposed top
+degree equal to $t(2)$ satisfying even its necessary degree-zero bound.
+\end{document}
