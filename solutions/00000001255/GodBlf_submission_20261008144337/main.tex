@@ -1,0 +1,77 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Conjecture 00000001255 is false\\A noisy one-site cellular automaton}
+\author{GodBlf}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+A binary flip rule on a one-site periodic ring has no deterministic fixed
+configuration. Its nondegenerate noisy update has a unique stationary law,
+the uniform law. This law is an extreme stationary measure and is not a
+point mass. Thus the conjecture's extreme-point assertion fails.
+\end{abstract}
+\section{Statement and model}
+The conjecture asserts, for a cellular automaton on a finite ring driven by
+Glauber-type noise, that the relevant stationary simplex has deterministic
+fixed points as its extreme points. It also asserts a support description
+and a dimension identity. A counterexample to the extreme-point clause
+suffices to refute their conjunction.
+
+Take the periodic ring $\mathbb Z/\mathbb Z$, with binary state space
+$S=\{0,1\}$. The local deterministic rule is $F(s)=1-s$.
+At an update, independently flip the prescribed output with probability
+$1/4$. Equivalently, apply $F$ with probability $3/4$, and keep the current
+bit with probability $1/4$. This is a one-site, positive-temperature
+Glauber-type noisy local update. In the order $(0,1)$ its transition matrix is
+\[
+ P=\begin{pmatrix}1/4&3/4\\3/4&1/4\end{pmatrix}.
+\]
+Every entry is positive and each row sums to one. The deterministic rule
+has a two-cycle and no fixed point.
+
+\section{Exact stationary and extreme-point computation}
+\begin{theorem}
+The only stationary probability law is $u=(1/2,1/2)$. It is an extreme
+point of the convex set of stationary laws, and is not a Dirac law.
+\end{theorem}
+\begin{proof}
+Write a probability law as $(a,b)$, with $a,b\geq0$ and $a+b=1$.
+Stationarity at state zero gives
+$a=a/4+3b/4$, hence $a=b=1/2$. Conversely, direct multiplication gives
+$uP=u$. The stationary-law set is therefore the singleton $\{u\}$.
+If $u=r v+(1-r)w$ with stationary $v,w$ and $0<r<1$, uniqueness implies
+$v=w=u$, which is exactly the extreme-point condition. Both coordinates
+of $u$ are $1/2$, so it is neither of the two Dirac laws.
+\end{proof}
+
+The unique extreme stationary law cannot be supported at a deterministic
+fixed point because there are none. If the statement instead intends the
+simplex of probability laws on the stationary support, that support is all
+of $S$; its vertices are the two Dirac laws, and neither underlying
+configuration is a fixed point of $F$. Thus that reading fails as well.
+No interpretation of the undefined ``minimal attractor dimension'' is
+needed for this disproof.
+
+\section{Formal verification}
+The accompanying Lean project represents the two configurations by
+\texttt{Bool}, and probability laws by functions $S\to\mathbb R$ with
+nonnegative coordinates summing to one. This represents every probability
+measure on the finite state space, not a restricted numerical sample.
+The positivity and row-sum theorems verify the
+kernel. \texttt{stationary\_unique} quantifies over all real-valued laws;
+\texttt{uniform\_extreme} uses the standard convex-combination definition.
+\texttt{conjecture\_false} negates the extreme-point clause, using the actual
+flip rule and the actual stationary set.
+
+Lean and Mathlib are pinned by the toolchain and Lake manifest.
+Run \texttt{lake build} and \texttt{lake env lean Check.lean} in the
+\texttt{lean} directory. No admitted proofs, additional axioms, or
+\texttt{native\_decide} are used. The axiom audit is in
+\texttt{verification.txt}. Rebuild this document with
+\texttt{pdflatex main.tex} twice.
+\end{document}
