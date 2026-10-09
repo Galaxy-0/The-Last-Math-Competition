@@ -1,0 +1,128 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\AGL}{\operatorname{AGL}}
+\newcommand{\orb}{\operatorname{orb}}
+\title{A two-orbit maximal subgroup refutes source 00000001100}
+\author{Local formalization report}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The origin stabilizer in the affine group of a field line is a maximal proper
+subgroup with exactly two orbits in the natural action. Over arbitrarily large
+prime fields this contradicts the uniformly bounded error term asserted in
+source 00000001100. The argument covers an eventual $q+O(1)$ interpretation as
+well as the source's stronger ``always'' wording. The construction is standard
+group theory; this report records a source-bound Lean formalization candidate.
+\end{abstract}
+
+\section{Statement and source scope}
+The necessary first clause of the supplied English and Chinese source asserts
+that the orbit count of a maximal subgroup of the finite-field affine group in
+the natural action is $q$ plus a uniformly bounded constant. We take $q$ to be
+the field cardinality, and maximality to mean maximality among proper subgroups
+under inclusion. The one-dimensional affine group is an admissible instance of
+that universal assertion.
+
+The source additionally refers to a kernel of the constant and a subfield index,
+without defining that clause. No replacement definition is supplied here. Since
+the necessary first clause is false, its conjunction with any additional clause
+is false. Nothing about the latter clause is required for this refutation.
+
+For a field $F$, put $G=\AGL_1(F)$, the group of all affine bijections
+$x\mapsto ax+b$ with $a\ne0$, acting on $F$ by evaluation. Let
+\[
+H=\{g\in G:g(0)=0\}.
+\]
+Orbit count means the cardinality of the quotient of $F$ by the actual
+$H$-orbit equivalence relation.
+
+\section{The subgroup and its orbits}
+\begin{lemma}
+The subgroup $H$ fixes $0$ and is transitive on $F\setminus\{0\}$.
+\end{lemma}
+\begin{proof}
+Fixedness is its defining property. Given nonzero $x,y$, scaling by the unit
+$y/x$ belongs to $H$ and sends $x$ to $y$. An affine bijection fixing zero cannot
+send a nonzero point to zero, by injectivity.
+\end{proof}
+
+\begin{lemma}
+$H$ is a maximal proper subgroup of $G$.
+\end{lemma}
+\begin{proof}
+Translation by $1$ does not fix zero, so $H$ is proper. Suppose a subgroup
+$J$ properly contains $H$. Take $f\in J\setminus H$, so $f(0)\ne0$. For any
+$g\in G\setminus H$, transitivity on the nonzero points gives $h\in H$ with
+$h(f(0))=g(0)$. Set $a=hf$, using composition multiplication. Then $a\in J$
+and $a(0)=g(0)$, hence $a^{-1}g$ fixes zero and lies in $H\subseteq J$.
+Therefore $g=a(a^{-1}g)\in J$. All elements of $H$ were already in $J$, so
+$J=G$. This proves maximality.
+\end{proof}
+
+\begin{lemma}
+The actual orbit quotient of $H$ on $F$ has cardinality $2$.
+\end{lemma}
+\begin{proof}
+The first lemma shows that two points are orbit equivalent precisely when both
+are zero or both are nonzero. Thus the quotient is in bijection with a two-element
+set. Explicitly, send the zero class to \texttt{true} and the nonzero class to
+\texttt{false}; the inverse selects the classes of $0$ and $1$. The field axiom
+$0\ne1$ ensures that these are distinct. This applies also to the field of
+order two.
+\end{proof}
+
+\section{An unbounded counterexample family}
+\begin{theorem}
+For every $C,q_0\in\mathbb N$, there is a prime $p\ge q_0$ and a maximal proper
+subgroup $H_p$ of $\AGL_1(\mathbb F_p)$ such that
+\[
+\orb(H_p)=2,\qquad \orb(H_p)+C<p.
+\]
+\end{theorem}
+\begin{proof}
+By the infinitude of primes, choose a prime
+$p\ge\max\{q_0,C+3\}$. Take $H_p$ to be the origin stabilizer. The previous
+lemmas prove maximality and the count $2$, while $2+C<p$ follows from the choice
+of $p$.
+\end{proof}
+
+Any eventual uniform $q+O(1)$ orbit-count assertion implies the necessary lower
+bound $q\le\orb(H)+C$ for some fixed natural $C$ beyond some threshold $q_0$.
+Indeed, if the source intended a real absolute error bound $B$, choose a natural
+$C\ge\max\{B,0\}$, for example by taking a ceiling. For a signed error $c$,
+$\orb(H)=q+c$ and $|c|\le B$ then imply $q\le\orb(H)+C$. The theorem refutes
+this necessary inequality for every $C$ and every threshold. Consequently no
+choice of positive, zero, or negative uniformly bounded error terms works.
+
+\section{Formalization correspondence}
+The Lean source uses mathlib's actual group \texttt{F $\simeq$\textsuperscript{a}[F] F}
+of affine equivalences, and declares its evaluation action. The subgroup is the
+actual \texttt{MulAction.stabilizer} of $0$; maximality is \texttt{IsCoatom} in
+the subgroup inclusion lattice. Orbit count is
+\begin{quote}\texttt{Nat.card (MulAction.orbitRel.Quotient H F)}\end{quote}
+This is the actual action quotient, not a stipulated numerical function. A quotient equivalence with \texttt{Bool} proves its cardinality.
+
+\texttt{arbitrarily\_large\_maximal\_counterexamples} quantifies both $C$ and
+$q_0$ and constructs prime-field witnesses. \texttt{FiniteFieldOrbitCountClause}
+quantifies all finite fields and all maximal subgroups, using
+$q=\texttt{Nat.card F}$ and a signed integer deviation of uniformly bounded
+absolute value. Restriction to prime fields yields a necessary consequence
+already contradicted by the family. The final theorem is
+\texttt{refutation\_00000001100 : $\neg$ FiniteFieldOrbitCountClause}.
+
+The worker development compile uses Lean 4.33.0 and mathlib revision
+\par\noindent\texttt{db584cd6d46c92f209a44c0f1c829460d327499d}.\par
+The main declarations report
+only \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+This is a worker proof candidate; independent semantic review and the manager's
+deterministic package gate are separate requirements. Upstream submission
+eligibility is not asserted here, and the known mathematical construction is
+not claimed as a new discovery.
+\end{document}
