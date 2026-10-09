@@ -1,0 +1,71 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{theorem}{Theorem}
+\title{The optimal rank-one backward error is a residual norm ratio}
+\author{Proof of Conjecture 00000005136}
+\date{October 8, 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Convention and result.} For $Ax=b$ and a fixed nonzero approximate solution $x$, use absolute backward error in the induced Euclidean operator norm, perturbing $A$ alone and keeping $b$ fixed. The exact minimum is
+\[
+ \min_{\Delta:\,(A+\Delta)x=b}\|\Delta\|
+ =\frac{\|b-Ax\|}{\|x\|}.
+\]
+A correction of rank at most one attains it, and its rank is exactly one whenever the residual is nonzero. The formula holds for every original matrix $A$, including all tridiagonal matrices.
+
+\section*{A general operator theorem}
+Let $\mathbb K$ be $\mathbb R$ or $\mathbb C$, let $E$ be an inner-product space and $F$ a normed space over $\mathbb K$, and let $A:E\to F$ be bounded and linear. Fix $x\ne0$ and set $r=b-Ax$. We use the convention that $\langle x,v\rangle$ is linear in $v$. Define the actual linear operator
+\[
+ \Delta_*v=\frac{\langle x,v\rangle}{\|x\|^2}\,r.
+\]
+In standard finite-dimensional orthonormal coordinates this is
+\[
+ \Delta_*=\frac{r x^*}{x^*x}.
+\]
+Its construction does not require $A$ to be invertible, symmetric, or tridiagonal.
+
+\begin{theorem}
+The operator $\Delta_*$ is bounded and satisfies $(A+\Delta_*)x=b$. Its norm equals $\|r\|/\|x\|$, and no admissible bounded linear perturbation has smaller norm. Its range is $\operatorname{span}\{r\}$, hence its rank is one if $r\ne0$ and zero if $r=0$.
+\end{theorem}
+\begin{proof}
+Since $\langle x,x\rangle=\|x\|^2$, we have $\Delta_*x=r$. This proves the corrected equation. Cauchy--Schwarz gives, for every $v$,
+\[
+ \|\Delta_*v\|=\frac{|\langle x,v\rangle|}{\|x\|^2}\|r\|
+ \leq\frac{\|r\|}{\|x\|}\|v\|.
+\]
+Thus $\Delta_*$ is bounded and $\|\Delta_*\|\leq\|r\|/\|x\|$.
+
+\newpage
+For any admissible perturbation $D$, the corrected equation implies $Dx=r$. Consequently
+\[
+ \|r\|=\|Dx\|\leq\|D\|\|x\|,
+ \qquad\frac{\|r\|}{\|x\|}\leq\|D\|.
+\]
+Applying this to $D=\Delta_*$ proves equality of the norm and optimality against \emph{all} perturbations, not only those of low rank.
+
+Every value of $\Delta_*$ is a scalar multiple of $r$, so its range is contained in $\operatorname{span}\{r\}$. Conversely, $\Delta_*x=r$ and linearity show that every scalar multiple of $r$ lies in the range. Therefore the range equals that span. It has dimension one when $r\ne0$; if $r=0$, the displayed operator is zero.
+\end{proof}
+
+\section*{The minimum and the tridiagonal case}
+Define the complete feasible set of perturbation magnitudes
+\[
+ \mathcal N(A,x,b)=\{\|D\|:D\text{ bounded and linear},\ (A+D)x=b\}.
+\]
+The theorem proves that $\|r\|/\|x\|$ is an element of this set and a lower bound for every element. It is therefore the least element and equals the genuine infimum of $\mathcal N(A,x,b)$. This explicitly proves attainment and optimality; it does not merely exhibit a feasible rank-one correction.
+
+If $A$ is tridiagonal, precisely the same proof and correction apply. Thus equality holds for every tridiagonal original problem in this norm convention, with no special tridiagonal hypothesis needed. The correcting matrix need not itself be tridiagonal. Requiring the perturbation to preserve the tridiagonal pattern defines a different, structured backward-error problem and is not an assumption stated in the source.
+
+\section*{Degeneracies and scope}
+The nonzero-$x$ condition is necessary for the ratio: when $x=0$ and $b\ne0$, no perturbation of $A$ alone can make $x$ solve the equation. When $x=b=0$, no correction is needed. For $x\ne0$ with zero residual, the optimum is zero, attained by the rank-zero correction. In the nontrivial case of nonzero residual, the optimizer constructed above has exactly rank one.
+
+The source does not specify a matrix equation or norm beyond residual and backward error. This report uses the standard linear-system, absolute, unstructured, $A$-only operator-norm convention stated at the outset. It does not assert the same expression for joint perturbations of $A$ and $b$, relative error models, or additional sparsity constraints.
+
+\section*{Formal verification}
+Lean treats both real and complex scalars through \texttt{RCLike}. It constructs $\Delta_*$ as a genuine continuous linear map from the inner-product functional and a scalar-to-vector map. It proves its action on $x$, its exact operator norm, its actual range and rank, the corrected equation, and the least-element and infimum statements for the full feasible set. The final theorem supplies a rank-one optimizer for every nonzero residual.
+
+Run \texttt{lake build} in \texttt{lean/} with Lean 4.19.0. Mathlib is pinned to
+\begin{center}\small\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+Principal theorem audits use only standard logical axioms; no optimality certificate is assumed.
+\end{document}
