@@ -1,0 +1,33 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\title{Disproof of Conjecture 00000001616\\The asserted Eisenstein norm form is false}
+\author{ziangni-sys}
+\date{8 October 2026}
+\begin{document}
+\maketitle
+Both language versions explicitly identify $Q(a,b)=a^2+b^2$ as the norm form of the Eisenstein integers. This assertion is false. The counterexample below disproves this explicit constituent of the statement; it makes no assertion about the separate billiard gap-distribution claims.
+
+Set
+\[
+ \omega=\frac{-1+i\sqrt3}{2},\qquad
+ \mathbb Z[\omega]=\{a+b\omega:a,b\in\mathbb Z\}\subset\mathbb C.
+\]
+Direct calculation gives $\omega^2+\omega+1=0$, hence $\omega^3=1$, while $\operatorname{Re}\omega=-1/2$ shows $\omega\ne1$. Thus $\omega$ is a primitive cube root of unity and the displayed embedded ring is the Eisenstein ring with its usual basis $1,\omega$. Complex conjugation sends $\omega$ to $\omega^2$.
+
+The actual norm is
+\begin{align*}
+ N(a+b\omega)&=(a+b\omega)\overline{(a+b\omega)}\\
+ &=|a+b\omega|^2\\
+ &=\left(a-\frac b2\right)^2+\left(\frac{b\sqrt3}{2}\right)^2\\
+ &=a^2-ab+b^2.
+\end{align*}
+In particular,
+\[
+ N(1+\omega)=1-1+1=1,\qquad Q(1,1)=1+1=2.
+\]
+Therefore $Q$ is not the Eisenstein norm form asserted in the conjecture. The form $a^2+b^2$ is instead the standard norm form for the Gaussian integer basis $1,i$. Replacing the named ring or using a different spectral statement would change the source assertion, rather than repair this counterexample.
+
+\paragraph{Formal verification.}
+The Lean project constructs the actual complex number $\omega$ and the embedded integer pairs $a+b\omega$. It proves its quadratic relation, primitive cube-root property, the full norm identity for every integer pair, and the explicit contradiction to the universal claimed norm formula. The norm is Mathlib's complex squared modulus, not an assigned polynomial. All five printed final theorem axiom audits use only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}; no additional axioms or incomplete proofs are used.
+\end{document}
