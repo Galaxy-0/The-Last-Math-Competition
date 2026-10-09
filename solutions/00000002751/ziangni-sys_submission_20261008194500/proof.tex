@@ -1,0 +1,72 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\title{Scalar tensor products do not add PI exponents\\Disproof of Conjecture 00000002751}
+\author{ziangni-sys}
+\date{October 8, 2026}
+\begin{document}
+\begin{center}
+{\Large Scalar tensor products do not add PI exponents}\\[4pt]
+Disproof of Conjecture 00000002751\\[4pt]
+ziangni-sys --- October 8, 2026
+\end{center}
+\paragraph{Counterexample.}
+Take the unital characteristic-zero PI algebras $A=B=\mathbb Q$ over
+$\mathbb Q$. Their actual algebra tensor product is
+$T=\mathbb Q\otimes_{\mathbb Q}\mathbb Q$. Multiplication defines an
+algebra isomorphism
+\[
+ \phi:T\longrightarrow\mathbb Q,\qquad \phi(a\otimes b)=ab,
+ \qquad \phi^{-1}(c)=1\otimes c.
+\]
+The inverse identity follows from the balancing relation
+$a\otimes b=1\otimes ab$. In particular $T$ is a genuine nonzero
+commutative algebra, and each of $A,B,T$ satisfies the nonzero
+commutator polynomial $xy-yx$.
+
+\paragraph{Codimensions from evaluations.}
+Let $D$ be any nonzero unital commutative $\mathbb Q$-algebra, in
+particular any of $A,B,T$. For $m\geq1$ let $P_m$ be the vector space
+of formal noncommutative multilinear polynomials, with basis
+$w_\sigma=x_{\sigma(1)}\cdots x_{\sigma(m)}$ for $\sigma\in S_m$.
+Its actual evaluation map on all tuples in $D$ is
+\[
+ E_{D,m}:P_m\to\{D^m\to D\},\qquad
+ E_{D,m}\Bigl(\sum_\sigma a_\sigma w_\sigma\Bigr)(t)
+ =\sum_\sigma a_\sigma\prod_{j=1}^m t_{\sigma(j)}.
+\]
+The kernel is exactly $P_m\cap\operatorname{Id}(D)$. Commutativity
+shows that
+\[
+ E_{D,m}(p)(t)=\Bigl(\sum_\sigma a_\sigma\Bigr)g_m(t),
+ \qquad g_m(t)=\prod_{j=1}^m t_j.
+\]
+The function $g_m$ is nonzero since its value at $(1,\ldots,1)$ is
+$1_D\ne0$. It belongs to the image because it evaluates any basis
+word. Hence the image is precisely its one-dimensional $\mathbb Q$
+span. The first isomorphism theorem gives the genuine codimensions
+\[
+ c_m(D)=\dim_{\mathbb Q}\bigl(P_m/(P_m\cap\operatorname{Id}(D))\bigr)
+       =\dim_{\mathbb Q}\operatorname{im}E_{D,m}=1.
+\]
+Consequently the defining nth-root limits exist and
+\[
+ \operatorname{exp}(A)=\operatorname{exp}(B)=\operatorname{exp}(T)
+ =\lim_{m\to\infty}\sqrt[m]{1}=1.
+\]
+Thus the conjectured exact sum would assert $1=1+1=2$, a
+contradiction. The extra mixed-characteristic correction does not
+repair a false assertion already in characteristic zero. We only
+need this false clause to disprove the conjecture.
+
+\paragraph{Formal certificate.}
+Lean constructs the actual algebra tensor product and its standard
+multiplication algebra equivalence. The multilinear evaluation map,
+its quotient-by-kernel linear equivalence, one-dimensional image,
+codimensions and root limit are established for a general nonzero
+commutative $\mathbb Q$-algebra and instantiated separately on the
+scalar factors and the tensor algebra. No exponent or codimension
+sequence is stipulated. Final theorem audits use only standard Lean
+and Mathlib axioms.
+\end{document}
