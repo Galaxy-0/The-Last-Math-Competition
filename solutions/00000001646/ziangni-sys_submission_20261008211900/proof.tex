@@ -1,0 +1,63 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\begin{document}
+\begin{center}{\Large Degree-zero rational cohomology does not decay}\\[4pt]
+Disproof of conjecture 00000001646\\[4pt]
+ziangni-sys --- October 8, 2026\end{center}
+
+The conjecture asserts that
+$\dim_{\mathbb Q}H^i(\operatorname{Mod}(\Sigma_g);\mathbb Q)$ tends to zero
+exponentially as $g$ grows, whenever $i\le (2g-2)/3$. Both language versions
+include degree $i=0$: no positive-degree or reduced-cohomology restriction
+is stated. Ordinary group cohomology in this degree gives a counterexample.
+
+\paragraph{Degree-zero calculation for every group.}
+Let $G$ be any group and give $\mathbb Q$ the trivial $G$-action. In the
+inhomogeneous cochain complex,
+\[
+ C^0(G;\mathbb Q)=\mathbb Q,\qquad
+ C^1(G;\mathbb Q)=\{f:G\to\mathbb Q\},\qquad
+ (d^0q)(h)=h\cdot q-q.
+\]
+Since the action is trivial, $d^0=0$. Thus every rational number is a
+zero-cocycle. There are no negative-degree cochains, so the zero-coboundary
+space is $\operatorname{im}(d^{-1})=0$. The actual cohomology quotient is
+therefore
+\[
+ H^0(G;\mathbb Q)=\ker(d^0)/\operatorname{im}(d^{-1})
+ =\mathbb Q/0\cong\mathbb Q,
+ \qquad \dim_{\mathbb Q}H^0(G;\mathbb Q)=1.
+\]
+This calculation applies to every mapping class group, irrespective of genus,
+connectedness conventions for surfaces or the choice between standard
+mapping class group variants.
+
+\paragraph{Failure in the claimed stable range.}
+For every integer $g\ge1$ we have $0\le(2g-2)/3$. Hence $i=0$ belongs to the
+conjecture's stable range at all sufficiently large genera. Nevertheless,
+\[
+ \dim_{\mathbb Q}H^0(\operatorname{Mod}(\Sigma_g);\mathbb Q)=1
+ \quad\text{for every }g.
+\]
+The sequence has limit one and cannot have limit zero, much less exponential
+decay with constant $-\log2$. Equivalently, the neighborhood
+$(-\tfrac12,\tfrac12)$ of zero contains none of its terms.
+
+\paragraph{Scope.}
+The introductory sentence mentions $l^2$-Betti numbers, whereas the claimed
+quantitative formula explicitly uses ordinary rational cohomology
+$H^i(-;\mathbb Q)$. These are different invariants. The counterexample
+refutes the displayed ordinary-cohomology claim as written. It neither
+asserts nor refutes any general $l^2$-vanishing theorem. Replacing $H^0$
+by reduced cohomology or explicitly restricting to positive degrees would
+change the statement and would require a separate analysis.
+
+\paragraph{Lean certificate.}
+The project constructs trivial-action cochains, the degree-zero
+differential, its cocycle kernel, negative-degree zero cochains and the
+boundary image. An explicit linear equivalence identifies the quotient
+with $\mathbb Q$, proving dimension one for every group. It verifies
+stable-range inclusion and proves nonconvergence to zero for every group
+family, including when dimensions are only specified on the stable tail.
+\end{document}
