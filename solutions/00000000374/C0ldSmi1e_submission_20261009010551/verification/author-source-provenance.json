@@ -1,0 +1,45 @@
+{
+  "authorized_input_root": "/private/tmp/tlmc374-author-input",
+  "input_files_read": [
+    "ORIGINAL.md",
+    "README.md",
+    "README.zh-CN.md",
+    "lean-toolchain",
+    "dependency-template.json",
+    "SHA256SUMS.json"
+  ],
+  "project_root": "/private/tmp/tlmc374-proof",
+  "standard_packages_link": "/private/tmp/tlmc374-proof/.lake/packages",
+  "standard_mathlib_revision": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+  "runtime": "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin",
+  "standard_search_roots": [
+    "Mathlib/NumberTheory",
+    "Mathlib/Algebra/Polynomial",
+    "Mathlib/RingTheory/Localization",
+    "Mathlib/RingTheory/Polynomial",
+    "Mathlib/FieldTheory/Minpoly",
+    "Mathlib/RingTheory/Algebraic",
+    "Mathlib/Algebra/Module",
+    "Mathlib/Algebra/Algebra",
+    "Mathlib/Data/Int/Cast",
+    "Mathlib/Algebra",
+    "Mathlib/Data/Complex",
+    "Mathlib/Analysis/Complex",
+    "Mathlib/Analysis/SpecialFunctions/Pow",
+    "Mathlib/Data/Set/Finite"
+  ],
+  "detailed_command_records": "author-audit/run-*.json plus .stdout and .stderr; independent helper in heightroots-audit.jsonl",
+  "pre_logger_reads_note": "Before author-run.py was created, exact input files and neutral project files were read, standard-only rg searches/reads were run, and one failed read of nonexistent lakefile.lean occurred. Those initial commands and outputs are retained in the agent tool transcript rather than separate stdout files. Input cat/hash replays are stored in audit runs042-043. No pre-logger mathematical source or compilation existed. Do not mislabel later replays as the original first accesses.",
+  "pre_logger_standard_explicit_reads": [
+    "Mathlib/RingTheory/Localization/Integral.lean",
+    "Mathlib/RingTheory/Polynomial/Content.lean",
+    "Mathlib/RingTheory/Polynomial/GaussLemma.lean",
+    "Mathlib/Algebra/Polynomial/Roots.lean",
+    "Mathlib/FieldTheory/Minpoly/Basic.lean",
+    "Mathlib/FieldTheory/Minpoly/Field.lean",
+    "Mathlib/RingTheory/Algebraic/Basic.lean",
+    "Mathlib/RingTheory/Algebraic/Integral.lean"
+  ],
+  "excluded_sources": "No prior solutions, other authored projects, web solution searches, selector feasibility, eligibility corpus, PR bodies/reviews, source assessment notes, or thread/agent inventories were accessed by the author. The helper received only this clean context and used its own HeightRoots artifacts and standard dependencies.",
+  "failed_attempts": "All compiler/probe stdout/stderr/exit records after logger creation are preserved. Initial lakefile.lean read failed because neutral project uses lakefile.toml. Initial import Mathlib failed because umbrella Mathlib.olean was unavailable; selective standard imports succeeded."
+}

@@ -1,0 +1,185 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\code}[1]{\nolinkurl{#1}}
+\title{Conjecture 00000000374:\\zero is excluded at the claimed full-line endpoint}
+\author{C0ldSmi1e}
+\date{October 9, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The conjecture asserts that every real number admits infinitely many distinct
+algebraic approximants of degree at most two with error less than
+$H(\alpha)^{-\tau}$ when $\tau\leq3$. At $\tau=3$, zero does not have this property.
+We prove this for each of three explicit standard arithmetic height conventions:
+naive coefficient height, Mahler measure, and absolute multiplicative Weil
+height. The proof allows either real or complex algebraic approximants.
+A Lean 4 formalization proves the negation of the full-real-line conjunct with
+the stated degree, strict inequality, exponent, and infinitude quantifiers.
+\end{abstract}
+
+\section{Statement and scope}
+In both supplied language versions, $P(\tau)$ consists of real $\xi$ for which
+infinitely many algebraic numbers $\alpha$ of degree at most two satisfy
+$|\xi-\alpha|<H(\alpha)^{-\tau}$. The conjecture combines three assertions:
+Hausdorff dimension $3/\tau$ for $\tau>3$; $P(\tau)=\R$ for $\tau\leq3$;
+and continuity of the dimension formula at $3$. We disprove the second assertion,
+so their conjunction is false. We make no separate claim about the other two.
+The original does not exclude rational targets, replace equality with an
+almost-everywhere assertion, or permit repeated copies of one approximant.
+The counterexample uses the included endpoint $\tau=3$ and the real target $0$.
+The exact bilingual source accompanies this submission as \code{ORIGINAL.md}.
+
+The source does not define $H$. Accordingly, this report specifies and treats
+three conventional multiplicative arithmetic heights separately, without
+identifying their values or changing the exponent. Our result covers those
+three readings; it is not a theorem about an arbitrary function denoted by $H$.
+Both real and complex approximant domains are covered because the source leaves
+that choice implicit. Absolute value on $\C$ means its usual modulus.
+
+\section{Actual algebraic numbers and their heights}
+Let $\alpha\in\C$ be algebraic over $\Q$, with degree $d$. Let
+\[
+ p_\alpha(X)=a_dX^d+\cdots+a_0\in\Z[X]
+\]
+be its primitive irreducible integer minimal polynomial, normalized by $a_d>0$.
+If its complex roots, with multiplicities, are $\alpha_1,\ldots,\alpha_d$, define
+\begin{align*}
+ H_N(\alpha)&=\max_{0\leq i\leq d}|a_i|,\\
+ M(\alpha)&=|a_d|\prod_{i=1}^d\max(1,|\alpha_i|),\\
+ W(\alpha)&=M(\alpha)^{1/d}.
+\end{align*}
+The last expression is the primitive-minimal-polynomial definition of absolute
+multiplicative Weil height. Its degree normalization uses the actual $d$, not
+the upper bound $2$: $W^d=M$. This formalization does not separately construct
+the equivalent product over places of a number field.
+
+The Lean construction starts with the monic rational minimal polynomial,
+clears denominators, and takes the primitive part. It proves a nonzero rational
+scalar relation to the monic polynomial, the same degree, irreducibility,
+vanishing at $\alpha$, and a nonzero constant coefficient if $\alpha\ne0$.
+Gauss's lemma gives uniqueness up to sign. A positive-leading-coefficient
+representative is constructed and proved unique. Each height is sign invariant;
+therefore its implemented value agrees exactly with the displayed formula for
+any primitive irreducible integer polynomial vanishing at $\alpha$.
+This includes algebraic numbers that are not algebraic integers.
+
+\section{Finitely many approximants to zero}
+For a chosen height $H$, put
+\[
+ A_H=\{\alpha\in\C:\alpha\text{ is algebraic over }\Q,\quad
+ [\Q(\alpha):\Q]\leq2,\quad |\alpha|<H(\alpha)^{-3}\}.
+\]
+We prove $A_H$ finite. Restricting to real approximants can only decrease it.
+
+\begin{lemma}[Naive height]
+$A_{H_N}$ is finite.
+\end{lemma}
+\begin{proof}
+For $\alpha\ne0$, write $r=|\alpha|$ and $H=H_N(\alpha)$.
+The integer $a_0$ is nonzero. Since $d\leq2$, padding missing coefficients
+with zeros gives
+\[
+ 1\leq |a_0|=|a_1\alpha+a_2\alpha^2|\leq Hr+Hr^2.
+\]
+If $H\geq2$ and $r<H^{-3}$, then $rH^3<1$. Since $H^2\geq2$,
+we obtain $2Hr<1$. Also $0\leq r\leq1$, so
+$Hr+Hr^2\leq2Hr<1$, a contradiction.
+Every qualifying nonzero $\alpha$ therefore has $H\leq1$.
+Its minimal polynomial has degree at most two and all coefficients in
+$\{-1,0,1\}$. There are finitely many such polynomials and each nonzero
+polynomial has finitely many roots. Their finite union, together with $0$,
+contains $A_{H_N}$. This is a symbolic finiteness argument, not a bounded
+numerical search.
+\end{proof}
+
+\begin{lemma}[Mahler measure and Weil height]
+$A_M\subseteq\{0\}$ and $A_W\subseteq\{0\}$.
+\end{lemma}
+\begin{proof}
+Let $\alpha\ne0$ have degree $d\leq2$. The constant-term product formula yields
+\[
+ 1\leq |a_0|=|a_d|\prod_{i=1}^d|\alpha_i|\leq |\alpha|M(\alpha).
+\]
+For the last inequality, separate one occurrence of the root $\alpha$, bound
+every remaining modulus by its maximum with $1$, and, if necessary, multiply
+by the extra factor $\max(1,|\alpha|)\geq1$.
+Since $|a_d|\geq1$, we have $M\geq1$ and hence $W\geq1$.
+The actual algebraic degree is $1$ or $2$, so $M=W^d\leq W^2$.
+Consequently
+\[
+ 1\leq |\alpha|M^2,\qquad 1\leq |\alpha|W^2.
+\]
+For either $H=M$ or $H=W$, a strict inequality
+$|\alpha|<H^{-3}\leq H^{-2}$ would imply $|\alpha|H^2<1$,
+contradicting these bounds. Thus no nonzero $\alpha$ qualifies.
+\end{proof}
+
+\begin{theorem}
+For each $H\in\{H_N,M,W\}$ and either real or complex algebraic approximants,
+$0\notin P(3)$. In particular,
+\[
+ \neg\bigl(\forall\tau\in\R,\ \tau\leq3\Longrightarrow P(\tau)=\R\bigr).
+\]
+\end{theorem}
+\begin{proof}
+The two lemmas show that the set of eligible approximants to $0$ is finite,
+and hence cannot be infinite. For real approximants, take its preimage under
+the injective map $\R\hookrightarrow\C$. The norm of the difference becomes
+the real absolute value, and the rational minimal polynomial is unchanged
+under this embedding. If the displayed universal assertion held, its
+$\tau=3$ instance would put $0$ in $P(3)$, a contradiction.
+\end{proof}
+
+\section{Formal statement and verification boundary}
+\code{DegreeAtMostTwo} requires algebraicity explicitly and bounds the natural
+degree of \code{minpoly} over $\Q$. Transcendental numbers cannot enter through
+the convention that their minimal polynomial is zero.
+\code{approximants} is an actual set of complex numbers, and \code{Pcomplex}
+uses \code{Set.Infinite}; \code{Preal} uses an actual set of real numbers.
+All parameters $\xi,\tau$ are real. The inequalities use real exponentiation,
+the literal constant $1$, and the strict comparison in the source.
+
+The final theorem \code{TLMC374.source_conjunct_false} quantifies over
+\code{ApproximationDomain} (real or complex) and \code{HeightConvention}
+(naive, Mahler, or absolute Weil). Its conclusion is exactly the negation of
+$\forall\tau\leq3,\ P(\tau)=\R$ for the selected definitions.
+It follows from \code{TLMC374.zero_not_mem_P_three}.
+The formalized set and universal assertion exist independently of the chosen
+counterexample; no witness-specific surrogate replaces them.
+
+\code{Counterexample.lean} contains the minimal-polynomial bridges, naive
+height argument, approximation sets, real-domain transfer, and final theorem.
+\code{HeightRoots.lean} proves the root-product bounds and Mahler/Weil
+identities. The project pins Lean 4.19.0 and Mathlib v4.19.0, revision
+\code{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+The accompanying verification records distinguish independent local checks
+from maintainer acceptance. The supplied runner rebuilds authored modules,
+replays source with warnings treated as errors, and audits compiled
+declarations in both mathematical modules, including generated declarations.
+Safe mathematical declarations may depend only on the standard foundational
+axioms \code{propext}, \code{Classical.choice}, and \code{Quot.sound}.
+The inventory also records compiler-generated unsafe execution helpers;
+none is reachable through the type or value dependencies of any safe
+mathematical declaration. No numerical computation is needed for the proof.
+
+The missing definition of $H$ remains a limitation of the original statement.
+Logarithmic height, an archimedean house omitting denominator information,
+and arbitrary rescalings are different functions and are not covered by this
+theorem. No assertion is made that the three heights above are equal or can
+be exchanged without affecting other parts of the conjecture.
+The report resolves the literal full-line assertion under each of the three
+explicit standard arithmetic conventions; it does not resolve a newly
+specified arbitrary-height problem or determine the Hausdorff dimension.
+\end{document}

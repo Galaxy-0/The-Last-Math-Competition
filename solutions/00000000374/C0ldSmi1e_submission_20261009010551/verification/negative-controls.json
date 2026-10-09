@@ -1,0 +1,286 @@
+{
+  "result": "PASS",
+  "unit_test_count": 21,
+  "unit_tests_pass": true,
+  "compiled_controls": [
+    {
+      "control": "custom-axiom-HeightRoots",
+      "expected_rejection": "Authored axiom declaration",
+      "result": "PASS",
+      "source": "axiom OutsideNamespace.assumed : False\n",
+      "target_module": "HeightRoots",
+      "records": [
+        {
+          "label": "compile-fixture",
+          "argv": [
+            "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+            "build"
+          ],
+          "cwd": "/private/tmp/tlmc374-verifier-work/controls-final/custom-axiom-HeightRoots/fresh-project",
+          "started_utc": "2026-10-09T00:59:55.069570+00:00",
+          "exit_code": 0,
+          "completed_utc": "2026-10-09T00:59:55.610191+00:00",
+          "stdout": "✔ [2/4] Built HeightRoots\n✔ [3/4] Built Counterexample\nBuild completed successfully.\n",
+          "stderr": ""
+        },
+        {
+          "label": "audit-fixture",
+          "argv": [
+            "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+            "env",
+            "lean",
+            "-DwarningAsError=true",
+            "Audit.lean"
+          ],
+          "cwd": "/private/tmp/tlmc374-verifier-work/controls-final/custom-axiom-HeightRoots/fresh-project",
+          "started_utc": "2026-10-09T00:59:55.610670+00:00",
+          "exit_code": 1,
+          "completed_utc": "2026-10-09T00:59:58.364997+00:00",
+          "stdout": "AUDITED HelperControl.ok: theorem; execution=false; axioms=[]\nAUDITED MainControl.ok: theorem; execution=false; axioms=[]\nAudit.lean:31:0: error: Authored axiom declaration: OutsideNamespace.assumed\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "control": "custom-axiom-Counterexample",
+      "expected_rejection": "Authored axiom declaration",
+      "result": "PASS",
+      "source": "axiom OutsideNamespace.assumed : False\n",
+      "target_module": "Counterexample",
+      "records": [
+        {
+          "label": "compile-fixture",
+          "argv": [
+            "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+            "build"
+          ],
+          "cwd": "/private/tmp/tlmc374-verifier-work/controls-final/custom-axiom-Counterexample/fresh-project",
+          "started_utc": "2026-10-09T00:59:58.368592+00:00",
+          "exit_code": 0,
+          "completed_utc": "2026-10-09T00:59:59.104813+00:00",
+          "stdout": "✔ [2/4] Built HeightRoots\n✔ [3/4] Built Counterexample\nBuild completed successfully.\n",
+          "stderr": ""
+        },
+        {
+          "label": "audit-fixture",
+          "argv": [
+            "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+            "env",
+            "lean",
+            "-DwarningAsError=true",
+            "Audit.lean"
+          ],
+          "cwd": "/private/tmp/tlmc374-verifier-work/controls-final/custom-axiom-Counterexample/fresh-project",
+          "started_utc": "2026-10-09T00:59:59.105368+00:00",
+          "exit_code": 1,
+          "completed_utc": "2026-10-09T01:00:01.764917+00:00",
+          "stdout": "AUDITED HelperControl.ok: theorem; execution=false; axioms=[]\nAUDITED MainControl.ok: theorem; execution=false; axioms=[]\nAudit.lean:31:0: error: Authored axiom declaration: OutsideNamespace.assumed\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "control": "unsafe-definition-HeightRoots",
+      "expected_rejection": "Unsafe authored declaration",
+      "result": "PASS",
+      "source": "unsafe def OutsideNamespace.unchecked : Nat := 1\n",
+      "target_module": "HeightRoots",
+      "records": [
+        {
+          "label": "compile-fixture",
+          "argv": [
+            "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+            "build"
+          ],
+          "cwd": "/private/tmp/tlmc374-verifier-work/controls-final/unsafe-definition-HeightRoots/fresh-project",
+          "started_utc": "2026-10-09T01:00:01.766920+00:00",
+          "exit_code": 0,
+          "completed_utc": "2026-10-09T01:00:02.295525+00:00",
+          "stdout": "✔ [2/4] Built HeightRoots\n✔ [3/4] Built Counterexample\nBuild completed successfully.\n",
+          "stderr": ""
+        },
+        {
+          "label": "audit-fixture",
+          "argv": [
+            "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+            "env",
+            "lean",
+            "-DwarningAsError=true",
+            "Audit.lean"
+          ],
+          "cwd": "/private/tmp/tlmc374-verifier-work/controls-final/unsafe-definition-HeightRoots/fresh-project",
+          "started_utc": "2026-10-09T01:00:02.295980+00:00",
+          "exit_code": 1,
+          "completed_utc": "2026-10-09T01:00:04.720983+00:00",
+          "stdout": "AUDITED HelperControl.ok: theorem; execution=false; axioms=[]\nAUDITED MainControl.ok: theorem; execution=false; axioms=[]\nAudit.lean:31:0: error: Unsafe authored declaration: OutsideNamespace.unchecked\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "control": "unsafe-definition-Counterexample",
+      "expected_rejection": "Unsafe authored declaration",
+      "result": "PASS",
+      "source": "unsafe def OutsideNamespace.unchecked : Nat := 1\n",
+      "target_module": "Counterexample",
+      "records": [
+        {
+          "label": "compile-fixture",
+          "argv": [
+            "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+            "build"
+          ],
+          "cwd": "/private/tmp/tlmc374-verifier-work/controls-final/unsafe-definition-Counterexample/fresh-project",
+          "started_utc": "2026-10-09T01:00:04.722900+00:00",
+          "exit_code": 0,
+          "completed_utc": "2026-10-09T01:00:05.253651+00:00",
+          "stdout": "✔ [2/4] Built HeightRoots\n✔ [3/4] Built Counterexample\nBuild completed successfully.\n",
+          "stderr": ""
+        },
+        {
+          "label": "audit-fixture",
+          "argv": [
+            "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+            "env",
+            "lean",
+            "-DwarningAsError=true",
+            "Audit.lean"
+          ],
+          "cwd": "/private/tmp/tlmc374-verifier-work/controls-final/unsafe-definition-Counterexample/fresh-project",
+          "started_utc": "2026-10-09T01:00:05.254082+00:00",
+          "exit_code": 1,
+          "completed_utc": "2026-10-09T01:00:07.674659+00:00",
+          "stdout": "AUDITED HelperControl.ok: theorem; execution=false; axioms=[]\nAUDITED MainControl.ok: theorem; execution=false; axioms=[]\nAudit.lean:31:0: error: Unsafe authored declaration: OutsideNamespace.unchecked\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "control": "sorry-proof-HeightRoots",
+      "expected_rejection": "Forbidden transitive axiom sorryAx",
+      "result": "PASS",
+      "source": "theorem OutsideNamespace.unsound : False := by sorry\n",
+      "target_module": "HeightRoots",
+      "records": [
+        {
+          "label": "compile-fixture",
+          "argv": [
+            "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+            "build"
+          ],
+          "cwd": "/private/tmp/tlmc374-verifier-work/controls-final/sorry-proof-HeightRoots/fresh-project",
+          "started_utc": "2026-10-09T01:00:07.676526+00:00",
+          "exit_code": 0,
+          "completed_utc": "2026-10-09T01:00:08.192071+00:00",
+          "stdout": "⚠ [2/4] Built HeightRoots\nwarning: ././././HeightRoots.lean:2:8: declaration uses 'sorry'\n✔ [3/4] Built Counterexample\nBuild completed successfully.\n",
+          "stderr": ""
+        },
+        {
+          "label": "audit-fixture",
+          "argv": [
+            "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+            "env",
+            "lean",
+            "-DwarningAsError=true",
+            "Audit.lean"
+          ],
+          "cwd": "/private/tmp/tlmc374-verifier-work/controls-final/sorry-proof-HeightRoots/fresh-project",
+          "started_utc": "2026-10-09T01:00:08.192536+00:00",
+          "exit_code": 1,
+          "completed_utc": "2026-10-09T01:00:10.541433+00:00",
+          "stdout": "AUDITED HelperControl.ok: theorem; execution=false; axioms=[]\nAUDITED MainControl.ok: theorem; execution=false; axioms=[]\nAudit.lean:31:0: error: Forbidden transitive axiom sorryAx in OutsideNamespace.unsound\n",
+          "stderr": ""
+        },
+        {
+          "label": "strict-replay-fixture",
+          "argv": [
+            "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+            "env",
+            "lean",
+            "-DwarningAsError=true",
+            "HeightRoots.lean"
+          ],
+          "cwd": "/private/tmp/tlmc374-verifier-work/controls-final/sorry-proof-HeightRoots/fresh-project",
+          "started_utc": "2026-10-09T01:00:10.541881+00:00",
+          "exit_code": 1,
+          "completed_utc": "2026-10-09T01:00:10.966515+00:00",
+          "stdout": "HeightRoots.lean:2:8: error: declaration uses 'sorry'\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "control": "sorry-proof-Counterexample",
+      "expected_rejection": "Forbidden transitive axiom sorryAx",
+      "result": "PASS",
+      "source": "theorem OutsideNamespace.unsound : False := by sorry\n",
+      "target_module": "Counterexample",
+      "records": [
+        {
+          "label": "compile-fixture",
+          "argv": [
+            "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+            "build"
+          ],
+          "cwd": "/private/tmp/tlmc374-verifier-work/controls-final/sorry-proof-Counterexample/fresh-project",
+          "started_utc": "2026-10-09T01:00:10.968454+00:00",
+          "exit_code": 0,
+          "completed_utc": "2026-10-09T01:00:11.490308+00:00",
+          "stdout": "✔ [2/4] Built HeightRoots\n⚠ [3/4] Built Counterexample\nwarning: ././././Counterexample.lean:3:8: declaration uses 'sorry'\nBuild completed successfully.\n",
+          "stderr": ""
+        },
+        {
+          "label": "audit-fixture",
+          "argv": [
+            "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+            "env",
+            "lean",
+            "-DwarningAsError=true",
+            "Audit.lean"
+          ],
+          "cwd": "/private/tmp/tlmc374-verifier-work/controls-final/sorry-proof-Counterexample/fresh-project",
+          "started_utc": "2026-10-09T01:00:11.490787+00:00",
+          "exit_code": 1,
+          "completed_utc": "2026-10-09T01:00:13.818983+00:00",
+          "stdout": "AUDITED HelperControl.ok: theorem; execution=false; axioms=[]\nAUDITED MainControl.ok: theorem; execution=false; axioms=[]\nAudit.lean:31:0: error: Forbidden transitive axiom sorryAx in OutsideNamespace.unsound\n",
+          "stderr": ""
+        },
+        {
+          "label": "strict-replay-fixture",
+          "argv": [
+            "/private/tmp/tlmc310-runtime/lean-4.19.0-darwin_aarch64/bin/lake",
+            "env",
+            "lean",
+            "-DwarningAsError=true",
+            "Counterexample.lean"
+          ],
+          "cwd": "/private/tmp/tlmc374-verifier-work/controls-final/sorry-proof-Counterexample/fresh-project",
+          "started_utc": "2026-10-09T01:00:13.819490+00:00",
+          "exit_code": 1,
+          "completed_utc": "2026-10-09T01:00:14.212855+00:00",
+          "stdout": "Counterexample.lean:3:8: error: declaration uses 'sorry'\n",
+          "stderr": ""
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "input_sha256": {
+    "ORIGINAL.md": "a51a0f94ce5651406733197f08bf0b0b9ecc874641a3eab5d5ab60f12f1a778f",
+    "lean/Audit.lean": "89643c06a7852f3363e1e773c1e93a15712c6c885da19581e0e3911920ef0f45",
+    "lean/Counterexample.lean": "b6cdda44e8848fb6d1b39ecda46739df8074eaeab76bc1e3f18662d46776c210",
+    "lean/HeightRoots.lean": "8672cc39356a93259ad9cc72c0438bc81309edd35c7c14568fca38a765bfc424",
+    "lean/HeightRootsAudit.lean": "a7758bc53f34e62191a98f10d580efe04d9c5079d65cb1e08042682b2682e678",
+    "lean/Inspect.lean": "ca797f08c627ac0868ca193c5f033806c1bb93f56d8214b500d4291cc2aacdae",
+    "lean/lake-manifest.json": "8b5df231ef923341f42b19021c8436a190046d67dd6e36ff12e892adbdeed090",
+    "lean/lakefile.toml": "9fb7c9cf46b8735fa76d39a9e5bb8e5a39160fe99926a19f2c799f9a6b6ca2d7",
+    "lean/lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea",
+    "test_verify.py": "133f9eb23ca0217ea4da519e44e4690d0fa7ca1d59c174f117e5ab8f3f777be0",
+    "verification/author-freeze.json": "7cdc6b7c706622146f52d24fa06b17ecd15ec9387627d359476a0a79aec10082",
+    "verification/compiled-inventory.json": "163f4b61bc6cd7f656e8fc1a1b07e09d425caae8e0eddacbd5a8794563f9a30d",
+    "verification/pinned-dependencies.json": "8b5df231ef923341f42b19021c8436a190046d67dd6e36ff12e892adbdeed090",
+    "verify.py": "a046723f1d9fa42f759048b8be7d4bb05ae1bcb2d9e71a091c36f89508831ba9"
+  },
+  "inputs_unchanged": true,
+  "pins_clean_before_and_after": true
+}
