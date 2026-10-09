@@ -1,0 +1,70 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,geometry}
+\geometry{margin=1in}
+\begin{document}
+\begin{center}
+{\Large Dataflow rounds depend on lattice height}\\[4pt]
+Disproof of Conjecture 00000003689\\[4pt]
+ziangni-sys --- October 8, 2026
+\end{center}
+\paragraph{The fixed dataflow problem.}
+Use the directed control-flow graph with one vertex $v$ and one
+self-loop $v\to v$. Its node count and loop depth are both one.
+Take the complete information lattice
+\[
+ L=\mathbb N\cup\{\infty\},\qquad 0<1<2<\cdots<\infty.
+\]
+The monotone transfer function is $T(a)=a+1$ for finite $a$ and
+$T(\infty)=\infty$. Since there is only one incoming edge, the
+global dataflow update of the state $s$ is $F(s)(v)=T(s(v))$.
+This is a genuine monotone lattice fixed-point iteration on the
+stated graph. Start from the bottom state $s_0(v)=0$.
+
+\paragraph{No finite convergence.}
+Induction gives $s_r(v)=r$ for every finite round $r$. Hence
+$F(s_r)(v)=r+1\ne r=s_r(v)$: the iteration never stabilizes after
+any finite number of rounds. The top state is fixed, and is in
+fact the unique fixed point, since no finite natural number equals
+its successor. The supremum of the finite orbit is the top state,
+which is reached only at the limit stage. Thus even one fixed
+complete lattice and one fixed one-node graph refute any proposed
+finite convergence count linear in the number of nodes.
+The conjecture states no finite-height or ascending-chain condition.
+
+\paragraph{Finite truncations and the missing parameter.}
+Even if a finite lattice were intended, no uniform bound depending
+only on node count and loop depth can hold. On the same graph take
+\[
+ L_m=\{0,\ldots,m\},\qquad T_m(a)=\min(a+1,m).
+\]
+This is an actual finite chain lattice and a monotone transfer.
+Induction yields $s^{(m)}_r(v)=\min(r,m)$, so
+\[
+ F_m(s^{(m)}_r)=s^{(m)}_r\quad\Longleftrightarrow\quad r\geq m.
+\]
+The first stable state therefore occurs at round $m$, arbitrarily
+large with node count and loop depth still one. For any proposed
+uniform coefficient $C$, choose $m=C+1$; no round $r\leq C\cdot1$
+is stable. Counting an extra round to detect stability only
+increases this cost.
+
+\paragraph{Scope of the disproof.}
+For a fixed finite lattice, a node-count bound whose constant
+depends on lattice height can be valid. The finite family above
+specifically disproves a uniform node/depth-only bound. The fixed
+infinite-height complete-lattice example removes that constant
+ambiguity altogether, because there is no finite stabilization.
+A finite-height hypothesis and an explicit height parameter would
+be substantive additions to the original statement.
+
+\paragraph{Formal certificate.}
+Lean constructs the actual one-node self-loop quiver, the complete
+extended-natural information lattice, monotone transfer, global
+update and its function iterates from bottom. It proves the exact
+orbit, unique fixed point and absence of every finite stable round.
+It additionally constructs the ordered finite domains, calculates
+their actual iterates and first stabilization threshold, and rules
+out every uniform node-only coefficient. Final axiom audits use
+only standard Lean and Mathlib axioms.
+\end{document}
