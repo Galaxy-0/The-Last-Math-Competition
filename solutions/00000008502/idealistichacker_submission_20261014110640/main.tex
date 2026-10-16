@@ -1,0 +1,169 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\title{A Trivial Picard--Vessiot Extension\protect\\Contradicts Conjecture 00000008502}
+\author{idealistichacker\protect\\\small AI-assisted proof; no affiliation claimed}
+\date{14 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The conjecture asserts that the Zariski dimensions of the differential Galois
+groups of equations $y''=ay$ form exactly $\{1,2,3,4\}$. Over
+$K=\mathbb C(t)$ with its usual derivation, $a=0$ gives the Picard--Vessiot
+extension $L=K$. The fundamental matrix has determinant one and entries already
+in the base field. Thus the actual differential Galois group is trivial;
+its represented Zariski closure is the identity point and has coordinate ring
+isomorphic to $\mathbb C$, hence dimension zero. This contradicts the asserted
+exact spectrum. The Lean development constructs rational-function differentiation,
+its constant field, the fundamental matrix, the self-extension automorphism group,
+the representation, Zariski closure and coordinate-ring dimension.
+\end{abstract}
+
+\section{Source and scope}
+Both source languages assert an exact dimension spectrum $\{1,2,3,4\}$ for
+second-order equations $y''=ay$, with every listed dimension realized. This is
+one necessary clause of a conjunction also claiming a general $n^2$ upper
+bound and an equality classification. Refuting the exact-spectrum clause
+suffices; this paper does not separately refute the general upper bound.
+
+We use ordinary characteristic-zero Picard--Vessiot theory with algebraically
+closed constants. The source does not exclude $a=0$, reducible equations,
+trivial groups or identity extensions. This counterexample satisfies the
+standard restrictions just stated. It does not require a speculative choice
+of a parameterized or analytic-monodromy Galois group. The standard fundamental
+matrix and PV-field definitions are described in Singer~\cite{Singer},
+Definitions 1.2.13 and 1.3.4 and the PV-field discussion preceding the latter.
+
+The fixed original is preserved separately; it is not edited.
+\begin{description}
+\item[Source commit] \hfill\\
+\texttt{cce2d90cb298de9595798eb674d2c80712100532}
+\item[Conjecture blob] \hfill\\
+\texttt{a2f2c93606d87db922691efc471572a32355e881}
+\end{description}
+
+\section{The concrete differential field}
+Take $K=\mathbb C(t)$ and differentiate rational functions by
+\[
+D\!\left(\frac{p}{q}\right)=\frac{p'q-pq'}{q^2}\qquad(q\ne0).
+\]
+The usual cancellation calculation shows this is independent of the chosen
+fraction representation, additive, and satisfies the Leibniz rule. It kills
+every coefficient from $\mathbb C$, and $D(t)=1$.
+
+\begin{lemma}
+The constants of $K$ are exactly $\mathbb C$.
+\end{lemma}
+\begin{proof}
+For nonzero reduced $p/q$, if its derivative vanishes then $p'q=pq'$.
+Because $p$ and $q$ are coprime, $p$ divides $p'$. A nonzero polynomial
+derivative has strictly smaller degree, so $p'=0$. Now $p\ne0$ implies
+$q'=0$. In characteristic zero, both $p$ and $q$ are constant polynomials.
+The zero rational function is also a constant. Conversely differentiation
+kills all constant coefficients.
+\end{proof}
+
+These properties are proved on Mathlib's actual \texttt{RatFunc} type,
+including its genuine coprime numerator and denominator. The derivative is
+not a label attached to an arbitrary function. Algebraic closedness of the
+coefficient field uses Mathlib's fundamental theorem of algebra.
+
+\section{A Picard--Vessiot self-extension}
+For $a=0$ the companion system and fundamental matrix are
+\[
+A=\begin{pmatrix}0&1\\0&0\end{pmatrix},\qquad
+U=\begin{pmatrix}1&t\\0&1\end{pmatrix}.
+\]
+Entrywise differentiation gives $D(U)=AU$, and $\det U=1$. Its columns are
+the scalar solutions $1,t$ with their first derivatives. The nonzero
+Wronskian makes this an invertible fundamental matrix for the order-two
+equation, not a scalar equation of reduced order.
+
+All entries of $U$ and $1/\det U$ already lie in $K$. The ring generated
+over $K$ by these entries is exactly $K$, which is differentially simple
+because a field has only the ideals $0$ and $K$. Its fraction field is $K$.
+Consequently $L=K$ is the generated PV field and is minimal. The extension
+has no new constants, since it is the identity extension; its constants
+are exactly the $\mathbb C$ verified above. Properness of a PV extension
+is not part of the standard definition.
+
+\section{The actual Galois group and algebraic dimension}
+Let $G=\operatorname{Aut}_D(L/K)$, the derivative-commuting subgroup of
+the actual $K$-algebra automorphisms of $L$. At $L=K$, an automorphism fixing
+the base fixes every element. Thus $G$ has exactly the identity automorphism.
+The standard representation determined by the fundamental matrix is
+\[
+\rho(\sigma)=U^{-1}\sigma(U)=I_2.
+\]
+Its entries belong to the constant field. Lean checks the displayed formula
+against the constructed homomorphism, not just against a declared trivial-group
+label.
+
+Represent $\mathrm{GL}_2(\mathbb C)$ by five affine coordinates
+$(x_{00},x_{01},x_{10},x_{11},z)$ satisfying
+$z(x_{00}x_{11}-x_{01}x_{10})=1$, so $z$ is the inverse determinant.
+The identity point is $(1,0,0,1,1)$. It is Zariski closed: coordinate-equality
+polynomials cut out precisely this point. Hence the represented group's
+Zariski closure is still this point.
+
+Its coordinate ring is the actual polynomial ring quotient by the point's
+vanishing ideal. Evaluation at the identity is surjective, and its kernel
+is exactly that vanishing ideal. The first isomorphism theorem identifies
+the quotient ring with $\mathbb C$. The Krull dimension is therefore zero.
+This argument does not replace algebraic dimension by the cardinality of a
+group, or assign a dimension by definition.
+
+\begin{theorem}
+The exact second-order spectrum asserted in conjecture 00000008502 is false.
+\end{theorem}
+\begin{proof}
+The verified equation $y''=0$, base $K=\mathbb C(t)$ and PV field $L=K$
+give an admissible actual represented group of Zariski dimension zero.
+But $0\notin\{1,2,3,4\}$. Thus this exact-spectrum necessary clause, and
+therefore the source conjunction, cannot hold.
+\end{proof}
+
+\section{Lean correspondence and reproducibility}
+The source correspondence is:
+\begin{description}
+\item[\texttt{RationalDerivative.lean}] \hfill\\
+Constructs the derivative, its laws and the exact constants.
+\item[\texttt{DifferentialMatrix.lean}] \hfill\\
+Proves the matrix and self-automorphism components.
+\item[\texttt{PointClosure.lean}] \hfill\\
+Implements polynomial zero loci, the induced standard Zariski topology,
+closure, invertible-matrix coordinates and the genuine coordinate quotient.
+\item[\texttt{ConcretePV.lean}] \hfill\\
+Assembles the concrete PV data, actual represented group and closed negation
+of the universal exact-spectrum necessary clause.
+\end{description}
+
+All 76 public theorem types and transitive axioms are printed by
+\texttt{ResearchCheck.lean}. Only the standard axioms \texttt{propext},
+\texttt{Classical.choice} and \texttt{Quot.sound} are allowed. The project uses
+Lean 4.33.1 and Mathlib commit
+\texttt{0df444a360eaa60ab8c11dca51a86af692955474}. The installed compiler and
+fixed library remain trusted infrastructure; no full compiler-source audit is claimed.
+
+The research reproducer builds all authored modules in a fresh private directory,
+audits every listed theorem and runs exact rational regression checks. It reuses
+dependency caches: it is not a full dependency rebuild or empty-machine bootstrap.
+Finite regressions support reproducibility, not the universal mathematical argument.
+
+This document is preparation material, not a claim of submission, first-solver
+status, human endorsement, upstream acceptance, ranking or award. A portable
+submission package, final frozen independent review, actual PDF reproduction and
+fresh publication gates remain separate requirements.
+
+\begin{thebibliography}{1}
+\bibitem{Singer}
+Michael F. Singer, \emph{Introduction to the Galois Theory of Linear
+Differential Equations}, arXiv:0712.4124v2, 2008.
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,154 @@
+import Main
+
+#check Rational8502.fractionDerivative_zero_denominator
+#print axioms Rational8502.fractionDerivative_zero_denominator
+#check Rational8502.fractionDerivative_scaling
+#print axioms Rational8502.fractionDerivative_scaling
+#check Rational8502.derivative_fraction
+#print axioms Rational8502.derivative_fraction
+#check Rational8502.derivative_polynomial
+#print axioms Rational8502.derivative_polynomial
+#check Rational8502.derivative_zero
+#print axioms Rational8502.derivative_zero
+#check Rational8502.derivative_one
+#print axioms Rational8502.derivative_one
+#check Rational8502.derivative_X
+#print axioms Rational8502.derivative_X
+#check Rational8502.derivative_add
+#print axioms Rational8502.derivative_add
+#check Rational8502.derivative_mul
+#print axioms Rational8502.derivative_mul
+#check Rational8502.derivative_constant
+#print axioms Rational8502.derivative_constant
+#check Rational8502.derivative_smul
+#print axioms Rational8502.derivative_smul
+#check Rational8502.derivative_zero_iff_constant
+#print axioms Rational8502.derivative_zero_iff_constant
+#check Rational8502.concrete_D_X
+#print axioms Rational8502.concrete_D_X
+#check Rational8502.concrete_constants
+#print axioms Rational8502.concrete_constants
+#check Differential8502.fundamental_det
+#print axioms Differential8502.fundamental_det
+#check Differential8502.fundamental_equation
+#print axioms Differential8502.fundamental_equation
+#check Differential8502.one_second_derivative
+#print axioms Differential8502.one_second_derivative
+#check Differential8502.t_second_derivative
+#print axioms Differential8502.t_second_derivative
+#check Differential8502.self_base_automorphism
+#print axioms Differential8502.self_base_automorphism
+#check Differential8502.differential_self_group_eq_bot
+#print axioms Differential8502.differential_self_group_eq_bot
+#check PointClosure8502.coordinateIdeal_le_vanishingIdeal
+#print axioms PointClosure8502.coordinateIdeal_le_vanishingIdeal
+#check PointClosure8502.zeroLocus_coordinateIdeal
+#print axioms PointClosure8502.zeroLocus_coordinateIdeal
+#check PointClosure8502.zeroLocus_vanishingIdeal_singleton
+#print axioms PointClosure8502.zeroLocus_vanishingIdeal_singleton
+#check PointClosure8502.subset_algebraicClosure
+#print axioms PointClosure8502.subset_algebraicClosure
+#check PointClosure8502.algebraicClosure_le_zeroLocus_iff
+#print axioms PointClosure8502.algebraicClosure_le_zeroLocus_iff
+#check PointClosure8502.algebraicClosure_zeroLocus
+#print axioms PointClosure8502.algebraicClosure_zeroLocus
+#check PointClosure8502.algebraicClosure_idempotent
+#print axioms PointClosure8502.algebraicClosure_idempotent
+#check PointClosure8502.algebraicClosure_singleton
+#print axioms PointClosure8502.algebraicClosure_singleton
+#check PointClosure8502.pointToPoint_preimage_zeroLocus
+#print axioms PointClosure8502.pointToPoint_preimage_zeroLocus
+#check PointClosure8502.zariski_isClosed_zeroLocus
+#print axioms PointClosure8502.zariski_isClosed_zeroLocus
+#check PointClosure8502.zariski_isClosed_iff
+#print axioms PointClosure8502.zariski_isClosed_iff
+#check PointClosure8502.zariskiClosure_eq_algebraicClosure
+#print axioms PointClosure8502.zariskiClosure_eq_algebraicClosure
+#check PointClosure8502.zariskiClosure_singleton
+#print axioms PointClosure8502.zariskiClosure_singleton
+#check PointClosure8502.vanishingIdeal_singleton_eq_kernel
+#print axioms PointClosure8502.vanishingIdeal_singleton_eq_kernel
+#check PointClosure8502.evaluation_surjective
+#print axioms PointClosure8502.evaluation_surjective
+#check PointClosure8502.pointCoordinateRingEquiv_mk
+#print axioms PointClosure8502.pointCoordinateRingEquiv_mk
+#check PointClosure8502.pointCoordinateRing_krullDim
+#print axioms PointClosure8502.pointCoordinateRing_krullDim
+#check PointClosure8502.closurePointCoordinateRing_krullDim
+#print axioms PointClosure8502.closurePointCoordinateRing_krullDim
+#check PointClosure8502.identity_matrixCoords
+#print axioms PointClosure8502.identity_matrixCoords
+#check PointClosure8502.matrixOfPoint_identity
+#print axioms PointClosure8502.matrixOfPoint_identity
+#check PointClosure8502.matrixOfPoint_matrixCoords
+#print axioms PointClosure8502.matrixOfPoint_matrixCoords
+#check PointClosure8502.matrixCoords_injective
+#print axioms PointClosure8502.matrixCoords_injective
+#check PointClosure8502.determinantRelation_eval_identity
+#print axioms PointClosure8502.determinantRelation_eval_identity
+#check PointClosure8502.determinantRelation_mem_pointIdeal
+#print axioms PointClosure8502.determinantRelation_mem_pointIdeal
+#check PointClosure8502.determinantRelation_eval_matrixCoords
+#print axioms PointClosure8502.determinantRelation_eval_matrixCoords
+#check PointClosure8502.identity_zeroLocus_coordinateIdeal
+#print axioms PointClosure8502.identity_zeroLocus_coordinateIdeal
+#check PointClosure8502.identity_algebraicClosure
+#print axioms PointClosure8502.identity_algebraicClosure
+#check PointClosure8502.identity_matrix_closure
+#print axioms PointClosure8502.identity_matrix_closure
+#check PointClosure8502.identity_coordinateRing_krullDim
+#print axioms PointClosure8502.identity_coordinateRing_krullDim
+#check PointClosure8502.identity_matrix_closure_krullDim
+#print axioms PointClosure8502.identity_matrix_closure_krullDim
+#check PointClosure8502.identity_matrix_zariskiClosure
+#print axioms PointClosure8502.identity_matrix_zariskiClosure
+#check PointClosure8502.identity_matrix_zariskiClosure_krullDim
+#print axioms PointClosure8502.identity_matrix_zariskiClosure_krullDim
+#check PointClosure8502.glPointCoords_identity
+#print axioms PointClosure8502.glPointCoords_identity
+#check PointClosure8502.glPointCoords_injective
+#print axioms PointClosure8502.glPointCoords_injective
+#check PointClosure8502.glPointCoords_satisfies_relation
+#print axioms PointClosure8502.glPointCoords_satisfies_relation
+#check PointClosure8502.matrixCoords_matrixOfPoint_of_relation
+#print axioms PointClosure8502.matrixCoords_matrixOfPoint_of_relation
+#check PointClosure8502.matrixOfPoint_det_ne_zero_of_relation
+#print axioms PointClosure8502.matrixOfPoint_det_ne_zero_of_relation
+#check PointClosure8502.glPointCoords_range
+#print axioms PointClosure8502.glPointCoords_range
+#check PointClosure8502.glPointCoords_preimage_identity
+#print axioms PointClosure8502.glPointCoords_preimage_identity
+#check PointClosure8502.identity_GL_isClosed
+#print axioms PointClosure8502.identity_GL_isClosed
+#check PointClosure8502.identity_GL_zariskiClosure
+#print axioms PointClosure8502.identity_GL_zariskiClosure
+#check PointClosure8502.identity_GL_closure_coordinateRing_krullDim
+#print axioms PointClosure8502.identity_GL_closure_coordinateRing_krullDim
+#check Concrete8502.Dt
+#print axioms Concrete8502.Dt
+#check Concrete8502.base_constants
+#print axioms Concrete8502.base_constants
+#check Concrete8502.algebraically_closed_constants
+#print axioms Concrete8502.algebraically_closed_constants
+#check Concrete8502.self_field_generated
+#print axioms Concrete8502.self_field_generated
+#check Concrete8502.U_det
+#print axioms Concrete8502.U_det
+#check Concrete8502.U_equation
+#print axioms Concrete8502.U_equation
+#check Concrete8502.generatedPVRing_eq_top
+#print axioms Concrete8502.generatedPVRing_eq_top
+#check Concrete8502.self_ring_differential_simple
+#print axioms Concrete8502.self_ring_differential_simple
+#check Concrete8502.self_automorphism_identity
+#print axioms Concrete8502.self_automorphism_identity
+#check Concrete8502.self_action_identity
+#print axioms Concrete8502.self_action_identity
+#check Concrete8502.self_represented_image
+#print axioms Concrete8502.self_represented_image
+#check Concrete8502.self_galois_dimension_zero
+#print axioms Concrete8502.self_galois_dimension_zero
+#check Concrete8502.counterexample_not_in_asserted_spectrum
+#print axioms Concrete8502.counterexample_not_in_asserted_spectrum
+#check Concrete8502.no_uniform_second_order_spectrum
+#print axioms Concrete8502.no_uniform_second_order_spectrum
