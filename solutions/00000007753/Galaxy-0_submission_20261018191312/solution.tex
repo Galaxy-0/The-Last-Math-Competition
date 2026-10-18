@@ -1,0 +1,75 @@
+\pdfoutput=1
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue,linkcolor=blue}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\title{Two reducible parameters disprove Conjecture 7753}
+\author{Galaxy-0}
+\date{October 18, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The claimed bound of $2^{n-1}$ on the number of parameters for which the dynatomic polynomial is reducible fails already at $n=1$. The two distinct integer parameters $c=-2$ and $c=-6$ give nontrivial factorizations over $\mathbb Q$. The accompanying self-contained Lean 4 project proves the polynomial identities, nonunit status of the factors, and failure of the cardinality bound.
+\end{abstract}
+
+\section{The clause being disproved}
+Conjecture 00000007753 defines $f_c(X)=X^2+c$ and
+\[
+ \Phi_{n,c}(X)=\prod_{d\mid n}\bigl(f_c^{\circ d}(X)-X\bigr)^{\mu(n/d)}.
+\]
+Its final clause asserts that, for fixed $n$, the exceptional parameters $c$ making this polynomial reducible are finite in number and number at most $2^{n-1}$. Here reducibility is over $\mathbb Q$; the witnesses below are integers and therefore also rational parameters. No restriction on $c$ excluding either witness, and no restriction $n>1$, occurs in the statement.
+
+We disprove that bound for the original polynomial in $X$. We do not use, or need to interpret, the separate claim about the Galois group of the special value at $X=0$.
+
+\section{Counterexample}
+Since the only positive divisor of $1$ is $1$ and $\mu(1)=1$,
+\[
+ \Phi_{1,c}(X)=f_c(X)-X=X^2-X+c.
+\]
+Consequently,
+\begin{align*}
+ \Phi_{1,-2}(X)&=X^2-X-2=(X-2)(X+1),\\
+ \Phi_{1,-6}(X)&=X^2-X-6=(X-3)(X+2).
+\end{align*}
+Each polynomial on the left is nonzero, and each factor on the right is a nonunit in $\mathbb Q[X]$. Indeed, all four factors have degree one. Alternatively, each has a rational root, so if it had a polynomial inverse, evaluation at that root would give $0=1$.
+
+\begin{theorem}
+Conjecture 00000007753 is false.
+\end{theorem}
+\begin{proof}
+Both $-2$ and $-6$ belong to the exceptional-parameter set at $n=1$, and they are distinct. That set therefore has at least two elements. The asserted upper bound is $2^{1-1}=1$, a contradiction.
+\end{proof}
+This argument requires no computation of Galois groups, dynatomic curves, or an exhaustive parameter search.
+
+\section{Formalization and semantic correspondence}
+The project in \texttt{lean/} uses Lean 4.31.0 and the standard library only; Mathlib and network dependencies are not required.
+
+\begin{itemize}
+\item \texttt{Poly} is a finite list of rational coefficients in ascending degree order. \texttt{mul} is ordinary polynomial convolution, implemented by scalar multiplication, coefficientwise addition, and a one-position shift. \texttt{trim} removes trailing zero coefficients. \texttt{EqPoly} is equality after this normalization, hence ordinary coefficient equality.
+\item \texttt{IsUnit p} means that there exists an arbitrary rational-coefficient polynomial $q$ whose product with $p$ normalizes to the constant polynomial $1$. \texttt{Reducible p} asserts that $p$ is nonzero and is the product of two nonunits. Thus reducibility is proved in the polynomial algebra, not merely by reporting a discriminant or evaluating a few points.
+\item \texttt{eval\_mul} and \texttt{eval\_trim} prove, for every rational input and every coefficient list, that evaluation respects multiplication and normalization. \texttt{root\_not\_unit} uses these general theorems to rule out every possible polynomial inverse of a polynomial with a rational root.
+\item \texttt{firstDynatomic} is $f_c-X$, the defining divisor-product formula at $n=1$. Its coefficient theorem,
+\texttt{firstDynatomic\_coeffs}, proves its exact coefficient list is $[c,-1,1]$. \texttt{factorA}, \texttt{factorB}, \texttt{reducibleA}, and \texttt{reducibleB} verify the two complete factorizations and their hypotheses.
+\item \texttt{HasAtMost P k} means that a list of length at most $k$ covers every element satisfying $P$. This is precisely a cardinality upper bound; allowing duplicate entries does not weaken that bound. The final theorem
+\begin{center}
+\texttt{TLMC7753.exceptional\_parameter\_bound\_false}
+\end{center}
+proves the negation of this bound for the exceptional-parameter set and $k=2^{1-1}$.
+\end{itemize}
+The full conjecture includes claims beyond this clause. Formalizing a false necessary clause suffices to disprove the conjunction; the Lean theorem does not assert a result about the ambiguous special-value Galois-group clause.
+
+\section{Reproduction and trust boundary}
+With the specified toolchain on the path, run from \texttt{lean/}:
+\begin{verbatim}
+lake build
+lake env lean Audit.lean
+lake env leanchecker Main
+\end{verbatim}
+The supplied \texttt{Audit.lean} prints the axioms used by the main theorems. They are exactly Lean's standard foundational axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}. There are no custom axioms, proof holes, or native decision procedures. Closed rational arithmetic is checked using \texttt{decide +kernel}, which invokes kernel reduction, not native compilation.
+
+The report can be rebuilt with \texttt{pdflatex -no-shell-escape solution.tex}. The optional \texttt{verify.py} independently checks the displayed coefficient products using Python's exact rational arithmetic; it is not part of the trusted proof.
+\end{document}
