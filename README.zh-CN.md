@@ -30,7 +30,7 @@
 
 ## 排行榜（Leaderboard）
 
-截至 2026-10-12 的当前战绩——**10000 个猜想中已解决 875 个**（89 个证明，786 个证伪）。上榜的每一份提交都通过了完整审计——LaTeX 源码、PDF 文档，以及一个完整编译的 Lean 4 项目（Mathlib 或自包含核心 Lean）——无 `sorry`、无 `native_decide`、无额外公理——并通过语义审查确认 Lean 定理确实建立了该猜想或其否定。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
+截至 2026-10-19 的当前战绩——**10000 个猜想中已解决 886 个**（91 个证明，795 个证伪）。上榜的每一份提交都通过了完整审计——LaTeX 源码、PDF 文档，以及一个完整编译的 Lean 4 项目（Mathlib 或自包含核心 Lean）——无 `sorry`、无 `native_decide`、无额外公理——并通过语义审查确认 Lean 定理确实建立了该猜想或其否定。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
@@ -42,18 +42,20 @@
 | 6 | [orionsheep](https://github.com/orionsheep) | 73 | 64 | 0 | 73 |
 | 7 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 37 | 36 | 8 | 29 |
 | 8 | [jilint777](https://github.com/jilint777) | 34 | 34 | 2 | 32 |
-| 9 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
-| 10 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
-| 11 | [lizaixi01](https://github.com/lizaixi01) | 15 | 15 | 2 | 13 |
-| 12 | [Galaxy-0](https://github.com/Galaxy-0) | 13 | 13 | 4 | 9 |
+| 9 | [Galaxy-0](https://github.com/Galaxy-0) | 25 | 25 | 6 | 19 |
+| 10 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
+| 11 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
+| 12 | [lizaixi01](https://github.com/lizaixi01) | 15 | 15 | 2 | 13 |
 | 13 | [AlyciaBHZ](https://github.com/AlyciaBHZ) | 8 | 8 | 2 | 6 |
-| 14 | [idealistichacker](https://github.com/idealistichacker) | 7 | 7 | 2 | 5 |
-| 15 | [GodBlf](https://github.com/GodBlf) | 4 | 4 | 0 | 4 |
-| 16 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
-| 17 | [asfigh665](https://github.com/asfigh665) | 1 | 1 | 0 | 1 |
-| 18 | [champagnepapihz](https://github.com/champagnepapihz) | 1 | 1 | 0 | 1 |
-| 19 | [Cosica](https://github.com/Cosica) | 1 | 1 | 0 | 1 |
-| 20 | [LibertychaserUS](https://github.com/LibertychaserUS) | 1 | 1 | 0 | 1 |
+| 14 | [idealistichacker](https://github.com/idealistichacker) | 8 | 8 | 2 | 6 |
+| 15 | [asfigh665](https://github.com/asfigh665) | 5 | 5 | 1 | 4 |
+| 16 | [GodBlf](https://github.com/GodBlf) | 4 | 4 | 0 | 4 |
+| 17 | [zbw123456](https://github.com/zbw123456) | 3 | 3 | 0 | 3 |
+| 18 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
+| 19 | [champagnepapihz](https://github.com/champagnepapihz) | 1 | 1 | 0 | 1 |
+| 20 | [Cosica](https://github.com/Cosica) | 1 | 1 | 0 | 1 |
+| 21 | [LibertychaserUS](https://github.com/LibertychaserUS) | 1 | 1 | 0 | 1 |
+| 22 | [quantumtool](https://github.com/quantumtool) | 1 | 1 | 0 | 1 |
 
 ## 早期声明
 
