@@ -1,0 +1,87 @@
+\pdfmapfile{+symbols.map}
+\pdfmapfile{+cm.map}
+\pdfmapfile{+cmextra.map}
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\title{A connected maximum-degree-five counterexample\\to Conjecture 00000003944}
+\author{Galaxy-0}
+\date{October 18, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+A triangular prism with two pendant leaves has maximum degree five, but its proper three-colourings split into two Kempe-invariant sets of equal size. Every random walk using full Kempe-component switches, started in either set, remains at total-variation distance at least $1/2$ from the uniform distribution on all proper three-colourings. Thus the printed maximum-degree threshold for mixing is false. A self-contained Lean 4 project verifies the graph, all colourings, actual component-switch invariance, and the obstruction at every time.
+\end{abstract}
+
+\section{The assertion being refuted}
+The English statement of Conjecture 00000003944 reads:
+\begin{quote}
+Definition: A Kempe switch is the local recoloring operation flipping a two-colored chain. Conjecture: For Delta $\geq 5$ the mixing time of random Kempe switches is $n^{O(\mathrm{Delta})}$, whereas for Delta $\leq 4$ there exist colorings whose switch graph never mixes.
+\end{quote}
+We use the standard graph-theoretic meaning $\Delta=\max_v\deg(v)$, and a fixed labelled palette of three colours. A Kempe chain is a \emph{whole connected component} of the subgraph induced by two colours. Mixing is to the uniform distribution on \emph{all} proper colourings for that palette. The statement supplies no lower bound on the number of colours relative to $\Delta$. Our counterexample concerns precisely this unrestricted formulation; it makes no claim against versions imposing an additional palette hypothesis. Refuting its $\Delta\geq5$ assertion suffices to refute the conjunction.
+
+\section{The graph and its invariant}
+Let $G$ have vertex set $\{0,1,\ldots,7\}$ and edge set
+\[
+\{01,02,12,34,35,45,03,14,25,06,07\}.
+\]
+The first six vertices form a triangular prism, and vertices 6 and 7 are leaves attached to 0. The graph is simple and connected, with degree sequence
+\[
+(5,3,3,3,3,3,1,1).
+\]
+Write $\Omega$ for its proper colourings $c:V(G)\to\{0,1,2\}$ and set
+\[
+A=\{c\in\Omega:c(0)=c(4)\}.
+\]
+
+\begin{lemma}
+There are 48 proper colourings, and $|A|=|\Omega\setminus A|=24$. Every full Kempe-component switch preserves membership in $A$.
+\end{lemma}
+\begin{proof}
+Each triangle uses all three colours. There are six choices for the top triangle. For a fixed top triangle the bottom triangle must be a derangement relative to it, because of the three matching edges. There are exactly two possibilities: after relabelling the top colours as $(0,1,2)$, the bottom colours are $(1,2,0)$ or $(2,0,1)$. Each leaf independently has two choices. This gives $6\cdot2\cdot2^2=48$ colourings. The two bottom possibilities respectively fail and satisfy $c(0)=c(4)$, so each set has size 24.
+
+Fix two colours. On the prism, their induced subgraph consists of the edge joining them on each triangle, together with exactly one matching edge joining those two edges. It is a connected path on four vertices. Consequently, a full two-colour component in $G$ either misses the prism altogether or contains all four prism vertices of the chosen colours. In the former case it leaves the prism unchanged; in the latter it acts on the entire prism colouring as the global transposition of those two colour names. Equality of colours at vertices 0 and 4 is preserved in either case. The leaves cannot alter this argument.
+\end{proof}
+
+For explicit witnesses, the colourings in vertex order
+\[
+c_*=(0,1,2,1,2,0,1,1),\qquad
+c^*=(0,1,2,2,0,1,1,1)
+\]
+are proper, with $c_*\notin A$ and $c^*\in A$. They cannot be joined by any finite sequence of Kempe switches, including sequences with holding steps.
+
+\section{Failure of mixing, including the standard threshold}
+\begin{theorem}
+For any Markov chain on $\Omega$ whose transitions are full Kempe switches or holding steps, let $\mu_t$ be its distribution at time $t$ starting from $c_*$. If $\pi$ is uniform on $\Omega$, then for every $t\geq0$,
+\[
+\mu_t(A)=0,\qquad \pi(A)=\frac12,
+\qquad \|\mu_t-\pi\|_{\mathrm{TV}}\geq\frac12.
+\]
+In particular, its total-variation mixing time at threshold $1/4$ is infinite.
+\end{theorem}
+\begin{proof}
+The invariant gives $\mu_t(A)=0$ by induction on $t$. The counting lemma gives $\pi(A)=24/48=1/2$. On a finite state space, total variation is the maximum of $|\mu(B)-\pi(B)|$ over events $B\subseteq\Omega$; take $B=A$. This argument holds for arbitrary probabilities on the permitted transitions, not just equal probabilities.
+\end{proof}
+
+For completeness there is a usual concrete random Kempe chain for which $\pi$ really is stationary: choose one of the three unordered colour pairs and one of the eight vertices uniformly; switch its component if its colour is in the pair, and otherwise stay put. For each fixed pair and seed, this operation is an involution of $\Omega$: switching does not change the induced two-colour subgraph or the selected component. Its transition matrix is the average of 24 permutation matrices of involutions, hence is symmetric and stochastic, and $\pi$ is stationary. The theorem shows failure to approach that stationary distribution. Thus the issue is not a choice of a nonexistent target measure, nor the possibility of mixing within a single Kempe class.
+
+\paragraph{Arbitrarily large counterexamples.}
+The obstruction is not a small-$n$ exception to asymptotic notation. For every $n\geq8$, extend the pendant vertex 6 by a path of $n-8$ new vertices (do nothing when $n=8$). The resulting graph is connected and still has maximum degree five. Each proper prism colouring extends to this attached tree and the leaf 7 in exactly $2^{n-6}$ ways. Thus there are $12\cdot2^{n-6}$ proper colourings, exactly half in $A$. The induced two-colour prism path is unchanged, so the same invariant and total-variation lower bound apply. This gives unbounded orders with $\Delta=5$. This extension argument is proved here mathematically; the Lean project below verifies the explicit eight-vertex member, not the parameterized family.
+
+\section{Formal verification and reproducibility}
+The project uses Lean 4.31.0 and only its standard library. Vertices and colours are \texttt{Fin 8} and \texttt{Fin 3}. Adjacency is the explicit relation above. Colourings are encoded by their eight base-three digits in \texttt{Fin 6561}; \texttt{decode\_encode} and \texttt{decode\_injective} prove that this encoding neither loses nor duplicates assignments. The list \texttt{states} filters exactly the proper colourings, and its length is proved to be 48.
+
+\texttt{Chain} is an inductive path relation in the actual two-colour induced subgraph, and \texttt{KempeMove} requires switching exactly its entire reachable component. A finite six-vertex lemma proves invariance for eligible subsets closed under two-colour adjacency; the path definition proves that real components satisfy that closure. Thus no arbitrary partial recolouring is substituted for a Kempe move.
+
+The formal evolution \texttt{law} is the finite matrix recurrence
+\[
+\mu_0(y)=\mathbf1_{y=c_*},\qquad
+\mu_{t+1}(y)=\sum_{x\in\Omega}\mu_t(x)P(x,y).
+\]
+The theorem is proved for every rational kernel supported on legal moves; stochastic normalization is not even needed by the invariant argument. The final theorem \texttt{counterexample} includes the conventional stochastic-kernel hypotheses, connectedness and maximum degree five. \texttt{event\_gap} proves the exact discrepancy $1/2$ for every time. \texttt{never\_mixes\_at\_quarter} negates the event definition of total-variation distance at most $1/4$; \texttt{no\_uniform\_mixing} also rules out pointwise convergence. Rational arithmetic covers the concrete 24-choice random chain above exactly. The elementary event argument in the preceding section also covers arbitrary real transition probabilities.
+
+All finite decisions use kernel reduction, not native decision axioms. The audit reports only Lean's standard axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}; there are no proof holes or custom axioms. Run \texttt{./VERIFY.sh} from this directory to build, recheck the compiled modules with \texttt{leanchecker}, and run the independent Python enumeration. The Python program additionally constructs the explicit rational transition matrix and checks symmetry, stochasticity and stationarity. Its results are supplementary and are not imported as Lean assumptions.
+\end{document}

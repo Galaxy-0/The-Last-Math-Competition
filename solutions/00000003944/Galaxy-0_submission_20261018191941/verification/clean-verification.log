@@ -1,0 +1,50 @@
+ℹ [2/5] Built Conjecture3944 (79s)
+info: Conjecture3944.lean:350:0: 'Conjecture3944.core_check' depends on axioms: [propext, Quot.sound]
+info: Conjecture3944.lean:351:0: 'Conjecture3944.kempe_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Conjecture3944.lean:352:0: 'Conjecture3944.decode_encode' depends on axioms: [propext, Quot.sound]
+info: Conjecture3944.lean:353:0: 'Conjecture3944.decode_injective' depends on axioms: [propext, Quot.sound]
+info: Conjecture3944.lean:354:0: 'Conjecture3944.state_count' depends on axioms: [propext]
+info: Conjecture3944.lean:355:0: 'Conjecture3944.connected' depends on axioms: [propext, Quot.sound]
+info: Conjecture3944.lean:356:0: 'Conjecture3944.degree_five' depends on axioms: [propext]
+info: Conjecture3944.lean:357:0: 'Conjecture3944.unreachable' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Conjecture3944.lean:358:0: 'Conjecture3944.no_uniform_mixing' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Conjecture3944.lean:359:0: 'Conjecture3944.never_mixes_at_quarter' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Conjecture3944.lean:360:0: 'Conjecture3944.counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+ℹ [4/5] Built Audit (366ms)
+info: Audit.lean:2:0: 'Conjecture3944.counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Audit.lean:3:0: 'Conjecture3944.never_mixes_at_quarter' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Audit.lean:4:0: 'Conjecture3944.event_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Audit.lean:5:0: 'Conjecture3944.opposite_count' depends on axioms: [propext]
+info: Audit.lean:6:0: 'Conjecture3944.opposite_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Audit.lean:7:0: 'Conjecture3944.uniform_normalized' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Audit.lean:8:0: 'Conjecture3944.decode_encode' depends on axioms: [propext, Quot.sound]
+info: Audit.lean:9:0: 'Conjecture3944.decode_injective' depends on axioms: [propext, Quot.sound]
+info: Audit.lean:10:0: Conjecture3944.counterexample :
+  (∀ (v : Conjecture3944.Vertex), Conjecture3944.Walk 0 v) ∧
+    (Conjecture3944.degree 0 = 5 ∧ ∀ (v : Conjecture3944.Vertex), Conjecture3944.degree v ≤ 5) ∧
+      ∀ (P : Conjecture3944.Code → Conjecture3944.Code → Rat),
+        Conjecture3944.Stochastic P →
+          Conjecture3944.Supported P →
+            ∀ (n : Nat), ¬Conjecture3944.WithinQuarter (Conjecture3944.law P n) Conjecture3944.uniform
+Build completed successfully (5 jobs).
+'Conjecture3944.counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture3944.never_mixes_at_quarter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture3944.event_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture3944.opposite_count' depends on axioms: [propext]
+'Conjecture3944.opposite_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture3944.uniform_normalized' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Conjecture3944.decode_encode' depends on axioms: [propext, Quot.sound]
+'Conjecture3944.decode_injective' depends on axioms: [propext, Quot.sound]
+Conjecture3944.counterexample :
+  (∀ (v : Conjecture3944.Vertex), Conjecture3944.Walk 0 v) ∧
+    (Conjecture3944.degree 0 = 5 ∧ ∀ (v : Conjecture3944.Vertex), Conjecture3944.degree v ≤ 5) ∧
+      ∀ (P : Conjecture3944.Code → Conjecture3944.Code → Rat),
+        Conjecture3944.Stochastic P →
+          Conjecture3944.Supported P →
+            ∀ (n : Nat), ¬Conjecture3944.WithinQuarter (Conjecture3944.law P n) Conjecture3944.uniform
+degrees [5, 3, 3, 3, 3, 3, 1, 1]
+proper colorings 48 Kempe classes [24, 24]
+class invariant c(0)=c(4), sizes 24 24
+directed transitions 240
+Exact rational kernel: stochastic, symmetric, uniform stationary; invariant event mass 1/2.
+All verification commands passed.
