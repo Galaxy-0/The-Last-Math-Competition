@@ -1,0 +1,51 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\title{Two Inclusion-Maximal Antichains in the Four-Point Partition Lattice}
+\author{quantumtool}
+\date{19 October 2026}
+\begin{document}
+\maketitle
+
+\textbf{Conjecture 00000002197 -- Verdict under the standard meaning of maximal: false.}
+
+\textbf{Filed statement.} “The uniqueness of the maximal antichain of the partition lattice symmetrizes across all levels for $n\ge 3$ (a generalization of Dedekind uniqueness).”
+
+\section*{Interpretation}
+The statement does not define “symmetrizes across all levels” or say whether “maximal” means inclusion-maximal or maximum-cardinality. In order theory, a maximal antichain is normally one that cannot be enlarged by adding another element; a maximum antichain has largest possible cardinality. The counterexample below refutes uniqueness of inclusion-maximal antichains in $\Pi_4$, which is one of the standard readings of the filed wording. It does not refute a separately specified conjecture about uniqueness of maximum-cardinality antichains.
+
+\section*{The partition lattice $\Pi_4$}
+Let the ground set be $\{0,1,2,3\}$. Order set partitions by refinement: $\pi\leq\sigma$ when each block of $\pi$ is contained in a block of $\sigma$. The discrete partition
+\[
+\delta=\{\{0\},\{1\},\{2\},\{3\}\}
+\]
+is the bottom element. The six atoms immediately above it are the partitions that merge exactly one pair:
+\[
+\begin{aligned}
+a_{01}&=\{\{0,1\},\{2\},\{3\}\}, & a_{02}&=\{\{0,2\},\{1\},\{3\}\},\\
+a_{03}&=\{\{0,3\},\{1\},\{2\}\}, & a_{12}&=\{\{1,2\},\{0\},\{3\}\},\\
+a_{13}&=\{\{1,3\},\{0\},\{2\}\}, & a_{23}&=\{\{2,3\},\{0\},\{1\}\}.
+\end{aligned}
+\]
+
+\section*{First maximal antichain}
+The singleton $A=\{\delta\}$ is an antichain. It is inclusion-maximal: every partition $\pi$ satisfies $\delta\leq\pi$, so every partition outside $A$ is comparable with its only member and cannot be added to $A$ while preserving the antichain property.
+
+\section*{Second maximal antichain}
+Let $B=\{a_{01},a_{02},a_{03},a_{12},a_{13},a_{23}\}$. Distinct atoms are incomparable, so $B$ is an antichain. To check maximality, take any partition $\pi\notin B$. If $\pi=\delta$, then $\delta$ is comparable with every atom in $B$. Otherwise, some two distinct elements lie in the same block of $\pi$. The atom that merges precisely this pair refines $\pi$, and belongs to $B$. Thus every partition outside $B$ is comparable with a member of $B$, so no outside partition can be adjoined to $B$.
+
+Therefore both $A$ and $B$ are inclusion-maximal antichains, while $A\neq B$ (indeed, $|A|=1$ and $|B|=6$). This disproves uniqueness of maximal antichains in $\Pi_4$, a case covered by $n\ge3$.
+
+\section*{Lean formalization}
+The Lean project represents the 15 partitions of a four-element set by their restricted-growth strings. They are listed in \texttt{lean4/Main.lean}; their block counts are $1$, $7$, $6$, and $1$ for one through four blocks, respectively. A partition relation is represented by equality of labels, and refinement is inclusion of these equivalence relations. The theorem \texttt{partition\_table\_complete\_bits} checks all 64 possible assignments to the six unordered pairs; reflexivity and symmetry determine the diagonal and reversed pairs. The theorems \texttt{singleton\_bottom\_maximal} and \texttt{atoms\_maximal} verify the two antichains against every listed partition, and \texttt{disproof\_00000002197} packages their inequality as the counterexample.
+
+The finite model and proof are self-contained in Lean 4.33.1 with \texttt{Std}. \texttt{Check.lean} prints the theorem axiom dependencies.
+
+\textbf{Source.} \url{https://github.com/The-Last-Math-Competition/The-Last-Math-Competition/blob/main/conjectures/00000002197.md}
+\end{document}

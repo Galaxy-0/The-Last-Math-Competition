@@ -1,0 +1,22 @@
+Verified UTC: 2026-10-18T19:35:08Z
+Submitter: quantumtool
+Lean: 4.33.1 (leanprover/lean4:v4.33.1; no Mathlib dependency)
+
+$ cd lean4 && lake +leanprover/lean4:v4.33.1 build
+Build completed successfully (3 jobs).
+
+$ cd lean4 && lake +leanprover/lean4:v4.33.1 env lean Check.lean
+'partition_table_rows_valid' depends on axioms: [propext]
+'partition_table_complete_bits' depends on axioms: [propext, Quot.sound]
+'singleton_bottom_maximal' depends on axioms: [propext, Quot.sound]
+'atoms_maximal' depends on axioms: [propext, Quot.sound]
+'maximal_antichains_not_unique' depends on axioms: [propext]
+'disproof_00000002197' depends on axioms: [propext, Quot.sound]
+
+$ pdflatex -interaction=nonstopmode -halt-on-error main.tex (run twice)
+Both runs succeeded; main.pdf was produced as a two-page PDF.
+
+SHA-256 of lean4/Main.lean:
+dc42a381fa1e730fbe290003f2a2565afced8649aa4e8014469b64249ddffb1d
+
+The printed axiom dependencies are standard Lean foundations only. No custom axiom, `sorry`, or `native_decide` is used.
