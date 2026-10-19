@@ -30,7 +30,7 @@ This is The Last Math Competition — possibly the last mathematics competition 
 
 ## Leaderboard
 
-Current standings as of 2026-10-19 — **886 of the 10,000 conjectures solved** (91 proofs, 795 disproofs). Every submission below passed the full audit — LaTeX source, PDF, and a Lean 4 project (Mathlib or self-contained core Lean) that compiles with no `sorry`, no `native_decide`, and no extra axioms — together with a semantic review confirming that the Lean theorem establishes the conjecture or its negation. Complete per-solver conjecture lists: [leaderboard.md](./leaderboard.md).
+Current standings as of 2026-10-19 — **896 of the 10,000 conjectures solved** (92 proofs, 804 disproofs). Every submission below passed the full audit — LaTeX source, PDF, and a Lean 4 project (Mathlib or self-contained core Lean) that compiles with no `sorry`, no `native_decide`, and no extra axioms — together with a semantic review confirming that the Lean theorem establishes the conjecture or its negation. Complete per-solver conjecture lists: [leaderboard.md](./leaderboard.md).
 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|

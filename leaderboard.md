@@ -10,7 +10,7 @@ archived under solutions/[number_ID]/review/. After the full re-audit of 2026-10
 reverted to open unless another valid submission remains); 98 PRs were closed unmerged with  
 full review comments.
 
-**Total solved: 886 / 10000 conjectures** — 91 proven, 795 disproven.
+**Total solved: 896 / 10000 conjectures** — 92 proven, 804 disproven.
 
 Ranking is by **Solved** (accepted submissions), ties broken by first solves.
 

@@ -30,7 +30,7 @@
 
 ## 排行榜（Leaderboard）
 
-截至 2026-10-19 的当前战绩——**10000 个猜想中已解决 886 个**（91 个证明，795 个证伪）。上榜的每一份提交都通过了完整审计——LaTeX 源码、PDF 文档，以及一个完整编译的 Lean 4 项目（Mathlib 或自包含核心 Lean）——无 `sorry`、无 `native_decide`、无额外公理——并通过语义审查确认 Lean 定理确实建立了该猜想或其否定。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
+截至 2026-10-19 的当前战绩——**10000 个猜想中已解决 896 个**（92 个证明，804 个证伪）。上榜的每一份提交都通过了完整审计——LaTeX 源码、PDF 文档，以及一个完整编译的 Lean 4 项目（Mathlib 或自包含核心 Lean）——无 `sorry`、无 `native_decide`、无额外公理——并通过语义审查确认 Lean 定理确实建立了该猜想或其否定。每位求解者的完整解题清单见 [leaderboard.md](./leaderboard.md)。
 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
