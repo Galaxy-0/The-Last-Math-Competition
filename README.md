@@ -37,10 +37,10 @@ Current standings as of 2026-10-19 — **912 of the 10,000 conjectures solved** 
 | 1 | [ziangni-sys](https://github.com/ziangni-sys) | 193 | 193 | 16 | 177 |
 | 2 | [Jackmeson1](https://github.com/Jackmeson1) | 173 | 173 | 32 | 141 |
 | 3 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 121 | 121 | 7 | 114 |
-| 4 | [earthking11](https://github.com/earthking11) | 101 | 94 | 1 | 100 |
+| 4 | [earthking11](https://github.com/earthking11) | 94 | 94 | 1 | 93 |
 | 5 | [C0ldSmi1e](https://github.com/C0ldSmi1e) | 80 | 80 | 10 | 70 |
-| 6 | [orionsheep](https://github.com/orionsheep) | 73 | 64 | 0 | 73 |
-| 7 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 37 | 36 | 8 | 29 |
+| 6 | [orionsheep](https://github.com/orionsheep) | 65 | 65 | 0 | 65 |
+| 7 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 36 | 36 | 8 | 28 |
 | 8 | [jilint777](https://github.com/jilint777) | 34 | 34 | 2 | 32 |
 | 9 | [Galaxy-0](https://github.com/Galaxy-0) | 25 | 25 | 6 | 19 |
 | 10 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
