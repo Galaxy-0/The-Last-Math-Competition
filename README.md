@@ -30,7 +30,7 @@ This is The Last Math Competition — possibly the last mathematics competition 
 
 ## Leaderboard
 
-Current standings as of 2026-10-19 — **896 of the 10,000 conjectures solved** (92 proofs, 804 disproofs). Every submission below passed the full audit — LaTeX source, PDF, and a Lean 4 project (Mathlib or self-contained core Lean) that compiles with no `sorry`, no `native_decide`, and no extra axioms — together with a semantic review confirming that the Lean theorem establishes the conjecture or its negation. Complete per-solver conjecture lists: [leaderboard.md](./leaderboard.md).
+Current standings as of 2026-10-19 — **912 of the 10,000 conjectures solved** (95 proofs, 817 disproofs). Every submission below passed the full audit — LaTeX source, PDF, and a Lean 4 project (Mathlib or self-contained core Lean) that compiles with no `sorry`, no `native_decide`, and no extra axioms — together with a semantic review confirming that the Lean theorem establishes the conjecture or its negation. Complete per-solver conjecture lists: [leaderboard.md](./leaderboard.md).
 
 | # | GitHub ID | Solved | First solves | Proven | Disproven |
 |---|----------|-------:|-------------:|-------:|----------:|
@@ -38,7 +38,7 @@ Current standings as of 2026-10-19 — **896 of the 10,000 conjectures solved** 
 | 2 | [Jackmeson1](https://github.com/Jackmeson1) | 173 | 173 | 32 | 141 |
 | 3 | [gaochengzhecpu](https://github.com/gaochengzhecpu) | 121 | 121 | 7 | 114 |
 | 4 | [earthking11](https://github.com/earthking11) | 101 | 94 | 1 | 100 |
-| 5 | [C0ldSmi1e](https://github.com/C0ldSmi1e) | 76 | 76 | 9 | 67 |
+| 5 | [C0ldSmi1e](https://github.com/C0ldSmi1e) | 80 | 80 | 10 | 70 |
 | 6 | [orionsheep](https://github.com/orionsheep) | 73 | 64 | 0 | 73 |
 | 7 | [feiyuceng06-prog](https://github.com/feiyuceng06-prog) | 37 | 36 | 8 | 29 |
 | 8 | [jilint777](https://github.com/jilint777) | 34 | 34 | 2 | 32 |
@@ -46,11 +46,11 @@ Current standings as of 2026-10-19 — **896 of the 10,000 conjectures solved** 
 | 10 | [SucRunBug](https://github.com/SucRunBug) | 18 | 18 | 2 | 16 |
 | 11 | [lidangzzz](https://github.com/lidangzzz) | 16 | 16 | 2 | 14 |
 | 12 | [lizaixi01](https://github.com/lizaixi01) | 15 | 15 | 2 | 13 |
-| 13 | [AlyciaBHZ](https://github.com/AlyciaBHZ) | 8 | 8 | 2 | 6 |
-| 14 | [idealistichacker](https://github.com/idealistichacker) | 8 | 8 | 2 | 6 |
-| 15 | [asfigh665](https://github.com/asfigh665) | 5 | 5 | 1 | 4 |
-| 16 | [GodBlf](https://github.com/GodBlf) | 4 | 4 | 0 | 4 |
-| 17 | [zbw123456](https://github.com/zbw123456) | 3 | 3 | 0 | 3 |
+| 13 | [zbw123456](https://github.com/zbw123456) | 13 | 13 | 2 | 11 |
+| 14 | [idealistichacker](https://github.com/idealistichacker) | 10 | 10 | 2 | 8 |
+| 15 | [AlyciaBHZ](https://github.com/AlyciaBHZ) | 8 | 8 | 2 | 6 |
+| 16 | [asfigh665](https://github.com/asfigh665) | 5 | 5 | 1 | 4 |
+| 17 | [GodBlf](https://github.com/GodBlf) | 4 | 4 | 0 | 4 |
 | 18 | [11zhangzheng](https://github.com/11zhangzheng) | 1 | 1 | 0 | 1 |
 | 19 | [champagnepapihz](https://github.com/champagnepapihz) | 1 | 1 | 0 | 1 |
 | 20 | [Cosica](https://github.com/Cosica) | 1 | 1 | 0 | 1 |
